@@ -1,0 +1,85 @@
+{
+  "schemaVersion": "conquistador.benchmark-matrix/v1",
+  "immutable": true,
+  "releaseVersion": "1.0.0",
+  "status": "inventory-complete-candidate-unbound",
+  "partitions": [
+    {
+      "id": "outcome-core",
+      "uniqueCasesRequired": 72,
+      "executionsPerCase": 3,
+      "executionsRequired": 216,
+      "seedCasesPresent": 72,
+      "candidateExecutionsPresent": 0
+    },
+    {
+      "id": "outcome-deep",
+      "uniqueCasesRequired": 40,
+      "executionsPerCase": 3,
+      "executionsRequired": 120,
+      "seedCasesPresent": 40,
+      "candidateExecutionsPresent": 0
+    },
+    {
+      "id": "parent-workflow",
+      "uniqueCasesRequired": 25,
+      "executionsPerCase": 3,
+      "executionsRequired": 75,
+      "seedCasesPresent": 25,
+      "candidateExecutionsPresent": 0
+    },
+    {
+      "id": "historical-parity",
+      "uniqueCasesRequired": 40,
+      "executionsPerCase": 3,
+      "executionsRequired": 120,
+      "seedCasesPresent": 40,
+      "candidateExecutionsPresent": 0
+    },
+    {
+      "id": "grader-calibration",
+      "uniqueCasesRequired": 60,
+      "executionsPerCase": 1,
+      "executionsRequired": 60,
+      "seedCasesPresent": 60,
+      "candidateExecutionsPresent": 0
+    }
+  ],
+  "stochasticControls": {
+    "aaExecutionsPerProviderModelCell": 12,
+    "caseClasses": [
+      "normal",
+      "boundary",
+      "deep",
+      "parent"
+    ],
+    "providerModelCellsBound": 0,
+    "executionsPresent": 0
+  },
+  "runPolicy": {
+    "caseRepetitions": 3,
+    "casePassMinimum": 2,
+    "outcomePassMinimum": 5,
+    "outcomeExecutions": 6,
+    "brokenRunMaximumRate": 0.02,
+    "brokenRunMaximumPerCase": 1,
+    "unresolvedTerminalRunsMaximum": 0,
+    "brokenRunsCountAsPass": false,
+    "varianceRequired": true
+  },
+  "humanReview": {
+    "blindOrderingRequired": true,
+    "shuffledOrderingRequired": true,
+    "durableReviewerRevisionRequired": true,
+    "verdictsPresent": 0
+  },
+  "incomplete": [
+    "no exact Candidate Build is bound",
+    "no provider/model cell is bound",
+    "no candidate repetitions or A/A controls have run",
+    "grader calibration executions are pending",
+    "blind human verdicts are pending",
+    "deep, live, install, runtime, tool, and distribution evidence is pending",
+    "offline inventory completeness is not candidate execution or release evidence"
+  ]
+}

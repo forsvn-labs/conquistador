@@ -1,0 +1,66 @@
+---
+name: build-web-app
+description: "Implement and verify an explicit web-product outcome in an existing or approved project. Use for end-to-end vertical slices, responsive accessible UI, client/server state, data, validation, auth, security, recovery, tests, browser checks, migrations, and bounded deployment handoffs."
+metadata:
+  version: 1.0.0
+
+---
+
+# Build a web app outcome
+
+This is a new first-party outcome with no fabricated historical adoption claim. Activate it only for an
+explicit implementation request; landing strategy or routine marketing does not imply code authority.
+
+## Inspect before choosing a stack
+
+Read repository instructions, current code, package and lock files, architecture, schemas, migrations,
+tests, environments, deployment configuration, and dirty worktree state. Preserve the existing stack
+and user changes. For greenfield work, choose the smallest justified stack from product needs and host
+constraints, record a stack decision record with rejected alternatives, and mandate no framework,
+database, scaffold, builder, or cloud.
+
+Validate the minimum user flow, interface states, data and trust boundaries, acceptance criteria, and
+non-goals needed to implement safely. Expose unresolved product decisions rather than encoding guesses.
+The full procedure lives in [web engineering method](references/web-engineering-method.md).
+
+## Implement complete vertical slices
+
+Carry one useful outcome at a time end to end through semantic responsive UI, client/server state,
+data model, validation on both sides of the boundary, authentication and authorization when applicable,
+security/privacy controls, and complete loading/empty/error/offline/retry/recovery states. Reuse
+project tokens and components. Keep secrets out of source and logs.
+
+Plan slices with stable IDs, dependencies, risk-first spikes, tests, rollback, docs, and human-owned
+prerequisites. Extract shared services only for two real callers. Separate behavior changes from
+behavior-preserving maintenance; never use the build request as inferred cleanup authority — no
+opportunistic rewrites, deletions, or dependency upgrades without evidence, scoped authority, and
+rollback.
+
+## Verify against the test contract
+
+Classify each slice's risk (read-only UI, stateful, trust boundary, infrastructure) and run the checks
+the [test contract](references/test-contract.md) requires: proportionate type, lint, unit, integration,
+end-to-end, browser, responsive, accessibility, security, migration, and build checks. Inspect the
+actual rendered behavior when tools allow. Report commands, environment, results, artifacts, and named
+untested cells; do not claim a browser, deployment, or production result that did not run, and never
+describe an unexecuted check as passing.
+
+A worked (fictional) example of the delivered artifact shape:
+[authenticated settings slice walkthrough](references/examples/settings-slice-walkthrough.md).
+
+If the host, dependency, service, browser, or environment is unavailable, return a bounded handoff with
+exact changes, files, commands, fixtures, expected evidence, blockers, and the human-owned next step.
+
+## Run the method in one context when needed
+
+When separate implementer, reviewer, and browser contexts are unavailable, use
+[sequential fallback](fallbacks/sequential.md): inspect → validate intent → classify risk → implement
+one slice → hostile self-review pass → execute the available contract checks → deliver or hand off.
+Label single-context results as such; unavailable checks stay untested cells, never simulated passes.
+
+## Deliver
+
+Return the implemented outcome or precise handoff, changed files grouped by slice ID, verification
+evidence, architecture and data implications, remaining risks, and rollout/rollback plan. Deployments,
+domains, DNS, production data, credentials, billing, destructive migrations, and external service
+mutation require explicit approval for the exact action.

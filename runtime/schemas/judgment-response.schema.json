@@ -1,0 +1,221 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "conquistador.judgment-response.v1",
+  "title": "Validated judgment response",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "responseId",
+    "responseDigest",
+    "requestId",
+    "requestDigest",
+    "identity",
+    "skill",
+    "outcome",
+    "executor",
+    "model",
+    "outputs",
+    "usage",
+    "cost",
+    "tools",
+    "failure",
+    "redaction",
+    "startedAt",
+    "finishedAt"
+  ],
+  "properties": {
+    "schema": { "const": "conquistador.judgment-response.v1" },
+    "responseId": { "type": "string", "minLength": 1 },
+    "responseDigest": { "$ref": "#/$defs/sha256" },
+    "requestId": { "type": "string", "minLength": 1 },
+    "requestDigest": { "$ref": "#/$defs/sha256" },
+    "identity": { "$ref": "conquistador.judgment-request.v1#/properties/identity" },
+    "skill": { "$ref": "conquistador.judgment-request.v1#/properties/skill" },
+    "outcome": { "enum": ["succeeded", "failed", "cancelled"] },
+    "executor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "hostId",
+        "adapterId",
+        "adapterVersion",
+        "executionId",
+        "loadedAssetManifestDigest"
+      ],
+      "properties": {
+        "hostId": { "type": "string", "minLength": 1, "not": { "const": "latest" } },
+        "adapterId": { "type": "string", "minLength": 1, "not": { "const": "latest" } },
+        "adapterVersion": { "type": "string", "minLength": 1, "not": { "const": "latest" } },
+        "executionId": { "type": "string", "minLength": 1 },
+        "loadedAssetManifestDigest": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "model": {
+      "oneOf": [
+        { "type": "null" },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "provider",
+            "providerCellId",
+            "model",
+            "modelVersion",
+            "settingsDigest",
+            "promptTemplateDigest"
+          ],
+          "properties": {
+            "provider": { "type": "string", "minLength": 1, "not": { "const": "latest" } },
+            "providerCellId": { "type": "string", "minLength": 1, "not": { "const": "latest" } },
+            "model": { "type": "string", "minLength": 1, "not": { "const": "latest" } },
+            "modelVersion": { "type": "string", "minLength": 1, "not": { "const": "latest" } },
+            "settingsDigest": { "$ref": "#/$defs/sha256" },
+            "promptTemplateDigest": { "$ref": "#/$defs/sha256" }
+          }
+        }
+      ]
+    },
+    "outputs": {
+      "oneOf": [
+        { "type": "null" },
+        {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["artifactId", "schema", "format", "body", "contentDigest"],
+            "properties": {
+              "artifactId": { "type": "string", "minLength": 1 },
+              "schema": { "type": "string", "minLength": 1 },
+              "format": { "enum": ["json", "markdown", "text"] },
+              "body": {},
+              "contentDigest": { "$ref": "#/$defs/sha256" }
+            }
+          }
+        }
+      ]
+    },
+    "usage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "inputTokens",
+        "outputTokens",
+        "cacheReadTokens",
+        "cacheWriteTokens",
+        "totalTokens"
+      ],
+      "properties": {
+        "inputTokens": { "type": "integer", "minimum": 0 },
+        "outputTokens": { "type": "integer", "minimum": 0 },
+        "cacheReadTokens": { "type": "integer", "minimum": 0 },
+        "cacheWriteTokens": { "type": "integer", "minimum": 0 },
+        "totalTokens": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "cost": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "billingMode",
+        "currency",
+        "reservedMicros",
+        "actualMicros",
+        "chargedToRunMicros"
+      ],
+      "properties": {
+        "billingMode": { "enum": ["host-covered", "metered"] },
+        "currency": { "const": "USD" },
+        "reservedMicros": { "type": "integer", "minimum": 0 },
+        "actualMicros": { "type": ["integer", "null"], "minimum": 0 },
+        "chargedToRunMicros": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "tools": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["capabilityId", "operationId", "receiptDigest"],
+        "properties": {
+          "capabilityId": { "type": "string", "minLength": 1 },
+          "operationId": { "type": "string", "minLength": 1 },
+          "receiptDigest": { "$ref": "#/$defs/sha256" }
+        }
+      }
+    },
+    "failure": {
+      "oneOf": [
+        { "type": "null" },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["code", "retryable", "dispatchState", "safeMessage"],
+          "properties": {
+            "code": {
+              "enum": [
+                "skill-unavailable",
+                "skill-digest-mismatch",
+                "invalid-input",
+                "budget-exceeded",
+                "deadline-exceeded",
+                "provider-rejected",
+                "provider-failed",
+                "cancelled"
+              ]
+            },
+            "retryable": { "type": "boolean" },
+            "dispatchState": { "enum": ["pre-dispatch", "accepted", "unknown"] },
+            "safeMessage": { "type": "string", "minLength": 1 }
+          }
+        }
+      ]
+    },
+    "redaction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["applied", "policyDigest"],
+      "properties": {
+        "applied": { "const": true },
+        "policyDigest": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "startedAt": { "$ref": "#/$defs/isoDateTime" },
+    "finishedAt": { "$ref": "#/$defs/isoDateTime" }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "isoDateTime": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "outcome": { "const": "succeeded" } }, "required": ["outcome"] },
+      "then": {
+        "properties": {
+          "failure": { "type": "null" },
+          "outputs": { "type": "array", "minItems": 1 }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "outcome": { "enum": ["failed", "cancelled"] } },
+        "required": ["outcome"]
+      },
+      "then": {
+        "properties": {
+          "outputs": { "type": "null" },
+          "failure": { "type": "object" }
+        }
+      }
+    }
+  ]
+}

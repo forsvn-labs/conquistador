@@ -1,0 +1,24 @@
+{
+  "schemaVersion": "conquistador.connection-reference/v1",
+  "id": "conn.github.sandbox.01",
+  "provider": "github",
+  "principal": {
+    "accountId": "sandbox-account-01",
+    "workspaceId": "sandbox-workspace-01",
+    "displayName": "GitHub sandbox fixture"
+  },
+  "allowedOperationIds": ["github.repository.get"],
+  "scopes": ["metadata:read"],
+  "environment": "sandbox",
+  "usage": "ephemeral-test",
+  "revision": 1,
+  "state": "active",
+  "verifiedAt": "2026-08-20T00:00:00.000Z",
+  "expiresAt": "2026-08-21T00:00:00.000Z",
+  "storagePolicy": {
+    "referenceMetadata": "conquistador-local",
+    "secretStorage": "host-secure-store-only",
+    "export": "forbidden",
+    "recovery": "reauthenticate-only"
+  }
+}

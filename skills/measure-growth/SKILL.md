@@ -1,0 +1,127 @@
+---
+name: measure-growth
+description: "Design growth measurement or learn from marketing results. Use for analytics and tracking plans, KPI trees, campaign measurement, attribution boundaries, experiment readouts, performance reviews, launch retrospectives, cohort or funnel analysis, deciding what to keep or stop, or converting observed results into bounded reusable learning."
+metadata:
+  version: 2.1.0
+
+---
+
+# Measure growth outcomes
+
+Connect measurement to a decision. Do not create dashboards without an operator action.
+
+Choose the mode explicitly. In design mode, define the decision, signal system, instrumentation, and
+thresholds before results exist. In readout mode, assess supplied observations against their original
+baseline and decision rule without retrofitting success criteria.
+
+## Define the decision system
+
+Specify:
+
+- business outcome and decision owner;
+- user behavior that represents value;
+- primary signal and why it predicts the outcome;
+- diagnostic signals for reach, attention, comprehension, belief, motivation, friction, and value;
+- guardrails for quality, cost, retention, and harm;
+- segments and observation window;
+- decision date and keep, revise, stop, or scale thresholds.
+
+Define event names, properties, identity rules, source of truth, and QA steps when implementation detail
+is requested. Distinguish leading, lagging, and diagnostic measures.
+
+Run instrumentation QA before interpreting movement: validate event firing, identity stitching,
+deduplication, timestamps, properties, consent boundaries, missingness, and continuity across releases.
+
+## Read results carefully
+
+Check:
+
+- exposure and opportunity volume;
+- baseline and comparable period;
+- audience, channel, device, geography, and customer mix;
+- instrumentation changes and missing data;
+- seasonality, releases, promotions, outages, and competitor movement;
+- downstream quality, revenue, or retention;
+- qualitative objections and customer language.
+
+Do not turn correlation into causation. Prefer a comparison or test that creates different predictions
+for competing explanations. State uncertainty and accept inconclusive results.
+
+## Produce a decision
+
+Return:
+
+1. result summary with denominator, baseline, window, and confidence;
+2. what changed and what did not;
+3. plausible mechanisms and alternative explanations;
+4. **Keep, drop, test** decision;
+5. next experiment with one intentional change;
+6. durable learning record.
+
+Write each durable learning as:
+
+- observation;
+- audience, offer, channel, and time boundary;
+- evidence and confidence;
+- implication;
+- where it must not be generalized.
+
+Promote a learning only from observed behavior or a documented test. Never invent unavailable
+analytics or silently treat missing observations as zero.
+
+Before delivery, load the recovered method instead of paraphrasing it. Keep channel measurement and
+campaign evaluation as distinct lenses.
+
+**Measurement-design lens** (before results → decision contract, instrumentation, and activation gate):
+
+- [measurement design contract](references/measurement-design-contract.md);
+- use the front-door decision system and instrumentation QA; do not dispatch result-ingest,
+  diagnosis, recommendation, or pack-feedback agents when no observations exist.
+
+**Channel measurement lens** (one channel's results → keep / drop / test):
+
+- [metric ingest](agents/measure-metric-ingest-agent.md),
+  [diagnosis](agents/measure-diagnosis-agent.md),
+  [pack feedback](agents/pack-feedback-agent.md),
+  [measure critic](agents/measure-critic-agent.md);
+- [measure rubric](references/measure-rubric.md),
+  [anti-sycophancy](references/anti-sycophancy.md),
+  [legibility](references/legibility-convention.md),
+  [performance store](references/performance-data.md) — an optional local-first integration,
+  never a requirement; standalone runs use operator-supplied evidence.
+
+**Campaign evaluation lens** (multi-channel campaign → keep / discard / watch / blocked):
+
+- [metric ingest](agents/campaign-metric-ingest-agent.md),
+  [diagnosis](agents/campaign-diagnosis-agent.md),
+  [recommendation](agents/campaign-recommendation-agent.md),
+  [campaign critic](agents/campaign-critic-agent.md);
+- [campaign rubric](references/campaign-rubric.md) and
+  [evaluation-loop frame](references/evaluation-loop-rubric.md) (7 dimensions, pass ≥49/70, no
+  dimension below 6);
+- worked examples: [measure walkthrough](references/examples/measure-walkthrough.md) for the channel
+  lens and [campaign evaluation walkthrough](references/examples/campaign-eval-cycle-walkthrough.md)
+  for the campaign lens.
+
+If the host cannot run those as separate agents, use [sequential fallback](fallbacks/sequential.md).
+Run [measure anti-patterns](references/measure-anti-patterns.md) or
+[campaign anti-patterns](references/campaign-anti-patterns.md) before ship.
+
+Use the narrowest permitted data access. Keep tracking changes, experiment activation, messages, and
+external writes behind explicit approval.
+
+## Stops
+
+Fail closed and say which stop fired:
+
+- **Missing input:** no baseline, decision rule, or denominator for a readout → return
+  inconclusive or move to design mode; never retrofit criteria or treat missing observations as zero.
+- **Factual uncertainty:** correlation cannot be separated from competing explanations → state the
+  uncertainty and propose the discriminating test instead of claiming causation.
+- **Credential stop:** analytics access is unavailable → record the metric as `n/a`; do not invent
+  numbers or simulate platform data.
+- **External action:** tracking changes, experiment activation, messages, and external writes stay
+  behind explicit human approval.
+- **Critic failure:** a read that could have been written without the numbers fails the gate; after
+  the bounded rewrite cycle, return the failure honestly.
+- **Human verdict:** keep / drop / test recommendations are advisory; the decision owner decides.

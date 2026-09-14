@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "conquistador.squad-package/v1",
+  "title": "Conquistador squad package",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "id",
+    "displayName",
+    "productName",
+    "pluginVersion",
+    "installClass",
+    "publicListing",
+    "cleanHostProof",
+    "zeroRuntime",
+    "members",
+    "fallback",
+    "fallbackIsIndependentContext",
+    "delegation",
+    "notThisDoor",
+    "missingCapabilityBehavior",
+    "lifecycle"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "conquistador.squad-package/v1" },
+    "id": { "const": "squad:advisor-worker" },
+    "displayName": { "type": "string", "minLength": 1 },
+    "productName": { "const": "conquistador" },
+    "pluginVersion": { "const": "1.0.0" },
+    "installClass": { "const": "candidate-only" },
+    "publicListing": { "const": false },
+    "cleanHostProof": { "const": false },
+    "zeroRuntime": { "const": true },
+    "members": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "uniqueItems": true,
+      "items": { "enum": ["agent:advisor", "agent:worker"] }
+    },
+    "fallback": { "const": "sequential-in-context" },
+    "fallbackIsIndependentContext": { "const": false },
+    "delegation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "maxHandoffsPerRun",
+        "order",
+        "advisorCannotExecuteWorkerSkills",
+        "workerCannotSelfApprove",
+        "contextBudget"
+      ],
+      "properties": {
+        "maxHandoffsPerRun": { "type": "integer", "minimum": 1, "maximum": 2 },
+        "order": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "items": { "enum": ["worker", "advisor"] }
+        },
+        "advisorCannotExecuteWorkerSkills": { "const": true },
+        "workerCannotSelfApprove": { "const": true },
+        "contextBudget": { "const": "assigned-skill-plus-named-workflow-plus-current-artifact" }
+      }
+    },
+    "notThisDoor": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "missingCapabilityBehavior": { "const": "fail-closed-draft" },
+    "lifecycle": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["setup", "upgrade", "remove"],
+      "properties": {
+        "setup": { "type": "string", "minLength": 1 },
+        "upgrade": { "type": "string", "minLength": 1 },
+        "remove": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}

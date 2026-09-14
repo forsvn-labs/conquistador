@@ -1,0 +1,74 @@
+{
+  "schemaVersion": "conquistador.provenance/v1",
+  "productVersion": "1.0.0",
+  "policy": "Conquistador-owned runtime interfaces and implementation. Dependency and official wire-reference notices are listed below; this record does not certify a live execution or a release.",
+  "concepts": [
+    {
+      "id": "conquistador-runtime-contract",
+      "source": "Included Conquistador runtime contracts and source",
+      "sourceLicense": "MIT",
+      "copiedCode": false,
+      "destination": [
+        "src/config.ts",
+        "src/contracts.ts",
+        "src/corpus.ts",
+        "src/runtime.ts",
+        "src/api.ts",
+        "src/http.ts",
+        "src/service.ts",
+        "src/cli.ts",
+        "src/main.ts",
+        "schemas"
+      ]
+    },
+    {
+      "id": "provider-wire-contracts",
+      "source": [
+        "https://platform.openai.com/docs/api-reference/responses",
+        "https://docs.anthropic.com/en/api/messages",
+        "https://vercel.com/docs/ai-gateway/openai-compat/rest-api"
+      ],
+      "sourceLicense": "official-documentation-reference-only",
+      "copiedCode": false,
+      "destination": [
+        "src/providers.ts",
+        "providers/v1.json"
+      ]
+    },
+    {
+      "id": "replaceable-harness-boundary",
+      "source": "Included Conquistador runtime contracts and source",
+      "sourceLicense": "MIT",
+      "copiedCode": false,
+      "use": "Provider and runtime interfaces are Conquistador-owned; no upstream harness dependency is included.",
+      "destination": [
+        "src/providers.ts",
+        "src/runtime.ts",
+        "src/http.ts",
+        "src/service.ts"
+      ]
+    },
+    {
+      "id": "jose-oidc-verification",
+      "source": "https://github.com/panva/jose/tree/v6.2.8",
+      "sourceLicense": "MIT",
+      "copiedCode": false,
+      "use": "Exact pinned runtime dependency for JWT signature and OIDC claim verification.",
+      "destination": [
+        "package.json",
+        "src/oidc.ts"
+      ]
+    },
+    {
+      "id": "ajv-schema-validation-tests",
+      "source": "https://github.com/ajv-validator/ajv/tree/v8.20.0",
+      "sourceLicense": "MIT",
+      "copiedCode": false,
+      "use": "Exact pinned development-only dependency for Draft 2020-12 contract tests.",
+      "destination": [
+        "package.json",
+        "tests/protocol.test.ts"
+      ]
+    }
+  ]
+}

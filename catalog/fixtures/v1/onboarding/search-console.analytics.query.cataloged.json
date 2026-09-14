@@ -1,0 +1,44 @@
+{
+  "schemaVersion": "conquistador.provider-onboarding/v1",
+  "id": "search-console.analytics.query.onboarding",
+  "maturity": "cataloged",
+  "supportCellId": "search-console.research",
+  "demand": {
+    "playbookId": "playbook:content-intelligence-loop",
+    "playbookVersion": "1.0.0",
+    "stepId": "pull-signals",
+    "requestedOutcome": "Pull bounded owned search-performance signals",
+    "requestedCapability": "search.analytics.read",
+    "recordedAt": "2026-08-20T00:00:00.000Z",
+    "ownerRef": "EXTS-194",
+    "digest": "sha256:5bdad54f47ece9a06be69e6f6dedbea89b90082488d040d8b802aac7ab6c51f9"
+  },
+  "operation": {
+    "provider": "search-console",
+    "operationId": "search-console.analytics.query",
+    "capabilityId": "search.analytics.read",
+    "actionClass": "observe",
+    "providerApiVersion": "webmasters-v3",
+    "authScopes": ["webmasters.readonly"],
+    "rateLimit": "Google Search Console API account and property limits",
+    "quotaUnit": "request",
+    "monetaryUnit": "USD",
+    "budget": {
+      "mode": "non-metered",
+      "maximumUnitsPerRun": null,
+      "maximumCostPerRun": null
+    }
+  },
+  "supportOwner": "Buildence:Tool-Module",
+  "nextProofOwner": "Buildence:EXTS-149",
+  "failure": {
+    "state": "none",
+    "reasonCodes": [],
+    "fallback": "human-action-manifest",
+    "retry": {
+      "strategy": "none",
+      "maximumAttempts": 0,
+      "backoff": "none"
+    }
+  }
+}

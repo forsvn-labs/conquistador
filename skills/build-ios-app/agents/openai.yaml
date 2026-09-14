@@ -1,0 +1,7 @@
+interface:
+  display_name: "Build iOS App"
+  short_description: "Build or hand off a safe native iOS slice"
+  default_prompt: "Use $build-ios-app to implement and verify this iOS outcome within the available Xcode and signing authority."
+
+policy:
+  allow_implicit_invocation: true

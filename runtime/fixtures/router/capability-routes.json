@@ -1,0 +1,50 @@
+{
+  "schemaVersion": "conquistador.capability-router/v1",
+  "version": "1.0.0",
+  "productVersion": "1.0.0",
+  "activationRequiredByPortablePlugin": false,
+  "loadsAtPluginRuntime": false,
+  "abstention": {
+    "onZeroMatches": "abstain",
+    "onMultipleMatches": "abstain",
+    "onEmptyIntent": "abstain",
+    "neverGuess": true
+  },
+  "routes": [
+    {
+      "id": "content-intelligence-loop",
+      "target": { "kind": "playbook", "id": "content-intelligence-loop" },
+      "phrases": ["content intelligence loop", "content-intelligence-loop"]
+    },
+    {
+      "id": "write-copy",
+      "target": { "kind": "skill", "id": "write-copy" },
+      "phrases": ["write copy", "rewrite this copy", "landing page copy"]
+    },
+    {
+      "id": "write-social",
+      "target": { "kind": "skill", "id": "write-social" },
+      "phrases": ["write a social post", "write social"]
+    },
+    {
+      "id": "research-content-ideas",
+      "target": { "kind": "skill", "id": "research-content-ideas" },
+      "phrases": ["research content ideas", "content opportunities"]
+    },
+    {
+      "id": "plan-campaign",
+      "target": { "kind": "skill", "id": "plan-campaign" },
+      "phrases": ["plan a campaign", "plan this campaign"]
+    },
+    {
+      "id": "measure-growth",
+      "target": { "kind": "skill", "id": "measure-growth" },
+      "phrases": ["measure growth", "learn from these results"]
+    },
+    {
+      "id": "fresh-eyes-review",
+      "target": { "kind": "skill", "id": "fresh-eyes-review" },
+      "phrases": ["fresh eyes review", "review this artifact"]
+    }
+  ]
+}

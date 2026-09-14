@@ -1,0 +1,7 @@
+interface:
+  display_name: "Evaluate Paid Campaign"
+  short_description: "Diagnose actual paid performance"
+  default_prompt: "Use $evaluate-paid-campaign to interpret actual paid-media evidence and recommend a bounded next decision without granting spend authority."
+
+policy:
+  allow_implicit_invocation: true

@@ -1,0 +1,57 @@
+{
+  "schemaVersion": "conquistador.candidate-build/v1",
+  "id": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+  "source": {
+    "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "ledgerDigest": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+    "projector": {
+      "name": "release-projector",
+      "version": "1.0.0",
+      "digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222"
+    }
+  },
+  "stage": {
+    "publicTreeDigest": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+    "portablePlugin": {
+      "name": "conquistador-portable",
+      "version": "1.0.0",
+      "digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444"
+    },
+    "npmInput": {
+      "name": "@forsvn/conquistador",
+      "version": "1.0.0",
+      "digest": "sha256:5555555555555555555555555555555555555555555555555555555555555555"
+    },
+    "ociInputs": [
+      {
+        "name": "conquistador-linux-amd64",
+        "version": "1.0.0",
+        "digest": "sha256:6666666666666666666666666666666666666666666666666666666666666666"
+      },
+      {
+        "name": "conquistador-linux-arm64",
+        "version": "1.0.0",
+        "digest": "sha256:7777777777777777777777777777777777777777777777777777777777777777"
+      }
+    ]
+  },
+  "modules": {
+    "runtime": {
+      "name": "conquistador-runtime",
+      "version": "1.0.0",
+      "digest": "sha256:8888888888888888888888888888888888888888888888888888888888888888"
+    },
+    "toolModule": {
+      "name": "conquistador-tools",
+      "version": "1.0.0",
+      "digest": "sha256:9999999999999999999999999999999999999999999999999999999999999999"
+    },
+    "evalLab": {
+      "name": "conquistador-eval-lab",
+      "version": "1.0.0",
+      "digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  },
+  "createdAt": "2026-08-11T00:00:00.000Z"
+}

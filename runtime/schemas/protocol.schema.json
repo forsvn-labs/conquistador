@@ -1,0 +1,187 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://forsvn.com/schemas/conquistador/protocol-v1.json",
+  "title": "Conquistador Runtime Protocol v1",
+  "oneOf": [
+    { "$ref": "#/$defs/Session" },
+    { "$ref": "#/$defs/Event" },
+    { "$ref": "#/$defs/MessageAcceptedResponse" },
+    { "$ref": "https://forsvn.com/schemas/conquistador/review-contract-v1.json#/$defs/packet" },
+    { "$ref": "#/$defs/ReviewVerdictRequest" },
+    { "$ref": "https://forsvn.com/schemas/conquistador/review-contract-v1.json#/$defs/verdict" }
+  ],
+  "$defs": {
+    "Sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "Session": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "id", "principalId", "state", "createdAt", "updatedAt"],
+      "properties": {
+        "schemaVersion": { "const": "conquistador.session/v1" },
+        "id": { "type": "string", "minLength": 1 },
+        "principalId": { "type": "string", "minLength": 1 },
+        "state": { "enum": ["idle", "running", "awaiting-review", "terminal"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      }
+    },
+    "Event": {
+      "oneOf": [
+        { "$ref": "#/$defs/InputAcceptedEvent" },
+        { "$ref": "#/$defs/ProgressEvent" },
+        { "$ref": "#/$defs/EvidenceEvent" },
+        { "$ref": "#/$defs/ReviewPacketEvent" },
+        { "$ref": "#/$defs/ApprovalRequestEvent" },
+        { "$ref": "#/$defs/FinalResultEvent" },
+        { "$ref": "#/$defs/LearningProposalEvent" },
+        { "$ref": "#/$defs/WarningEvent" },
+        { "$ref": "#/$defs/FailureEvent" }
+      ]
+    },
+    "EventBase": {
+      "type": "object",
+      "required": ["schemaVersion", "id", "sessionId", "sequence", "type", "createdAt", "payload"],
+      "properties": {
+        "schemaVersion": { "const": "conquistador.event/v1" },
+        "id": { "type": "string", "minLength": 1 },
+        "sessionId": { "type": "string", "minLength": 1 },
+        "sequence": { "type": "integer", "minimum": 1 },
+        "type": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "payload": { "type": "object" }
+      }
+    },
+    "InputAcceptedEvent": {
+      "allOf": [{ "$ref": "#/$defs/EventBase" }, { "properties": { "type": { "const": "input.accepted" }, "payload": { "$ref": "#/$defs/InputAcceptedPayload" } } }],
+      "unevaluatedProperties": false
+    },
+    "ProgressEvent": {
+      "allOf": [{ "$ref": "#/$defs/EventBase" }, { "properties": { "type": { "const": "progress" }, "payload": { "$ref": "#/$defs/ProgressPayload" } } }],
+      "unevaluatedProperties": false
+    },
+    "EvidenceEvent": {
+      "allOf": [{ "$ref": "#/$defs/EventBase" }, { "properties": { "type": { "const": "evidence" }, "payload": { "$ref": "#/$defs/EvidencePayload" } } }],
+      "unevaluatedProperties": false
+    },
+    "ReviewPacketEvent": {
+      "allOf": [{ "$ref": "#/$defs/EventBase" }, { "properties": { "type": { "const": "review.packet" }, "payload": { "$ref": "#/$defs/ReviewPacketPayload" } } }],
+      "unevaluatedProperties": false
+    },
+    "ApprovalRequestEvent": {
+      "allOf": [{ "$ref": "#/$defs/EventBase" }, { "properties": { "type": { "const": "approval.request" }, "payload": { "$ref": "#/$defs/ApprovalRequestPayload" } } }],
+      "unevaluatedProperties": false
+    },
+    "FinalResultEvent": {
+      "allOf": [{ "$ref": "#/$defs/EventBase" }, { "properties": { "type": { "const": "final.result" }, "payload": { "$ref": "#/$defs/FinalResultPayload" } } }],
+      "unevaluatedProperties": false
+    },
+    "LearningProposalEvent": {
+      "allOf": [{ "$ref": "#/$defs/EventBase" }, { "properties": { "type": { "const": "learning.proposal" }, "payload": { "$ref": "#/$defs/LearningProposalPayload" } } }],
+      "unevaluatedProperties": false
+    },
+    "WarningEvent": {
+      "allOf": [{ "$ref": "#/$defs/EventBase" }, { "properties": { "type": { "const": "warning" }, "payload": { "$ref": "#/$defs/WarningPayload" } } }],
+      "unevaluatedProperties": false
+    },
+    "FailureEvent": {
+      "allOf": [{ "$ref": "#/$defs/EventBase" }, { "properties": { "type": { "const": "failure" }, "payload": { "$ref": "#/$defs/FailurePayload" } } }],
+      "unevaluatedProperties": false
+    },
+    "InputAcceptedPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["messageId", "messageDigest"],
+      "properties": { "messageId": { "type": "string", "minLength": 1 }, "messageDigest": { "$ref": "#/$defs/Sha256" } }
+    },
+    "ProgressPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["messageId", "stage"],
+      "properties": { "messageId": { "type": "string", "minLength": 1 }, "stage": { "const": "producing" } }
+    },
+    "EvidencePayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["messageId", "provider", "providerCellId", "usage"],
+      "properties": {
+        "messageId": { "type": "string", "minLength": 1 },
+        "provider": { "enum": ["openai", "anthropic", "vercel-ai-gateway"] },
+        "providerCellId": { "type": "string", "minLength": 1 },
+        "providerRequestId": { "type": "string", "minLength": 1 },
+        "usage": { "$ref": "#/$defs/Usage" }
+      }
+    },
+    "ReviewPacketPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "reviewPacket": { "$ref": "https://forsvn.com/schemas/conquistador/review-contract-v1.json#/$defs/packet" },
+        "presentationEvent": { "$ref": "https://forsvn.com/schemas/conquistador/review-contract-v1.json#/$defs/presentationEvent" }
+      },
+      "required": ["reviewPacket", "presentationEvent"]
+    },
+    "MessageAcceptedResponse": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["reviewPacket"],
+      "properties": {
+        "reviewPacket": { "$ref": "https://forsvn.com/schemas/conquistador/review-contract-v1.json#/$defs/packet" }
+      }
+    },
+    "ApprovalRequestPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "summary"],
+      "properties": { "id": { "type": "string", "minLength": 1 }, "summary": { "type": "string", "minLength": 1 } }
+    },
+    "FinalResultPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["reviewVerdict"],
+      "properties": { "reviewVerdict": { "$ref": "https://forsvn.com/schemas/conquistador/review-contract-v1.json#/$defs/verdict" } }
+    },
+    "LearningProposalPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["proposal"],
+      "properties": { "proposal": {} }
+    },
+    "WarningPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["code", "message"],
+      "properties": { "code": { "type": "string", "minLength": 1 }, "message": { "type": "string", "minLength": 1 } }
+    },
+    "FailurePayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["messageId", "code", "retryable"],
+      "properties": {
+        "messageId": { "type": "string", "minLength": 1 },
+        "code": { "enum": ["cancelled", "deadline-exceeded", "provider-failure"] },
+        "retryable": { "type": "boolean" }
+      }
+    },
+    "Usage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["inputTokens", "outputTokens"],
+      "properties": {
+        "inputTokens": { "type": "integer", "minimum": 0 },
+        "outputTokens": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "ReviewVerdictRequest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["outcome", "packetDigest"],
+      "properties": {
+        "outcome": { "enum": ["accept", "revise", "reject", "cancel"] },
+        "packetDigest": { "$ref": "#/$defs/Sha256" }
+      }
+    }
+  }
+}

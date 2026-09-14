@@ -1,0 +1,466 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://forsvn.com/schemas/conquistador/registry-v1.json",
+  "title": "Conquistador Skill and Playbook Registry contracts",
+  "oneOf": [
+    { "$ref": "#/$defs/SkillRecord" },
+    { "$ref": "#/$defs/SkillRegistry" },
+    { "$ref": "#/$defs/PlaybookRecord" },
+    { "$ref": "#/$defs/PlaybookRegistry" }
+  ],
+  "$defs": {
+    "KebabId": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$"
+    },
+    "Semver": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+(?:-[0-9A-Za-z.-]+)?$"
+    },
+    "UtcTimestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "ContractField": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "type", "required", "description"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "type": { "enum": ["string", "number", "boolean", "string[]", "artifact"] },
+        "required": { "type": "boolean" },
+        "description": { "type": "string", "minLength": 1 }
+      }
+    },
+    "VersionedFields": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["version", "fields"],
+      "properties": {
+        "version": { "$ref": "#/$defs/Semver" },
+        "fields": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/ContractField" } }
+      }
+    },
+    "VersionedOutputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["version", "fields", "deliverable"],
+      "properties": {
+        "version": { "$ref": "#/$defs/Semver" },
+        "fields": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/ContractField" } },
+        "deliverable": { "type": "string", "minLength": 1 }
+      }
+    },
+    "InstallEligibility": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "independentlyInstallable",
+        "requiresSiblingSkill",
+        "requiresPlaybookRunner",
+        "requiresRegistryActivation",
+        "requiresGeneratedCatalog"
+      ],
+      "properties": {
+        "independentlyInstallable": { "const": true },
+        "requiresSiblingSkill": { "const": false },
+        "requiresPlaybookRunner": { "const": false },
+        "requiresRegistryActivation": { "const": false },
+        "requiresGeneratedCatalog": { "const": false }
+      }
+    },
+    "SkillRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "id",
+        "version",
+        "kind",
+        "trigger",
+        "inputs",
+        "outputs",
+        "compatiblePlaybooks",
+        "toolRequirements",
+        "qualityCriteria",
+        "failureBehavior",
+        "provenance",
+        "installEligibility"
+      ],
+      "properties": {
+        "schemaVersion": { "const": "conquistador.skill-record/v1" },
+        "id": { "$ref": "#/$defs/KebabId" },
+        "version": { "$ref": "#/$defs/Semver" },
+        "kind": { "const": "outcome-skill" },
+        "trigger": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["description", "examples"],
+          "properties": {
+            "description": { "type": "string", "minLength": 1 },
+            "examples": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } }
+          }
+        },
+        "inputs": { "$ref": "#/$defs/VersionedFields" },
+        "outputs": { "$ref": "#/$defs/VersionedOutputs" },
+        "compatiblePlaybooks": { "type": "array", "items": { "$ref": "#/$defs/KebabId" } },
+        "toolRequirements": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["capabilityIds", "requiredForStandalone"],
+          "properties": {
+            "capabilityIds": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+            "requiredForStandalone": { "const": false }
+          }
+        },
+        "qualityCriteria": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "description"],
+            "properties": {
+              "id": { "type": "string", "minLength": 1 },
+              "description": { "type": "string", "minLength": 1 }
+            }
+          }
+        },
+        "failureBehavior": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["onInvalidInput", "onMissingTools", "onQualityFail"],
+          "properties": {
+            "onInvalidInput": { "enum": ["reject", "ask-once"] },
+            "onMissingTools": { "enum": ["degrade-to-local", "stop"] },
+            "onQualityFail": { "enum": ["revise-once", "stop"] }
+          }
+        },
+        "provenance": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["sourcePath", "independentlyVersioned", "recordedAt"],
+          "properties": {
+            "sourcePath": { "type": "string", "minLength": 1 },
+            "independentlyVersioned": { "const": true },
+            "recordedAt": { "$ref": "#/$defs/UtcTimestamp" }
+          }
+        },
+        "installEligibility": { "$ref": "#/$defs/InstallEligibility" }
+      }
+    },
+    "SkillRegistry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "productVersion", "activationRequiredByPortablePlugin", "loadsAtPluginRuntime", "records"],
+      "properties": {
+        "schemaVersion": { "const": "conquistador.skill-registry/v1" },
+        "productVersion": { "const": "1.0.0" },
+        "activationRequiredByPortablePlugin": { "const": false },
+        "loadsAtPluginRuntime": { "const": false },
+        "records": { "type": "array", "items": { "$ref": "#/$defs/SkillRecord" } }
+      }
+    },
+    "ArtifactContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "format", "schema", "provenanceRequired"],
+      "properties": {
+        "id": { "$ref": "#/$defs/KebabId" },
+        "name": { "type": "string", "minLength": 1 },
+        "format": { "enum": ["markdown", "json"] },
+        "schema": { "type": "string", "minLength": 1 },
+        "provenanceRequired": { "const": true }
+      }
+    },
+    "StepBranch": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["on", "cases"],
+      "properties": {
+        "on": { "type": "string", "minLength": 1 },
+        "cases": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["when", "skillId"],
+            "properties": {
+              "when": { "type": "string", "minLength": 1 },
+              "skillId": { "$ref": "#/$defs/KebabId" }
+            }
+          }
+        }
+      }
+    },
+    "StepUses": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "skillId": { "$ref": "#/$defs/KebabId" },
+        "scriptId": { "$ref": "#/$defs/KebabId" },
+        "toolOperationId": { "type": "string", "pattern": "^[a-z][a-z0-9]*(?:[.-][a-z0-9]+)*$" },
+        "branch": { "$ref": "#/$defs/StepBranch" },
+        "maturity": { "const": "unverified" },
+        "fallback": { "const": "human-action-manifest" }
+      }
+    },
+    "PlaybookStep": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "kind", "uses", "dependsOn", "inputArtifacts", "outputArtifacts", "completion", "timeoutSeconds", "idempotency", "failureBehavior"],
+      "properties": {
+        "id": { "$ref": "#/$defs/KebabId" },
+        "kind": { "enum": ["skill", "script", "tool-operation"] },
+        "uses": { "$ref": "#/$defs/StepUses" },
+        "dependsOn": { "type": "array", "items": { "$ref": "#/$defs/KebabId" } },
+        "inputArtifacts": { "type": "array", "items": { "$ref": "#/$defs/KebabId" } },
+        "outputArtifacts": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/KebabId" } },
+        "completion": { "type": "string", "minLength": 1 },
+        "timeoutSeconds": { "type": "integer", "minimum": 1 },
+        "idempotency": { "enum": ["none", "required"] },
+        "retry": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["maxAttempts"],
+          "properties": { "maxAttempts": { "type": "integer", "minimum": 1 } }
+        },
+        "failureBehavior": { "enum": ["stop", "degrade"] },
+        "budget": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["maxTokens"],
+          "properties": { "maxTokens": { "type": "integer", "minimum": 1 } }
+        }
+      }
+    },
+    "ReviewGate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "kind", "afterStep", "humanRequired", "modelCannotSatisfy", "outcomes", "artifactIds", "stopOnReject"],
+      "properties": {
+        "id": { "$ref": "#/$defs/KebabId" },
+        "kind": { "const": "review" },
+        "afterStep": { "$ref": "#/$defs/KebabId" },
+        "humanRequired": { "const": true },
+        "modelCannotSatisfy": { "const": true },
+        "outcomes": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 3,
+          "prefixItems": [{ "const": "accept" }, { "const": "revise" }, { "const": "reject" }],
+          "items": false
+        },
+        "artifactIds": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/KebabId" } },
+        "stopOnReject": { "const": true }
+      }
+    },
+    "ActionGate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "kind", "afterStep", "afterGate", "requiresReviewOutcome", "humanRequired", "modelCannotSatisfy", "mutationClass", "fallback"],
+      "properties": {
+        "id": { "$ref": "#/$defs/KebabId" },
+        "kind": { "const": "action" },
+        "afterStep": { "$ref": "#/$defs/KebabId" },
+        "afterGate": { "$ref": "#/$defs/KebabId" },
+        "requiresReviewOutcome": { "const": "accept" },
+        "humanRequired": { "const": true },
+        "modelCannotSatisfy": { "const": true },
+        "mutationClass": { "enum": ["draft", "publish", "spend", "account-change"] },
+        "fallback": { "const": "human-action-manifest" }
+      }
+    },
+    "EvalCriterion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "description", "source"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "description": { "type": "string", "minLength": 1 },
+        "source": { "enum": ["artifact", "trace", "human-verdict", "observed-result"] }
+      }
+    },
+    "PlaybookRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "id",
+        "canonicalId",
+        "version",
+        "kind",
+        "executionStatus",
+        "inputs",
+        "completionCriteria",
+        "stepGraph",
+        "artifacts",
+        "budgets",
+        "retry",
+        "resume",
+        "timeout",
+        "idempotency",
+        "gates",
+        "provenance",
+        "receipts",
+        "evalSignals",
+        "finalDeliverable",
+        "nextDecision",
+        "activation"
+      ],
+      "properties": {
+        "schemaVersion": { "const": "conquistador.playbook-record/v1" },
+        "id": { "$ref": "#/$defs/KebabId" },
+        "canonicalId": { "type": "string", "pattern": "^playbook:[a-z][a-z0-9]*(?:-[a-z0-9]+)*$" },
+        "version": { "$ref": "#/$defs/Semver" },
+        "kind": { "const": "executable-playbook" },
+        "executionStatus": { "enum": ["fixture-not-executable", "unimplemented", "executable"] },
+        "notExecutableReason": { "type": "string", "minLength": 1 },
+        "proseSource": { "type": "string", "minLength": 1 },
+        "inputs": { "$ref": "#/$defs/VersionedFields" },
+        "completionCriteria": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+        "stepGraph": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["nodes"],
+          "properties": {
+            "nodes": { "type": "array", "minItems": 2, "items": { "$ref": "#/$defs/PlaybookStep" } }
+          }
+        },
+        "artifacts": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/ArtifactContract" } },
+        "budgets": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["tokensPerRun", "judgmentNodesMaxTokens", "maximumCostPerRun"],
+          "properties": {
+            "tokensPerRun": { "type": "integer", "minimum": 1 },
+            "judgmentNodesMaxTokens": { "type": "integer", "minimum": 1 },
+            "maximumCostPerRun": { "type": "number", "minimum": 0 }
+          }
+        },
+        "retry": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["maxAttempts", "preserveCompletedSteps"],
+          "properties": {
+            "maxAttempts": { "type": "integer", "minimum": 1 },
+            "preserveCompletedSteps": { "const": true }
+          }
+        },
+        "resume": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["enabled", "preserveCompletedWork"],
+          "properties": {
+            "enabled": { "const": true },
+            "preserveCompletedWork": { "const": true }
+          }
+        },
+        "timeout": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["seconds"],
+          "properties": { "seconds": { "type": "integer", "minimum": 1 } }
+        },
+        "idempotency": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["required", "keyFrom"],
+          "properties": {
+            "required": { "const": true },
+            "keyFrom": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } }
+          }
+        },
+        "gates": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["review", "action"],
+          "properties": {
+            "review": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/ReviewGate" } },
+            "action": { "type": "array", "items": { "$ref": "#/$defs/ActionGate" } }
+          }
+        },
+        "provenance": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["sourcePath", "recordedAt", "proseCompositionKind"],
+          "properties": {
+            "sourcePath": { "type": "string", "minLength": 1 },
+            "recordedAt": { "$ref": "#/$defs/UtcTimestamp" },
+            "proseCompositionKind": { "const": "compatibility-map-only" }
+          }
+        },
+        "receipts": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["required", "redaction", "includeToolOperations"],
+          "properties": {
+            "required": { "const": true },
+            "redaction": { "const": "required" },
+            "includeToolOperations": { "const": true }
+          }
+        },
+        "evalSignals": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["criteria"],
+          "properties": {
+            "criteria": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/EvalCriterion" } }
+          }
+        },
+        "finalDeliverable": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["artifactId", "description", "accompanyingArtifactIds"],
+          "properties": {
+            "artifactId": { "$ref": "#/$defs/KebabId" },
+            "description": { "type": "string", "minLength": 1 },
+            "accompanyingArtifactIds": { "type": "array", "items": { "$ref": "#/$defs/KebabId" } }
+          }
+        },
+        "nextDecision": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["id", "description"],
+          "properties": {
+            "id": { "$ref": "#/$defs/KebabId" },
+            "description": { "type": "string", "minLength": 1 }
+          }
+        },
+        "activation": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["requiredByPortablePlugin", "loadsAtPluginRuntime", "customerManagedCatalog"],
+          "properties": {
+            "requiredByPortablePlugin": { "const": false },
+            "loadsAtPluginRuntime": { "const": false },
+            "customerManagedCatalog": { "const": false }
+          }
+        }
+      },
+      "if": {
+        "properties": { "executionStatus": { "const": "executable" } },
+        "required": ["executionStatus"]
+      },
+      "then": {
+        "not": { "required": ["notExecutableReason"] }
+      },
+      "else": {
+        "required": ["notExecutableReason"]
+      }
+    },
+    "PlaybookRegistry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "productVersion", "activationRequiredByPortablePlugin", "loadsAtPluginRuntime", "records"],
+      "properties": {
+        "schemaVersion": { "const": "conquistador.playbook-registry/v1" },
+        "productVersion": { "const": "1.0.0" },
+        "activationRequiredByPortablePlugin": { "const": false },
+        "loadsAtPluginRuntime": { "const": false },
+        "records": { "type": "array", "items": { "$ref": "#/$defs/PlaybookRecord" } }
+      }
+    }
+  }
+}

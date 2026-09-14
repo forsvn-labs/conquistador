@@ -1,0 +1,72 @@
+{
+  "schemaVersion": "conquistador.agent-package/v1",
+  "id": "agent:worker",
+  "kind": "squad-member",
+  "role": "worker",
+  "displayName": "Conquistador worker",
+  "productName": "conquistador",
+  "pluginVersion": "1.0.0",
+  "canonicalSkill": "conquistador",
+  "canonicalSkillRoot": "skills/skills/conquistador",
+  "installClass": "candidate-only",
+  "publicListing": false,
+  "cleanHostProof": false,
+  "zeroRuntime": true,
+  "notThisDoor": [
+    "single Conquistador agent",
+    "complete coding-agent plugin",
+    "advisor role",
+    "per-skill agents/ files",
+    "generic bot import"
+  ],
+  "mayLoadSkills": [
+    "write-copy",
+    "write-social",
+    "brief-creative"
+  ],
+  "mayLoadWorkflows": [
+    "create-landing-page",
+    "launch-product",
+    "outreach-sequence",
+    "shortform-campaign"
+  ],
+  "proseOnlyWorkflows": [],
+  "undeclaredSiblings": "fail-closed",
+  "absentDeclaredSiblings": "degrade-parent-only",
+  "capabilities": {
+    "requested": [
+      "host model invocation",
+      "assigned worker skills",
+      "named production workflows on the parent tree"
+    ],
+    "missing": [
+      "self-approval of send, publish, spend, or external writes",
+      "advisor critique skills",
+      "native isolated worker context on every host",
+      "optional conquistador runner and catalog"
+    ]
+  },
+  "context": {
+    "inputs": [
+      "current request",
+      "assigned worker skill",
+      "named production workflow",
+      "product files needed for that job"
+    ]
+  },
+  "results": {
+    "contract": "Finished channel-native work plus one terminal Review Packet. Hand the artifact to the advisor. Do not send, publish, or spend."
+  },
+  "delegation": {
+    "maxDelegationsPerRun": 1,
+    "mayExecuteAssignedWork": true,
+    "mayAuthorizeMutations": false,
+    "maySelfApprove": false
+  },
+  "missingCapabilityBehavior": "fail-closed-draft",
+  "lifecycle": {
+    "setup": "Install with the squad package. Stage parent conquistador plus the three worker skills.",
+    "upgrade": "Replace owned worker trees from a newer source. Do not fetch at runtime.",
+    "remove": "Delete the owned worker trees with the squad. Leave other skills."
+  }
+}

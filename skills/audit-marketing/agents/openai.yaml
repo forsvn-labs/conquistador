@@ -1,0 +1,7 @@
+interface:
+  display_name: "Audit Marketing"
+  short_description: "Run a bounded pre-ship audit"
+  default_prompt: "Use $audit-marketing to audit this bounded package, preserve what works, and return severity-ranked findings without inferring cleanup or release authority."
+
+policy:
+  allow_implicit_invocation: true

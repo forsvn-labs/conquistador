@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "conquistador.eval-case/v1",
+  "id": "example-normal",
+  "outcomeId": "shape-initiative",
+  "partition": "normal",
+  "class": "normal",
+  "fixtureIds": [
+    "example"
+  ],
+  "assertionIds": [
+    "finished-outcome"
+  ],
+  "dimensionIds": [
+    "quality"
+  ],
+  "promptDigest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "repetitionCount": 3,
+  "externalActionPolicy": "deny"
+}

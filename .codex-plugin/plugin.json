@@ -1,0 +1,41 @@
+{
+  "name": "conquistador",
+  "version": "0.1.0",
+  "description": "A senior product-marketing and growth teammate with independently installable outcome skills.",
+  "author": {
+    "name": "FORSVN",
+    "url": "https://forsvn.com"
+  },
+  "homepage": "https://forsvn.com",
+  "repository": "https://github.com/forsvn-labs/conquistador",
+  "license": "MIT",
+  "keywords": [
+    "product-marketing",
+    "growth",
+    "launch",
+    "campaign",
+    "conversion"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Conquistador",
+    "shortDescription": "Product marketing that ships",
+    "longDescription": "Describe the outcome. Conquistador creates finished product-marketing work and keeps publishing, spend, credentials, and external writes behind human approval.",
+    "developerName": "FORSVN",
+    "category": "Productivity",
+    "capabilities": [
+      "Interactive",
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://forsvn.com",
+    "defaultPrompt": [
+      "Turn this product into a focused launch package.",
+      "Improve this marketing work and make it ready to use.",
+      "Review these results and tell me what to keep, drop, and test."
+    ],
+    "brandColor": "#004700",
+    "composerIcon": "./assets/conquistador-icon.png",
+    "logo": "./assets/conquistador-icon.png"
+  }
+}

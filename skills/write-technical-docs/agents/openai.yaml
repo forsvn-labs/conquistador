@@ -1,0 +1,7 @@
+interface:
+  display_name: "Write Technical Docs"
+  short_description: "Write code-grounded technical documentation"
+  default_prompt: "Use $write-technical-docs to produce audience-calibrated documentation grounded in the current code and configuration."
+
+policy:
+  allow_implicit_invocation: true

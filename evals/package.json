@@ -1,0 +1,31 @@
+{
+  "name": "@forsvn/conquistador-eval-lab",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Optional candidate-bound evidence lab for Conquistador",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=22.22.0"
+  },
+  "scripts": {
+    "test": "npm run test:public",
+    "test:contracts": "vitest run tests/contracts.test.ts",
+    "inventory:generate": "node --experimental-strip-types tools/generate-inventory-preflight.ts",
+    "inventory:verify": "node --experimental-strip-types tools/verify-inventory-preflight.ts",
+    "promptfoo:integrity:write": "node --experimental-strip-types tools/generate-promptfoo-integrity.ts --write",
+    "promptfoo:integrity:verify": "node --experimental-strip-types tools/generate-promptfoo-integrity.ts --verify",
+    "promptfoo:overrides:verify": "node --experimental-strip-types tools/verify-promptfoo-overrides.ts",
+    "promptfoo:plan": "node --experimental-strip-types src/promptfoo-adapter.ts --plan",
+    "promptfoo:preflight": "node --experimental-strip-types src/promptfoo-adapter.ts --preflight",
+    "promptfoo:execute": "node --experimental-strip-types src/promptfoo-adapter.ts --execute",
+    "promptfoo:evidence": "node --experimental-strip-types tools/export-live-evidence.ts",
+    "test:source": "vitest run",
+    "test:public": "vitest run --exclude tests/inventory-preflight.test.ts --exclude tests/promptfoo-live.test.ts --exclude tests/historical-readiness.test.ts --exclude tests/historical-benchmarks.test.ts",
+    "example:local": "node examples/local-contract.ts"
+  },
+  "devDependencies": {
+    "ajv": "8.20.0",
+    "vitest": "4.1.11"
+  }
+}

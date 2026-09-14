@@ -1,0 +1,7 @@
+interface:
+  display_name: "Design Pricing & Packaging"
+  short_description: "Design evidence-bounded offers and tiers"
+  default_prompt: "Use $design-pricing-and-packaging to design an evidence-bounded offer, test, and migration plan."
+
+policy:
+  allow_implicit_invocation: true

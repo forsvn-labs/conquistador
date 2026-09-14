@@ -1,0 +1,39 @@
+{
+  "schemaVersion": "conquistador.promptfoo-adapter/v1",
+  "adapterVersion": "1.0.0",
+  "upstream": {
+    "name": "promptfoo",
+    "version": "0.122.0",
+    "package": "https://www.npmjs.com/package/promptfoo/v/0.122.0",
+    "documentation": "https://www.promptfoo.dev/docs/configuration/reference/"
+  },
+  "node": ">=22.22.0",
+  "sharing": false,
+  "cache": false,
+  "executionDefault": "deny",
+  "requiredBindings": [
+    "Candidate Build",
+    "Eval Case",
+    "Provider Cell",
+    "provider",
+    "model",
+    "model version",
+    "adapter version",
+    "prompt template digest",
+    "tool manifest digest",
+    "settings digest",
+    "calibration digest"
+  ],
+  "knownRisk": {
+    "checkedAt": "2026-09-14",
+    "status": "isolated-live-environment-required",
+    "npmAudit": {
+      "high": 0,
+      "critical": 0,
+      "moderate": 0,
+      "productionDependencies": 399,
+      "optionalDependencies": 393
+    },
+    "reason": "The current isolated lock retains Promptfoo 0.122.0 and sharp 0.35.4, patches adm-zip to 0.6.1 and qs to 6.16.0, and reports zero known npm advisories on 2026-09-14. The upstream adm-zip 0.6.1 release documents destination-symlink extraction rejection; a local Node 24 regression preserves an outside test file that 0.6.0 overwrote. Earlier audit findings remain recorded in private review history. The runner authenticates the package manifest, complete lock, launcher, Promptfoo package, and full installed dependency tree before credentialed dispatch. Byte identity and these checks do not prove all transitive code safe; live execution still requires an isolated credential environment and exact review gates."
+  }
+}

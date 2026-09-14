@@ -1,0 +1,7 @@
+interface:
+  display_name: "Analyze Video"
+  short_description: "Analyze local footage with timestamped evidence"
+  default_prompt: "Use $analyze-video to inspect my local video and answer with timestamped visual and audio evidence."
+
+policy:
+  allow_implicit_invocation: true

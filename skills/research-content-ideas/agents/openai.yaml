@@ -1,0 +1,7 @@
+interface:
+  display_name: "Research Content Ideas"
+  short_description: "Select evidence-backed content angles"
+  default_prompt: "Use $research-content-ideas to research and rank a small set of decision-ready content angles."
+
+policy:
+  allow_implicit_invocation: true

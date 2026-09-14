@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "conquistador.host-package/v1",
+  "title": "Conquistador host package",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "id",
+    "hostKind",
+    "displayName",
+    "productName",
+    "pluginVersion",
+    "canonicalSkillsRoot",
+    "skillMount",
+    "installClass",
+    "publicListing",
+    "cleanHostProof",
+    "zeroRuntime",
+    "notThisDoor",
+    "hostProvides",
+    "conquistadorOwns",
+    "missingCapabilities",
+    "missingCapabilityBehavior",
+    "lifecycle"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "conquistador.host-package/v1"
+    },
+    "id": {
+      "type": "string",
+      "enum": ["host:coding-agent", "host:eve", "host:grok-bot"]
+    },
+    "hostKind": {
+      "type": "string",
+      "enum": ["coding-agent-plugin", "eve-agent", "official-xai-grok-bot"]
+    },
+    "displayName": { "type": "string", "minLength": 1 },
+    "productName": { "const": "conquistador" },
+    "pluginVersion": { "const": "1.0.0" },
+    "canonicalSkillsRoot": { "const": "skills/skills" },
+    "skillMount": { "type": "string", "minLength": 1 },
+    "installClass": { "const": "candidate-only" },
+    "publicListing": { "const": false },
+    "cleanHostProof": { "const": false },
+    "zeroRuntime": { "const": true },
+    "notThisDoor": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "hostProvides": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "conquistadorOwns": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "missingCapabilities": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "missingCapabilityBehavior": { "const": "fail-closed-draft" },
+    "lifecycle": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["setup", "upgrade", "remove"],
+      "properties": {
+        "setup": { "type": "string", "minLength": 1 },
+        "upgrade": { "type": "string", "minLength": 1 },
+        "remove": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}

@@ -1,0 +1,7 @@
+interface:
+  display_name: "Evaluate Shortform"
+  short_description: "Review actual short-form results"
+  default_prompt: "Use $evaluate-shortform to review the actual video, platform evidence, confounders, and the next bounded brief."
+
+policy:
+  allow_implicit_invocation: true

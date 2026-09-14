@@ -1,0 +1,17 @@
+{
+  "name": "@forsvn/conquistador-promptfoo-isolated",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Exact isolated Promptfoo installation for Conquistador live evals",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22.22.0"
+  },
+  "dependencies": {
+    "promptfoo": "0.122.0"
+  },
+  "overrides": {
+    "adm-zip": "0.6.1",
+    "sharp": "0.35.4"
+  }
+}

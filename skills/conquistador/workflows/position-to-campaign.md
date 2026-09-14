@@ -1,0 +1,17 @@
+# Position-to-campaign workflow
+
+Use privately when the product needs an evidenced audience and position carried through to one first
+campaign, rather than isolated copy.
+
+1. Use `research-positioning` to settle the audience, costly moment, alternatives, promise, mechanism,
+   proof, objection, and assumption boundary.
+2. Use `plan-campaign` to choose one observable outcome, channel role, sequence, asset inventory,
+   budget boundary, and stop rule.
+3. Use `write-copy` or the channel-native creation outcome for the finished primary asset.
+4. Use `measure-growth` to define the first qualified signal and reversal condition.
+
+Keep one decision spine across the position and every asset. Do not manufacture customer language,
+proof, market size, or outcome claims; when evidence is thin, make the campaign a learning test.
+
+End with one terminal Review Packet for final human review: the bet, ready-to-use campaign and asset,
+consequential choices, evidence boundary, and one next action.

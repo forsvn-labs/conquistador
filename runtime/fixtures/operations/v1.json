@@ -1,0 +1,40 @@
+{
+  "schemaVersion": "conquistador.verified-operations/v1",
+  "records": [
+    {
+      "id": "signals.pull-bounded",
+      "provider": "unverified",
+      "capabilityId": "signals.bounded-pull",
+      "verificationStatus": "unverified",
+      "actionClass": "observe"
+    },
+    {
+      "id": "distribution.create-draft",
+      "provider": "unverified",
+      "capabilityId": "distribution.draft",
+      "verificationStatus": "unverified",
+      "actionClass": "draft"
+    },
+    {
+      "id": "performance.observe-window",
+      "provider": "unverified",
+      "capabilityId": "performance.observe",
+      "verificationStatus": "unverified",
+      "actionClass": "observe"
+    },
+    {
+      "id": "unsupported.provider-draft",
+      "provider": "unsupported-provider",
+      "capabilityId": "distribution.draft",
+      "verificationStatus": "unsupported",
+      "actionClass": "draft"
+    },
+    {
+      "id": "fixture.recorded-stub",
+      "provider": "fixture-provider",
+      "capabilityId": "signals.bounded-pull",
+      "verificationStatus": "fixture-verified",
+      "actionClass": "observe"
+    }
+  ]
+}

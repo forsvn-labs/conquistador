@@ -1,0 +1,7 @@
+interface:
+  display_name: "Evaluate Outreach"
+  short_description: "Diagnose sent outreach results"
+  default_prompt: "Use $evaluate-outreach to evaluate delivery, qualified replies, compliance, and segment evidence and define the next bounded batch."
+
+policy:
+  allow_implicit_invocation: true

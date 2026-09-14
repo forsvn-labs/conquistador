@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://forsvn.com/schemas/conquistador/provider-matrix-v1.json",
+  "title": "Conquistador Provider Matrix v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "productVersion", "cells"],
+  "properties": {
+    "schemaVersion": { "const": "conquistador.provider-matrix/v1" },
+    "productVersion": { "const": "1.0.0" },
+    "cells": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "provider", "transport", "endpoint", "credentialEnv", "state", "officialSources", "checkedAt", "liveEvidence"],
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "provider": { "enum": ["openai", "anthropic", "vercel-ai-gateway"] },
+          "transport": { "type": "string", "minLength": 1 },
+          "endpoint": { "type": "string", "format": "uri", "pattern": "^https://" },
+          "credentialEnv": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]{2,63}$" },
+          "state": { "enum": ["fixture-verified", "live-verified", "supported"] },
+          "officialSources": { "type": "array", "minItems": 1, "items": { "type": "string", "format": "uri", "pattern": "^https://" } },
+          "checkedAt": { "type": "string", "format": "date-time" },
+          "liveEvidence": {
+            "oneOf": [
+              { "type": "null" },
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["candidateBuildId", "receiptId"],
+                "properties": {
+                  "candidateBuildId": { "type": "string", "minLength": 1 },
+                  "receiptId": { "type": "string", "minLength": 1 }
+                }
+              }
+            ]
+          }
+        }
+      }
+    }
+  }
+}

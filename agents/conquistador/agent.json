@@ -1,0 +1,123 @@
+{
+  "schemaVersion": "conquistador.agent-package/v1",
+  "id": "agent:conquistador",
+  "kind": "single-agent",
+  "role": "worker",
+  "displayName": "Conquistador",
+  "productName": "conquistador",
+  "pluginVersion": "1.0.0",
+  "canonicalSkill": "conquistador",
+  "canonicalSkillRoot": "skills/skills/conquistador",
+  "installClass": "candidate-only",
+  "publicListing": false,
+  "cleanHostProof": false,
+  "zeroRuntime": true,
+  "notThisDoor": [
+    "complete coding-agent plugin",
+    "complete skills-bundle fallback",
+    "independent outcome skill",
+    "advisor/worker squad",
+    "Eve agent",
+    "official xAI Grok Bot",
+    "Grok CLI / Grok Build",
+    "generic bot import"
+  ],
+  "mayLoadSkills": [
+    "shape-initiative",
+    "research-positioning",
+    "research-channel",
+    "research-content-ideas",
+    "diagnose-growth",
+    "prioritize-opportunities",
+    "model-growth-funnel",
+    "allocate-marketing-budget",
+    "design-pricing-and-packaging",
+    "plan-campaign",
+    "optimize-search",
+    "measure-growth",
+    "create-brand",
+    "brief-creative",
+    "analyze-video",
+    "create-paid-campaign",
+    "create-shortform",
+    "create-run-of-show",
+    "write-copy",
+    "write-social",
+    "write-outreach",
+    "write-longform",
+    "polish-vietnamese",
+    "improve-conversion",
+    "evaluate-paid-campaign",
+    "evaluate-outreach",
+    "evaluate-shortform",
+    "audit-marketing",
+    "fresh-eyes-review",
+    "knowledge-review",
+    "decision-panel",
+    "submit-feedback"
+  ],
+  "mayLoadWorkflows": [
+    "position-to-campaign",
+    "channel-to-campaign",
+    "target-to-growth-plan",
+    "content-intelligence-loop",
+    "measured-initiative-loop",
+    "launch-product",
+    "create-landing-page",
+    "create-app-preview",
+    "shortform-campaign",
+    "paid-campaign-loop",
+    "outreach-sequence",
+    "earned-media-outreach",
+    "lifecycle-campaign",
+    "referral-loop",
+    "interactive-campaign",
+    "build-programmatic-search",
+    "optimize-app-store-listing",
+    "answer-visibility-monitor",
+    "content-performance-review",
+    "creative-asset-review"
+  ],
+  "proseOnlyWorkflows": [
+    "content-intelligence-loop"
+  ],
+  "undeclaredSiblings": "fail-closed",
+  "absentDeclaredSiblings": "degrade-parent-only",
+  "capabilities": {
+    "requested": [
+      "host model invocation",
+      "parent skill tree at skills/conquistador",
+      "optional sibling outcome trees when already installed"
+    ],
+    "missing": [
+      "shipped sibling outcome trees",
+      "native subagents",
+      "optional conquistador runner and catalog",
+      "Eval Lab",
+      "public listing"
+    ]
+  },
+  "context": {
+    "inputs": [
+      "current request",
+      "thread and attachments",
+      "available product files",
+      "parent private composition (workflows, methods, channels, standards)"
+    ]
+  },
+  "results": {
+    "contract": "One terminal Review Packet from the parent contract. Finish the work from parent methods and workflows when siblings are absent. Do not invent sibling skill bodies."
+  },
+  "delegation": {
+    "maxDelegationsPerRun": 0,
+    "mayExecuteAssignedWork": true,
+    "mayAuthorizeMutations": false,
+    "maySelfApprove": false
+  },
+  "missingCapabilityBehavior": "fail-closed-draft",
+  "lifecycle": {
+    "setup": "Stage skills/skills/conquistador only. Do not copy outcome siblings into this door.",
+    "upgrade": "Replace the owned conquistador tree from a newer source. Do not fetch siblings at runtime.",
+    "remove": "Delete the owned conquistador tree and agent receipt. Leave other skills."
+  }
+}

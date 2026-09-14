@@ -1,0 +1,55 @@
+{
+  "schemaVersion": "conquistador.extension-manifest/v1",
+  "id": "adapter.semrush-report",
+  "version": "1.0.0",
+  "kind": "provider-adapter",
+  "activation": "typed-adapter",
+  "transport": "audited-adapter-only",
+  "provenance": {
+    "sourceId": "adapter.semrush-report",
+    "sourceVersion": "1.0.0",
+    "digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333"
+  },
+  "operations": [
+    {
+      "id": "semrush.report.query",
+      "capabilityId": "seo.report.read",
+      "catalog": { "provider": "semrush", "capabilityId": "seo.report.read", "operationId": "semrush.report.query" },
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "report": { "type": "string" },
+          "database": { "type": "string" },
+          "domain": { "type": "string" },
+          "keywords": { "type": "array", "items": { "type": "string" } },
+          "columns": { "type": "array", "items": { "type": "string" } },
+          "limit": { "type": "integer" },
+          "offset": { "type": "integer" }
+        },
+        "required": ["report", "database"]
+      },
+      "outputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "rows": { "type": "array", "items": { "type": "object" } },
+          "unitsUsed": { "type": "number" },
+          "nextOffset": { "type": "integer" }
+        },
+        "required": ["rows", "unitsUsed"]
+      },
+      "actionClass": "metered-observe",
+      "budget": { "rateLimit": "Semrush API units and provider restrictions", "quotaUnit": "api-unit", "monetaryUnit": "USD", "maximumUnitsPerRun": 500, "maximumCostPerRun": 5 },
+      "connection": { "required": true, "provider": "semrush", "scopes": ["api:read"], "credentialCustody": "host-only" },
+      "maturity": "fixture-verified",
+      "dependencies": [],
+      "failure": {
+        "unavailable": "fail-closed",
+        "degraded": "return-degraded-result",
+        "retry": { "strategy": "none", "maximumAttempts": 0, "backoff": "none" },
+        "recovery": "manual-reconnect"
+      }
+    }
+  ]
+}

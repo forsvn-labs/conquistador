@@ -1,0 +1,59 @@
+{
+  "name": "@forsvn/conquistador",
+  "version": "0.1.0",
+  "description": "A senior product-marketing and growth teammate with independently installable outcome skills.",
+  "license": "MIT",
+  "homepage": "https://forsvn.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/forsvn-labs/conquistador"
+  },
+  "type": "module",
+  "engines": {
+    "node": ">=24.0.0 <25"
+  },
+  "dependencies": {
+    "jose": "6.2.8"
+  },
+  "bin": {
+    "conquistador": "runtime/bin/conquistador.js"
+  },
+  "files": [
+    ".claude-plugin",
+    ".codex-plugin",
+    "hosts",
+    "agents",
+    "tools",
+    "INSTALL.md",
+    "CONTRIBUTING.md",
+    "AGENTS.md",
+    "VISION.md",
+    "ROADMAP.md",
+    "PROGRESS.md",
+    "Dockerfile",
+    ".dockerignore",
+    "assets",
+    "catalog",
+    "docs",
+    "evals",
+    "plugin.json",
+    "release",
+    "runtime",
+    "skills",
+    "CHANGELOG.md",
+    "LICENSE",
+    "MIGRATION.md",
+    "NOTICE.md",
+    "README.md",
+    "VERSIONS.md"
+  ],
+  "scripts": {
+    "bootstrap": "node tools/dev.mjs bootstrap",
+    "build": "node tools/dev.mjs build",
+    "test": "node tools/dev.mjs test",
+    "package": "node tools/package.mjs"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

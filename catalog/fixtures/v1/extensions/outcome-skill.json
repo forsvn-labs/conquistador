@@ -1,0 +1,44 @@
+{
+  "schemaVersion": "conquistador.extension-manifest/v1",
+  "id": "conquistador.content-brief",
+  "version": "1.0.0",
+  "kind": "outcome-skill",
+  "activation": "on-demand-skill",
+  "transport": "none",
+  "provenance": {
+    "sourceId": "conquistador.content-brief",
+    "sourceVersion": "1.0.0",
+    "digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+  },
+  "operations": [
+    {
+      "id": "content.brief.create",
+      "capabilityId": "content.brief.create",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": { "topic": { "type": "string" } },
+        "required": ["topic"]
+      },
+      "outputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": { "brief": { "type": "string" } },
+        "required": ["brief"]
+      },
+      "actionClass": "observe",
+      "budget": { "rateLimit": "one local run", "quotaUnit": "local-run", "monetaryUnit": "USD" },
+      "connection": { "required": false, "provider": "none", "scopes": [], "credentialCustody": "host-only" },
+      "maturity": "cataloged",
+      "dependencies": [
+        { "provider": "search-console", "capabilityId": "search.analytics.read", "operationId": "search-console.analytics.query" }
+      ],
+      "failure": {
+        "unavailable": "omit-optional-dependency",
+        "degraded": "return-degraded-result",
+        "retry": { "strategy": "none", "maximumAttempts": 0, "backoff": "none" },
+        "recovery": "resume-from-artifact"
+      }
+    }
+  ]
+}

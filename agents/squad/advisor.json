@@ -1,0 +1,70 @@
+{
+  "schemaVersion": "conquistador.agent-package/v1",
+  "id": "agent:advisor",
+  "kind": "squad-member",
+  "role": "advisor",
+  "displayName": "Conquistador advisor",
+  "productName": "conquistador",
+  "pluginVersion": "1.0.0",
+  "canonicalSkill": "conquistador",
+  "canonicalSkillRoot": "skills/skills/conquistador",
+  "installClass": "candidate-only",
+  "publicListing": false,
+  "cleanHostProof": false,
+  "zeroRuntime": true,
+  "notThisDoor": [
+    "single Conquistador agent",
+    "complete coding-agent plugin",
+    "worker role",
+    "per-skill agents/ files",
+    "generic bot import"
+  ],
+  "mayLoadSkills": [
+    "decision-panel",
+    "knowledge-review",
+    "fresh-eyes-review"
+  ],
+  "mayLoadWorkflows": [
+    "creative-asset-review",
+    "content-performance-review"
+  ],
+  "proseOnlyWorkflows": [],
+  "undeclaredSiblings": "fail-closed",
+  "absentDeclaredSiblings": "degrade-parent-only",
+  "capabilities": {
+    "requested": [
+      "host model invocation",
+      "assigned advisor skills",
+      "named review workflows on the parent tree"
+    ],
+    "missing": [
+      "authority to send, publish, spend, or write externally",
+      "worker production skills",
+      "native isolated advisor context on every host",
+      "optional conquistador runner and catalog"
+    ]
+  },
+  "context": {
+    "inputs": [
+      "current artifact from the worker",
+      "fixed review criteria",
+      "assigned advisor skill",
+      "named review workflow"
+    ]
+  },
+  "results": {
+    "contract": "Critique with PASS/FAIL, dissent, and a reversal condition. Not a substitute for human approval. Do not replace the worker artifact with a ghost-written draft."
+  },
+  "delegation": {
+    "maxDelegationsPerRun": 0,
+    "mayExecuteAssignedWork": false,
+    "mayAuthorizeMutations": false,
+    "maySelfApprove": false
+  },
+  "missingCapabilityBehavior": "fail-closed-draft",
+  "lifecycle": {
+    "setup": "Install with the squad package. Stage parent conquistador plus the three advisor skills.",
+    "upgrade": "Replace owned advisor trees from a newer source. Do not fetch at runtime.",
+    "remove": "Delete the owned advisor trees with the squad. Leave other skills."
+  }
+}

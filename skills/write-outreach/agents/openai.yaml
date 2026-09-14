@@ -1,0 +1,8 @@
+interface:
+  display_name: "Write Outreach"
+  short_description: "Draft relevant outreach and replies with evidence boundaries"
+  default_prompt: "Use $write-outreach to draft the outreach or reply requested for this audience, with evidence limits and pre-send checks."
+
+policy:
+  allow_implicit_invocation: true
+

@@ -1,0 +1,124 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://forsvn.com/schemas/conquistador/review-contract-v1.json",
+  "oneOf": [
+    { "$ref": "#/$defs/packet" }, { "$ref": "#/$defs/verdict" },
+    { "$ref": "#/$defs/authorization" }, { "$ref": "#/$defs/receipt" },
+    { "$ref": "#/$defs/observation" }, { "$ref": "#/$defs/learning" },
+    { "$ref": "#/$defs/reviewEvent" }
+  ],
+  "$defs": {
+    "safeString": { "type": "string", "not": { "$ref": "https://forsvn.com/schemas/conquistador/credential-detector-v1.json" } },
+    "safeText": { "type": "string", "minLength": 1, "pattern": "^(?:\\S|\\S[\\s\\S]*\\S)$", "not": { "$ref": "https://forsvn.com/schemas/conquistador/credential-detector-v1.json" } },
+    "id": { "allOf": [{ "type": "string", "pattern": "^[a-z0-9][a-z0-9:._-]{0,127}$", "not": { "enum": ["latest", "default", "*"] } }, { "$ref": "#/$defs/safeString" }] },
+    "digest": { "allOf": [{ "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" }, { "$ref": "#/$defs/safeString" }] },
+    "utc": { "allOf": [{ "type": "string", "format": "date-time", "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$" }, { "$ref": "#/$defs/safeString" }] },
+    "semver": { "allOf": [{ "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+(?:-[0-9A-Za-z.-]+)?$" }, { "$ref": "#/$defs/safeString" }] },
+    "safeJson": {
+      "anyOf": [
+        { "type": "null" }, { "type": "boolean" }, { "type": "number" },
+        { "$ref": "#/$defs/safeString" },
+        { "type": "array", "items": { "$ref": "#/$defs/safeJson" } },
+        { "type": "object", "propertyNames": { "$ref": "#/$defs/safeString" }, "additionalProperties": { "$ref": "#/$defs/safeJson" } }
+      ]
+    },
+    "nullableId": { "anyOf": [{ "$ref": "#/$defs/id" }, { "type": "null" }] },
+    "artifact": {
+      "type": "object", "additionalProperties": false,
+      "required": ["artifactId", "revision", "digest", "state"],
+      "properties": { "artifactId": { "$ref": "#/$defs/id" }, "revision": { "type": "integer", "minimum": 1 }, "digest": { "$ref": "#/$defs/digest" }, "state": { "enum": ["finished", "partial", "cancelled", "failed"] } }
+    },
+    "authentication": {
+      "type": "object", "additionalProperties": false,
+      "required": ["principalId", "role", "method", "verifier", "verifiedAt", "authority", "subjectDigest", "proofDigest"],
+      "properties": { "principalId": { "$ref": "#/$defs/id" }, "role": { "enum": ["operator", "reviewer", "release-authority"] }, "method": { "$ref": "#/$defs/id" }, "verifier": { "$ref": "#/$defs/id" }, "verifiedAt": { "$ref": "#/$defs/utc" }, "authority": { "$ref": "#/$defs/id" }, "subjectDigest": { "$ref": "#/$defs/digest" }, "proofDigest": { "$ref": "#/$defs/digest" } }
+    },
+    "packet": {
+      "type": "object", "additionalProperties": false,
+      "required": ["schemaVersion", "kind", "packetId", "revisionId", "revision", "producer", "identity", "artifact", "strategicBet", "work", "materialTactics", "evidence", "unresolvedLimitations", "proposedNextAction", "actionProposal", "redaction", "reviewBoundary", "createdAt", "digest"],
+      "properties": {
+        "schemaVersion": { "const": "conquistador.review-contract/v1" }, "kind": { "const": "review-packet" }, "packetId": { "$ref": "#/$defs/id" }, "revisionId": { "$ref": "#/$defs/id" }, "revision": { "type": "integer", "minimum": 1 },
+        "producer": { "type": "object", "additionalProperties": false, "required": ["module", "sourceId", "capabilityId", "playbookId", "playbookVersion"], "properties": { "module": { "enum": ["portable-plugin", "self-hosted-agent", "tool-module", "eval-lab", "release"] }, "sourceId": { "$ref": "#/$defs/id" }, "capabilityId": { "$ref": "#/$defs/id" }, "playbookId": { "$ref": "#/$defs/nullableId" }, "playbookVersion": { "anyOf": [{ "$ref": "#/$defs/semver" }, { "type": "null" }] } } },
+        "identity": { "type": "object", "additionalProperties": false, "required": ["sessionId", "runId", "candidateId", "evidenceId"], "properties": { "sessionId": { "$ref": "#/$defs/id" }, "runId": { "$ref": "#/$defs/id" }, "candidateId": { "$ref": "#/$defs/nullableId" }, "evidenceId": { "$ref": "#/$defs/nullableId" } } },
+        "artifact": { "$ref": "#/$defs/artifact" }, "strategicBet": { "$ref": "#/$defs/safeText" },
+        "work": { "type": "object", "additionalProperties": false, "required": ["state", "summary", "partialReason"], "properties": { "state": { "enum": ["finished", "partial", "cancelled", "failed"] }, "summary": { "$ref": "#/$defs/safeText" }, "partialReason": { "anyOf": [{ "$ref": "#/$defs/safeText" }, { "type": "null" }] } } },
+        "materialTactics": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "#/$defs/safeText" } },
+        "evidence": { "type": "array", "items": { "type": "object", "additionalProperties": false, "required": ["id", "digest", "provenance"], "properties": { "id": { "$ref": "#/$defs/id" }, "digest": { "$ref": "#/$defs/digest" }, "provenance": { "$ref": "#/$defs/safeText" } } } },
+        "unresolvedLimitations": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/$defs/safeText" } }, "proposedNextAction": { "$ref": "#/$defs/safeText" },
+        "actionProposal": { "anyOf": [{ "type": "null" }, { "type": "object", "additionalProperties": false, "required": ["authority", "operation", "connectionRef", "payload", "payloadDigest"], "properties": { "authority": { "$ref": "#/$defs/id" }, "operation": { "$ref": "#/$defs/id" }, "connectionRef": { "$ref": "#/$defs/id" }, "payload": { "$ref": "#/$defs/safeJson" }, "payloadDigest": { "$ref": "#/$defs/digest" } } }] },
+        "redaction": { "type": "object", "additionalProperties": false, "required": ["classification", "secretFields", "applied"], "properties": { "classification": { "enum": ["public", "internal", "confidential", "secret"] }, "secretFields": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/$defs/safeText" } }, "applied": { "const": true } } },
+        "reviewBoundary": { "type": "object", "additionalProperties": false, "required": ["humanRequired", "modelCannotDecide", "oneFinalVerdict", "outcomes"], "properties": { "humanRequired": { "const": true }, "modelCannotDecide": { "const": true }, "oneFinalVerdict": { "const": true }, "outcomes": { "const": ["accept", "revise", "reject", "cancel"] } } },
+        "createdAt": { "$ref": "#/$defs/utc" }, "digest": { "$ref": "#/$defs/digest" }
+      },
+      "allOf": [
+        { "oneOf": [
+          { "properties": { "producer": { "properties": { "playbookId": { "type": "null" }, "playbookVersion": { "type": "null" } } } } },
+          { "properties": { "producer": { "properties": { "playbookId": { "$ref": "#/$defs/id" }, "playbookVersion": { "$ref": "#/$defs/semver" } } } } }
+        ] },
+        { "oneOf": [
+          { "properties": { "artifact": { "properties": { "state": { "const": "finished" } } }, "work": { "properties": { "state": { "const": "finished" }, "partialReason": { "type": "null" } } } } },
+          { "properties": { "artifact": { "properties": { "state": { "const": "partial" } } }, "work": { "properties": { "state": { "const": "partial" }, "partialReason": { "$ref": "#/$defs/safeText" } } } } },
+          { "properties": { "artifact": { "properties": { "state": { "const": "cancelled" } } }, "work": { "properties": { "state": { "const": "cancelled" }, "partialReason": { "$ref": "#/$defs/safeText" } } } } },
+          { "properties": { "artifact": { "properties": { "state": { "const": "failed" } } }, "work": { "properties": { "state": { "const": "failed" }, "partialReason": { "$ref": "#/$defs/safeText" } } } } }
+        ] }
+      ]
+    },
+    "verdict": {
+      "type": "object", "additionalProperties": false,
+      "required": ["schemaVersion", "kind", "verdictId", "outcome", "packetId", "packetDigest", "artifactId", "artifactRevision", "artifactDigest", "actionPayloadDigest", "sessionId", "runId", "candidateId", "evidenceId", "authentication", "decidedAt", "expiryPolicy", "expiresAt", "singleUse", "digest"],
+      "properties": { "schemaVersion": { "const": "conquistador.review-contract/v1" }, "kind": { "const": "review-verdict" }, "verdictId": { "$ref": "#/$defs/id" }, "outcome": { "enum": ["accept", "revise", "reject", "cancel"] }, "packetId": { "$ref": "#/$defs/id" }, "packetDigest": { "$ref": "#/$defs/digest" }, "artifactId": { "$ref": "#/$defs/id" }, "artifactRevision": { "type": "integer", "minimum": 1 }, "artifactDigest": { "$ref": "#/$defs/digest" }, "actionPayloadDigest": { "anyOf": [{ "$ref": "#/$defs/digest" }, { "type": "null" }] }, "sessionId": { "$ref": "#/$defs/id" }, "runId": { "$ref": "#/$defs/id" }, "candidateId": { "$ref": "#/$defs/nullableId" }, "evidenceId": { "$ref": "#/$defs/nullableId" }, "authentication": { "$ref": "#/$defs/authentication" }, "decidedAt": { "$ref": "#/$defs/utc" }, "expiryPolicy": { "const": "expires" }, "expiresAt": { "$ref": "#/$defs/utc" }, "singleUse": { "const": true }, "digest": { "$ref": "#/$defs/digest" } }
+    },
+    "reviewEvent": {
+      "type": "object", "additionalProperties": false,
+      "required": ["schemaVersion", "kind", "eventId", "sequence", "eventType", "source", "actor", "packetId", "packetDigest", "artifact", "sessionId", "runId", "candidateId", "evidenceId", "payload", "authority", "redaction", "createdAt", "digest"],
+      "properties": {
+        "schemaVersion": { "const": "conquistador.review-event/v1" },
+        "kind": { "const": "review-event" },
+        "eventId": { "$ref": "#/$defs/id" },
+        "sequence": { "type": "integer", "minimum": 1 },
+        "eventType": { "enum": ["packet.presented", "annotation.created", "suggestion.created", "companion.failed"] },
+        "source": { "type": "object", "additionalProperties": false, "required": ["kind", "id"], "properties": { "kind": { "enum": ["host", "companion"] }, "id": { "$ref": "#/$defs/id" } } },
+        "actor": { "type": "object", "additionalProperties": false, "required": ["kind", "id"], "properties": { "kind": { "enum": ["human", "agent", "system"] }, "id": { "$ref": "#/$defs/nullableId" } }, "oneOf": [
+          { "properties": { "kind": { "enum": ["human", "agent"] }, "id": { "$ref": "#/$defs/id" } } },
+          { "properties": { "kind": { "const": "system" }, "id": { "type": "null" } } }
+        ] },
+        "packetId": { "$ref": "#/$defs/id" },
+        "packetDigest": { "$ref": "#/$defs/digest" },
+        "artifact": { "$ref": "#/$defs/artifact" },
+        "sessionId": { "$ref": "#/$defs/id" },
+        "runId": { "$ref": "#/$defs/id" },
+        "candidateId": { "$ref": "#/$defs/nullableId" },
+        "evidenceId": { "$ref": "#/$defs/nullableId" },
+        "payload": { "type": "object" },
+        "authority": { "type": "object", "additionalProperties": false, "required": ["canonicalOwner", "accept", "rewrite", "delete", "authorizeAction", "approveRelease"], "properties": { "canonicalOwner": { "const": false }, "accept": { "const": false }, "rewrite": { "const": false }, "delete": { "const": false }, "authorizeAction": { "const": false }, "approveRelease": { "const": false } } },
+        "redaction": { "type": "object", "additionalProperties": false, "required": ["classification", "secretFields", "applied"], "properties": { "classification": { "enum": ["public", "internal", "confidential", "secret"] }, "secretFields": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/$defs/safeText" } }, "applied": { "const": true } } },
+        "createdAt": { "$ref": "#/$defs/utc" },
+        "digest": { "$ref": "#/$defs/digest" }
+      },
+      "oneOf": [
+        { "properties": { "eventType": { "const": "packet.presented" }, "source": { "properties": { "kind": { "const": "host" } } }, "actor": { "properties": { "kind": { "const": "system" }, "id": { "type": "null" } } }, "payload": { "type": "object", "additionalProperties": false, "required": ["format", "presentationDigest", "canonicalTextAvailable"], "properties": { "format": { "const": "plain-text" }, "presentationDigest": { "$ref": "#/$defs/digest" }, "canonicalTextAvailable": { "const": true } } } } },
+        { "properties": { "eventType": { "const": "annotation.created" }, "actor": { "properties": { "kind": { "enum": ["human", "agent"] } } }, "payload": { "type": "object", "additionalProperties": false, "required": ["body", "anchor"], "properties": { "body": { "$ref": "#/$defs/safeText" }, "anchor": { "anyOf": [{ "$ref": "#/$defs/safeText" }, { "type": "null" }] } } } } },
+        { "properties": { "eventType": { "const": "suggestion.created" }, "actor": { "properties": { "kind": { "enum": ["human", "agent"] } } }, "payload": { "type": "object", "additionalProperties": false, "required": ["body", "anchor", "replacement"], "properties": { "body": { "$ref": "#/$defs/safeText" }, "anchor": { "anyOf": [{ "$ref": "#/$defs/safeText" }, { "type": "null" }] }, "replacement": { "anyOf": [{ "$ref": "#/$defs/safeText" }, { "type": "null" }] } } } } },
+        { "properties": { "eventType": { "const": "companion.failed" }, "source": { "properties": { "kind": { "const": "companion" } } }, "actor": { "properties": { "kind": { "const": "system" }, "id": { "type": "null" } } }, "payload": { "type": "object", "additionalProperties": false, "required": ["code", "message", "fallback", "canonicalReviewAvailable", "hostVerdictRequired"], "properties": { "code": { "$ref": "#/$defs/id" }, "message": { "$ref": "#/$defs/safeText" }, "fallback": { "const": "plain-text" }, "canonicalReviewAvailable": { "const": true }, "hostVerdictRequired": { "const": true } } } } }
+      ]
+    },
+    "presentationEvent": {
+      "allOf": [
+        { "$ref": "#/$defs/reviewEvent" },
+        { "properties": { "eventType": { "const": "packet.presented" }, "source": { "properties": { "kind": { "const": "host" } } }, "actor": { "properties": { "kind": { "const": "system" }, "id": { "type": "null" } } }, "payload": { "type": "object", "additionalProperties": false, "required": ["format", "presentationDigest", "canonicalTextAvailable"], "properties": { "format": { "const": "plain-text" }, "presentationDigest": { "$ref": "#/$defs/digest" }, "canonicalTextAvailable": { "const": true } } } } }
+      ]
+    },
+    "authorization": {
+      "type": "object", "additionalProperties": false,
+      "required": ["schemaVersion", "kind", "authorizationId", "verdictId", "verdictDigest", "packetId", "packetDigest", "sessionId", "runId", "candidateId", "artifact", "allowed", "authentication", "authorizedAt", "expiresAt", "singleUse", "digest"],
+      "properties": { "schemaVersion": { "const": "conquistador.review-contract/v1" }, "kind": { "const": "action-authorization" }, "authorizationId": { "$ref": "#/$defs/id" }, "verdictId": { "$ref": "#/$defs/id" }, "verdictDigest": { "$ref": "#/$defs/digest" }, "packetId": { "$ref": "#/$defs/id" }, "packetDigest": { "$ref": "#/$defs/digest" }, "sessionId": { "$ref": "#/$defs/id" }, "runId": { "$ref": "#/$defs/id" }, "candidateId": { "$ref": "#/$defs/nullableId" }, "artifact": { "$ref": "#/$defs/artifact" }, "allowed": { "type": "object", "additionalProperties": false, "required": ["authority", "operation", "connectionRef", "payloadDigest"], "properties": { "authority": { "$ref": "#/$defs/id" }, "operation": { "$ref": "#/$defs/id" }, "connectionRef": { "$ref": "#/$defs/id" }, "payloadDigest": { "$ref": "#/$defs/digest" } } }, "authentication": { "$ref": "#/$defs/authentication" }, "authorizedAt": { "$ref": "#/$defs/utc" }, "expiresAt": { "$ref": "#/$defs/utc" }, "singleUse": { "const": true }, "digest": { "$ref": "#/$defs/digest" } }
+    },
+    "receipt": {
+      "type": "object", "additionalProperties": false,
+      "required": ["schemaVersion", "kind", "receiptId", "authorizationId", "authorizationDigest", "sessionId", "runId", "candidateId", "artifact", "authority", "operation", "connectionRef", "payloadDigest", "status", "startedAt", "finishedAt", "redactionApplied", "terminal", "digest"],
+      "properties": { "schemaVersion": { "const": "conquistador.review-contract/v1" }, "kind": { "const": "action-receipt" }, "receiptId": { "$ref": "#/$defs/id" }, "authorizationId": { "$ref": "#/$defs/id" }, "authorizationDigest": { "$ref": "#/$defs/digest" }, "sessionId": { "$ref": "#/$defs/id" }, "runId": { "$ref": "#/$defs/id" }, "candidateId": { "$ref": "#/$defs/nullableId" }, "artifact": { "$ref": "#/$defs/artifact" }, "authority": { "$ref": "#/$defs/id" }, "operation": { "$ref": "#/$defs/id" }, "connectionRef": { "$ref": "#/$defs/id" }, "payloadDigest": { "$ref": "#/$defs/digest" }, "status": { "enum": ["succeeded", "failed", "cancelled"] }, "startedAt": { "$ref": "#/$defs/utc" }, "finishedAt": { "$ref": "#/$defs/utc" }, "redactionApplied": { "const": true }, "terminal": { "const": true }, "digest": { "$ref": "#/$defs/digest" } }
+    },
+    "observation": { "type": "object", "additionalProperties": false, "required": ["schemaVersion", "kind", "observationId", "receiptId", "receiptDigest", "status", "measures", "observedAt", "digest"], "properties": { "schemaVersion": { "const": "conquistador.review-contract/v1" }, "kind": { "const": "result-observation" }, "observationId": { "$ref": "#/$defs/id" }, "receiptId": { "$ref": "#/$defs/id" }, "receiptDigest": { "$ref": "#/$defs/digest" }, "status": { "enum": ["unknown", "known"] }, "measures": { "anyOf": [{ "allOf": [{ "$ref": "#/$defs/safeJson" }, { "type": "object", "minProperties": 1 }] }, { "type": "null" }] }, "observedAt": { "$ref": "#/$defs/utc" }, "digest": { "$ref": "#/$defs/digest" } }, "oneOf": [{ "properties": { "status": { "const": "unknown" }, "measures": { "type": "null" } } }, { "properties": { "status": { "const": "known" }, "measures": { "allOf": [{ "$ref": "#/$defs/safeJson" }, { "type": "object", "minProperties": 1 }] } } }] },
+    "learning": { "type": "object", "additionalProperties": false, "required": ["schemaVersion", "kind", "learningId", "observationId", "observationDigest", "status", "claim", "createdAt", "digest"], "properties": { "schemaVersion": { "const": "conquistador.review-contract/v1" }, "kind": { "const": "learning-record" }, "learningId": { "$ref": "#/$defs/id" }, "observationId": { "$ref": "#/$defs/id" }, "observationDigest": { "$ref": "#/$defs/digest" }, "status": { "enum": ["unknown", "recorded"] }, "claim": { "anyOf": [{ "$ref": "#/$defs/safeText" }, { "type": "null" }] }, "createdAt": { "$ref": "#/$defs/utc" }, "digest": { "$ref": "#/$defs/digest" } }, "oneOf": [{ "properties": { "status": { "const": "unknown" }, "claim": { "type": "null" } } }, { "properties": { "status": { "const": "recorded" }, "claim": { "$ref": "#/$defs/safeText" } } }] }
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "name": "@forsvn/conquistador-tool-catalog",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Public catalog, adapter, gateway, and receipt contracts for Conquistador",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=22.22.0"
+  },
+  "scripts": {
+    "test": "npm run test:public",
+    "typecheck": "tsc --noEmit",
+    "catalog:check": "node --experimental-strip-types src/cli.ts catalog check --file operations/v1.json",
+    "candidate:build": "node --experimental-strip-types tools/candidate-build.ts",
+    "fixtures:check": "node --experimental-strip-types tools/mark-fixture-evidence.ts --check",
+    "fixtures:mark": "node --experimental-strip-types tools/mark-fixture-evidence.ts",
+    "matrix:check": "node --experimental-strip-types tools/check-six-provider-matrix.ts",
+    "matrix:write": "node --experimental-strip-types tools/check-six-provider-matrix.ts --write",
+    "lint:for-149": "oxlint -c .oxlintrc.json src/six-provider-matrix.ts tools/check-six-provider-matrix.ts tools/candidate-build.ts",
+    "test:public": "vitest run --exclude tests/candidate.test.ts --exclude tests/g4.test.ts",
+    "test:source": "vitest run"
+  },
+  "devDependencies": {
+    "@oxlint/plugins": "1.82.0",
+    "@types/node": "22.20.1",
+    "oxlint": "1.82.0",
+    "typescript": "7.0.2",
+    "vitest": "4.1.11"
+  }
+}

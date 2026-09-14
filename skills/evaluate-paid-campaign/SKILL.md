@@ -1,0 +1,92 @@
+---
+name: evaluate-paid-campaign
+description: "Evaluate actual paid-media performance by network, audience, creative, and time period. Use after a campaign has delivery or outcome evidence to diagnose attribution limits, fatigue, and qualified results and recommend a bounded keep, revise, pause, or stop decision. Not for creating ads or granting spend authority."
+metadata:
+  version: 1.0.0
+
+---
+
+# Evaluate a paid campaign
+
+Turn observed paid-media evidence into a bounded decision. Never present a plan, platform estimate, or
+modeled result as actual performance.
+
+## Establish the evidence boundary
+
+Record the network, account, campaign, audience, creative, geography, device, attribution window, date
+range, spend, delivery, and downstream outcome data supplied. Mark absent values as missing—not zero.
+If no actual delivery or outcome evidence exists, return the smallest measurement plan needed for a
+later evaluation instead of inventing a verdict.
+
+Separate:
+
+- observed platform delivery and cost;
+- observed product or revenue outcomes;
+- platform-attributed outcomes;
+- inference and plausible explanation;
+- unsupported assumption.
+
+## Normalize before comparing
+
+Compare like-for-like cells by network, audience or segment, creative, placement, and time period.
+Show denominators beside rates. Check tracking changes, attribution windows, conversion lag, auction or
+seasonal changes, budget constraints, and sample size before ranking cells.
+
+Inspect the whole path: delivery, attention, qualified visit, activation or purchase, downstream
+quality, and guardrails. A low acquisition cost is not a win when the acquired cohort does not reach
+product value.
+
+## Diagnose performance
+
+For every material finding, state the observation, interpretation, confidence, and competing
+explanation. Test for:
+
+- audience saturation and frequency-driven fatigue;
+- creative fatigue versus weak offer or audience fit;
+- network or placement mix hiding a bad cell;
+- attribution inflation, overlap, or missing incrementality;
+- spend changes that altered marginal rather than average performance;
+- downstream quality or retention that reverses the platform story.
+
+Do not claim causal lift without an experiment or other discriminating evidence.
+
+## Decide
+
+Recommend one of **keep**, **revise**, **pause**, or **stop** for each relevant cell. Give the rule,
+observation window, primary outcome, guardrails, and evidence that would reverse the recommendation.
+Prefer one controlled next change over simultaneous creative, audience, bid, and landing changes.
+
+Return:
+
+1. evidence boundary and data-quality warnings;
+2. normalized cell comparison;
+3. performance and fatigue diagnosis;
+4. attribution and causal limits;
+5. bounded decision and next test.
+
+Before delivery, load the method instead of paraphrasing it:
+
+- [metric ingest](agents/metric-ingest-agent.md),
+  [diagnosis](agents/diagnosis-agent.md),
+  [recommendation](agents/recommendation-agent.md),
+  [critic](agents/critic-agent.md);
+- [rubric](references/rubric.md),
+  [evaluation-loop frame](references/evaluation-loop-rubric.md), and the matching
+  [ad-intelligence metrics](references/ad-intelligence/) pack;
+- [measurement over heuristics](references/measurement-over-heuristics.md) and
+  [anti-patterns](references/anti-patterns.md) before ship.
+
+If the host cannot run those as separate agents, use [sequential fallback](fallbacks/sequential.md).
+One network and one comparable audience scope or network framing axis per cycle. Missing data
+is missing, never zero. The
+existing ledger uses keep / discard / watch / blocked; translate to this skill's keep / revise /
+pause / stop when delivering.
+
+This skill runs standalone: it ingests operator-supplied exports, screenshots, and pasted numbers.
+Loop state under `.forsvn/loops/[slug]/` is the preferred source when that store exists — when it
+does not, work from the operator's declared scope and evidence and return results inline. Signal
+separation holds either way: opens and clicks alone support no success claim, and no new spend or
+sends are ever authorized by this evaluation.
+
+This is an evaluator. It may recommend but never approve spend, launch, publication, or account
+changes. External actions and budget remain human-owned.

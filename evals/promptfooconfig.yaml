@@ -1,0 +1,7 @@
+description: Conquistador candidate-bound Eval Lab adapter
+sharing: false
+evaluateOptions:
+  cache: false
+providers: []
+prompts: []
+tests: []

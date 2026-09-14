@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://forsvn.com/schemas/conquistador/verified-operations-v1.json",
+  "title": "Conquistador verified-operation catalog",
+  "$ref": "#/$defs/OperationCatalog",
+  "$defs": {
+    "OperationVerificationStatus": {
+      "enum": [
+        "unknown",
+        "cataloged",
+        "researched",
+        "fixture-verified",
+        "live-verified",
+        "supported",
+        "unsupported",
+        "unverified"
+      ]
+    },
+    "VerifiedOperation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "provider", "capabilityId", "verificationStatus", "actionClass"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z][a-z0-9]*(?:[.-][a-z0-9]+)*$" },
+        "provider": { "type": "string", "minLength": 1 },
+        "capabilityId": { "type": "string", "pattern": "^[a-z][a-z0-9]*(?:[.-][a-z0-9]+)*$" },
+        "verificationStatus": { "$ref": "#/$defs/OperationVerificationStatus" },
+        "actionClass": { "enum": ["observe", "draft", "consequential"] }
+      }
+    },
+    "OperationCatalog": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "records"],
+      "properties": {
+        "schemaVersion": { "const": "conquistador.verified-operations/v1" },
+        "records": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/VerifiedOperation" }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,73 @@
+---
+name: decision-panel
+description: "Resolve a consequential decision through independent positions, dissent, uncertainty, and explicit resolver criteria. Use for requests historically called debate-agents or agents-panel, and for stochastic multi-agent discussion only as an optional deep mode. Works through a sequential single-context fallback when separate contexts are unavailable."
+metadata:
+  version: 1.1.0
+
+---
+
+# Resolve a consequential decision
+
+Use a panel only when two or more defensible positions have materially different consequences. For an
+ordinary drafting or format choice, decide directly without role theater.
+
+## Define the decision contract
+
+State the exact decision, deadline, available options, non-negotiable constraints, evidence, unknowns,
+decision owner, and resolver criteria before positions are produced. Include what evidence would make
+the decision reversible or force a recheck. Route debate vs poll with
+[decision tree](references/decision-tree.md).
+
+## Produce independent positions honestly
+
+When separate contexts are available, brief each context from the same evidence packet without the
+other positions or the user's preferred answer. Each returns a position, premises, evidence, upside,
+downside, uncertainty, and disconfirming condition. Record that separate contexts ran.
+
+Default strategy trio when roles are unspecified: [optimist](agents/optimist-agent.md),
+[skeptic](agents/skeptic-agent.md), [synthesizer](agents/synthesizer-agent.md). For how-to-build
+decisions, prefer constraint assignment or the engineering trio
+([architect](agents/architect-agent.md), [pragmatist](agents/pragmatist-agent.md),
+[critic](agents/critic-agent.md)). Round protocol:
+[debate rounds](references/debate-rounds.md). Load
+[anti-sycophancy](references/anti-sycophancy.md) before the first position.
+
+Shuffle the position order and blind author or provider labels before an initial resolver poll when
+the host permits it. The poll records a starting judgment; it does not decide by majority.
+Ranking-shaped polls use [poll protocol](references/poll-protocol.md) and
+[idea ranking core](references/idea-ranking-core.md).
+
+If only one context is available, produce sequential counter-positions from different first
+principles. Do not call these passes independent agents. Use
+[sequential fallback](fallbacks/sequential.md). The fallback must still surface the strongest
+opposing case, uncertainty, and disconfirming evidence.
+
+## Debate the strongest disagreement
+
+Expose each position to the strongest opposing evidence. Let positions revise, hold, or concede, and
+retain the reason. Preserve material dissent rather than forcing consensus or averaging incompatible
+recommendations. A second blinded poll may show whether the evidence moved judgments, but vote count
+never replaces criteria.
+
+## Resolve
+
+One [resolver](agents/resolver-agent.md) applies the criteria fixed at the start. It chooses, declares
+honest deadlock, or makes a bounded temporary choice when the decision cannot wait. Return:
+
+- chosen position and why it wins on the criteria;
+- strongest surviving dissent;
+- uncertainty and assumptions;
+- evidence that would reverse the decision;
+- smallest test when evidence cannot separate the options;
+- review mode: separate-context panel or single-context fallback.
+
+Before delivery, load [independent positions method](references/independent-positions-method.md),
+[anti-patterns](references/anti-patterns.md), and [report template](references/report-template.md)
+instead of paraphrasing them.
+
+`debate-agents` and `agents-panel` are request and migration aliases for this outcome.
+`stochastic-multiagents-discussion` names the optional separate-context deep mode, never a second
+public skill or a claim that one context became independent.
+
+Prefer `.forsvn/artifacts/mkt/decision-panel/` for durable panel artifacts. The panel recommends a
+decision; it does not publish, spend, delete, release, or grant approval.

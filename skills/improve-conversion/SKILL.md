@@ -1,0 +1,132 @@
+---
+name: improve-conversion
+description: "Diagnose and revise one conversion surface — landing page, funnel step, offer, message, or acquisition handoff — and return a ready-to-use revision plus exactly one discriminating test. Use when the outcome changes the surface itself. Route paid-media performance readouts to evaluate-paid-campaign, full SEO work to optimize-search, and brand or messaging foundations to create-brand."
+metadata:
+  version: 2.1.0
+
+---
+
+# Improve conversion performance
+
+Return a diagnosis, revised work, and one discriminating test—not a decorative scorecard.
+
+This outcome changes the conversion surface. Use `evaluate-paid-campaign`, `evaluate-outreach`, or
+`evaluate-shortform` when the requested result is an evidence-only performance readout, and use
+`audit-marketing` for a bounded pre-ship audit. Do not collapse their verdicts into a conversion
+rewrite.
+
+## Scope and handoffs
+
+One engagement diagnoses and revises one conversion surface with one controlled test.
+
+For a pre-launch surface with no behavior metrics, use `prelaunch-test` mode. Diagnose from supplied
+claims, evidence boundaries, message-path logic, and explicit assumptions; do not require current or
+target conversion metrics, external scanning, or a causal verdict. Return one discriminating test,
+label its baseline/instrumentation needs, and keep activation blocked until those inputs exist.
+
+Include:
+
+- a launched or pre-launch surface underperforming on conversion;
+- diagnosis through the Reach→Value break ladder;
+- a ready-to-use revision tied to the leading cause;
+- exactly one discriminating test with keep / revise / kill rules.
+
+Exclude — route instead:
+
+- paid-media performance readouts → `evaluate-paid-campaign`;
+- full SEO audits or ranking diagnosis → `optimize-search`;
+- brand systems or messaging foundations → `create-brand`;
+- evidence-only outreach or short-form readouts → `evaluate-outreach` or `evaluate-shortform`;
+- a bounded pre-ship audit without revision → `audit-marketing`.
+
+## Establish the intended path
+
+Identify:
+
+- intended audience and costly moment;
+- promise, mechanism, proof, and objection;
+- acquisition source and message expectation;
+- primary action and downstream value;
+- available exposure, behavior, conversion, revenue, retention, and qualitative evidence.
+
+Separate missing data from zero. Treat vanity engagement as diagnostic, not business performance.
+
+## Locate the first meaningful break
+
+1. **Reach:** the right people did not encounter it.
+2. **Attention:** they encountered it but did not stop.
+3. **Comprehension:** they stopped but did not understand.
+4. **Belief:** they understood but did not trust the promise.
+5. **Motivation:** they believed it but did not care enough now.
+6. **Friction:** they wanted it but the next step was costly or broken.
+7. **Value:** they acted but the product or offer did not deliver.
+
+Inspect audience, channel, device, geography, and customer mix before aggregating. Treat co-timed
+movement as correlation until evidence distinguishes causes. State the mechanism connecting each
+proposed cause to the observed behavior.
+
+## Prioritize a discriminating test
+
+Name plausible alternative explanations. Choose the smallest change that produces different
+predictions for the leading explanations.
+
+Define:
+
+- hypothesis and causal mechanism;
+- one intentional change;
+- target segment and surface;
+- primary outcome and guardrails;
+- observation window;
+- keep, revise, or kill rule.
+
+Accept “inconclusive” when evidence cannot discriminate.
+
+## Deliver
+
+Lead with:
+
+- **Keep:** what evidence supports retaining.
+- **Drop:** what is weak, harmful, or unnecessary.
+- **Change:** the revised message, structure, or experience.
+- **Test:** the highest-value uncertainty and controlled experiment.
+
+Include the ready-to-use revision whenever the medium permits. Tie every recommendation to observed
+evidence, an explicit inference, or a labeled assumption. Do not claim causality or conversion lift
+without evidence.
+
+Keep deployments, experiment activation, spend, publishing, and other external writes behind explicit
+approval.
+
+Before delivery, load the recovered method instead of paraphrasing it. Keep conversion diagnosis,
+prelaunch testing, and post-launch landing evaluation as distinct lenses. In `prelaunch-test`, do not
+dispatch the external-check, metric/data-mapper, causal-verdict, or post-result agents. Use the
+front-door Reach→Value logic, supplied evidence, explicit assumptions, and the bounded test contract.
+
+**Conversion diagnosis lens** (locate the break → revise + discriminating test):
+
+- [tree builder](agents/conversion-tree-builder-agent.md),
+  [external check](agents/conversion-external-check-agent.md),
+  [hypothesis](agents/conversion-hypothesis-agent.md),
+  [data mapper](agents/conversion-data-mapper-agent.md),
+  [verdict](agents/conversion-verdict-agent.md),
+  [conversion critic](agents/conversion-critic-agent.md);
+- [conversion diagnosis method](references/conversion-diagnosis-method.md),
+  [diagnostic evidence method](references/diagnostic-evidence-method.md),
+  [hypothesis framework](references/hypothesis-framework.md),
+  [diagnostic examples](references/logic-tree-examples.md).
+
+**Landing eval lens** (launched surface evidence → keep / discard / watch / blocked):
+
+- [metric ingest](agents/landing-metric-ingest-agent.md),
+  [diagnosis](agents/landing-diagnosis-agent.md),
+  [recommendation](agents/landing-recommendation-agent.md),
+  [landing critic](agents/landing-critic-agent.md);
+- [landing eval method](references/landing-eval-method.md),
+  [landing eval rubric](references/landing-eval-rubric.md),
+  [anti-sycophancy](references/anti-sycophancy.md).
+
+If the host cannot run those as separate agents, use [sequential fallback](fallbacks/sequential.md).
+Run [conversion diagnosis anti-patterns](references/conversion-diagnosis-anti-patterns.md) or
+[landing anti-patterns](references/landing-anti-patterns.md) before ship.
+
+When the host has a durable artifact store, prefer `.forsvn/artifacts/mkt/improve-conversion/` for artifacts; otherwise return findings and revisions inline.

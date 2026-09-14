@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "conquistador.host-package/v1",
+  "id": "host:eve",
+  "hostKind": "eve-agent",
+  "displayName": "Eve agent",
+  "productName": "conquistador",
+  "pluginVersion": "1.0.0",
+  "canonicalSkillsRoot": "skills/skills",
+  "skillMount": "agent/skills",
+  "installClass": "candidate-only",
+  "publicListing": false,
+  "cleanHostProof": false,
+  "zeroRuntime": true,
+  "notThisDoor": [
+    "coding-agent plugin",
+    "official xAI Grok Bot",
+    "Grok CLI / Grok Build",
+    "eve add registry publication",
+    "Eve extension with tools, hooks, MCP, channels, or schedules",
+    "conquistador runtime, catalog, Eval Lab, app/",
+    "explicit single-agent-only package",
+    "advisor/worker squad package"
+  ],
+  "hostProvides": [
+    "Eve agent process and model",
+    "optional sandbox, memory, channels, and connections declared by the consuming Eve app",
+    "load_skill over agent/skills/"
+  ],
+  "conquistadorOwns": [
+    "default teammate contract",
+    "canonical SKILL.md trees",
+    "review packet",
+    "approval boundary for send, publish, spend, and external writes"
+  ],
+  "missingCapabilities": [
+    "operator-owned Eve host access",
+    "public eve add / skills.sh listing",
+    "Eve tools, hooks, MCP servers, channels, and schedules in this package",
+    "optional conquistador runner and catalog"
+  ],
+  "missingCapabilityBehavior": "fail-closed-draft",
+  "lifecycle": {
+    "setup": "Create or open an Eve agent. Copy instructions.md into agent/instructions.md. Stage canonical skills into agent/skills/.",
+    "upgrade": "Replace agent/instructions.md and each owned agent/skills/<name> tree from a newer source. Do not fetch at runtime.",
+    "remove": "Delete the owned Conquistador instructions and agent/skills/<name> trees. Leave other Eve app files."
+  }
+}

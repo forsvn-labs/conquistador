@@ -1,0 +1,44 @@
+{
+  "name": "@forsvn/conquistador-runtime-core",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Conquistador-owned self-hosted runtime contracts and provider core",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "conquistador": "bin/conquistador.js"
+  },
+  "engines": {
+    "node": ">=24.0.0 <25"
+  },
+  "scripts": {
+    "start": "node bin/conquistador.js serve",
+    "build": "tsc -p tsconfig.build.json",
+    "test": "npm run test:public",
+    "typecheck": "tsc --noEmit",
+    "test:public": "npm run build && vitest run --exclude tests/pilot.test.ts --exclude tests/self-hosted-conformance.test.ts",
+    "typecheck:public": "tsc -p tsconfig.build.json --noEmit",
+    "test:source": "npm run build && vitest run"
+  },
+  "dependencies": {
+    "jose": "6.2.8"
+  },
+  "devDependencies": {
+    "@types/node": "24.13.3",
+    "ajv": "8.20.0",
+    "typescript": "7.0.2",
+    "vitest": "4.1.11"
+  },
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "files": [
+    "bin",
+    "config",
+    "lib",
+    "providers",
+    "schemas",
+    "LICENSE",
+    "PROVENANCE.json",
+    "README.md"
+  ]
+}

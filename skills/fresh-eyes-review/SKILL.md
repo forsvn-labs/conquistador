@@ -1,0 +1,99 @@
+---
+name: fresh-eyes-review
+description: "Independently review a consequential finished artifact against its intended outcome, evidence, actual output, risk, and release boundary. Use for a fresh-eyes second opinion before a human ship decision. Claims independence only when a separate context actually reviewed it."
+metadata:
+  version: 1.1.0
+
+---
+
+# Review with fresh eyes
+
+Review the finished artifact, not the producer's confidence or a summary of what was meant to ship.
+This is an advisory readiness review; a human owns the final decision.
+
+## Build the clean review packet
+
+Gather the exact artifact or actual output, intended audience and outcome, acceptance criteria,
+source evidence, constraints, known risks, and release boundary. Keep drafting rationale out unless it
+is itself evidence. Missing artifacts or criteria are review limitations, not silent assumptions.
+Detect the review target with
+[review target and closeout](references/review-target-and-closeout.md) when git or path state is
+ambiguous.
+
+## Establish reviewer independence honestly
+
+When the host can run a separate context, give that reviewer only the clean packet and record which
+separate context performed the review. Do not call multiple lenses, roles, or passes inside one
+context independent.
+
+When no separate context is available, run a useful sequential fallback: first evaluate against the
+acceptance criteria, then perform a counter-position pass that tries to disprove readiness. Label the
+result **single-context review**, not independent corroboration. Use
+[sequential fallback](fallbacks/sequential.md).
+
+## Inspect the actual output
+
+Check intent fit, factual support, completeness, internal consistency, usability, safety and consent,
+platform or channel constraints, failure and recovery paths, and whether the real rendered or
+executed output differs from the plan. Trace consequential claims to evidence.
+
+Raise only readiness-changing findings:
+
+- **blocking:** unsafe, false, unauthorized, or defeats the intended outcome;
+- **material:** meaningfully weakens usefulness, trust, or acceptance;
+- **minor:** worth noting but does not change readiness.
+
+Preserve dissent and uncertainty. Do not manufacture consensus between reviewers or erase a
+well-supported minority concern.
+
+Before delivery, load the recovered method instead of paraphrasing it:
+
+- [reviewer](agents/reviewer-agent.md) for the generalist pass;
+- [security](agents/security-reviewer-agent.md), [performance](agents/performance-reviewer-agent.md),
+  and [correctness](agents/correctness-reviewer-agent.md) when
+  [specialist lenses](references/specialist-lenses.md) auto-escalate or the operator asks for depth;
+- [critic consensus](references/critic-consensus.md) for high-stakes non-code artifacts;
+- [noise filter](references/noise-filter.md) and [scope drift](references/scope-drift.md) before the
+  verdict;
+- [resolver](agents/resolver-agent.md) for synthesis, Accepted fixes, and the max-two-loop bound;
+- [independent review method](references/independent-review-method.md),
+  [anti-patterns](references/anti-patterns.md), and
+  [report template](references/report-template.md) for the ship shape;
+- worked example: [review cycle walkthrough](references/examples/review-cycle-walkthrough.md);
+- [quality feedback](references/quality-feedback-protocol.md) when overrides or repeated misses appear.
+
+This skill is fresh-eyes readiness review. Source-authority and contradiction audits belong to
+`knowledge-review` — do not fold that outcome in here.
+
+## Return the review
+
+Provide:
+
+1. review mode and independence status;
+2. exact scope and criteria;
+3. verdict: ready for human decision, ready with material cautions, or not ready;
+4. blocking and material findings with evidence;
+5. what survives unchanged;
+6. smallest required revisions and recheck conditions;
+7. unresolved dissent or uncertainty.
+
+Prefer `.forsvn/artifacts/mkt/fresh-eyes-review/` for durable review artifacts when such storage
+exists; it is optional and never required to finish this skill. Never publish,
+release, approve spend, delete work, or claim human approval. The operator decides whether and how to
+act on the review.
+
+## Stops
+
+Fail closed and say which stop fired:
+
+- **Missing input:** the artifact, actual output, or acceptance criteria cannot be gathered → record
+  the gap as a review limitation in the report; never review from a summary alone.
+- **Factual uncertainty:** a consequential claim cannot be traced to evidence → raise it as blocking
+  or material; do not assume support.
+- **Credential stop:** verifying the output requires access you do not have (rendered surface,
+  data, logs) → mark that check not performed.
+- **External action:** never publish, release, spend, or delete in response to findings.
+- **Critic failure:** reviewers disagree irreconcilably or the resolver loop exceeds its bound →
+  return the dissent and unresolved state; do not manufacture consensus.
+- **Human verdict:** every verdict ends at ready / ready with cautions / not ready for a human
+  decision — the review never issues the final verdict.

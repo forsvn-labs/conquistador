@@ -1,0 +1,7 @@
+interface:
+  display_name: "Build Web App"
+  short_description: "Build and verify a useful web vertical slice"
+  default_prompt: "Use $build-web-app to implement and verify this explicit web-product outcome in the existing project."
+
+policy:
+  allow_implicit_invocation: true

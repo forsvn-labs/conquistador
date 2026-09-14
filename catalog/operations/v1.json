@@ -1,0 +1,2118 @@
+{
+  "schemaVersion": "conquistador.tool-catalog/v1",
+  "productVersion": "1.0.0",
+  "status": "candidate-operations-not-supported",
+  "operations": [
+    {
+      "id": "github.repository.get",
+      "capabilityId": "source.repository.read",
+      "provider": "github",
+      "product": "GitHub",
+      "category": "source",
+      "outcomes": [
+        "research-positioning",
+        "knowledge-review"
+      ],
+      "actionClass": "observe",
+      "providerApiVersion": "github-rest-2022-11-28",
+      "authScopes": [
+        "metadata:read"
+      ],
+      "dataClassification": "internal",
+      "pii": "possible",
+      "residency": "provider-controlled; verify account configuration",
+      "rateLimit": "GitHub REST primary and secondary limits",
+      "quotaUnit": "request",
+      "monetaryUnit": "USD",
+      "inputKeys": [
+        "owner",
+        "repository"
+      ],
+      "requiredInputKeys": [
+        "owner",
+        "repository"
+      ],
+      "outputKeys": [
+        "repository",
+        "visibility",
+        "topics",
+        "timestamps"
+      ],
+      "pagination": "not applicable",
+      "retry": "no automatic retry; expose typed retryability and bounded Retry-After guidance",
+      "idempotency": "none",
+      "officialSources": [
+        "https://docs.github.com/en/rest/repos/repos#get-a-repository",
+        "https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api"
+      ],
+      "provenance": "Maintained operation contract referencing the listed official provider sources. This description is not a live execution record or release acceptance.",
+      "checkedAt": "2026-08-10T13:07:44.000Z",
+      "knownGaps": [
+        "candidate-bound live evidence pending",
+        "Live verification requires operator-supplied opaque Connection references, exact provider targets, authenticated human review, and applicable provider/spend authorization. Each live or support claim needs its own observed evidence. Missing credentials or approval for another provider never authorize fabricated cells.",
+        "support claim forbidden",
+        "1.0.0 remains pinned to GitHub REST 2022-11-28; newer provider versions require a new evidence cell"
+      ],
+      "roadmapDestination": "FOR-149",
+      "supportCells": [
+        {
+          "id": "github.research",
+          "platform": "darwin-25.6.0-node-22.23.2",
+          "architecture": "arm64",
+          "state": "fixture-verified",
+          "evidence": [
+            {
+              "id": "github.repository.get.research",
+              "kind": "research",
+              "providerVersion": "github-rest-2022-11-28",
+              "adapterVersion": "0.0.0-research",
+              "checkedAt": "2026-08-10T13:07:44.000Z",
+              "digest": "sha256:90dc7bf0daba9486931989f6396e74a6211738da72c11fe82b7d3e653eb5aec8"
+            },
+            {
+              "id": "github.repository.get.fixture",
+              "kind": "fixture",
+              "providerVersion": "github-rest-2022-11-28",
+              "adapterVersion": "1.0.0",
+              "checkedAt": "2026-08-11T10:44:32.000Z",
+              "digest": "sha256:b2193173bfe2ff90b737970159069cc141d7352262d41f90c6a29bab43954226"
+            }
+          ]
+        }
+      ],
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "owner": {
+            "type": "string"
+          },
+          "repository": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "owner",
+          "repository"
+        ]
+      },
+      "outputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "repository": {
+            "type": "object"
+          },
+          "visibility": {
+            "type": "string"
+          },
+          "topics": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "timestamps": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "repository",
+          "visibility",
+          "topics",
+          "timestamps"
+        ]
+      }
+    },
+    {
+      "id": "github.release.list",
+      "capabilityId": "source.release.read",
+      "provider": "github",
+      "product": "GitHub",
+      "category": "source",
+      "outcomes": [
+        "research-positioning",
+        "knowledge-review"
+      ],
+      "actionClass": "observe",
+      "providerApiVersion": "github-rest-2022-11-28",
+      "authScopes": [
+        "contents:read"
+      ],
+      "dataClassification": "confidential",
+      "pii": "possible",
+      "residency": "provider-controlled; verify account configuration",
+      "rateLimit": "GitHub REST primary and secondary limits",
+      "quotaUnit": "request",
+      "monetaryUnit": "USD",
+      "inputKeys": [
+        "owner",
+        "repository",
+        "pageSize",
+        "cursor"
+      ],
+      "requiredInputKeys": [
+        "owner",
+        "repository"
+      ],
+      "outputKeys": [
+        "releases",
+        "nextCursor"
+      ],
+      "pagination": "bounded cursor/page traversal with truncation receipt",
+      "retry": "no automatic retry; expose typed retryability and bounded Retry-After guidance",
+      "idempotency": "none",
+      "officialSources": [
+        "https://docs.github.com/en/rest/releases/releases#list-releases",
+        "https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api"
+      ],
+      "provenance": "Maintained operation contract referencing the listed official provider sources. This description is not a live execution record or release acceptance.",
+      "checkedAt": "2026-08-10T13:07:44.000Z",
+      "knownGaps": [
+        "candidate-bound live evidence pending",
+        "Live verification requires operator-supplied opaque Connection references, exact provider targets, authenticated human review, and applicable provider/spend authorization. Each live or support claim needs its own observed evidence. Missing credentials or approval for another provider never authorize fabricated cells.",
+        "support claim forbidden",
+        "1.0.0 remains pinned to GitHub REST 2022-11-28; newer provider versions require a new evidence cell"
+      ],
+      "roadmapDestination": "FOR-149",
+      "supportCells": [
+        {
+          "id": "github.research",
+          "platform": "darwin-25.6.0-node-22.23.2",
+          "architecture": "arm64",
+          "state": "fixture-verified",
+          "evidence": [
+            {
+              "id": "github.release.list.research",
+              "kind": "research",
+              "providerVersion": "github-rest-2022-11-28",
+              "adapterVersion": "0.0.0-research",
+              "checkedAt": "2026-08-10T13:07:44.000Z",
+              "digest": "sha256:f6caa9b05c154dc8e67eca1da5f4a25bee1651e46bf4009328e585fffae7c381"
+            },
+            {
+              "id": "github.release.list.fixture",
+              "kind": "fixture",
+              "providerVersion": "github-rest-2022-11-28",
+              "adapterVersion": "1.0.0",
+              "checkedAt": "2026-08-11T10:44:32.000Z",
+              "digest": "sha256:0f503d9c9e58c0739f1bf5b85960bb5a8bcb7524965ebec76ff132a843d46a11"
+            }
+          ]
+        }
+      ],
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "owner": {
+            "type": "string"
+          },
+          "repository": {
+            "type": "string"
+          },
+          "pageSize": {
+            "type": "integer"
+          },
+          "cursor": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "owner",
+          "repository"
+        ]
+      },
+      "outputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "releases": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "nextCursor": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "releases"
+        ]
+      }
+    },
+    {
+      "id": "github.issue.list",
+      "capabilityId": "source.issue.read",
+      "provider": "github",
+      "product": "GitHub",
+      "category": "source",
+      "outcomes": [
+        "diagnose-growth",
+        "research-content-ideas"
+      ],
+      "actionClass": "observe",
+      "providerApiVersion": "github-rest-2022-11-28",
+      "authScopes": [
+        "issues:read"
+      ],
+      "dataClassification": "confidential",
+      "pii": "possible",
+      "residency": "provider-controlled; verify account configuration",
+      "rateLimit": "GitHub REST primary and secondary limits",
+      "quotaUnit": "request",
+      "monetaryUnit": "USD",
+      "inputKeys": [
+        "owner",
+        "repository",
+        "state",
+        "labels",
+        "pageSize",
+        "cursor"
+      ],
+      "requiredInputKeys": [
+        "owner",
+        "repository"
+      ],
+      "outputKeys": [
+        "issues",
+        "nextCursor"
+      ],
+      "pagination": "bounded cursor/page traversal with truncation receipt",
+      "retry": "no automatic retry; expose typed retryability and bounded Retry-After guidance",
+      "idempotency": "none",
+      "officialSources": [
+        "https://docs.github.com/en/rest/issues/issues#list-repository-issues",
+        "https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api"
+      ],
+      "provenance": "Maintained operation contract referencing the listed official provider sources. This description is not a live execution record or release acceptance.",
+      "checkedAt": "2026-08-10T13:07:44.000Z",
+      "knownGaps": [
+        "candidate-bound live evidence pending",
+        "Live verification requires operator-supplied opaque Connection references, exact provider targets, authenticated human review, and applicable provider/spend authorization. Each live or support claim needs its own observed evidence. Missing credentials or approval for another provider never authorize fabricated cells.",
+        "support claim forbidden",
+        "1.0.0 remains pinned to GitHub REST 2022-11-28; newer provider versions require a new evidence cell"
+      ],
+      "roadmapDestination": "FOR-149",
+      "supportCells": [
+        {
+          "id": "github.research",
+          "platform": "darwin-25.6.0-node-22.23.2",
+          "architecture": "arm64",
+          "state": "fixture-verified",
+          "evidence": [
+            {
+              "id": "github.issue.list.research",
+              "kind": "research",
+              "providerVersion": "github-rest-2022-11-28",
+              "adapterVersion": "0.0.0-research",
+              "checkedAt": "2026-08-10T13:07:44.000Z",
+              "digest": "sha256:c49d8092b4f9316c8333b5ef3d906f7eb584a4fac778c5f02710cec7f29d9e76"
+            },
+            {
+              "id": "github.issue.list.fixture",
+              "kind": "fixture",
+              "providerVersion": "github-rest-2022-11-28",
+              "adapterVersion": "1.0.0",
+              "checkedAt": "2026-08-11T10:44:32.000Z",
+              "digest": "sha256:6b8bb009187dddd48bb325936033961f778a79f7942b5bff329930923bd3b5e3"
+            }
+          ]
+        }
+      ],
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "owner": {
+            "type": "string"
+          },
+          "repository": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string"
+          },
+          "labels": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "pageSize": {
+            "type": "integer"
+          },
+          "cursor": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "owner",
+          "repository"
+        ]
+      },
+      "outputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "issues": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "nextCursor": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "issues"
+        ]
+      }
+    },
+    {
+      "id": "github.signal.aggregate",
+      "capabilityId": "source.signal.aggregate",
+      "provider": "github",
+      "product": "GitHub",
+      "category": "source",
+      "outcomes": [
+        "research-positioning",
+        "measure-growth"
+      ],
+      "actionClass": "observe",
+      "providerApiVersion": "github-rest-2022-11-28",
+      "authScopes": [
+        "metadata:read"
+      ],
+      "dataClassification": "public",
+      "pii": "none",
+      "residency": "provider-controlled; verify account configuration",
+      "rateLimit": "GitHub REST primary and secondary limits",
+      "quotaUnit": "request",
+      "monetaryUnit": "USD",
+      "inputKeys": [
+        "owner",
+        "repository",
+        "windowDays"
+      ],
+      "requiredInputKeys": [
+        "owner",
+        "repository",
+        "windowDays"
+      ],
+      "outputKeys": [
+        "stars",
+        "forks",
+        "issues",
+        "releases",
+        "window"
+      ],
+      "pagination": "bounded aggregation over allowlisted public signals",
+      "retry": "no automatic retry; expose typed retryability and bounded Retry-After guidance",
+      "idempotency": "none",
+      "officialSources": [
+        "https://docs.github.com/en/rest/repos/repos#get-a-repository",
+        "https://docs.github.com/en/rest/issues/issues#list-repository-issues",
+        "https://docs.github.com/en/rest/releases/releases#list-releases",
+        "https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api"
+      ],
+      "provenance": "Maintained operation contract referencing the listed official provider sources. This description is not a live execution record or release acceptance.",
+      "checkedAt": "2026-08-10T13:07:44.000Z",
+      "knownGaps": [
+        "candidate-bound live evidence pending",
+        "Live verification requires operator-supplied opaque Connection references, exact provider targets, authenticated human review, and applicable provider/spend authorization. Each live or support claim needs its own observed evidence. Missing credentials or approval for another provider never authorize fabricated cells.",
+        "support claim forbidden",
+        "1.0.0 remains pinned to GitHub REST 2022-11-28; newer provider versions require a new evidence cell"
+      ],
+      "roadmapDestination": "FOR-149",
+      "supportCells": [
+        {
+          "id": "github.research",
+          "platform": "darwin-25.6.0-node-22.23.2",
+          "architecture": "arm64",
+          "state": "fixture-verified",
+          "evidence": [
+            {
+              "id": "github.signal.aggregate.research",
+              "kind": "research",
+              "providerVersion": "github-rest-2022-11-28",
+              "adapterVersion": "0.0.0-research",
+              "checkedAt": "2026-08-10T13:07:44.000Z",
+              "digest": "sha256:281c0a11a4703fe62236bdfa514b1689bed731295e0b19026ea6dcd7fe5775e9"
+            },
+            {
+              "id": "github.signal.aggregate.fixture",
+              "kind": "fixture",
+              "providerVersion": "github-rest-2022-11-28",
+              "adapterVersion": "1.0.0",
+              "checkedAt": "2026-08-11T10:44:32.000Z",
+              "digest": "sha256:f38d65d239276bf6d6c1a4d6b6dd0a3b7274f78bb44c909ccf249865ad1fec3b"
+            }
+          ]
+        }
+      ],
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "owner": {
+            "type": "string"
+          },
+          "repository": {
+            "type": "string"
+          },
+          "windowDays": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "owner",
+          "repository",
+          "windowDays"
+        ]
+      },
+      "outputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "stars": {
+            "type": "integer"
+          },
+          "forks": {
+            "type": "integer"
+          },
+          "issues": {
+            "type": "integer"
+          },
+          "releases": {
+            "type": "integer"
+          },
+          "window": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "stars",
+          "forks",
+          "issues",
+          "releases",
+          "window"
+        ]
+      }
+    },
+    {
+      "id": "google-analytics.report.query",
+      "capabilityId": "analytics.report.read",
+      "provider": "google-analytics",
+      "product": "Google Analytics Data",
+      "category": "analytics",
+      "outcomes": [
+        "diagnose-growth",
+        "measure-growth"
+      ],
+      "actionClass": "observe",
+      "providerApiVersion": "ga-data-v1beta",
+      "authScopes": [
+        "analytics.readonly"
+      ],
+      "dataClassification": "confidential",
+      "pii": "possible",
+      "residency": "provider-controlled; verify account configuration",
+      "rateLimit": "Google Analytics Data API account and property limits",
+      "quotaUnit": "request",
+      "monetaryUnit": "USD",
+      "inputKeys": [
+        "propertyId",
+        "dateRanges",
+        "dimensions",
+        "metrics",
+        "limit",
+        "offset"
+      ],
+      "requiredInputKeys": [
+        "propertyId",
+        "dateRanges",
+        "metrics"
+      ],
+      "outputKeys": [
+        "rows",
+        "rowCount",
+        "metadata",
+        "nextOffset"
+      ],
+      "pagination": "bounded offset/limit with rowCount and truncation receipt",
+      "retry": "no automatic retry; expose typed retryability and bounded Retry-After guidance",
+      "idempotency": "none",
+      "officialSources": [
+        "https://developers.google.com/analytics/devguides/reporting/data/v1/quickstart"
+      ],
+      "provenance": "Maintained operation contract referencing the listed official provider sources. This description is not a live execution record or release acceptance.",
+      "checkedAt": "2026-08-10T13:07:44.000Z",
+      "knownGaps": [
+        "candidate-bound live evidence pending",
+        "Live verification requires operator-supplied opaque Connection references, exact provider targets, authenticated human review, and applicable provider/spend authorization. Each live or support claim needs its own observed evidence. Missing credentials or approval for another provider never authorize fabricated cells.",
+        "support claim forbidden"
+      ],
+      "roadmapDestination": "FOR-149",
+      "supportCells": [
+        {
+          "id": "google-analytics.research",
+          "platform": "darwin-25.6.0-node-22.23.2",
+          "architecture": "arm64",
+          "state": "fixture-verified",
+          "evidence": [
+            {
+              "id": "google-analytics.report.query.research",
+              "kind": "research",
+              "providerVersion": "ga-data-v1beta",
+              "adapterVersion": "0.0.0-research",
+              "checkedAt": "2026-08-10T13:07:44.000Z",
+              "digest": "sha256:766212e6b5bedede3f955377ac2b4602486aee697a17b4ceb3656e88a99f9ce6"
+            },
+            {
+              "id": "google-analytics.report.query.fixture",
+              "kind": "fixture",
+              "providerVersion": "ga-data-v1beta",
+              "adapterVersion": "1.0.0",
+              "checkedAt": "2026-08-11T10:44:32.000Z",
+              "digest": "sha256:dee162ec2d3afe5754c0b789d336ac4fcee5815830921ba40333f0fc733a7eb4"
+            }
+          ]
+        }
+      ],
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "propertyId": {
+            "type": "string"
+          },
+          "dateRanges": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "dimensions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "metrics": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "limit": {
+            "type": "integer"
+          },
+          "offset": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "propertyId",
+          "dateRanges",
+          "metrics"
+        ]
+      },
+      "outputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "rows": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "rowCount": {
+            "type": "integer"
+          },
+          "metadata": {
+            "type": "object"
+          },
+          "nextOffset": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "rows",
+          "rowCount",
+          "metadata"
+        ]
+      }
+    },
+    {
+      "id": "search-console.analytics.query",
+      "capabilityId": "search.analytics.read",
+      "provider": "search-console",
+      "product": "Google Search Console",
+      "category": "search",
+      "outcomes": [
+        "optimize-search",
+        "measure-growth"
+      ],
+      "actionClass": "observe",
+      "providerApiVersion": "webmasters-v3",
+      "authScopes": [
+        "webmasters.readonly"
+      ],
+      "dataClassification": "confidential",
+      "pii": "possible",
+      "residency": "provider-controlled; verify account configuration",
+      "rateLimit": "Google Search Console API account and property limits",
+      "quotaUnit": "request",
+      "monetaryUnit": "USD",
+      "inputKeys": [
+        "siteUrl",
+        "startDate",
+        "endDate",
+        "dimensions",
+        "rowLimit",
+        "startRow"
+      ],
+      "requiredInputKeys": [
+        "siteUrl",
+        "startDate",
+        "endDate"
+      ],
+      "outputKeys": [
+        "rows",
+        "responseAggregationType",
+        "nextStartRow"
+      ],
+      "pagination": "bounded startRow/rowLimit with explicit truncation",
+      "retry": "no automatic retry; expose typed retryability and bounded Retry-After guidance",
+      "idempotency": "none",
+      "officialSources": [
+        "https://developers.google.com/webmaster-tools/v1/searchanalytics/query"
+      ],
+      "provenance": "Maintained operation contract referencing the listed official provider sources. This description is not a live execution record or release acceptance.",
+      "checkedAt": "2026-08-10T13:07:44.000Z",
+      "knownGaps": [
+        "candidate-bound live evidence pending",
+        "Live verification requires operator-supplied opaque Connection references, exact provider targets, authenticated human review, and applicable provider/spend authorization. Each live or support claim needs its own observed evidence. Missing credentials or approval for another provider never authorize fabricated cells.",
+        "support claim forbidden"
+      ],
+      "roadmapDestination": "FOR-149",
+      "supportCells": [
+        {
+          "id": "search-console.research",
+          "platform": "darwin-25.6.0-node-22.23.2",
+          "architecture": "arm64",
+          "state": "fixture-verified",
+          "evidence": [
+            {
+              "id": "search-console.analytics.query.research",
+              "kind": "research",
+              "providerVersion": "webmasters-v3",
+              "adapterVersion": "0.0.0-research",
+              "checkedAt": "2026-08-10T13:07:44.000Z",
+              "digest": "sha256:623507c1068c94de437f4e9f206a33ce6533b1a1e2583dd36c39abd68dc29474"
+            },
+            {
+              "id": "search-console.analytics.query.fixture",
+              "kind": "fixture",
+              "providerVersion": "webmasters-v3",
+              "adapterVersion": "1.0.0",
+              "checkedAt": "2026-08-11T10:44:32.000Z",
+              "digest": "sha256:12bafecc3e161b9e553964b2cbd6b3212cb78ce17c8f94860251e997baa94079"
+            }
+          ]
+        }
+      ],
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "siteUrl": {
+            "type": "string"
+          },
+          "startDate": {
+            "type": "string"
+          },
+          "endDate": {
+            "type": "string"
+          },
+          "dimensions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "rowLimit": {
+            "type": "integer"
+          },
+          "startRow": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "siteUrl",
+          "startDate",
+          "endDate"
+        ]
+      },
+      "outputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "rows": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "responseAggregationType": {
+            "type": "string"
+          },
+          "nextStartRow": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "rows",
+          "responseAggregationType"
+        ]
+      }
+    },
+    {
+      "id": "posthog.insight.read",
+      "capabilityId": "product.analytics.read",
+      "provider": "posthog",
+      "product": "PostHog",
+      "category": "analytics",
+      "outcomes": [
+        "diagnose-growth",
+        "measure-growth"
+      ],
+      "actionClass": "observe",
+      "providerApiVersion": "posthog-2026-08-10",
+      "authScopes": [
+        "insight:read"
+      ],
+      "dataClassification": "confidential",
+      "pii": "possible",
+      "residency": "provider-controlled; verify account configuration",
+      "rateLimit": "PostHog API project and account limits",
+      "quotaUnit": "request",
+      "monetaryUnit": "USD",
+      "inputKeys": [
+        "projectId",
+        "insightId"
+      ],
+      "requiredInputKeys": [
+        "projectId",
+        "insightId"
+      ],
+      "outputKeys": [
+        "insight",
+        "result",
+        "lastRefresh"
+      ],
+      "pagination": "not applicable",
+      "retry": "no automatic retry; expose typed retryability and bounded Retry-After guidance",
+      "idempotency": "none",
+      "officialSources": [
+        "https://posthog.com/docs/api"
+      ],
+      "provenance": "Maintained operation contract referencing the listed official provider sources. This description is not a live execution record or release acceptance.",
+      "checkedAt": "2026-08-10T13:07:44.000Z",
+      "knownGaps": [
+        "candidate-bound live evidence pending",
+        "Live verification requires operator-supplied opaque Connection references, exact provider targets, authenticated human review, and applicable provider/spend authorization. Each live or support claim needs its own observed evidence. Missing credentials or approval for another provider never authorize fabricated cells.",
+        "support claim forbidden"
+      ],
+      "roadmapDestination": "FOR-149",
+      "supportCells": [
+        {
+          "id": "posthog.research",
+          "platform": "darwin-25.6.0-node-22.23.2",
+          "architecture": "arm64",
+          "state": "fixture-verified",
+          "evidence": [
+            {
+              "id": "posthog.insight.read.research",
+              "kind": "research",
+              "providerVersion": "posthog-2026-08-10",
+              "adapterVersion": "0.0.0-research",
+              "checkedAt": "2026-08-10T13:07:44.000Z",
+              "digest": "sha256:8fe14319f2b2b3a1a6b2ef7321dc04b49a1f4ce4c6e13d18dcf9ca9b798f723f"
+            },
+            {
+              "id": "posthog.insight.read.fixture",
+              "kind": "fixture",
+              "providerVersion": "posthog-2026-08-10",
+              "adapterVersion": "1.0.0",
+              "checkedAt": "2026-08-11T10:44:32.000Z",
+              "digest": "sha256:1e5b058137a5c4205d3e385d6a6bf96a92a90d0215ceb9edfbbd0693fb39afe1"
+            }
+          ]
+        }
+      ],
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "projectId": {
+            "type": "string"
+          },
+          "insightId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "projectId",
+          "insightId"
+        ]
+      },
+      "outputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "insight": {
+            "type": "object"
+          },
+          "result": {
+            "type": "object"
+          },
+          "lastRefresh": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "insight",
+          "result",
+          "lastRefresh"
+        ]
+      }
+    },
+    {
+      "id": "posthog.query.run",
+      "capabilityId": "product.analytics.read",
+      "provider": "posthog",
+      "product": "PostHog",
+      "category": "analytics",
+      "outcomes": [
+        "diagnose-growth",
+        "measure-growth"
+      ],
+      "actionClass": "observe",
+      "providerApiVersion": "posthog-2026-08-10",
+      "authScopes": [
+        "query:read"
+      ],
+      "dataClassification": "confidential",
+      "pii": "possible",
+      "residency": "provider-controlled; verify account configuration",
+      "rateLimit": "PostHog API project and account limits",
+      "quotaUnit": "request",
+      "monetaryUnit": "USD",
+      "inputKeys": [
+        "projectId",
+        "queryKind",
+        "queryBody"
+      ],
+      "requiredInputKeys": [
+        "projectId",
+        "queryKind",
+        "queryBody"
+      ],
+      "outputKeys": [
+        "results",
+        "metadata",
+        "nextCursor"
+      ],
+      "pagination": "only allowlisted query kinds; bounded cursor traversal",
+      "retry": "no automatic retry; expose typed retryability and bounded Retry-After guidance",
+      "idempotency": "none",
+      "officialSources": [
+        "https://posthog.com/docs/api"
+      ],
+      "provenance": "Maintained operation contract referencing the listed official provider sources. This description is not a live execution record or release acceptance.",
+      "checkedAt": "2026-08-10T13:07:44.000Z",
+      "knownGaps": [
+        "candidate-bound live evidence pending",
+        "Live verification requires operator-supplied opaque Connection references, exact provider targets, authenticated human review, and applicable provider/spend authorization. Each live or support claim needs its own observed evidence. Missing credentials or approval for another provider never authorize fabricated cells.",
+        "support claim forbidden",
+        "1.0.0 query allowlist excludes HogQLQuery and every unlisted query kind"
+      ],
+      "roadmapDestination": "FOR-149",
+      "supportCells": [
+        {
+          "id": "posthog.research",
+          "platform": "darwin-25.6.0-node-22.23.2",
+          "architecture": "arm64",
+          "state": "fixture-verified",
+          "evidence": [
+            {
+              "id": "posthog.query.run.research",
+              "kind": "research",
+              "providerVersion": "posthog-2026-08-10",
+              "adapterVersion": "0.0.0-research",
+              "checkedAt": "2026-08-10T13:07:44.000Z",
+              "digest": "sha256:d33d8f5134401a51f4e26ba7a93655b3ef250bf486ac0e6ba459605fdb3a43ad"
+            },
+            {
+              "id": "posthog.query.run.fixture",
+              "kind": "fixture",
+              "providerVersion": "posthog-2026-08-10",
+              "adapterVersion": "1.0.0",
+              "checkedAt": "2026-08-11T10:44:32.000Z",
+              "digest": "sha256:fd52ffa3c8cbefc521b40652a77f2b4978b35b2bb5859bf94f8149ebcd54394b"
+            }
+          ]
+        }
+      ],
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "projectId": {
+            "type": "string"
+          },
+          "queryKind": {
+            "type": "string"
+          },
+          "queryBody": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "projectId",
+          "queryKind",
+          "queryBody"
+        ]
+      },
+      "outputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "results": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "metadata": {
+            "type": "object"
+          },
+          "nextCursor": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "results",
+          "metadata"
+        ]
+      }
+    },
+    {
+      "id": "semrush.report.query",
+      "capabilityId": "seo.report.read",
+      "provider": "semrush",
+      "product": "Semrush",
+      "category": "search",
+      "outcomes": [
+        "research-positioning",
+        "research-channel",
+        "optimize-search"
+      ],
+      "actionClass": "metered-observe",
+      "providerApiVersion": "semrush-v4",
+      "authScopes": [
+        "api:read"
+      ],
+      "dataClassification": "confidential",
+      "pii": "possible",
+      "residency": "provider-controlled; verify account configuration",
+      "rateLimit": "Semrush API units and provider restrictions",
+      "quotaUnit": "api-unit",
+      "monetaryUnit": "USD",
+      "maximumUnitsPerRun": 1000,
+      "maximumCostPerRun": 10,
+      "inputKeys": [
+        "report",
+        "database",
+        "domain",
+        "keywords",
+        "columns",
+        "limit",
+        "offset"
+      ],
+      "requiredInputKeys": [
+        "report",
+        "database"
+      ],
+      "outputKeys": [
+        "rows",
+        "unitsUsed",
+        "nextOffset"
+      ],
+      "pagination": "bounded offset/limit; stop before configured unit ceiling",
+      "retry": "no automatic retry; expose typed retryability and bounded Retry-After guidance",
+      "idempotency": "none",
+      "officialSources": [
+        "https://developer.semrush.com/api/v4/seo/keyword-reports/",
+        "https://developer.semrush.com/api/v4/introduction/api-usage-restrictions/"
+      ],
+      "provenance": "Maintained operation contract referencing the listed official provider sources. This description is not a live execution record or release acceptance.",
+      "checkedAt": "2026-08-10T13:07:44.000Z",
+      "knownGaps": [
+        "candidate-bound live evidence pending",
+        "Live verification requires operator-supplied opaque Connection references, exact provider targets, authenticated human review, and applicable provider/spend authorization. Each live or support claim needs its own observed evidence. Missing credentials or approval for another provider never authorize fabricated cells.",
+        "support claim forbidden",
+        "1.0.0 report allowlist is keyword-metrics only at exactly 20 API units per request"
+      ],
+      "roadmapDestination": "FOR-149",
+      "supportCells": [
+        {
+          "id": "semrush.research",
+          "platform": "darwin-25.6.0-node-22.23.2",
+          "architecture": "arm64",
+          "state": "fixture-verified",
+          "evidence": [
+            {
+              "id": "semrush.report.query.research",
+              "kind": "research",
+              "providerVersion": "semrush-v4",
+              "adapterVersion": "0.0.0-research",
+              "checkedAt": "2026-08-10T13:07:44.000Z",
+              "digest": "sha256:8142b9c18f355e2bb368ec1d8d5beac303d63f5c8a89c646d2cd1bfe73bd147a"
+            },
+            {
+              "id": "semrush.report.query.fixture",
+              "kind": "fixture",
+              "providerVersion": "semrush-v4",
+              "adapterVersion": "1.0.0",
+              "checkedAt": "2026-08-11T10:44:32.000Z",
+              "digest": "sha256:63e5a4f7d1275e66c7cb6e19da6fb577337d8b1973607937a6a3aa740c495b8d"
+            }
+          ]
+        }
+      ],
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "report": {
+            "type": "string"
+          },
+          "database": {
+            "type": "string"
+          },
+          "domain": {
+            "type": "string"
+          },
+          "keywords": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "columns": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "limit": {
+            "type": "integer"
+          },
+          "offset": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "report",
+          "database"
+        ]
+      },
+      "outputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "rows": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "unitsUsed": {
+            "type": "number"
+          },
+          "nextOffset": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "rows",
+          "unitsUsed"
+        ]
+      }
+    },
+    {
+      "id": "typefully.post.list",
+      "capabilityId": "social.post.read",
+      "provider": "typefully",
+      "product": "Typefully",
+      "category": "social",
+      "outcomes": [
+        "write-social",
+        "measure-growth"
+      ],
+      "actionClass": "observe",
+      "providerApiVersion": "typefully-v2",
+      "authScopes": [
+        "posts:read"
+      ],
+      "dataClassification": "confidential",
+      "pii": "possible",
+      "residency": "provider-controlled; verify account configuration",
+      "rateLimit": "Typefully API account limits",
+      "quotaUnit": "request",
+      "monetaryUnit": "USD",
+      "inputKeys": [
+        "socialSetId",
+        "status",
+        "pageSize",
+        "cursor"
+      ],
+      "requiredInputKeys": [
+        "socialSetId"
+      ],
+      "outputKeys": [
+        "posts",
+        "nextCursor"
+      ],
+      "pagination": "bounded cursor traversal with truncation receipt",
+      "retry": "no automatic retry; expose typed retryability and bounded Retry-After guidance",
+      "idempotency": "none",
+      "officialSources": [
+        "https://typefully.com/docs/api"
+      ],
+      "provenance": "Maintained operation contract referencing the listed official provider sources. This description is not a live execution record or release acceptance.",
+      "checkedAt": "2026-08-10T13:07:44.000Z",
+      "knownGaps": [
+        "candidate-bound live evidence pending",
+        "Live verification requires operator-supplied opaque Connection references, exact provider targets, authenticated human review, and applicable provider/spend authorization. Each live or support claim needs its own observed evidence. Missing credentials or approval for another provider never authorize fabricated cells.",
+        "support claim forbidden"
+      ],
+      "roadmapDestination": "FOR-149",
+      "supportCells": [
+        {
+          "id": "typefully.research",
+          "platform": "darwin-25.6.0-node-22.23.2",
+          "architecture": "arm64",
+          "state": "fixture-verified",
+          "evidence": [
+            {
+              "id": "typefully.post.list.research",
+              "kind": "research",
+              "providerVersion": "typefully-v2",
+              "adapterVersion": "0.0.0-research",
+              "checkedAt": "2026-08-10T13:07:44.000Z",
+              "digest": "sha256:2e2588b915f5da32507525dc16dbf363dceb18da4c71b5c3fe6268aa47acdd1b"
+            },
+            {
+              "id": "typefully.post.list.fixture",
+              "kind": "fixture",
+              "providerVersion": "typefully-v2",
+              "adapterVersion": "1.0.0",
+              "checkedAt": "2026-08-11T10:44:32.000Z",
+              "digest": "sha256:29da58e93d69a4a81a09188b844dddbbb0d5473224385a1242ded48082802073"
+            }
+          ]
+        }
+      ],
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "socialSetId": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "pageSize": {
+            "type": "integer"
+          },
+          "cursor": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "socialSetId"
+        ]
+      },
+      "outputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "posts": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "nextCursor": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "posts"
+        ]
+      }
+    },
+    {
+      "id": "typefully.draft.create",
+      "capabilityId": "social.draft.create",
+      "provider": "typefully",
+      "product": "Typefully",
+      "category": "social",
+      "outcomes": [
+        "write-social"
+      ],
+      "actionClass": "draft",
+      "providerApiVersion": "typefully-v2",
+      "authScopes": [
+        "drafts:write"
+      ],
+      "dataClassification": "confidential",
+      "pii": "possible",
+      "residency": "provider-controlled; verify account configuration",
+      "rateLimit": "Typefully API account limits",
+      "quotaUnit": "request",
+      "monetaryUnit": "USD",
+      "maximumUnitsPerRun": 1,
+      "maximumCostPerRun": 0,
+      "inputKeys": [
+        "socialSetId",
+        "content",
+        "mediaIds"
+      ],
+      "requiredInputKeys": [
+        "socialSetId",
+        "content"
+      ],
+      "outputKeys": [
+        "draftId",
+        "status",
+        "previewUrl"
+      ],
+      "pagination": "not applicable",
+      "retry": "no automatic retry; expose typed retryability and bounded Retry-After guidance",
+      "idempotency": "required",
+      "officialSources": [
+        "https://typefully.com/docs/api"
+      ],
+      "provenance": "Maintained operation contract referencing the listed official provider sources. This description is not a live execution record or release acceptance.",
+      "checkedAt": "2026-08-10T13:07:44.000Z",
+      "knownGaps": [
+        "candidate-bound live evidence pending",
+        "Live verification requires operator-supplied opaque Connection references, exact provider targets, authenticated human review, and applicable provider/spend authorization. Each live or support claim needs its own observed evidence. Missing credentials or approval for another provider never authorize fabricated cells.",
+        "support claim forbidden",
+        "1.0.0 external draft creation targets X because the frozen input contract has no destination field"
+      ],
+      "roadmapDestination": "FOR-149",
+      "supportCells": [
+        {
+          "id": "typefully.research",
+          "platform": "darwin-25.6.0-node-22.23.2",
+          "architecture": "arm64",
+          "state": "fixture-verified",
+          "evidence": [
+            {
+              "id": "typefully.draft.create.research",
+              "kind": "research",
+              "providerVersion": "typefully-v2",
+              "adapterVersion": "0.0.0-research",
+              "checkedAt": "2026-08-10T13:07:44.000Z",
+              "digest": "sha256:9de4f92bed3d78a5c0dcd5c9e1110174712d989574016bde5b6ecc559e91378f"
+            },
+            {
+              "id": "typefully.draft.create.fixture",
+              "kind": "fixture",
+              "providerVersion": "typefully-v2",
+              "adapterVersion": "1.0.0",
+              "checkedAt": "2026-08-11T10:44:32.000Z",
+              "digest": "sha256:322555a0a713f4eb438b1a0b058140d1940de22d123dad0db8844bd074e4132c"
+            }
+          ]
+        }
+      ],
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "socialSetId": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          },
+          "mediaIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "socialSetId",
+          "content"
+        ]
+      },
+      "outputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "draftId": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "previewUrl": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "draftId",
+          "status",
+          "previewUrl"
+        ]
+      }
+    },
+    {
+      "id": "typefully.post.schedule",
+      "capabilityId": "social.post.schedule",
+      "provider": "typefully",
+      "product": "Typefully",
+      "category": "social",
+      "outcomes": [
+        "write-social"
+      ],
+      "actionClass": "consequential",
+      "providerApiVersion": "typefully-v2",
+      "authScopes": [
+        "posts:write"
+      ],
+      "dataClassification": "confidential",
+      "pii": "possible",
+      "residency": "provider-controlled; verify account configuration",
+      "rateLimit": "Typefully API account limits",
+      "quotaUnit": "request",
+      "monetaryUnit": "USD",
+      "maximumUnitsPerRun": 1,
+      "maximumCostPerRun": 0,
+      "inputKeys": [
+        "socialSetId",
+        "content",
+        "mediaIds",
+        "scheduleAt",
+        "timezone",
+        "destination"
+      ],
+      "requiredInputKeys": [
+        "socialSetId",
+        "content",
+        "scheduleAt",
+        "timezone",
+        "destination"
+      ],
+      "outputKeys": [
+        "postId",
+        "status",
+        "scheduledAt",
+        "previewUrl"
+      ],
+      "pagination": "not applicable",
+      "retry": "no automatic retry; expose typed retryability and bounded Retry-After guidance",
+      "idempotency": "required",
+      "officialSources": [
+        "https://typefully.com/docs/api"
+      ],
+      "provenance": "Maintained operation contract referencing the listed official provider sources. This description is not a live execution record or release acceptance.",
+      "checkedAt": "2026-08-10T13:07:44.000Z",
+      "knownGaps": [
+        "candidate-bound live evidence pending",
+        "Live verification requires operator-supplied opaque Connection references, exact provider targets, authenticated human review, and applicable provider/spend authorization. Each live or support claim needs its own observed evidence. Missing credentials or approval for another provider never authorize fabricated cells.",
+        "support claim forbidden"
+      ],
+      "roadmapDestination": "FOR-149",
+      "supportCells": [
+        {
+          "id": "typefully.research",
+          "platform": "darwin-25.6.0-node-22.23.2",
+          "architecture": "arm64",
+          "state": "fixture-verified",
+          "evidence": [
+            {
+              "id": "typefully.post.schedule.research",
+              "kind": "research",
+              "providerVersion": "typefully-v2",
+              "adapterVersion": "0.0.0-research",
+              "checkedAt": "2026-08-10T13:07:44.000Z",
+              "digest": "sha256:62cb81c7333ab5ab3aa359ded90a8e995cfbed649a8e98f9c84be68d2a1a8f21"
+            },
+            {
+              "id": "typefully.post.schedule.fixture",
+              "kind": "fixture",
+              "providerVersion": "typefully-v2",
+              "adapterVersion": "1.0.0",
+              "checkedAt": "2026-08-11T10:44:32.000Z",
+              "digest": "sha256:c7a4146b5de4031ce6cc5a2df648a1029a5803246e84a1aff678e2171aa21690"
+            }
+          ]
+        }
+      ],
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "socialSetId": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          },
+          "mediaIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "scheduleAt": {
+            "type": "string"
+          },
+          "timezone": {
+            "type": "string"
+          },
+          "destination": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "socialSetId",
+          "content",
+          "scheduleAt",
+          "timezone",
+          "destination"
+        ]
+      },
+      "outputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "postId": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "scheduledAt": {
+            "type": "string"
+          },
+          "previewUrl": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "postId",
+          "status",
+          "scheduledAt",
+          "previewUrl"
+        ]
+      }
+    },
+    {
+      "id": "typefully.post.publish",
+      "capabilityId": "social.post.publish",
+      "provider": "typefully",
+      "product": "Typefully",
+      "category": "social",
+      "outcomes": [
+        "write-social"
+      ],
+      "actionClass": "consequential",
+      "providerApiVersion": "typefully-v2",
+      "authScopes": [
+        "posts:write"
+      ],
+      "dataClassification": "confidential",
+      "pii": "possible",
+      "residency": "provider-controlled; verify account configuration",
+      "rateLimit": "Typefully API account limits",
+      "quotaUnit": "request",
+      "monetaryUnit": "USD",
+      "maximumUnitsPerRun": 4,
+      "maximumCostPerRun": 0,
+      "inputKeys": [
+        "socialSetId",
+        "content",
+        "mediaIds",
+        "destination"
+      ],
+      "requiredInputKeys": [
+        "socialSetId",
+        "content",
+        "destination"
+      ],
+      "outputKeys": [
+        "postId",
+        "status",
+        "publishedAt",
+        "publicUrl"
+      ],
+      "pagination": "not applicable",
+      "retry": "no automatic retry; expose typed retryability and bounded Retry-After guidance",
+      "idempotency": "required",
+      "officialSources": [
+        "https://typefully.com/docs/api"
+      ],
+      "provenance": "Maintained operation contract referencing the listed official provider sources. This description is not a live execution record or release acceptance.",
+      "checkedAt": "2026-08-10T13:07:44.000Z",
+      "knownGaps": [
+        "candidate-bound live evidence pending",
+        "Live verification requires operator-supplied opaque Connection references, exact provider targets, authenticated human review, and applicable provider/spend authorization. Each live or support claim needs its own observed evidence. Missing credentials or approval for another provider never authorize fabricated cells.",
+        "support claim forbidden"
+      ],
+      "roadmapDestination": "FOR-149",
+      "supportCells": [
+        {
+          "id": "typefully.research",
+          "platform": "darwin-25.6.0-node-22.23.2",
+          "architecture": "arm64",
+          "state": "fixture-verified",
+          "evidence": [
+            {
+              "id": "typefully.post.publish.research",
+              "kind": "research",
+              "providerVersion": "typefully-v2",
+              "adapterVersion": "0.0.0-research",
+              "checkedAt": "2026-08-10T13:07:44.000Z",
+              "digest": "sha256:402e45c26d7d00de4e35ec05c252fa1a6c5990772b37a680d201c57d4a38155b"
+            },
+            {
+              "id": "typefully.post.publish.fixture",
+              "kind": "fixture",
+              "providerVersion": "typefully-v2",
+              "adapterVersion": "1.0.0",
+              "checkedAt": "2026-08-11T10:44:32.000Z",
+              "digest": "sha256:303054a2f99525f364e26a51afcc8bd2ac29d111120df2f81e00d38f6ad4c7f9"
+            }
+          ]
+        }
+      ],
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "socialSetId": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          },
+          "mediaIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "destination": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "socialSetId",
+          "content",
+          "destination"
+        ]
+      },
+      "outputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "postId": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "publishedAt": {
+            "type": "string"
+          },
+          "publicUrl": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "postId",
+          "status",
+          "publishedAt",
+          "publicUrl"
+        ]
+      }
+    },
+    {
+      "id": "typefully.post.delete",
+      "capabilityId": "social.post.delete",
+      "provider": "typefully",
+      "product": "Typefully",
+      "category": "social",
+      "outcomes": [],
+      "actionClass": "prohibited",
+      "providerApiVersion": "typefully-v2",
+      "authScopes": [
+        "posts:write"
+      ],
+      "dataClassification": "confidential",
+      "pii": "possible",
+      "residency": "provider-controlled; verify account configuration",
+      "rateLimit": "Typefully API account limits",
+      "quotaUnit": "request",
+      "monetaryUnit": "USD",
+      "maximumUnitsPerRun": 0,
+      "maximumCostPerRun": 0,
+      "inputKeys": [
+        "postId"
+      ],
+      "requiredInputKeys": [
+        "postId"
+      ],
+      "outputKeys": [],
+      "pagination": "not applicable",
+      "retry": "no automatic retry; expose typed retryability and bounded Retry-After guidance",
+      "idempotency": "required",
+      "officialSources": [
+        "https://typefully.com/docs/api"
+      ],
+      "provenance": "Maintained operation contract referencing the listed official provider sources. This description is not a live execution record or release acceptance.",
+      "checkedAt": "2026-08-10T13:07:44.000Z",
+      "knownGaps": [
+        "intentionally prohibited: delete has no adapter, fixture promotion, live proof, or support path",
+        "support claim forbidden"
+      ],
+      "roadmapDestination": "FOR-149",
+      "supportCells": [
+        {
+          "id": "typefully.research",
+          "platform": "unbound",
+          "architecture": "unbound",
+          "state": "researched",
+          "evidence": [
+            {
+              "id": "typefully.post.delete.research",
+              "kind": "research",
+              "providerVersion": "typefully-v2",
+              "adapterVersion": "0.0.0-research",
+              "checkedAt": "2026-08-10T13:07:44.000Z",
+              "digest": "sha256:07f8eb748e02449394d20ce18aba20b5c45249a22baeeb8d98975e0f8fd80e7c"
+            }
+          ]
+        }
+      ],
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "postId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "postId"
+        ]
+      },
+      "outputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {},
+        "required": []
+      }
+    },
+    {
+      "id": "openseo.get-serp-results",
+      "capabilityId": "openseo.serp.results.read",
+      "provider": "openseo",
+      "product": "OpenSEO",
+      "category": "seo",
+      "outcomes": [
+        "bounded SERP and competitor signal for exactly one target"
+      ],
+      "actionClass": "metered-observe",
+      "providerApiVersion": "0.0.12",
+      "authScopes": [
+        "openseo:project",
+        "openseo:serp"
+      ],
+      "dataClassification": "public",
+      "pii": "none",
+      "residency": "OpenSEO managed infrastructure, DataForSEO-backed",
+      "rateLimit": "OpenSEO platform fair-use limits per project",
+      "quotaUnit": "credit",
+      "monetaryUnit": "usd",
+      "maximumUnitsPerRun": 5,
+      "maximumCostPerRun": 1,
+      "inputKeys": [
+        "projectId",
+        "target",
+        "locationCode",
+        "languageCode"
+      ],
+      "requiredInputKeys": [
+        "projectId",
+        "target",
+        "locationCode",
+        "languageCode"
+      ],
+      "outputKeys": [
+        "results",
+        "creditsUsed",
+        "truncated"
+      ],
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "projectId": {
+            "type": "string"
+          },
+          "target": {
+            "type": "string"
+          },
+          "locationCode": {
+            "type": "integer"
+          },
+          "languageCode": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "projectId",
+          "target",
+          "locationCode",
+          "languageCode"
+        ]
+      },
+      "outputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "results": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "creditsUsed": {
+            "type": "integer"
+          },
+          "truncated": {
+            "type": "boolean"
+          }
+        },
+        "required": []
+      },
+      "pagination": "bounded single response; no cursor",
+      "retry": "no automatic retry; expose typed retryability and bounded Retry-After guidance",
+      "idempotency": "none",
+      "officialSources": [
+        "https://openseo.so",
+        "https://github.com/every-app/open-seo"
+      ],
+      "provenance": "Maintained OpenSEO operation contract for get_serp_results, referencing the listed official sources. This description establishes no connection, pilot result, candidate-bound execution, or support claim.",
+      "checkedAt": "2026-08-21T00:00:00.000Z",
+      "knownGaps": [
+        "candidate-bound live evidence pending",
+        "paid live proof unrun; requires explicit provider/spend approval from the operator",
+        "support claim forbidden"
+      ],
+      "roadmapDestination": "1.0.0 G4 release-blocking family per EXTS-182",
+      "supportCells": [
+        {
+          "id": "openseo.get-serp-results.cell",
+          "platform": "darwin-25.6.0-node-22.23.2",
+          "architecture": "arm64",
+          "state": "fixture-verified",
+          "evidence": [
+            {
+              "id": "openseo.get-serp-results.research",
+              "kind": "research",
+              "providerVersion": "0.0.12",
+              "adapterVersion": "1.0.0",
+              "checkedAt": "2026-08-21T00:00:00.000Z",
+              "digest": "sha256:41c59287c9004ce71a07a2ee6402232ee0b2f4f182e2481c7982b193bf8156cd"
+            },
+            {
+              "id": "openseo.get-serp-results.fixture",
+              "kind": "fixture",
+              "providerVersion": "0.0.12",
+              "adapterVersion": "1.0.0",
+              "checkedAt": "2026-08-11T10:44:32.000Z",
+              "digest": "sha256:3023b37fdcfd8e42fc58e2b627d8cbf8905fbb2c533ca877008c64bc19252ee8"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "openseo.get-search-console-performance",
+      "capabilityId": "openseo.search.performance.read",
+      "provider": "openseo",
+      "product": "OpenSEO",
+      "category": "seo",
+      "outcomes": [
+        "read-only owned search-performance signal"
+      ],
+      "actionClass": "observe",
+      "providerApiVersion": "0.0.12",
+      "authScopes": [
+        "openseo:project",
+        "openseo:search-console"
+      ],
+      "dataClassification": "internal",
+      "pii": "none",
+      "residency": "OpenSEO managed infrastructure, DataForSEO-backed",
+      "rateLimit": "OpenSEO platform fair-use limits per project",
+      "quotaUnit": "request",
+      "monetaryUnit": "usd",
+      "inputKeys": [
+        "projectId",
+        "domain",
+        "startDate",
+        "endDate"
+      ],
+      "requiredInputKeys": [
+        "projectId",
+        "domain",
+        "startDate",
+        "endDate"
+      ],
+      "outputKeys": [
+        "rows",
+        "totals",
+        "typedUnknownCode",
+        "truncated"
+      ],
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "projectId": {
+            "type": "string"
+          },
+          "domain": {
+            "type": "string"
+          },
+          "startDate": {
+            "type": "string"
+          },
+          "endDate": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "projectId",
+          "domain",
+          "startDate",
+          "endDate"
+        ]
+      },
+      "outputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "rows": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "totals": {
+            "type": "object"
+          },
+          "typedUnknownCode": {
+            "type": "string"
+          },
+          "truncated": {
+            "type": "boolean"
+          }
+        },
+        "required": []
+      },
+      "pagination": "bounded single response; no cursor",
+      "retry": "no automatic retry; expose typed retryability and bounded Retry-After guidance",
+      "idempotency": "none",
+      "officialSources": [
+        "https://openseo.so",
+        "https://github.com/every-app/open-seo"
+      ],
+      "provenance": "Maintained OpenSEO operation contract for get_search_console_performance, referencing the listed official sources. This description establishes no connection, pilot result, candidate-bound execution, or support claim.",
+      "checkedAt": "2026-08-21T00:00:00.000Z",
+      "knownGaps": [
+        "candidate-bound live evidence pending",
+        "operation-level evidence promotion incomplete; candidate-bound live proof is absent",
+        "support claim forbidden"
+      ],
+      "roadmapDestination": "1.0.0 G4 release-blocking family per EXTS-182",
+      "supportCells": [
+        {
+          "id": "openseo.get-search-console-performance.cell",
+          "platform": "darwin-25.6.0-node-22.23.2",
+          "architecture": "arm64",
+          "state": "fixture-verified",
+          "evidence": [
+            {
+              "id": "openseo.get-search-console-performance.research",
+              "kind": "research",
+              "providerVersion": "0.0.12",
+              "adapterVersion": "1.0.0",
+              "checkedAt": "2026-08-21T00:00:00.000Z",
+              "digest": "sha256:f692e6aad0af409ba9407d09b310e6191b5b5954bfb5997b196a435c0cf47604"
+            },
+            {
+              "id": "openseo.get-search-console-performance.fixture",
+              "kind": "fixture",
+              "providerVersion": "0.0.12",
+              "adapterVersion": "1.0.0",
+              "checkedAt": "2026-08-11T10:44:32.000Z",
+              "digest": "sha256:3c89c3946b0921efe2a9196dc0a352f3d986aae8b47c572844c42fb6ce7d9cde"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "openseo.get-google-analytics-organic-landing-pages",
+      "capabilityId": "openseo.analytics.landing.pages.read",
+      "provider": "openseo",
+      "product": "OpenSEO",
+      "category": "seo",
+      "outcomes": [
+        "read-only owned organic landing-page outcome signal"
+      ],
+      "actionClass": "observe",
+      "providerApiVersion": "0.0.12",
+      "authScopes": [
+        "openseo:project",
+        "openseo:analytics"
+      ],
+      "dataClassification": "internal",
+      "pii": "none",
+      "residency": "OpenSEO managed infrastructure, DataForSEO-backed",
+      "rateLimit": "OpenSEO platform fair-use limits per project",
+      "quotaUnit": "request",
+      "monetaryUnit": "usd",
+      "inputKeys": [
+        "projectId",
+        "propertyId",
+        "startDate",
+        "endDate"
+      ],
+      "requiredInputKeys": [
+        "projectId",
+        "propertyId",
+        "startDate",
+        "endDate"
+      ],
+      "outputKeys": [
+        "rows",
+        "typedUnknownCode",
+        "truncated"
+      ],
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "projectId": {
+            "type": "string"
+          },
+          "propertyId": {
+            "type": "string"
+          },
+          "startDate": {
+            "type": "string"
+          },
+          "endDate": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "projectId",
+          "propertyId",
+          "startDate",
+          "endDate"
+        ]
+      },
+      "outputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "rows": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "typedUnknownCode": {
+            "type": "string"
+          },
+          "truncated": {
+            "type": "boolean"
+          }
+        },
+        "required": []
+      },
+      "pagination": "bounded single response; no cursor",
+      "retry": "no automatic retry; expose typed retryability and bounded Retry-After guidance",
+      "idempotency": "none",
+      "officialSources": [
+        "https://openseo.so",
+        "https://github.com/every-app/open-seo"
+      ],
+      "provenance": "Maintained OpenSEO operation contract for get_google_analytics_organic_landing_pages, referencing the listed official sources. This description establishes no connection, pilot result, candidate-bound execution, or support claim.",
+      "checkedAt": "2026-08-21T00:00:00.000Z",
+      "knownGaps": [
+        "candidate-bound live evidence pending",
+        "ga4_not_connected is a typed unknown, not success or live proof; candidate-bound live success is absent",
+        "support claim forbidden"
+      ],
+      "roadmapDestination": "1.0.0 G4 release-blocking family per EXTS-182",
+      "supportCells": [
+        {
+          "id": "openseo.get-google-analytics-organic-landing-pages.cell",
+          "platform": "darwin-25.6.0-node-22.23.2",
+          "architecture": "arm64",
+          "state": "fixture-verified",
+          "evidence": [
+            {
+              "id": "openseo.get-google-analytics-organic-landing-pages.research",
+              "kind": "research",
+              "providerVersion": "0.0.12",
+              "adapterVersion": "1.0.0",
+              "checkedAt": "2026-08-21T00:00:00.000Z",
+              "digest": "sha256:64150f0f2ca10367a745abc4eac067508f1a7d93f4d09cb3070f4170ebf019e2"
+            },
+            {
+              "id": "openseo.get-google-analytics-organic-landing-pages.fixture",
+              "kind": "fixture",
+              "providerVersion": "0.0.12",
+              "adapterVersion": "1.0.0",
+              "checkedAt": "2026-08-11T10:44:32.000Z",
+              "digest": "sha256:c7f40a3615ec282f420a7353d11cfb6eb51d420150340353ad2094b753a92581"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

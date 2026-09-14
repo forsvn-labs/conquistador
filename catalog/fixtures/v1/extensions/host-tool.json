@@ -1,0 +1,48 @@
+{
+  "schemaVersion": "conquistador.extension-manifest/v1",
+  "id": "host.github-repository-reader",
+  "version": "1.0.0",
+  "kind": "host-tool",
+  "activation": "host-mediated",
+  "transport": "host-mcp",
+  "provenance": {
+    "sourceId": "host.github-repository-reader",
+    "sourceVersion": "1.0.0",
+    "digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222"
+  },
+  "operations": [
+    {
+      "id": "github.repository.get",
+      "capabilityId": "source.repository.read",
+      "catalog": { "provider": "github", "capabilityId": "source.repository.read", "operationId": "github.repository.get" },
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": { "owner": { "type": "string" }, "repository": { "type": "string" } },
+        "required": ["owner", "repository"]
+      },
+      "outputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "repository": { "type": "object" },
+          "visibility": { "type": "string" },
+          "topics": { "type": "array", "items": { "type": "string" } },
+          "timestamps": { "type": "object" }
+        },
+        "required": ["repository", "visibility", "topics", "timestamps"]
+      },
+      "actionClass": "observe",
+      "budget": { "rateLimit": "GitHub REST primary and secondary limits", "quotaUnit": "request", "monetaryUnit": "USD" },
+      "connection": { "required": true, "provider": "github", "scopes": ["metadata:read"], "credentialCustody": "host-only" },
+      "maturity": "fixture-verified",
+      "dependencies": [],
+      "failure": {
+        "unavailable": "fail-closed",
+        "degraded": "fail-closed",
+        "retry": { "strategy": "none", "maximumAttempts": 0, "backoff": "none" },
+        "recovery": "manual-reconnect"
+      }
+    }
+  ]
+}

@@ -1,0 +1,430 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://forsvn.com/schemas/conquistador/artifact-lineage-v1.json",
+  "title": "Conquistador artifact lineage, review, action-gate, and learning contracts",
+  "oneOf": [
+    { "$ref": "#/$defs/ArtifactEnvelope" },
+    { "$ref": "#/$defs/PlaybookReviewPacket" },
+    { "$ref": "#/$defs/ActionGateRecord" },
+    { "$ref": "#/$defs/LearningEntry" }
+  ],
+  "$defs": {
+    "Sha256": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "KebabId": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$"
+    },
+    "Semver": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+(?:-[0-9A-Za-z.-]+)?$"
+    },
+    "UtcTimestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "Destination": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["channel", "publicationId"],
+      "properties": {
+        "channel": { "type": ["string", "null"], "minLength": 1 },
+        "publicationId": { "type": ["string", "null"], "minLength": 1 }
+      }
+    },
+    "BoundArtifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["artifactId", "path", "contentDigest"],
+      "properties": {
+        "artifactId": { "$ref": "#/$defs/KebabId" },
+        "path": { "type": "string", "minLength": 1 },
+        "contentDigest": { "$ref": "#/$defs/Sha256" }
+      }
+    },
+    "ArtifactEnvelope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "id",
+        "identity",
+        "provenance",
+        "revision",
+        "status",
+        "relationships",
+        "toolReceipts",
+        "humanEdits",
+        "reviewVerdict",
+        "approvedAction",
+        "destination",
+        "observationWindow",
+        "results",
+        "contentDigest"
+      ],
+      "properties": {
+        "schemaVersion": { "const": "conquistador.artifact-envelope/v1" },
+        "id": { "type": "string", "minLength": 1 },
+        "identity": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["artifactId", "schema", "format"],
+          "properties": {
+            "artifactId": { "$ref": "#/$defs/KebabId" },
+            "schema": { "type": "string", "minLength": 1 },
+            "format": { "enum": ["markdown", "json"] }
+          }
+        },
+        "provenance": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["playbookId", "playbookVersion", "runId", "stepId", "sourceContext"],
+          "properties": {
+            "playbookId": { "type": "string", "minLength": 1 },
+            "playbookVersion": { "$ref": "#/$defs/Semver" },
+            "runId": { "type": "string", "minLength": 1 },
+            "stepId": { "type": "string", "minLength": 1 },
+            "skillId": { "type": "string", "minLength": 1 },
+            "skillVersion": { "$ref": "#/$defs/Semver" },
+            "skillPackageDigest": { "$ref": "#/$defs/Sha256" },
+            "skillInterfaceDigest": { "$ref": "#/$defs/Sha256" },
+            "scriptId": { "type": "string", "minLength": 1 },
+            "toolOperationId": { "type": "string", "minLength": 1 },
+            "sourceContext": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["parentArtifactIds"],
+              "properties": {
+                "parentArtifactIds": {
+                  "type": "array",
+                  "items": { "type": "string", "minLength": 1 }
+                }
+              }
+            }
+          }
+        },
+        "revision": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["n", "previousContentDigest", "contentDigest", "chain"],
+          "properties": {
+            "n": { "type": "integer", "minimum": 1 },
+            "previousContentDigest": { "oneOf": [{ "$ref": "#/$defs/Sha256" }, { "type": "null" }] },
+            "contentDigest": { "$ref": "#/$defs/Sha256" },
+            "chain": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["n", "contentDigest", "producedAt", "source"],
+                "properties": {
+                  "n": { "type": "integer", "minimum": 1 },
+                  "contentDigest": { "$ref": "#/$defs/Sha256" },
+                  "producedAt": { "$ref": "#/$defs/UtcTimestamp" },
+                  "source": { "enum": ["run", "human-edit"] }
+                }
+              }
+            }
+          }
+        },
+        "status": { "enum": ["draft", "reviewed", "approved", "acted", "observed"] },
+        "relationships": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["kind", "artifactId"],
+            "properties": {
+              "kind": { "enum": ["input-of", "decision-for", "action-from", "result-of"] },
+              "artifactId": { "$ref": "#/$defs/KebabId" }
+            }
+          }
+        },
+        "toolReceipts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["receiptId", "path"],
+            "oneOf": [
+              { "required": ["executed"], "not": { "anyOf": [{ "required": ["status"] }, { "required": ["catalogReceiptDigest"] }] } },
+              { "required": ["catalogReceiptDigest", "status"], "not": { "required": ["executed"] } }
+            ],
+            "properties": {
+              "receiptId": { "type": "string", "minLength": 1 },
+              "path": { "type": "string", "minLength": 1 },
+              "executed": { "const": false },
+              "catalogReceiptDigest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+              "status": { "enum": ["succeeded", "partial", "failed", "pending", "unknown", "rejected", "expired", "blocked"] }
+            }
+          }
+        },
+        "humanEdits": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["at", "previousContentDigest", "nextContentDigest", "summary", "source"],
+            "properties": {
+              "at": { "$ref": "#/$defs/UtcTimestamp" },
+              "previousContentDigest": { "$ref": "#/$defs/Sha256" },
+              "nextContentDigest": { "$ref": "#/$defs/Sha256" },
+              "summary": { "type": "string", "minLength": 1 },
+              "source": { "const": "human" }
+            }
+          }
+        },
+        "reviewVerdict": {
+          "oneOf": [
+            { "type": "null" },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["packetId", "packetDigest", "outcome", "artifactId", "artifactRevision", "boundContentDigest", "decidedAt"],
+              "properties": {
+                "packetId": { "type": "string", "minLength": 1 },
+                "packetDigest": { "$ref": "#/$defs/Sha256" },
+                "outcome": { "enum": ["accept", "revise", "reject", "cancel"] },
+                "artifactId": { "type": "string", "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$" },
+                "artifactRevision": { "type": "integer", "minimum": 1 },
+                "boundContentDigest": { "$ref": "#/$defs/Sha256" },
+                "decidedAt": { "$ref": "#/$defs/UtcTimestamp" }
+              }
+            }
+          ]
+        },
+        "approvedAction": {
+          "oneOf": [
+            { "type": "null" },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["gateId", "boundPayloadDigest", "decidedAt", "destination"],
+              "properties": {
+                "gateId": { "type": "string", "minLength": 1 },
+                "boundPayloadDigest": { "$ref": "#/$defs/Sha256" },
+                "decidedAt": { "$ref": "#/$defs/UtcTimestamp" },
+                "destination": { "$ref": "#/$defs/Destination" }
+              }
+            }
+          ]
+        },
+        "destination": {
+          "oneOf": [{ "type": "null" }, { "$ref": "#/$defs/Destination" }]
+        },
+        "observationWindow": {
+          "oneOf": [
+            { "type": "null" },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["declared", "elapsed"],
+              "properties": {
+                "declared": { "type": "string", "minLength": 1 },
+                "elapsed": { "type": "boolean" }
+              }
+            }
+          ]
+        },
+        "results": {
+          "oneOf": [
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["status"],
+              "properties": { "status": { "const": "unknown" } }
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["status", "measures"],
+              "properties": {
+                "status": { "const": "known" },
+                "measures": { "type": "object" }
+              }
+            }
+          ]
+        },
+        "contentDigest": { "$ref": "#/$defs/Sha256" }
+      }
+    },
+    "PlaybookReviewPacket": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "id",
+        "sessionId",
+        "messageId",
+        "runId",
+        "gateId",
+        "requestedOutcome",
+        "completed",
+        "deliverables",
+        "evidence",
+        "assumptions",
+        "unknowns",
+        "quality",
+        "learningProposals",
+        "actionProposals",
+        "humanRequired",
+        "modelCannotSatisfy",
+        "actionGateSeparate",
+        "outcomes",
+        "boundArtifacts",
+        "createdAt",
+        "digest"
+      ],
+      "properties": {
+        "schemaVersion": { "const": "conquistador.review-packet/v1" },
+        "id": { "type": "string", "minLength": 1 },
+        "sessionId": { "type": "string", "minLength": 1 },
+        "messageId": { "type": "string", "minLength": 1 },
+        "runId": { "type": "string", "minLength": 1 },
+        "gateId": { "type": "string", "minLength": 1 },
+        "requestedOutcome": { "type": "string", "minLength": 1 },
+        "completed": { "type": "string", "minLength": 1 },
+        "deliverables": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["kind", "content", "digest"],
+            "properties": {
+              "kind": { "enum": ["artifact", "text"] },
+              "content": { "type": "string", "minLength": 1 },
+              "digest": { "$ref": "#/$defs/Sha256" }
+            }
+          }
+        },
+        "evidence": { "type": "array" },
+        "assumptions": { "type": "array", "items": { "type": "string" } },
+        "unknowns": { "type": "array", "items": { "type": "string" } },
+        "quality": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "status"],
+            "properties": {
+              "id": { "type": "string", "minLength": 1 },
+              "status": { "enum": ["passed", "warning", "failed"] }
+            }
+          }
+        },
+        "learningProposals": { "type": "array" },
+        "actionProposals": { "type": "array", "items": { "type": "object" } },
+        "humanRequired": { "const": true },
+        "modelCannotSatisfy": { "const": true },
+        "actionGateSeparate": { "const": true },
+        "outcomes": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 4,
+          "prefixItems": [{ "const": "accept" }, { "const": "revise" }, { "const": "reject" }, { "const": "cancel" }]
+        },
+        "boundArtifacts": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/BoundArtifact" }
+        },
+        "createdAt": { "$ref": "#/$defs/UtcTimestamp" },
+        "digest": { "$ref": "#/$defs/Sha256" }
+      }
+    },
+    "ActionGateRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "id",
+        "runId",
+        "gateId",
+        "afterGate",
+        "requiresReviewOutcome",
+        "humanRequired",
+        "modelCannotSatisfy",
+        "mutationClass",
+        "fallback",
+        "reviewPacketId",
+        "reviewPacketDigest",
+        "reviewOutcome",
+        "boundArtifacts",
+        "boundPayloadDigest",
+        "executed",
+        "liveCall",
+        "credentialsUsed",
+        "createdAt",
+        "digest"
+      ],
+      "properties": {
+        "schemaVersion": { "const": "conquistador.action-gate/v1" },
+        "id": { "type": "string", "minLength": 1 },
+        "runId": { "type": "string", "minLength": 1 },
+        "gateId": { "type": "string", "minLength": 1 },
+        "afterGate": { "type": "string", "minLength": 1 },
+        "requiresReviewOutcome": { "const": "accept" },
+        "humanRequired": { "const": true },
+        "modelCannotSatisfy": { "const": true },
+        "mutationClass": { "enum": ["draft", "publish", "spend", "account-change"] },
+        "fallback": { "const": "human-action-manifest" },
+        "reviewPacketId": { "type": "string", "minLength": 1 },
+        "reviewPacketDigest": { "$ref": "#/$defs/Sha256" },
+        "reviewOutcome": { "const": "accept" },
+        "boundArtifacts": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/BoundArtifact" }
+        },
+        "boundPayloadDigest": { "$ref": "#/$defs/Sha256" },
+        "executed": { "const": false },
+        "liveCall": { "const": false },
+        "credentialsUsed": { "const": false },
+        "createdAt": { "$ref": "#/$defs/UtcTimestamp" },
+        "digest": { "$ref": "#/$defs/Sha256" }
+      }
+    },
+    "LearningEntry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "id", "recordedAt", "runId", "kind", "approved", "inferred", "source", "body"],
+      "properties": {
+        "schemaVersion": { "const": "conquistador.learning-entry/v1" },
+        "id": { "type": "string", "minLength": 1 },
+        "recordedAt": { "$ref": "#/$defs/UtcTimestamp" },
+        "runId": { "type": "string", "minLength": 1 },
+        "kind": { "enum": ["fact", "decision", "edit-delta", "action", "observed-result"] },
+        "approved": { "const": true },
+        "inferred": { "const": false },
+        "source": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["artifactId", "contentDigest", "reviewPacketId"],
+          "properties": {
+            "artifactId": { "type": "string", "minLength": 1 },
+            "contentDigest": { "$ref": "#/$defs/Sha256" },
+            "reviewPacketId": { "type": "string", "minLength": 1 },
+            "actionReceiptId": { "type": "string", "minLength": 1 }
+          }
+        },
+        "body": true
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "kind": { "enum": ["action", "observed-result"] } },
+            "required": ["kind"]
+          },
+          "then": {
+            "properties": {
+              "source": { "required": ["actionReceiptId"] }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

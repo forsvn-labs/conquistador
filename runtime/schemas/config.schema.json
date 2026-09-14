@@ -1,0 +1,136 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://forsvn.com/schemas/conquistador/conquistador.config-1.0.0.schema.json",
+  "title": "Conquistador self-hosted configuration",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "instance", "models", "server", "data", "memory", "sandbox", "limits", "tools"],
+  "properties": {
+    "schemaVersion": { "const": "conquistador.config/v1" },
+    "instance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id"],
+      "properties": { "id": { "type": "string", "pattern": "^[a-z0-9]+(?:[.-][a-z0-9]+)*$" } }
+    },
+    "models": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["primary"],
+      "properties": {
+        "primary": { "$ref": "#/$defs/model" },
+        "fast": { "$ref": "#/$defs/model" },
+        "judge": { "$ref": "#/$defs/model" }
+      }
+    },
+    "server": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["profile", "bind", "port", "auth", "allowedOrigins", "trustedProxies"],
+      "properties": {
+        "profile": { "enum": ["local", "single-node"] },
+        "bind": { "type": "string", "minLength": 1 },
+        "port": { "type": "integer", "minimum": 1, "maximum": 65535 },
+        "publicUrl": { "type": "string", "format": "uri" },
+        "auth": { "$ref": "#/$defs/auth" },
+        "allowedOrigins": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "trustedProxies": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }
+      }
+    },
+    "data": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["dir", "sessionRetentionDays", "traceRetentionDays", "artifactPolicy", "backupPolicy"],
+      "properties": {
+        "dir": { "type": "string", "minLength": 1 },
+        "sessionRetentionDays": { "type": "integer", "minimum": 1 },
+        "traceRetentionDays": { "type": "integer", "minimum": 1 },
+        "artifactPolicy": { "enum": ["accepted-only", "reviewed"] },
+        "backupPolicy": { "const": "operator" }
+      }
+    },
+    "memory": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode", "scopePolicy"],
+      "properties": {
+        "mode": { "enum": ["off", "review-promoted"] },
+        "scopePolicy": { "const": "instance-workspace-project" }
+      }
+    },
+    "sandbox": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode", "projectRoots"],
+      "properties": {
+        "mode": { "const": "disabled" },
+        "projectRoots": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }
+      }
+    },
+    "limits": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["activeSessions", "internalSpecialists", "tokensPerRun", "timeoutSeconds", "queuedMessages", "bodyBytes"],
+      "properties": {
+        "activeSessions": { "type": "integer", "minimum": 1 },
+        "internalSpecialists": { "type": "integer", "minimum": 0 },
+        "tokensPerRun": { "type": "integer", "minimum": 1 },
+        "timeoutSeconds": { "type": "integer", "minimum": 1 },
+        "queuedMessages": { "type": "integer", "minimum": 1 },
+        "bodyBytes": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "tools": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["actionPolicy"],
+      "properties": {
+        "catalogPath": { "type": "string" },
+        "actionPolicy": { "const": "human-bound" }
+      }
+    }
+  },
+  "$defs": {
+    "model": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["provider", "model", "credentialEnv"],
+      "properties": {
+        "provider": { "enum": ["openai", "anthropic", "vercel-ai-gateway"] },
+        "model": { "type": "string", "minLength": 1, "not": { "enum": ["latest", "default", "auto"] } },
+        "credentialEnv": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]{2,63}$" },
+        "billingMode": { "const": "host-covered" }
+      }
+    },
+    "auth": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["mode"],
+          "properties": { "mode": { "const": "local" } }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["mode", "tokenEnv"],
+          "properties": {
+            "mode": { "const": "bearer" },
+            "tokenEnv": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]{2,63}$" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["mode", "issuer", "audience", "jwksUrl"],
+          "properties": {
+            "mode": { "const": "oidc" },
+            "issuer": { "type": "string", "format": "uri" },
+            "audience": { "type": "string", "minLength": 1 },
+            "jwksUrl": { "type": "string", "format": "uri" }
+          }
+        }
+      ]
+    }
+  }
+}

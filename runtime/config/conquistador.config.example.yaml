@@ -1,0 +1,39 @@
+schemaVersion: "conquistador.config/v1"
+instance:
+  id: "local-founder"
+models:
+  primary:
+    # The operator pays provider charges outside the runner cost ledger.
+    billingMode: "host-covered"
+    provider: "openai"
+    model: "gpt-example"
+    credentialEnv: "OPENAI_API_KEY"
+server:
+  profile: "local"
+  bind: "127.0.0.1"
+  port: 4317
+  auth:
+    mode: "local"
+  allowedOrigins: []
+  trustedProxies: []
+data:
+  dir: "./.conquistador-data"
+  sessionRetentionDays: 30
+  traceRetentionDays: 14
+  artifactPolicy: "accepted-only"
+  backupPolicy: "operator"
+memory:
+  mode: "review-promoted"
+  scopePolicy: "instance-workspace-project"
+sandbox:
+  mode: "disabled"
+  projectRoots: []
+limits:
+  activeSessions: 4
+  internalSpecialists: 2
+  tokensPerRun: 32000
+  timeoutSeconds: 600
+  queuedMessages: 20
+  bodyBytes: 1048576
+tools:
+  actionPolicy: "human-bound"

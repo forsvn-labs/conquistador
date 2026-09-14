@@ -1,0 +1,7 @@
+interface:
+  display_name: "Architect Software System"
+  short_description: "Design an implementation-ready system"
+  default_prompt: "Use $architect-software-system to design a demand-triggered system with explicit tradeoffs and rollout boundaries."
+
+policy:
+  allow_implicit_invocation: true

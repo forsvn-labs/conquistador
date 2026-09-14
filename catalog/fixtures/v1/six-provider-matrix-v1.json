@@ -1,0 +1,150 @@
+{
+  "schemaVersion": "conquistador.for-149-six-provider-matrix/v1",
+  "issue": "FOR-149",
+  "catalogStatus": "candidate-operations-not-supported",
+  "liveProofStatus": "deferred-missing-hung-credentials",
+  "supportClaimStatus": "none-claimed",
+  "reopenLiveWhen": "Live verification requires operator-supplied opaque Connection references, exact provider targets, authenticated human review, and applicable provider/spend authorization. Each live or support claim needs its own observed evidence. Missing credentials or approval for another provider never authorize fabricated cells.",
+  "operations": [
+    {
+      "operationId": "github.issue.list",
+      "provider": "github",
+      "actionClass": "observe",
+      "catalogStage": "fixture-verified",
+      "liveProof": "not-run",
+      "supportClaim": "forbidden",
+      "ordinaryGatewayAvailability": "unsupported",
+      "reopenLiveWhen": "Live verification requires operator-supplied opaque Connection references, exact provider targets, authenticated human review, and applicable provider/spend authorization. Each live or support claim needs its own observed evidence. Missing credentials or approval for another provider never authorize fabricated cells."
+    },
+    {
+      "operationId": "github.release.list",
+      "provider": "github",
+      "actionClass": "observe",
+      "catalogStage": "fixture-verified",
+      "liveProof": "not-run",
+      "supportClaim": "forbidden",
+      "ordinaryGatewayAvailability": "unsupported",
+      "reopenLiveWhen": "Live verification requires operator-supplied opaque Connection references, exact provider targets, authenticated human review, and applicable provider/spend authorization. Each live or support claim needs its own observed evidence. Missing credentials or approval for another provider never authorize fabricated cells."
+    },
+    {
+      "operationId": "github.repository.get",
+      "provider": "github",
+      "actionClass": "observe",
+      "catalogStage": "fixture-verified",
+      "liveProof": "not-run",
+      "supportClaim": "forbidden",
+      "ordinaryGatewayAvailability": "unsupported",
+      "reopenLiveWhen": "Live verification requires operator-supplied opaque Connection references, exact provider targets, authenticated human review, and applicable provider/spend authorization. Each live or support claim needs its own observed evidence. Missing credentials or approval for another provider never authorize fabricated cells."
+    },
+    {
+      "operationId": "github.signal.aggregate",
+      "provider": "github",
+      "actionClass": "observe",
+      "catalogStage": "fixture-verified",
+      "liveProof": "not-run",
+      "supportClaim": "forbidden",
+      "ordinaryGatewayAvailability": "unsupported",
+      "reopenLiveWhen": "Live verification requires operator-supplied opaque Connection references, exact provider targets, authenticated human review, and applicable provider/spend authorization. Each live or support claim needs its own observed evidence. Missing credentials or approval for another provider never authorize fabricated cells."
+    },
+    {
+      "operationId": "google-analytics.report.query",
+      "provider": "google-analytics",
+      "actionClass": "observe",
+      "catalogStage": "fixture-verified",
+      "liveProof": "not-run",
+      "supportClaim": "forbidden",
+      "ordinaryGatewayAvailability": "unsupported",
+      "reopenLiveWhen": "Live verification requires operator-supplied opaque Connection references, exact provider targets, authenticated human review, and applicable provider/spend authorization. Each live or support claim needs its own observed evidence. Missing credentials or approval for another provider never authorize fabricated cells."
+    },
+    {
+      "operationId": "posthog.insight.read",
+      "provider": "posthog",
+      "actionClass": "observe",
+      "catalogStage": "fixture-verified",
+      "liveProof": "not-run",
+      "supportClaim": "forbidden",
+      "ordinaryGatewayAvailability": "unsupported",
+      "reopenLiveWhen": "Live verification requires operator-supplied opaque Connection references, exact provider targets, authenticated human review, and applicable provider/spend authorization. Each live or support claim needs its own observed evidence. Missing credentials or approval for another provider never authorize fabricated cells."
+    },
+    {
+      "operationId": "posthog.query.run",
+      "provider": "posthog",
+      "actionClass": "observe",
+      "catalogStage": "fixture-verified",
+      "liveProof": "not-run",
+      "supportClaim": "forbidden",
+      "ordinaryGatewayAvailability": "unsupported",
+      "reopenLiveWhen": "Live verification requires operator-supplied opaque Connection references, exact provider targets, authenticated human review, and applicable provider/spend authorization. Each live or support claim needs its own observed evidence. Missing credentials or approval for another provider never authorize fabricated cells."
+    },
+    {
+      "operationId": "search-console.analytics.query",
+      "provider": "search-console",
+      "actionClass": "observe",
+      "catalogStage": "fixture-verified",
+      "liveProof": "not-run",
+      "supportClaim": "forbidden",
+      "ordinaryGatewayAvailability": "unsupported",
+      "reopenLiveWhen": "Live verification requires operator-supplied opaque Connection references, exact provider targets, authenticated human review, and applicable provider/spend authorization. Each live or support claim needs its own observed evidence. Missing credentials or approval for another provider never authorize fabricated cells."
+    },
+    {
+      "operationId": "semrush.report.query",
+      "provider": "semrush",
+      "actionClass": "metered-observe",
+      "catalogStage": "fixture-verified",
+      "liveProof": "not-run",
+      "supportClaim": "forbidden",
+      "ordinaryGatewayAvailability": "unsupported",
+      "reopenLiveWhen": "Live verification requires operator-supplied opaque Connection references, exact provider targets, authenticated human review, and applicable provider/spend authorization. Each live or support claim needs its own observed evidence. Missing credentials or approval for another provider never authorize fabricated cells."
+    },
+    {
+      "operationId": "typefully.draft.create",
+      "provider": "typefully",
+      "actionClass": "draft",
+      "catalogStage": "fixture-verified",
+      "liveProof": "not-run",
+      "supportClaim": "forbidden",
+      "ordinaryGatewayAvailability": "unsupported",
+      "reopenLiveWhen": "Live verification requires operator-supplied opaque Connection references, exact provider targets, authenticated human review, and applicable provider/spend authorization. Each live or support claim needs its own observed evidence. Missing credentials or approval for another provider never authorize fabricated cells."
+    },
+    {
+      "operationId": "typefully.post.delete",
+      "provider": "typefully",
+      "actionClass": "prohibited",
+      "catalogStage": "researched",
+      "liveProof": "not-run",
+      "supportClaim": "forbidden",
+      "ordinaryGatewayAvailability": "prohibited",
+      "reopenLiveWhen": "Live verification requires operator-supplied opaque Connection references, exact provider targets, authenticated human review, and applicable provider/spend authorization. Each live or support claim needs its own observed evidence. Missing credentials or approval for another provider never authorize fabricated cells."
+    },
+    {
+      "operationId": "typefully.post.list",
+      "provider": "typefully",
+      "actionClass": "observe",
+      "catalogStage": "fixture-verified",
+      "liveProof": "not-run",
+      "supportClaim": "forbidden",
+      "ordinaryGatewayAvailability": "unsupported",
+      "reopenLiveWhen": "Live verification requires operator-supplied opaque Connection references, exact provider targets, authenticated human review, and applicable provider/spend authorization. Each live or support claim needs its own observed evidence. Missing credentials or approval for another provider never authorize fabricated cells."
+    },
+    {
+      "operationId": "typefully.post.publish",
+      "provider": "typefully",
+      "actionClass": "consequential",
+      "catalogStage": "fixture-verified",
+      "liveProof": "not-run",
+      "supportClaim": "forbidden",
+      "ordinaryGatewayAvailability": "unsupported",
+      "reopenLiveWhen": "Live verification requires operator-supplied opaque Connection references, exact provider targets, authenticated human review, and applicable provider/spend authorization. Each live or support claim needs its own observed evidence. Missing credentials or approval for another provider never authorize fabricated cells."
+    },
+    {
+      "operationId": "typefully.post.schedule",
+      "provider": "typefully",
+      "actionClass": "consequential",
+      "catalogStage": "fixture-verified",
+      "liveProof": "not-run",
+      "supportClaim": "forbidden",
+      "ordinaryGatewayAvailability": "unsupported",
+      "reopenLiveWhen": "Live verification requires operator-supplied opaque Connection references, exact provider targets, authenticated human review, and applicable provider/spend authorization. Each live or support claim needs its own observed evidence. Missing credentials or approval for another provider never authorize fabricated cells."
+    }
+  ]
+}

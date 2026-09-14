@@ -1,0 +1,20 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "conquistador",
+  "version": "0.1.0",
+  "description": "A senior product-marketing and growth teammate with independently installable outcome skills.",
+  "author": {
+    "name": "FORSVN",
+    "url": "https://forsvn.com"
+  },
+  "homepage": "https://forsvn.com",
+  "repository": "https://github.com/forsvn-labs/conquistador",
+  "license": "MIT",
+  "keywords": [
+    "product-marketing",
+    "growth",
+    "launch",
+    "campaign",
+    "conversion"
+  ]
+}

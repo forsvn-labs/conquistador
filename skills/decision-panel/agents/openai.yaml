@@ -1,0 +1,7 @@
+interface:
+  display_name: "Decision Panel"
+  short_description: "Resolve consequential disagreement"
+  default_prompt: "Use $decision-panel to develop credible opposing positions, preserve dissent, and resolve them against explicit criteria."
+
+policy:
+  allow_implicit_invocation: true

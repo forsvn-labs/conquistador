@@ -1,0 +1,7 @@
+interface:
+  display_name: "Prioritize Opportunities"
+  short_description: "Force-rank bets against real capacity"
+  default_prompt: "Use $prioritize-opportunities to force-rank these bets and draw an evidence-backed cut line."
+
+policy:
+  allow_implicit_invocation: true

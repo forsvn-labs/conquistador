@@ -1,0 +1,7 @@
+interface:
+  display_name: "Fresh Eyes Review"
+  short_description: "Review a consequential artifact"
+  default_prompt: "Use $fresh-eyes-review to inspect the actual artifact against intent and evidence, stating honestly whether a separate context provided independence."
+
+policy:
+  allow_implicit_invocation: true

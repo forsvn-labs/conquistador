@@ -1,0 +1,39 @@
+{
+  "schemaVersion": "conquistador.provider-matrix/v1",
+  "productVersion": "1.0.0",
+  "cells": [
+    {
+      "id": "anthropic.messages.direct",
+      "provider": "anthropic",
+      "transport": "messages-2023-06-01",
+      "endpoint": "https://api.anthropic.com/v1/messages",
+      "credentialEnv": "ANTHROPIC_API_KEY",
+      "state": "fixture-verified",
+      "officialSources": ["https://docs.anthropic.com/en/api/messages"],
+      "checkedAt": "2026-08-11T00:00:00.000Z",
+      "liveEvidence": null
+    },
+    {
+      "id": "openai.responses.direct",
+      "provider": "openai",
+      "transport": "responses-v1",
+      "endpoint": "https://api.openai.com/v1/responses",
+      "credentialEnv": "OPENAI_API_KEY",
+      "state": "fixture-verified",
+      "officialSources": ["https://platform.openai.com/docs/api-reference/responses"],
+      "checkedAt": "2026-08-11T00:00:00.000Z",
+      "liveEvidence": null
+    },
+    {
+      "id": "vercel-ai-gateway.responses",
+      "provider": "vercel-ai-gateway",
+      "transport": "openai-responses-compatible-v1",
+      "endpoint": "https://ai-gateway.vercel.sh/v1/responses",
+      "credentialEnv": "AI_GATEWAY_API_KEY",
+      "state": "fixture-verified",
+      "officialSources": ["https://vercel.com/docs/ai-gateway/openai-compat/rest-api"],
+      "checkedAt": "2026-08-11T00:00:00.000Z",
+      "liveEvidence": null
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "schemaVersion": "conquistador.promptfoo-installation-integrity/v1",
+  "promptfooVersion": "0.122.0",
+  "packageManifestDigest": "sha256:edb83b009cee3179abe7d3fb33cd8762720d0b91845e4a51b7df64759f42b081",
+  "packageLockDigest": "sha256:16b6728dac82a4fff2fcf33c3d2ccae85f3a63291e4d8aaa9b2310756f5dfd55",
+  "entrypointPath": "dist/src/entrypoint.js",
+  "entrypointDigest": "sha256:b1f2d2cbe07ef2308d6e3eea067789d86c4e97d664636f3d1250f74a8ac04003",
+  "packageTreeDigest": "sha256:1dbdab5397b04d0f04f53c9382aaee5ad89b481a146e4021caba3a6e17fc98d4",
+  "installedDependencyTreeDigest": "sha256:b35400856bc26f5cbeb3819b714926ff2e54b53245330d6a9b59c329554be5ba"
+}

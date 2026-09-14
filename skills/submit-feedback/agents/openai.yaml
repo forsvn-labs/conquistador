@@ -1,0 +1,6 @@
+interface:
+  display_name: "Submit Feedback"
+  short_description: "Draft redacted Conquistador feedback for public review"
+  default_prompt: "Use $submit-feedback to draft feedback about my Conquistador experience. Show me the redacted issue and exact public destination before any submission."
+policy:
+  allow_implicit_invocation: true

@@ -1,0 +1,7 @@
+interface:
+  display_name: "Create Run of Show"
+  short_description: "Build an executable event cue sheet"
+  default_prompt: "Use $create-run-of-show to build an owner-ready event cue sheet with contingencies and follow-up."
+
+policy:
+  allow_implicit_invocation: true

@@ -1,0 +1,642 @@
+{
+  "declarationVersion": "exts-155.self-hosted-runtime/v1",
+  "ownerIssue": "EXTS-155",
+  "fixedClock": "2026-08-22T00:00:00.000Z",
+  "authority": {
+    "releaseState": "NO-GO",
+    "candidateStatus": "UNBOUND",
+    "selectedCandidate": null,
+    "g3Status": "INCOMPLETE",
+    "landing": "disabled",
+    "exts161Packet": null
+  },
+  "timingNormalization": [
+    "startTime",
+    "endTime",
+    "duration"
+  ],
+  "cells": [
+    {
+      "id": "SH-CLI-CONFIG-MACOS-ARM64",
+      "ownerIssue": "EXTS-155",
+      "platform": "macos",
+      "architecture": "arm64",
+      "profile": "cli-config-schema",
+      "identity": {
+        "provider": null,
+        "model": null,
+        "apiVersion": null,
+        "image": null,
+        "tag": null,
+        "imageDigest": null
+      },
+      "proofClass": "local-runtime",
+      "required": {
+        "kind": "command",
+        "cwd": "runtime",
+        "argv": [
+          "node_modules/.bin/vitest",
+          "run",
+          "tests/cli.test.ts",
+          "tests/config.test.ts",
+          "tests/protocol.test.ts",
+          "--reporter=json"
+        ]
+      },
+      "expectedStatus": "passed",
+      "currentSupportClaim": "local-macos-arm64-only",
+      "missingReason": null,
+      "sources": [
+        {
+          "path": "runtime/tests/cli.test.ts",
+          "sha256": "sha256:31aaba2276d610c2bc033d6c25e43f19e5f0244f660d0eb95a5ea870aaa2a7de"
+        },
+        {
+          "path": "runtime/tests/config.test.ts",
+          "sha256": "sha256:894a0021bf1745f53085f63cb452ef86263a05eec2d5c2524cea9b8239d2bfdb"
+        },
+        {
+          "path": "runtime/tests/protocol.test.ts",
+          "sha256": "sha256:899f4db5265237db840304d17753678ba2656548c41e5663ec1a11c792671aa0"
+        }
+      ]
+    },
+    {
+      "id": "SH-API-MACOS-ARM64",
+      "ownerIssue": "EXTS-155",
+      "platform": "macos",
+      "architecture": "arm64",
+      "profile": "session-message-event-cancel-review-api",
+      "identity": {
+        "provider": null,
+        "model": null,
+        "apiVersion": null,
+        "image": null,
+        "tag": null,
+        "imageDigest": null
+      },
+      "proofClass": "local-runtime",
+      "required": {
+        "kind": "command",
+        "cwd": "runtime",
+        "argv": [
+          "node_modules/.bin/vitest",
+          "run",
+          "tests/api.test.ts",
+          "tests/http.test.ts",
+          "tests/main.test.ts",
+          "--reporter=json"
+        ]
+      },
+      "expectedStatus": "passed",
+      "currentSupportClaim": "local-macos-arm64-only",
+      "missingReason": null,
+      "sources": [
+        {
+          "path": "runtime/tests/api.test.ts",
+          "sha256": "sha256:140b7e6fca6f2af8e79a347e1ca598ec0f7c3bd3970d4361efa32800cf70fdc6"
+        },
+        {
+          "path": "runtime/tests/http.test.ts",
+          "sha256": "sha256:ba9850b5695b7996ae5f731b05045d3e70de3877e099ef89dddc9fa62a985c68"
+        },
+        {
+          "path": "runtime/tests/main.test.ts",
+          "sha256": "sha256:5751ee07d0a5f02fb9e81d7426287b8f31d88a8dd14755c6a3380ae74438a4cd"
+        }
+      ]
+    },
+    {
+      "id": "SH-REVIEW-AUTH-MACOS-ARM64",
+      "ownerIssue": "EXTS-155",
+      "platform": "macos",
+      "architecture": "arm64",
+      "profile": "authenticated-review-consequential-authority",
+      "identity": {
+        "provider": null,
+        "model": null,
+        "apiVersion": null,
+        "image": null,
+        "tag": null,
+        "imageDigest": null
+      },
+      "proofClass": "local-runtime",
+      "required": {
+        "kind": "command",
+        "cwd": "runtime",
+        "argv": [
+          "node_modules/.bin/vitest",
+          "run",
+          "tests/review-contract.test.ts",
+          "tests/oidc.test.ts",
+          "tests/runner.test.ts",
+          "--reporter=json"
+        ]
+      },
+      "expectedStatus": "passed",
+      "currentSupportClaim": "local-macos-arm64-only",
+      "missingReason": null,
+      "sources": [
+        {
+          "path": "runtime/tests/review-contract.test.ts",
+          "sha256": "sha256:4408b417cd3b5274277c0fa5bfa25fc77e8e1bbb9903d0b067fb5e2e71cb0d94"
+        },
+        {
+          "path": "runtime/tests/oidc.test.ts",
+          "sha256": "sha256:8117eae4362fde319f175b9f411eb189502601ade431cb76034642d86529edb0"
+        },
+        {
+          "path": "runtime/tests/runner.test.ts",
+          "sha256": "sha256:7109b1462b08a5fff940af2f3453868bccf065c6e5b9e95da9b8d16e38f7b783"
+        }
+      ]
+    },
+    {
+      "id": "SH-STATE-MACOS-ARM64",
+      "ownerIssue": "EXTS-155",
+      "platform": "macos",
+      "architecture": "arm64",
+      "profile": "state-backup-verify-restore-migrate-export-erase-retain-restart-resume",
+      "identity": {
+        "provider": null,
+        "model": null,
+        "apiVersion": null,
+        "image": null,
+        "tag": null,
+        "imageDigest": null
+      },
+      "proofClass": "local-runtime",
+      "required": {
+        "kind": "command",
+        "cwd": "runtime",
+        "argv": [
+          "node_modules/.bin/vitest",
+          "run",
+          "tests/local-state.test.ts",
+          "tests/lifecycle-cli.test.ts",
+          "tests/runner.test.ts",
+          "--reporter=json"
+        ]
+      },
+      "expectedStatus": "passed",
+      "currentSupportClaim": "local-macos-arm64-only",
+      "missingReason": null,
+      "sources": [
+        {
+          "path": "runtime/tests/local-state.test.ts",
+          "sha256": "sha256:dd1185981a7fb162a715b550d11583566dfe5a705a3499e84b3f3a02060137f3"
+        },
+        {
+          "path": "runtime/tests/lifecycle-cli.test.ts",
+          "sha256": "sha256:13d445b9bbc860e3fc56dc7022ef3d396eba0f53ca8a297250bef0fb9acd5455"
+        },
+        {
+          "path": "runtime/tests/runner.test.ts",
+          "sha256": "sha256:7109b1462b08a5fff940af2f3453868bccf065c6e5b9e95da9b8d16e38f7b783"
+        }
+      ]
+    },
+    {
+      "id": "SH-SECURITY-MACOS-ARM64",
+      "ownerIssue": "EXTS-155",
+      "platform": "macos",
+      "architecture": "arm64",
+      "profile": "limits-redaction-secret-isolation-containment-replay-crash-receipts",
+      "identity": {
+        "provider": null,
+        "model": null,
+        "apiVersion": null,
+        "image": null,
+        "tag": null,
+        "imageDigest": null
+      },
+      "proofClass": "local-runtime",
+      "required": {
+        "kind": "command",
+        "cwd": "runtime",
+        "argv": [
+          "node_modules/.bin/vitest",
+          "run",
+          "tests/local-state.test.ts",
+          "tests/review-contract.test.ts",
+          "tests/publication.test.ts",
+          "tests/provenance.test.ts",
+          "tests/runtime.test.ts",
+          "--reporter=json"
+        ]
+      },
+      "expectedStatus": "passed",
+      "currentSupportClaim": "local-macos-arm64-only",
+      "missingReason": null,
+      "sources": [
+        {
+          "path": "runtime/tests/local-state.test.ts",
+          "sha256": "sha256:dd1185981a7fb162a715b550d11583566dfe5a705a3499e84b3f3a02060137f3"
+        },
+        {
+          "path": "runtime/tests/review-contract.test.ts",
+          "sha256": "sha256:4408b417cd3b5274277c0fa5bfa25fc77e8e1bbb9903d0b067fb5e2e71cb0d94"
+        },
+        {
+          "path": "runtime/tests/publication.test.ts",
+          "sha256": "sha256:0e4b9313717658b7e6fe004ffeef71d5c84168585baa83e1e684661ea0b0eb79"
+        },
+        {
+          "path": "runtime/tests/provenance.test.ts",
+          "sha256": "sha256:cd88f7ab6b5486cba8744a6911e0f96e703fdd2e7631678e2489144ce1684a59"
+        },
+        {
+          "path": "runtime/tests/runtime.test.ts",
+          "sha256": "sha256:93105830d4eefba500a05946965b6878ffbe7ffd8ea283963e9407a2872a02d3"
+        }
+      ]
+    },
+    {
+      "id": "SH-PROVIDER-DECL-MACOS-ARM64",
+      "ownerIssue": "EXTS-155",
+      "platform": "macos",
+      "architecture": "arm64",
+      "profile": "provider-model-api-declarations-fixture-only",
+      "identity": {
+        "provider": "declared-provider-catalog",
+        "model": "provider-cells-v1.0.0",
+        "apiVersion": "provider-matrix-2026-08-11",
+        "image": null,
+        "tag": null,
+        "imageDigest": null
+      },
+      "proofClass": "local-runtime",
+      "required": {
+        "kind": "command",
+        "cwd": "runtime",
+        "argv": [
+          "node_modules/.bin/vitest",
+          "run",
+          "tests/provider.test.ts",
+          "--reporter=json"
+        ]
+      },
+      "expectedStatus": "passed",
+      "currentSupportClaim": "local-macos-arm64-only",
+      "missingReason": null,
+      "sources": [
+        {
+          "path": "runtime/providers/v1.json",
+          "sha256": "sha256:afe4887dac183a9a705bd5da606a019d52ce31d1b77c9956e09a47cd7c277deb"
+        },
+        {
+          "path": "runtime/tests/provider.test.ts",
+          "sha256": "sha256:b7bd176995074c82c2c0d94218da1b646c3ede92755d3de001d41989d2c56cd2"
+        }
+      ]
+    },
+    {
+      "id": "SH-CANDIDATE-MACOS-ARM64",
+      "ownerIssue": "EXTS-155",
+      "platform": "candidate",
+      "architecture": "arm64",
+      "profile": "candidate-bound-runtime",
+      "identity": {
+        "provider": null,
+        "model": null,
+        "apiVersion": null,
+        "image": null,
+        "tag": null,
+        "imageDigest": null
+      },
+      "proofClass": "candidate-bound",
+      "required": {
+        "kind": "external-receipt",
+        "receiptClass": "candidate-bound-runtime"
+      },
+      "expectedStatus": "missing",
+      "currentSupportClaim": "unsupported-pending-exact-evidence",
+      "missingReason": "Candidate is UNBOUND; no exact candidate runtime receipt exists.",
+      "sources": [
+        {
+          "path": "release/ledger/v1.json",
+          "sha256": "sha256:0b50efdc9478ddfbf2768af9fd08ade27e7ed0d496be7295d4f33c200a36efd4"
+        }
+      ]
+    },
+    {
+      "id": "SH-LINUX-X64-RUNTIME",
+      "ownerIssue": "EXTS-155",
+      "platform": "linux",
+      "architecture": "x64",
+      "profile": "full-runtime",
+      "identity": {
+        "provider": null,
+        "model": null,
+        "apiVersion": null,
+        "image": null,
+        "tag": null,
+        "imageDigest": null
+      },
+      "proofClass": "platform",
+      "required": {
+        "kind": "external-receipt",
+        "receiptClass": "linux-x64-runtime"
+      },
+      "expectedStatus": "missing",
+      "currentSupportClaim": "unsupported-pending-exact-evidence",
+      "missingReason": "No Linux x64 runtime execution receipt exists.",
+      "sources": [
+        {
+          "path": "runtime/package.json",
+          "sha256": "sha256:0d27bfabd64feb1f0d3089c1e803ebb84e52c1670e4db04849b66beaee6a26fb"
+        }
+      ]
+    },
+    {
+      "id": "SH-CLEAN-HOST-MACOS-ARM64",
+      "ownerIssue": "EXTS-155",
+      "platform": "macos",
+      "architecture": "arm64",
+      "profile": "clean-host-install-lifecycle",
+      "identity": {
+        "provider": null,
+        "model": null,
+        "apiVersion": null,
+        "image": null,
+        "tag": null,
+        "imageDigest": null
+      },
+      "proofClass": "clean-host",
+      "required": {
+        "kind": "external-receipt",
+        "receiptClass": "clean-host-lifecycle"
+      },
+      "expectedStatus": "missing",
+      "currentSupportClaim": "unsupported-pending-exact-evidence",
+      "missingReason": "No clean macOS arm64 host install and lifecycle receipt exists.",
+      "sources": [
+        {
+          "path": "runtime/package.json",
+          "sha256": "sha256:0d27bfabd64feb1f0d3089c1e803ebb84e52c1670e4db04849b66beaee6a26fb"
+        }
+      ]
+    },
+    {
+      "id": "SH-CLEAN-HOST-LINUX-X64",
+      "ownerIssue": "EXTS-155",
+      "platform": "linux",
+      "architecture": "x64",
+      "profile": "clean-host-install-lifecycle",
+      "identity": {
+        "provider": null,
+        "model": null,
+        "apiVersion": null,
+        "image": null,
+        "tag": null,
+        "imageDigest": null
+      },
+      "proofClass": "clean-host",
+      "required": {
+        "kind": "external-receipt",
+        "receiptClass": "clean-host-lifecycle"
+      },
+      "expectedStatus": "missing",
+      "currentSupportClaim": "unsupported-pending-exact-evidence",
+      "missingReason": "No clean Linux x64 host install and lifecycle receipt exists.",
+      "sources": [
+        {
+          "path": "runtime/package.json",
+          "sha256": "sha256:0d27bfabd64feb1f0d3089c1e803ebb84e52c1670e4db04849b66beaee6a26fb"
+        }
+      ]
+    },
+    {
+      "id": "SH-PROVIDER-ANTHROPIC-LIVE",
+      "ownerIssue": "EXTS-155",
+      "platform": "provider",
+      "architecture": "none",
+      "profile": "provider-live",
+      "identity": {
+        "provider": "anthropic",
+        "model": "claude-sonnet-4-20250514",
+        "apiVersion": "2023-06-01",
+        "image": null,
+        "tag": null,
+        "imageDigest": null
+      },
+      "proofClass": "provider-live",
+      "required": {
+        "kind": "external-receipt",
+        "receiptClass": "provider-live"
+      },
+      "expectedStatus": "missing",
+      "currentSupportClaim": "unsupported-pending-exact-evidence",
+      "missingReason": "No authorized live Anthropic receipt exists; no provider call was made.",
+      "sources": [
+        {
+          "path": "runtime/providers/v1.json",
+          "sha256": "sha256:afe4887dac183a9a705bd5da606a019d52ce31d1b77c9956e09a47cd7c277deb"
+        }
+      ]
+    },
+    {
+      "id": "SH-PROVIDER-OPENAI-LIVE",
+      "ownerIssue": "EXTS-155",
+      "platform": "provider",
+      "architecture": "none",
+      "profile": "provider-live",
+      "identity": {
+        "provider": "openai",
+        "model": "gpt-5-2025-08-07",
+        "apiVersion": "responses-2025-08-07",
+        "image": null,
+        "tag": null,
+        "imageDigest": null
+      },
+      "proofClass": "provider-live",
+      "required": {
+        "kind": "external-receipt",
+        "receiptClass": "provider-live"
+      },
+      "expectedStatus": "missing",
+      "currentSupportClaim": "unsupported-pending-exact-evidence",
+      "missingReason": "No authorized live OpenAI receipt exists; no provider call was made.",
+      "sources": [
+        {
+          "path": "runtime/providers/v1.json",
+          "sha256": "sha256:afe4887dac183a9a705bd5da606a019d52ce31d1b77c9956e09a47cd7c277deb"
+        }
+      ]
+    },
+    {
+      "id": "SH-PROVIDER-VERCEL-LIVE",
+      "ownerIssue": "EXTS-155",
+      "platform": "provider",
+      "architecture": "none",
+      "profile": "provider-live",
+      "identity": {
+        "provider": "vercel-ai-gateway",
+        "model": "openai/gpt-5-2025-08-07",
+        "apiVersion": "responses-compatible-2025-08-07",
+        "image": null,
+        "tag": null,
+        "imageDigest": null
+      },
+      "proofClass": "provider-live",
+      "required": {
+        "kind": "external-receipt",
+        "receiptClass": "provider-live"
+      },
+      "expectedStatus": "missing",
+      "currentSupportClaim": "unsupported-pending-exact-evidence",
+      "missingReason": "No authorized live Vercel AI Gateway receipt exists; no provider call was made.",
+      "sources": [
+        {
+          "path": "runtime/providers/v1.json",
+          "sha256": "sha256:afe4887dac183a9a705bd5da606a019d52ce31d1b77c9956e09a47cd7c277deb"
+        }
+      ]
+    },
+    {
+      "id": "SH-OCI-AMD64",
+      "ownerIssue": "EXTS-155",
+      "platform": "oci",
+      "architecture": "amd64",
+      "profile": "immutable-image",
+      "identity": {
+        "provider": null,
+        "model": null,
+        "apiVersion": null,
+        "image": "ghcr.io/forsvn-labs/conquistador",
+        "tag": "1.0.0-amd64",
+        "imageDigest": null
+      },
+      "proofClass": "oci",
+      "required": {
+        "kind": "external-receipt",
+        "receiptClass": "oci-image"
+      },
+      "expectedStatus": "missing",
+      "currentSupportClaim": "unsupported-pending-exact-evidence",
+      "missingReason": "No OCI amd64 image or immutable digest exists.",
+      "sources": [
+        {
+          "path": "runtime/package.json",
+          "sha256": "sha256:0d27bfabd64feb1f0d3089c1e803ebb84e52c1670e4db04849b66beaee6a26fb"
+        }
+      ]
+    },
+    {
+      "id": "SH-OCI-ARM64",
+      "ownerIssue": "EXTS-155",
+      "platform": "oci",
+      "architecture": "arm64",
+      "profile": "immutable-image",
+      "identity": {
+        "provider": null,
+        "model": null,
+        "apiVersion": null,
+        "image": "ghcr.io/forsvn-labs/conquistador",
+        "tag": "1.0.0-arm64",
+        "imageDigest": null
+      },
+      "proofClass": "oci",
+      "required": {
+        "kind": "external-receipt",
+        "receiptClass": "oci-image"
+      },
+      "expectedStatus": "missing",
+      "currentSupportClaim": "unsupported-pending-exact-evidence",
+      "missingReason": "No OCI arm64 image or immutable digest exists.",
+      "sources": [
+        {
+          "path": "runtime/package.json",
+          "sha256": "sha256:0d27bfabd64feb1f0d3089c1e803ebb84e52c1670e4db04849b66beaee6a26fb"
+        }
+      ]
+    },
+    {
+      "id": "SH-HUMAN-AUTH-CANDIDATE",
+      "ownerIssue": "EXTS-155",
+      "platform": "candidate",
+      "architecture": "none",
+      "profile": "authenticated-human-review-and-action",
+      "identity": {
+        "provider": null,
+        "model": null,
+        "apiVersion": null,
+        "image": null,
+        "tag": null,
+        "imageDigest": null
+      },
+      "proofClass": "human",
+      "required": {
+        "kind": "external-receipt",
+        "receiptClass": "authenticated-human-authority"
+      },
+      "expectedStatus": "missing",
+      "currentSupportClaim": "unsupported-pending-exact-evidence",
+      "missingReason": "No candidate-bound authenticated human review and consequential-action receipt exists.",
+      "sources": [
+        {
+          "path": "runtime/src/review-contract.ts",
+          "sha256": "sha256:4da032a49c8009467be939f7b9c48d53b1731013efd0d3acba195e850256bd78"
+        }
+      ]
+    },
+    {
+      "id": "SH-SUPPORT-MACOS-ARM64",
+      "ownerIssue": "EXTS-155",
+      "platform": "support",
+      "architecture": "arm64",
+      "profile": "customer-support-posture",
+      "identity": {
+        "provider": null,
+        "model": null,
+        "apiVersion": null,
+        "image": null,
+        "tag": null,
+        "imageDigest": null
+      },
+      "proofClass": "customer-support",
+      "required": {
+        "kind": "external-receipt",
+        "receiptClass": "customer-support"
+      },
+      "expectedStatus": "missing",
+      "currentSupportClaim": "unsupported-pending-exact-evidence",
+      "missingReason": "Local runtime tests are not macOS customer-support evidence.",
+      "sources": [
+        {
+          "path": "runtime/README.md",
+          "sha256": "sha256:96103f479e706a22225410802eecd758acc0f146416c9f889984cdd6ebcd1842"
+        }
+      ]
+    },
+    {
+      "id": "SH-SUPPORT-LINUX-X64",
+      "ownerIssue": "EXTS-155",
+      "platform": "support",
+      "architecture": "x64",
+      "profile": "customer-support-posture",
+      "identity": {
+        "provider": null,
+        "model": null,
+        "apiVersion": null,
+        "image": null,
+        "tag": null,
+        "imageDigest": null
+      },
+      "proofClass": "customer-support",
+      "required": {
+        "kind": "external-receipt",
+        "receiptClass": "customer-support"
+      },
+      "expectedStatus": "missing",
+      "currentSupportClaim": "unsupported-pending-exact-evidence",
+      "missingReason": "No Linux x64 customer-support evidence or support authority exists.",
+      "sources": [
+        {
+          "path": "runtime/README.md",
+          "sha256": "sha256:96103f479e706a22225410802eecd758acc0f146416c9f889984cdd6ebcd1842"
+        }
+      ]
+    }
+  ]
+}

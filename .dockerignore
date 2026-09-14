@@ -1,0 +1,9 @@
+**/node_modules
+.git
+.conquistador*
+**/conquistador.config.yaml
+**/.env
+**/.env.*
+**/bun.lock
+dist/
+**/dist/

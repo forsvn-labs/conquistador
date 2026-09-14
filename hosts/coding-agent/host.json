@@ -1,0 +1,46 @@
+{
+  "schemaVersion": "conquistador.host-package/v1",
+  "id": "host:coding-agent",
+  "hostKind": "coding-agent-plugin",
+  "displayName": "Coding-agent plugin",
+  "productName": "conquistador",
+  "pluginVersion": "1.0.0",
+  "canonicalSkillsRoot": "skills/skills",
+  "skillMount": "skills",
+  "installClass": "candidate-only",
+  "publicListing": false,
+  "cleanHostProof": false,
+  "zeroRuntime": true,
+  "notThisDoor": [
+    "Eve agent",
+    "official xAI Grok Bot",
+    "Grok CLI / Grok Build",
+    "explicit single-agent-only package",
+    "advisor/worker squad package"
+  ],
+  "hostProvides": [
+    "model invocation",
+    "filesystem and repository context",
+    "plugin or skills-installer placement",
+    "permission and approval UI"
+  ],
+  "conquistadorOwns": [
+    "marketing methods",
+    "outcome skill contracts",
+    "review packet",
+    "approval boundary for send, publish, spend, and external writes"
+  ],
+  "missingCapabilities": [
+    "public marketplace listing",
+    "clean-host install proof",
+    "optional self-hosted runner",
+    "typed catalog execution",
+    "Eval Lab"
+  ],
+  "missingCapabilityBehavior": "fail-closed-draft",
+  "lifecycle": {
+    "setup": "Install the skills/ tree as the complete plugin (Claude /plugin, Codex overlay, or pinned skills CLI).",
+    "upgrade": "Replace the owned plugin tree with a newer skills/ copy. Hosts do not fetch at runtime.",
+    "remove": "Delete the owned plugin or skill directories recorded by the host. Leave user artifacts."
+  }
+}

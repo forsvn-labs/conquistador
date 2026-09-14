@@ -1,0 +1,7 @@
+interface:
+  display_name: "Allocate Marketing Budget"
+  short_description: "Allocate spend or bounded learning budget"
+  default_prompt: "Use $allocate-marketing-budget to build an evidence-bounded allocation with reserve and reallocation rules."
+
+policy:
+  allow_implicit_invocation: true

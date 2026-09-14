@@ -1,0 +1,269 @@
+{
+  "schemaVersion": "conquistador.playbook-record/v1",
+  "id": "content-intelligence-loop",
+  "canonicalId": "playbook:content-intelligence-loop",
+  "version": "1.0.0",
+  "kind": "executable-playbook",
+  "executionStatus": "executable",
+  "proseSource": "skills/conquistador/workflows/content-intelligence-loop.md",
+  "inputs": {
+    "version": "1.0.0",
+    "fields": [
+      { "name": "product", "type": "string", "required": true, "description": "The product or offer the loop is about." },
+      { "name": "audience", "type": "string", "required": true, "description": "The audience the content must serve." },
+      { "name": "channel", "type": "string", "required": true, "description": "The target channel for this cycle." },
+      { "name": "goals", "type": "string", "required": true, "description": "The bounded goal and success signal for this cycle." },
+      { "name": "priorApprovedContext", "type": "artifact", "required": false, "description": "Prior approved facts, decisions, and observed results owned by the user." }
+    ]
+  },
+  "completionCriteria": [
+    "Source signals are pulled or explicitly handed off, with provenance preserved.",
+    "One evidence-backed opportunity is selected with a channel, success signal, guardrail, and stop rule.",
+    "A finished channel-native artifact exists.",
+    "One Review Packet was presented and a human accepted, revised, or rejected it.",
+    "Any external mutation was separately approved or replaced by a human action manifest.",
+    "Observed results entered a learning record without becoming unreviewed universal truth.",
+    "Exactly one next decision remains: keep, revise, or stop one consequential variable."
+  ],
+  "stepGraph": {
+    "nodes": [
+      {
+        "id": "load-context",
+        "kind": "script",
+        "uses": { "scriptId": "load-approved-context" },
+        "dependsOn": [],
+        "inputArtifacts": [],
+        "outputArtifacts": ["approved-context"],
+        "completion": "Product, audience, channel, goals, and prior approved context are declared as a typed artifact.",
+        "timeoutSeconds": 60,
+        "idempotency": "required",
+        "failureBehavior": "stop"
+      },
+      {
+        "id": "pull-signals",
+        "kind": "tool-operation",
+        "uses": {
+          "toolOperationId": "signals.pull-bounded",
+          "maturity": "unverified",
+          "fallback": "human-action-manifest"
+        },
+        "dependsOn": ["load-context"],
+        "inputArtifacts": ["approved-context"],
+        "outputArtifacts": ["signal-bundle"],
+        "completion": "Bounded search, audience, competitor, and owned-performance signals exist, or a human action manifest records the handoff.",
+        "timeoutSeconds": 120,
+        "idempotency": "required",
+        "retry": { "maxAttempts": 2 },
+        "failureBehavior": "degrade"
+      },
+      {
+        "id": "normalize-data",
+        "kind": "script",
+        "uses": { "scriptId": "normalize-signals" },
+        "dependsOn": ["pull-signals"],
+        "inputArtifacts": ["signal-bundle"],
+        "outputArtifacts": ["normalized-signals"],
+        "completion": "Signals are normalized deterministically with source provenance intact.",
+        "timeoutSeconds": 60,
+        "idempotency": "required",
+        "failureBehavior": "stop"
+      },
+      {
+        "id": "rank-opportunities",
+        "kind": "skill",
+        "uses": { "skillId": "research-content-ideas" },
+        "dependsOn": ["normalize-data"],
+        "inputArtifacts": ["approved-context", "normalized-signals"],
+        "outputArtifacts": ["opportunity-briefs"],
+        "completion": "One to four evidence-backed opportunity briefs are ranked with sources and falsifiers.",
+        "timeoutSeconds": 300,
+        "idempotency": "none",
+        "failureBehavior": "stop",
+        "budget": { "maxTokens": 16000 }
+      },
+      {
+        "id": "select-hypothesis",
+        "kind": "script",
+        "uses": { "scriptId": "select-hypothesis" },
+        "dependsOn": ["rank-opportunities"],
+        "inputArtifacts": ["opportunity-briefs"],
+        "outputArtifacts": ["hypothesis"],
+        "completion": "Exactly one hypothesis, channel, success signal, guardrail, and stop rule are declared.",
+        "timeoutSeconds": 60,
+        "idempotency": "required",
+        "failureBehavior": "stop"
+      },
+      {
+        "id": "create-artifact",
+        "kind": "skill",
+        "uses": {
+          "branch": {
+            "on": "hypothesis.nativeFormat",
+            "cases": [
+              { "when": "social", "skillId": "write-social" },
+              { "when": "longform", "skillId": "write-longform" },
+              { "when": "shortform", "skillId": "create-shortform" },
+              { "when": "copy", "skillId": "write-copy" }
+            ]
+          }
+        },
+        "dependsOn": ["select-hypothesis"],
+        "inputArtifacts": ["approved-context", "hypothesis"],
+        "outputArtifacts": ["created-artifact"],
+        "completion": "A finished channel-native artifact exists for the selected format.",
+        "timeoutSeconds": 300,
+        "idempotency": "none",
+        "failureBehavior": "stop",
+        "budget": { "maxTokens": 16000 }
+      },
+      {
+        "id": "specialist-review",
+        "kind": "skill",
+        "uses": { "skillId": "fresh-eyes-review" },
+        "dependsOn": ["create-artifact"],
+        "inputArtifacts": ["created-artifact", "hypothesis"],
+        "outputArtifacts": ["review-packet"],
+        "completion": "One Review Packet is ready for a human accept, revise, or reject decision.",
+        "timeoutSeconds": 180,
+        "idempotency": "none",
+        "failureBehavior": "stop",
+        "budget": { "maxTokens": 16000 }
+      },
+      {
+        "id": "approved-action",
+        "kind": "tool-operation",
+        "uses": {
+          "toolOperationId": "distribution.create-draft",
+          "maturity": "unverified",
+          "fallback": "human-action-manifest"
+        },
+        "dependsOn": ["specialist-review"],
+        "inputArtifacts": ["created-artifact", "review-packet"],
+        "outputArtifacts": ["action-receipt"],
+        "completion": "The approved artifact is drafted through a verified operation, or a human action manifest records the exact handoff.",
+        "timeoutSeconds": 120,
+        "idempotency": "required",
+        "failureBehavior": "degrade"
+      },
+      {
+        "id": "observe-results",
+        "kind": "tool-operation",
+        "uses": {
+          "toolOperationId": "performance.observe-window",
+          "maturity": "unverified",
+          "fallback": "human-action-manifest"
+        },
+        "dependsOn": ["approved-action"],
+        "inputArtifacts": ["action-receipt", "hypothesis"],
+        "outputArtifacts": ["observation-record"],
+        "completion": "Results from the declared observation window exist, or the missing window is recorded as unknown.",
+        "timeoutSeconds": 120,
+        "idempotency": "required",
+        "failureBehavior": "degrade"
+      },
+      {
+        "id": "measure-and-decide",
+        "kind": "skill",
+        "uses": { "skillId": "measure-growth" },
+        "dependsOn": ["observe-results"],
+        "inputArtifacts": ["observation-record", "hypothesis"],
+        "outputArtifacts": ["measurement-verdict"],
+        "completion": "A keep, revise, or stop verdict names one consequential variable and does not fabricate attribution.",
+        "timeoutSeconds": 180,
+        "idempotency": "none",
+        "failureBehavior": "stop",
+        "budget": { "maxTokens": 16000 }
+      },
+      {
+        "id": "store-learning",
+        "kind": "script",
+        "uses": { "scriptId": "store-learning-record" },
+        "dependsOn": ["measure-and-decide"],
+        "inputArtifacts": ["measurement-verdict", "review-packet", "action-receipt"],
+        "outputArtifacts": ["learning-record"],
+        "completion": "User-owned learning is stored for the next cycle without hidden reasoning or unreviewed universal truth.",
+        "timeoutSeconds": 60,
+        "idempotency": "required",
+        "failureBehavior": "stop"
+      }
+    ]
+  },
+  "artifacts": [
+    { "id": "approved-context", "name": "Approved context", "format": "markdown", "schema": "conquistador.artifact.approved-context/v1", "provenanceRequired": true },
+    { "id": "signal-bundle", "name": "Signal bundle", "format": "json", "schema": "conquistador.artifact.signal-bundle/v1", "provenanceRequired": true },
+    { "id": "normalized-signals", "name": "Normalized signals", "format": "json", "schema": "conquistador.artifact.normalized-signals/v1", "provenanceRequired": true },
+    { "id": "opportunity-briefs", "name": "Opportunity briefs", "format": "markdown", "schema": "conquistador.artifact.opportunity-briefs/v1", "provenanceRequired": true },
+    { "id": "hypothesis", "name": "Selected hypothesis", "format": "markdown", "schema": "conquistador.artifact.hypothesis/v1", "provenanceRequired": true },
+    { "id": "created-artifact", "name": "Finished content artifact", "format": "markdown", "schema": "conquistador.artifact.created-content/v1", "provenanceRequired": true },
+    { "id": "review-packet", "name": "Review Packet", "format": "markdown", "schema": "conquistador.review-packet/v1", "provenanceRequired": true },
+    { "id": "action-receipt", "name": "Action receipt or human action manifest", "format": "markdown", "schema": "conquistador.artifact.action-receipt/v1", "provenanceRequired": true },
+    { "id": "observation-record", "name": "Observation record", "format": "markdown", "schema": "conquistador.artifact.observation-record/v1", "provenanceRequired": true },
+    { "id": "measurement-verdict", "name": "Measurement verdict", "format": "markdown", "schema": "conquistador.artifact.measurement-verdict/v1", "provenanceRequired": true },
+    { "id": "learning-record", "name": "Learning record", "format": "markdown", "schema": "conquistador.artifact.learning-record/v1", "provenanceRequired": true }
+  ],
+  "budgets": {
+    "tokensPerRun": 50000,
+    "judgmentNodesMaxTokens": 32000,
+    "maximumCostPerRun": 0
+  },
+  "retry": { "maxAttempts": 2, "preserveCompletedSteps": true },
+  "resume": { "enabled": true, "preserveCompletedWork": true },
+  "timeout": { "seconds": 3600 },
+  "idempotency": { "required": true, "keyFrom": ["canonicalId", "version", "inputs"] },
+  "gates": {
+    "review": [
+      {
+        "id": "final-review",
+        "kind": "review",
+        "afterStep": "specialist-review",
+        "humanRequired": true,
+        "modelCannotSatisfy": true,
+        "outcomes": ["accept", "revise", "reject"],
+        "artifactIds": ["review-packet", "created-artifact"],
+        "stopOnReject": true
+      }
+    ],
+    "action": [
+      {
+        "id": "approved-external-action",
+        "kind": "action",
+        "afterStep": "specialist-review",
+        "afterGate": "final-review",
+        "requiresReviewOutcome": "accept",
+        "humanRequired": true,
+        "modelCannotSatisfy": true,
+        "mutationClass": "draft",
+        "fallback": "human-action-manifest"
+      }
+    ]
+  },
+  "provenance": {
+    "sourcePath": "runtime/fixtures/playbooks/content-intelligence-loop.json",
+    "recordedAt": "2026-08-20T00:00:00.000Z",
+    "proseCompositionKind": "compatibility-map-only"
+  },
+  "receipts": { "required": true, "redaction": "required", "includeToolOperations": true },
+  "evalSignals": {
+    "criteria": [
+      { "id": "graph-ran", "description": "The declared step graph ran rather than being paraphrased into one prompt.", "source": "trace" },
+      { "id": "artifacts-and-provenance", "description": "Required artifacts and provenance exist.", "source": "artifact" },
+      { "id": "human-review", "description": "A human accepted, revised, or rejected the Review Packet.", "source": "human-verdict" },
+      { "id": "separate-action", "description": "Review and external action remained separate.", "source": "trace" },
+      { "id": "measured-learning", "description": "Measured or explicitly unknown results entered the next cycle without becoming unreviewed truth.", "source": "observed-result" }
+    ]
+  },
+  "finalDeliverable": {
+    "artifactId": "created-artifact",
+    "description": "Finished channel-native content with the Review Packet, action receipt or human action manifest, and the learning record for the next cycle.",
+    "accompanyingArtifactIds": ["review-packet", "action-receipt", "learning-record"]
+  },
+  "nextDecision": {
+    "id": "keep-revise-or-stop",
+    "description": "Keep, revise, or stop, changing one consequential variable before the next cycle."
+  },
+  "activation": {
+    "requiredByPortablePlugin": false,
+    "loadsAtPluginRuntime": false,
+    "customerManagedCatalog": false
+  }
+}

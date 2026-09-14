@@ -1,0 +1,346 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://forsvn.com/schemas/conquistador/eval-lab-1.0.0.schema.json",
+  "title": "Conquistador Eval Lab contracts",
+  "type": "object",
+  "$defs": {
+    "Sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "ArtifactIdentity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "version", "digest"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+(?:-[0-9A-Za-z.-]+)?$" },
+        "digest": { "$ref": "#/$defs/Sha256" }
+      }
+    },
+    "CandidateBuild": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "id", "source", "stage", "modules", "createdAt"],
+      "properties": {
+        "schemaVersion": { "const": "conquistador.candidate-build/v1" },
+        "id": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "source": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["commit", "tree", "ledgerDigest", "projector"],
+          "properties": {
+            "commit": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+            "tree": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+            "ledgerDigest": { "$ref": "#/$defs/Sha256" },
+            "projector": { "$ref": "#/$defs/ArtifactIdentity" }
+          }
+        },
+        "stage": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["publicTreeDigest", "portablePlugin", "npmInput", "ociInputs"],
+          "properties": {
+            "publicTreeDigest": { "$ref": "#/$defs/Sha256" },
+            "portablePlugin": { "$ref": "#/$defs/ArtifactIdentity" },
+            "npmInput": { "$ref": "#/$defs/ArtifactIdentity" },
+            "ociInputs": {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 2,
+              "items": { "$ref": "#/$defs/ArtifactIdentity" }
+            }
+          }
+        },
+        "modules": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["runtime", "toolModule", "evalLab"],
+          "properties": {
+            "runtime": { "$ref": "#/$defs/ArtifactIdentity" },
+            "toolModule": { "$ref": "#/$defs/ArtifactIdentity" },
+            "evalLab": { "$ref": "#/$defs/ArtifactIdentity" }
+          }
+        },
+        "createdAt": { "type": "string", "format": "date-time" }
+      }
+    },
+    "ProviderCell": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "id", "provider", "model", "modelVersion", "adapter", "promptTemplateDigest", "toolManifestDigest", "settingsDigest", "calibrationDigest"],
+      "properties": {
+        "schemaVersion": { "const": "conquistador.provider-cell/v1" },
+        "id": { "type": "string", "minLength": 1 },
+        "provider": { "type": "string", "minLength": 1 },
+        "model": { "type": "string", "minLength": 1 },
+        "modelVersion": { "type": "string", "minLength": 1 },
+        "adapter": { "$ref": "#/$defs/ArtifactIdentity" },
+        "promptTemplateDigest": { "$ref": "#/$defs/Sha256" },
+        "toolManifestDigest": { "$ref": "#/$defs/Sha256" },
+        "settingsDigest": { "$ref": "#/$defs/Sha256" },
+        "calibrationDigest": { "$ref": "#/$defs/Sha256" },
+        "execution": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["promptfooProviderId", "credentialEnvironmentVariables", "settings", "maxOutputTokens"],
+          "properties": {
+            "promptfooProviderId": { "type": "string", "minLength": 1, "not": { "pattern": "[\\s*]" } },
+            "credentialEnvironmentVariables": {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]*$" }
+            },
+            "settings": { "type": "object" },
+            "maxOutputTokens": { "type": "integer", "minimum": 1, "maximum": 4096 }
+          }
+        }
+      }
+    },
+    "EvalCase": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "id", "outcomeId", "partition", "class", "fixtureIds", "assertionIds", "dimensionIds", "promptDigest", "repetitionCount", "externalActionPolicy"],
+      "properties": {
+        "schemaVersion": { "const": "conquistador.eval-case/v1" },
+        "id": { "type": "string", "minLength": 1 },
+        "outcomeId": { "type": "string", "minLength": 1 },
+        "partition": { "enum": ["normal", "boundary", "deep", "parent", "parity", "calibration"] },
+        "class": { "type": "string", "minLength": 1 },
+        "fixtureIds": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "assertionIds": { "type": "array", "minItems": 1, "items": { "type": "string" }, "uniqueItems": true },
+        "dimensionIds": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "promptDigest": { "$ref": "#/$defs/Sha256" },
+        "repetitionCount": { "const": 3 },
+        "externalActionPolicy": { "const": "deny" }
+      }
+    },
+    "Fixture": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "id", "path", "digest", "license", "provenance", "sensitivity", "immutable"],
+      "properties": {
+        "schemaVersion": { "const": "conquistador.fixture/v1" },
+        "id": { "type": "string", "minLength": 1 },
+        "path": { "type": "string", "minLength": 1 },
+        "digest": { "$ref": "#/$defs/Sha256" },
+        "license": { "type": "string", "minLength": 1 },
+        "provenance": { "type": "string", "minLength": 1 },
+        "sensitivity": { "enum": ["public", "synthetic", "private-redacted"] },
+        "immutable": { "const": true }
+      }
+    },
+    "Assertion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "id", "kind", "description", "hardFailure"],
+      "properties": {
+        "schemaVersion": { "const": "conquistador.assertion/v1" },
+        "id": { "type": "string", "minLength": 1 },
+        "kind": { "enum": ["deterministic", "model", "media", "artifact", "human"] },
+        "description": { "type": "string", "minLength": 1 },
+        "hardFailure": { "type": "boolean" }
+      }
+    },
+    "Dimension": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "id", "rubricVersion", "description", "minimumScore", "medianFloor"],
+      "properties": {
+        "schemaVersion": { "const": "conquistador.dimension/v1" },
+        "id": { "type": "string", "minLength": 1 },
+        "rubricVersion": { "type": "string", "minLength": 1 },
+        "description": { "type": "string", "minLength": 1 },
+        "minimumScore": { "type": "number" },
+        "medianFloor": { "type": "number" }
+      }
+    },
+    "AssertionResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["assertionId", "status", "evidenceDigests"],
+      "properties": {
+        "assertionId": { "type": "string" },
+        "status": { "enum": ["pass", "fail", "inconclusive"] },
+        "evidenceDigests": { "type": "array", "items": { "$ref": "#/$defs/Sha256" } }
+      }
+    },
+    "DimensionResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["dimensionId", "score"],
+      "properties": {
+        "dimensionId": { "type": "string" },
+        "score": { "type": "number" }
+      }
+    },
+    "Run": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "id", "caseId", "candidateBuildId", "providerCellId", "repetition", "status", "startedAt", "finishedAt", "traceDigest", "artifactDigests", "assertionResults", "dimensionResults", "externalActions", "terminalMarker"],
+      "properties": {
+        "schemaVersion": { "const": "conquistador.run/v1" },
+        "id": { "type": "string" },
+        "caseId": { "type": "string" },
+        "candidateBuildId": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "providerCellId": { "type": "string" },
+        "repetition": { "enum": [1, 2, 3] },
+        "status": { "enum": ["pass", "fail", "inconclusive"] },
+        "startedAt": { "type": "string", "format": "date-time" },
+        "finishedAt": { "type": "string", "format": "date-time" },
+        "traceDigest": { "$ref": "#/$defs/Sha256" },
+        "artifactDigests": { "type": "array", "items": { "$ref": "#/$defs/Sha256" } },
+        "assertionResults": { "type": "array", "items": { "$ref": "#/$defs/AssertionResult" } },
+        "dimensionResults": { "type": "array", "items": { "$ref": "#/$defs/DimensionResult" } },
+        "externalActions": { "type": "array", "maxItems": 0 },
+        "terminalMarker": { "const": true }
+      }
+    },
+    "BrokenRun": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "id", "caseId", "candidateBuildId", "providerCellId", "repetition", "status", "startedAt", "finishedAt", "cause", "traceDigest", "terminalMarker"],
+      "properties": {
+        "schemaVersion": { "const": "conquistador.broken-run/v1" },
+        "id": { "type": "string" },
+        "caseId": { "type": "string" },
+        "candidateBuildId": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "providerCellId": { "type": "string" },
+        "repetition": { "enum": [1, 2, 3] },
+        "status": { "const": "broken" },
+        "startedAt": { "type": "string", "format": "date-time" },
+        "finishedAt": { "type": "string", "format": "date-time" },
+        "cause": { "type": "string", "minLength": 1 },
+        "traceDigest": { "$ref": "#/$defs/Sha256" },
+        "terminalMarker": { "const": true }
+      }
+    },
+    "JudgeResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "id", "runId", "assertionId", "graderType", "graderCellId", "calibrationDigest", "verdict", "evidenceDigests"],
+      "properties": {
+        "schemaVersion": { "const": "conquistador.judge-result/v1" },
+        "id": { "type": "string" },
+        "runId": { "type": "string" },
+        "assertionId": { "type": "string" },
+        "graderType": { "enum": ["model", "media", "artifact"] },
+        "graderCellId": { "type": "string" },
+        "calibrationDigest": { "$ref": "#/$defs/Sha256" },
+        "verdict": { "enum": ["pass", "fail", "inconclusive"] },
+        "evidenceDigests": { "type": "array", "items": { "$ref": "#/$defs/Sha256" } }
+      }
+    },
+    "BlindPair": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "id", "caseId", "armA", "armB", "assignmentDigest", "presentedAt"],
+      "properties": {
+        "schemaVersion": { "const": "conquistador.blind-pair/v1" },
+        "id": { "type": "string" },
+        "caseId": { "type": "string" },
+        "armA": { "$ref": "#/$defs/BlindArm" },
+        "armB": { "$ref": "#/$defs/BlindArm" },
+        "assignmentDigest": { "$ref": "#/$defs/Sha256" },
+        "presentedAt": { "type": "string", "format": "date-time" }
+      }
+    },
+    "BlindArm": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["label", "artifactDigest"],
+      "properties": {
+        "label": { "enum": ["A", "B"] },
+        "artifactDigest": { "$ref": "#/$defs/Sha256" }
+      }
+    },
+    "HumanVerdict": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "id", "blindPairId", "reviewer", "reviewerRevision", "artifactDigests", "verdict", "rationale", "recordedAt", "assignmentDigest"],
+      "properties": {
+        "schemaVersion": { "const": "conquistador.human-verdict/v1" },
+        "id": { "type": "string" },
+        "blindPairId": { "type": "string" },
+        "reviewer": { "type": "string", "minLength": 1 },
+        "reviewerRevision": { "type": "string", "minLength": 1 },
+        "artifactDigests": { "type": "array", "minItems": 2, "maxItems": 2, "items": { "$ref": "#/$defs/Sha256" } },
+        "verdict": { "enum": ["A", "B", "tie", "reject-both"] },
+        "rationale": { "type": "string", "minLength": 1 },
+        "recordedAt": { "type": "string", "format": "date-time" },
+        "assignmentDigest": { "$ref": "#/$defs/Sha256" }
+      }
+    },
+    "Experiment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "id", "candidateBuildId", "baselineDigest", "mutablePaths", "maxRuns", "maxBudgetUsd", "stopConditions", "benchmarkDigest"],
+      "properties": {
+        "schemaVersion": { "const": "conquistador.experiment/v1" },
+        "id": { "type": "string" },
+        "candidateBuildId": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "baselineDigest": { "$ref": "#/$defs/Sha256" },
+        "mutablePaths": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string" } },
+        "maxRuns": { "type": "integer", "minimum": 1 },
+        "maxBudgetUsd": { "type": "number", "minimum": 0 },
+        "stopConditions": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+        "benchmarkDigest": { "$ref": "#/$defs/Sha256" }
+      }
+    },
+    "Decision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "id", "experimentId", "verdict", "baselineDigest", "proposalDigest", "evidenceRunIds", "rationale", "decidedAt"],
+      "properties": {
+        "schemaVersion": { "const": "conquistador.decision/v1" },
+        "id": { "type": "string" },
+        "experimentId": { "type": "string" },
+        "verdict": { "enum": ["keep", "discard", "inconclusive"] },
+        "baselineDigest": { "$ref": "#/$defs/Sha256" },
+        "proposalDigest": { "$ref": "#/$defs/Sha256" },
+        "evidenceRunIds": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+        "rationale": { "type": "string", "minLength": 1 },
+        "decidedAt": { "type": "string", "format": "date-time" }
+      }
+    },
+    "ClaimVerdictRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "verdictId", "verdictDigest", "packetId", "packetDigest", "artifactDigest", "reviewerPrincipalId", "reviewerAuthSubjectDigest", "candidateBuildId", "evidenceCellId", "outcome", "decidedAt", "expiresAt", "unresolvedLimitations"],
+      "properties": {
+        "schemaVersion": { "const": "conquistador.claim-verdict-ref/v1" },
+        "verdictId": { "type": "string", "minLength": 1 },
+        "verdictDigest": { "$ref": "#/$defs/Sha256" },
+        "packetId": { "type": "string", "minLength": 1 },
+        "packetDigest": { "$ref": "#/$defs/Sha256" },
+        "artifactDigest": { "$ref": "#/$defs/Sha256" },
+        "reviewerPrincipalId": { "type": "string", "minLength": 1 },
+        "reviewerAuthSubjectDigest": { "$ref": "#/$defs/Sha256" },
+        "candidateBuildId": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "evidenceCellId": { "type": "string", "minLength": 1 },
+        "outcome": { "enum": ["accept", "revise", "reject", "cancel"] },
+        "decidedAt": { "type": "string", "format": "date-time" },
+        "expiresAt": { "type": "string", "format": "date-time" },
+        "unresolvedLimitations": { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 1 } }
+      }
+    },
+    "ReleaseClaim": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "id", "candidateBuildId", "evidenceDigest", "status", "incompleteCells", "brokenRunIds", "humanVerdicts", "authority", "generatedAt"],
+      "properties": {
+        "schemaVersion": { "const": "conquistador.release-claim/v1" },
+        "id": { "type": "string" },
+        "candidateBuildId": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "evidenceDigest": { "$ref": "#/$defs/Sha256" },
+        "status": { "enum": ["incomplete", "evidence-complete", "no-go"] },
+        "incompleteCells": { "type": "array", "uniqueItems": true, "items": { "type": "string" } },
+        "brokenRunIds": { "type": "array", "uniqueItems": true, "items": { "type": "string" } },
+        "humanVerdicts": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/$defs/ClaimVerdictRef" } },
+        "authority": { "const": "none" },
+        "generatedAt": { "type": "string", "format": "date-time" }
+      }
+    }
+  }
+}

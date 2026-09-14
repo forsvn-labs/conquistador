@@ -1,0 +1,77 @@
+---
+name: polish-vietnamese
+description: "Create, rewrite, translate, or edit Vietnamese marketing and product language so it sounds natural, precise, and appropriate to the audience. Use for Vietnamese copy, localization, tone and pronoun consistency, removing English calques, regional register, founder or company voice, and preserving factual claims while improving rhythm."
+metadata:
+  version: 2.1.0
+
+---
+
+# Polish Vietnamese language
+
+Create natural Vietnamese, not English syntax with Vietnamese words.
+
+## Set the language contract
+
+Infer or state:
+
+- audience and relationship;
+- conversational, professional, corporate, editorial, or other register;
+- sustainable self/reader pronoun pair;
+- regional preference when it materially affects vocabulary;
+- founder, company, product, or narrator voice;
+- facts, claims, numbers, product names, and legal language that must not change.
+
+Ask only when pronoun or register choices would materially alter the relationship. Otherwise choose a
+reasonable default and state it briefly.
+
+For consequential or long work, keep diagnosis, rewrite, and critique distinct. Independent language
+reviewers are optional; the portable sequential fallback runs those passes separately, then performs a
+claim regression check against the source for names, numbers, conditions, uncertainty, and legal or
+technical meaning.
+
+## Rewrite for Vietnamese logic
+
+- Rebuild English noun stacks into clear Vietnamese clauses.
+- Prefer active, spoken phrasing where the context allows it.
+- Keep common loanwords when the audience naturally uses them.
+- Translate or explain terminology only when clarity improves.
+- Preserve claim strength; do not turn a possibility into a guarantee.
+- Preserve intentional technical precision, names, numbers, and source meaning.
+- Remove filler transitions, redundant classifiers, formalism without purpose, and machine-like
+  parallelism.
+- Avoid slang inventories, forced particles, theatrical intimacy, and mixed levels of formality.
+
+For translation, translate the communication job and social relationship, not the source sentence
+order. For editing, preserve the author's point of view and product-specific vocabulary.
+
+## Deliver
+
+Return the finished Vietnamese first. When useful, add:
+
+- the chosen register and pronoun pair;
+- materially changed phrases and why;
+- ambiguous source claims or terminology needing confirmation;
+- alternate wording only when it represents a real register choice.
+
+Read the complete result aloud for pronoun drift, mixed formality, unnatural rhythm, accidental claim
+changes, punctuation, and line-breaking. Do not explain every edit.
+
+Machine checks and self-review cannot grant a native-human verdict. Release-critical Vietnamese work
+requires a named native reviewer to judge natural register and semantic/authority parity on the exact
+revision; until then, label that verdict pending.
+
+Never invent facts, quotes, metrics, or consent while rewriting. Keep sending, publishing, and
+external writes behind explicit approval.
+
+Before delivery, load the recovered method instead of paraphrasing it:
+
+- [diagnostic](agents/diagnostic-agent.md), [polisher](agents/polisher-agent.md),
+  [critic](agents/critic-agent.md);
+- [vn-tone corpus](references/vn-tone-corpus.md),
+  [translation artifacts](references/translation-artifacts.md),
+  [absolute prohibitions](references/absolute-prohibitions.md),
+  [anti-patterns](references/anti-patterns.md).
+
+If the host cannot run those as separate agents, use [sequential fallback](fallbacks/sequential.md).
+Return the finished copy inline by default. If the host supplies a durable artifact location and the
+operator asks for persistence, write it there; no specific project store is required.

@@ -1,0 +1,187 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "conquistador.self-hosted-conformance/v1",
+  "title": "Conquistador self-hosted runtime conformance record v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "declarationVersion", "collectorVersion", "generatedAt", "declarationRawDigest", "authority", "host", "rows", "aggregate", "overall", "digest"],
+  "properties": {
+    "schemaVersion": {"const": "conquistador.self-hosted-conformance/v1"},
+    "declarationVersion": {"const": "exts-155.self-hosted-runtime/v1"},
+    "collectorVersion": {"const": "self-hosted-collector/v1"},
+    "generatedAt": {"const": "2026-08-22T00:00:00.000Z"},
+    "declarationRawDigest": {"$ref": "#/$defs/sha256"},
+    "authority": {"$ref": "#/$defs/authority"},
+    "host": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["platform", "architecture"],
+      "properties": {"platform": {"const": "macos"}, "architecture": {"const": "arm64"}}
+    },
+    "rows": {
+      "type": "array",
+      "minItems": 18,
+      "maxItems": 18,
+      "items": {"$ref": "#/$defs/row"}
+    },
+    "aggregate": {"$ref": "#/$defs/aggregate"},
+    "overall": {"const": "INCOMPLETE"},
+    "digest": {"$ref": "#/$defs/sha256"}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"},
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["releaseState", "candidateStatus", "selectedCandidate", "g3Status", "landing", "exts161Packet"],
+      "properties": {
+        "releaseState": {"const": "NO-GO"},
+        "candidateStatus": {"const": "UNBOUND"},
+        "selectedCandidate": {"const": null},
+        "g3Status": {"const": "INCOMPLETE"},
+        "landing": {"const": "disabled"},
+        "exts161Packet": {"const": null}
+      }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": {"type": "string", "pattern": "^[A-Za-z0-9.][A-Za-z0-9._/-]*$", "not": {"pattern": "(^|/)\\.\\.?(/|$)"}},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["provider", "model", "apiVersion", "image", "tag", "imageDigest"],
+      "properties": {
+        "provider": {"type": ["string", "null"]},
+        "model": {"type": ["string", "null"]},
+        "apiVersion": {"type": ["string", "null"]},
+        "image": {"type": ["string", "null"]},
+        "tag": {"type": ["string", "null"]},
+        "imageDigest": {"oneOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]}
+      }
+    },
+    "command": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "cwd", "argv"],
+      "properties": {
+        "kind": {"const": "command"},
+        "cwd": {"const": "runtime"},
+        "argv": {"type": "array", "minItems": 2, "items": {"type": "string", "minLength": 1}}
+      }
+    },
+    "receiptRequirement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "receiptClass"],
+      "properties": {
+        "kind": {"const": "external-receipt"},
+        "receiptClass": {"enum": ["candidate-bound-runtime", "linux-x64-runtime", "provider-live", "oci-image", "clean-host-lifecycle", "authenticated-human-authority", "customer-support"]}
+      }
+    },
+    "counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["testSuites", "passedTestSuites", "failedTestSuites", "tests", "passedTests", "failedTests"],
+      "properties": {
+        "testSuites": {"type": "integer", "minimum": 0},
+        "passedTestSuites": {"type": "integer", "minimum": 0},
+        "failedTestSuites": {"type": "integer", "minimum": 0},
+        "tests": {"type": "integer", "minimum": 0},
+        "passedTests": {"type": "integer", "minimum": 0},
+        "failedTests": {"type": "integer", "minimum": 0}
+      }
+    },
+    "receipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["cellId", "receiptId", "receiptClass", "status", "startedAt", "finishedAt", "sequence", "replayNonce", "subjectDigest", "evidence"],
+      "properties": {
+        "cellId": {"type": "string"},
+        "receiptId": {"type": "string", "minLength": 1},
+        "receiptClass": {"enum": ["candidate-bound-runtime", "linux-x64-runtime", "provider-live", "oci-image", "clean-host-lifecycle", "authenticated-human-authority", "customer-support"]},
+        "status": {"const": "succeeded"},
+        "startedAt": {"type": "string", "minLength": 20},
+        "finishedAt": {"type": "string", "minLength": 20},
+        "sequence": {"type": "integer", "minimum": 1},
+        "replayNonce": {"type": "string", "pattern": "^[a-f0-9]{32}$"},
+        "subjectDigest": {"$ref": "#/$defs/sha256"},
+        "evidence": {"$ref": "#/$defs/source"}
+      }
+    },
+    "result": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "observedAt", "command", "exitCode", "counts", "reportDigest", "observationDigest", "receipt", "missingReason"],
+      "properties": {
+        "status": {"enum": ["passed", "missing"]},
+        "observedAt": {"type": ["string", "null"]},
+        "command": {"oneOf": [{"$ref": "#/$defs/command"}, {"type": "null"}]},
+        "exitCode": {"type": ["integer", "null"]},
+        "counts": {"oneOf": [{"$ref": "#/$defs/counts"}, {"type": "null"}]},
+        "reportDigest": {"oneOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]},
+        "observationDigest": {"oneOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]},
+        "receipt": {"oneOf": [{"$ref": "#/$defs/receipt"}, {"type": "null"}]},
+        "missingReason": {"type": ["string", "null"]}
+      }
+    },
+    "row": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "ownerIssue", "platform", "architecture", "profile", "identity", "proofClass", "required", "expectedStatus", "currentSupportClaim", "missingReason", "sources", "result"],
+      "properties": {
+        "id": {"enum": ["SH-API-MACOS-ARM64", "SH-CANDIDATE-MACOS-ARM64", "SH-CLEAN-HOST-LINUX-X64", "SH-CLEAN-HOST-MACOS-ARM64", "SH-CLI-CONFIG-MACOS-ARM64", "SH-HUMAN-AUTH-CANDIDATE", "SH-LINUX-X64-RUNTIME", "SH-OCI-AMD64", "SH-OCI-ARM64", "SH-PROVIDER-ANTHROPIC-LIVE", "SH-PROVIDER-DECL-MACOS-ARM64", "SH-PROVIDER-OPENAI-LIVE", "SH-PROVIDER-VERCEL-LIVE", "SH-REVIEW-AUTH-MACOS-ARM64", "SH-SECURITY-MACOS-ARM64", "SH-STATE-MACOS-ARM64", "SH-SUPPORT-LINUX-X64", "SH-SUPPORT-MACOS-ARM64"]},
+        "ownerIssue": {"const": "EXTS-155"},
+        "platform": {"enum": ["macos", "linux", "provider", "oci", "support", "candidate"]},
+        "architecture": {"enum": ["arm64", "x64", "amd64", "none"]},
+        "profile": {"type": "string", "minLength": 1},
+        "identity": {"$ref": "#/$defs/identity"},
+        "proofClass": {"enum": ["local-runtime", "candidate-bound", "platform", "provider-live", "clean-host", "oci", "human", "customer-support"]},
+        "required": {"oneOf": [{"$ref": "#/$defs/command"}, {"$ref": "#/$defs/receiptRequirement"}]},
+        "expectedStatus": {"enum": ["passed", "missing"]},
+        "currentSupportClaim": {"enum": ["local-macos-arm64-only", "unsupported-pending-exact-evidence"]},
+        "missingReason": {"type": ["string", "null"]},
+        "sources": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/source"}},
+        "result": {"$ref": "#/$defs/result"}
+      }
+    },
+    "proofCounts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["total", "passed", "missing"],
+      "properties": {"total": {"type": "integer", "minimum": 0}, "passed": {"type": "integer", "minimum": 0}, "missing": {"type": "integer", "minimum": 0}}
+    },
+    "aggregate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["total", "passed", "missing", "supported", "byProofClass", "missingReasons"],
+      "properties": {
+        "total": {"const": 18},
+        "passed": {"type": "integer", "minimum": 0, "maximum": 18},
+        "missing": {"type": "integer", "minimum": 0, "maximum": 18},
+        "supported": {"const": 0},
+        "byProofClass": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["local-runtime", "candidate-bound", "platform", "provider-live", "clean-host", "oci", "human", "customer-support"],
+          "properties": {
+            "local-runtime": {"$ref": "#/$defs/proofCounts"},
+            "candidate-bound": {"$ref": "#/$defs/proofCounts"},
+            "platform": {"$ref": "#/$defs/proofCounts"},
+            "provider-live": {"$ref": "#/$defs/proofCounts"},
+            "clean-host": {"$ref": "#/$defs/proofCounts"},
+            "oci": {"$ref": "#/$defs/proofCounts"},
+            "human": {"$ref": "#/$defs/proofCounts"},
+            "customer-support": {"$ref": "#/$defs/proofCounts"}
+          }
+        },
+        "missingReasons": {"type": "array", "items": {"type": "string", "minLength": 1}}
+      }
+    }
+  }
+}

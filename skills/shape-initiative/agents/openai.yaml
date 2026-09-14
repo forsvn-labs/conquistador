@@ -1,0 +1,7 @@
+interface:
+  display_name: "Shape Initiative"
+  short_description: "Turn ambiguity into one bounded decision"
+  default_prompt: "Use $shape-initiative to turn this ambiguous request into a bounded decision and immediate next move."
+
+policy:
+  allow_implicit_invocation: true

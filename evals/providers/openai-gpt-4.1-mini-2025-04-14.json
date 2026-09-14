@@ -1,0 +1,36 @@
+{
+  "schemaVersion": "conquistador.provider-cell/v1",
+  "id": "openai.gpt-4.1-mini-2025-04-14.promptfoo-0.122.0",
+  "provider": "openai",
+  "model": "gpt-4.1-mini-2025-04-14",
+  "modelVersion": "2025-04-14",
+  "adapter": {
+    "name": "promptfoo",
+    "version": "0.122.0",
+    "digest": "sha256:1b078ed094e4c50f7003f60caba8db483d0a087d32e40c8a341106d7fc25fdd5"
+  },
+  "promptTemplateDigest": "sha256:03be58336a36624591131742bb834635bc4fc2af1d4afd1514cdd69e3205dba0",
+  "toolManifestDigest": "sha256:e479bb6f2769a6c4a57014e8e6a7e3ace70bf15ea3f909d475c0bbdf6253f4b8",
+  "settingsDigest": "sha256:425296282d8540551a8290c081af174dcaa5a7cd17c2ce0946d26d72f03328d0",
+  "calibrationDigest": "sha256:fd4161adf3f1d31a5c8a6c1d894ca4d4f8cbf57d243b0be31f4d1566e725dead",
+  "execution": {
+    "promptfooProviderId": "openai:chat:gpt-4.1-mini-2025-04-14",
+    "credentialEnvironmentVariables": [
+      "OPENAI_API_KEY"
+    ],
+    "settings": {
+      "temperature": 0,
+      "max_tokens": 900
+    },
+    "contextWindowTokens": 1047576,
+    "maxInputTokens": 1046676,
+    "maxOutputTokens": 900,
+    "pricing": {
+      "currency": "USD",
+      "revision": "2026-08-28",
+      "source": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+      "inputNanoUsdPerToken": 400,
+      "outputNanoUsdPerToken": 1600
+    }
+  }
+}

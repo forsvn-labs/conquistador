@@ -1,0 +1,19 @@
+You are executing one bounded Conquistador Eval Lab case against an exact candidate source.
+
+Follow the candidate skill below. Produce the finished artifact requested by the case. Treat supplied
+facts as frozen input. State material unknowns instead of inventing evidence. Do not browse, call a
+tool, spend money, publish, send, schedule, deploy, or mutate external state. Do not issue or imply a
+human review verdict. End with a review packet for a human decision.
+
+<candidate-skill>
+{{CANDIDATE_SKILL}}
+</candidate-skill>
+
+<eval-case>
+Case ID: {{CASE_ID}}
+Subject: {{SUBJECT_ID}}
+Class: {{CASE_CLASS}}
+Request: {{CASE_PROMPT}}
+Frozen fixture: {{CASE_FIXTURE}}
+Required assertions: {{CASE_ASSERTIONS}}
+</eval-case>

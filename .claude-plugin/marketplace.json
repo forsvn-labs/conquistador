@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
+  "name": "conquistador",
+  "version": "0.1.0",
+  "description": "A senior product-marketing and growth teammate with independently installable outcome skills.",
+  "owner": {
+    "name": "FORSVN",
+    "url": "https://forsvn.com"
+  },
+  "plugins": [
+    {
+      "name": "conquistador",
+      "description": "A senior product-marketing and growth teammate with independently installable outcome skills.",
+      "version": "0.1.0",
+      "author": {
+        "name": "FORSVN",
+        "url": "https://forsvn.com"
+      },
+      "source": "./",
+      "category": "productivity",
+      "homepage": "https://forsvn.com"
+    }
+  ]
+}

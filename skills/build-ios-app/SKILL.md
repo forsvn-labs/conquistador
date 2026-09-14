@@ -1,0 +1,97 @@
+---
+name: build-ios-app
+description: "Implement and verify an explicit native iOS or iPadOS product outcome in an existing or approved project. Use for Swift or SwiftUI vertical slices, state, persistence, networking, permissions, capabilities, accessibility, testing, simulator/device readiness, and bounded distribution handoffs."
+metadata:
+  version: 1.1.0
+
+---
+
+# Build an iOS app outcome
+
+Produce a useful inspected vertical slice when the host supports it, or a precise bounded handoff when
+it does not. Never substitute placeholder prose for a claimed build.
+
+## Inspect the native project and authority
+
+Read repository instructions, project/workspace settings, package dependencies, targets, schemes,
+deployment targets, existing architecture, capabilities, tests, and dirty worktree state. Preserve the
+existing stack and conventions unless evidence requires a change. Do not require a vendor builder,
+MCP, router, Vibecode, Chorus, or an opaque executable such as the excluded historical `ios-cli`.
+
+Use host-appropriate Xcode and source-inspectable tools. Before consequential platform or distribution
+advice, refresh the [official Apple authority map](references/apple-platform-authority.md); record the
+source and check date for volatile rules.
+
+## Implement one complete vertical slice
+
+Trace the slice from approved user flow through native surfaces and recovery. Cover as applicable:
+
+- Swift/SwiftUI or the project's established framework and architecture;
+- iPhone/iPad behavior, navigation, state, persistence, networking, validation, and errors;
+- permissions, privacy, localization, Dynamic Type, VoiceOver, reduced motion, and native conventions;
+- capabilities, entitlements, Info.plist usage descriptions, extensions, dependencies, and secrets;
+- offline, interruption, retry, restoration, cancellation, and destructive confirmation.
+
+Keep implementation planning outcome-oriented and behavior-preserving. Do not perform opportunistic
+cleanup or remove code/assets without evidence, scoped authority, a green baseline, and rollback.
+
+## Verify what actually ran
+
+Run the strongest available build, unit, integration, UI, simulator, device, accessibility,
+performance, and diagnostics checks proportionate to the change. Report commands, environment,
+target/scheme/destination, results, warnings, and untested cells. Never claim simulator/device, signing,
+or App Store readiness from source inspection alone.
+
+When Xcode, the target SDK, a compatible host, dependency access, device, or signing authority is
+unavailable, stop at a bounded handoff: exact files and changes, project settings, commands to run,
+expected evidence, blockers, risks, and the human-owned next step.
+
+## Finish at the release boundary
+
+Return implemented behavior or handoff, changed files, verification evidence, privacy/capability review,
+remaining risks, and optional icon/screenshot/listing/TestFlight/App Store readiness work. Creating
+identifiers, changing entitlements, joining programs, accepting fees, using credentials, signing,
+registering devices, uploading builds, TestFlight distribution, and submission require explicit
+approval for the exact account and payload.
+
+## Load the recovered references
+
+Before consequential native or distribution work, load the recovered references instead of
+paraphrasing them:
+
+- [Apple platform authority](references/apple-platform-authority.md) for volatile platform rules;
+- [capabilities](references/capabilities.md) and [gotchas](references/gotchas.md) for entitlements,
+  Info.plist, and common build failures;
+- [publishing](references/publishing.md), [readiness](references/publishing-readiness.md),
+  [production](references/publishing-production.md), [TestFlight](references/publishing-testflight.md),
+  and [publishing gotchas](references/publishing-gotchas.md) for distribution handoffs;
+- [device registration](references/device-registration.md) and [screenshots](references/screenshots.md)
+  when preparing device or listing evidence;
+- [config schema](references/config-schema.json) for optional local config shape;
+- [historical signing API notes](references/api-reference.md) as background only — the `ios-cli`
+  binary is not shipped.
+
+Bootstrap a greenfield SwiftUI skeleton with [`scripts/bootstrap.sh`](scripts/bootstrap.sh) from
+[`template/`](template/) only when the operator explicitly requests a new project and no existing
+workspace should be disturbed. The script is gated:
+
+- **dry run:** run with `--dry-run` first; it prints the plan and writes nothing;
+- **path:** the output directory must be absolute, its parent must exist, and it must not sit inside
+  an existing git work tree — nested repositories are never created;
+- **consent:** git initialization, staging, and an initial commit happen only with explicit consent
+  (`--git-consent yes` or `CONQUISTADOR_BOOTSTRAP_GIT_CONSENT=YES`); the default runs zero git
+  commands;
+- **idempotency:** re-running against an already-bootstrapped matching directory is a no-op success;
+  a foreign or mismatched existing directory is refused.
+
+## Sequential fallback
+
+When separate implementer, reviewer, and runner contexts are unavailable, use
+[sequential fallback](fallbacks/sequential.md): inspect project and authority → plan one slice →
+implement → hostile self-review → verify what actually ran → deliver at the release boundary. Label
+single-context results as such; anything that could not run stays an untested cell.
+
+Prefer `.forsvn/artifacts/product/build-ios-app/` for durable handoff notes. Creating
+identifiers, changing entitlements, joining programs, accepting fees, using credentials, signing,
+registering devices, uploading builds, TestFlight distribution, and submission still require
+explicit approval for the exact account and payload.

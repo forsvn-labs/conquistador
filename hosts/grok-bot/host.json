@@ -1,0 +1,49 @@
+{
+  "schemaVersion": "conquistador.host-package/v1",
+  "id": "host:grok-bot",
+  "hostKind": "official-xai-grok-bot",
+  "displayName": "Official xAI Grok Bot",
+  "productName": "conquistador",
+  "pluginVersion": "1.0.0",
+  "canonicalSkillsRoot": "skills/skills",
+  "skillMount": "packaged-skills",
+  "installClass": "candidate-only",
+  "publicListing": false,
+  "cleanHostProof": false,
+  "zeroRuntime": true,
+  "notThisDoor": [
+    "Grok CLI / Grok Build",
+    "grok plugin install",
+    ".grok/ plugin or skill paths",
+    "grokbot.dev / community GrokBot",
+    "coding-agent plugin",
+    "Eve agent",
+    "conquistador runtime, catalog, Eval Lab, app/",
+    "explicit single-agent-only package",
+    "advisor/worker squad package"
+  ],
+  "hostProvides": [
+    "Grok Bot app teammate (name, title, description, conversation)",
+    "Settings → Plugins packaged-skill install in the Grok Bot app",
+    "optional computer, connectors, and routines the operator enables in that app"
+  ],
+  "conquistadorOwns": [
+    "bot profile contract",
+    "canonical SKILL.md trees",
+    "review packet",
+    "approval boundary for send, publish, spend, and external writes"
+  ],
+  "missingCapabilities": [
+    "operator-owned Grok Bot listing and credentials",
+    "official marketplace row",
+    "Grok Bot computer, connectors, and routines until the operator enables them",
+    "Grok CLI hooks, MCP, LSP, and .grok/ discovery",
+    "optional conquistador runner and catalog"
+  ],
+  "missingCapabilityBehavior": "fail-closed-draft",
+  "lifecycle": {
+    "setup": "In the official Grok Bot app, create a Bot from bot-profile.md and enable packaged skills from packaged-skills/. Do not use Grok CLI.",
+    "upgrade": "Replace the Bot description from a newer bot-profile.md and replace owned packaged skills. Do not fetch at runtime.",
+    "remove": "Disable or delete the owned Bot and its enabled Conquistador skills in the Grok Bot app. Leave other Bots."
+  }
+}

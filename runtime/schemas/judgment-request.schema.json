@@ -1,0 +1,216 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "conquistador.judgment-request.v1",
+  "title": "Sealed judgment request",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "requestId",
+    "requestDigest",
+    "revision",
+    "identity",
+    "purpose",
+    "skill",
+    "input",
+    "outputContract",
+    "execution",
+    "budget",
+    "toolPolicy",
+    "redaction"
+  ],
+  "properties": {
+    "schema": { "const": "conquistador.judgment-request.v1" },
+    "requestId": { "type": "string", "minLength": 1 },
+    "requestDigest": { "$ref": "#/$defs/sha256" },
+    "revision": { "const": 1 },
+    "identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sessionId",
+        "runId",
+        "candidateId",
+        "evidenceId",
+        "playbookId",
+        "playbookVersion",
+        "planDigest",
+        "stepId",
+        "attempt"
+      ],
+      "properties": {
+        "sessionId": { "type": ["string", "null"], "minLength": 1 },
+        "runId": { "type": "string", "minLength": 1 },
+        "candidateId": { "type": ["string", "null"], "minLength": 1 },
+        "evidenceId": { "type": ["string", "null"], "minLength": 1 },
+        "playbookId": { "type": "string", "minLength": 1 },
+        "playbookVersion": { "$ref": "#/$defs/semver" },
+        "planDigest": { "$ref": "#/$defs/sha256" },
+        "stepId": { "type": "string", "minLength": 1 },
+        "attempt": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "purpose": {
+      "enum": ["research", "creation", "quality-review", "measurement"]
+    },
+    "skill": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "version", "packageDigest", "interfaceDigest"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$" },
+        "version": { "$ref": "#/$defs/semver" },
+        "packageDigest": { "$ref": "#/$defs/sha256" },
+        "interfaceDigest": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "input": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "runInputDigest",
+        "contextBundleDigest",
+        "payload",
+        "payloadDigest",
+        "contextManifest"
+      ],
+      "properties": {
+        "runInputDigest": { "$ref": "#/$defs/sha256" },
+        "contextBundleDigest": { "$ref": "#/$defs/sha256" },
+        "payload": {},
+        "payloadDigest": { "$ref": "#/$defs/sha256" },
+        "contextManifest": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["artifactId", "schema", "revision", "contentDigest"],
+            "properties": {
+              "artifactId": { "type": "string", "minLength": 1 },
+              "schema": { "type": "string", "minLength": 1 },
+              "revision": { "type": "integer", "minimum": 1 },
+              "contentDigest": { "$ref": "#/$defs/sha256" }
+            }
+          }
+        }
+      }
+    },
+    "outputContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["artifacts", "contractDigest"],
+      "properties": {
+        "artifacts": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["artifactId", "schema", "format", "required"],
+            "properties": {
+              "artifactId": { "type": "string", "minLength": 1 },
+              "schema": { "type": "string", "minLength": 1 },
+              "format": { "enum": ["json", "markdown", "text"] },
+              "required": { "const": true }
+            }
+          }
+        },
+        "contractDigest": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "execution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["idempotencyKey", "createdAt", "deadlineAt", "maxLogicalAttempts"],
+      "properties": {
+        "idempotencyKey": { "$ref": "#/$defs/sha256" },
+        "createdAt": { "$ref": "#/$defs/isoDateTime" },
+        "deadlineAt": { "$ref": "#/$defs/isoDateTime" },
+        "maxLogicalAttempts": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "budget": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "maxInputTokens",
+        "maxOutputTokens",
+        "maxTotalTokens",
+        "remainingRunTokens",
+        "maximumChargeMicros",
+        "currency",
+        "allowedBillingModes"
+      ],
+      "properties": {
+        "maxInputTokens": { "type": "integer", "minimum": 0 },
+        "maxOutputTokens": { "type": "integer", "minimum": 0 },
+        "maxTotalTokens": { "type": "integer", "minimum": 0 },
+        "remainingRunTokens": { "type": "integer", "minimum": 0 },
+        "maximumChargeMicros": { "type": "integer", "minimum": 0 },
+        "currency": { "const": "USD" },
+        "allowedBillingModes": {
+          "type": "array",
+          "items": { "enum": ["host-covered", "metered"] }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "maximumChargeMicros": { "const": 0 } },
+            "required": ["maximumChargeMicros"]
+          },
+          "then": {
+            "properties": {
+              "allowedBillingModes": { "enum": [["host-covered"]] }
+            }
+          }
+        }
+      ]
+    },
+    "toolPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["externalMutation", "allowed"],
+      "properties": {
+        "externalMutation": { "const": "deny" },
+        "allowed": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["capabilityId", "operationId"],
+            "properties": {
+              "capabilityId": { "type": "string", "minLength": 1 },
+              "operationId": { "type": "string", "minLength": 1 }
+            }
+          }
+        }
+      }
+    },
+    "redaction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["applied", "classification", "removedPaths", "policyDigest"],
+      "properties": {
+        "applied": { "const": true },
+        "classification": { "enum": ["public", "internal", "confidential"] },
+        "removedPaths": { "type": "array", "items": { "type": "string" } },
+        "policyDigest": { "$ref": "#/$defs/sha256" }
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "semver": {
+      "type": "string",
+      "pattern": "^(?!latest$)\\d+\\.\\d+\\.\\d+(?:-[0-9A-Za-z.-]+)?$"
+    },
+    "isoDateTime": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}

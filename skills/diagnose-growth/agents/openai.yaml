@@ -1,0 +1,7 @@
+interface:
+  display_name: "Diagnose Growth"
+  short_description: "Find the first break and test its cause"
+  default_prompt: "Use $diagnose-growth to diagnose this growth problem and select one discriminating test."
+
+policy:
+  allow_implicit_invocation: true
