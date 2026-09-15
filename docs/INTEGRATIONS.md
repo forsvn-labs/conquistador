@@ -59,6 +59,9 @@ submission are explicit steps. Skill installation never enables a schedule, webh
 agent. Select a model and its billing limits before running a job.
 
 Use an isolated owner and data directory. The Eve host has separate worker and operator authority.
+The trusted host configuration binds those access credentials to the expected Eve origin. The client
+rejects a different destination before sending credentials. Moving the service requires explicit
+configuration and credential rotation.
 Its upstream tools use Executor; it does not introduce another provider credential store. Keep the
 Executor endpoint reachable from the job host. A cloud job cannot assume access to a laptop's
 loopback gateway or private network.
@@ -81,6 +84,10 @@ and latest versions and never installs a package, edits a lockfile, changes a co
 new tool access. Any different release, including an older `latest` tag, requires review. A failed
 lookup remains unknown. Exit codes are 0 for matching releases, 1 for release review, and 2 for an
 unavailable check or invalid input. Release metadata does not establish compatibility or security.
+
+The report also lists development tools. A new major TypeScript release or Node type-definition
+release does not override this project's Node 24 requirement. Keep a tested toolchain until its
+migration is reviewed; a review-required report can be expected while those pins differ.
 
 The private repository includes a daily read-only release-watch workflow and optional host checks.
 Scheduled GitHub workflows run only after the workflow reaches the repository's default branch

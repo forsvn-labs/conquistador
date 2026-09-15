@@ -15,11 +15,18 @@ output, human acceptance, rights disposition and release authority require separ
   the existing catalog authority path; arbitrary provider dispatch remains unavailable.
 - Added an optional Eve app using canonical skills and explicit owner/session commands. Worker and
   operator access are separate. Provider tools require approval through the configured Executor
-  route. Native verification remains in progress on the local adoption branch.
+  route. Credential rotation invalidates the previous gateway binding in both adapters.
 - Added exact upstream pins, Bun lockfiles, a read-only npm release checker, daily release-watch CI,
   and optional installed-package/security checks. Updates require review and do not expand grants.
 - Documented credential custody, service ownership, update policy, and the distinction between
   local package checks and live account evidence. No remote activation or release has occurred.
+- Bound Eve access credentials to a trusted configured origin. Missing or mismatched destinations
+  fail before credential transmission; origin migration requires explicit configuration and rotation.
+- Passed Node 24.21.0 build and all 606 default tests, plus 22 Executor and 13 Eve source tests,
+  prepared-app checks, frozen installs, native builds, and clean dependency audits. Actual local
+  Executor discovery and Eve HTTP authentication checks passed without provider calls or model jobs.
+  Eve 0.55.0 and Executor 1.6.8 matched current npm releases. Toolchain major updates remain flagged
+  for review. Live account, model, approval, and crash-recovery acceptance remain outstanding.
 
 ## Unreleased master-agent execution
 

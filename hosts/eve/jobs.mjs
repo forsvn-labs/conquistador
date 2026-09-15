@@ -39,11 +39,12 @@ export async function prepareJob({ source = sourceDefault, destination, owner, m
   const skillFiles = await collect(skills);
   if (!skillFiles.includes(join('conquistador', 'SKILL.md'))) throw new Error('Canonical parent skill is missing.');
   // Stage bytes in memory before creating the destination. Only authored template
-  // files are copied; local dependencies, build state, tests and secrets never travel.
+  // files are copied; local dependencies, build state and secrets never travel.
   const templateFiles = ['package.json', 'identity.json', 'bun.lock', 'tsconfig.json', '.gitignore', 'client.mjs', 'README.md', 'test/policy.test.mjs', 'test/native.test.mjs',
     ...(await collect(join(template, 'agent'))).filter(p => !p.startsWith(`skills${sep}`)).map(p => join('agent', p))];
   const entries = [];
   for (const name of templateFiles) entries.push([name, await readFile(join(template, name))]);
+  const eveVersion = JSON.parse(entries.find(([name]) => name === 'package.json')[1].toString('utf8')).dependencies.eve;
   for (const name of skillFiles) entries.push([join('agent', 'skills', name), await readFile(join(skills, name))]);
   const hashes = Object.fromEntries(entries.filter(([p]) => p.startsWith(join('agent', 'skills') + sep))
     .map(([p, bytes]) => [p, createHash('sha256').update(bytes).digest('hex')]));
@@ -55,7 +56,7 @@ export async function prepareJob({ source = sourceDefault, destination, owner, m
     await writeFile(target, name === 'identity.json' ? JSON.stringify(identity, null, 2) + '\n' : bytes, { flag: 'wx', mode: 0o600 });
   }
   await writeFile(join(destination, 'conquistador-skills.json'), JSON.stringify({ source: 'canonical skills/', hashes }, null, 2) + '\n', { flag: 'wx', mode: 0o600 });
-  return { status: 'prepared', app: destination, owner, eve: '0.55.0', started: false,
+  return { status: 'prepared', app: destination, owner, eve: eveVersion, started: false,
     next: ['bun install --frozen-lockfile --ignore-scripts', 'bun run check', 'bun run build', 'Configure separate host credentials, then explicitly start the app.'] };
 }
 
@@ -66,7 +67,7 @@ export const help = `Optional Eve durable jobs (Node 24)
   resume --app DIR --url ORIGIN --session ID --message-file FILE
 
 prepare writes files only. Other commands require an explicitly started owner-isolated
-Eve app and CONQUISTADOR_EVE_CALLER_TOKEN in the host environment. No approval API is
+Eve app, CONQUISTADOR_EVE_ORIGIN, and CONQUISTADOR_EVE_CALLER_TOKEN in the trusted host environment. No approval API is
 exposed here. An operator uses the prepared app's client.mjs respond command separately.
 `;
 

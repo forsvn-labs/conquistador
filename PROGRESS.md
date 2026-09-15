@@ -31,14 +31,37 @@ remain usable within their policies; the catalog still requires exact audited op
   changing dependencies or grants. The daily GitHub release watch needs default-branch activation.
   Optional CI checks package compatibility and security advisories. No automatic upgrade is enabled.
 
-The Executor worker verified Node 24.21.0 build/tests, 21 optional client tests, frozen dependency
-installation, and a clean dependency audit. The client tests use the installed official MCP SDK
-with a synthetic loopback server. They do not prove a deployed Executor endpoint or provider account.
-Integrated verification and native Eve checks are still in progress for this local change.
+Verification on Node 24.21.0 and macOS arm64 passed:
+
+- The integrated build and all 606 default tests: 85 tooling, 291 runtime, 167 catalog, and 63
+  Eval Lab. The catalog check and explicitly synthetic local example also passed.
+- Executor frozen installation, syntax checks, 22 client tests, and dependency audit. A separate
+  installed Executor 1.6.8 process authenticated our client and exposed seven MCP tools. The check
+  invoked no tools or providers, stopped the process, verified endpoint closure, and removed its
+  temporary state. The GitHub callback still has no reviewed live binding in this adoption work.
+- Eve frozen installation, typecheck, 13 source tests, native build, and dependency audit. A prepared
+  canonical app also passed installation, typecheck, ten tests, and build. Its actual HTTP endpoints
+  accepted synthetic caller/operator credentials, denied unauthenticated access and caller approvals,
+  rejected unknown-session sends without creating replacements, and exposed no callback routes.
+  No model job was submitted. The local process was stopped.
+- The release checker reached the public npm registry. Eve 0.55.0, Executor 1.6.8, MCP SDK 1.30.0,
+  AI SDK 7.0.102, and just-bash 3.4.2 matched their latest releases on 2026-09-16. It correctly
+  reported newer major releases of TypeScript and Node type definitions for review. The tested
+  TypeScript 5.9.3 and Node 24 type pins remain intentional; the project still requires Node 24.
+
+Independent review covered the root command dispatcher, release monitor, optional workflows, and
+Eve credential/action boundaries. The reviewer rechecked the origin fix with no further findings.
+Credential rotation now invalidates the old gateway binding. The GitHub callback must be recreated;
+Eve changes its connection identity and rejects configuration changes during a turn.
+Eve clients also bind credentials to a trusted configured origin and reject mismatches before
+network access. Twenty-four negative origin cases made zero fetch calls; valid bound wrapper calls
+reached the real local HTTP endpoint. This closes the initial-destination leak found in review.
+The optional GitHub Actions jobs have not run on this local branch. Local checks do not establish Linux support,
+provider-account access, model quality, or durable crash recovery.
 
 Live dogfooding still needs an approved Executor endpoint, scoped bearer, provider account/policies,
 and reviewed operation binding. Eve also needs an operator-owned service, selected model, budget,
-and observed approval/recovery behavior. No live call, model turn, deployment, or release is claimed
+and observed approval/recovery behavior. No third-party provider call, model turn, deployment, or release is claimed
 by this adoption work. See [integration setup](docs/INTEGRATIONS.md).
 
 ### Existing product behavior
@@ -63,7 +86,7 @@ annotation consumer. Run artifacts and audit state still persist when automatic 
 
 ## Verification
 
-The current execution slice has actual BB evidence: two specialist contexts, one integration
+The preceding master-agent execution slice has actual BB evidence: two specialist contexts, one integration
 context and a separate review context completed a draft. The reviewer bound its findings to the
 exact integrated artifact. An earlier run requested revision; the final run had no material draft
 findings. A separate same-context run completed with
