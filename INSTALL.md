@@ -4,9 +4,10 @@ Choose a skill install for everyday use. Choose a plugin if you want your host's
 and, in Claude Code, the native Conquistador agent. Both include all 38 outcome methods.
 The optional runtime is a separate choice for durable playbooks and MCP.
 
-Version 0.1.0 is currently unpublished. Use a fresh extracted distribution for the local commands
-below. The intended GitHub URL still needs publication of this source; remote commands in this
-page are explicitly for use after that step. No npm registry package or hosted service is claimed.
+Version 0.1.0 is a private dogfood build. Use a fresh extracted distribution for the local commands
+below. Remote installation of this build is not configured, and public publication is deferred.
+The npm publication guard does not prevent local ZIP or tarball installation. See the
+[dogfood guide](docs/DOGFOOD.md) for the first real tasks and private feedback capture.
 
 ## Let your coding agent do the setup
 
@@ -39,12 +40,6 @@ Agent names include `claude-code`, `codex`, `cursor`, `opencode`, `github-copilo
 and `pi`. These commands install into the current project. Leave out `--yes` to review the CLI's
 choices. `DO_NOT_TRACK=1` disables the third-party installer's telemetry.
 
-After this source is published at the intended repository, the short command will be:
-
-```sh
-DO_NOT_TRACK=1 npx skills add forsvn-labs/conquistador --skill conquistador --copy
-```
-
 The root `SKILL.md` forwards to the authored parent in `skills/conquistador/`. The complete public
 bundle travels with it, so every method stays available. The agent loads only relevant methods.
 Do not select the nested `skills/conquistador` directory alone or use `--full-depth` for this install.
@@ -70,7 +65,6 @@ claude plugin marketplace add /absolute/path/conquistador-plugin
 claude plugin install conquistador@conquistador
 ```
 
-After repository publication, replace the marketplace path with `forsvn-labs/conquistador`.
 In Claude Code, use `/conquistador:conquistador` for the parent skill. To start its native agent:
 
 ```sh
@@ -94,7 +88,6 @@ codex plugin marketplace add /absolute/path/conquistador-plugin
 codex plugin add conquistador@conquistador
 ```
 
-After repository publication, replace the marketplace path with `forsvn-labs/conquistador`.
 Select Conquistador through the host's plugin/skill controls. The repo includes
 `.agents/plugins/marketplace.json`, `.codex-plugin/plugin.json` and the complete method library.
 The portable JSON agent contracts are not native Codex agents. See

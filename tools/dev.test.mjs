@@ -10,7 +10,7 @@ function fixture() {
   const root = mkdtempSync(join(tmpdir(), 'public source test '));
   const git = (...args) => execFileSync('git', ['-C', root, ...args], { stdio: 'pipe' });
   git('init', '-q'); git('config', 'user.name', 'Local Fixture'); git('config', 'user.email', 'fixture@example.invalid');
-  writeFileSync(join(root, 'package.json'), JSON.stringify({name:'@forsvn/conquistador',version:'0.1.0',files:['README.md'],scripts:{prepack:'exit 71'}}));
+  writeFileSync(join(root, 'package.json'), JSON.stringify({name:'@forsvn/conquistador',version:'0.1.0',private:true,files:['README.md'],scripts:{prepack:'exit 71'}}));
   writeFileSync(join(root, 'README.md'), '# Synthetic package fixture\n');
   writeFileSync(join(root, '.gitignore'), 'dist/\n');
   git('add', '.'); git('commit', '-qm', 'synthetic source fixture');

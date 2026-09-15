@@ -4,9 +4,11 @@ For a complete product checkout, use the instructions below. A portable-only plu
 skills and documentation; its host loads the skill contracts and does not run these development
 commands.
 
-This is the editable public product source. Read README.md, CONTRIBUTING.md, INSTALL.md, and the
+This is the editable product source, kept private for dogfooding. Read README.md, CONTRIBUTING.md, INSTALL.md, and the
 relevant module README before changing behavior. Node 24 and npm are the supported local toolchain.
 
+- Keep this repository private. Do not push, publish, change visibility or remove the npm private
+  guard without the user's explicit authorization. Local commits and private packages are allowed.
 - `skills/<outcome>/` owns an independently usable method. `skills/conquistador/` owns parent routing.
 - `runtime/`, `catalog/`, and `evals/` own runner, typed tools, and evidence contracts.
 - `hosts/` and `agents/` contain installation contracts; `tools/` contains local development helpers.

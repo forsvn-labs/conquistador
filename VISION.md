@@ -18,7 +18,7 @@ Use Lavish AXI for visual previews and annotation through the coding-agent host.
 artifacts canonical. Review feedback, approved private memory and opt-in public issue submission
 have separate authority. Conquistador does not need its own preview UI.
 
-The editable source identifies as 0.1.0 and remains unbound and unpublished. Local packaging does
+The editable source identifies as 0.1.0 and remains private for dogfooding, unbound and unpublished. Local packaging does
 not supply live host evidence, output quality, rights approval, or release authorization.
 
 Proactive host events are opt-in. Local reminders can direct an active host back to Conquistador; they do not create background services, schedules or external action authority.
@@ -26,3 +26,6 @@ Proactive host events are opt-in. Local reminders can direct an active host back
 Conquistador should install through the user's existing skill or plugin manager. One entry point owns routing; native adapters load the same authored methods instead of creating parallel behavior.
 
 Routine environment setup belongs to the agent. Users ask for outcomes; Conquistador prepares only the tools needed and continues within the host's permissions.
+
+Prioritize evidence from real use now. Keep public distribution and the landing page deferred until
+the user explicitly chooses to release. Preserve the product/private-knowledge separation.

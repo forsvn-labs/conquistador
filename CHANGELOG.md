@@ -3,7 +3,10 @@
 No public release is claimed. These entries describe implemented source awaiting acceptance.
 See [VERSIONS.md](VERSIONS.md) for independent product and method versions.
 
-## 0.1.0, unpublished
+## 0.1.0, private dogfood
+
+- Kept distribution private for dogfooding, added the npm publication guard and removed the public publish default.
+- Added a private dogfood guide; deferred remote/public installation and public feedback submission.
 
 - Root skills.sh entry point carries the full method library, fixing partial parent-only installations.
 - Repo-local Claude and Codex marketplaces, Agent Plugins 1.0.0 validation and a native Claude agent.

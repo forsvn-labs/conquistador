@@ -1,6 +1,7 @@
 # Implementation status
 
-The source is editable and locally packageable as 0.1.0. It is unbound and unpublished.
+The source is editable and locally packageable as private dogfood version 0.1.0. It is unbound
+and unpublished. The root package now blocks npm publication; public release is deferred.
 
 Implemented interfaces include independently installable skills, parent routing, host/agent
 contracts, owned install/upgrade/remove, compiled Node 24 runtime, structured chat, narrow MCP,
@@ -33,3 +34,8 @@ future work; the public learning guide describes a user-approved host workflow.
 Installation now includes a root skill for the complete bundle, repo-local Claude/Codex marketplaces, Agent Plugins 1.0.0 metadata and one native Claude agent. The local plugin installer includes these files. Portable squad prose moved out of native agent discovery. The default test command validates metadata and installed paths. Actual host/model activation and public distribution remain separate checks.
 
 The parent method is now 2.4.3 and owns on-demand prerequisite setup. Lavish instructions use pinned Bun/npm execution instead of a manual global install, set its telemetry opt-out, and retain the same launcher/state through the preview session. This is host-executed guidance; it does not add a universal installer or background service.
+
+The current handoff is private local use. Dogfood guidance covers actual host activation, real
+deliverables, Lavish annotations and private corrections. CI has read-only repository permissions
+and no publish job. The product and prior source-history repositories remain separate; do not
+assume a historical remote contains this build. No repository mutation or push is part of this handoff.

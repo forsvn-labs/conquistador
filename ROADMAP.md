@@ -1,27 +1,22 @@
 # Product roadmap
 
-The implemented source includes the skill library, parent and squad contracts, persistent local
-installation, served runner, structured chat, MCP, typed operation bridge, and local Eval Lab SDK.
+The current phase is private dogfooding of version 0.1.0. Packaging is complete for local use.
+Keep the repository private and retain the npm publication guard. Public publication, marketplace
+listing and the landing page are deferred until the user chooses to release.
 
-Next work is to validate useful outputs through actual authorized model/provider connections,
-exercise the supported host and agent execution paths, obtain human feedback on real work, and
-resolve release rights and acceptance requirements. Improve methods based on observed gaps while
-keeping evidence provenance and private information boundaries intact.
+Use Conquistador on real tasks in one coding-agent host first. Verify initial skill/plugin
+activation, useful parent routing, complete deliverables, automatic local tool setup and the
+Lavish annotation/revision loop. Record concrete failures privately and fix those before adding
+more platforms or features.
 
-The public repository supports local build, tests and unbound packaging now. A successful local
-package is not a published release. Hosted services, arbitrary bot imports and broader scheduling
-are separate future work; they are not implied by the current local interfaces.
+The skill library, native plugin metadata, Claude agent, portable roles, owned installer and
+optional Node runtime/MCP/catalog/Eval modules are implemented. Runtime playbooks cover their
+declared graphs; skill availability does not make every method an executable workflow.
 
-The unified entry-point package now bundles all outcome methods. Validate named coding-agent discovery, host event activation and real outcomes next. Publish installation URLs only after authenticated repository setup and release authorization; do not advertise experimental import contracts as native services.
+Learning remains a user-approved private workflow. Automatic promotion is disabled, and automatic
+cross-run retrieval is absent. Proactive helpers require opt-in host events. Validate those host
+behaviors before making unattended or improvement-over-time claims.
 
-Lavish preview instructions now travel with the parent and installed packages. Validate actual
-human annotation and agent resumption in each supported host. Extend learning with reviewed,
-project-scoped facts and observed outcomes before adding automatic retrieval or a shared service.
-Any public feedback contribution stays explicitly selected and consented.
-
-Automatic learning promotion is disabled until separate persistence consent is implemented. Keep
-existing records accessible to explicit state/export operations while adding that boundary.
-
-The root skills.sh entry point, Agent Plugins manifest, Claude/Codex marketplaces and native Claude agent are implemented. Verify actual CLI installs from clean artifacts, then validate native host activation separately. Public URL installation requires publication of the reviewed source.
-
-Use package-manager execution caches for auxiliary CLIs and existing project tooling for project dependencies. Validate each added tool recipe through actual invocation. Keep account access and paid/external actions separate from local setup.
+After dogfooding, review observed results, remaining quality/rights/authority requirements and the
+repository history plan. Any public release needs an explicit decision and verification against
+its exact source and artifacts. Preserve historical evidence as historical.

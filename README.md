@@ -1,5 +1,7 @@
 # Conquistador 0.1.0
 
+Private dogfood build. Start with [the dogfood guide](docs/DOGFOOD.md).
+
 Ask `/conquistador` for an outcome. Conquistador selects the relevant methods, produces the work,
 reviews it, and helps decide the next step. It includes 38 outcome capabilities for product,
 research, marketing, growth, creative work, engineering and review.
@@ -14,8 +16,8 @@ Install with the [skills CLI](https://www.skills.sh/docs) from a fresh extracted
 DO_NOT_TRACK=1 npx skills add /absolute/path/extracted-conquistador --skill conquistador --copy
 ```
 
-Choose your coding agent when prompted. The root skill includes every method. After public repository
-setup, the source argument can be `forsvn-labs/conquistador`. That remote command is not available yet.
+Choose your coding agent when prompted. The root skill includes every method. Use the supplied
+private distribution for now; remote installation of this build is not configured.
 [Installation](INSTALL.md) also covers Claude/Codex plugins, a native Claude agent, Agent Plugins
 1.0.0, compact offline staging and the optional runtime.
 
@@ -57,15 +59,16 @@ learning are not implemented.
 
 ## Distribution status
 
-This source is MIT and packageable as version 0.1.0. It is currently unpublished. No npm registry
-package, hosted service, native app-store listing or verified Eve/Grok integration is offered.
+This source is MIT and packageable as version 0.1.0. It stays private while we dogfood it.
+The root package sets `private: true` to block npm publication. No registry package, public release,
+hosted service, native app-store listing or verified Eve/Grok integration is offered.
 The optional runtime executes its declared playbooks; it does not turn every skill into an
-automated workflow. Local tests establish implementation behavior, not live-provider quality or
-human release acceptance.
+automated workflow. Local checks do not establish real-task quality or human acceptance.
 
-Intended public source: [forsvn-labs/conquistador](https://github.com/forsvn-labs/conquistador).
-Publication of this source at that URL is pending. The private source-history archive and landing
-repository are not dependencies. No private workspace is needed to use or develop this product.
+Repository identity: [forsvn-labs/conquistador](https://github.com/forsvn-labs/conquistador).
+Use the supplied local package until this build is synchronized to a verified private remote.
+The source-history archive and landing repository are not installation dependencies. Keep dogfood
+notes and customer material in your private project, outside the installed product.
 
 For development, use Node 24 and run `npm run bootstrap`, `npm run build`, and `npm test`.
 [CONTRIBUTING.md](CONTRIBUTING.md) covers packaging; [AGENTS.md](AGENTS.md) covers contributions.

@@ -1,4 +1,4 @@
-name: Public source checks
+name: Product checks
 on:
   pull_request:
   push:

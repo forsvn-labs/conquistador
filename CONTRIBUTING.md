@@ -38,6 +38,10 @@ to check plugin paths and metadata. These checks do not start a host or validate
 
 ## Package a local commit
 
+This phase is private dogfooding. Keep `package.json` marked `private: true`; local npm pack still
+works. Do not publish, remove that guard or change repository visibility without explicit approval.
+
+
 Run bootstrap/build/test, review generated changes, and commit the source and maintained output.
 Then:
 

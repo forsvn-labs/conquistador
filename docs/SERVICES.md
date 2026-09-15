@@ -58,9 +58,9 @@ telemetry or unsolicited feedback submission is included.
 
 ## Repository layout
 
-The intended public repository is [forsvn-labs/conquistador](https://github.com/forsvn-labs/conquistador).
-It contains everything needed to install, build and package the product. Remote publication is
-pending; the repository link is an intended destination until verified.
+The repository identity is [forsvn-labs/conquistador](https://github.com/forsvn-labs/conquistador).
+The product remains private during dogfooding. Use the supplied local distribution; this build's
+remote installation is not configured. [The dogfood guide](DOGFOOD.md) covers actual host use.
 
 Internal research, planning, provenance and source-history preservation belong outside this public
 repository. They are never runtime dependencies. The landing site is a separate project and does

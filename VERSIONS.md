@@ -1,6 +1,6 @@
 # Versions
 
-The editable public product and plugin manifests identify as **0.1.0**, unbound and unpublished.
+The product and plugin manifests identify as **0.1.0**, a private dogfood build, unbound and unpublished.
 Local build and package records do not establish release approval or a previously shipped version.
 
 Each skill declares its own `metadata.version` in `skills/<name>/SKILL.md`. Internal module and
