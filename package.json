@@ -19,6 +19,8 @@
     "conquistador": "runtime/bin/conquistador.js"
   },
   "files": [
+    "SKILL.md",
+    ".agents",
     ".claude-plugin",
     ".codex-plugin",
     "hosts",
