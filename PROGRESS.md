@@ -40,7 +40,7 @@ Executor-bound Connection in candidate-verification mode. These observations do 
 human acceptance, general output quality, sandboxed tools or supported provider status.
 
 The independent implementation review found and rechecked fixes for cancellation cleanup,
-child ownership, unknown spawn outcomes and exact Executor connection binding. The Node 24.12.0 build and all 592 default tests pass: 71 tooling, 291 runtime, 167 catalog and
+child ownership, unknown spawn outcomes and exact Executor connection binding. The Node 24.12.0 build and all 595 default tests pass: 74 tooling, 291 runtime, 167 catalog and
 63 Eval Lab. This includes ten orchestration checks, seven stack checks and twelve graph checks.
 The catalog check validates 17 operations; the synthetic local contract example also passes. Graph tests use synthetic judgments and explicitly preserve
 missing image/vision/data connections. Private task outputs and source provenance stay outside

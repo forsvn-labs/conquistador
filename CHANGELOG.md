@@ -21,7 +21,7 @@ output, human acceptance, rights disposition and release authority require separ
   draft review, plus a same-context fallback and successful bounded Executor metadata reads.
   None grants human acceptance or provider support.
 
-- Passed the Node 24.12.0 build and all 592 default tests: 71 tooling, 291 runtime, 167 catalog
+- Passed the Node 24.12.0 build and all 595 default tests: 74 tooling, 291 runtime, 167 catalog
   and 63 Eval Lab, plus the 17-operation catalog check and synthetic local example.
 
 ## Unreleased master-agent slice
