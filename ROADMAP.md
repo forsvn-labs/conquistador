@@ -1,22 +1,32 @@
 # Product roadmap
 
-The current phase is private dogfooding of version 0.1.0. Packaging is complete for local use.
-Keep the repository private and retain the npm publication guard. Public publication, marketplace
-listing and the landing page are deferred until the user chooses to release.
+## Now: private dogfooding
 
-Use Conquistador on real tasks in one coding-agent host first. Verify initial skill/plugin
-activation, useful parent routing, complete deliverables, automatic local tool setup and the
-Lavish annotation/revision loop. Record concrete failures privately and fix those before adding
-more platforms or features.
+Version 0.1.0 is packaged for local use. Keep the repository private and retain the npm publication
+guard. Start with [one real task](docs/DOGFOOD.md) in an existing coding-agent host.
 
-The skill library, native plugin metadata, Claude agent, portable roles, owned installer and
-optional Node runtime/MCP/catalog/Eval modules are implemented. Runtime playbooks cover their
-declared graphs; skill availability does not make every method an executable workflow.
+1. Verify activation, appropriate parent routing and a finished deliverable.
+2. Check on-demand tool setup and the Lavish annotation/revision loop.
+3. Record concrete failures privately and fix them before adding more platforms or features.
 
-Learning remains a user-approved private workflow. Automatic promotion is disabled, and automatic
-cross-run retrieval is absent. Proactive helpers require opt-in host events. Validate those host
-behaviors before making unattended or improvement-over-time claims.
+The bundled methods, native plugin metadata, Claude agent, portable roles and installer are
+implemented. Optional runtime/MCP/catalog/Eval modules are available when a task needs them.
+Runtime playbooks execute their declared graphs; bundled skill availability does not make every
+method an executable runtime workflow.
 
-After dogfooding, review observed results, remaining quality/rights/authority requirements and the
-repository history plan. Any public release needs an explicit decision and verification against
-its exact source and artifacts. Preserve historical evidence as historical.
+## Next: validate host behavior
+
+Test native agent execution and opt-in proactive events in the selected host. Automatic learning
+promotion is disabled. A separate persistence-consent API and project-scoped cross-run retrieval
+remain future work. Follow [docs/LEARNING.md](docs/LEARNING.md) and obtain approval for each entry
+and destination before persisting private learning. Do not claim automatic improvement over time.
+
+Keep public feedback at local drafting during private dogfooding. Preserve its destination,
+redaction and exact-consent requirements for any later submission.
+
+## Deferred: public release
+
+Public distribution, marketplace listing and landing work require a later decision. Review real
+outcomes, rights, provider/human evidence and release authority against the exact source and
+artifacts before publishing. Pushes and publication require explicit user authorization.
+Preserve historical evidence under its original scope.

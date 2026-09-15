@@ -1,37 +1,37 @@
 # Changelog
 
-No public release is claimed. These entries describe implemented source awaiting acceptance.
-See [VERSIONS.md](VERSIONS.md) for independent product and method versions.
+No public release is claimed. See [VERSIONS.md](VERSIONS.md) for independent product and method
+versions. Verification establishes the stated local scope; live provider operation, useful model
+output, human acceptance, rights disposition and release authority require separate evidence.
+
+## Unreleased documentation
+
+- Consolidated VISION, ROADMAP, PROGRESS and CHANGELOG around private dogfooding and real-use
+  validation. Kept the packaged `def3e91` build, artifacts and installed copies unchanged.
 
 ## 0.1.0, private dogfood
 
-- Kept distribution private for dogfooding, added the npm publication guard and removed the public publish default.
-- Added a private dogfood guide; deferred remote/public installation and public feedback submission.
-
-- Root skills.sh entry point carries the full method library, fixing partial parent-only installations.
-- Repo-local Claude and Codex marketplaces, Agent Plugins 1.0.0 validation and a native Claude agent.
-- Plugin staging includes discovery metadata; portable squad prose no longer appears as an unintended Claude agent.
-- Installation guide covers skills CLI, native plugins, portable roles and clean local source requirements.
-
-- Parent-owned Lavish AXI preview and annotation handoff, optional CLI setup, and explicit separation of review, memory and public feedback consent.
-- Removed automatic run-completion learning writes that ignored the memory-off setting and treated content acceptance as learning consent. Existing data and explicit state operations remain available.
-- One recommended Conquistador entry point with all 38 outcome methods bundled; parent routing includes engineering on demand.
-- Complete single-agent method installation and corrected contained host/agent paths and product versions.
-- Opt-in local host-event reminders, with no network calls, background scheduler or external action authority.
-- Installation instructions and a services matrix distinguish coding-agent use, role packages, MCP/runtime and experimental host imports.
-
-- Editable public source with root bootstrap, build, tests, read-only CI, and deterministic local
-  ZIP plus npm packaging from a clean Git commit. Local package records remain unbound.
-- Independently usable original skills, default parent routing, host and agent/squad contracts,
-  and persistent installation with edited-tree protection.
-- Node 24 runtime with structured chat, narrow MCP, owned artifact reads, HTTP review/action
-  boundaries, and a host-injected typed operation bridge with durable dispatch intent.
-- Typed catalog contracts and public Eval Lab SDK examples using explicit synthetic fixtures.
-- Opt-in feedback drafting with redaction, exact public payload consent, and manual fallback.
-- A contained original Conquistador mascot shared by the plugin composer icon and logo.
-
-Live host/provider operation, useful model output, human acceptance, rights disposition, and release
-authority remain separate requirements. An operator-attested receipt is labeled as such; uncertain
-dispatch pauses without automatic replay. No local test count establishes those external facts.
-
-Parent 2.4.3 handles routine prerequisite setup through the host. Added pinned cached Lavish launchers, removed the manual-install handoff, and disabled Lavish command telemetry in the documented invocation. Initial host activation and credentials remain distinct.
+- Added the npm publication guard, removed the public publish default and added DOGFOOD guidance.
+  Deferred public distribution, public feedback sending and landing work.
+- Bundled all 38 outcome methods behind `/conquistador`, including explicit engineering routing.
+  Parent 2.4.3 prepares routine prerequisites through the host.
+- Added a complete root skills.sh entry, Claude/Codex marketplace metadata, Agent Plugins
+  validation and one native Claude agent. Removed unintended native discovery of squad prose.
+- Added persistent install/upgrade/remove with edited-tree protection. Repaired contained method
+  paths for single-agent and squad packages and restricted the advisor to review work.
+- Added Lavish AXI preview/annotation guidance with pinned cached Bun/npm launchers and command
+  telemetry opt-out. Kept preview feedback, private memory and public disclosure separate.
+- Removed automatic run-completion learning writes that ignored memory-off and treated content
+  acceptance as learning consent. Preserved existing data, run artifacts and explicit state APIs.
+- Added opt-in static host-event advice without network calls, automatic hook registration or a
+  background scheduler.
+- Added self-contained bootstrap/build/test commands, read-only CI and local ZIP/npm packaging
+  from a clean Git commit. Local package records remain unbound and unpublished.
+- Added the compiled Node 24 runtime, supported playbook chat, narrow MCP, owned artifact reads,
+  separate HTTP review/action authority and a host-injected typed operation bridge. Durable
+  dispatch intent prevents automatic replay of uncertain operations.
+- Added typed catalog contracts and Eval SDK examples using explicit synthetic fixtures.
+- Added opt-in feedback drafting with redaction, exact public payload consent and manual fallback.
+- Replaced source-derived methods with original procedures and removed private narratives and
+  historical evidence from the distribution. Preserved applicable licenses and notices.
+- Added a contained Conquistador mascot shared by the plugin composer icon and logo.

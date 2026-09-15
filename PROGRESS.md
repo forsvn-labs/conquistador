@@ -1,41 +1,49 @@
 # Implementation status
 
-The source is editable and locally packageable as private dogfood version 0.1.0. It is unbound
-and unpublished. The root package now blocks npm publication; public release is deferred.
+Version 0.1.0 is packaged for private local dogfooding. Parent method version is 2.4.3. The root
+npm package has `private: true`; CI only builds and tests with read-only repository permissions.
+Public distribution is deferred. The packaged build remains `def3e91`; this status consolidation
+does not rebuild its artifacts or update installed copies.
 
-Implemented interfaces include independently installable skills, parent routing, host/agent
-contracts, owned install/upgrade/remove, compiled Node 24 runtime, structured chat, narrow MCP,
-artifact reads, HTTP review/action boundaries, and an injected typed catalog bridge. The optional
-feedback skill prepares redacted public issue drafts and requires exact consent for sending.
+## Implemented
 
-Default build/tests use included source, schemas and synthetic fixtures. Eval Lab's local SDK
-example does not call a model or approve a candidate. Container and npm installation are local
-execution paths. Source test results do not establish real provider support or native host quality.
+| Area | Available behavior |
+| --- | --- |
+| Entry point | `/conquistador` selects from all 38 outcome methods, including engineering requests |
+| Installation | Complete root skill bundle, owned install/upgrade/remove with edited-tree protection, skills CLI layout, Claude/Codex marketplaces and Agent Plugins 1.0.0 metadata |
+| Agents | One native Claude agent and portable single-agent/squad contracts; the squad advisor has a review-only role |
+| Task setup and previews | Host-managed prerequisites and pinned cached Lavish AXI launchers with command telemetry opt-out |
+| Proactive advice | Opt-in static reminders for session-start, before-delivery and results-updated; no automatic hook registration or scheduler |
+| Optional runtime | Compiled Node 24 CLI, supported playbook chat, narrow MCP, owned artifact reads and separate HTTP review/action authority |
+| Tools and evaluation | Host-injected typed operation bridge, catalog contracts and local Eval SDK examples with explicit synthetic fixtures |
+| Learning and feedback | Existing state/export APIs, no implicit learning promotion, and opt-in redacted feedback drafts with exact payload consent |
 
-Known limits include missing complete live host/model/human acceptance, unresolved release rights
-and authority work, and no supported reconciliation API for an ambiguously dispatched operation.
-Such operations pause; the runtime does not automatically replay them. An imported action receipt
-is an operator attestation unless backed by separately observed provider evidence.
+See [INSTALL.md](INSTALL.md), [docs/SERVICES.md](docs/SERVICES.md),
+[docs/PREVIEW.md](docs/PREVIEW.md) and [docs/LEARNING.md](docs/LEARNING.md) for use and limits.
+The preview instructions are host procedures; they do not add a runtime launcher or automatic
+annotation consumer. Run artifacts and audit state still persist when automatic learning is off.
 
-Run the commands in CONTRIBUTING.md for current local results. Keep actual verification records
-bound to the exact tested commit and artifacts. Do not relabel local fixtures as release evidence.
+## Verification
 
-The recommended install is now a single Conquistador skill with a complete nested library. Parent routing includes explicit engineering requests. Single-agent installs carry their declared methods, and host/agent manifest paths resolve inside staged packages. An opt-in local helper produces session-start, before-delivery and results-updated reminders without network access or writes. Native hook activation and live model behavior remain unverified.
+The preceding implementation passed the Node 24 build and 518 default tests. Installation checks
+exercised the skills CLI on seven coding-agent targets. Local Bun/npm probes exercised pinned
+Lavish sessions without changing project dependencies. These checks do not establish native
+agent activation, human annotation or useful model output.
 
-The parent now directs visual review to the optional Lavish AXI CLI. Every install includes its
-setup instructions. This is a host procedure, not a runtime launcher, automatic annotation consumer
-or durable learning service. Preview feedback does not authorize memory or public submission.
+The final private-packaging change passed twelve focused packaging/install/plugin tests. ZIP and
+npm checks confirmed the publication guard and required files. Extracted plugin validation, local
+skill installation and clean-prefix offline npm installation passed. Earlier full-suite and
+Docker results remain bound to their tested commits; they were not rerun for the final private
+packaging change. Follow [CONTRIBUTING.md](CONTRIBUTING.md) to verify a new source revision.
 
-The runtime no longer promotes completed runs into a learning ledger. Both supported memory-mode
-spellings preserve existing data and leave automatic promotion disabled. Run artifacts and audit
-state still persist. A separate exact-entry/destination consent API and cross-run retrieval remain
-future work; the public learning guide describes a user-approved host workflow.
+## Remaining limits and next use
 
-Installation now includes a root skill for the complete bundle, repo-local Claude/Codex marketplaces, Agent Plugins 1.0.0 metadata and one native Claude agent. The local plugin installer includes these files. Portable squad prose moved out of native agent discovery. The default test command validates metadata and installed paths. Actual host/model activation and public distribution remain separate checks.
+Use [docs/DOGFOOD.md](docs/DOGFOOD.md) to assess real tasks, routing and Lavish revisions. Complete
+host/model/provider/human acceptance remains unverified. Portable role contracts do not establish
+native support in every host. Proactive events need explicit host configuration.
 
-The parent method is now 2.4.3 and owns on-demand prerequisite setup. Lavish instructions use pinned Bun/npm execution instead of a manual global install, set its telemetry opt-out, and retain the same launcher/state through the preview session. This is host-executed guidance; it does not add a universal installer or background service.
-
-The current handoff is private local use. Dogfood guidance covers actual host activation, real
-deliverables, Lavish annotations and private corrections. CI has read-only repository permissions
-and no publish job. The product and prior source-history repositories remain separate; do not
-assume a historical remote contains this build. No repository mutation or push is part of this handoff.
+Both memory-mode spellings leave automatic learning promotion disabled. A separate consent API
+and cross-run retrieval are absent. Public feedback sending stays deferred during private use.
+Ambiguous dispatch pauses without automatic replay; there is no supported reconciliation API yet.
+Imported action receipts remain operator attestations unless separate observed evidence supports
+them. Rights disposition and release authority remain work for a later public release.

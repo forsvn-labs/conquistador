@@ -1,31 +1,28 @@
 # Product principles
 
-Conquistador is one product entry point, `/conquistador`. Users ask for an outcome; the parent owns
-routing, composition, delivery and review across product, marketing, growth and engineering. The
-default skill install includes the full method library. Individual skills and role packages remain
-advanced options rather than prerequisites users must manage.
+Conquistador gives users one entry point, `/conquistador`, for product, research, marketing,
+growth, creative work, engineering and review. Users ask for an outcome. The parent selects the
+necessary methods and owns delivery within the user's scope. The default installation carries
+the complete library; separate skill or role packages are optional.
 
-Methods must be original, useful without a private workspace, and clear about their sources and
-limits. Runtime, typed catalog and Eval Lab are optional modules. Hosts supply models, credentials,
-connections and human decisions. The product must distinguish a local fixture, observed provider
-result, operator attestation and human acceptance. None substitutes for another.
+Use the user's existing coding agent and skill/plugin manager. Native adapters load the same
+methods. Conquistador prepares routine task tools on demand through the host, within its
+permissions. Hosts provide models, credentials, connections and human decisions. The runtime,
+typed catalog and Eval Lab are optional modules.
 
-Publishing, spending, external actions and public feedback disclosure remain explicitly authorized.
-Private content stays private. Feedback is opt-in, with redacted previews and exact-payload consent.
-No telemetry or automatic background collection is part of that feedback flow.
+Methods must be original, independently useful and clear about evidence and limits. Keep private
+knowledge, customer records and source history out of product source. Preserve required licenses
+and notices. Distinguish synthetic fixtures, observed provider results, operator attestations
+and human acceptance.
 
-Use Lavish AXI for visual previews and annotation through the coding-agent host. Keep source
-artifacts canonical. Review feedback, approved private memory and opt-in public issue submission
-have separate authority. Conquistador does not need its own preview UI.
+Use Lavish AXI through the host for previews and annotation; keep source artifacts canonical.
+No custom preview UI is planned. Host-event advice is opt-in. Publication, spend, external actions,
+reusable memory and feedback disclosure require their applicable authority. Review acceptance
+does not grant consent to persist learning or disclose private content.
+Feedback remains opt-in, with redacted previews and exact-payload consent. Its flow has no
+telemetry or automatic background collection.
 
-The editable source identifies as 0.1.0 and remains private for dogfooding, unbound and unpublished. Local packaging does
-not supply live host evidence, output quality, rights approval, or release authorization.
-
-Proactive host events are opt-in. Local reminders can direct an active host back to Conquistador; they do not create background services, schedules or external action authority.
-
-Conquistador should install through the user's existing skill or plugin manager. One entry point owns routing; native adapters load the same authored methods instead of creating parallel behavior.
-
-Routine environment setup belongs to the agent. Users ask for outcomes; Conquistador prepares only the tools needed and continues within the host's permissions.
-
-Prioritize evidence from real use now. Keep public distribution and the landing page deferred until
-the user explicitly chooses to release. Preserve the product/private-knowledge separation.
+Version 0.1.0 is for private dogfooding. Keep the repository private and judge the product through
+real tasks and corrections. Public distribution and the landing page are deferred until an
+explicit release decision. Local packages and passing tests do not establish useful model output
+or release approval. See [ROADMAP.md](ROADMAP.md) and [PROGRESS.md](PROGRESS.md).
