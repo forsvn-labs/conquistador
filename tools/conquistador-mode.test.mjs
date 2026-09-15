@@ -9,7 +9,13 @@ import { HOST_EVENTS, applyMode, handleHostEvent, hostSupport, inspectMode } fro
 
 const script = fileURLToPath(new URL('./conquistador-mode.mjs', import.meta.url));
 function invoke(args, options = {}) {
-  return spawnSync(process.execPath, [script, ...args], { encoding: 'utf8', timeout: 3000, ...options });
+  return spawnSync(process.execPath, [script, ...args], {
+    encoding: 'utf8',
+    timeout: 3000,
+    input: '',
+    stdio: ['pipe', 'pipe', 'pipe'],
+    ...options,
+  });
 }
 function project(t) {
   const dir = mkdtempSync(join(tmpdir(), 'mode project '));
@@ -35,6 +41,8 @@ test('enable maps host events, preserves unrelated settings, and disable leaves 
   const stored = JSON.parse(readFileSync(settings, 'utf8'));
   assert.deepEqual(Object.keys(HOST_EVENTS).sort(), ['before-delivery', 'results-updated', 'session-start']);
   assert.equal(stored.hooks.SessionStart[0].hooks[0].command.includes('--handle'), true);
+  assert.equal(stored.hooks.SessionStart[0].hooks[0].command.startsWith(`'${process.execPath}' `), true);
+  assert.equal(stored.hooks.SessionStart[0].hooks[0].command.includes(`'${script}'`), true);
   assert.equal(stored.hooks.Stop[0].hooks[0].command.includes('before-delivery'), true);
   assert.equal(stored.hooks.TaskCompleted[0].hooks[0].command.includes('results-updated'), true);
   assert.deepEqual(stored.hooks.PreToolUse, [{ hooks: [{ type: 'command', command: 'echo keep' }] }]);
@@ -49,13 +57,17 @@ test('enable maps host events, preserves unrelated settings, and disable leaves 
   assert.deepEqual(leftover.hooks.PreToolUse, [{ hooks: [{ type: 'command', command: 'echo keep' }] }]);
 });
 
-test('remove keeps similarly named unrelated hooks', t => {
+test('remove keeps another absolute script with the same basename', t => {
   const { dir, config, settings } = project(t);
+  const other = join(dir, 'other-install', 'conquistador-mode.mjs');
   mkdirSync(join(dir, '.claude'), { recursive: true });
+  mkdirSync(join(dir, 'other-install'));
+  writeFileSync(other, '// different installation\n');
+  const foreign = [process.execPath, other, '--handle', '--host', 'claude-code', '--event', 'before-delivery', '--config', config].join(' ');
   writeFileSync(settings, JSON.stringify({
     hooks: {
       Stop: [{ hooks: [
-        { type: 'command', command: 'node /tmp/other-conquistador-mode.mjs --handle --host claude-code --event before-delivery' },
+        { type: 'command', command: foreign },
         { type: 'command', command: "echo 'mention conquistador-mode.mjs --handle in prose'" },
       ] }],
     },
@@ -64,7 +76,7 @@ test('remove keeps similarly named unrelated hooks', t => {
   applyMode('remove', { host: 'claude-code', project: dir, config });
   const leftover = JSON.parse(readFileSync(settings, 'utf8'));
   assert.deepEqual(leftover.hooks.Stop[0].hooks.map(item => item.command), [
-    'node /tmp/other-conquistador-mode.mjs --handle --host claude-code --event before-delivery',
+    foreign,
     "echo 'mention conquistador-mode.mjs --handle in prose'",
   ]);
 });

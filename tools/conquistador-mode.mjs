@@ -1,5 +1,5 @@
-import { existsSync, lstatSync, mkdirSync, readFileSync, readSync, renameSync, rmSync, writeFileSync } from 'node:fs';
-import { basename, dirname, isAbsolute, join, resolve } from 'node:path';
+import { constants, closeSync, existsSync, lstatSync, mkdirSync, openSync, readFileSync, readSync, renameSync, rmSync, writeFileSync } from 'node:fs';
+import { dirname, isAbsolute, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { advisory, readConfig } from './proactive.mjs';
 
@@ -17,7 +17,6 @@ export const HOST_EVIDENCE = Object.freeze({
   nativeActivationVerified: false,
   executorVerified: false,
 });
-const MARKER = 'conquistador-mode.mjs';
 const EVENTS = Object.keys(HOST_EVENTS);
 const fail = message => { throw new Error(message); };
 const isObject = value => value !== null && typeof value === 'object' && !Array.isArray(value);
@@ -51,14 +50,22 @@ function ownedCommand(command) {
   if (typeof command !== 'string') return false;
   const tokens = [];
   for (const match of command.matchAll(/'([^']*)'|[^\s]+/g)) tokens.push(match[1] ?? match[0]);
-  if (!tokens.includes('--handle')) return false;
-  return tokens.some(token => basename(token) === MARKER);
+  return tokens.length === 9
+    && tokens[0] === process.execPath
+    && tokens[1] === script
+    && tokens[2] === '--handle'
+    && tokens[3] === '--host'
+    && tokens[4] === SUPPORTED_HOST
+    && tokens[5] === '--event'
+    && Object.hasOwn(HOST_EVENTS, tokens[6])
+    && tokens[7] === '--config'
+    && isAbsolute(tokens[8]);
 }
 
 function handler(event, configPath) {
   return {
     type: 'command',
-    command: [process.execPath, quote(script), '--handle', '--host', SUPPORTED_HOST, '--event', event, '--config', quote(configPath)].join(' '),
+    command: [quote(process.execPath), quote(script), '--handle', '--host', SUPPORTED_HOST, '--event', event, '--config', quote(configPath)].join(' '),
   };
 }
 
@@ -176,24 +183,33 @@ export function applyMode(action, options) {
 }
 
 function readStdinLimited() {
-  const fd = 0;
-  const bytes = Buffer.alloc(8192);
-  let length = 0;
+  let fd;
   try {
-    while (length < bytes.length) {
-      const count = readSync(fd, bytes, length, bytes.length - length, null);
-      if (!count) break;
-      length += count;
-    }
+    fd = openSync('/dev/fd/0', constants.O_RDONLY | constants.O_NONBLOCK);
   } catch {
     return {};
   }
-  if (!length) return {};
   try {
+    const bytes = Buffer.alloc(8192);
+    let length = 0;
+    while (length < bytes.length) {
+      let count;
+      try {
+        count = readSync(fd, bytes, length, bytes.length - length, null);
+      } catch (error) {
+        if (error.code === 'EAGAIN' || error.code === 'EWOULDBLOCK') break;
+        return {};
+      }
+      if (!count) break;
+      length += count;
+    }
+    if (!length) return {};
     const value = JSON.parse(new TextDecoder('utf-8', { fatal: true }).decode(bytes.subarray(0, length)));
     return isObject(value) ? value : {};
   } catch {
     return {};
+  } finally {
+    closeSync(fd);
   }
 }
 

@@ -86,8 +86,8 @@ test('missing restriction is a no-op; present restriction is automatic at the in
 test('knowledge handles accept kebab or scope:name; roots stay outside the product', t => {
   const dir = realpathSync(mkdtempSync(join(tmpdir(), 'knowledge roots ')));
   t.after(() => rmSync(dir, { recursive: true, force: true }));
-  const notes = join(dir, 'notes');
-  mkdirSync(notes);
+  mkdirSync(join(dir, 'notes'));
+  const notes = realpathSync(join(dir, 'notes'));
   const config = { schemaVersion: KNOWLEDGE_ROOTS_SCHEMA_VERSION, roots: { 'vault:notes': notes, playbook: notes } };
   assert.equal(resolveKnowledgeRoot('vault:notes', config, { productRoot: root }), notes);
   assert.equal(resolveKnowledgeRoot('playbook', config, { productRoot: root }), notes);

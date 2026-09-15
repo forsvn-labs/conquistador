@@ -12,7 +12,7 @@ test('the installed setup command works before runtime libraries or dependencies
   const temporary = realpathSync(mkdtempSync(join(tmpdir(), 'conquistador setup entry ')));
   try {
     const source = join(temporary, 'distribution');
-    for (const file of ['package.json', 'runtime/bin/conquistador.js', 'tools/setup.mjs']) {
+    for (const file of ['package.json', 'runtime/bin/conquistador.js', 'tools/setup.mjs', 'tools/domain-package.mjs']) {
       const target = join(source, file);
       mkdirSync(dirname(target), { recursive: true });
       copyFileSync(join(root, file), target);
