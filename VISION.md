@@ -7,8 +7,9 @@ the complete library; separate skill or role packages are optional.
 
 Use the user's existing coding agent and skill/plugin manager. Native adapters load the same
 methods. Conquistador prepares routine task tools on demand through the host, within its
-permissions. Hosts provide models, credentials, connections and human decisions. The runtime,
-typed catalog and Eval Lab are optional modules.
+permissions. Hosts provide models, credentials, connections and human decisions. Compact installs include usage and review guides so users can start work in their host.
+The complete distribution supplies installation management and optional development commands.
+The runtime, typed catalog and Eval Lab are optional modules.
 
 Methods must be original, independently useful and clear about evidence and limits. Keep private
 knowledge, customer records and source history out of product source. Preserve required licenses

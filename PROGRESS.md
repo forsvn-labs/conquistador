@@ -2,15 +2,16 @@
 
 Version 0.1.0 is packaged for private local dogfooding. Parent method version is 2.4.3. The root
 npm package has `private: true`; CI only builds and tests with read-only repository permissions.
-Public distribution is deferred. The packaged build remains `def3e91`; this status consolidation
-does not rebuild its artifacts or update installed copies.
+Public distribution is deferred. Final source packaging binds the integrated documentation and
+installer to an exact clean commit in `assembly.json`. Earlier artifacts retain their original
+source identity and are not rebuilt. Installing a new package does not update existing copies.
 
 ## Implemented
 
 | Area | Available behavior |
 | --- | --- |
 | Entry point | `/conquistador` selects from all 38 outcome methods, including engineering requests |
-| Installation | Complete root skill bundle, owned install/upgrade/remove with edited-tree protection, skills CLI layout, Claude/Codex marketplaces and Agent Plugins 1.0.0 metadata |
+| Installation | Complete root skill bundle, owned install/upgrade/remove with edited-tree protection, contained usage guides in each staged mode, skills CLI layout, Claude/Codex marketplaces and Agent Plugins 1.0.0 metadata |
 | Agents | One native Claude agent and portable single-agent/squad contracts; the squad advisor has a review-only role |
 | Task setup and previews | Host-managed prerequisites and pinned cached Lavish AXI launchers with command telemetry opt-out |
 | Proactive advice | Opt-in static reminders for session-start, before-delivery and results-updated; no automatic hook registration or scheduler |
@@ -25,16 +26,17 @@ annotation consumer. Run artifacts and audit state still persist when automatic 
 
 ## Verification
 
-The preceding implementation passed the Node 24 build and 518 default tests. Installation checks
+Earlier implementation checks passed the Node 24 build and 518 default tests. Installation checks
 exercised the skills CLI on seven coding-agent targets. Local Bun/npm probes exercised pinned
 Lavish sessions without changing project dependencies. These checks do not establish native
 agent activation, human annotation or useful model output.
 
-The final private-packaging change passed twelve focused packaging/install/plugin tests. ZIP and
-npm checks confirmed the publication guard and required files. Extracted plugin validation, local
-skill installation and clean-prefix offline npm installation passed. Earlier full-suite and
-Docker results remain bound to their tested commits; they were not rerun for the final private
-packaging change. Follow [CONTRIBUTING.md](CONTRIBUTING.md) to verify a new source revision.
+The final integration adds a staged usage-guide check for all seven installer mode families,
+including contained Markdown links and refusal to upgrade or remove edited usage docs. CI includes
+`dogfood/0.1.0` and `main` pushes and keeps read-only permissions. Follow
+[CONTRIBUTING.md](CONTRIBUTING.md) for complete-distribution build, test and package commands.
+Final artifact checks are recorded separately against the exact source commit; previous Docker
+and host checks do not transfer to a new revision.
 
 ## Remaining limits and next use
 

@@ -4,10 +4,15 @@ No public release is claimed. See [VERSIONS.md](VERSIONS.md) for independent pro
 versions. Verification establishes the stated local scope; live provider operation, useful model
 output, human acceptance, rights disposition and release authority require separate evidence.
 
-## Unreleased documentation
+## 0.1.0 private packaging integration
 
-- Consolidated VISION, ROADMAP, PROGRESS and CHANGELOG around private dogfooding and real-use
-  validation. Kept the packaged `def3e91` build, artifacts and installed copies unchanged.
+- Clarified product value, installation choices, first requests, review and private dogfood use.
+- Included the usage guide and its linked preview, learning and proactive guides in each staged
+  install. Kept complete-distribution commands separate from staged usage. Added checks for local
+  Markdown link containment and refusal to replace or remove edited usage guides.
+- Added `dogfood/0.1.0` to push checks while retaining `main` and read-only CI permissions.
+- Updated product status for exact committed-source packaging. Preserved the npm publication guard,
+  product 0.1.0, parent 2.4.3 and the separate identity of earlier artifacts.
 
 ## 0.1.0, private dogfood
 

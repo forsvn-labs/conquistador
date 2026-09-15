@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
 import { mkdtempSync, readFileSync, readdirSync, realpathSync, rmSync, writeFileSync, existsSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { dirname, join, resolve } from 'node:path';
+import { dirname, join, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { validatePluginContracts } from './plugin-contracts.mjs';
 
@@ -71,5 +71,34 @@ test('host and squad declarations resolve inside each staged package', () => {
     }
     install('remove', mode, target);
     assert.equal(existsSync(target), false);
+  });
+});
+
+
+test('every staged mode includes usage docs with contained existing Markdown links', () => {
+  for (const mode of ['conquistador', 'plugin', 'single-agent', 'squad', 'eve', 'grok-bot', 'skill:write-copy']) temporary(target => {
+    install('install', mode, target);
+    const readme = readFileSync(join(target, 'README.md'), 'utf8');
+    assert.match(readme, /\[Use Conquistador\]\(docs\/USAGE.md\)/);
+    assert.match(readme, /complete distribution, not this folder/);
+    assert.equal(existsSync(join(target, 'runtime')), false);
+    assert.equal(existsSync(join(target, 'tools/install.mjs')), false);
+    for (const name of ['USAGE.md', 'PREVIEW.md', 'LEARNING.md', 'PROACTIVE.md']) {
+      assert.deepEqual(readFileSync(join(target, 'docs', name)), readFileSync(join(root, 'docs', name)));
+    }
+    for (const path of ['README.md', ...readdirSync(join(target, 'docs')).map(name => `docs/${name}`)]) {
+      const markdown = readFileSync(join(target, path), 'utf8');
+      for (const [, link] of markdown.matchAll(/\[[^\]]*\]\(([^)\s]+)\)/g)) {
+        if (/^(?:https?:|mailto:|#)/.test(link)) continue;
+        const resolved = resolve(dirname(join(target, path)), decodeURIComponent(link.split(/[?#]/)[0]));
+        const local = relative(target, resolved);
+        assert.ok(local !== '..' && !local.startsWith(`..${sep}`), `${mode}: ${path} escapes through ${link}`);
+        assert.ok(existsSync(resolved), `${mode}: ${path} has missing link ${link}`);
+      }
+    }
+    writeFileSync(join(target, 'docs/USAGE.md'), 'A user correction.');
+    assert.throws(() => install('upgrade', mode, target), /files were modified/);
+    assert.throws(() => install('remove', mode, target), /files were modified/);
+    assert.equal(readFileSync(join(target, 'docs/USAGE.md'), 'utf8'), 'A user correction.');
   });
 });

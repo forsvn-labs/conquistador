@@ -2,7 +2,8 @@
 
 ## Now: private dogfooding
 
-Version 0.1.0 is packaged for local use. Keep the repository private and retain the npm publication
+Version 0.1.0 targets private local use. Package the final integrated source from its exact clean
+commit and retain its ZIP, npm tarball, checksums and assembly record together. Keep the repository private and retain the npm publication
 guard. Start with [one real task](docs/DOGFOOD.md) in an existing coding-agent host.
 
 1. Verify activation, appropriate parent routing and a finished deliverable.
