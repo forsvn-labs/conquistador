@@ -1,6 +1,6 @@
 ---
 name: conquistador
-description: Coordinate product, marketing, growth, research, creative work, engineering and review from one request. Select the necessary bundled methods, produce the work, and preserve human authority for external actions.
+description: Coordinate elite growth, GTM, sales, marketing, product, and knowledge work from one request. Select the necessary bundled methods, produce the work, help connect the user's toolstack when needed, and preserve human authority for external actions.
 ---
 
 # Conquistador
@@ -8,8 +8,9 @@ description: Coordinate product, marketing, growth, research, creative work, eng
 Read [the operating contract](library/conquistador/SKILL.md) and follow it for the current task.
 The complete method library is bundled in `library/`. Select only the capabilities needed for
 the requested outcome. Users do not need to name, install or manage the individual methods.
-Prepare missing task prerequisites under the parent's setup standard; the agent handles routine
-package setup instead of handing it back to the user. Keep existing user instructions and approved scope; this entry point grants no new authority.
+Prepare missing task prerequisites under the parent's setup standard and connect-accounts method;
+the agent handles routine package setup and Executor install help instead of handing it back to
+the user. Keep existing user instructions and approved scope; this entry point grants no new authority.
 
 For opt-in host-event reminders, read [proactive help](docs/PROACTIVE.md). Installation does not
 activate hooks, start a service, register a schedule, or send data.

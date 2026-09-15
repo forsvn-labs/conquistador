@@ -165,10 +165,11 @@ be identified. Host credentials, task outputs and external state are not install
 
 ## Optional Executor and Eve runtimes
 
-The complete distribution offers `conquistador connections --help` and `conquistador jobs --help`.
-These commands prepare an operator-owned Executor connection or a separate Eve app. They do not
-install a service into the coding agent or start a background job. Read
-[accounts and durable jobs](INTEGRATIONS.md) for setup, credential boundaries, and update checks.
+The complete distribution offers `conquistador connections setup` and `conquistador jobs --help`.
+`connections setup` inspects whether Executor is installed and prints official next steps. It does
+not itself install a package or start a service. The parent skill runs those official commands
+through the host when helping a new user. Read [accounts and durable jobs](INTEGRATIONS.md) for
+setup, credential boundaries, and update checks.
 
 ## Portable Grok Bot and Eve packages
 

@@ -3,8 +3,9 @@
 Version 0.1.0 is packaged and privately prereleased as
 [`v0.1.0-dogfood.2`](https://github.com/forsvn-labs/conquistador/releases/tag/v0.1.0-dogfood.2)
 (source `0ae8df059170d476d2f700ad161429c9061b2f17` on `dogfood/0.1.0`). The current feature branch
-updates the parent method to 2.7.0 with explicitly versioned v2 master-agent contracts and optional
-Executor/Eve setup. The root npm package has `private: true`; CI only builds and tests with read-only
+updates the parent method to 2.8.0: elite growth/GTM/sales/marketing/product knowledge work, plus
+first-run Executor install help (`connections setup`, connect-accounts method). Optional Executor/Eve
+hosts remain. The root npm package has `private: true`; CI only builds and tests with read-only
 repository permissions. Public distribution is deferred. Final source packaging binds the
 integrated documentation and installer to that exact clean commit in `assembly.json`
 (`authority: UNBOUND`, not a public publish). Earlier artifacts retain their original source
@@ -15,10 +16,13 @@ identity and are not rebuilt. Installing a new package does not update existing 
 ### Optional integration adoption
 
 The local adoption branch adds Executor account setup, an explicit Eve job host, and read-only
-upstream release monitoring. The coding agent remains the ordinary entrypoint. Existing host tools
-remain usable within their policies; the catalog still requires exact audited operations.
+upstream release monitoring. The coding agent remains the ordinary entrypoint. Conquistador helps
+install Executor when it is missing and connect only the sources the current task needs. Existing
+host tools remain usable within their policies; the catalog still requires exact audited operations.
 
-- Executor configuration contains endpoint and UI URLs plus an environment-variable reference.
+- `connections setup` and `status` detect a local Executor CLI and print official install, start,
+  and MCP-connect steps. The parent skill runs those commands through the host for a new user.
+  Configuration drafts still contain endpoint and UI URLs plus an environment-variable reference.
   The client offers a UI handoff and bounded discovery. Its host-only GitHub metadata callback
   verifies an exact reviewed schema, account connection, allowlist, and deadline before invocation.
   It does not offer arbitrary execution or copy provider credentials into Conquistador.

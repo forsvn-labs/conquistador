@@ -1,9 +1,10 @@
 # Conquistador 0.1.0
 
-Conquistador is a master agent for product, marketing, growth, and engineering work. Ask for an
-outcome. It selects the relevant methods and, when the result crosses capabilities, assigns bounded
-work to the specialist team the task needs. It integrates the deliverable, reviews it, and recommends
-a next step.
+Conquistador is a master agent for elite growth, GTM, sales, marketing, product, and knowledge
+work. Ask for an outcome. It selects the relevant methods and, when the result crosses capabilities,
+assigns bounded work to the specialist team the task needs. It integrates the deliverable, reviews
+it, and recommends a next step. When the task needs your CRM, warehouse, ads, or docs, it helps
+install Executor and connect that stack so you can get going.
 
 All 38 outcome methods are included. Your host supplies the model, project files, tools and
 permission controls. This is a private dogfood build.
@@ -53,13 +54,15 @@ Expect finished copy and a plan with owners, timing, measurement and open eviden
 
 You do not need to install every optional tool. Conquistador first inspects the CLI, MCP, warehouse,
 and Executor routes already available, then prepares the narrow task prerequisite through the host.
-For visual feedback, ask for a [Lavish preview](docs/PREVIEW.md). Credentials, paid services and
-external actions retain their applicable human authority.
+If Executor is missing and the task needs live accounts, it walks you through the official install,
+MCP connect, and first source. For visual feedback, ask for a [Lavish preview](docs/PREVIEW.md).
+Credentials, paid services and external actions retain their applicable human authority.
 
-For account connections and work that must continue beyond a coding session, use the optional
-[Executor and Eve integration paths](docs/INTEGRATIONS.md). Connection preparation, durable-job
-preparation, and upstream version checks are explicit commands in the complete distribution.
-The ordinary skill installation starts neither service.
+For account connections and work that must continue beyond a coding session, use the
+[Executor and Eve integration paths](docs/INTEGRATIONS.md). `conquistador connections setup`
+inspects install state; the parent skill runs official Executor commands through the host when you
+want to get going. Durable-job preparation and upstream version checks stay explicit. Ordinary skill
+installation starts neither service.
 
 ## Private use and current limits
 

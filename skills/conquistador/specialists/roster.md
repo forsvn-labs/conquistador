@@ -15,7 +15,8 @@ not replace the 38 outcomes or create another method library.
 | [Creative assets](creative-assets-agent.md) | Produce and review a coherent volume of paid or short-form assets | `brief-creative`, `create-paid-campaign`, `create-shortform` | `paid-campaign-loop`, `shortform-campaign`, `creative-asset-review` |
 
 Use [specialist team execution](../orchestration/specialist-team.md) for assignment packets,
-dependencies, parallel work, integration, and fallback. Use [stack setup](../methods/stack-setup.md)
+dependencies, parallel work, integration, and fallback. Use
+[connect accounts](../methods/connect-accounts.md) and [stack setup](../methods/stack-setup.md)
 when a role needs a missing data or provider interface.
 
 The parent may use one role or several. Do not add a coordinator specialist. The parent coordinates.

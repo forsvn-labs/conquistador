@@ -5,6 +5,10 @@ methods and specialist roles, produces one integrated result, reviews it, and gi
 All 38 outcome methods are included in the complete Conquistador install. A standalone method install
 contains only that method; the examples below assume the complete entry point.
 
+If the work needs HubSpot, Databricks, ads, or another live system and that route is missing,
+Conquistador should help install Executor, connect this host over MCP, and add only the sources
+the task needs. You sign in inside Executor's UI. You do not need to already know Executor.
+
 Your coding-agent host supplies the model, file access, tools and permission controls. Use
 `/conquistador`, `$conquistador`, the host's skill picker, or `/conquistador:conquistador` for the
 Claude plugin. Portable agent packages need a host adapter before they can run.
@@ -90,9 +94,10 @@ Create account-ready drafts only. Do not spend or enable a campaign.
 ```
 
 Conquistador should inspect existing host connectors, MCP servers, maintained CLIs, warehouse access,
-and operator-supplied Executor routes before adding a tool. It should verify the narrow route, assign
-only the required access to each specialist, and continue the task. Account sign-in, new paid
-services, and production writes remain human-owned.
+and Executor routes before adding a tool. If Executor is missing, it should walk a new user through
+the official install (`npm install -g executor`, then `executor install` and `executor web`), MCP
+connect, and the first needed source, then continue the task. Account sign-in, new paid services,
+and production writes remain human-owned.
 
 ## Write documentation people can follow
 

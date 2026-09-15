@@ -134,7 +134,7 @@ test('offline help and preparation work with no optional node_modules', async t 
   const { spawnSync } = await import('node:child_process');
   const dir = await mkdtemp(join(tmpdir(), 'conquistador-executor-offline-'));
   t.after(() => rm(dir, { recursive: true, force: true }));
-  for (const name of ['cli.mjs', 'config.mjs']) await copyFile(new URL(name, import.meta.url), join(dir, name));
+  for (const name of ['cli.mjs', 'config.mjs', 'setup.mjs']) await copyFile(new URL(name, import.meta.url), join(dir, name));
   for (const args of [['--help'], ['prepare', '--endpoint', 'https://executor.example/mcp', '--ui-url', 'https://executor.example/', '--auth-env', authEnv]]) {
     const child = spawnSync(process.execPath, [join(dir, 'cli.mjs'), ...args], { encoding: 'utf8' });
     assert.equal(child.status, 0, child.stderr);

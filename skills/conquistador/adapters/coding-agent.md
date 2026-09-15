@@ -10,11 +10,15 @@ Use the repository as context, not as a required operating system.
 - Do not create plan, manifest, graph, review, or session-state files for routine work.
 - Prepare missing local tools for the requested task under [the setup standard](../standards/setup.md).
   Reuse the host's package manager and permissions; keep auxiliary CLIs out of project dependencies.
-- When the task needs data or a provider, follow [stack setup](../methods/stack-setup.md). Inspect the
-  user's existing CLI, MCP, warehouse, and Executor routes before adding anything.
+- When the task needs data or a provider, follow [connect accounts](../methods/connect-accounts.md)
+  and [stack setup](../methods/stack-setup.md). If Executor is missing, help the user install the
+  official CLI or Cloud path, connect MCP, and add only the sources this task needs. Inspect
+  existing CLI, MCP, warehouse, and Executor routes before adding anything.
 - Guide account setup through the host or Executor secure interface, with credentials outside chat
-  and specialist assignments. The complete distribution provides explicit connection and Eve job
-  commands. Compact method installs omit those executables. Keep one parent per durable job.
+  and specialist assignments. A user who does not know Executor still needs this walkthrough. The
+  complete distribution provides `connections setup` plus prepare/login/probe. Compact method
+  installs omit those executables; use the host shell and official Executor docs instead. Keep one
+  parent per durable job.
 - For a multi-part request, follow [specialist team execution](../orchestration/specialist-team.md).
   Use native subagents or workers only when this host exposes them. Give each one a bounded assignment
   from [the roster](../specialists/roster.md). If the host lacks isolated contexts, run the roles in

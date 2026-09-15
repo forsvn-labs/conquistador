@@ -1,10 +1,10 @@
 # Product principles
 
-Conquistador gives users one master-agent entry point, `/conquistador`, for product, research,
-marketing, growth, creative work, engineering, and review. Users ask for an outcome. The parent
-selects the necessary methods, assigns bounded work to the specialist team the outcome needs, and
-owns the integrated delivery within the user's scope. The default installation carries the complete
-library; separate skill or role packages are optional.
+Conquistador gives users one master-agent entry point, `/conquistador`, for elite growth, GTM,
+sales, marketing, product, research, creative work, engineering, and review. Users ask for an
+outcome. The parent selects the necessary methods, assigns bounded work to the specialist team the
+outcome needs, and owns the integrated delivery within the user's scope. The default installation
+carries the complete library; separate skill or role packages are optional.
 
 Installation should fit the host users already have. Offer direct skill installation first,
 remote host plugins and local MCP over stdio, with a clone as a fallback. Each route must have a
@@ -16,12 +16,14 @@ already has. Hosts provide models, specialist contexts, credentials, connections
 Compact installs include usage and review guides so users can start work in their host.
 The runtime, typed catalog and Eval Lab are optional modules.
 
-Executor is the preferred optional connection manager for account onboarding and authenticated
-tool access. Conquistador should guide sign-in, verify the required operation, and continue the
-task while credentials stay with the host or gateway. Existing authorized connections remain
-usable within host policy. Eve owns explicitly requested durable jobs that outlive the coding
-session. Each job has one coordinating parent, and both execution paths preserve the same action
-authority. Do not build another provider credential store or duplicate the method library.
+Executor is the preferred connection manager for account onboarding and authenticated tool access.
+Conquistador must help a new user install it, connect this coding agent over MCP, add the sources
+the current task needs, verify the required operation, and continue while credentials stay with the
+host or gateway. A user who already knows Executor should still get this inspection and continuation,
+not a blank assumption. Existing authorized connections remain usable within host policy. Eve owns
+explicitly requested durable jobs that outlive the coding session. Each job has one coordinating
+parent, and both execution paths preserve the same action authority. Do not build another provider
+credential store or duplicate the method library.
 
 Keep the integrations close to upstream through exact package pins, read-only release monitoring,
 native package checks, and observed verification of the deployed account and action paths.

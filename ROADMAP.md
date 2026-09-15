@@ -4,11 +4,13 @@
 
 ### Executor and Eve adoption
 
-Use the optional Executor helper to prepare secure gateway access and inspect its available tools.
-Use the optional Eve app for explicit durable jobs with one owner, canonical skills, and separate
-worker/operator authority. Keep `/conquistador` in the existing coding host as the normal entry.
-[Integration usage](docs/INTEGRATIONS.md) separates connection preparation, package verification,
-live account proof, and the applicable human decisions.
+Use Conquistador to help install Executor when it is missing, connect the coding agent over MCP,
+and add the sources the current growth, GTM, sales, marketing, or product task needs. Use
+`conquistador connections setup` to inspect install state, then official Executor commands through
+the host. Use the optional Eve app for explicit durable jobs with one owner, canonical skills, and
+separate worker/operator authority. Keep `/conquistador` in the existing coding host as the normal
+entry. [Integration usage](docs/INTEGRATIONS.md) separates install help, connection preparation,
+package verification, live account proof, and the applicable human decisions.
 
 Maintain exact upstream dependencies and lockfiles. The release watcher reports new versions;
 optional CI checks installed packages and security advisories. Review and verify new versions

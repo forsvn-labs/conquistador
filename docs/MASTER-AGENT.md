@@ -77,9 +77,11 @@ services, production permissions, and external actions remain human-owned.
 
 ## Optional Executor connections and Eve jobs
 
-The complete distribution provides `conquistador connections` for an operator-owned Executor
-endpoint and `conquistador jobs` for explicitly prepared Eve work. Use each command's `--help`
-before setup. The compact skill continues to use the coding agent's existing tools.
+The complete distribution provides `conquistador connections` for Executor install detection and an
+operator-owned gateway, and `conquistador jobs` for explicitly prepared Eve work. Use
+`connections setup` first. The parent skill helps a new user run the official Executor install and
+MCP connect through the host. The compact skill continues to use the coding agent's existing tools
+and the same official commands.
 
 Executor holds provider credentials and enforces its configured policies. The coding host and Eve
 authenticate to Executor with scoped gateway access. Conquistador does not copy provider keys into

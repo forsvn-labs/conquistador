@@ -47,12 +47,15 @@ Use the host's credential flow. Never request a secret in chat or write it to co
 files, or specialist assignments. Authentication, new accounts, paid plans, administrator changes,
 and production permissions remain human-owned.
 
-In a complete distribution, `conquistador connections --help` describes configuration preparation,
-the operator UI handoff, and bounded MCP discovery. These steps do not install Executor or prove a
-provider operation. The coding host's access to Executor and Executor's access to a provider are
-separate grants. Reuse an existing grant only within its account and operation scope. Never extract
-provider credentials from the host or put them into generated scripts. Connection approval does
-not grant publication or write authority.
+In a complete distribution, `conquistador connections setup` inspects whether Executor is installed
+and prints official next steps. `status` reports detection only. Those commands do not themselves
+run `npm install` or start the service. The parent skill does that through the host when helping
+a new user get going; see [connect accounts](connect-accounts.md). `prepare`, `login`, and `probe`
+then configure an operator-owned gateway. None of these prove a provider operation. The coding
+host's access to Executor and Executor's access to a provider are separate grants. Reuse an
+existing grant only within its account and operation scope. Never extract provider credentials
+from the host or put them into generated scripts. Connection approval does not grant publication
+or write authority.
 
 Verify the narrow route before use:
 

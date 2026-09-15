@@ -28,6 +28,8 @@ Direct invocation works too:
 
 ```sh
 node hosts/executor/cli.mjs --help
+node hosts/executor/cli.mjs setup
+node hosts/executor/cli.mjs status
 node hosts/executor/cli.mjs prepare \
   --endpoint http://127.0.0.1:4788/mcp \
   --ui-url http://127.0.0.1:4788/ \
@@ -35,6 +37,11 @@ node hosts/executor/cli.mjs prepare \
 node hosts/executor/cli.mjs login --config /absolute/operator-owned/connection.json
 node hosts/executor/cli.mjs probe --config /absolute/operator-owned/connection.json
 ```
+
+`setup` and `status` inspect whether an `executor` binary is on PATH. They print
+JSON next steps from the official CLI and Cloud docs. They do not run
+`npm install`, start the service, or write host MCP config. The parent
+Conquistador skill does that through the host when helping a new user get going.
 
 `prepare` prints a non-secret JSON draft. It never writes or overwrites a file.
 Save that draft outside Git with operator-only access. Help, preparation, and

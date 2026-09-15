@@ -1,9 +1,11 @@
 # What Conquistador provides
 
-Conquistador is a product master agent. Users ask the parent for an outcome; it owns specialist
-assignment, method selection, composition, integration, review, and the next useful step. A host
-supplies the model, available agent contexts, tools, project access, and permission controls.
-Conquistador is not currently a hosted SaaS service.
+Conquistador is a master agent for elite growth, GTM, sales, marketing, product, and knowledge
+work. Users ask the parent for an outcome; it owns specialist assignment, method selection,
+composition, integration, review, and the next useful step. When the work needs the user's live
+systems, it helps install Executor and connect that stack. A host supplies the model, available
+agent contexts, tools, project access, and permission controls. Conquistador is not currently a
+hosted SaaS service.
 
 ## Outcomes and benefits
 

@@ -13,8 +13,9 @@ Start with one task you already need to finish. Record the result separately fro
 3. Use a request from [the usage guide](USAGE.md) with your own files. Expect a finished deliverable,
    its evidence gaps and a next action. Check these yourself before marking the task accepted.
 
-The agent can handle routine local setup. You handle account sign-in and host-required approvals.
-You do not need the HTTP runtime, MCP, Docker, hooks or every integration to use the skill library.
+The agent can handle routine local setup, including helping install Executor and connecting the
+accounts a task needs. You handle account sign-in and host-required approvals. Text work from
+supplied context does not require Executor. Live CRM, warehouse, ads, or docs work does.
 
 ## Check the first tasks
 

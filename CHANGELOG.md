@@ -4,6 +4,16 @@ No public release is claimed. See [VERSIONS.md](VERSIONS.md) for independent pro
 versions. Verification establishes the stated local scope; live provider operation, useful model
 output, human acceptance, rights disposition and release authority require separate evidence.
 
+## Unreleased first-run Executor install
+
+- Updated the parent method to 2.8.0. Core mission is elite growth, GTM, sales, marketing, and
+  product knowledge work. When a task needs live accounts, the parent helps a new user install
+  Executor, connect MCP, add only the needed sources, and continue.
+- Added `conquistador connections setup` and `status`. They inspect the official CLI and print
+  documented next steps. They do not themselves install a package or start a service.
+- Added [connect accounts](skills/conquistador/methods/connect-accounts.md) with official Executor
+  CLI and Cloud install commands from executor.sh docs.
+
 ## Unreleased Executor and Eve adoption
 
 - Updated the parent method to 2.7.0. It guides missing account access through a secure host or

@@ -102,8 +102,9 @@ an MCP client uses a command from it. Download the current source before updatin
 ### Optional account and job hosts
 
 The complete distribution includes `conquistador connections`, `conquistador jobs`, and
-`conquistador integrations`. Use `--help` on each command. [Accounts, tools, and durable jobs](docs/INTEGRATIONS.md)
-explains secure Executor setup, the separate Eve app, exact dependency pins, and update checks.
+`conquistador integrations`. Start with `conquistador connections setup` to see whether Executor is
+installed. [Accounts, tools, and durable jobs](docs/INTEGRATIONS.md) explains how Conquistador helps
+install Executor, connect MCP, and add sources, plus the separate Eve app and update checks.
 These optional hosts have their own private dependency manifests. Use their documented Bun
 installation commands; do not symlink dependencies. No daemon, schedule, paid model, or provider
 connection starts during ordinary skill installation.

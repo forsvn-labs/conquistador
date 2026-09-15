@@ -1,9 +1,9 @@
 # Accounts, tools, and durable jobs
 
 Conquistador uses the coding agent you already have. Reuse its authorized tools first. When a task
-needs a new connection, the complete distribution offers an Executor connection helper. When work
-must continue beyond an interactive session, it offers an explicit Eve job host. The portable skill
-does not install either service.
+needs a new connection, help install Executor if it is missing, then connect the needed accounts.
+When work must continue beyond an interactive session, offer an explicit Eve job host. Ordinary
+skill installation starts neither service.
 
 ## Responsibilities
 
@@ -20,27 +20,40 @@ submission automatically.
 
 ## Connect accounts
 
-From the complete distribution, inspect the connection helper:
+From the complete distribution, inspect whether Executor is installed:
 
 ```sh
-node runtime/bin/conquistador.js connections --help
+node runtime/bin/conquistador.js connections setup
 ```
 
-Follow [Executor setup](../hosts/executor/README.md) to prepare a connection configuration, open the
-operator's connection-manager UI, and probe the configured MCP endpoint. The helper does not create
-an OAuth client, store provider secrets, start a daemon, or silently register an MCP server in your
-coding agent.
+If the CLI is missing, Conquistador should help a new user install it with the official commands
+(Node 20+): `npm install -g executor`, then `executor install` and `executor web`. Also valid:
+`pnpm add -g executor`, `bun add -g executor`, `yarn global add executor`. Official docs:
+[CLI](https://executor.sh/docs/local/cli) and [Cloud](https://executor.sh/docs/hosted/cloud).
+Then connect this coding agent:
+
+```sh
+npx add-mcp http://127.0.0.1:4788/mcp --transport http --name executor
+```
+
+The user signs in and adds sources in Executor UI. Restrict policies to the account, operations,
+and data this task needs. Never paste a token into chat, a command argument, an assignment, or a
+tracked file.
+
+After Executor exists, follow [Executor setup](../hosts/executor/README.md) to prepare a connection
+configuration, open the operator UI, and probe the configured MCP endpoint. `connections setup` and
+`status` inspect only. `prepare`, `login`, and `probe` do not create an OAuth client, store provider
+secrets, or silently register an MCP server. The parent skill runs official install and `add-mcp`
+commands through the host when helping the user get going.
 
 Two authorization boundaries matter. The coding host authenticates to Executor. Executor then
 uses the authorized provider connection for the requested account. A gateway login does not prove
 that a CRM, warehouse, or publishing account is connected. A successful MCP probe proves discovery,
 not that an operation on one of those accounts succeeded.
 
-Complete provider sign-in and API-key entry through the connection manager's secure interface.
-Configuration refers to host-held authentication by name. Never paste a token into chat, a command
-argument, an assignment, or a tracked file. Specialists receive operation and connection references;
-the gateway attaches provider credentials outside agent-authored code. Existing CLI or MCP credentials
-remain with their owner and are not extracted or copied into Executor automatically.
+Specialists receive operation and connection references; the gateway attaches provider credentials
+outside agent-authored code. Existing CLI or MCP credentials remain with their owner and are not
+extracted or copied into Executor automatically.
 
 Grant only the account, operations, data, and cost needed for the task. Publish, spend, sends, and live
 writes require their separate human decision. Approving a connection or draft does not authorize a

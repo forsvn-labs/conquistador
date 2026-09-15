@@ -33,13 +33,13 @@ test('optional integration help stays usable before runtime and vendor packages 
   const temporary = realpathSync(mkdtempSync(join(tmpdir(), 'conquistador integration entry ')));
   try {
     for (const file of ['package.json', 'runtime/bin/conquistador.js', 'hosts/executor/cli.mjs',
-      'hosts/executor/config.mjs', 'hosts/eve/jobs.mjs', 'tools/integration-releases.mjs']) {
+      'hosts/executor/config.mjs', 'hosts/executor/setup.mjs', 'hosts/eve/jobs.mjs', 'tools/integration-releases.mjs']) {
       const target = join(temporary, file);
       mkdirSync(dirname(target), { recursive: true });
       copyFileSync(join(root, file), target);
     }
     const run = (...args) => execFileSync(process.execPath, [join(temporary, 'runtime/bin/conquistador.js'), ...args], { encoding: 'utf8' });
-    for (const [command, expected] of [['connections', /prepare/], ['jobs', /submit/], ['integrations', /check-updates/]]) {
+    for (const [command, expected] of [['connections', /setup[\s\S]*prepare/], ['jobs', /submit/], ['integrations', /check-updates/]]) {
       assert.match(run(command, '--help'), expected);
     }
     const config = JSON.parse(run('connections', 'prepare', '--endpoint', 'https://executor.example/mcp',
