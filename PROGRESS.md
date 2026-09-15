@@ -24,3 +24,8 @@ The recommended install is now a single Conquistador skill with a complete neste
 The parent now directs visual review to the optional Lavish AXI CLI. Every install includes its
 setup instructions. This is a host procedure, not a runtime launcher, automatic annotation consumer
 or durable learning service. Preview feedback does not authorize memory or public submission.
+
+The runtime no longer promotes completed runs into a learning ledger. Both supported memory-mode
+spellings preserve existing data and leave automatic promotion disabled. Run artifacts and audit
+state still persist. A separate exact-entry/destination consent API and cross-run retrieval remain
+future work; the public learning guide describes a user-approved host workflow.

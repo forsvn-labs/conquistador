@@ -18,3 +18,6 @@ Lavish preview instructions now travel with the parent and installed packages. V
 human annotation and agent resumption in each supported host. Extend learning with reviewed,
 project-scoped facts and observed outcomes before adding automatic retrieval or a shared service.
 Any public feedback contribution stays explicitly selected and consented.
+
+Automatic learning promotion is disabled until separate persistence consent is implemented. Keep
+existing records accessible to explicit state/export operations while adding that boundary.

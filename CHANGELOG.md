@@ -6,6 +6,7 @@ See [VERSIONS.md](VERSIONS.md) for independent product and method versions.
 ## 0.1.0, unpublished
 
 - Parent-owned Lavish AXI preview and annotation handoff, optional CLI setup, and explicit separation of review, memory and public feedback consent.
+- Removed automatic run-completion learning writes that ignored the memory-off setting and treated content acceptance as learning consent. Existing data and explicit state operations remain available.
 - One recommended Conquistador entry point with all 38 outcome methods bundled; parent routing includes engineering on demand.
 - Complete single-agent method installation and corrected contained host/agent paths and product versions.
 - Opt-in local host-event reminders, with no network calls, background scheduler or external action authority.
