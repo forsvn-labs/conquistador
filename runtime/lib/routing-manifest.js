@@ -3,7 +3,7 @@ export const PARENT_JOBS = [
     "create-or-improve",
     "learn-from-results",
 ];
-export const DIRECT_ONLY_ENGINEERING_OUTCOMES = [
+export const ENGINEERING_OUTCOMES = [
     "architect-software-system",
     "brief-product-ui",
     "build-ios-app",
@@ -11,14 +11,14 @@ export const DIRECT_ONLY_ENGINEERING_OUTCOMES = [
     "map-user-flow",
     "write-technical-docs",
 ];
-export const DIRECT_ONLY_ENGINEERING_WORKFLOWS = ["specify-product-experience"];
-const DIRECT_ONLY_OUTCOME_SET = new Set(DIRECT_ONLY_ENGINEERING_OUTCOMES);
-const DIRECT_ONLY_WORKFLOW_SET = new Set(DIRECT_ONLY_ENGINEERING_WORKFLOWS);
-export function isDirectOnlyEngineeringOutcome(id) {
-    return DIRECT_ONLY_OUTCOME_SET.has(id);
+export const ENGINEERING_WORKFLOWS = ["specify-product-experience"];
+const ENGINEERING_OUTCOME_SET = new Set(ENGINEERING_OUTCOMES);
+const ENGINEERING_WORKFLOW_SET = new Set(ENGINEERING_WORKFLOWS);
+export function isEngineeringOutcome(id) {
+    return ENGINEERING_OUTCOME_SET.has(id);
 }
-export function isDirectOnlyEngineeringWorkflow(id) {
-    return DIRECT_ONLY_WORKFLOW_SET.has(id);
+export function isEngineeringWorkflow(id) {
+    return ENGINEERING_WORKFLOW_SET.has(id);
 }
 // Explicit engineering requests must not become marketing routes when installed
 // method prose changes the lexical ranking. These patterns describe requests,
@@ -31,7 +31,21 @@ const ENGINEERING_REQUESTS = {
     "map-user-flow": /^map\s+(?:(?:the|a|an)\s+)?(?:onboarding\s+)?user\s+flow\b/i,
     "write-technical-docs": /^write\s+(?:(?:the|a|an)\s+)?technical\s+(?:documentation|docs)\b/i,
 };
+export function requestedEngineeringOutcome(prompt) {
+    const request = prompt.trim().replace(/^\/conquistador\b\s*:?\s*/i, "").replace(/^(?:please\s+|(?:can|could|would)\s+you\s+(?:please\s+)?)/i, "");
+    return ENGINEERING_OUTCOMES.find((id) => new RegExp(`^/?${id}(?=$|[\\s:,.!?])`, "i").test(request) || ENGINEERING_REQUESTS[id].test(request));
+}
+// Kept for source consumers of the original inventory API. These names describe
+// historical inventory membership, not a restriction on parent routing.
+/** @deprecated Use ENGINEERING_OUTCOMES. */
+export const DIRECT_ONLY_ENGINEERING_OUTCOMES = ENGINEERING_OUTCOMES;
+/** @deprecated Use ENGINEERING_WORKFLOWS. */
+export const DIRECT_ONLY_ENGINEERING_WORKFLOWS = ENGINEERING_WORKFLOWS;
+/** @deprecated Use isEngineeringOutcome. */
+export const isDirectOnlyEngineeringOutcome = isEngineeringOutcome;
+/** @deprecated Use isEngineeringWorkflow. */
+export const isDirectOnlyEngineeringWorkflow = isEngineeringWorkflow;
+/** @deprecated Use requestedEngineeringOutcome. */
 export function hasDirectOnlyEngineeringIntent(prompt) {
-    const request = prompt.trim().replace(/^(?:please\s+|(?:can|could|would)\s+you\s+(?:please\s+)?)/i, "");
-    return Object.values(ENGINEERING_REQUESTS).some((pattern) => pattern.test(request));
+    return requestedEngineeringOutcome(prompt) !== undefined;
 }

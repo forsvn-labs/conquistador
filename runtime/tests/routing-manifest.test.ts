@@ -1,30 +1,37 @@
 import { describe, expect, it } from "vitest";
 
 import {
-  DIRECT_ONLY_ENGINEERING_OUTCOMES,
-  DIRECT_ONLY_ENGINEERING_WORKFLOWS,
+  ENGINEERING_OUTCOMES,
+  ENGINEERING_WORKFLOWS,
   PARENT_JOBS,
-  hasDirectOnlyEngineeringIntent,
-  isDirectOnlyEngineeringOutcome,
-  isDirectOnlyEngineeringWorkflow,
+  requestedEngineeringOutcome,
+  isEngineeringOutcome,
+  isEngineeringWorkflow,
 } from "../src/routing-manifest.ts";
 
 describe("parent routing manifest", () => {
   it("recognizes explicit engineering requests without capturing marketing mentions", () => {
     for (const prompt of ["Specify the product UI", "Please design a user interface", "Build an iOS app", "Map the onboarding user flow", "Architect the software system", "Write technical docs", "Build a web app", "Could you please specify the product UI"]) {
-      expect(hasDirectOnlyEngineeringIntent(prompt), prompt).toBe(true);
+      expect(requestedEngineeringOutcome(prompt), prompt).toBeDefined();
     }
     for (const prompt of ["Write launch copy for a web app", "Audit marketing for this software system", "Create a product UI announcement", "Write launch copy for our tool that helps teams build a web app", "Audit our campaign headline: Build an iOS app", "Do not build a web app; write marketing copy"]) {
-      expect(hasDirectOnlyEngineeringIntent(prompt), prompt).toBe(false);
+      expect(requestedEngineeringOutcome(prompt), prompt).toBeUndefined();
     }
   });
-  it("keeps three marketing jobs and a closed direct-only engineering boundary", () => {
+  it("recognizes exact engineering outcome names through the parent", () => {
+    for (const id of ENGINEERING_OUTCOMES) {
+      expect(requestedEngineeringOutcome(`/conquistador ${id}: requested work`)).toBe(id);
+      expect(requestedEngineeringOutcome(`Write launch copy about ${id}`)).toBeUndefined();
+      expect(requestedEngineeringOutcome(`/conquistador ${id}-example`)).toBeUndefined();
+    }
+  });
+  it("keeps compatible job values and identifies the six engineering outcomes", () => {
     expect([...PARENT_JOBS]).toEqual([
       "launch-or-grow",
       "create-or-improve",
       "learn-from-results",
     ]);
-    expect([...DIRECT_ONLY_ENGINEERING_OUTCOMES]).toEqual([
+    expect([...ENGINEERING_OUTCOMES]).toEqual([
       "architect-software-system",
       "brief-product-ui",
       "build-ios-app",
@@ -32,15 +39,15 @@ describe("parent routing manifest", () => {
       "map-user-flow",
       "write-technical-docs",
     ]);
-    expect([...DIRECT_ONLY_ENGINEERING_WORKFLOWS]).toEqual([
+    expect([...ENGINEERING_WORKFLOWS]).toEqual([
       "specify-product-experience",
     ]);
-    expect(isDirectOnlyEngineeringOutcome("map-user-flow")).toBe(true);
-    expect(isDirectOnlyEngineeringOutcome("write-copy")).toBe(false);
-    expect(isDirectOnlyEngineeringWorkflow("specify-product-experience")).toBe(
+    expect(isEngineeringOutcome("map-user-flow")).toBe(true);
+    expect(isEngineeringOutcome("write-copy")).toBe(false);
+    expect(isEngineeringWorkflow("specify-product-experience")).toBe(
       true,
     );
-    expect(isDirectOnlyEngineeringWorkflow("landing-page-messaging")).toBe(
+    expect(isEngineeringWorkflow("landing-page-messaging")).toBe(
       false,
     );
   });

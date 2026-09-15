@@ -6,7 +6,7 @@ export const PARENT_JOBS = [
 
 export type ParentJob = (typeof PARENT_JOBS)[number];
 
-export const DIRECT_ONLY_ENGINEERING_OUTCOMES = [
+export const ENGINEERING_OUTCOMES = [
   "architect-software-system",
   "brief-product-ui",
   "build-ios-app",
@@ -15,27 +15,27 @@ export const DIRECT_ONLY_ENGINEERING_OUTCOMES = [
   "write-technical-docs",
 ] as const;
 
-export type DirectOnlyEngineeringOutcome = (typeof DIRECT_ONLY_ENGINEERING_OUTCOMES)[number];
+export type EngineeringOutcome = (typeof ENGINEERING_OUTCOMES)[number];
 
-export const DIRECT_ONLY_ENGINEERING_WORKFLOWS = ["specify-product-experience"] as const;
+export const ENGINEERING_WORKFLOWS = ["specify-product-experience"] as const;
 
-export type DirectOnlyEngineeringWorkflow = (typeof DIRECT_ONLY_ENGINEERING_WORKFLOWS)[number];
+export type EngineeringWorkflow = (typeof ENGINEERING_WORKFLOWS)[number];
 
-const DIRECT_ONLY_OUTCOME_SET = new Set<string>(DIRECT_ONLY_ENGINEERING_OUTCOMES);
-const DIRECT_ONLY_WORKFLOW_SET = new Set<string>(DIRECT_ONLY_ENGINEERING_WORKFLOWS);
+const ENGINEERING_OUTCOME_SET = new Set<string>(ENGINEERING_OUTCOMES);
+const ENGINEERING_WORKFLOW_SET = new Set<string>(ENGINEERING_WORKFLOWS);
 
-export function isDirectOnlyEngineeringOutcome(id: string): boolean {
-  return DIRECT_ONLY_OUTCOME_SET.has(id);
+export function isEngineeringOutcome(id: string): boolean {
+  return ENGINEERING_OUTCOME_SET.has(id);
 }
 
-export function isDirectOnlyEngineeringWorkflow(id: string): boolean {
-  return DIRECT_ONLY_WORKFLOW_SET.has(id);
+export function isEngineeringWorkflow(id: string): boolean {
+  return ENGINEERING_WORKFLOW_SET.has(id);
 }
 
 // Explicit engineering requests must not become marketing routes when installed
 // method prose changes the lexical ranking. These patterns describe requests,
 // rather than incidental mentions of software in a marketing brief.
-const ENGINEERING_REQUESTS: Record<DirectOnlyEngineeringOutcome, RegExp> = {
+const ENGINEERING_REQUESTS: Record<EngineeringOutcome, RegExp> = {
   "architect-software-system": /^architect\s+(?:(?:the|a|an)\s+)?(?:software\s+)?system\b/i,
   "brief-product-ui": /^(?:specify|brief|design)\s+(?:(?:the|a|an)\s+)?(?:product\s+)?(?:ui|user interface)\b/i,
   "build-ios-app": /^build\s+(?:(?:the|a|an)\s+)?ios\s+app\b/i,
@@ -44,7 +44,26 @@ const ENGINEERING_REQUESTS: Record<DirectOnlyEngineeringOutcome, RegExp> = {
   "write-technical-docs": /^write\s+(?:(?:the|a|an)\s+)?technical\s+(?:documentation|docs)\b/i,
 };
 
+export function requestedEngineeringOutcome(prompt: string): EngineeringOutcome | undefined {
+  const request = prompt.trim().replace(/^\/conquistador\b\s*:?\s*/i, "").replace(/^(?:please\s+|(?:can|could|would)\s+you\s+(?:please\s+)?)/i, "");
+  return ENGINEERING_OUTCOMES.find((id) => new RegExp(`^/?${id}(?=$|[\\s:,.!?])`, "i").test(request) || ENGINEERING_REQUESTS[id].test(request));
+}
+
+// Kept for source consumers of the original inventory API. These names describe
+// historical inventory membership, not a restriction on parent routing.
+/** @deprecated Use ENGINEERING_OUTCOMES. */
+export const DIRECT_ONLY_ENGINEERING_OUTCOMES = ENGINEERING_OUTCOMES;
+/** @deprecated Use EngineeringOutcome. */
+export type DirectOnlyEngineeringOutcome = EngineeringOutcome;
+/** @deprecated Use ENGINEERING_WORKFLOWS. */
+export const DIRECT_ONLY_ENGINEERING_WORKFLOWS = ENGINEERING_WORKFLOWS;
+/** @deprecated Use EngineeringWorkflow. */
+export type DirectOnlyEngineeringWorkflow = EngineeringWorkflow;
+/** @deprecated Use isEngineeringOutcome. */
+export const isDirectOnlyEngineeringOutcome = isEngineeringOutcome;
+/** @deprecated Use isEngineeringWorkflow. */
+export const isDirectOnlyEngineeringWorkflow = isEngineeringWorkflow;
+/** @deprecated Use requestedEngineeringOutcome. */
 export function hasDirectOnlyEngineeringIntent(prompt: string): boolean {
-  const request = prompt.trim().replace(/^(?:please\s+|(?:can|could|would)\s+you\s+(?:please\s+)?)/i, "");
-  return Object.values(ENGINEERING_REQUESTS).some((pattern) => pattern.test(request));
+  return requestedEngineeringOutcome(prompt) !== undefined;
 }

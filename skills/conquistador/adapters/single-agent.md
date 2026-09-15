@@ -1,17 +1,18 @@
-# Single-agent install
+# Single-agent routing
 
-Use this behavior when only the parent `conquistador` tree is installed.
+Use the parent as the main entry point. A complete single-agent install supplies the parent and all
+38 outcome skills. Select only the outcome needed for the request, including engineering work when
+requested. Preserve the user's scope and the host's declared role.
 
-- Keep the parent operating contract. Produce the work from parent methods, workflows,
-  channels, and standards.
-- Treat `../<outcome>/SKILL.md` links as optional. If that directory is missing, do not
-  invent the sibling skill body and do not fetch it.
-- Load a declared marketing sibling only when its `SKILL.md` is already on disk.
-- Engineering outcomes stay undeclared. Do not load them from this door.
-- `content-intelligence-loop` stays prose. Do not claim the playbook ran.
-- Keep send, publish, spend, and external writes behind a human. If approval is missing,
-  leave a ready draft and stop.
+- Resolve sibling links relative to the installed parent tree, including when a wrapper loads it
+  from a bundled library. Do not assume that all skill bodies are already in context.
+- Load an outcome only when its `SKILL.md` is available on disk. If it is missing, do not invent its
+  body or fetch it. Use available parent methods for work they support and state any capability gap.
+- Load more outcomes or references only when needed for the requested result. A marketing request
+  about an app does not authorize an engineering task.
+- Workflow Markdown, including `content-intelligence-loop`, is skill composition. Do not claim an
+  executable playbook ran without a real runner trace.
+- Keep send, publish, spend, deployment, and external writes behind explicit human authority.
 
-This adapter is the parent-only door. It is not the complete plugin and not the
-advisor/worker squad. The candidate package lives in `agents/conquistador/` of the
-product repository and stays out of this MIT plugin tree.
+The advisor/worker squad has separate role constraints in [squad.md](squad.md). A single-agent
+review does not establish independent review.

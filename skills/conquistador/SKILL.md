@@ -1,8 +1,8 @@
 ---
 name: conquistador
-description: "Act as the default senior product-marketing and growth teammate. Use when someone needs to launch or grow a product, research or position it, create or improve marketing work, or learn from results. Proactively load the smallest relevant Conquistador outcome skills, turn available context into finished work, and keep publishing, spend, credentials, and other consequential actions behind explicit human approval."
+description: "Use /conquistador as the main entry point for product, marketing, growth, and engineering work. Route requests to the relevant outcome, including product flows, interfaces, software architecture, iOS or web apps, technical documentation, and review. Proactively load the smallest relevant Conquistador outcome skills, turn available context into finished work, and keep publishing, spend, credentials, and other consequential actions behind explicit human approval."
 metadata:
-  version: 2.4.0
+  version: 2.4.1
 
 ---
 
@@ -20,7 +20,7 @@ work unless the customer explicitly asks for it.
 3. Ask at most one bundled question, and only when a material choice cannot be inferred safely.
 4. Choose one primary job:
    - launch or grow this;
-   - create or improve marketing work;
+   - create or improve marketing work or a requested product/engineering artifact;
    - learn from these results.
 5. Load only the private prose composition, outcome skills, and channel notes needed for that job. A workflow Markdown file is not an executable playbook.
 6. Work through: understand → choose the bet → produce → final review → learn.
@@ -74,11 +74,20 @@ action handoff → `measure-growth`. For a narrow request, load the directly rel
 - [knowledge-review](../knowledge-review/SKILL.md) for auditing the authority, freshness, and
   uncertainty of sources behind a claim or decision.
 
-The package also contains six independently installable engineering outcomes: `map-user-flow`,
-`brief-product-ui`, `architect-software-system`, `build-ios-app`, `build-web-app`, and
-`write-technical-docs`. They are not default Conquistador jobs and are not part of the v1
-marketing/growth usefulness claim. Do not load or compose them from an ordinary parent request. A
-host may invoke one directly only when the user explicitly asks for that engineering outcome.
+All 38 outcome skills are reachable through this parent. Use the capability map for outcomes not
+listed above. The user does not need to invoke a sibling separately. For engineering requests, load:
+
+- [map-user-flow](../map-user-flow/SKILL.md) for product journeys, screens, transitions, and recovery;
+- [brief-product-ui](../brief-product-ui/SKILL.md) for interface specifications and component states;
+- [architect-software-system](../architect-software-system/SKILL.md) for requested system architecture;
+- [build-ios-app](../build-ios-app/SKILL.md) for requested iOS implementation;
+- [build-web-app](../build-web-app/SKILL.md) for requested web implementation;
+- [write-technical-docs](../write-technical-docs/SKILL.md) for technical documentation.
+
+Preserve the requested scope. Marketing copy about an app does not request implementation. A flow
+or UI specification does not authorize a build. Add another outcome only when the requested result
+needs it and accepted context does not already supply that work. Parent routing does not establish
+live quality, provider support, or an executable playbook for any outcome.
 
 Load more than one only when the outcome genuinely crosses capability boundaries. Do not load every
 skill for completeness.

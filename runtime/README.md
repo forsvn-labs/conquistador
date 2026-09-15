@@ -1,6 +1,6 @@
 # Conquistador self-hosted runtime
 
-This directory is the MIT-licensed Conquistador-owned runtime foundation for the optional Self-hosted Agent. It runs the same authored marketing/growth corpus and three parent jobs as the Portable Plugin while keeping the runtime, provider, and protocol interfaces replaceable. Six package-present engineering outcomes remain direct-install only and are not selected by this parent runtime.
+This directory is the MIT-licensed Conquistador-owned runtime foundation for the optional Self-hosted Agent. Its corpus selector uses the same authored parent and 38 outcome skills as the Portable Plugin while keeping the runtime, provider, and protocol interfaces replaceable. Requested engineering outcomes are available through the parent. The three existing protocol job values remain unchanged; engineering creation uses `create-or-improve`.
 
 The Portable Plugin remains runtime-free. Installing it never starts this service, adds a binary, or requires provider credentials.
 
@@ -46,6 +46,22 @@ This foundation executes `init`, `serve`, `doctor`, `run`, `resume`, `status`, `
 An artifact sidecar's `reviewVerdict` is only a projection for display and provenance. Later-run consumption classifies a prior artifact as approved only after loading the exact canonical packet and a consumed verdict from the run's `ReviewTransitionState`, then matching the packet, artifact ID, artifact revision, and bound content digest. A sidecar alone has no review authority.
 
 The closed schemas are under [`schemas/`](schemas/). Provider cells and their current evidence state are in [`providers/v1.json`](providers/v1.json).
+
+## Parent corpus routing
+
+`loadRuntimeCorpus(...).resolve(...)` selects bounded skill context. A leading outcome name, such as
+`/conquistador build-web-app`, selects that installed outcome. Explicit engineering requests such as
+"Build a web app" also select their outcome. Incidental engineering mentions in marketing requests do
+not select engineering skills. Narrow explicit requests load one outcome and its contained references;
+sibling links do not automatically load more outcomes. The parent can compose further skills when the
+requested result requires them. Missing outcomes are not fabricated. Selection remains limited to
+24 files and 80,000 context bytes, with omitted references recorded for progressive loading.
+
+This selector does not add executable playbooks. The `route` CLI and served HTTP path use the separate
+phrase-based routing contract. All 38 outcome IDs and their spaced aliases return skill guidance
+there, not executable playbooks. Empty, unknown, or ambiguous requests still abstain. This fixed
+alias list is not a universal free-text router. Workflow Markdown is prose composition; it grants no external action authority and
+provides no runner trace or provider evidence.
 
 ## Registry contracts
 

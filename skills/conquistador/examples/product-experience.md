@@ -1,19 +1,27 @@
-# Fixture: direct-only product experience
+# Fixture: requested product experience
 
-This is a parent-route boundary fixture, not a fourth Conquistador job. The six engineering outcomes
-stay independently installable. The parent must not compose them from an ordinary request.
+This checks parent routing. It does not establish model quality or executable playbook support.
 
 ## Request
 
-“Map the onboarding for this local-first review app, including permissions, empty/error recovery, and
-the handoff a developer needs to build it.”
+"Map the onboarding user flow for this local-first review app, including permissions and empty/error
+recovery. Use the accepted UI specification."
 
 ## Expected behavior
 
-- Treat the request as explicit engineering demand, not a default marketing/growth job.
-- Do not load `map-user-flow`, `brief-product-ui`, `specify-product-experience`, or the other
-  engineering outcomes through ordinary parent routing.
-- Keep the parent contract visible: those outcomes are direct-install only and outside the v1
-  usefulness claim.
-- A host may invoke `map-user-flow` or `brief-product-ui` directly only when the user explicitly asks
-  for that engineering outcome.
+- Load `map-user-flow` through the parent. Reuse the accepted UI specification.
+- Do not add UI design, architecture, implementation, or deployment to this request.
+- Load further references only as needed. Return the requested flow and its verification limits.
+
+## Multi-outcome request
+
+"Map the onboarding user flow and specify the product UI, including error recovery."
+
+The parent may compose `map-user-flow` and `brief-product-ui` using `specify-product-experience`.
+The composition remains prose. It does not establish that a runner executed a playbook.
+
+## Near miss
+
+"Write launch copy for our tool that helps teams build a web app."
+
+Select the copy outcome. Do not load an engineering outcome or start a build.

@@ -46,7 +46,7 @@ describe("Conquistador-owned protocol and authored corpus", () => {
     }
   });
 
-  it("uses the same default agent, capability roots, and three marketing parent jobs as the plugin", () => {
+  it("uses the same default agent, capability roots, and three compatible parent jobs as the plugin", () => {
     const corpus = loadCorpusDescriptor(skillsRoot);
     expect(corpus.defaultAgent).toBe("conquistador");
     expect(corpus.jobs).toEqual([
@@ -71,19 +71,19 @@ describe("Conquistador-owned protocol and authored corpus", () => {
     expect(selection.fileIds.filter((fileId) => fileId.endsWith("/SKILL.md")).length)
       .toBeLessThan(runtimeCorpus.descriptor.skillIds.length);
 
-    for (const prompt of [
-      "Map the onboarding user flow",
-      "Specify the product UI",
-      "Architect the software system",
-      "Build an iOS app",
-      "Build a web app",
-      "Write the technical documentation",
+    for (const [prompt, outcome] of [
+      ["Map the onboarding user flow", "map-user-flow"],
+      ["Specify the product UI", "brief-product-ui"],
+      ["Architect the software system", "architect-software-system"],
+      ["Build an iOS app", "build-ios-app"],
+      ["Build a web app", "build-web-app"],
+      ["Write the technical documentation", "write-technical-docs"],
     ]) {
       const engineering = runtimeCorpus.resolve(prompt);
       expect(engineering.job, prompt).toBe("create-or-improve");
       expect(engineering.fileIds, prompt).not.toContain("conquistador/workflows/specify-product-experience.md");
       expect(engineering.fileIds.filter((fileId) => fileId.endsWith("/SKILL.md")), prompt)
-        .toEqual(["conquistador/SKILL.md"]);
+        .toEqual(["conquistador/SKILL.md", `${outcome}/SKILL.md`].sort());
     }
   });
 

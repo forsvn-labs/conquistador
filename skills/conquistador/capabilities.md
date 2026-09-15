@@ -1,7 +1,8 @@
 # Compact capability map
 
 Use this map privately. Select the smallest outcome or composition that produces the requested result.
-Skip a step when accepted context already supplies its decision; never narrate this map.
+All 38 outcomes below are available through /conquistador when installed. Skip a step when accepted
+context already supplies its decision; never narrate this map.
 
 ## Launch or grow this
 
@@ -31,15 +32,17 @@ Skip a step when accepted context already supplies its decision; never narrate t
 | Write social/community work | `write-social` | Relevant channel note | Ready-to-post work, disclosure, reply plan |
 | Write direct outreach | `write-outreach` | `research-positioning` for unresolved segment/proof | Signal-led sequence, replies, compliance, evaluation |
 | Write long-form work | `write-longform` | `polish-vietnamese` for Vietnamese | Defensible thesis, evidence, objections, finished draft |
+| Inspect supplied video | `analyze-video` | Relevant outcome for requested revisions | Timestamped observations, evidence limits, and requested analysis |
 | Create short-form video | `create-shortform` | Relevant channel and format notes | Hero, true recuts, production spec, learning plan |
 | Improve a conversion surface | `improve-conversion` | Relevant creation outcome for the revision | Diagnosis, ready revision, one discriminating test |
 | Create or revise Vietnamese | `polish-vietnamese` | The outcome owning strategy or channel requirements | Natural Vietnamese with preserved facts and voice |
 
-## Direct-only engineering outcomes
+## Create or improve product and engineering work
 
-These outcomes are package-present but outside the default parent route and the v1 marketing/growth
-usefulness claim. Do not select them as part of an ordinary Conquistador job. A host may invoke one
-directly when the user explicitly requests that engineering outcome.
+Route these outcomes through the parent when the user requests the corresponding work. An incidental
+mention of an app, interface, or system in a marketing brief is not an engineering request. Keep
+specification, implementation, and external deployment within the user's scope. Use the existing
+`create-or-improve` runtime job for these requests; no fourth protocol job is required.
 
 | User outcome | Primary outcome | Add only when needed | Required finish |
 |---|---|---|---|

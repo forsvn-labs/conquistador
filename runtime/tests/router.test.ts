@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { readFileSync, readdirSync } from "node:fs";
 import { resolve } from "node:path";
 
 import { Ajv2020 } from "ajv/dist/2020.js";
@@ -59,6 +59,26 @@ describe("Capability Router contract", () => {
       "playbook:content-intelligence-loop",
       "skill:research-content-ideas",
     ]));
+  });
+
+  it("routes every installed outcome ID and spaced alias to skill guidance", () => {
+    const ids = readdirSync(resolve(root, "../skills")).filter((id) => id !== "conquistador").sort();
+    expect(ids).toHaveLength(38);
+    const contract = loadRouterContract();
+    expect(contract.routes.filter((route) => route.target.kind === "skill").map((route) => route.target.id).sort()).toEqual(ids);
+    for (const id of ids) {
+      for (const alias of [id, id.replaceAll("-", " "), `/conquistador ${id}`]) {
+        expect(routeIntent(alias), alias).toMatchObject({ outcome: "skill", targetId: id });
+      }
+    }
+    expect(contract.routes.filter((route) => route.target.kind === "playbook").map((route) => route.target.id))
+      .toEqual(["content-intelligence-loop"]);
+  });
+
+  it("abstains when engineering aliases compete with another outcome or playbook", () => {
+    for (const prompt of ["build-web-app and write-copy", "map user flow and brief product ui", "build-ios-app in content-intelligence-loop"]) {
+      expect(routeIntent(prompt), prompt).toMatchObject({ outcome: "abstain", reason: "ambiguous-intent" });
+    }
   });
 
   it("rejects a contract that guesses or activates inside the plugin", () => {

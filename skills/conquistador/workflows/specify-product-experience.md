@@ -1,7 +1,8 @@
 # Specify-product-experience workflow
 
-This workflow is direct-install composition only. It is not a default Conquistador parent job and is
-outside ordinary parent routing and the v1 marketing/growth usefulness claim.
+This workflow is parent-routed skill composition, not an executable playbook. Load it only when the
+requested product specification needs multiple outcomes. A narrow flow or UI request can use its
+primary outcome alone.
 
 Use it only when the user explicitly asks for this engineering outcome and a product result spans
 screens, states, decisions, native surfaces, and a buildable interface specification.

@@ -1,6 +1,6 @@
 # Shared product-engineering standard
 
-Load only when a host directly invokes one of the six engineering outcomes, or for a demand-triggered
+Load when the parent or host selects a requested engineering outcome, or for a demand-triggered
 technical handoff. Do not load it from an ordinary marketing/growth parent request.
 
 - Start from the accepted user job, flow, state model, and acceptance evidence.

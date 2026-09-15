@@ -9,7 +9,7 @@ Use this behavior when Conquistador is installed as an Eve agent (`agent/skills/
 - Do not enable Eve tools, hooks, MCP, channels, or schedules from this portable plugin. Those are
   not in the zero-runtime payload.
 - Do not treat this adapter as the coding-agent plugin, official xAI Grok Bot, Grok CLI, the
-  parent-only single-agent package, or the advisor/worker squad.
+  single-agent package, or the advisor/worker squad.
 
 The Eve candidate package (instructions and mount recipe) lives in `hosts/eve/` of the product
 repository. It is not part of this MIT plugin tree. Public Eve listing is unavailable.

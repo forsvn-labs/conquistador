@@ -1,7 +1,7 @@
 import { lstatSync, readFileSync, readdirSync } from "node:fs";
 import { posix, resolve } from "node:path";
 import { canonicalJson, deepFreeze, sha256 } from "./canonical.js";
-import { PARENT_JOBS, hasDirectOnlyEngineeringIntent, isDirectOnlyEngineeringOutcome, isDirectOnlyEngineeringWorkflow, } from "./routing-manifest.js";
+import { PARENT_JOBS, requestedEngineeringOutcome, isEngineeringOutcome, isEngineeringWorkflow, } from "./routing-manifest.js";
 const JOB_MARKERS = [
     "launch or grow this",
     "create or improve marketing work",
@@ -60,21 +60,14 @@ function score(prompt, file) {
     return total;
 }
 function jobFor(prompt) {
+    if (requestedEngineeringOutcome(prompt))
+        return "create-or-improve";
     const normalized = prompt.toLowerCase();
     if (/\b(result|metric|performance|analytics|learn|retention|conversion data)\b/.test(normalized))
         return "learn-from-results";
     if (/\b(launch|grow|campaign|channel|position|acquisition|product hunt)\b/.test(normalized))
         return "launch-or-grow";
     return "create-or-improve";
-}
-function exclusiveDirectOnlyWin(prompt, candidates, isDirectOnly) {
-    const scored = candidates
-        .map((file) => ({ file, score: score(prompt, file) }))
-        .filter((entry) => entry.score > 0);
-    if (scored.length === 0)
-        return false;
-    const best = Math.max(...scored.map((entry) => entry.score));
-    return scored.filter((entry) => entry.score === best).every((entry) => isDirectOnly(entry.file));
 }
 function ranked(prompt, candidates, maximum) {
     return candidates
@@ -97,7 +90,7 @@ function linkedFiles(initial, byId) {
             if (id.startsWith("../") || id === "..")
                 continue;
             const linked = byId.get(id);
-            if (linked && !selected.has(id)) {
+            if (linked && !selected.has(id) && !/^[^/]+\/SKILL\.md$/.test(id)) {
                 selected.set(id, linked);
                 queue.push(linked);
             }
@@ -122,27 +115,35 @@ function selectionFor(files, descriptor, prompt) {
         requiredIds.push("conquistador/standards/vietnamese.md");
     const allOutcomes = files.filter((file) => /^[^/]+\/SKILL\.md$/.test(file.id) && file.id !== "conquistador/SKILL.md");
     const allWorkflows = files.filter((file) => file.id.startsWith("conquistador/workflows/") && file.id.endsWith(".md"));
-    const outcomeIsDirectOnly = (file) => isDirectOnlyEngineeringOutcome(file.id.slice(0, -"/SKILL.md".length));
-    const workflowIsDirectOnly = (file) => isDirectOnlyEngineeringWorkflow(file.id.slice("conquistador/workflows/".length, -".md".length));
-    const directOnlyIntent = hasDirectOnlyEngineeringIntent(prompt) ||
-        exclusiveDirectOnlyWin(promptTokens, allOutcomes, outcomeIsDirectOnly) ||
-        exclusiveDirectOnlyWin(promptTokens, allWorkflows, workflowIsDirectOnly);
-    const outcomes = allOutcomes.filter((file) => !outcomeIsDirectOnly(file));
+    // A leading outcome name is an exact request, not a lexical mention in a brief.
+    // This makes every installed outcome reachable without loading the full library.
+    const request = prompt.trim().replace(/^\/conquistador\b\s*:?\s*/i, "");
+    const namedOutcome = allOutcomes.find((file) => {
+        const id = file.id.slice(0, -"/SKILL.md".length);
+        return new RegExp(`^/?${id}(?=$|[\\s:,.!?])`, "i").test(request);
+    });
+    const engineeringId = requestedEngineeringOutcome(request);
+    const explicitOutcome = namedOutcome ?? (engineeringId ? byId.get(`${engineeringId}/SKILL.md`) : undefined);
+    const engineeringIntent = engineeringId !== undefined ||
+        (namedOutcome !== undefined && isEngineeringOutcome(namedOutcome.id.split("/")[0]));
+    const outcomes = allOutcomes.filter((file) => !isEngineeringOutcome(file.id.split("/")[0]));
     const defaults = {
         "launch-or-grow": "plan-campaign/SKILL.md",
         "create-or-improve": "write-copy/SKILL.md",
         "learn-from-results": "measure-growth/SKILL.md",
     };
-    const selectedOutcomes = directOnlyIntent ? [] : ranked(promptTokens, outcomes, 2);
-    if (selectedOutcomes.length === 0 && !directOnlyIntent) {
+    const selectedOutcomes = explicitOutcome ? [explicitOutcome] : engineeringIntent ? [] : ranked(promptTokens, outcomes, 2);
+    if (selectedOutcomes.length === 0 && !engineeringIntent) {
         const fallback = byId.get(defaults[job]);
         if (fallback)
             selectedOutcomes.push(fallback);
     }
-    const workflows = allWorkflows.filter((file) => !workflowIsDirectOnly(file));
-    const selectedWorkflows = directOnlyIntent ? [] : ranked(promptTokens, workflows, 2);
+    const workflows = allWorkflows.filter((file) => !isEngineeringWorkflow(file.id.slice("conquistador/workflows/".length, -".md".length)));
+    // Narrow explicit requests need only their outcome. The parent can compose
+    // additional outcomes progressively when the requested deliverable needs them.
+    const selectedWorkflows = explicitOutcome || engineeringIntent ? [] : ranked(promptTokens, workflows, 2);
     const contextual = files.filter((file) => file.id.startsWith("conquistador/channels/") || file.id.startsWith("conquistador/adapters/"));
-    const selectedContext = ranked(promptTokens, contextual, 1);
+    const selectedContext = explicitOutcome || engineeringIntent ? [] : ranked(promptTokens, contextual, 1);
     const required = requiredIds.map((id) => byId.get(id)).filter((file) => Boolean(file));
     const relevant = linkedFiles([...selectedOutcomes, ...selectedWorkflows, ...selectedContext], byId);
     const candidates = [...new Map([...required, ...relevant].map((file) => [file.id, file])).values()];

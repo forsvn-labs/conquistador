@@ -13,4 +13,4 @@ enabled for that Bot.
 
 The Grok Bot candidate package (profile and packaged-skill mount) lives in `hosts/grok-bot/` of the
 product repository. It is not part of this MIT plugin tree. Public listing is unavailable. It is not
-the parent-only single-agent package or the advisor/worker squad.
+the single-agent package or the advisor/worker squad.

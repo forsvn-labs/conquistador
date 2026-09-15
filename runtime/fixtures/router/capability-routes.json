@@ -1,6 +1,6 @@
 {
   "schemaVersion": "conquistador.capability-router/v1",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "productVersion": "1.0.0",
   "activationRequiredByPortablePlugin": false,
   "loadsAtPluginRuntime": false,
@@ -13,38 +13,198 @@
   "routes": [
     {
       "id": "content-intelligence-loop",
-      "target": { "kind": "playbook", "id": "content-intelligence-loop" },
+      "target": {"kind": "playbook", "id": "content-intelligence-loop"},
       "phrases": ["content intelligence loop", "content-intelligence-loop"]
     },
     {
       "id": "write-copy",
-      "target": { "kind": "skill", "id": "write-copy" },
-      "phrases": ["write copy", "rewrite this copy", "landing page copy"]
+      "target": {"kind": "skill", "id": "write-copy"},
+      "phrases": ["write copy", "rewrite this copy", "landing page copy", "write-copy"]
     },
     {
       "id": "write-social",
-      "target": { "kind": "skill", "id": "write-social" },
-      "phrases": ["write a social post", "write social"]
+      "target": {"kind": "skill", "id": "write-social"},
+      "phrases": ["write a social post", "write social", "write-social"]
     },
     {
       "id": "research-content-ideas",
-      "target": { "kind": "skill", "id": "research-content-ideas" },
-      "phrases": ["research content ideas", "content opportunities"]
+      "target": {"kind": "skill", "id": "research-content-ideas"},
+      "phrases": ["research content ideas", "content opportunities", "research-content-ideas"]
     },
     {
       "id": "plan-campaign",
-      "target": { "kind": "skill", "id": "plan-campaign" },
-      "phrases": ["plan a campaign", "plan this campaign"]
+      "target": {"kind": "skill", "id": "plan-campaign"},
+      "phrases": ["plan a campaign", "plan this campaign", "plan-campaign", "plan campaign"]
     },
     {
       "id": "measure-growth",
-      "target": { "kind": "skill", "id": "measure-growth" },
-      "phrases": ["measure growth", "learn from these results"]
+      "target": {"kind": "skill", "id": "measure-growth"},
+      "phrases": ["measure growth", "learn from these results", "measure-growth"]
     },
     {
       "id": "fresh-eyes-review",
-      "target": { "kind": "skill", "id": "fresh-eyes-review" },
-      "phrases": ["fresh eyes review", "review this artifact"]
+      "target": {"kind": "skill", "id": "fresh-eyes-review"},
+      "phrases": ["fresh eyes review", "review this artifact", "fresh-eyes-review"]
+    },
+    {
+      "id": "allocate-marketing-budget",
+      "target": {"kind": "skill", "id": "allocate-marketing-budget"},
+      "phrases": ["allocate-marketing-budget", "allocate marketing budget"]
+    },
+    {
+      "id": "analyze-video",
+      "target": {"kind": "skill", "id": "analyze-video"},
+      "phrases": ["analyze-video", "analyze video"]
+    },
+    {
+      "id": "architect-software-system",
+      "target": {"kind": "skill", "id": "architect-software-system"},
+      "phrases": ["architect-software-system", "architect software system"]
+    },
+    {
+      "id": "audit-marketing",
+      "target": {"kind": "skill", "id": "audit-marketing"},
+      "phrases": ["audit-marketing", "audit marketing"]
+    },
+    {
+      "id": "brief-creative",
+      "target": {"kind": "skill", "id": "brief-creative"},
+      "phrases": ["brief-creative", "brief creative"]
+    },
+    {
+      "id": "brief-product-ui",
+      "target": {"kind": "skill", "id": "brief-product-ui"},
+      "phrases": ["brief-product-ui", "brief product ui"]
+    },
+    {
+      "id": "build-ios-app",
+      "target": {"kind": "skill", "id": "build-ios-app"},
+      "phrases": ["build-ios-app", "build ios app"]
+    },
+    {
+      "id": "build-web-app",
+      "target": {"kind": "skill", "id": "build-web-app"},
+      "phrases": ["build-web-app", "build web app"]
+    },
+    {
+      "id": "create-brand",
+      "target": {"kind": "skill", "id": "create-brand"},
+      "phrases": ["create-brand", "create brand"]
+    },
+    {
+      "id": "create-paid-campaign",
+      "target": {"kind": "skill", "id": "create-paid-campaign"},
+      "phrases": ["create-paid-campaign", "create paid campaign"]
+    },
+    {
+      "id": "create-run-of-show",
+      "target": {"kind": "skill", "id": "create-run-of-show"},
+      "phrases": ["create-run-of-show", "create run of show"]
+    },
+    {
+      "id": "create-shortform",
+      "target": {"kind": "skill", "id": "create-shortform"},
+      "phrases": ["create-shortform", "create shortform"]
+    },
+    {
+      "id": "decision-panel",
+      "target": {"kind": "skill", "id": "decision-panel"},
+      "phrases": ["decision-panel", "decision panel"]
+    },
+    {
+      "id": "design-pricing-and-packaging",
+      "target": {"kind": "skill", "id": "design-pricing-and-packaging"},
+      "phrases": ["design-pricing-and-packaging", "design pricing and packaging"]
+    },
+    {
+      "id": "diagnose-growth",
+      "target": {"kind": "skill", "id": "diagnose-growth"},
+      "phrases": ["diagnose-growth", "diagnose growth"]
+    },
+    {
+      "id": "evaluate-outreach",
+      "target": {"kind": "skill", "id": "evaluate-outreach"},
+      "phrases": ["evaluate-outreach", "evaluate outreach"]
+    },
+    {
+      "id": "evaluate-paid-campaign",
+      "target": {"kind": "skill", "id": "evaluate-paid-campaign"},
+      "phrases": ["evaluate-paid-campaign", "evaluate paid campaign"]
+    },
+    {
+      "id": "evaluate-shortform",
+      "target": {"kind": "skill", "id": "evaluate-shortform"},
+      "phrases": ["evaluate-shortform", "evaluate shortform"]
+    },
+    {
+      "id": "improve-conversion",
+      "target": {"kind": "skill", "id": "improve-conversion"},
+      "phrases": ["improve-conversion", "improve conversion"]
+    },
+    {
+      "id": "knowledge-review",
+      "target": {"kind": "skill", "id": "knowledge-review"},
+      "phrases": ["knowledge-review", "knowledge review"]
+    },
+    {
+      "id": "map-user-flow",
+      "target": {"kind": "skill", "id": "map-user-flow"},
+      "phrases": ["map-user-flow", "map user flow"]
+    },
+    {
+      "id": "model-growth-funnel",
+      "target": {"kind": "skill", "id": "model-growth-funnel"},
+      "phrases": ["model-growth-funnel", "model growth funnel"]
+    },
+    {
+      "id": "optimize-search",
+      "target": {"kind": "skill", "id": "optimize-search"},
+      "phrases": ["optimize-search", "optimize search"]
+    },
+    {
+      "id": "polish-vietnamese",
+      "target": {"kind": "skill", "id": "polish-vietnamese"},
+      "phrases": ["polish-vietnamese", "polish vietnamese"]
+    },
+    {
+      "id": "prioritize-opportunities",
+      "target": {"kind": "skill", "id": "prioritize-opportunities"},
+      "phrases": ["prioritize-opportunities", "prioritize opportunities"]
+    },
+    {
+      "id": "research-channel",
+      "target": {"kind": "skill", "id": "research-channel"},
+      "phrases": ["research-channel", "research channel"]
+    },
+    {
+      "id": "research-positioning",
+      "target": {"kind": "skill", "id": "research-positioning"},
+      "phrases": ["research-positioning", "research positioning"]
+    },
+    {
+      "id": "shape-initiative",
+      "target": {"kind": "skill", "id": "shape-initiative"},
+      "phrases": ["shape-initiative", "shape initiative"]
+    },
+    {
+      "id": "submit-feedback",
+      "target": {"kind": "skill", "id": "submit-feedback"},
+      "phrases": ["submit-feedback", "submit feedback"]
+    },
+    {
+      "id": "write-longform",
+      "target": {"kind": "skill", "id": "write-longform"},
+      "phrases": ["write-longform", "write longform"]
+    },
+    {
+      "id": "write-outreach",
+      "target": {"kind": "skill", "id": "write-outreach"},
+      "phrases": ["write-outreach", "write outreach"]
+    },
+    {
+      "id": "write-technical-docs",
+      "target": {"kind": "skill", "id": "write-technical-docs"},
+      "phrases": ["write-technical-docs", "write technical docs"]
     }
   ]
 }
