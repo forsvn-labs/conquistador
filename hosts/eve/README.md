@@ -28,6 +28,8 @@ or starts a process. `source` defaults to this full checkout. Method changes bel
 in `skills/`, never in the Eve template.
 
 Submit, status, and resume load the optional pinned `eve/client` package. They need
-an explicitly running app and a host-supplied caller credential. No model or network
+an explicitly running app, a host-supplied caller credential, and the trusted launcher's
+`CONQUISTADOR_EVE_ORIGIN` binding. The requested URL must match that origin before any
+network request. No model or network
 call occurs when importing `jobs.mjs`, requesting help, or preparing an app. Commands
 do not authorize actions. The separate operator interface is documented below.

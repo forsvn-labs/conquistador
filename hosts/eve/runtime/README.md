@@ -56,12 +56,30 @@ skill library, or a coding-agent prompt:
 | Variable | Purpose |
 | --- | --- |
 | `AI_GATEWAY_API_KEY` or supported host `VERCEL_OIDC_TOKEN` | Eve model access, held by the Eve host; upstream tool credentials never go here |
+| `CONQUISTADOR_EVE_ORIGIN` | Required expected app origin, configured alongside the token by the trusted launcher; CLI URLs must match after normalization |
 | `CONQUISTADOR_EVE_CALLER_TOKEN` | Unique random app access secret of at least 32 characters; caller can submit, inspect, and queue follow-ups |
 | `CONQUISTADOR_EVE_OPERATOR_TOKEN` | Different random secret of at least 32 characters; human-only input responses and inspection |
 | `CONQUISTADOR_EXECUTOR_MCP_URL` | Optional operator-configured HTTPS MCP endpoint speaking Streamable HTTP or SSE |
 | `CONQUISTADOR_EXECUTOR_TOKEN` | Optional separate Executor access token of at least 32 characters, scoped to this owner/account |
 | `CONQUISTADOR_EXECUTOR_ACCOUNT` | Optional stable non-secret Executor account identity |
 | `CONQUISTADOR_EXECUTOR_TOOLS` | Optional comma-separated exact MCP tool names approved for discovery |
+
+The trusted client launcher must set `CONQUISTADOR_EVE_ORIGIN` alongside its caller
+or operator token. For example, the operator can bind it to
+`https://jobs.example.com` or the explicitly selected `http://127.0.0.1:2000`.
+The origin must contain no credentials, path, query, or fragment. Scheme, hostname,
+and effective port must match `--url`; a trailing slash and default-port spelling
+normalize to the same origin. Missing, invalid, or mismatched bindings fail before
+SDK loading or network access. There is no CLI flag that overrides the binding.
+Treat the launcher's environment as trusted configuration; do not derive this value
+from task input or the requested URL.
+
+For an existing installation, configure the expected origin before using the updated
+client. To migrate to another origin, stop clients, reconcile outstanding jobs, revoke
+the old app credentials, and issue fresh caller/operator credentials at the new host.
+Update the trusted launcher origin and corresponding token together. Never reuse an
+old bearer merely because a new destination uses HTTPS. Origin binding does not replace
+TLS or protection of the launcher environment.
 
 All four Executor variables must be present together. With none, the app has no external
 tools and can produce drafts from supplied context. Partial or invalid configuration

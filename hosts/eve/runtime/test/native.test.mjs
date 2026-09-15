@@ -38,3 +38,25 @@ test('skill reference tool rejects traversal and absolute paths before sandbox a
     await assert.rejects(readSkillFile.execute({ skill: 'conquistador', path }, context), /contained text/);
   }
 });
+
+test('all client actions deny unbound or mismatched origins before any fetch', async t => {
+  const { mkdtemp, writeFile, rm } = await import('node:fs/promises');
+  const { tmpdir } = await import('node:os');
+  const { join } = await import('node:path');
+  const { jobRequest } = await import('../client.mjs');
+  const app = await mkdtemp(join(tmpdir(), 'eve-origin-test-'));
+  t.after(() => rm(app, { recursive: true, force: true }));
+  await writeFile(join(app, 'identity.json'), JSON.stringify({ schemaVersion: 'conquistador.eve-app/v1', owner: 'test-owner', instance: 'a'.repeat(32) }));
+  await writeFile(join(app, 'message.txt'), 'Synthetic request, never sent.');
+  await writeFile(join(app, 'responses.json'), '[{"requestId":"test","optionId":"approve"}]');
+  const fetch = t.mock.method(globalThis, 'fetch', () => { throw new Error('Unexpected network request'); });
+  const tokens = { CONQUISTADOR_EVE_CALLER_TOKEN: 'synthetic-caller-'.repeat(3), CONQUISTADOR_EVE_OPERATOR_TOKEN: 'synthetic-operator-'.repeat(3) };
+  for (const action of ['submit', 'status', 'resume', 'respond']) {
+    for (const binding of [undefined, '', 'https://expected.example', 'https://requested.example:8443', 'http://requested.example', 'https://requested.example/path']) {
+      await assert.rejects(jobRequest({ action, app, url: 'https://requested.example', session: 'wrun_test',
+        messageFile: join(app, 'message.txt'), responsesFile: join(app, 'responses.json') },
+      { ...tokens, CONQUISTADOR_EVE_ORIGIN: binding }), /not confirmed/);
+    }
+  }
+  assert.equal(fetch.mock.callCount(), 0);
+});

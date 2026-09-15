@@ -10,6 +10,11 @@ async function requestJob({ action, app, url, session, messageFile, responsesFil
   if (!app) throw new Error('An owner-isolated --app directory is required.');
   const identity = requireIdentity(JSON.parse(await readFile(join(app, 'identity.json'), 'utf8')));
   const host = safeOrigin(url);
+  // The trusted launcher binds this credential to its initial destination.
+  // A caller-selected URL and redirect refusal alone cannot protect a bearer.
+  if (!env.CONQUISTADOR_EVE_ORIGIN || safeOrigin(env.CONQUISTADOR_EVE_ORIGIN) !== host) {
+    throw new Error('The requested origin does not match the host credential binding.');
+  }
   const token = action === 'respond' ? env.CONQUISTADOR_EVE_OPERATOR_TOKEN : env.CONQUISTADOR_EVE_CALLER_TOKEN;
   if (!token || token.length < 32) throw new Error(`Host ${action === 'respond' ? 'operator' : 'caller'} credential is missing or too short.`);
   if (action !== 'submit' && !/^[A-Za-z0-9_-]{1,200}$/.test(session ?? '')) throw new Error('A durable session ID is required.');

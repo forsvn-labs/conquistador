@@ -4,7 +4,10 @@ import assert from 'node:assert/strict';
 import { spawn } from 'node:child_process';
 import { createServer } from 'node:net';
 import { once } from 'node:events';
-import { resolve } from 'node:path';
+import { resolve, join } from 'node:path';
+import { mkdtemp, writeFile, rm } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { jobRequest } from '../client.mjs';
 import { setTimeout } from 'node:timers/promises';
 import { Client } from 'eve/client';
 
@@ -45,10 +48,36 @@ try {
   await assert.rejects(caller.sessions.attach(missing).respond([{ requestId: 'none', optionId: 'approve' }]), error => error.status === 401);
   await assert.rejects(operator.sessions.attach(missing).respond([{ requestId: 'none', optionId: 'approve' }]), error => error.status === 409);
   assert.equal((await fetch(`${host}/eve/v1/session`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: '{"message":"denied"}' })).status, 401);
+  // Pass through to the real native server; record only status and role matches.
+  const inputs = await mkdtemp(join(tmpdir(), 'eve-bound-client-'));
+  const nativeFetch = globalThis.fetch;
+  const observed = [];
+  try {
+    const messageFile = join(inputs, 'message.txt');
+    const responsesFile = join(inputs, 'responses.json');
+    await writeFile(messageFile, 'Missing session; never create a replacement.');
+    await writeFile(responsesFile, '[{"requestId":"none","optionId":"approve"}]');
+    globalThis.fetch = async (input, init) => {
+      const response = await nativeFetch(input, init);
+      const auth = new Headers(init?.headers).get('authorization');
+      observed.push({ status: response.status, caller: auth === `Bearer ${callerToken}`, operator: auth === `Bearer ${operatorToken}` });
+      return response;
+    };
+    const env = { CONQUISTADOR_EVE_ORIGIN: host + '/', CONQUISTADOR_EVE_CALLER_TOKEN: callerToken, CONQUISTADOR_EVE_OPERATOR_TOKEN: operatorToken };
+    await assert.rejects(jobRequest({ action: 'resume', app, url: host, session: missing, messageFile }, env), /not confirmed/);
+    await assert.rejects(jobRequest({ action: 'respond', app, url: host, session: missing, responsesFile }, env), /not confirmed/);
+    assert.ok(observed.some(result => result.caller && result.status === 409));
+    assert.ok(observed.some(result => result.operator && result.status === 409));
+    assert.ok(observed.every(result => result.status === 409));
+  } finally {
+    globalThis.fetch = nativeFetch;
+    await rm(inputs, { recursive: true, force: true });
+  }
+
   for (const path of ['/eve/v1/task-input/anything', '/eve/v1/callback/anything']) {
     assert.equal((await fetch(host + path, { method: 'POST' })).status, 404);
   }
-  console.log(JSON.stringify({ evidence: 'local native HTTP, synthetic access tokens, no model jobs', health: 'ready', info: 'authenticated via eve/client', callerApproval: 'denied', unknownSession: '409 without replacement', callbackRoutes: 'absent' }));
+  console.log(JSON.stringify({ evidence: 'local native HTTP, synthetic access tokens, no model jobs', health: 'ready', info: 'authenticated via eve/client', callerApproval: 'denied', unknownSession: '409 without replacement', callbackRoutes: 'absent', boundWrapper: 'caller and operator reached native 409 with normalized origin' }));
 } finally {
   try { process.kill(-child.pid, 'SIGTERM'); } catch {}
   if (child.exitCode === null) await Promise.race([once(child, 'exit'), setTimeout(3000)]);
