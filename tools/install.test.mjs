@@ -37,7 +37,8 @@ test('portable master contains specialist contracts, declared outcomes and its c
   assert.equal(agent.pluginVersion, '0.1.0');
   assert.equal(agent.kind, 'master-agent');
   assert.equal(agent.role, 'orchestrator');
-  assert.equal(agent.delegation.maxDelegationsPerRun, 'host-bounded');
+  assert.equal(agent.schemaVersion, 'conquistador.agent-package/v2');
+  assert.equal(agent.delegation.maxDelegationsPerRun, 12);
   assert.ok(existsSync(join(target, agent.canonicalSkillRoot, 'SKILL.md')));
   for (const name of ['ads', 'copy', 'dr-landing', 'saas-landing', 'data-diagnosis', 'campaign-data', 'creative-assets']) {
     assert.ok(existsSync(join(target, agent.canonicalSkillRoot, 'specialists', `${name}-agent.md`)));
@@ -51,7 +52,7 @@ test('portable master contains specialist contracts, declared outcomes and its c
 test('native plugin install contains discoverable marketplaces and only its native agent', () => temporary(target => {
   install('install', 'plugin', target);
   assert.equal(validatePluginContracts(target).hostActivationVerified, false);
-  assert.deepEqual(readdirSync(join(target, 'agents')), ['conquistador.md']);
+  assert.deepEqual(readdirSync(join(target, 'agents')).sort(), ['conquistador', 'conquistador.md']);
   assert.match(readFileSync(join(target, 'SKILL.md'), 'utf8'), /skills\/conquistador\/SKILL.md/);
   install('remove', 'plugin', target);
   assert.equal(existsSync(target), false);
@@ -108,3 +109,49 @@ test('every staged mode includes usage docs with contained existing Markdown lin
     assert.equal(readFileSync(join(target, 'docs/USAGE.md'), 'utf8'), 'A user correction.');
   });
 });
+
+test('plugin and harness copy native dispatch; compact skill states full distribution', () => temporary(target => {
+  install('install', 'plugin', target);
+  assert.deepEqual(readdirSync(join(target, 'agents')).sort(), ['conquistador', 'conquistador.md']);
+  assert.ok(existsSync(join(target, 'agents/conquistador/agent.json')));
+  for (const name of ['contracts.mjs', 'orchestrate.mjs', 'bb.mjs', 'team.mjs', 'host.json', 'README.md']) {
+    assert.ok(existsSync(join(target, 'hosts/coding-agent', name)));
+  }
+  assert.ok(existsSync(join(target, 'tools/domain-package.mjs')));
+  assert.ok(existsSync(join(target, 'tools/plugin-contracts.mjs')));
+  assert.match(readFileSync(join(target, 'README.md'), 'utf8'), /hosts\/coding-agent/);
+  install('remove', 'plugin', target);
+  install('install', 'conquistador', target);
+  assert.equal(existsSync(join(target, 'hosts/coding-agent')), false);
+  assert.ok(existsSync(join(target, 'tools/domain-package.mjs')));
+  assert.ok(existsSync(join(target, 'tools/conquistador-mode.mjs')));
+  assert.match(readFileSync(join(target, 'README.md'), 'utf8'), /complete distribution, not this compact folder/);
+}));
+
+test('domain install writes restriction with mandatory review and omits undeclared outcomes', () => temporary(target => {
+  const parent = dirname(target);
+  const manifest = join(parent, 'domain.json');
+  writeFileSync(manifest, JSON.stringify({
+    schemaVersion: 'conquistador.domain-package/v1',
+    id: 'domain:diagnosis',
+    agentPackageSchemaVersion: 'conquistador.agent-package/v2',
+    allowed: {
+      roles: ['data-diagnosis'],
+      skills: [],
+      workflows: [],
+      tools: ['host-model'],
+      knowledgeHandles: ['vault:notes'],
+    },
+  }));
+  install('install', 'plugin', target, '--domain', manifest);
+  const restriction = JSON.parse(readFileSync(join(target, 'domain-restriction.json')));
+  assert.ok(restriction.allowed.skills.includes('conquistador'));
+  assert.ok(restriction.allowed.skills.includes('fresh-eyes-review'));
+  assert.ok(restriction.allowed.skills.includes('diagnose-growth'));
+  assert.equal(restriction.allowed.skills.includes('write-copy'), false);
+  assert.ok(existsSync(join(target, 'skills/diagnose-growth/SKILL.md')));
+  assert.equal(existsSync(join(target, 'skills/write-copy')), false);
+  assert.ok(existsSync(join(target, 'skills/conquistador/specialists/data-diagnosis-agent.md')));
+  assert.equal(existsSync(join(target, 'skills/conquistador/specialists/copy-agent.md')), false);
+  assert.match(readFileSync(join(target, 'README.md'), 'utf8'), /domain-restriction.json is the load-time allowlist/);
+}));

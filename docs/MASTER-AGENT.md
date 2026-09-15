@@ -35,9 +35,15 @@ same-context. Installation or file discovery does not prove that a host created 
 | Runtime MCP bridge | Tools for implemented runtime playbooks and artifacts | The configured runtime; general specialist orchestration remains host-owned |
 | Eve or official Grok Bot package | Experimental instructions and packaged skills | Native execution and specialist delegation remain unverified |
 
-A domain-specific host can restrict the available roster, skills, knowledge roots, and tools in its
-adapter. The current setup command does not build a custom domain package. It prepares the complete
-portable master agent or the fixed squad.
+A domain-specific host can restrict the available roster, skills, knowledge roots, and tools.
+`setup.mjs --domain ABS` writes `domain-restriction.json` next to a coding-agent, plugin, or
+harness install. `createDomainAuthorizer(root)` reads that file when present and is the load-time
+authorizer, not an opt-in CLI flag. Parent integration uses `skills=[]`. An `outcome` assignment
+may load any skill in `allowed.skills`; the mandatory final review still requires `fresh-eyes-review`
+in the dependency closure. Local MCP does not read the restriction file; domain MCP is unsupported.
+No restriction file means the full package. Plugin and harness copies include
+`hosts/coding-agent/README.md`. Compact skill folders do not include that adapter; native BB
+dispatch needs the complete distribution or a plugin/harness copy that includes those modules.
 
 ## Stack setup
 

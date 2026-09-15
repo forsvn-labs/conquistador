@@ -3,13 +3,27 @@ import { cpSync, existsSync, lstatSync, mkdirSync, mkdtempSync, readFileSync, re
 import { createHash } from 'node:crypto';
 import { dirname, join, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { DOMAIN_SCHEMA_VERSION, PARENT_SKILL, RESTRICTION_NAME, REVIEW_SKILL, parseRestriction, readDomainManifestFile, resolveDomainSelection, shouldStageSkillPath } from './domain-package.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const receiptName = '.conquistador-install.json';
-const [command, mode, destination, ...extra] = process.argv.slice(2);
+const fail = message => { throw new Error(message); };
+const argv = process.argv.slice(2);
+const command = argv[0];
+const mode = argv[1];
+const destination = argv[2];
+let domainPath;
+const extra = [];
+for (let i = 3; i < argv.length; i += 1) {
+  if (argv[i] === '--domain') {
+    if (domainPath !== undefined || !argv[i + 1]) fail('Domain flag is incomplete.');
+    domainPath = argv[++i];
+    continue;
+  }
+  extra.push(argv[i]);
+}
 const modes = ['conquistador', 'plugin', 'eve', 'grok-bot', 'single-agent', 'squad'];
 const readJson = path => JSON.parse(readFileSync(path, 'utf8'));
-const fail = message => { throw new Error(message); };
 
 function filesAt(directory, prefix = '') {
   return readdirSync(directory).sort().flatMap(name => {
@@ -55,15 +69,46 @@ function owned(target, expectedMode) {
   }
 }
 
-function stage(mode, target) {
+function selectionFor(target) {
+  if (domainPath) return resolveDomainSelection(root, readDomainManifestFile(domainPath));
+  const restrictionFile = join(target, RESTRICTION_NAME);
+  if (!existsSync(restrictionFile)) return undefined;
+  const restriction = parseRestriction(readJson(restrictionFile));
+  return resolveDomainSelection(root, {
+    schemaVersion: DOMAIN_SCHEMA_VERSION,
+    id: restriction.id,
+    agentPackageSchemaVersion: restriction.agentPackageSchemaVersion,
+    allowed: {
+      roles: restriction.allowed.roles,
+      skills: restriction.allowed.skills.filter(name => name !== PARENT_SKILL && name !== REVIEW_SKILL),
+      workflows: restriction.allowed.workflows,
+      tools: restriction.allowed.tools,
+      knowledgeHandles: restriction.allowed.knowledgeHandles,
+    },
+  });
+}
+
+function stage(mode, target, selection) {
   const copy = (from, to = from) => {
     const source = join(root, from);
-    if (lstatSync(source).isDirectory()) filesAt(source);
-    else if (!lstatSync(source).isFile()) fail(`Invalid source: ${from}`);
+    if (lstatSync(source).isDirectory()) {
+      if (selection && (from === 'skills' || from.startsWith('skills/'))) {
+        for (const key of filesAt(source)) {
+          const sourceKey = `${from}/${key}`;
+          if (!shouldStageSkillPath(sourceKey, selection)) continue;
+          const dest = join(target, to, key);
+          mkdirSync(dirname(dest), { recursive: true });
+          cpSync(join(source, key), dest, { errorOnExist: true, force: false });
+        }
+        return;
+      }
+      filesAt(source);
+    } else if (!lstatSync(source).isFile()) fail(`Invalid source: ${from}`);
     mkdirSync(dirname(join(target, to)), { recursive: true });
     cpSync(source, join(target, to), { recursive: true, errorOnExist: true, force: false });
   };
   const skill = (name, into = 'skills') => {
+    if (selection && !selection.skills.includes(name)) return;
     if (!/^[a-z][a-z0-9-]*$/.test(name) || !existsSync(join(root, 'skills', name, 'SKILL.md'))) fail(`Unknown skill: ${name}`);
     copy(`skills/${name}`, `${into}/${name}`);
   };
@@ -83,6 +128,13 @@ function stage(mode, target) {
   copy('docs/PROACTIVE.md');
   if (['conquistador', 'plugin', 'single-agent'].includes(mode)) {
     copy('tools/proactive.mjs');
+    copy('tools/conquistador-mode.mjs');
+    copy('tools/domain-package.mjs');
+  }
+  if (['plugin', 'single-agent'].includes(mode)) {
+    copy('tools/plugin-contracts.mjs');
+    copy('agents/conquistador/agent.json');
+    for (const name of ['contracts.mjs', 'orchestrate.mjs', 'bb.mjs', 'team.mjs', 'host.json', 'README.md']) copy(`hosts/coding-agent/${name}`);
   }
   if (mode === 'conquistador') {
     copy('tools/entrypoint/SKILL.md', 'SKILL.md');
@@ -113,9 +165,9 @@ function stage(mode, target) {
     role('agents/squad/worker.json', 'worker');
   } else fail(`Unknown install mode: ${mode}`);
   const usage = mode === 'conquistador'
-    ? 'Load SKILL.md as the Conquistador skill. It routes through library/conquistador and all bundled outcome methods. Start with /conquistador, or the equivalent named-skill invocation in your host. Proactive help is opt-in; read docs/PROACTIVE.md.'
+    ? 'Load SKILL.md as the Conquistador skill. It routes through library/conquistador and all bundled outcome methods. Start with /conquistador, or the equivalent named-skill invocation in your host. Proactive help is opt-in; read docs/PROACTIVE.md. Native BB specialist dispatch (hosts/coding-agent/) requires the complete distribution, not this compact folder.'
     : mode === 'single-agent'
-    ? 'Load agent/agent.json and agent/skills/conquistador in your host. The portable master contract, specialist roles, and all declared outcome skills are bundled. The host supplies any isolated worker contexts.'
+    ? 'Load agent/agent.json and agent/skills/conquistador in your host. The portable master contract, specialist roles, and declared outcome skills are bundled. Native dispatch imports hosts/coding-agent/*.mjs. When domain-restriction.json is present, createDomainAuthorizer(root) is the load-time authorizer; it is not optional. The host supplies isolated worker contexts.'
     : mode === 'squad'
       ? 'Load squad.json and each member contract with its own skills directory. Read sequential-fallback.md if your host cannot create separate contexts.'
       : mode === 'eve'
@@ -123,10 +175,20 @@ function stage(mode, target) {
         : mode === 'grok-bot'
           ? 'Use bot-profile.md and packaged-skills through the official Grok Bot app import controls, if supported. Read capabilities.md. Grok CLI is a different host.'
           : mode === 'plugin'
-            ? 'Add this directory as a local marketplace in Claude Code or Codex, then install conquistador@conquistador. Other Agent Plugins clients load plugin.json. Claude also discovers the Conquistador agent. No service or hook starts on install; methods declare prerequisites when needed.'
+            ? 'Add this directory as a local marketplace in Claude Code or Codex, then install conquistador@conquistador. Other Agent Plugins clients load plugin.json. Claude also discovers the Conquistador agent. Native dispatch imports hosts/coding-agent/*.mjs from this folder. No service or hook starts on install; methods declare prerequisites when needed.'
             : `Point your host at skills/${mode.slice(6)}. Read its SKILL.md for inputs, outputs and invocation prerequisites.`;
-  writeFileSync(join(target, 'README.md'), `# Conquistador ${mode}\n\n${usage}\n\nRead [Use Conquistador](docs/USAGE.md) for requests, review and correction. Read [Master-agent modes](docs/MASTER-AGENT.md) for specialist execution and host limits. This staged folder contains methods and usage documentation. Run installation, upgrade, removal, runtime, build, test and package commands from the complete distribution, not this folder. The proactive helper is available only when tools/proactive.mjs is included.\n\nPrepared locally, not live-host verified. This folder is installer-owned. Keep user artifacts elsewhere. Run upgrade or remove from the original complete distribution using the same mode and this destination. Modified files are preserved by refusing replacement.\n`);
-  const record = { schemaVersion: 'conquistador.public-install/v1', mode, productVersion: readJson(join(root, 'package.json')).version, digest: digest(target), liveHostVerified: false };
+  writeFileSync(join(target, 'README.md'), `# Conquistador ${mode}\n\n${usage}\n\nRead [Use Conquistador](docs/USAGE.md) for requests, review and correction. Read [Master-agent modes](docs/MASTER-AGENT.md) for specialist execution and host limits. This staged folder contains methods and usage documentation. Run installation, upgrade, removal, runtime, build, test and package commands from the complete distribution, not this folder. The proactive helper is available only when tools/proactive.mjs is included.${selection ? ' domain-restriction.json is the load-time allowlist; undeclared siblings are refused even if copied later. Private knowledge roots stay in operator-owned configuration outside this folder.' : ''}\n\nPrepared locally, not live-host verified. This folder is installer-owned. Keep user artifacts elsewhere. Run upgrade or remove from the original complete distribution using the same mode and this destination. Modified files are preserved by refusing replacement.\n`);
+  if (selection) {
+    writeFileSync(join(target, RESTRICTION_NAME), `${JSON.stringify(selection.restriction, null, 2)}\n`);
+  }
+  const record = {
+    schemaVersion: 'conquistador.public-install/v1',
+    mode,
+    productVersion: readJson(join(root, 'package.json')).version,
+    digest: digest(target),
+    liveHostVerified: false,
+    ...(selection ? { domainId: selection.id, agentPackageSchemaVersion: selection.agentPackageSchemaVersion } : {}),
+  };
   writeFileSync(join(target, receiptName), `${JSON.stringify(record, null, 2)}\n`, { flag: 'wx' });
 }
 
@@ -138,6 +200,7 @@ try {
       fail('Usage: node tools/install.mjs list | install|upgrade|remove MODE ABSOLUTE_DESTINATION');
     }
     const target = safeDestination(destination);
+    if (domainPath && !['conquistador', 'plugin', 'single-agent'].includes(mode)) fail('Domain packages apply to conquistador, plugin, and single-agent installs.');
     if (command === 'remove') {
       owned(target, mode);
       rmSync(target, { recursive: true });
@@ -145,11 +208,13 @@ try {
     } else {
       if (command === 'install' && existsSync(target)) fail('Destination exists. Use upgrade for an unchanged owned install, or choose a new directory.');
       if (command === 'upgrade') owned(target, mode);
+      const selection = selectionFor(target);
+      if (domainPath && command === 'install' && !selection) fail('Domain manifest did not resolve.');
       mkdirSync(dirname(target), { recursive: true });
       const temporary = mkdtempSync(join(dirname(target), '.conquistador-stage-'));
       let previous;
       try {
-        stage(mode, temporary);
+        stage(mode, temporary, selection);
         if (command === 'upgrade') {
           owned(target, mode);
           previous = mkdtempSync(join(dirname(target), '.conquistador-previous-'));

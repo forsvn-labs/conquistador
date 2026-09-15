@@ -187,6 +187,21 @@ See [Copilot plugin installation](https://docs.github.com/en/copilot/how-tos/cop
 Manifest checks and skills CLI installs do not establish native host activation or model quality.
 For Cursor, OpenCode, Gemini CLI, Pi and other skill-capable hosts, use the skills.sh route above.
 
+## Domain packages
+
+Use `setup.mjs --domain ABS` on coding-agent, plugin, and harness installs to write
+`domain-restriction.json`. Optional `--knowledge-roots ABS` maps logical handles (`name` or
+`scope:name`) to operator-owned directories outside the product. The restriction is the load-time
+allowlist; undeclared siblings are refused even if copied later. `createDomainAuthorizer(root)`
+reads that file automatically; parent integration uses `skills=[]` and does not inherit
+`write-copy`. An `outcome` assignment may name any skill in `allowed.skills`. The mandatory final
+review still uses `fresh-eyes-review`, which is always in the closure.
+
+Domain packages do not apply to MCP. `conquistador_methods` / `conquistador_read` serve the skills
+tree they were started from and do not load `domain-restriction.json`. A domain-staged plugin
+omits unselected skill folders, so MCP pointed at that folder only sees copied methods. MCP started
+from the complete distribution can list every method.
+
 ## Compact local installation
 
 From the complete distribution with Node 24, choose a new directory in the host's skill location:
@@ -197,7 +212,9 @@ node tools/install.mjs install conquistador /absolute/path/to/skills/conquistado
 
 This stages one root `SKILL.md`, the parent, all outcome methods under `library/`, and the optional
 proactive helper. Import that folder through the host's skill controls. No Node process or
-Conquistador service is needed when the host loads the methods.
+Conquistador service is needed when the host loads the methods. Native BB specialist dispatch
+(`hosts/coding-agent/`) is not in this compact folder; use the complete distribution, or stage
+`plugin` / `single-agent`, which copy those executable modules.
 
 Advanced users can stage an independently usable method:
 
@@ -227,8 +244,10 @@ node tools/install.mjs install squad /absolute/path/conquistador-squad
 ```
 
 The `single-agent` install contains the portable master contract in `agent/agent.json`, specialist
-assignment files, and its methods under `agent/skills/`. The consuming host decides how many worker
-contexts it can run. The squad contains worker and advisor contracts and their methods. The worker produces; the advisor
+assignment files, methods under `agent/skills/`, and the native dispatch modules under
+`hosts/coding-agent/` including `README.md` plus `agents/conquistador/agent.json`. When `domain-restriction.json` is present,
+`createDomainAuthorizer(root)` is the load-time authorizer; it is not an opt-in callback the CLI can
+omit. The consuming host decides how many worker contexts it can run. The squad contains worker and advisor contracts and their methods. The worker produces; the advisor
 reviews. The host must create separate contexts for independent review. Otherwise follow the
 installed `sequential-fallback.md` and identify the review as the same context. These are portable
 contracts that need a host adapter. For a native Claude agent, use its plugin above.
@@ -245,6 +264,10 @@ Configure it outside the installation, then have the host invoke it and pass the
 instructions to Conquistador. It cannot register hooks, run a schedule, access a provider or
 authorize an action. Installation leaves it disabled. Installing methods grants no new permission
 to publish, spend, persist learning or submit feedback.
+
+Claude Code can also opt into Conquistador mode through `tools/conquistador-mode.mjs`, which writes
+only owned hooks into `.claude/settings.local.json`. See [Proactive help](PROACTIVE.md#optional-conquistador-mode-claude-code).
+Grok Bot and Eve have no mode adapter.
 
 ## Optional runtime, terminal chat and MCP
 

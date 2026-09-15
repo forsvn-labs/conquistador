@@ -64,7 +64,8 @@ uninstall step. [Claude reference](https://code.claude.com/docs/en/plugins-refer
 The plugin includes the native `conquistador:conquistador` master agent. Select it in Claude's agent
 picker, or use the namespaced `/conquistador:conquistador` skill. It can request Claude worker
 contexts when the current host exposes them. The plugin contains one native Conquistador definition;
-specialist role files stay inside its method tree.
+specialist role files stay inside its method tree. Optional Conquistador mode is a separate, disabled
+hook adapter; see [Proactive help](PROACTIVE.md#optional-conquistador-mode-claude-code).
 
 ### Codex
 
@@ -151,9 +152,12 @@ The master contract allows the number of specialist assignments needed by the ta
 limits. The fixed squad always has one worker and one advisor. Use the native Claude plugin if you
 want an already defined host-specific parent instead.
 
-A domain-specific adapter may restrict the roster, knowledge roots, tools, and outcome methods. The
-current setup command packages the complete master agent or fixed squad; it does not generate a
-custom domain package.
+A domain-specific adapter may restrict the roster, knowledge roots, tools, and outcome methods.
+Pass `--domain ABS` on coding-agent, plugin, and harness installs to write `domain-restriction.json`.
+The load-time authorizer is `createDomainAuthorizer(root)` from `tools/domain-package.mjs`. It is
+automatic whenever that file is present. An `outcome` assignment authorizes listed skills against
+that allowlist; MCP stdio does not. Compact skill installs do not copy `hosts/coding-agent/`;
+use the complete distribution or a plugin/harness folder for native dispatch.
 
 To remove a harness, detach it in your host adapter, then uninstall its prepared directory through
 setup. Separate host contexts are required for independent review. A same-context fallback must

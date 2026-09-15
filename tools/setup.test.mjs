@@ -207,3 +207,38 @@ test('default MCP connector uses local stdio with no server and preserves mode d
   good('uninstall', '--path', path);
   assert.equal(existsSync(path), false);
 }));
+
+test('domain install records the restriction; knowledge roots stay outside the product', () => temporary((path, parent) => {
+  const manifest = join(parent, 'domain.json');
+  const rootsFile = join(parent, 'roots.json');
+  const notes = join(parent, 'notes');
+  mkdirSync(notes);
+  writeFileSync(manifest, JSON.stringify({
+    schemaVersion: 'conquistador.domain-package/v1',
+    id: 'domain:diagnosis',
+    agentPackageSchemaVersion: 'conquistador.agent-package/v2',
+    allowed: {
+      roles: ['data-diagnosis'],
+      skills: [],
+      workflows: [],
+      tools: ['host-model'],
+      knowledgeHandles: ['vault:notes'],
+    },
+  }));
+  writeFileSync(rootsFile, JSON.stringify({
+    schemaVersion: 'conquistador.knowledge-roots/v1',
+    roots: { 'vault:notes': notes },
+  }));
+  assert.match(good('install', '--target', 'skill', '--path', path, '--domain', manifest, '--knowledge-roots', rootsFile), /Domain: domain:diagnosis/);
+  assert.ok(existsSync(join(path, 'domain-restriction.json')));
+  assert.ok(existsSync(join(path, 'library/diagnose-growth/SKILL.md')));
+  assert.equal(existsSync(join(path, 'library/write-copy')), false);
+  good('uninstall', '--path', path);
+  const inside = join(root, 'skills');
+  writeFileSync(join(parent, 'inside-roots.json'), JSON.stringify({
+    schemaVersion: 'conquistador.knowledge-roots/v1',
+    roots: { 'vault:notes': inside },
+  }));
+  assert.match(bad('install', '--target', 'skill', '--path', path, '--domain', manifest, '--knowledge-roots', join(parent, 'inside-roots.json')), /outside the product package/);
+  assert.equal(existsSync(path), false);
+}));

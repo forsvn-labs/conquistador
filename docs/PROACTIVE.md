@@ -99,3 +99,22 @@ Staged skill, plugin and agent installs contain the helper and guide, not this t
 Tests use local synthetic configurations and child processes. They cover disabled defaults,
 event selection, validation, bounded reads and output, non-regular files, ignored stdin,
 and unchanged fixture files. They make no live calls.
+
+## Optional Conquistador mode (Claude Code)
+
+`tools/conquistador-mode.mjs` is the only implemented host adapter for Conquistador mode. It maps
+`session-start`, `before-delivery`, and `results-updated` to Claude Code's documented `SessionStart`,
+`Stop`, and `TaskCompleted` hooks in `.claude/settings.local.json`. Installation leaves mode
+disabled. Native activation is unverified.
+
+From a complete distribution or an install that includes the helper:
+
+```sh
+node /absolute/install/tools/conquistador-mode.mjs enable --host claude-code --project /absolute/project --config /absolute/local/proactive.json
+node /absolute/install/tools/conquistador-mode.mjs disable --host claude-code --project /absolute/project --config /absolute/local/proactive.json
+node /absolute/install/tools/conquistador-mode.mjs remove --host claude-code --project /absolute/project
+```
+
+The handler honors `stop_hook_active` and returns empty additional context in that case. It does not
+create specialists, edit unrelated host settings, or enable Grok Bot or Eve. Those remain
+experimental imports without a mode adapter.

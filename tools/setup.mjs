@@ -5,6 +5,7 @@ import { lstatSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, renameSyn
 import { dirname, isAbsolute, join, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createInterface } from 'node:readline/promises';
+import { parseKnowledgeRoots, readDomainManifestFile, resolveDomainSelection, resolveKnowledgeRoot } from './domain-package.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const script = join(root, 'tools/setup.mjs');
@@ -51,7 +52,7 @@ function parse(args) {
   const options = { action };
   for (let i = 0; i < rest.length; i += 2) {
     const flag = rest[i];
-    if (!['--target', '--project', '--path', '--url'].includes(flag) || options[flag.slice(2)] !== undefined || !rest[i + 1] || rest[i + 1].startsWith('--')) fail('Unknown, duplicate, or incomplete option.');
+    if (!['--target', '--project', '--path', '--url', '--domain', '--knowledge-roots'].includes(flag) || options[flag.slice(2)] !== undefined || !rest[i + 1] || rest[i + 1].startsWith('--')) fail('Unknown, duplicate, or incomplete option.');
     options[flag.slice(2)] = rest[i + 1];
   }
   if (options.target !== undefined && !Object.hasOwn(targets, options.target)) fail('Unknown target.');
@@ -66,6 +67,20 @@ function parse(args) {
   if (options.url !== undefined) {
     if (options.target !== 'mcp' || !['install', 'update'].includes(action)) fail('--url requires install/update --target mcp.');
     options.url = serviceUrl(options.url);
+  }
+  if (options.domain !== undefined) {
+    if (!['install', 'update'].includes(action)) fail('--domain requires install or update.');
+    if (options.target && !['skill', 'codex', 'claude-code', 'copilot', 'cursor', 'claude-plugin', 'codex-plugin', 'copilot-plugin', 'agent-plugins', 'harness'].includes(options.target)) {
+      fail('Domain packages apply to coding-agent, plugin, and harness installs.');
+    }
+    options.domain = absolutePath(options.domain);
+    options.selection = resolveDomainSelection(root, readDomainManifestFile(options.domain));
+  }
+  if (options['knowledge-roots'] !== undefined) {
+    if (!options.selection) fail('--knowledge-roots requires --domain.');
+    const config = parseKnowledgeRoots(JSON.parse(readFileSync(absolutePath(options['knowledge-roots']), 'utf8')));
+    for (const handle of options.selection.knowledgeHandles) resolveKnowledgeRoot(handle, config, { productRoot: root });
+    options.knowledgeRoots = config;
   }
   return options;
 }
@@ -92,8 +107,8 @@ function inspect(path, expectedMode) {
     if (!stat(path).isDirectory() || !stat(join(path, receiptName))?.isFile() || stat(join(path, receiptName)).isSymbolicLink()) fail('Missing receipt.');
     const record = JSON.parse(readFileSync(join(path, receiptName), 'utf8'));
     if (record.schemaVersion !== schema || (!Object.values(targets).includes(record.mode) && !/^skill:[a-z][a-z0-9-]*$/.test(record.mode))) fail('Unknown receipt.');
-    if (expectedMode && expectedMode !== record.mode) return { state: 'wrong-target', mode: record.mode };
-    return { state: record.digest === digest(path) ? 'unchanged' : 'modified', mode: record.mode };
+    if (expectedMode && expectedMode !== record.mode) return { state: 'wrong-target', mode: record.mode, domainId: record.domainId };
+    return { state: record.digest === digest(path) ? 'unchanged' : 'modified', mode: record.mode, domainId: record.domainId };
   } catch { return { state: 'modified', ownership: 'unverified' }; }
 }
 const quote = value => `'${value.replaceAll("'", "'\\''")}'`;
@@ -128,6 +143,7 @@ function report(options, result) {
     console.log(result.mode === 'mcp'
       ? 'Connector configured locally. Client registration unverified. No service was installed or contacted.'
       : 'Prepared locally. Host activation unverified.');
+    if (result.domainId) console.log(`Domain: ${result.domainId}. Load-time restriction is in domain-restriction.json.`);
     console.log('Next: ' + (result.mode === 'mcp'
       ? 'Add connector.json through your MCP client settings. With no --url, stdio serves bundled methods using your host model and tools. An explicit --url uses the separate runtime service; never pass human review or action tokens.'
       : result.mode === 'plugin'
@@ -194,8 +210,9 @@ function run(options, reminderShown = false) {
   const ownedMode = mode ?? result.mode;
   if (options.action === 'uninstall' && !reminderShown) removalReminder(ownedMode);
   if (ownedMode === 'mcp') mcpLifecycle(options);
-  else execFileSync(process.execPath, [join(root, 'tools/install.mjs'), { install: 'install', update: 'upgrade', uninstall: 'remove' }[options.action], ownedMode, options.path], { stdio: 'pipe' });
-  report(options, { ...inspect(options.path, ownedMode), mode: ownedMode });
+  else execFileSync(process.execPath, [join(root, 'tools/install.mjs'), { install: 'install', update: 'upgrade', uninstall: 'remove' }[options.action], ownedMode, options.path, ...(options.domain ? ['--domain', options.domain] : [])], { stdio: 'pipe' });
+  const checked = inspect(options.path, ownedMode);
+  report(options, { ...checked, mode: ownedMode });
 }
 async function guided() {
   if (!process.stdin.isTTY || !process.stdout.isTTY) fail('Interactive setup requires a terminal. Use install|status|update|uninstall --target TARGET --path ABS.');
@@ -230,7 +247,7 @@ async function guided() {
 export async function runSetup(args) {
   try {
     if (args.length === 0) await guided();
-    else if (args.length === 1 && args[0] === '--help') console.log('Usage: node tools/setup.mjs [install|status|update|uninstall --target TARGET (--project ABS | --path ABS) [--url ORIGIN]]\nTargets: ' + Object.keys(targets).join(', ') + '\nOmit target with --path for receipt-owned status, update, or uninstall. No arguments opens guided setup.');
+    else if (args.length === 1 && args[0] === '--help') console.log('Usage: node tools/setup.mjs [install|status|update|uninstall --target TARGET (--project ABS | --path ABS) [--url ORIGIN] [--domain ABS] [--knowledge-roots ABS]]\nTargets: ' + Object.keys(targets).join(', ') + '\nOmit target with --path for receipt-owned status, update, or uninstall. --domain selects roles, outcomes, workflows, tools, and logical knowledge handles from the canonical library. Knowledge roots stay in operator-owned configuration. No arguments opens guided setup.');
     else run(parse(args));
     return 0;
   } catch (error) {
