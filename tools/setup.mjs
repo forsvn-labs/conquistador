@@ -67,7 +67,6 @@ function parse(args) {
     if (options.target !== 'mcp' || !['install', 'update'].includes(action)) fail('--url requires install/update --target mcp.');
     options.url = serviceUrl(options.url);
   }
-  if (action === 'install' && options.target === 'mcp' && !options.url) fail('MCP install requires --url for an existing service.');
   return options;
 }
 // Match install.mjs receipt hashing, including rejection of links and special files.
@@ -127,10 +126,10 @@ function report(options, result) {
   }
   if (result.state === 'unchanged') {
     console.log(result.mode === 'mcp'
-      ? 'Connector configured locally. Connection unverified; client registration unverified. No service was installed or contacted.'
+      ? 'Connector configured locally. Client registration unverified. No service was installed or contacted.'
       : 'Prepared locally. Host activation unverified.');
     console.log('Next: ' + (result.mode === 'mcp'
-      ? 'Import connector.json through your MCP client settings. Keep model secrets and runtime data separate; set only CONQUISTADOR_CHAT_TOKEN in host secret settings if required. Never pass human review or action tokens.'
+      ? 'Add connector.json through your MCP client settings. With no --url, stdio serves bundled methods using your host model and tools. An explicit --url uses the separate runtime service; never pass human review or action tokens.'
       : result.mode === 'plugin'
         ? 'Use your host plugin manager to register and activate this local folder. Its activated copy, update, and uninstall remain host-owned.'
         : ['eve', 'grok-bot'].includes(result.mode)
@@ -140,7 +139,7 @@ function report(options, result) {
     console.log(`Update local copy: ${command('update', '--path', path)}`);
     console.log(`Uninstall local copy: ${command('uninstall', '--path', path)}`);
   } else if (result.state === 'absent' && target === 'mcp') {
-    console.log('Next: install --target mcp --path with --url for your existing service origin.');
+    console.log('Next: install --target mcp --path prepares local stdio. Add --url only for an existing runtime service.');
   } else if (result.state === 'absent' && target) {
     const urlArgs = options.url ? ['--url', options.url] : [];
     console.log(`Install: ${command('install', '--target', target, '--path', path, ...urlArgs)}`);
@@ -149,8 +148,15 @@ function report(options, result) {
 function mcpLifecycle(options) {
   const { action, path } = options;
   if (action === 'uninstall') { rmSync(path, { recursive: true }); return; }
-  const url = options.url ?? serviceUrl(JSON.parse(readFileSync(join(path, 'connector.json'), 'utf8')).args.at(-1));
-  const connector = { command: process.execPath, args: [join(root, 'runtime/bin/conquistador.js'), 'mcp', '--url', url] };
+  let url = options.url;
+  if (action === 'update' && !url) {
+    const prior = JSON.parse(readFileSync(join(path, 'connector.json'), 'utf8'));
+    const priorArgs = prior.args;
+    if (!Array.isArray(priorArgs) || priorArgs[1] !== 'mcp' ||
+        !([2, 4].includes(priorArgs.length)) || (priorArgs.length === 4 && priorArgs[2] !== '--url')) fail('Unrecognized MCP connector. Preserve it and choose a new folder.');
+    if (priorArgs.length === 4) url = serviceUrl(priorArgs[3]);
+  }
+  const connector = { command: process.execPath, args: [join(root, 'runtime/bin/conquistador.js'), 'mcp', ...(url ? ['--url', url] : [])] };
   mkdirSync(dirname(path), { recursive: true });
   const temporary = mkdtempSync(join(dirname(path), '.conquistador-connector-'));
   let previous;
@@ -199,7 +205,7 @@ async function guided() {
     if (!['install', 'status', 'update', 'uninstall'].includes(action)) fail('Unknown action.');
     const args = [action];
     if (action === 'install') {
-      console.log('Where will you use Conquistador?\n1. Coding agent (recommended)\n2. Host plugin\n3. MCP client for an existing service\n4. Custom agent host\n5. Experimental Grok/Eve');
+      console.log('Where will you use Conquistador?\n1. Coding agent (recommended)\n2. Host plugin\n3. MCP over stdio\n4. Custom agent host\n5. Experimental Grok/Eve');
       const groups = { 1: ['codex', 'claude-code', 'copilot', 'cursor', 'skill'], 2: ['claude-plugin', 'codex-plugin', 'copilot-plugin', 'agent-plugins'], 3: ['mcp'], 4: ['harness', 'squad'], 5: ['grok-bot', 'eve'] };
       const group = groups[(await prompt.question('Group [1]: ')).trim() || '1'];
       if (!Array.isArray(group)) fail('Unknown group.');
@@ -209,7 +215,10 @@ async function guided() {
       const location = Object.hasOwn(projectPaths, target) ? '--project' : '--path';
       const path = await prompt.question(location === '--project' ? 'Absolute project directory: ' : 'Absolute owned folder: ');
       args.push('--target', target, location, path);
-      if (target === 'mcp') args.push('--url', await prompt.question('Existing HTTP/HTTPS service origin: '));
+      if (target === 'mcp') {
+        const url = (await prompt.question('Runtime service origin, or Enter for local methods: ')).trim();
+        if (url) args.push('--url', url);
+      }
     } else args.push('--path', await prompt.question('Absolute owned folder: '));
     const options = parse(args);
     console.log(command(...args));

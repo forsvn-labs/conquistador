@@ -4,6 +4,13 @@ No public release is claimed. See [VERSIONS.md](VERSIONS.md) for independent pro
 versions. Verification establishes the stated local scope; live provider operation, useful model
 output, human acceptance, rights disposition and release authority require separate evidence.
 
+## 0.1.0 direct installation
+
+- Made skills.sh and remote host plugins direct installation options, with a clone as a fallback.
+- Added default local MCP over stdio for bundled method access without a runtime service or API key.
+- Kept `mcp --url` for the existing runtime bridge and made no-URL connector setup local by default.
+- Added private Git npm launchers and paired removal instructions. Preserved the npm private guard.
+
 ## 0.1.0 guided setup follow-up
 
 - Added one guided setup command and matching local install, status, update and uninstall actions.

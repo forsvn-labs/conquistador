@@ -74,8 +74,9 @@ job. Other operating systems and CPU architectures still require their own obser
 
 `tools/setup.mjs` coordinates local install, status, update and uninstall. It delegates skill,
 plugin and role copies to the existing owned installer. MCP connector configuration is separate
-from runtime service and data ownership. The executable's `setup` command loads this coordinator
-without importing runtime dependencies. Keep help and local file setup usable before bootstrap.
+from runtime service and data ownership. The executable's `setup` command and default `mcp` method server load Node-only tools without
+importing runtime dependencies. Explicit `mcp --url` retains the HTTP runtime bridge. Keep the
+default entry points usable before bootstrap and test stdout as protocol data only.
 
 Run the setup lifecycle tests when changing host paths or removal behavior. Host registration
 commands are instructions, not hidden subprocesses. Test files and synthetic fixtures cannot

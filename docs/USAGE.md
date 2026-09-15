@@ -139,7 +139,8 @@ feedback upload happens automatically.
 ## Optional tools and limits
 
 The optional runtime runs declared playbooks and stores run artifacts. It does not execute every
-method. MCP provides run, artifact-list, artifact-read and cancel access to that configured runtime;
+method. Default MCP provides local method access using your host model and tools. Explicit `mcp --url`
+provides run, artifact-list, artifact-read and cancel access to that configured runtime;
 it grants no human approval or publishing authority. Its built-in model adapter has no browser,
 file-editing or external action tools.
 

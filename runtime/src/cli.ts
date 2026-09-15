@@ -294,7 +294,7 @@ Usage:
   conquistador init                    Create runtime configuration
   conquistador chat [--url URL] [--intent TEXT] [--product TEXT]
                     [--audience TEXT] [--channel TEXT] [--goals TEXT] [--timeout-ms N]
-  conquistador mcp [--url URL]         Serve MCP over stdio
+  conquistador mcp [--url URL]         Local methods over stdio; URL selects runtime bridge
   conquistador serve [--config FILE]   Start the service
   conquistador doctor [--config FILE]  Read-only diagnostics
   conquistador run --playbook ID|--playbook-file FILE --input FILE
