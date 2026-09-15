@@ -1,38 +1,72 @@
 # Private dogfooding
 
-Use the complete private 0.1.0 distribution. Ask your coding agent to install Conquistador from
-that folder into the current project using [the install guide](../INSTALL.md). Start a fresh host
-session and select Conquistador. The host may use `/conquistador`, `$conquistador`, a picker or a
-plugin namespace. Initial activation is the first thing to verify in your actual host.
+Use this guide to check whether Conquistador works for your real tasks in your actual host.
+Start with one task you already need to finish. Record the result separately from package checks.
 
-Start with a real task you already need to do. Let the parent select methods and prepare missing
-local tools. You do not need the optional HTTP runtime, MCP service, Docker or every integration to
-use the skill library.
+## Get the private build
 
-Useful first exercises:
+1. Follow [installation](../INSTALL.md#recommended-quick-start) using an authenticated account with
+   access to `forsvn-labs/conquistador`, branch `dogfood/0.1.0`, or a supplied private distribution.
+   Expect a clean source folder and record its exact commit or package identity.
+2. Install the complete entry point for your host. Start a fresh host session and select
+   Conquistador. Expect the host to discover the skill or namespaced plugin entry point.
+3. Use a request from [the usage guide](USAGE.md) with your own files. Expect a finished deliverable,
+   its evidence gaps and a next action. Check these yourself before marking the task accepted.
 
-- Ask for a finished product or marketing deliverable from real project context. Check whether
-  routing is useful, the result is accurate and the agent finishes without unnecessary questions.
-- Ask for a Lavish preview, make one concrete annotation, and check that the agent applies it to
-  the canonical source. Confirm the browser link works from your machine and the agent resumes.
-- Bring real results or a correction into a follow-up request. Check that Conquistador changes
-  its recommendation using that evidence rather than repeating the previous output.
+The agent can handle routine local setup. You handle account sign-in and host-required approvals.
+You do not need the HTTP runtime, MCP, Docker, hooks or every integration to use the skill library.
 
-Keep notes in your private project outside the installed package. Record the build or install
-receipt, host, request, failure or correction, and whether the revised result worked. Save only
-what is useful; do not automatically copy entire transcripts. Source changes should follow a
-reproducible problem or an observed improvement.
+## Check the first tasks
 
-Memory is still an explicit user-approved workflow; automatic cross-run retrieval is absent.
-[Proactive reminders](PROACTIVE.md) remain opt-in and require an actual host event.
-[Preview setup](PREVIEW.md) handles the cached CLI, telemetry opt-out and attached polling.
-Treat these as behaviors to try in the host, not as already proven by packaging tests.
+| Exercise | What to inspect | Record separately |
+| --- | --- | --- |
+| Produce a launch or product deliverable | Correct use of context, finished work, useful review, unnecessary questions | Whether the host activated the method and whether you accepted the actual result |
+| Preview a visual deliverable | Reachable private link, one annotation returned through polling, source revision | Whether browser review worked in your host; a started server alone is insufficient |
+| Supply a correction or measured result | Revised recommendation, preserved facts, stated uncertainty | Whether the revision fixed the observed problem |
 
-The public `submit-feedback` path is deferred while dogfooding privately. It may prepare a local
-redacted draft, but its public-destination requirement must not be relaxed to upload private notes.
-Do not use the historical repository URL as proof that this build is installed or released.
+Use [Lavish setup](PREVIEW.md) for previews and telemetry opt-out. The
+[proactive helper](PROACTIVE.md) is disabled by default and requires a real host event.
+These are behaviors to test, not proof already supplied by a ZIP, manifest or local fixture.
 
-Keep the repository private. The root npm package is marked `private: true`; local packing and
-installation remain available. Do not publish packages, create public marketplace listings, change
-repository visibility or share test artifacts without explicit authorization. Public release and
-the landing page come later, after real use shows what needs fixing.
+## Keep useful private notes
+
+Keep notes in your private project outside the installed package. A small record is enough:
+
+```text
+Build: exact source commit or supplied package identity
+Host: name, version, installation route and scope
+Task: request and selected source references
+Observed result: what happened, including any failure
+Correction: what changed in the request or output
+Verdict: accepted, needs revision, or blocked, with a reason
+Next check: the smallest task that can confirm the correction
+```
+
+Store only the material needed to explain the observation. Do not automatically copy full
+transcripts, customer data or credentials. A source commit identifies what you tested; it does
+not imply that another host or later build will behave the same way.
+
+## Memory and feedback
+
+Corrections in the current task do not automatically become memory. The
+[memory workflow](LEARNING.md) requires approval for the exact entry and destination. Reuse through
+host file tools starts with at most five relevant entries and 8,000 characters of recalled text.
+Automatic cross-run retrieval, enforced project isolation and global learning are absent.
+
+Keep product feedback as local redacted drafts during private dogfooding. `submit-feedback` may
+prepare a draft, but its public-destination requirement must not be relaxed to upload private
+notes. Memory approval is not permission to disclose feedback. Keep the draft local until you
+and the recipient agree on a private destination and the exact content to disclose. Drafting
+it does not send it anywhere.
+
+## Update and retry
+
+Use the [installation owner's update procedure](../INSTALL.md#update-or-remove-an-installation).
+Record the new build identity and repeat the smallest task that exposed the problem. Keep the
+original observation so you can compare the revised result. Preserve user outputs outside the
+installed copy; uninstalling the product does not erase those files or runtime state.
+
+Keep the repository and installed copies private. The root package has `private: true`; local
+packing and installation remain available. Public packages, marketplace listings, repository
+visibility changes and artifact sharing need explicit authorization. No hosted SaaS, native
+Eve/Grok activation, live-provider support or release acceptance follows from these local checks.

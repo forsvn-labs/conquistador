@@ -4,7 +4,7 @@ Conquistador is a product agent toolkit. Users ask the Conquistador parent for a
 method selection, composition, review and the next useful step. A host supplies the model, available
 tools, project access and permission controls. Conquistador is not currently a hosted SaaS service.
 
-## User capabilities
+## Outcomes and benefits
 
 | Need | Work Conquistador can help produce |
 | --- | --- |
@@ -23,12 +23,29 @@ relevant development tools. Publishing, spend and account changes need authorize
 Conquistador prepares missing local prerequisites through the host when permitted. It names remaining
 account, tool or input gaps rather than inventing observations or execution.
 
+The [usage guide](USAGE.md) pairs concrete requests with expected deliverables. You provide the
+outcome, facts, access and decisions. Conquistador handles method selection, routine local tool
+setup, production and review through the host. The parent contract requires a usable deliverable,
+evidence or labeled assumptions, and one next action. It does not guarantee performance lift.
+
+## What the tools add
+
+| Tool or method | Practical benefit | Implementation boundary |
+| --- | --- | --- |
+| Parent routing and 38 outcome methods | One request can produce a coherent package without manually selecting each method | Bundled Markdown contracts guide the host model; only relevant methods are loaded |
+| Review contracts | The result includes defects, uncertainty and recheck needs before you use it | Independent review needs separate host contexts; a same-context pass must be identified |
+| Lavish AXI | You can point to a visual change instead of describing its location in chat | The host runs the optional CLI and polls; the agent applies annotations to the source |
+| Private project memory workflow | Approved facts and corrections can be reused in a later task | Host file tools and explicit consent are required; no automatic retrieval service |
+| Runtime and MCP | Supported playbook work has persisted state and readable draft artifacts | Requires service/model configuration; the four MCP tools cannot approve or publish |
+| Typed catalog | Integrators can constrain operations, budgets and authority | A catalog entry or fixture-tested adapter does not provide a live connection or support claim |
+| Eval Lab | Developers can define repeatable local checks and grading contracts | Synthetic examples cannot establish real-task quality or human acceptance |
+
 ## Platform and service boundary
 
 | Platform or module | Shipped implementation | Activation and limits |
 | --- | --- | --- |
-| skills.sh / coding agent | One root skill with all 38 outcomes | CLI installs the complete clean bundle; host discovery and invocation naming apply |
-| Claude/Codex plugins | Repo-local marketplaces, methods and icon; one native Claude agent | Documented host activation commands; no central listing or universal alias claim |
+| skills.sh / coding agent | One root skill with all 38 outcomes | CLI installs a clean private clone or distribution; host discovery and invocation naming apply |
+| Claude/Codex plugins | Repo-local marketplaces, methods and icon; one native Claude agent | Host plugin support and activation required; no central listing or universal alias claim |
 | Agent Plugins 1.0.0 | Root `plugin.json` and fixed `skills/` discovery | Compatible client required; hooks and native agents are host-specific |
 | Single-agent harness | Parent role and all declared methods | Host supplies agent execution; no service starts on install |
 | Advisor/worker harness | Separate role packages and review handoff | Independent review requires separate host contexts |
@@ -59,9 +76,9 @@ telemetry or unsolicited feedback submission is included.
 ## Repository layout
 
 The repository identity is [forsvn-labs/conquistador](https://github.com/forsvn-labs/conquistador).
-The product remains private during dogfooding. Use the supplied local distribution; this build's
-remote installation is not configured. [The dogfood guide](DOGFOOD.md) covers actual host use.
+The product remains private during dogfooding. Use an authenticated clone of branch
+`dogfood/0.1.0` or a supplied private distribution. The account must have repository access. [The dogfood guide](DOGFOOD.md) covers actual host use.
 
-Internal research, planning, provenance and source-history preservation belong outside this public
+Internal research, planning, provenance and source-history preservation belong outside this product
 repository. They are never runtime dependencies. The landing site is a separate project and does
-not need its source shipped with the product. See [installation](../INSTALL.md) for local commands.
+not need its source shipped with the product. See [installation](../INSTALL.md) for setup and update/removal ownership.

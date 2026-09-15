@@ -4,56 +4,120 @@ Choose a skill install for everyday use. Choose a plugin if you want your host's
 and, in Claude Code, the native Conquistador agent. Both include all 38 outcome methods.
 The optional runtime is a separate choice for durable playbooks and MCP.
 
-Version 0.1.0 is a private dogfood build. Use a fresh extracted distribution for the local commands
-below. Remote installation of this build is not configured, and public publication is deferred.
-The npm publication guard does not prevent local ZIP or tarball installation. See the
-[dogfood guide](docs/DOGFOOD.md) for the first real tasks and private feedback capture.
+Version 0.1.0 is private. The source is
+[forsvn-labs/conquistador, branch dogfood/0.1.0](https://github.com/forsvn-labs/conquistador/tree/dogfood/0.1.0).
+Your GitHub account must have access, including any organization sign-in requirements.
+A repository-not-found response can mean that the account lacks access. Use a supplied private
+ZIP if you do not have repository access. There is no public package to install from npm.
 
 ## Let your coding agent do the setup
 
-You can ask an existing coding agent to install Conquistador into the current project from the
-provided distribution. The commands below are executable setup instructions for the agent; users
-can also run them directly. Initial host/plugin activation may require a host approval or a new
-session. Conquistador cannot invoke itself before the host can discover it.
+Ask your existing agent to follow the quick start below for the current project. It can check
+prerequisites, obtain a clean source folder, install the entry point and check discovery. You handle
+account sign-in, repository access and any host-required approval. Do not paste credentials into chat.
+Conquistador becomes usable after the host discovers it; it cannot install itself beforehand.
 
-After that, ask `/conquistador` for the result. It detects missing tools, prepares routine local
-prerequisites with the host's package manager, checks them and continues. It installs only what the
-task needs. For example, [Lavish preview](docs/PREVIEW.md) uses a cached package launcher instead
-of requiring a manual global install. Credentials, paid services and host-required approvals remain
-separate. The skill library does not require Conquistador's runtime or development dependencies.
+During later tasks, Conquistador checks missing tools and prepares routine local prerequisites
+through the host when permitted. It installs only what the task needs. For example,
+[Lavish preview](docs/PREVIEW.md) uses a cached package launcher. Model access comes from your host;
+paid providers and external account connections remain separate.
 
-## Recommended: skills.sh
+## Recommended quick start
 
-From your project directory, install from a fresh extracted Conquistador ZIP:
+Use an existing coding-agent project and Node 24 with npm. The clone route also needs Git and an
+authenticated GitHub CLI. Replace every `/absolute/path/...` below with your own path. Keep the
+source clone separate from the project receiving the skill.
+
+1. Confirm that the active GitHub account can read the private repository:
+
+   ```sh
+   gh repo view forsvn-labs/conquistador --json nameWithOwner,isPrivate
+   ```
+
+   Expect `forsvn-labs/conquistador` and `isPrivate: true`. If access fails, complete GitHub sign-in
+   or request repository access from the owner, then retry. Do not bypass this with another source.
+
+2. Clone the dogfood branch into a new, dedicated directory:
+
+   ```sh
+   gh repo clone forsvn-labs/conquistador /absolute/path/conquistador-source -- --branch dogfood/0.1.0 --single-branch
+   git -C /absolute/path/conquistador-source rev-parse HEAD
+   git -C /absolute/path/conquistador-source status --short
+   ```
+
+   Expect a commit ID and no status output. Record the full commit ID for your dogfood notes.
+   The branch can advance; compare the ID with the build your maintainer asked you to test.
+   Do not install dependencies, build, or save project files in this source folder before copying it.
+   If the destination already exists, choose a new directory instead of deleting or cleaning it.
+
+   If you received a ZIP, extract it into a new directory and use the extracted root containing
+   `SKILL.md` instead. Record its supplied build identity. Git checks apply only to a clone.
+
+3. In the project where you want to use Conquistador, install the root entry point:
+
+   ```sh
+   cd /absolute/path/your-project
+   DO_NOT_TRACK=1 DISABLE_TELEMETRY=1 npx skills add /absolute/path/conquistador-source --skill conquistador --copy
+   ```
+
+   Choose your host when prompted. Expect an installation summary for `conquistador` in the project
+   scope. To select a host explicitly, add `--agent codex` or `--agent claude-code` to that command.
+   Review the installer choices before accepting them.
+
+4. Check discovery, then start a new host session:
+
+   ```sh
+   DO_NOT_TRACK=1 DISABLE_TELEMETRY=1 npx skills list
+   ```
+
+   Expect `conquistador` in the installed skills. Select it in your host and try the first request
+   in [the usage guide](docs/USAGE.md). The host may use `/conquistador`, `$conquistador` or a picker.
+   A listing proves installation metadata; the first task checks actual host activation.
+
+The root `SKILL.md` carries the complete library of 38 outcomes. Do not install only the nested
+`skills/conquistador` folder or use `--full-depth`; the parent needs its bundled methods.
+The agent selects the methods for each request.
+
+The skills CLI copies a local directory, which can include untracked files and dependencies.
+Use a fresh clone or extraction, never a working development tree with `node_modules`, `dist`,
+secrets, local state or symlinks. Keep this private product out of public project commits.
+The [compact helper](#compact-local-installation) stages a smaller alternative.
+
+The telemetry variables above disable the third-party installer's telemetry. Supported options and
+host names are in the [skills CLI source documentation](https://github.com/vercel-labs/skills#install-a-skill).
+This guide uses an authenticated clone plus a local install so the source branch and commit can be
+checked before installation.
+
+## Optional private release ZIP
+
+After the maintainer ships the private `v0.1.0` prerelease, an authenticated GitHub account with
+repository access can download its packaged ZIP. Choose a fresh download directory:
 
 ```sh
-DO_NOT_TRACK=1 npx skills add /absolute/path/extracted-conquistador --skill conquistador --copy
+gh release download v0.1.0 --repo forsvn-labs/conquistador --pattern conquistador-0.1.0.zip --dir /absolute/path/conquistador-download
 ```
 
-The skills CLI asks which installed agents should receive the skill. To select one explicitly:
+Expect `conquistador-0.1.0.zip` in that directory. Extract it into a new folder, locate the root
+containing `SKILL.md`, and use that root as the source in quick-start step 3. This is a private
+release asset, not a public npm registry package. The release also supplies the npm tarball,
+`SHA256SUMS` and `assembly.json` for package identity and integrity checks. A missing release or
+asset means this route is not available yet; use the authorized branch clone or supplied ZIP.
 
-```sh
-DO_NOT_TRACK=1 npx skills add /absolute/path/extracted-conquistador --skill conquistador --agent codex --copy
-```
+## Update or remove an installation
 
-Agent names include `claude-code`, `codex`, `cursor`, `opencode`, `github-copilot`, `gemini-cli`
-and `pi`. These commands install into the current project. Leave out `--yes` to review the CLI's
-choices. `DO_NOT_TRACK=1` disables the third-party installer's telemetry.
+The tool that created a copy owns its lifecycle. Updating the source clone does not update an
+installed copy, and removing a skill does not erase project outputs or runtime data.
 
-The root `SKILL.md` forwards to the authored parent in `skills/conquistador/`. The complete public
-bundle travels with it, so every method stays available. The agent loads only relevant methods.
-Do not select the nested `skills/conquistador` directory alone or use `--full-depth` for this install.
-That would bypass the complete entry point.
+| Installed through | Update | Remove |
+| --- | --- | --- |
+| skills.sh with the local path above | Obtain a fresh branch clone or distribution, record its commit, and repeat the same `skills add` command for the same project and host | Run `DO_NOT_TRACK=1 DISABLE_TELEMETRY=1 npx skills remove conquistador` in that project and review the selected hosts |
+| Host plugin manager | Refresh its local marketplace source and use the host's update controls | Use the host's uninstall controls; remove the marketplace registration if no longer needed |
+| `tools/install.mjs` | Use `upgrade` with the original mode and destination from a complete distribution | Use `remove` with that same mode and destination |
 
-For a local source, use a fresh extracted distribution. The skills CLI copies the selected directory,
-including untracked content and dependencies if present. Do not point it at a development checkout
-containing `node_modules`, `dist`, local state, secrets or symlinks. The compact installer below
-provides a smaller alternative without the development modules.
-
-Start a new host session and select Conquistador. Ask `/conquistador` for your outcome. A host may
-use `$conquistador` or its skill picker instead. You do not need to choose the underlying methods.
-Use the skills CLI's `list`, `remove` and update controls for installations it owns. See the
-[skills CLI documentation](https://www.skills.sh/docs/cli) for supported host names and options.
+Preserve local edits before replacement. Keep user work outside installer-owned directories.
+A local-path install does not promise automatic branch tracking. After an update, start a fresh
+host session and repeat a small task. For runtime state retention and erasure, use the separate
+[runtime state guide](runtime/STATE.md).
 
 ## Claude Code plugin and agent
 
@@ -81,14 +145,17 @@ See [Claude marketplaces](https://code.claude.com/docs/en/plugin-marketplaces) a
 
 ## Codex plugin
 
-Use the same fresh distribution or staged plugin directory:
+Use the same fresh distribution or staged plugin directory. With a Codex version that supports
+plugin marketplaces, add the local marketplace and install Conquistador:
 
 ```sh
 codex plugin marketplace add /absolute/path/conquistador-plugin
 codex plugin add conquistador@conquistador
 ```
 
-Select Conquistador through the host's plugin/skill controls. The repo includes
+Expect the host to register the marketplace and install `conquistador@conquistador`. Confirm
+Conquistador appears in the host's plugin/skill controls before starting a task. If your version
+lacks these commands, use the recommended skills.sh route. The repo includes
 `.agents/plugins/marketplace.json`, `.codex-plugin/plugin.json` and the complete method library.
 The portable JSON agent contracts are not native Codex agents. See
 [Codex plugin packaging](https://learn.chatgpt.com/docs/build-plugins).
@@ -96,7 +163,7 @@ The portable JSON agent contracts are not native Codex agents. See
 ## Agent Plugins and other hosts
 
 The root `plugin.json` follows [Agent Plugins 1.0.0](https://agent-plugins.org/specification), the
-current standard reached from Open Plugins. It uses fixed `skills/` discovery. Import the directory
+specified discovery format. It uses fixed `skills/` discovery. Import the directory
 through a compatible client's plugin controls; the standard does not define one universal install
 command or native agent format. The Claude and Codex files add their host-specific discovery.
 No MCP server or hook starts automatically.
@@ -173,7 +240,10 @@ to publish, spend, persist learning or submit feedback.
 ## Optional runtime, terminal chat and MCP
 
 The runtime is optional. Coding-agent skills use the host's model and tools. To use durable
-playbooks and HTTP/MCP access, install the runtime dependency from the full distribution:
+playbooks and HTTP/MCP access, use Node 24 and Bun. Make a separate working copy of the complete
+distribution, or extract its ZIP into a second fresh directory. Keep the pristine source used by
+the skills CLI free of dependencies and runtime state. Run these commands from the separate
+working copy root to install the runtime dependency:
 
 ```sh
 bun install
@@ -182,8 +252,10 @@ node runtime/bin/conquistador.js init
 node runtime/bin/conquistador.js doctor
 ```
 
-Configure an exact supported model and supply its credential through the configured environment
-variable. Do not put credentials in chat or Git. Then:
+Expect `version` to print the product version and `init` to create the default configuration.
+`doctor` reports configuration or prerequisite gaps; a fresh setup is not ready for generation yet.
+Configure a model accepted by the runtime configuration and supply its credential through the
+configured environment variable. Do not put credentials in chat or Git. Then:
 
 ```sh
 node runtime/bin/conquistador.js serve
@@ -207,7 +279,8 @@ absolute path. This example does not automatically start the HTTP service:
 }
 ```
 
-The four MCP tools run a supported playbook, list artifacts, read an artifact and cancel work.
+The four MCP tools, `conquistador_run`, `conquistador_artifacts`, `conquistador_artifact` and
+`conquistador_cancel`, run a supported playbook, list artifacts, read an artifact and cancel work.
 They do not approve work or publish. Supply `CONQUISTADOR_CHAT_TOKEN` in the host's secret settings
 only if bearer transport is enabled. Never provide human review/action tokens to the agent.
 See [runtime setup and review](runtime/README.md) for the service configuration and authority flow.
@@ -241,3 +314,18 @@ A bind mount must be writable by the image's user. Local container creation is n
 [Services](docs/SERVICES.md) distinguishes methods, host tools, catalog adapters and Eval Lab.
 [CONTRIBUTING.md](CONTRIBUTING.md) covers root bootstrap, build, tests and packaging without private
 release records. A package or install receipt is not live-provider evidence or release approval.
+
+## Troubleshooting
+
+| Symptom | Recovery |
+| --- | --- |
+| GitHub reports repository not found or access denied | Check the active account and private repository access; ask the owner for access or a private distribution |
+| Conquistador appears in the install summary but not in the host | Confirm the project and selected host, then start a fresh session; check the plugin namespace if applicable |
+| The parent cannot find a method | Reinstall the complete root bundle from clean source; do not copy the nested parent alone |
+| The compact helper reports `Destination exists` | Choose a new directory, or use `upgrade` only for an unchanged helper-owned install |
+| The helper reports modified files or a differing receipt | Preserve the edits and stage a new directory; do not alter the receipt to force replacement |
+| Runtime configuration or model access fails | Follow `doctor` diagnostics and the runtime guide; verify the configured credential environment variable through the host's secret settings |
+| A runtime request returns skill guidance instead of a session | That outcome has no selected executable playbook; use the coding-agent skill route |
+
+Host command examples describe setup procedures. They do not establish activation in your host.
+Use the [dogfood checklist](docs/DOGFOOD.md) to record that separately.

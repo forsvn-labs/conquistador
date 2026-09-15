@@ -1,74 +1,93 @@
 # Conquistador 0.1.0
 
-Private dogfood build. Start with [the dogfood guide](docs/DOGFOOD.md).
+Conquistador helps product builders turn project context into finished launch, marketing, growth
+and engineering work inside their coding agent. Ask for an outcome. It selects the relevant
+methods, produces the deliverable, reviews it and recommends a next step.
 
-Ask `/conquistador` for an outcome. Conquistador selects the relevant methods, produces the work,
-reviews it, and helps decide the next step. It includes 38 outcome capabilities for product,
-research, marketing, growth, creative work, engineering and review.
+All 38 outcome methods are included. Your host supplies the model, project files, tools and
+permission controls. This is a private dogfood build.
 
-Your coding agent can perform the installation for you. Once Conquistador is available, ask for
-the outcome; it handles routine missing-tool setup as needed. You do not need to install each
-method or optional utility.
+## What you get
 
-Install with the [skills CLI](https://www.skills.sh/docs) from a fresh extracted distribution:
-
-```sh
-DO_NOT_TRACK=1 npx skills add /absolute/path/extracted-conquistador --skill conquistador --copy
-```
-
-Choose your coding agent when prompted. The root skill includes every method. Use the supplied
-private distribution for now; remote installation of this build is not configured.
-[Installation](INSTALL.md) also covers Claude/Codex plugins, a native Claude agent, Agent Plugins
-1.0.0, compact offline staging and the optional runtime.
-
-Use requests such as:
-
-```text
-/conquistador Turn this product into a launch package.
-/conquistador Improve our onboarding flow and implement the agreed changes.
-/conquistador Review these campaign results and prepare the next experiment.
-```
-
-`/conquistador` is the product entry point. Hosts choose their invocation syntax: a slash command,
-a named-skill picker, `$conquistador`, or a request to the Conquistador agent. The default install
-bundles all methods. Users do not need to choose individual skills or manage routing.
-
-## Choose where it runs
-
-| Interface | What users get | What the host provides |
+| Your task | What Conquistador helps deliver | Why it helps |
 | --- | --- | --- |
-| Coding-agent skill, recommended | One Conquistador entry point and the complete method library | Model, project files, tools and permission UI |
-| Claude/Codex or Agent Plugins | Complete methods, repo marketplace metadata and a native Claude agent | Host plugin activation, model and tools |
-| Single agent or advisor/worker squad | Portable role contracts and bundled methods | Agent execution and, for independent review, separate contexts |
-| Optional Node 24 runtime | Durable supported playbooks, HTTP sessions, terminal chat and MCP artifact access | Configured model and separately authorized integrations |
-| Opt-in host-event helper | Reminders to resume work, review a deliverable or assess new results | Event invocation and delivery of the reminder to Conquistador |
+| Prepare a launch | Campaign plan, finished copy, asset requirements and measurement plan | Keeps the audience, promise and next action consistent across the package |
+| Improve onboarding or a landing page | Evidence-based diagnosis, revised content or requested implementation, and a test | Connects each change to an observed problem or a labeled assumption |
+| Review campaign results | Keep, drop and test decisions with attribution limits | Turns supplied results into a bounded next experiment |
+| Build or document a product | Flow or UI specifications, requested web/iOS code, or code-grounded documentation | Carries the requested work through review and reports verification gaps |
 
-[Services and platform support](docs/SERVICES.md) explains the capabilities, prerequisites and
-limits. [Proactive help](docs/PROACTIVE.md) documents the local event helper. Installing a skill
-starts no service, enables no hooks, and sends no data. Publication, spend and external writes
-require the applicable human authority.
+These are method contracts, not guarantees of quality or measured lift. See
+[how to use Conquistador](docs/USAGE.md) for task inputs and expected deliverables, and
+[capabilities and tools](docs/SERVICES.md) for implementation limits.
 
-For visual review, Conquistador uses [Lavish AXI](docs/PREVIEW.md) through the host's CLI. Users
-stay with `/conquistador`; the agent prepares the preview and handles annotations. Lavish is an
-optional tool that the agent acquires on demand. Its launcher disables command telemetry. Feedback
-stays in the review session unless the user explicitly chooses to share it.
+## Quick start
 
-[Memory and learning](docs/LEARNING.md) describes an approved private project workflow and the
-separate opt-in contribution through `submit-feedback`. Automatic cross-run retrieval and global
-learning are not implemented.
+Use the skills.sh route in an existing coding-agent project. You need a working host, Node/npm for
+the installer, and either access to the private repository or a supplied private distribution.
+The installation guide uses Node 24. No runtime service or integration account is required for
+skill-only work on supplied files.
 
-## Distribution status
+1. Ask your existing coding agent to perform setup:
 
-This source is MIT and packageable as version 0.1.0. It stays private while we dogfood it.
-The root package sets `private: true` to block npm publication. No registry package, public release,
-hosted service, native app-store listing or verified Eve/Grok integration is offered.
-The optional runtime executes its declared playbooks; it does not turn every skill into an
-automated workflow. Local checks do not establish real-task quality or human acceptance.
+   ```text
+   Install Conquistador into this project using INSTALL.md from the private
+   forsvn-labs/conquistador repository, branch dogfood/0.1.0. Use a fresh
+   dedicated clone and the recommended skills.sh copy install. Verify the
+   source commit and host discovery. Keep project outputs outside the install.
+   ```
 
-Repository identity: [forsvn-labs/conquistador](https://github.com/forsvn-labs/conquistador).
-Use the supplied local package until this build is synchronized to a verified private remote.
-The source-history archive and landing repository are not installation dependencies. Keep dogfood
-notes and customer material in your private project, outside the installed product.
+   Your GitHub account needs repository access. Complete any account sign-in or host approval
+   yourself. [Installation](INSTALL.md#recommended-quick-start) has the exact commands and a
+   fresh-distribution alternative.
 
-For development, use Node 24 and run `npm run bootstrap`, `npm run build`, and `npm test`.
-[CONTRIBUTING.md](CONTRIBUTING.md) covers packaging; [AGENTS.md](AGENTS.md) covers contributions.
+2. Start a new host session and select Conquistador. Depending on the host, use `/conquistador`,
+   `$conquistador`, its skill picker, or `/conquistador:conquistador` in the Claude plugin.
+   Confirm the host finds the installed skill.
+
+3. Give it a real task with source material and a clear finish:
+
+   ```text
+   /conquistador Use docs/product.md and docs/audience.md to prepare our beta
+   launch. Deliver landing-page copy, one launch email and a two-week campaign
+   plan in docs/launch/. Mark claims that need evidence. Keep this as a draft.
+   ```
+
+   Expect finished copy and a plan with owners, timing, measurement and open evidence gaps.
+   Review the work before using it. [The usage guide](docs/USAGE.md) explains follow-up requests.
+
+## Choose an installation method
+
+| Choose | When it fits |
+| --- | --- |
+| [skills.sh, recommended](INSTALL.md#recommended-quick-start) | You want one entry point in your existing coding agent |
+| [Claude or Codex plugin](INSTALL.md#claude-code-plugin-and-agent) | You prefer host-managed plugins; Claude also includes a native agent definition |
+| [Agent Plugins](INSTALL.md#agent-plugins-and-other-hosts) | Your client imports the Agent Plugins 1.0.0 format |
+| [Compact local skill](INSTALL.md#compact-local-installation) | You want a smaller staged folder without development modules |
+| [Portable agent contracts](INSTALL.md#portable-agent-harnesses) | You operate a host adapter for a single agent or advisor/worker roles |
+| [Optional runtime and MCP](INSTALL.md#optional-runtime-terminal-chat-and-mcp) | You need durable supported playbooks, HTTP sessions or artifact access |
+
+Install one route first. The skill library does not require Docker, MCP, hooks or every provider.
+Conquistador handles routine missing-tool setup through the host when a task needs it.
+Credentials, paid services and external actions still need the applicable human authority.
+
+For visual work, ask for a [Lavish preview](docs/PREVIEW.md) and annotate the result. The agent
+prepares the optional CLI on demand and applies feedback to the source. The
+[proactive helper](docs/PROACTIVE.md) is opt-in and requires host events. Installing a skill starts
+no service and enables no hooks.
+
+## Private use and current limits
+
+Source lives in [forsvn-labs/conquistador, branch dogfood/0.1.0](https://github.com/forsvn-labs/conquistador/tree/dogfood/0.1.0).
+The repository requires account access. Keep installed copies and dogfood artifacts private.
+See [private dogfooding](docs/DOGFOOD.md) for a first-use checklist and local feedback drafts.
+
+Project memory requires approval and host file tools. Automatic cross-run retrieval and global
+learning are absent. [Memory and learning](docs/LEARNING.md) explains retention and consent.
+
+The source is MIT-licensed; the npm package remains `private: true`. No public registry package,
+hosted SaaS, app-store listing or verified native Eve/Grok integration is offered. The runtime
+executes its declared playbooks, not all 38 methods. Local tests and install receipts do not prove
+live-provider operation, native host activation or human acceptance.
+
+For development, use Node 24 and the commands in [CONTRIBUTING.md](CONTRIBUTING.md).
+[AGENTS.md](AGENTS.md) covers contribution rules.

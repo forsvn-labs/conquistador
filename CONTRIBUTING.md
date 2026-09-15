@@ -1,7 +1,8 @@
 # Develop Conquistador
 
-These instructions apply to the complete public product. The portable ZIP contains plugin skills
-and documentation only; use the complete distribution for build/test/package commands.
+These instructions apply to the complete product source or extracted ZIP distribution. Compact installs made by
+`tools/install.mjs` contain methods and usage documentation. Run build/test/package commands from
+the complete distribution, not a compact install.
 
 Use Node 24, npm, and Git. Work directly in this repository; no private workspace or historical
 release ledger is needed for the default development path. All commands below run from its root.
@@ -61,7 +62,8 @@ and human verdicts. It is a source/archive identity record, not release approval
 tags, signs, uploads, or publishes. Before any public release, obtain the applicable external and
 human acceptance evidence and explicit operator authorization.
 
-CI runs the same local commands with read-only repository permissions. It never publishes.
+CI runs the same local commands for pull requests and pushes to `main` or `dogfood/0.1.0`,
+with read-only repository permissions. It never publishes.
 Historical `test:source`, candidate, live-evidence and inventory-maintenance pipelines retain their
 own private authority requirements and are not part of `npm test` or the public setup path.
 
