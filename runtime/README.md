@@ -84,7 +84,26 @@ provides no runner trace or provider evidence.
 
 Skill Registry and Playbook Registry contracts live in this package because they serve the optional local runner. They version skill metadata and executable playbook graphs. They are not loaded by the Portable Plugin, not a customer-managed catalog, and not a runtime routing index.
 
-The 21 workflow Markdown files under the plugin remain prose-composition sources. `fixtures/playbooks/content-intelligence-loop.json` is a validated contract fixture. The local runner can execute that graph's deterministic steps directly and its skill steps through validated judgment responses from an injected host provider or an imported response file. It does not install any provider and does not claim live model execution until separately authorized evidence exists. The Portable Plugin still does not load the runner.
+The 21 workflow Markdown files remain composition sources. Four executable graphs under
+`fixtures/playbooks/` reuse the canonical outcome methods:
+
+| Graph | Draft sequence and missing capabilities |
+| --- | --- |
+| `content-intelligence-loop` | Existing content and signal composition |
+| `creative-production-review` | Brief, shortform production draft, explicit vision-review handoff, integration and review |
+| `paid-search-split-landing` | Search campaign, separate direct-response and SaaS copy assignments, integration and review |
+| `campaign-money-events` | Bounded data-read handoff, event contract, diagnosis, campaign assessment and review |
+
+Each graph declares dependencies, artifacts and finite budgets. The judgment packet carries the
+step ID and completion instructions, so the two landing assignments remain distinct even though
+both use `write-copy`. Missing model execution pauses at `awaiting-judgment`. Missing vision or
+campaign-data access produces an explicit handoff; it never supplies invented inspection or rows.
+Completed draft graphs await human review and authorize no publishing, spend or tracking changes.
+
+Local tests exercise traces, interrupted resume and failed judgments using synthetic responses.
+They establish runner behavior, not live model, image-generation, vision or warehouse support.
+The host supplies validated judgments or imports them through the existing sealed-request flow.
+The Portable Plugin still does not load the runner.
 
 ## Development verification
 

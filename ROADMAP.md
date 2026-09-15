@@ -6,17 +6,17 @@ Version 0.1.0 is packaged and shipped as private GitHub prerelease
 [`v0.1.0-dogfood.2`](https://github.com/forsvn-labs/conquistador/releases/tag/v0.1.0-dogfood.2)
 from source `0ae8df0` on `dogfood/0.1.0`. ZIP, npm tarball, checksums and the unbound assembly
 record are retained together. The repository stays private and the npm publication guard remains.
-Next work is [one real task](docs/DOGFOOD.md) in an existing coding-agent host — not another
-installer or packaging pass.
+Next work is [one real user task](docs/DOGFOOD.md) in an existing coding-agent host.
 
 1. Verify activation, appropriate parent routing and a finished deliverable.
 2. Check on-demand tool setup and the Lavish annotation/revision loop.
 3. Record concrete failures privately and fix them before adding more platforms or features.
 
-The current feature slice adds the master-agent team contract, concrete GTM specialist roles, and
-existing-stack setup through CLI, MCP, warehouse, and Executor routes. Dogfood must now verify one
-multi-specialist request in a host that exposes isolated workers and the same request through the
-sequential fallback. It must also verify one real existing-stack setup without a live write.
+The current feature branch implements v2 master metadata, a BB dispatch adapter, domain selection,
+exact-operation stack negotiation, and three additional runtime graphs. Real multi-specialist
+BB runs and a separate same-context fallback have completed. An Executor-backed public metadata
+read also completed through the existing catalog gateway. An earlier reviewer found a claim that
+needed revision; the final run passed draft review. These checks do not establish general output quality.
 
 Direct skill and plugin commands avoid a manual clone. Local MCP serves the method library
 through stdio without a separate service. Guided setup remains the managed-file fallback for
@@ -34,9 +34,11 @@ promotion is disabled. A separate persistence-consent API and project-scoped cro
 remain future work. Follow [docs/LEARNING.md](docs/LEARNING.md) and obtain approval for each entry
 and destination before persisting private learning. Do not claim automatic improvement over time.
 
-After those tasks pass, add a configurable domain-package builder, declared host capability
-negotiation, and runner graphs for specialist workflows that need durable execution. Do not promote a
-Markdown composition to an executable playbook without a runner trace.
+Next, verify the opt-in mode adapter in its native host, test a real user artifact with the domain
+restrictions enabled, and connect the specialist graphs to approved model/data routes. The graphs
+currently have local runner and failure/resume evidence. Missing vision or campaign data remains a
+handoff. Databricks, Confluence and HubSpot need exact audited operation extensions before any
+support claim. No additional outcome library is needed.
 
 Keep public feedback at local drafting during private dogfooding. Preserve its destination,
 redaction and exact-consent requirements for any later submission.

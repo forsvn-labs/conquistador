@@ -16,8 +16,8 @@ already has. Hosts provide models, specialist contexts, credentials, connections
 Compact installs include usage and review guides so users can start work in their host.
 The runtime, typed catalog and Eval Lab are optional modules.
 
-The parent can assign one specialist or several. The product does not fix a team size. Host limits
-decide available concurrency and isolation. A portable sequential fallback runs the same assignments
+The parent can assign one specialist or several. The BB adapter bounds each run to four concurrent
+contexts and twelve total dispatches, including integration and review. Host limits can reduce those ceilings. A portable sequential fallback runs the same assignments
 when the host cannot create separate contexts. Specialist roles compose the existing outcomes and
 workflows; they do not form another skill library.
 

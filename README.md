@@ -22,6 +22,8 @@ These are method contracts, not guarantees of quality or measured lift. See
 [capabilities and tools](docs/SERVICES.md) for implementation limits.
 [Master-agent modes](docs/MASTER-AGENT.md) explains specialist execution across coding agents,
 plugins, portable packages, MCP, and the optional runtime.
+The [BB adapter](hosts/coding-agent/README.md) supplies callable worker dispatch, result integration
+and exact-artifact review. Domain installs restrict the same library.
 
 ## Start here
 
@@ -65,7 +67,7 @@ learning are absent. [Memory and learning](docs/LEARNING.md) explains retention 
 
 The source is MIT-licensed; the npm package remains `private: true`. No public registry package,
 hosted SaaS, app-store listing or verified native Eve/Grok integration is offered. The runtime
-executes its declared playbooks, not all 38 methods. Local tests and install receipts do not prove
+executes four declared playbooks, not all 38 methods. Local tests and install receipts do not prove
 live-provider operation, native host activation or human acceptance.
 
 For development, use Node 24 and the commands in [CONTRIBUTING.md](CONTRIBUTING.md).

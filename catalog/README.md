@@ -49,7 +49,7 @@ manifest fallback. It adds no research, credential, connection, live proof, or
 support claim.
 
 The GitHub, Google Analytics Data, Search Console, PostHog, Semrush, and
-Typefully adapters are fixture-verified catalog candidates. Their live proof remains unrun.
+Typefully adapters are fixture-verified catalog candidates. Their release-qualified live proof remains unrun.
 They are not advertised as supported; fixture checks grant no release acceptance.
 
 The v1 release-blocking provider family is OpenSEO, limited to three exact
@@ -164,3 +164,29 @@ Current operation-description digests identify the maintained metadata snapshot.
 text changes that digest; it does not repeat source research or revalidate a historical execution.
 Existing check dates and fixture assertion identities remain historical metadata. A new candidate
 and observed terminal evidence are required for any later live or support claim.
+
+
+## Existing-stack setup
+
+`createStackSession` in `src/stack.ts` consumes an explicit host inventory of extension manifests,
+adapter IDs and Connection references. A demand selects one exact capability and operation for
+a named principal, environment, unit ceiling and cost ceiling. Selection returns `ready`,
+`verification-only`, `unsupported`, `connection-required`, `policy-denied`, or
+`human-action-required`. Only bounded reads can enter this helper. It preserves an Executor-only
+host policy and uses the selected adapter's Gateway for dispatch.
+
+`read` rechecks the Connection and reserves the maximum units and cost before dispatch. Its
+payload-free setup receipt binds operation, route, principal, Connection and catalog receipt
+through identifiers or digests. A deadline or cancellation bounds the wait even if host code
+ignores the signal. Such a call returns `unknown` with no terminal catalog receipt and retains its
+reservation. Reconcile through the host before another attempt.
+
+`createExecutorGithubRepositoryAdapter` maps only allowlisted repository metadata reads to an
+operator-supplied Executor callback. The callback is bound to one exact Connection and receives
+its resolved host capability. Changing the principal, connection revision or environment fails
+before dispatch. No generic HTTP, shell or MCP method is accepted.
+
+One actual public repository read through this route succeeded in candidate-verification mode.
+That observation does not promote the catalog operation to supported status. Databricks,
+Confluence, HubSpot and owned warehouse reads still require exact audited operations, host
+connections and their own observed evidence. Fixtures contain synthetic data only.

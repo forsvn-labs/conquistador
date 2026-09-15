@@ -72,7 +72,7 @@ describe("Capability Router contract", () => {
       }
     }
     expect(contract.routes.filter((route) => route.target.kind === "playbook").map((route) => route.target.id))
-      .toEqual(["content-intelligence-loop"]);
+      .toEqual(["content-intelligence-loop", "creative-production-review", "paid-search-split-landing", "campaign-money-events"]);
   });
 
   it("abstains when engineering aliases compete with another outcome or playbook", () => {

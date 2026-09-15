@@ -4,6 +4,26 @@ No public release is claimed. See [VERSIONS.md](VERSIONS.md) for independent pro
 versions. Verification establishes the stated local scope; live provider operation, useful model
 output, human acceptance, rights disposition and release authority require separate evidence.
 
+## Unreleased master-agent execution
+
+- Restored the unchanged v1 agent schema and explicit legacy package. The master package now
+  declares v2 with a finite dispatch ceiling.
+- Added callable BB child-thread dispatch, contained method/agent loading, dependency ordering,
+  cancellation, parent integration, exact-digest review and explicit same-context fallback.
+- Added host-owned stack route selection through extension manifests, connection references and
+  Gateway. Reads enforce operation, identity, data and budget limits; Executor-only policy cannot
+  select another transport. Added one exact GitHub metadata mapping and fixed HTTP Date conversion.
+- Added creative production/review, search with separate DR/SaaS pages, and money-event diagnosis
+  graphs using the existing durable runner. Step-specific completion criteria now reach the sealed
+  judgment request. Missing model/data/vision access remains pending or an explicit handoff.
+- Added focused package import guards and private-fingerprint checks with synthetic tests.
+- Observed a BB team with a substantive revision finding and a later four-context run that passed
+  draft review, plus a same-context fallback and successful bounded Executor metadata reads.
+  None grants human acceptance or provider support.
+
+- Passed the Node 24.12.0 build and all 592 default tests: 71 tooling, 291 runtime, 167 catalog
+  and 63 Eval Lab, plus the 17-operation catalog check and synthetic local example.
+
 ## Unreleased master-agent slice
 
 - Updated `/conquistador` to assemble a host-bounded specialist team for multi-part requests and use
