@@ -10,7 +10,9 @@ guard. Start with [one real task](docs/DOGFOOD.md) in an existing coding-agent h
 2. Check on-demand tool setup and the Lavish annotation/revision loop.
 3. Record concrete failures privately and fix them before adding more platforms or features.
 
-The guided setup coordinates local install, status, update and uninstall. Verify the chosen
+Direct skill and plugin commands avoid a manual clone. Local MCP serves the method library
+through stdio without a separate service. Guided setup remains the managed-file fallback for
+install, status, update and uninstall. Verify the chosen
 host after local preparation. Experimental Grok/Eve imports stay outside ready installation
 claims. The bundled methods, native plugin metadata, Claude agent, portable roles and installer
 are implemented. Optional runtime/MCP/catalog/Eval modules are available when a task needs them.

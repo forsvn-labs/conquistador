@@ -213,7 +213,11 @@ provider execution, evidence quality, or successful external actions.
 
 ## MCP stdio client
 
-Start `serve` with a configured judgment provider, then configure the agent host to
+For method access through your existing host, use `conquistador mcp` without a URL. The binary
+starts a dependency-free local method server; see [installation](../INSTALL.md#mcp-over-stdio).
+The host supplies the model and tools. No runtime service is required for that mode.
+
+For the optional runtime bridge, start `serve` with a configured judgment provider, then configure the agent host to
 launch `node /ABS_DISTRIBUTION/runtime/bin/conquistador.js mcp --url http://127.0.0.1:4317`.
 Pass `CONQUISTADOR_CHAT_TOKEN` only when the service requires bearer authentication.
 Never give this process either human review or action token. The endpoint must be an

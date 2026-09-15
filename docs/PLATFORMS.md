@@ -1,6 +1,6 @@
 # Conquistador in your host
 
-Start with [guided setup](../INSTALL.md). This page contains the details for the one host you
+Start with [installation](../INSTALL.md). This page contains the details for the one host you
 selected. Installing files, registering a host and running a real task are separate checks.
 
 ## Coding agents, recommended
@@ -29,26 +29,26 @@ Folder references: [Codex](https://learn.chatgpt.com/docs/build-skills),
 
 ## Plugins
 
-Choose a plugin only when you want host-managed plugin controls or the native Claude agent.
-Setup prepares the bundle and prints the host steps. The host owns its activated copy. Before
+Register the private GitHub repository directly when you want host-managed plugin controls or the
+native Claude agent. Managed setup can also prepare a local plugin folder. The host owns its activated copy. Before
 removing the prepared folder, uninstall the plugin through the same host and scope. Marketplace
 registrations may be shared; remove only the Conquistador registration when no other install uses it.
 
 ### Claude Code
 
-Run these from the project where you want Conquistador. Replace the plugin path with the folder
-printed by setup. Use local scope so the registration is not written into shared project settings.
+Run these from the project where you want Conquistador. Use local scope so the registration is not
+written into shared project settings. Your host needs GitHub access to this private repository.
 
 | Action | Command |
 | --- | --- |
-| Register source | `claude plugin marketplace add /absolute/path/conquistador-plugin --scope local` |
+| Register source | `claude plugin marketplace add forsvn-labs/conquistador@dogfood/0.1.0 --scope local` |
 | Install | `claude plugin install conquistador@conquistador --scope local` |
 | Check | `claude plugin list --json` |
 | Refresh source | `claude plugin marketplace update conquistador` |
 | Update installed plugin | `claude plugin update conquistador@conquistador --scope local` |
 | Uninstall and keep data | `claude plugin uninstall conquistador@conquistador --scope local --keep-data` |
 
-Update the prepared source through setup before refreshing the marketplace. Host cache updates
+For a local marketplace, update its prepared source through setup before refreshing. Host cache updates
 also depend on plugin versions. For a copy installed in a different scope, use that original scope.
 Only after checking other registrations, remove an unused local marketplace with
 `claude plugin marketplace remove conquistador --scope local`. Omitting scope can affect other
@@ -65,15 +65,16 @@ when you want only project-local files.
 
 | Action | Command |
 | --- | --- |
-| Register source | `codex plugin marketplace add /absolute/path/conquistador-plugin` |
+| Register source | `codex plugin marketplace add forsvn-labs/conquistador@dogfood/0.1.0` |
 | Install | `codex plugin add conquistador@conquistador` |
 | Check | `codex plugin list --json` |
-| Update from refreshed local source | `codex plugin add conquistador@conquistador` |
+| Refresh Git source | `codex plugin marketplace upgrade conquistador` |
+| Update installed plugin | `codex plugin add conquistador@conquistador` |
 | Uninstall | `codex plugin remove conquistador@conquistador` |
 
-Update the prepared source through setup before adding it again. There is no `codex plugin update`
-command in the audited CLI. `marketplace upgrade` applies to Git marketplaces, not staged local
-folders. Remove an unused marketplace separately with `codex plugin marketplace remove conquistador`.
+Refresh the Git marketplace before adding the plugin again. There is no `codex plugin update`
+command in the audited CLI. For staged local folders, update the files through setup and repeat
+`plugin add`; `marketplace upgrade` applies only to Git marketplaces. Remove an unused marketplace separately with `codex plugin marketplace remove conquistador`.
 Keep outputs outside plugin caches. These commands require a Codex version with plugin support.
 [CLI source](https://github.com/openai/codex/blob/a8964cb1bad67bc26a826fb07d1bef99c6a3f008/codex-rs/cli/src/plugin_cmd.rs),
 [marketplace source](https://github.com/openai/codex/blob/a8964cb1bad67bc26a826fb07d1bef99c6a3f008/codex-rs/cli/src/marketplace_cmd.rs).
@@ -84,15 +85,15 @@ Copilot's native plugins are user-level installations. For project-only setup, u
 
 | Action | Command |
 | --- | --- |
-| Register source | `copilot plugin marketplace add /absolute/path/conquistador-plugin` |
+| Register source | `copilot plugin marketplace add forsvn-labs/conquistador#dogfood/0.1.0` |
 | Install | `copilot plugin install conquistador@conquistador` |
 | Check and find installed name | `copilot plugin list` |
 | Refresh source | `copilot plugin marketplace update conquistador` |
 | Update | `copilot plugin update NAME` |
 | Uninstall | `copilot plugin uninstall NAME` |
 
-Replace `NAME` with the installed Conquistador name returned by list. Update the prepared source
-first. Remove an unused marketplace with `copilot plugin marketplace remove conquistador` only
+Replace `NAME` with the installed Conquistador name returned by list. For local marketplaces,
+update the prepared source first. Remove an unused marketplace with `copilot plugin marketplace remove conquistador` only
 after uninstalling its dependents. Do not use `--force`. Data-retention guarantees for native
 uninstall are unverified, so keep project outputs and runtime data outside its install cache.
 [Copilot reference](https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-plugin-reference).
@@ -107,22 +108,32 @@ standard defines a package format; it does not define one universal manager comm
 
 ## MCP
 
-MCP connects a client to the optional Conquistador runtime. It is useful for supported playbook
-runs and reading persisted draft artifacts. It does not make all 38 methods executable tools.
-Use [runtime setup](../runtime/README.md) to configure and start the service first.
+The default `conquistador mcp` command starts a local stdio server. It serves the bundled methods
+to your MCP host, which supplies the model, project tools and permission controls. No separate
+service or API key is required. Use the [copyable client configuration](../INSTALL.md#mcp-over-stdio).
 
-Setup prepares `connector.json` for your service URL. Add its command and arguments to your MCP
-client's settings. Supply transport credentials through the client's secret settings when required.
-Never pass human review or action credentials to the agent.
+The tools list available methods, list a method's text resources and read a selected file. Start
+with `conquistador/SKILL.md`, then follow Conquistador's routing. The server does not execute code,
+write project files, collect feedback or run the optional runtime. Reads are bounded and restricted
+to the installed skill tree.
 
-Local setup status checks the connector files; it does not probe a running service. Runtime
-`doctor` checks configuration, and runtime `status` checks a run. Neither means the MCP client is
-connected.
+Your MCP client owns the process. Remove its `conquistador` entry to disconnect. To update, stop
+the entry, refresh its package from the current branch, then restart it. The npm launcher caches
+packages; when you need to confirm an exact revision, use the clone route and inspect `git rev-parse HEAD`.
+For a local clone, the entry is `node /absolute/path/conquistador/runtime/bin/conquistador.js mcp`.
 
-To disconnect, remove only this Conquistador entry from the client, then uninstall the prepared
-connector directory through setup. The service, run data and credentials remain separate. Stop the
-service yourself when no other client uses it; use [runtime state controls](../runtime/STATE.md)
-only when you intend to export or erase data.
+Managed setup with `--target mcp --path ABS` prepares a `connector.json` for this local command.
+It does not edit client settings. Status checks the connector's files, not host registration.
+Keep the source folder while using that connector. Disconnect the client before removing its
+owned connector folder through setup.
+
+### Optional runtime bridge
+
+`conquistador mcp --url ORIGIN` retains the existing bridge to a configured HTTP runtime service.
+It runs supported playbooks and reads persisted draft artifacts; it does not expose all 38 methods
+as executable tools. Follow [runtime setup](../runtime/README.md#mcp-stdio-client) for this mode.
+Only this mode may need `CONQUISTADOR_CHAT_TOKEN`. Never pass human review or action credentials
+to an agent. Removing a connector does not erase service data or stop a shared service.
 
 ## Agent harnesses
 

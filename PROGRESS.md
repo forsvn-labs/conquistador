@@ -11,7 +11,8 @@ source identity and are not rebuilt. Installing a new package does not update ex
 | Area | Available behavior |
 | --- | --- |
 | Entry point | `/conquistador` selects from all 38 outcome methods, including engineering requests |
-| Installation | Guided setup and one local install/status/update/uninstall interface, complete managed skill in host-specific project folders, owned-file protection, plugin steps, MCP connector configuration and harness staging |
+| Installation | Direct private Git skills and host plugins, npm on-demand launcher, clone fallback and managed install/status/update/uninstall with owned-file protection |
+| Local MCP | Dependency-free stdio method listing and contained text reads; host supplies model/tools, no separate HTTP service or model credentials |
 | Agents | One native Claude agent and portable single-agent/squad contracts; the squad advisor has a review-only role |
 | Task setup and previews | Host-managed prerequisites and pinned cached Lavish AXI launchers with command telemetry opt-out |
 | Proactive advice | Opt-in static reminders for session-start, before-delivery and results-updated; no automatic hook registration or scheduler |
@@ -25,6 +26,14 @@ The preview instructions are host procedures; they do not add a runtime launcher
 annotation consumer. Run artifacts and audit state still persist when automatic learning is off.
 
 ## Verification
+
+The direct-install follow-up passes Node 24 build and all 544 default tests: 43 tooling,
+278 runtime, 160 catalog and 63 Eval Lab. Real private Git skills install/reinstall/list/remove
+and npm setup install/remove passed in temporary projects. Local MCP discovery, all 39 method
+entries, parent and iOS template reads, protocol negotiation and path refusals passed in spawned
+processes without runtime dependencies. Native plugin commands were checked against primary
+sources; native host activation and useful model execution remain unverified.
+
 
 The guided setup follow-up passes Node 24 build and all 533 default tests: 32 tooling, 278 runtime,
 160 catalog and 63 Eval Lab. Thirteen setup tests cover ownership, host paths, MCP origins,

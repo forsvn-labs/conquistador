@@ -1,95 +1,107 @@
-# Set up Conquistador
+# Install Conquistador
 
-Use **one guided setup command**. It asks where you want to use Conquistador, chooses the right
-package and prints the next step. For everyday work, choose your coding agent. You get the complete
-`/conquistador` skill and all 38 methods, with no runtime service or model account to configure.
+Choose one method. You do not need all of them. The repository is private for dogfooding, so your
+GitHub account needs access. Use Node 24 and Git for the commands below.
 
-You can ask your existing agent:
+## Skills, recommended
 
-```text
-Install Conquistador in this project from the private forsvn-labs/conquistador
-repository, branch dogfood/0.1.0. Follow INSTALL.md and use the managed setup
-for this host. Keep the copy private, check its files and show me how to uninstall it.
-```
-
-You handle private repository access and any host approval. The agent handles routine local setup.
-Keep the installed folder out of public project commits.
-
-## Recommended quick start
-
-Use Node 24. Clone the current private source into a separate folder, then start setup:
+From your project, run:
 
 ```sh
-gh repo clone forsvn-labs/conquistador /absolute/path/conquistador -- --branch dogfood/0.1.0 --single-branch
-node /absolute/path/conquistador/tools/setup.mjs
+DISABLE_TELEMETRY=1 npx --yes skills@1.5.26 add "forsvn-labs/conquistador#dogfood/0.1.0" --skill conquistador
 ```
 
-Replace the example path with a new folder. Choose your coding agent and the project where you
-want the skill. Setup prints the destination, local status and activation instructions. Start a
-fresh host session, select Conquistador and try [a first task](docs/USAGE.md).
+The installer detects your agent or asks you to choose one. This installs one Conquistador entry point with all 38
+outcome methods. Your existing agent supplies the model and tools. Refresh the host and ask
+`/conquistador` for a task, or select it in the host's skill picker.
 
-The source folder supplies updates and removal. Keep it available. Setup copies the method
-library, not your development dependencies. It does not edit global host settings or start services.
-If GitHub denies access, use the right account or request private access. Do not paste credentials
-into chat. The frozen v0.1.0 ZIP uses the [older manual commands](docs/INSTALL-REFERENCE.md).
-
-## Update or remove an installation
-
-Use the same setup command again and choose **Status**, **Update** or **Uninstall**. For scripts or
-an agent, use the destination printed during installation:
+Remove it from the same project with:
 
 ```sh
-node /absolute/path/conquistador/tools/setup.mjs status --path /absolute/path/installed-conquistador
-node /absolute/path/conquistador/tools/setup.mjs update --path /absolute/path/installed-conquistador
-node /absolute/path/conquistador/tools/setup.mjs uninstall --path /absolute/path/installed-conquistador
+DISABLE_TELEMETRY=1 npx --yes skills@1.5.26 remove conquistador
 ```
 
-You do not need to remember the original install mode. Obtain the current source before updating;
-updating an installed copy does not fetch a release. Setup checks its receipt and refuses to replace
-or remove files that you edited. Keep project outputs outside the installed folder.
+To update this project, preserve local edits and repeat the same `skills add` command.
+Agent-run installers can overwrite an existing copy without a prompt. [Other installation scopes](docs/INSTALL-REFERENCE.md#update-or-remove-an-installation)
+keep their own update and removal commands.
 
-For plugins and MCP, host registration is a separate step. Disconnect or uninstall in the host
-first, then remove the prepared files. Setup prints the relevant instructions and does not claim
-the host is connected. It does not erase runtime data, project work, model credentials or shared
-host configuration. [Platform details](docs/PLATFORMS.md) pair setup and removal for each route.
+## Plugins
 
-Existing skills.sh copies and host-managed plugins keep their original owner. Use their
-[update and removal commands](docs/INSTALL-REFERENCE.md#update-or-remove-an-installation);
-the managed setup will not take over or delete an unowned installation.
-
-## Where do you want to use it?
-
-| Where | What setup prepares | What you do next |
-| --- | --- | --- |
-| Codex, Claude Code, Copilot or Cursor | Complete skill in that agent's project folder | Refresh host discovery and use Conquistador |
-| A host's plugin manager | One plugin bundle, including the native Claude agent | Run the displayed host registration commands |
-| An MCP client | Connector configuration for an existing Conquistador service | Add it to the client; service and model setup stay separate |
-| Your own agent host | A complete single-agent package or separate worker/reviewer contracts | Load the contracts through your host adapter |
-| Grok Bot or Eve | Experimental instructions only | Native import is unverified; use a supported coding agent for now |
-
-Choose only the row that matches where you work. [Platform details](docs/PLATFORMS.md) cover host
-commands, scopes and removal. Skills.sh, Agent Plugins and Docker are available in the
-[manual reference](docs/INSTALL-REFERENCE.md) when your setup needs them.
-
-For noninteractive coding-agent setup, name the host and project. For example:
+If you prefer your host's plugin manager, register this repository directly. No separate clone is needed.
+For Claude Code, run these in the project:
 
 ```sh
-node /absolute/path/conquistador/tools/setup.mjs install --target codex --project /absolute/path/your-project
+claude plugin marketplace add forsvn-labs/conquistador@dogfood/0.1.0 --scope local
+claude plugin install conquistador@conquistador --scope local
 ```
 
-Supported coding-agent names are `codex`, `claude-code`, `copilot` and `cursor`. Other hosts can
-use an explicit destination with `--target skill --path ...`; the host must support that skill
-folder. If the CLI is already installed, `conquistador setup` opens the same guide.
+Use the namespaced `/conquistador:conquistador` skill or select the Conquistador agent.
+To remove it while keeping plugin data:
 
-## Help
+```sh
+claude plugin uninstall conquistador@conquistador --scope local --keep-data
+```
 
-| Message | Next step |
-| --- | --- |
-| Missing or modified receipt | Preserve the existing folder and choose a new destination; do not edit the receipt |
-| Prepared, activation unverified | Complete host registration or refresh discovery, then try a task |
-| MCP service is unavailable | Check the service and model configuration in [runtime setup](runtime/README.md) |
-| Host command is unavailable | Use the recommended skill route, or follow that host's current plugin controls |
+[Codex, Copilot and other plugin hosts](docs/PLATFORMS.md#plugins) have their own commands.
+Use the same manager and scope for updates and removal.
 
-Previews and opted-in reminders are prepared when needed. See [Lavish previews](docs/PREVIEW.md)
-and [proactive help](docs/PROACTIVE.md). Setup does not enable hooks, persist learning or authorize
-publication. [Usage](docs/USAGE.md) explains what to ask for after installation.
+## MCP over stdio
+
+Add this server to your MCP client's configuration:
+
+```json
+{
+  "mcpServers": {
+    "conquistador": {
+      "command": "npx",
+      "args": [
+        "--yes",
+        "--ignore-scripts",
+        "--package=git+https://github.com/forsvn-labs/conquistador.git#dogfood/0.1.0",
+        "conquistador",
+        "mcp"
+      ]
+    }
+  }
+}
+```
+
+The client starts and stops the process. Git must already have access to the private repository in
+that client's environment. This downloads the package into npm's cache; it does not install a global
+CLI or need a public npm package.
+
+The local server lists and reads the bundled methods. Ask your agent to use Conquistador and read
+its parent guide first. Your host supplies the model, file tools and approvals. No API key, HTTP
+service or background daemon is required. Remove the `conquistador` entry to disconnect it.
+
+[The MCP reference](docs/PLATFORMS.md#mcp) explains tools, updates and the optional runtime bridge.
+
+## Clone, if you want a local copy
+
+```sh
+gh repo clone forsvn-labs/conquistador -- --branch dogfood/0.1.0 --single-branch
+node conquistador/tools/setup.mjs
+```
+
+The guide prepares files for your host. Run it again for status, update or uninstall; it recognizes
+the installed folder by its receipt and preserves edited files. Keep the source available for
+updates and removal. See [managed setup](docs/PLATFORMS.md#coding-agents-recommended).
+
+You can also run setup on demand without a clone:
+
+```sh
+npm exec --yes --ignore-scripts --package=git+https://github.com/forsvn-labs/conquistador.git#dogfood/0.1.0 -- conquistador setup
+```
+
+For noninteractive setup, supply the action, host and absolute project path. The same launcher
+supports `status`, `update` and `uninstall` with an owned `--path`. Keep npm's cache available while
+an MCP client uses a command from it. Download the current source before updating installed files.
+
+## First task and help
+
+Try a [first task](docs/USAGE.md). Keep installed copies out of public commits while dogfooding.
+If GitHub denies access, authenticate the correct account. If `gh` works but HTTPS Git does not,
+`gh auth setup-git` configures Git to use that account. Never put a token in a command or MCP configuration. A host may require a refresh or explicit plugin/skill activation.
+
+The frozen v0.1.0 ZIP predates these shortcuts; use its [manual installation reference](docs/INSTALL-REFERENCE.md).
+Custom harnesses and experimental Grok Bot/Eve contracts remain in [platform details](docs/PLATFORMS.md).

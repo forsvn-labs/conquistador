@@ -36,26 +36,27 @@ evidence or labeled assumptions, and one next action. It does not guarantee perf
 | Review contracts | The result includes defects, uncertainty and recheck needs before you use it | Independent review needs separate host contexts; a same-context pass must be identified |
 | Lavish AXI | You can point to a visual change instead of describing its location in chat | The host runs the optional CLI and polls; the agent applies annotations to the source |
 | Private project memory workflow | Approved facts and corrections can be reused in a later task | Host file tools and explicit consent are required; no automatic retrieval service |
-| Runtime and MCP | Supported playbook work has persisted state and readable draft artifacts | Requires service/model configuration; the four MCP tools cannot approve or publish |
+| Local MCP | Gives an MCP host access to the complete method library through stdio | Lists and reads bundled text; host supplies the model and execution tools |
+| Runtime bridge | Supported playbook work has persisted state and readable draft artifacts | Explicit `mcp --url` requires service/model configuration; its tools cannot approve or publish |
 | Typed catalog | Integrators can constrain operations, budgets and authority | A catalog entry or fixture-tested adapter does not provide a live connection or support claim |
 | Eval Lab | Developers can define repeatable local checks and grading contracts | Synthetic examples cannot establish real-task quality or human acceptance |
 
 ## Platforms
 
-Start with [guided setup](../INSTALL.md). Choose where you work; setup prepares the package and
-prints status, update and uninstall steps. The [platform guide](PLATFORMS.md) keeps native manager
+Start with [installation](../INSTALL.md). Direct skills, host plugins and local MCP avoid a manual
+clone. Managed setup remains available for owned local copies and their lifecycle. The [platform guide](PLATFORMS.md) keeps native manager
 commands and advanced connections separate from the default coding-agent skill.
 
 ### Implementation and activation
 
 | Platform or module | Shipped implementation | Activation and limits |
 | --- | --- | --- |
-| Coding agent | One managed root skill with all 38 outcomes | Guided setup selects the host project folder; refresh discovery to activate. skills.sh remains an alternative |
+| Coding agent | One root skill with all 38 outcomes | Install directly with skills.sh or use managed setup; refresh host discovery |
 | Claude/Codex plugins | Repo-local marketplaces, methods and icon; one native Claude agent | Host plugin support and activation required; no central listing or universal alias claim |
 | Agent Plugins 1.0.0 | Root `plugin.json` and fixed `skills/` discovery | Compatible client required; hooks and native agents are host-specific |
 | Single-agent harness | Parent role and all declared methods | Host supplies agent execution; no service starts on install |
 | Advisor/worker harness | Separate role packages and review handoff | Independent review requires separate host contexts |
-| MCP | Stdio run, artifact-list, artifact-read and cancel tools | Requires configured Conquistador HTTP service; no approval or publishing tools |
+| MCP | Default stdio method list, resource list and text read; optional runtime bridge with `--url` | Local mode uses host model/tools without service credentials; bridge mode requires a configured HTTP service |
 | HTTP and terminal | Durable supported playbooks, structured chat and review boundaries | Node 24, model configuration and separate human authority |
 | Local proactive helper | Opt-in event-to-instruction output | Host must invoke and deliver it; no daemon, scheduler or automatic external action |
 | Visual review | On-demand Lavish AXI setup, HTML previews and annotations | Agent prepares a cached CLI with telemetry disabled; reachable browser and active polling required |
@@ -82,8 +83,7 @@ telemetry or unsolicited feedback submission is included.
 ## Repository layout
 
 The repository identity is [forsvn-labs/conquistador](https://github.com/forsvn-labs/conquistador).
-The product remains private during dogfooding. Use an authenticated clone of branch
-`dogfood/0.1.0` or a supplied private distribution. The account must have repository access. [The dogfood guide](DOGFOOD.md) covers actual host use.
+The product remains private during dogfooding. Install from private Git branch `dogfood/0.1.0` through the chosen manager, or use a clone or private distribution. The account must have repository access. [The dogfood guide](DOGFOOD.md) covers actual host use.
 
 Internal research, planning, provenance and source-history preservation belong outside this product
 repository. They are never runtime dependencies. The landing site is a separate project and does

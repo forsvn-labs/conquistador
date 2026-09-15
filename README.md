@@ -22,17 +22,18 @@ These are method contracts, not guarantees of quality or measured lift. See
 
 ## Start here
 
-Ask your coding agent:
+Install the complete skill from your project:
 
-```text
-Install Conquistador in this project from the private forsvn-labs/conquistador
-repository, branch dogfood/0.1.0. Follow INSTALL.md, use this host's recommended
-setup and show me how to uninstall it.
+```sh
+DISABLE_TELEMETRY=1 npx --yes skills@1.5.26 add "forsvn-labs/conquistador#dogfood/0.1.0" --skill conquistador
 ```
 
-Or open [guided setup](INSTALL.md). Choose where you work; it prepares the right package and
-provides status, update and uninstall instructions. A coding-agent skill is the default. Plugins,
-MCP and custom agent hosts are optional choices in the same guide.
+The installer detects your agent or asks you to choose one. Use Node 24 and a GitHub account with repository access.
+No separate clone or runtime setup is needed.
+
+Prefer a [native plugin](INSTALL.md#plugins), [MCP over stdio](INSTALL.md#mcp-over-stdio), or
+[a local clone](INSTALL.md#clone-if-you-want-a-local-copy)? Choose that installation method instead.
+[Installation and removal](INSTALL.md) keeps the steps for each method together.
 
 Start a fresh host session and give Conquistador a task:
 

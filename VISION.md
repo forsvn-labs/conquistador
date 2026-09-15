@@ -5,11 +5,13 @@ growth, creative work, engineering and review. Users ask for an outcome. The par
 necessary methods and owns delivery within the user's scope. The default installation carries
 the complete library; separate skill or role packages are optional.
 
-Setup should start with where the user works, not a list of package formats. Give each route
-an install, status, update and uninstall path. A managed complete skill in the existing coding
-agent is the default. Native adapters load the same methods. Conquistador prepares routine task tools on demand through the host, within its
-permissions. Hosts provide models, credentials, connections and human decisions. Compact installs include usage and review guides so users can start work in their host.
-The complete distribution supplies installation management and optional development commands.
+Installation should fit the host users already have. Offer direct skill installation first,
+remote host plugins and local MCP over stdio, with a clone as a fallback. Each route must have a
+clear removal path. The default MCP exposes method guidance to the host without a separate
+runtime or model account. Managed setup remains available for owned project copies.
+Native adapters load the same methods. Conquistador prepares routine task tools on demand through
+the host, within its permissions. Hosts provide models, credentials, connections and human decisions.
+Compact installs include usage and review guides so users can start work in their host.
 The runtime, typed catalog and Eval Lab are optional modules.
 
 Methods must be original, independently useful and clear about evidence and limits. Keep private

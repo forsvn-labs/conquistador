@@ -74,7 +74,6 @@ test('MCP origin validation rejects credentials and malformed URLs without write
     const output = bad('install', '--target', 'mcp', '--path', path, '--url', url);
     assert.doesNotMatch(output, /user:secret|token=secret/);
   }
-  bad('install', '--target', 'mcp', '--path', path);
   assert.deepEqual(readdirSync(parent), []);
 }));
 
@@ -86,7 +85,7 @@ test('MCP config lifecycle retains service/data and never connects or edits host
   writeFileSync(sentinel, '{"keep":"model and data settings"}');
   try {
     const url = `http://127.0.0.1:${server.address().port}`;
-    assert.match(good('install', '--target', 'mcp', '--path', path, '--url', url), /configured locally\. Connection unverified/);
+    assert.match(good('install', '--target', 'mcp', '--path', path, '--url', url), /configured locally\. Client registration unverified/);
     const config = JSON.parse(readFileSync(join(path, 'connector.json')));
     assert.deepEqual(config, { command: process.execPath, args: [join(root, 'runtime/bin/conquistador.js'), 'mcp', '--url', url] });
     assert.deepEqual(readdirSync(path).sort(), ['.conquistador-install.json', 'connector.json']);
@@ -195,4 +194,16 @@ test('plugin, MCP, and harness cleanup reminders precede the removal result', ()
     assert.ok(reminder < output.indexOf('Removed the unchanged owned local copy.'), output);
     assert.equal(existsSync(path), false);
   }
+}));
+
+
+test('default MCP connector uses local stdio with no server and preserves mode during update', () => temporary(path => {
+  const output = good('install', '--target', 'mcp', '--path', path);
+  assert.match(output, /stdio serves bundled methods/);
+  const expected = { command: process.execPath, args: [join(root, 'runtime/bin/conquistador.js'), 'mcp'] };
+  assert.deepEqual(JSON.parse(readFileSync(join(path, 'connector.json'))), expected);
+  good('update', '--path', path);
+  assert.deepEqual(JSON.parse(readFileSync(join(path, 'connector.json'))), expected);
+  good('uninstall', '--path', path);
+  assert.equal(existsSync(path), false);
 }));
