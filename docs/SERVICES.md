@@ -40,11 +40,17 @@ evidence or labeled assumptions, and one next action. It does not guarantee perf
 | Typed catalog | Integrators can constrain operations, budgets and authority | A catalog entry or fixture-tested adapter does not provide a live connection or support claim |
 | Eval Lab | Developers can define repeatable local checks and grading contracts | Synthetic examples cannot establish real-task quality or human acceptance |
 
-## Platform and service boundary
+## Platforms
+
+Start with [guided setup](../INSTALL.md). Choose where you work; setup prepares the package and
+prints status, update and uninstall steps. The [platform guide](PLATFORMS.md) keeps native manager
+commands and advanced connections separate from the default coding-agent skill.
+
+### Implementation and activation
 
 | Platform or module | Shipped implementation | Activation and limits |
 | --- | --- | --- |
-| skills.sh / coding agent | One root skill with all 38 outcomes | CLI installs a clean private clone or distribution; host discovery and invocation naming apply |
+| Coding agent | One managed root skill with all 38 outcomes | Guided setup selects the host project folder; refresh discovery to activate. skills.sh remains an alternative |
 | Claude/Codex plugins | Repo-local marketplaces, methods and icon; one native Claude agent | Host plugin support and activation required; no central listing or universal alias claim |
 | Agent Plugins 1.0.0 | Root `plugin.json` and fixed `skills/` discovery | Compatible client required; hooks and native agents are host-specific |
 | Single-agent harness | Parent role and all declared methods | Host supplies agent execution; no service starts on install |
