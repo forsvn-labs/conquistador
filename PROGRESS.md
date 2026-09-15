@@ -31,6 +31,10 @@ exercised the skills CLI on seven coding-agent targets. Local Bun/npm probes exe
 Lavish sessions without changing project dependencies. These checks do not establish native
 agent activation, human annotation or useful model output.
 
+The integrated source passed the Node 24 build and all 519 default tests: 18 local tooling,
+278 runtime, 160 catalog and 63 Eval Lab tests. The catalog check validated 17 operations, and
+the synthetic local Eval SDK example passed. Maintained runtime/lib output matched source.
+
 The final integration adds a staged usage-guide check for all seven installer mode families,
 including contained Markdown links and refusal to upgrade or remove edited usage docs. CI includes
 `dogfood/0.1.0` and `main` pushes and keeps read-only permissions. Follow
