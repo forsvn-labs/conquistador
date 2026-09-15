@@ -145,10 +145,17 @@ See [Claude marketplaces](https://code.claude.com/docs/en/plugin-marketplaces) a
 
 ## Codex plugin
 
-Use the same fresh distribution or staged plugin directory. In a Codex host with plugin support,
-add that directory through its local marketplace controls and select `conquistador@conquistador`.
-Plugin controls depend on the host version; use the recommended skills.sh route if those controls
-are unavailable. Confirm Conquistador appears in the host before starting a task. The repo includes
+Use the same fresh distribution or staged plugin directory. With a Codex version that supports
+plugin marketplaces, add the local marketplace and install Conquistador:
+
+```sh
+codex plugin marketplace add /absolute/path/conquistador-plugin
+codex plugin add conquistador@conquistador
+```
+
+Expect the host to register the marketplace and install `conquistador@conquistador`. Confirm
+Conquistador appears in the host's plugin/skill controls before starting a task. If your version
+lacks these commands, use the recommended skills.sh route. The repo includes
 `.agents/plugins/marketplace.json`, `.codex-plugin/plugin.json` and the complete method library.
 The portable JSON agent contracts are not native Codex agents. See
 [Codex plugin packaging](https://learn.chatgpt.com/docs/build-plugins).
