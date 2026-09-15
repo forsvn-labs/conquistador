@@ -16,8 +16,8 @@ npm test
 
 The exact npm versions checked on 2026-09-16 are MCP SDK `1.30.0` and Executor
 `1.6.8`. `bun.lock` records the resolved packages. The Executor CLI is a development
-dependency for explicit operator use and version monitoring. The client never
-starts it. Root build and tests do not import this optional package.
+dependency for explicit operator use and version monitoring. The ordinary client never
+starts it. The explicit native smoke command below starts one temporary process. Root build and tests do not import this optional package.
 
 ## CLI contract
 
@@ -104,6 +104,10 @@ not proof that an arbitrary tool is safe. The operator must verify that the tool
 really reads GitHub repository metadata before supplying it. Matching annotations
 are a required check, not independent evidence of that semantic contract.
 
+The factory binds the Executor bearer identity when created. A changed or missing
+bearer fails before network access. After an explicit credential rotation, recreate
+the factory and host resolver for the updated Connection.
+
 Each callback checks the Connection snapshot and opaque credential identity,
 repository allowlist and deadline before network access. It appends the official
 `?mode=passthrough` option internally, runs one bounded `search` for repository
@@ -138,8 +142,7 @@ Tests use the genuinely installed official MCP client and server SDK over a
 short-lived loopback HTTP server with synthetic credentials. They verify protocol
 compatibility, transport limits, cancellation, output filtering, config rejection,
 redirect refusal, exact GitHub callback binding, and offline operation. These fixtures are not real Executor
-server, provider-account, human-acceptance or release evidence. The Executor
-binary is installed but is not launched in the suite.
+server, provider-account, human-acceptance or release evidence. The default suite does not launch the Executor binary.
 
 Live prerequisites remain an operator-approved Executor endpoint, scoped access
 bearer, provider connection and policies configured through Executor UI, a reviewed binding in the supported GitHub argument layout, and authorized catalog verification with observed receipts.
@@ -154,3 +157,22 @@ and the [MCP tool server source](https://github.com/UsefulSoftwareCo/executor/bl
 The installed SDK's `client/index.js`, `client/streamableHttp.js`, and
 `server/streamableHttp.js` interfaces were exercised directly. Current upstream
 source research does not establish compatibility of every deployed Executor version.
+
+## Explicit native smoke
+
+`npm run test:native` starts the installed Executor `web --foreground` on numeric
+loopback with a new temporary data and scope directory. It passes no provider
+credentials and disables telemetry, catalog fetching and update checks through
+Executor's documented environment controls. It suppresses native startup logs,
+which otherwise contain a login token. The script reads only Executor's freshly
+minted local bearer in memory and runs our client's MCP discovery. It performs no
+provider/tool calls. Cleanup terminates the process group, removes task-owned
+state, and checks that the TCP endpoint has closed. This script supports POSIX
+hosts and is separate from the default tests and CI.
+
+Observed on 2026-09-16 on macOS arm64 with Node 24.21.0 and installed Executor 1.6.8: native
+startup and authenticated MCP discovery succeeded, listing seven tools. Known
+entrypoints were `execute`, `resume`, and `skills`. The process stopped and its
+temporary state was removed. This is native local connection evidence, not a
+provider-account read, GitHub binding verification, durable-job proof, or release
+acceptance. Provider verification remains false.

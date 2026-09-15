@@ -8,7 +8,8 @@
   },
   "scripts": {
     "test": "node --test *.test.mjs",
-    "check": "node --check cli.mjs && node --check config.mjs && node --check client.mjs"
+    "check": "node --check cli.mjs && node --check config.mjs && node --check client.mjs && node --check native-smoke.mjs",
+    "test:native": "node native-smoke.mjs"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "1.30.0"

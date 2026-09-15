@@ -116,6 +116,9 @@ export function createExecutorGithubRepositoryRead(config, { env = process.env, 
   requireCondition(connection?.provider === 'github' && connection.state === 'active' &&
     connection.allowedOperationIds?.includes('github.repository.get'), 'BINDING_INVALID');
   const connectionDigest = digest(connection);
+  const initialBearer = env[checked.authEnv];
+  requireCondition(typeof initialBearer === 'string' && initialBearer.length >= 16, 'AUTH_REQUIRED');
+  const bearerDigest = digest(initialBearer);
   requireCondition(Array.isArray(allowedRepositories) && allowedRepositories.length > 0 &&
     allowedRepositories.every(id => /^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/.test(id)), 'BINDING_INVALID');
   const allowed = new Set(allowedRepositories);
@@ -144,7 +147,9 @@ export function createExecutorGithubRepositoryRead(config, { env = process.env, 
       requireCondition(Number.isFinite(remaining) && remaining > 0 && !options.signal?.aborted, 'DEADLINE_EXPIRED');
       const signal = AbortSignal.any([AbortSignal.timeout(Math.min(10000, Math.ceil(remaining))), ...(options.signal ? [options.signal] : [])]);
       let session;
-      const sessionEnv = { [checked.authEnv]: env[checked.authEnv] };
+      const currentBearer = env[checked.authEnv];
+      requireCondition(typeof currentBearer === 'string' && digest(currentBearer) === bearerDigest, 'AUTH_BINDING_MISMATCH');
+      const sessionEnv = { [checked.authEnv]: currentBearer };
       try {
         session = await openSession(checked, { env: sessionEnv, signal, passthrough: true });
         const requestOptions = { timeout: Math.min(10000, remaining), signal: session.signal };

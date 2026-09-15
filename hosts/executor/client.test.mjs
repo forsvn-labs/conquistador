@@ -221,3 +221,17 @@ test('CLI handoff reads only bounded regular config files and prints no token', 
   assert.equal(await run(['login', '--config', path], io), 1);
   assert.ok(!error.includes(credential));
 });
+
+test('GitHub bearer rotation cannot reuse an existing Connection and opaque credential', async t => {
+  let networkRequests = 0;
+  const f = await fixture(t, () => ({ tools: [] }), (_req, res) => {
+    networkRequests++; res.writeHead(500); res.end();
+  });
+  const mutableEnv = { ...env };
+  const route = createExecutorGithubRepositoryRead(f.config, { env: mutableEnv, binding, connection, allowedRepositories: ['owner/repo'] });
+  for (const changed of ['different-synthetic-account-bearer', undefined, '']) {
+    mutableEnv[authEnv] = changed;
+    await assert.rejects(route.readRepository({ owner: 'owner', repository: 'repo' }, options(route.credential)), /AUTH_BINDING_MISMATCH/);
+  }
+  assert.equal(networkRequests, 0);
+});
