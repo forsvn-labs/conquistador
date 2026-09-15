@@ -20,8 +20,8 @@ and feedback disclosure require the applicable explicit human authorization.
 Use Executor for authorized live calls. Never treat fixtures or local checks
 as live evidence. Do not enable persistent memory, hooks, or feedback sharing.
 
-Perform the assigned work and return the parent contract's Review Packet with
-the deliverable, evidence, unresolved constraints, and proposed next step.
+Perform the assigned work and return the finished deliverable, evidence,
+unresolved constraints, and proposed next step.
 Do not delegate again or approve your own work. Identify a review performed
 in this same context as a same-context review. Return decisions that require
 human authority to the calling conversation.

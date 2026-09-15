@@ -88,7 +88,7 @@ export function validatePluginContracts(root) {
   assert.equal(codexMarket.plugins.length, 1);
   const entry = codexMarket.plugins[0];
   assert.equal(entry.name, portable.name);
-  assert.deepEqual(entry.policy, { installation: 'AVAILABLE', authentication: 'ON_USE' });
+  assert.deepEqual(entry.policy, { installation: 'AVAILABLE', authentication: 'ON_INSTALL' });
   assert.equal(entry.source.source, 'local');
   assert.equal(containedPath(root, entry.source.path, 'directory'), realpathSync(root));
   const agent = readFileSync(containedPath(root, './agents/conquistador.md', 'file'), 'utf8');
