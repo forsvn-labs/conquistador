@@ -6,7 +6,8 @@ export const LIMITS = Object.freeze({ request: 65536, file: 131072, response: 52
 const bundledRoot = fileURLToPath(new URL('../skills', import.meta.url));
 const decoder = new TextDecoder('utf-8', { fatal: true });
 const extensions = new Set(['.md', '.json', '.yaml', '.yml', '.txt', '.csv', '.tsv', '.py', '.sh', '.swift', '.pbxproj', '.xcworkspacedata']);
-const segment = /^[A-Za-z0-9][A-Za-z0-9._-]*$/;
+const segment = /^[A-Za-z0-9](?:[A-Za-z0-9._ -]*[A-Za-z0-9_-])?$/;
+const protocolVersions = new Set(['2024-11-05', '2025-03-26', '2025-06-18', '2025-11-25']);
 const methodPattern = /^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$/;
 const object = value => value !== null && typeof value === 'object' && !Array.isArray(value);
 const schema = properties => ({ type: 'object', properties, required: Object.keys(properties), additionalProperties: false });
@@ -146,7 +147,7 @@ export async function runSkillsMcp({ input = process.stdin, output = process.std
     if (method === 'initialize' && !initialized) {
       if (typeof params.protocolVersion !== 'string' || !object(params.capabilities) || !object(params.clientInfo)) return error(id, -32602, 'Invalid initialization');
       initialized = true;
-      return send({ jsonrpc: '2.0', id, result: { protocolVersion: '2025-11-25', capabilities: { tools: {} }, serverInfo: { name: 'conquistador-methods', version: '0.1.0' }, instructions: 'Read conquistador/SKILL.md with conquistador_read, then select relevant methods. Your host supplies the model, tools and permissions. Reading methods does not execute them or grant authority.' } });
+      return send({ jsonrpc: '2.0', id, result: { protocolVersion: protocolVersions.has(params.protocolVersion) ? params.protocolVersion : '2025-11-25', capabilities: { tools: {} }, serverInfo: { name: 'conquistador-methods', version: '0.1.0' }, instructions: 'Read conquistador/SKILL.md with conquistador_read, then select relevant methods. Your host supplies the model, tools and permissions. Reading methods does not execute them or grant authority.' } });
     }
     if (!ready) return error(id, -32600, 'Initialize the connection first');
     if (method === 'tools/list') return send({ jsonrpc: '2.0', id, result: { tools: TOOLS } });

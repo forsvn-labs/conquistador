@@ -183,3 +183,39 @@ test('a blocked stdout writer stops within its deadline without accumulating req
   assert.equal(input.destroyed, true);
   assert.equal(output.destroyed, true);
 });
+
+test('initialization negotiates a supported version for older and unknown client versions', async t => {
+  const path = cold(t);
+  for (const protocolVersion of ['2024-11-05', '2025-03-26', '2025-06-18', '2025-11-25', '2099-01-01']) {
+    const initialization = rpc(1, 'initialize', { protocolVersion, capabilities: {}, clientInfo: { name: 'test', version: '1' } });
+    const result = await run(path, lines([initialization, start[1], rpc(2, 'tools/list')]));
+    assert.equal(result.code, 0);
+    assert.equal(result.stderr, '');
+    assert.equal(result.messages[0].result.protocolVersion, protocolVersion === '2099-01-01' ? '2025-11-25' : protocolVersion);
+    assert.equal(result.messages[1].result.tools.length, 3);
+  }
+});
+
+
+test('bundled iOS resources with internal spaces are listed and readable, but ambiguous segments are refused', () => {
+  const access = createMethodAccess();
+  const files = access.files('build-ios-app').files;
+  const spacedResources = [
+    'App NameUITests/App_NameUITests.swift',
+    'App NameUITests/App_NameUITestsLaunchTests.swift',
+    'App NameTests/App_NameTests.swift',
+    'App Name.xcodeproj/project.pbxproj',
+    'App Name/Item.swift',
+    'App Name/App_NameApp.swift',
+    'App Name/ContentView.swift',
+    'App Name/Assets.xcassets/Contents.json',
+    'App Name/Assets.xcassets/AppIcon.appiconset/Contents.json',
+    'App Name/Assets.xcassets/AccentColor.colorset/Contents.json',
+    'App Name.xcodeproj/project.xcworkspace/contents.xcworkspacedata',
+  ].map(path => `build-ios-app/template/${path}`);
+  for (const path of spacedResources) {
+    assert.ok(files.includes(path), path);
+    assert.ok(access.read(path).length > 0);
+  }
+  for (const path of ['build-ios-app/template/ App Name/ContentView.swift', 'build-ios-app/template/App Name /ContentView.swift', 'build-ios-app/template/App Name./ContentView.swift', 'build-ios-app/template/../SKILL.md']) assert.throws(() => access.read(path), path);
+});
