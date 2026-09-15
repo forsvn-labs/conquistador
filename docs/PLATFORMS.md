@@ -163,7 +163,14 @@ To remove a harness, detach it in your host adapter, then uninstall its prepared
 setup. Separate host contexts are required for independent review. A same-context fallback must
 be identified. Host credentials, task outputs and external state are not installer-owned.
 
-## Grok Bot and Eve
+## Optional Executor and Eve runtimes
+
+The complete distribution offers `conquistador connections --help` and `conquistador jobs --help`.
+These commands prepare an operator-owned Executor connection or a separate Eve app. They do not
+install a service into the coding agent or start a background job. Read
+[accounts and durable jobs](INTEGRATIONS.md) for setup, credential boundaries, and update checks.
+
+## Portable Grok Bot and Eve packages
 
 These are experimental import contracts. Native import, specialist delegation, and execution have not been verified, so
 the setup guide does not offer them as ready integrations. Grok CLI is a different host from the

@@ -55,6 +55,8 @@
     "build": "node tools/dev.mjs build",
     "test": "node tools/dev.mjs test",
     "package": "node tools/package.mjs",
-    "setup": "node tools/setup.mjs"
+    "setup": "node tools/setup.mjs",
+    "integrations:status": "node tools/integration-releases.mjs status",
+    "integrations:updates": "node tools/integration-releases.mjs check-updates"
   }
 }

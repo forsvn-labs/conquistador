@@ -28,3 +28,26 @@ test('the installed setup command works before runtime libraries or dependencies
     rmSync(temporary, { recursive: true, force: true });
   }
 });
+
+test('optional integration help stays usable before runtime and vendor packages are installed', () => {
+  const temporary = realpathSync(mkdtempSync(join(tmpdir(), 'conquistador integration entry ')));
+  try {
+    for (const file of ['package.json', 'runtime/bin/conquistador.js', 'hosts/executor/cli.mjs',
+      'hosts/executor/config.mjs', 'hosts/eve/jobs.mjs', 'tools/integration-releases.mjs']) {
+      const target = join(temporary, file);
+      mkdirSync(dirname(target), { recursive: true });
+      copyFileSync(join(root, file), target);
+    }
+    const run = (...args) => execFileSync(process.execPath, [join(temporary, 'runtime/bin/conquistador.js'), ...args], { encoding: 'utf8' });
+    for (const [command, expected] of [['connections', /prepare/], ['jobs', /submit/], ['integrations', /check-updates/]]) {
+      assert.match(run(command, '--help'), expected);
+    }
+    const config = JSON.parse(run('connections', 'prepare', '--endpoint', 'https://executor.example/mcp',
+      '--ui-url', 'https://executor.example/', '--auth-env', 'CONQUISTADOR_EXECUTOR_ACCESS'));
+    assert.equal(config.authEnv, 'CONQUISTADOR_EXECUTOR_ACCESS');
+    assert.equal(existsSync(join(temporary, 'node_modules')), false);
+    assert.equal(existsSync(join(temporary, 'runtime/lib')), false);
+  } finally {
+    rmSync(temporary, { recursive: true, force: true });
+  }
+});

@@ -1,0 +1,45 @@
+name: Optional integration checks
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'hosts/eve/**'
+      - 'hosts/executor/**'
+      - 'skills/**'
+      - 'tools/integration-*.mjs'
+      - 'runtime/bin/conquistador.js'
+      - '.github/workflows/integration-checks.yml'
+jobs:
+  hosts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        directory: [hosts/eve/runtime, hosts/executor]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: '1.3.14'
+      - name: Install the reviewed lockfile
+        working-directory: ${{ matrix.directory }}
+        run: bun install --frozen-lockfile --ignore-scripts
+      - name: Check native package compatibility
+        working-directory: ${{ matrix.directory }}
+        run: npm run check
+      - name: Exercise local contracts
+        working-directory: ${{ matrix.directory }}
+        run: npm test
+      - name: Build the native job host
+        if: matrix.directory == 'hosts/eve/runtime'
+        working-directory: ${{ matrix.directory }}
+        run: npm run build
+      - name: Check dependency security advisories
+        working-directory: ${{ matrix.directory }}
+        run: bun audit --audit-level high

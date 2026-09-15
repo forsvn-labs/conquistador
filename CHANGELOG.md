@@ -4,6 +4,23 @@ No public release is claimed. See [VERSIONS.md](VERSIONS.md) for independent pro
 versions. Verification establishes the stated local scope; live provider operation, useful model
 output, human acceptance, rights disposition and release authority require separate evidence.
 
+## Unreleased Executor and Eve adoption
+
+- Updated the parent method to 2.7.0. It guides missing account access through a secure host or
+  Executor interface and uses one parent for explicitly requested durable work.
+- Added lazy `connections`, `jobs`, and `integrations` commands in the complete distribution.
+  Ordinary skill installation starts no service and adds no model or provider credentials.
+- Added a private Executor MCP client with configuration drafts, operator UI handoff, bounded
+  discovery, and a host-only callback for an exact GitHub repository metadata binding. It uses
+  the existing catalog authority path; arbitrary provider dispatch remains unavailable.
+- Added an optional Eve app using canonical skills and explicit owner/session commands. Worker and
+  operator access are separate. Provider tools require approval through the configured Executor
+  route. Native verification remains in progress on the local adoption branch.
+- Added exact upstream pins, Bun lockfiles, a read-only npm release checker, daily release-watch CI,
+  and optional installed-package/security checks. Updates require review and do not expand grants.
+- Documented credential custody, service ownership, update policy, and the distinction between
+  local package checks and live account evidence. No remote activation or release has occurred.
+
 ## Unreleased master-agent execution
 
 - Restored the unchanged v1 agent schema and explicit legacy package. The master package now

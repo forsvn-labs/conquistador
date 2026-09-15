@@ -75,6 +75,28 @@ Recurring analytics should use an owned warehouse or durable export when availab
 interfaces remain appropriate for provider-only reads and approved writes. Authentication, new paid
 services, production permissions, and external actions remain human-owned.
 
+## Optional Executor connections and Eve jobs
+
+The complete distribution provides `conquistador connections` for an operator-owned Executor
+endpoint and `conquistador jobs` for explicitly prepared Eve work. Use each command's `--help`
+before setup. The compact skill continues to use the coding agent's existing tools.
+
+Executor holds provider credentials and enforces its configured policies. The coding host and Eve
+authenticate to Executor with scoped gateway access. Conquistador does not copy provider keys into
+scripts, assignments, or a second secret store. Gateway discovery does not prove provider access.
+The optional catalog callback currently covers only a reviewed GitHub repository metadata binding.
+
+An Eve job has one owner, its own state, and one coordinating parent. Preparation copies canonical
+methods; it does not install dependencies, start a service, submit a model turn, or enable a
+schedule. Worker and operator authority are separate. Credential setup, cost, and consequential
+actions keep their human decisions. See `docs/INTEGRATIONS.md` in the complete distribution for
+setup and evidence limits.
+
+`conquistador integrations status` reports exact dependency pins. `check-updates` reads public npm
+release metadata without upgrading packages or granting new tools. The repository includes an
+optional daily release watch and local package compatibility checks. Production upgrades still
+need review, state recovery checks, and authorized live evidence.
+
 ## Optional Conquistador mode and hooks
 
 Ordinary use starts when the user invokes Conquistador. No hook, daemon, schedule, or service is

@@ -28,10 +28,12 @@ technical transports when one existing route clearly fits.
 Prefer routes in this order:
 
 1. Reuse a verified connector or MCP server already available in the host.
-2. Use the provider's maintained CLI through the project's package manager or a pinned auxiliary
-   package cache. Add a project dependency only when the product itself needs that dependency.
-3. Use an existing, operator-supplied `Executor.sh` or Executor connection for an authorized API or
-   GraphQL call. Keep the provider, operation, account, environment, and payload explicit.
+2. Guide missing account access through the operator's Executor connection manager. Reuse an
+   existing Executor MCP, API, or GraphQL route when available. Keep the provider, operation,
+   account, environment, and payload explicit.
+3. If host policy permits it, use the provider's maintained CLI through the project's package
+   manager or a pinned auxiliary package cache. Add a project dependency only when the product
+   itself needs that dependency.
 4. If no safe route exists, finish the local work and return the exact missing connection or human
    action.
 
@@ -44,6 +46,13 @@ same reporting data already lands in the warehouse.
 Use the host's credential flow. Never request a secret in chat or write it to commands, logs, project
 files, or specialist assignments. Authentication, new accounts, paid plans, administrator changes,
 and production permissions remain human-owned.
+
+In a complete distribution, `conquistador connections --help` describes configuration preparation,
+the operator UI handoff, and bounded MCP discovery. These steps do not install Executor or prove a
+provider operation. The coding host's access to Executor and Executor's access to a provider are
+separate grants. Reuse an existing grant only within its account and operation scope. Never extract
+provider credentials from the host or put them into generated scripts. Connection approval does
+not grant publication or write authority.
 
 Verify the narrow route before use:
 
@@ -79,7 +88,27 @@ GitHub repository metadata and an exact host-owned repository allowlist. Other s
 explicit audited extension and connection; naming a vendor does not make it supported. Do not
 invent a generic HTTP, shell, or MCP invocation to fill a missing operation.
 
+The optional Executor package supplies a host-only callback for the GitHub mapping. It requires an
+operator-reviewed exact tool schema and connection binding. It does not make other integrations
+available through this catalog.
+
 Return the setup receipt's operation, route, state and digests. Keep credentials, account details,
 customer rows and resolved knowledge paths out of that receipt. A candidate verification read can
 produce observed evidence without promoting the operation to supported. Missing vision, warehouse,
 CRM, wiki or provider operations remain bounded handoffs.
+
+## Explicit durable work
+
+When the user needs work to continue outside this coding-agent session, inspect
+`conquistador jobs --help` in the complete distribution. Prepare the optional Eve app with the
+canonical methods, a named owner, and a selected model. Installation, model access, service start,
+and submission are separate explicit steps. Agree on cost and access limits before execution.
+Do not enable schedules or move an interactive job to Eve implicitly.
+
+Use one coordinating parent per job. Keep provider credentials in Executor and job state outside
+the installed methods. Inspect an existing session after an uncertain submission before retrying.
+If this host lacks the job commands, finish the interactive work and identify the needed host.
+
+Use `conquistador integrations status` for installed source pins and `check-updates` for a read-only
+upstream version report. A new release requires review and compatibility checks. It must not change
+an existing account grant or enable additional operations automatically.

@@ -2,7 +2,7 @@
 name: conquistador
 description: "Use /conquistador as the master agent for product, marketing, growth, and engineering work. Turn one request into a finished result by assigning the existing outcome skills, project knowledge, and composition workflows to the specialist team the work needs. Keep publishing, spend, credentials, and other consequential actions behind explicit human approval."
 metadata:
-  version: 2.6.0
+  version: 2.7.0
 
 ---
 
@@ -24,6 +24,9 @@ work unless the customer explicitly asks for it.
    - learn from these results.
 5. Inspect the host's available tools, connections, and specialist-agent support. Follow
    [stack setup](methods/stack-setup.md) only when the task needs a missing interface.
+   Guide missing account access through the host or Executor secure interface. Never ask for keys
+   in chat. Use the optional Eve host for explicitly requested durable work when available, with
+   one coordinating parent per job.
 6. Follow [specialist team execution](orchestration/specialist-team.md). Assign one specialist for a
    narrow job or the number needed for a multi-part result. Use host-native isolated contexts when
    available and useful. Otherwise run the same assignments in sequence inside this context.

@@ -14,6 +14,14 @@ The public methods operate without private course records or practitioner source
 Technical provider and platform names identify compatibility or documented interfaces; they do not
 state affiliation or endorsement. Third-party dependency license obligations remain applicable.
 
+The optional Eve job host depends on the upstream `eve` package, licensed under Apache-2.0.
+The optional Executor connection host depends on upstream `executor`, licensed under MIT, and
+the official MCP SDK. These dependencies are installed separately through their exact manifests
+and lockfiles. Their source and license notices remain with the upstream packages; the root MIT
+license does not relicense them. Hosted services have separate terms and are not included by
+installing the Conquistador skill. Upstream identities are https://github.com/vercel/eve and
+https://github.com/UsefulSoftwareCo/executor.
+
 The separate app is UNLICENSED and excluded. Private course records, internal planning and review
 documents, source release authority, and landing are also excluded. Dependency notices and rights
 checks are separate acceptance evidence and must be verified for the exact artifact before release.

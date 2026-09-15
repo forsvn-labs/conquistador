@@ -291,6 +291,11 @@ export function cliHelp(version = "1.0.0"): string {
 Usage:
   conquistador                         Show help
   conquistador setup                   Install, inspect, update or uninstall a host package
+  conquistador connections --help      Connect accounts through an existing Executor gateway
+  conquistador jobs --help             Prepare a host for explicit durable jobs
+  conquistador integrations status     Inspect pinned integration dependencies
+  conquistador integrations check-updates
+                                        Check upstream releases without changing versions
   conquistador init                    Create runtime configuration
   conquistador chat [--url URL] [--intent TEXT] [--product TEXT]
                     [--audience TEXT] [--channel TEXT] [--goals TEXT] [--timeout-ms N]

@@ -16,6 +16,18 @@ already has. Hosts provide models, specialist contexts, credentials, connections
 Compact installs include usage and review guides so users can start work in their host.
 The runtime, typed catalog and Eval Lab are optional modules.
 
+Executor is the preferred optional connection manager for account onboarding and authenticated
+tool access. Conquistador should guide sign-in, verify the required operation, and continue the
+task while credentials stay with the host or gateway. Existing authorized connections remain
+usable within host policy. Eve owns explicitly requested durable jobs that outlive the coding
+session. Each job has one coordinating parent, and both execution paths preserve the same action
+authority. Do not build another provider credential store or duplicate the method library.
+
+Keep the integrations close to upstream through exact package pins, read-only release monitoring,
+native package checks, and observed verification of the deployed account and action paths.
+Upgrades must preserve permissions and have a state recovery path. Following an upstream release
+never grants new operations or enables background work.
+
 The parent can assign one specialist or several. The BB adapter bounds each run to four concurrent
 contexts and twelve total dispatches, including integration and review. Host limits can reduce those ceilings. A portable sequential fallback runs the same assignments
 when the host cannot create separate contexts. Specialist roles compose the existing outcomes and

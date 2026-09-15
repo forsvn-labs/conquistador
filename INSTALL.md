@@ -99,11 +99,24 @@ an MCP client uses a command from it. Download the current source before updatin
 
 ## First task and help
 
+### Optional account and job hosts
+
+The complete distribution includes `conquistador connections`, `conquistador jobs`, and
+`conquistador integrations`. Use `--help` on each command. [Accounts, tools, and durable jobs](docs/INTEGRATIONS.md)
+explains secure Executor setup, the separate Eve app, exact dependency pins, and update checks.
+These optional hosts have their own private dependency manifests. Use their documented Bun
+installation commands; do not symlink dependencies. No daemon, schedule, paid model, or provider
+connection starts during ordinary skill installation.
+
+### First task
+
 Try a [first task](docs/USAGE.md). Keep installed copies out of public commits while dogfooding.
 If GitHub denies access, authenticate the correct account. If `gh` works but HTTPS Git does not,
 `gh auth setup-git` configures Git to use that account. Never put a token in a command or MCP configuration. A host may require a refresh or explicit plugin/skill activation.
 
 The frozen v0.1.0 ZIP predates these shortcuts; use its [manual installation reference](docs/INSTALL-REFERENCE.md).
-Custom harnesses and experimental Grok Bot/Eve contracts remain in [platform details](docs/PLATFORMS.md).
+Custom harnesses and experimental portable Grok Bot/Eve contracts remain in
+[platform details](docs/PLATFORMS.md). The optional Eve runtime has its own explicit setup described
+in [accounts and durable jobs](docs/INTEGRATIONS.md).
 [Master-agent modes](docs/MASTER-AGENT.md) states how each installed surface handles specialist
 assignments, sequential fallback, and optional hooks.

@@ -2,6 +2,22 @@
 
 ## Now: private dogfooding
 
+### Executor and Eve adoption
+
+Use the optional Executor helper to prepare secure gateway access and inspect its available tools.
+Use the optional Eve app for explicit durable jobs with one owner, canonical skills, and separate
+worker/operator authority. Keep `/conquistador` in the existing coding host as the normal entry.
+[Integration usage](docs/INTEGRATIONS.md) separates connection preparation, package verification,
+live account proof, and the applicable human decisions.
+
+Maintain exact upstream dependencies and lockfiles. The release watcher reports new versions;
+optional CI checks installed packages and security advisories. Review and verify new versions
+before promotion. Activation of repository schedules and any deployment remains a separate action.
+Next dogfood evidence must exercise a real authorized account, a useful job, approval, and recovery.
+Do not count discovery, an installed SDK, or synthetic tests as provider support.
+
+### Existing dogfood baseline
+
 Version 0.1.0 is packaged and shipped as private GitHub prerelease
 [`v0.1.0-dogfood.2`](https://github.com/forsvn-labs/conquistador/releases/tag/v0.1.0-dogfood.2)
 from source `0ae8df0` on `dogfood/0.1.0`. ZIP, npm tarball, checksums and the unbound assembly

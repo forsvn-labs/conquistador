@@ -3,13 +3,45 @@
 Version 0.1.0 is packaged and privately prereleased as
 [`v0.1.0-dogfood.2`](https://github.com/forsvn-labs/conquistador/releases/tag/v0.1.0-dogfood.2)
 (source `0ae8df059170d476d2f700ad161429c9061b2f17` on `dogfood/0.1.0`). The current feature branch
-updates the parent method to 2.6.0 with explicitly versioned v2 master-agent contracts. The root npm package has `private: true`; CI only builds and tests with read-only
+updates the parent method to 2.7.0 with explicitly versioned v2 master-agent contracts and optional
+Executor/Eve setup. The root npm package has `private: true`; CI only builds and tests with read-only
 repository permissions. Public distribution is deferred. Final source packaging binds the
 integrated documentation and installer to that exact clean commit in `assembly.json`
 (`authority: UNBOUND`, not a public publish). Earlier artifacts retain their original source
 identity and are not rebuilt. Installing a new package does not update existing copies.
 
 ## Implemented
+
+### Optional integration adoption
+
+The local adoption branch adds Executor account setup, an explicit Eve job host, and read-only
+upstream release monitoring. The coding agent remains the ordinary entrypoint. Existing host tools
+remain usable within their policies; the catalog still requires exact audited operations.
+
+- Executor configuration contains endpoint and UI URLs plus an environment-variable reference.
+  The client offers a UI handoff and bounded discovery. Its host-only GitHub metadata callback
+  verifies an exact reviewed schema, account connection, allowlist, and deadline before invocation.
+  It does not offer arbitrary execution or copy provider credentials into Conquistador.
+- The optional Eve app uses the canonical methods, a named owner, separate worker/operator access,
+  and Executor connections. Preparation and explicit session commands are separate from installation,
+  model access, service start, and scheduling. The original portable Eve staging contract stays
+  candidate-only.
+- Exact private package pins and Bun lockfiles support explicit installation and review.
+  `integrations status` reads local pins; `check-updates` compares public npm release metadata without
+  changing dependencies or grants. The daily GitHub release watch needs default-branch activation.
+  Optional CI checks package compatibility and security advisories. No automatic upgrade is enabled.
+
+The Executor worker verified Node 24.21.0 build/tests, 21 optional client tests, frozen dependency
+installation, and a clean dependency audit. The client tests use the installed official MCP SDK
+with a synthetic loopback server. They do not prove a deployed Executor endpoint or provider account.
+Integrated verification and native Eve checks are still in progress for this local change.
+
+Live dogfooding still needs an approved Executor endpoint, scoped bearer, provider account/policies,
+and reviewed operation binding. Eve also needs an operator-owned service, selected model, budget,
+and observed approval/recovery behavior. No live call, model turn, deployment, or release is claimed
+by this adoption work. See [integration setup](docs/INTEGRATIONS.md).
+
+### Existing product behavior
 
 | Area | Available behavior |
 | --- | --- |

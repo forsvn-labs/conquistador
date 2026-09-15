@@ -56,6 +56,11 @@ and Executor routes already available, then prepares the narrow task prerequisit
 For visual feedback, ask for a [Lavish preview](docs/PREVIEW.md). Credentials, paid services and
 external actions retain their applicable human authority.
 
+For account connections and work that must continue beyond a coding session, use the optional
+[Executor and Eve integration paths](docs/INTEGRATIONS.md). Connection preparation, durable-job
+preparation, and upstream version checks are explicit commands in the complete distribution.
+The ordinary skill installation starts neither service.
+
 ## Private use and current limits
 
 Source lives in [forsvn-labs/conquistador, branch dogfood/0.1.0](https://github.com/forsvn-labs/conquistador/tree/dogfood/0.1.0).

@@ -63,7 +63,9 @@ commands and advanced connections separate from the default coding-agent skill.
 | Visual review | On-demand Lavish AXI setup, HTML previews and annotations | Agent prepares a cached CLI with telemetry disabled; reachable browser and active polling required |
 | Typed catalog | Seventeen operation contracts, adapters and a host-injected bridge | Exact support evidence and connection authority gate dispatch; not turnkey live support |
 | Eval Lab | Source SDK, graders, schemas and local examples | Synthetic checks by default; real evaluations need authorized providers, budgets and human review |
-| Eve and official Grok Bot | Experimental staging contracts | Import and native execution unverified; not a supported native service claim |
+| Executor connection helper | Configuration draft, operator UI handoff, bounded MCP discovery, and an exact GitHub metadata callback | Optional package, scoped gateway bearer and reviewed provider binding required; discovery is not provider proof |
+| Eve durable jobs | Optional app preparation and explicit session commands using the canonical methods | Separate owner, model, service, Executor policies and operator approval required; no service starts on install |
+| Portable Eve and official Grok Bot | Experimental staging contracts | Native import and specialist delegation unverified; separate from the optional Eve runtime |
 
 The optional runtime currently has a declared content-intelligence playbook. Other skill routes
 remain host methods or guidance unless a corresponding executable graph is supplied and validated.
@@ -73,6 +75,9 @@ host can add the typed operation bridge through its own authenticated Executor c
 For task setup, the parent checks existing CLI, MCP, warehouse, and Executor routes first. It assigns
 only the verified interface needed for the task. Tool discovery and login do not prove that an
 external operation succeeded.
+
+See [accounts and durable jobs](INTEGRATIONS.md) for credential custody, explicit activation, pinned
+dependencies, and upstream release monitoring. These optional hosts do not expand catalog support.
 
 ## Proactive responsibilities
 
