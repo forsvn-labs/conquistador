@@ -31,6 +31,14 @@ limits. [Proactive help](docs/PROACTIVE.md) documents the local event helper. In
 starts no service, enables no hooks, and sends no data. Publication, spend and external writes
 require the applicable human authority.
 
+For visual review, Conquistador uses [Lavish AXI](docs/PREVIEW.md) through the host's CLI. Users
+stay with `/conquistador`; the agent prepares the preview and handles annotations. Lavish is an
+optional separate installation. Feedback remains local unless the user explicitly chooses to share it.
+
+[Memory and learning](docs/LEARNING.md) describes an approved private project workflow and the
+separate opt-in contribution through `submit-feedback`. Automatic cross-run retrieval and global
+learning are not implemented.
+
 ## Distribution status
 
 This source is MIT and packageable as version 0.1.0. It is currently unpublished. No npm registry

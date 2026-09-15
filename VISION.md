@@ -14,6 +14,10 @@ Publishing, spending, external actions and public feedback disclosure remain exp
 Private content stays private. Feedback is opt-in, with redacted previews and exact-payload consent.
 No telemetry or automatic background collection is part of that feedback flow.
 
+Use Lavish AXI for visual previews and annotation through the coding-agent host. Keep source
+artifacts canonical. Review feedback, approved private memory and opt-in public issue submission
+have separate authority. Conquistador does not need its own preview UI.
+
 The editable source identifies as 0.1.0 and remains unbound and unpublished. Local packaging does
 not supply live host evidence, output quality, rights approval, or release authorization.
 

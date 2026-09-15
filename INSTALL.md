@@ -86,6 +86,9 @@ host execution remain unverified. They are not advertised as supported native in
 
 ## Proactive help
 
+For visual previews and annotations, follow [Lavish setup](docs/PREVIEW.md). The parent chooses
+that review path on demand; no Conquistador preview application or global session hook is required.
+
 [Proactive help](docs/PROACTIVE.md) describes the opt-in local helper and its three host events.
 Configure it outside the installer-owned directory, then have the host invoke it on the selected
 event and pass its returned instructions to Conquistador. The helper cannot register hooks, run a

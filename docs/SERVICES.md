@@ -33,6 +33,7 @@ Conquistador must name missing inputs or capabilities rather than invent observa
 | MCP | Stdio run, artifact-list, artifact-read and cancel tools | Requires configured Conquistador HTTP service; no approval or publishing tools |
 | HTTP and terminal | Durable supported playbooks, structured chat and review boundaries | Node 24, model configuration and separate human authority |
 | Local proactive helper | Opt-in event-to-instruction output | Host must invoke and deliver it; no daemon, scheduler or automatic external action |
+| Visual review | Parent handoff to Lavish AXI for HTML previews and annotations | Separate CLI install and reachable browser session; active polling returns feedback |
 | Typed catalog | Seventeen operation contracts, adapters and a host-injected bridge | Exact support evidence and connection authority gate dispatch; not turnkey live support |
 | Eval Lab | Source SDK, graders, schemas and local examples | Synthetic checks by default; real evaluations need authorized providers, budgets and human review |
 | Eve and official Grok Bot | Experimental staging contracts | Import and native execution unverified; not a supported native service claim |

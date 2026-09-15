@@ -76,6 +76,8 @@ function stage(mode, target) {
   };
   copy('LICENSE');
   copy('NOTICE.md');
+  copy('docs/PREVIEW.md');
+  copy('docs/LEARNING.md');
   if (['conquistador', 'plugin', 'single-agent'].includes(mode)) {
     copy('tools/proactive.mjs');
     copy('docs/PROACTIVE.md');

@@ -13,3 +13,8 @@ package is not a published release. Hosted services, arbitrary bot imports and b
 are separate future work; they are not implied by the current local interfaces.
 
 The unified entry-point package now bundles all outcome methods. Validate named coding-agent discovery, host event activation and real outcomes next. Publish installation URLs only after authenticated repository setup and release authorization; do not advertise experimental import contracts as native services.
+
+Lavish preview instructions now travel with the parent and installed packages. Validate actual
+human annotation and agent resumption in each supported host. Extend learning with reviewed,
+project-scoped facts and observed outcomes before adding automatic retrieval or a shared service.
+Any public feedback contribution stays explicitly selected and consented.

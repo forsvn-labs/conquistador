@@ -21,6 +21,8 @@ test('one entry point contains every method and upgrades without losing user cha
   for (const name of skills) assert.deepEqual(readFileSync(join(target, 'library', name, 'SKILL.md')), readFileSync(join(root, 'skills', name, 'SKILL.md')));
   assert.ok(existsSync(join(target, 'tools/proactive.mjs')));
   assert.ok(existsSync(join(target, 'docs/PROACTIVE.md')));
+  assert.deepEqual(readFileSync(join(target, 'docs/PREVIEW.md')), readFileSync(join(root, 'docs/PREVIEW.md')));
+  assert.ok(existsSync(join(target, 'library/conquistador/standards/preview.md')));
   install('upgrade', 'conquistador', target);
   writeFileSync(join(target, 'operator-note.md'), 'Keep this note.');
   assert.throws(() => install('upgrade', 'conquistador', target), /files were modified/);
