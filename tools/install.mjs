@@ -87,7 +87,8 @@ function stage(mode, target) {
     copy('skills', 'library');
     copy('skills/conquistador/agents/openai.yaml', 'agents/openai.yaml');
   } else if (mode === 'plugin') {
-    for (const path of ['plugin.json', '.claude-plugin', '.codex-plugin', 'skills', 'assets']) copy(path);
+    for (const path of ['plugin.json', '.claude-plugin', '.codex-plugin', '.agents', 'SKILL.md', 'skills', 'assets']) copy(path);
+    copy('agents/conquistador.md');
   } else if (mode.startsWith('skill:')) {
     const name = mode.slice(6);
     skill(name);
@@ -105,7 +106,7 @@ function stage(mode, target) {
     role('agents/conquistador/agent.json', 'agent');
   } else if (mode === 'squad') {
     copy('agents/squad/squad.json', 'squad.json');
-    copy('agents/squad/sequential-fallback.md', 'sequential-fallback.md');
+    copy('docs/squad-sequential-fallback.md', 'sequential-fallback.md');
     role('agents/squad/advisor.json', 'advisor');
     role('agents/squad/worker.json', 'worker');
   } else fail(`Unknown install mode: ${mode}`);
@@ -120,7 +121,7 @@ function stage(mode, target) {
         : mode === 'grok-bot'
           ? 'Use bot-profile.md and packaged-skills through the official Grok Bot app import controls, if supported. Read capabilities.md. Grok CLI is a different host.'
           : mode === 'plugin'
-            ? 'Point your coding-agent host local-plugin installer at this directory. The plugin starts no service. Skills declare any prerequisites needed when invoked.'
+            ? 'Add this directory as a local marketplace in Claude Code or Codex, then install conquistador@conquistador. Other Agent Plugins clients load plugin.json. Claude also discovers the Conquistador agent. No service or hook starts on install; methods declare prerequisites when needed.'
             : `Point your host at skills/${mode.slice(6)}. Read its SKILL.md for inputs, outputs and invocation prerequisites.`;
   writeFileSync(join(target, 'README.md'), `# Conquistador ${mode}\n\n${usage}\n\nPrepared locally, not live-host verified. This folder is installer-owned. Keep user artifacts elsewhere. Run upgrade or remove from the original complete distribution using the same mode and this destination. Modified files are preserved by refusing replacement.\n`);
   const record = { schemaVersion: 'conquistador.public-install/v1', mode, productVersion: readJson(join(root, 'package.json')).version, digest: digest(target), liveHostVerified: false };

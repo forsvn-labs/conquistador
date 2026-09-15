@@ -29,6 +29,13 @@ frontmatter names and parent routing. An isolated skill must not depend on sibli
 Describe behavior changes and relevant checks in CHANGELOG.md. Do not add private issue exports,
 source history, raw provider receipts, customer content, or credentials to a pull request.
 
+The repository-root SKILL.md is the skills.sh entry point. It forwards to the authored parent under
+skills/conquistador and travels with the complete public tree. Keep every required method contained.
+Do not move the wrapper into the parent folder without preserving sibling methods in installations.
+Only native Claude agent definitions belong in agents/*.md; portable-role documentation belongs in
+docs/ because Claude scans the agents directory recursively. Run `node tools/plugin-contracts.mjs .`
+to check plugin paths and metadata. These checks do not start a host or validate model behavior.
+
 ## Package a local commit
 
 Run bootstrap/build/test, review generated changes, and commit the source and maintained output.

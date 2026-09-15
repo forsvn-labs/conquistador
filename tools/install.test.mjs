@@ -5,6 +5,7 @@ import { mkdtempSync, readFileSync, readdirSync, realpathSync, rmSync, writeFile
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { validatePluginContracts } from './plugin-contracts.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const skills = readdirSync(join(root, 'skills')).sort();
@@ -38,6 +39,15 @@ test('single agent contains declared outcomes and an existing canonical parent',
   assert.deepEqual(readdirSync(join(target, 'agent/skills')).sort(), skills);
   for (const name of agent.mayLoadSkills) assert.ok(existsSync(join(target, 'agent/skills', name, 'SKILL.md')));
   install('remove', 'single-agent', target);
+  assert.equal(existsSync(target), false);
+}));
+
+test('native plugin install contains discoverable marketplaces and only its native agent', () => temporary(target => {
+  install('install', 'plugin', target);
+  assert.equal(validatePluginContracts(target).hostActivationVerified, false);
+  assert.deepEqual(readdirSync(join(target, 'agents')), ['conquistador.md']);
+  assert.match(readFileSync(join(target, 'SKILL.md'), 'utf8'), /skills\/conquistador\/SKILL.md/);
+  install('remove', 'plugin', target);
   assert.equal(existsSync(target), false);
 }));
 
