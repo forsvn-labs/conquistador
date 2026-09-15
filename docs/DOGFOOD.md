@@ -55,8 +55,9 @@ Automatic cross-run retrieval, enforced project isolation and global learning ar
 
 Keep product feedback as local redacted drafts during private dogfooding. `submit-feedback` may
 prepare a draft, but its public-destination requirement must not be relaxed to upload private
-notes. Memory approval is not permission to disclose feedback. A maintainer can review a draft
-through a separately authorized private process; drafting it does not send it anywhere.
+notes. Memory approval is not permission to disclose feedback. Keep the draft local until you
+and the recipient agree on a private destination and the exact content to disclose. Drafting
+it does not send it anywhere.
 
 ## Update and retry
 

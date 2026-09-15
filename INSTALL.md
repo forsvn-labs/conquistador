@@ -240,8 +240,10 @@ to publish, spend, persist learning or submit feedback.
 ## Optional runtime, terminal chat and MCP
 
 The runtime is optional. Coding-agent skills use the host's model and tools. To use durable
-playbooks and HTTP/MCP access, use Node 24 and Bun. Run these commands from the full
-distribution root to install the runtime dependency:
+playbooks and HTTP/MCP access, use Node 24 and Bun. Make a separate working copy of the complete
+distribution, or extract its ZIP into a second fresh directory. Keep the pristine source used by
+the skills CLI free of dependencies and runtime state. Run these commands from the separate
+working copy root to install the runtime dependency:
 
 ```sh
 bun install
