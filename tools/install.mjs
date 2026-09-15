@@ -78,6 +78,7 @@ function stage(mode, target) {
   copy('NOTICE.md');
   copy('docs/PREVIEW.md');
   copy('docs/LEARNING.md');
+  copy('docs/MASTER-AGENT.md');
   copy('docs/USAGE.md');
   copy('docs/PROACTIVE.md');
   if (['conquistador', 'plugin', 'single-agent'].includes(mode)) {
@@ -114,7 +115,7 @@ function stage(mode, target) {
   const usage = mode === 'conquistador'
     ? 'Load SKILL.md as the Conquistador skill. It routes through library/conquistador and all bundled outcome methods. Start with /conquistador, or the equivalent named-skill invocation in your host. Proactive help is opt-in; read docs/PROACTIVE.md.'
     : mode === 'single-agent'
-    ? 'Load agent/agent.json and agent/skills/conquistador in your host. All declared outcome skills are bundled; the parent selects only the methods needed for the request.'
+    ? 'Load agent/agent.json and agent/skills/conquistador in your host. The portable master contract, specialist roles, and all declared outcome skills are bundled. The host supplies any isolated worker contexts.'
     : mode === 'squad'
       ? 'Load squad.json and each member contract with its own skills directory. Read sequential-fallback.md if your host cannot create separate contexts.'
       : mode === 'eve'
@@ -124,7 +125,7 @@ function stage(mode, target) {
           : mode === 'plugin'
             ? 'Add this directory as a local marketplace in Claude Code or Codex, then install conquistador@conquistador. Other Agent Plugins clients load plugin.json. Claude also discovers the Conquistador agent. No service or hook starts on install; methods declare prerequisites when needed.'
             : `Point your host at skills/${mode.slice(6)}. Read its SKILL.md for inputs, outputs and invocation prerequisites.`;
-  writeFileSync(join(target, 'README.md'), `# Conquistador ${mode}\n\n${usage}\n\nRead [Use Conquistador](docs/USAGE.md) for requests, review and correction. This staged folder contains methods and usage documentation. Run installation, upgrade, removal, runtime, build, test and package commands from the complete distribution, not this folder. The proactive helper is available only when tools/proactive.mjs is included.\n\nPrepared locally, not live-host verified. This folder is installer-owned. Keep user artifacts elsewhere. Run upgrade or remove from the original complete distribution using the same mode and this destination. Modified files are preserved by refusing replacement.\n`);
+  writeFileSync(join(target, 'README.md'), `# Conquistador ${mode}\n\n${usage}\n\nRead [Use Conquistador](docs/USAGE.md) for requests, review and correction. Read [Master-agent modes](docs/MASTER-AGENT.md) for specialist execution and host limits. This staged folder contains methods and usage documentation. Run installation, upgrade, removal, runtime, build, test and package commands from the complete distribution, not this folder. The proactive helper is available only when tools/proactive.mjs is included.\n\nPrepared locally, not live-host verified. This folder is installer-owned. Keep user artifacts elsewhere. Run upgrade or remove from the original complete distribution using the same mode and this destination. Modified files are preserved by refusing replacement.\n`);
   const record = { schemaVersion: 'conquistador.public-install/v1', mode, productVersion: readJson(join(root, 'package.json')).version, digest: digest(target), liveHostVerified: false };
   writeFileSync(join(target, receiptName), `${JSON.stringify(record, null, 2)}\n`, { flag: 'wx' });
 }

@@ -1,4 +1,4 @@
-# Advisor/worker squad
+# Fixed advisor/worker squad
 
 Use this behavior when the advisor/worker squad package is installed. The parent routes the request,
 but routing does not expand either role's declared capabilities. If the requested outcome is outside
@@ -16,4 +16,5 @@ those roles, state the gap instead of assigning unrelated production or review w
 - Per-skill files under an outcome `agents/` directory are not this squad.
 
 The candidate package lives in `agents/squad/` of the product repository and stays out
-of this MIT plugin tree. Generic bot import is later work.
+of this MIT plugin tree. It is a two-role review package, not the parent-managed specialist team.
+Generic bot import is later work.

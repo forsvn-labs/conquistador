@@ -1,8 +1,9 @@
 # What Conquistador provides
 
-Conquistador is a product agent toolkit. Users ask the Conquistador parent for an outcome; it owns
-method selection, composition, review and the next useful step. A host supplies the model, available
-tools, project access and permission controls. Conquistador is not currently a hosted SaaS service.
+Conquistador is a product master agent. Users ask the parent for an outcome; it owns specialist
+assignment, method selection, composition, integration, review, and the next useful step. A host
+supplies the model, available agent contexts, tools, project access, and permission controls.
+Conquistador is not currently a hosted SaaS service.
 
 ## Outcomes and benefits
 
@@ -32,7 +33,7 @@ evidence or labeled assumptions, and one next action. It does not guarantee perf
 
 | Tool or method | Practical benefit | Implementation boundary |
 | --- | --- | --- |
-| Parent routing and 38 outcome methods | One request can produce a coherent package without manually selecting each method | Bundled Markdown contracts guide the host model; only relevant methods are loaded |
+| Parent routing, specialist roles and 38 outcome methods | One request can produce a coherent package without manually selecting each method or agent | Bundled contracts guide the host model; the host creates isolated contexts when available |
 | Review contracts | The result includes defects, uncertainty and recheck needs before you use it | Independent review needs separate host contexts; a same-context pass must be identified |
 | Lavish AXI | You can point to a visual change instead of describing its location in chat | The host runs the optional CLI and polls; the agent applies annotations to the source |
 | Private project memory workflow | Approved facts and corrections can be reused in a later task | Host file tools and explicit consent are required; no automatic retrieval service |
@@ -54,7 +55,7 @@ commands and advanced connections separate from the default coding-agent skill.
 | Coding agent | One root skill with all 38 outcomes | Install directly with skills.sh or use managed setup; refresh host discovery |
 | Claude/Codex plugins | Repo-local marketplaces, methods and icon; one native Claude agent | Host plugin support and activation required; no central listing or universal alias claim |
 | Agent Plugins 1.0.0 | Root `plugin.json` and fixed `skills/` discovery | Compatible client required; hooks and native agents are host-specific |
-| Single-agent harness | Parent role and all declared methods | Host supplies agent execution; no service starts on install |
+| Portable master-agent harness | Parent role, specialist contracts and all declared methods | Host supplies agent execution and any worker contexts; no service starts on install |
 | Advisor/worker harness | Separate role packages and review handoff | Independent review requires separate host contexts |
 | MCP | Default stdio method list, resource list and text read; optional runtime bridge with `--url` | Local mode uses host model/tools without service credentials; bridge mode requires a configured HTTP service |
 | HTTP and terminal | Durable supported playbooks, structured chat and review boundaries | Node 24, model configuration and separate human authority |
@@ -68,6 +69,10 @@ The optional runtime currently has a declared content-intelligence playbook. Oth
 remain host methods or guidance unless a corresponding executable graph is supplied and validated.
 The built-in served model adapter does not browse, edit files or call external tools. An embedding
 host can add the typed operation bridge through its own authenticated Executor connection.
+
+For task setup, the parent checks existing CLI, MCP, warehouse, and Executor routes first. It assigns
+only the verified interface needed for the task. Tool discovery and login do not prove that an
+external operation succeeded.
 
 ## Proactive responsibilities
 

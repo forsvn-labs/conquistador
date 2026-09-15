@@ -56,7 +56,7 @@ test('cold spawned stdio initializes, lists bundled methods/resources, and reads
   assert.equal(methods.guide, 'conquistador/SKILL.md');
   assert.equal(methods.methods.length, 39);
   assert.ok(JSON.parse(result.messages[3].result.content[0].text).files.includes('conquistador/standards/safety.md'));
-  assert.match(result.messages[4].result.content[0].text, /# Conquistador agent/);
+  assert.match(result.messages[4].result.content[0].text, /# Conquistador master agent/);
   assert.match(result.messages[5].result.content[0].text, /name: write-copy/);
 });
 

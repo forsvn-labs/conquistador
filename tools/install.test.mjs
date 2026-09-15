@@ -31,11 +31,17 @@ test('one entry point contains every method and upgrades without losing user cha
   assert.equal(readFileSync(join(target, 'operator-note.md'), 'utf8'), 'Keep this note.');
 }));
 
-test('single agent contains declared outcomes and an existing canonical parent', () => temporary(target => {
+test('portable master contains specialist contracts, declared outcomes and its canonical parent', () => temporary(target => {
   install('install', 'single-agent', target);
   const agent = JSON.parse(readFileSync(join(target, 'agent/agent.json')));
   assert.equal(agent.pluginVersion, '0.1.0');
+  assert.equal(agent.kind, 'master-agent');
+  assert.equal(agent.role, 'orchestrator');
+  assert.equal(agent.delegation.maxDelegationsPerRun, 'host-bounded');
   assert.ok(existsSync(join(target, agent.canonicalSkillRoot, 'SKILL.md')));
+  for (const name of ['ads', 'copy', 'dr-landing', 'saas-landing', 'data-diagnosis', 'campaign-data', 'creative-assets']) {
+    assert.ok(existsSync(join(target, agent.canonicalSkillRoot, 'specialists', `${name}-agent.md`)));
+  }
   assert.deepEqual(readdirSync(join(target, 'agent/skills')).sort(), skills);
   for (const name of agent.mayLoadSkills) assert.ok(existsSync(join(target, 'agent/skills', name, 'SKILL.md')));
   install('remove', 'single-agent', target);
@@ -83,7 +89,7 @@ test('every staged mode includes usage docs with contained existing Markdown lin
     assert.match(readme, /complete distribution, not this folder/);
     assert.equal(existsSync(join(target, 'runtime')), false);
     assert.equal(existsSync(join(target, 'tools/install.mjs')), false);
-    for (const name of ['USAGE.md', 'PREVIEW.md', 'LEARNING.md', 'PROACTIVE.md']) {
+    for (const name of ['USAGE.md', 'PREVIEW.md', 'LEARNING.md', 'MASTER-AGENT.md', 'PROACTIVE.md']) {
       assert.deepEqual(readFileSync(join(target, 'docs', name)), readFileSync(join(root, 'docs', name)));
     }
     for (const path of ['README.md', ...readdirSync(join(target, 'docs')).map(name => `docs/${name}`)]) {

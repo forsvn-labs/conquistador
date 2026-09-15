@@ -5,6 +5,10 @@ explicit host events to this helper. It returns static advice that routes the cu
 through `/conquistador`. The parent skill selects the relevant available capabilities.
 The helper does not load skills, inspect results, or perform the suggested work.
 
+This is the optional hook input for Conquistador mode. It supplies an instruction to the parent. It
+does not create specialist agents. After the host delivers the instruction, the parent may use
+specialist team execution only if the host also exposes agent or worker contexts.
+
 The helper is disabled by default. Installation does not activate host hooks or change user
 host configuration. Native activation on any named platform remains unverified. Local tests
 prove only the generic helper contract. A platform-specific activation claim requires official

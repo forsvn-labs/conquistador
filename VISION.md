@@ -1,18 +1,25 @@
 # Product principles
 
-Conquistador gives users one entry point, `/conquistador`, for product, research, marketing,
-growth, creative work, engineering and review. Users ask for an outcome. The parent selects the
-necessary methods and owns delivery within the user's scope. The default installation carries
-the complete library; separate skill or role packages are optional.
+Conquistador gives users one master-agent entry point, `/conquistador`, for product, research,
+marketing, growth, creative work, engineering, and review. Users ask for an outcome. The parent
+selects the necessary methods, assigns bounded work to the specialist team the outcome needs, and
+owns the integrated delivery within the user's scope. The default installation carries the complete
+library; separate skill or role packages are optional.
 
 Installation should fit the host users already have. Offer direct skill installation first,
 remote host plugins and local MCP over stdio, with a clone as a fallback. Each route must have a
 clear removal path. The default MCP exposes method guidance to the host without a separate
 runtime or model account. Managed setup remains available for owned project copies.
 Native adapters load the same methods. Conquistador prepares routine task tools on demand through
-the host, within its permissions. Hosts provide models, credentials, connections and human decisions.
+the host, within its permissions. It starts with the CLI, MCP, warehouse, and Executor routes the user
+already has. Hosts provide models, specialist contexts, credentials, connections, and human decisions.
 Compact installs include usage and review guides so users can start work in their host.
 The runtime, typed catalog and Eval Lab are optional modules.
+
+The parent can assign one specialist or several. The product does not fix a team size. Host limits
+decide available concurrency and isolation. A portable sequential fallback runs the same assignments
+when the host cannot create separate contexts. Specialist roles compose the existing outcomes and
+workflows; they do not form another skill library.
 
 Methods must be original, independently useful and clear about evidence and limits. Keep private
 knowledge, customer records and source history out of product source. Preserve required licenses

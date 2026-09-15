@@ -1,9 +1,9 @@
 # Use Conquistador
 
 Describe the result you need and supply the relevant project context. Conquistador selects the
-methods, produces the work, reviews it and gives you a next action. All 38 outcome methods are
-included in the complete Conquistador install. A standalone method install contains only that
-method; the examples below assume the complete entry point.
+methods and specialist roles, produces one integrated result, reviews it, and gives you a next action.
+All 38 outcome methods are included in the complete Conquistador install. A standalone method install
+contains only that method; the examples below assume the complete entry point.
 
 Your coding-agent host supplies the model, file access, tools and permission controls. Use
 `/conquistador`, `$conquistador`, the host's skill picker, or `/conquistador:conquistador` for the
@@ -17,6 +17,11 @@ Claude plugin. Portable agent packages need a host adapter before they can run.
    your host can read. Say whether you want a specification, implementation or draft for review.
 3. Review the deliverable and its evidence gaps. Reply with a correction or the next authorized
    step in the same thread. You do not need to select another method.
+
+For a multi-part request, Conquistador decides whether specialist assignments can run independently
+or must follow a dependency. A host with agent or worker contexts may run independent assignments at
+the same time. Other hosts use the sequential fallback. You receive one integrated result in either
+case. See [master-agent modes](MASTER-AGENT.md).
 
 The examples below are task templates and expected deliverables, not recorded successful runs.
 Replace the example paths and details with your own. Keep outputs in your project, outside the
@@ -73,6 +78,22 @@ primary measure, guardrails, observation window and stop or continue rule. Missi
 or incompatible periods should remain gaps. You supply actual measurements; Conquistador must
 not invent them or describe a proposed test as an observed result.
 
+## Use your existing stack
+
+Name the systems that contain the useful context when the repository does not already show them:
+
+```text
+/conquistador Prepare our next paid-search test. Campaign history is in
+Databricks, the offer notes are in Confluence, and qualified customers are in
+HubSpot. Reuse the connections and command-line tools this host already has.
+Create account-ready drafts only. Do not spend or enable a campaign.
+```
+
+Conquistador should inspect existing host connectors, MCP servers, maintained CLIs, warehouse access,
+and operator-supplied Executor routes before adding a tool. It should verify the narrow route, assign
+only the required access to each specialist, and continue the task. Account sign-in, new paid
+services, and production writes remain human-owned.
+
 ## Write documentation people can follow
 
 Supply the code and name the reader's job:
@@ -107,10 +128,10 @@ launcher, telemetry opt-out and polling. Text-only work needs no preview tool.
 
 | You provide or decide | Conquistador handles through the host |
 | --- | --- |
-| The outcome and available project context | Selects the smallest set of methods needed for the result |
+| The outcome and available project context | Selects the smallest set of methods and specialist roles needed for the result |
 | Product facts, audience constraints and corrections | Grounds claims in supplied or authorized sources and labels assumptions |
 | The desired deliverable and destination | Produces the requested work, reviews it and reports remaining gaps |
-| Account access and host-required approvals | Checks tools and prepares routine local prerequisites when permitted |
+| Account access and host-required approvals | Reuses the existing stack and prepares the narrow missing interface when permitted |
 | Permission for publication, spend or external writes | Prepares a reviewable result and pauses at the applicable action boundary |
 | Approval for a specific memory entry or feedback disclosure | Previews the exact content and destination before the approved write |
 

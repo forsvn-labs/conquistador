@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
-import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, realpathSync, rmSync, symlinkSync, writeFileSync } from 'node:fs';
+import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, realpathSync, rmSync, symlinkSync, unlinkSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -133,7 +133,7 @@ test('plugin and harness staging use shared receipt modes; experiments are hando
 test('symlink ancestors and payloads are refused', () => temporary((path, parent) => {
   symlinkSync(parent, path);
   bad('install', '--target', 'skill', '--path', join(path, 'install'));
-  rmSync(path);
+  unlinkSync(path);
   good('install', '--target', 'mcp', '--path', path, '--url', 'https://example.com');
   symlinkSync(join(path, 'connector.json'), join(path, 'link'));
   assert.match(good('status', '--path', path), /modified/);

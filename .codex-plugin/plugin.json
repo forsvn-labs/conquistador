@@ -1,7 +1,7 @@
 {
   "name": "conquistador",
   "version": "0.1.0",
-  "description": "One Conquistador entry point for product, marketing, growth and engineering work.",
+  "description": "A master agent for product, marketing, growth and engineering work.",
   "author": {
     "name": "FORSVN",
     "url": "https://forsvn.com"
@@ -19,8 +19,8 @@
   "skills": "./skills/",
   "interface": {
     "displayName": "Conquistador",
-    "shortDescription": "One agent for product and growth",
-    "longDescription": "Describe the outcome. Conquistador selects the relevant methods, produces and reviews the work, and preserves human authority for external actions.",
+    "shortDescription": "A master agent for product and growth",
+    "longDescription": "Describe the outcome. Conquistador assigns the needed specialist roles and methods, integrates and reviews the work, and preserves human authority for external actions.",
     "developerName": "FORSVN",
     "category": "Productivity",
     "capabilities": [

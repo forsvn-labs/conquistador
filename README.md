@@ -1,8 +1,9 @@
 # Conquistador 0.1.0
 
-Conquistador helps product builders turn project context into finished launch, marketing, growth
-and engineering work inside their coding agent. Ask for an outcome. It selects the relevant
-methods, produces the deliverable, reviews it and recommends a next step.
+Conquistador is a master agent for product, marketing, growth, and engineering work. Ask for an
+outcome. It selects the relevant methods and, when the result crosses capabilities, assigns bounded
+work to the specialist team the task needs. It integrates the deliverable, reviews it, and recommends
+a next step.
 
 All 38 outcome methods are included. Your host supplies the model, project files, tools and
 permission controls. This is a private dogfood build.
@@ -19,6 +20,8 @@ permission controls. This is a private dogfood build.
 These are method contracts, not guarantees of quality or measured lift. See
 [how to use Conquistador](docs/USAGE.md) for task inputs and expected deliverables, and
 [capabilities and tools](docs/SERVICES.md) for implementation limits.
+[Master-agent modes](docs/MASTER-AGENT.md) explains specialist execution across coding agents,
+plugins, portable packages, MCP, and the optional runtime.
 
 ## Start here
 
@@ -46,9 +49,10 @@ plan in docs/launch/. Mark claims that need evidence. Keep this as a draft.
 Expect finished copy and a plan with owners, timing, measurement and open evidence gaps.
 [Usage and examples](docs/USAGE.md) explain inputs, review and follow-up requests.
 
-You do not need to install every optional tool. Conquistador prepares task prerequisites through
-the host when needed. For visual feedback, ask for a [Lavish preview](docs/PREVIEW.md). Credentials,
-paid services and external actions retain their applicable human authority.
+You do not need to install every optional tool. Conquistador first inspects the CLI, MCP, warehouse,
+and Executor routes already available, then prepares the narrow task prerequisite through the host.
+For visual feedback, ask for a [Lavish preview](docs/PREVIEW.md). Credentials, paid services and
+external actions retain their applicable human authority.
 
 ## Private use and current limits
 

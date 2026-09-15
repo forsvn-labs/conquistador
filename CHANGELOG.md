@@ -4,6 +4,20 @@ No public release is claimed. See [VERSIONS.md](VERSIONS.md) for independent pro
 versions. Verification establishes the stated local scope; live provider operation, useful model
 output, human acceptance, rights disposition and release authority require separate evidence.
 
+## Unreleased master-agent slice
+
+- Updated `/conquistador` to assemble a host-bounded specialist team for multi-part requests and use
+  a sequential fallback when the host cannot create isolated contexts.
+- Added seven GTM specialist assignment contracts for ads, copy, direct-response landing pages, SaaS
+  landing pages, data diagnosis, campaign data, and creative assets. They compose the existing 38
+  outcomes and 21 workflows.
+- Added an existing-stack setup method for CLI, MCP, warehouse, and operator-supplied Executor access.
+  It preserves human control over authentication, spend, and external writes.
+- Added execution-mode documentation to every compact installation and updated the portable master
+  agent contract. The fixed advisor/worker package remains separate.
+- Passed the Node 24 build and all 544 default tests: 43 tooling, 278 runtime, 160 catalog and 63
+  Eval Lab. The 17-operation catalog check and synthetic local contract example also passed.
+
 ## 0.1.0-dogfood.2 private prerelease
 
 - Shipped private GitHub prerelease

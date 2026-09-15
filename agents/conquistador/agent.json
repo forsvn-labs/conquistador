@@ -1,8 +1,8 @@
 {
   "schemaVersion": "conquistador.agent-package/v1",
   "id": "agent:conquistador",
-  "kind": "single-agent",
-  "role": "worker",
+  "kind": "master-agent",
+  "role": "orchestrator",
   "displayName": "Conquistador",
   "productName": "conquistador",
   "pluginVersion": "0.1.0",
@@ -94,10 +94,11 @@
     "requested": [
       "host model invocation",
       "parent entry point",
-      "bundled outcome methods selected on demand"
+      "bundled outcome methods selected on demand",
+      "host-native specialist contexts when available"
     ],
     "missing": [
-      "native subagents",
+      "guaranteed specialist isolation or concurrency on every host",
       "optional conquistador runner and catalog",
       "Eval Lab",
       "public listing"
@@ -108,21 +109,22 @@
       "current request",
       "thread and attachments",
       "available product files",
-      "parent private composition (workflows, methods, channels, standards)"
+      "parent private composition (workflows, methods, channels, standards)",
+      "selected specialist role files and task knowledge"
     ]
   },
   "results": {
-    "contract": "One terminal Review Packet from the parent contract. Finish the work from parent methods and workflows when siblings are absent. Do not invent sibling skill bodies."
+    "contract": "One integrated terminal Review Packet from the parent contract. Assign bounded specialist work when the host supports it. Use the sequential fallback when it does not. Do not invent sibling skill bodies or agent execution."
   },
   "delegation": {
-    "maxDelegationsPerRun": 0,
+    "maxDelegationsPerRun": "host-bounded",
     "mayExecuteAssignedWork": true,
     "mayAuthorizeMutations": false,
     "maySelfApprove": false
   },
   "missingCapabilityBehavior": "fail-closed-draft",
   "lifecycle": {
-    "setup": "Stage the parent and all declared outcome skills. Load the parent first; select methods for the user request.",
+    "setup": "Stage the parent, specialist assignment files, and all declared outcome skills. Load the parent first; select roles and methods for the user request.",
     "upgrade": "Replace the unchanged owned package from a newer source. Do not fetch at runtime.",
     "remove": "Remove the owned package with its receipt. Leave user artifacts outside the install."
   }

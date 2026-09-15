@@ -2,6 +2,8 @@
 
 Start with [installation](../INSTALL.md). This page contains the details for the one host you
 selected. Installing files, registering a host and running a real task are separate checks.
+[Master-agent modes](MASTER-AGENT.md) explains which surfaces can run isolated specialists and which
+use the sequential fallback.
 
 ## Coding agents, recommended
 
@@ -17,6 +19,10 @@ Managed setup installs the same complete skill in the project's host-specific fo
 After setup, refresh the host and select Conquistador. Invocation may use `/conquistador`,
 `$conquistador` or the host's skill picker. A local receipt proves which files were prepared;
 it does not prove host discovery or task quality.
+
+The installed parent can assign bounded work to native agents or workers when the selected host
+exposes that feature. The product does not create a background process or require native delegation.
+When a host has no isolated worker context, the parent runs the same specialist contracts in sequence.
 
 Run `setup.mjs status`, `update` or `uninstall` with that exact folder as `--path`. Setup refuses
 modified or unowned folders. It leaves project outputs alone. If you used skills.sh instead,
@@ -55,8 +61,10 @@ Only after checking other registrations, remove an unused local marketplace with
 scopes, and marketplace removal can uninstall remaining plugins. Do not use it as the first
 uninstall step. [Claude reference](https://code.claude.com/docs/en/plugins-reference).
 
-The plugin includes the native `conquistador:conquistador` agent. Select it in Claude's agent
-picker, or use the namespaced `/conquistador:conquistador` skill.
+The plugin includes the native `conquistador:conquistador` master agent. Select it in Claude's agent
+picker, or use the namespaced `/conquistador:conquistador` skill. It can request Claude worker
+contexts when the current host exposes them. The plugin contains one native Conquistador definition;
+specialist role files stay inside its method tree.
 
 ### Codex
 
@@ -115,7 +123,7 @@ service or API key is required. Use the [copyable client configuration](../INSTA
 The tools list available methods, list a method's text resources and read a selected file. Start
 with `conquistador/SKILL.md`, then follow Conquistador's routing. The server does not execute code,
 write project files, collect feedback or run the optional runtime. Reads are bounded and restricted
-to the installed skill tree.
+to the installed skill tree. The MCP client, not this server, creates any specialist contexts.
 
 Your MCP client owns the process. Remove its `conquistador` entry to disconnect. To update, stop
 the entry, refresh its package from the current branch, then restart it. The npm launcher caches
@@ -137,9 +145,15 @@ to an agent. Removing a connector does not erase service data or stop a shared s
 
 ## Agent harnesses
 
-Choose `harness` for one agent, or `squad` for separate production and review roles. Setup prepares
-portable contracts and their method libraries. Your host adapter executes those contracts. Use the
-native Claude plugin if you want an already defined host-specific agent instead.
+Choose `harness` for the portable master agent, or `squad` for the fixed production and review roles.
+Setup prepares the contracts and their method libraries. Your host adapter executes those contracts.
+The master contract allows the number of specialist assignments needed by the task, subject to host
+limits. The fixed squad always has one worker and one advisor. Use the native Claude plugin if you
+want an already defined host-specific parent instead.
+
+A domain-specific adapter may restrict the roster, knowledge roots, tools, and outcome methods. The
+current setup command packages the complete master agent or fixed squad; it does not generate a
+custom domain package.
 
 To remove a harness, detach it in your host adapter, then uninstall its prepared directory through
 setup. Separate host contexts are required for independent review. A same-context fallback must
@@ -147,7 +161,7 @@ be identified. Host credentials, task outputs and external state are not install
 
 ## Grok Bot and Eve
 
-These are experimental import contracts. Native import and execution have not been verified, so
+These are experimental import contracts. Native import, specialist delegation, and execution have not been verified, so
 the setup guide does not offer them as ready integrations. Grok CLI is a different host from the
 Grok Bot app. Use the coding-agent route for current dogfooding.
 

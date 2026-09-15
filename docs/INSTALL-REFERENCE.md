@@ -141,8 +141,10 @@ claude --agent conquistador:conquistador
 
 You can also select `conquistador:conquistador` in the agent picker. The agent inherits the host's
 model and permitted tools and loads the same parent method. It does not enable hooks or recursive
-agent delegation. The plugin contains one native agent; portable squad documentation is outside
-Claude's recursively scanned `agents/` directory.
+agent delegation by installation. During a task, the master agent can request bounded Claude worker
+contexts when the current host exposes them. The plugin contains one native agent; specialist role
+files remain inside the method tree and portable squad documentation stays outside Claude's
+recursively scanned `agents/` directory.
 
 See [Claude marketplaces](https://code.claude.com/docs/en/plugin-marketplaces) and
 [native agents](https://code.claude.com/docs/en/sub-agents#invoke-subagents-explicitly).
@@ -224,8 +226,9 @@ node tools/install.mjs install single-agent /absolute/path/conquistador-agent
 node tools/install.mjs install squad /absolute/path/conquistador-squad
 ```
 
-The single-agent install contains `agent/agent.json` and its methods under `agent/skills/`.
-The squad contains worker and advisor contracts and their methods. The worker produces; the advisor
+The `single-agent` install contains the portable master contract in `agent/agent.json`, specialist
+assignment files, and its methods under `agent/skills/`. The consuming host decides how many worker
+contexts it can run. The squad contains worker and advisor contracts and their methods. The worker produces; the advisor
 reviews. The host must create separate contexts for independent review. Otherwise follow the
 installed `sequential-fallback.md` and identify the review as the same context. These are portable
 contracts that need a host adapter. For a native Claude agent, use its plugin above.

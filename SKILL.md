@@ -7,8 +7,8 @@ license: MIT
 # Conquistador
 
 Read [the operating contract](skills/conquistador/SKILL.md) and follow it for this task.
-The complete method library is under `skills/`. Load only the methods needed for the user's
-outcome. Users do not need to install or invoke the individual methods.
+The complete method library is under `skills/`. Load only the methods and specialist roles needed
+for the user's outcome. Users do not need to install or invoke them individually.
 
 This directory is the complete distribution. Its optional runtime source does not need to run
 for the host to use these skills. Do not install dependencies, enable hooks or start services as

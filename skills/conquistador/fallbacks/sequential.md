@@ -13,6 +13,8 @@ integration that a deeper mode could use.
   acceptance rubric plus the missing proof—do not pretend the render was seen.
 - For publishing or integrations without a verified tool, return a validated export and the exact
   human action.
+- For a multi-specialist request, run each bounded assignment in dependency order. Keep its inputs and
+  output separate until the parent integrates the result. Do not claim parallel or isolated work.
 
 The fallback must still end in one useful terminal Review Packet. Never install a runtime, revive a
 router, or manufacture tool success to mimic the unavailable mode.

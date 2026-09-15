@@ -105,3 +105,5 @@ If GitHub denies access, authenticate the correct account. If `gh` works but HTT
 
 The frozen v0.1.0 ZIP predates these shortcuts; use its [manual installation reference](docs/INSTALL-REFERENCE.md).
 Custom harnesses and experimental Grok Bot/Eve contracts remain in [platform details](docs/PLATFORMS.md).
+[Master-agent modes](docs/MASTER-AGENT.md) states how each installed surface handles specialist
+assignments, sequential fallback, and optional hooks.

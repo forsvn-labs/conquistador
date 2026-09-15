@@ -22,17 +22,20 @@
     "model invocation",
     "filesystem and repository context",
     "plugin or skills-installer placement",
-    "permission and approval UI"
+    "permission and approval UI",
+    "optional isolated agent or worker contexts"
   ],
   "conquistadorOwns": [
     "marketing methods",
     "outcome skill contracts",
+    "specialist assignment and integration contract",
     "review packet",
     "approval boundary for send, publish, spend, and external writes"
   ],
   "missingCapabilities": [
     "public marketplace listing",
     "clean-host install proof",
+    "uniform specialist isolation and concurrency across hosts",
     "optional self-hosted runner",
     "typed catalog execution",
     "Eval Lab"
