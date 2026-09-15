@@ -21,10 +21,11 @@ Do not count discovery, an installed SDK, or synthetic tests as provider support
 ### Existing dogfood baseline
 
 Version 0.1.0 is packaged and shipped as private GitHub prerelease
-[`v0.1.0-dogfood.2`](https://github.com/forsvn-labs/conquistador/releases/tag/v0.1.0-dogfood.2)
-from source `0ae8df0` on `dogfood/0.1.0`. ZIP, npm tarball, checksums and the unbound assembly
+[`v0.1.0-dogfood.3`](https://github.com/forsvn-labs/conquistador/releases/tag/v0.1.0-dogfood.3)
+from source `5261038` on `dogfood/0.1.0`. ZIP, npm tarball, checksums and the unbound assembly
 record are retained together. The repository stays private and the npm publication guard remains.
-Next work is [one real user task](docs/DOGFOOD.md) in an existing coding-agent host.
+Next work is [one real user task](docs/DOGFOOD.md) in an existing coding-agent host, including
+Executor install help when live accounts are needed.
 
 1. Verify activation, appropriate parent routing and a finished deliverable.
 2. Check on-demand tool setup and the Lavish annotation/revision loop.

@@ -4,8 +4,11 @@ No public release is claimed. See [VERSIONS.md](VERSIONS.md) for independent pro
 versions. Verification establishes the stated local scope; live provider operation, useful model
 output, human acceptance, rights disposition and release authority require separate evidence.
 
-## Unreleased first-run Executor install
+## 0.1.0-dogfood.3 private prerelease
 
+- Shipped private GitHub prerelease
+  [`v0.1.0-dogfood.3`](https://github.com/forsvn-labs/conquistador/releases/tag/v0.1.0-dogfood.3)
+  from `5261038` on `dogfood/0.1.0`, with ZIP, npm tarball, checksums and unbound assembly record.
 - Updated the parent method to 2.8.0. Core mission is elite growth, GTM, sales, marketing, and
   product knowledge work. When a task needs live accounts, the parent helps a new user install
   Executor, connect MCP, add only the needed sources, and continue.
@@ -13,6 +16,11 @@ output, human acceptance, rights disposition and release authority require separ
   documented next steps. They do not themselves install a package or start a service.
 - Added [connect accounts](skills/conquistador/methods/connect-accounts.md) with official Executor
   CLI and Cloud install commands from executor.sh docs.
+- This private branch also carries the previously unreleased master-agent execution and
+  Executor/Eve adoption work.
+- Node 24.21.0 build and all 606 default tests passed, plus 27 Executor host tests. Native host
+  activation and live provider/model jobs were not exercised.
+- npm publication remains disabled. Original `v0.1.0` and `v0.1.0-dogfood.2` tags are unchanged.
 
 ## Unreleased Executor and Eve adoption
 

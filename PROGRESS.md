@@ -1,15 +1,15 @@
 # Implementation status
 
 Version 0.1.0 is packaged and privately prereleased as
-[`v0.1.0-dogfood.2`](https://github.com/forsvn-labs/conquistador/releases/tag/v0.1.0-dogfood.2)
-(source `0ae8df059170d476d2f700ad161429c9061b2f17` on `dogfood/0.1.0`). The current feature branch
-updates the parent method to 2.8.0: elite growth/GTM/sales/marketing/product knowledge work, plus
-first-run Executor install help (`connections setup`, connect-accounts method). Optional Executor/Eve
-hosts remain. The root npm package has `private: true`; CI only builds and tests with read-only
-repository permissions. Public distribution is deferred. Final source packaging binds the
-integrated documentation and installer to that exact clean commit in `assembly.json`
-(`authority: UNBOUND`, not a public publish). Earlier artifacts retain their original source
-identity and are not rebuilt. Installing a new package does not update existing copies.
+[`v0.1.0-dogfood.3`](https://github.com/forsvn-labs/conquistador/releases/tag/v0.1.0-dogfood.3)
+(source `526103872d64e8f0b2b7872c637e4a1d920dcb94` on `dogfood/0.1.0`). The parent method is 2.8.0:
+elite growth/GTM/sales/marketing/product knowledge work, plus first-run Executor install help
+(`connections setup`, connect-accounts method). Optional Executor/Eve hosts remain. The root npm
+package has `private: true`; CI only builds and tests with read-only repository permissions. Public
+distribution is deferred. Final source packaging binds the integrated documentation and installer to
+that exact clean commit in `assembly.json` (`authority: UNBOUND`, not a public publish). Earlier
+artifacts retain their original source identity and are not rebuilt. Installing a new package does
+not update existing copies.
 
 ## Implemented
 
