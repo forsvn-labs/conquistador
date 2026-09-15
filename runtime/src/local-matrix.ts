@@ -725,10 +725,11 @@ export async function buildRuntimeLocalMatrix(options: {
     .length;
   const memoryEntries = inventoryDataRoot(root)
     .filter((entry) => entry.class === "memory").length;
+  if (memoryEntries !== 0) fail("run completion must not promote durable learning");
   cells.push({
     id: "terminal.reviewed-completion",
     scenario:
-      "review accept plus authorized action receipt completes a run with approved artifacts and promoted memory",
+      "review accept plus authorized action receipt completes a run with approved artifacts and no automatic learning promotion",
     result: "pass",
     detail: {
       status: done.status,

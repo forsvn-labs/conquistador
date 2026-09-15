@@ -45,11 +45,6 @@ import {
   validateReviewPacket,
   type ValidationContext,
 } from "./review-contract.ts";
-import {
-  appendRunLearning,
-  learningEntriesFromRun,
-  learningLedgerPath,
-} from "./learning.ts";
 import { defaultOperationCatalog, type OperationCatalog } from "./operations.ts";
 import { hasOperationDispatch, invokeDurableOperation, OperationReconciliationRequired, type OperationBridge } from "./operation-bridge.ts";
 import type { PlaybookRecord, PlaybookStep } from "./registry.ts";
@@ -820,36 +815,6 @@ function applyEnvelopeVerdict(
       });
     }
   }
-}
-
-function persistLearning(
-  directory: string,
-  runsDir: string,
-  state: RunState,
-  now: string,
-): void {
-  if (state.review?.outcome !== "accept") return;
-  const canonicalPacketPath = resolve(
-    directory,
-    state.review.canonicalPacketPath ?? "canonical-review-packet.json",
-  );
-  if (!existsSync(canonicalPacketPath)) return;
-  const canonicalPacket = readJson<ReviewPacketV1>(canonicalPacketPath);
-  validateReviewPacket(canonicalPacket);
-  const transitions = new ReviewTransitionState(state.reviewTransitions);
-  const verdict = transitions.consumedVerdict(canonicalPacket);
-  const receipt = state.review.authorizationDigest
-    ? transitions.consumedReceipt(state.review.authorizationDigest)
-    : undefined;
-  const entries = learningEntriesFromRun({
-    runId: state.runId,
-    recordedAt: now,
-    envelopes: readRunEnvelopes(directory, state),
-    canonicalPacket,
-    verdict,
-    ...(receipt ? { actionReceipt: receipt } : {}),
-  });
-  appendRunLearning(learningLedgerPath(runsDir), entries);
 }
 
 function persist(
@@ -2081,7 +2046,8 @@ async function continueRun(options: LoopOptions): Promise<RunSnapshot> {
     nextDecision: playbook.nextDecision,
   });
   persist(directory, plan, state, trace);
-  persistLearning(directory, resolve(directory, ".."), state, doneAt);
+  // Content acceptance authorizes no reusable learning write. Keep run artifacts
+  // and audit state only until exact-entry/destination consent is supported.
   return snapshot(directory, plan, state, trace);
 }
 

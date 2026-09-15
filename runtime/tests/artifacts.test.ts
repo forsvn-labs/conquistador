@@ -534,12 +534,26 @@ describe("Later-run consumption", () => {
 });
 
 describe("Local learning ledger", () => {
-  it("appends only exact-review-bound facts, decisions, and terminal action receipts", async () => {
+  it("preserves explicit ledger APIs without promoting accepted run content automatically", async () => {
     const directory = runsDir();
     const snapshot = await completeRun(directory, "run-learning");
     const ledgerPath = learningLedgerPath(directory);
-    expect(existsSync(ledgerPath)).toBe(true);
-    const entries = readLearningLedger(ledgerPath);
+    expect(existsSync(ledgerPath)).toBe(false);
+    const authority = actionAuthority(directory, snapshot.runId);
+    const entries = learningEntriesFromRun({
+      runId: snapshot.runId,
+      recordedAt: "2026-08-22T00:00:00.000Z",
+      envelopes: Object.values(snapshot.state.artifacts).map(artifact => envelopeOf(snapshot, artifact.id)),
+      canonicalPacket: authority.canonicalPacket,
+      verdict: authority.verdict,
+      actionReceipt: authority.transitions.consumedReceipt(authority.authorization.digest),
+    });
+    // Explicit fixture writes exercise the low-level API, not runtime consent.
+    for (const entry of entries) appendLearningEntry(ledgerPath, entry);
+    expect(readLearningLedger(ledgerPath)).toEqual(entries);
+    const before = readFileSync(ledgerPath);
+    await completeRun(directory, "run-preserves-learning");
+    expect(readFileSync(ledgerPath)).toEqual(before);
     expect(entries.length).toBeGreaterThan(0);
     expect(
       entries.every((entry) =>

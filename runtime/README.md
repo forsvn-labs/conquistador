@@ -47,6 +47,23 @@ An artifact sidecar's `reviewVerdict` is only a projection for display and prove
 
 The closed schemas are under [`schemas/`](schemas/). Provider cells and their current evidence state are in [`providers/v1.json`](providers/v1.json).
 
+## Learning persistence
+
+Run completion never writes reusable learning. Content acceptance, action authorization and
+successful receipts do not grant consent to store a learning entry. The runtime has no separate
+exact-entry/destination consent API yet, so automatic promotion is disabled.
+
+Both `memory.mode: "off"` and `memory.mode: "review-promoted"` remain valid for configuration
+compatibility. Neither enables automatic learning-ledger writes or retrieval. The scope-policy
+string does not add a project retrieval service. Existing learning data is preserved; explicit
+backup, export, restore and erase operations retain their documented behavior.
+
+Runs still persist artifacts, review decisions, receipts and recovery state. The `learning-record`
+step produces a run artifact only, not an approved reusable lesson. Low-level learning validation,
+entry derivation, ledger read/write and export APIs remain available to embedding callers; they
+do not authenticate persistence consent. A caller must separately authorize the exact entry and
+destination before invoking a write API. No runtime path invokes those ledger writes automatically.
+
 ## Parent corpus routing
 
 `loadRuntimeCorpus(...).resolve(...)` selects bounded skill context. A leading outcome name, such as

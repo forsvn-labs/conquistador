@@ -15,7 +15,6 @@ import {
   createHostJudgmentProvider,
   type JudgmentProvider,
 } from "../src/judgment.ts";
-import { readLearningLedger } from "../src/learning.ts";
 import { resumePlaybookRun } from "../src/runner.ts";
 import { testResponseFor } from "./judgment-fixture.ts";
 import { canonicalReviewFixture } from "./review-fixture.ts";
@@ -314,15 +313,7 @@ describe("owned CLI execution boundary", () => {
       .toMatch(/Human action manifest[\s\S]*Executed: no/);
     expect(readFileSync(resolve(runDirectory, "artifacts/observation-record.md"), "utf8"))
       .toMatch(/Result: unknown/);
-    const learning = readLearningLedger(resolve(directory, "learning.jsonl"));
-    expect(learning.length).toBeGreaterThan(0);
-    expect(learning.every((entry) =>
-      entry.source.reviewPacketId !== undefined &&
-      entry.kind !== "observed-result"
-    )).toBe(true);
-    expect(learning.some((entry) =>
-      entry.kind === "action" && entry.source.actionReceiptId === "fixture-terminal-receipt"
-    )).toBe(true);
+    expect(existsSync(resolve(directory, "learning.jsonl"))).toBe(false);
   });
 
   it("reports missing bearer transport credentials as blocked", async () => {

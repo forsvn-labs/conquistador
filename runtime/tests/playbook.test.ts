@@ -4,7 +4,6 @@ import { resolve } from "node:path";
 
 import { afterEach, describe, expect, it } from "vitest";
 
-import { readLearningLedger } from "../src/learning.ts";
 import { type CliHost, runCli } from "../src/main.ts";
 import {
   type PlaybookRecord,
@@ -92,7 +91,7 @@ const GRAPH = [
 ] as const;
 
 describe("content-intelligence-loop executable playbook", () => {
-  it("runs the declared graph through CLI from fixture input to review, action manifest, and learning", async () => {
+  it("runs the declared graph through CLI from fixture input to review, action manifest, and a run learning artifact", async () => {
     const directory = runsDir();
     const output = host();
     expect(
@@ -227,17 +226,7 @@ describe("content-intelligence-loop executable playbook", () => {
     expect(existsSync(resolve(runDir, "artifacts/learning-record.md"))).toBe(
       true,
     );
-    const learning = readLearningLedger(resolve(directory, "learning.jsonl"));
-    expect(
-      learning.every((entry) =>
-        entry.approved === true && entry.inferred === false &&
-        entry.source.reviewPacketId !== undefined &&
-        entry.kind !== "observed-result"
-      ),
-    ).toBe(true);
-    expect(learning.some((entry) =>
-      entry.kind === "action" && entry.source.actionReceiptId === "fixture-terminal-receipt"
-    )).toBe(true);
+    expect(existsSync(resolve(directory, "learning.jsonl"))).toBe(false);
   });
 
   it("stops at a revise verdict without taking the action", async () => {

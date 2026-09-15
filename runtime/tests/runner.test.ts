@@ -830,6 +830,7 @@ describe("Local Playbook Runner", () => {
     );
     expect(journal.phase).toBe("retired");
     expect(completed.state.steps["store-learning"].status).toBe("completed");
+    expect(existsSync(resolve(directory, "learning.jsonl"))).toBe(false);
 
     const receiptPath = resolve(
       runDirectory,
@@ -839,6 +840,7 @@ describe("Local Playbook Runner", () => {
     const recovered = loadPlaybookRun(directory, runId);
     expect(recovered.status).toBe("completed");
     expect(recovered.state.steps["store-learning"].status).toBe("completed");
+    expect(existsSync(resolve(directory, "learning.jsonl"))).toBe(false);
     expect(JSON.parse(readFileSync(receiptPath, "utf8"))).toEqual(
       journal.projections.receipt,
     );

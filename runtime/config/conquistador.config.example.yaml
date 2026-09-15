@@ -23,6 +23,7 @@ data:
   artifactPolicy: "accepted-only"
   backupPolicy: "operator"
 memory:
+  # Compatibility value only; no automatic promotion until separate learning consent exists.
   mode: "review-promoted"
   scopePolicy: "instance-workspace-project"
 sandbox:

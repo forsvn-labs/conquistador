@@ -1,9 +1,14 @@
 # Local state and recovery
 
 The runtime stores instance identity, sessions, artifacts, review state, receipts, and
-approved memory under `data.dir` in `conquistador.config.yaml`. Run lifecycle commands
+existing learning records under `data.dir` in `conquistador.config.yaml`. Run lifecycle commands
 with that configuration selected through `CONQUISTADOR_CONFIG`. Paths below are
 relative to the data root. Stop the service before backup, restore, or erase.
+
+Automatic learning promotion is disabled for both supported `memory.mode` values, `off` and
+`review-promoted`, until separate exact-entry/destination consent is supported. Run artifacts and
+recovery/audit records still persist. Existing learning ledgers remain unchanged by run completion;
+lifecycle operations preserve their explicit scope. See [learning persistence](README.md#learning-persistence).
 
 ```sh
 node runtime/bin/conquistador.js backup create --file backups/before-change.json

@@ -291,8 +291,8 @@ function storeLearning(ctx: StepContext): StepExecution {
         body: [
           "# Learning record",
           "",
-          "User-owned facts, decisions, and observed or explicitly unknown results for the next cycle.",
-          "Hidden reasoning is not stored. Unreviewed output is not treated as universal truth.",
+          "Run artifact only; not approved reusable learning or a durable learning-ledger entry.",
+          "Content acceptance does not authorize learning persistence. Separate exact-entry and destination consent is required.",
           "",
           `- Run: ${ctx.runId}`,
           `- Recorded at: ${ctx.now.toISOString()}`,

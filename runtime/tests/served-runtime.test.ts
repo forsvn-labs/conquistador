@@ -646,6 +646,43 @@ describe("durable served runtime", () => {
   });
 });
 
+describe("learning persistence consent", () => {
+  it.each(["off", "review-promoted"] as const)("does not write learning after accepted completion or restart with memory.mode=%s", async (mode) => {
+    const root = dataDir();
+    const config = parseConfigYaml(readFileSync(new URL("../config/conquistador.config.example.yaml", import.meta.url), "utf8"));
+    config.data.dir = root;
+    config.memory.mode = mode;
+    const service = buildService({ config, env: { OPENAI_API_KEY: "synthetic-unused-credential" }, judgment: judgment().provider, verifyAuthentication });
+    const runtime = service.runtime;
+    const session = runtime.createSession({ principalId: "operator-1" });
+    const packet = await runtime.sendMessage(session.id, {
+      id: "learning-consent-message", content: playbookMessage(), principalId: "operator-1",
+    });
+    await runtime.decideReview(session.id, packet.packetId, {
+      transport: authentication, authenticateHuman, outcome: "accept", packetDigest: packet.digest,
+    });
+    const authorization = await runtime.authorizeAction(session.id, packet.packetId, {
+      transport: authentication, authenticateHuman, packetDigest: packet.digest,
+    });
+    const { digest: _digest, ...basis } = cancelledReceipt(authorization);
+    // Synthetic successful receipt exercises completion, not a live external action.
+    await runtime.importActionReceipt(session.id, seal({ ...basis, status: "succeeded" as const }), {
+      transport: authentication, authenticateHuman,
+    });
+    const runDirectory = resolve(root, "sessions", session.id);
+    expect(runStatus(resolve(runDirectory, "state.json"))).toBe("completed");
+    expect(existsSync(resolve(root, "sessions/learning.jsonl"))).toBe(false);
+    expect(readdirSync(resolve(root, "memory"))).toEqual([]);
+    expect(readFileSync(resolve(runDirectory, "artifacts/learning-record.md"), "utf8"))
+      .toContain("Run artifact only; not approved reusable learning");
+    await service.shutdown();
+    const restored = buildService({ config, env: { OPENAI_API_KEY: "synthetic-unused-credential" }, judgment: judgment().provider, verifyAuthentication });
+    expect(restored.runtime.actionState(session.id, "operator-1").status).toBe("completed");
+    expect(existsSync(resolve(root, "sessions/learning.jsonl"))).toBe(false);
+    await restored.shutdown();
+  });
+});
+
 describe("served HTTP service", () => {
   it("returns stopping on /ready after shutdown and keeps generate off the HTTP path", async () => {
     const root = dataDir();

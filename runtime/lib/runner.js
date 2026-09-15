@@ -5,7 +5,6 @@ import { buildArtifactEnvelope, contentDigestOf, patchEnvelope, readArtifactCont
 import { deepFreeze, redact, sha256 } from "./canonical.js";
 import { actionPayloadDigest, createActionGateRecord, createReviewPacket, evaluateActionGate, evaluateReviewApproval, validateActionGateRecord, validatePlaybookReviewPacket, } from "./gates.js";
 import { packetTransitionKey, ReviewTransitionState, seal, validateActionAuthorization, validateReceipt as validateCanonicalReceipt, validateReviewPacket, } from "./review-contract.js";
-import { appendRunLearning, learningEntriesFromRun, learningLedgerPath, } from "./learning.js";
 import { defaultOperationCatalog } from "./operations.js";
 import { hasOperationDispatch, invokeDurableOperation, OperationReconciliationRequired } from "./operation-bridge.js";
 import { validatePlaybookRecord } from "./registry.js";
@@ -430,29 +429,6 @@ function applyEnvelopeVerdict(directory, packet, verdict, action) {
             });
         }
     }
-}
-function persistLearning(directory, runsDir, state, now) {
-    if (state.review?.outcome !== "accept")
-        return;
-    const canonicalPacketPath = resolve(directory, state.review.canonicalPacketPath ?? "canonical-review-packet.json");
-    if (!existsSync(canonicalPacketPath))
-        return;
-    const canonicalPacket = readJson(canonicalPacketPath);
-    validateReviewPacket(canonicalPacket);
-    const transitions = new ReviewTransitionState(state.reviewTransitions);
-    const verdict = transitions.consumedVerdict(canonicalPacket);
-    const receipt = state.review.authorizationDigest
-        ? transitions.consumedReceipt(state.review.authorizationDigest)
-        : undefined;
-    const entries = learningEntriesFromRun({
-        runId: state.runId,
-        recordedAt: now,
-        envelopes: readRunEnvelopes(directory, state),
-        canonicalPacket,
-        verdict,
-        ...(receipt ? { actionReceipt: receipt } : {}),
-    });
-    appendRunLearning(learningLedgerPath(runsDir), entries);
 }
 function persist(directory, plan, state, trace) {
     mkdirSync(resolve(directory, "receipts"), { recursive: true });
@@ -1508,7 +1484,8 @@ async function continueRun(options) {
         nextDecision: playbook.nextDecision,
     });
     persist(directory, plan, state, trace);
-    persistLearning(directory, resolve(directory, ".."), state, doneAt);
+    // Content acceptance authorizes no reusable learning write. Keep run artifacts
+    // and audit state only until exact-entry/destination consent is supported.
     return snapshot(directory, plan, state, trace);
 }
 export function playbookFixturePath(id) {
