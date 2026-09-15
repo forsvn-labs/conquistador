@@ -2,9 +2,12 @@
 
 ## Now: private dogfooding
 
-Version 0.1.0 targets private local use. Package the final integrated source from its exact clean
-commit and retain its ZIP, npm tarball, checksums and assembly record together. Keep the repository private and retain the npm publication
-guard. Start with [one real task](docs/DOGFOOD.md) in an existing coding-agent host.
+Version 0.1.0 is packaged and shipped as private GitHub prerelease
+[`v0.1.0-dogfood.2`](https://github.com/forsvn-labs/conquistador/releases/tag/v0.1.0-dogfood.2)
+from source `0ae8df0` on `dogfood/0.1.0`. ZIP, npm tarball, checksums and the unbound assembly
+record are retained together. The repository stays private and the npm publication guard remains.
+Next work is [one real task](docs/DOGFOOD.md) in an existing coding-agent host — not another
+installer or packaging pass.
 
 1. Verify activation, appropriate parent routing and a finished deliverable.
 2. Check on-demand tool setup and the Lavish annotation/revision loop.

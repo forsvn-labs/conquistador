@@ -4,6 +4,20 @@ No public release is claimed. See [VERSIONS.md](VERSIONS.md) for independent pro
 versions. Verification establishes the stated local scope; live provider operation, useful model
 output, human acceptance, rights disposition and release authority require separate evidence.
 
+## 0.1.0-dogfood.2 private prerelease
+
+- Shipped private GitHub prerelease
+  [`v0.1.0-dogfood.2`](https://github.com/forsvn-labs/conquistador/releases/tag/v0.1.0-dogfood.2)
+  from `0ae8df0` on `dogfood/0.1.0`, with ZIP, npm tarball, checksums and unbound assembly record.
+- Made direct skills, remote host plugins and local stdio MCP the default install paths, with a
+  clone as fallback. Each route includes removal instructions.
+- Default `conquistador mcp` serves bundled methods through the host model and tools without an
+  HTTP service or API key; explicit `--url` keeps the optional runtime bridge.
+- Node 24 build and 544 tests passed, plus direct private skills/npm Git install checks, local MCP
+  protocol/read/refusal checks, exact archive checks and Linux CI. Native host activation and live
+  model/provider behavior were not exercised.
+- npm publication remains disabled. Original `v0.1.0` tag and assets are unchanged.
+
 ## 0.1.0 direct installation
 
 - Made skills.sh and remote host plugins direct installation options, with a clone as a fallback.

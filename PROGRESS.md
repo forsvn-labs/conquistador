@@ -1,10 +1,13 @@
 # Implementation status
 
-Version 0.1.0 is packaged for private local dogfooding. Parent method version is 2.4.3. The root
-npm package has `private: true`; CI only builds and tests with read-only repository permissions.
-Public distribution is deferred. Final source packaging binds the integrated documentation and
-installer to an exact clean commit in `assembly.json`. Earlier artifacts retain their original
-source identity and are not rebuilt. Installing a new package does not update existing copies.
+Version 0.1.0 is packaged and privately prereleased as
+[`v0.1.0-dogfood.2`](https://github.com/forsvn-labs/conquistador/releases/tag/v0.1.0-dogfood.2)
+(source `0ae8df059170d476d2f700ad161429c9061b2f17` on `dogfood/0.1.0`). Parent method version is
+2.4.3. The root npm package has `private: true`; CI only builds and tests with read-only
+repository permissions. Public distribution is deferred. Final source packaging binds the
+integrated documentation and installer to that exact clean commit in `assembly.json`
+(`authority: UNBOUND`, not a public publish). Earlier artifacts retain their original source
+identity and are not rebuilt. Installing a new package does not update existing copies.
 
 ## Implemented
 
@@ -27,12 +30,13 @@ annotation consumer. Run artifacts and audit state still persist when automatic 
 
 ## Verification
 
-The direct-install follow-up passes Node 24 build and all 544 default tests: 43 tooling,
+Private prerelease `v0.1.0-dogfood.2` records Node 24 build and all 544 default tests: 43 tooling,
 278 runtime, 160 catalog and 63 Eval Lab. Real private Git skills install/reinstall/list/remove
 and npm setup install/remove passed in temporary projects. Local MCP discovery, all 39 method
 entries, parent and iOS template reads, protocol negotiation and path refusals passed in spawned
-processes without runtime dependencies. Native plugin commands were checked against primary
-sources; native host activation and useful model execution remain unverified.
+processes without runtime dependencies. Exact ZIP/npm checksum checks and Linux CI passed.
+Native plugin commands were checked against primary sources; native host activation and useful
+model execution remain unverified.
 
 
 The guided setup follow-up passes Node 24 build and all 533 default tests: 32 tooling, 278 runtime,
