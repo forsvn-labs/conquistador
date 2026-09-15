@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
-import { existsSync, mkdtempSync, readFileSync, readdirSync, realpathSync, rmSync, symlinkSync, writeFileSync } from 'node:fs';
+import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, realpathSync, rmSync, symlinkSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -154,3 +154,45 @@ test('exported API returns numeric failure without terminating embedding process
   assert.equal(result.status, 0, result.stderr);
   assert.match(result.stdout, /embedding continued/);
 });
+
+
+test('ancestor projects allow sibling skill installs while source-containing targets fail closed', () => temporary((path, parent) => {
+  function distribution(destination) {
+    mkdirSync(destination, { recursive: true });
+    for (const name of ['tools', 'skills', 'docs', 'LICENSE', 'NOTICE.md', 'package.json']) {
+      cpSync(join(root, name), join(destination, name), { recursive: true });
+    }
+    return join(destination, 'tools/setup.mjs');
+  }
+  const project = join(parent, 'project with nested source');
+  const nestedScript = distribution(join(project, '0-projects', 'source'));
+  const invoke = (scriptPath, ...args) => spawnSync(process.execPath, [scriptPath, ...args], { encoding: 'utf8' });
+  const install = invoke(nestedScript, 'install', '--target', 'codex', '--project', project);
+  assert.equal(install.status, 0, install.stderr);
+  const destination = join(project, '.agents/skills/conquistador');
+  assert.ok(existsSync(join(destination, 'SKILL.md')));
+  assert.ok(existsSync(nestedScript));
+  assert.equal(invoke(nestedScript, 'uninstall', '--path', destination).status, 0);
+  assert.ok(existsSync(nestedScript));
+
+  const unsafeProject = join(parent, 'source inside target');
+  const unsafeScript = distribution(join(unsafeProject, '.agents/skills/conquistador/source'));
+  const before = readFileSync(unsafeScript, 'utf8');
+  for (const action of ['install', 'status', 'update', 'uninstall']) {
+    const result = invoke(unsafeScript, action, '--target', 'codex', '--project', unsafeProject);
+    assert.equal(result.status, 1);
+    assert.match(result.stderr, /outside the distribution/);
+  }
+  assert.equal(readFileSync(unsafeScript, 'utf8'), before);
+}));
+
+test('plugin, MCP, and harness cleanup reminders precede the removal result', () => temporary(path => {
+  for (const target of ['claude-plugin', 'mcp', 'harness', 'squad']) {
+    good('install', '--target', target, '--path', path, ...(target === 'mcp' ? ['--url', 'http://127.0.0.1:4317'] : []));
+    const output = good('uninstall', '--path', path);
+    const reminder = output.indexOf('Before removing this folder:');
+    assert.ok(reminder >= 0, output);
+    assert.ok(reminder < output.indexOf('Removed the unchanged owned local copy.'), output);
+    assert.equal(existsSync(path), false);
+  }
+}));

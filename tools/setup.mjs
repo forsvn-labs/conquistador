@@ -20,13 +20,17 @@ const fail = message => { throw new Error(message); };
 function stat(path) {
   try { return lstatSync(path); } catch (error) { if (error.code === 'ENOENT') return null; throw error; }
 }
-function safePath(path) {
+function absolutePath(path) {
   if (!isAbsolute(path) || /[\x00-\x1f\x7f]/.test(path)) fail('Use an absolute path without control characters.');
   const target = resolve(path);
   for (let cursor = target; ; cursor = dirname(cursor)) {
     if (stat(cursor)?.isSymbolicLink()) fail('Destination must not cross a symlink.');
     if (cursor === dirname(cursor)) break;
   }
+  return target;
+}
+function safePath(path) {
+  const target = absolutePath(path);
   const inside = (a, b) => { const part = relative(a, b); return !part || (part !== '..' && !part.startsWith(`..${sep}`)); };
   if (inside(root, target) || inside(target, root)) fail('Choose a dedicated directory outside the distribution.');
   return target;
@@ -54,7 +58,7 @@ function parse(args) {
   if (!!options.project === !!options.path) fail('Supply exactly one of --project ABS or --path ABS.');
   if (options.project) {
     if (!Object.hasOwn(projectPaths, options.target ?? '')) fail('--project requires a named coding-agent target; use --path for other targets.');
-    safePath(options.project);
+    absolutePath(options.project);
     options.path = join(options.project, projectPaths[options.target]);
   }
   options.path = safePath(options.path);
@@ -165,7 +169,12 @@ function mcpLifecycle(options) {
     throw error;
   } finally { rmSync(temporary, { recursive: true, force: true }); }
 }
-function run(options) {
+function removalReminder(mode) {
+  if (mode === 'plugin') console.log('Before removing this folder: use the original host manager and scope to uninstall activated copies; for Claude preserve data with --keep-data. Do not remove shared marketplaces.');
+  else if (mode === 'mcp') console.log('Before removing this folder: disconnect its connector entry in your MCP client. Service, runtime data, and secrets remain separate.');
+  else if (['single-agent', 'squad'].includes(mode)) console.log('Before removing this folder: disconnect the contract from your custom agent host. Host configuration and running agents remain host-owned.');
+}
+function run(options, reminderShown = false) {
   const mode = options.target ? targets[options.target] : undefined;
   const result = inspect(options.path, mode);
   if (options.action === 'status') { report(options, result); return; }
@@ -177,6 +186,7 @@ function run(options) {
     }
   } else if (result.state !== 'unchanged') fail(`Refusing ${options.action}: ${result.state}; unowned or modified files are preserved.`);
   const ownedMode = mode ?? result.mode;
+  if (options.action === 'uninstall' && !reminderShown) removalReminder(ownedMode);
   if (ownedMode === 'mcp') mcpLifecycle(options);
   else execFileSync(process.execPath, [join(root, 'tools/install.mjs'), { install: 'install', update: 'upgrade', uninstall: 'remove' }[options.action], ownedMode, options.path], { stdio: 'pipe' });
   report(options, { ...inspect(options.path, ownedMode), mode: ownedMode });
@@ -185,24 +195,26 @@ async function guided() {
   if (!process.stdin.isTTY || !process.stdout.isTTY) fail('Interactive setup requires a terminal. Use install|status|update|uninstall --target TARGET --path ABS.');
   const prompt = createInterface({ input: process.stdin, output: process.stdout });
   try {
-    console.log('Where will you use Conquistador?\n1. Coding agent (recommended)\n2. Host plugin\n3. MCP client for an existing service\n4. Custom agent host\n5. Experimental Grok/Eve');
-    const groups = { 1: ['codex', 'claude-code', 'copilot', 'cursor', 'skill'], 2: ['claude-plugin', 'codex-plugin', 'copilot-plugin', 'agent-plugins'], 3: ['mcp'], 4: ['harness', 'squad'], 5: ['grok-bot', 'eve'] };
-    const group = groups[(await prompt.question('Group [1]: ')).trim() || '1'];
-    if (!group) fail('Unknown group.');
-    console.log(group.join(', '));
-    const target = (await prompt.question(`Target [${group[0]}]: `)).trim() || group[0];
-    if (!group.includes(target)) fail('Choose a target from this group.');
     const action = (await prompt.question('Action: install, status, update, uninstall [install]: ')).trim() || 'install';
-    const location = Object.hasOwn(projectPaths, target) ? '--project' : '--path';
-    const path = await prompt.question(location === '--project' ? 'Absolute project directory: ' : 'Absolute owned folder: ');
-    const args = [action, '--target', target, location, path];
-    if (target === 'mcp' && ['install', 'update'].includes(action)) {
-      const url = await prompt.question('Existing HTTP/HTTPS service origin: ');
-      if (url) args.push('--url', url);
-    }
+    if (!['install', 'status', 'update', 'uninstall'].includes(action)) fail('Unknown action.');
+    const args = [action];
+    if (action === 'install') {
+      console.log('Where will you use Conquistador?\n1. Coding agent (recommended)\n2. Host plugin\n3. MCP client for an existing service\n4. Custom agent host\n5. Experimental Grok/Eve');
+      const groups = { 1: ['codex', 'claude-code', 'copilot', 'cursor', 'skill'], 2: ['claude-plugin', 'codex-plugin', 'copilot-plugin', 'agent-plugins'], 3: ['mcp'], 4: ['harness', 'squad'], 5: ['grok-bot', 'eve'] };
+      const group = groups[(await prompt.question('Group [1]: ')).trim() || '1'];
+      if (!Array.isArray(group)) fail('Unknown group.');
+      console.log(group.join(', '));
+      const target = (await prompt.question(`Target [${group[0]}]: `)).trim() || group[0];
+      if (!group.includes(target)) fail('Choose a target from this group.');
+      const location = Object.hasOwn(projectPaths, target) ? '--project' : '--path';
+      const path = await prompt.question(location === '--project' ? 'Absolute project directory: ' : 'Absolute owned folder: ');
+      args.push('--target', target, location, path);
+      if (target === 'mcp') args.push('--url', await prompt.question('Existing HTTP/HTTPS service origin: '));
+    } else args.push('--path', await prompt.question('Absolute owned folder: '));
     const options = parse(args);
     console.log(command(...args));
-    if (action === 'status' || (await prompt.question('Apply this local action? [y/N]: ')).trim().toLowerCase() === 'y') run(options);
+    if (action === 'uninstall') removalReminder(inspect(options.path).mode);
+    if (action === 'status' || (await prompt.question('Apply this local action? [y/N]: ')).trim().toLowerCase() === 'y') run(options, action === 'uninstall');
     else console.log('Cancelled. No files changed.');
   } finally { prompt.close(); }
 }
