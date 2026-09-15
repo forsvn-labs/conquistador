@@ -37,3 +37,7 @@ Version 0.1.0 is for private dogfooding. Keep the repository private and judge t
 real tasks and corrections. Public distribution and the landing page are deferred until an
 explicit release decision. Local packages and passing tests do not establish useful model output
 or release approval. See [ROADMAP.md](ROADMAP.md) and [PROGRESS.md](PROGRESS.md).
+
+Host advice must fit the selected event contract. Invalid or incomplete input must suppress advice,
+and advisory errors must not block completion. Compact method copies rely on the consuming host
+to enforce domain restrictions; only the callable coordinator supplies automatic load checks.

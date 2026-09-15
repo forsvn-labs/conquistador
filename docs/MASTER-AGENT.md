@@ -46,13 +46,16 @@ same-context run exercised fallback. Neither run granted human acceptance.
 
 A domain-specific host can restrict the available roster, skills, knowledge roots, and tools.
 `setup.mjs --domain ABS` writes `domain-restriction.json` next to a coding-agent, plugin, or
-harness install. `createDomainAuthorizer(root)` reads that file when present and is the load-time
-authorizer, not an opt-in CLI flag. Parent integration uses `skills=[]`. An `outcome` assignment
+harness install. The callable coordinator checks that file before loading assignments or dispatching
+workers, even when no additional authorizer callback is supplied. `createDomainAuthorizer(root)`
+is available to other consuming hosts. Parent integration uses `skills=[]`. An `outcome` assignment
 may load any skill in `allowed.skills`; the mandatory final review still requires `fresh-eyes-review`
 in the dependency closure. Local MCP does not read the restriction file; domain MCP is unsupported.
 No restriction file means the full package. Plugin and harness copies include
 `hosts/coding-agent/README.md`. Compact skill folders do not include that adapter; native BB
 dispatch needs the complete distribution or a plugin/harness copy that includes those modules.
+Compact skill installs filter the copied methods, but their consuming host must enforce the
+restriction file. Direct host filesystem and tool access is outside the coordinator's controls.
 
 ## Stack setup
 
@@ -79,7 +82,8 @@ enabled by installation.
 
 A host may opt into Conquistador mode by routing selected task requests through the parent and by
 calling the included proactive helper for its three events: session start, before delivery,
-and results updated. The explicit Claude configuration lifecycle is documented in
+and results updated. The Claude adapter registers only session start and before delivery; results
+updated remains a generic helper event. The explicit Claude configuration lifecycle is documented in
 [Proactive advice](PROACTIVE.md); native event delivery remains unverified. The helper returns instructions. It does not create agents, schedule work, change
 accounts, or perform external actions. The host must deliver the event and decide whether to create
 specialist contexts for the resulting task.

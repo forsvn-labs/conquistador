@@ -49,3 +49,10 @@ Public distribution, marketplace listing and landing work require a later decisi
 outcomes, rights, provider/human evidence and release authority against the exact source and
 artifacts before publishing. Pushes and publication require explicit user authorization.
 Preserve historical evidence under its original scope.
+
+## Final helper review
+
+The Claude mode adapter now offers SessionStart and Stop only. Verify both in the installed
+Claude version before claiming native support. Results-updated remains a generic helper event.
+Complete the Executor documentation-read evidence through an authorized route when available.
+Use a host that enforces the domain allowlist when loading compact skill copies.

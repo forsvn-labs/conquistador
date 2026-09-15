@@ -8,7 +8,6 @@ export const SUPPORTED_HOST = 'claude-code';
 export const HOST_EVENTS = Object.freeze({
   'session-start': 'SessionStart',
   'before-delivery': 'Stop',
-  'results-updated': 'TaskCompleted',
 });
 export const HOST_EVIDENCE = Object.freeze({
   host: SUPPORTED_HOST,
@@ -16,6 +15,7 @@ export const HOST_EVIDENCE = Object.freeze({
   mapping: HOST_EVENTS,
   nativeActivationVerified: false,
   executorVerified: false,
+  documentationReviewed: '2026-09-15',
 });
 const EVENTS = Object.keys(HOST_EVENTS);
 const fail = message => { throw new Error(message); };
@@ -33,7 +33,7 @@ export function hostSupport(host) {
     nativeActivationVerified: false,
     explanation: host === 'grok-bot' || host === 'eve'
       ? 'Experimental import only. Native hook import and removal are unverified; Conquistador mode is not offered.'
-      : 'Conquistador mode is implemented only for Claude Code using its documented SessionStart, Stop, and TaskCompleted events. Other hosts keep the disabled proactive helper.',
+      : 'Conquistador mode is implemented only for Claude Code using SessionStart and Stop. Native activation remains unverified. Other hosts keep the disabled proactive helper.',
   };
 }
 
@@ -79,7 +79,8 @@ function ownedCommand(command) {
   if (!tokens || tokens.length !== 9) return null;
   if (tokens[0] !== process.execPath || tokens[1] !== script) return null;
   if (tokens[2] !== '--handle' || tokens[3] !== '--host' || tokens[4] !== SUPPORTED_HOST) return null;
-  if (tokens[5] !== '--event' || !Object.hasOwn(HOST_EVENTS, tokens[6])) return null;
+  // Recognize the removed TaskCompleted registration so upgrades can remove owned hooks.
+  if (tokens[5] !== '--event' || (!Object.hasOwn(HOST_EVENTS, tokens[6]) && tokens[6] !== 'results-updated')) return null;
   if (tokens[7] !== '--config' || !isAbsolute(tokens[8])) return null;
   return resolve(tokens[8]);
 }
@@ -168,7 +169,7 @@ function withOwned(settings, events, configPath) {
 
 function parseEvents(value) {
   const events = value === undefined ? EVENTS : String(value).split(',').map(item => item.trim()).filter(Boolean);
-  if (!events.length || new Set(events).size !== events.length || events.some(event => !EVENTS.includes(event))) fail('Choose only session-start, before-delivery, and results-updated.');
+  if (!events.length || new Set(events).size !== events.length || events.some(event => !EVENTS.includes(event))) fail('Choose only session-start and before-delivery. results-updated has no Claude context-advice adapter.');
   return events;
 }
 
@@ -193,7 +194,7 @@ export function inspectMode({ host, project, config } = {}) {
     if (!supplied) state = 'unknown';
     else {
       const record = readConfig(bound);
-      enabled = record.enabled === true && record.events.length > 0;
+      enabled = record.enabled === true && record.events.some(event => registered.includes(event));
       state = enabled ? 'enabled' : 'registered-disabled';
     }
   }
@@ -241,7 +242,7 @@ function readStdinLimited() {
   try {
     fd = openSync('/dev/fd/0', constants.O_RDONLY | constants.O_NONBLOCK);
   } catch {
-    return {};
+    return null;
   }
   try {
     const bytes = Buffer.alloc(8192);
@@ -252,16 +253,16 @@ function readStdinLimited() {
         count = readSync(fd, bytes, length, bytes.length - length, null);
       } catch (error) {
         if (error.code === 'EAGAIN' || error.code === 'EWOULDBLOCK') break;
-        return {};
+        return null;
       }
       if (!count) break;
       length += count;
     }
-    if (!length) return {};
+    if (!length || length === bytes.length) return null;
     const value = JSON.parse(new TextDecoder('utf-8', { fatal: true }).decode(bytes.subarray(0, length)));
-    return isObject(value) ? value : {};
+    return isObject(value) ? value : null;
   } catch {
-    return {};
+    return null;
   } finally {
     closeSync(fd);
   }
@@ -270,11 +271,12 @@ function readStdinLimited() {
 export function handleHostEvent({ host, event, config, input } = {}) {
   if (host !== SUPPORTED_HOST || !Object.hasOwn(HOST_EVENTS, event)) fail('Unsupported host event.');
   const payload = input === undefined ? readStdinLimited() : input;
-  if (payload.stop_hook_active === true) {
-    return { hookSpecificOutput: { hookEventName: HOST_EVENTS[event], additionalContext: '' } };
-  }
+  // Missing or truncated input must never bypass the host's recursion flag.
+  if (!isObject(payload) || payload.hook_event_name !== HOST_EVENTS[event]) return {};
+  if (event === 'before-delivery' && payload.stop_hook_active !== false) return {};
   const result = advisory(event, config ? readConfig(config) : undefined);
-  const instructions = result.enabled ? result.instructions.join('\n') : '';
+  if (!result.enabled) return {};
+  const instructions = result.instructions.join('\n');
   return {
     hookSpecificOutput: {
       hookEventName: HOST_EVENTS[event],
@@ -288,7 +290,7 @@ export function main(args) {
   const [action, ...rest] = args;
   if (action === '--handle') {
     for (let i = 0; i < rest.length; i += 2) {
-      if (!['--host', '--event', '--config'].includes(rest[i]) || !rest[i + 1]) fail('Invalid mode handle arguments.');
+      if (!['--host', '--event', '--config'].includes(rest[i]) || options[rest[i].slice(2)] !== undefined || !rest[i + 1]) fail('Invalid mode handle arguments.');
       options[rest[i].slice(2)] = rest[i + 1];
     }
     return handleHostEvent(options);
@@ -310,8 +312,10 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
   try {
     const value = main(process.argv.slice(2));
     process.stdout.write(`${JSON.stringify(value)}\n`);
-  } catch (error) {
-    process.stderr.write(`${error.message}\n`);
-    process.exitCode = 2;
+  } catch {
+    // Parser and filesystem errors can include private configuration content or paths.
+    process.stderr.write('Invalid Conquistador mode input. See docs/PROACTIVE.md.\n');
+    // Exit 2 blocks Stop/TaskCompleted in Claude. Advisory failures must not block work.
+    process.exitCode = process.argv[2] === '--handle' ? 1 : 2;
   }
 }

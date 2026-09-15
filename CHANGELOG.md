@@ -103,3 +103,18 @@ output, human acceptance, rights disposition and release authority require separ
 - Replaced source-derived methods with original procedures and removed private narratives and
   historical evidence from the distribution. Preserved applicable licenses and notices.
 - Added a contained Conquistador mascot shared by the plugin composer icon and logo.
+
+## Unreleased final helper corrections
+
+- Removed Claude TaskCompleted context-advice registration. SessionStart and Stop retain the
+  documented context feedback contract. Owned legacy registrations can still be removed.
+- Suppressed hook advice on malformed, partial, oversized, mismatched or recursive input. Hook
+  errors now exit 1 with a fixed diagnostic so they cannot block work or reveal config content.
+- Corrected mode status for configurations with no enabled registered event.
+- Clarified that compact domain skill copies need host enforcement; automatic load checks belong
+  to the callable coordinator. Native delivery and Executor documentation verification remain open.
+
+Final review validation passes on Node 24.19.0: build and all 599 default tests, with 78 tooling,
+291 runtime, 167 catalog and 63 Eval Lab tests. The catalog check validates 17 operations and
+the synthetic local example passes. A focused scan checked 1,530 tracked product files against
+four private fingerprints with no matches. These checks do not establish native hook delivery.

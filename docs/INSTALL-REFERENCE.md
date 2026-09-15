@@ -192,8 +192,9 @@ For Cursor, OpenCode, Gemini CLI, Pi and other skill-capable hosts, use the skil
 Use `setup.mjs --domain ABS` on coding-agent, plugin, and harness installs to write
 `domain-restriction.json`. Optional `--knowledge-roots ABS` maps logical handles (`name` or
 `scope:name`) to operator-owned directories outside the product. The restriction is the load-time
-allowlist; undeclared siblings are refused even if copied later. `createDomainAuthorizer(root)`
-reads that file automatically; parent integration uses `skills=[]` and does not inherit
+allowlist. The callable coordinator refuses undeclared siblings even if copied later.
+Compact skill installs only filter copied methods; their host must enforce the restriction file.
+`createDomainAuthorizer(root)` is available for that host integration. Parent integration uses `skills=[]` and does not inherit
 `write-copy`. An `outcome` assignment may name any skill in `allowed.skills`. The mandatory final
 review still uses `fresh-eyes-review`, which is always in the closure.
 
@@ -246,8 +247,8 @@ node tools/install.mjs install squad /absolute/path/conquistador-squad
 The `single-agent` install contains the portable master contract in `agent/agent.json`, specialist
 assignment files, methods under `agent/skills/`, and the native dispatch modules under
 `hosts/coding-agent/` including `README.md` plus `agents/conquistador/agent.json`. When `domain-restriction.json` is present,
-`createDomainAuthorizer(root)` is the load-time authorizer; it is not an opt-in callback the CLI can
-omit. The consuming host decides how many worker contexts it can run. The squad contains worker and advisor contracts and their methods. The worker produces; the advisor
+the callable coordinator enforces the file before loading or dispatching, without an optional
+callback. The consuming host decides how many worker contexts it can run. The squad contains worker and advisor contracts and their methods. The worker produces; the advisor
 reviews. The host must create separate contexts for independent review. Otherwise follow the
 installed `sequential-fallback.md` and identify the review as the same context. These are portable
 contracts that need a host adapter. For a native Claude agent, use its plugin above.

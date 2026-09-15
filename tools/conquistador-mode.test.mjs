@@ -39,12 +39,12 @@ test('enable maps host events, preserves unrelated settings, and disable leaves 
   const enabled = applyMode('enable', { host: 'claude-code', project: dir, config });
   assert.equal(enabled.state, 'enabled');
   const stored = JSON.parse(readFileSync(settings, 'utf8'));
-  assert.deepEqual(Object.keys(HOST_EVENTS).sort(), ['before-delivery', 'results-updated', 'session-start']);
+  assert.deepEqual(Object.keys(HOST_EVENTS).sort(), ['before-delivery', 'session-start']);
   assert.equal(stored.hooks.SessionStart[0].hooks[0].command.includes('--handle'), true);
   assert.equal(stored.hooks.SessionStart[0].hooks[0].command.startsWith(`'${process.execPath}' `), true);
   assert.equal(stored.hooks.SessionStart[0].hooks[0].command.includes(`'${script}'`), true);
   assert.equal(stored.hooks.Stop[0].hooks[0].command.includes('before-delivery'), true);
-  assert.equal(stored.hooks.TaskCompleted[0].hooks[0].command.includes('results-updated'), true);
+  assert.equal(stored.hooks.TaskCompleted, undefined);
   assert.deepEqual(stored.hooks.PreToolUse, [{ hooks: [{ type: 'command', command: 'echo keep' }] }]);
   assert.deepEqual(stored.permissions, { allow: ['Read'] });
   const disabled = applyMode('disable', { host: 'claude-code', project: dir, config });
@@ -133,10 +133,13 @@ test('quoted apostrophes in the config path stay owned across enable and remove'
 
 test('handle ignores recursive stop hooks and returns additionalContext for Claude events', t => {
   const { config } = project(t);
-  assert.deepEqual(handleHostEvent({ host: 'claude-code', event: 'before-delivery', config, input: { stop_hook_active: true } }).hookSpecificOutput.additionalContext, '');
-  const live = handleHostEvent({ host: 'claude-code', event: 'session-start', config, input: {} });
+  assert.deepEqual(handleHostEvent({ host: 'claude-code', event: 'before-delivery', config, input: { hook_event_name: 'Stop', stop_hook_active: true } }), {});
+  const live = handleHostEvent({ host: 'claude-code', event: 'session-start', config, input: { hook_event_name: 'SessionStart' } });
   assert.equal(live.hookSpecificOutput.hookEventName, 'SessionStart');
   assert.match(live.hookSpecificOutput.additionalContext, /\/conquistador/);
+  const stop = handleHostEvent({ host: 'claude-code', event: 'before-delivery', config, input: { hook_event_name: 'Stop', stop_hook_active: false } });
+  assert.equal(stop.hookSpecificOutput.hookEventName, 'Stop');
+  assert.match(stop.hookSpecificOutput.additionalContext, /review the current deliverable/);
 });
 
 test('CLI status and handle emit JSON; unsupported hosts fail closed', t => {
@@ -147,9 +150,59 @@ test('CLI status and handle emit JSON; unsupported hosts fail closed', t => {
   const blocked = invoke(['enable', '--host', 'grok-bot', '--project', dir, '--config', config]);
   assert.equal(blocked.status, 2);
   assert.equal(blocked.stdout, '');
-  assert.match(blocked.stderr, /Experimental import only/);
-  const handled = invoke(['--handle', '--host', 'claude-code', '--event', 'results-updated', '--config', config], { input: '{}' });
+  assert.match(blocked.stderr, /Invalid Conquistador mode input/);
+  const handled = invoke(['--handle', '--host', 'claude-code', '--event', 'session-start', '--config', config], { input: '{"hook_event_name":"SessionStart"}' });
   assert.equal(handled.status, 0);
-  assert.equal(JSON.parse(handled.stdout).hookSpecificOutput.hookEventName, 'TaskCompleted');
+  assert.equal(JSON.parse(handled.stdout).hookSpecificOutput.hookEventName, 'SessionStart');
   assert.equal(inspectMode({ host: 'cursor', project: dir }).state, 'unsupported');
+});
+
+test('results-updated cannot register advisory hooks and owned legacy hooks can be removed', t => {
+  const { dir, config, settings } = project(t);
+  assert.throws(() => applyMode('enable', { host: 'claude-code', project: dir, config, events: 'results-updated' }), /no Claude context-advice adapter/);
+  assert.equal(existsSync(settings), false);
+  applyMode('enable', { host: 'claude-code', project: dir, config });
+  const stored = JSON.parse(readFileSync(settings, 'utf8'));
+  const legacy = structuredClone(stored.hooks.SessionStart[0]);
+  legacy.hooks[0].command = legacy.hooks[0].command.replace('--event session-start', '--event results-updated');
+  stored.hooks.TaskCompleted = [legacy, { hooks: [{ type: 'command', command: 'echo keep' }] }];
+  writeFileSync(settings, JSON.stringify(stored));
+  applyMode('enable', { host: 'claude-code', project: dir, config });
+  assert.deepEqual(JSON.parse(readFileSync(settings, 'utf8')).hooks.TaskCompleted, [{ hooks: [{ type: 'command', command: 'echo keep' }] }]);
+  const removedEvent = invoke(['--handle', '--host', 'claude-code', '--event', 'results-updated', '--config', config]);
+  assert.equal(removedEvent.status, 1);
+  assert.equal(removedEvent.stdout, '');
+});
+
+test('invalid, missing, oversized and recursive event payloads never inject advice', t => {
+  const { config } = project(t);
+  const args = ['--handle', '--host', 'claude-code', '--event', 'before-delivery', '--config', config];
+  for (const input of ['', '{', 'null', '[]', '{}', '{"hook_event_name":"SessionStart"}',
+    '{"hook_event_name":"Stop"}', '{"hook_event_name":"Stop","stop_hook_active":"false"}',
+    '{"hook_event_name":"Stop","stop_hook_active":true}',
+    JSON.stringify({ hook_event_name: 'Stop', last_assistant_message: 'x'.repeat(9000), stop_hook_active: true })]) {
+    const result = invoke(args, { input });
+    assert.equal(result.status, 0);
+    assert.deepEqual(JSON.parse(result.stdout), {});
+    assert.equal(result.stderr, '');
+  }
+  const disabled = handleHostEvent({ host: 'claude-code', event: 'session-start', input: { hook_event_name: 'SessionStart' } });
+  assert.deepEqual(disabled, {});
+});
+
+test('hook failures do not block Claude or expose operator configuration', t => {
+  const { config } = project(t);
+  const marker = 'synthetic-private-mode-value';
+  writeFileSync(config, marker);
+  const result = invoke(['--handle', '--host', 'claude-code', '--event', 'session-start', '--config', config], { input: '{"hook_event_name":"SessionStart"}' });
+  assert.equal(result.status, 1);
+  assert.equal(result.stdout, '');
+  assert.equal(result.stderr.includes(marker), false);
+  assert.equal(result.stderr.includes(config), false);
+});
+
+test('status requires an enabled event that is actually registered', t => {
+  const { dir, config } = project(t);
+  writeFileSync(config, JSON.stringify({ schemaVersion: 1, enabled: true, events: ['results-updated'] }));
+  assert.equal(applyMode('enable', { host: 'claude-code', project: dir, config }).state, 'registered-disabled');
 });

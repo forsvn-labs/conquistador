@@ -100,24 +100,37 @@ Tests use local synthetic configurations and child processes. They cover disable
 event selection, validation, bounded reads and output, non-regular files, ignored stdin,
 and unchanged fixture files. They make no live calls.
 
-## Optional Conquistador mode (Claude Code)
+## Optional Conquistador mode for Claude Code
 
-`tools/conquistador-mode.mjs` is the only implemented host adapter for Conquistador mode. It maps
-`session-start`, `before-delivery`, and `results-updated` to Claude Code's documented `SessionStart`,
-`Stop`, and `TaskCompleted` hooks in `.claude/settings.local.json`. Installation leaves mode
-disabled. Native activation is unverified.
+`tools/conquistador-mode.mjs` maps `session-start` and `before-delivery` to Claude Code's
+`SessionStart` and `Stop` hooks in `.claude/settings.local.json`. Installation leaves mode disabled.
+The current [Claude hooks reference](https://code.claude.com/docs/en/hooks#stop-decision-control)
+documents context feedback for both events. Native activation remains unverified.
+
+`results-updated` remains a generic helper event. The Claude adapter refuses to register it because
+`TaskCompleted` has no documented context-advice output. Enabling or removing mode also removes
+that older registration when it belongs to this installation, preserving unrelated hooks.
 
 From a complete distribution or an install that includes the helper:
 
 ```sh
 node /absolute/install/tools/conquistador-mode.mjs enable --host claude-code --project /absolute/project --config /absolute/local/proactive.json
+node /absolute/install/tools/conquistador-mode.mjs status --host claude-code --project /absolute/project --config /absolute/local/proactive.json
 node /absolute/install/tools/conquistador-mode.mjs disable --host claude-code --project /absolute/project --config /absolute/local/proactive.json
 node /absolute/install/tools/conquistador-mode.mjs remove --host claude-code --project /absolute/project
 ```
 
-The handler honors `stop_hook_active` and returns empty additional context in that case. It does not
-create specialists, edit unrelated host settings, or enable Grok Bot or Eve. Those remain
+Use `--events session-start` to limit registration to session start. The default registers both
+supported events; the operator config must also enable an event before it emits advice.
+
+The handler requires matching `hook_event_name` input and an explicit `stop_hook_active: false`
+for Stop advice. Recursive, missing, malformed, mismatched or oversized input returns `{}`.
+Input reads are nonblocking and limited to less than 8 KiB; partial or unavailable input suppresses
+advice. Handler errors emit a fixed diagnostic and exit 1 so they cannot block completion or expose
+configuration text. It does not create specialists, edit unrelated host settings, or enable Grok Bot or Eve. Those remain
 experimental imports without a mode adapter. `status` and `disable` use the config path stored in
 the owned hooks. A different `--config` is an error. `status` without that registered file is
-`unknown`; it does not report another file's enabled flag. Native activation and Executor source
-verification remain unverified.
+`unknown`; it does not report another file's enabled flag. Status reports enabled only when a
+registered event is also enabled in that config. The current official reference was read on
+2026-09-15 through web access. Native activation and source verification through Executor remain
+unverified. No documentation read establishes delivery in an installed Claude version.

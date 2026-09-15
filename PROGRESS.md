@@ -98,3 +98,21 @@ and cross-run retrieval are absent. Public feedback sending stays deferred durin
 Ambiguous dispatch pauses without automatic replay; there is no supported reconciliation API yet.
 Imported action receipts remain operator attestations unless separate observed evidence supports
 them. Rights disposition and release authority remain work for a later public release.
+
+## Final helper review
+
+The Claude adapter now registers SessionStart and Stop only. It rejects results-updated registration,
+removes its old TaskCompleted hook during enable or remove, and preserves unrelated hooks. Invalid,
+missing or oversized input suppresses advice. Config errors emit redacted diagnostics and exit 1
+so an advisory failure cannot block completion. Status checks the intersection of enabled and
+registered events. The current official event reference was checked through web access; source
+verification through Executor and native event delivery remain unverified.
+
+Domain documentation now identifies the enforcement boundary. The callable coordinator checks the
+installed restriction before loading or dispatching. Compact skill copies only filter the staged
+methods; their consuming host must enforce the restriction file.
+
+Final review validation passes on Node 24.19.0: build and all 599 default tests, with 78 tooling,
+291 runtime, 167 catalog and 63 Eval Lab tests. The catalog check validates 17 operations and
+the synthetic local example passes. A focused scan checked 1,530 tracked product files against
+four private fingerprints with no matches. These checks do not establish native hook delivery.
