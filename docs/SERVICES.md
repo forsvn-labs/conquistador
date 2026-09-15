@@ -26,8 +26,9 @@ Conquistador must name missing inputs or capabilities rather than invent observa
 
 | Platform or module | Shipped implementation | Activation and limits |
 | --- | --- | --- |
-| Coding agent | One installable Conquistador skill with all 38 outcomes | Host loads `SKILL.md`; host-specific discovery and slash naming apply |
-| Claude/Codex plugin format | Manifests, all methods and icon | Local plugin activation; no marketplace listing or universal alias claim |
+| skills.sh / coding agent | One root skill with all 38 outcomes | CLI installs the complete clean bundle; host discovery and invocation naming apply |
+| Claude/Codex plugins | Repo-local marketplaces, methods and icon; one native Claude agent | Documented host activation commands; no central listing or universal alias claim |
+| Agent Plugins 1.0.0 | Root `plugin.json` and fixed `skills/` discovery | Compatible client required; hooks and native agents are host-specific |
 | Single-agent harness | Parent role and all declared methods | Host supplies agent execution; no service starts on install |
 | Advisor/worker harness | Separate role packages and review handoff | Independent review requires separate host contexts |
 | MCP | Stdio run, artifact-list, artifact-read and cancel tools | Requires configured Conquistador HTTP service; no approval or publishing tools |

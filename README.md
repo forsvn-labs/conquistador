@@ -4,7 +4,18 @@ Ask `/conquistador` for an outcome. Conquistador selects the relevant methods, p
 reviews it, and helps decide the next step. It includes 38 outcome capabilities for product,
 research, marketing, growth, creative work, engineering and review.
 
-Start with [installation](INSTALL.md), then use requests such as:
+Install with the [skills CLI](https://www.skills.sh/docs) from a fresh extracted distribution:
+
+```sh
+DO_NOT_TRACK=1 npx skills add /absolute/path/extracted-conquistador --skill conquistador --copy
+```
+
+Choose your coding agent when prompted. The root skill includes every method. After public repository
+setup, the source argument can be `forsvn-labs/conquistador`. That remote command is not available yet.
+[Installation](INSTALL.md) also covers Claude/Codex plugins, a native Claude agent, Agent Plugins
+1.0.0, compact offline staging and the optional runtime.
+
+Use requests such as:
 
 ```text
 /conquistador Turn this product into a launch package.
@@ -21,7 +32,7 @@ bundles all methods. Users do not need to choose individual skills or manage rou
 | Interface | What users get | What the host provides |
 | --- | --- | --- |
 | Coding-agent skill, recommended | One Conquistador entry point and the complete method library | Model, project files, tools and permission UI |
-| Plugin | The same methods in a compatible plugin package | Plugin activation and model/tools |
+| Claude/Codex or Agent Plugins | Complete methods, repo marketplace metadata and a native Claude agent | Host plugin activation, model and tools |
 | Single agent or advisor/worker squad | Portable role contracts and bundled methods | Agent execution and, for independent review, separate contexts |
 | Optional Node 24 runtime | Durable supported playbooks, HTTP sessions, terminal chat and MCP artifact access | Configured model and separately authorized integrations |
 | Opt-in host-event helper | Reminders to resume work, review a deliverable or assess new results | Event invocation and delivery of the reminder to Conquistador |
@@ -48,7 +59,7 @@ automated workflow. Local tests establish implementation behavior, not live-prov
 human release acceptance.
 
 Intended public source: [forsvn-labs/conquistador](https://github.com/forsvn-labs/conquistador).
-Remote setup is not confirmed by this package. The private source-history archive and landing
+Publication of this source at that URL is pending. The private source-history archive and landing
 repository are not dependencies. No private workspace is needed to use or develop this product.
 
 For development, use Node 24 and run `npm run bootstrap`, `npm run build`, and `npm test`.

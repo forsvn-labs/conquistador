@@ -1,98 +1,168 @@
 # Install Conquistador
 
-Use the complete 0.1.0 distribution ZIP or this source checkout. Extract the ZIP, open a terminal
-in its root, and use Node 24 for the installation helper. The generated skill package itself needs
-no Node process or Conquistador service when the host loads it.
+Choose a skill install for everyday use. Choose a plugin if you want your host's plugin manager
+and, in Claude Code, the native Conquistador agent. Both include all 38 outcome methods.
+The optional runtime is a separate choice for durable playbooks and MCP.
 
-This version is not published to a package registry. Do not use an unverified package with a
-similar name. The intended source repository is
-[forsvn-labs/conquistador](https://github.com/forsvn-labs/conquistador); remote availability is
-still pending. Use the provided local artifact until publication is verified.
+Version 0.1.0 is currently unpublished. Use a fresh extracted distribution for the local commands
+below. The intended GitHub URL still needs publication of this source; remote commands in this
+page are explicitly for use after that step. No npm registry package or hosted service is claimed.
 
-## Recommended: one entry point with every method
+## Recommended: skills.sh
 
-Choose a new dedicated directory in your host's configured skills location, or stage locally and
-import it through the host's skill controls:
+From your project directory, install from a fresh extracted Conquistador ZIP:
+
+```sh
+DO_NOT_TRACK=1 npx skills add /absolute/path/extracted-conquistador --skill conquistador --copy
+```
+
+The skills CLI asks which installed agents should receive the skill. To select one explicitly:
+
+```sh
+DO_NOT_TRACK=1 npx skills add /absolute/path/extracted-conquistador --skill conquistador --agent codex --copy
+```
+
+Agent names include `claude-code`, `codex`, `cursor`, `opencode`, `github-copilot`, `gemini-cli`
+and `pi`. These commands install into the current project. Leave out `--yes` to review the CLI's
+choices. `DO_NOT_TRACK=1` disables the third-party installer's telemetry.
+
+After this source is published at the intended repository, the short command will be:
+
+```sh
+DO_NOT_TRACK=1 npx skills add forsvn-labs/conquistador --skill conquistador --copy
+```
+
+The root `SKILL.md` forwards to the authored parent in `skills/conquistador/`. The complete public
+bundle travels with it, so every method stays available. The agent loads only relevant methods.
+Do not select the nested `skills/conquistador` directory alone or use `--full-depth` for this install.
+That would bypass the complete entry point.
+
+For a local source, use a fresh extracted distribution. The skills CLI copies the selected directory,
+including untracked content and dependencies if present. Do not point it at a development checkout
+containing `node_modules`, `dist`, local state, secrets or symlinks. The compact installer below
+provides a smaller alternative without the development modules.
+
+Start a new host session and select Conquistador. Ask `/conquistador` for your outcome. A host may
+use `$conquistador` or its skill picker instead. You do not need to choose the underlying methods.
+Use the skills CLI's `list`, `remove` and update controls for installations it owns. See the
+[skills CLI documentation](https://www.skills.sh/docs/cli) for supported host names and options.
+
+## Claude Code plugin and agent
+
+Use the fresh distribution root, or create a smaller plugin folder from it with Node 24:
+
+```sh
+node tools/install.mjs install plugin /absolute/path/conquistador-plugin
+claude plugin marketplace add /absolute/path/conquistador-plugin
+claude plugin install conquistador@conquistador
+```
+
+After repository publication, replace the marketplace path with `forsvn-labs/conquistador`.
+In Claude Code, use `/conquistador:conquistador` for the parent skill. To start its native agent:
+
+```sh
+claude --agent conquistador:conquistador
+```
+
+You can also select `conquistador:conquistador` in the agent picker. The agent inherits the host's
+model and permitted tools and loads the same parent method. It does not enable hooks or recursive
+agent delegation. The plugin contains one native agent; portable squad documentation is outside
+Claude's recursively scanned `agents/` directory.
+
+See [Claude marketplaces](https://code.claude.com/docs/en/plugin-marketplaces) and
+[native agents](https://code.claude.com/docs/en/sub-agents#invoke-subagents-explicitly).
+
+## Codex plugin
+
+Use the same fresh distribution or staged plugin directory:
+
+```sh
+codex plugin marketplace add /absolute/path/conquistador-plugin
+codex plugin add conquistador@conquistador
+```
+
+After repository publication, replace the marketplace path with `forsvn-labs/conquistador`.
+Select Conquistador through the host's plugin/skill controls. The repo includes
+`.agents/plugins/marketplace.json`, `.codex-plugin/plugin.json` and the complete method library.
+The portable JSON agent contracts are not native Codex agents. See
+[Codex plugin packaging](https://learn.chatgpt.com/docs/build-plugins).
+
+## Agent Plugins and other hosts
+
+The root `plugin.json` follows [Agent Plugins 1.0.0](https://agent-plugins.org/specification), the
+current standard reached from Open Plugins. It uses fixed `skills/` discovery. Import the directory
+through a compatible client's plugin controls; the standard does not define one universal install
+command or native agent format. The Claude and Codex files add their host-specific discovery.
+No MCP server or hook starts automatically.
+
+For GitHub Copilot CLI, the documented marketplace path is:
+
+```sh
+copilot plugin marketplace add /absolute/path/conquistador-plugin
+copilot plugin install conquistador@conquistador
+```
+
+See [Copilot plugin installation](https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/plugins-finding-installing).
+Manifest checks and skills CLI installs do not establish native host activation or model quality.
+For Cursor, OpenCode, Gemini CLI, Pi and other skill-capable hosts, use the skills.sh route above.
+
+## Compact local installation
+
+From the complete distribution with Node 24, choose a new directory in the host's skill location:
 
 ```sh
 node tools/install.mjs install conquistador /absolute/path/to/skills/conquistador
 ```
 
-This installs a root `SKILL.md`, Conquistador's operating contract, all 38 outcome methods under
-`library/`, and the optional proactive helper. Point the host at that root `SKILL.md`. Start a new
-host session and select Conquistador. Ask `/conquistador` for your outcome. If the host uses a
-named-skill picker or `$conquistador`, use that spelling for the same entry point.
+This stages one root `SKILL.md`, the parent, all outcome methods under `library/`, and the optional
+proactive helper. Import that folder through the host's skill controls. No Node process or
+Conquistador service is needed when the host loads the methods.
 
-For a Codex installation whose skill directory is `$CODEX_HOME/skills`, choose
-`$CODEX_HOME/skills/conquistador`; the usual default is `$HOME/.codex/skills/conquistador`.
-Other agents may use different project or user skill directories. Use the directory documented
-by the installed host rather than treating the staging command as host activation.
-
-The parent chooses and composes methods, including engineering methods when the request needs
-them. It loads the smallest relevant context. It does not make users install siblings, download
-methods at runtime, or approve internal routing steps. A missing tool or authorization is reported
-at the operation that needs it; installing methods does not grant those capabilities.
-
-## Plugin and standalone methods
-
-A plugin-capable host can load the full plugin directory:
-
-```sh
-node tools/install.mjs install plugin /absolute/path/conquistador-plugin
-```
-
-The package contains the Claude and Codex plugin manifests, method library, icon and proactive
-helper. Use your host's local-plugin controls to activate it. Plugin hosts can namespace skill
-commands, so select the Conquistador parent rather than assuming an exact slash alias is universal.
-The recommended single-skill install above avoids requiring users to navigate sibling methods.
-
-Advanced users can still install an individual outcome:
+Advanced users can stage an independently usable method:
 
 ```sh
 node tools/install.mjs install skill:write-copy /absolute/path/write-copy-install
 ```
 
-That command stages `skills/write-copy/`. It is not the complete Conquistador entry point.
+That folder contains `skills/write-copy/`. It is not the complete Conquistador entry point.
 
-## Upgrade and remove
-
-Run these commands from the complete distribution, using the same mode and destination:
+For installations created by this helper, upgrade or remove from the complete distribution:
 
 ```sh
 node tools/install.mjs upgrade conquistador /absolute/path/to/skills/conquistador
 node tools/install.mjs remove conquistador /absolute/path/to/skills/conquistador
 ```
 
-The installer checks ownership and file hashes. It refuses to overwrite or remove a modified
-installation. Keep user outputs and local configuration outside the owned installation. To retain
-an edited install, stage the new version at a different path and switch the host to it.
-`node tools/install.mjs list` shows all install modes. No command changes host account settings.
+Use the same mode and destination. The helper checks ownership and hashes and refuses to replace
+or remove modified files. Keep user outputs and configuration elsewhere. Stage a new directory to
+retain an edited version. `node tools/install.mjs list` lists all modes. Host plugin managers own
+their activated copies; update or remove those through the host's controls.
 
-## Agent harnesses
+## Portable agent harnesses
 
 ```sh
 node tools/install.mjs install single-agent /absolute/path/conquistador-agent
 node tools/install.mjs install squad /absolute/path/conquistador-squad
 ```
 
-The single-agent install contains `agent/agent.json` and all declared methods under `agent/skills/`.
-Load the parent first. The squad contains separate worker and advisor contracts and their methods.
-The worker produces; the advisor reviews. The host must create separate contexts for independent
-review. Otherwise follow `sequential-fallback.md` and identify the review as the same context.
-These are portable contracts, not native agent launchers or separately hosted accounts.
+The single-agent install contains `agent/agent.json` and its methods under `agent/skills/`.
+The squad contains worker and advisor contracts and their methods. The worker produces; the advisor
+reviews. The host must create separate contexts for independent review. Otherwise follow the
+installed `sequential-fallback.md` and identify the review as the same context. These are portable
+contracts that need a host adapter. For a native Claude agent, use its plugin above.
 
-The `eve` and `grok-bot` modes stage experimental import packages. Import compatibility and actual
-host execution remain unverified. They are not advertised as supported native installations.
+The `eve` and `grok-bot` modes stage experimental import packages. Native activation is unverified.
 
-## Proactive help
+## Preview and proactive help
 
 For visual previews and annotations, follow [Lavish setup](docs/PREVIEW.md). The parent chooses
 that review path on demand; no Conquistador preview application or global session hook is required.
 
 [Proactive help](docs/PROACTIVE.md) describes the opt-in local helper and its three host events.
-Configure it outside the installer-owned directory, then have the host invoke it on the selected
-event and pass its returned instructions to Conquistador. The helper cannot register hooks, run a
-schedule, access a provider, or authorize an action. Installation leaves it disabled.
+Configure it outside the installation, then have the host invoke it and pass the returned
+instructions to Conquistador. It cannot register hooks, run a schedule, access a provider or
+authorize an action. Installation leaves it disabled. Installing methods grants no new permission
+to publish, spend, persist learning or submit feedback.
 
 ## Optional runtime, terminal chat and MCP
 

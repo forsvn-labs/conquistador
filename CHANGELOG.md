@@ -5,6 +5,11 @@ See [VERSIONS.md](VERSIONS.md) for independent product and method versions.
 
 ## 0.1.0, unpublished
 
+- Root skills.sh entry point carries the full method library, fixing partial parent-only installations.
+- Repo-local Claude and Codex marketplaces, Agent Plugins 1.0.0 validation and a native Claude agent.
+- Plugin staging includes discovery metadata; portable squad prose no longer appears as an unintended Claude agent.
+- Installation guide covers skills CLI, native plugins, portable roles and clean local source requirements.
+
 - Parent-owned Lavish AXI preview and annotation handoff, optional CLI setup, and explicit separation of review, memory and public feedback consent.
 - Removed automatic run-completion learning writes that ignored the memory-off setting and treated content acceptance as learning consent. Existing data and explicit state operations remain available.
 - One recommended Conquistador entry point with all 38 outcome methods bundled; parent routing includes engineering on demand.

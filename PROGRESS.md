@@ -29,3 +29,5 @@ The runtime no longer promotes completed runs into a learning ledger. Both suppo
 spellings preserve existing data and leave automatic promotion disabled. Run artifacts and audit
 state still persist. A separate exact-entry/destination consent API and cross-run retrieval remain
 future work; the public learning guide describes a user-approved host workflow.
+
+Installation now includes a root skill for the complete bundle, repo-local Claude/Codex marketplaces, Agent Plugins 1.0.0 metadata and one native Claude agent. The local plugin installer includes these files. Portable squad prose moved out of native agent discovery. The default test command validates metadata and installed paths. Actual host/model activation and public distribution remain separate checks.

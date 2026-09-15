@@ -21,3 +21,5 @@ Any public feedback contribution stays explicitly selected and consented.
 
 Automatic learning promotion is disabled until separate persistence consent is implemented. Keep
 existing records accessible to explicit state/export operations while adding that boundary.
+
+The root skills.sh entry point, Agent Plugins manifest, Claude/Codex marketplaces and native Claude agent are implemented. Verify actual CLI installs from clean artifacts, then validate native host activation separately. Public URL installation requires publication of the reviewed source.
