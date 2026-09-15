@@ -5,6 +5,11 @@ See [VERSIONS.md](VERSIONS.md) for independent product and method versions.
 
 ## 0.1.0, unpublished
 
+- One recommended Conquistador entry point with all 38 outcome methods bundled; parent routing includes engineering on demand.
+- Complete single-agent method installation and corrected contained host/agent paths and product versions.
+- Opt-in local host-event reminders, with no network calls, background scheduler or external action authority.
+- Installation instructions and a services matrix distinguish coding-agent use, role packages, MCP/runtime and experimental host imports.
+
 - Editable public source with root bootstrap, build, tests, read-only CI, and deterministic local
   ZIP plus npm packaging from a clean Git commit. Local package records remain unbound.
 - Independently usable original skills, default parent routing, host and agent/squad contracts,

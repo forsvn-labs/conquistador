@@ -7,7 +7,8 @@ those roles, state the gap instead of assigning unrelated production or review w
 - Worker selects the relevant declared production outcome. Load a production workflow only when
   the request needs composition. Keep review-only outcomes in the advisor role.
 - Advisor critiques from `decision-panel`, `knowledge-review`, or `fresh-eyes-review`
-  and a named review workflow. Advisor does not ghost-write the artifact.
+  using the supplied worker artifact. Advisor does not run production workflows or ghost-write the artifact.
+- A production composition may name a later review. The worker stops at that handoff and passes the artifact to the advisor instead of loading an undeclared review skill.
 - One handoff per run: worker then advisor. Worker cannot self-approve. Advisor cannot
   send, publish, spend, or approve.
 - If the host cannot isolate the two roles, follow the squad sequential fallback. That

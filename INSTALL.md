@@ -1,144 +1,164 @@
-# Install and use the local candidate
+# Install Conquistador
 
-The portable ZIP can be installed directly through a compatible host's local-plugin controls.
-It contains no runtime, catalog, Eval Lab, host/agent staging packages, or staging helper.
-Use the complete distribution for the helper commands and optional modules below.
+Use the complete 0.1.0 distribution ZIP or this source checkout. Extract the ZIP, open a terminal
+in its root, and use Node 24 for the installation helper. The generated skill package itself needs
+no Node process or Conquistador service when the host loads it.
 
-Run the commands below from the complete distribution root. The distribution
-version is 0.1.0; individual skill, module, and schema versions retain their own histories.
+This version is not published to a package registry. Do not use an unverified package with a
+similar name. The intended source repository is
+[forsvn-labs/conquistador](https://github.com/forsvn-labs/conquistador); remote availability is
+still pending. Use the provided local artifact until publication is verified.
 
-## Portable plugin and standalone skills
+## Recommended: one entry point with every method
 
-The root `plugin.json`, `.claude-plugin/`, `.codex-plugin/`, and `skills/` form the portable plugin.
-Use the host's local-plugin installation feature with that directory. For a skills-only host,
-copy the desired `skills/<name>/` directory into its documented skills directory.
-
-Node is needed only for the staging helper below. Replace destinations with dedicated absolute
-paths outside this distribution. The helper never connects to a host account or network.
+Choose a new dedicated directory in your host's configured skills location, or stage locally and
+import it through the host's skill controls:
 
 ```sh
-node tools/install.mjs list
-node tools/install.mjs install plugin /absolute/path/conquistador-plugin
-node tools/install.mjs install skill:write-copy /absolute/path/write-copy-install
-node tools/install.mjs upgrade plugin /absolute/path/conquistador-plugin
-node tools/install.mjs remove plugin /absolute/path/conquistador-plugin
+node tools/install.mjs install conquistador /absolute/path/to/skills/conquistador
 ```
 
-An individual install contains `skills/<name>/` and the MIT license. Point the host at that skill
-folder. Upgrades and removal require a matching receipt and unchanged files. If you edited an
-install, preserve it and stage a fresh directory. Never put user artifacts inside an owned install.
+This installs a root `SKILL.md`, Conquistador's operating contract, all 38 outcome methods under
+`library/`, and the optional proactive helper. Point the host at that root `SKILL.md`. Start a new
+host session and select Conquistador. Ask `/conquistador` for your outcome. If the host uses a
+named-skill picker or `$conquistador`, use that spelling for the same entry point.
 
-## Eve, official Grok Bot, single agent, and squad
+For a Codex installation whose skill directory is `$CODEX_HOME/skills`, choose
+`$CODEX_HOME/skills/conquistador`; the usual default is `$HOME/.codex/skills/conquistador`.
+Other agents may use different project or user skill directories. Use the directory documented
+by the installed host rather than treating the staging command as host activation.
+
+The parent chooses and composes methods, including engineering methods when the request needs
+them. It loads the smallest relevant context. It does not make users install siblings, download
+methods at runtime, or approve internal routing steps. A missing tool or authorization is reported
+at the operation that needs it; installing methods does not grant those capabilities.
+
+## Plugin and standalone methods
+
+A plugin-capable host can load the full plugin directory:
 
 ```sh
-node tools/install.mjs install eve /absolute/path/conquistador-eve
-node tools/install.mjs install grok-bot /absolute/path/conquistador-grok
+node tools/install.mjs install plugin /absolute/path/conquistador-plugin
+```
+
+The package contains the Claude and Codex plugin manifests, method library, icon and proactive
+helper. Use your host's local-plugin controls to activate it. Plugin hosts can namespace skill
+commands, so select the Conquistador parent rather than assuming an exact slash alias is universal.
+The recommended single-skill install above avoids requiring users to navigate sibling methods.
+
+Advanced users can still install an individual outcome:
+
+```sh
+node tools/install.mjs install skill:write-copy /absolute/path/write-copy-install
+```
+
+That command stages `skills/write-copy/`. It is not the complete Conquistador entry point.
+
+## Upgrade and remove
+
+Run these commands from the complete distribution, using the same mode and destination:
+
+```sh
+node tools/install.mjs upgrade conquistador /absolute/path/to/skills/conquistador
+node tools/install.mjs remove conquistador /absolute/path/to/skills/conquistador
+```
+
+The installer checks ownership and file hashes. It refuses to overwrite or remove a modified
+installation. Keep user outputs and local configuration outside the owned installation. To retain
+an edited install, stage the new version at a different path and switch the host to it.
+`node tools/install.mjs list` shows all install modes. No command changes host account settings.
+
+## Agent harnesses
+
+```sh
 node tools/install.mjs install single-agent /absolute/path/conquistador-agent
 node tools/install.mjs install squad /absolute/path/conquistador-squad
 ```
 
-For Eve, merge the staged `agent/` instructions and skills into an operator-owned Eve application.
-For the official Grok Bot app, use the staged bot profile and packaged skills through the app's
-available import controls. This package does not establish that a specific Grok Bot version accepts
-that import; a missing import capability remains a compatibility blocker.
+The single-agent install contains `agent/agent.json` and all declared methods under `agent/skills/`.
+Load the parent first. The squad contains separate worker and advisor contracts and their methods.
+The worker produces; the advisor reviews. The host must create separate contexts for independent
+review. Otherwise follow `sequential-fallback.md` and identify the review as the same context.
+These are portable contracts, not native agent launchers or separately hosted accounts.
 
-For a single agent, load `agent/agent.json` and its parent-only `agent/skills/` directory in a host that
-can enforce the declared role. Optional sibling outcomes require their own standalone installs. For a squad, load `squad.json`, the advisor and worker contracts, and their separate
-skills directories. A host without separate agent contexts uses `sequential-fallback.md`; that
-fallback does not prove independent review. These files are portable contracts, not a native host
-agent launcher. Local staging does not prove host execution.
+The `eve` and `grok-bot` modes stage experimental import packages. Import compatibility and actual
+host execution remain unverified. They are not advertised as supported native installations.
 
-## Optional runner
+## Proactive help
 
-Use Node 24. Install the pinned runtime dependency with your package manager:
+[Proactive help](docs/PROACTIVE.md) describes the opt-in local helper and its three host events.
+Configure it outside the installer-owned directory, then have the host invoke it on the selected
+event and pass its returned instructions to Conquistador. The helper cannot register hooks, run a
+schedule, access a provider, or authorize an action. Installation leaves it disabled.
+
+## Optional runtime, terminal chat and MCP
+
+The runtime is optional. Coding-agent skills use the host's model and tools. To use durable
+playbooks and HTTP/MCP access, install the runtime dependency from the full distribution:
 
 ```sh
 bun install
 node runtime/bin/conquistador.js version
-node runtime/bin/conquistador.js --help
 node runtime/bin/conquistador.js init
 node runtime/bin/conquistador.js doctor
 ```
 
-The launcher runs the shipped compiled JavaScript. No build or experimental Node flag is required
-in this distribution. To develop or compile the runtime separately:
+Configure an exact supported model and supply its credential through the configured environment
+variable. Do not put credentials in chat or Git. Then:
 
 ```sh
-cd runtime
-bun install
-bun run build
-bun run typecheck:public
-bun run test:public
-```
-
-The generated configuration has a placeholder model. Set a supported, exact model and its credential
-environment variable privately before `serve`. Credentials do not belong in chat, Git, or command
-arguments. `doctor` reports missing setup; it does not prove live model access.
-
-```sh
-node runtime/bin/conquistador.js route --intent "improve organic content"
 node runtime/bin/conquistador.js serve
 ```
 
-The service accepts structured playbook input. Read the runtime README for the HTTP contract and
-separate operator review and action credentials. Use `chat` to collect structured input through
-the service; the `eval` CLI verb remains reserved. A runner without an authenticated
-judgment provider pauses for judgment rather than inventing an artifact.
-
-## Locally built runtime container
-
-The included Dockerfile builds from this complete distribution root on pinned Node 24.
-Run `docker build -t conquistador:0.1.0 .` here. The image runs
-as the `node` user and uses `/data` as its writable working directory. Mount a persistent
-volume there before setup. Use the exact locally built image:
+In another terminal:
 
 ```sh
+node runtime/bin/conquistador.js chat --url http://127.0.0.1:4317 \
+  --intent "content intelligence loop" --product "Example product" \
+  --audience "Independent designers" --channel "Email" --goals "Qualified trials"
+```
+
+For an MCP-capable host, configure a stdio server with this command and arguments, replacing the
+absolute path. This example does not automatically start the HTTP service:
+
+```json
+{
+  "command": "node",
+  "args": ["/absolute/path/conquistador/runtime/bin/conquistador.js", "mcp", "--url", "http://127.0.0.1:4317"]
+}
+```
+
+The four MCP tools run a supported playbook, list artifacts, read an artifact and cancel work.
+They do not approve work or publish. Supply `CONQUISTADOR_CHAT_TOKEN` in the host's secret settings
+only if bearer transport is enabled. Never provide human review/action tokens to the agent.
+See [runtime setup and review](runtime/README.md) for the service configuration and authority flow.
+Skill-only routes give guidance; they are not silently turned into executable playbooks.
+
+The supplied npm tarball can also install the CLI into a dedicated prefix:
+
+```sh
+npm install --prefix /absolute/path/conquistador-cli --ignore-scripts /absolute/path/forsvn-conquistador-0.1.0.tgz
+/absolute/path/conquistador-cli/node_modules/.bin/conquistador --help
+```
+
+## Container
+
+Build the provided Dockerfile locally; no published image is claimed:
+
+```sh
+docker build -t conquistador:0.1.0 .
 docker volume create conquistador-data
 docker run --rm -v conquistador-data:/data conquistador:0.1.0 init
 docker run --rm -v conquistador-data:/data conquistador:0.1.0 doctor
 ```
 
-Configure the persisted file and provider environment before running `serve`. A bind
-mount must grant write access to the image's `node` user. Creating a local image or
-volume is not evidence of a published registry image or live provider support.
+The image runs as the `node` user in writable `/data`. Configure the volume and model environment
+before running the service. The default service binds loopback inside its host; exposing it outside
+the container requires the runtime's documented authenticated single-node/TLS configuration.
+A bind mount must be writable by the image's user. Local container creation is not registry publication.
 
-## Catalog and Eval Lab
+## Integrations and development
 
-The catalog contains typed contracts and provider adapters. An operation is unsupported until its
-required support evidence and connection authority exist. Installing this archive does not promote
-fixture evidence to live support.
-
-```sh
-cd catalog
-bun install
-bun run typecheck
-bun run test:public
-bun run catalog:check
-```
-
-The public catalog suite excludes the private G4 evidence and Git candidate-build tests.
-Those remain in the full maintainer suite.
-
-The optional Eval Lab is a source SDK with examples, schemas, graders, and tests:
-
-```sh
-cd evals
-bun install
-bun run test:contracts
-```
-
-Repository-maintainer inventory and release-evidence commands require private source authorities
-and are not supported from the public distribution. Live benchmark execution needs a separately
-configured provider, exact run inputs and budget, and review evidence. Local tests are not such runs.
-
-## Release limits
-
-No host listing, provider receipt, human verdict, signature identity, or public promotion is created
-by these commands. The candidate remains NO-GO until its applicable acceptance evidence is complete.
-
-## Edit and package the public source
-
-The complete distribution includes editable sources and contributor instructions. See
-[CONTRIBUTING.md](CONTRIBUTING.md) for root bootstrap, build, default public tests, and packaging
-from a clean public Git commit. Those commands need no private workspace or historical ledger.
-The resulting package record is unbound and does not authorize publication.
+[Services](docs/SERVICES.md) distinguishes methods, host tools, catalog adapters and Eval Lab.
+[CONTRIBUTING.md](CONTRIBUTING.md) covers root bootstrap, build, tests and packaging without private
+release records. A package or install receipt is not live-provider evidence or release approval.

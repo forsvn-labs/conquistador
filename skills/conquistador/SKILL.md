@@ -150,9 +150,8 @@ must never be required to complete the current job.
 
 ## Version and updates
 
-This skill and each outcome skill carry a `metadata.version` in their frontmatter. The package records
-one version per skill in `VERSIONS.md`; treat that file as the manual reference for the current version
-of this skill and the others, and treat each skill's frontmatter as its authoritative version. Updates
+This skill and each outcome skill carry a `metadata.version` in their frontmatter. Each skill's frontmatter is its authoritative method version. `VERSIONS.md` explains the distinction
+between method, module and product versions. Updates
 are installed by the host, never fetched at runtime, and are never required for this skill to work.
 
 

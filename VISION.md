@@ -1,8 +1,9 @@
 # Product principles
 
-Conquistador turns product-marketing judgment into reusable skills and agent contracts. Users ask
-for an outcome; the parent selects the smallest relevant method and returns useful work.
-Standalone skills, host packages and agent/squad contracts are explicit installation choices.
+Conquistador is one product entry point, `/conquistador`. Users ask for an outcome; the parent owns
+routing, composition, delivery and review across product, marketing, growth and engineering. The
+default skill install includes the full method library. Individual skills and role packages remain
+advanced options rather than prerequisites users must manage.
 
 Methods must be original, useful without a private workspace, and clear about their sources and
 limits. Runtime, typed catalog and Eval Lab are optional modules. Hosts supply models, credentials,
@@ -15,3 +16,5 @@ No telemetry or automatic background collection is part of that feedback flow.
 
 The editable source identifies as 0.1.0 and remains unbound and unpublished. Local packaging does
 not supply live host evidence, output quality, rights approval, or release authorization.
+
+Proactive host events are opt-in. Local reminders can direct an active host back to Conquistador; they do not create background services, schedules or external action authority.

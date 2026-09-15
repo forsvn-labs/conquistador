@@ -41,9 +41,9 @@
     "role": { "type": "string", "enum": ["advisor", "worker"] },
     "displayName": { "type": "string", "minLength": 1 },
     "productName": { "const": "conquistador" },
-    "pluginVersion": { "const": "1.0.0" },
+    "pluginVersion": { "const": "0.1.0" },
     "canonicalSkill": { "const": "conquistador" },
-    "canonicalSkillRoot": { "const": "skills/skills/conquistador" },
+    "canonicalSkillRoot": { "enum": ["skills/conquistador", "agent/skills/conquistador", "advisor/skills/conquistador", "worker/skills/conquistador"] },
     "installClass": { "const": "candidate-only" },
     "publicListing": { "const": false },
     "cleanHostProof": { "const": false },
@@ -62,7 +62,7 @@
     },
     "mayLoadWorkflows": {
       "type": "array",
-      "minItems": 1,
+      "minItems": 0,
       "uniqueItems": true,
       "items": { "type": "string", "minLength": 1 }
     },

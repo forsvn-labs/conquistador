@@ -5,9 +5,9 @@
   "role": "advisor",
   "displayName": "Conquistador advisor",
   "productName": "conquistador",
-  "pluginVersion": "1.0.0",
+  "pluginVersion": "0.1.0",
   "canonicalSkill": "conquistador",
-  "canonicalSkillRoot": "skills/skills/conquistador",
+  "canonicalSkillRoot": "skills/conquistador",
   "installClass": "candidate-only",
   "publicListing": false,
   "cleanHostProof": false,
@@ -24,18 +24,14 @@
     "knowledge-review",
     "fresh-eyes-review"
   ],
-  "mayLoadWorkflows": [
-    "creative-asset-review",
-    "content-performance-review"
-  ],
+  "mayLoadWorkflows": [],
   "proseOnlyWorkflows": [],
   "undeclaredSiblings": "fail-closed",
   "absentDeclaredSiblings": "degrade-parent-only",
   "capabilities": {
     "requested": [
       "host model invocation",
-      "assigned advisor skills",
-      "named review workflows on the parent tree"
+      "assigned advisor skills"
     ],
     "missing": [
       "authority to send, publish, spend, or write externally",
@@ -48,12 +44,11 @@
     "inputs": [
       "current artifact from the worker",
       "fixed review criteria",
-      "assigned advisor skill",
-      "named review workflow"
+      "assigned advisor skill"
     ]
   },
   "results": {
-    "contract": "Critique with PASS/FAIL, dissent, and a reversal condition. Not a substitute for human approval. Do not replace the worker artifact with a ghost-written draft."
+    "contract": "Critique the supplied worker artifact using a declared review skill. Return defects, evidence gaps and revision guidance. Do not execute a production workflow, generate replacement deliverables or approve external actions."
   },
   "delegation": {
     "maxDelegationsPerRun": 0,

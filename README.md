@@ -1,24 +1,47 @@
-# Conquistador v0.1.0
+# Conquistador 0.1.0
 
-Conquistador provides portable marketing skills, agent contracts, an optional durable playbook
-runner, a typed tool catalog, and an Eval Lab. Ask for an outcome or install a skill on its own.
+Ask `/conquistador` for an outcome. Conquistador selects the relevant methods, produces the work,
+reviews it, and helps decide the next step. It includes 38 outcome capabilities for product,
+research, marketing, growth, creative work, engineering and review.
 
-This is an unpublished local release candidate. The complete distribution includes all source
-modules and local installation tools. The portable ZIP contains only the plugin and its skills. Live host compatibility, model output quality, provider support, human review,
-and publication are not proved by its existence or by local tests.
+Start with [installation](INSTALL.md), then use requests such as:
 
-Start with [installation and local use](INSTALL.md). The portable plugin needs no service or package
-manager. The optional runner requires Node 24 and user-owned model access. External actions require
-explicit human authority. Unsupported connections stop without dispatch.
+```text
+/conquistador Turn this product into a launch package.
+/conquistador Improve our onboarding flow and implement the agreed changes.
+/conquistador Review these campaign results and prepare the next experiment.
+```
 
-The distribution is MIT. The separate desktop experiment, private research, internal release
-records, and landing site are excluded. Internal module, skill, and contract versions can differ
-from the public distribution version; their history is retained.
+`/conquistador` is the product entry point. Hosts choose their invocation syntax: a slash command,
+a named-skill picker, `$conquistador`, or a request to the Conquistador agent. The default install
+bundles all methods. Users do not need to choose individual skills or manage routing.
 
-## Develop the product
+## Choose where it runs
 
-The complete distribution is editable source as well as an installable package. The portable ZIP
-omits the runtime and development commands below. In the complete distribution with Node 24, run `npm run bootstrap`,
-`npm run build`, and `npm test` from the root. [CONTRIBUTING.md](CONTRIBUTING.md) explains local
-packaging from an exact public Git commit. [AGENTS.md](AGENTS.md) gives contributor instructions.
-These commands do not depend on private workspace records or authorize a release.
+| Interface | What users get | What the host provides |
+| --- | --- | --- |
+| Coding-agent skill, recommended | One Conquistador entry point and the complete method library | Model, project files, tools and permission UI |
+| Plugin | The same methods in a compatible plugin package | Plugin activation and model/tools |
+| Single agent or advisor/worker squad | Portable role contracts and bundled methods | Agent execution and, for independent review, separate contexts |
+| Optional Node 24 runtime | Durable supported playbooks, HTTP sessions, terminal chat and MCP artifact access | Configured model and separately authorized integrations |
+| Opt-in host-event helper | Reminders to resume work, review a deliverable or assess new results | Event invocation and delivery of the reminder to Conquistador |
+
+[Services and platform support](docs/SERVICES.md) explains the capabilities, prerequisites and
+limits. [Proactive help](docs/PROACTIVE.md) documents the local event helper. Installing a skill
+starts no service, enables no hooks, and sends no data. Publication, spend and external writes
+require the applicable human authority.
+
+## Distribution status
+
+This source is MIT and packageable as version 0.1.0. It is currently unpublished. No npm registry
+package, hosted service, native app-store listing or verified Eve/Grok integration is offered.
+The optional runtime executes its declared playbooks; it does not turn every skill into an
+automated workflow. Local tests establish implementation behavior, not live-provider quality or
+human release acceptance.
+
+Intended public source: [forsvn-labs/conquistador](https://github.com/forsvn-labs/conquistador).
+Remote setup is not confirmed by this package. The private source-history archive and landing
+repository are not dependencies. No private workspace is needed to use or develop this product.
+
+For development, use Node 24 and run `npm run bootstrap`, `npm run build`, and `npm test`.
+[CONTRIBUTING.md](CONTRIBUTING.md) covers packaging; [AGENTS.md](AGENTS.md) covers contributions.

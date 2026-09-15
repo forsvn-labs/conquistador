@@ -84,11 +84,13 @@ no evidence of human review, live provider operation, or native host compatibili
 
 ## Verify locally
 
-With Node 24, run:
+From the complete distribution or source checkout with Node 24, run:
 
 ```sh
 node --test tools/proactive.test.mjs
 ```
+
+Staged skill, plugin and agent installs contain the helper and guide, not this test file.
 
 Tests use local synthetic configurations and child processes. They cover disabled defaults,
 event selection, validation, bounded reads and output, non-regular files, ignored stdin,

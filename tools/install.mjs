@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url';
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const receiptName = '.conquistador-install.json';
 const [command, mode, destination, ...extra] = process.argv.slice(2);
-const modes = ['plugin', 'eve', 'grok-bot', 'single-agent', 'squad'];
+const modes = ['conquistador', 'plugin', 'eve', 'grok-bot', 'single-agent', 'squad'];
 const readJson = path => JSON.parse(readFileSync(path, 'utf8'));
 const fail = message => { throw new Error(message); };
 
@@ -69,37 +69,48 @@ function stage(mode, target) {
   };
   const role = (source, into) => {
     const agent = readJson(join(root, source));
-    copy(source, `${into}/agent.json`);
+    agent.canonicalSkillRoot = `${into}/skills/conquistador`;
+    mkdirSync(join(target, into), { recursive: true });
+    writeFileSync(join(target, into, 'agent.json'), JSON.stringify(agent, null, 2) + '\n');
     for (const name of new Set(['conquistador', ...agent.mayLoadSkills])) skill(name, `${into}/skills`);
   };
   copy('LICENSE');
   copy('NOTICE.md');
-  if (mode === 'plugin') {
+  if (['conquistador', 'plugin', 'single-agent'].includes(mode)) {
+    copy('tools/proactive.mjs');
+    copy('docs/PROACTIVE.md');
+  }
+  if (mode === 'conquistador') {
+    copy('tools/entrypoint/SKILL.md', 'SKILL.md');
+    copy('skills', 'library');
+    copy('skills/conquistador/agents/openai.yaml', 'agents/openai.yaml');
+  } else if (mode === 'plugin') {
     for (const path of ['plugin.json', '.claude-plugin', '.codex-plugin', 'skills', 'assets']) copy(path);
   } else if (mode.startsWith('skill:')) {
     const name = mode.slice(6);
     skill(name);
   } else if (mode === 'eve') {
     copy('hosts/eve/instructions.md', 'agent/instructions.md');
-    copy('hosts/eve/host.json', 'host.json');
+    writeFileSync(join(target, 'host.json'), JSON.stringify({ ...readJson(join(root, 'hosts/eve/host.json')), canonicalSkillsRoot: 'agent/skills' }, null, 2) + '\n');
     copy('hosts/eve/capabilities.md', 'capabilities.md');
     copy('skills', 'agent/skills');
   } else if (mode === 'grok-bot') {
     copy('hosts/grok-bot/bot-profile.md', 'bot-profile.md');
-    copy('hosts/grok-bot/host.json', 'host.json');
+    writeFileSync(join(target, 'host.json'), JSON.stringify({ ...readJson(join(root, 'hosts/grok-bot/host.json')), canonicalSkillsRoot: 'packaged-skills' }, null, 2) + '\n');
     copy('hosts/grok-bot/capabilities.md', 'capabilities.md');
     copy('skills', 'packaged-skills');
   } else if (mode === 'single-agent') {
-    copy('agents/conquistador/agent.json', 'agent/agent.json');
-    skill('conquistador', 'agent/skills');
+    role('agents/conquistador/agent.json', 'agent');
   } else if (mode === 'squad') {
     copy('agents/squad/squad.json', 'squad.json');
     copy('agents/squad/sequential-fallback.md', 'sequential-fallback.md');
     role('agents/squad/advisor.json', 'advisor');
     role('agents/squad/worker.json', 'worker');
   } else fail(`Unknown install mode: ${mode}`);
-  const usage = mode === 'single-agent'
-    ? 'Load agent/agent.json and agent/skills/conquistador in your host. This parent-only package does not install optional sibling outcomes. Install a requested outcome separately when needed.'
+  const usage = mode === 'conquistador'
+    ? 'Load SKILL.md as the Conquistador skill. It routes through library/conquistador and all bundled outcome methods. Start with /conquistador, or the equivalent named-skill invocation in your host. Proactive help is opt-in; read docs/PROACTIVE.md.'
+    : mode === 'single-agent'
+    ? 'Load agent/agent.json and agent/skills/conquistador in your host. All declared outcome skills are bundled; the parent selects only the methods needed for the request.'
     : mode === 'squad'
       ? 'Load squad.json and each member contract with its own skills directory. Read sequential-fallback.md if your host cannot create separate contexts.'
       : mode === 'eve'
