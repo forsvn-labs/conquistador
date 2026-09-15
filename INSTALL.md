@@ -88,6 +88,21 @@ host names are in the [skills CLI source documentation](https://github.com/verce
 This guide uses an authenticated clone plus a local install so the source branch and commit can be
 checked before installation.
 
+## Optional private release ZIP
+
+After the maintainer ships the private `v0.1.0` prerelease, an authenticated GitHub account with
+repository access can download its packaged ZIP. Choose a fresh download directory:
+
+```sh
+gh release download v0.1.0 --repo forsvn-labs/conquistador --pattern conquistador-0.1.0.zip --dir /absolute/path/conquistador-download
+```
+
+Expect `conquistador-0.1.0.zip` in that directory. Extract it into a new folder, locate the root
+containing `SKILL.md`, and use that root as the source in quick-start step 3. This is a private
+release asset, not a public npm registry package. The release also supplies the npm tarball,
+`SHA256SUMS` and `assembly.json` for package identity and integrity checks. A missing release or
+asset means this route is not available yet; use the authorized branch clone or supplied ZIP.
+
 ## Update or remove an installation
 
 The tool that created a copy owns its lifecycle. Updating the source clone does not update an
