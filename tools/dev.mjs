@@ -22,7 +22,7 @@ if (task === 'bootstrap') {
   run(npm, ['run', 'typecheck:public'], resolve(root, 'runtime'));
   run(npm, ['run', 'typecheck'], resolve(root, 'catalog'));
 } else if (task === 'test') {
-  run(process.execPath, ['--test', 'tools/dev.test.mjs', 'tools/install.test.mjs', 'tools/proactive.test.mjs', 'tools/plugin-contracts.test.mjs']);
+  run(process.execPath, ['--test', 'tools/dev.test.mjs', 'tools/install.test.mjs', 'tools/proactive.test.mjs', 'tools/plugin-contracts.test.mjs', 'tools/setup.test.mjs', 'tools/setup-entry.test.mjs']);
   for (const module of ['runtime', 'catalog', 'evals']) run(npm, ['test'], resolve(root, module));
   run(npm, ['run', 'catalog:check'], resolve(root, 'catalog'));
   run(npm, ['run', 'example:local'], resolve(root, 'evals'));

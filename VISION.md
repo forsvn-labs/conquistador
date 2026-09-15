@@ -5,8 +5,9 @@ growth, creative work, engineering and review. Users ask for an outcome. The par
 necessary methods and owns delivery within the user's scope. The default installation carries
 the complete library; separate skill or role packages are optional.
 
-Use the user's existing coding agent and skill/plugin manager. Native adapters load the same
-methods. Conquistador prepares routine task tools on demand through the host, within its
+Setup should start with where the user works, not a list of package formats. Give each route
+an install, status, update and uninstall path. A managed complete skill in the existing coding
+agent is the default. Native adapters load the same methods. Conquistador prepares routine task tools on demand through the host, within its
 permissions. Hosts provide models, credentials, connections and human decisions. Compact installs include usage and review guides so users can start work in their host.
 The complete distribution supplies installation management and optional development commands.
 The runtime, typed catalog and Eval Lab are optional modules.

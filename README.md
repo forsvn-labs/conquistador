@@ -20,60 +20,34 @@ These are method contracts, not guarantees of quality or measured lift. See
 [how to use Conquistador](docs/USAGE.md) for task inputs and expected deliverables, and
 [capabilities and tools](docs/SERVICES.md) for implementation limits.
 
-## Quick start
+## Start here
 
-Use the skills.sh route in an existing coding-agent project. You need a working host, Node/npm for
-the installer, and either access to the private repository or a supplied private distribution.
-The installation guide uses Node 24. No runtime service or integration account is required for
-skill-only work on supplied files.
+Ask your coding agent:
 
-1. Ask your existing coding agent to perform setup:
+```text
+Install Conquistador in this project from the private forsvn-labs/conquistador
+repository, branch dogfood/0.1.0. Follow INSTALL.md, use this host's recommended
+setup and show me how to uninstall it.
+```
 
-   ```text
-   Install Conquistador into this project using INSTALL.md from the private
-   forsvn-labs/conquistador repository, branch dogfood/0.1.0. Use a fresh
-   dedicated clone and the recommended skills.sh copy install. Verify the
-   source commit and host discovery. Keep project outputs outside the install.
-   ```
+Or open [guided setup](INSTALL.md). Choose where you work; it prepares the right package and
+provides status, update and uninstall instructions. A coding-agent skill is the default. Plugins,
+MCP and custom agent hosts are optional choices in the same guide.
 
-   Your GitHub account needs repository access. Complete any account sign-in or host approval
-   yourself. [Installation](INSTALL.md#recommended-quick-start) has the exact commands and a
-   fresh-distribution alternative.
+Start a fresh host session and give Conquistador a task:
 
-2. Start a new host session and select Conquistador. Depending on the host, use `/conquistador`,
-   `$conquistador`, its skill picker, or `/conquistador:conquistador` in the Claude plugin.
-   Confirm the host finds the installed skill.
+```text
+/conquistador Use docs/product.md and docs/audience.md to prepare our beta
+launch. Deliver landing-page copy, one launch email and a two-week campaign
+plan in docs/launch/. Mark claims that need evidence. Keep this as a draft.
+```
 
-3. Give it a real task with source material and a clear finish:
+Expect finished copy and a plan with owners, timing, measurement and open evidence gaps.
+[Usage and examples](docs/USAGE.md) explain inputs, review and follow-up requests.
 
-   ```text
-   /conquistador Use docs/product.md and docs/audience.md to prepare our beta
-   launch. Deliver landing-page copy, one launch email and a two-week campaign
-   plan in docs/launch/. Mark claims that need evidence. Keep this as a draft.
-   ```
-
-   Expect finished copy and a plan with owners, timing, measurement and open evidence gaps.
-   Review the work before using it. [The usage guide](docs/USAGE.md) explains follow-up requests.
-
-## Choose an installation method
-
-| Choose | When it fits |
-| --- | --- |
-| [skills.sh, recommended](INSTALL.md#recommended-quick-start) | You want one entry point in your existing coding agent |
-| [Claude or Codex plugin](INSTALL.md#claude-code-plugin-and-agent) | You prefer host-managed plugins; Claude also includes a native agent definition |
-| [Agent Plugins](INSTALL.md#agent-plugins-and-other-hosts) | Your client imports the Agent Plugins 1.0.0 format |
-| [Compact local skill](INSTALL.md#compact-local-installation) | You want a smaller staged folder without development modules |
-| [Portable agent contracts](INSTALL.md#portable-agent-harnesses) | You operate a host adapter for a single agent or advisor/worker roles |
-| [Optional runtime and MCP](INSTALL.md#optional-runtime-terminal-chat-and-mcp) | You need durable supported playbooks, HTTP sessions or artifact access |
-
-Install one route first. The skill library does not require Docker, MCP, hooks or every provider.
-Conquistador handles routine missing-tool setup through the host when a task needs it.
-Credentials, paid services and external actions still need the applicable human authority.
-
-For visual work, ask for a [Lavish preview](docs/PREVIEW.md) and annotate the result. The agent
-prepares the optional CLI on demand and applies feedback to the source. The
-[proactive helper](docs/PROACTIVE.md) is opt-in and requires host events. Installing a skill starts
-no service and enables no hooks.
+You do not need to install every optional tool. Conquistador prepares task prerequisites through
+the host when needed. For visual feedback, ask for a [Lavish preview](docs/PREVIEW.md). Credentials,
+paid services and external actions retain their applicable human authority.
 
 ## Private use and current limits
 

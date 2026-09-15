@@ -10,8 +10,10 @@ guard. Start with [one real task](docs/DOGFOOD.md) in an existing coding-agent h
 2. Check on-demand tool setup and the Lavish annotation/revision loop.
 3. Record concrete failures privately and fix them before adding more platforms or features.
 
-The bundled methods, native plugin metadata, Claude agent, portable roles and installer are
-implemented. Optional runtime/MCP/catalog/Eval modules are available when a task needs them.
+The guided setup coordinates local install, status, update and uninstall. Verify the chosen
+host after local preparation. Experimental Grok/Eve imports stay outside ready installation
+claims. The bundled methods, native plugin metadata, Claude agent, portable roles and installer
+are implemented. Optional runtime/MCP/catalog/Eval modules are available when a task needs them.
 Runtime playbooks execute their declared graphs; bundled skill availability does not make every
 method an executable runtime workflow.
 

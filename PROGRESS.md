@@ -11,7 +11,7 @@ source identity and are not rebuilt. Installing a new package does not update ex
 | Area | Available behavior |
 | --- | --- |
 | Entry point | `/conquistador` selects from all 38 outcome methods, including engineering requests |
-| Installation | Complete root skill bundle, owned install/upgrade/remove with edited-tree protection, contained usage guides in each staged mode, skills CLI layout, Claude/Codex marketplaces and Agent Plugins 1.0.0 metadata |
+| Installation | Guided setup and one local install/status/update/uninstall interface, complete managed skill in host-specific project folders, owned-file protection, plugin steps, MCP connector configuration and harness staging |
 | Agents | One native Claude agent and portable single-agent/squad contracts; the squad advisor has a review-only role |
 | Task setup and previews | Host-managed prerequisites and pinned cached Lavish AXI launchers with command telemetry opt-out |
 | Proactive advice | Opt-in static reminders for session-start, before-delivery and results-updated; no automatic hook registration or scheduler |
@@ -25,6 +25,14 @@ The preview instructions are host procedures; they do not add a runtime launcher
 annotation consumer. Run artifacts and audit state still persist when automatic learning is off.
 
 ## Verification
+
+The guided setup follow-up passes Node 24 build and all 533 default tests: 32 tooling, 278 runtime,
+160 catalog and 63 Eval Lab. Thirteen setup tests cover ownership, host paths, MCP origins,
+experimental handoffs and nested source/project layout. An additional executable test proves
+setup works without runtime libraries or dependencies. A real terminal session completed skill
+installation followed by path-only status, update and uninstall. All 39 method roots were present;
+the temporary installation was removed. No native host registration or live connection is implied.
+Earlier checks below retain their original scope.
 
 Earlier implementation checks passed the Node 24 build and 518 default tests. Installation checks
 exercised the skills CLI on seven coding-agent targets. Local Bun/npm probes exercised pinned

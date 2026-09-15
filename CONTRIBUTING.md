@@ -1,7 +1,7 @@
 # Develop Conquistador
 
 These instructions apply to the complete product source or extracted ZIP distribution. Compact installs made by
-`tools/install.mjs` contain methods and usage documentation. Run build/test/package commands from
+`tools/setup.mjs` or `tools/install.mjs` contain methods and usage documentation. Run build/test/package commands from
 the complete distribution, not a compact install.
 
 Use Node 24, npm, and Git. Work directly in this repository; no private workspace or historical
@@ -69,3 +69,14 @@ own private authority requirements and are not part of `npm test` or the public 
 
 The commands have been exercised on macOS with Node 24 and are suitable for the included Linux CI
 job. Other operating systems and CPU architectures still require their own observed verification.
+
+## Setup changes
+
+`tools/setup.mjs` coordinates local install, status, update and uninstall. It delegates skill,
+plugin and role copies to the existing owned installer. MCP connector configuration is separate
+from runtime service and data ownership. The executable's `setup` command loads this coordinator
+without importing runtime dependencies. Keep help and local file setup usable before bootstrap.
+
+Run the setup lifecycle tests when changing host paths or removal behavior. Host registration
+commands are instructions, not hidden subprocesses. Test files and synthetic fixtures cannot
+prove native registration or service connectivity.

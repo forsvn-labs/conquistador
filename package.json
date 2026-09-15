@@ -54,6 +54,7 @@
     "bootstrap": "node tools/dev.mjs bootstrap",
     "build": "node tools/dev.mjs build",
     "test": "node tools/dev.mjs test",
-    "package": "node tools/package.mjs"
+    "package": "node tools/package.mjs",
+    "setup": "node tools/setup.mjs"
   }
 }

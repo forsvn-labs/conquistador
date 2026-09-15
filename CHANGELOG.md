@@ -4,6 +4,14 @@ No public release is claimed. See [VERSIONS.md](VERSIONS.md) for independent pro
 versions. Verification establishes the stated local scope; live provider operation, useful model
 output, human acceptance, rights disposition and release authority require separate evidence.
 
+## 0.1.0 guided setup follow-up
+
+- Added one guided setup command and matching local install, status, update and uninstall actions.
+- Made the complete coding-agent skill the default, with optional plugin, MCP and harness choices.
+- Separated local package preparation from host activation and preserved user data during removal.
+- Shortened the quick start and moved platform commands and manual procedures into separate guides.
+- Kept the private release's frozen artifacts unchanged; this follow-up belongs to current source.
+
 ## 0.1.0 private packaging integration
 
 - Clarified product value, installation choices, first requests, review and private dogfood use.
