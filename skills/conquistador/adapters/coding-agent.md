@@ -8,6 +8,8 @@ Use the repository as context, not as a required operating system.
 - Use existing project paths. If none exist and persistence is valuable, prefer
   `docs/conquistador/experience/marketing.md`.
 - Do not create plan, manifest, graph, review, or session-state files for routine work.
+- Prepare missing local tools for the requested task under [the setup standard](../standards/setup.md).
+  Reuse the host's package manager and permissions; keep auxiliary CLIs out of project dependencies.
 - Treat browser, image generation, publishing, and analytics connectors as optional tools.
 - Ask for approval immediately before any send, publish, spend, credential, or external write.
 

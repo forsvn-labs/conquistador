@@ -4,6 +4,10 @@ Ask `/conquistador` for an outcome. Conquistador selects the relevant methods, p
 reviews it, and helps decide the next step. It includes 38 outcome capabilities for product,
 research, marketing, growth, creative work, engineering and review.
 
+Your coding agent can perform the installation for you. Once Conquistador is available, ask for
+the outcome; it handles routine missing-tool setup as needed. You do not need to install each
+method or optional utility.
+
 Install with the [skills CLI](https://www.skills.sh/docs) from a fresh extracted distribution:
 
 ```sh
@@ -44,7 +48,8 @@ require the applicable human authority.
 
 For visual review, Conquistador uses [Lavish AXI](docs/PREVIEW.md) through the host's CLI. Users
 stay with `/conquistador`; the agent prepares the preview and handles annotations. Lavish is an
-optional separate installation. Feedback remains local unless the user explicitly chooses to share it.
+optional tool that the agent acquires on demand. Its launcher disables command telemetry. Feedback
+stays in the review session unless the user explicitly chooses to share it.
 
 [Memory and learning](docs/LEARNING.md) describes an approved private project workflow and the
 separate opt-in contribution through `submit-feedback`. Automatic cross-run retrieval and global

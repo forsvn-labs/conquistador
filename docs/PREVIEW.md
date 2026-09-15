@@ -5,21 +5,44 @@ annotations. The coding-agent host runs its CLI. Conquistador does not ship a cu
 embed Lavish, or require it for text-only work. The optional HTTP/MCP runtime has no automatic
 Lavish launcher or feedback consumer.
 
-## Set up
+## Agent-managed setup
 
-Use Node 24 for Conquistador. Install Lavish separately if it is absent:
+Ask Conquistador for the preview. The agent checks the tool and prepares it when needed; the user
+does not need to install Lavish globally. An available compatible installation can be reused.
+Set `LAVISH_AXI_TELEMETRY=0` before every command, including version/help. Lavish enables command
+telemetry by default; Conquistador's invocation disables it.
+
+With Bun and Node 24 available, the agent runs:
 
 ```sh
-bun add --global lavish-axi@0.1.50
-lavish-axi --version
-lavish-axi --help
+LAVISH_AXI_TELEMETRY=0 bunx lavish-axi@0.1.50 --version
+LAVISH_AXI_TELEMETRY=0 bunx lavish-axi@0.1.50 --help
 ```
 
-Version 0.1.50 is the checked integration version. This pin is not a claim that it is the newest
-release. The package manager's global binary directory must be on the agent process's PATH.
-No provider credential is needed for the local preview loop. The Conquistador installer does not
-install Lavish, register global hooks or start its server. The parent operating contract discovers
-and uses the CLI on demand, so users can keep asking `/conquistador` for previews.
+If Bun is absent, use npm with Node 24:
+
+```sh
+LAVISH_AXI_TELEMETRY=0 npm exec --yes --ignore-scripts --package=lavish-axi@0.1.50 -- lavish-axi --version
+```
+
+Both package managers fetch a missing package into their execution cache. No global installation
+or project dependency change is needed. Version 0.1.50 is the checked integration version, not a
+claim about the latest release. Keep the Node runtime selected by the CLI's shebang; do not add
+`--bun`. Verify version/help and keep using the chosen launcher for open, poll, end and stop.
+An isolated tool working directory avoids an unrelated project executable taking precedence.
+
+A package download needs registry access; the local preview needs no provider credential. Use the
+host's existing permissions for ordinary setup. If the host blocks downloads or lacks a usable
+runtime/package manager, diagnose the missing prerequisite and use its supported setup path. Ask
+only for a step that the host cannot perform or that needs new authority. Return the source artifact
+if preview remains unavailable. Do not install unrelated tools or register global hooks.
+
+For a new session, the agent chooses a separate `LAVISH_AXI_STATE_DIR` and an available
+`LAVISH_AXI_PORT` to avoid reusing or stopping another session's server. Keep these values on
+subsequent commands, and keep the cached package available while its server is running.
+Starting a server for a requested preview does not enable an always-running Conquistador service.
+See [Bun package execution](https://bun.sh/docs/pm/bunx) and
+[npm exec](https://docs.npmjs.com/cli/v11/commands/npm-exec/) for cache and command behavior.
 
 ## Review an artifact
 
@@ -27,21 +50,22 @@ Ask `/conquistador Preview this deliverable in Lavish and apply my annotations.`
 the CLI and prepares an HTML preview of the deliverable. Keep the source document canonical and
 place only intended preview assets beside the HTML, outside the installed product directory.
 
-The agent then runs:
+Using the Bun launcher, the agent runs:
 
 ```sh
-lavish-axi /absolute/path/to/preview.html
-lavish-axi poll /absolute/path/to/preview.html
+LAVISH_AXI_TELEMETRY=0 bunx lavish-axi@0.1.50 /absolute/path/to/preview.html
+LAVISH_AXI_TELEMETRY=0 bunx lavish-axi@0.1.50 poll /absolute/path/to/preview.html
 ```
 
 Annotations return through the active poll. The agent revises the source and preview, then waits
 for further review. A session-start discovery hook does not replace this poll. A host must keep
 the poll attached or provide a verified completion callback before claiming unattended monitoring.
-An agent can close its session with `lavish-axi end /absolute/path/to/preview.html`. Do not reopen
+An agent can close its session by passing `end /absolute/path/to/preview.html` to the same launcher. Do not reopen
 a session that the user ended unless they request further review.
 
 Lavish starts a local server. Its localhost URL works on the machine running the CLI. For a remote
-coding-agent host, use that host's authorized private port access after checking the files exposed.
+coding-agent host, add `--no-open` and use that host's authorized private port access after checking
+the files exposed.
 Do not substitute Lavish's hosted `share` command: sharing sends content to a separate service and
 requires its own approval. If no private access path is available, review the source in chat.
 

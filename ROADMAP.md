@@ -23,3 +23,5 @@ Automatic learning promotion is disabled until separate persistence consent is i
 existing records accessible to explicit state/export operations while adding that boundary.
 
 The root skills.sh entry point, Agent Plugins manifest, Claude/Codex marketplaces and native Claude agent are implemented. Verify actual CLI installs from clean artifacts, then validate native host activation separately. Public URL installation requires publication of the reviewed source.
+
+Use package-manager execution caches for auxiliary CLIs and existing project tooling for project dependencies. Validate each added tool recipe through actual invocation. Keep account access and paid/external actions separate from local setup.

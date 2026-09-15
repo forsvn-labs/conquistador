@@ -30,3 +30,5 @@ See [VERSIONS.md](VERSIONS.md) for independent product and method versions.
 Live host/provider operation, useful model output, human acceptance, rights disposition, and release
 authority remain separate requirements. An operator-attested receipt is labeled as such; uncertain
 dispatch pauses without automatic replay. No local test count establishes those external facts.
+
+Parent 2.4.3 handles routine prerequisite setup through the host. Added pinned cached Lavish launchers, removed the manual-install handoff, and disabled Lavish command telemetry in the documented invocation. Initial host activation and credentials remain distinct.

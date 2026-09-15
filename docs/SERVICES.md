@@ -20,7 +20,8 @@ tools, project access and permission controls. Conquistador is not currently a h
 These methods work on supplied context and available host tools. Current research needs access to
 current sources. Video analysis needs its declared media/provider setup. Building an app needs the
 relevant development tools. Publishing, spend and account changes need authorized connections.
-Conquistador must name missing inputs or capabilities rather than invent observations or execution.
+Conquistador prepares missing local prerequisites through the host when permitted. It names remaining
+account, tool or input gaps rather than inventing observations or execution.
 
 ## Platform and service boundary
 
@@ -34,7 +35,7 @@ Conquistador must name missing inputs or capabilities rather than invent observa
 | MCP | Stdio run, artifact-list, artifact-read and cancel tools | Requires configured Conquistador HTTP service; no approval or publishing tools |
 | HTTP and terminal | Durable supported playbooks, structured chat and review boundaries | Node 24, model configuration and separate human authority |
 | Local proactive helper | Opt-in event-to-instruction output | Host must invoke and deliver it; no daemon, scheduler or automatic external action |
-| Visual review | Parent handoff to Lavish AXI for HTML previews and annotations | Separate CLI install and reachable browser session; active polling returns feedback |
+| Visual review | On-demand Lavish AXI setup, HTML previews and annotations | Agent prepares a cached CLI with telemetry disabled; reachable browser and active polling required |
 | Typed catalog | Seventeen operation contracts, adapters and a host-injected bridge | Exact support evidence and connection authority gate dispatch; not turnkey live support |
 | Eval Lab | Source SDK, graders, schemas and local examples | Synthetic checks by default; real evaluations need authorized providers, budgets and human review |
 | Eve and official Grok Bot | Experimental staging contracts | Import and native execution unverified; not a supported native service claim |

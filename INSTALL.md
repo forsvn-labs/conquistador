@@ -8,6 +8,19 @@ Version 0.1.0 is currently unpublished. Use a fresh extracted distribution for t
 below. The intended GitHub URL still needs publication of this source; remote commands in this
 page are explicitly for use after that step. No npm registry package or hosted service is claimed.
 
+## Let your coding agent do the setup
+
+You can ask an existing coding agent to install Conquistador into the current project from the
+provided distribution. The commands below are executable setup instructions for the agent; users
+can also run them directly. Initial host/plugin activation may require a host approval or a new
+session. Conquistador cannot invoke itself before the host can discover it.
+
+After that, ask `/conquistador` for the result. It detects missing tools, prepares routine local
+prerequisites with the host's package manager, checks them and continues. It installs only what the
+task needs. For example, [Lavish preview](docs/PREVIEW.md) uses a cached package launcher instead
+of requiring a manual global install. Credentials, paid services and host-required approvals remain
+separate. The skill library does not require Conquistador's runtime or development dependencies.
+
 ## Recommended: skills.sh
 
 From your project directory, install from a fresh extracted Conquistador ZIP:

@@ -24,3 +24,5 @@ not supply live host evidence, output quality, rights approval, or release autho
 Proactive host events are opt-in. Local reminders can direct an active host back to Conquistador; they do not create background services, schedules or external action authority.
 
 Conquistador should install through the user's existing skill or plugin manager. One entry point owns routing; native adapters load the same authored methods instead of creating parallel behavior.
+
+Routine environment setup belongs to the agent. Users ask for outcomes; Conquistador prepares only the tools needed and continues within the host's permissions.

@@ -12,7 +12,8 @@ outcome. Users do not need to install or invoke the individual methods.
 
 This directory is the complete distribution. Its optional runtime source does not need to run
 for the host to use these skills. Do not install dependencies, enable hooks or start services as
-a side effect of loading Conquistador. The host supplies the model, tools and permission controls.
+a side effect of loading Conquistador. For a requested task, follow the parent's setup standard to
+prepare missing tools through the host and continue. The host supplies the model and permissions.
 
 Use [Lavish preview guidance](docs/PREVIEW.md) for visual review, [approved project learning](docs/LEARNING.md)
 for memory proposals, and [proactive help](docs/PROACTIVE.md) only when host events are enabled.

@@ -2,7 +2,7 @@
 name: conquistador
 description: "Use /conquistador as the main entry point for product, marketing, growth, and engineering work. Route requests to the relevant outcome, including product flows, interfaces, software architecture, iOS or web apps, technical documentation, and review. Proactively load the smallest relevant Conquistador outcome skills, turn available context into finished work, and keep publishing, spend, credentials, and other consequential actions behind explicit human approval."
 metadata:
-  version: 2.4.2
+  version: 2.4.3
 
 ---
 
@@ -108,6 +108,7 @@ advisor/worker squad is [adapters/squad.md](adapters/squad.md), not the per-skil
 - Read [standards/vietnamese.md](standards/vietnamese.md) before creating or revising Vietnamese work.
 - Follow [standards/learning.md](standards/learning.md) before persisting a durable learning.
 - Follow [standards/context.md](standards/context.md) when reading or proposing shared product context.
+- Follow [standards/setup.md](standards/setup.md) when a requested task needs a missing tool. Handle routine setup through the host and continue; do not delegate package management to the user.
 - Follow [standards/preview.md](standards/preview.md) for visual previews and annotation in Lavish AXI.
 - In a chat or team workspace, apply [adapters/workspace.md](adapters/workspace.md). In a
   filesystem-capable coding agent, apply [adapters/coding-agent.md](adapters/coding-agent.md).
