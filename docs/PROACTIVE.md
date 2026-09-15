@@ -117,4 +117,7 @@ node /absolute/install/tools/conquistador-mode.mjs remove --host claude-code --p
 
 The handler honors `stop_hook_active` and returns empty additional context in that case. It does not
 create specialists, edit unrelated host settings, or enable Grok Bot or Eve. Those remain
-experimental imports without a mode adapter.
+experimental imports without a mode adapter. `status` and `disable` use the config path stored in
+the owned hooks. A different `--config` is an error. `status` without that registered file is
+`unknown`; it does not report another file's enabled flag. Native activation and Executor source
+verification remain unverified.

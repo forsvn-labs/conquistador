@@ -46,20 +46,63 @@ function settingsPath(project) {
   return join(absoluteFile(project, 'Project'), '.claude/settings.local.json');
 }
 
-function ownedCommand(command) {
-  if (typeof command !== 'string') return false;
+function tokenize(command) {
+  if (typeof command !== 'string') return null;
   const tokens = [];
-  for (const match of command.matchAll(/'([^']*)'|[^\s]+/g)) tokens.push(match[1] ?? match[0]);
-  return tokens.length === 9
-    && tokens[0] === process.execPath
-    && tokens[1] === script
-    && tokens[2] === '--handle'
-    && tokens[3] === '--host'
-    && tokens[4] === SUPPORTED_HOST
-    && tokens[5] === '--event'
-    && Object.hasOwn(HOST_EVENTS, tokens[6])
-    && tokens[7] === '--config'
-    && isAbsolute(tokens[8]);
+  let i = 0;
+  while (i < command.length) {
+    if (command[i] === ' ' || command[i] === '\t') {
+      i += 1;
+      continue;
+    }
+    let token = '';
+    while (i < command.length && command[i] !== ' ' && command[i] !== '\t') {
+      if (command[i] === "'") {
+        i += 1;
+        while (i < command.length && command[i] !== "'") token += command[i++];
+        if (i >= command.length) return null;
+        i += 1;
+      } else if (command[i] === '\\' && i + 1 < command.length) {
+        token += command[i + 1];
+        i += 2;
+      } else {
+        token += command[i++];
+      }
+    }
+    tokens.push(token);
+  }
+  return tokens;
+}
+
+function ownedCommand(command) {
+  const tokens = tokenize(command);
+  if (!tokens || tokens.length !== 9) return null;
+  if (tokens[0] !== process.execPath || tokens[1] !== script) return null;
+  if (tokens[2] !== '--handle' || tokens[3] !== '--host' || tokens[4] !== SUPPORTED_HOST) return null;
+  if (tokens[5] !== '--event' || !Object.hasOwn(HOST_EVENTS, tokens[6])) return null;
+  if (tokens[7] !== '--config' || !isAbsolute(tokens[8])) return null;
+  return resolve(tokens[8]);
+}
+
+function registeredConfig(settings) {
+  const paths = new Set();
+  if (!isObject(settings?.hooks)) return null;
+  for (const groups of Object.values(settings.hooks)) {
+    if (!Array.isArray(groups)) continue;
+    for (const group of groups) {
+      if (!Array.isArray(group?.hooks)) continue;
+      for (const item of group.hooks) {
+        const path = ownedCommand(item?.command);
+        if (path) paths.add(path);
+      }
+    }
+  }
+  if (paths.size > 1) fail('Host hooks register more than one operator config.');
+  return paths.values().next().value ?? null;
+}
+
+function assertRegisteredConfig(supplied, registered) {
+  if (registered && supplied !== registered) fail('Operator config does not match the registered host hooks.');
 }
 
 function handler(event, configPath) {
@@ -141,15 +184,24 @@ export function inspectMode({ host, project, config } = {}) {
       registered.push(event);
     }
   }
+  const bound = registeredConfig(current);
+  const supplied = config ? absoluteFile(config, 'Config') : null;
+  if (supplied) assertRegisteredConfig(supplied, bound);
   let enabled = false;
-  if (config) {
-    const record = readConfig(config);
-    enabled = record.enabled === true && record.events.length > 0;
+  let state = 'disabled';
+  if (bound) {
+    if (!supplied) state = 'unknown';
+    else {
+      const record = readConfig(bound);
+      enabled = record.enabled === true && record.events.length > 0;
+      state = enabled ? 'enabled' : 'registered-disabled';
+    }
   }
   return {
-    state: registered.length ? (enabled ? 'enabled' : 'registered-disabled') : 'disabled',
+    state,
     host: SUPPORTED_HOST,
     settings,
+    config: bound,
     registered,
     enabled,
     nativeActivationVerified: false,
@@ -168,16 +220,18 @@ export function applyMode(action, options) {
     const next = withoutOwned(current);
     if (Object.keys(next).length) writeJsonAtomic(settings, next);
     else if (existsSync(settings)) rmSync(settings);
-    return inspectMode({ host, project, config });
+    return inspectMode({ host, project });
   }
   const configPath = absoluteFile(config, 'Config');
+  const bound = registeredConfig(current);
+  if (action !== 'enable') assertRegisteredConfig(configPath, bound);
   const record = readConfig(configPath);
   const events = parseEvents(options.events);
   if (action === 'enable') {
     if (!record.enabled) fail('Enable requires an operator config with enabled true.');
     writeJsonAtomic(settings, withOwned(current, events, configPath));
   } else {
-    writeJsonAtomic(configPath, { schemaVersion: 1, enabled: false, events: record.events });
+    writeJsonAtomic(bound ?? configPath, { schemaVersion: 1, enabled: false, events: record.events });
   }
   return inspectMode({ host, project, config: configPath });
 }

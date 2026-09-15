@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, readFileSync, rmSync, writeFileSync, existsSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { spawnSync } from 'node:child_process';
@@ -79,6 +79,56 @@ test('remove keeps another absolute script with the same basename', t => {
     foreign,
     "echo 'mention conquistador-mode.mjs --handle in prose'",
   ]);
+});
+
+test('status and disable bind to the registered config and reject a mismatch', t => {
+  const { dir, config, settings } = project(t);
+  const other = join(dir, 'other.json');
+  writeFileSync(other, JSON.stringify({ schemaVersion: 1, enabled: false, events: ['session-start'] }));
+  applyMode('enable', { host: 'claude-code', project: dir, config });
+  const command = JSON.parse(readFileSync(settings, 'utf8')).hooks.SessionStart[0].hooks[0].command;
+  assert.equal(inspectMode({ host: 'claude-code', project: dir }).state, 'unknown');
+  assert.equal(inspectMode({ host: 'claude-code', project: dir, config }).state, 'enabled');
+  assert.throws(() => inspectMode({ host: 'claude-code', project: dir, config: other }), /does not match the registered host hooks/);
+  assert.throws(() => applyMode('disable', { host: 'claude-code', project: dir, config: other }), /does not match the registered host hooks/);
+  assert.equal(JSON.parse(readFileSync(config, 'utf8')).enabled, true);
+  assert.equal(JSON.parse(readFileSync(other, 'utf8')).enabled, false);
+  assert.equal(JSON.parse(readFileSync(settings, 'utf8')).hooks.SessionStart[0].hooks[0].command, command);
+  const disabled = applyMode('disable', { host: 'claude-code', project: dir, config });
+  assert.equal(disabled.state, 'registered-disabled');
+  assert.equal(JSON.parse(readFileSync(config, 'utf8')).enabled, false);
+});
+
+test('enable switches from registered A to requested B', t => {
+  const { dir, config, settings } = project(t);
+  const next = join(dir, 'other.json');
+  writeFileSync(next, JSON.stringify({ schemaVersion: 1, enabled: true, events: ['session-start'] }));
+  applyMode('enable', { host: 'claude-code', project: dir, config });
+  const switched = applyMode('enable', { host: 'claude-code', project: dir, config: next, events: 'session-start' });
+  assert.equal(switched.state, 'enabled');
+  assert.equal(switched.config, next);
+  const command = JSON.parse(readFileSync(settings, 'utf8')).hooks.SessionStart[0].hooks[0].command;
+  assert.equal(command.includes(next), true);
+  assert.equal(inspectMode({ host: 'claude-code', project: dir, config: next }).state, 'enabled');
+  assert.throws(() => inspectMode({ host: 'claude-code', project: dir, config }), /does not match the registered host hooks/);
+});
+
+test('quoted apostrophes in the config path stay owned across enable and remove', t => {
+  const dir = mkdtempSync(join(tmpdir(), "mode's "));
+  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  const config = join(dir, "proactive's.json");
+  writeFileSync(config, JSON.stringify({ schemaVersion: 1, enabled: true, events: ['before-delivery'] }));
+  const settings = join(dir, '.claude/settings.local.json');
+  applyMode('enable', { host: 'claude-code', project: dir, config, events: 'before-delivery' });
+  applyMode('enable', { host: 'claude-code', project: dir, config, events: 'before-delivery' });
+  const stored = JSON.parse(readFileSync(settings, 'utf8'));
+  assert.equal(stored.hooks.Stop.length, 1);
+  assert.equal(stored.hooks.Stop[0].hooks.length, 1);
+  assert.match(stored.hooks.Stop[0].hooks[0].command, /'\\''/);
+  assert.equal(inspectMode({ host: 'claude-code', project: dir, config }).state, 'enabled');
+  const removed = applyMode('remove', { host: 'claude-code', project: dir });
+  assert.equal(removed.state, 'disabled');
+  assert.equal(existsSync(settings), false);
 });
 
 test('handle ignores recursive stop hooks and returns additionalContext for Claude events', t => {
