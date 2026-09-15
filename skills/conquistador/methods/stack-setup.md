@@ -64,3 +64,22 @@ files and omit credentials.
 
 If setup succeeds, complete the requested task. If it fails, name the failed check and use the best
 available local evidence. Do not stop with a generic tool checklist.
+
+## Executable setup in a complete distribution
+
+Use `createStackSession` from `catalog/src/stack.ts` with the host's actual discovered routes.
+Each route binds an existing extension manifest, exact adapter and connection reference. Declare
+required operation, principal, environment, data classes, and finite unit and cost limits. The
+selection distinguishes ready, verification-only, unsupported, missing connection, denied policy,
+and human-action-required states. A ready selection still passes through Gateway at dispatch.
+
+The setup API runs bounded reads only. If the host requires Executor, its route policy rejects CLI,
+MCP and warehouse dispatch that bypasses Executor. The first supplied mapping implements only
+GitHub repository metadata and an exact host-owned repository allowlist. Other systems need an
+explicit audited extension and connection; naming a vendor does not make it supported. Do not
+invent a generic HTTP, shell, or MCP invocation to fill a missing operation.
+
+Return the setup receipt's operation, route, state and digests. Keep credentials, account details,
+customer rows and resolved knowledge paths out of that receipt. A candidate verification read can
+produce observed evidence without promoting the operation to supported. Missing vision, warehouse,
+CRM, wiki or provider operations remain bounded handoffs.

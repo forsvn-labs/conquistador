@@ -138,6 +138,9 @@ export function result(
   },
 ): CapabilityResult {
   const requestId = header(response, "x-github-request-id", "x-request-id", "x-posthog-request-id");
+  const observedDate = header(response, "date");
+  // HTTP Date uses IMF-fixdate. Capability results require canonical UTC ISO.
+  const freshnessAt = observedDate === undefined ? new Date().toISOString() : new Date(observedDate).toISOString();
   return {
     schemaVersion: "conquistador.capability-result/v1",
     requestId: request.id,
@@ -146,7 +149,7 @@ export function result(
     ...(options.providerResourceId ? { providerResourceId: options.providerResourceId } : {}),
     data,
     sourceUrls: [options.sourceUrl],
-    freshnessAt: header(response, "date") ?? new Date().toISOString(),
+    freshnessAt,
     pagination: {
       complete: options.complete ?? !options.cursor,
       ...(options.cursor ? { cursor: options.cursor } : {}),

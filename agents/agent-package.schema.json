@@ -37,8 +37,8 @@
       "type": "string",
       "enum": ["agent:conquistador", "agent:advisor", "agent:worker"]
     },
-    "kind": { "type": "string", "enum": ["master-agent", "squad-member"] },
-    "role": { "type": "string", "enum": ["orchestrator", "advisor", "worker"] },
+    "kind": { "type": "string", "enum": ["single-agent", "squad-member"] },
+    "role": { "type": "string", "enum": ["advisor", "worker"] },
     "displayName": { "type": "string", "minLength": 1 },
     "productName": { "const": "conquistador" },
     "pluginVersion": { "const": "0.1.0" },
@@ -123,12 +123,7 @@
         "maySelfApprove"
       ],
       "properties": {
-        "maxDelegationsPerRun": {
-          "oneOf": [
-            { "type": "integer", "minimum": 0 },
-            { "const": "host-bounded" }
-          ]
-        },
+        "maxDelegationsPerRun": { "type": "integer", "minimum": 0, "maximum": 8 },
         "mayExecuteAssignedWork": { "type": "boolean" },
         "mayAuthorizeMutations": { "const": false },
         "maySelfApprove": { "const": false }

@@ -4,6 +4,7 @@ import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync, chmodSync,
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { checkPackageBoundary } from './package-boundary.mjs';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 export function safePath(path) {
@@ -86,6 +87,7 @@ export function committedFiles(root) {
 export function packageSource(root, outputRoot = join(root, 'dist')) {
   if (Number(process.versions.node.split('.')[0]) !== 24) throw new Error('Use Node 24.');
   const { commit, tree, files } = committedFiles(root);
+  checkPackageBoundary(files);
   const manifest = JSON.parse(files['package.json']?.bytes.toString() || '{}');
   if (manifest.name !== '@forsvn/conquistador' || !/^\d+\.\d+\.\d+$/.test(manifest.version)) throw new Error('Expected public product identity');
   for (const name of Object.keys(files)) {

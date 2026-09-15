@@ -1,6 +1,6 @@
 {
   "schemaVersion": "conquistador.capability-router/v1",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "productVersion": "1.0.0",
   "activationRequiredByPortablePlugin": false,
   "loadsAtPluginRuntime": false,
@@ -205,6 +205,21 @@
       "id": "write-technical-docs",
       "target": {"kind": "skill", "id": "write-technical-docs"},
       "phrases": ["write-technical-docs", "write technical docs"]
+    },
+    {
+      "id": "creative-production-review",
+      "target": {"kind": "playbook", "id": "creative-production-review"},
+      "phrases": ["creative-production-review", "creative production review"]
+    },
+    {
+      "id": "paid-search-split-landing",
+      "target": {"kind": "playbook", "id": "paid-search-split-landing"},
+      "phrases": ["paid-search-split-landing", "paid search split landing"]
+    },
+    {
+      "id": "campaign-money-events",
+      "target": {"kind": "playbook", "id": "campaign-money-events"},
+      "phrases": ["campaign-money-events", "campaign money events"]
     }
   ]
 }

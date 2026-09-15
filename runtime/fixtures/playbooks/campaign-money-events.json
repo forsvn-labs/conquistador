@@ -1,0 +1,323 @@
+{
+  "schemaVersion": "conquistador.playbook-record/v1",
+  "id": "campaign-money-events",
+  "canonicalId": "playbook:campaign-money-events",
+  "version": "1.0.0",
+  "kind": "executable-playbook",
+  "executionStatus": "executable",
+  "proseSource": "skills/conquistador/workflows/measured-initiative-loop.md",
+  "inputs": {
+    "version": "1.0.0",
+    "fields": [
+      {
+        "name": "product",
+        "type": "string",
+        "required": true,
+        "description": "The product or offer the loop is about."
+      },
+      {
+        "name": "audience",
+        "type": "string",
+        "required": true,
+        "description": "The audience the content must serve."
+      },
+      {
+        "name": "channel",
+        "type": "string",
+        "required": true,
+        "description": "The target channel for this cycle."
+      },
+      {
+        "name": "goals",
+        "type": "string",
+        "required": true,
+        "description": "The bounded goal and success signal for this cycle."
+      },
+      {
+        "name": "priorApprovedContext",
+        "type": "artifact",
+        "required": false,
+        "description": "Prior approved facts, decisions, and observed results owned by the user."
+      }
+    ]
+  },
+  "completionCriteria": [
+    "A money-event measurement and campaign diagnosis draft with bounded data evidence or explicit missing-connection handoffs.",
+    "Missing provider or vision access is recorded as a handoff. No absent data or visual inspection is invented.",
+    "The exact integrated artifact reaches a human review gate. No publication, spend, tracking change or upload is executed."
+  ],
+  "stepGraph": {
+    "nodes": [
+      {
+        "id": "load-context",
+        "kind": "script",
+        "uses": {
+          "scriptId": "load-approved-context"
+        },
+        "dependsOn": [],
+        "inputArtifacts": [],
+        "outputArtifacts": [
+          "approved-context"
+        ],
+        "completion": "Product, audience, channel, goals, and prior approved context are declared as a typed artifact.",
+        "timeoutSeconds": 60,
+        "idempotency": "required",
+        "failureBehavior": "stop"
+      },
+      {
+        "id": "read-events",
+        "kind": "tool-operation",
+        "uses": {
+          "toolOperationId": "campaign.money-events-read",
+          "maturity": "unverified",
+          "fallback": "human-action-manifest"
+        },
+        "dependsOn": [
+          "load-context"
+        ],
+        "inputArtifacts": [
+          "approved-context"
+        ],
+        "outputArtifacts": [
+          "event-bundle"
+        ],
+        "completion": "Read one bounded window of owned payment and campaign events through an exact authorized connection, or record missing connection and data. Never invent customer rows.",
+        "timeoutSeconds": 60,
+        "idempotency": "required",
+        "failureBehavior": "degrade"
+      },
+      {
+        "id": "contract",
+        "kind": "skill",
+        "uses": {
+          "skillId": "measure-growth"
+        },
+        "dependsOn": [
+          "read-events"
+        ],
+        "inputArtifacts": [
+          "approved-context",
+          "event-bundle"
+        ],
+        "outputArtifacts": [
+          "event-contract"
+        ],
+        "completion": "Define payment capture, refund, net revenue, qualified lead and activation separately; record deduplication, attribution window, consent and source-of-truth requirements. Propose tracking changes without performing them.",
+        "timeoutSeconds": 300,
+        "idempotency": "none",
+        "failureBehavior": "stop",
+        "budget": {
+          "maxTokens": 8000
+        }
+      },
+      {
+        "id": "diagnose",
+        "kind": "skill",
+        "uses": {
+          "skillId": "diagnose-growth"
+        },
+        "dependsOn": [
+          "contract"
+        ],
+        "inputArtifacts": [
+          "event-bundle",
+          "event-contract"
+        ],
+        "outputArtifacts": [
+          "diagnosis"
+        ],
+        "completion": "Diagnose observed funnel breaks with competing explanations, missingness, denominators and attribution limits. If the read is a handoff, report unknown results and design the required extract.",
+        "timeoutSeconds": 300,
+        "idempotency": "none",
+        "failureBehavior": "stop",
+        "budget": {
+          "maxTokens": 8000
+        }
+      },
+      {
+        "id": "integrate",
+        "kind": "skill",
+        "uses": {
+          "skillId": "evaluate-paid-campaign"
+        },
+        "dependsOn": [
+          "diagnose"
+        ],
+        "inputArtifacts": [
+          "event-bundle",
+          "event-contract",
+          "diagnosis"
+        ],
+        "outputArtifacts": [
+          "created-artifact"
+        ],
+        "completion": "Integrate the money-event contract, observed or explicitly unknown campaign performance, experiment proposal, budget stop rules and human tracking handoff. No event install, conversion upload, or spend.",
+        "timeoutSeconds": 300,
+        "idempotency": "none",
+        "failureBehavior": "stop",
+        "budget": {
+          "maxTokens": 8000
+        }
+      },
+      {
+        "id": "review",
+        "kind": "skill",
+        "uses": {
+          "skillId": "fresh-eyes-review"
+        },
+        "dependsOn": [
+          "integrate"
+        ],
+        "inputArtifacts": [
+          "created-artifact",
+          "event-bundle"
+        ],
+        "outputArtifacts": [
+          "review-packet"
+        ],
+        "completion": "Review exact campaign analysis, source completeness, revenue-versus-proxy labeling, attribution and action boundaries. Report unsupported results as unknown.",
+        "timeoutSeconds": 300,
+        "idempotency": "none",
+        "failureBehavior": "stop",
+        "budget": {
+          "maxTokens": 8000
+        }
+      }
+    ]
+  },
+  "artifacts": [
+    {
+      "id": "approved-context",
+      "name": "approved context",
+      "format": "markdown",
+      "schema": "conquistador.artifact.approved-context/v1",
+      "provenanceRequired": true
+    },
+    {
+      "id": "event-bundle",
+      "name": "event bundle",
+      "format": "json",
+      "schema": "conquistador.artifact.event-bundle/v1",
+      "provenanceRequired": true
+    },
+    {
+      "id": "event-contract",
+      "name": "event contract",
+      "format": "markdown",
+      "schema": "conquistador.artifact.event-contract/v1",
+      "provenanceRequired": true
+    },
+    {
+      "id": "diagnosis",
+      "name": "diagnosis",
+      "format": "markdown",
+      "schema": "conquistador.artifact.diagnosis/v1",
+      "provenanceRequired": true
+    },
+    {
+      "id": "created-artifact",
+      "name": "created artifact",
+      "format": "markdown",
+      "schema": "conquistador.artifact.created-artifact/v1",
+      "provenanceRequired": true
+    },
+    {
+      "id": "review-packet",
+      "name": "review packet",
+      "format": "markdown",
+      "schema": "conquistador.review-packet/v1",
+      "provenanceRequired": true
+    }
+  ],
+  "budgets": {
+    "tokensPerRun": 64000,
+    "judgmentNodesMaxTokens": 8000,
+    "maximumCostPerRun": 0
+  },
+  "retry": {
+    "maxAttempts": 1,
+    "preserveCompletedSteps": true
+  },
+  "resume": {
+    "enabled": true,
+    "preserveCompletedWork": true
+  },
+  "timeout": {
+    "seconds": 3600
+  },
+  "idempotency": {
+    "required": true,
+    "keyFrom": [
+      "canonicalId",
+      "version",
+      "inputs"
+    ]
+  },
+  "gates": {
+    "review": [
+      {
+        "id": "final-review",
+        "kind": "review",
+        "afterStep": "review",
+        "humanRequired": true,
+        "modelCannotSatisfy": true,
+        "outcomes": [
+          "accept",
+          "revise",
+          "reject"
+        ],
+        "artifactIds": [
+          "created-artifact",
+          "review-packet"
+        ],
+        "stopOnReject": true
+      }
+    ],
+    "action": []
+  },
+  "provenance": {
+    "sourcePath": "runtime/fixtures/playbooks/campaign-money-events.json",
+    "recordedAt": "2026-09-15T00:00:00.000Z",
+    "proseCompositionKind": "compatibility-map-only"
+  },
+  "receipts": {
+    "required": true,
+    "redaction": "required",
+    "includeToolOperations": true
+  },
+  "evalSignals": {
+    "criteria": [
+      {
+        "id": "graph-ran",
+        "description": "Each declared node produces a trace or an explicit pending state.",
+        "source": "trace"
+      },
+      {
+        "id": "bounded-handoff",
+        "description": "Missing connections and external actions remain unexecuted handoffs.",
+        "source": "artifact"
+      },
+      {
+        "id": "human-review",
+        "description": "A human reviews the exact integrated artifact before any action.",
+        "source": "human-verdict"
+      }
+    ]
+  },
+  "finalDeliverable": {
+    "artifactId": "created-artifact",
+    "description": "A money-event measurement and campaign diagnosis draft with bounded data evidence or explicit missing-connection handoffs.",
+    "accompanyingArtifactIds": [
+      "review-packet"
+    ]
+  },
+  "nextDecision": {
+    "id": "review-draft",
+    "description": "Accept, revise or reject this draft. External actions need a separate host-owned authorization."
+  },
+  "activation": {
+    "requiredByPortablePlugin": false,
+    "loadsAtPluginRuntime": false,
+    "customerManagedCatalog": false
+  }
+}

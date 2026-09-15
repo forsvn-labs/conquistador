@@ -2,7 +2,7 @@
 name: conquistador
 description: "Use /conquistador as the master agent for product, marketing, growth, and engineering work. Turn one request into a finished result by assigning the existing outcome skills, project knowledge, and composition workflows to the specialist team the work needs. Keep publishing, spend, credentials, and other consequential actions behind explicit human approval."
 metadata:
-  version: 2.5.0
+  version: 2.6.0
 
 ---
 

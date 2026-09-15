@@ -310,6 +310,10 @@ const PURPOSE_BY_SKILL: Record<string, JudgmentPurpose> = {
   "write-copy": "creation",
   "fresh-eyes-review": "quality-review",
   "measure-growth": "measurement",
+  "brief-creative": "creation",
+  "create-paid-campaign": "creation",
+  "diagnose-growth": "measurement",
+  "evaluate-paid-campaign": "measurement",
 };
 
 export function purposeOfSkill(skillId: string): JudgmentPurpose {

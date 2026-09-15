@@ -54,3 +54,33 @@ Return one coherent deliverable and one next action. Do not return a pile of spe
 If the host cannot create isolated specialist contexts, run the same role files in dependency order
 inside the parent context. Keep each assignment and result separate so the parent can detect conflicts.
 Identify any review as same-context. Do not claim that another agent ran.
+
+## Callable host contract
+
+The complete distribution and plugin/harness installs include `hosts/coding-agent/orchestrate.mjs`
+and a BB adapter in `hosts/coding-agent/bb.mjs`. Use them when the host exposes BB and an existing
+project/environment. The BB adapter creates visible child threads with separate conversation
+contexts, then executes a parent integration assignment and an isolated `fresh-eyes-review`
+assignment. It passes only the selected method files, their contained outcome agents and references,
+named workflow, allowed knowledge snippets, and required predecessor results.
+
+The executable protocol is `conquistador.specialist/v1`. The master package is
+`conquistador.agent-package/v2`; the original v1 schema and package remain available for old hosts.
+A run declares one to four concurrent contexts, a finite deadline, at most two attempts, an output
+limit, and at most twelve dispatches including integration and review. Only a known pre-dispatch
+failure can retry. An accepted or uncertain dispatch must be reconciled before another attempt.
+Cancellation stops owned BB children. No specialist may recursively delegate.
+
+A result contains a finished draft, evidence and gaps. The host binds its execution identity;
+the model cannot choose that identity. The reviewer must echo the digest of the exact integrated
+artifact. `draft`, `revise`, and `blocked` are valid results; none means human acceptance.
+
+A host without isolated contexts must provide the coordinator's explicit `parent.execute` callback.
+That callback performs each role in the current context. The result records `sequential-in-context`
+and `independentReview: false`. Do not substitute test responses for model execution.
+
+Load-time domain restrictions apply when an installed `domain-restriction.json` is present, including
+the model and worker-context tools. Logical `scope:name` knowledge handles resolve through a
+host-owned callback. Keep resolved paths and source bodies outside package metadata and receipts.
+BB context isolation is not a filesystem sandbox. The host's permission system remains responsible
+for file and tool access. This first BB adapter supports draft-only work with no external tools.

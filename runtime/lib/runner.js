@@ -971,6 +971,7 @@ async function runJudgmentStep(options) {
         });
         const bodies = artifactBodies(directory, state, playbook);
         const payload = {
+            assignment: { id: step.id, completion: step.completion },
             inputs: state.inputs,
             artifacts: Object.fromEntries(step.inputArtifacts
                 .filter((id) => id in bodies)

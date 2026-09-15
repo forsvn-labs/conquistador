@@ -1,0 +1,324 @@
+{
+  "schemaVersion": "conquistador.playbook-record/v1",
+  "id": "paid-search-split-landing",
+  "canonicalId": "playbook:paid-search-split-landing",
+  "version": "1.0.0",
+  "kind": "executable-playbook",
+  "executionStatus": "executable",
+  "proseSource": "skills/conquistador/workflows/paid-campaign-loop.md",
+  "inputs": {
+    "version": "1.0.0",
+    "fields": [
+      {
+        "name": "product",
+        "type": "string",
+        "required": true,
+        "description": "The product or offer the loop is about."
+      },
+      {
+        "name": "audience",
+        "type": "string",
+        "required": true,
+        "description": "The audience the content must serve."
+      },
+      {
+        "name": "channel",
+        "type": "string",
+        "required": true,
+        "description": "The target channel for this cycle."
+      },
+      {
+        "name": "goals",
+        "type": "string",
+        "required": true,
+        "description": "The bounded goal and success signal for this cycle."
+      },
+      {
+        "name": "priorApprovedContext",
+        "type": "artifact",
+        "required": false,
+        "description": "Prior approved facts, decisions, and observed results owned by the user."
+      }
+    ]
+  },
+  "completionCriteria": [
+    "A bottom-of-funnel search plan with separate direct-response and SaaS landing drafts and a human launch handoff.",
+    "Missing provider or vision access is recorded as a handoff. No absent data or visual inspection is invented.",
+    "The exact integrated artifact reaches a human review gate. No publication, spend, tracking change or upload is executed."
+  ],
+  "stepGraph": {
+    "nodes": [
+      {
+        "id": "load-context",
+        "kind": "script",
+        "uses": {
+          "scriptId": "load-approved-context"
+        },
+        "dependsOn": [],
+        "inputArtifacts": [],
+        "outputArtifacts": [
+          "approved-context"
+        ],
+        "completion": "Product, audience, channel, goals, and prior approved context are declared as a typed artifact.",
+        "timeoutSeconds": 60,
+        "idempotency": "required",
+        "failureBehavior": "stop"
+      },
+      {
+        "id": "search",
+        "kind": "skill",
+        "uses": {
+          "skillId": "create-paid-campaign"
+        },
+        "dependsOn": [
+          "load-context"
+        ],
+        "inputArtifacts": [
+          "approved-context"
+        ],
+        "outputArtifacts": [
+          "search-draft"
+        ],
+        "completion": "Draft a bottom-of-funnel search campaign with query intents, exclusions, targeting limits, no-spend budget proposal and proof requirements.",
+        "timeoutSeconds": 300,
+        "idempotency": "none",
+        "failureBehavior": "stop",
+        "budget": {
+          "maxTokens": 8000
+        }
+      },
+      {
+        "id": "dr-landing",
+        "kind": "skill",
+        "uses": {
+          "skillId": "write-copy"
+        },
+        "dependsOn": [
+          "search"
+        ],
+        "inputArtifacts": [
+          "approved-context",
+          "search-draft"
+        ],
+        "outputArtifacts": [
+          "dr-page"
+        ],
+        "completion": "Write a direct-response landing draft with an offer, belief progression, objections, supplied proof and one CTA. Preserve claim limits.",
+        "timeoutSeconds": 300,
+        "idempotency": "none",
+        "failureBehavior": "stop",
+        "budget": {
+          "maxTokens": 8000
+        }
+      },
+      {
+        "id": "saas-landing",
+        "kind": "skill",
+        "uses": {
+          "skillId": "write-copy"
+        },
+        "dependsOn": [
+          "search"
+        ],
+        "inputArtifacts": [
+          "approved-context",
+          "search-draft"
+        ],
+        "outputArtifacts": [
+          "saas-page"
+        ],
+        "completion": "Write a separate SaaS landing draft based on product mechanism, user job, activation and one CTA. Do not reuse the direct-response page as the same artifact or invent product facts.",
+        "timeoutSeconds": 300,
+        "idempotency": "none",
+        "failureBehavior": "stop",
+        "budget": {
+          "maxTokens": 8000
+        }
+      },
+      {
+        "id": "integrate",
+        "kind": "skill",
+        "uses": {
+          "skillId": "create-paid-campaign"
+        },
+        "dependsOn": [
+          "dr-landing",
+          "saas-landing"
+        ],
+        "inputArtifacts": [
+          "search-draft",
+          "dr-page",
+          "saas-page"
+        ],
+        "outputArtifacts": [
+          "created-artifact"
+        ],
+        "completion": "Integrate the search ads, intent-to-page routing, separate DR and SaaS pages, budget boundaries and measurement proposal into one launch draft. Do not publish or spend.",
+        "timeoutSeconds": 300,
+        "idempotency": "none",
+        "failureBehavior": "stop",
+        "budget": {
+          "maxTokens": 8000
+        }
+      },
+      {
+        "id": "review",
+        "kind": "skill",
+        "uses": {
+          "skillId": "fresh-eyes-review"
+        },
+        "dependsOn": [
+          "integrate"
+        ],
+        "inputArtifacts": [
+          "created-artifact"
+        ],
+        "outputArtifacts": [
+          "review-packet"
+        ],
+        "completion": "Review the exact integrated campaign, each separate page, message matching, claims and measurement definitions. Produce a human handoff; no account mutation.",
+        "timeoutSeconds": 300,
+        "idempotency": "none",
+        "failureBehavior": "stop",
+        "budget": {
+          "maxTokens": 8000
+        }
+      }
+    ]
+  },
+  "artifacts": [
+    {
+      "id": "approved-context",
+      "name": "approved context",
+      "format": "markdown",
+      "schema": "conquistador.artifact.approved-context/v1",
+      "provenanceRequired": true
+    },
+    {
+      "id": "search-draft",
+      "name": "search draft",
+      "format": "markdown",
+      "schema": "conquistador.artifact.search-draft/v1",
+      "provenanceRequired": true
+    },
+    {
+      "id": "dr-page",
+      "name": "dr page",
+      "format": "markdown",
+      "schema": "conquistador.artifact.dr-page/v1",
+      "provenanceRequired": true
+    },
+    {
+      "id": "saas-page",
+      "name": "saas page",
+      "format": "markdown",
+      "schema": "conquistador.artifact.saas-page/v1",
+      "provenanceRequired": true
+    },
+    {
+      "id": "created-artifact",
+      "name": "created artifact",
+      "format": "markdown",
+      "schema": "conquistador.artifact.created-artifact/v1",
+      "provenanceRequired": true
+    },
+    {
+      "id": "review-packet",
+      "name": "review packet",
+      "format": "markdown",
+      "schema": "conquistador.review-packet/v1",
+      "provenanceRequired": true
+    }
+  ],
+  "budgets": {
+    "tokensPerRun": 64000,
+    "judgmentNodesMaxTokens": 8000,
+    "maximumCostPerRun": 0
+  },
+  "retry": {
+    "maxAttempts": 1,
+    "preserveCompletedSteps": true
+  },
+  "resume": {
+    "enabled": true,
+    "preserveCompletedWork": true
+  },
+  "timeout": {
+    "seconds": 3600
+  },
+  "idempotency": {
+    "required": true,
+    "keyFrom": [
+      "canonicalId",
+      "version",
+      "inputs"
+    ]
+  },
+  "gates": {
+    "review": [
+      {
+        "id": "final-review",
+        "kind": "review",
+        "afterStep": "review",
+        "humanRequired": true,
+        "modelCannotSatisfy": true,
+        "outcomes": [
+          "accept",
+          "revise",
+          "reject"
+        ],
+        "artifactIds": [
+          "created-artifact",
+          "review-packet"
+        ],
+        "stopOnReject": true
+      }
+    ],
+    "action": []
+  },
+  "provenance": {
+    "sourcePath": "runtime/fixtures/playbooks/paid-search-split-landing.json",
+    "recordedAt": "2026-09-15T00:00:00.000Z",
+    "proseCompositionKind": "compatibility-map-only"
+  },
+  "receipts": {
+    "required": true,
+    "redaction": "required",
+    "includeToolOperations": true
+  },
+  "evalSignals": {
+    "criteria": [
+      {
+        "id": "graph-ran",
+        "description": "Each declared node produces a trace or an explicit pending state.",
+        "source": "trace"
+      },
+      {
+        "id": "bounded-handoff",
+        "description": "Missing connections and external actions remain unexecuted handoffs.",
+        "source": "artifact"
+      },
+      {
+        "id": "human-review",
+        "description": "A human reviews the exact integrated artifact before any action.",
+        "source": "human-verdict"
+      }
+    ]
+  },
+  "finalDeliverable": {
+    "artifactId": "created-artifact",
+    "description": "A bottom-of-funnel search plan with separate direct-response and SaaS landing drafts and a human launch handoff.",
+    "accompanyingArtifactIds": [
+      "review-packet"
+    ]
+  },
+  "nextDecision": {
+    "id": "review-draft",
+    "description": "Accept, revise or reject this draft. External actions need a separate host-owned authorization."
+  },
+  "activation": {
+    "requiredByPortablePlugin": false,
+    "loadsAtPluginRuntime": false,
+    "customerManagedCatalog": false
+  }
+}

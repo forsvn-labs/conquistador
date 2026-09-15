@@ -1,0 +1,247 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "conquistador.agent-package/v2",
+  "title": "Conquistador master agent package v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "id",
+    "kind",
+    "role",
+    "displayName",
+    "productName",
+    "pluginVersion",
+    "canonicalSkill",
+    "canonicalSkillRoot",
+    "installClass",
+    "publicListing",
+    "cleanHostProof",
+    "zeroRuntime",
+    "notThisDoor",
+    "mayLoadSkills",
+    "mayLoadWorkflows",
+    "proseOnlyWorkflows",
+    "undeclaredSiblings",
+    "absentDeclaredSiblings",
+    "capabilities",
+    "context",
+    "results",
+    "delegation",
+    "missingCapabilityBehavior",
+    "lifecycle"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "conquistador.agent-package/v2"
+    },
+    "id": {
+      "type": "string",
+      "enum": [
+        "agent:conquistador",
+        "agent:advisor",
+        "agent:worker"
+      ]
+    },
+    "kind": {
+      "type": "string",
+      "enum": [
+        "master-agent",
+        "squad-member"
+      ]
+    },
+    "role": {
+      "type": "string",
+      "enum": [
+        "orchestrator",
+        "advisor",
+        "worker"
+      ]
+    },
+    "displayName": {
+      "type": "string",
+      "minLength": 1
+    },
+    "productName": {
+      "const": "conquistador"
+    },
+    "pluginVersion": {
+      "const": "0.1.0"
+    },
+    "canonicalSkill": {
+      "const": "conquistador"
+    },
+    "canonicalSkillRoot": {
+      "enum": [
+        "skills/conquistador",
+        "agent/skills/conquistador",
+        "advisor/skills/conquistador",
+        "worker/skills/conquistador"
+      ]
+    },
+    "installClass": {
+      "const": "candidate-only"
+    },
+    "publicListing": {
+      "const": false
+    },
+    "cleanHostProof": {
+      "const": false
+    },
+    "zeroRuntime": {
+      "const": true
+    },
+    "notThisDoor": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "mayLoadSkills": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "mayLoadWorkflows": {
+      "type": "array",
+      "minItems": 0,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "proseOnlyWorkflows": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "undeclaredSiblings": {
+      "const": "fail-closed"
+    },
+    "absentDeclaredSiblings": {
+      "const": "degrade-parent-only"
+    },
+    "capabilities": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "requested",
+        "missing"
+      ],
+      "properties": {
+        "requested": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "missing": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "inputs"
+      ],
+      "properties": {
+        "inputs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "results": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contract"
+      ],
+      "properties": {
+        "contract": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "delegation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "maxDelegationsPerRun",
+        "mayExecuteAssignedWork",
+        "mayAuthorizeMutations",
+        "maySelfApprove"
+      ],
+      "properties": {
+        "maxDelegationsPerRun": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 12
+        },
+        "mayExecuteAssignedWork": {
+          "type": "boolean"
+        },
+        "mayAuthorizeMutations": {
+          "const": false
+        },
+        "maySelfApprove": {
+          "const": false
+        }
+      }
+    },
+    "missingCapabilityBehavior": {
+      "const": "fail-closed-draft"
+    },
+    "lifecycle": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "setup",
+        "upgrade",
+        "remove"
+      ],
+      "properties": {
+        "setup": {
+          "type": "string",
+          "minLength": 1
+        },
+        "upgrade": {
+          "type": "string",
+          "minLength": 1
+        },
+        "remove": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    }
+  }
+}

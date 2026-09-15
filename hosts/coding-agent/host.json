@@ -29,6 +29,7 @@
     "marketing methods",
     "outcome skill contracts",
     "specialist assignment and integration contract",
+    "BB child-thread dispatch, bounded cleanup and exact-artifact review",
     "review packet",
     "approval boundary for send, publish, spend, and external writes"
   ],
@@ -42,7 +43,7 @@
   ],
   "missingCapabilityBehavior": "fail-closed-draft",
   "lifecycle": {
-    "setup": "Install the skills/ tree as the complete plugin (Claude /plugin, Codex overlay, or pinned skills CLI).",
+    "setup": "Install the skills/ tree as the complete plugin (Claude /plugin, Codex overlay, or pinned skills CLI). The included coding-agent/team.mjs adapter needs an explicit existing BB project, environment and parent.",
     "upgrade": "Replace the owned plugin tree with a newer skills/ copy. Hosts do not fetch at runtime.",
     "remove": "Delete the owned plugin or skill directories recorded by the host. Leave user artifacts."
   }

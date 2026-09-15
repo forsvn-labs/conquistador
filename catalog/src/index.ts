@@ -10,3 +10,5 @@ export * from "./onboarding.ts";
 export * from "./providers/index.ts";
 export * from "./receipt.ts";
 export * from "./validate.ts";
+export * from "./stack.ts";
+export * from "./providers/executor-github.ts";

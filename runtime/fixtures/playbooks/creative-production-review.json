@@ -1,0 +1,322 @@
+{
+  "schemaVersion": "conquistador.playbook-record/v1",
+  "id": "creative-production-review",
+  "canonicalId": "playbook:creative-production-review",
+  "version": "1.0.0",
+  "kind": "executable-playbook",
+  "executionStatus": "executable",
+  "proseSource": "skills/conquistador/workflows/creative-asset-review.md",
+  "inputs": {
+    "version": "1.0.0",
+    "fields": [
+      {
+        "name": "product",
+        "type": "string",
+        "required": true,
+        "description": "The product or offer the loop is about."
+      },
+      {
+        "name": "audience",
+        "type": "string",
+        "required": true,
+        "description": "The audience the content must serve."
+      },
+      {
+        "name": "channel",
+        "type": "string",
+        "required": true,
+        "description": "The target channel for this cycle."
+      },
+      {
+        "name": "goals",
+        "type": "string",
+        "required": true,
+        "description": "The bounded goal and success signal for this cycle."
+      },
+      {
+        "name": "priorApprovedContext",
+        "type": "artifact",
+        "required": false,
+        "description": "Prior approved facts, decisions, and observed results owned by the user."
+      }
+    ]
+  },
+  "completionCriteria": [
+    "A bounded creative production draft, asset manifest and explicit vision-review state, ready for human review.",
+    "Missing provider or vision access is recorded as a handoff. No absent data or visual inspection is invented.",
+    "The exact integrated artifact reaches a human review gate. No publication, spend, tracking change or upload is executed."
+  ],
+  "stepGraph": {
+    "nodes": [
+      {
+        "id": "load-context",
+        "kind": "script",
+        "uses": {
+          "scriptId": "load-approved-context"
+        },
+        "dependsOn": [],
+        "inputArtifacts": [],
+        "outputArtifacts": [
+          "approved-context"
+        ],
+        "completion": "Product, audience, channel, goals, and prior approved context are declared as a typed artifact.",
+        "timeoutSeconds": 60,
+        "idempotency": "required",
+        "failureBehavior": "stop"
+      },
+      {
+        "id": "brief",
+        "kind": "skill",
+        "uses": {
+          "skillId": "brief-creative"
+        },
+        "dependsOn": [
+          "load-context"
+        ],
+        "inputArtifacts": [
+          "approved-context"
+        ],
+        "outputArtifacts": [
+          "creative-brief"
+        ],
+        "completion": "Define a bounded creative volume, variants, brand constraints, asset dimensions, production budget, and claims that have supplied proof.",
+        "timeoutSeconds": 300,
+        "idempotency": "none",
+        "failureBehavior": "stop",
+        "budget": {
+          "maxTokens": 8000
+        }
+      },
+      {
+        "id": "produce",
+        "kind": "skill",
+        "uses": {
+          "skillId": "create-shortform"
+        },
+        "dependsOn": [
+          "brief"
+        ],
+        "inputArtifacts": [
+          "approved-context",
+          "creative-brief"
+        ],
+        "outputArtifacts": [
+          "production-draft"
+        ],
+        "completion": "Draft scripts, storyboards, visual directions and an asset manifest. Link actual generated assets only when provided. Label missing generation access; never claim a rendered asset exists.",
+        "timeoutSeconds": 300,
+        "idempotency": "none",
+        "failureBehavior": "stop",
+        "budget": {
+          "maxTokens": 8000
+        }
+      },
+      {
+        "id": "vision",
+        "kind": "tool-operation",
+        "uses": {
+          "toolOperationId": "creative.vision-review",
+          "maturity": "unverified",
+          "fallback": "human-action-manifest"
+        },
+        "dependsOn": [
+          "produce"
+        ],
+        "inputArtifacts": [
+          "production-draft"
+        ],
+        "outputArtifacts": [
+          "vision-record"
+        ],
+        "completion": "Request exact asset vision checks through a host connection. Without that connection or assets, produce an explicit unexecuted handoff.",
+        "timeoutSeconds": 60,
+        "idempotency": "required",
+        "failureBehavior": "degrade"
+      },
+      {
+        "id": "integrate",
+        "kind": "skill",
+        "uses": {
+          "skillId": "brief-creative"
+        },
+        "dependsOn": [
+          "vision"
+        ],
+        "inputArtifacts": [
+          "creative-brief",
+          "production-draft",
+          "vision-record"
+        ],
+        "outputArtifacts": [
+          "created-artifact"
+        ],
+        "completion": "Integrate the production draft and observed vision results. If inspection was unavailable, list checks still needed. Provide a draft-only production handoff.",
+        "timeoutSeconds": 300,
+        "idempotency": "none",
+        "failureBehavior": "stop",
+        "budget": {
+          "maxTokens": 8000
+        }
+      },
+      {
+        "id": "review",
+        "kind": "skill",
+        "uses": {
+          "skillId": "fresh-eyes-review"
+        },
+        "dependsOn": [
+          "integrate"
+        ],
+        "inputArtifacts": [
+          "created-artifact",
+          "vision-record"
+        ],
+        "outputArtifacts": [
+          "review-packet"
+        ],
+        "completion": "Review the exact integrated creative draft, brand consistency, proof gaps and missing visual checks. Do not claim independent model or vision review without executor evidence.",
+        "timeoutSeconds": 300,
+        "idempotency": "none",
+        "failureBehavior": "stop",
+        "budget": {
+          "maxTokens": 8000
+        }
+      }
+    ]
+  },
+  "artifacts": [
+    {
+      "id": "approved-context",
+      "name": "approved context",
+      "format": "markdown",
+      "schema": "conquistador.artifact.approved-context/v1",
+      "provenanceRequired": true
+    },
+    {
+      "id": "creative-brief",
+      "name": "creative brief",
+      "format": "markdown",
+      "schema": "conquistador.artifact.creative-brief/v1",
+      "provenanceRequired": true
+    },
+    {
+      "id": "production-draft",
+      "name": "production draft",
+      "format": "markdown",
+      "schema": "conquistador.artifact.production-draft/v1",
+      "provenanceRequired": true
+    },
+    {
+      "id": "vision-record",
+      "name": "vision record",
+      "format": "markdown",
+      "schema": "conquistador.artifact.vision-record/v1",
+      "provenanceRequired": true
+    },
+    {
+      "id": "created-artifact",
+      "name": "created artifact",
+      "format": "markdown",
+      "schema": "conquistador.artifact.created-artifact/v1",
+      "provenanceRequired": true
+    },
+    {
+      "id": "review-packet",
+      "name": "review packet",
+      "format": "markdown",
+      "schema": "conquistador.review-packet/v1",
+      "provenanceRequired": true
+    }
+  ],
+  "budgets": {
+    "tokensPerRun": 64000,
+    "judgmentNodesMaxTokens": 8000,
+    "maximumCostPerRun": 0
+  },
+  "retry": {
+    "maxAttempts": 1,
+    "preserveCompletedSteps": true
+  },
+  "resume": {
+    "enabled": true,
+    "preserveCompletedWork": true
+  },
+  "timeout": {
+    "seconds": 3600
+  },
+  "idempotency": {
+    "required": true,
+    "keyFrom": [
+      "canonicalId",
+      "version",
+      "inputs"
+    ]
+  },
+  "gates": {
+    "review": [
+      {
+        "id": "final-review",
+        "kind": "review",
+        "afterStep": "review",
+        "humanRequired": true,
+        "modelCannotSatisfy": true,
+        "outcomes": [
+          "accept",
+          "revise",
+          "reject"
+        ],
+        "artifactIds": [
+          "created-artifact",
+          "review-packet"
+        ],
+        "stopOnReject": true
+      }
+    ],
+    "action": []
+  },
+  "provenance": {
+    "sourcePath": "runtime/fixtures/playbooks/creative-production-review.json",
+    "recordedAt": "2026-09-15T00:00:00.000Z",
+    "proseCompositionKind": "compatibility-map-only"
+  },
+  "receipts": {
+    "required": true,
+    "redaction": "required",
+    "includeToolOperations": true
+  },
+  "evalSignals": {
+    "criteria": [
+      {
+        "id": "graph-ran",
+        "description": "Each declared node produces a trace or an explicit pending state.",
+        "source": "trace"
+      },
+      {
+        "id": "bounded-handoff",
+        "description": "Missing connections and external actions remain unexecuted handoffs.",
+        "source": "artifact"
+      },
+      {
+        "id": "human-review",
+        "description": "A human reviews the exact integrated artifact before any action.",
+        "source": "human-verdict"
+      }
+    ]
+  },
+  "finalDeliverable": {
+    "artifactId": "created-artifact",
+    "description": "A bounded creative production draft, asset manifest and explicit vision-review state, ready for human review.",
+    "accompanyingArtifactIds": [
+      "review-packet"
+    ]
+  },
+  "nextDecision": {
+    "id": "review-draft",
+    "description": "Accept, revise or reject this draft. External actions need a separate host-owned authorization."
+  },
+  "activation": {
+    "requiredByPortablePlugin": false,
+    "loadsAtPluginRuntime": false,
+    "customerManagedCatalog": false
+  }
+}
