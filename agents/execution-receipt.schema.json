@@ -54,6 +54,7 @@
     "specialists": {
       "type": "array",
       "maxItems": 12,
+      "description": "Plan assignments first, then observed integration, correction, and the final review child. Duplicate assignment IDs are rejected. The array must not drop plan specialists to fit coordinator rows.",
       "items": {
         "type": "object",
         "additionalProperties": false,

@@ -117,25 +117,30 @@ export async function runSpecialistTeam({ plan: input, root, host, parent, signa
     }
     // Integration is one explicit parent assignment. It receives every specialist result.
     let integrated = await execute(integration, 'integrate', [...results.values()]);
+    const integrationResult = integrated;
     let integratedDigest = digest(integrated.artifact);
     if (integrated.status === 'blocked') {
-      return finish({ status: 'blocked', independentReview: false, integrated, integratedDigest, results: [...results.values()] });
+      return finish({
+        status: 'blocked', independentReview: false, integrated, integratedDigest,
+        integration: integrationResult, results: [...results.values()],
+      });
     }
     let reviewed = await execute(review, 'review', [integrated], integratedDigest);
     let corrected = false;
+    let correctionResult = null;
     const additionalGaps = [];
     if (reviewed.status === 'revise') {
       if (plan.limits.maxDispatches - dispatches >= 2) {
         emit('team.correction', { attempt: 1, reviewDigest: digest(reviewed) });
-        const correctedResult = await execute(correction, 'correct', [integrated, reviewed]);
-        if (correctedResult.status === 'blocked') {
+        correctionResult = await execute(correction, 'correct', [integrated, reviewed]);
+        if (correctionResult.status === 'blocked') {
           additionalGaps.push('Targeted correction was blocked; remaining review findings are unresolved.');
           return finish({
             status: 'blocked', independentReview: isolated, integrated, integratedDigest, review: reviewed,
-            results: [...results.values()],
+            integration: integrationResult, correction: correctionResult, results: [...results.values()],
           }, { additionalGaps, corrected: true });
         }
-        integrated = correctedResult;
+        integrated = correctionResult;
         integratedDigest = digest(integrated.artifact);
         reviewed = await execute(review, 'review', [integrated], integratedDigest);
         corrected = true;
@@ -151,7 +156,8 @@ export async function runSpecialistTeam({ plan: input, root, host, parent, signa
     emit('team.finished', { integratedDigest, independentReview: isolated, humanAccepted: false, corrected });
     return finish({
       status: reviewed.status, independentReview: isolated, humanAccepted: false,
-      integrated, integratedDigest, review: reviewed, results: [...results.values()],
+      integrated, integratedDigest, review: reviewed, integration: integrationResult,
+      correction: correctionResult, results: [...results.values()],
     }, { additionalGaps, corrected });
   } catch (error) {
     error.teamTrace = trace;

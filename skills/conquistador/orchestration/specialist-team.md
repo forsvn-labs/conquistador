@@ -84,10 +84,12 @@ A result contains a finished draft, evidence and gaps. The host binds its execut
 the model cannot choose that identity. The reviewer must echo the digest of the exact integrated
 artifact. `draft`, `revise`, and `blocked` are valid results; none means human acceptance. The
 deterministic `conquistador.execution-receipt/v1` is derived from the validated plan plus observed
-host results. Public fields may include capability labels, role labels, deliverable, evidence
-classes, execution mode, review independence, child execution IDs/statuses, artifact digest, gaps,
-and external-action status. External actions stay empty and `humanAccepted` stays false in this
-draft-only adapter.
+host results. Its specialist list keeps every plan assignment, then any observed integration,
+correction, and the final review child, each with host execution IDs and statuses. A second review
+after correction replaces the receipt's review row; it does not duplicate it. Public fields may
+include capability labels, role labels, deliverable, evidence classes, execution mode, review
+independence, child execution IDs/statuses, artifact digest, gaps, and external-action status.
+External actions stay empty and `humanAccepted` stays false in this draft-only adapter.
 
 A host without isolated contexts must provide the coordinator's explicit `parent.execute` callback.
 That callback performs each role in the current context. The result records `sequential-in-context`

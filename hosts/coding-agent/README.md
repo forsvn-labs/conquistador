@@ -65,7 +65,8 @@ creative-assets. Public titles look like `Conquistador: Campaign data`. No new o
 created. An optional `presentation` object on the plan is validated against that roster. Plans
 without it remain valid. The coordinator emits a compact engagement brief before the first dispatch
 and writes `conquistador.execution-receipt/v1` beside the integrated artifact. Receipt execution IDs
-and statuses come from the host. External actions stay empty and `humanAccepted` stays false.
+and statuses come from the host, including observed integration, correction, and the final review
+child. External actions stay empty and `humanAccepted` stays false.
 
 ## Embed in a host
 

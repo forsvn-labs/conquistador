@@ -128,7 +128,9 @@ test('isolated runs bind observed child ids and format a truthful receipt', asyn
   assert.equal(out.independentReview, true);
   assert.equal(out.receipt.independentReview, true);
   assert.equal(out.receipt.integratedDigest, digest(out.integrated.artifact));
-  assert.deepEqual(out.receipt.specialists.map(item => item.executionId), ['thr_child1', 'thr_child2']);
+  assert.deepEqual(out.receipt.specialists.map(item => item.assignmentId), ['first', 'second', 'integrate', 'review']);
+  assert.deepEqual(out.receipt.specialists.map(item => item.executionId), ['thr_child1', 'thr_child2', 'thr_child3', 'thr_child4']);
+  assert.deepEqual(out.receipt.specialists.map(item => item.label), ['Copy', 'Copy', 'Integration', 'Review']);
   assert.match(out.receiptMarkdown, /1 independent review/);
   assert.match(formatEngagementBrief(p, { isolated: true }), /separate fresh-eyes review/);
 });
@@ -150,6 +152,10 @@ test('one targeted correction follows a revise verdict, then one exact-digest re
   assert.equal(reviews, 2);
   assert.equal(out.status, 'draft');
   assert.equal(out.trace.some(event => event.type === 'team.correction'), true);
+  assert.deepEqual(out.receipt.specialists.map(item => item.assignmentId), ['first', 'second', 'integrate', 'correct', 'review']);
+  assert.equal(out.receipt.specialists.find(item => item.assignmentId === 'integrate').executionId, 'thr_fix3');
+  assert.equal(out.receipt.specialists.find(item => item.assignmentId === 'correct').executionId, 'thr_fix5');
+  assert.equal(out.receipt.specialists.find(item => item.assignmentId === 'review').executionId, 'thr_fix6');
   assert.match(out.receiptMarkdown, /revise, then draft on artifact/);
 });
 
@@ -199,7 +205,24 @@ test('blocked specialists produce a receipt that does not report completion', as
   assert.equal(out.independentReview, false);
   assert.equal(out.receipt.integratedDigest, null);
   assert.equal(out.receipt.specialists.find(item => item.assignmentId === 'first').status, 'blocked');
+  assert.equal(out.receipt.specialists.some(item => item.assignmentId === 'review'), false);
   assert.equal(out.receipt.humanAccepted, false);
+});
+
+test('blocked pre-review receipts report the overall blocked state, not a specialist draft', async () => {
+  const p = plan();
+  const parent = { async execute(packet) {
+    const result = resultFor(packet);
+    if (packet.assignment.id === 'second') result.status = 'blocked';
+    return { executionId: 'same-parent', isolated: false, result };
+  } };
+  const out = await runSpecialistTeam({ plan: p, root, parent });
+  assert.equal(out.status, 'blocked');
+  assert.equal(out.receipt.specialists[0].status, 'draft');
+  assert.equal(out.receipt.specialists[1].status, 'blocked');
+  assert.equal(out.receipt.specialists.some(item => item.assignmentId === 'review'), false);
+  assert.match(out.receiptMarkdown, /Review: blocked same-context; not independent/);
+  assert.equal(out.receiptMarkdown.includes('Review: draft same-context'), false);
 });
 
 test('BB child titles use the public roster and observed thread identity', async () => {
@@ -233,6 +256,13 @@ test('malformed specialist output is rejected and formatter errors do not drop J
   assert.equal(receipt.independentReview, false);
   assert.equal(receipt.specialists[1].status, 'blocked');
   assert.equal(receipt.integratedDigest, null);
+  const overflowPlan = plan();
+  overflowPlan.assignments = Array.from({ length: 11 }, (_, index) => task(`item${String.fromCharCode(97 + index)}`));
+  assert.throws(() => deriveReceipt({
+    plan: overflowPlan, mode: 'isolated-workers', independentReview: true, results: [],
+    integration: { assignmentId: 'integrate', executionId: 'thr_i', status: 'draft', evidence: [], gaps: [] },
+    review: { assignmentId: 'review', executionId: 'thr_r', status: 'draft', evidence: [], gaps: [] },
+  }), /cannot drop plan specialists/);
 });
 
 test('digest mismatch rejects the review and does not report completion', async () => {
@@ -272,5 +302,8 @@ test('blocked correction keeps observed independent review and the prior integra
   assert.equal(out.status, 'blocked');
   assert.equal(out.receipt.independentReview, true);
   assert.equal(out.receipt.integratedDigest, digest(out.integrated.artifact));
+  assert.equal(out.receipt.specialists.find(item => item.assignmentId === 'integrate').status, 'draft');
+  assert.equal(out.receipt.specialists.find(item => item.assignmentId === 'review').status, 'revise');
+  assert.equal(out.receipt.specialists.find(item => item.assignmentId === 'correct').status, 'blocked');
   assert.ok(out.receipt.gaps.some(item => /Targeted correction was blocked/.test(item)));
 });

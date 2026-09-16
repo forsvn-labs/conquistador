@@ -31,9 +31,10 @@ product-engineering requests at turn start. It abstains from unrelated coding wo
 watcher, poller, or transcript collector starts. Substantial runs emit a compact engagement brief
 before dispatch and an execution receipt after isolated or multi-capability work. Public fields may
 include capability labels, specialist role labels, deliverable, evidence classes, execution mode,
-review independence, child execution IDs/statuses, artifact digest, gaps, and external-action
-status. Prompts, skill paths, routing scores, token budgets, hidden schemas, credentials, private
-knowledge bodies, and chain-of-thought stay private.
+review independence, child execution IDs/statuses for plan assignments plus observed integration,
+correction, and the final review, artifact digest, gaps, and external-action status. Prompts, skill
+paths, routing scores, token budgets, hidden schemas, credentials, private knowledge bodies, and
+chain-of-thought stay private.
 
 The BB coordinator limits concurrency to four and total dispatches to twelve, including integration,
 review, and at most one correction cycle. Specialists receive bounded assignments and cannot delegate

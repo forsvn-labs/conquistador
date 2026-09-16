@@ -44,6 +44,11 @@ it('validates the operator profile and execution receipt contracts', () => {
   expect(receipt({ ...sample, externalActions: ['send'] })).toBe(false);
   expect(receipt({ ...sample, integratedDigest: 'sha256:not-a-digest' })).toBe(false);
   expect(receipt({ ...sample, specialists: [{ assignmentId: 'copy', label: 'Copy', executionId: 'x'.repeat(81), status: 'draft' }] })).toBe(false);
+  expect(receipt({ ...sample, specialists: [
+    { assignmentId: 'copy', label: 'Copy', executionId: 'thr_a', status: 'draft' },
+    { assignmentId: 'integrate', label: 'Integration', executionId: 'thr_b', status: 'draft' },
+    { assignmentId: 'review', label: 'Review', executionId: 'thr_c', status: 'draft' },
+  ] })).toBe(true);
   expect(receipt({ ...sample, mode: 'sequential-in-context', independentReview: true })).toBe(false);
   expect(receipt({ ...sample, mode: 'sequential-in-context', independentReview: false })).toBe(true);
 });

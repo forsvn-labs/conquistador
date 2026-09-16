@@ -99,33 +99,48 @@ function observedExecutionId(value) {
   return redactText(value) === value ? value : null;
 }
 
-export function deriveReceipt({ plan, mode, independentReview, results = [], integrated = null, integratedDigest = null, review = null, additionalGaps = [] }) {
+const coordinatorIds = Object.freeze(['integrate', 'review', 'correct']);
+
+function observedRow(assignment, result) {
+  return {
+    assignmentId: assignment.id,
+    label: publicSpecialistLabel(assignment),
+    executionId: observedExecutionId(result?.executionId),
+    status: result ? observedStatus(result) : 'blocked',
+  };
+}
+
+export function deriveReceipt({
+  plan, mode, independentReview, results = [], integrated = null, integratedDigest = null,
+  review = null, integration = null, correction = null, additionalGaps = [],
+}) {
   const isolated = mode === 'isolated-workers';
   const presentation = derivePresentation(plan, { isolated });
   const byId = new Map((results ?? []).map(result => [result.assignmentId, result]));
+  const integrationResult = integration ?? (integrated?.assignmentId === 'integrate' ? integrated : null);
+  const correctionResult = correction ?? (integrated?.assignmentId === 'correct' ? integrated : null);
+  const planRows = plan.assignments.map(task => observedRow(task, byId.get(task.id)));
+  const coordinatorRows = [];
+  if (integrationResult) coordinatorRows.push(observedRow({ id: 'integrate', role: 'parent' }, integrationResult));
+  if (correctionResult) coordinatorRows.push(observedRow({ id: 'correct', role: 'parent' }, correctionResult));
+  if (review) coordinatorRows.push(observedRow({ id: 'review', role: 'outcome' }, review));
+  assert.ok(planRows.length <= 12, 'Plan specialists exceed receipt bound');
+  assert.ok(planRows.length + coordinatorRows.length <= 12, 'Receipt cannot drop plan specialists to fit coordinator rows');
   const receipt = {
     schemaVersion: receiptProtocol,
     runId: plan.id,
     outcome: presentation.outcome,
     capabilities: (presentation.capabilities ?? []).map(item => ({ id: item.id, label: publicCapabilities[item.id] })),
-    specialists: plan.assignments.map(task => {
-      const observed = byId.get(task.id);
-      return {
-        assignmentId: task.id,
-        label: publicSpecialistLabel(task),
-        executionId: observedExecutionId(observed?.executionId),
-        status: observed ? observedStatus(observed) : 'blocked',
-      };
-    }),
+    specialists: [...planRows, ...coordinatorRows],
     mode,
     independentReview: isolated && independentReview === true,
     integratedDigest: integratedDigest ?? null,
     evidence: boundUnique([
       ...(presentation.evidence ?? []),
-      ...[...byId.values(), integrated, review].flatMap(result => result?.evidence ?? []),
+      ...[...byId.values(), integrationResult, correctionResult, integrated, review].flatMap(result => result?.evidence ?? []),
     ]),
     gaps: boundUnique([
-      ...[...byId.values(), integrated, review].flatMap(result => result?.gaps ?? []),
+      ...[...byId.values(), integrationResult, correctionResult, integrated, review].flatMap(result => result?.gaps ?? []),
       ...additionalGaps,
     ]),
     externalActions: [],
@@ -134,20 +149,27 @@ export function deriveReceipt({ plan, mode, independentReview, results = [], int
   return validateReceipt(receipt);
 }
 
-function reviewLine(receipt, { review, corrected }) {
+function reviewLine(receipt, { review, corrected, status }) {
   const digestText = receipt.integratedDigest ?? 'unavailable';
-  if (!receipt.independentReview) {
-    return `${review?.status ?? receipt.specialists.find(Boolean)?.status ?? 'blocked'} same-context; not independent`;
+  const reviewRow = receipt.specialists.find(item => item.assignmentId === 'review');
+  const overall = status ?? review?.status ?? reviewRow?.status ?? 'blocked';
+  if (!review && !reviewRow) {
+    return receipt.independentReview ? `${overall}; no separate review` : `${overall} same-context; not independent`;
   }
-  if (corrected) return `revise, then ${review?.status ?? 'blocked'} on artifact ${digestText}`;
-  return `${review?.status ?? 'blocked'} on artifact ${digestText}`;
+  const reviewStatus = review?.status ?? reviewRow?.status ?? overall;
+  if (!receipt.independentReview) return `${reviewStatus} same-context; not independent`;
+  if (corrected) return `revise, then ${reviewStatus} on artifact ${digestText}`;
+  return `${reviewStatus} on artifact ${digestText}`;
 }
 
-export function formatReceiptMarkdown(receipt, { review = null, corrected = false } = {}) {
+export function formatReceiptMarkdown(receipt, { review = null, corrected = false, status = null } = {}) {
   const validated = validateReceipt(receipt);
-  const specialistCount = validated.specialists.filter(item => item.executionId).length;
+  const planCount = validated.specialists.filter(item => item.executionId && !coordinatorIds.includes(item.assignmentId)).length;
+  const hasIntegration = validated.specialists.some(item => item.assignmentId === 'integrate');
+  const hasCorrection = validated.specialists.some(item => item.assignmentId === 'correct');
+  const hasReview = validated.specialists.some(item => item.assignmentId === 'review');
   const context = validated.mode === 'isolated-workers'
-    ? `${specialistCount} isolated specialist contexts, 1 parent integration, ${validated.independentReview ? '1 independent review' : 'same-context review'}`
+    ? `${planCount} isolated specialist contexts${hasIntegration ? ', 1 parent integration' : ''}${hasCorrection ? ', 1 correction' : ''}, ${validated.independentReview ? '1 independent review' : (hasReview ? 'same-context review' : 'no separate review')}`
     : 'sequential in the parent context; review is not independent';
   const evidence = validated.evidence.length
     ? `${validated.evidence.length} supplied project sources; no live account data`
@@ -159,7 +181,7 @@ export function formatReceiptMarkdown(receipt, { review = null, corrected = fals
     `Specialists run: ${validated.specialists.map(item => item.label).join(', ') || 'none'}`,
     `Execution: ${context}`,
     `Evidence used: ${evidence}`,
-    `Review: ${reviewLine(validated, { review, corrected })}`,
+    `Review: ${reviewLine(validated, { review, corrected, status })}`,
     `Open gaps: ${gaps}`,
     'External actions: none',
   ].join('\n');
@@ -174,7 +196,9 @@ export function attachReceipt(result, plan, extras = {}) {
   let receiptMarkdown = null;
   let receiptFormatError = false;
   try {
-    receiptMarkdown = formatReceiptMarkdown(receipt, { review: result.review, corrected: extras.corrected === true });
+    receiptMarkdown = formatReceiptMarkdown(receipt, {
+      review: result.review, corrected: extras.corrected === true, status: result.status,
+    });
   } catch {
     receiptFormatError = true;
   }
