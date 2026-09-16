@@ -246,8 +246,12 @@ async function guided() {
 }
 export async function runSetup(args) {
   try {
+    if (args[0] === 'doctor') {
+      const { runInstallationDoctor } = await import('./installation-doctor.mjs');
+      return runInstallationDoctor(args.slice(1), inspect);
+    }
     if (args.length === 0) await guided();
-    else if (args.length === 1 && args[0] === '--help') console.log('Usage: node tools/setup.mjs [install|status|update|uninstall --target TARGET (--project ABS | --path ABS) [--url ORIGIN] [--domain ABS] [--knowledge-roots ABS]]\nTargets: ' + Object.keys(targets).join(', ') + '\nOmit target with --path for receipt-owned status, update, or uninstall. --domain selects roles, outcomes, workflows, tools, and logical knowledge handles from the canonical library. Knowledge roots stay in operator-owned configuration. No arguments opens guided setup.');
+    else if (args.length === 1 && args[0] === '--help') console.log('Usage: node tools/setup.mjs [install|status|update|uninstall --target TARGET (--project ABS | --path ABS) [--url ORIGIN] [--domain ABS] [--knowledge-roots ABS]]\n       conquistador setup doctor --path ABS [--json]\nDoctor checks local library completeness, build identity where available, and saved MCP executable paths. It does not verify host activation or provider access.\nTargets: ' + Object.keys(targets).join(', ') + '\nOmit target with --path for receipt-owned status, update, or uninstall. --domain selects roles, outcomes, workflows, tools, and logical knowledge handles from the canonical library. Knowledge roots stay in operator-owned configuration. No arguments opens guided setup.');
     else run(parse(args));
     return 0;
   } catch (error) {

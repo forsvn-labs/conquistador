@@ -221,6 +221,7 @@ export function cliHelp(version = "1.0.0") {
     return `Conquistador ${version}
 
 Usage:
+  conquistador setup doctor --path ABS [--json]  Check installed files; no host activation proof
   conquistador                         Show help
   conquistador setup                   Install, inspect, update or uninstall a host package
   conquistador connections --help      Inspect Executor, help install it, connect accounts

@@ -127,6 +127,7 @@ function stage(mode, target, selection) {
   copy('docs/USAGE.md');
   copy('docs/PROACTIVE.md');
   if (['conquistador', 'plugin', 'single-agent'].includes(mode)) {
+    copy('release/completeness.json');
     copy('tools/proactive.mjs');
     copy('tools/conquistador-mode.mjs');
     copy('tools/domain-package.mjs');

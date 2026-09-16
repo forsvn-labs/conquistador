@@ -36,7 +36,7 @@ DISABLE_TELEMETRY=1 npx --yes skills@1.5.26 add "forsvn-labs/conquistador#dogfoo
 ```
 
 The installer detects your agent or asks you to choose one. Keep `--skill conquistador` exactly as
-shown. Do not add `--full-depth`, a `--skill` wildcard, or `--all`, and do not install the nested
+shown. Do not add `--full-depth`, `--skill '*'`, or `--all`, and do not install the nested
 `skills/conquistador` folder. The root install includes all 38 outcome methods. No separate clone
 or runtime setup is needed.
 

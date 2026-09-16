@@ -13,7 +13,7 @@ DISABLE_TELEMETRY=1 npx --yes skills@1.5.26 add "forsvn-labs/conquistador#dogfoo
 ```
 
 The installer detects your agent or asks you to choose one. Keep `--skill conquistador` exactly as
-shown. Do not add `--full-depth`, a `--skill` wildcard, or `--all`, and do not install the nested
+shown. Do not add `--full-depth`, `--skill '*'`, or `--all`, and do not install the nested
 `skills/conquistador` folder. Your existing agent supplies the model and tools.
 
 ### First task
@@ -74,6 +74,12 @@ plugin activation.
 
 ### Read-only completeness check
 
+For a root skills.sh copy that includes this command, run from the receiving project:
+
+```sh
+node .agents/skills/conquistador/runtime/bin/conquistador.js setup doctor --path "$PWD/.agents/skills/conquistador"
+```
+
 From a complete source checkout or distribution with the setup doctor command, run:
 
 ```sh
@@ -86,6 +92,20 @@ does not put `conquistador` or a root `doctor` command on your PATH. The check r
 a source/root skill, managed compact install, plugin or single-agent harness, or managed MCP saved
 paths. It does not repair files, verify native host activation, or perform or verify account operations.
 A successful diagnostic does not replace the fresh-session task above.
+
+Expect `38 methods available; local files verified; host activation and task execution unverified.`
+The doctor compares method versions and content hashes plus supporting resources against
+`release/completeness.json`. It reports source commit and cleanliness when the selected folder is
+a Git source root, and receipt integrity/product version when a managed receipt exists. Copies
+without Git report an unavailable source commit; a receipt digest is not proof of provenance.
+Use the doctor from the same release when manifests differ. Domain-restricted and standalone method
+installs do not satisfy this full-library check.
+
+For a managed MCP folder, the doctor also checks the saved Node executable and package script,
+then the library that script resolves to. A matching receipt digest cannot hide missing executable
+paths after a source move, Node replacement, or npm-cache cleanup. It executes neither saved path
+and contacts no service. Exit code 0 means the local checks passed; 1 means an incomplete install
+or invalid diagnostic input. Bare `conquistador doctor` remains the separate runtime diagnostic.
 
 ### Update or remove the skill
 

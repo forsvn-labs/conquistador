@@ -17,8 +17,8 @@ Claude plugin. Portable agent packages need a host adapter before they can run.
 
 A `skills list` result is an inventory check. Start a fresh host session after installation and
 use a real task to check activation. For the wrong project or scope, missing files, or a stale
-session, follow [installation recovery](../INSTALL.md#recovery). The complete CLI can run a
-[read-only completeness check](../INSTALL.md#read-only-completeness-check); skill installation
+session, follow [installation recovery](https://github.com/forsvn-labs/conquistador/blob/dogfood/0.1.0/INSTALL.md#recovery). The complete CLI can run a
+[read-only completeness check](https://github.com/forsvn-labs/conquistador/blob/dogfood/0.1.0/INSTALL.md#read-only-completeness-check); skill installation
 does not add that CLI to your PATH or verify account operations.
 
 1. Select Conquistador in your host. If it is missing, check installation scope and start a fresh

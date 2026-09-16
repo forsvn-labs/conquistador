@@ -30,6 +30,13 @@ frontmatter names and parent routing. An isolated skill must not depend on sibli
 Describe behavior changes and relevant checks in CHANGELOG.md. Do not add private issue exports,
 source history, raw provider receipts, customer content, or credentials to a pull request.
 
+After intentional skill or supporting-resource edits, run `node tools/update-completeness.mjs` and
+review `release/completeness.json` with the source changes. It records exact method versions and
+content hashes for the complete library. The installation-doctor tests reject missing or stale
+manifest entries. Use `node runtime/bin/conquistador.js setup doctor --path /absolute/install`
+to check local files without starting a host or service. This does not establish host activation,
+model context loading, provider access, or release acceptance.
+
 The repository-root SKILL.md is the skills.sh entry point. It forwards to the authored parent under
 skills/conquistador and travels with the complete public tree. Keep every required method contained.
 Do not move the wrapper into the parent folder without preserving sibling methods in installations.

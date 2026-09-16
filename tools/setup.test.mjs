@@ -158,7 +158,7 @@ test('exported API returns numeric failure without terminating embedding process
 test('ancestor projects allow sibling skill installs while source-containing targets fail closed', () => temporary((path, parent) => {
   function distribution(destination) {
     mkdirSync(destination, { recursive: true });
-    for (const name of ['tools', 'skills', 'docs', 'LICENSE', 'NOTICE.md', 'package.json']) {
+    for (const name of ['tools', 'skills', 'docs', 'release', 'LICENSE', 'NOTICE.md', 'package.json']) {
       cpSync(join(root, name), join(destination, name), { recursive: true });
     }
     return join(destination, 'tools/setup.mjs');

@@ -13,6 +13,35 @@ not update existing copies.
 
 ## Implemented
 
+### Unreleased installation clarity and diagnostics
+
+The root skills.sh install remains the default and copies the complete library. README and INSTALL
+now place prerequisites and traps beside the pinned command, followed by a real first-task example,
+inventory checks, recovery, and alternatives. Managed compact copies use `library/` and omit the BB
+adapter; plugin/harness copies include it. This distinction is explicit.
+
+`conquistador setup doctor --path ABS [--json]` checks the local root/compact/plugin/harness library
+against `release/completeness.json`. The manifest names all 38 outcomes, parent version 2.8.0, and
+all supporting resources, including specialist/setup contracts, with content hashes. The report
+separates method availability,
+managed receipt integrity, available source Git identity and cleanliness, and BB adapter presence.
+Domain-restricted and standalone method packages do not pass the full-library check. Older copies
+without a manifest are checked against the doctor's release baseline with an explicit notice.
+
+Managed MCP diagnostics separately check the saved Node executable and package script, then inspect
+the referenced library. This catches a moved source, pruned npm cache, or removed Node executable
+even when connector receipt integrity is unchanged. It neither executes the saved paths nor contacts
+a service. Local success reports 38 methods available; host activation, model loading, task execution,
+and provider access remain unverified. Copies without Git retain an explicit unknown source commit.
+No update-identity migration, host observation, or Executor onboarding overhaul is included.
+
+Verification on Node 24 passed the integrated build and all 620 default tests: 99 tooling,
+291 runtime, 167 catalog, and 63 Eval Lab. The 14 new doctor/manifest tests include missing method
+bodies and resources, compact/plugin/harness copies, modified receipts, stale MCP executable paths,
+cross-bundle executable symlinks, and Git index preservation. Catalog validation and the explicitly
+synthetic local example passed. A direct source doctor run reported all 38 methods available while
+identifying pending source edits. No native host, model task, or provider connection was exercised.
+
 ### Optional integration adoption
 
 The local adoption branch adds Executor account setup, an explicit Eve job host, and read-only

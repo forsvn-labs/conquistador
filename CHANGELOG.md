@@ -4,6 +4,27 @@ No public release is claimed. See [VERSIONS.md](VERSIONS.md) for independent pro
 versions. Verification establishes the stated local scope; live provider operation, useful model
 output, human acceptance, rights disposition and release authority require separate evidence.
 
+## Unreleased private dogfood installation
+
+- Kept the pinned root skills.sh command as the single default, with prerequisites, installation
+  traps, a first task, payload locations, and recovery together. Distinguished inventory from host
+  activation and the compact managed payload from plugin/harness BB adapter files.
+- Added `release/completeness.json` with the parent and all 38 outcome versions/content hashes,
+  plus all supporting resources, including specialist contracts and setup references. Managed
+  skill, plugin, and harness copies
+  retain that manifest; the full Git/npm distribution includes it through the existing package list.
+- Added read-only `conquistador setup doctor --path ABS [--json]`. It checks required files,
+  entry-point routing, manifest agreement, method identity, receipt integrity, and source Git identity
+  where available. It accepts host links without mutating their targets.
+- Managed MCP diagnostics check saved Node and package executable paths independently from receipt
+  integrity and inspect the referenced library. Missing source/cache files cannot pass on a matching
+  connector digest alone. No saved executable or MCP service is started by the doctor.
+- These are local file diagnostics. Host activation, model context loading, task completion, and
+  provider access remain unverified. Exact source identity remains unavailable for copies without
+  Git metadata; a payload digest is not source provenance. No public release or live observation.
+- Node 24 build and all 620 default tests passed, including 14 doctor/manifest regression tests.
+  Catalog validation and the explicitly synthetic local example also passed.
+
 ## 0.1.0-dogfood.3 private prerelease
 
 - Shipped private GitHub prerelease

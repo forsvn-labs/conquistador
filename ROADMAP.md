@@ -2,6 +2,18 @@
 
 ## Now: private dogfooding
 
+### Installation reliability
+
+The pinned root skills.sh command remains the default. The first-task path, required files,
+installation traps, recovery, and compact-versus-plugin capabilities are documented together.
+The local completeness manifest and `conquistador setup doctor --path ABS [--json]` check method
+versions/content, required contracts, receipt integrity, available source identity, and managed MCP
+executable paths. Local file readiness is separate from host activation and useful task delivery.
+
+Next, observe the actual pinned installer and first-task behavior in priority dogfood hosts.
+Executor handoff/resumption and a fuller update-identity/recovery system remain later work. Do not
+promote guided setup to the default or add public distribution based on local doctor/test results.
+
 ### Executor and Eve adoption
 
 Use Conquistador to help install Executor when it is missing, connect the coding agent over MCP,

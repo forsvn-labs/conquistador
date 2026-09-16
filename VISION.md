@@ -16,6 +16,12 @@ already has. Hosts provide models, specialist contexts, credentials, connections
 Compact installs include usage and review guides so users can start work in their host.
 The runtime, typed catalog and Eval Lab are optional modules.
 
+Installation diagnostics should make incomplete libraries and stale launch paths visible before a
+user relies on them. Verify named method files and required contracts without loading the whole
+library into model context. Report local completeness, available build identity, host activation,
+and task success separately. A matching receipt cannot substitute for a working executable path,
+and neither establishes a useful result in the user's host.
+
 Executor is the preferred connection manager for account onboarding and authenticated tool access.
 Conquistador must help a new user install it, connect this coding agent over MCP, add the sources
 the current task needs, verify the required operation, and continue while credentials stay with the
