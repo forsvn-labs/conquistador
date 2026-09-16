@@ -53,7 +53,7 @@ test('portable master contains specialist contracts, declared outcomes and its c
 test('native plugin install contains discoverable marketplaces and only its native agent', () => temporary(target => {
   install('install', 'plugin', target);
   assert.equal(validatePluginContracts(target).hostActivationVerified, false);
-  assert.deepEqual(readdirSync(join(target, 'agents')).sort(), ['conquistador', 'conquistador.md']);
+  assert.deepEqual(readdirSync(join(target, 'agents')).sort(), ['agent-package-v2.schema.json', 'agent-package.schema.json', 'conquistador', 'conquistador.md', 'execution-receipt.schema.json', 'operator-profile.schema.json']);
   assert.match(readFileSync(join(target, 'SKILL.md'), 'utf8'), /skills\/conquistador\/SKILL.md/);
   install('remove', 'plugin', target);
   assert.equal(existsSync(target), false);
@@ -113,7 +113,7 @@ test('every staged mode includes usage docs with contained existing Markdown lin
 
 test('plugin and harness copy native dispatch; compact skill states full distribution', () => temporary(target => {
   install('install', 'plugin', target);
-  assert.deepEqual(readdirSync(join(target, 'agents')).sort(), ['conquistador', 'conquistador.md']);
+  assert.deepEqual(readdirSync(join(target, 'agents')).sort(), ['agent-package-v2.schema.json', 'agent-package.schema.json', 'conquistador', 'conquistador.md', 'execution-receipt.schema.json', 'operator-profile.schema.json']);
   assert.ok(existsSync(join(target, 'agents/conquistador/agent.json')));
   for (const name of ['contracts.mjs', 'operator.mjs', 'receipt.mjs', 'orchestrate.mjs', 'bb.mjs', 'team.mjs', 'host.json', 'README.md']) {
     assert.ok(existsSync(join(target, 'hosts/coding-agent', name)));

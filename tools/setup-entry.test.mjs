@@ -51,3 +51,20 @@ test('optional integration help stays usable before runtime and vendor packages 
     rmSync(temporary, { recursive: true, force: true });
   }
 });
+
+test('team refuses an existing result before reading the plan or calling BB', async () => {
+  const { spawnSync } = await import('node:child_process');
+  const { writeFileSync, readFileSync } = await import('node:fs');
+  const temporary = realpathSync(mkdtempSync(join(tmpdir(), 'conquistador team output ')));
+  const output = join(temporary, 'existing.json');
+  try {
+    writeFileSync(output, 'Keep the original report.');
+    const run = spawnSync(process.execPath, [join(root, 'hosts/coding-agent/team.mjs'),
+      join(temporary, 'missing-plan.json'), 'proj_test', 'env_test', output],
+    { encoding: 'utf8', env: { ...process.env, BB_CLI: '/nonexistent', BB_THREAD_ID: 'thr_parent' } });
+    assert.equal(run.status, 1);
+    assert.match(run.stderr, /EEXIST/);
+    assert.doesNotMatch(run.stderr, /missing-plan|BB command/);
+    assert.equal(readFileSync(output, 'utf8'), 'Keep the original report.');
+  } finally { rmSync(temporary, { recursive: true, force: true }); }
+});

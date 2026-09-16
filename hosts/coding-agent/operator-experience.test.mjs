@@ -70,8 +70,9 @@ test('presentation is bounded, roster-backed, and prior valid plans stay compati
   p.presentation.outcome = '/Users/private/secret.md launch package';
   assert.throws(() => validatePlan(p), /secrets/);
   p.presentation = presentation();
+  delete p.presentation;
   p.assignments[0].id = 'correct';
-  assert.throws(() => validatePlan(p), /reserved/);
+  assert.equal(validatePlan(p).assignments[0].id, 'correct');
 });
 
 test('receipts derive host identity, redact secrets, bound duplicates, and never claim acceptance', async () => {
@@ -96,8 +97,8 @@ test('receipts derive host identity, redact secrets, bound duplicates, and never
   assert.ok(out.receipt.evidence.every(item => !/bearer|\/Users\/private|sk-/.test(item)));
   assert.ok(out.receipt.evidence.length <= 12);
   assert.equal(new Set(out.receipt.evidence).size, out.receipt.evidence.length);
-  assert.ok(out.receipt.gaps.includes('pricing proof'));
-  assert.ok(out.receipt.gaps.some(item => item.includes('[redacted]')));
+  assert.ok(out.receipt.gaps.some(item => /reported 3 limitations/.test(item)));
+  assert.equal(JSON.stringify(out.receipt).includes('pricing proof'), false);
   assert.equal(out.receipt.humanAccepted, false);
   assert.throws(() => validateReceipt({ ...out.receipt, humanAccepted: true }));
   assert.throws(() => validateReceipt({ ...out.receipt, externalActions: ['publish'] }));
@@ -152,11 +153,14 @@ test('one targeted correction follows a revise verdict, then one exact-digest re
   assert.equal(reviews, 2);
   assert.equal(out.status, 'draft');
   assert.equal(out.trace.some(event => event.type === 'team.correction'), true);
-  assert.deepEqual(out.receipt.specialists.map(item => item.assignmentId), ['first', 'second', 'integrate', 'correct', 'review']);
+  assert.deepEqual(out.receipt.specialists.map(item => item.assignmentId), ['first', 'second', 'integrate', 'review', 'operator:correct', 'operator:final-review']);
   assert.equal(out.receipt.specialists.find(item => item.assignmentId === 'integrate').executionId, 'thr_fix3');
-  assert.equal(out.receipt.specialists.find(item => item.assignmentId === 'correct').executionId, 'thr_fix5');
-  assert.equal(out.receipt.specialists.find(item => item.assignmentId === 'review').executionId, 'thr_fix6');
-  assert.match(out.receiptMarkdown, /revise, then draft on artifact/);
+  assert.equal(out.receipt.specialists.find(item => item.assignmentId === 'operator:correct').executionId, 'thr_fix5');
+  assert.equal(out.receipt.specialists.find(item => item.assignmentId === 'review').executionId, 'thr_fix4');
+  assert.equal(out.receipt.specialists.find(item => item.assignmentId === 'operator:final-review').executionId, 'thr_fix6');
+  assert.equal(out.receipt.specialists.find(item => item.assignmentId === 'review').reviewedDigest, digest(out.integration.artifact));
+  assert.equal(out.receipt.specialists.find(item => item.assignmentId === 'operator:final-review').reviewedDigest, out.integratedDigest);
+  assert.match(out.receiptMarkdown, /2 independent review executions/);
 });
 
 test('correction is limited to one pass and remaining material failures stay visible', async () => {
@@ -221,7 +225,7 @@ test('blocked pre-review receipts report the overall blocked state, not a specia
   assert.equal(out.receipt.specialists[0].status, 'draft');
   assert.equal(out.receipt.specialists[1].status, 'blocked');
   assert.equal(out.receipt.specialists.some(item => item.assignmentId === 'review'), false);
-  assert.match(out.receiptMarkdown, /Review: blocked same-context; not independent/);
+  assert.match(out.receiptMarkdown, /Status: blocked[\s\S]*Review: not run/);
   assert.equal(out.receiptMarkdown.includes('Review: draft same-context'), false);
 });
 
@@ -244,7 +248,7 @@ test('BB child titles use the public roster and observed thread identity', async
   assert.equal(calls[0].includes('codex'), false);
 });
 
-test('malformed specialist output is rejected and formatter errors do not drop JSON receipts', () => {
+test('malformed specialist output is rejected and invalid receipts are rejected', () => {
   const packet = { assignment: { id: 'review' }, phase: 'review', integratedDigest: digest('current'), maxOutputBytes: 4000 };
   assert.throws(() => validateResult({ ...resultFor(packet), extra: true }, packet), /Unknown field/);
   assert.throws(() => validateResult({ ...resultFor(packet), status: 'accepted' }, packet), /human acceptance/);
@@ -254,7 +258,7 @@ test('malformed specialist output is rejected and formatter errors do not drop J
     results: [{ assignmentId: 'first', executionId: 'parent', status: 'draft', evidence: [], gaps: [] }],
   });
   assert.equal(receipt.independentReview, false);
-  assert.equal(receipt.specialists[1].status, 'blocked');
+  assert.equal(receipt.specialists[1].status, 'not-run');
   assert.equal(receipt.integratedDigest, null);
   const overflowPlan = plan();
   overflowPlan.assignments = Array.from({ length: 11 }, (_, index) => task(`item${String.fromCharCode(97 + index)}`));
@@ -262,7 +266,7 @@ test('malformed specialist output is rejected and formatter errors do not drop J
     plan: overflowPlan, mode: 'isolated-workers', independentReview: true, results: [],
     integration: { assignmentId: 'integrate', executionId: 'thr_i', status: 'draft', evidence: [], gaps: [] },
     review: { assignmentId: 'review', executionId: 'thr_r', status: 'draft', evidence: [], gaps: [] },
-  }), /cannot drop plan specialists/);
+  }), /Dispatch budget/);
 });
 
 test('digest mismatch rejects the review and does not report completion', async () => {
@@ -274,7 +278,7 @@ test('digest mismatch rejects the review and does not report completion', async 
   await assert.rejects(runSpecialistTeam({ plan: plan(), root, host }), /exact integrated/);
 });
 
-test('long evidence and gaps are truncated; secret-like execution ids are dropped', async () => {
+test('raw evidence and gaps are omitted; secret-like execution ids are dropped', async () => {
   const p = plan();
   const parent = { async execute(packet) {
     const result = resultFor(packet);
@@ -304,6 +308,136 @@ test('blocked correction keeps observed independent review and the prior integra
   assert.equal(out.receipt.integratedDigest, digest(out.integrated.artifact));
   assert.equal(out.receipt.specialists.find(item => item.assignmentId === 'integrate').status, 'draft');
   assert.equal(out.receipt.specialists.find(item => item.assignmentId === 'review').status, 'revise');
-  assert.equal(out.receipt.specialists.find(item => item.assignmentId === 'correct').status, 'blocked');
+  assert.equal(out.receipt.specialists.find(item => item.assignmentId === 'operator:correct').status, 'blocked');
   assert.ok(out.receipt.gaps.some(item => /Targeted correction was blocked/.test(item)));
+});
+
+test('public projection omits raw goals and arbitrary model knowledge, even without credential markers', async () => {
+  const p = plan();
+  p.goal = 'Private acquisition target is Example Confidential Company. Internal reasoning follows.';
+  const parent = { async execute(packet) {
+    return { executionId: 'parent', isolated: false, result: { ...resultFor(packet),
+      evidence: ['Example Confidential Company, purchase price 4200000'], gaps: ['Internal reasoning: secretly acquire the competitor.'] } };
+  } };
+  const out = await runSpecialistTeam({ plan: p, root, parent });
+  const visible = out.receiptMarkdown + JSON.stringify(out.receipt) + out.trace.find(event => event.type === 'team.brief').markdown;
+  assert.doesNotMatch(visible, /Confidential|4200000|secretly acquire|Internal reasoning/);
+  assert.match(out.integrated.artifact, /Synthetic/);
+  assert.match(out.receiptMarkdown, /source use is not verified/);
+  assert.doesNotMatch(out.receiptMarkdown, /supplied project sources|no live account data/);
+});
+
+test('public fields reject multiple secrets, paths, prompt residue and unsafe execution ids', () => {
+  for (const text of [
+    'bearer firstvalue12 and bearer secondvalue12',
+    'system prompt: private policy goes here',
+    'Read (/workspace/private.txt)', 'Read ~/vault/secrets.md', 'Read C:/private/secret.txt',
+    'api_key="very-secret" password="also-secret"', 'https://example.invalid/?token=private',
+  ]) {
+    assert.equal(redactText(text), '[redacted]');
+    const p = plan(); p.presentation = { ...presentation(), outcome: text };
+    assert.throws(() => validatePlan(p));
+  }
+  const receipt = deriveReceipt({ plan: plan(), mode: 'sequential-in-context' });
+  assert.throws(() => validateReceipt({ ...receipt, outcome: 'system prompt: private rules' }));
+  assert.throws(() => validateReceipt({ ...receipt, specialists: [{ assignmentId: 'first', label: 'Copy', executionId: '<script>test</script>', status: 'draft' }] }));
+});
+
+test('brief describes actual assignments and review mode; receipt capabilities require completed methods', async () => {
+  const p = plan(); p.presentation = presentation(); p.presentation.specialists = []; p.presentation.review = 'none';
+  const parent = { async execute(packet) { return { executionId: 'parent', isolated: false,
+    result: { ...resultFor(packet), status: 'blocked' } }; } };
+  const out = await runSpecialistTeam({ plan: p, root, parent });
+  assert.match(out.trace.find(event => event.type === 'team.brief').markdown, /Planned specialists: Copy, Copy[\s\S]*same-context review/);
+  assert.deepEqual(out.receipt.capabilities, []);
+  assert.equal(out.receipt.independentReview, false);
+});
+
+test('blocked dependency chains finish with not-run rows and no invented integration or review', async () => {
+  const p = plan(); p.assignments[1].dependsOn = ['first']; p.assignments.push(task('third', ['second']));
+  const seen = [];
+  const parent = { async execute(packet) { seen.push(packet.assignment.id); return { executionId: 'parent', isolated: false,
+    result: { ...resultFor(packet), status: 'blocked' } }; } };
+  const out = await runSpecialistTeam({ plan: p, root, parent });
+  assert.deepEqual(seen, ['first']);
+  assert.equal(out.status, 'blocked');
+  assert.deepEqual(out.receipt.specialists.map(row => row.status), ['blocked', 'not-run', 'not-run']);
+  assert.deepEqual(out.receipt.specialists.map(row => row.executionId), ['parent', null, null]);
+  assert.match(out.receiptMarkdown, /Review: not run/);
+});
+
+test('same-context correction keeps both review executions without claiming independence', async () => {
+  let reviews = 0;
+  const parent = { async execute(packet) { const result = resultFor(packet);
+    if (packet.phase === 'review' && ++reviews === 1) result.status = 'revise';
+    return { executionId: 'parent', isolated: false, result }; } };
+  const out = await runSpecialistTeam({ plan: plan(), root, parent });
+  assert.equal(reviews, 2);
+  assert.equal(out.receipt.specialists.length, 6);
+  assert.equal(out.receipt.independentReview, false);
+  assert.match(out.receiptMarkdown, /2 same-context or independence unverified executions/);
+});
+
+test('accepted correction is never retried even if the host incorrectly marks the failure preDispatch', async () => {
+  const p = plan(); p.limits.maxAttempts = 2; p.limits.concurrency = 1; p.limits.maxDispatches = 8;
+  let corrections = 0;
+  const parent = { async execute(packet, { onDispatch }) {
+    const result = resultFor(packet);
+    if (packet.phase === 'review') result.status = 'revise';
+    if (packet.phase === 'correct') { corrections++; onDispatch('parent'); throw Object.assign(new Error('accepted failure'), { preDispatch: true }); }
+    return { executionId: 'parent', isolated: false, result };
+  } };
+  await assert.rejects(runSpecialistTeam({ plan: p, root, parent }), /accepted failure/);
+  assert.equal(corrections, 1);
+});
+
+test('final re-review rejects a stale digest and never starts a second correction', async () => {
+  let corrections = 0;
+  const parent = { async execute(packet) {
+    const result = resultFor(packet);
+    if (packet.assignment.id === 'review') result.status = 'revise';
+    if (packet.phase === 'correct') { corrections++; result.artifact = 'Corrected draft.'; }
+    if (packet.assignment.id === 'operator:final-review') result.reviewedDigest = digest('stale');
+    return { executionId: 'parent', isolated: false, result };
+  } };
+  await assert.rejects(runSpecialistTeam({ plan: plan(), root, parent }), /exact integrated/);
+  assert.equal(corrections, 1);
+});
+
+test('maximum dispatch plan retains every observed row including both reviews', async () => {
+  const p = plan(); p.assignments = Array.from({ length: 8 }, (_, i) => task(`item${i}`)); p.limits.maxDispatches = 12;
+  let count = 0;
+  const host = { capabilities: { isolatedContexts: true, maxConcurrency: 4 }, async execute(packet) {
+    return { executionId: `host-${++count}`, isolated: true, result: { ...resultFor(packet),
+      status: packet.assignment.id === 'review' ? 'revise' : 'draft' } };
+  } };
+  const out = await runSpecialistTeam({ plan: p, root, host });
+  assert.equal(count, 12); assert.equal(out.receipt.specialists.length, 12);
+  assert.equal(out.receipt.specialists.at(-1).assignmentId, 'operator:final-review');
+});
+
+test('correction and final-review get only one attempt even on a known pre-dispatch failure', async () => {
+  for (const failed of ['operator:correct', 'operator:final-review']) {
+    const p = plan(); p.limits.maxAttempts = 2; p.limits.maxDispatches = 8;
+    let attempts = 0;
+    const parent = { async execute(packet) {
+      if (packet.assignment.id === failed) { attempts++; throw Object.assign(new Error('preflight unavailable'), { preDispatch: true }); }
+      return { executionId: 'parent', isolated: false, result: { ...resultFor(packet), status: packet.assignment.id === 'review' ? 'revise' : 'draft' } };
+    } };
+    await assert.rejects(runSpecialistTeam({ plan: p, root, parent }), /preflight unavailable/);
+    assert.equal(attempts, 1);
+  }
+});
+
+test('legacy user assignments named correct and final-review cannot collide with correction stages', async () => {
+  const p = plan(); p.assignments = [task('correct'), task('final-review')];
+  const parent = { async execute(packet) {
+    return { executionId: 'parent', isolated: false, result: { ...resultFor(packet),
+      status: packet.assignment.id === 'review' ? 'revise' : 'draft' } };
+  } };
+  const out = await runSpecialistTeam({ plan: p, root, parent });
+  assert.deepEqual(out.receipt.specialists.map(row => row.assignmentId),
+    ['correct', 'final-review', 'integrate', 'review', 'operator:correct', 'operator:final-review']);
+  assert.deepEqual(out.receipt.specialists.map(row => row.label), ['Copy', 'Copy', 'Integration', 'Review', 'Correction', 'Final review']);
+  assert.equal(out.status, 'draft');
 });

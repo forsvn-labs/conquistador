@@ -1,16 +1,73 @@
 # Install Conquistador
 
-Use the skill install below unless you already need another host's plugin or MCP controls.
-It includes one entry point and all 38 outcome methods. Keep this private dogfood copy out of
-public project commits.
+The next proposed channel is `private-alpha`. These operator changes have not shipped. Product
+version remains 0.1.0. The channel commands below become usable only when the owner makes that
+private Git branch available. No tag or release is implied. Until then, use a supplied complete
+source copy or ZIP containing this implementation.
 
-## Skills, recommended
+## Project operator, recommended
+
+Use Node 24 and a coding agent that can read project files. Put the complete distribution at a
+separate source path. Run from the receiving project, replacing the source path:
+
+```sh
+node /absolute/path/conquistador-source/tools/setup.mjs install --target operator --project "$PWD"
+node /absolute/path/conquistador-source/tools/setup.mjs status --path "$PWD/.conquistador-operator"
+node /absolute/path/conquistador-source/tools/setup.mjs doctor --path "$PWD/.conquistador-operator"
+```
+
+This creates `.conquistador-operator/` with `agent/agent.json`, the parent and 38 methods under
+`agent/skills/`, the operator profile, contract schemas, compatibility v1 metadata, and
+`hosts/coding-agent/`. The `harness` target with `--path ABS` installs the same single-agent package.
+Keep the folder private and outputs outside it. No global CLI, host registration, daemon, poller,
+background capture, or external operation starts. You do not need to bootstrap this source to install.
+
+Start a fresh host session in that project and ask:
+
+```text
+Read .conquistador-operator/agent/skills/conquistador/SKILL.md and follow it for
+this task. Use docs/product.md and docs/audience.md to prepare our beta launch.
+Deliver landing-page copy, one launch email and a two-week campaign plan in
+docs/launch/. Mark claims that need evidence. Keep this as a draft.
+```
+
+Use your own inputs. This explicit file request loads the parent without assuming that your host
+understands portable JSON agents. If the host cannot read files, choose a skills/plugin or MCP
+route below. In BB, the explicit [team command](hosts/coding-agent/README.md#run-a-team) executes
+specialists when needed. Setup does not automatically call it or register project routing.
+
+The installed profile defaults to `manual`. A host integration can call `admitRequest` at each
+user turn with a host-owned `activation` override. `project` enables conservative request routing;
+`off` makes the router abstain, including explicit invocation. No generic host setting is installed.
+Keep activation settings outside the managed package. [Activation details](docs/MASTER-AGENT.md)
+include the API and limits.
+
+Use the complete distribution for each lifecycle command:
+
+```sh
+node /absolute/path/conquistador-source/tools/setup.mjs update --path "$PWD/.conquistador-operator"
+node /absolute/path/conquistador-source/tools/setup.mjs doctor --path "$PWD/.conquistador-operator"
+node /absolute/path/conquistador-source/tools/setup.mjs uninstall --path "$PWD/.conquistador-operator"
+```
+
+Update from the newer complete source you intend to install. Record its commit with
+`git -C /absolute/path/conquistador-source rev-parse HEAD` when Git is available. Status verifies
+owned files; doctor verifies library completeness. Both leave host activation and execution
+unverified. Edited files cause update/removal to refuse. Preserve edits and use a new folder if
+needed. Before removal, disable any host routing, detach the contract, and stop active teams.
+Uninstall leaves host settings and running agents alone. Refresh the host after update/removal.
+
+## Skills
+
+This alternative uses the host's skill picker. Its private-alpha command is proposed until the
+channel exists. For immediate use, install from the [supplied local source](docs/INSTALL-REFERENCE.md#skillssh-from-a-local-source).
+
 
 Use Node 24, Git, an existing coding agent, and a GitHub account with access to the private
 repository. From the project where you want to use Conquistador, run:
 
 ```sh
-DISABLE_TELEMETRY=1 npx --yes skills@1.5.26 add "forsvn-labs/conquistador#dogfood/0.1.0" --skill conquistador
+DISABLE_TELEMETRY=1 npx --yes skills@1.5.26 add "forsvn-labs/conquistador#private-alpha" --skill conquistador
 ```
 
 Choose your host when prompted. Keep `--skill conquistador` as shown. Do not add `--full-depth`,
@@ -51,7 +108,7 @@ The code files are available but do not start automatically. Skill installation 
 daemon, watcher, or schedule. The operator profile defaults to `manual` activation.
 
 Managed compact setup instead places methods under `library/` and omits `hosts/coding-agent/`.
-Plugin and single-agent harness packages include that BB adapter. All three include the methods;
+Plugin and operator/harness packages include that BB adapter. All three include the methods;
 executing specialists still depends on the host. [Platform details](docs/PLATFORMS.md) describe
 locations and host registration.
 
@@ -101,10 +158,10 @@ Bare `conquistador doctor` is the separate runtime diagnostic.
 | Installed in the wrong project or scope | Remove through the original installer in that scope, then install from the intended project for the intended host. |
 | Listed but missing in the host | Check the project, host, and scope; start a fresh session. Plugin installs use the host's plugin invocation. |
 | Doctor reports missing or changed files | Preserve edits, then repair or reinstall through the original installer. Do not rewrite the receipt to force a pass. |
-| Doctor passes but the task fails | Record the host, build, task, and failure in private dogfood notes. Local completeness does not prove execution. |
+| Doctor passes but the task fails | Record the host, build, task, and failure in private-alpha notes. Local completeness does not prove execution. |
 | Managed MCP has stale executable paths | Restore the source/package or recreate the connector with the current Node installation. Update the client's registration if its path changed. |
 
-Never place tokens in chat, commands, or MCP configuration. [Dogfood notes](docs/DOGFOOD.md) keep
+Never place tokens in chat, commands, or MCP configuration. [Dogfood notes](docs/PRIVATE-ALPHA.md) keep
 observations separate from installation checks.
 
 ### Update or remove the skill
@@ -125,14 +182,14 @@ Use the original plugin manager or managed installer for copies it owns. The
 
 ## Alternatives
 
-Choose one route. None is an additional prerequisite for the default skill install.
+Choose one route. None is an additional prerequisite for the recommended operator install.
 
 ### Plugins
 
 For Claude Code, run from the receiving project:
 
 ```sh
-claude plugin marketplace add forsvn-labs/conquistador@dogfood/0.1.0 --scope local
+claude plugin marketplace add forsvn-labs/conquistador@private-alpha --scope local
 claude plugin install conquistador@conquistador --scope local
 ```
 
@@ -152,7 +209,7 @@ For an MCP client, add:
       "args": [
         "--yes",
         "--ignore-scripts",
-        "--package=git+https://github.com/forsvn-labs/conquistador.git#dogfood/0.1.0",
+        "--package=git+https://github.com/forsvn-labs/conquistador.git#private-alpha",
         "conquistador",
         "mcp"
       ]
@@ -169,13 +226,14 @@ to read the parent guide first. Remove the client entry to disconnect.
 
 ### CLI setup
 
-Use managed setup when you want an owned compact copy, plugin folder, or MCP connector:
+Use managed setup for an owned operator, compact copy, plugin folder, or MCP connector.
+This remote launcher is proposed for the future private-alpha branch:
 
 ```sh
-npm exec --yes --ignore-scripts --package=git+https://github.com/forsvn-labs/conquistador.git#dogfood/0.1.0 -- conquistador setup
+npm exec --yes --ignore-scripts --package=git+https://github.com/forsvn-labs/conquistador.git#private-alpha -- conquistador setup
 ```
 
-For automation, supply `setup install --target codex --project /absolute/path/to/project` instead
+For automation, supply `setup install --target operator --project /absolute/path/to/project` instead
 of interactive setup. `setup status|update|uninstall --path ABS` operates on a managed receipt.
 Status checks local integrity; doctor checks completeness. Neither registers or activates the host.
 Keep the source or cached package available while a saved MCP connector points to it.
@@ -183,8 +241,8 @@ Keep the source or cached package available while a saved MCP connector points t
 ### Clone, if you want a local copy
 
 ```sh
-gh repo clone forsvn-labs/conquistador -- --branch dogfood/0.1.0 --single-branch
-node conquistador/tools/setup.mjs
+gh repo clone forsvn-labs/conquistador -- --branch private-alpha --single-branch
+node conquistador/tools/setup.mjs install --target operator --project /absolute/path/to/receiving-project
 ```
 
 Use a separate receiving project. Keep the source for managed updates and removal. For frozen ZIPs,

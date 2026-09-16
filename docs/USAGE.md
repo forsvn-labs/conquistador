@@ -9,7 +9,12 @@ install contains only that method. The examples here assume the complete entry p
 
 ## Give it a task
 
-After installation, start a fresh session in the receiving project. Select `/conquistador`,
+For the managed operator, start a fresh session in the receiving project and ask the host to read
+`.conquistador-operator/agent/skills/conquistador/SKILL.md` and follow it for your task. The JSON agent
+contract does not register a native host agent. In the examples below, replace `/conquistador` with
+that file instruction when using this route.
+
+For a registered skill, select `/conquistador`,
 `$conquistador`, or the host's skill picker. The Claude plugin uses `/conquistador:conquistador`.
 A skill listing checks inventory; the installation doctor checks local files. This first task
 checks whether the host can actually use Conquistador.
@@ -22,7 +27,7 @@ Conquistador should ask only when missing information changes the result or need
 It should finish useful work with available evidence and identify what remains blocked.
 
 For missing skills, wrong scope, or stale sessions, see
-[installation and recovery](https://github.com/forsvn-labs/conquistador/blob/dogfood/0.1.0/INSTALL.md).
+[installation and recovery](https://github.com/forsvn-labs/conquistador/blob/private-alpha/INSTALL.md).
 
 ## Prepare a beta launch
 
@@ -87,7 +92,7 @@ the service UI. Never paste credentials into chat.
 The agent then verifies the specific account operation and resumes the original task. Finding an
 MCP server does not prove a warehouse query or CRM read works. Naming a vendor does not establish
 runtime adapter support. Existing connections remain subject to host policy, including any
-Executor-only rule. [Connection guidance](https://github.com/forsvn-labs/conquistador/blob/dogfood/0.1.0/docs/INTEGRATIONS.md)
+Executor-only rule. [Connection guidance](https://github.com/forsvn-labs/conquistador/blob/private-alpha/docs/INTEGRATIONS.md)
 contains the official setup commands and limits.
 
 ## Review and continue
@@ -99,21 +104,25 @@ Same-context review is not independent review. See [execution modes](MASTER-AGEN
 
 ### Direct, isolated, same-context, and project activation
 
-**Direct.** Rewrite one supplied headline. Conquistador should work in the parent, name the copy
+Direct work. Rewrite one supplied headline. Conquistador should work in the parent, name the copy
 capability only if useful, and not spawn a team for display.
 
-**Isolated team in BB.** Ask for a launch page, email, campaign plan, and measurement plan from
-supplied product and audience files. Expect a visible engagement brief, two or more specialist
+Isolated team in BB. Ask for a launch page, email, campaign plan, and measurement plan from
+supplied product and audience files. When the host explicitly uses the BB team adapter, expect
+a visible engagement brief, two or more specialist
 child threads titled with public role labels, one integrated deliverable, one separate review of
-the exact artifact digest, and a final receipt. No external actions occur.
+the exact artifact digest, and a final receipt. The BB draft adapter authorizes no
+external actions. Host permissions enforce access.
 
-**Same-context host.** The same broad task without worker contexts should run assignments in
+Same-context host. The same broad task without worker contexts should run assignments in
 order, disclose same-context review, and set `independentReview: false`.
 
-**Project activation.** A host that stores `project` activation may route an admitted launch or
+Project activation. A host adapter that calls `admitRequest` with `project` activation may route
+an admitted launch or
 research request without `/conquistador`. An unrelated coding fix must abstain. Setting activation
-to `off` or `manual` stops automatic routing immediately. Methods remain available for explicit
-use. No daemon exists.
+to `off` or `manual` changes admission at the next call; it does not cancel active work. Off also
+disables explicit admission through this router. Files remain installed and can still be read
+directly; this setting is not an access-control boundary. No daemon exists.
 
 Reply in the same thread with a correction or the next authorized step. For example: "The offer
 is a paid pilot. Revise the page and email." You do not need to select another method. Approval
@@ -131,7 +140,7 @@ Corrections apply to the current task. Saving them for later needs approval of t
 entry and destination. [Memory and learning](LEARNING.md) explains the host-file workflow;
 automatic cross-run retrieval and global learning are absent.
 
-Keep dogfood feedback as a local redacted draft. No transcript collection or upload happens
+Keep private-alpha feedback as a local redacted draft. No transcript collection or upload happens
 automatically. The `submit-feedback` method requires an approved, verified public destination;
 do not bypass that requirement to upload private notes. A private feedback handoff needs its own
 agreed destination and exact content. Memory approval does not authorize disclosure.
@@ -145,4 +154,7 @@ starts neither a service nor a schedule.
 
 Use the original installer to update or remove your copy. A compact skill folder is not a runtime
 or development checkout. Build, package, and setup commands belong to a complete distribution.
-Get those instructions from the private [installation guide](https://github.com/forsvn-labs/conquistador/blob/dogfood/0.1.0/INSTALL.md).
+Get those instructions from the private [installation guide](https://github.com/forsvn-labs/conquistador/blob/private-alpha/INSTALL.md).
+
+Private-alpha Git links above refer to the proposed next channel. Until it is available, use the
+corresponding files in the complete distribution that supplied this install.

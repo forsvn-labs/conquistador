@@ -14,9 +14,9 @@ const schema = 'conquistador.public-install/v1';
 const targets = {
   codex: 'conquistador', 'claude-code': 'conquistador', copilot: 'conquistador', cursor: 'conquistador', skill: 'conquistador',
   'claude-plugin': 'plugin', 'codex-plugin': 'plugin', 'copilot-plugin': 'plugin', 'agent-plugins': 'plugin',
-  mcp: 'mcp', harness: 'single-agent', squad: 'squad', 'grok-bot': 'grok-bot', eve: 'eve',
+  mcp: 'mcp', operator: 'single-agent', harness: 'single-agent', squad: 'squad', 'grok-bot': 'grok-bot', eve: 'eve',
 };
-const projectPaths = { codex: '.agents/skills/conquistador', 'claude-code': '.claude/skills/conquistador', copilot: '.github/skills/conquistador', cursor: '.cursor/skills/conquistador' };
+const projectPaths = { operator: '.conquistador-operator', codex: '.agents/skills/conquistador', 'claude-code': '.claude/skills/conquistador', copilot: '.github/skills/conquistador', cursor: '.cursor/skills/conquistador' };
 const fail = message => { throw new Error(message); };
 function stat(path) {
   try { return lstatSync(path); } catch (error) { if (error.code === 'ENOENT') return null; throw error; }
@@ -70,7 +70,7 @@ function parse(args) {
   }
   if (options.domain !== undefined) {
     if (!['install', 'update'].includes(action)) fail('--domain requires install or update.');
-    if (options.target && !['skill', 'codex', 'claude-code', 'copilot', 'cursor', 'claude-plugin', 'codex-plugin', 'copilot-plugin', 'agent-plugins', 'harness'].includes(options.target)) {
+    if (options.target && !['skill', 'codex', 'claude-code', 'copilot', 'cursor', 'claude-plugin', 'codex-plugin', 'copilot-plugin', 'agent-plugins', 'operator', 'harness'].includes(options.target)) {
       fail('Domain packages apply to coding-agent, plugin, and harness installs.');
     }
     options.domain = absolutePath(options.domain);
@@ -150,6 +150,8 @@ function report(options, result) {
         ? 'Use your host plugin manager to register and activate this local folder. Its activated copy, update, and uninstall remain host-owned.'
         : ['eve', 'grok-bot'].includes(result.mode)
           ? 'Experimental import only. Native app support and activation are unverified.'
+          : result.mode === 'single-agent'
+            ? 'In a fresh session in the receiving project, ask your agent to read ' + join(path, 'agent/skills/conquistador/SKILL.md') + ' and follow it for your task. BB users can explicitly run hosts/coding-agent/team.mjs from this folder. Project routing needs a host adapter; no registration or watcher was created.'
           : 'Load the prepared contract or skill in your host, start a fresh session, and verify discovery with a small task.'));
     if (result.mode === 'plugin') pluginNext(target, path, options.action);
     console.log(`Update local copy: ${command('update', '--path', path)}`);
@@ -222,8 +224,8 @@ async function guided() {
     if (!['install', 'status', 'update', 'uninstall'].includes(action)) fail('Unknown action.');
     const args = [action];
     if (action === 'install') {
-      console.log('Where will you use Conquistador?\n1. Coding agent (recommended)\n2. Host plugin\n3. MCP over stdio\n4. Custom agent host\n5. Experimental Grok/Eve');
-      const groups = { 1: ['codex', 'claude-code', 'copilot', 'cursor', 'skill'], 2: ['claude-plugin', 'codex-plugin', 'copilot-plugin', 'agent-plugins'], 3: ['mcp'], 4: ['harness', 'squad'], 5: ['grok-bot', 'eve'] };
+      console.log('Where will you use Conquistador?\n1. Project operator (recommended)\n2. Host plugin\n3. MCP over stdio\n4. Compact skill or custom host\n5. Experimental Grok/Eve');
+      const groups = { 1: ['operator'], 2: ['claude-plugin', 'codex-plugin', 'copilot-plugin', 'agent-plugins'], 3: ['mcp'], 4: ['codex', 'claude-code', 'copilot', 'cursor', 'skill', 'harness', 'squad'], 5: ['grok-bot', 'eve'] };
       const group = groups[(await prompt.question('Group [1]: ')).trim() || '1'];
       if (!Array.isArray(group)) fail('Unknown group.');
       console.log(group.join(', '));
@@ -251,7 +253,7 @@ export async function runSetup(args) {
       return runInstallationDoctor(args.slice(1), inspect);
     }
     if (args.length === 0) await guided();
-    else if (args.length === 1 && args[0] === '--help') console.log('Usage: node tools/setup.mjs [install|status|update|uninstall --target TARGET (--project ABS | --path ABS) [--url ORIGIN] [--domain ABS] [--knowledge-roots ABS]]\n       conquistador setup doctor --path ABS [--json]\nDoctor checks local library completeness, build identity where available, and saved MCP executable paths. It does not verify host activation or provider access.\nTargets: ' + Object.keys(targets).join(', ') + '\nOmit target with --path for receipt-owned status, update, or uninstall. --domain selects roles, outcomes, workflows, tools, and logical knowledge handles from the canonical library. Knowledge roots stay in operator-owned configuration. No arguments opens guided setup.');
+    else if (args.length === 1 && args[0] === '--help') console.log('Usage: node tools/setup.mjs [install|status|update|uninstall --target TARGET (--project ABS | --path ABS) [--url ORIGIN] [--domain ABS] [--knowledge-roots ABS]]\n       conquistador setup doctor --path ABS [--json]\nDoctor checks local library completeness, build identity where available, and saved MCP executable paths. It does not verify host activation or provider access.\nTargets: ' + Object.keys(targets).join(', ') + '\noperator installs at PROJECT/.conquistador-operator with --project; harness uses --path for the same package. Activation is manual.\nOmit target with --path for receipt-owned status, update, or uninstall. --domain selects roles, outcomes, workflows, tools, and logical knowledge handles from the canonical library. Knowledge roots stay in operator-owned configuration. No arguments opens guided setup.');
     else run(parse(args));
     return 0;
   } catch (error) {

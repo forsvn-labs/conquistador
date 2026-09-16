@@ -23,3 +23,6 @@ The parent may use one role or several. Do not add a coordinator specialist. The
 Do not add a reviewer specialist when an existing review outcome supplies the judgment.
 Public labels in this table are the product-owned roster. Briefs, child titles, and receipts must
 use them. Do not invent display names from model prose.
+
+The executable coordinator uses Outcome for unnamed roles and Integration, Review, Correction, and
+Final review for its observed stages. These are stage labels, not additional specialist methods.

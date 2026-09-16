@@ -30,7 +30,10 @@ it('validates the operator profile and execution receipt contracts', () => {
     runId: 'draft-launch',
     outcome: 'launch package',
     capabilities: [{ id: 'positioning', label: 'positioning' }],
-    specialists: [{ assignmentId: 'copy', label: 'Copy', executionId: 'thr_test', status: 'draft' }],
+    specialists: [
+      { assignmentId: 'copy', label: 'Copy', executionId: 'thr_test', status: 'draft' },
+      { assignmentId: 'review', label: 'Review', executionId: 'thr_review', status: 'draft' },
+    ],
     mode: 'isolated-workers',
     independentReview: true,
     integratedDigest: `sha256:${'a'.repeat(64)}`,
@@ -51,4 +54,13 @@ it('validates the operator profile and execution receipt contracts', () => {
   ] })).toBe(true);
   expect(receipt({ ...sample, mode: 'sequential-in-context', independentReview: true })).toBe(false);
   expect(receipt({ ...sample, mode: 'sequential-in-context', independentReview: false })).toBe(true);
+});
+
+it('receipt schema rejects an independence claim without any review execution', () => {
+  const receipt = new Ajv2020.default({ strict: true }).compile(json('agents/execution-receipt.schema.json'));
+  expect(receipt({
+    schemaVersion: 'conquistador.execution-receipt/v1', runId: 'blocked', outcome: 'draft',
+    capabilities: [], specialists: [], mode: 'isolated-workers', independentReview: true,
+    integratedDigest: null, evidence: [], gaps: [], externalActions: [], humanAccepted: false,
+  })).toBe(false);
 });

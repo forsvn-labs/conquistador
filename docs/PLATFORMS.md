@@ -5,9 +5,9 @@ selected. Installing files, registering a host and running a real task are separ
 [Master-agent modes](MASTER-AGENT.md) explains which installations can run isolated specialists and which
 use the sequential fallback.
 
-## Coding agents, recommended
+## Coding agents
 
-The default [skills.sh install](../INSTALL.md#skills-recommended) copies the complete root payload,
+The alternative [skills.sh install](../INSTALL.md#skills) copies the complete root payload,
 including `skills/` and the BB adapter at `hosts/coding-agent/`. Managed setup stages a compact
 entry point with all 38 outcome methods under `library/` and omits that adapter. Plugin and
 single-agent harness packages include it.
@@ -28,8 +28,7 @@ it does not prove host discovery or task quality.
 The installed parent can assign bounded work to native agents or workers when the selected host
 exposes that feature. The product does not create a background process or require native delegation.
 When a host has no isolated worker context, the parent runs the same specialist contracts in sequence.
-The operator profile defaults to manual invocation. A host may enable project routing in its own
-settings; Conquistador does not rewrite instruction files or start a watcher.
+The operator profile defaults to manual invocation. A host adapter may call admitRequest with a project activation setting; Conquistador does not rewrite instruction files or start a watcher.
 
 Run `setup.mjs status`, `update` or `uninstall` with that exact folder as `--path`. Setup refuses
 modified or unowned folders. It leaves project outputs alone. If you used skills.sh instead,
@@ -47,7 +46,8 @@ Folder references: [Codex](https://learn.chatgpt.com/docs/build-skills),
 
 ## Plugins
 
-Register the private GitHub repository directly when you want host-managed plugin controls or the
+The private-alpha Git commands below are proposed until that branch is available. Use a supplied
+local distribution before then. Register the private GitHub repository directly when you want host-managed plugin controls or the
 native Claude agent. Managed setup can also prepare a local plugin folder. The host owns its activated copy. Before
 removing the prepared folder, uninstall the plugin through the same host and scope. Marketplace
 registrations may be shared; remove only the Conquistador registration when no other install uses it.
@@ -59,7 +59,7 @@ written into shared project settings. Your host needs GitHub access to this priv
 
 | Action | Command |
 | --- | --- |
-| Register source | `claude plugin marketplace add forsvn-labs/conquistador@dogfood/0.1.0 --scope local` |
+| Register source | `claude plugin marketplace add forsvn-labs/conquistador@private-alpha --scope local` |
 | Install | `claude plugin install conquistador@conquistador --scope local` |
 | Check | `claude plugin list --json` |
 | Refresh source | `claude plugin marketplace update conquistador` |
@@ -86,7 +86,7 @@ when you want only project-local files.
 
 | Action | Command |
 | --- | --- |
-| Register source | `codex plugin marketplace add forsvn-labs/conquistador@dogfood/0.1.0` |
+| Register source | `codex plugin marketplace add forsvn-labs/conquistador@private-alpha` |
 | Install | `codex plugin add conquistador@conquistador` |
 | Check | `codex plugin list --json` |
 | Refresh Git source | `codex plugin marketplace upgrade conquistador` |
@@ -106,7 +106,7 @@ Copilot's native plugins are user-level installations. For project-only setup, u
 
 | Action | Command |
 | --- | --- |
-| Register source | `copilot plugin marketplace add forsvn-labs/conquistador#dogfood/0.1.0` |
+| Register source | `copilot plugin marketplace add forsvn-labs/conquistador#private-alpha` |
 | Install | `copilot plugin install conquistador@conquistador` |
 | Check and find installed name | `copilot plugin list` |
 | Refresh source | `copilot plugin marketplace update conquistador` |
@@ -160,7 +160,7 @@ to an agent. Removing a connector does not erase service data or stop a shared s
 
 ## Agent harnesses
 
-Choose `harness` for the portable master agent, or `squad` for the fixed production and review roles.
+Choose `operator` for the portable master agent, or `squad` for the fixed production and review roles.
 `harness` remains the compatible alias for that portable operator package. Setup prepares the
 contracts, operator profile, and their method libraries. Your host adapter executes those contracts.
 The master contract allows the number of specialist assignments needed by the task, subject to host
@@ -191,7 +191,7 @@ setup, credential boundaries, and update checks.
 
 These are experimental import contracts. Native import, specialist delegation, and execution have not been verified, so
 the setup guide does not offer them as ready integrations. Grok CLI is a different host from the
-Grok Bot app. Use the coding-agent route for current dogfooding.
+Grok Bot app. Use the coding-agent route for private-alpha testing.
 
 If you previously staged one of these packages with `install.mjs`, managed status and removal can
 inspect its receipt. Remove any host registration in that app before deleting the prepared folder.

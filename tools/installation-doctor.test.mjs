@@ -6,6 +6,7 @@ import { chmodSync, cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, re
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { operatorFiles } from './operator-package.mjs';
 import { methodIdentity } from './installation-doctor.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
@@ -33,6 +34,10 @@ function temporary(check) {
 }
 function rootBundle(path) {
   mkdirSync(path, { recursive: true });
+  for (const file of operatorFiles) {
+    mkdirSync(dirname(join(path, file)), { recursive: true });
+    cpSync(join(root, file), join(path, file));
+  }
   for (const name of ['SKILL.md', 'skills', 'release']) cpSync(join(root, name), join(path, name), { recursive: true });
 }
 function rewriteConnector(path, connector) {
@@ -262,4 +267,32 @@ test('doctor is usable before runtime libraries and dependencies exist and rejec
   assert.equal(existsSync(join(path, 'node_modules')), false);
   for (const args of [[], ['--path', 'relative'], ['--path', path, '--path', path], ['--path', path, '--json', '--json'], ['--path', path, '--target', 'skill']]) assert.equal(run('doctor', ...args).status, 1);
   assert.match(run('--help').stdout, /setup doctor --path ABS \[--json\]/);
+}));
+
+test('doctor verifies the executable operator inventory and rewritten portable contract', () => temporary(path => {
+  rootBundle(path);
+  rmSync(join(path, 'hosts/coding-agent/receipt.mjs'));
+  let report = doctor(path, 1);
+  assert.equal(report.bbAdapterPresent, false);
+  assert.ok(report.issues.some(issue => issue.includes('hosts/coding-agent/receipt.mjs')));
+  rmSync(path, { recursive: true });
+  install(path, 'operator');
+  const agentPath = join(path, 'agent/agent.json');
+  const agent = JSON.parse(readFileSync(agentPath));
+  agent.delegation.maxDelegationsPerRun = 100;
+  writeFileSync(agentPath, JSON.stringify(agent));
+  report = doctor(path, 1);
+  assert.ok(report.issues.some(issue => issue.includes('operator contract differs')));
+}));
+
+test('doctor rejects unknown and duplicate operator domains with the same validator as activation', () => temporary(path => {
+  rootBundle(path);
+  const file = join(path, 'skills/conquistador/operator-profile.json');
+  const profile = JSON.parse(readFileSync(file));
+  for (const admittedDomains of [['unknown'], ['product', 'product']]) {
+    writeFileSync(file, JSON.stringify({ ...profile, admittedDomains }));
+    const report = doctor(path, 1);
+    assert.equal(report.operatorActivation, null);
+    assert.ok(report.issues.some(issue => issue.includes('Operator profile is present but invalid')));
+  }
 }));

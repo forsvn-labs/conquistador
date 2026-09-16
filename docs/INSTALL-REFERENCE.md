@@ -1,12 +1,14 @@
 # Manual installation reference
 
-Start with the [recommended skill install](../INSTALL.md#skills-recommended). This reference keeps
+Start with the [recommended operator installation](../INSTALL.md#project-operator-recommended). This reference keeps
 the direct commands for local source copies, native plugin managers, runtime operators, and
 containers. Use the original installer to update and remove a copy. Full skill and plugin packages
 include all 38 outcome methods; domain and standalone method packages can contain fewer.
 
-Version 0.1.0 is private. The source is
-[forsvn-labs/conquistador, branch dogfood/0.1.0](https://github.com/forsvn-labs/conquistador/tree/dogfood/0.1.0).
+Version 0.1.0 is private. The proposed next source channel is
+[forsvn-labs/conquistador, branch private-alpha](https://github.com/forsvn-labs/conquistador/tree/private-alpha).
+This review did not create that branch. Until the owner makes it available, use a supplied source
+copy or ZIP.
 Your GitHub account must have access, including any organization sign-in requirements.
 A repository-not-found response can mean that the account lacks access. Use a supplied private
 ZIP if you do not have repository access. There is no public package to install from npm.
@@ -16,7 +18,7 @@ ZIP if you do not have repository access. There is no public package to install 
 Ask your existing agent to follow [INSTALL.md](../INSTALL.md) for the current project. It can check
 prerequisites, install the root bundle, and check discovery without a separate clone. You handle
 account sign-in, repository access and any host-required approval. Do not paste credentials into chat.
-Conquistador becomes usable after the host discovers it; it cannot install itself beforehand.
+Conquistador becomes usable after the host reads its parent contract; it cannot install itself beforehand.
 
 During later tasks, Conquistador checks missing tools and prepares routine local prerequisites
 through the host when permitted. It installs only what the task needs. For example,
@@ -38,15 +40,15 @@ with your own path. Keep the source clone separate from the project receiving th
    Expect `forsvn-labs/conquistador` and `isPrivate: true`. If access fails, complete GitHub sign-in
    or request repository access from the owner, then retry. Do not bypass this with another source.
 
-2. Clone the dogfood branch into a new, dedicated directory:
+2. Clone the private-alpha branch into a new, dedicated directory:
 
    ```sh
-   gh repo clone forsvn-labs/conquistador /absolute/path/conquistador-source -- --branch dogfood/0.1.0 --single-branch
+   gh repo clone forsvn-labs/conquistador /absolute/path/conquistador-source -- --branch private-alpha --single-branch
    git -C /absolute/path/conquistador-source rev-parse HEAD
    git -C /absolute/path/conquistador-source status --short
    ```
 
-   Expect a commit ID and no status output. Record the full commit ID for your dogfood notes.
+   Expect a commit ID and no status output. Record the full commit ID for your private-alpha notes.
    The branch can advance; compare the ID with the build your maintainer asked you to test.
    Do not install dependencies, build, or save project files in this source folder before copying it.
    If the destination already exists, choose a new directory instead of deleting or cleaning it.
@@ -282,13 +284,13 @@ Grok Bot and Eve have no mode adapter.
 ## Optional runtime, terminal chat and MCP
 
 The runtime is optional. Coding-agent skills use the host's model and tools. To use durable
-playbooks and HTTP/MCP access, use Node 24 and Bun. Make a separate working copy of the complete
+playbooks and HTTP/MCP access, use Node 24 and npm. Make a separate working copy of the complete
 distribution, or extract its ZIP into a second fresh directory. Keep the pristine source used by
 the skills CLI free of dependencies and runtime state. Run these commands from the separate
 working copy root to install the runtime dependency:
 
 ```sh
-bun install
+npm run bootstrap
 node runtime/bin/conquistador.js version
 node runtime/bin/conquistador.js init
 node runtime/bin/conquistador.js doctor
@@ -372,4 +374,4 @@ release records. A package or install receipt is not live-provider evidence or r
 | A runtime request returns skill guidance instead of a session | That outcome has no selected executable playbook; use the coding-agent skill route |
 
 Host command examples describe setup procedures. They do not establish activation in your host.
-Use the [dogfood checklist](DOGFOOD.md) to record that separately.
+Use the [private-alpha checklist](PRIVATE-ALPHA.md) to record that separately.

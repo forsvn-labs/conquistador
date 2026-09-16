@@ -44,8 +44,8 @@
   ],
   "missingCapabilityBehavior": "fail-closed-draft",
   "lifecycle": {
-    "setup": "Install the skills/ tree as the complete plugin (Claude /plugin, Codex overlay, or pinned skills CLI). The included coding-agent/team.mjs adapter needs an explicit existing BB project, environment and parent. Operator activation defaults to manual and starts no daemon.",
-    "upgrade": "Replace the owned plugin tree with a newer skills/ copy. Hosts do not fetch at runtime.",
-    "remove": "Delete the owned plugin or skill directories recorded by the host. Leave user artifacts."
+    "setup": "Install the complete root skill bundle, a plugin, or setup --target operator. Invoke the parent explicitly. For BB teams, run hosts/coding-agent/team.mjs with an existing project, environment and parent. Activation defaults to manual; no process starts on installation.",
+    "upgrade": "Use the installer or host manager that owns the copy. Preserve the source, scope and host settings; hosts do not fetch during tasks.",
+    "remove": "Disconnect host routing and stop any active teams before removing the unchanged owned folder. User artifacts, host settings and other activated copies remain host-owned."
   }
 }

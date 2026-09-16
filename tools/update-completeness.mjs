@@ -5,6 +5,8 @@ import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { methodIdentity } from './installation-doctor.mjs';
 
+import { operatorFiles } from './operator-package.mjs';
+
 const root = fileURLToPath(new URL('../', import.meta.url));
 const skills = join(root, 'skills');
 const digest = path => createHash('sha256').update(readFileSync(join(skills, path))).digest('hex');
@@ -29,6 +31,7 @@ const manifest = {
   parent: methods.find(method => method.name === 'conquistador'),
   outcomes: methods.filter(method => method.name !== 'conquistador'),
   requiredResources: resources(),
+  operatorResources: operatorFiles.map(path => ({ path, sha256: createHash('sha256').update(readFileSync(join(root, path))).digest('hex') })),
 };
 if (!manifest.parent || manifest.outcomes.length !== 38) throw Error('Expected the parent and 38 outcomes; review the release contract before changing this count.');
 writeFileSync(join(root, 'release/completeness.json'), JSON.stringify(manifest, null, 2) + '\n');

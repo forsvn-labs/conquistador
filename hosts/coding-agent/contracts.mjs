@@ -21,6 +21,8 @@ export const publicSpecialists = Object.freeze({
   'creative-assets': 'Creative assets',
   outcome: 'Outcome',
   parent: 'Integration',
+  correction: 'Correction',
+  'final-review': 'Final review',
   review: 'Review',
 });
 export const publicCapabilities = Object.freeze({
@@ -38,7 +40,8 @@ export const publicCapabilities = Object.freeze({
   sales: 'sales',
   brand: 'brand',
 });
-export const reservedAssignmentIds = Object.freeze(['integrate', 'review', 'correct']);
+export const reservedAssignmentIds = Object.freeze(['integrate', 'review']);
+export const coordinatorIds = Object.freeze(['integrate', 'review', 'operator:correct', 'operator:final-review']);
 
 export function closed(value, required, optional = []) {
   assert.ok(value && typeof value === 'object' && !Array.isArray(value), 'Expected object');
@@ -63,16 +66,18 @@ export function labelField(value, maximum = 80) {
   assert.ok(!/[\r\n]/.test(value), 'Labels must be single-line');
 }
 
-const secretPattern = /(?:sk-[A-Za-z0-9_-]{8,}|github_pat_[A-Za-z0-9_]{20,}|ghp_[A-Za-z0-9]{20,}|bearer\s+[A-Za-z0-9._-]{8,}|BEGIN [A-Z ]*PRIVATE KEY|api[_-]?key\s*[:=]\s*\S+|password\s*[:=]\s*\S+)/i;
-const privatePathPattern = /(?:^|[\s`'"])(?:\/(?:Users|home|root|private|var|etc)\/[^\s`'"]+|file:\/\/[^\s`'"]+|[A-Za-z]:\\[^\s`'"]+|skills\/[a-z0-9-]+\/SKILL\.md)/g;
-const promptPattern = /\b(?:chain[- ]of[- ]thought|hidden prompt|system prompt|token budget|routing score)\b/i;
+// Reject the entire public field when it resembles private content. Regexes are a
+// secondary check; raw goals, knowledge, evidence and gaps never become public text.
+const privateContent = /(?:sk-[a-z0-9_-]{8,}|github_pat_|gh[pousr]_[a-z0-9]{20,}|bearer\s+|PRIVATE KEY|(?:api[_-]?key|password|secret|token)\s*["']?\s*[:=]|(?:^|[\s(\[<`'"])(?:\/|~\/|[a-z]:[\\/]|file:\/\/)|(?:skills|library|agent)\/|https?:\/\/[^\s]*[?@]|chain[- ]of[- ]thought|hidden prompt|system prompt|token budget|routing score|[\x00-\x1f\x7f\u202a-\u202e\u2066-\u2069])/i;
 
 export function redactText(value) {
   assert.ok(typeof value === 'string');
-  let text = value.replace(secretPattern, '[redacted]');
-  text = text.replace(privatePathPattern, ' [redacted-path]');
-  text = text.replace(promptPattern, '[redacted]');
-  return text.replace(/\s+/g, ' ').trim();
+  if (privateContent.test(value)) return '[redacted]';
+  return value.replace(/\s+/g, ' ').trim();
+}
+export function publicExecutionId(value) {
+  return typeof value === 'string' && /^[a-zA-Z][a-zA-Z0-9_-]{0,79}$/.test(value)
+    && redactText(value) === value ? value : null;
 }
 export function truncateText(value, maximum) {
   assert.ok(typeof value === 'string');
@@ -96,9 +101,9 @@ export function boundUnique(values, { limit = 12, maximum = 200 } = {}) {
 }
 
 export function publicSpecialistLabel(assignment) {
-  const reserved = { integrate: 'Integration', review: 'Review', correct: 'Integration' };
+  const reserved = { integrate: 'Integration', review: 'Review', 'operator:correct': 'Correction', 'operator:final-review': 'Final review' };
   if (Object.hasOwn(reserved, assignment.id)) return reserved[assignment.id];
-  return publicSpecialists[assignment.role] ?? publicSpecialists.outcome;
+  return Object.hasOwn(publicSpecialists, assignment.role) ? publicSpecialists[assignment.role] : publicSpecialists.outcome;
 }
 export function specialistTitle(assignment) {
   return `Conquistador: ${publicSpecialistLabel(assignment)}`;
@@ -140,6 +145,7 @@ export function validatePlan(plan) {
   closed(plan, ['schemaVersion', 'id', 'goal', 'assignments', 'limits'], ['presentation']);
   assert.equal(plan.schemaVersion, protocol);
   identifier(plan.id); textField(plan.goal);
+  assert.equal(redactText(plan.id), plan.id, 'Run id must be public');
   closed(plan.limits, ['concurrency', 'timeoutSeconds', 'maxAttempts', 'maxDispatches', 'maxOutputBytes']);
   bounded(plan.limits.concurrency, 1, 4);
   bounded(plan.limits.timeoutSeconds, 1, 1800);
@@ -151,6 +157,7 @@ export function validatePlan(plan) {
   for (const task of plan.assignments) {
     closed(task, ['id', 'role', 'goal', 'skills', 'workflows', 'knowledgeHandles', 'dependsOn']);
     identifier(task.id); identifier(task.role); textField(task.goal);
+    assert.equal(redactText(task.id), task.id, 'Assignment id must be public');
     assert.ok(Object.hasOwn(roleFiles, task.role) || task.role === 'outcome', 'Unknown specialist role');
     assert.ok(!ids.has(task.id) && !reservedAssignmentIds.includes(task.id), 'Duplicate or reserved assignment id');
     ids.add(task.id);

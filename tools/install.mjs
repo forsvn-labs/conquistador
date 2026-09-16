@@ -5,6 +5,8 @@ import { dirname, join, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { DOMAIN_SCHEMA_VERSION, PARENT_SKILL, RESTRICTION_NAME, REVIEW_SKILL, parseRestriction, readDomainManifestFile, resolveDomainSelection, shouldStageSkillPath } from './domain-package.mjs';
 
+import { operatorFiles } from './operator-package.mjs';
+
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const receiptName = '.conquistador-install.json';
 const fail = message => { throw new Error(message); };
@@ -133,9 +135,9 @@ function stage(mode, target, selection) {
     copy('tools/domain-package.mjs');
   }
   if (['plugin', 'single-agent'].includes(mode)) {
-    copy('tools/plugin-contracts.mjs');
-    copy('agents/conquistador/agent.json');
-    for (const name of ['contracts.mjs', 'operator.mjs', 'receipt.mjs', 'orchestrate.mjs', 'bb.mjs', 'team.mjs', 'host.json', 'README.md']) copy(`hosts/coding-agent/${name}`);
+    for (const file of operatorFiles) {
+      if (file !== 'tools/domain-package.mjs') copy(file);
+    }
   }
   if (mode === 'conquistador') {
     copy('tools/entrypoint/SKILL.md', 'SKILL.md');
@@ -168,7 +170,7 @@ function stage(mode, target, selection) {
   const usage = mode === 'conquistador'
     ? 'Load SKILL.md as the Conquistador skill. It routes through library/conquistador and all bundled outcome methods. Start with /conquistador, or the equivalent named-skill invocation in your host. The operator profile defaults to manual activation; hosts may enable project routing without starting a daemon. Proactive help is opt-in; read docs/PROACTIVE.md. Native BB specialist dispatch (hosts/coding-agent/) requires the complete distribution, not this compact folder.'
     : mode === 'single-agent'
-    ? 'Load agent/agent.json and agent/skills/conquistador in your host. The portable master contract, operator profile, specialist roles, and declared outcome skills are bundled. Native dispatch imports hosts/coding-agent/*.mjs. The callable coordinator automatically enforces domain-restriction.json when present. The host supplies isolated worker contexts. harness remains the setup alias for this package.'
+    ? 'Load agent/agent.json and agent/skills/conquistador in your host. The portable master contract, operator profile, specialist roles, and declared outcome skills are bundled. Native dispatch imports hosts/coding-agent/*.mjs. The callable coordinator automatically enforces domain-restriction.json when present. The host supplies isolated worker contexts. setup --target operator installs this package; harness is its compatibility alias. Start a fresh host session and explicitly ask it to read agent/skills/conquistador/SKILL.md and follow it for your task. Project activation requires a host adapter that calls admitRequest at turn start. No generic host registration is created.'
     : mode === 'squad'
       ? 'Load squad.json and each member contract with its own skills directory. Read sequential-fallback.md if your host cannot create separate contexts.'
       : mode === 'eve'
@@ -178,7 +180,7 @@ function stage(mode, target, selection) {
           : mode === 'plugin'
             ? 'Add this directory as a local marketplace in Claude Code or Codex, then install conquistador@conquistador. Other Agent Plugins clients load plugin.json. Claude also discovers the Conquistador agent. Native dispatch imports hosts/coding-agent/*.mjs from this folder. The operator profile defaults to manual activation. No service, hook, watcher, or schedule starts on install; methods declare prerequisites when needed.'
             : `Point your host at skills/${mode.slice(6)}. Read its SKILL.md for inputs, outputs and invocation prerequisites.`;
-  writeFileSync(join(target, 'README.md'), `# Conquistador ${mode}\n\n${usage}\n\nRead [Use Conquistador](docs/USAGE.md) for requests, review and correction. Read [Master-agent modes](docs/MASTER-AGENT.md) for specialist execution and host limits. This staged folder contains methods and usage documentation. Run installation, upgrade, removal, runtime, build, test and package commands from the complete distribution, not this folder. The proactive helper is available only when tools/proactive.mjs is included.${selection ? (mode === 'conquistador' ? ' Domain selection filters the copied methods. This compact skill has no callable loader; its host must enforce domain-restriction.json before loading additional methods or tools.' : ' domain-restriction.json is the load-time allowlist for the callable coordinator; undeclared siblings are refused there even if copied later.') + ' Private knowledge roots stay in operator-owned configuration outside this folder. Direct host file and tool access requires host enforcement.' : ''}\n\nPrepared locally, not live-host verified. This folder is installer-owned. Keep user artifacts elsewhere. Run upgrade or remove from the original complete distribution using the same mode and this destination. Modified files are preserved by refusing replacement.\n`);
+  writeFileSync(join(target, 'README.md'), `# Conquistador ${mode}\n\n${usage}\n\nRead [Use Conquistador](docs/USAGE.md) for requests, review and correction. Read [Master-agent modes](docs/MASTER-AGENT.md) for specialist execution and host limits. This staged folder contains methods and usage documentation. Run setup status, setup doctor, installation, upgrade, removal, runtime, build, test and package commands from the complete distribution, not this folder. The proactive helper is available only when tools/proactive.mjs is included.${selection ? (mode === 'conquistador' ? ' Domain selection filters the copied methods. This compact skill has no callable loader; its host must enforce domain-restriction.json before loading additional methods or tools.' : ' domain-restriction.json is the load-time allowlist for the callable coordinator; undeclared siblings are refused there even if copied later.') + ' Private knowledge roots stay in operator-owned configuration outside this folder. Direct host file and tool access requires host enforcement.' : ''}\n\nPrepared locally, not live-host verified. This folder is installer-owned. Keep user artifacts elsewhere. Run upgrade or remove from the original complete distribution using the same mode and this destination. Modified files are preserved by refusing replacement.\n`);
   if (selection) {
     writeFileSync(join(target, RESTRICTION_NAME), `${JSON.stringify(selection.restriction, null, 2)}\n`);
   }

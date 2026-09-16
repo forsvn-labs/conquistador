@@ -3,7 +3,7 @@
   "parent": {
     "name": "conquistador",
     "version": "2.9.0",
-    "sha256": "ee2613ace4beea2aa94fd0ebaf2b35a4b628842d7a98c9da5a05f9926cfa8ec1"
+    "sha256": "6b9c35e7d102c97088202de2489345517da480603059a9555a7acb3a67b16652"
   },
   "outcomes": [
     {
@@ -644,7 +644,7 @@
     },
     {
       "path": "build-ios-app/references/api-reference.md",
-      "sha256": "986645a64881c587ca392c68d257e8e8fcbab9b6d2097fc83e53146e52e86d92"
+      "sha256": "8cb41a391d3c0aeacb1d0e2955e9420163bc9a76bb406b2f246601e9fbf116ad"
     },
     {
       "path": "build-ios-app/references/apple-platform-authority.md",
@@ -772,7 +772,7 @@
     },
     {
       "path": "conquistador/adapters/single-agent.md",
-      "sha256": "b168976a2f60441165443cfaec1c02d0869d7c7bc0be7c36301439d24e4588c0"
+      "sha256": "e18bf62deac49363abe224cd2ec67b6592db5ce5b4d93af8681150bd81458f32"
     },
     {
       "path": "conquistador/adapters/social-publishing-handoff.md",
@@ -912,7 +912,7 @@
     },
     {
       "path": "conquistador/orchestration/specialist-team.md",
-      "sha256": "3bdbe9c38ee1cf578ba5251aa83d8aa15624afccce412c33fa7fc6e3bb028cb3"
+      "sha256": "3412e1b93f0cb0f2718ff9cf4fb7bb9a13a10ced88e7d9ef0ca8b86c73f8c3bb"
     },
     {
       "path": "conquistador/references/ai-patterns.md",
@@ -1620,7 +1620,7 @@
     },
     {
       "path": "conquistador/specialists/roster.md",
-      "sha256": "5a8180d5610dab4275921637702966ca53ae7c72b091e675f55bbb96f1d621c3"
+      "sha256": "0128873785163f66b32f8518cacb4747d246cfab42fab69db5e58e351844a5a8"
     },
     {
       "path": "conquistador/specialists/saas-landing-agent.md",
@@ -4581,6 +4581,72 @@
     {
       "path": "write-technical-docs/references/ship-log-template.md",
       "sha256": "e55791bf01dda6fb8e1da9a2137a8e603aa14f82d66a77d8aa615051b87eb314"
+    }
+  ],
+  "operatorResources": [
+    {
+      "path": "hosts/coding-agent/contracts.mjs",
+      "sha256": "6971ff54f1c8c0ea5fbf225c2c7588d391816caa256979055858b2e2705cc690"
+    },
+    {
+      "path": "hosts/coding-agent/operator.mjs",
+      "sha256": "9fdfa079e628e973224682e48b27842fb0618084f8f050ede53eda9645c681f7"
+    },
+    {
+      "path": "hosts/coding-agent/receipt.mjs",
+      "sha256": "00967e13ab6b8cf1cc55598de3b716c2a2b671833577e25e4ea29bba7468d7f2"
+    },
+    {
+      "path": "hosts/coding-agent/orchestrate.mjs",
+      "sha256": "384cd1fef592a4a5ddd99bc193f3b727a3a3aba7ef887ac0219d5709d9637545"
+    },
+    {
+      "path": "hosts/coding-agent/bb.mjs",
+      "sha256": "07d81cfc4f83a2d826a894b23634c5e90ae096465155a422b355b0321c10eda6"
+    },
+    {
+      "path": "hosts/coding-agent/team.mjs",
+      "sha256": "a3435ff1c96c3c9bd652725951758a87a2374ef5ad2e32561c623a8b9636d827"
+    },
+    {
+      "path": "hosts/coding-agent/host.json",
+      "sha256": "998c212a4e80d1e82705b106514ad0f8387687116ee0d9c0b1917e9127edcaf8"
+    },
+    {
+      "path": "hosts/coding-agent/README.md",
+      "sha256": "bb65a83817730c0ed00d50d8df1e54f7ddf81ea931c9d004bc52c46a1a29a36b"
+    },
+    {
+      "path": "tools/domain-package.mjs",
+      "sha256": "37ec855ed6a791343de5ad4e998962b86d46de8f97a5798f4e7ba84cfca49b3c"
+    },
+    {
+      "path": "tools/plugin-contracts.mjs",
+      "sha256": "77b4d36138b24eff256d32f1073faffc52e35de8cdd9af427a77d79343ad3128"
+    },
+    {
+      "path": "agents/conquistador/agent.json",
+      "sha256": "887b077d66a0e7ad07b8c2132d97c9879cb6b3e2bebaabc91a7d79ba7d93acba"
+    },
+    {
+      "path": "agents/conquistador/compatibility/v1.json",
+      "sha256": "461d0c64a3652ad1d9b0f65adfd1aa5ab847660e970e4ae9c275702f9c62308e"
+    },
+    {
+      "path": "agents/agent-package.schema.json",
+      "sha256": "52f9d4eccb900d355e6548b7abb98404122fe483305b6afe738480649cc19a73"
+    },
+    {
+      "path": "agents/agent-package-v2.schema.json",
+      "sha256": "ff3ee537c057b57b20d021cd6c19fa9fcf6ba93943947c0e6ba49978c189219c"
+    },
+    {
+      "path": "agents/operator-profile.schema.json",
+      "sha256": "abdbca66341c0dd977a2afb8ea7c933a6ad696b06fcd366a03f40c0c832604aa"
+    },
+    {
+      "path": "agents/execution-receipt.schema.json",
+      "sha256": "84f8a563bc1a750b39a10a5e84941f21c27b9a8bd3a359bbf9faffbf21133f3b"
     }
   ]
 }

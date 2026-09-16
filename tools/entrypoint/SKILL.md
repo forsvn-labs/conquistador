@@ -1,6 +1,6 @@
 ---
 name: conquistador
-description: Coordinate elite growth, GTM, sales, marketing, product, and knowledge work from one request. Select the necessary bundled methods, produce the work, help connect the user's toolstack when needed, and preserve human authority for external actions.
+description: Coordinate growth, GTM, sales, marketing, product, and knowledge work from one request. Select the necessary bundled methods, produce the work, help connect the user's toolstack when needed, and preserve human authority for external actions.
 ---
 
 # Conquistador

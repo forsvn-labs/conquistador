@@ -1,6 +1,6 @@
 ---
 name: conquistador
-description: Coordinate elite growth, GTM, sales, marketing, product, and knowledge work from one request. Select the necessary bundled methods, produce the work, help connect the user's toolstack when needed, and preserve human authority for external actions.
+description: Coordinate growth, GTM, sales, marketing, product, and knowledge work from one request. Select the necessary bundled methods, produce the work, help connect the user's toolstack when needed, and preserve human authority for external actions.
 license: MIT
 ---
 
@@ -21,3 +21,7 @@ Use [Lavish preview guidance](docs/PREVIEW.md) for visual review, [approved proj
 for memory proposals, and [proactive help](docs/PROACTIVE.md) only when host events are enabled.
 Keep user outputs and memory outside this installed directory. No file here grants publication,
 spending, memory persistence or public-feedback disclosure authority.
+
+The operator profile defaults to manual invocation. Setup does not register project routing.
+For substantial tasks, follow the parent's brief and receipt contract; identify same-context review
+and preserve the limits of observed evidence.

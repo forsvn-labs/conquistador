@@ -460,7 +460,7 @@ ride-share, navigation, and similar apps that declare
 content-validates the GeoJSON shape: reject reasons surface as
 `assetDeliveryState.errors[].code` (commonly `TRANSIT_APP_FILE_INVALID_JSON`).
 The build's pbxproj must declare `INFOPLIST_KEY_MKDirectionsApplicationSupportedModes`
-for Apple to accept the upload — see [Routing apps section in SKILL.md](../SKILL.md#routing-apps-transit-ride-share-navigation).
+for Apple to accept the upload — see [native distribution boundary](../SKILL.md#finish-at-the-release-boundary).
 Apple-side `assetDeliveryState: COMPLETE` additionally requires the bundle id
 to be registered at https://mapsconnect.apple.com — outside pipeline scope.
 Cap: 10 MiB.

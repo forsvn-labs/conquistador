@@ -2,7 +2,7 @@ name: Product checks
 on:
   pull_request:
   push:
-    branches: [main, dogfood/0.1.0]
+    branches: [main, dogfood/0.1.0, private-alpha]
 permissions:
   contents: read
 jobs:

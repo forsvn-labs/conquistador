@@ -242,3 +242,22 @@ test('domain install records the restriction; knowledge roots stay outside the p
   assert.match(bad('install', '--target', 'skill', '--path', path, '--domain', manifest, '--knowledge-roots', join(parent, 'inside-roots.json')), /outside the product package/);
   assert.equal(existsSync(path), false);
 }));
+
+test('project operator and harness alias share lifecycle without changing host routing or user work', () => temporary((path, project) => {
+  const sentinel = join(project, 'AGENTS.md');
+  writeFileSync(sentinel, 'Existing host instructions.');
+  const installed = join(project, '.conquistador-operator');
+  const output = good('install', '--target', 'operator', '--project', project);
+  assert.match(output, /agent\/skills\/conquistador\/SKILL.md/);
+  assert.match(output, /Project routing needs a host adapter/);
+  assert.ok(existsSync(join(installed, 'agents/execution-receipt.schema.json')));
+  assert.ok(existsSync(join(installed, 'agents/conquistador/compatibility/v1.json')));
+  assert.equal(JSON.parse(readFileSync(join(installed, '.conquistador-install.json'))).mode, 'single-agent');
+  assert.match(good('status', '--target', 'harness', '--path', installed), /unchanged/);
+  good('update', '--target', 'harness', '--path', installed);
+  assert.match(good('doctor', '--path', installed), /38 methods available/);
+  good('uninstall', '--target', 'operator', '--project', project);
+  assert.equal(existsSync(installed), false);
+  assert.equal(readFileSync(sentinel, 'utf8'), 'Existing host instructions.');
+  assert.deepEqual(readdirSync(project), ['AGENTS.md']);
+}));

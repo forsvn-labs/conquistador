@@ -74,7 +74,7 @@ The executable protocol is `conquistador.specialist/v1`. Plans may include an op
 object; plans without it remain valid. The master package is `conquistador.agent-package/v2`; the
 original v1 schema and package remain available for old hosts. Operator activation is
 `conquistador.operator-profile/v1` with `manual | project | off`. Installed copies default to
-`manual`. `harness` remains the setup alias for the portable master package. A run declares one to
+`manual`. `operator` is the setup target for the portable master package; `harness` remains compatible. A run declares one to
 four concurrent contexts, a finite deadline, at most two attempts, an output limit, and at most
 twelve dispatches including integration, review, and at most one correction cycle. Only a known
 pre-dispatch failure can retry. An accepted or uncertain dispatch must be reconciled before another
@@ -85,8 +85,9 @@ the model cannot choose that identity. The reviewer must echo the digest of the 
 artifact. `draft`, `revise`, and `blocked` are valid results; none means human acceptance. The
 deterministic `conquistador.execution-receipt/v1` is derived from the validated plan plus observed
 host results. Its specialist list keeps every plan assignment, then any observed integration,
-correction, and the final review child, each with host execution IDs and statuses. A second review
-after correction replaces the receipt's review row; it does not duplicate it. Public fields may
+initial review, correction, and final-review child, each with host execution IDs and statuses.
+Both review rows retain their own exact reviewedDigest. Skipped assignments are not-run, not
+observed blocked executions. Public fields may
 include capability labels, role labels, deliverable, evidence classes, execution mode, review
 independence, child execution IDs/statuses, artifact digest, gaps, and external-action status.
 External actions stay empty and `humanAccepted` stays false in this draft-only adapter.
@@ -101,3 +102,11 @@ the model and worker-context tools. Logical `scope:name` knowledge handles resol
 host-owned callback. Keep resolved paths and source bodies outside package metadata and receipts.
 BB context isolation is not a filesystem sandbox. The host's permission system remains responsible
 for file and tool access. This first BB adapter supports draft-only work with no external tools.
+
+Public summaries must not quote private goals, prompts, method bodies, knowledge, or raw model
+evidence and gaps. The executable receipt reports counts and public labels; the private result
+retains the substantive findings. Presentation text must be approved for display by its caller.
+Pattern checks cannot classify arbitrary confidential prose. Method selection and result counts
+do not establish source verification, model quality, human acceptance, or absence of host tool use.
+Setup does not register project routing. A host must call admitRequest at user turn start to use
+project activation; off disables even explicit admission through that function.

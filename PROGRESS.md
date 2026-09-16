@@ -1,81 +1,49 @@
 # Implementation status
 
-Conquistador is in private dogfood. The shipped prerelease is
-[`v0.1.0-dogfood.4`](https://github.com/forsvn-labs/conquistador/releases/tag/v0.1.0-dogfood.4),
-from `45a3d276874b30e884fb5e603b289e0c58a286f8` on `dogfood/0.1.0`. Product version is 0.1.0;
-the parent method is 2.9.0 on current source. The root npm package remains `private: true`. CI builds and tests with
-read-only repository permissions; public distribution is deferred. ZIP, npm tarball, checksums, and
-`assembly.json` bind that exact source (`authority: UNBOUND`). Installing a new package does not
-update existing copies. Earlier dogfood prereleases retain their original source identity.
+The operator implementation and this independent review are unshipped. The proposed next private
+channel is `private-alpha`; no channel branch, tag, version, release, push, or publication was made.
+Product version remains 0.1.0 and parent method version remains 2.9.0. The npm private guard remains
+true. Historical ships are recorded only in [CHANGELOG.md](CHANGELOG.md).
 
-## Installation and first use
+This review covers every changed file in `d2fc898..84f0008`, the complete 41-file operator diff on
+`bb/implement-conquistador-operator-experience-with-thr_dx5zj6re7b`. It also audits the source and
+installation paths those changes depend on. All work stays in the product worktree. The product
+registry identifies Conquistador and PROGRESS.md as its handoff; no FORSVN workspace files were edited.
 
-The pinned repository-root skills.sh command is the one default. It already copies the complete
-library. README and INSTALL put prerequisites and traps beside the command, followed by a first
-task, checks, recovery, and alternatives. The usage, dogfood, integration, mode, and capability
-guides follow the same sequence: use supplied context, reuse permitted connections, and set up
-Executor when missing live access blocks the task. Plugins, MCP, CLI repair, Eve, and the runtime
-remain optional. This rewrite changes guidance, not host execution behavior.
+## Implemented and reviewed
 
-`conquistador setup doctor --path ABS [--json]` checks full root, compact, plugin, and harness
-copies against `release/completeness.json`. The manifest names all 38 outcomes, parent version
-2.9.0, and all supporting resources, including specialist, operator-profile, and setup contracts, with content hashes.
-The report separates library completeness, managed receipt integrity and version, available Git
-identity and cleanliness, and BB adapter presence. Compact copies use `library/` and omit the
-adapter; plugin and harness copies include it.
+- Request-time admission uses the manual/project/off operator profile. It starts no polling,
+  daemon, background transcript collection, instruction-file edit, or external operation. Setup
+  does not register the router in a host. Invalid overrides disable admission; ambiguous coding
+  requests abstain. Missing old profiles default to manual; malformed profiles fail closed.
+- Public role titles, engagement briefs, and execution receipts accompany explicit BB teams.
+  Raw goals, knowledge, method text, prompts, model evidence and gaps stay out of the public receipt.
+  Optional presentation text is caller-approved public input. Pattern checks cannot identify
+  arbitrary confidential prose; the receipt contains fixed summaries and counts of observed results.
+- Receipts retain specialist, integration, initial review, correction, and final-review rows. Each
+  review retains its own exact digest. Blocked dependencies record not-run rows; same-context runs
+  retain independentReview false. A receipt does not audit host tools, verify sources, or record
+  human acceptance. The private result file retains substantive findings for the operator.
+- The coordinator permits one targeted correction and one final re-review. It refuses digest
+  mismatch and isolated context reuse. Accepted/ambiguous dispatches cannot retry, even when a host
+  incorrectly sets preDispatch after reporting a dispatch. A second revise result remains unresolved.
+- The team CLI reserves its private output before dispatch and emits a fixed failure diagnostic.
+  It cannot run a team and then discover that its output file already exists.
+- Managed setup adds --target operator --project ABS at PROJECT/.conquistador-operator. The harness
+  target with --path remains compatible. The package includes the v1 compatibility agent, v2 master,
+  operator and receipt schemas, methods and adapter. Doctor uses the same profile validator as the
+  router and checks the complete operator executable inventory plus the rewritten master contract.
+- README, INSTALL, reference guides, entry points, lifecycle help and CI name private-alpha as the
+  proposed channel. The current acceptance checklist is docs/PRIVATE-ALPHA.md; docs/DOGFOOD.md remains
+  a working historical redirect. Local source/ZIP installation is usable before a channel exists.
+  Removal requires host detachment; uninstall does not promise to stop agents or delete host settings.
+- Unshipped operator material was removed from CHANGELOG. VISION contains stable boundaries;
+  ROADMAP contains remaining acceptance and distribution work. No historical shipped entry changed.
 
-Managed MCP diagnostics check the saved Node executable and package script separately from the
-receipt digest, then inspect the library at the resolved script path. A moved source, pruned npm
-cache, or removed Node executable fails even if the connector digest is intact. The doctor changes
-no files, executes no saved paths, and contacts no service.
+## Recorded operator evidence before this review
 
-Success reports "38 methods available; local files verified; host activation and task execution
-unverified." It does not claim all methods are loaded into model context. A copy without Git has
-an unknown source commit. Domain-restricted and standalone packages do not pass the full-library
-check. Copies without a manifest use the doctor's release baseline with an explicit notice;
-older releases need a newer complete distribution to supply the doctor.
-
-The implementation passed the Node 24 build and all 620 default tests: 99 tooling, 291 runtime,
-167 catalog, and 63 Eval Lab. Fourteen doctor/manifest tests cover missing methods and resources,
-compact/plugin/harness copies, changed receipts, stale MCP paths, cross-bundle executable symlinks,
-and Git index preservation. Catalog validation and the explicitly synthetic local example passed.
-A source doctor run found all 38 methods and reported pending source edits. No native host,
-model task, or provider connection was exercised for this installation work.
-
-The documentation rewrite passed 41 focused install/doctor tests and the full 620-test product
-suite on Node 24. Catalog validation and the synthetic example also passed. Checks covered 107
-local links and anchors, links inside staged packages, the pinned default commands, adjacent
-prerequisites and traps, and first-task ordering. A direct source doctor run again reported all
-38 methods available and the pending documentation edits. No live host or provider check was run.
-
-## Operator experience on dogfood/0.1.0
-
-Current source on `bb/implement-conquistador-operator-experience-with-thr_dx5zj6re7b` starts from
-`d2fc898d6736e5ad8517296007bb6f866e2d62d2`. It adds `conquistador.operator-profile/v1`, optional
-specialist presentation, `conquistador.execution-receipt/v1`, BB brief/receipt integration, and
-one targeted correction after an exact-artifact `revise` verdict. Installed activation stays
-`manual`. `backgroundWatch` stays false. Draft-only runs keep `externalActions: []` and
-`humanAccepted: false`.
-
-Node 24.21.0 passed `npm run bootstrap`, `npm run build`, and `npm test`: 118 tooling, 292 runtime,
-167 catalog, and 63 Eval Lab tests (640 total). Catalog check reported 17 valid operations. The
-synthetic local example reported `proofClass: synthetic-local-contract-example`,
-`executionAuthorized: false`, `liveExecutions: 0`, `humanVerdicts: 0`. Completeness hashes matched
-parent 2.9.0 (`sha256:ee2613ace4beea2aa94fd0ebaf2b35a4b628842d7a98c9da5a05f9926cfa8ec1`) and 1096
-required resources, including `conquistador/operator-profile.json`.
-
-A fresh temporary harness install/status/update/remove cycle reported 38 methods available, operator
-profile present (`activation manual`), BB adapter present, and `hostActivationVerified: false`.
-A compact skill cycle reported the operator profile present and the BB adapter absent. Doctor does
-not prove routing or task execution. `plugin-contracts` reported `hostActivationVerified: false`.
-A checkout package-boundary scan checked 1580 files with 0 private fingerprints
-(`semanticReviewRequired: true` for this private package). A changed-file secret and private-path
-scan found no matches.
-
-Follow-up commit `c318bf09f17b1e2a66f85a93a3923ffa82f3277f` records observed integration, review,
-and correction children on receipts and reports overall blocked state instead of a sibling draft.
-That change passed Node 24.21.0 `npm run build` and `npm test`: 119 tooling, 292 runtime, 167
-catalog, and 63 Eval Lab tests (641 total).
+The implementation recorded 640 default tests on 999087e and 641 on c318bf0, on Node 24.21.0.
+Those results were local contracts. They did not prove host activation or useful output.
 
 Two live BB acceptance attempts ran from parent `thr_dx5zj6re7b` in `env_e7raxthku8`. They do not
 complete FOR-247 or FOR-248 host acceptance.
@@ -96,118 +64,152 @@ human acceptance. Protocol tests cover briefs, receipts, redaction, digest misma
 and the one-pass correction limit; they are not a host, provider, or human result. No push, merge,
 publish, Linear mutation, or FORSVN planning edit is included.
 
+## Independent review validation
+
+No live host or provider task ran in this review. FOR-247 and FOR-248 remain
+open; their remaining acceptance work is in ROADMAP.md.
 
 
-## Available product behavior
+Commands ran on macOS arm64 with Node v24.21.0 and npm 11.19.0. The shell used:
 
-| Area | Available behavior and limit |
+```sh
+export PATH=/opt/homebrew/opt/node@24/bin:$PATH
+export npm_config_cache=/private/tmp/conquistador-review-npm-cache
+npm run bootstrap
+npm run build
+npm test
+node --test tools/install.test.mjs tools/setup.test.mjs tools/setup-entry.test.mjs tools/installation-doctor.test.mjs hosts/coding-agent/operator.test.mjs hosts/coding-agent/operator-experience.test.mjs hosts/coding-agent/orchestrate.test.mjs
+npm --prefix runtime exec -- vitest run tests/agent-packages.test.ts
+node tools/plugin-contracts.mjs .
+node tools/setup.mjs doctor --path "$PWD" --json
+git diff --check
+git diff --exit-code -- runtime/lib
+```
+
+Bootstrap, build and the full suite passed. The full suite contains 658 tests: 135 tooling,
+293 runtime, 167 catalog and 63 Eval Lab. Focused install/operator tests passed 83/83 and schema
+checks passed 3/3. The final receipt/compatibility regression pass contains 24/24 tests. Catalog validation reported 17 valid operations. The local SDK example reported
+synthetic-local-contract-example, executionAuthorized false, liveExecutions 0 and humanVerdicts 0.
+Build left maintained runtime/lib unchanged. The first bootstrap failed on the unwritable default
+npm cache; the task-owned cache above resolved it. An intermediate schema test caught a missing
+JSON Schema array type; that was fixed before the passing schema and full-suite runs.
+
+Doctor reported all 38 outcomes, manual activation, the complete adapter, and zero issues. The
+manifest records 1,096 method resources and 16 operator resources. Plugin contract checks left
+hostActivationVerified false. These are local checks, not activation or output-quality evidence.
+
+Three fresh temporary lifecycle cycles used operator, harness and codex compact targets. For each,
+the exact sequence was install, status, doctor --json, update, status, doctor --json, uninstall,
+and status. Operator/codex used --project ABS; harness used --path ABS. All eight commands in each
+cycle passed, for 24 successful CLI invocations. Every doctor reported 38 methods and manual
+activation. Operator/harness included the adapter; compact omitted it. All copies were removed,
+and the receiving project's AGENTS.md and draft.md remained unchanged. Direct admission-function
+checks on the installed operator/harness confirmed manual abstention, project admission, and off
+abstention. They did not call a host or start a background task.
+
+The temporary lifecycle driver was run with:
+
+```sh
+node /private/tmp/conquistador-review-lifecycle.mjs "$PWD"
+python3 /private/tmp/conquistador-review-links.py "$PWD"
+node /private/tmp/conquistador-review-scan.mjs
+```
+
+The local Markdown audit checked 1,121 files and 1,539 links with zero unresolved links after
+accounting for three entrypoint-template links that resolve after staging. Staged install tests
+check those template links in their real destinations. The audit fixed one stale iOS reference
+anchor without changing its method version. The source boundary scan checked 1,582 files against
+three private path fingerprints and credential patterns: no matches and no tracked dependency,
+state, credential or distribution artifacts. This is a pattern scan plus source review, not a
+claim that regexes can classify all confidential material. No private-alpha remote link or native
+host manager command was exercised; those channel references remain proposed. Historical dogfood
+release names, tags and CI coverage remain; method examples using the ordinary word dogfooding are
+not channel references. CHANGELOG is byte-identical to its d2fc898 contents.
+
+Execution limits remain explicit: 1–4 concurrent contexts, 3–12 total dispatch attempts, 1–1,800
+seconds per team, and 256–128,000 UTF-8 bytes per result. Ordinary assignments have at most two
+attempts, only before accepted dispatch. Correction and final re-review each have one attempt.
+Selected method/knowledge context is bounded to 196,608 bytes and 100 method files per assignment.
+Receipts have at most 12 rows; public evidence/gap lists have at most 12 entries of 200 bytes.
+Default cleanup waits at most 5 seconds; the BB adapter allows 80 seconds for its bounded cleanup.
+These limits do not measure model tokens, billing, source use or host filesystem permissions.
+
+## Supported findings and corrections
+
+| Finding | Correction and affected implementation |
 | --- | --- |
-| Task entry | One parent selects from 38 outcome methods for growth, GTM, sales, marketing, and product knowledge work; the host supplies the model and tools. Operator activation defaults to manual; project routing is an explicit host setting |
-| Installations | Root skills, compact managed skills, plugins, and host packages; local file preparation does not establish host activation |
-| Local MCP | Lists and reads bundled methods over stdio without runtime dependencies, a model account, or an HTTP service |
-| Specialists | Seven role contracts, public roster labels, a callable BB adapter, engagement brief, execution receipt, exact-artifact review with one correction pass, and a same-context fallback; v2 master metadata retains v1 compatibility |
-| Existing stack | Host-owned route selection and bounded reads; the catalog requires exact audited operations |
-| Executor help | `connections setup` and `status` detect a CLI and print official next steps; configuration, UI handoff, discovery, and provider execution are separate |
-| Optional Eve | A canonical app with explicit owner/session commands and separate worker/operator authority; preparation does not submit a model job |
-| Optional runtime | Four declared playbooks with saved state, draft artifacts, failure/resume behavior, and separate review/action authority |
-| Preview | Host procedures for Lavish AXI previews and annotations; no automatic annotation consumer |
-| Proactive advice | Opt-in helper and Claude hook lifecycle; native delivery remains unverified |
-| Memory and feedback | Explicit host-file memory and redacted feedback drafts; no automatic learning promotion, cross-run retrieval, or global learning |
+| Public fields copied arbitrary model prose; regex replacement could leave multiple secrets or private bodies | contracts.mjs and receipt.mjs omit raw goal/evidence/gap bodies, restrict identities and use public summaries and observed counts |
+| The final review replaced the initial review, and receipt text inferred evidence and capability use from plans | orchestrate.mjs and receipt.mjs retain both reviews and digests, derive methods from completed assignments and report actual execution mode |
+| Blocked dependencies threw before receipt creation | Downstream assignments now produce not-run rows without dispatch |
+| A host could report a dispatch and still trigger a preDispatch retry; correction retries could consume the re-review slot | Accepted dispatches cannot retry; correction and final-review each have one attempt |
+| Existing output files were discovered after host work | team.mjs reserves its private output before reading the plan or invoking BB |
+| Profile handling could silently accept invalid overrides or missing link targets, and domain validation differed in doctor | operator.mjs fails closed, narrows coding admission, and shares profile validation with doctor |
+| Operator installs omitted schemas and compatibility metadata; doctor could pass a missing runner module | install.mjs, operator-package.mjs and the completeness manifest share an exact operator inventory; doctor checks its hashes and transformed master contract |
+| Setup and removal prose implied automatic host activation and shutdown | setup.mjs, host/agent manifests and installation guides state explicit file invocation, host-owned routing and detachment |
+| Operator work appeared in shipped history and future commands targeted dogfood | Horsemen use their fact classes; current channel guidance names private-alpha and preserves historical facts |
 
-Use [INSTALL.md](INSTALL.md), [usage](docs/USAGE.md), [capabilities](docs/SERVICES.md),
-[execution modes](docs/MASTER-AGENT.md), and [integrations](docs/INTEGRATIONS.md) for commands and
-limits. Build and package commands belong to a complete distribution under
-[CONTRIBUTING.md](CONTRIBUTING.md). Outputs, private notes, and runtime state stay outside the
-installed product. Run artifacts and audit state can still persist when automatic learning is off.
+Correction and re-review use coordinator-only operator:correct and operator:final-review IDs,
+which cannot collide with valid user assignment IDs. Existing plans without presentation and user
+assignments named correct or final-review remain valid; integrate and review stay reserved.
+The portable v1 agent metadata and v2 master schema remain available. The unshipped receipt schema
+keeps v1 and adds optional status/reviewedDigest fields plus not-run rows. Consumers must accept
+those fields and retain every observed review row.
 
-## Earlier recorded verification
+## Files corrected in this review
 
-These observations retain their original build and task scope. They were not repeated for the
-documentation rewrite and do not establish native activation of the current installation.
+The review changes 52 product files. The source diff remains available through Git.
 
-### Executor and Eve adoption
-
-Node 24.21.0 on macOS arm64 passed the integrated build and 606 default tests, catalog validation,
-and the synthetic local example. The dogfood.3 follow-up also recorded 27 Executor host tests.
-The preceding adoption work recorded:
-
-- Executor frozen installation, syntax checks, 22 client tests, and a dependency audit. A local
-  Executor 1.6.8 process authenticated the client and exposed seven MCP tools. No tool or provider
-  was invoked; the process stopped and temporary state was removed. The adoption client's exact
-  GitHub callback still lacks a reviewed live binding.
-- Eve frozen installation, typecheck, 13 source tests, native build, and dependency audit. A prepared
-  app passed installation, typecheck, ten tests, and build. Its HTTP endpoints accepted synthetic
-  caller/operator credentials, denied unauthenticated access and caller approvals, and rejected
-  unknown-session sends without creating replacements. No model job ran; the process stopped.
-- Origin checks that prevented credential transmission to missing or mismatched destinations.
-  Twenty-four negative cases made zero fetch calls; valid bound calls reached the local HTTP
-  endpoint. Credential rotation invalidates old gateway bindings; Eve rejects configuration changes
-  during a turn.
-- A read-only npm release check on 2026-09-16. Eve 0.55.0, Executor 1.6.8, MCP SDK 1.30.0,
-  AI SDK 7.0.102, and just-bash 3.4.2 matched the reported latest releases then. New TypeScript and
-  Node type majors were flagged for review; the tested TypeScript 5.9.3 and Node 24 pins remained.
-
-Exact pins and Bun lockfiles support reviewed upgrades. `integrations status` reads local records;
-`check-updates` queries public npm metadata without changing dependencies. The daily release watch
-requires default-branch activation. Optional Actions jobs were not run on this local branch.
-These checks do not establish Linux support for the optional hosts, provider access, model quality,
-or durable crash recovery.
-
-### Specialist execution and installation
-
-Earlier master-agent work observed two specialist contexts, integration, and separate exact-artifact
-review in BB. An earlier run requested revision; a later four-context run passed draft review.
-A separate same-context run reported independent review false. One bounded public repository
-metadata read succeeded through an Executor-bound Connection in candidate-verification mode.
-These observations do not grant human acceptance, general output quality, sandboxed tools, or
-maintained provider support.
-
-The implementation review rechecked cancellation cleanup, child ownership, uncertain spawn outcomes,
-and exact connection binding. That stage passed 595 default tests on Node 24.12.0, including
-orchestration, stack, and graph checks, plus the 17-operation catalog check and synthetic example.
-Graph tests preserved missing image, vision, and data connections as gaps.
-
-Dogfood.2 recorded real private Git skills install/reinstall/list/remove and npm setup install/remove
-in temporary projects. Spawned local MCP processes listed all 39 entries and passed contained reads,
-protocol negotiation, and path refusal checks without runtime dependencies. Exact archive checks
-and Linux CI passed. The release recorded 544 default tests. These were installer and protocol
-checks, not native host activation or useful model execution.
-
-Earlier guided setup checks exercised install/status/update/uninstall in a terminal, all 39 method
-roots, and setup without runtime dependencies. Staged usage-guide checks cover all seven installer
-mode families, contained links, and protection of edited guides. Earlier Lavish launcher checks
-did not establish human annotation or useful model output.
-
-### Optional hooks and domain restrictions
-
-The Claude adapter registers SessionStart and Stop only. It removes owned legacy TaskCompleted
-registrations and preserves unrelated hooks. Invalid or incomplete input suppresses advice;
-configuration errors produce a redacted diagnostic and cannot block completion. The official event
-reference was checked through web access, but verification through Executor and native delivery
-remain unobserved. That review recorded a Node 24.19.0 build, 599 default tests, catalog validation,
-the synthetic example, and a private-fingerprint scan with no matches.
-
-The callable coordinator checks domain restrictions before loading or dispatching. Compact copies
-filter staged methods but rely on the consuming host to enforce access. Domain MCP is unsupported.
-
-## Remaining work
-
-1. Complete a live BB operator-package run with at least two visible specialist children, one
-   integration child, one exact-digest review, a receipt bound to the integrated digest, and
-   observed cleanup. Two attempts from this worktree observed public titles and one Copy draft
-   each; both stopped on a manual-stop before review and receipt (`thr_kx2g4ms545`,
-   `thr_jw4jrhu9ar`). Protocol tests still do not substitute for that host result. Use the
-   [dogfood checklist](docs/DOGFOOD.md).
-2. Polish Executor setup and resumption with an authorized account operation. Observe permission,
-   cancellation, and recovery behavior. Eve additionally needs an operator-owned service, selected
-   model and budget, and a useful job.
-3. Complete update identity and repair across source, package cache, Node, and host changes. Copies
-   without Git still lack exact source identity; no full update-identity migration is implemented.
-4. Verify optional native hooks, previews, domain enforcement, and connected model/vision/data
-   paths only where needed. Ambiguous runtime dispatch pauses without automatic replay; a supported
-   reconciliation API remains absent.
-
-Human acceptance, rights disposition, and public release authority remain separate. Imported action
-receipts are operator attestations unless observed evidence supports them. Automatic learning
-promotion stays disabled; a separate persistence-consent API and cross-run retrieval are absent.
-Keep public feedback sending and public distribution deferred during private dogfood.
+```text
+.claude-plugin/marketplace.json
+.claude-plugin/plugin.json
+.codex-plugin/plugin.json
+.github/workflows/checks.yml
+AGENTS.md
+CHANGELOG.md
+CONTRIBUTING.md
+INSTALL.md
+PROGRESS.md
+README.md
+ROADMAP.md
+SKILL.md
+VERSIONS.md
+VISION.md
+agents/conquistador.md
+agents/conquistador/agent.json
+agents/execution-receipt.schema.json
+docs/DOGFOOD.md
+docs/INSTALL-REFERENCE.md
+docs/MASTER-AGENT.md
+docs/PLATFORMS.md
+docs/PRIVATE-ALPHA.md
+docs/SERVICES.md
+docs/USAGE.md
+hosts/coding-agent/README.md
+hosts/coding-agent/contracts.mjs
+hosts/coding-agent/host.json
+hosts/coding-agent/operator-experience.test.mjs
+hosts/coding-agent/operator.mjs
+hosts/coding-agent/operator.test.mjs
+hosts/coding-agent/orchestrate.mjs
+hosts/coding-agent/receipt.mjs
+hosts/coding-agent/team.mjs
+package.json
+plugin.json
+release/completeness.json
+runtime/tests/agent-packages.test.ts
+skills/build-ios-app/references/api-reference.md
+skills/conquistador/SKILL.md
+skills/conquistador/adapters/single-agent.md
+skills/conquistador/orchestration/specialist-team.md
+skills/conquistador/specialists/roster.md
+tools/entrypoint/SKILL.md
+tools/install.mjs
+tools/install.test.mjs
+tools/installation-doctor.mjs
+tools/installation-doctor.test.mjs
+tools/operator-package.mjs
+tools/setup-entry.test.mjs
+tools/setup.mjs
+tools/setup.test.mjs
+tools/update-completeness.mjs
+```

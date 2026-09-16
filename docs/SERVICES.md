@@ -1,11 +1,11 @@
 # What Conquistador helps you deliver
 
-Conquistador brings 38 outcome methods to elite growth, GTM, sales, marketing, product, and
+Conquistador brings 38 outcome methods to growth, GTM, sales, marketing, product, and
 knowledge work. Give the parent a result to produce. It selects methods, uses specialists when
 appropriate and available, integrates the work, reviews it, and proposes a next action.
 Your host supplies the model, tools, project access, and permissions.
 
-This is a private dogfood build, not a hosted service or a guarantee of business results.
+This source prepares private-alpha. The operator changes are unshipped and do not guarantee business results.
 [Start with a task](USAGE.md) or use the [installation guide](../INSTALL.md).
 
 ## Useful deliverables
@@ -88,8 +88,8 @@ what happened in a live account. None alone establishes general provider support
 Local tests, synthetic fixtures, and package records do not prove native host activation, live
 provider operation, or business results. Portable Eve and official Grok Bot packages remain
 experimental; native import and delegation are unverified. See [implementation status](../PROGRESS.md)
-for recorded checks and [private dogfooding](DOGFOOD.md) for first-use guidance.
+for recorded checks and [private-alpha preparation](PRIVATE-ALPHA.md) for first-use guidance.
 
-Keep installed copies and dogfood artifacts private. Store credentials, customer material, project
+Keep installed copies and private-alpha artifacts private. Store credentials, customer material, project
 knowledge, and finished work outside the product repository. Use the
 [installation guide](../INSTALL.md) for updates and removal through the original installer.

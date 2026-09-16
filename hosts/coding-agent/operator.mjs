@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, readFileSync, lstatSync } from 'node:fs';
 import { posix, resolve } from 'node:path';
 import { closed, identifier } from './contracts.mjs';
 import { containedPath } from '../../tools/plugin-contracts.mjs';
@@ -22,7 +22,7 @@ const domainSignals = Object.freeze({
   product: /\b(?:positioning|pricing|packaging|icp|value proposition|product strategy|go-to-market|\bgtm\b|initiative scope)\b/i,
   marketing: /\b(?:campaign plan|launch email|landing-?page copy|brand voice|conversion copy|seo|lifecycle campaign)\b/i,
   growth: /\b(?:growth plan|funnel|retention|activation metric|measurement plan|conversion experiment)\b/i,
-  sales: /\b(?:outreach sequence|sales sequence|cold email|qualified leads?|pipeline)\b/i,
+  sales: /\b(?:outreach sequence|sales sequence|cold email|qualified leads?|sales pipeline)\b/i,
   research: /\b(?:market research|competitor research|audience research|channel research|content ideas)\b/i,
   creative: /\b(?:creative brief|ad creative|short-form|storyboard|visual identity)\b/i,
   'product-engineering': /\b(?:user flow|interface spec|product ui|system architecture|build (?:an? )?(?:ios|web) (?:app|experience)|technical documentation)\b/i,
@@ -66,7 +66,13 @@ function profileCandidates(root) {
 export function loadOperatorProfile(root) {
   for (const relative of profileCandidates(root)) {
     const absolute = resolve(root, relative);
-    if (!existsSync(absolute)) continue;
+    try {
+      const info = lstatSync(absolute);
+      assert.ok(info.isFile() && !info.isSymbolicLink() && info.size <= 16384, 'Invalid operator profile file');
+    } catch (error) {
+      if (error.code === 'ENOENT') continue;
+      throw error;
+    }
     const parsed = JSON.parse(readFileSync(containedPath(root, relative, 'file'), 'utf8'));
     return validateOperatorProfile(parsed);
   }
@@ -77,7 +83,7 @@ export function resolveActivation(profile, hostSettings = {}) {
   const installed = validateOperatorProfile(profile).activation;
   const override = hostSettings?.activation;
   if (override === undefined || override === null) return installed;
-  if (!['manual', 'project', 'off'].includes(override)) return installed;
+  if (!['manual', 'project', 'off'].includes(override)) return 'off';
   return override;
 }
 
@@ -115,7 +121,7 @@ export function admitRequest(profile, request, hostSettings = {}) {
     if (activation === 'manual') return explicit ? admit('explicit-invocation', activation) : abstain('manual-requires-explicit');
     if (explicit) return admit('explicit-invocation', activation);
     const body = stripSourceFiles(text);
-    if (codingAbstain.test(text) && admittedDomainHits(body, validated.admittedDomains).length === 0) {
+    if (codingAbstain.test(body)) {
       return abstain('unrelated-coding');
     }
     const domains = admittedDomainHits(body, validated.admittedDomains);

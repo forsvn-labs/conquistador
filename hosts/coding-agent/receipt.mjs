@@ -1,20 +1,43 @@
 import assert from 'node:assert/strict';
 import {
   boundUnique, closed, digest, identifier, labelField, protocol, publicCapabilities,
-  publicSpecialists, publicSpecialistLabel, receiptProtocol, redactText, specialistTitle,
-  truncateText,
+  publicSpecialists, publicSpecialistLabel, publicExecutionId, receiptProtocol, redactText,
+  coordinatorIds, specialistTitle, validatePlan,
 } from './contracts.mjs';
 
 const digestPattern = /^sha256:[a-f0-9]{64}$/;
+const capabilityMethods = Object.freeze({
+  positioning: ['research-positioning'],
+  'launch-planning': ['plan-campaign', 'create-run-of-show'],
+  'conversion-copy': ['write-copy', 'write-longform', 'write-social', 'polish-vietnamese', 'improve-conversion', 'optimize-search'],
+  measurement: ['measure-growth', 'model-growth-funnel'],
+  'paid-media': ['create-paid-campaign', 'evaluate-paid-campaign', 'allocate-marketing-budget'],
+  outreach: ['write-outreach', 'evaluate-outreach'],
+  'creative-production': ['brief-creative', 'create-shortform', 'evaluate-shortform', 'analyze-video'],
+  'growth-diagnosis': ['diagnose-growth', 'audit-marketing'],
+  'product-strategy': ['design-pricing-and-packaging', 'prioritize-opportunities', 'shape-initiative'],
+  'product-engineering': ['brief-product-ui', 'map-user-flow', 'architect-software-system', 'build-ios-app', 'build-web-app', 'write-technical-docs'],
+  research: ['research-channel', 'research-content-ideas', 'knowledge-review'],
+  brand: ['create-brand'],
+});
+
+function capabilitiesFor(assignments) {
+  const methods = new Set(assignments.flatMap(task => task.skills));
+  return Object.entries(capabilityMethods).filter(([, skills]) => skills.some(skill => methods.has(skill)))
+    .map(([id]) => ({ id, label: publicCapabilities[id] }));
+}
 
 export function validateReceipt(value) {
   closed(value, [
     'schemaVersion', 'runId', 'outcome', 'capabilities', 'specialists', 'mode',
     'independentReview', 'integratedDigest', 'evidence', 'gaps', 'externalActions', 'humanAccepted',
-  ]);
+  ], ['status']);
   assert.equal(value.schemaVersion, receiptProtocol);
   identifier(value.runId);
+  assert.equal(redactText(value.runId), value.runId);
   labelField(value.outcome, 240);
+  assert.equal(redactText(value.outcome), value.outcome);
+  if (value.status !== undefined) assert.ok(['draft', 'revise', 'blocked'].includes(value.status));
   assert.ok(['isolated-workers', 'sequential-in-context'].includes(value.mode));
   assert.equal(typeof value.independentReview, 'boolean');
   if (value.mode === 'sequential-in-context') assert.equal(value.independentReview, false, 'Same-context review cannot claim independence');
@@ -25,8 +48,7 @@ export function validateReceipt(value) {
   const capabilityIds = new Set();
   for (const capability of value.capabilities) {
     closed(capability, ['id', 'label']);
-    identifier(capability.id);
-    assert.ok(Object.hasOwn(publicCapabilities, capability.id), `Unknown public capability ${capability.id}`);
+    assert.ok(Object.hasOwn(publicCapabilities, capability.id), 'Unknown public capability');
     assert.equal(capability.label, publicCapabilities[capability.id]);
     assert.ok(!capabilityIds.has(capability.id));
     capabilityIds.add(capability.id);
@@ -34,156 +56,124 @@ export function validateReceipt(value) {
   assert.ok(Array.isArray(value.specialists) && value.specialists.length <= 12);
   const seen = new Set();
   for (const specialist of value.specialists) {
-    closed(specialist, ['assignmentId', 'label', 'executionId', 'status']);
-    identifier(specialist.assignmentId);
-    labelField(specialist.label, 80);
-    assert.ok(['draft', 'revise', 'blocked'].includes(specialist.status));
-    assert.ok(specialist.executionId === null || (typeof specialist.executionId === 'string' && specialist.executionId.length > 0 && specialist.executionId.length <= 80 && redactText(specialist.executionId) === specialist.executionId));
+    closed(specialist, ['assignmentId', 'label', 'executionId', 'status'], ['reviewedDigest']);
+    if (!coordinatorIds.includes(specialist.assignmentId)) identifier(specialist.assignmentId);
+    assert.equal(redactText(specialist.assignmentId), specialist.assignmentId);
+    assert.ok(['draft', 'revise', 'blocked', 'not-run'].includes(specialist.status));
+    assert.ok(specialist.executionId === null || publicExecutionId(specialist.executionId) === specialist.executionId);
+    if (specialist.status === 'not-run') assert.equal(specialist.executionId, null);
     assert.ok(!seen.has(specialist.assignmentId), 'Duplicate receipt specialist');
     seen.add(specialist.assignmentId);
     assert.ok(Object.values(publicSpecialists).includes(specialist.label), 'Receipt labels must use the public roster');
-    assert.equal(redactText(specialist.label), specialist.label);
+    if (coordinatorIds.includes(specialist.assignmentId)) assert.equal(specialist.label, publicSpecialistLabel({ id: specialist.assignmentId }));
+    if (specialist.reviewedDigest !== undefined) assert.ok(specialist.reviewedDigest === null || digestPattern.test(specialist.reviewedDigest));
+  }
+  if (value.independentReview) {
+    const lastReview = value.specialists.find(row => row.assignmentId === 'operator:final-review')
+      ?? value.specialists.find(row => row.assignmentId === 'review');
+    assert.ok(lastReview && lastReview.status !== 'not-run' && value.integratedDigest !== null, 'Independent review needs an observed review');
+    if (lastReview.reviewedDigest !== undefined) assert.equal(lastReview.reviewedDigest, value.integratedDigest);
   }
   assert.deepEqual(value.evidence, boundUnique(value.evidence));
   assert.deepEqual(value.gaps, boundUnique(value.gaps));
   return structuredClone(value);
 }
 
-export function derivePresentation(plan, { isolated }) {
-  const review = isolated ? 'independent' : 'same-context';
-  if (plan.presentation) {
-    const presentation = structuredClone(plan.presentation);
-    if (presentation.review === 'independent' && !isolated) presentation.review = 'same-context';
-    return presentation;
-  }
+export function derivePresentation(input, { isolated }) {
+  const plan = validatePlan(input);
+  // Presentation strings are explicitly public caller input. Never infer them from
+  // a private goal, knowledge body, method text, or model result.
   return {
-    outcome: truncateText(redactText(plan.goal), 240) || plan.id,
-    deliverable: 'one integrated draft',
-    capabilities: [],
+    outcome: plan.presentation?.outcome ?? 'the requested draft',
+    deliverable: plan.presentation?.deliverable ?? 'one integrated draft',
+    capabilities: capabilitiesFor(plan.assignments),
     specialists: plan.assignments.map(task => ({ assignmentId: task.id, label: publicSpecialistLabel(task) })),
-    evidence: [],
-    review,
+    evidence: plan.presentation?.evidence ?? [],
+    review: isolated ? 'independent' : 'same-context',
   };
 }
 
 export function formatEngagementBrief(plan, { isolated }) {
   const presentation = derivePresentation(plan, { isolated });
-  const reviewText = {
-    independent: 'separate fresh-eyes review of the integrated draft',
-    'same-context': 'same-context review in the parent thread; not independent',
-    none: 'no separate review',
-  }[presentation.review];
-  const specialists = presentation.specialists.length
-    ? presentation.specialists.map(item => item.label).join(', ')
-    : 'direct parent work';
-  const capabilities = presentation.capabilities.length
-    ? presentation.capabilities.map(item => item.label).join(', ')
-    : 'selected for the requested outcome';
-  const evidence = presentation.evidence.length ? presentation.evidence.join('; ') : 'supplied request context';
   return [
-    `Conquistador is preparing ${presentation.outcome}.`,
-    '',
-    `Capabilities: ${capabilities}`,
-    `Specialists: ${specialists}`,
-    `Evidence: ${evidence}`,
-    `Review: ${reviewText}`,
+    `Conquistador is preparing ${presentation.outcome}.`, '',
+    `Planned capabilities: ${presentation.capabilities.map(item => item.label).join(', ') || 'none classified'}`,
+    `Planned specialists: ${presentation.specialists.map(item => item.label).join(', ')}`,
+    `Supplied evidence labels, use unverified: ${presentation.evidence.join('; ') || 'none declared'}`,
+    `Review: ${isolated ? 'separate fresh-eyes review of the integrated draft' : 'same-context review in the parent thread; not independent'}`,
     `Deliverable: ${presentation.deliverable}`,
   ].join('\n');
 }
 
-function observedStatus(result) {
-  return ['draft', 'revise', 'blocked'].includes(result?.status) ? result.status : 'blocked';
-}
-function observedExecutionId(value) {
-  if (typeof value !== 'string' || value.length === 0 || value.length > 80) return null;
-  return redactText(value) === value ? value : null;
-}
-
-const coordinatorIds = Object.freeze(['integrate', 'review', 'correct']);
-
 function observedRow(assignment, result) {
+  const ran = result && !result.skipped;
   return {
     assignmentId: assignment.id,
     label: publicSpecialistLabel(assignment),
-    executionId: observedExecutionId(result?.executionId),
-    status: result ? observedStatus(result) : 'blocked',
+    executionId: ran ? publicExecutionId(result.executionId) : null,
+    status: ran ? result.status : 'not-run',
+    reviewedDigest: ran ? result.reviewedDigest ?? null : null,
   };
 }
 
 export function deriveReceipt({
-  plan, mode, independentReview, results = [], integrated = null, integratedDigest = null,
-  review = null, integration = null, correction = null, additionalGaps = [],
+  plan, mode, results = [], integrated = null, integratedDigest = null,
+  review = null, firstReview = null, finalReview = null, integration = null,
+  correction = null, additionalGaps = [], status = 'blocked',
 }) {
-  const isolated = mode === 'isolated-workers';
-  const presentation = derivePresentation(plan, { isolated });
-  const byId = new Map((results ?? []).map(result => [result.assignmentId, result]));
+  const presentation = derivePresentation(plan, { isolated: mode === 'isolated-workers' });
+  const byId = new Map(results.map(result => [result.assignmentId, result]));
   const integrationResult = integration ?? (integrated?.assignmentId === 'integrate' ? integrated : null);
-  const correctionResult = correction ?? (integrated?.assignmentId === 'correct' ? integrated : null);
-  const planRows = plan.assignments.map(task => observedRow(task, byId.get(task.id)));
-  const coordinatorRows = [];
-  if (integrationResult) coordinatorRows.push(observedRow({ id: 'integrate', role: 'parent' }, integrationResult));
-  if (correctionResult) coordinatorRows.push(observedRow({ id: 'correct', role: 'parent' }, correctionResult));
-  if (review) coordinatorRows.push(observedRow({ id: 'review', role: 'outcome' }, review));
-  assert.ok(planRows.length <= 12, 'Plan specialists exceed receipt bound');
-  assert.ok(planRows.length + coordinatorRows.length <= 12, 'Receipt cannot drop plan specialists to fit coordinator rows');
-  const receipt = {
-    schemaVersion: receiptProtocol,
-    runId: plan.id,
-    outcome: presentation.outcome,
-    capabilities: (presentation.capabilities ?? []).map(item => ({ id: item.id, label: publicCapabilities[item.id] })),
-    specialists: [...planRows, ...coordinatorRows],
-    mode,
-    independentReview: isolated && independentReview === true,
-    integratedDigest: integratedDigest ?? null,
-    evidence: boundUnique([
-      ...(presentation.evidence ?? []),
-      ...[...byId.values(), integrationResult, correctionResult, integrated, review].flatMap(result => result?.evidence ?? []),
-    ]),
+  const correctionResult = correction ?? (integrated?.assignmentId === 'operator:correct' ? integrated : null);
+  const initialReview = firstReview ?? (review?.assignmentId === 'review' ? review : null);
+  const lastReview = finalReview ?? (review?.assignmentId === 'operator:final-review' ? review : null);
+  const stages = [integrationResult, initialReview, correctionResult, lastReview].filter(Boolean);
+  const observed = [...byId.values(), ...stages].filter(result => !result.skipped);
+  const rows = [
+    ...plan.assignments.map(task => observedRow(task, byId.get(task.id))),
+    ...stages.map(result => observedRow({ id: result.assignmentId }, result)),
+  ];
+  const reviewed = lastReview ?? initialReview;
+  const applied = plan.assignments.filter(task => {
+    const result = byId.get(task.id);
+    return result && !result.skipped && result.status !== 'blocked';
+  });
+  return validateReceipt({
+    schemaVersion: receiptProtocol, runId: plan.id, status, outcome: presentation.outcome,
+    capabilities: capabilitiesFor(applied), specialists: rows, mode,
+    independentReview: mode === 'isolated-workers' && reviewed?.isolated === true
+      && reviewed.reviewedDigest === integratedDigest && integratedDigest !== null,
+    integratedDigest,
+    // Counts describe observed result envelopes, not source verification. Private
+    // model prose remains only in the private run result, never in this projection.
+    evidence: [`${observed.length} validated assignment results; source use is not verified.`],
     gaps: boundUnique([
-      ...[...byId.values(), integrationResult, correctionResult, integrated, review].flatMap(result => result?.gaps ?? []),
       ...additionalGaps,
+      ...rows.filter(row => row.status === 'not-run').map(row => `${row.label} did not run because a required dependency was blocked.`),
+      ...observed.filter(result => result.gaps?.length).map(result =>
+        `${publicSpecialistLabel(plan.assignments.find(task => task.id === result.assignmentId) ?? { id: result.assignmentId })} reported ${result.gaps.length} limitation${result.gaps.length === 1 ? '' : 's'}; inspect the private result.`),
     ]),
-    externalActions: [],
-    humanAccepted: false,
-  };
-  return validateReceipt(receipt);
+    externalActions: [], humanAccepted: false,
+  });
 }
 
-function reviewLine(receipt, { review, corrected, status }) {
-  const digestText = receipt.integratedDigest ?? 'unavailable';
-  const reviewRow = receipt.specialists.find(item => item.assignmentId === 'review');
-  const overall = status ?? review?.status ?? reviewRow?.status ?? 'blocked';
-  if (!review && !reviewRow) {
-    return receipt.independentReview ? `${overall}; no separate review` : `${overall} same-context; not independent`;
-  }
-  const reviewStatus = review?.status ?? reviewRow?.status ?? overall;
-  if (!receipt.independentReview) return `${reviewStatus} same-context; not independent`;
-  if (corrected) return `revise, then ${reviewStatus} on artifact ${digestText}`;
-  return `${reviewStatus} on artifact ${digestText}`;
-}
-
-export function formatReceiptMarkdown(receipt, { review = null, corrected = false, status = null } = {}) {
-  const validated = validateReceipt(receipt);
-  const planCount = validated.specialists.filter(item => item.executionId && !coordinatorIds.includes(item.assignmentId)).length;
-  const hasIntegration = validated.specialists.some(item => item.assignmentId === 'integrate');
-  const hasCorrection = validated.specialists.some(item => item.assignmentId === 'correct');
-  const hasReview = validated.specialists.some(item => item.assignmentId === 'review');
-  const context = validated.mode === 'isolated-workers'
-    ? `${planCount} isolated specialist contexts${hasIntegration ? ', 1 parent integration' : ''}${hasCorrection ? ', 1 correction' : ''}, ${validated.independentReview ? '1 independent review' : (hasReview ? 'same-context review' : 'no separate review')}`
-    : 'sequential in the parent context; review is not independent';
-  const evidence = validated.evidence.length
-    ? `${validated.evidence.length} supplied project sources; no live account data`
-    : 'no live account data';
-  const gaps = validated.gaps.length ? validated.gaps.join('; ') : 'none recorded';
+export function formatReceiptMarkdown(receipt) {
+  const value = validateReceipt(receipt);
+  const reviews = value.specialists.filter(row => ['review', 'operator:final-review'].includes(row.assignmentId));
+  const ran = value.specialists.filter(row => row.status !== 'not-run');
+  const lines = value.specialists.map(row => `${row.label}: ${row.status}${row.executionId ? ` (${row.executionId})` : ''}${row.reviewedDigest ? `; reviewed ${row.reviewedDigest}` : ''}`);
   return [
     'Conquistador receipt',
-    `Capabilities used: ${validated.capabilities.length ? validated.capabilities.map(item => item.label).join(', ') : 'parent-selected'}`,
-    `Specialists run: ${validated.specialists.map(item => item.label).join(', ') || 'none'}`,
-    `Execution: ${context}`,
-    `Evidence used: ${evidence}`,
-    `Review: ${reviewLine(validated, { review, corrected, status })}`,
-    `Open gaps: ${gaps}`,
-    'External actions: none',
+    `Status: ${value.status ?? 'unrecorded'}`,
+    `Capability methods supplied to completed assignments: ${value.capabilities.map(item => item.label).join(', ') || 'none recorded'}`,
+    ...lines,
+    `Execution: ${ran.length} observed assignments; ${value.mode === 'isolated-workers' ? 'separate host contexts' : 'sequential in the parent context'}`,
+    `Evidence: ${value.evidence.join('; ') || 'none recorded'}`,
+    `Review: ${reviews.length === 0 ? 'not run' : `${reviews.length} ${value.independentReview ? 'independent review' : 'same-context or independence unverified'} executions`}`,
+    `Final artifact digest: ${value.integratedDigest ?? 'unavailable'}`,
+    `Open gaps: ${value.gaps.join('; ') || 'none recorded'}`,
+    'External actions: none authorized; this receipt does not audit host tool activity',
+    'Human acceptance: not recorded',
   ].join('\n');
 }
 
@@ -195,13 +185,8 @@ export function attachReceipt(result, plan, extras = {}) {
   const receipt = deriveReceipt({ plan, ...result, ...extras });
   let receiptMarkdown = null;
   let receiptFormatError = false;
-  try {
-    receiptMarkdown = formatReceiptMarkdown(receipt, {
-      review: result.review, corrected: extras.corrected === true, status: result.status,
-    });
-  } catch {
-    receiptFormatError = true;
-  }
+  try { receiptMarkdown = formatReceiptMarkdown(receipt); }
+  catch { receiptFormatError = true; }
   return { ...result, receipt, receiptMarkdown, receiptFormatError, protocol };
 }
 

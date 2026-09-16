@@ -37,7 +37,10 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["id", "label"],
+        "required": [
+          "id",
+          "label"
+        ],
         "properties": {
           "id": {
             "type": "string",
@@ -54,42 +57,83 @@
     "specialists": {
       "type": "array",
       "maxItems": 12,
-      "description": "Plan assignments first, then observed integration, correction, and the final review child. Duplicate assignment IDs are rejected. The array must not drop plan specialists to fit coordinator rows.",
+      "description": "Plan assignments, then observed integration, initial review, correction and final-review executions. Skipped assignments have status not-run and no execution ID. Reviews bind their own reviewedDigest. Total rows remain within the twelve-dispatch plan bound.",
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["assignmentId", "label", "executionId", "status"],
+        "required": [
+          "assignmentId",
+          "label",
+          "executionId",
+          "status"
+        ],
         "properties": {
           "assignmentId": {
             "type": "string",
-            "pattern": "^[a-z][a-z0-9-]{0,63}$"
+            "pattern": "^(?:[a-z][a-z0-9-]{0,63}|operator:(?:correct|final-review))$"
           },
           "label": {
             "type": "string",
             "minLength": 1,
-            "maxLength": 80
+            "maxLength": 80,
+            "enum": [
+              "Ads",
+              "Copy",
+              "Direct-response landing",
+              "SaaS landing",
+              "Data diagnosis",
+              "Campaign data",
+              "Creative assets",
+              "Outcome",
+              "Integration",
+              "Correction",
+              "Review",
+              "Final review"
+            ]
           },
           "executionId": {
-            "type": ["string", "null"],
+            "type": [
+              "string",
+              "null"
+            ],
             "minLength": 1,
-            "maxLength": 80
+            "maxLength": 80,
+            "pattern": "^[a-zA-Z][a-zA-Z0-9_-]{0,79}$"
           },
           "status": {
             "type": "string",
-            "enum": ["draft", "revise", "blocked"]
+            "enum": [
+              "draft",
+              "revise",
+              "blocked",
+              "not-run"
+            ]
+          },
+          "reviewedDigest": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "pattern": "^sha256:[a-f0-9]{64}$"
           }
         }
       }
     },
     "mode": {
       "type": "string",
-      "enum": ["isolated-workers", "sequential-in-context"]
+      "enum": [
+        "isolated-workers",
+        "sequential-in-context"
+      ]
     },
     "independentReview": {
       "type": "boolean"
     },
     "integratedDigest": {
-      "type": ["string", "null"],
+      "type": [
+        "string",
+        "null"
+      ],
       "pattern": "^sha256:[a-f0-9]{64}$"
     },
     "evidence": {
@@ -116,19 +160,77 @@
     },
     "humanAccepted": {
       "const": false
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "revise",
+        "blocked"
+      ]
     }
   },
   "allOf": [
     {
       "if": {
         "properties": {
-          "mode": { "const": "sequential-in-context" }
+          "mode": {
+            "const": "sequential-in-context"
+          }
         },
-        "required": ["mode"]
+        "required": [
+          "mode"
+        ]
       },
       "then": {
         "properties": {
-          "independentReview": { "const": false }
+          "independentReview": {
+            "const": false
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "independentReview": {
+            "const": true
+          }
+        },
+        "required": [
+          "independentReview"
+        ]
+      },
+      "then": {
+        "properties": {
+          "integratedDigest": {
+            "type": "string"
+          },
+          "specialists": {
+            "contains": {
+              "type": "object",
+              "properties": {
+                "assignmentId": {
+                  "enum": [
+                    "review",
+                    "operator:final-review"
+                  ]
+                },
+                "status": {
+                  "enum": [
+                    "draft",
+                    "revise",
+                    "blocked"
+                  ]
+                }
+              },
+              "required": [
+                "assignmentId",
+                "status"
+              ]
+            },
+            "type": "array"
+          }
         }
       }
     }

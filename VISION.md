@@ -1,15 +1,15 @@
 # Product principles
 
-Conquistador helps users do elite growth, GTM, sales, marketing, and product knowledge work in
+Conquistador helps users do growth, GTM, sales, marketing, and product knowledge work in
 their existing coding agent. Users ask for an outcome. The parent selects the necessary methods,
 assigns bounded specialist work when useful, and owns one integrated, reviewed deliverable.
 Research, creative work, engineering, and review support that mission.
 
 ## Make the first task easy
 
-Offer one default skill installation with the complete library. Put prerequisites, installation
-traps, and recovery beside the command. Follow it with a real task. Plugins, MCP, managed setup,
-and a clone are alternatives; the runtime, typed catalog, Eval Lab, and durable jobs are optional.
+Offer one project operator installation with the complete library. Put prerequisites, installation
+traps, and recovery beside the command. Follow it with a real task. Compact skills, plugins, and
+MCP are alternatives. The runtime, typed catalog, Eval Lab, and durable jobs are optional.
 Every installation route needs a clear update and removal path.
 
 An installed library must contain the methods and resources its parent routes to. Check those
@@ -23,7 +23,7 @@ fallback when separate contexts are unavailable. Specialist roles compose the ex
 not a second library. Compact copies must describe any adapter or runtime they omit.
 
 The recommended one-user experience is a project-installed operator package. Installed activation
-defaults to manual invocation. Project routing of admitted product, marketing, growth, sales,
+defaults to manual invocation. Host-integrated project routing of admitted product, marketing, growth, sales,
 research, creative, and product-engineering requests is an explicit setting. Installation starts
 no daemon, watcher, or schedule. Substantial runs present a compact engagement brief and finish
 with an execution receipt. Public labels stay visible; prompts, skill paths, routing scores, and
@@ -60,7 +60,7 @@ learning, or background feedback upload is planned.
 
 ## Stay private until a release decision
 
-Version 0.1.0 is for private dogfooding. Judge it through real tasks and corrections. Keep the
+Private distribution is the initial boundary. Judge it through real tasks and corrections. Keep the
 repository private and the npm publication guard enabled. Public distribution, marketplace listings,
 and landing work require an explicit later decision. Local package records do not grant release
 authority. See [ROADMAP.md](ROADMAP.md) and [PROGRESS.md](PROGRESS.md).

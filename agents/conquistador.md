@@ -1,6 +1,6 @@
 ---
 name: conquistador
-description: Produce elite growth, GTM, sales, marketing, product, and knowledge work when the user requests Conquistador or the parent assigns a Conquistador outcome.
+description: Produce growth, GTM, sales, marketing, product, and knowledge work when the user requests Conquistador or the parent assigns a Conquistador outcome.
 model: inherit
 ---
 

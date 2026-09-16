@@ -1,3 +1,4 @@
+import { validateOperatorProfile } from '../hosts/coding-agent/operator.mjs';
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { accessSync, constants, lstatSync, readFileSync, realpathSync, statSync } from 'node:fs';
@@ -159,17 +160,31 @@ export function inspectInstallation(path, inspectReceipt) {
   if (operatorProfilePresent) {
     try {
       const profile = JSON.parse(textAt(bundleRoot, `${library.layout}/conquistador/operator-profile.json`));
-      if (profile?.schemaVersion !== 'conquistador.operator-profile/v1') throw Error('schema');
-      if (!['manual', 'project', 'off'].includes(profile.activation)) throw Error('activation');
-      if (profile.disclosure !== 'capabilities-and-specialists') throw Error('disclosure');
-      if (profile.backgroundWatch !== false) throw Error('watch');
-      if (profile.externalMutation !== 'human-gated') throw Error('mutation');
-      if (!Array.isArray(profile.admittedDomains) || profile.admittedDomains.length < 1) throw Error('domains');
-      const required = ['schemaVersion', 'activation', 'admittedDomains', 'disclosure', 'backgroundWatch', 'externalMutation'];
-      if (Object.keys(profile).some(key => !required.includes(key)) || required.some(key => !Object.hasOwn(profile, key))) throw Error('fields');
+      validateOperatorProfile(profile);
       operatorActivation = profile.activation;
     } catch {
       issues.push('Operator profile is present but invalid; fail closed until it is repaired.');
+    }
+  }
+  let bbAdapterPresent = false;
+  if (bundleRoot && library.layout && library.layout !== 'library') {
+    const resources = manifest.operatorResources ?? [];
+    bbAdapterPresent = resources.length > 0;
+    for (const resource of resources) {
+      try {
+        if (hash(bytesAt(bundleRoot, resource.path)) !== resource.sha256) throw Error('Changed operator resource');
+      } catch {
+        bbAdapterPresent = false;
+        issues.push(`Missing or changed operator resource: ${resource.path}`);
+      }
+    }
+    if (library.layout === 'agent/skills') {
+      try {
+        const installed = JSON.parse(textAt(bundleRoot, 'agent/agent.json'));
+        installed.canonicalSkillRoot = 'skills/conquistador';
+        const canonical = JSON.parse(textAt(bundleRoot, 'agents/conquistador/agent.json'));
+        if (JSON.stringify(installed) !== JSON.stringify(canonical)) throw Error('Changed agent contract');
+      } catch { issues.push('Installed operator contract differs from its canonical package.'); }
     }
   }
   const status = issues.length ? 'incomplete' : 'local-files-verified';
@@ -178,7 +193,7 @@ export function inspectInstallation(path, inspectReceipt) {
     summary: `${library.available} methods available; ${status === 'incomplete' ? 'local checks failed' : 'local files verified'}; host activation and task execution unverified.`,
     manifest: { schemaVersion: manifest.schemaVersion, sha256: hash(manifestText), packaged: packagedManifest },
     library, identity, receipt, connector: connector?.checks ?? null,
-    bbAdapterPresent: Boolean(bundleRoot && executable(join(bundleRoot, 'hosts/coding-agent/team.mjs'), constants.R_OK)),
+    bbAdapterPresent,
     operatorProfilePresent,
     operatorActivation,
     hostActivationVerified: false, taskExecutionVerified: false, providerVerified: false,
@@ -209,7 +224,7 @@ export function runInstallationDoctor(args, inspectReceipt) {
     console.log(`Operator profile: ${result.operatorProfilePresent ? `present (activation ${result.operatorActivation ?? 'unparsed'}); host activation unverified` : 'not present; older packages degrade to explicit invocation'}. No daemon or schedule is started.`);
     for (const issue of result.issues) console.log(`FAIL: ${issue}`);
     for (const warning of result.warnings) console.log(`NOTE: ${warning}`);
-    console.log(result.issues.length ? 'Next: preserve local edits and repair the failed checks through the original installer.' : 'Next: refresh the host, select Conquistador or enable project activation, and complete one real task. Doctor does not prove that routing ran.');
+    console.log(result.issues.length ? 'Next: preserve local edits and repair the failed checks through the original installer.' : 'Next: refresh the host, select Conquistador, and complete one real task. Doctor does not prove that routing ran.');
     console.log('No methods were loaded into the model context by this check.');
   }
   return result.status === 'local-files-verified' ? 0 : 1;

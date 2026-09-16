@@ -35,7 +35,7 @@ test('host settings may select project or off without editing the package', () =
   assert.equal(resolveActivation(installed, {}), 'manual');
   assert.equal(resolveActivation(installed, { activation: 'project' }), 'project');
   assert.equal(resolveActivation(installed, { activation: 'off' }), 'off');
-  assert.equal(resolveActivation(installed, { activation: 'always' }), 'manual');
+  assert.equal(resolveActivation(installed, { activation: 'always' }), 'off');
   const status = operatorStatus(installed, { activation: 'project' });
   assert.equal(status.installedActivation, 'manual');
   assert.equal(status.activation, 'project');
@@ -67,4 +67,24 @@ test('malformed or recursive host input abstains without throwing', () => {
   assert.equal(admitRequest(installed, { source: 'conquistador', text: 'campaign plan' }).reason, 'recursive');
   assert.equal(admitRequest(installed, { text: 'x'.repeat(33000) }).reason, 'malformed-input');
   assert.equal(admitRequest(installed, JSON.parse('{"text":"/conquistador hi","__proto__":{"admin":true}}')).reason, 'malformed-input');
+});
+
+test('ambiguous coding requests abstain even when they contain an admitted business keyword', () => {
+  const settings = { activation: 'project' };
+  for (const text of ['Refactor the sales pipeline parser.', 'Add unit tests for pricing.', 'Fix a bug in the launch email parser.']) {
+    assert.equal(admitRequest(profile(), { text }, settings).action, 'abstain');
+  }
+  assert.equal(admitRequest(profile(), { text: '/conquistador Refactor the sales pipeline parser.' }, settings).action, 'admit');
+  assert.equal(admitRequest({ ...profile(), activation: 'project' }, { text: 'prepare a campaign plan' }, { activation: 'typo' }).reason, 'activation-off');
+});
+
+test('a broken profile link cannot silently downgrade to a legacy manual profile', async () => {
+  const { mkdtempSync, mkdirSync, symlinkSync, rmSync } = await import('node:fs');
+  const { tmpdir } = await import('node:os');
+  const temporary = mkdtempSync(join(tmpdir(), 'operator-profile-'));
+  try {
+    mkdirSync(join(temporary, 'skills/conquistador'), { recursive: true });
+    symlinkSync(join(temporary, 'missing.json'), join(temporary, 'skills/conquistador/operator-profile.json'));
+    assert.throws(() => loadOperatorProfile(temporary), /Invalid operator profile file/);
+  } finally { rmSync(temporary, { recursive: true, force: true }); }
 });

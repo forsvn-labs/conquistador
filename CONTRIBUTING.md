@@ -27,7 +27,7 @@ SDK using explicitly synthetic fixtures, with no model or network. See each modu
 Edit authored source in `runtime/src/`, `catalog/src/`, or `evals/src/`; runtime/lib is maintained
 build output. Skills are editable Markdown with contained resources and metadata versions. Preserve
 frontmatter names and parent routing. An isolated skill must not depend on sibling or private files.
-Describe behavior changes and relevant checks in CHANGELOG.md. Do not add private issue exports,
+Record unshipped behavior changes and checks in PROGRESS.md. CHANGELOG.md contains shipped work only. Do not add private issue exports,
 source history, raw provider receipts, customer content, or credentials to a pull request.
 
 After intentional skill or supporting-resource edits, run `node tools/update-completeness.mjs` and
@@ -46,7 +46,7 @@ to check plugin paths and metadata. These checks do not start a host or validate
 
 ## Package a local commit
 
-This phase is private dogfooding. Keep `package.json` marked `private: true`; local npm pack still
+This phase is private-alpha preparation. Keep `package.json` marked `private: true`; local npm pack still
 works. Do not publish, remove that guard or change repository visibility without explicit approval.
 
 
@@ -69,7 +69,7 @@ and human verdicts. It is a source/archive identity record, not release approval
 tags, signs, uploads, or publishes. Before any public release, obtain the applicable external and
 human acceptance evidence and explicit operator authorization.
 
-CI runs the same local commands for pull requests and pushes to `main` or `dogfood/0.1.0`,
+CI runs the same local commands for pull requests and pushes to `main`, historical `dogfood/0.1.0`, or proposed `private-alpha`,
 with read-only repository permissions. It never publishes.
 Historical `test:source`, candidate, live-evidence and inventory-maintenance pipelines retain their
 own private authority requirements and are not part of `npm test` or the public setup path.

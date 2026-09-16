@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { digest, loadAssignment, protocol, validatePlan, validateResult } from './contracts.mjs';
+import { digest, loadAssignment, protocol, publicExecutionId, validatePlan, validateResult } from './contracts.mjs';
 import { attachReceipt, formatEngagementBrief } from './receipt.mjs';
 
 function interruptible(work, signal) {
@@ -32,9 +32,10 @@ export async function runSpecialistTeam({ plan: input, root, host, parent, signa
   // Validate every method and restriction before the first worker is created.
   const integration = { id: 'integrate', role: 'parent', goal: plan.goal, skills: [], workflows: [], knowledgeHandles: [], dependsOn: plan.assignments.map(t => t.id) };
   const review = { id: 'review', role: 'outcome', goal: 'Review the exact integrated artifact against the goal. Identify contradictions, unsupported claims, and missing deliverables. Return draft or revise; never grant human acceptance.', skills: ['fresh-eyes-review'], workflows: [], knowledgeHandles: [], dependsOn: ['integrate'] };
-  const correction = { id: 'correct', role: 'parent', goal: 'Apply one targeted correction to the integrated artifact using only the review findings. Do not rewrite unrelated work or grant human acceptance.', skills: [], workflows: [], knowledgeHandles: [], dependsOn: ['review'] };
+  const correction = { id: 'operator:correct', role: 'parent', goal: 'Apply one targeted correction to the integrated artifact using only the review findings. Do not rewrite unrelated work or grant human acceptance.', skills: [], workflows: [], knowledgeHandles: [], dependsOn: ['review'] };
+  const finalReview = { ...review, id: 'operator:final-review', dependsOn: ['operator:correct'] };
   const assets = new Map();
-  for (const task of [...plan.assignments, integration, review, correction]) assets.set(task.id, await interruptible(
+  for (const task of [...plan.assignments, integration, review, correction, finalReview]) assets.set(task.id, await interruptible(
     () => loadAssignment(root, task, { authorize, resolveKnowledge, requiredTools: isolated ? ['host-worker-context'] : [] }), abort));
 
   async function execute(assignment, phase, dependencies, integratedDigest = null) {
@@ -44,17 +45,20 @@ export async function runSpecialistTeam({ plan: input, root, host, parent, signa
       integratedDigest, maxOutputBytes: plan.limits.maxOutputBytes,
       authority: { externalMutation: 'deny', fileMutation: 'deny', delegation: 'deny', humanAcceptance: 'deny' },
     };
-    for (let attempt = 1; attempt <= plan.limits.maxAttempts; attempt++) {
+    const maxAttempts = phase === 'correct' || assignment.id === 'operator:final-review' ? 1 : plan.limits.maxAttempts;
+    for (let attempt = 1; attempt <= maxAttempts; attempt++) {
       abort.throwIfAborted();
       assert.ok(++dispatches <= plan.limits.maxDispatches, 'Team dispatch budget exhausted');
       emit('assignment.started', { id: assignment.id, phase, attempt, packetDigest: digest(packet) });
+      const dispatchRecord = { assignmentId: assignment.id, executionId: null, settled: false, cleanupFailed: false };
+      let accepted = false;
       try {
-        const dispatchRecord = { assignmentId: assignment.id, executionId: null, settled: false, cleanupFailed: false };
         const work = Promise.resolve().then(() => executor.execute(structuredClone(packet), {
           signal: abort,
           onDispatch: executionId => {
-            dispatchRecord.executionId = executionId;
-            emit('assignment.dispatched', { id: assignment.id, executionId });
+            accepted = true;
+            dispatchRecord.executionId = publicExecutionId(executionId);
+            emit('assignment.dispatched', { id: assignment.id, executionId: dispatchRecord.executionId });
           },
         }));
         dispatchRecord.promise = work;
@@ -65,17 +69,18 @@ export async function runSpecialistTeam({ plan: input, root, host, parent, signa
           dispatchRecord.unverifiedChildId = error?.unverifiedChildId ?? null;
         });
         const response = await interruptible(() => work, abort);
+        accepted = true;
         abort.throwIfAborted();
         assert.ok(response?.executionId && response.isolated === isolated, 'Host execution identity or isolation mismatch');
         if (isolated) assert.ok(!executions.has(response.executionId), 'Host reused a specialist context');
         executions.add(response.executionId);
         const result = validateResult(response.result, packet);
-        emit('assignment.finished', { id: assignment.id, phase, executionId: response.executionId, isolated, resultDigest: digest(result), status: result.status });
+        emit('assignment.finished', { id: assignment.id, phase, executionId: publicExecutionId(response.executionId), isolated, resultDigest: digest(result), status: result.status });
         return { ...result, executionId: response.executionId, isolated };
       } catch (error) {
-        emit('assignment.failed', { id: assignment.id, phase, attempt, retryable: error.preDispatch === true && !abort.aborted });
+        emit('assignment.failed', { id: assignment.id, phase, attempt, retryable: error.preDispatch === true && !accepted && !abort.aborted && attempt < maxAttempts && dispatches < plan.limits.maxDispatches });
         // Ambiguous or accepted dispatches must be reconciled, never replayed automatically.
-        if (error.preDispatch !== true || abort.aborted || attempt === plan.limits.maxAttempts) throw error;
+        if (error.preDispatch !== true || accepted || abort.aborted || attempt === maxAttempts) throw error;
       }
     }
   }
@@ -103,8 +108,10 @@ export async function runSpecialistTeam({ plan: input, root, host, parent, signa
       const settled = await Promise.allSettled(ready.map(async task => {
         try {
           const dependencies = task.dependsOn.map(id => results.get(id));
-          if (dependencies.some(r => r.status === 'blocked')) throw new Error('A required dependency is blocked');
-          results.set(task.id, await execute(task, 'work', dependencies));
+          if (dependencies.some(r => r.status === 'blocked')) {
+            results.set(task.id, { assignmentId: task.id, status: 'blocked', skipped: true });
+            emit('assignment.skipped', { id: task.id, reason: 'required-dependency-blocked' });
+          } else results.set(task.id, await execute(task, 'work', dependencies));
           pending.delete(task.id);
         } catch (error) { primaryFailure ??= error; controller.abort(); throw error; }
       }));
@@ -126,6 +133,8 @@ export async function runSpecialistTeam({ plan: input, root, host, parent, signa
       });
     }
     let reviewed = await execute(review, 'review', [integrated], integratedDigest);
+    const firstReview = reviewed;
+    let finalReviewResult = null;
     let corrected = false;
     let correctionResult = null;
     const additionalGaps = [];
@@ -138,11 +147,12 @@ export async function runSpecialistTeam({ plan: input, root, host, parent, signa
           return finish({
             status: 'blocked', independentReview: isolated, integrated, integratedDigest, review: reviewed,
             integration: integrationResult, correction: correctionResult, results: [...results.values()],
-          }, { additionalGaps, corrected: true });
+          }, { additionalGaps, corrected: false });
         }
         integrated = correctionResult;
         integratedDigest = digest(integrated.artifact);
-        reviewed = await execute(review, 'review', [integrated], integratedDigest);
+        finalReviewResult = await execute(finalReview, 'review', [integrated], integratedDigest);
+        reviewed = finalReviewResult;
         corrected = true;
         if (reviewed.status !== 'draft') {
           additionalGaps.push('Material issues remain after one targeted correction and re-review.');
@@ -157,7 +167,7 @@ export async function runSpecialistTeam({ plan: input, root, host, parent, signa
     return finish({
       status: reviewed.status, independentReview: isolated, humanAccepted: false,
       integrated, integratedDigest, review: reviewed, integration: integrationResult,
-      correction: correctionResult, results: [...results.values()],
+      correction: correctionResult, firstReview, finalReview: finalReviewResult, results: [...results.values()],
     }, { additionalGaps, corrected });
   } catch (error) {
     error.teamTrace = trace;

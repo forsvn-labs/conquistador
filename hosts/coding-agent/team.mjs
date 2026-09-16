@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { readFileSync, writeFileSync, realpathSync } from 'node:fs';
+import { readFileSync, writeFileSync, realpathSync, openSync, closeSync } from 'node:fs';
 import { resolve, relative, isAbsolute } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createBbHost } from './bb.mjs';
@@ -15,6 +15,8 @@ const target = resolve(outputPath);
 const outputParent = realpathSync(resolve(target, '..'));
 const delta = relative(realpathSync(root), outputParent);
 if (!delta || (delta !== '..' && !delta.startsWith('../') && !isAbsolute(delta))) throw new Error('Keep team evidence outside the product package.');
+// Reserve the destination before any billable host work. Never replace an existing report.
+const output = openSync(target, 'wx', 0o600);
 const controller = new AbortController();
 const cancel = () => controller.abort();
 process.once('SIGINT', cancel); process.once('SIGTERM', cancel);
@@ -24,9 +26,10 @@ try {
   const result = await runSpecialistTeam({ plan, root, host, signal: controller.signal,
     onEvent: event => process.stderr.write(`${JSON.stringify(event)}\n`) });
   if (result.receiptMarkdown) process.stderr.write(`${result.receiptMarkdown}\n`);
-  writeFileSync(target, JSON.stringify(result, null, 2) + '\n', { flag: 'wx', mode: 0o600 });
+  writeFileSync(output, JSON.stringify(result, null, 2) + '\n');
   process.stdout.write(JSON.stringify({ status: result.status, mode: result.mode, independentReview: result.independentReview, receipt: result.receipt ?? null }) + '\n');
 } catch (error) {
-  writeFileSync(target, JSON.stringify({ status: 'failed', reason: 'Team execution failed. Reconcile the recorded children before retrying.', trace: error.teamTrace ?? [] }, null, 2) + '\n', { flag: 'wx', mode: 0o600 });
-  throw error;
-} finally { process.removeListener('SIGINT', cancel); process.removeListener('SIGTERM', cancel); }
+  writeFileSync(output, JSON.stringify({ status: 'failed', reason: 'Team execution failed. Reconcile the recorded children before retrying.', trace: error.teamTrace ?? [] }, null, 2) + '\n');
+  process.stderr.write('Team execution failed. Inspect the private result and reconcile owned children before retrying.\n');
+  process.exitCode = 1;
+} finally { closeSync(output); process.removeListener('SIGINT', cancel); process.removeListener('SIGTERM', cancel); }
