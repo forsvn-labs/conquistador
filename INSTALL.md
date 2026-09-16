@@ -3,24 +3,50 @@
 The next proposed channel is `private-alpha`. These operator changes have not shipped. Product
 version remains 0.1.0. The channel commands below become usable only when the owner makes that
 private Git branch available. No tag or release is implied. Until then, use a supplied complete
-source copy or ZIP containing this implementation.
+npm tarball, source copy, or ZIP containing this implementation.
 
 ## Project operator, recommended
 
-Use Node 24 and a coding agent that can read project files. Put the complete distribution at a
-separate source path. Run from the receiving project, replacing the source path:
+Use Node 24, npm, Git, a coding agent that can read project files, and a GitHub account with access
+to the private repository. From the receiving project, run this command after `private-alpha`
+exists:
 
 ```sh
-node /absolute/path/conquistador-source/tools/setup.mjs install --target operator --project "$PWD"
-node /absolute/path/conquistador-source/tools/setup.mjs status --path "$PWD/.conquistador-operator"
-node /absolute/path/conquistador-source/tools/setup.mjs doctor --path "$PWD/.conquistador-operator"
+npm exec --yes --ignore-scripts \
+  --package=git+https://github.com/forsvn-labs/conquistador.git#private-alpha \
+  -- conquistador setup install --target operator --project "$PWD"
+node .conquistador-operator/runtime/bin/conquistador.js setup doctor \
+  --path "$PWD/.conquistador-operator"
 ```
+
+`npm exec` obtains the package through Git and runs its declared `conquistador` executable from
+npm's cache. It does not add a dependency, `node_modules`, or a lockfile to the receiving project.
+Use the exact release tag or commit from the private-alpha release notes when repeatable bytes
+matter; the channel branch can advance. If GitHub denies access, authenticate the intended account
+and run `gh auth setup-git`. Do not put a token in the command.
 
 This creates `.conquistador-operator/` with `agent/agent.json`, the parent and 38 methods under
 `agent/skills/`, the operator profile, contract schemas, compatibility v1 metadata, and
 `hosts/coding-agent/`. The `harness` target with `--path ABS` installs the same single-agent package.
 Keep the folder private and outputs outside it. No global CLI, host registration, daemon, poller,
-background capture, or external operation starts. You do not need to bootstrap this source to install.
+background capture, or external operation starts. No source checkout or development bootstrap is
+required.
+
+If you received the release tarball, npm and Bun can execute that exact local file:
+
+```sh
+npm exec --yes --ignore-scripts \
+  --package=/absolute/path/forsvn-conquistador-0.1.0.tgz \
+  -- conquistador setup install --target operator --project "$PWD"
+
+bunx --package /absolute/path/forsvn-conquistador-0.1.0.tgz \
+  conquistador setup install --target operator --project "$PWD"
+```
+
+Choose one command. The Bun launcher follows the package's Node shebang, so Node 24 remains a
+prerequisite. For this private repository, use the release tarball with Bun; the private HTTPS Git
+form is not a supported path. Verify a downloaded tarball against the release `SHA256SUMS` before
+running it.
 
 Start a fresh host session in that project and ask:
 
@@ -42,20 +68,26 @@ user turn with a host-owned `activation` override. `project` enables conservativ
 Keep activation settings outside the managed package. [Activation details](docs/MASTER-AGENT.md)
 include the API and limits.
 
-Use the complete distribution for each lifecycle command:
+Use the same package source for each lifecycle command. For the private Git channel:
 
 ```sh
-node /absolute/path/conquistador-source/tools/setup.mjs update --path "$PWD/.conquistador-operator"
-node /absolute/path/conquistador-source/tools/setup.mjs doctor --path "$PWD/.conquistador-operator"
-node /absolute/path/conquistador-source/tools/setup.mjs uninstall --path "$PWD/.conquistador-operator"
+npm exec --yes --ignore-scripts \
+  --package=git+https://github.com/forsvn-labs/conquistador.git#private-alpha \
+  -- conquistador setup status --path "$PWD/.conquistador-operator"
+npm exec --yes --ignore-scripts \
+  --package=git+https://github.com/forsvn-labs/conquistador.git#private-alpha \
+  -- conquistador setup update --path "$PWD/.conquistador-operator"
+npm exec --yes --ignore-scripts \
+  --package=git+https://github.com/forsvn-labs/conquistador.git#private-alpha \
+  -- conquistador setup uninstall --path "$PWD/.conquistador-operator"
 ```
 
-Update from the newer complete source you intend to install. Record its commit with
-`git -C /absolute/path/conquistador-source rev-parse HEAD` when Git is available. Status verifies
-owned files; doctor verifies library completeness. Both leave host activation and execution
-unverified. Edited files cause update/removal to refuse. Preserve edits and use a new folder if
-needed. Before removal, disable any host routing, detach the contract, and stop active teams.
-Uninstall leaves host settings and running agents alone. Refresh the host after update/removal.
+For an update, replace the package reference with the exact newer release tag or commit you intend
+to install. Reuse the local tarball form when that is your distribution. Status verifies owned
+files; doctor verifies library completeness. Both leave host activation and execution unverified.
+Edited files cause update/removal to refuse. Preserve edits and use a new folder if needed. Before
+removal, disable any host routing, detach the contract, and stop active teams. Uninstall leaves
+host settings and running agents alone. Refresh the host after update/removal.
 
 ## Skills
 
@@ -226,27 +258,28 @@ to read the parent guide first. Remove the client entry to disconnect.
 
 ### CLI setup
 
-Use managed setup for an owned operator, compact copy, plugin folder, or MCP connector.
-This remote launcher is proposed for the future private-alpha branch:
+The recommended package runner also opens the interactive guide:
 
 ```sh
 npm exec --yes --ignore-scripts --package=git+https://github.com/forsvn-labs/conquistador.git#private-alpha -- conquistador setup
 ```
 
-For automation, supply `setup install --target operator --project /absolute/path/to/project` instead
-of interactive setup. `setup status|update|uninstall --path ABS` operates on a managed receipt.
-Status checks local integrity; doctor checks completeness. Neither registers or activates the host.
-Keep the source or cached package available while a saved MCP connector points to it.
+For other targets, select them in that guide or replace the operator arguments. The command can
+prepare an owned compact copy, plugin folder, or MCP connector. Status checks local integrity;
+doctor checks completeness. Neither registers or activates the host. Keep the cached package
+available while a saved MCP connector points to it.
 
-### Clone, if you want a local copy
+### Clone for recovery or development
 
 ```sh
 gh repo clone forsvn-labs/conquistador -- --branch private-alpha --single-branch
 node conquistador/tools/setup.mjs install --target operator --project /absolute/path/to/receiving-project
 ```
 
-Use a separate receiving project. Keep the source for managed updates and removal. For frozen ZIPs,
-custom hosts, and runtime operators, use the [manual reference](docs/INSTALL-REFERENCE.md).
+Use a separate receiving project. Keep the source for managed updates and removal. This path is
+useful when the package runner cannot use your Git credentials or when you need to inspect the
+source before installation. For frozen ZIPs, custom hosts, and runtime operators, use the
+[manual reference](docs/INSTALL-REFERENCE.md).
 
 ## Optional account and job hosts
 

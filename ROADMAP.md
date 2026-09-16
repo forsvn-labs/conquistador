@@ -12,7 +12,9 @@
 3. Obtain the private-alpha distribution decision and authorized source reference. Check the exact
    ZIP, npm tarball, checksums and assembly record before any channel creation or distribution.
    Product version remains 0.1.0; do not infer a new version or tag. Keep the repository private and
-   npm publication disabled. Historical dogfood tags and release facts stay unchanged.
+   npm publication disabled. Make the npm package runner the default install, validate the Bun
+   tarball path, and retain source clone as recovery. Historical dogfood tags and release facts
+   stay unchanged.
 
 Use the [private-alpha checklist](docs/PRIVATE-ALPHA.md). Installed file completeness, model output,
 provider observations, human acceptance and release authority are separate evidence classes.
@@ -21,8 +23,8 @@ provider observations, human acceptance and release authority are separate evide
 
 - Verify Executor setup and task resumption with a separately authorized account operation. Observe
   permissions, cancellation and recovery. Discovery or login alone does not prove an operation.
-- Check exact update identity across source copies, npm cache changes, Node changes, and host
-  caches. Copies without Git still lack source commit provenance.
+- Check exact update identity across source copies, npm and Bun cache changes, Node changes, and
+  host caches. Copies without Git still lack source commit provenance.
 - Exercise optional previews, Claude hooks, and domain restrictions in the consuming host. Compact
   copies rely on host access enforcement. Native hook delivery remains unverified.
 - Exercise an explicitly requested Eve job with a named owner, selected model and budget, approval,

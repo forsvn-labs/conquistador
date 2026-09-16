@@ -5,9 +5,10 @@ checks, observed behavior, and your acceptance of the result separate.
 
 ## Install and check
 
-1. Follow the [recommended operator installation](../INSTALL.md#project-operator-recommended). Use the complete
-   supplied distribution and the project where you intend to work. The private-alpha channel is
-   proposed, not released.
+1. Follow the [recommended operator installation](../INSTALL.md#project-operator-recommended). Use
+   the npm private Git launcher or the exact supplied tarball in the project where you intend to
+   work. Record the tag, commit, or tarball digest. The private-alpha channel is proposed, not
+   released.
 2. Check the managed folder with `setup status --path ABS`, or use `skills list` for a skills.sh copy. Run the
    [installation doctor](../INSTALL.md#read-only-completeness-check) if your distribution includes it.
    Record missing files or stale paths before continuing. Older releases may need a newer complete

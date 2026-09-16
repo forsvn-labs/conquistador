@@ -13,6 +13,17 @@ Your GitHub account must have access, including any organization sign-in require
 A repository-not-found response can mean that the account lacks access. Use a supplied private
 ZIP if you do not have repository access. There is no public package to install from npm.
 
+The recommended `npm exec` command uses the package's existing `conquistador` executable and a Git
+package reference. `private: true` prevents registry publication; it does not prevent an authorized
+Git or local tarball package from running. npm keeps that package in its cache and does not add it to
+the receiving project's dependencies. For repeatable installation, replace the moving channel with
+the exact release tag or commit supplied in the release notes.
+
+The private release tarball is also the supported Bun package runner input. Bun still starts the
+Node shebang, so Node 24 is required. Do not use the private HTTPS Git reference with Bun unless a
+release explicitly verifies that credential path. See the [standard install](../INSTALL.md#project-operator-recommended)
+for both commands.
+
 ## Let your coding agent do the setup
 
 Ask your existing agent to follow [INSTALL.md](../INSTALL.md) for the current project. It can check

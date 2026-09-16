@@ -5,6 +5,15 @@ channel is `private-alpha`; no channel branch, tag, version, release, push, or p
 Product version remains 0.1.0 and parent method version remains 2.9.0. The npm private guard remains
 true. Historical ships are recorded only in [CHANGELOG.md](CHANGELOG.md).
 
+The default private-alpha install now uses the existing `conquistador` package executable
+through `npm exec` and the private Git reference. This path installs the operator without adding a
+dependency, `node_modules`, or a lockfile to the receiving project. The supplied npm tarball also
+completed install, doctor, and uninstall through npm and Bun package runners in fresh projects.
+Private Git execution passed through npm on Node 24.21.0. Bun 1.3.14 could execute the local
+tarball, but its HTTPS Git form requested an unauthenticated GitHub API tarball and received 404;
+the documentation therefore does not claim private Git Bun support. Source and ZIP remain recovery
+paths. No curl-to-shell installer was added.
+
 This review covers every changed file in `d2fc898..84f0008`, the complete 41-file operator diff on
 `bb/implement-conquistador-operator-experience-with-thr_dx5zj6re7b`. It also audits the source and
 installation paths those changes depend on. All work stays in the product worktree. The product

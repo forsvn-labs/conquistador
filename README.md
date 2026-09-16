@@ -11,29 +11,29 @@ Historical releases remain in [CHANGELOG.md](CHANGELOG.md). Review results befor
 
 ## Install in one project
 
-Use Node 24 and a complete source copy or supplied ZIP. Keep that distribution outside the project
-receiving the operator. From the receiving project's root, run:
+Use Node 24, npm, Git, and a GitHub account with access to the private repository. From the
+receiving project's root, run this command after the owner makes `private-alpha` available:
 
 ```sh
-node /absolute/path/conquistador-source/tools/setup.mjs install --target operator --project "$PWD"
-node /absolute/path/conquistador-source/tools/setup.mjs doctor --path "$PWD/.conquistador-operator"
+npm exec --yes --ignore-scripts \
+  --package=git+https://github.com/forsvn-labs/conquistador.git#private-alpha \
+  -- conquistador setup install --target operator --project "$PWD"
+node .conquistador-operator/runtime/bin/conquistador.js setup doctor \
+  --path "$PWD/.conquistador-operator"
 ```
 
-Replace the source path with your distribution. The managed folder `.conquistador-operator/`
-contains the parent, all methods, the operator profile, portable agent contracts, and the BB
-adapter. Keep it out of public commits and keep your outputs elsewhere. No bootstrap, global CLI,
-service, hook, polling, or transcript capture is required for this installation.
+`npm exec` keeps Conquistador in npm's cache. It does not add a dependency, `node_modules`, or a
+lockfile to the receiving project. The managed folder `.conquistador-operator/` contains the
+parent, all methods, the operator profile, portable agent contracts, and the BB adapter. Keep it
+out of public commits and keep your outputs elsewhere. Installation starts no global CLI, service,
+hook, polling, or transcript capture.
 
-The proposed source acquisition command, to use only after the owner makes `private-alpha`
-available, is:
-
-```sh
-gh repo clone forsvn-labs/conquistador /absolute/path/conquistador-source -- --branch private-alpha --single-branch
-```
-
-GitHub CLI, Git, and private repository access are required for that command. Until the channel
-exists, use the supplied source or ZIP. Do not substitute an old dogfood release for this operator.
-[INSTALL.md](INSTALL.md) covers source identity, lifecycle commands, compact skills, and plugins.
+If GitHub denies access, authenticate the intended account and run `gh auth setup-git`; do not put
+a token in the command. Until the channel exists, use the supplied npm tarball, source, or ZIP.
+Bun users can execute the supplied tarball with `bunx`; the private Git URL is not the documented
+Bun path. Do not substitute an old dogfood release for this operator. [INSTALL.md](INSTALL.md)
+covers Bun, exact release references, lifecycle commands, source recovery, compact skills, and
+plugins.
 
 ## Start a task
 

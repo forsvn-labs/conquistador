@@ -7,10 +7,11 @@ Research, creative work, engineering, and review support that mission.
 
 ## Make the first task easy
 
-Offer one project operator installation with the complete library. Put prerequisites, installation
-traps, and recovery beside the command. Follow it with a real task. Compact skills, plugins, and
-MCP are alternatives. The runtime, typed catalog, Eval Lab, and durable jobs are optional.
-Every installation route needs a clear update and removal path.
+Offer one package runner command that installs the complete project operator. Put prerequisites,
+installation traps, and recovery beside the command. It must not add a dependency or lockfile to
+the receiving project. Follow it with a real task. Bun, compact skills, plugins, MCP, and a source
+clone are alternatives. The runtime, typed catalog, Eval Lab, and durable jobs are optional. Every
+installation route needs a clear update and removal path.
 
 An installed library must contain the methods and resources its parent routes to. Check those
 files without loading the entire library into model context. Report local completeness, available
