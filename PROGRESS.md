@@ -3,7 +3,7 @@
 Conquistador is in private dogfood. The shipped prerelease is
 [`v0.1.0-dogfood.4`](https://github.com/forsvn-labs/conquistador/releases/tag/v0.1.0-dogfood.4),
 from `45a3d276874b30e884fb5e603b289e0c58a286f8` on `dogfood/0.1.0`. Product version is 0.1.0;
-the parent method is 2.8.0. The root npm package remains `private: true`. CI builds and tests with
+the parent method is 2.9.0 on current source. The root npm package remains `private: true`. CI builds and tests with
 read-only repository permissions; public distribution is deferred. ZIP, npm tarball, checksums, and
 `assembly.json` bind that exact source (`authority: UNBOUND`). Installing a new package does not
 update existing copies. Earlier dogfood prereleases retain their original source identity.
@@ -19,7 +19,7 @@ remain optional. This rewrite changes guidance, not host execution behavior.
 
 `conquistador setup doctor --path ABS [--json]` checks full root, compact, plugin, and harness
 copies against `release/completeness.json`. The manifest names all 38 outcomes, parent version
-2.8.0, and all supporting resources, including specialist and setup contracts, with content hashes.
+2.9.0, and all supporting resources, including specialist, operator-profile, and setup contracts, with content hashes.
 The report separates library completeness, managed receipt integrity and version, available Git
 identity and cleanliness, and BB adapter presence. Compact copies use `library/` and omit the
 adapter; plugin and harness copies include it.
@@ -48,14 +48,45 @@ local links and anchors, links inside staged packages, the pinned default comman
 prerequisites and traps, and first-task ordering. A direct source doctor run again reported all
 38 methods available and the pending documentation edits. No live host or provider check was run.
 
+## Operator experience on dogfood/0.1.0
+
+Current source on `bb/implement-conquistador-operator-experience-with-thr_dx5zj6re7b` starts from
+`d2fc898d6736e5ad8517296007bb6f866e2d62d2`. It adds `conquistador.operator-profile/v1`, optional
+specialist presentation, `conquistador.execution-receipt/v1`, BB brief/receipt integration, and
+one targeted correction after an exact-artifact `revise` verdict. Installed activation stays
+`manual`. `backgroundWatch` stays false. Draft-only runs keep `externalActions: []` and
+`humanAccepted: false`.
+
+Node 24.21.0 passed `npm run bootstrap`, `npm run build`, and `npm test`: 118 tooling, 292 runtime,
+167 catalog, and 63 Eval Lab tests (640 total). Catalog check reported 17 valid operations. The
+synthetic local example reported `proofClass: synthetic-local-contract-example`,
+`executionAuthorized: false`, `liveExecutions: 0`, `humanVerdicts: 0`. Completeness hashes matched
+parent 2.9.0 (`sha256:ee2613ace4beea2aa94fd0ebaf2b35a4b628842d7a98c9da5a05f9926cfa8ec1`) and 1096
+required resources, including `conquistador/operator-profile.json`.
+
+A fresh temporary harness install/status/update/remove cycle reported 38 methods available, operator
+profile present (`activation manual`), BB adapter present, and `hostActivationVerified: false`.
+A compact skill cycle reported the operator profile present and the BB adapter absent. Doctor does
+not prove routing or task execution. `plugin-contracts` reported `hostActivationVerified: false`.
+A checkout package-boundary scan checked 1580 files with 0 private fingerprints
+(`semanticReviewRequired: true` for this private package). A changed-file secret and private-path
+scan found no matches.
+
+No live BB operator-package run was executed from this implementation worktree: specialist children
+share the environment filesystem, so a host run here could have mixed model file edits into the
+operator-experience source. Protocol tests cover briefs, receipts, redaction, digest mismatch,
+cancellation, cleanup, and the one-pass correction limit. They are not a host, provider, or human
+result. No push, merge, publish, Linear mutation, or FORSVN planning edit is included.
+
+
 ## Available product behavior
 
 | Area | Available behavior and limit |
 | --- | --- |
-| Task entry | One parent selects from 38 outcome methods for growth, GTM, sales, marketing, and product knowledge work; the host supplies the model and tools |
+| Task entry | One parent selects from 38 outcome methods for growth, GTM, sales, marketing, and product knowledge work; the host supplies the model and tools. Operator activation defaults to manual; project routing is an explicit host setting |
 | Installations | Root skills, compact managed skills, plugins, and host packages; local file preparation does not establish host activation |
 | Local MCP | Lists and reads bundled methods over stdio without runtime dependencies, a model account, or an HTTP service |
-| Specialists | Seven role contracts, a callable BB adapter, exact-artifact review, and a same-context fallback; v2 master metadata retains v1 compatibility |
+| Specialists | Seven role contracts, public roster labels, a callable BB adapter, engagement brief, execution receipt, exact-artifact review with one correction pass, and a same-context fallback; v2 master metadata retains v1 compatibility |
 | Existing stack | Host-owned route selection and bounded reads; the catalog requires exact audited operations |
 | Executor help | `connections setup` and `status` detect a CLI and print official next steps; configuration, UI handoff, discovery, and provider execution are separate |
 | Optional Eve | A canonical app with explicit owner/session commands and separate worker/operator authority; preparation does not submit a model job |
@@ -142,8 +173,9 @@ filter staged methods but rely on the consuming host to enforce access. Domain M
 
 ## Remaining work
 
-1. Observe fresh host activation, parent routing, a real deliverable, and one correction for the
-   default install. Use the [dogfood checklist](docs/DOGFOOD.md); local completeness is not task proof.
+1. Observe a real BB operator-package run with visible children, a brief, a receipt bound to the
+   integrated digest, and one targeted correction. Protocol tests cover those contracts; they are
+   not a live host or human result. Use the [dogfood checklist](docs/DOGFOOD.md).
 2. Polish Executor setup and resumption with an authorized account operation. Observe permission,
    cancellation, and recovery behavior. Eve additionally needs an operator-owned service, selected
    model and budget, and a useful job.

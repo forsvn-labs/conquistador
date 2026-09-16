@@ -11,6 +11,11 @@ The doctor checks method versions and content, required resources, receipts, ava
 identity, and managed MCP executable paths. It separates local file readiness from host activation
 and useful work. Managed compact copies omit the BB adapter; plugin and harness copies include it.
 
+Current source adds a host-neutral operator profile (`manual | project | off`), public engagement
+briefs, deterministic execution receipts, and one targeted correction after an exact-artifact
+`revise` verdict. The installed default remains explicit invocation. `harness` remains the
+compatible alias for the portable master package. Background watch stays false.
+
 The shipped private prerelease is
 [`v0.1.0-dogfood.4`](https://github.com/forsvn-labs/conquistador/releases/tag/v0.1.0-dogfood.4)
 from `45a3d27` on `dogfood/0.1.0`. It includes the documentation rewrite, completeness manifest,
@@ -29,9 +34,10 @@ for verification scope.
 3. Improve update identity and repair. Preserve the resolved source commit and original host where
    possible, expose identity consistently, and test cache/source/Node changes. Keep a useful path
    for older installations and edited files. Do not make guided setup the default.
-4. Check optional host behavior when a real task needs it: isolated specialist review, Lavish
-   annotations, domain restrictions, and Claude SessionStart/Stop delivery. Keep same-context review
-   labeled. Compact copies rely on their consuming host for domain enforcement.
+4. Check optional host behavior when a real task needs it: isolated specialist review, engagement
+   brief and receipt rendering, Lavish annotations, domain restrictions, and Claude SessionStart/Stop
+   delivery. Keep same-context review labeled. Compact copies rely on their consuming host for domain
+   enforcement. Project activation is an explicit host setting, not a doctor result.
 5. Exercise an explicitly requested Eve job with a named owner, approved model and budget, and
    observed approval, cancellation, and persisted-state recovery. Keep dependency pins and review
    upstream updates before promotion. Discovery and accepted submissions do not prove a useful job.

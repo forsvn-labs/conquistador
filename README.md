@@ -33,7 +33,8 @@ plan in docs/launch/. Mark claims that need evidence. Keep this as a draft.
 ```
 
 Use your own file paths, or paste the product facts and audience instead. Expect finished copy,
-a campaign plan, and stated evidence gaps. Check the result before using it.
+a campaign plan, stated evidence gaps, and for a substantial launch task a short engagement brief
+plus an execution receipt. Check the result before using it.
 
 Installation is useful when the host can find the complete library and use it on your task.
 A skill listing checks inventory; `conquistador setup doctor` checks local completeness. Neither

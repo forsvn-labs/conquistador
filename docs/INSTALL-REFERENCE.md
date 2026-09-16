@@ -252,9 +252,10 @@ node tools/install.mjs install single-agent /absolute/path/conquistador-agent
 node tools/install.mjs install squad /absolute/path/conquistador-squad
 ```
 
-The `single-agent` install contains the portable master contract in `agent/agent.json`, specialist
-assignment files, methods under `agent/skills/`, and the native dispatch modules under
-`hosts/coding-agent/` including `README.md` plus `agents/conquistador/agent.json`. When `domain-restriction.json` is present,
+The `single-agent` install contains the portable master contract in `agent/agent.json`, the operator
+profile, specialist assignment files, methods under `agent/skills/`, and the native dispatch modules
+under `hosts/coding-agent/` including `README.md` plus `agents/conquistador/agent.json`. `harness`
+is the setup alias for this mode. When `domain-restriction.json` is present,
 the callable coordinator enforces the file before loading or dispatching, without an optional
 callback. The consuming host decides how many worker contexts it can run. The squad contains worker and advisor contracts and their methods. The worker produces; the advisor
 reviews. The host must create separate contexts for independent review. Otherwise follow the

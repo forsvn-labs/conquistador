@@ -5,13 +5,15 @@ owns the user's outcome, team design, integration, and final response.
 
 ## Choose the team
 
-Start with the smallest team that can finish the requested result. A narrow task uses one specialist.
-A broad task can use as many specialists as the work needs and the host can run. Do not create roles
-for status, coordination, or restating another specialist's output.
+Start with the smallest team that can finish the requested result. A narrow task uses one specialist
+or stays with the parent. A broad task can use as many specialists as the work needs and the host
+can run. Do not create roles for status, coordination, display, or restating another specialist's
+output.
 
-Use [the specialist roster](../specialists/roster.md) for the named GTM roles. For another domain,
-assign an existing outcome skill and its contained agent contracts. Do not create a new outcome when
-the library already owns the method.
+Use [the specialist roster](../specialists/roster.md) for the named GTM roles. Public child titles and
+receipts use those roster labels, never internal file paths. For another domain, assign an existing
+outcome skill and its contained agent contracts. Do not create a new outcome when the library already
+owns the method.
 
 Split work only when a specialist has a distinct goal, input set, or acceptance check. Run independent
 assignments in parallel when the host supports isolated contexts. Run dependent assignments in order.
@@ -45,9 +47,11 @@ authority assumptions.
 Use `fresh-eyes-review`, `knowledge-review`, or `decision-panel` when the result needs a separate
 review judgment. Claim independent review only when another isolated context reviewed the exact
 artifact. Keep publication, spend, credentials, deployment, sends, and other external writes behind
-the applicable human decision.
+the applicable human decision. If review returns `revise`, apply at most one targeted integration
+correction, then one exact-digest re-review. A second unresolved material failure stays a gap.
 
-Return one coherent deliverable and one next action. Do not return a pile of specialist reports.
+Return one coherent deliverable, one next action, and an execution receipt when more than one
+capability or any separate context ran. Do not return a pile of specialist reports.
 
 ## Sequential fallback
 
@@ -59,25 +63,36 @@ Identify any review as same-context. Do not claim that another agent ran.
 
 The complete distribution and plugin/harness installs include `hosts/coding-agent/orchestrate.mjs`
 and a BB adapter in `hosts/coding-agent/bb.mjs`. Use them when the host exposes BB and an existing
-project/environment. The BB adapter creates visible child threads with separate conversation
-contexts, then executes a parent integration assignment and an isolated `fresh-eyes-review`
-assignment. It passes only the selected method files, their contained outcome agents and references,
-named workflow, allowed knowledge snippets, and required predecessor results.
+project/environment. The BB adapter creates visible child threads with public roster titles, emits
+the validated engagement brief before the first dispatch, then executes a parent integration
+assignment and an isolated `fresh-eyes-review` assignment. After a `revise` verdict it may run one
+targeted correction and one exact-digest re-review. It passes only the selected method files, their
+contained outcome agents and references, named workflow, allowed knowledge snippets, and required
+predecessor results.
 
-The executable protocol is `conquistador.specialist/v1`. The master package is
-`conquistador.agent-package/v2`; the original v1 schema and package remain available for old hosts.
-A run declares one to four concurrent contexts, a finite deadline, at most two attempts, an output
-limit, and at most twelve dispatches including integration and review. Only a known pre-dispatch
-failure can retry. An accepted or uncertain dispatch must be reconciled before another attempt.
-Cancellation stops owned BB children. No specialist may recursively delegate.
+The executable protocol is `conquistador.specialist/v1`. Plans may include an optional `presentation`
+object; plans without it remain valid. The master package is `conquistador.agent-package/v2`; the
+original v1 schema and package remain available for old hosts. Operator activation is
+`conquistador.operator-profile/v1` with `manual | project | off`. Installed copies default to
+`manual`. `harness` remains the setup alias for the portable master package. A run declares one to
+four concurrent contexts, a finite deadline, at most two attempts, an output limit, and at most
+twelve dispatches including integration, review, and at most one correction cycle. Only a known
+pre-dispatch failure can retry. An accepted or uncertain dispatch must be reconciled before another
+attempt. Cancellation stops owned BB children. No specialist may recursively delegate.
 
 A result contains a finished draft, evidence and gaps. The host binds its execution identity;
 the model cannot choose that identity. The reviewer must echo the digest of the exact integrated
-artifact. `draft`, `revise`, and `blocked` are valid results; none means human acceptance.
+artifact. `draft`, `revise`, and `blocked` are valid results; none means human acceptance. The
+deterministic `conquistador.execution-receipt/v1` is derived from the validated plan plus observed
+host results. Public fields may include capability labels, role labels, deliverable, evidence
+classes, execution mode, review independence, child execution IDs/statuses, artifact digest, gaps,
+and external-action status. External actions stay empty and `humanAccepted` stays false in this
+draft-only adapter.
 
 A host without isolated contexts must provide the coordinator's explicit `parent.execute` callback.
 That callback performs each role in the current context. The result records `sequential-in-context`
-and `independentReview: false`. Do not substitute test responses for model execution.
+and `independentReview: false`. Do not substitute test responses for model execution. The brief must
+disclose same-context review.
 
 Load-time domain restrictions apply when an installed `domain-restriction.json` is present, including
 the model and worker-context tools. Logical `scope:name` knowledge handles resolve through a

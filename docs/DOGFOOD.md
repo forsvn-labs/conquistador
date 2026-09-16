@@ -12,9 +12,12 @@ checks, observed behavior, and your acceptance of the result separate.
    Record missing files or stale paths before continuing. Older releases may need a newer complete
    distribution to supply the doctor.
 3. Start a fresh host session and select Conquistador. Use a [task example](USAGE.md) with your own
-   facts and files. Expect a finished deliverable, evidence gaps, and a next action.
+   facts and files. Expect a finished deliverable, evidence gaps, and a next action. For a
+   multi-part task, record whether a brief and receipt appeared, and whether child titles used
+   public role labels.
 4. Review the output yourself, then supply one correction or measured result. Check whether the
-   follow-up preserves the facts and fixes the problem.
+   follow-up preserves the facts and fixes the problem. A second unresolved material failure should
+   remain a gap, not a hidden retry loop.
 
 The default installer already copies the complete library. A listing or passing doctor does not
 prove activation, independent review, useful output, or live account access. Those need their own

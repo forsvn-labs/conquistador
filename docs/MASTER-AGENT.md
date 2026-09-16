@@ -24,11 +24,22 @@ context must be labeled same-context review. Separate conversations can still sh
 tools; isolation alone is not an access-control boundary. Installation does not prove that the
 host created a worker or activated the skill.
 
-The BB coordinator limits concurrency to four and total dispatches to twelve, including integration
-and review. Specialists receive bounded assignments and cannot delegate or authorize consequential
-actions. See the private [BB adapter reference](https://github.com/forsvn-labs/conquistador/blob/dogfood/0.1.0/hosts/coding-agent/README.md)
-for commands, host callbacks, cancellation, and observed execution limits. Recorded adapter runs
-do not establish general quality or human acceptance.
+The recommended operator package keeps the complete method library, master-agent contract, host
+adapter, and specialist runner together. Activation is `manual` (default), `project`, or `off`.
+`project` routes admitted product, marketing, growth, sales, research, creative, and
+product-engineering requests at turn start. It abstains from unrelated coding work. No daemon,
+watcher, poller, or transcript collector starts. Substantial runs emit a compact engagement brief
+before dispatch and an execution receipt after isolated or multi-capability work. Public fields may
+include capability labels, specialist role labels, deliverable, evidence classes, execution mode,
+review independence, child execution IDs/statuses, artifact digest, gaps, and external-action
+status. Prompts, skill paths, routing scores, token budgets, hidden schemas, credentials, private
+knowledge bodies, and chain-of-thought stay private.
+
+The BB coordinator limits concurrency to four and total dispatches to twelve, including integration,
+review, and at most one correction cycle. Specialists receive bounded assignments and cannot delegate
+or authorize consequential actions. See the private [BB adapter reference](https://github.com/forsvn-labs/conquistador/blob/dogfood/0.1.0/hosts/coding-agent/README.md)
+for commands, host callbacks, cancellation, briefs, receipts, and observed execution limits. Recorded
+adapter runs do not establish general quality or human acceptance.
 
 ## Know what your install contains
 
@@ -36,7 +47,7 @@ do not establish general quality or human acceptance.
 | --- | --- | --- |
 | Repository-root skills.sh install | The complete distribution, including all 38 outcome methods under `skills/` and the BB adapter | Your coding agent runs the selected methods; the adapter needs explicit host setup |
 | Managed compact skill install | The parent, methods under `library/`, contracts, and selected usage docs | Your host supplies execution; this copy omits the BB adapter |
-| Plugin or single-agent `harness` package | The complete method tree and BB adapter; the Claude plugin also has a native agent definition | The consuming host supplies model, tools, and worker contexts |
+| Plugin or single-agent `harness` package | The complete method tree, operator profile, and BB adapter; the Claude plugin also has a native agent definition | The consuming host supplies model, tools, and worker contexts. `harness` remains the setup alias |
 | Fixed `squad` package | Worker and advisor role packages | The consuming host executes the handoff |
 | Local MCP | Tools to list and read bundled methods | The MCP client supplies the model and execution tools; no runtime service is required |
 | Runtime MCP bridge | Access to implemented runtime playbooks and draft artifacts | Explicit `mcp --url` and a configured runtime service are required |

@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
-import { validateResult } from './contracts.mjs';
+import { specialistTitle, validateResult } from './contracts.mjs';
 
 const exec = promisify(execFile);
 async function command(args, options = {}) {
@@ -63,7 +63,7 @@ export function createBbHost({ projectId, environmentId, parentThreadId = proces
       try {
         // Do not abort spawn mid-command: once its id is known cancellation can stop the child.
         const spawned = await cli(['thread', 'spawn', '--project', projectId, '--environment', environmentId,
-          '--parent-thread', parentThreadId, '--visibility', 'visible', '--title', `Conquistador ${packet.assignment.id}`,
+          '--parent-thread', parentThreadId, '--visibility', 'visible', '--title', specialistTitle(packet.assignment),
           '--prompt', promptFor(packet), '--json']).catch(error => {
           throw Object.assign(new Error('BB spawn outcome is unknown. Inspect children of the configured parent before retrying.'), { unverifiedChildId: 'unknown-spawn', cause: error });
         });
@@ -81,7 +81,7 @@ export function createBbHost({ projectId, environmentId, parentThreadId = proces
           const first = !ownedChildId;
           const thread = owned(state);
           if (first) {
-            onChild({ assignmentId: packet.assignment.id, threadId: childId });
+            onChild({ assignmentId: packet.assignment.id, threadId: childId, title: specialistTitle(packet.assignment), status: thread.status });
             onDispatch(childId);
           }
           if (thread.status === 'idle') break;
@@ -106,7 +106,7 @@ export function createBbHost({ projectId, environmentId, parentThreadId = proces
             const first = !ownedChildId;
             owned(await cli(['thread', 'show', childId, '--json'], { timeout: 10000, signal: cleanupSignal }));
             if (first) {
-              onChild({ assignmentId: packet.assignment.id, threadId: ownedChildId });
+              onChild({ assignmentId: packet.assignment.id, threadId: ownedChildId, title: specialistTitle(packet.assignment), status: 'cleanup' });
               onDispatch(ownedChildId);
             }
           } catch {

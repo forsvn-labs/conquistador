@@ -154,6 +154,24 @@ export function inspectInstallation(path, inspectReceipt) {
   if (!identity.sourceCommit) warnings.push('Exact source commit unavailable. Method hashes and receipt integrity do not establish source provenance.');
   else if (!identity.sourceClean) warnings.push('Source checkout has local changes; HEAD does not identify the current files exactly.');
   if (receipt.state === 'absent') warnings.push('No managed receipt. Use the installer or plugin manager that owns this copy for updates.');
+  let operatorActivation = null;
+  const operatorProfilePresent = Boolean(bundleRoot && library.layout && present(join(bundleRoot, library.layout, 'conquistador/operator-profile.json')));
+  if (operatorProfilePresent) {
+    try {
+      const profile = JSON.parse(textAt(bundleRoot, `${library.layout}/conquistador/operator-profile.json`));
+      if (profile?.schemaVersion !== 'conquistador.operator-profile/v1') throw Error('schema');
+      if (!['manual', 'project', 'off'].includes(profile.activation)) throw Error('activation');
+      if (profile.disclosure !== 'capabilities-and-specialists') throw Error('disclosure');
+      if (profile.backgroundWatch !== false) throw Error('watch');
+      if (profile.externalMutation !== 'human-gated') throw Error('mutation');
+      if (!Array.isArray(profile.admittedDomains) || profile.admittedDomains.length < 1) throw Error('domains');
+      const required = ['schemaVersion', 'activation', 'admittedDomains', 'disclosure', 'backgroundWatch', 'externalMutation'];
+      if (Object.keys(profile).some(key => !required.includes(key)) || required.some(key => !Object.hasOwn(profile, key))) throw Error('fields');
+      operatorActivation = profile.activation;
+    } catch {
+      issues.push('Operator profile is present but invalid; fail closed until it is repaired.');
+    }
+  }
   const status = issues.length ? 'incomplete' : 'local-files-verified';
   return {
     schemaVersion: 'conquistador.install-doctor/v1', status, path, bundleRoot,
@@ -161,6 +179,8 @@ export function inspectInstallation(path, inspectReceipt) {
     manifest: { schemaVersion: manifest.schemaVersion, sha256: hash(manifestText), packaged: packagedManifest },
     library, identity, receipt, connector: connector?.checks ?? null,
     bbAdapterPresent: Boolean(bundleRoot && executable(join(bundleRoot, 'hosts/coding-agent/team.mjs'), constants.R_OK)),
+    operatorProfilePresent,
+    operatorActivation,
     hostActivationVerified: false, taskExecutionVerified: false, providerVerified: false,
     issues, warnings,
   };
@@ -186,9 +206,10 @@ export function runInstallationDoctor(args, inspectReceipt) {
     console.log(`Parent version: ${parent?.version ?? 'unavailable'}. Receipt product version: ${result.receipt.productVersion ?? 'unavailable'}.`);
     if (result.connector) console.log(`Saved MCP Node executable: ${result.connector.nodeExecutable ? 'available' : 'unavailable'}. Package executable: ${result.connector.packageExecutable ? 'available' : 'unavailable'}.`);
     console.log(`BB adapter files: ${result.bbAdapterPresent ? 'present; execution unverified' : 'not present'}.`);
+    console.log(`Operator profile: ${result.operatorProfilePresent ? `present (activation ${result.operatorActivation ?? 'unparsed'}); host activation unverified` : 'not present; older packages degrade to explicit invocation'}. No daemon or schedule is started.`);
     for (const issue of result.issues) console.log(`FAIL: ${issue}`);
     for (const warning of result.warnings) console.log(`NOTE: ${warning}`);
-    console.log(result.issues.length ? 'Next: preserve local edits and repair the failed checks through the original installer.' : 'Next: refresh the host, select Conquistador, and complete one real task.');
+    console.log(result.issues.length ? 'Next: preserve local edits and repair the failed checks through the original installer.' : 'Next: refresh the host, select Conquistador or enable project activation, and complete one real task. Doctor does not prove that routing ran.');
     console.log('No methods were loaded into the model context by this check.');
   }
   return result.status === 'local-files-verified' ? 0 : 1;

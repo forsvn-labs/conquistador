@@ -2,8 +2,8 @@
   "schemaVersion": "conquistador.install-completeness/v1",
   "parent": {
     "name": "conquistador",
-    "version": "2.8.0",
-    "sha256": "324260acb7c2322b10ee07bef774bca4054376a4664f917e6c59c6ae888bbcf0"
+    "version": "2.9.0",
+    "sha256": "ee2613ace4beea2aa94fd0ebaf2b35a4b628842d7a98c9da5a05f9926cfa8ec1"
   },
   "outcomes": [
     {
@@ -760,7 +760,7 @@
     },
     {
       "path": "conquistador/adapters/coding-agent.md",
-      "sha256": "f8ca61e0f0dde29ddbc99f1d22e0b99fc4cdab5fb770ef5667847f810330c93a"
+      "sha256": "d8e5bd3115e68454c56f19e99b1e3d625714aa3e0062426d3ab898297bc53c3d"
     },
     {
       "path": "conquistador/adapters/eve.md",
@@ -772,7 +772,7 @@
     },
     {
       "path": "conquistador/adapters/single-agent.md",
-      "sha256": "b4d682e42d533751d2cfc7b423ae36697e1274cab610831adb07b99620a34a8a"
+      "sha256": "b168976a2f60441165443cfaec1c02d0869d7c7bc0be7c36301439d24e4588c0"
     },
     {
       "path": "conquistador/adapters/social-publishing-handoff.md",
@@ -907,8 +907,12 @@
       "sha256": "b8af5e267dc0007082ef113d579376af54b09d8a43c6aae5f329205c87e504fb"
     },
     {
+      "path": "conquistador/operator-profile.json",
+      "sha256": "ab5830d0ab2a5d41cfbee9f8821b5eb66716e07899d42b99b1a0a609a7a7d22e"
+    },
+    {
       "path": "conquistador/orchestration/specialist-team.md",
-      "sha256": "d28ceaeac541bf8772eb0a743653b52da2681b6227b1f230243927577a186532"
+      "sha256": "bddf6ddee5e623ca57b8212ba04c46fafe0e1769b46c45d77beffd48c7335b26"
     },
     {
       "path": "conquistador/references/ai-patterns.md",
@@ -1616,7 +1620,7 @@
     },
     {
       "path": "conquistador/specialists/roster.md",
-      "sha256": "9ab3da5284cd4c072ac814781b2452ef516ed821a2888b54c901cddb3a3ab4ac"
+      "sha256": "5a8180d5610dab4275921637702966ca53ae7c72b091e675f55bbb96f1d621c3"
     },
     {
       "path": "conquistador/specialists/saas-landing-agent.md",
@@ -1644,7 +1648,7 @@
     },
     {
       "path": "conquistador/standards/quality.md",
-      "sha256": "386e83415ab4e9dc17ac6c58cf645275a87a601cdfa4f2766bbd865c5f3c8aea"
+      "sha256": "728ef9745a3b45c40ff6d53ee6439b8177834089bab638b79fc6ad20b91bb04e"
     },
     {
       "path": "conquistador/standards/safety.md",

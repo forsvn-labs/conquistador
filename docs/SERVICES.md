@@ -32,9 +32,10 @@ optional tool before starting. Conquistador first uses supplied material and per
 If a missing local prerequisite can be prepared within host permissions, it can do that work.
 If live account access blocks the task, use the [Executor connection path](INTEGRATIONS.md).
 
-A complete install includes all 38 methods. A domain or standalone install can contain fewer.
-The repository-root skills.sh copy includes the full distribution. Managed compact installs use
-`library/` and omit the BB adapter. Plugin and single-agent harness copies include it. See
+A complete install includes all 38 methods and the operator profile. A domain or standalone install
+can contain fewer. The repository-root skills.sh copy includes the full distribution. Managed
+compact installs use `library/` and omit the BB adapter. Plugin and single-agent harness copies
+include it. Default activation is explicit `/conquistador` invocation. See
 [master-agent modes](MASTER-AGENT.md) and [platform details](PLATFORMS.md) for execution differences.
 
 Separate host contexts allow independent review. A review in the parent's context is a same-context

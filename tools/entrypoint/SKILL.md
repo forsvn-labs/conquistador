@@ -14,7 +14,8 @@ set up Executor if needed, verify the operation, and resume. Keep existing user 
 approved scope; this entry point grants no new authority.
 
 For opt-in host-event reminders, read [proactive help](docs/PROACTIVE.md). Installation does not
-activate hooks, start a service, register a schedule, or send data.
+activate hooks, start a service, register a schedule, or send data. The bundled operator profile
+defaults to manual `/conquistador` invocation.
 
 For visual review, use [Lavish AXI](docs/PREVIEW.md) through the host's local CLI. Conquistador owns
 the handoff and revisions. Annotations do not grant memory or public-feedback consent.

@@ -97,9 +97,29 @@ material choices, mark assumptions, and distinguish completed checks from unveri
 larger tasks, it may use isolated specialists when the host supports them, or work sequentially.
 Same-context review is not independent review. See [execution modes](MASTER-AGENT.md).
 
+### Direct, isolated, same-context, and project activation
+
+**Direct.** Rewrite one supplied headline. Conquistador should work in the parent, name the copy
+capability only if useful, and not spawn a team for display.
+
+**Isolated team in BB.** Ask for a launch page, email, campaign plan, and measurement plan from
+supplied product and audience files. Expect a visible engagement brief, two or more specialist
+child threads titled with public role labels, one integrated deliverable, one separate review of
+the exact artifact digest, and a final receipt. No external actions occur.
+
+**Same-context host.** The same broad task without worker contexts should run assignments in
+order, disclose same-context review, and set `independentReview: false`.
+
+**Project activation.** A host that stores `project` activation may route an admitted launch or
+research request without `/conquistador`. An unrelated coding fix must abstain. Setting activation
+to `off` or `manual` stops automatic routing immediately. Methods remain available for explicit
+use. No daemon exists.
+
 Reply in the same thread with a correction or the next authorized step. For example: "The offer
 is a paid pilot. Revise the page and email." You do not need to select another method. Approval
-of a draft does not authorize publication, spending, sends, or other external writes.
+of a draft does not authorize publication, spending, sends, or other external writes. If review
+asked for revision, the parent may apply one targeted correction and re-review the exact digest.
+Remaining material failures stay visible.
 
 For visual feedback, ask Conquistador to preview the deliverable in Lavish and apply your
 annotations. [Preview guidance](PREVIEW.md) explains the optional tool and private access needs.

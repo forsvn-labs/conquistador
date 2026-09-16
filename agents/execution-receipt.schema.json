@@ -1,0 +1,135 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "conquistador.execution-receipt/v1",
+  "title": "Conquistador execution receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "runId",
+    "outcome",
+    "capabilities",
+    "specialists",
+    "mode",
+    "independentReview",
+    "integratedDigest",
+    "evidence",
+    "gaps",
+    "externalActions",
+    "humanAccepted"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "conquistador.execution-receipt/v1"
+    },
+    "runId": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]{0,63}$"
+    },
+    "outcome": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 240
+    },
+    "capabilities": {
+      "type": "array",
+      "maxItems": 12,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "label"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]{0,63}$"
+          },
+          "label": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80
+          }
+        }
+      }
+    },
+    "specialists": {
+      "type": "array",
+      "maxItems": 12,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["assignmentId", "label", "executionId", "status"],
+        "properties": {
+          "assignmentId": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]{0,63}$"
+          },
+          "label": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80
+          },
+          "executionId": {
+            "type": ["string", "null"],
+            "minLength": 1,
+            "maxLength": 80
+          },
+          "status": {
+            "type": "string",
+            "enum": ["draft", "revise", "blocked"]
+          }
+        }
+      }
+    },
+    "mode": {
+      "type": "string",
+      "enum": ["isolated-workers", "sequential-in-context"]
+    },
+    "independentReview": {
+      "type": "boolean"
+    },
+    "integratedDigest": {
+      "type": ["string", "null"],
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "evidence": {
+      "type": "array",
+      "maxItems": 12,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 200
+      }
+    },
+    "gaps": {
+      "type": "array",
+      "maxItems": 12,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 200
+      }
+    },
+    "externalActions": {
+      "type": "array",
+      "maxItems": 0
+    },
+    "humanAccepted": {
+      "const": false
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "mode": { "const": "sequential-in-context" }
+        },
+        "required": ["mode"]
+      },
+      "then": {
+        "properties": {
+          "independentReview": { "const": false }
+        }
+      }
+    }
+  ]
+}

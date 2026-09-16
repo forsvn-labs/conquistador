@@ -22,6 +22,13 @@ methods relevant to the task. Use specialists within host limits; use a labeled 
 fallback when separate contexts are unavailable. Specialist roles compose the existing methods,
 not a second library. Compact copies must describe any adapter or runtime they omit.
 
+The recommended one-user experience is a project-installed operator package. Installed activation
+defaults to manual invocation. Project routing of admitted product, marketing, growth, sales,
+research, creative, and product-engineering requests is an explicit setting. Installation starts
+no daemon, watcher, or schedule. Substantial runs present a compact engagement brief and finish
+with an execution receipt. Public labels stay visible; prompts, skill paths, routing scores, and
+chain-of-thought stay private.
+
 ## Connect only what the task needs
 
 Start with supplied context and permitted connections. When missing live access blocks the task,

@@ -25,4 +25,7 @@ only when evidence is repeatable or unusually high-confidence.
 5. Deletion test: remove any sentence that does not change understanding, belief, or action.
 6. Channel test: the work would not look copied unchanged from another platform.
 
-Do not show the checklist unless the user asks for the evaluation.
+Do not show the checklist unless the user asks for the evaluation. Do not add a universal numeric
+quality score. Substantial runs still need a specific bet, separated evidence, finished specialist
+artifacts, parent integration, exact-artifact review, at most one correction pass, and a truthful
+receipt that cannot convert tests into proof of useful output or human acceptance.

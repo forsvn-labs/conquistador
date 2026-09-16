@@ -4,6 +4,31 @@ No public release is claimed. See [VERSIONS.md](VERSIONS.md) for independent pro
 versions. Verification establishes the stated local scope; live provider operation, useful model
 output, human acceptance, rights disposition and release authority require separate evidence.
 
+## Unreleased operator experience on dogfood/0.1.0
+
+- Added `conquistador.operator-profile/v1` with `manual | project | off` activation. Installed
+  copies default to `manual`. `project` admits product, marketing, growth, sales, research,
+  creative, and product-engineering requests at turn start. `backgroundWatch` stays false.
+  `harness` remains the compatible setup alias. Older v2 packages without a profile degrade to
+  explicit invocation.
+- Extended `conquistador.specialist/v1` with an optional presentation object. Existing plans
+  without it remain valid. Public specialist labels come from a product-owned roster.
+- Added deterministic `conquistador.execution-receipt/v1` derived from the validated plan and
+  observed host results, with Markdown and JSON formatters, bounded deduplicated evidence/gaps,
+  and redaction of secrets, private paths, and prompt residue. External actions stay empty and
+  `humanAccepted` stays false in this draft-only slice.
+- Wired engagement briefs, public child titles, observed child IDs/statuses, exact-digest review,
+  and final receipts into the BB coordinator. After a `revise` verdict the parent may run at most
+  one targeted correction and one re-review. Narrow tasks stay direct.
+- Updated parent method to 2.9.0. Documentation now names the operator package, activation
+  lifecycle, brief/receipt disclosure, and evidence limits. No daemon, watcher, push, publish, or
+  Linear mutation is included.
+- Node 24.21.0 passed `npm run build` and 640 default tests (118 tooling, 292 runtime, 167 catalog,
+  63 Eval Lab). Catalog check: 17 operations. Synthetic local example: no live executions. A fresh
+  harness install/status/update/remove cycle showed operator profile `manual`, 38 methods, and
+  host activation unverified. No live BB receipt run was observed from this worktree; protocol
+  tests are not host or human proof.
+
 ## 0.1.0-dogfood.4 private prerelease
 
 - Shipped private GitHub prerelease

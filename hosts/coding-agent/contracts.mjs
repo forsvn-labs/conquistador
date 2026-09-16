@@ -6,10 +6,39 @@ import { containedPath } from '../../tools/plugin-contracts.mjs';
 import { assertLoadAllowed, parseRestriction, RESTRICTION_NAME } from '../../tools/domain-package.mjs';
 
 export const protocol = 'conquistador.specialist/v1';
+export const receiptProtocol = 'conquistador.execution-receipt/v1';
 export const digest = value => `sha256:${createHash('sha256').update(JSON.stringify(value)).digest('hex')}`;
 export const roleFiles = Object.freeze(Object.fromEntries([
   'ads', 'copy', 'dr-landing', 'saas-landing', 'data-diagnosis', 'campaign-data', 'creative-assets',
 ].map(id => [id, `skills/conquistador/specialists/${id}-agent.md`])));
+export const publicSpecialists = Object.freeze({
+  ads: 'Ads',
+  copy: 'Copy',
+  'dr-landing': 'Direct-response landing',
+  'saas-landing': 'SaaS landing',
+  'data-diagnosis': 'Data diagnosis',
+  'campaign-data': 'Campaign data',
+  'creative-assets': 'Creative assets',
+  outcome: 'Outcome',
+  parent: 'Integration',
+  review: 'Review',
+});
+export const publicCapabilities = Object.freeze({
+  positioning: 'positioning',
+  'launch-planning': 'launch planning',
+  'conversion-copy': 'conversion copy',
+  measurement: 'measurement',
+  'paid-media': 'paid media',
+  outreach: 'outreach',
+  'creative-production': 'creative production',
+  'growth-diagnosis': 'growth diagnosis',
+  'product-strategy': 'product strategy',
+  'product-engineering': 'product engineering',
+  research: 'research',
+  sales: 'sales',
+  brand: 'brand',
+});
+export const reservedAssignmentIds = Object.freeze(['integrate', 'review', 'correct']);
 
 export function closed(value, required, optional = []) {
   assert.ok(value && typeof value === 'object' && !Array.isArray(value), 'Expected object');
@@ -29,9 +58,86 @@ function bounded(value, min, max) {
 export function textField(value, maximum = 32000) {
   assert.ok(typeof value === 'string' && value.trim().length > 0 && Buffer.byteLength(value) <= maximum, 'Expected bounded nonempty text');
 }
+export function labelField(value, maximum = 80) {
+  textField(value, maximum);
+  assert.ok(!/[\r\n]/.test(value), 'Labels must be single-line');
+}
+
+const secretPattern = /(?:sk-[A-Za-z0-9_-]{8,}|github_pat_[A-Za-z0-9_]{20,}|ghp_[A-Za-z0-9]{20,}|bearer\s+[A-Za-z0-9._-]{8,}|BEGIN [A-Z ]*PRIVATE KEY|api[_-]?key\s*[:=]\s*\S+|password\s*[:=]\s*\S+)/i;
+const privatePathPattern = /(?:^|[\s`'"])(?:\/(?:Users|home|root|private|var|etc)\/[^\s`'"]+|file:\/\/[^\s`'"]+|[A-Za-z]:\\[^\s`'"]+|skills\/[a-z0-9-]+\/SKILL\.md)/g;
+const promptPattern = /\b(?:chain[- ]of[- ]thought|hidden prompt|system prompt|token budget|routing score)\b/i;
+
+export function redactText(value) {
+  assert.ok(typeof value === 'string');
+  let text = value.replace(secretPattern, '[redacted]');
+  text = text.replace(privatePathPattern, ' [redacted-path]');
+  text = text.replace(promptPattern, '[redacted]');
+  return text.replace(/\s+/g, ' ').trim();
+}
+export function truncateText(value, maximum) {
+  assert.ok(typeof value === 'string');
+  let text = value;
+  while (Buffer.byteLength(text) > maximum) text = text.slice(0, Math.max(0, text.length - 1));
+  return text.trim();
+}
+export function boundUnique(values, { limit = 12, maximum = 200 } = {}) {
+  assert.ok(Array.isArray(values));
+  const seen = new Set();
+  const out = [];
+  for (const item of values) {
+    if (typeof item !== 'string') continue;
+    const redacted = truncateText(redactText(item), maximum);
+    if (!redacted || seen.has(redacted)) continue;
+    seen.add(redacted);
+    out.push(redacted);
+    if (out.length === limit) break;
+  }
+  return out;
+}
+
+export function publicSpecialistLabel(assignment) {
+  const reserved = { integrate: 'Integration', review: 'Review', correct: 'Integration' };
+  if (Object.hasOwn(reserved, assignment.id)) return reserved[assignment.id];
+  return publicSpecialists[assignment.role] ?? publicSpecialists.outcome;
+}
+export function specialistTitle(assignment) {
+  return `Conquistador: ${publicSpecialistLabel(assignment)}`;
+}
+
+function validatePresentation(presentation, assignments) {
+  closed(presentation, ['outcome', 'deliverable', 'capabilities', 'specialists', 'evidence', 'review']);
+  labelField(presentation.outcome, 240);
+  labelField(presentation.deliverable, 240);
+  assert.ok(['independent', 'same-context', 'none'].includes(presentation.review), 'Unknown review mode');
+  assert.ok(Array.isArray(presentation.capabilities) && presentation.capabilities.length <= 12);
+  const capabilityIds = new Set();
+  for (const capability of presentation.capabilities) {
+    closed(capability, ['id', 'label']);
+    identifier(capability.id);
+    assert.ok(Object.hasOwn(publicCapabilities, capability.id), `Unknown public capability ${capability.id}`);
+    assert.equal(capability.label, publicCapabilities[capability.id], 'Capability labels must use the public roster');
+    assert.ok(!capabilityIds.has(capability.id), 'Duplicate capability');
+    capabilityIds.add(capability.id);
+  }
+  assert.ok(Array.isArray(presentation.specialists) && presentation.specialists.length <= 12);
+  const assignmentIds = new Set(assignments.map(task => task.id));
+  const seen = new Set();
+  for (const specialist of presentation.specialists) {
+    closed(specialist, ['assignmentId', 'label']);
+    identifier(specialist.assignmentId);
+    assert.ok(assignmentIds.has(specialist.assignmentId), 'Presentation specialist must refer to a plan assignment');
+    assert.ok(!seen.has(specialist.assignmentId), 'Duplicate presentation specialist');
+    seen.add(specialist.assignmentId);
+    const task = assignments.find(item => item.id === specialist.assignmentId);
+    assert.equal(specialist.label, publicSpecialistLabel(task), 'Specialist labels must use the public roster');
+  }
+  assert.deepEqual(presentation.evidence, boundUnique(presentation.evidence), 'Evidence must be unique, bounded, and already public');
+  assert.equal(redactText(presentation.outcome), presentation.outcome, 'Presentation must not include secrets');
+  assert.equal(redactText(presentation.deliverable), presentation.deliverable, 'Presentation must not include secrets');
+}
 
 export function validatePlan(plan) {
-  closed(plan, ['schemaVersion', 'id', 'goal', 'assignments', 'limits']);
+  closed(plan, ['schemaVersion', 'id', 'goal', 'assignments', 'limits'], ['presentation']);
   assert.equal(plan.schemaVersion, protocol);
   identifier(plan.id); textField(plan.goal);
   closed(plan.limits, ['concurrency', 'timeoutSeconds', 'maxAttempts', 'maxDispatches', 'maxOutputBytes']);
@@ -46,7 +152,7 @@ export function validatePlan(plan) {
     closed(task, ['id', 'role', 'goal', 'skills', 'workflows', 'knowledgeHandles', 'dependsOn']);
     identifier(task.id); identifier(task.role); textField(task.goal);
     assert.ok(Object.hasOwn(roleFiles, task.role) || task.role === 'outcome', 'Unknown specialist role');
-    assert.ok(!ids.has(task.id) && !['integrate', 'review'].includes(task.id), 'Duplicate or reserved assignment id');
+    assert.ok(!ids.has(task.id) && !reservedAssignmentIds.includes(task.id), 'Duplicate or reserved assignment id');
     ids.add(task.id);
     for (const field of ['skills', 'workflows', 'dependsOn']) strings(task[field]);
     assert.ok(Array.isArray(task.knowledgeHandles) && task.knowledgeHandles.length <= 20 && new Set(task.knowledgeHandles).size === task.knowledgeHandles.length, 'Invalid knowledge handles');
@@ -59,6 +165,7 @@ export function validatePlan(plan) {
     assert.ok(ready.length, 'Cyclic or missing assignment dependency');
     ready.forEach(t => complete.add(t.id));
   }
+  if (Object.hasOwn(plan, 'presentation')) validatePresentation(plan.presentation, plan.assignments);
   return structuredClone(plan);
 }
 

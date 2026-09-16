@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import { digest, loadAssignment, protocol, validatePlan, validateResult } from './contracts.mjs';
+import { attachReceipt, formatEngagementBrief } from './receipt.mjs';
 
 function interruptible(work, signal) {
   signal.throwIfAborted();
@@ -31,8 +32,9 @@ export async function runSpecialistTeam({ plan: input, root, host, parent, signa
   // Validate every method and restriction before the first worker is created.
   const integration = { id: 'integrate', role: 'parent', goal: plan.goal, skills: [], workflows: [], knowledgeHandles: [], dependsOn: plan.assignments.map(t => t.id) };
   const review = { id: 'review', role: 'outcome', goal: 'Review the exact integrated artifact against the goal. Identify contradictions, unsupported claims, and missing deliverables. Return draft or revise; never grant human acceptance.', skills: ['fresh-eyes-review'], workflows: [], knowledgeHandles: [], dependsOn: ['integrate'] };
+  const correction = { id: 'correct', role: 'parent', goal: 'Apply one targeted correction to the integrated artifact using only the review findings. Do not rewrite unrelated work or grant human acceptance.', skills: [], workflows: [], knowledgeHandles: [], dependsOn: ['review'] };
   const assets = new Map();
-  for (const task of [...plan.assignments, integration, review]) assets.set(task.id, await interruptible(
+  for (const task of [...plan.assignments, integration, review, correction]) assets.set(task.id, await interruptible(
     () => loadAssignment(root, task, { authorize, resolveKnowledge, requiredTools: isolated ? ['host-worker-context'] : [] }), abort));
 
   async function execute(assignment, phase, dependencies, integratedDigest = null) {
@@ -78,9 +80,20 @@ export async function runSpecialistTeam({ plan: input, root, host, parent, signa
     }
   }
 
+  const finish = (result, extras = {}) => {
+    const attached = attachReceipt({ ...result, mode, trace }, plan, extras);
+    emit('team.receipt', {
+      receiptDigest: digest(attached.receipt),
+      formatError: attached.receiptFormatError,
+      independentReview: attached.receipt.independentReview === true,
+    });
+    return attached;
+  };
+
   try {
     const concurrency = isolated ? Math.min(plan.limits.concurrency, host.capabilities.maxConcurrency) : 1;
     assert.ok(Number.isInteger(concurrency) && concurrency >= 1 && concurrency <= 4, 'Invalid host concurrency');
+    emit('team.brief', { markdown: formatEngagementBrief(plan, { isolated }), isolated });
     const pending = new Map(plan.assignments.map(t => [t.id, t]));
     let primaryFailure;
     while (pending.size) {
@@ -100,15 +113,46 @@ export async function runSpecialistTeam({ plan: input, root, host, parent, signa
     }
     if ([...results.values()].some(r => r.status === 'blocked')) {
       emit('team.blocked', { reason: 'required-assignment-blocked' });
-      return { status: 'blocked', mode, independentReview: false, results: [...results.values()], trace };
+      return finish({ status: 'blocked', independentReview: false, results: [...results.values()] });
     }
     // Integration is one explicit parent assignment. It receives every specialist result.
-    const integrated = await execute(integration, 'integrate', [...results.values()]);
-    const integratedDigest = digest(integrated.artifact);
-    if (integrated.status === 'blocked') return { status: 'blocked', mode, independentReview: false, integrated, trace };
-    const reviewed = await execute(review, 'review', [integrated], integratedDigest);
-    emit('team.finished', { integratedDigest, independentReview: isolated, humanAccepted: false });
-    return { status: reviewed.status, mode, independentReview: isolated, humanAccepted: false, integrated, integratedDigest, review: reviewed, results: [...results.values()], trace };
+    let integrated = await execute(integration, 'integrate', [...results.values()]);
+    let integratedDigest = digest(integrated.artifact);
+    if (integrated.status === 'blocked') {
+      return finish({ status: 'blocked', independentReview: false, integrated, integratedDigest, results: [...results.values()] });
+    }
+    let reviewed = await execute(review, 'review', [integrated], integratedDigest);
+    let corrected = false;
+    const additionalGaps = [];
+    if (reviewed.status === 'revise') {
+      if (plan.limits.maxDispatches - dispatches >= 2) {
+        emit('team.correction', { attempt: 1, reviewDigest: digest(reviewed) });
+        const correctedResult = await execute(correction, 'correct', [integrated, reviewed]);
+        if (correctedResult.status === 'blocked') {
+          additionalGaps.push('Targeted correction was blocked; remaining review findings are unresolved.');
+          return finish({
+            status: 'blocked', independentReview: isolated, integrated, integratedDigest, review: reviewed,
+            results: [...results.values()],
+          }, { additionalGaps, corrected: true });
+        }
+        integrated = correctedResult;
+        integratedDigest = digest(integrated.artifact);
+        reviewed = await execute(review, 'review', [integrated], integratedDigest);
+        corrected = true;
+        if (reviewed.status !== 'draft') {
+          additionalGaps.push('Material issues remain after one targeted correction and re-review.');
+          emit('team.material-failure', { afterCorrection: true, status: reviewed.status });
+        }
+      } else {
+        additionalGaps.push('Review requested revision; remaining dispatch budget prevented a correction pass.');
+        emit('team.correction-skipped', { reason: 'dispatch-budget' });
+      }
+    }
+    emit('team.finished', { integratedDigest, independentReview: isolated, humanAccepted: false, corrected });
+    return finish({
+      status: reviewed.status, independentReview: isolated, humanAccepted: false,
+      integrated, integratedDigest, review: reviewed, results: [...results.values()],
+    }, { additionalGaps, corrected });
   } catch (error) {
     error.teamTrace = trace;
     throw error;

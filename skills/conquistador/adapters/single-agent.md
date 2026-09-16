@@ -1,9 +1,10 @@
 # Portable master-agent routing
 
-Use the parent as the main entry point. The `harness` installation supplies the portable master-agent
-contract, specialist assignment files, and all 38 outcome skills. The consuming host decides whether
-it can create isolated specialists. Select only the roles and outcomes needed for the request.
-Preserve the user's scope and the host's declared capabilities.
+Use the parent as the main entry point. The `harness` installation remains the compatible alias for
+the portable master-agent contract, operator profile, specialist assignment files, BB adapter, and
+all 38 outcome skills. The consuming host decides whether it can create isolated specialists. Select
+only the roles and outcomes needed for the request. Preserve the user's scope and the host's declared
+capabilities. Default activation is `manual`; `project` routing is an explicit host setting.
 
 - Resolve sibling links relative to the installed parent tree, including when a wrapper loads it
   from a bundled library. Do not assume that all skill bodies are already in context.

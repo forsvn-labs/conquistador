@@ -40,6 +40,7 @@ test('portable master contains specialist contracts, declared outcomes and its c
   assert.equal(agent.schemaVersion, 'conquistador.agent-package/v2');
   assert.equal(agent.delegation.maxDelegationsPerRun, 12);
   assert.ok(existsSync(join(target, agent.canonicalSkillRoot, 'SKILL.md')));
+  assert.ok(existsSync(join(target, agent.canonicalSkillRoot, 'operator-profile.json')));
   for (const name of ['ads', 'copy', 'dr-landing', 'saas-landing', 'data-diagnosis', 'campaign-data', 'creative-assets']) {
     assert.ok(existsSync(join(target, agent.canonicalSkillRoot, 'specialists', `${name}-agent.md`)));
   }
@@ -114,9 +115,10 @@ test('plugin and harness copy native dispatch; compact skill states full distrib
   install('install', 'plugin', target);
   assert.deepEqual(readdirSync(join(target, 'agents')).sort(), ['conquistador', 'conquistador.md']);
   assert.ok(existsSync(join(target, 'agents/conquistador/agent.json')));
-  for (const name of ['contracts.mjs', 'orchestrate.mjs', 'bb.mjs', 'team.mjs', 'host.json', 'README.md']) {
+  for (const name of ['contracts.mjs', 'operator.mjs', 'receipt.mjs', 'orchestrate.mjs', 'bb.mjs', 'team.mjs', 'host.json', 'README.md']) {
     assert.ok(existsSync(join(target, 'hosts/coding-agent', name)));
   }
+  assert.ok(existsSync(join(target, 'skills/conquistador/operator-profile.json')));
   assert.ok(existsSync(join(target, 'tools/domain-package.mjs')));
   assert.ok(existsSync(join(target, 'tools/plugin-contracts.mjs')));
   assert.match(readFileSync(join(target, 'README.md'), 'utf8'), /hosts\/coding-agent/);

@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "conquistador.operator-profile/v1",
+  "activation": "manual",
+  "admittedDomains": [
+    "product",
+    "marketing",
+    "growth",
+    "sales",
+    "research",
+    "creative",
+    "product-engineering"
+  ],
+  "disclosure": "capabilities-and-specialists",
+  "backgroundWatch": false,
+  "externalMutation": "human-gated"
+}

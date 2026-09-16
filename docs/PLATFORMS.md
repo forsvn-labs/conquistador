@@ -28,6 +28,8 @@ it does not prove host discovery or task quality.
 The installed parent can assign bounded work to native agents or workers when the selected host
 exposes that feature. The product does not create a background process or require native delegation.
 When a host has no isolated worker context, the parent runs the same specialist contracts in sequence.
+The operator profile defaults to manual invocation. A host may enable project routing in its own
+settings; Conquistador does not rewrite instruction files or start a watcher.
 
 Run `setup.mjs status`, `update` or `uninstall` with that exact folder as `--path`. Setup refuses
 modified or unowned folders. It leaves project outputs alone. If you used skills.sh instead,
@@ -159,7 +161,8 @@ to an agent. Removing a connector does not erase service data or stop a shared s
 ## Agent harnesses
 
 Choose `harness` for the portable master agent, or `squad` for the fixed production and review roles.
-Setup prepares the contracts and their method libraries. Your host adapter executes those contracts.
+`harness` remains the compatible alias for that portable operator package. Setup prepares the
+contracts, operator profile, and their method libraries. Your host adapter executes those contracts.
 The master contract allows the number of specialist assignments needed by the task, subject to host
 limits. The fixed squad always has one worker and one advisor. Use the native Claude plugin if you
 want an already defined host-specific parent instead.

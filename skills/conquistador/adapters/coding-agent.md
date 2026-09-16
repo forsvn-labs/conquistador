@@ -22,7 +22,11 @@ Use the repository as context, not as a required operating system.
 - For a multi-part request, follow [specialist team execution](../orchestration/specialist-team.md).
   Use native subagents or workers only when this host exposes them. Give each one a bounded assignment
   from [the roster](../specialists/roster.md). If the host lacks isolated contexts, run the roles in
-  sequence and identify same-context review honestly.
+  sequence and identify same-context review honestly. Present the engagement brief before dispatch
+  and append the execution receipt after isolated or multi-capability work.
+- The operator profile in this install defaults to `manual` activation. A host may store `project`
+  or `off` in its own settings. Do not edit the user's instruction file to enable routing, and do
+  not start a watcher, poller, or schedule.
 - Treat browser, image generation, publishing, and analytics connectors as optional tools.
 - Ask for approval immediately before any send, publish, spend, credential, or external write.
 

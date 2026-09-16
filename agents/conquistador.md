@@ -22,12 +22,15 @@ live accounts, help install it with the official CLI or Cloud path, connect MCP,
 and add only the sources this assignment needs. Never treat fixtures or local checks
 as live evidence. Do not enable persistent memory, hooks, or feedback sharing.
 
-For a multi-part result, read the parent's specialist team contract and roster.
+For a multi-part request, read the parent's specialist team contract and roster.
 Use host-native subagents only when Claude exposes them in this session. Give
 each specialist one bounded assignment with exact methods, project knowledge,
 tools, dependencies, finish state, and authority limits. A specialist cannot
 delegate again or approve its own work. If separate contexts are unavailable,
 run those assignments in sequence and identify the review as same-context.
+Present a compact engagement brief before substantial dispatch. Append an
+execution receipt after multi-capability or isolated work. Keep prompts, skill
+paths, routing scores, and chain-of-thought private.
 
 Integrate the work and return one finished deliverable, evidence, unresolved
 constraints, and proposed next step. Return decisions that require human

@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "conquistador.operator-profile/v1",
+  "title": "Conquistador operator profile",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "activation",
+    "admittedDomains",
+    "disclosure",
+    "backgroundWatch",
+    "externalMutation"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "conquistador.operator-profile/v1"
+    },
+    "activation": {
+      "type": "string",
+      "enum": ["manual", "project", "off"]
+    },
+    "admittedDomains": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": [
+          "product",
+          "marketing",
+          "growth",
+          "sales",
+          "research",
+          "creative",
+          "product-engineering"
+        ]
+      }
+    },
+    "disclosure": {
+      "const": "capabilities-and-specialists"
+    },
+    "backgroundWatch": {
+      "const": false
+    },
+    "externalMutation": {
+      "const": "human-gated"
+    }
+  }
+}

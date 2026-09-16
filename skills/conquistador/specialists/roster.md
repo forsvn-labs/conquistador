@@ -21,3 +21,5 @@ when a role needs a missing data or provider interface.
 
 The parent may use one role or several. Do not add a coordinator specialist. The parent coordinates.
 Do not add a reviewer specialist when an existing review outcome supplies the judgment.
+Public labels in this table are the product-owned roster. Briefs, child titles, and receipts must
+use them. Do not invent display names from model prose.

@@ -28,9 +28,11 @@ launch. Deliver landing-page copy, one launch email and a two-week campaign
 plan in docs/launch/. Mark claims that need evidence. Keep this as a draft.
 ```
 
-Use your own paths, or paste the relevant facts. Expect finished copy, a plan, and evidence gaps.
-Review the output. [More task examples](docs/USAGE.md) explain inputs, corrections, and follow-up.
-No provider account, Executor service, or runtime is required for work based on supplied context.
+Use your own paths, or paste the relevant facts. Expect finished copy, a plan, evidence gaps, and
+for this multi-part task a short engagement brief plus an execution receipt. Review the output.
+[More task examples](docs/USAGE.md) explain direct work, isolated teams, same-context review,
+project activation, inputs, corrections, and follow-up. No provider account, Executor service, or
+runtime is required for work based on supplied context.
 
 ### What successful installation means
 
@@ -44,8 +46,9 @@ Check these separately:
 
 The normal destination is `.agents/skills/conquistador/`, with host links or copies as selected
 by the installer. Inside it are root `SKILL.md`, `skills/conquistador/SKILL.md`, all outcome
-folders under `skills/`, supporting docs, `release/completeness.json`, tools, and runtime source.
-The code files are available but do not start automatically. Skill installation adds no global CLI.
+folders under `skills/`, the operator profile, supporting docs, `release/completeness.json`, tools, and runtime source.
+The code files are available but do not start automatically. Skill installation adds no global CLI,
+daemon, watcher, or schedule. The operator profile defaults to `manual` activation.
 
 Managed compact setup instead places methods under `library/` and omits `hosts/coding-agent/`.
 Plugin and single-agent harness packages include that BB adapter. All three include the methods;
@@ -74,9 +77,11 @@ Omit `--json` for readable output. Expect:
 ```
 
 The doctor compares method versions, content hashes, and supporting resources with its release
-manifest. It reports source Git identity and cleanliness where available, and managed receipt
-integrity and product version where present. A copy without Git has an unknown source commit.
-A digest does not prove provenance or load methods into model context.
+manifest. It reports source Git identity and cleanliness where available, managed receipt
+integrity, operator-profile presence, and product version where present. A copy without Git has an
+unknown source commit. A digest does not prove provenance, routing, or load methods into model
+context. Files ready is not host activation. If the host cannot activate the operator package,
+the first task should explain that host's invocation step.
 
 For managed MCP, it also checks the saved Node executable and package script, then the library the
 script resolves to. A matching receipt cannot hide paths lost after a source move, Node replacement,

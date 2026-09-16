@@ -23,8 +23,9 @@ try {
   const host = createBbHost({ projectId, environmentId, onChild: event => process.stderr.write(`${JSON.stringify(event)}\n`) });
   const result = await runSpecialistTeam({ plan, root, host, signal: controller.signal,
     onEvent: event => process.stderr.write(`${JSON.stringify(event)}\n`) });
+  if (result.receiptMarkdown) process.stderr.write(`${result.receiptMarkdown}\n`);
   writeFileSync(target, JSON.stringify(result, null, 2) + '\n', { flag: 'wx', mode: 0o600 });
-  process.stdout.write(JSON.stringify({ status: result.status, mode: result.mode, independentReview: result.independentReview }) + '\n');
+  process.stdout.write(JSON.stringify({ status: result.status, mode: result.mode, independentReview: result.independentReview, receipt: result.receipt ?? null }) + '\n');
 } catch (error) {
   writeFileSync(target, JSON.stringify({ status: 'failed', reason: 'Team execution failed. Reconcile the recorded children before retrying.', trace: error.teamTrace ?? [] }, null, 2) + '\n', { flag: 'wx', mode: 0o600 });
   throw error;

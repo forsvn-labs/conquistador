@@ -54,7 +54,7 @@ test('release manifest names every authored outcome, exact method contents, and 
   }
   const resources = manifest.requiredResources.map(resource => resource.path);
   const specialists = readdirSync(join(root, 'skills/conquistador/specialists')).map(name => `conquistador/specialists/${name}`);
-  for (const required of [...specialists, 'conquistador/orchestration/specialist-team.md', 'conquistador/methods/connect-accounts.md', 'conquistador/methods/stack-setup.md', 'conquistador/standards/setup.md']) assert.ok(resources.includes(required), required);
+  for (const required of [...specialists, 'conquistador/orchestration/specialist-team.md', 'conquistador/methods/connect-accounts.md', 'conquistador/methods/stack-setup.md', 'conquistador/standards/setup.md', 'conquistador/operator-profile.json']) assert.ok(resources.includes(required), required);
   assert.equal(new Set(resources).size, resources.length);
   // Compare the whole resource inventory, including references below individual outcomes.
   const declared = new Set([...manifest.outcomes, manifest.parent].map(method => `${method.name}/SKILL.md`).concat(resources));
@@ -76,7 +76,8 @@ test('root bundle and installer-owned host link pass without claiming source ide
   assert.match(report.summary, /^38 methods available;/);
   const text = run('doctor', '--path', path).stdout;
   assert.match(text, /No methods were loaded into the model context/);
-  assert.match(text, /Parent version: 2\.8\.0/);
+  assert.match(text, /Parent version: 2\.9\.0/);
+  assert.match(text, /Operator profile: present \(activation manual\)/);
 }));
 
 test('compact, plugin, and harness payloads include the manifest and distinguish BB adapter availability', () => temporary(path => {
@@ -90,6 +91,8 @@ test('compact, plugin, and harness payloads include the manifest and distinguish
     assert.equal(report.receipt.state, 'unchanged');
     assert.equal(report.receipt.productVersion, '0.1.0');
     assert.equal(report.bbAdapterPresent, adapter);
+    assert.equal(report.operatorProfilePresent, true);
+    assert.equal(report.operatorActivation, 'manual');
     assert.deepEqual(readFileSync(join(path, '.conquistador-install.json')), receipt);
     rmSync(path, { recursive: true });
   }
@@ -117,7 +120,7 @@ test('missing outcomes and truncated methods fail even when frontmatter is intac
 test('parent version, missing contracts, entrypoint drift, and manifest drift are visible independently', () => temporary(path => {
   rootBundle(path);
   const parent = join(path, 'skills/conquistador/SKILL.md');
-  writeFileSync(parent, readFileSync(parent, 'utf8').replace('version: 2.8.0', 'version: 0.0.0'));
+  writeFileSync(parent, readFileSync(parent, 'utf8').replace('version: 2.9.0', 'version: 0.0.0'));
   rmSync(join(path, 'skills/conquistador/methods/connect-accounts.md'));
   writeFileSync(join(path, 'SKILL.md'), '# A wrapper with no operating contract');
   writeFileSync(join(path, 'release/completeness.json'), '{}');
@@ -136,6 +139,22 @@ test('modified receipts fail without changing user files', () => temporary(path 
   assert.equal(report.library.available, 38);
   assert.equal(report.receipt.state, 'modified');
   assert.equal(readFileSync(join(path, 'operator-note.md'), 'utf8'), 'preserve');
+}));
+
+test('an invalid operator profile fails closed without claiming activation', () => temporary(path => {
+  rootBundle(path);
+  writeFileSync(join(path, 'skills/conquistador/operator-profile.json'), JSON.stringify({
+    schemaVersion: 'conquistador.operator-profile/v1',
+    activation: 'watch',
+    admittedDomains: ['product'],
+    disclosure: 'capabilities-and-specialists',
+    backgroundWatch: false,
+    externalMutation: 'human-gated',
+  }));
+  const report = doctor(path, 1);
+  assert.equal(report.operatorProfilePresent, true);
+  assert.equal(report.operatorActivation, null);
+  assert.ok(report.issues.some(issue => issue.includes('Operator profile is present but invalid')));
 }));
 
 test('missing supporting resources fail for unmanaged installs even when all method bodies match', () => temporary(path => {

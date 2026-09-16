@@ -2,7 +2,8 @@
 
 This adapter runs draft assignments in fresh, visible BB child threads. The coordinator enforces
 ordering, concurrency, dispatch and output limits, cancellation, result validation, integration,
-and exact-artifact review. It uses the existing specialist and outcome methods.
+exact-artifact review, at most one targeted correction, engagement briefs, and execution receipts.
+It uses the existing specialist and outcome methods. Child titles use the public specialist roster.
 
 ## Run a team
 
@@ -36,15 +37,35 @@ A minimal plan:
       "skills": ["write-copy"], "workflows": [], "knowledgeHandles": [], "dependsOn": ["ads"]
     }
   ],
-  "limits": { "concurrency": 2, "timeoutSeconds": 900, "maxAttempts": 1, "maxDispatches": 4, "maxOutputBytes": 16000 }
+  "presentation": {
+    "outcome": "the launch package",
+    "deliverable": "two ad variants and aligned landing copy",
+    "capabilities": [
+      { "id": "paid-media", "label": "paid media" },
+      { "id": "conversion-copy", "label": "conversion copy" }
+    ],
+    "specialists": [
+      { "assignmentId": "ads", "label": "Ads" },
+      { "assignmentId": "copy", "label": "Copy" }
+    ],
+    "evidence": ["supplied product facts"],
+    "review": "independent"
+  },
+  "limits": { "concurrency": 2, "timeoutSeconds": 900, "maxAttempts": 1, "maxDispatches": 6, "maxOutputBytes": 16000 }
 }
 ```
 
 Add product facts to the goal or pass allowed knowledge through the host API. The CLI does not
 resolve private knowledge. `maxDispatches` includes one parent integration assignment and one
-review assignment. The portable protocol supports arbitrary allowed outcomes with role `outcome`.
+review assignment. Leave two extra dispatches if a `revise` verdict should receive one targeted
+correction and one exact-digest re-review. The portable protocol supports arbitrary allowed
+outcomes with role `outcome`.
 The named roster covers ads, copy, dr-landing, saas-landing, data-diagnosis, campaign-data, and
-creative-assets. No new outcome library is created.
+creative-assets. Public titles look like `Conquistador: Campaign data`. No new outcome library is
+created. An optional `presentation` object on the plan is validated against that roster. Plans
+without it remain valid. The coordinator emits a compact engagement brief before the first dispatch
+and writes `conquistador.execution-receipt/v1` beside the integrated artifact. Receipt execution IDs
+and statuses come from the host. External actions stay empty and `humanAccepted` stays false.
 
 ## Embed in a host
 
@@ -53,6 +74,9 @@ coordinator API. A host declares `capabilities.isolatedContexts` and `maxConcurr
 `execute(packet, {signal})` returns `{executionId, isolated, result}`. Identity and isolation are
 host-owned fields; the result has the closed shape checked by `validateResult` in `contracts.mjs`.
 `createBbHost({projectId, environmentId, parentThreadId})` implements that callback using BB.
+Operator activation is separate: load `skills/conquistador/operator-profile.json` or call
+`loadOperatorProfile(root)` and `admitRequest(profile, {text}, hostSettings)`. Hosts may store
+`project` or `off` in their own settings. The package does not edit instruction files.
 
 Without isolation, provide `parent.execute` using the same contract. It must invoke the current
 parent context for each packet, including integration and review. The coordinator executes one
@@ -70,7 +94,9 @@ Four separate BB contexts have been observed completing a two-specialist draft, 
 review. The reviewer returned a real revision finding against the exact integrated digest. A
 separate host-driven same-context run completed with independent review false. These checks establish
 that the adapter executes and preserves review identity; they do not establish general output
-quality, native activation in other hosts, human acceptance or live-provider support.
+quality, native activation in other hosts, human acceptance or live-provider support. The operator
+brief/receipt path is covered by synthetic protocol tests in this source. This worktree did not
+observe a new live BB receipt run: specialist children share the implementation filesystem.
 
 BB workers share their environment's filesystem and available host tools. Conversation isolation
 is not an access-control sandbox. This adapter instructs workers to use supplied context and
