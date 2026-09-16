@@ -8,9 +8,10 @@ description: Coordinate elite growth, GTM, sales, marketing, product, and knowle
 Read [the operating contract](library/conquistador/SKILL.md) and follow it for the current task.
 The complete method library is bundled in `library/`. Select only the capabilities needed for
 the requested outcome. Users do not need to name, install or manage the individual methods.
-Prepare missing task prerequisites under the parent's setup standard and connect-accounts method;
-the agent handles routine package setup and Executor install help instead of handing it back to
-the user. Keep existing user instructions and approved scope; this entry point grants no new authority.
+Prepare only the prerequisites the task needs under the parent's setup standard. When missing
+live-account access blocks the task, follow connect-accounts: reuse permitted connections, help
+set up Executor if needed, verify the operation, and resume. Keep existing user instructions and
+approved scope; this entry point grants no new authority.
 
 For opt-in host-event reminders, read [proactive help](docs/PROACTIVE.md). Installation does not
 activate hooks, start a service, register a schedule, or send data.

@@ -1,117 +1,88 @@
-# Master agent and execution modes
+# One outcome, one reviewed deliverable
 
-Conquistador accepts one outcome and owns the finished result. It can assign parts of a multi-stage
-request to specialist roles that combine existing outcome skills, relevant project knowledge, and a
-named composition workflow. The parent integrates the work and returns one review packet.
+Conquistador helps with elite growth, GTM, sales, marketing, product, and knowledge work.
+Give it the outcome, source material, constraints, and destination. It selects the relevant methods,
+completes the work through your host, reviews the result, and recommends a next step.
+See [task examples](USAGE.md) for inputs and expected deliverables.
 
-A narrow request uses one role. A broader request uses the roles the work needs within explicit
-host and plan limits. The current coordinator caps concurrency at four and total dispatches at twelve,
-including integration and review. Each assignment has one goal, exact
-context, tools, dependencies, limits, and a verifiable finish state. Specialists cannot delegate or
-authorize consequential actions.
+Your host supplies the model, tools, project access, permissions, and any separate worker contexts.
+The method library does not supply a model or guarantee output quality. A narrow task can stay
+with the parent. A broader task can use specialists when your host supports them and permits it.
 
-## Execution modes
+## Choose an execution mode
 
-| Mode | Behavior | Availability |
+| Mode | What you get | Requirement or limit |
 | --- | --- | --- |
-| Direct | The parent performs a narrow assignment with the relevant outcome skill | Available in every complete install |
-| Specialist team | The BB adapter creates visible child threads, orders dependencies, integrates results and reviews the exact artifact | Implemented for BB with an explicit existing project, environment and parent |
-| Sequential team | A host callback runs the same packets in the parent context and labels review accordingly | Implemented by the coordinator with an explicit parent callback |
-| Fixed advisor/worker | One production role hands one artifact to one review role | Separate `squad` package; not the dynamic specialist team |
-| Runtime playbook | The optional runtime executes a declared graph | Limited to implemented runtime playbooks; it does not execute the general specialist team |
+| Direct | The parent completes a task with the relevant methods | Uses your host's model and tools |
+| Specialist team | Separate assignments, an integrated deliverable, and review of that exact artifact | The BB adapter needs an existing project, environment, and parent thread |
+| Sequential team | The parent runs assignments and review in sequence | Review is in the same context; the callable coordinator requires an explicit host callback |
+| Fixed worker and advisor | One production role hands an artifact to a review role | Separate `squad` package; the host must supply the contexts |
+| Runtime playbook | A declared sequence with saved state and draft artifacts | Explicit runtime setup; limited to four implemented playbooks |
 
-An independent review needs an isolated context. Sequential review must be identified as
-same-context. Installation or file discovery does not prove that a host created another agent.
+Independent review requires an isolated conversation context. A second pass in the parent's
+context must be labeled same-context review. Separate conversations can still share files and
+tools; isolation alone is not an access-control boundary. Installation does not prove that the
+host created a worker or activated the skill.
 
-Read `hosts/coding-agent/README.md` in the complete distribution or plugin/harness copy for the
-callable CLI and API. Compact method installs omit the executable adapter.
-`conquistador.agent-package/v2` declares the master contract. The original v1 schema remains
-unchanged, and `agents/conquistador/compatibility/v1.json` preserves the original single-agent
-package for older consumers. The specialist assignment/result protocol is separately versioned.
-Actual BB runs have exercised isolated workers, integration and exact-artifact review. A separate
-same-context run exercised fallback. Neither run granted human acceptance.
+The BB coordinator limits concurrency to four and total dispatches to twelve, including integration
+and review. Specialists receive bounded assignments and cannot delegate or authorize consequential
+actions. See the private [BB adapter reference](https://github.com/forsvn-labs/conquistador/blob/dogfood/0.1.0/hosts/coding-agent/README.md)
+for commands, host callbacks, cancellation, and observed execution limits. Recorded adapter runs
+do not establish general quality or human acceptance.
 
-## Installation surfaces
+## Know what your install contains
 
-| Surface | What is installed | Who runs specialists |
+| Install | What it contains | How work runs |
 | --- | --- | --- |
-| Coding-agent skill for Codex, Claude Code, Cursor, or Copilot | Parent, specialist contracts, and all 38 outcomes | The current coding agent, with native workers only when the host provides them |
-| Claude or Codex plugin | The same complete method tree; Claude also gets one native Conquistador agent | The native parent asks the host for worker contexts when available |
-| Agent Plugins client | The method tree declared by `plugin.json` | The client; the package format does not define a universal agent API |
-| Package-manager `harness` target | Portable master-agent JSON and the complete method tree | The consuming host adapter |
-| Package-manager `squad` target | Fixed worker and advisor JSON packages | The consuming host adapter, in separate contexts when supported |
-| Local MCP | Bounded listing and reading of method text | The MCP client model and its own agent system |
-| Runtime MCP bridge | Tools for implemented runtime playbooks and artifacts | The configured runtime; general specialist orchestration remains host-owned |
-| Eve or official Grok Bot package | Experimental instructions and packaged skills | Native execution and specialist delegation remain unverified |
+| Repository-root skills.sh install | The complete distribution, including all 38 outcome methods under `skills/` and the BB adapter | Your coding agent runs the selected methods; the adapter needs explicit host setup |
+| Managed compact skill install | The parent, methods under `library/`, contracts, and selected usage docs | Your host supplies execution; this copy omits the BB adapter |
+| Plugin or single-agent `harness` package | The complete method tree and BB adapter; the Claude plugin also has a native agent definition | The consuming host supplies model, tools, and worker contexts |
+| Fixed `squad` package | Worker and advisor role packages | The consuming host executes the handoff |
+| Local MCP | Tools to list and read bundled methods | The MCP client supplies the model and execution tools; no runtime service is required |
+| Runtime MCP bridge | Access to implemented runtime playbooks and draft artifacts | Explicit `mcp --url` and a configured runtime service are required |
+| Portable Eve or official Grok Bot package | Experimental instructions and packaged skills | Native import and specialist delegation remain unverified |
 
-A domain-specific host can restrict the available roster, skills, knowledge roots, and tools.
-`setup.mjs --domain ABS` writes `domain-restriction.json` next to a coding-agent, plugin, or
-harness install. The callable coordinator checks that file before loading assignments or dispatching
-workers, even when no additional authorizer callback is supplied. `createDomainAuthorizer(root)`
-is available to other consuming hosts. Parent integration uses `skills=[]`. An `outcome` assignment
-may load any skill in `allowed.skills`; the mandatory final review still requires `fresh-eyes-review`
-in the dependency closure. Local MCP does not read the restriction file; domain MCP is unsupported.
-No restriction file means the full package. Plugin and harness copies include
-`hosts/coding-agent/README.md`. Compact skill folders do not include that adapter; native BB
-dispatch needs the complete distribution or a plugin/harness copy that includes those modules.
-Compact skill installs filter the copied methods, but their consuming host must enforce the
-restriction file. Direct host filesystem and tool access is outside the coordinator's controls.
+The default repository-root skills.sh install is complete. Do not install only the nested parent
+folder. A managed compact copy is a different layout, and cannot run an adapter it does not contain.
+A standalone outcome install contains only that method and its required material.
 
-## Stack setup
+Use the private [installation guide](https://github.com/forsvn-labs/conquistador/blob/dogfood/0.1.0/INSTALL.md)
+for commands, updates, and removal. `setup doctor --path ABS` through the complete CLI checks local
+files against the manifest. It does not prove host activation, provider access, or task execution.
+Start a fresh host session and complete a bounded task to check actual use.
 
-Before adding a tool, Conquistador inspects what the project and host already use. The parent maps the
-task to an existing connector, MCP server, maintained CLI, warehouse, or operator-supplied Executor
-route. The catalog's `createStackSession` reads explicit host inventory, selects the exact extension,
-adapter and Connection, then applies operation, principal, data and budget limits. Missing routes
-return unsupported or connection-required. Writes require a separate human handoff.
+Advanced hosts can restrict methods, knowledge, and tools to a domain. The coordinator enforces
+its restriction file; other consuming hosts must enforce their own access. Local domain MCP is
+unsupported. See the private [platform guide](https://github.com/forsvn-labs/conquistador/blob/dogfood/0.1.0/docs/PLATFORMS.md)
+for domain installs, package compatibility, and host-specific activation.
 
-One bounded public repository metadata read has succeeded through the implemented Executor mapping.
-Its candidate-verification receipt does not establish supported provider status. Databricks,
-Confluence, HubSpot, vision and warehouse connections still need their own exact adapters and evidence.
-Credentials remain host-owned. Setup receipts contain identifiers and digests, without customer rows
-or credentials. Deadlines return unknown when a host ignores cancellation and retain the reservation.
+## Connect tools only when needed
 
-Recurring analytics should use an owned warehouse or durable export when available. Live provider
-interfaces remain appropriate for provider-only reads and approved writes. Authentication, new paid
-services, production permissions, and external actions remain human-owned.
+Start with supplied context and permitted connections. If live account access blocks the task,
+Conquistador helps set up Executor, hands sign-in to its UI, verifies one bounded authorized job,
+and resumes the deliverable. A binary check, gateway login, or MCP tool listing does not establish
+provider operation. Account setup does not authorize later sends, publishing, spend, or live writes.
 
-## Optional Executor connections and Eve jobs
+The private [integration guide](https://github.com/forsvn-labs/conquistador/blob/dogfood/0.1.0/docs/INTEGRATIONS.md)
+contains official Executor setup commands and the separate checks for local files, binary detection,
+discovery, and provider results. Credentials remain with their owner.
 
-The complete distribution provides `conquistador connections` for Executor install detection and an
-operator-owned gateway, and `conquistador jobs` for explicitly prepared Eve work. Use
-`connections setup` first. The parent skill helps a new user run the official Executor install and
-MCP connect through the host. The compact skill continues to use the coding agent's existing tools
-and the same official commands.
+Eve jobs and the Conquistador runtime are advanced, explicit choices. Installing skills starts
+neither service and enables no schedule. Eve preparation does not submit a job. The Conquistador
+runtime executes four declared playbooks, not arbitrary combinations of all 38 methods. See the
+private [runtime reference](https://github.com/forsvn-labs/conquistador/blob/dogfood/0.1.0/runtime/README.md)
+for model configuration, state, and execution limits.
 
-Executor holds provider credentials and enforces its configured policies. The coding host and Eve
-authenticate to Executor with scoped gateway access. Conquistador does not copy provider keys into
-scripts, assignments, or a second secret store. Gateway discovery does not prove provider access.
-The optional catalog callback currently covers only a reviewed GitHub repository metadata binding.
+## Optional feedback and follow-up
 
-An Eve job has one owner, its own state, and one coordinating parent. Preparation copies canonical
-methods; it does not install dependencies, start a service, submit a model turn, or enable a
-schedule. Worker and operator authority are separate. Credential setup, cost, and consequential
-actions keep their human decisions. See `docs/INTEGRATIONS.md` in the complete distribution for
-setup and evidence limits.
+Ask for a [visual preview](PREVIEW.md) when you need to review layout or annotate a change.
+Use [approved project memory](LEARNING.md) to retain useful facts or corrections. Automatic
+cross-run retrieval and global learning are absent.
 
-`conquistador integrations status` reports exact dependency pins. `check-updates` reads public npm
-release metadata without upgrading packages or granting new tools. The repository includes an
-optional daily release watch and local package compatibility checks. Production upgrades still
-need review, state recovery checks, and authorized live evidence.
+Ordinary use starts with your request. Optional [proactive advice](PROACTIVE.md) requires the host
+to deliver an event. The helper returns instructions; it does not create workers, schedule jobs,
+or perform external actions. Native Claude event delivery remains unverified.
 
-## Optional Conquistador mode and hooks
-
-Ordinary use starts when the user invokes Conquistador. No hook, daemon, schedule, or service is
-enabled by installation.
-
-A host may opt into Conquistador mode by routing selected task requests through the parent and by
-calling the included proactive helper for its three events: session start, before delivery,
-and results updated. The Claude adapter registers only session start and before delivery; results
-updated remains a generic helper event. The explicit Claude configuration lifecycle is documented in
-[Proactive advice](PROACTIVE.md); native event delivery remains unverified. The helper returns instructions. It does not create agents, schedule work, change
-accounts, or perform external actions. The host must deliver the event and decide whether to create
-specialist contexts for the resulting task.
-
-Keep runtime data, project knowledge, credentials, and finished work outside the installed package.
-Publishing, spend, sends, deployment, memory writes, and feedback disclosure keep their documented
-human decisions in every mode.
+Keep project knowledge, credentials, runtime state, and finished work outside the installed package.
+Publication, spend, sends, deployment, memory writes, and feedback disclosure retain their documented
+human decisions in every mode. Private Git links in this guide require repository access.

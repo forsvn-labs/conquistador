@@ -12,9 +12,10 @@ for the user's outcome. Users do not need to install or invoke them individually
 
 This directory is the complete distribution. Its optional runtime source does not need to run
 for the host to use these skills. Do not install dependencies, enable hooks or start services as
-a side effect of loading Conquistador. For a requested task, follow the parent's setup standard and
-connect-accounts method: help install Executor if it is missing, connect the user's stack through
-the host, and continue. The host supplies the model and permissions.
+a side effect of loading Conquistador. When missing live-account access blocks the requested task,
+follow the parent's setup standard and connect-accounts method. Reuse permitted connections, help
+set up Executor if needed, verify the required operation, and resume the task. The host supplies
+the model and permissions.
 
 Use [Lavish preview guidance](docs/PREVIEW.md) for visual review, [approved project learning](docs/LEARNING.md)
 for memory proposals, and [proactive help](docs/PROACTIVE.md) only when host events are enabled.

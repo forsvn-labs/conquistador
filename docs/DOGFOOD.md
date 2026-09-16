@@ -1,76 +1,73 @@
 # Private dogfooding
 
-Use this guide to check whether Conquistador works for your real tasks in your actual host.
-Start with one task you already need to finish. Record the result separately from package checks.
+Use one real task to check whether Conquistador helps in your actual host. Keep installation
+checks, observed behavior, and your acceptance of the result separate.
 
-## Get the private build
+## Install and check
 
-1. Follow [installation](../INSTALL.md#skills-recommended) using an authenticated account with
-   access to `forsvn-labs/conquistador`, branch `dogfood/0.1.0`, or a supplied private distribution.
-   Record the installed source commit or supplied package identity when available. A separate
-   source clone is not required for the default skill install.
-2. Install the complete entry point for your host. Check inventory in the intended scope.
-   Inventory and [setup doctor](../INSTALL.md#read-only-completeness-check) diagnostics do not
-   establish native activation or account operation. Start a fresh host session and select
-   Conquistador. Expect the host to discover the skill or namespaced plugin entry point.
-3. Use a request from [the usage guide](USAGE.md) with your own files. Expect a finished deliverable,
-   its evidence gaps and a next action. Check these yourself before marking the task accepted.
+1. Follow the [default skill installation](../INSTALL.md#skills-recommended). Use the complete root
+   bundle, an account with private repository access, and the project where you intend to work.
+2. Check the selected host and scope with `skills list`. Run the
+   [installation doctor](../INSTALL.md#read-only-completeness-check) if your distribution includes it.
+   Record missing files or stale paths before continuing. Older releases may need a newer complete
+   distribution to supply the doctor.
+3. Start a fresh host session and select Conquistador. Use a [task example](USAGE.md) with your own
+   facts and files. Expect a finished deliverable, evidence gaps, and a next action.
+4. Review the output yourself, then supply one correction or measured result. Check whether the
+   follow-up preserves the facts and fixes the problem.
 
-The agent can handle routine local setup, including helping install Executor and connecting the
-accounts a task needs. You handle account sign-in and host-required approvals. Text work from
-supplied context does not require Executor. Live CRM, warehouse, ads, or docs work does.
+The default installer already copies the complete library. A listing or passing doctor does not
+prove activation, independent review, useful output, or live account access. Those need their own
+observations. Record the exact source commit when available; otherwise keep the supplied build
+identity and mark the commit unknown.
 
-## Check the first tasks
+## Connect accounts only when needed
 
-| Exercise | What to inspect | Record separately |
-| --- | --- | --- |
-| Produce a launch or product deliverable | Correct use of context, finished work, useful review, unnecessary questions | Whether the host activated the method and whether you accepted the actual result |
-| Preview a visual deliverable | Reachable private link, one annotation returned through polling, source revision | Whether browser review worked in your host; a started server alone is insufficient |
-| Supply a correction or measured result | Revised recommendation, preserved facts, stated uncertainty | Whether the revision fixed the observed problem |
+Start with supplied context and existing permitted connections. If missing live access blocks the
+task, Conquistador should explain Executor, help set it up, guide account sign-in through its UI,
+verify the required operation, and resume. You should not need to know Executor beforehand.
+Follow [connection guidance](INTEGRATIONS.md); do not paste secrets into chat.
 
-Use [Lavish setup](PREVIEW.md) for previews and telemetry opt-out. The
-[proactive helper](PROACTIVE.md) is disabled by default and requires a real host event.
-These are behaviors to test, not proof already supplied by a ZIP, manifest or local fixture.
+A successful login or MCP discovery is not an account-operation result. Record those separately.
+Eve jobs, runtime playbooks, and proactive hooks are optional, explicit exercises. If your task
+needs visual feedback, use [Lavish preview](PREVIEW.md) and check that annotations return to the
+agent and affect the source.
 
-## Keep useful private notes
+## Keep a small private record
 
-Keep notes in your private project outside the installed package. A small record is enough:
+Save notes in your own private project, outside the installed product:
 
 ```text
-Build: exact source commit or supplied package identity
-Host: name, version, installation route and scope
-Task: request and selected source references
-Observed result: what happened, including any failure
-Correction: what changed in the request or output
+Build: source commit or supplied package identity; unknown fields marked
+Host: name, version, model, installation route and scope
+Checks: inventory, doctor, activation, and any account operation observed
+Task: requested outcome and relevant source references
+Result: what worked or failed, including evidence gaps
+Correction: what you asked to change and what happened
 Verdict: accepted, needs revision, or blocked, with a reason
-Next check: the smallest task that can confirm the correction
+Next check: the smallest task that can confirm the fix
 ```
 
-Store only the material needed to explain the observation. Do not automatically copy full
-transcripts, customer data or credentials. A source commit identifies what you tested; it does
-not imply that another host or later build will behave the same way.
+Keep only what explains the result. Do not collect whole transcripts, customer data, or credentials
+by default. An observation applies to that build, host, and task; it is not a general quality claim.
 
 ## Memory and feedback
 
-Corrections in the current task do not automatically become memory. The
-[memory workflow](LEARNING.md) requires approval for the exact entry and destination. Reuse through
-host file tools starts with at most five relevant entries and 8,000 characters of recalled text.
-Automatic cross-run retrieval, enforced project isolation and global learning are absent.
+A correction does not become memory automatically. Review the exact entry and destination before
+saving it through the [memory workflow](LEARNING.md). Automatic cross-run retrieval and global
+learning are absent.
 
-Keep product feedback as local redacted drafts during private dogfooding. `submit-feedback` may
-prepare a draft, but its public-destination requirement must not be relaxed to upload private
-notes. Memory approval is not permission to disclose feedback. Keep the draft local until you
-and the recipient agree on a private destination and the exact content to disclose. Drafting
-it does not send it anywhere.
+Keep product feedback as a local redacted draft. Agree on a private recipient, destination, and
+exact content before disclosure. The `submit-feedback` method's public-destination requirement
+must not be bypassed for private dogfood notes. Memory approval is separate from feedback consent.
 
 ## Update and retry
 
-Use the [installation owner's update procedure](INSTALL-REFERENCE.md#update-or-remove-an-installation).
-Record the new build identity and repeat the smallest task that exposed the problem. Keep the
-original observation so you can compare the revised result. Preserve user outputs outside the
-installed copy; uninstalling the product does not erase those files or runtime state.
+Preserve local edits and use the [original installer's update procedure](INSTALL-REFERENCE.md#update-or-remove-an-installation).
+Record the new build identity, check completeness, refresh the host, and repeat the smallest task
+that exposed the problem. Keep the original observation for comparison. Outputs and runtime state
+belong outside the installed copy and have their own retention rules.
 
-Keep the repository and installed copies private. The root package has `private: true`; local
-packing and installation remain available. Public packages, marketplace listings, repository
-visibility changes and artifact sharing need explicit authorization. No hosted SaaS, native
-Eve/Grok activation, live-provider support or release acceptance follows from these local checks.
+The repository and dogfood artifacts remain private. The npm package stays `private: true`.
+Local tests, package records, and doctor results do not grant public release or external-action
+authority. Publication, visibility changes, and artifact sharing require explicit authorization.

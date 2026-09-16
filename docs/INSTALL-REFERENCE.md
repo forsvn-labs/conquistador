@@ -1,9 +1,9 @@
 # Manual installation reference
 
 Start with the [recommended skill install](../INSTALL.md#skills-recommended). This reference keeps
-the direct commands for existing skills.sh installations, native managers, runtime operators and
-container users. Use the same
-owner to update and remove a copy. Both skill and plugin packages include all 38 outcome methods.
+the direct commands for local source copies, native plugin managers, runtime operators, and
+containers. Use the original installer to update and remove a copy. Full skill and plugin packages
+include all 38 outcome methods; domain and standalone method packages can contain fewer.
 
 Version 0.1.0 is private. The source is
 [forsvn-labs/conquistador, branch dogfood/0.1.0](https://github.com/forsvn-labs/conquistador/tree/dogfood/0.1.0).
@@ -13,8 +13,8 @@ ZIP if you do not have repository access. There is no public package to install 
 
 ## Let your coding agent do the setup
 
-Ask your existing agent to follow the quick start below for the current project. It can check
-prerequisites, obtain a clean source folder, install the entry point and check discovery. You handle
+Ask your existing agent to follow [INSTALL.md](../INSTALL.md) for the current project. It can check
+prerequisites, install the root bundle, and check discovery without a separate clone. You handle
 account sign-in, repository access and any host-required approval. Do not paste credentials into chat.
 Conquistador becomes usable after the host discovers it; it cannot install itself beforehand.
 
@@ -61,7 +61,7 @@ with your own path. Keep the source clone separate from the project receiving th
    DO_NOT_TRACK=1 DISABLE_TELEMETRY=1 npx --yes skills@1.5.26 add /absolute/path/conquistador-source --skill conquistador --copy
    ```
 
-   Do not add `--full-depth`, a `--skill` wildcard, or `--all`. Do not use the nested
+   Do not add `--full-depth`, `--skill '*'`, or `--all`. Do not use the nested
    `skills/conquistador` folder as the source.
 
    Choose your host when prompted. Expect an installation summary for `conquistador` in the project
@@ -80,8 +80,8 @@ with your own path. Keep the source clone separate from the project receiving th
    in [the usage guide](USAGE.md). The host may use `/conquistador`, `$conquistador` or a picker.
    A listing proves installation metadata; the first task checks actual host activation.
 
-The root install with skills.sh 1.5.26 carries the complete library of 38 outcomes; it is not a thin
-stub. See the [normal root payload](../INSTALL.md#inventory-and-installed-files) and
+The root install with skills.sh 1.5.26 carries the complete library of 38 outcomes.
+See the [normal root payload](../INSTALL.md#what-successful-installation-means) and
 [completeness check](../INSTALL.md#read-only-completeness-check). Do not install only the nested
 `skills/conquistador` folder or use `--full-depth`; the parent needs its bundled methods.
 The agent selects the methods for each request.
@@ -98,9 +98,9 @@ checked before installation.
 
 ## Optional private release ZIP
 
-The private `v0.1.0` prerelease is available to accounts with repository access. Its frozen ZIP
-predates the guided setup command. Use this manual reference for that artifact, or clone the
-current dogfood branch for guided setup. Choose a fresh download directory:
+This subsection documents the original private `v0.1.0` archive. Its frozen ZIP predates guided
+setup and the installation doctor. Use this manual reference for that artifact, or a newer
+complete distribution for diagnostics. Choose a fresh download directory:
 
 ```sh
 gh release download v0.1.0 --repo forsvn-labs/conquistador --pattern conquistador-0.1.0.zip --dir /absolute/path/conquistador-download
@@ -364,6 +364,7 @@ release records. A package or install receipt is not live-provider evidence or r
 | The skill is in the wrong project or scope | Remove it through the original installer in that scope, then install from the intended project for the intended host |
 | Conquistador appears in the install summary but not in the host | Confirm the project and selected host, then start a fresh session; check the plugin namespace if applicable |
 | The parent cannot find a method | Use the [read-only completeness check](../INSTALL.md#read-only-completeness-check) from the complete CLI, preserve edits, and reinstall the root bundle; do not copy the nested parent alone |
+| Managed MCP has an unchanged receipt but will not start | Run `setup doctor --path ABS` from a complete distribution to check its saved Node/package paths; restore the source or recreate the connector, then update the client registration if needed |
 | The compact helper reports `Destination exists` | Choose a new directory, or use `upgrade` only for an unchanged helper-owned install |
 | The helper reports modified files or a differing receipt | Preserve the edits and stage a new directory; do not alter the receipt to force replacement |
 | Runtime configuration or model access fails | Follow `doctor` diagnostics and the runtime guide; verify the configured credential environment variable through the host's secret settings |

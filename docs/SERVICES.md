@@ -1,102 +1,94 @@
-# What Conquistador provides
+# What Conquistador helps you deliver
 
-Conquistador is a master agent for elite growth, GTM, sales, marketing, product, and knowledge
-work. Users ask the parent for an outcome; it owns specialist assignment, method selection,
-composition, integration, review, and the next useful step. When the work needs the user's live
-systems, it helps install Executor and connect that stack. A host supplies the model, available
-agent contexts, tools, project access, and permission controls. Conquistador is not currently a
-hosted SaaS service.
+Conquistador brings 38 outcome methods to elite growth, GTM, sales, marketing, product, and
+knowledge work. Give the parent a result to produce. It selects methods, uses specialists when
+appropriate and available, integrates the work, reviews it, and proposes a next action.
+Your host supplies the model, tools, project access, and permissions.
 
-## Outcomes and benefits
+This is a private dogfood build, not a hosted service or a guarantee of business results.
+[Start with a task](USAGE.md) or use the [installation guide](../INSTALL.md).
 
-| Need | Work Conquistador can help produce |
+## Useful deliverables
+
+| Your need | Expected work | What the work depends on |
+| --- | --- | --- |
+| Set product or GTM direction | Initiative scope, audience definition, positioning, pricing, packaging, and decision review | Product facts, customer evidence, constraints, and labeled assumptions |
+| Prepare a launch | Campaign plan, landing-page copy, launch email, creative brief, and measurement plan | A defined offer, audience, channels, budget, and approval boundaries |
+| Support sales | Outreach drafts, offer messaging, and supporting content | Verified claims and permitted account context; sending requires authorization |
+| Improve growth or conversion | Funnel diagnosis, search visibility review, revised copy, and a bounded experiment | Supplied results or authorized data access; attribution limits remain explicit |
+| Produce content and creative work | Brand direction, briefs, social posts, long-form copy, video drafts, and event plans | Current sources and the required media tools; a draft does not prove a rendered or published asset |
+| Build or document a product | User flows, interface specifications, requested web/iOS implementation, and technical documentation | Source access, development tools, and relevant verification |
+| Review results and retain learning | Artifact critique, campaign assessment, next experiments, and approved project notes | Observed evidence and separate consent for durable memory |
+| Report product feedback | A redacted issue draft for your review | Opt-in disclosure and exact-payload consent before submission |
+
+Expect a usable deliverable, evidence or labeled assumptions, and one next action. Missing inputs
+should produce a clear gap or a bounded draft. They must not become invented research, account
+results, or execution claims. No method guarantees revenue, conversion lift, rankings, or acceptance.
+
+## What comes with ordinary use
+
+The parent and outcome methods guide your existing agent. You do not need to configure every
+optional tool before starting. Conquistador first uses supplied material and permitted connections.
+If a missing local prerequisite can be prepared within host permissions, it can do that work.
+If live account access blocks the task, use the [Executor connection path](INTEGRATIONS.md).
+
+A complete install includes all 38 methods. A domain or standalone install can contain fewer.
+The repository-root skills.sh copy includes the full distribution. Managed compact installs use
+`library/` and omit the BB adapter. Plugin and single-agent harness copies include it. See
+[master-agent modes](MASTER-AGENT.md) and [platform details](PLATFORMS.md) for execution differences.
+
+Separate host contexts allow independent review. A review in the parent's context is a same-context
+pass and must be labeled that way. A local install check cannot establish either form of execution.
+
+## Optional capabilities
+
+| Option | What it adds | Actual limit |
+| --- | --- | --- |
+| [Lavish visual preview](PREVIEW.md) | HTML previews and annotations tied to requested changes | Requires the optional CLI, a reachable browser, and active host polling |
+| [Project memory](LEARNING.md) | Approved facts and corrections saved for later use | Requires host file tools and exact consent; no automatic retrieval service or global learning |
+| [Local MCP](PLATFORMS.md#mcp) | Method listing and reading over stdio | The client still supplies the model, tools, and execution |
+| [Proactive helper](PROACTIVE.md) | Advice at session start, before delivery, or when results change | The host must deliver events; the helper starts no background work |
+| [Executor](INTEGRATIONS.md) | Access to authorized account operations through configured connections | Discovery and login do not prove provider operation or expand catalog support |
+| [Eve jobs](../hosts/eve/README.md) | Explicitly prepared work with separate session state | Requires an owner, model, running service, policies, and operator authority |
+| [Conquistador runtime](../runtime/README.md) | Saved execution state and draft artifacts for four playbooks | Requires explicit setup; it does not execute all 38 methods as arbitrary jobs |
+| [Typed catalog](../catalog/README.md) | Narrow operation contracts, budgets, authorization checks, and receipts for integrators | Entries and fixture-tested adapters are not turnkey live connections or support claims |
+| [Eval Lab](../evals/README.md) | Repeatable local checks and grading contracts for developers | Synthetic examples do not establish real-task quality or human acceptance |
+
+Installation enables no daemon, customer schedule, unattended publishing, spending, or feedback
+submission. Publishing, sends, paid services, account changes, and deployment retain their applicable
+human decisions. Ordinary work can proceed without Eve or the runtime.
+
+## Runtime coverage
+
+The optional runtime implements these four playbooks:
+
+| Playbook | Declared work |
 | --- | --- |
-| Product and strategy | Initiative scope, user journeys, pricing, packaging, prioritization and decision reviews |
-| Research and positioning | Audience and market research, channel selection, content opportunities and evidence review |
-| Launch and growth | Campaign plans, funnel models, budget allocation, diagnosis and measurement plans |
-| Creative and content | Brand direction, briefs, copy, social posts, outreach, long-form work, short-form video and event plans |
-| Search and conversion | Search/answer visibility review, conversion audits and testable improvements |
-| Engineering | Interface specifications, architecture, web/iOS implementation and technical documentation |
-| Review and learning | Artifact critique, campaign evaluation, measured next steps and approved durable learning |
-| Product feedback | Opt-in redacted issue drafts with exact-payload consent before any submission |
+| `content-intelligence-loop` | Content and signal work through a declared sequence |
+| `creative-production-review` | Brief, short-form production draft, vision-review handoff, integration, and review |
+| `paid-search-split-landing` | Search campaign, separate direct-response and SaaS landing copy, integration, and review |
+| `campaign-money-events` | Data-read handoff, event contract, diagnosis, campaign assessment, and review |
 
-These methods work on supplied context and available host tools. Current research needs access to
-current sources. Video analysis needs its declared media/provider setup. Building an app needs the
-relevant development tools. Publishing, spend and account changes need authorized connections.
-Conquistador prepares missing local prerequisites through the host when permitted. It names remaining
-account, tool or input gaps rather than inventing observations or execution.
+These graphs reuse the method library. Other method requests remain host work or guidance unless
+an executable graph exists. Missing model execution pauses the run. Missing vision or campaign data
+requires an explicit handoff, not invented inspection or rows.
 
-The [usage guide](USAGE.md) pairs concrete requests with expected deliverables. You provide the
-outcome, facts, access and decisions. Conquistador handles method selection, routine local tool
-setup, production and review through the host. The parent contract requires a usable deliverable,
-evidence or labeled assumptions, and one next action. It does not guarantee performance lift.
+The built-in served model adapter cannot browse, edit files, or call external tools. An embedding
+host can add a constrained operation bridge. Runtime MCP can start supported work and read draft
+artifacts; it cannot approve or publish them. The [runtime reference](../runtime/README.md) covers
+configuration, recovery, and authority boundaries.
 
-## What the tools add
+## Read evidence at the right level
 
-| Tool or method | Practical benefit | Implementation boundary |
-| --- | --- | --- |
-| Parent routing, specialist roles and 38 outcome methods | One request can produce a coherent package without manually selecting each method or agent | Bundled contracts guide the host model; the host creates isolated contexts when available |
-| Review contracts | The result includes defects, uncertainty and recheck needs before you use it | Independent review needs separate host contexts; a same-context pass must be identified |
-| Lavish AXI | You can point to a visual change instead of describing its location in chat | The host runs the optional CLI and polls; the agent applies annotations to the source |
-| Private project memory workflow | Approved facts and corrections can be reused in a later task | Host file tools and explicit consent are required; no automatic retrieval service |
-| Local MCP | Gives an MCP host access to the complete method library through stdio | Lists and reads bundled text; host supplies the model and execution tools |
-| Runtime bridge | Supported playbook work has persisted state and readable draft artifacts | Explicit `mcp --url` requires service/model configuration; its tools cannot approve or publish |
-| Typed catalog | Integrators can constrain operations, budgets and authority | A catalog entry or fixture-tested adapter does not provide a live connection or support claim |
-| Eval Lab | Developers can define repeatable local checks and grading contracts | Synthetic examples cannot establish real-task quality or human acceptance |
+`setup doctor` checks local installation completeness. `connections setup` detects the Executor
+binary. A connection probe checks MCP discovery. Only an observed, authorized operation can show
+what happened in a live account. None alone establishes general provider support or human acceptance.
 
-## Platforms
+Local tests, synthetic fixtures, and package records do not prove native host activation, live
+provider operation, or business results. Portable Eve and official Grok Bot packages remain
+experimental; native import and delegation are unverified. See [implementation status](../PROGRESS.md)
+for recorded checks and [private dogfooding](DOGFOOD.md) for first-use guidance.
 
-Start with [installation](../INSTALL.md). Direct skills, host plugins and local MCP avoid a manual
-clone. Managed setup remains available for owned local copies and their lifecycle. The [platform guide](PLATFORMS.md) keeps native manager
-commands and advanced connections separate from the default coding-agent skill.
-
-### Implementation and activation
-
-| Platform or module | Shipped implementation | Activation and limits |
-| --- | --- | --- |
-| Coding agent | One root skill with all 38 outcomes | Install directly with skills.sh or use managed setup; refresh host discovery |
-| Claude/Codex plugins | Repo-local marketplaces, methods and icon; one native Claude agent | Host plugin support and activation required; no central listing or universal alias claim |
-| Agent Plugins 1.0.0 | Root `plugin.json` and fixed `skills/` discovery | Compatible client required; hooks and native agents are host-specific |
-| Portable master-agent harness | Parent role, specialist contracts and all declared methods | Host supplies agent execution and any worker contexts; no service starts on install |
-| Advisor/worker harness | Separate role packages and review handoff | Independent review requires separate host contexts |
-| MCP | Default stdio method list, resource list and text read; optional runtime bridge with `--url` | Local mode uses host model/tools without service credentials; bridge mode requires a configured HTTP service |
-| HTTP and terminal | Durable supported playbooks, structured chat and review boundaries | Node 24, model configuration and separate human authority |
-| Local proactive helper | Opt-in event-to-instruction output | Host must invoke and deliver it; no daemon, scheduler or automatic external action |
-| Visual review | On-demand Lavish AXI setup, HTML previews and annotations | Agent prepares a cached CLI with telemetry disabled; reachable browser and active polling required |
-| Typed catalog | Seventeen operation contracts, adapters and a host-injected bridge | Exact support evidence and connection authority gate dispatch; not turnkey live support |
-| Eval Lab | Source SDK, graders, schemas and local examples | Synthetic checks by default; real evaluations need authorized providers, budgets and human review |
-| Executor connection helper | Configuration draft, operator UI handoff, bounded MCP discovery, and an exact GitHub metadata callback | Optional package, scoped gateway bearer and reviewed provider binding required; discovery is not provider proof |
-| Eve durable jobs | Optional app preparation and explicit session commands using the canonical methods | Separate owner, model, service, Executor policies and operator approval required; no service starts on install |
-| Portable Eve and official Grok Bot | Experimental staging contracts | Native import and specialist delegation unverified; separate from the optional Eve runtime |
-
-The optional runtime currently has a declared content-intelligence playbook. Other skill routes
-remain host methods or guidance unless a corresponding executable graph is supplied and validated.
-The built-in served model adapter does not browse, edit files or call external tools. An embedding
-host can add the typed operation bridge through its own authenticated Executor connection.
-
-For task setup, the parent checks existing CLI, MCP, warehouse, and Executor routes first. It assigns
-only the verified interface needed for the task. Tool discovery and login do not prove that an
-external operation succeeded.
-
-See [accounts and durable jobs](INTEGRATIONS.md) for credential custody, explicit activation, pinned
-dependencies, and upstream release monitoring. These optional hosts do not expand catalog support.
-
-## Proactive responsibilities
-
-When the user invokes Conquistador, it should notice missing context, choose the relevant methods,
-carry useful work to completion, review the result and propose the next justified action. It should
-not ask the user to manage its internal skill selection.
-
-Outside an active request, proactive behavior needs an explicit host event. The optional
-[helper](PROACTIVE.md) offers session-start, before-delivery and results-updated guidance. A reminder
-is not execution or authority. No customer scheduling, unattended publishing, automatic spending,
-telemetry or unsolicited feedback submission is included.
-
-## Repository layout
-
-The repository identity is [forsvn-labs/conquistador](https://github.com/forsvn-labs/conquistador).
-The product remains private during dogfooding. Install from private Git branch `dogfood/0.1.0` through the chosen manager, or use a clone or private distribution. The account must have repository access. [The dogfood guide](DOGFOOD.md) covers actual host use.
-
-Internal research, planning, provenance and source-history preservation belong outside this product
-repository. They are never runtime dependencies. The landing site is a separate project and does
-not need its source shipped with the product. See [installation](../INSTALL.md) for setup and update/removal ownership.
+Keep installed copies and dogfood artifacts private. Store credentials, customer material, project
+knowledge, and finished work outside the product repository. Use the
+[installation guide](../INSTALL.md) for updates and removal through the original installer.

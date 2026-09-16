@@ -2,7 +2,7 @@
 
 Start with [installation](../INSTALL.md). This page contains the details for the one host you
 selected. Installing files, registering a host and running a real task are separate checks.
-[Master-agent modes](MASTER-AGENT.md) explains which surfaces can run isolated specialists and which
+[Master-agent modes](MASTER-AGENT.md) explains which installations can run isolated specialists and which
 use the sequential fallback.
 
 ## Coding agents, recommended
@@ -22,7 +22,7 @@ Managed setup uses the project's host-specific folder:
 | Cursor | `cursor` | `.cursor/skills/conquistador` |
 
 After setup, start a fresh host session and select Conquistador. Invocation may use `/conquistador`,
-`$conquistador` or the host's skill picker. A local receipt proves which files were prepared;
+`$conquistador` or the host's skill picker. A local receipt records the prepared file digest;
 it does not prove host discovery or task quality.
 
 The installed parent can assign bounded work to native agents or workers when the selected host
@@ -32,6 +32,11 @@ When a host has no isolated worker context, the parent runs the same specialist 
 Run `setup.mjs status`, `update` or `uninstall` with that exact folder as `--path`. Setup refuses
 modified or unowned folders. It leaves project outputs alone. If you used skills.sh instead,
 use its [own lifecycle](INSTALL-REFERENCE.md#update-or-remove-an-installation).
+
+For file completeness, use `conquistador setup doctor --path ABS [--json]` from a complete
+distribution that includes the command. It checks the library and available identity; `setup status`
+checks managed receipt integrity. Neither checks activation. See the
+[doctor instructions](../INSTALL.md#read-only-completeness-check), including older-release limits.
 
 Folder references: [Codex](https://learn.chatgpt.com/docs/build-skills),
 [Claude Code](https://code.claude.com/docs/en/skills),
@@ -161,10 +166,11 @@ want an already defined host-specific parent instead.
 
 A domain-specific adapter may restrict the roster, knowledge roots, tools, and outcome methods.
 Pass `--domain ABS` on coding-agent, plugin, and harness installs to write `domain-restriction.json`.
-The load-time authorizer is `createDomainAuthorizer(root)` from `tools/domain-package.mjs`. It is
-automatic whenever that file is present. An `outcome` assignment authorizes listed skills against
-that allowlist; MCP stdio does not. Compact skill installs do not copy `hosts/coding-agent/`;
-use the complete distribution or a plugin/harness folder for native dispatch.
+The callable coordinator uses `createDomainAuthorizer(root)` from `tools/domain-package.mjs` to
+check that restriction before loading or dispatching. An `outcome` assignment checks listed skills
+against the allowlist; MCP stdio does not. Other consuming hosts must enforce their own access
+boundaries. Compact skill installs do not copy `hosts/coding-agent/`; use the complete distribution
+or a plugin/harness folder for native dispatch.
 
 To remove a harness, detach it in your host adapter, then uninstall its prepared directory through
 setup. Separate host contexts are required for independent review. A same-context fallback must
@@ -174,8 +180,8 @@ be identified. Host credentials, task outputs and external state are not install
 
 The complete distribution offers `conquistador connections setup` and `conquistador jobs --help`.
 `connections setup` inspects whether Executor is installed and prints official next steps. It does
-not itself install a package or start a service. The parent skill runs those official commands
-through the host when helping a new user. Read [accounts and durable jobs](INTEGRATIONS.md) for
+not itself install a package or start a service. The parent helps run those official commands
+through the host when missing live access blocks a task. Read [accounts and durable jobs](INTEGRATIONS.md) for
 setup, credential boundaries, and update checks.
 
 ## Portable Grok Bot and Eve packages

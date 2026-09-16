@@ -1,191 +1,128 @@
 # Use Conquistador
 
-Describe the result you need and supply the relevant project context. Conquistador selects the
-methods and specialist roles, produces one integrated result, reviews it, and gives you a next action.
-All 38 outcome methods are included in the complete Conquistador install. A standalone method install
-contains only that method; the examples below assume the complete entry point.
+Ask for the result you need. Conquistador selects the relevant methods, produces one integrated
+deliverable, reviews it, and gives you a next action. The complete install includes all 38 methods;
+you do not need to learn their names or invoke them separately.
 
-If the work needs HubSpot, Databricks, ads, or another live system and that route is missing,
-Conquistador should help install Executor, connect this host over MCP, and add only the sources
-the task needs. You sign in inside Executor's UI. You do not need to already know Executor.
-
-Your coding-agent host supplies the model, file access, tools and permission controls. Use
-`/conquistador`, `$conquistador`, the host's skill picker, or `/conquistador:conquistador` for the
-Claude plugin. Portable agent packages need a host adapter before they can run.
+Your coding-agent host supplies the model, file access, tools, and permissions. A standalone method
+install contains only that method. The examples here assume the complete entry point.
 
 ## Give it a task
 
-A `skills list` result is an inventory check. Start a fresh host session after installation and
-use a real task to check activation. For the wrong project or scope, missing files, or a stale
-session, follow [installation recovery](https://github.com/forsvn-labs/conquistador/blob/dogfood/0.1.0/INSTALL.md#recovery). The complete CLI can run a
-[read-only completeness check](https://github.com/forsvn-labs/conquistador/blob/dogfood/0.1.0/INSTALL.md#read-only-completeness-check); skill installation
-does not add that CLI to your PATH or verify account operations.
+After installation, start a fresh session in the receiving project. Select `/conquistador`,
+`$conquistador`, or the host's skill picker. The Claude plugin uses `/conquistador:conquistador`.
+A skill listing checks inventory; the installation doctor checks local files. This first task
+checks whether the host can actually use Conquistador.
 
-1. Select Conquistador in your host. If it is missing, check installation scope and start a fresh
-   host session. Installation is complete only when your host can discover and use the entry point.
-2. State the outcome, intended audience, relevant files, constraints and desired output. Use paths
-   your host can read. Say whether you want a specification, implementation or draft for review.
-3. Review the deliverable and its evidence gaps. Reply with a correction or the next authorized
-   step in the same thread. You do not need to select another method.
+Include the outcome, audience, available facts or files, constraints, and output you want. Say
+whether you need a draft, specification, or implementation. Use paths the host can read, or paste
+relevant context. Keep outputs outside the installed product folder.
 
-For a multi-part request, Conquistador decides whether specialist assignments can run independently
-or must follow a dependency. A host with agent or worker contexts may run independent assignments at
-the same time. Other hosts use the sequential fallback. You receive one integrated result in either
-case. See [master-agent modes](MASTER-AGENT.md).
+Conquistador should ask only when missing information changes the result or needs your authority.
+It should finish useful work with available evidence and identify what remains blocked.
 
-The examples below are task templates and expected deliverables, not recorded successful runs.
-Replace the example paths and details with your own. Keep outputs in your project, outside the
-installed product. No runtime service, MCP server or provider account is needed for text work
-based on supplied context and your host's model.
+For missing skills, wrong scope, or stale sessions, see
+[installation and recovery](https://github.com/forsvn-labs/conquistador/blob/dogfood/0.1.0/INSTALL.md).
 
 ## Prepare a beta launch
 
-Supply a product description, audience, current offer and any approved claims:
+Supply the product, audience, offer, and approved claims:
 
 ```text
-/conquistador Use docs/product.md and docs/audience.md to prepare a beta launch
-for our appointment tool for independent tutors. Deliver landing-page copy,
-one launch email and a two-week campaign plan in docs/launch/. We have no
-customer testimonials yet. Use email and our existing community only.
-Keep all work as drafts for review.
+/conquistador Use docs/product.md and docs/audience.md to prepare our beta
+launch. Deliver landing-page copy, one launch email and a two-week campaign
+plan in docs/launch/. We have no testimonials yet. Use email and our existing
+community only. Mark claims that need evidence. Keep this as a draft.
 ```
 
-Expect paste-ready copy, a campaign plan with asset requirements and owners, a schedule, and a
-measurement plan with a decision date. Claims without evidence should be marked for review.
-Conquistador should carry the same audience and promise through the copy and plan. You review
-product truth and decide when to publish or send.
+Expect finished copy and a plan with asset requirements, owners, timing, and measurement. The page,
+email, and plan should use the same audience and promise. You verify product truth and decide
+whether to publish or send. This example is a template, not a recorded successful run.
 
 ## Improve an onboarding flow
 
-Supply the current flow, observed problems and access to the code if you want implementation:
+Supply the current behavior and code if you want an implementation:
 
 ```text
 /conquistador Review docs/onboarding.md and the signup flow in this project.
-Users report losing entered details after a validation error. Trace the current
-behavior, fix the error recovery, and verify the change with the relevant tests.
-Deliver the local code change and a short before/after explanation. Ask only
-if a product decision cannot be inferred. Do not deploy.
+Users lose entered details after a validation error. Trace the behavior, fix
+the error recovery, and run the relevant tests. Deliver the local change and
+a short before/after explanation. Do not deploy.
 ```
 
-Expect a diagnosis tied to the code, the requested local change and verification results.
-Conquistador should distinguish checks it ran from checks it could not run. A proposed conversion
-benefit remains a hypothesis until observed results support it. For a specification-only task,
-replace the implementation request with "deliver the revised flow and acceptance criteria."
+Expect a diagnosis grounded in code, the requested change, and checks that actually ran.
+For a specification only, ask for the revised flow and acceptance criteria. A conversion benefit
+remains a hypothesis until you measure it.
 
 ## Turn results into a next experiment
 
-Supply aggregate results, their definitions, observation window and known confounders:
+Supply results, definitions, dates, and known confounders:
 
 ```text
 /conquistador Review docs/campaign-results.md against docs/campaign-plan.md.
-Decide what to keep, drop and test next. The results cover the last two weeks;
-we changed the audience halfway through. Deliver a recommendation and one
-experiment brief. Do not claim the copy caused the change in conversion.
+Decide what to keep, drop and test next. The results cover two weeks; we changed
+the audience halfway through. Deliver a recommendation and one experiment brief.
+Do not claim the copy caused the change in conversion.
 ```
 
-Expect a decision tied to the supplied evidence, attribution limits and one test with a hypothesis,
-primary measure, guardrails, observation window and stop or continue rule. Missing denominators
-or incompatible periods should remain gaps. You supply actual measurements; Conquistador must
-not invent them or describe a proposed test as an observed result.
+Expect evidence-linked decisions and a test with a hypothesis, measure, observation window, and
+stop or continue rule. Missing denominators and incompatible periods should remain explicit gaps.
 
 ## Use your existing stack
 
-Name the systems that contain the useful context when the repository does not already show them:
+Name the systems only when they contain information needed for the task:
 
 ```text
 /conquistador Prepare our next paid-search test. Campaign history is in
-Databricks, the offer notes are in Confluence, and qualified customers are in
-HubSpot. Reuse the connections and command-line tools this host already has.
-Create account-ready drafts only. Do not spend or enable a campaign.
+Databricks, offer notes are in Confluence, and qualified customers are in HubSpot.
+Reuse the permitted connections this host already has. Create drafts only.
+Do not spend or enable a campaign.
 ```
 
-Conquistador should inspect existing host connectors, MCP servers, maintained CLIs, warehouse access,
-and Executor routes before adding a tool. If Executor is missing, it should walk a new user through
-the official install (`npm install -g executor`, then `executor install` and `executor web`), MCP
-connect, and the first needed source, then continue the task. Account sign-in, new paid services,
-and production writes remain human-owned.
+Conquistador first checks the available tools and connections. Work based on supplied files needs
+no account setup. If missing live access blocks the task, it explains Executor, helps install it
+or use Cloud, connects the host, and guides you through adding the needed source. You sign in in
+the service UI. Never paste credentials into chat.
 
-## Write documentation people can follow
+The agent then verifies the specific account operation and resumes the original task. Finding an
+MCP server does not prove a warehouse query or CRM read works. Naming a vendor does not establish
+runtime adapter support. Existing connections remain subject to host policy, including any
+Executor-only rule. [Connection guidance](https://github.com/forsvn-labs/conquistador/blob/dogfood/0.1.0/docs/INTEGRATIONS.md)
+contains the official setup commands and limits.
 
-Supply the code and name the reader's job:
+## Review and continue
 
-```text
-/conquistador Update README.md and docs/setup.md for a new developer using this
-checkout. Check commands against the scripts and configuration. Include a quick
-start, expected results and recovery for common setup errors. Report what you
-verified and what still needs a real account or host check.
-```
+Check the deliverable against your facts, audience, and constraints. Conquistador should explain
+material choices, mark assumptions, and distinguish completed checks from unverified work. For
+larger tasks, it may use isolated specialists when the host supports them, or work sequentially.
+Same-context review is not independent review. See [execution modes](MASTER-AGENT.md).
 
-Expect documentation grounded in the current code, usable commands with prerequisites, and an
-honest verification report. Conquistador should preserve the requested file scope. A documentation
-request does not authorize changes to deployment, accounts or publication.
+Reply in the same thread with a correction or the next authorized step. For example: "The offer
+is a paid pilot. Revise the page and email." You do not need to select another method. Approval
+of a draft does not authorize publication, spending, sends, or other external writes.
 
-## Review a visual deliverable
+For visual feedback, ask Conquistador to preview the deliverable in Lavish and apply your
+annotations. [Preview guidance](PREVIEW.md) explains the optional tool and private access needs.
+If a reachable private preview is unavailable, review the source in chat.
 
-After Conquistador produces a page, brief or other visual work, ask:
+## Memory and private feedback
 
-```text
-/conquistador Preview this deliverable in Lavish and apply my annotations to
-its source. Keep the preview private and keep the source file canonical.
-```
+Corrections apply to the current task. Saving them for later needs approval of the exact memory
+entry and destination. [Memory and learning](LEARNING.md) explains the host-file workflow;
+automatic cross-run retrieval and global learning are absent.
 
-The agent prepares the optional Lavish CLI, starts a preview and polls for annotations. You open
-the reachable browser link and mark changes; the agent revises the source and preview.
-A remote host needs authorized private port access. If that is unavailable, review the source
-in chat. Hosted sharing requires separate permission. [Preview setup](PREVIEW.md) explains the
-launcher, telemetry opt-out and polling. Text-only work needs no preview tool.
-
-## Who does what
-
-| You provide or decide | Conquistador handles through the host |
-| --- | --- |
-| The outcome and available project context | Selects the smallest set of methods and specialist roles needed for the result |
-| Product facts, audience constraints and corrections | Grounds claims in supplied or authorized sources and labels assumptions |
-| The desired deliverable and destination | Produces the requested work, reviews it and reports remaining gaps |
-| Account access and host-required approvals | Reuses the existing stack and prepares the narrow missing interface when permitted |
-| Permission for publication, spend or external writes | Prepares a reviewable result and pauses at the applicable action boundary |
-| Approval for a specific memory entry or feedback disclosure | Previews the exact content and destination before the approved write |
-
-Conquistador should ask only when missing information changes the result or needs your authority.
-It should complete useful work with the available context and identify any remaining dependency.
-It cannot supply credentials, grant itself account access or make a missing integration work by
-claiming that it ran.
-
-## Continue, correct and remember
-
-Reply in the same thread with a concrete correction, such as "The offer is a paid pilot, not a
-free trial. Revise the page and email." Conquistador should apply that correction to the current
-work. Accepting a revision does not automatically save it as durable memory.
-
-For later use, ask it to propose a private project memory entry. Review the exact entry and
-location before saving. The host can read relevant approved entries on a later request; automatic
-cross-run retrieval and global learning are absent. The documented working limit starts with at
-most five entries and 8,000 characters of recalled text. It is a context guideline, not an enforced
-retrieval system. See [memory and learning](LEARNING.md).
-
-Keep private dogfood feedback as a local redacted draft. The `submit-feedback` method requires a
-verified public destination for submission, so it must not upload private notes by bypassing that
-requirement. Feedback disclosure is separate from memory approval. No transcript collection or
-feedback upload happens automatically.
+Keep dogfood feedback as a local redacted draft. No transcript collection or upload happens
+automatically. The `submit-feedback` method requires an approved, verified public destination;
+do not bypass that requirement to upload private notes. A private feedback handoff needs its own
+agreed destination and exact content. Memory approval does not authorize disclosure.
 
 ## Optional tools and limits
 
-The optional runtime runs declared playbooks and stores run artifacts. It does not execute every
-method. Default MCP provides local method access using your host model and tools. Explicit `mcp --url`
-provides run, artifact-list, artifact-read and cancel access to that configured runtime;
-it grants no human approval or publishing authority. Its built-in model adapter has no browser,
-file-editing or external action tools.
+Text work based on supplied context needs only your host and the installed methods. Plugins and
+MCP offer other ways to load the library. The runtime executes four declared playbooks, not every
+method. Eve jobs and [proactive hooks](PROACTIVE.md) require explicit setup; ordinary installation
+starts neither a service nor a schedule.
 
-The [proactive helper](PROACTIVE.md) returns advice for selected host events. It is disabled by
-default and cannot schedule or execute work. Some compact packages include its guide without the
-helper executable. Your host must invoke it and deliver the advice for it to affect a task.
-
-Build, runtime setup, packaging and installation-helper commands require the complete distribution.
-They are not commands for a compact skill or agent folder. Get the complete installation guide
-from the private [dogfood source branch](https://github.com/forsvn-labs/conquistador/blob/dogfood/0.1.0/INSTALL.md).
-Updates and removal belong to the installer or host plugin manager that created the copy.
-Keep outputs and memory outside that copy so replacement does not mix them with product files.
-
-There is no hosted Conquistador SaaS or automatic global learning service. Experimental Eve/Grok
-packages do not establish native activation. Judge the actual host, task and result separately;
-local package checks do not prove live execution or human acceptance.
+Use the original installer to update or remove your copy. A compact skill folder is not a runtime
+or development checkout. Build, package, and setup commands belong to a complete distribution.
+Get those instructions from the private [installation guide](https://github.com/forsvn-labs/conquistador/blob/dogfood/0.1.0/INSTALL.md).
