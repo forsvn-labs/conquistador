@@ -1,7 +1,8 @@
 # Manual installation reference
 
-Start with [guided setup](../INSTALL.md). This reference keeps the direct commands for existing
-skills.sh installations, native managers, runtime operators and container users. Use the same
+Start with the [recommended skill install](../INSTALL.md#skills-recommended). This reference keeps
+the direct commands for existing skills.sh installations, native managers, runtime operators and
+container users. Use the same
 owner to update and remove a copy. Both skill and plugin packages include all 38 outcome methods.
 
 Version 0.1.0 is private. The source is
@@ -22,11 +23,11 @@ through the host when permitted. It installs only what the task needs. For examp
 [Lavish preview](PREVIEW.md) uses a cached package launcher. Model access comes from your host;
 paid providers and external account connections remain separate.
 
-## skills.sh alternative
+## skills.sh from a local source
 
-Use an existing coding-agent project and Node 24 with npm. The clone route also needs Git and an
-authenticated GitHub CLI. Replace every `/absolute/path/...` below with your own path. Keep the
-source clone separate from the project receiving the skill.
+Use an existing coding-agent project, Node 24 with npm, and Git. The clone route also needs an
+authenticated GitHub CLI with private repository access. Replace every `/absolute/path/...` below
+with your own path. Keep the source clone separate from the project receiving the skill.
 
 1. Confirm that the active GitHub account can read the private repository:
 
@@ -57,24 +58,31 @@ source clone separate from the project receiving the skill.
 
    ```sh
    cd /absolute/path/your-project
-   DO_NOT_TRACK=1 DISABLE_TELEMETRY=1 npx skills add /absolute/path/conquistador-source --skill conquistador --copy
+   DO_NOT_TRACK=1 DISABLE_TELEMETRY=1 npx --yes skills@1.5.26 add /absolute/path/conquistador-source --skill conquistador --copy
    ```
+
+   Do not add `--full-depth`, a `--skill` wildcard, or `--all`. Do not use the nested
+   `skills/conquistador` folder as the source.
 
    Choose your host when prompted. Expect an installation summary for `conquistador` in the project
    scope. To select a host explicitly, add `--agent codex` or `--agent claude-code` to that command.
    Review the installer choices before accepting them.
 
-4. Check discovery, then start a new host session:
+4. Check the installed inventory:
 
    ```sh
-   DO_NOT_TRACK=1 DISABLE_TELEMETRY=1 npx skills list
+   DO_NOT_TRACK=1 DISABLE_TELEMETRY=1 npx --yes skills@1.5.26 list
    ```
 
-   Expect `conquistador` in the installed skills. Select it in your host and try the first request
+   Expect `conquistador` in the intended project and host scope. This lists installation metadata.
+
+5. Start a fresh host session. Select Conquistador and try the first request
    in [the usage guide](USAGE.md). The host may use `/conquistador`, `$conquistador` or a picker.
    A listing proves installation metadata; the first task checks actual host activation.
 
-The root `SKILL.md` carries the complete library of 38 outcomes. Do not install only the nested
+The root install with skills.sh 1.5.26 carries the complete library of 38 outcomes; it is not a thin
+stub. See the [normal root payload](../INSTALL.md#inventory-and-installed-files) and
+[completeness check](../INSTALL.md#read-only-completeness-check). Do not install only the nested
 `skills/conquistador` folder or use `--full-depth`; the parent needs its bundled methods.
 The agent selects the methods for each request.
 
@@ -111,7 +119,7 @@ installed copy, and removing a skill does not erase project outputs or runtime d
 
 | Installed through | Update | Remove |
 | --- | --- | --- |
-| skills.sh with the local path above | Obtain a fresh branch clone or distribution, record its commit, and repeat the same `skills add` command for the same project and host | Run `DO_NOT_TRACK=1 DISABLE_TELEMETRY=1 npx skills remove conquistador` in that project and review the selected hosts |
+| skills.sh with the local path above | Obtain a fresh branch clone or distribution, record its commit, and repeat the same `skills add` command for the same project and host | Run `DO_NOT_TRACK=1 DISABLE_TELEMETRY=1 npx --yes skills@1.5.26 remove conquistador` in that project and review the selected hosts |
 | Host plugin manager | Refresh its local marketplace source and use the host's update controls | Use the host's uninstall controls; remove the marketplace registration if no longer needed |
 | `tools/install.mjs` | Use `upgrade` with the original mode and destination from a complete distribution | Use `remove` with that same mode and destination |
 
@@ -267,7 +275,7 @@ authorize an action. Installation leaves it disabled. Installing methods grants 
 to publish, spend, persist learning or submit feedback.
 
 Claude Code can also opt into Conquistador mode through `tools/conquistador-mode.mjs`, which writes
-only owned hooks into `.claude/settings.local.json`. See [Proactive help](PROACTIVE.md#optional-conquistador-mode-claude-code).
+only owned hooks into `.claude/settings.local.json`. See [Proactive help](PROACTIVE.md#optional-conquistador-mode-for-claude-code).
 Grok Bot and Eve have no mode adapter.
 
 ## Optional runtime, terminal chat and MCP
@@ -352,9 +360,10 @@ release records. A package or install receipt is not live-provider evidence or r
 
 | Symptom | Recovery |
 | --- | --- |
-| GitHub reports repository not found or access denied | Check the active account and private repository access; ask the owner for access or a private distribution |
+| GitHub reports repository not found or access denied | Check the active account and private repository access; if `gh` works but HTTPS Git fails, run `gh auth setup-git` |
+| The skill is in the wrong project or scope | Remove it through the original installer in that scope, then install from the intended project for the intended host |
 | Conquistador appears in the install summary but not in the host | Confirm the project and selected host, then start a fresh session; check the plugin namespace if applicable |
-| The parent cannot find a method | Reinstall the complete root bundle from clean source; do not copy the nested parent alone |
+| The parent cannot find a method | Use the [read-only completeness check](../INSTALL.md#read-only-completeness-check) from the complete CLI, preserve edits, and reinstall the root bundle; do not copy the nested parent alone |
 | The compact helper reports `Destination exists` | Choose a new directory, or use `upgrade` only for an unchanged helper-owned install |
 | The helper reports modified files or a differing receipt | Preserve the edits and stage a new directory; do not alter the receipt to force replacement |
 | Runtime configuration or model access fails | Follow `doctor` diagnostics and the runtime guide; verify the configured credential environment variable through the host's secret settings |

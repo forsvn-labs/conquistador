@@ -5,10 +5,13 @@ Start with one task you already need to finish. Record the result separately fro
 
 ## Get the private build
 
-1. Follow [installation](../INSTALL.md#recommended-quick-start) using an authenticated account with
+1. Follow [installation](../INSTALL.md#skills-recommended) using an authenticated account with
    access to `forsvn-labs/conquistador`, branch `dogfood/0.1.0`, or a supplied private distribution.
-   Expect a clean source folder and record its exact commit or package identity.
-2. Install the complete entry point for your host. Start a fresh host session and select
+   Record the installed source commit or supplied package identity when available. A separate
+   source clone is not required for the default skill install.
+2. Install the complete entry point for your host. Check inventory in the intended scope.
+   Inventory and [setup doctor](../INSTALL.md#read-only-completeness-check) diagnostics do not
+   establish native activation or account operation. Start a fresh host session and select
    Conquistador. Expect the host to discover the skill or namespaced plugin entry point.
 3. Use a request from [the usage guide](USAGE.md) with your own files. Expect a finished deliverable,
    its evidence gaps and a next action. Check these yourself before marking the task accepted.
@@ -62,7 +65,7 @@ it does not send it anywhere.
 
 ## Update and retry
 
-Use the [installation owner's update procedure](../INSTALL.md#update-or-remove-an-installation).
+Use the [installation owner's update procedure](INSTALL-REFERENCE.md#update-or-remove-an-installation).
 Record the new build identity and repeat the smallest task that exposed the problem. Keep the
 original observation so you can compare the revised result. Preserve user outputs outside the
 installed copy; uninstalling the product does not erase those files or runtime state.

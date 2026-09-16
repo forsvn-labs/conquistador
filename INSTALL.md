@@ -1,19 +1,93 @@
 # Install Conquistador
 
-Choose one method. You do not need all of them. The repository is private for dogfooding, so your
-GitHub account needs access. Use Node 24 and Git for the commands below.
+The default installs one entry point with all 38 outcome methods. Keep installed copies private
+while dogfooding.
 
 ## Skills, recommended
 
-From your project, run:
+Use Node 24, Git, an existing coding agent, and a GitHub account with access to the private
+repository. From the project where you want to use Conquistador, run:
 
 ```sh
 DISABLE_TELEMETRY=1 npx --yes skills@1.5.26 add "forsvn-labs/conquistador#dogfood/0.1.0" --skill conquistador
 ```
 
-The installer detects your agent or asks you to choose one. This installs one Conquistador entry point with all 38
-outcome methods. Your existing agent supplies the model and tools. Refresh the host and ask
-`/conquistador` for a task, or select it in the host's skill picker.
+The installer detects your agent or asks you to choose one. Keep `--skill conquistador` exactly as
+shown. Do not add `--full-depth`, a `--skill` wildcard, or `--all`, and do not install the nested
+`skills/conquistador` folder. Your existing agent supplies the model and tools.
+
+### First task
+
+Start a fresh host session in that project. Select Conquistador through `/conquistador`,
+`$conquistador`, or the host's skill picker, then give it a task:
+
+```text
+/conquistador Use docs/product.md and docs/audience.md to prepare our beta
+launch. Deliver landing-page copy, one launch email and a two-week campaign
+plan in docs/launch/. Mark claims that need evidence. Keep this as a draft.
+```
+
+Replace the paths with files your host can read. Expect finished copy, a plan and stated evidence
+gaps. Review the result. See [usage examples](docs/USAGE.md) for other tasks.
+
+### Inventory and installed files
+
+List installed skills from the same project:
+
+```sh
+DISABLE_TELEMETRY=1 npx --yes skills@1.5.26 list
+```
+
+Expect `conquistador` in the intended scope. This is an inventory check; it does not verify that
+the host activated the skill or completed a task.
+
+The normal root payload at `.agents/skills/conquistador/` includes:
+
+```text
+.agents/skills/conquistador/
+├── SKILL.md
+├── skills/
+│   ├── conquistador/SKILL.md
+│   └── ... outcome methods
+├── docs/
+├── hosts/coding-agent/
+├── tools/
+└── runtime/
+```
+
+The root install with skills.sh 1.5.26 is complete. It is not a thin stub. Host-specific locations
+may differ. Managed compact setup uses `library/` instead of `skills/` and omits the BB adapter
+at `hosts/coding-agent/`. Plugin and single-agent harness packages include that adapter.
+See [platform details](docs/PLATFORMS.md#coding-agents-recommended).
+
+### Recovery
+
+| Symptom | Next step |
+| --- | --- |
+| Installed in the wrong project or scope | Use the original installer to remove the unintended copy in its original scope, then run the default command from the intended project and select the intended host |
+| Listed but missing in the host | Start a fresh session in the installed project; check the selected host and scope, or the plugin namespace for a plugin install |
+| GitHub denies access | Authenticate the account with private repository access; if `gh` works but HTTPS Git fails, run `gh auth setup-git` and retry |
+| Parent or method files are missing | Preserve local edits, then reinstall the complete root bundle; use the completeness check below if you have the complete CLI |
+
+Never put a token in a command or MCP configuration. A host may also require explicit skill or
+plugin activation.
+
+### Read-only completeness check
+
+From a complete source checkout or distribution with the setup doctor command, run:
+
+```sh
+node runtime/bin/conquistador.js setup doctor --path /absolute/path/to/installation
+node runtime/bin/conquistador.js setup doctor --path /absolute/path/to/installation --json
+```
+
+This is `conquistador setup doctor --path ABS [--json]` through the complete CLI. Skill installation
+does not put `conquistador` or a root `doctor` command on your PATH. The check reads local files for
+a source/root skill, managed compact install, plugin or single-agent harness, or managed MCP saved
+paths. It does not repair files, verify native host activation, or perform or verify account operations.
+A successful diagnostic does not replace the fresh-session task above.
+
+### Update or remove the skill
 
 Remove it from the same project with:
 
@@ -97,9 +171,7 @@ For noninteractive setup, supply the action, host and absolute project path. The
 supports `status`, `update` and `uninstall` with an owned `--path`. Keep npm's cache available while
 an MCP client uses a command from it. Download the current source before updating installed files.
 
-## First task and help
-
-### Optional account and job hosts
+## Optional account and job hosts
 
 The complete distribution includes `conquistador connections`, `conquistador jobs`, and
 `conquistador integrations`. Start with `conquistador connections setup` to see whether Executor is
@@ -108,12 +180,6 @@ install Executor, connect MCP, and add sources, plus the separate Eve app and up
 These optional hosts have their own private dependency manifests. Use their documented Bun
 installation commands; do not symlink dependencies. No daemon, schedule, paid model, or provider
 connection starts during ordinary skill installation.
-
-### First task
-
-Try a [first task](docs/USAGE.md). Keep installed copies out of public commits while dogfooding.
-If GitHub denies access, authenticate the correct account. If `gh` works but HTTPS Git does not,
-`gh auth setup-git` configures Git to use that account. Never put a token in a command or MCP configuration. A host may require a refresh or explicit plugin/skill activation.
 
 The frozen v0.1.0 ZIP predates these shortcuts; use its [manual installation reference](docs/INSTALL-REFERENCE.md).
 Custom harnesses and experimental portable Grok Bot/Eve contracts remain in

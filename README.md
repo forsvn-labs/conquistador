@@ -28,18 +28,17 @@ and exact-artifact review. Domain installs restrict the same library.
 
 ## Start here
 
-Install the complete skill from your project:
+Use Node 24, Git, an existing coding agent, and a GitHub account with access to this private
+repository. From the project where you want to use Conquistador, install the complete skill:
 
 ```sh
 DISABLE_TELEMETRY=1 npx --yes skills@1.5.26 add "forsvn-labs/conquistador#dogfood/0.1.0" --skill conquistador
 ```
 
-The installer detects your agent or asks you to choose one. Use Node 24 and a GitHub account with repository access.
-No separate clone or runtime setup is needed.
-
-Prefer a [native plugin](INSTALL.md#plugins), [MCP over stdio](INSTALL.md#mcp-over-stdio), or
-[a local clone](INSTALL.md#clone-if-you-want-a-local-copy)? Choose that installation method instead.
-[Installation and removal](INSTALL.md) keeps the steps for each method together.
+The installer detects your agent or asks you to choose one. Keep `--skill conquistador` exactly as
+shown. Do not add `--full-depth`, a `--skill` wildcard, or `--all`, and do not install the nested
+`skills/conquistador` folder. The root install includes all 38 outcome methods. No separate clone
+or runtime setup is needed.
 
 Start a fresh host session and give Conquistador a task:
 
@@ -51,6 +50,12 @@ plan in docs/launch/. Mark claims that need evidence. Keep this as a draft.
 
 Expect finished copy and a plan with owners, timing, measurement and open evidence gaps.
 [Usage and examples](docs/USAGE.md) explain inputs, review and follow-up requests.
+
+For inventory, run `DISABLE_TELEMETRY=1 npx --yes skills@1.5.26 list` in the same project.
+A listing does not confirm host activation; check that through the task above.
+[Installation and recovery](INSTALL.md) shows the expected files and common fixes.
+Alternatives are a [native plugin](INSTALL.md#plugins), [MCP over stdio](INSTALL.md#mcp-over-stdio),
+or [local clone](INSTALL.md#clone-if-you-want-a-local-copy).
 
 You do not need to install every optional tool. Conquistador first inspects the CLI, MCP, warehouse,
 and Executor routes already available, then prepares the narrow task prerequisite through the host.

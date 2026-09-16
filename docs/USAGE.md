@@ -15,6 +15,12 @@ Claude plugin. Portable agent packages need a host adapter before they can run.
 
 ## Give it a task
 
+A `skills list` result is an inventory check. Start a fresh host session after installation and
+use a real task to check activation. For the wrong project or scope, missing files, or a stale
+session, follow [installation recovery](../INSTALL.md#recovery). The complete CLI can run a
+[read-only completeness check](../INSTALL.md#read-only-completeness-check); skill installation
+does not add that CLI to your PATH or verify account operations.
+
 1. Select Conquistador in your host. If it is missing, check installation scope and start a fresh
    host session. Installation is complete only when your host can discover and use the entry point.
 2. State the outcome, intended audience, relevant files, constraints and desired output. Use paths

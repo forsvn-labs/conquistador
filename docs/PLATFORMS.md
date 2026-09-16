@@ -7,7 +7,12 @@ use the sequential fallback.
 
 ## Coding agents, recommended
 
-Managed setup installs the same complete skill in the project's host-specific folder:
+The default [skills.sh install](../INSTALL.md#skills-recommended) copies the complete root payload,
+including `skills/` and the BB adapter at `hosts/coding-agent/`. Managed setup stages a compact
+entry point with all 38 outcome methods under `library/` and omits that adapter. Plugin and
+single-agent harness packages include it.
+
+Managed setup uses the project's host-specific folder:
 
 | Host | Target | Project folder |
 | --- | --- | --- |
@@ -16,7 +21,7 @@ Managed setup installs the same complete skill in the project's host-specific fo
 | GitHub Copilot | `copilot` | `.github/skills/conquistador` |
 | Cursor | `cursor` | `.cursor/skills/conquistador` |
 
-After setup, refresh the host and select Conquistador. Invocation may use `/conquistador`,
+After setup, start a fresh host session and select Conquistador. Invocation may use `/conquistador`,
 `$conquistador` or the host's skill picker. A local receipt proves which files were prepared;
 it does not prove host discovery or task quality.
 
@@ -65,7 +70,7 @@ The plugin includes the native `conquistador:conquistador` master agent. Select 
 picker, or use the namespaced `/conquistador:conquistador` skill. It can request Claude worker
 contexts when the current host exposes them. The plugin contains one native Conquistador definition;
 specialist role files stay inside its method tree. Optional Conquistador mode is a separate, disabled
-hook adapter; see [Proactive help](PROACTIVE.md#optional-conquistador-mode-claude-code).
+hook adapter; see [Proactive help](PROACTIVE.md#optional-conquistador-mode-for-claude-code).
 
 ### Codex
 
@@ -133,6 +138,8 @@ For a local clone, the entry is `node /absolute/path/conquistador/runtime/bin/co
 
 Managed setup with `--target mcp --path ABS` prepares a `connector.json` for this local command.
 It does not edit client settings. Status checks the connector's files, not host registration.
+The complete CLI's [setup doctor](../INSTALL.md#read-only-completeness-check) also checks managed
+MCP saved paths without starting the client or verifying account operations.
 Keep the source folder while using that connector. Disconnect the client before removing its
 owned connector folder through setup.
 
