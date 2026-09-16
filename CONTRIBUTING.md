@@ -33,7 +33,7 @@ source history, raw provider receipts, customer content, or credentials to a pul
 After intentional skill or supporting-resource edits, run `node tools/update-completeness.mjs` and
 review `release/completeness.json` with the source changes. It records exact method versions and
 content hashes for the complete library. The installation-doctor tests reject missing or stale
-manifest entries. Use `node runtime/bin/conquistador.js setup doctor --path /absolute/install`
+manifest entries. Use `node runtime/bin/conquistador.js operator doctor --path /absolute/install`
 to check local files without starting a host or service. This does not establish host activation,
 model context loading, provider access, or release acceptance.
 

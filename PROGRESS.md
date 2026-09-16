@@ -305,6 +305,6 @@ This evidence is recorded in a separate documentation commit. Packaging that fin
 its own source identity and checksums without changing the tested executable files. Local output
 stays under dist/<commit>/ and is not committed, pushed, signed or published. The proposed future
 source acquisition remains `gh repo clone forsvn-labs/conquistador SOURCE -- --branch private-alpha
---single-branch`, followed by `node SOURCE/tools/setup.mjs install --target operator --project ABS`.
+--single-branch`, followed by `node SOURCE/runtime/bin/conquistador.js install --project ABS`.
 It installs at ABS/.conquistador-operator. Until the owner makes the channel available, use the
 supplied complete source or local ZIP. FOR-247 and FOR-248 acceptance remains open.
