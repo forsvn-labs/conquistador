@@ -72,11 +72,30 @@ A checkout package-boundary scan checked 1580 files with 0 private fingerprints
 (`semanticReviewRequired: true` for this private package). A changed-file secret and private-path
 scan found no matches.
 
-No live BB operator-package run was executed from this implementation worktree: specialist children
-share the environment filesystem, so a host run here could have mixed model file edits into the
-operator-experience source. Protocol tests cover briefs, receipts, redaction, digest mismatch,
-cancellation, cleanup, and the one-pass correction limit. They are not a host, provider, or human
-result. No push, merge, publish, Linear mutation, or FORSVN planning edit is included.
+Follow-up commit `c318bf09f17b1e2a66f85a93a3923ffa82f3277f` records observed integration, review,
+and correction children on receipts and reports overall blocked state instead of a sibling draft.
+That change passed Node 24.21.0 `npm run build` and `npm test`: 119 tooling, 292 runtime, 167
+catalog, and 63 Eval Lab tests (641 total).
+
+Two live BB acceptance attempts ran from parent `thr_dx5zj6re7b` in `env_e7raxthku8`. They do not
+complete FOR-247 or FOR-248 host acceptance.
+
+Attempt 1, from `999087e79af24f9d612abbd9e81efdcc8cd86073`: Copy child `thr_fgygkuh6k5`
+(`Conquistador: Copy`) finished a draft JSON result. Integration child `thr_kx2g4ms545`
+(`Conquistador: Integration`) received `system/thread/interrupted` with `reason: "manual-stop"`
+and produced no output. No review child and no execution receipt were observed.
+
+Attempt 2, after `c318bf0`: Copy child `thr_ir5866swws` (`Conquistador: Copy`) finished a draft
+JSON result. Campaign data child `thr_jw4jrhu9ar` (`Conquistador: Campaign data`) received
+`system/thread/interrupted` with `reason: "manual-stop"` and produced no final output. No
+integration child, review child, integrated digest, or execution receipt were observed.
+
+Public child titles and one specialist output per attempt were observed. Those children were later
+idle. That is not claimed as coordinator cleanup, digest-bound review, a targeted correction, or
+human acceptance. Protocol tests cover briefs, receipts, redaction, digest mismatch, cancellation,
+and the one-pass correction limit; they are not a host, provider, or human result. No push, merge,
+publish, Linear mutation, or FORSVN planning edit is included.
+
 
 
 ## Available product behavior
@@ -173,9 +192,12 @@ filter staged methods but rely on the consuming host to enforce access. Domain M
 
 ## Remaining work
 
-1. Observe a real BB operator-package run with visible children, a brief, a receipt bound to the
-   integrated digest, and one targeted correction. Protocol tests cover those contracts; they are
-   not a live host or human result. Use the [dogfood checklist](docs/DOGFOOD.md).
+1. Complete a live BB operator-package run with at least two visible specialist children, one
+   integration child, one exact-digest review, a receipt bound to the integrated digest, and
+   observed cleanup. Two attempts from this worktree observed public titles and one Copy draft
+   each; both stopped on a manual-stop before review and receipt (`thr_kx2g4ms545`,
+   `thr_jw4jrhu9ar`). Protocol tests still do not substitute for that host result. Use the
+   [dogfood checklist](docs/DOGFOOD.md).
 2. Polish Executor setup and resumption with an authorized account operation. Observe permission,
    cancellation, and recovery behavior. Eve additionally needs an operator-owned service, selected
    model and budget, and a useful job.

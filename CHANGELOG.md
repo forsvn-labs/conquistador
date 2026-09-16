@@ -24,10 +24,16 @@ output, human acceptance, rights disposition and release authority require separ
   lifecycle, brief/receipt disclosure, and evidence limits. No daemon, watcher, push, publish, or
   Linear mutation is included.
 - Node 24.21.0 passed `npm run build` and 640 default tests (118 tooling, 292 runtime, 167 catalog,
-  63 Eval Lab). Catalog check: 17 operations. Synthetic local example: no live executions. A fresh
-  harness install/status/update/remove cycle showed operator profile `manual`, 38 methods, and
-  host activation unverified. No live BB receipt run was observed from this worktree; protocol
-  tests are not host or human proof.
+  63 Eval Lab) on `999087e`, then 641 tests (119 tooling) on `c318bf0` after receipts gained
+  observed integration, review, and correction children. Catalog check: 17 operations. Synthetic
+  local example: no live executions. A fresh harness install/status/update/remove cycle showed
+  operator profile `manual`, 38 methods, and host activation unverified.
+- Two live BB attempts from parent `thr_dx5zj6re7b` observed public child titles and one Copy
+  draft each. Attempt 1: `thr_fgygkuh6k5` draft; `thr_kx2g4ms545` manual-stop with no output; no
+  review or receipt. Attempt 2 after `c318bf0`: `thr_ir5866swws` draft; `thr_jw4jrhu9ar`
+  manual-stop with no final output; no integration, review, or receipt. Later idle child status
+  is not claimed as coordinator cleanup. End-to-end FOR-247/FOR-248 host acceptance remains
+  unproven. Protocol tests are not host or human proof.
 
 ## 0.1.0-dogfood.4 private prerelease
 
