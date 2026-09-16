@@ -4,10 +4,11 @@ No public release is claimed. See [VERSIONS.md](VERSIONS.md) for independent pro
 versions. Verification establishes the stated local scope; live provider operation, useful model
 output, human acceptance, rights disposition and release authority require separate evidence.
 
-## Unreleased private dogfood installation and documentation
+## 0.1.0-dogfood.4 private prerelease
 
-These changes follow `v0.1.0-dogfood.3` and are not included in that release.
-
+- Shipped private GitHub prerelease
+  [`v0.1.0-dogfood.4`](https://github.com/forsvn-labs/conquistador/releases/tag/v0.1.0-dogfood.4)
+  from `45a3d27` on `dogfood/0.1.0`, with ZIP, npm tarball, checksums and unbound assembly record.
 - Kept the pinned root skills.sh command as the single default, with prerequisites, installation
   traps, a first task, payload locations, and recovery together. Distinguished inventory from host
   activation and the compact managed payload from plugin/harness BB adapter files.
@@ -15,27 +16,14 @@ These changes follow `v0.1.0-dogfood.3` and are not included in that release.
   and capability descriptions around a real task. Start with supplied context and permitted
   connections; add Executor when missing live access blocks the work, then resume. Kept plugins,
   MCP, CLI repair, Eve, and runtime setup after the first task or in linked advanced guidance.
-- Documented the doctor's exact command and evidence limits, recovery from stale MCP paths,
-  and how older releases can use a newer complete distribution for diagnostics. Updated VISION,
-  ROADMAP, and PROGRESS to distinguish current source from the shipped private prerelease.
-- Added `release/completeness.json` with the parent and all 38 outcome versions/content hashes,
-  plus all supporting resources, including specialist contracts and setup references. Managed
-  skill, plugin, and harness copies retain that manifest; the full Git/npm distribution includes
-  it through the existing package list.
-- Added read-only `conquistador setup doctor --path ABS [--json]`. It checks required files,
-  entry-point routing, manifest agreement, method identity, receipt integrity, and source Git identity
-  where available. It accepts host links without mutating their targets.
-- Managed MCP diagnostics check saved Node and package executable paths independently from receipt
-  integrity and inspect the referenced library. Missing source/cache files cannot pass on a matching
-  connector digest alone. No saved executable or MCP service is started by the doctor.
-- These are local file diagnostics. Host activation, model context loading, task completion, and
-  provider access remain unverified. Exact source identity remains unavailable for copies without
-  Git metadata; a payload digest is not source provenance. No public release or live observation.
-- Node 24 build and all 620 default tests passed, including 14 doctor/manifest regression tests.
-  Catalog validation and the explicitly synthetic local example also passed.
-- The documentation rewrite passed 41 focused install/doctor tests, the full 620-test suite,
-  staged-document link contracts, and 107 local link/anchor checks. The source doctor reported
-  all 38 methods available. No native host or provider check was run for the rewrite.
+- Added `release/completeness.json` and read-only `conquistador setup doctor --path ABS [--json]`.
+  The doctor checks method identity, receipts, Git identity where available, and managed MCP
+  executable paths separately from connector digests. Local file readiness is not host activation
+  or provider proof.
+- Node 24.21.0 build and all 620 default tests passed on the implementation branch, including
+  doctor/manifest regression tests. Catalog validation and the synthetic local example also passed.
+  No native host or live provider check was run for this ship.
+- npm publication remains disabled. Original `v0.1.0` through `v0.1.0-dogfood.3` tags are unchanged.
 
 ## 0.1.0-dogfood.3 private prerelease
 

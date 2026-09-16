@@ -11,11 +11,12 @@ The doctor checks method versions and content, required resources, receipts, ava
 identity, and managed MCP executable paths. It separates local file readiness from host activation
 and useful work. Managed compact copies omit the BB adapter; plugin and harness copies include it.
 
-The shipped private prerelease remains
-[`v0.1.0-dogfood.3`](https://github.com/forsvn-labs/conquistador/releases/tag/v0.1.0-dogfood.3)
-from `5261038` on `dogfood/0.1.0`. It predates the doctor and this documentation rewrite. Keep its
-ZIP, npm tarball, checksums, and unbound assembly record tied to that source. The repository and
-packages remain private. See [implementation status](PROGRESS.md) for verification scope.
+The shipped private prerelease is
+[`v0.1.0-dogfood.4`](https://github.com/forsvn-labs/conquistador/releases/tag/v0.1.0-dogfood.4)
+from `45a3d27` on `dogfood/0.1.0`. It includes the documentation rewrite, completeness manifest,
+and installation doctor. Keep its ZIP, npm tarball, checksums, and unbound assembly record tied to
+that source. The repository and packages remain private. See [implementation status](PROGRESS.md)
+for verification scope.
 
 ## Next: observe and improve the first task
 

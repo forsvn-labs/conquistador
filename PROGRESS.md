@@ -1,17 +1,14 @@
 # Implementation status
 
 Conquistador is in private dogfood. The shipped prerelease is
-[`v0.1.0-dogfood.3`](https://github.com/forsvn-labs/conquistador/releases/tag/v0.1.0-dogfood.3),
-from `526103872d64e8f0b2b7872c637e4a1d920dcb94` on `dogfood/0.1.0`. Product version is 0.1.0;
+[`v0.1.0-dogfood.4`](https://github.com/forsvn-labs/conquistador/releases/tag/v0.1.0-dogfood.4),
+from `45a3d276874b30e884fb5e603b289e0c58a286f8` on `dogfood/0.1.0`. Product version is 0.1.0;
 the parent method is 2.8.0. The root npm package remains `private: true`. CI builds and tests with
-read-only repository permissions; public distribution is deferred.
+read-only repository permissions; public distribution is deferred. ZIP, npm tarball, checksums, and
+`assembly.json` bind that exact source (`authority: UNBOUND`). Installing a new package does not
+update existing copies. Earlier dogfood prereleases retain their original source identity.
 
-Current source adds the installation doctor and documentation rewrite described below. These
-changes are not in dogfood.3. Its ZIP, npm tarball, checksums, and `assembly.json` retain their
-original source identity. That assembly record is `UNBOUND`, not release authority. Installing a
-new package does not update existing copies.
-
-## Current source: installation and first use
+## Installation and first use
 
 The pinned repository-root skills.sh command is the one default. It already copies the complete
 library. README and INSTALL put prerequisites and traps beside the command, followed by a first
