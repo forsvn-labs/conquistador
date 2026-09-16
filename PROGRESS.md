@@ -9,9 +9,10 @@ The default private-alpha install now uses the existing `conquistador` package e
 through `npm exec` and the private Git reference. This path installs the operator without adding a
 dependency, `node_modules`, or a lockfile to the receiving project. The supplied npm tarball also
 completed install, doctor, and uninstall through npm and Bun package runners in fresh projects.
-Private Git execution passed through npm on Node 24.21.0. Bun 1.3.14 could execute the local
-tarball, but its HTTPS Git form requested an unauthenticated GitHub API tarball and received 404;
-the documentation therefore does not claim private Git Bun support. Source and ZIP remain recovery
+The current dogfood Git package ran setup help through npm on Node 24.21.0. The unshipped operator
+cannot be fetched from private Git until its channel exists. Bun 1.3.14 could execute the local
+tarball, but its HTTPS Git form requested an unauthenticated GitHub API tarball and received 404.
+The documentation therefore does not claim private Git Bun support. Source and ZIP remain recovery
 paths. No curl-to-shell installer was added.
 
 This review covers every changed file in `d2fc898..84f0008`, the complete 41-file operator diff on
