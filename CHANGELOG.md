@@ -4,15 +4,24 @@ No public release is claimed. See [VERSIONS.md](VERSIONS.md) for independent pro
 versions. Verification establishes the stated local scope; live provider operation, useful model
 output, human acceptance, rights disposition and release authority require separate evidence.
 
-## Unreleased private dogfood installation
+## Unreleased private dogfood installation and documentation
+
+These changes follow `v0.1.0-dogfood.3` and are not included in that release.
 
 - Kept the pinned root skills.sh command as the single default, with prerequisites, installation
   traps, a first task, payload locations, and recovery together. Distinguished inventory from host
   activation and the compact managed payload from plugin/harness BB adapter files.
+- Rewrote the product introduction, usage, dogfood checklist, integration guide, execution modes,
+  and capability descriptions around a real task. Start with supplied context and permitted
+  connections; add Executor when missing live access blocks the work, then resume. Kept plugins,
+  MCP, CLI repair, Eve, and runtime setup after the first task or in linked advanced guidance.
+- Documented the doctor's exact command and evidence limits, recovery from stale MCP paths,
+  and how older releases can use a newer complete distribution for diagnostics. Updated VISION,
+  ROADMAP, and PROGRESS to distinguish current source from the shipped private prerelease.
 - Added `release/completeness.json` with the parent and all 38 outcome versions/content hashes,
   plus all supporting resources, including specialist contracts and setup references. Managed
-  skill, plugin, and harness copies
-  retain that manifest; the full Git/npm distribution includes it through the existing package list.
+  skill, plugin, and harness copies retain that manifest; the full Git/npm distribution includes
+  it through the existing package list.
 - Added read-only `conquistador setup doctor --path ABS [--json]`. It checks required files,
   entry-point routing, manifest agreement, method identity, receipt integrity, and source Git identity
   where available. It accepts host links without mutating their targets.
@@ -24,6 +33,9 @@ output, human acceptance, rights disposition and release authority require separ
   Git metadata; a payload digest is not source provenance. No public release or live observation.
 - Node 24 build and all 620 default tests passed, including 14 doctor/manifest regression tests.
   Catalog validation and the explicitly synthetic local example also passed.
+- The documentation rewrite passed 41 focused install/doctor tests, the full 620-test suite,
+  staged-document link contracts, and 107 local link/anchor checks. The source doctor reported
+  all 38 methods available. No native host or provider check was run for the rewrite.
 
 ## 0.1.0-dogfood.3 private prerelease
 
@@ -43,7 +55,7 @@ output, human acceptance, rights disposition and release authority require separ
   activation and live provider/model jobs were not exercised.
 - npm publication remains disabled. Original `v0.1.0` and `v0.1.0-dogfood.2` tags are unchanged.
 
-## Unreleased Executor and Eve adoption
+## Executor and Eve adoption, included in dogfood.3
 
 - Updated the parent method to 2.7.0. It guides missing account access through a secure host or
   Executor interface and uses one parent for explicitly requested durable work.
@@ -58,7 +70,7 @@ output, human acceptance, rights disposition and release authority require separ
 - Added exact upstream pins, Bun lockfiles, a read-only npm release checker, daily release-watch CI,
   and optional installed-package/security checks. Updates require review and do not expand grants.
 - Documented credential custody, service ownership, update policy, and the distinction between
-  local package checks and live account evidence. No remote activation or release has occurred.
+  local package checks and live account evidence. This stage did not activate remote services.
 - Bound Eve access credentials to a trusted configured origin. Missing or mismatched destinations
   fail before credential transmission; origin migration requires explicit configuration and rotation.
 - Passed Node 24.21.0 build and all 606 default tests, plus 22 Executor and 13 Eve source tests,
@@ -67,7 +79,7 @@ output, human acceptance, rights disposition and release authority require separ
   Eve 0.55.0 and Executor 1.6.8 matched current npm releases. Toolchain major updates remain flagged
   for review. Live account, model, approval, and crash-recovery acceptance remain outstanding.
 
-## Unreleased master-agent execution
+## Master-agent execution, included in dogfood.3
 
 - Restored the unchanged v1 agent schema and explicit legacy package. The master package now
   declares v2 with a finite dispatch ceiling.
@@ -87,7 +99,7 @@ output, human acceptance, rights disposition and release authority require separ
 - Passed the Node 24.12.0 build and all 595 default tests: 74 tooling, 291 runtime, 167 catalog
   and 63 Eval Lab, plus the 17-operation catalog check and synthetic local example.
 
-## Unreleased master-agent slice
+## Master-agent contracts, included in dogfood.3
 
 - Updated `/conquistador` to assemble a host-bounded specialist team for multi-part requests and use
   a sequential fallback when the host cannot create isolated contexts.
@@ -167,7 +179,7 @@ output, human acceptance, rights disposition and release authority require separ
   historical evidence from the distribution. Preserved applicable licenses and notices.
 - Added a contained Conquistador mascot shared by the plugin composer icon and logo.
 
-## Unreleased final helper corrections
+## Final helper corrections, included in dogfood.3
 
 - Removed Claude TaskCompleted context-advice registration. SessionStart and Stop retain the
   documented context feedback contract. Owned legacy registrations can still be removed.
@@ -177,7 +189,7 @@ output, human acceptance, rights disposition and release authority require separ
 - Clarified that compact domain skill copies need host enforcement; automatic load checks belong
   to the callable coordinator. Native delivery and Executor documentation verification remain open.
 
-Final review validation passes on Node 24.19.0: build and all 599 default tests, with 78 tooling,
+That review passed validation on Node 24.19.0: build and all 599 default tests, with 78 tooling,
 291 runtime, 167 catalog and 63 Eval Lab tests. The catalog check validates 17 operations and
 the synthetic local example passes. A focused scan checked 1,530 tracked product files against
 four private fingerprints with no matches. These checks do not establish native hook delivery.

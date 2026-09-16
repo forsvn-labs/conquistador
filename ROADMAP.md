@@ -1,89 +1,53 @@
 # Product roadmap
 
-## Now: private dogfooding
+## Now: private dogfood with a clear install path
 
-### Installation reliability
+Use one root skills.sh command, then complete a real task in the user's existing host. The default
+copies all 38 outcome methods. README, INSTALL, and the usage guides explain prerequisites,
+installation traps, payload locations, first tasks, recovery, and optional integrations.
 
-The pinned root skills.sh command remains the default. The first-task path, required files,
-installation traps, recovery, and compact-versus-plugin capabilities are documented together.
-The local completeness manifest and `conquistador setup doctor --path ABS [--json]` check method
-versions/content, required contracts, receipt integrity, available source identity, and managed MCP
-executable paths. Local file readiness is separate from host activation and useful task delivery.
+Current source adds `conquistador setup doctor --path ABS [--json]` and a completeness manifest.
+The doctor checks method versions and content, required resources, receipts, available source
+identity, and managed MCP executable paths. It separates local file readiness from host activation
+and useful work. Managed compact copies omit the BB adapter; plugin and harness copies include it.
 
-Next, observe the actual pinned installer and first-task behavior in priority dogfood hosts.
-Executor handoff/resumption and a fuller update-identity/recovery system remain later work. Do not
-promote guided setup to the default or add public distribution based on local doctor/test results.
-
-### Executor and Eve adoption
-
-Use Conquistador to help install Executor when it is missing, connect the coding agent over MCP,
-and add the sources the current growth, GTM, sales, marketing, or product task needs. Use
-`conquistador connections setup` to inspect install state, then official Executor commands through
-the host. Use the optional Eve app for explicit durable jobs with one owner, canonical skills, and
-separate worker/operator authority. Keep `/conquistador` in the existing coding host as the normal
-entry. [Integration usage](docs/INTEGRATIONS.md) separates install help, connection preparation,
-package verification, live account proof, and the applicable human decisions.
-
-Maintain exact upstream dependencies and lockfiles. The release watcher reports new versions;
-optional CI checks installed packages and security advisories. Review and verify new versions
-before promotion. Activation of repository schedules and any deployment remains a separate action.
-Next dogfood evidence must exercise a real authorized account, a useful job, approval, and recovery.
-Do not count discovery, an installed SDK, or synthetic tests as provider support.
-
-### Existing dogfood baseline
-
-Version 0.1.0 is packaged and shipped as private GitHub prerelease
+The shipped private prerelease remains
 [`v0.1.0-dogfood.3`](https://github.com/forsvn-labs/conquistador/releases/tag/v0.1.0-dogfood.3)
-from source `5261038` on `dogfood/0.1.0`. ZIP, npm tarball, checksums and the unbound assembly
-record are retained together. The repository stays private and the npm publication guard remains.
-Next work is [one real user task](docs/DOGFOOD.md) in an existing coding-agent host, including
-Executor install help when live accounts are needed.
+from `5261038` on `dogfood/0.1.0`. It predates the doctor and this documentation rewrite. Keep its
+ZIP, npm tarball, checksums, and unbound assembly record tied to that source. The repository and
+packages remain private. See [implementation status](PROGRESS.md) for verification scope.
 
-1. Verify activation, appropriate parent routing and a finished deliverable.
-2. Check on-demand tool setup and the Lavish annotation/revision loop.
-3. Record concrete failures privately and fix them before adding more platforms or features.
+## Next: observe and improve the first task
 
-The current feature branch implements v2 master metadata, a BB dispatch adapter, domain selection,
-exact-operation stack negotiation, and three additional runtime graphs. Real multi-specialist
-BB runs and a separate same-context fallback have completed. An Executor-backed public metadata
-read also completed through the existing catalog gateway. An earlier reviewer found a claim that
-needed revision; the final run passed draft review. These checks do not establish general output quality.
+1. Exercise the pinned installer in priority dogfood hosts. Observe discovery in a fresh session,
+   parent routing, a finished deliverable, and one correction. Record the exact build, host, model,
+   and outcome with the [dogfood checklist](docs/DOGFOOD.md). Local doctor results remain separate.
+2. Polish Executor setup and task resumption. Start with existing permitted connections; help a
+   new user install or connect Executor only when missing live access blocks the task. Observe an
+   authorized account operation, approval where needed, failure recovery, and the resumed deliverable.
+3. Improve update identity and repair. Preserve the resolved source commit and original host where
+   possible, expose identity consistently, and test cache/source/Node changes. Keep a useful path
+   for older installations and edited files. Do not make guided setup the default.
+4. Check optional host behavior when a real task needs it: isolated specialist review, Lavish
+   annotations, domain restrictions, and Claude SessionStart/Stop delivery. Keep same-context review
+   labeled. Compact copies rely on their consuming host for domain enforcement.
+5. Exercise an explicitly requested Eve job with a named owner, approved model and budget, and
+   observed approval, cancellation, and persisted-state recovery. Keep dependency pins and review
+   upstream updates before promotion. Discovery and accepted submissions do not prove a useful job.
 
-Direct skill and plugin commands avoid a manual clone. Local MCP serves the method library
-through stdio without a separate service. Guided setup remains the managed-file fallback for
-install, status, update and uninstall. Verify the chosen
-host after local preparation. Experimental Grok/Eve imports stay outside ready installation
-claims. The bundled methods, native plugin metadata, Claude agent, portable roles and installer
-are implemented. Optional runtime/MCP/catalog/Eval modules are available when a task needs them.
-Runtime playbooks execute their declared graphs; bundled skill availability does not make every
-method an executable runtime workflow.
+The optional runtime executes four declared playbooks. Connect missing model, vision, and campaign
+data routes only for authorized tasks. Databricks, Confluence, and HubSpot need exact audited
+operation extensions before maintained runtime support claims. No additional outcome library is
+needed for this work.
 
-## Next: validate host behavior
+Automatic learning promotion stays disabled. A separate persistence-consent API and cross-run
+retrieval remain future work. Use approved host files under [memory guidance](docs/LEARNING.md).
+Keep feedback as local redacted drafts during private dogfooding; any disclosure needs its own
+approved destination and exact content.
 
-Test native specialist execution, integrated handoffs, and opt-in proactive events in the selected host. Automatic learning
-promotion is disabled. A separate persistence-consent API and project-scoped cross-run retrieval
-remain future work. Follow [docs/LEARNING.md](docs/LEARNING.md) and obtain approval for each entry
-and destination before persisting private learning. Do not claim automatic improvement over time.
+## Deferred: public distribution
 
-Next, verify the opt-in mode adapter in its native host, test a real user artifact with the domain
-restrictions enabled, and connect the specialist graphs to approved model/data routes. The graphs
-currently have local runner and failure/resume evidence. Missing vision or campaign data remains a
-handoff. Databricks, Confluence and HubSpot need exact audited operation extensions before any
-support claim. No additional outcome library is needed.
-
-Keep public feedback at local drafting during private dogfooding. Preserve its destination,
-redaction and exact-consent requirements for any later submission.
-
-## Deferred: public release
-
-Public distribution, marketplace listing and landing work require a later decision. Review real
-outcomes, rights, provider/human evidence and release authority against the exact source and
-artifacts before publishing. Pushes and publication require explicit user authorization.
-Preserve historical evidence under its original scope.
-
-## Final helper review
-
-The Claude mode adapter now offers SessionStart and Stop only. Verify both in the installed
-Claude version before claiming native support. Results-updated remains a generic helper event.
-Complete the Executor documentation-read evidence through an authorized route when available.
-Use a host that enforces the domain allowlist when loading compact skill copies.
+Public npm publication, marketplace listings, visibility changes, and landing work require a later
+release decision. Review real outcomes, rights, provider and human evidence, and release authority
+against the exact source and artifacts first. Pushes and publication need explicit authorization.
+Do not treat local tests, package records, or doctor results as that authorization.

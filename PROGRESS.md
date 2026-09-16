@@ -1,206 +1,162 @@
 # Implementation status
 
-Version 0.1.0 is packaged and privately prereleased as
-[`v0.1.0-dogfood.3`](https://github.com/forsvn-labs/conquistador/releases/tag/v0.1.0-dogfood.3)
-(source `526103872d64e8f0b2b7872c637e4a1d920dcb94` on `dogfood/0.1.0`). The parent method is 2.8.0:
-elite growth/GTM/sales/marketing/product knowledge work, plus first-run Executor install help
-(`connections setup`, connect-accounts method). Optional Executor/Eve hosts remain. The root npm
-package has `private: true`; CI only builds and tests with read-only repository permissions. Public
-distribution is deferred. Final source packaging binds the integrated documentation and installer to
-that exact clean commit in `assembly.json` (`authority: UNBOUND`, not a public publish). Earlier
-artifacts retain their original source identity and are not rebuilt. Installing a new package does
-not update existing copies.
+Conquistador is in private dogfood. The shipped prerelease is
+[`v0.1.0-dogfood.3`](https://github.com/forsvn-labs/conquistador/releases/tag/v0.1.0-dogfood.3),
+from `526103872d64e8f0b2b7872c637e4a1d920dcb94` on `dogfood/0.1.0`. Product version is 0.1.0;
+the parent method is 2.8.0. The root npm package remains `private: true`. CI builds and tests with
+read-only repository permissions; public distribution is deferred.
 
-## Implemented
+Current source adds the installation doctor and documentation rewrite described below. These
+changes are not in dogfood.3. Its ZIP, npm tarball, checksums, and `assembly.json` retain their
+original source identity. That assembly record is `UNBOUND`, not release authority. Installing a
+new package does not update existing copies.
 
-### Unreleased installation clarity and diagnostics
+## Current source: installation and first use
 
-The root skills.sh install remains the default and copies the complete library. README and INSTALL
-now place prerequisites and traps beside the pinned command, followed by a real first-task example,
-inventory checks, recovery, and alternatives. Managed compact copies use `library/` and omit the BB
-adapter; plugin/harness copies include it. This distinction is explicit.
+The pinned repository-root skills.sh command is the one default. It already copies the complete
+library. README and INSTALL put prerequisites and traps beside the command, followed by a first
+task, checks, recovery, and alternatives. The usage, dogfood, integration, mode, and capability
+guides follow the same sequence: use supplied context, reuse permitted connections, and set up
+Executor when missing live access blocks the task. Plugins, MCP, CLI repair, Eve, and the runtime
+remain optional. This rewrite changes guidance, not host execution behavior.
 
-`conquistador setup doctor --path ABS [--json]` checks the local root/compact/plugin/harness library
-against `release/completeness.json`. The manifest names all 38 outcomes, parent version 2.8.0, and
-all supporting resources, including specialist/setup contracts, with content hashes. The report
-separates method availability,
-managed receipt integrity, available source Git identity and cleanliness, and BB adapter presence.
-Domain-restricted and standalone method packages do not pass the full-library check. Older copies
-without a manifest are checked against the doctor's release baseline with an explicit notice.
+`conquistador setup doctor --path ABS [--json]` checks full root, compact, plugin, and harness
+copies against `release/completeness.json`. The manifest names all 38 outcomes, parent version
+2.8.0, and all supporting resources, including specialist and setup contracts, with content hashes.
+The report separates library completeness, managed receipt integrity and version, available Git
+identity and cleanliness, and BB adapter presence. Compact copies use `library/` and omit the
+adapter; plugin and harness copies include it.
 
-Managed MCP diagnostics separately check the saved Node executable and package script, then inspect
-the referenced library. This catches a moved source, pruned npm cache, or removed Node executable
-even when connector receipt integrity is unchanged. It neither executes the saved paths nor contacts
-a service. Local success reports 38 methods available; host activation, model loading, task execution,
-and provider access remain unverified. Copies without Git retain an explicit unknown source commit.
-No update-identity migration, host observation, or Executor onboarding overhaul is included.
+Managed MCP diagnostics check the saved Node executable and package script separately from the
+receipt digest, then inspect the library at the resolved script path. A moved source, pruned npm
+cache, or removed Node executable fails even if the connector digest is intact. The doctor changes
+no files, executes no saved paths, and contacts no service.
 
-Verification on Node 24 passed the integrated build and all 620 default tests: 99 tooling,
-291 runtime, 167 catalog, and 63 Eval Lab. The 14 new doctor/manifest tests include missing method
-bodies and resources, compact/plugin/harness copies, modified receipts, stale MCP executable paths,
-cross-bundle executable symlinks, and Git index preservation. Catalog validation and the explicitly
-synthetic local example passed. A direct source doctor run reported all 38 methods available while
-identifying pending source edits. No native host, model task, or provider connection was exercised.
+Success reports "38 methods available; local files verified; host activation and task execution
+unverified." It does not claim all methods are loaded into model context. A copy without Git has
+an unknown source commit. Domain-restricted and standalone packages do not pass the full-library
+check. Copies without a manifest use the doctor's release baseline with an explicit notice;
+older releases need a newer complete distribution to supply the doctor.
 
-### Optional integration adoption
+The implementation passed the Node 24 build and all 620 default tests: 99 tooling, 291 runtime,
+167 catalog, and 63 Eval Lab. Fourteen doctor/manifest tests cover missing methods and resources,
+compact/plugin/harness copies, changed receipts, stale MCP paths, cross-bundle executable symlinks,
+and Git index preservation. Catalog validation and the explicitly synthetic local example passed.
+A source doctor run found all 38 methods and reported pending source edits. No native host,
+model task, or provider connection was exercised for this installation work.
 
-The local adoption branch adds Executor account setup, an explicit Eve job host, and read-only
-upstream release monitoring. The coding agent remains the ordinary entrypoint. Conquistador helps
-install Executor when it is missing and connect only the sources the current task needs. Existing
-host tools remain usable within their policies; the catalog still requires exact audited operations.
+The documentation rewrite passed 41 focused install/doctor tests and the full 620-test product
+suite on Node 24. Catalog validation and the synthetic example also passed. Checks covered 107
+local links and anchors, links inside staged packages, the pinned default commands, adjacent
+prerequisites and traps, and first-task ordering. A direct source doctor run again reported all
+38 methods available and the pending documentation edits. No live host or provider check was run.
 
-- `connections setup` and `status` detect a local Executor CLI and print official install, start,
-  and MCP-connect steps. The parent skill runs those commands through the host for a new user.
-  Configuration drafts still contain endpoint and UI URLs plus an environment-variable reference.
-  The client offers a UI handoff and bounded discovery. Its host-only GitHub metadata callback
-  verifies an exact reviewed schema, account connection, allowlist, and deadline before invocation.
-  It does not offer arbitrary execution or copy provider credentials into Conquistador.
-- The optional Eve app uses the canonical methods, a named owner, separate worker/operator access,
-  and Executor connections. Preparation and explicit session commands are separate from installation,
-  model access, service start, and scheduling. The original portable Eve staging contract stays
-  candidate-only.
-- Exact private package pins and Bun lockfiles support explicit installation and review.
-  `integrations status` reads local pins; `check-updates` compares public npm release metadata without
-  changing dependencies or grants. The daily GitHub release watch needs default-branch activation.
-  Optional CI checks package compatibility and security advisories. No automatic upgrade is enabled.
+## Available product behavior
 
-Verification on Node 24.21.0 and macOS arm64 passed:
-
-- The integrated build and all 606 default tests: 85 tooling, 291 runtime, 167 catalog, and 63
-  Eval Lab. The catalog check and explicitly synthetic local example also passed.
-- Executor frozen installation, syntax checks, 22 client tests, and dependency audit. A separate
-  installed Executor 1.6.8 process authenticated our client and exposed seven MCP tools. The check
-  invoked no tools or providers, stopped the process, verified endpoint closure, and removed its
-  temporary state. The GitHub callback still has no reviewed live binding in this adoption work.
-- Eve frozen installation, typecheck, 13 source tests, native build, and dependency audit. A prepared
-  canonical app also passed installation, typecheck, ten tests, and build. Its actual HTTP endpoints
-  accepted synthetic caller/operator credentials, denied unauthenticated access and caller approvals,
-  rejected unknown-session sends without creating replacements, and exposed no callback routes.
-  No model job was submitted. The local process was stopped.
-- The release checker reached the public npm registry. Eve 0.55.0, Executor 1.6.8, MCP SDK 1.30.0,
-  AI SDK 7.0.102, and just-bash 3.4.2 matched their latest releases on 2026-09-16. It correctly
-  reported newer major releases of TypeScript and Node type definitions for review. The tested
-  TypeScript 5.9.3 and Node 24 type pins remain intentional; the project still requires Node 24.
-
-Independent review covered the root command dispatcher, release monitor, optional workflows, and
-Eve credential/action boundaries. The reviewer rechecked the origin fix with no further findings.
-Credential rotation now invalidates the old gateway binding. The GitHub callback must be recreated;
-Eve changes its connection identity and rejects configuration changes during a turn.
-Eve clients also bind credentials to a trusted configured origin and reject mismatches before
-network access. Twenty-four negative origin cases made zero fetch calls; valid bound wrapper calls
-reached the real local HTTP endpoint. This closes the initial-destination leak found in review.
-The optional GitHub Actions jobs have not run on this local branch. Local checks do not establish Linux support,
-provider-account access, model quality, or durable crash recovery.
-
-Live dogfooding still needs an approved Executor endpoint, scoped bearer, provider account/policies,
-and reviewed operation binding. Eve also needs an operator-owned service, selected model, budget,
-and observed approval/recovery behavior. No third-party provider call, model turn, deployment, or release is claimed
-by this adoption work. See [integration setup](docs/INTEGRATIONS.md).
-
-### Existing product behavior
-
-| Area | Available behavior |
+| Area | Available behavior and limit |
 | --- | --- |
-| Entry point | `/conquistador` acts as the master agent and selects from all 38 outcome methods, including engineering requests |
-| Installation | Existing lifecycle plus constrained domain selection for skills/plugins/harnesses; canonical dependencies and load-time restrictions; domain MCP is unsupported |
-| Local MCP | Dependency-free stdio method listing and contained text reads; host supplies model/tools, no separate HTTP service or model credentials |
-| Agents | Versioned v2 master with preserved v1 compatibility, seven specialist roles, a callable BB child-thread adapter, exact integrated review and sequential fallback |
-| Task setup and previews | Exact host-route discovery through extension manifests, Connections and Gateway; bounded reads with redacted setup receipts; existing Lavish AXI launchers |
-| Proactive advice | Disabled by default; explicit Claude hook configuration lifecycle is implemented, with native activation and source verification still unverified |
-| Optional runtime | Four executable graphs, sealed step-specific judgments, draft and missing-connection handoffs, failure/resume and separate human review/action authority |
-| Tools and evaluation | Host-injected typed operation bridge, catalog contracts and local Eval SDK examples with explicit synthetic fixtures |
-| Learning and feedback | Existing state/export APIs, no implicit learning promotion, and opt-in redacted feedback drafts with exact payload consent |
+| Task entry | One parent selects from 38 outcome methods for growth, GTM, sales, marketing, and product knowledge work; the host supplies the model and tools |
+| Installations | Root skills, compact managed skills, plugins, and host packages; local file preparation does not establish host activation |
+| Local MCP | Lists and reads bundled methods over stdio without runtime dependencies, a model account, or an HTTP service |
+| Specialists | Seven role contracts, a callable BB adapter, exact-artifact review, and a same-context fallback; v2 master metadata retains v1 compatibility |
+| Existing stack | Host-owned route selection and bounded reads; the catalog requires exact audited operations |
+| Executor help | `connections setup` and `status` detect a CLI and print official next steps; configuration, UI handoff, discovery, and provider execution are separate |
+| Optional Eve | A canonical app with explicit owner/session commands and separate worker/operator authority; preparation does not submit a model job |
+| Optional runtime | Four declared playbooks with saved state, draft artifacts, failure/resume behavior, and separate review/action authority |
+| Preview | Host procedures for Lavish AXI previews and annotations; no automatic annotation consumer |
+| Proactive advice | Opt-in helper and Claude hook lifecycle; native delivery remains unverified |
+| Memory and feedback | Explicit host-file memory and redacted feedback drafts; no automatic learning promotion, cross-run retrieval, or global learning |
 
-See [INSTALL.md](INSTALL.md), [docs/SERVICES.md](docs/SERVICES.md),
-[docs/MASTER-AGENT.md](docs/MASTER-AGENT.md), [docs/PREVIEW.md](docs/PREVIEW.md) and
-[docs/LEARNING.md](docs/LEARNING.md) for use and limits.
-The preview instructions are host procedures; they do not add a runtime launcher or automatic
-annotation consumer. Run artifacts and audit state still persist when automatic learning is off.
+Use [INSTALL.md](INSTALL.md), [usage](docs/USAGE.md), [capabilities](docs/SERVICES.md),
+[execution modes](docs/MASTER-AGENT.md), and [integrations](docs/INTEGRATIONS.md) for commands and
+limits. Build and package commands belong to a complete distribution under
+[CONTRIBUTING.md](CONTRIBUTING.md). Outputs, private notes, and runtime state stay outside the
+installed product. Run artifacts and audit state can still persist when automatic learning is off.
 
-## Verification
+## Earlier recorded verification
 
-The preceding master-agent execution slice has actual BB evidence: two specialist contexts, one integration
-context and a separate review context completed a draft. The reviewer bound its findings to the
-exact integrated artifact. An earlier run requested revision; the final run had no material draft
-findings. A separate same-context run completed with
-independent review false. A public repository metadata read succeeded through an exact
-Executor-bound Connection in candidate-verification mode. These observations do not establish
-human acceptance, general output quality, sandboxed tools or supported provider status.
+These observations retain their original build and task scope. They were not repeated for the
+documentation rewrite and do not establish native activation of the current installation.
 
-The independent implementation review found and rechecked fixes for cancellation cleanup,
-child ownership, unknown spawn outcomes and exact Executor connection binding. The Node 24.12.0 build and all 595 default tests pass: 74 tooling, 291 runtime, 167 catalog and
-63 Eval Lab. This includes ten orchestration checks, seven stack checks and twelve graph checks.
-The catalog check validates 17 operations; the synthetic local contract example also passes. Graph tests use synthetic judgments and explicitly preserve
-missing image/vision/data connections. Private task outputs and source provenance stay outside
-the product.
+### Executor and Eve adoption
 
-Private prerelease `v0.1.0-dogfood.2` records Node 24 build and all 544 default tests: 43 tooling,
-278 runtime, 160 catalog and 63 Eval Lab. Real private Git skills install/reinstall/list/remove
-and npm setup install/remove passed in temporary projects. Local MCP discovery, all 39 method
-entries, parent and iOS template reads, protocol negotiation and path refusals passed in spawned
-processes without runtime dependencies. Exact ZIP/npm checksum checks and Linux CI passed.
-Native plugin commands were checked against primary sources; native host activation and useful
-model execution remain unverified.
+Node 24.21.0 on macOS arm64 passed the integrated build and 606 default tests, catalog validation,
+and the synthetic local example. The dogfood.3 follow-up also recorded 27 Executor host tests.
+The preceding adoption work recorded:
 
-The guided setup follow-up passes Node 24 build and all 533 default tests: 32 tooling, 278 runtime,
-160 catalog and 63 Eval Lab. Thirteen setup tests cover ownership, host paths, MCP origins,
-experimental handoffs and nested source/project layout. An additional executable test proves
-setup works without runtime libraries or dependencies. A real terminal session completed skill
-installation followed by path-only status, update and uninstall. All 39 method roots were present;
-the temporary installation was removed. No native host registration or live connection is implied.
-Earlier checks below retain their original scope.
+- Executor frozen installation, syntax checks, 22 client tests, and a dependency audit. A local
+  Executor 1.6.8 process authenticated the client and exposed seven MCP tools. No tool or provider
+  was invoked; the process stopped and temporary state was removed. The adoption client's exact
+  GitHub callback still lacks a reviewed live binding.
+- Eve frozen installation, typecheck, 13 source tests, native build, and dependency audit. A prepared
+  app passed installation, typecheck, ten tests, and build. Its HTTP endpoints accepted synthetic
+  caller/operator credentials, denied unauthenticated access and caller approvals, and rejected
+  unknown-session sends without creating replacements. No model job ran; the process stopped.
+- Origin checks that prevented credential transmission to missing or mismatched destinations.
+  Twenty-four negative cases made zero fetch calls; valid bound calls reached the local HTTP
+  endpoint. Credential rotation invalidates old gateway bindings; Eve rejects configuration changes
+  during a turn.
+- A read-only npm release check on 2026-09-16. Eve 0.55.0, Executor 1.6.8, MCP SDK 1.30.0,
+  AI SDK 7.0.102, and just-bash 3.4.2 matched the reported latest releases then. New TypeScript and
+  Node type majors were flagged for review; the tested TypeScript 5.9.3 and Node 24 pins remained.
 
-Earlier implementation checks passed the Node 24 build and 518 default tests. Installation checks
-exercised the skills CLI on seven coding-agent targets. Local Bun/npm probes exercised pinned
-Lavish sessions without changing project dependencies. These checks do not establish native
-agent activation, human annotation or useful model output.
+Exact pins and Bun lockfiles support reviewed upgrades. `integrations status` reads local records;
+`check-updates` queries public npm metadata without changing dependencies. The daily release watch
+requires default-branch activation. Optional Actions jobs were not run on this local branch.
+These checks do not establish Linux support for the optional hosts, provider access, model quality,
+or durable crash recovery.
 
-The integrated source passed the Node 24 build and all 519 default tests: 18 local tooling,
-278 runtime, 160 catalog and 63 Eval Lab tests. The catalog check validated 17 operations, and
-the synthetic local Eval SDK example passed. Maintained runtime/lib output matched source.
+### Specialist execution and installation
 
-The final integration adds a staged usage-guide check for all seven installer mode families,
-including contained Markdown links and refusal to upgrade or remove edited usage docs. CI includes
-`dogfood/0.1.0` and `main` pushes and keeps read-only permissions. Follow
-[CONTRIBUTING.md](CONTRIBUTING.md) for complete-distribution build, test and package commands.
-Final artifact checks are recorded separately against the exact source commit; previous Docker
-and host checks do not transfer to a new revision.
+Earlier master-agent work observed two specialist contexts, integration, and separate exact-artifact
+review in BB. An earlier run requested revision; a later four-context run passed draft review.
+A separate same-context run reported independent review false. One bounded public repository
+metadata read succeeded through an Executor-bound Connection in candidate-verification mode.
+These observations do not grant human acceptance, general output quality, sandboxed tools, or
+maintained provider support.
 
-## Remaining limits and next use
+The implementation review rechecked cancellation cleanup, child ownership, uncertain spawn outcomes,
+and exact connection binding. That stage passed 595 default tests on Node 24.12.0, including
+orchestration, stack, and graph checks, plus the 17-operation catalog check and synthetic example.
+Graph tests preserved missing image, vision, and data connections as gaps.
 
-Use [docs/DOGFOOD.md](docs/DOGFOOD.md) to assess real tasks, routing and Lavish revisions. Complete
-host/model/provider/human acceptance remains incomplete. BB conversation isolation and one
-Executor metadata read have been observed. Native activation in other hosts, Claude hook delivery,
-connected image/vision/data execution and authenticated human acceptance remain unverified.
-A worker returning an invalid protocol result fails closed; the coordinator does not coerce or
-replay accepted work. BB cleanup rechecks ownership before stopping a child and reports unresolved
-identities rather than stopping an unverified thread.
+Dogfood.2 recorded real private Git skills install/reinstall/list/remove and npm setup install/remove
+in temporary projects. Spawned local MCP processes listed all 39 entries and passed contained reads,
+protocol negotiation, and path refusal checks without runtime dependencies. Exact archive checks
+and Linux CI passed. The release recorded 544 default tests. These were installer and protocol
+checks, not native host activation or useful model execution.
 
-Domain selection reuses the canonical library and the owned installer lifecycle. The BB loader
-enforces restrictions when present. A host with direct filesystem or tool access must enforce its
-own security boundary. Domain MCP is unsupported. The optional runtime executes declared graphs;
-it does not become a general dynamic-team service.
+Earlier guided setup checks exercised install/status/update/uninstall in a terminal, all 39 method
+roots, and setup without runtime dependencies. Staged usage-guide checks cover all seven installer
+mode families, contained links, and protection of edited guides. Earlier Lavish launcher checks
+did not establish human annotation or useful model output.
 
-Both memory-mode spellings leave automatic learning promotion disabled. A separate consent API
-and cross-run retrieval are absent. Public feedback sending stays deferred during private use.
-Ambiguous dispatch pauses without automatic replay; there is no supported reconciliation API yet.
-Imported action receipts remain operator attestations unless separate observed evidence supports
-them. Rights disposition and release authority remain work for a later public release.
+### Optional hooks and domain restrictions
 
-## Final helper review
+The Claude adapter registers SessionStart and Stop only. It removes owned legacy TaskCompleted
+registrations and preserves unrelated hooks. Invalid or incomplete input suppresses advice;
+configuration errors produce a redacted diagnostic and cannot block completion. The official event
+reference was checked through web access, but verification through Executor and native delivery
+remain unobserved. That review recorded a Node 24.19.0 build, 599 default tests, catalog validation,
+the synthetic example, and a private-fingerprint scan with no matches.
 
-The Claude adapter now registers SessionStart and Stop only. It rejects results-updated registration,
-removes its old TaskCompleted hook during enable or remove, and preserves unrelated hooks. Invalid,
-missing or oversized input suppresses advice. Config errors emit redacted diagnostics and exit 1
-so an advisory failure cannot block completion. Status checks the intersection of enabled and
-registered events. The current official event reference was checked through web access; source
-verification through Executor and native event delivery remain unverified.
+The callable coordinator checks domain restrictions before loading or dispatching. Compact copies
+filter staged methods but rely on the consuming host to enforce access. Domain MCP is unsupported.
 
-Domain documentation now identifies the enforcement boundary. The callable coordinator checks the
-installed restriction before loading or dispatching. Compact skill copies only filter the staged
-methods; their consuming host must enforce the restriction file.
+## Remaining work
 
-Final review validation passes on Node 24.19.0: build and all 599 default tests, with 78 tooling,
-291 runtime, 167 catalog and 63 Eval Lab tests. The catalog check validates 17 operations and
-the synthetic local example passes. A focused scan checked 1,530 tracked product files against
-four private fingerprints with no matches. These checks do not establish native hook delivery.
+1. Observe fresh host activation, parent routing, a real deliverable, and one correction for the
+   default install. Use the [dogfood checklist](docs/DOGFOOD.md); local completeness is not task proof.
+2. Polish Executor setup and resumption with an authorized account operation. Observe permission,
+   cancellation, and recovery behavior. Eve additionally needs an operator-owned service, selected
+   model and budget, and a useful job.
+3. Complete update identity and repair across source, package cache, Node, and host changes. Copies
+   without Git still lack exact source identity; no full update-identity migration is implemented.
+4. Verify optional native hooks, previews, domain enforcement, and connected model/vision/data
+   paths only where needed. Ambiguous runtime dispatch pauses without automatic replay; a supported
+   reconciliation API remains absent.
+
+Human acceptance, rights disposition, and public release authority remain separate. Imported action
+receipts are operator attestations unless observed evidence supports them. Automatic learning
+promotion stays disabled; a separate persistence-consent API and cross-run retrieval are absent.
+Keep public feedback sending and public distribution deferred during private dogfood.
