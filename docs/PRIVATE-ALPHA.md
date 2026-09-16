@@ -9,9 +9,10 @@ checks, observed behavior, and your acceptance of the result separate.
    the npm private Git launcher or the exact supplied tarball in the project where you intend to
    work. Record the tag, commit, or tarball digest. The private-alpha channel is proposed, not
    released.
-2. Check the managed folder with `setup status --path ABS`, or use `skills list` for a skills.sh copy. Run the
-   [installation doctor](../INSTALL.md#read-only-completeness-check) if your distribution includes it.
-   Record missing files or stale paths before continuing. Older releases may need a newer complete
+2. From the receiving project, run `conquistador operator status` and `conquistador operator
+   doctor --json` through the same package source used for installation. The doctor must report 38
+   methods, the operator profile, and the BB adapter. Use `skills list` for a skills.sh copy. Record
+   missing files or stale paths before continuing. Older releases may need a newer complete
    distribution to supply the doctor.
 3. Start a fresh host session and select Conquistador. Use a [task example](USAGE.md) with your own
    facts and files. Expect a finished deliverable, evidence gaps, and a next action. For a
@@ -25,6 +26,11 @@ The operator installer copies the complete library. A listing or passing doctor 
 prove activation, independent review, useful output, or live account access. Those need their own
 observations. Record the exact source commit when available; otherwise keep the supplied build
 identity and mark the commit unknown.
+
+When checking more than one full transport, use the same release bytes and compare the managed
+receipt digest. npm private Git, npm tarball, Bun tarball, source, and ZIP installs must agree.
+Compact skill and local MCP integrations have stated capability limits and do not satisfy this
+operator parity check.
 
 ## Connect accounts only when needed
 

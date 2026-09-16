@@ -261,3 +261,39 @@ test('project operator and harness alias share lifecycle without changing host r
   assert.equal(readFileSync(sentinel, 'utf8'), 'Existing host instructions.');
   assert.deepEqual(readdirSync(project), ['AGENTS.md']);
 }));
+
+test('short operator commands default to the current project and preserve the complete package', () => temporary((path, parent) => {
+  const cli = join(root, 'runtime/bin/conquistador.js');
+  const project = join(parent, 'short operator project');
+  const directProject = join(parent, 'direct operator project');
+  mkdirSync(project); mkdirSync(directProject);
+  const short = (...args) => spawnSync(process.execPath, [cli, ...args], {
+    cwd: project, encoding: 'utf8', env: { ...process.env, PATH: '/nonexistent' },
+  });
+  const ok = (...args) => {
+    const result = short(...args);
+    assert.equal(result.status, 0, result.stdout + result.stderr);
+    return result.stdout;
+  };
+  assert.match(ok('install'), /Prepared locally/);
+  const installed = join(project, '.conquistador-operator');
+  const report = JSON.parse(ok('operator', 'doctor', '--json'));
+  assert.equal(report.library.available, 38);
+  assert.equal(report.bbAdapterPresent, true);
+  assert.equal(report.operatorProfilePresent, true);
+  assert.equal(report.operatorActivation, 'manual');
+  assert.equal(report.hostActivationVerified, false);
+  assert.equal(report.taskExecutionVerified, false);
+  assert.match(ok('operator', 'status'), /Local state: unchanged/);
+  assert.match(ok('operator', 'update', '--project', '.'), /Prepared locally/);
+
+  good('install', '--target', 'operator', '--project', directProject);
+  const shortReceipt = JSON.parse(readFileSync(join(installed, '.conquistador-install.json')));
+  const directReceipt = JSON.parse(readFileSync(join(directProject, '.conquistador-operator', '.conquistador-install.json')));
+  assert.equal(shortReceipt.mode, 'single-agent');
+  assert.equal(shortReceipt.digest, directReceipt.digest);
+
+  assert.match(ok('operator', 'uninstall'), /Local state: absent/);
+  assert.equal(existsSync(installed), false);
+  good('uninstall', '--target', 'operator', '--project', directProject);
+}));

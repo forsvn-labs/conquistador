@@ -47,7 +47,7 @@ Run these commands from a complete checkout or distribution. Skill installation 
 
 | Check | What it establishes | What remains unverified |
 | --- | --- | --- |
-| `node runtime/bin/conquistador.js setup doctor --path /absolute/install` | Local installation completeness against the bundled manifest, plus applicable receipt and saved-path checks | Host activation, model context loading, task quality, and account access |
+| `conquistador operator doctor --path /absolute/install` | Local installation completeness against the bundled manifest, plus applicable receipt and saved-path checks | Host activation, model context loading, task quality, and account access |
 | `node runtime/bin/conquistador.js connections setup` | Whether an `executor` binary is on PATH, with setup instructions | A running service, MCP registration, login, or provider access |
 | `node runtime/bin/conquistador.js connections probe --config /absolute/connection.json` | Bounded MCP negotiation and tool discovery at the configured endpoint | Any provider operation; `providerVerified` remains false |
 | A bounded authorized provider operation | The observed result for that account, operation, and request | General provider support, other accounts, or human acceptance |
@@ -56,7 +56,7 @@ Run these commands from a complete checkout or distribution. Skill installation 
 configuration draft. `connections login` returns the operator UI handoff; it does not complete
 sign-in. None of these helpers silently installs Executor or registers an MCP server.
 
-The [installation guide](../INSTALL.md#read-only-completeness-check) covers the setup doctor.
+The [installation guide](../INSTALL.md#read-only-completeness-check) covers the operator doctor.
 The [Executor client reference](../hosts/executor/README.md) covers configuration, scoped gateway
 access, probe limits, and the narrow GitHub metadata callback. The client does not support every
 Cloud URL or interactive MCP OAuth session. Use a compatible host for those connections; do not

@@ -12,9 +12,11 @@
 3. Obtain the private-alpha distribution decision and authorized source reference. Check the exact
    ZIP, npm tarball, checksums and assembly record before any channel creation or distribution.
    Product version remains 0.1.0; do not infer a new version or tag. Keep the repository private and
-   npm publication disabled. Make the npm package runner the default install, validate the Bun
-   tarball path, and retain source clone as recovery. Historical dogfood tags and release facts
-   stay unchanged.
+   npm publication disabled. Make the short npm package runner command the default install. For
+   one exact release, compare the managed digest and doctor result across npm private Git, npm
+   tarball, Bun tarball, source, and ZIP installs. Each complete transport must contain 38 methods,
+   the operator profile, schemas, agent contracts, and the BB adapter. Keep compact skill and MCP
+   limits explicit. Historical dogfood tags and release facts stay unchanged.
 
 Use the [private-alpha checklist](docs/PRIVATE-ALPHA.md). Installed file completeness, model output,
 provider observations, human acceptance and release authority are separate evidence classes.

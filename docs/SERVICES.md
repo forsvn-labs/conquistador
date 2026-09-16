@@ -81,7 +81,7 @@ configuration, recovery, and authority boundaries.
 
 ## Read evidence at the right level
 
-`setup doctor` checks local installation completeness. `connections setup` detects the Executor
+`operator doctor` checks local installation completeness. `connections setup` detects the Executor
 binary. A connection probe checks MCP discovery. Only an observed, authorized operation can show
 what happened in a live account. None alone establishes general provider support or human acceptance.
 

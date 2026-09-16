@@ -34,8 +34,8 @@ Run `setup.mjs status`, `update` or `uninstall` with that exact folder as `--pat
 modified or unowned folders. It leaves project outputs alone. If you used skills.sh instead,
 use its [own lifecycle](INSTALL-REFERENCE.md#update-or-remove-an-installation).
 
-For file completeness, use `conquistador setup doctor --path ABS [--json]` from a complete
-distribution that includes the command. It checks the library and available identity; `setup status`
+For file completeness, use `conquistador operator doctor --path ABS [--json]` from a complete
+distribution that includes the command. It checks the library and available identity; `operator status`
 checks managed receipt integrity. Neither checks activation. See the
 [doctor instructions](../INSTALL.md#read-only-completeness-check), including older-release limits.
 
@@ -145,7 +145,7 @@ For a local clone, the entry is `node /absolute/path/conquistador/runtime/bin/co
 
 Managed setup with `--target mcp --path ABS` prepares a `connector.json` for this local command.
 It does not edit client settings. Status checks the connector's files, not host registration.
-The complete CLI's [setup doctor](../INSTALL.md#read-only-completeness-check) also checks managed
+The complete CLI's [operator doctor](../INSTALL.md#read-only-completeness-check) also checks managed
 MCP saved paths without starting the client or verifying account operations.
 Keep the source folder while using that connector. Disconnect the client before removing its
 owned connector folder through setup.

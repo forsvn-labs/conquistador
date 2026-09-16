@@ -15,14 +15,11 @@ Use Node 24, npm, Git, and a GitHub account with access to the private repositor
 receiving project's root, run this command after the owner makes `private-alpha` available:
 
 ```sh
-npm exec --yes --ignore-scripts \
-  --package=git+https://github.com/forsvn-labs/conquistador.git#private-alpha \
-  -- conquistador setup install --target operator --project "$PWD"
-node .conquistador-operator/runtime/bin/conquistador.js setup doctor \
-  --path "$PWD/.conquistador-operator"
+npx -y --ignore-scripts 'forsvn-labs/conquistador#private-alpha' install
+npx -y --ignore-scripts 'forsvn-labs/conquistador#private-alpha' operator doctor
 ```
 
-`npm exec` keeps Conquistador in npm's cache. It does not add a dependency, `node_modules`, or a
+`npx` keeps Conquistador in npm's cache. It does not add a dependency, `node_modules`, or a
 lockfile to the receiving project. The managed folder `.conquistador-operator/` contains the
 parent, all methods, the operator profile, portable agent contracts, and the BB adapter. Keep it
 out of public commits and keep your outputs elsewhere. Installation starts no global CLI, service,
@@ -31,9 +28,10 @@ hook, polling, or transcript capture.
 If GitHub denies access, authenticate the intended account and run `gh auth setup-git`; do not put
 a token in the command. Until the channel exists, use the supplied npm tarball, source, or ZIP.
 Bun users can execute the supplied tarball with `bunx`; the private Git URL is not the documented
-Bun path. Do not substitute an old dogfood release for this operator. [INSTALL.md](INSTALL.md)
-covers Bun, exact release references, lifecycle commands, source recovery, compact skills, and
-plugins.
+Bun path. Every full operator transport installs the same package and must pass the same doctor
+checks. Compact skills and MCP are limited host integrations, not equivalent operator installs.
+Do not substitute an old dogfood release for this operator. [INSTALL.md](INSTALL.md) covers Bun,
+exact release references, lifecycle commands, source recovery, skills, plugins, and MCP.
 
 ## Start a task
 

@@ -5,15 +5,26 @@ channel is `private-alpha`; no channel branch, tag, version, release, push, or p
 Product version remains 0.1.0 and parent method version remains 2.9.0. The npm private guard remains
 true. Historical ships are recorded only in [CHANGELOG.md](CHANGELOG.md).
 
-The default private-alpha install now uses the existing `conquistador` package executable
-through `npm exec` and the private Git reference. This path installs the operator without adding a
-dependency, `node_modules`, or a lockfile to the receiving project. The supplied npm tarball also
-completed install, doctor, and uninstall through npm and Bun package runners in fresh projects.
-The current dogfood Git package ran setup help through npm on Node 24.21.0. The unshipped operator
-cannot be fetched from private Git until its channel exists. Bun 1.3.14 could execute the local
-tarball, but its HTTPS Git form requested an unauthenticated GitHub API tarball and received 404.
-The documentation therefore does not claim private Git Bun support. Source and ZIP remain recovery
-paths. No curl-to-shell installer was added.
+The default private-alpha install now uses the package executable through the short command `npx -y
+--ignore-scripts 'forsvn-labs/conquistador#private-alpha' install`. The public operator lifecycle is
+`install` plus `operator status|doctor|update|uninstall`; each command defaults to the current
+project. Existing runtime `status`, runtime `doctor`, and advanced `setup` commands retain their
+meaning. The wrapper always selects the complete operator package and refuses a caller-supplied
+target. Its test compares the managed digest with the legacy `setup --target operator` result.
+
+The package runner does not add a dependency, `node_modules`, or a lockfile to the receiving
+project. npm private Git, npm tarball, Bun tarball, source, and ZIP are complete-package transports;
+compact skills and local MCP are documented as reduced host integrations. The current dogfood Git
+package ran the short npm launcher through help on Node 24.21.0. The unshipped operator cannot be
+fetched from private Git until its channel exists. Bun 1.3.14 could execute the local tarball, but
+its HTTPS Git form requested an unauthenticated GitHub API tarball and received 404. The
+documentation therefore does not claim private Git Bun support. No curl-to-shell installer was
+added because it would create a separate download, integrity, and credential path.
+
+Node 24.21.0 and npm 11.19.0 completed the build and all 660 default tests after this change: 137
+tooling, 293 runtime, 167 catalog, and 63 Eval Lab. Catalog validation reported 17 valid operations,
+and the synthetic local example retained zero live executions and zero human verdicts. Exact
+package-transport results are recorded below after clean committed-source assembly.
 
 This review covers every changed file in `d2fc898..84f0008`, the complete 41-file operator diff on
 `bb/implement-conquistador-operator-experience-with-thr_dx5zj6re7b`. It also audits the source and
@@ -39,10 +50,11 @@ registry identifies Conquistador and PROGRESS.md as its handoff; no FORSVN works
   incorrectly sets preDispatch after reporting a dispatch. A second revise result remains unresolved.
 - The team CLI reserves its private output before dispatch and emits a fixed failure diagnostic.
   It cannot run a team and then discover that its output file already exists.
-- Managed setup adds --target operator --project ABS at PROJECT/.conquistador-operator. The harness
-  target with --path remains compatible. The package includes the v1 compatibility agent, v2 master,
-  operator and receipt schemas, methods and adapter. Doctor uses the same profile validator as the
-  router and checks the complete operator executable inventory plus the rewritten master contract.
+- `conquistador install` prepares the complete operator at PROJECT/.conquistador-operator. The
+  `operator` lifecycle defaults to that project path. Advanced setup and the harness target remain
+  compatible. The package includes the v1 compatibility agent, v2 master, operator and receipt
+  schemas, methods and adapter. Doctor uses the same profile validator as the router and checks the
+  complete operator executable inventory plus the rewritten master contract.
 - README, INSTALL, reference guides, entry points, lifecycle help and CI name private-alpha as the
   proposed channel. The current acceptance checklist is docs/PRIVATE-ALPHA.md; docs/DOGFOOD.md remains
   a working historical redirect. Local source/ZIP installation is usable before a channel exists.

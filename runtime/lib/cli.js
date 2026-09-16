@@ -221,6 +221,8 @@ export function cliHelp(version = "1.0.0") {
     return `Conquistador ${version}
 
 Usage:
+  conquistador install [--project PATH] Install the complete operator in a project
+  conquistador operator --help         Manage and verify a project operator
   conquistador setup doctor --path ABS [--json]  Check installed files; no host activation proof
   conquistador                         Show help
   conquistador setup                   Install, inspect, update or uninstall a host package

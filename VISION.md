@@ -9,14 +9,16 @@ Research, creative work, engineering, and review support that mission.
 
 Offer one package runner command that installs the complete project operator. Put prerequisites,
 installation traps, and recovery beside the command. It must not add a dependency or lockfile to
-the receiving project. Follow it with a real task. Bun, compact skills, plugins, MCP, and a source
-clone are alternatives. The runtime, typed catalog, Eval Lab, and durable jobs are optional. Every
-installation route needs a clear update and removal path.
+the receiving project. Follow it with a real task. npm private Git, npm and Bun tarballs, source,
+and ZIP are transports for the same complete package. The runtime, typed catalog, Eval Lab, and
+durable jobs are optional. Every installation route needs a clear update and removal path.
 
-An installed library must contain the methods and resources its parent routes to. Check those
-files without loading the entire library into model context. Report local completeness, available
-build identity, host activation, and task success separately. A receipt cannot establish that a
-saved executable still exists or that the host can produce useful work.
+An installed library must contain the methods and resources its parent routes to. The transport
+must not change the package contents or managed digest. Check those files without loading the
+entire library into model context. Report local completeness, available build identity, host
+activation, and task success separately. A receipt cannot establish that a saved executable still
+exists or that the host can produce useful work. Label compact skills and MCP as reduced host
+integrations when they omit the adapter or execution path.
 
 The host supplies the model, context, tools, permissions, and worker contexts. Load only the
 methods relevant to the task. Use specialists within host limits; use a labeled same-context

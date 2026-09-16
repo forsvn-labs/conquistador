@@ -13,7 +13,7 @@ Your GitHub account must have access, including any organization sign-in require
 A repository-not-found response can mean that the account lacks access. Use a supplied private
 ZIP if you do not have repository access. There is no public package to install from npm.
 
-The recommended `npm exec` command uses the package's existing `conquistador` executable and a Git
+The recommended `npx` command uses the package's existing `conquistador` executable and a Git
 package reference. `private: true` prevents registry publication; it does not prevent an authorized
 Git or local tarball package from running. npm keeps that package in its cache and does not add it to
 the receiving project's dependencies. For repeatable installation, replace the moving channel with
@@ -23,6 +23,20 @@ The private release tarball is also the supported Bun package runner input. Bun 
 Node shebang, so Node 24 is required. Do not use the private HTTPS Git reference with Bun unless a
 release explicitly verifies that credential path. See the [standard install](../INSTALL.md#project-operator-recommended)
 for both commands.
+
+## Complete operator from source or ZIP
+
+Use this route when a package runner cannot use your Git credentials or when you need to inspect
+the source before installation. From the receiving project, run:
+
+```sh
+node /absolute/path/conquistador-source/runtime/bin/conquistador.js install
+node /absolute/path/conquistador-source/runtime/bin/conquistador.js operator doctor
+```
+
+The source path can be a clean clone or an extracted release ZIP. The command installs the same
+complete package at `.conquistador-operator/` as the npm and Bun routes. For the same release bytes,
+the managed receipt digest and doctor result must match the package-runner installations.
 
 ## Let your coding agent do the setup
 
@@ -132,6 +146,7 @@ installed copy, and removing a skill does not erase project outputs or runtime d
 
 | Installed through | Update | Remove |
 | --- | --- | --- |
+| Complete project operator | Run the same release launcher with `operator update` from the receiving project | Run the same release launcher with `operator uninstall` from the receiving project |
 | skills.sh with the local path above | Obtain a fresh branch clone or distribution, record its commit, and repeat the same `skills add` command for the same project and host | Run `DO_NOT_TRACK=1 DISABLE_TELEMETRY=1 npx --yes skills@1.5.26 remove conquistador` in that project and review the selected hosts |
 | Host plugin manager | Refresh its local marketplace source and use the host's update controls | Use the host's uninstall controls; remove the marketplace registration if no longer needed |
 | `tools/install.mjs` | Use `upgrade` with the original mode and destination from a complete distribution | Use `remove` with that same mode and destination |
@@ -378,7 +393,7 @@ release records. A package or install receipt is not live-provider evidence or r
 | The skill is in the wrong project or scope | Remove it through the original installer in that scope, then install from the intended project for the intended host |
 | Conquistador appears in the install summary but not in the host | Confirm the project and selected host, then start a fresh session; check the plugin namespace if applicable |
 | The parent cannot find a method | Use the [read-only completeness check](../INSTALL.md#read-only-completeness-check) from the complete CLI, preserve edits, and reinstall the root bundle; do not copy the nested parent alone |
-| Managed MCP has an unchanged receipt but will not start | Run `setup doctor --path ABS` from a complete distribution to check its saved Node/package paths; restore the source or recreate the connector, then update the client registration if needed |
+| Managed MCP has an unchanged receipt but will not start | Run `operator doctor --path ABS` from a complete distribution to check its saved Node/package paths; restore the source or recreate the connector, then update the client registration if needed |
 | The compact helper reports `Destination exists` | Choose a new directory, or use `upgrade` only for an unchanged helper-owned install |
 | The helper reports modified files or a differing receipt | Preserve the edits and stage a new directory; do not alter the receipt to force replacement |
 | Runtime configuration or model access fails | Follow `doctor` diagnostics and the runtime guide; verify the configured credential environment variable through the host's secret settings |

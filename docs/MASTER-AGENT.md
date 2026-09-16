@@ -78,7 +78,7 @@ folder. A managed compact copy is a different layout, and cannot run an adapter 
 A standalone outcome install contains only that method and its required material.
 
 Use the private [installation guide](https://github.com/forsvn-labs/conquistador/blob/private-alpha/INSTALL.md)
-for commands, updates, and removal. `setup doctor --path ABS` through the complete CLI checks local
+for commands, updates, and removal. `operator doctor --path ABS` through the complete CLI checks local
 files against the manifest. It does not prove host activation, provider access, or task execution.
 Start a fresh host session and complete a bounded task to check actual use.
 

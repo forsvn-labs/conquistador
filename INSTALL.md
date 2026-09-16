@@ -12,14 +12,11 @@ to the private repository. From the receiving project, run this command after `p
 exists:
 
 ```sh
-npm exec --yes --ignore-scripts \
-  --package=git+https://github.com/forsvn-labs/conquistador.git#private-alpha \
-  -- conquistador setup install --target operator --project "$PWD"
-node .conquistador-operator/runtime/bin/conquistador.js setup doctor \
-  --path "$PWD/.conquistador-operator"
+npx -y --ignore-scripts 'forsvn-labs/conquistador#private-alpha' install
+npx -y --ignore-scripts 'forsvn-labs/conquistador#private-alpha' operator doctor
 ```
 
-`npm exec` obtains the package through Git and runs its declared `conquistador` executable from
+`npx` obtains the package through Git and runs its declared `conquistador` executable from
 npm's cache. It does not add a dependency, `node_modules`, or a lockfile to the receiving project.
 Use the exact release tag or commit from the private-alpha release notes when repeatable bytes
 matter; the channel branch can advance. If GitHub denies access, authenticate the intended account
@@ -35,18 +32,38 @@ required.
 If you received the release tarball, npm and Bun can execute that exact local file:
 
 ```sh
-npm exec --yes --ignore-scripts \
-  --package=/absolute/path/forsvn-conquistador-0.1.0.tgz \
-  -- conquistador setup install --target operator --project "$PWD"
+npx -y --ignore-scripts /absolute/path/forsvn-conquistador-0.1.0.tgz install
 
 bunx --package /absolute/path/forsvn-conquistador-0.1.0.tgz \
-  conquistador setup install --target operator --project "$PWD"
+  conquistador install
 ```
 
 Choose one command. The Bun launcher follows the package's Node shebang, so Node 24 remains a
 prerequisite. For this private repository, use the release tarball with Bun; the private HTTPS Git
 form is not a supported path. Verify a downloaded tarball against the release `SHA256SUMS` before
 running it.
+
+### Capability parity
+
+The package transport must not change the installed operator. These routes install the complete
+operator into `.conquistador-operator/`:
+
+| Transport | Command input | Capability contract |
+| --- | --- | --- |
+| npm private Git | Exact branch, tag, or commit | Complete operator |
+| npm tarball | Verified release `.tgz` | Complete operator |
+| Bun tarball | The same verified release `.tgz` | Complete operator |
+| Source clone or ZIP | The same release source | Complete operator |
+
+For the same release bytes, each route must produce the same managed receipt digest. `operator
+doctor --json` must report 38 methods, the operator profile, and the BB adapter. It also reports
+host activation and task execution as unverified until the host runs a task. Release validation
+must fail if a transport omits a method, schema, agent contract, profile, or adapter.
+
+Skills, plugins, and MCP below connect Conquistador to specific hosts. They have their own discovery
+and execution behavior. A compact skill copy omits the BB adapter. Local MCP lists and reads methods
+but does not run the complete operator. These integrations must not be presented as substitutes for
+the complete operator unless they pass the same package and host checks.
 
 Start a fresh host session in that project and ask:
 
@@ -71,15 +88,11 @@ include the API and limits.
 Use the same package source for each lifecycle command. For the private Git channel:
 
 ```sh
-npm exec --yes --ignore-scripts \
-  --package=git+https://github.com/forsvn-labs/conquistador.git#private-alpha \
-  -- conquistador setup status --path "$PWD/.conquistador-operator"
-npm exec --yes --ignore-scripts \
-  --package=git+https://github.com/forsvn-labs/conquistador.git#private-alpha \
-  -- conquistador setup update --path "$PWD/.conquistador-operator"
-npm exec --yes --ignore-scripts \
-  --package=git+https://github.com/forsvn-labs/conquistador.git#private-alpha \
-  -- conquistador setup uninstall --path "$PWD/.conquistador-operator"
+CONQUISTADOR_PACKAGE='forsvn-labs/conquistador#private-alpha'
+npx -y --ignore-scripts "$CONQUISTADOR_PACKAGE" operator status
+npx -y --ignore-scripts "$CONQUISTADOR_PACKAGE" operator doctor
+npx -y --ignore-scripts "$CONQUISTADOR_PACKAGE" operator update
+npx -y --ignore-scripts "$CONQUISTADOR_PACKAGE" operator uninstall
 ```
 
 For an update, replace the package reference with the exact newer release tag or commit you intend
@@ -89,10 +102,12 @@ Edited files cause update/removal to refuse. Preserve edits and use a new folder
 removal, disable any host routing, detach the contract, and stop active teams. Uninstall leaves
 host settings and running agents alone. Refresh the host after update/removal.
 
-## Skills
+## Host skill integration
 
-This alternative uses the host's skill picker. Its private-alpha command is proposed until the
-channel exists. For immediate use, install from the [supplied local source](docs/INSTALL-REFERENCE.md#skillssh-from-a-local-source).
+Use this integration when the host needs native skill discovery. The host decides which files it
+loads and whether it can create specialist contexts, so installation alone does not establish full
+operator parity. Its private-alpha command is proposed until the channel exists. For immediate use,
+install from the [supplied local source](docs/INSTALL-REFERENCE.md#skillssh-from-a-local-source).
 
 
 Use Node 24, Git, an existing coding agent, and a GitHub account with access to the private
@@ -139,24 +154,25 @@ folders under `skills/`, the operator profile, supporting docs, `release/complet
 The code files are available but do not start automatically. Skill installation adds no global CLI,
 daemon, watcher, or schedule. The operator profile defaults to `manual` activation.
 
-Managed compact setup instead places methods under `library/` and omits `hosts/coding-agent/`.
-Plugin and operator/harness packages include that BB adapter. All three include the methods;
-executing specialists still depends on the host. [Platform details](docs/PLATFORMS.md) describe
-locations and host registration.
+Managed compact setup places methods under `library/` and omits `hosts/coding-agent/`. It is a
+reduced integration. Plugin and operator/harness packages include that BB adapter. All three include
+the methods, but executing specialists still depends on the host. [Platform details](docs/PLATFORMS.md)
+describe locations and host registration.
 
 ### Read-only completeness check
 
 For a root skill copy that contains the doctor, run from the receiving project:
 
 ```sh
-node .agents/skills/conquistador/runtime/bin/conquistador.js setup doctor --path "$PWD/.agents/skills/conquistador"
+node .agents/skills/conquistador/runtime/bin/conquistador.js operator doctor \
+  --path "$PWD/.agents/skills/conquistador"
 ```
 
 Adjust the path if your installer chose another location. From a complete source checkout or
 extracted distribution, inspect any supported installed copy with:
 
 ```sh
-node runtime/bin/conquistador.js setup doctor --path /absolute/path/to/installation --json
+node runtime/bin/conquistador.js operator doctor --path /absolute/path/to/installation --json
 ```
 
 Omit `--json` for readable output. Expect:
@@ -261,7 +277,7 @@ to read the parent guide first. Remove the client entry to disconnect.
 The recommended package runner also opens the interactive guide:
 
 ```sh
-npm exec --yes --ignore-scripts --package=git+https://github.com/forsvn-labs/conquistador.git#private-alpha -- conquistador setup
+npx -y --ignore-scripts 'forsvn-labs/conquistador#private-alpha' setup
 ```
 
 For other targets, select them in that guide or replace the operator arguments. The command can
@@ -273,7 +289,7 @@ available while a saved MCP connector points to it.
 
 ```sh
 gh repo clone forsvn-labs/conquistador -- --branch private-alpha --single-branch
-node conquistador/tools/setup.mjs install --target operator --project /absolute/path/to/receiving-project
+node conquistador/runtime/bin/conquistador.js install --project /absolute/path/to/receiving-project
 ```
 
 Use a separate receiving project. Keep the source for managed updates and removal. This path is

@@ -1,7 +1,13 @@
 #!/usr/bin/env node
 
-// Setup only prepares local packages and must also work before runtime dependencies exist.
-if (process.argv[2] === "setup") {
+// Installation must work before runtime dependencies exist.
+if (process.argv[2] === "install") {
+  const { runOperatorSetup } = await import("../../tools/operator-setup.mjs");
+  process.exitCode = await runOperatorSetup(["install", ...process.argv.slice(3)]);
+} else if (process.argv[2] === "operator") {
+  const { runOperatorSetup } = await import("../../tools/operator-setup.mjs");
+  process.exitCode = await runOperatorSetup(process.argv.slice(3));
+} else if (process.argv[2] === "setup") {
   const { runSetup } = await import("../../tools/setup.mjs");
   process.exitCode = await runSetup(process.argv.slice(3));
 } else if (process.argv[2] === "connections") {

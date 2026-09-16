@@ -105,6 +105,8 @@ describe("stable Conquistador CLI", () => {
     );
     expect(cliHelp()).toContain("conquistador serve");
     expect(cliHelp()).toContain("conquistador run");
+    expect(cliHelp()).toContain("conquistador install");
+    expect(cliHelp()).toContain("conquistador operator --help");
     expect(cliHelp()).not.toContain("--review");
     expect(cliHelp()).toContain("--judgment-response");
     expect(cliHelp()).toContain("judgment export");

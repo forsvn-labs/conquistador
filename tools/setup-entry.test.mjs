@@ -12,7 +12,7 @@ test('the installed setup command works before runtime libraries or dependencies
   const temporary = realpathSync(mkdtempSync(join(tmpdir(), 'conquistador setup entry ')));
   try {
     const source = join(temporary, 'distribution');
-    for (const file of ['package.json', 'runtime/bin/conquistador.js', 'tools/setup.mjs', 'tools/domain-package.mjs']) {
+    for (const file of ['package.json', 'runtime/bin/conquistador.js', 'tools/setup.mjs', 'tools/operator-setup.mjs', 'tools/domain-package.mjs']) {
       const target = join(source, file);
       mkdirSync(dirname(target), { recursive: true });
       copyFileSync(join(root, file), target);
@@ -21,6 +21,9 @@ test('the installed setup command works before runtime libraries or dependencies
     assert.equal(existsSync(join(source, 'node_modules')), false);
     const run = (...args) => execFileSync(process.execPath, [join(source, 'runtime/bin/conquistador.js'), 'setup', ...args], { encoding: 'utf8' });
     assert.match(run('--help'), /install\|status\|update\|uninstall/);
+    const cli = (...args) => execFileSync(process.execPath, [join(source, 'runtime/bin/conquistador.js'), ...args], { encoding: 'utf8' });
+    assert.match(cli('install', '--help'), /conquistador install/);
+    assert.match(cli('operator', '--help'), /operator install\|status\|doctor\|update\|uninstall/);
     const destination = join(temporary, 'missing skill');
     assert.match(run('status', '--path', destination), /Local state: absent/);
     assert.equal(existsSync(destination), false);
