@@ -220,3 +220,46 @@ The first local assembly at f557d6d exposed one npm-only broken link: docs/INTEG
 the referenced workflow directory. Those definitions do not execute from an installed package.
 The final protocol check also rejects non-string, empty, and oversized host execution identities
 before they can support an independence claim. These follow-up fixes remain unshipped.
+
+## Exact local package verification
+
+The corrected executable source is committed at
+`98ea75679b704d15f27ad9b605ff1d54f60f2e79`, after the main review commit
+`f557d6d4fbdf0f36990e955abbd74a526aa2e293`. From that clean commit, Node 24.21.0 ran:
+
+```sh
+npm run package
+npm run package -- /private/tmp/conquistador-review-repack
+python3 /private/tmp/conquistador-review-packages.py "$PWD" "$(git rev-parse HEAD)"
+```
+
+Both package commands passed. The ZIP contains 1,582 files; the npm tarball contains 1,580. Every
+archive file's bytes matched the corresponding committed Git file. Both archives contain the
+operator schemas, v1 compatibility metadata, adapter, completeness manifest, private-alpha guide,
+historical checklist redirect and referenced workflow definitions. Neither contains dependencies,
+private state, credentials, or committed distribution output. The npm private guard remains true.
+The three-fingerprint source scan and semantic review also apply to those exact file bytes.
+
+Both extracted archives passed doctor with 38 methods and host activation unverified, plus all
+1,539 local links in 1,121 Markdown files. The three relocated template links are checked by the
+staged installer tests. Each archive passed the operator, harness and compact lifecycle sequence,
+24 CLI commands per archive. With the source cycles, this is 72 successful lifecycle CLI invocations
+across nine fresh installs. Temporary installs and extracted copies were removed; user-file
+sentinels were preserved. No host registration, model task or account operation was performed.
+
+Repeated ZIP packaging of that commit was byte-identical. npm cross-toolchain reproducibility is
+not claimed. Assembly records say UNBOUND, published false, liveExecutions 0 and humanVerdicts 0.
+They are package identity evidence, not release acceptance or approval.
+
+| Artifact at 98ea756 | SHA-256 |
+| --- | --- |
+| conquistador-0.1.0.zip | c7cfd60bac04864130f81a3135dea8343a0b4710bde8e47c086d80ab44c5f2f3 |
+| forsvn-conquistador-0.1.0.tgz | 608604182fbb02a1fbc590d1f2c151eb9410970033ec4300873854c13fb047d4 |
+
+This evidence is recorded in a separate documentation commit. Packaging that final commit produces
+its own source identity and checksums without changing the tested executable files. Local output
+stays under dist/<commit>/ and is not committed, pushed, signed or published. The proposed future
+source acquisition remains `gh repo clone forsvn-labs/conquistador SOURCE -- --branch private-alpha
+--single-branch`, followed by `node SOURCE/tools/setup.mjs install --target operator --project ABS`.
+It installs at ABS/.conquistador-operator. Until the owner makes the channel available, use the
+supplied complete source or local ZIP. FOR-247 and FOR-248 acceptance remains open.
