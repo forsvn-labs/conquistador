@@ -24,6 +24,7 @@
     ".agents",
     ".claude-plugin",
     ".codex-plugin",
+    ".github/workflows",
     "hosts",
     "agents",
     "tools",

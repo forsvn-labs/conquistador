@@ -441,3 +441,12 @@ test('legacy user assignments named correct and final-review cannot collide with
   assert.deepEqual(out.receipt.specialists.map(row => row.label), ['Copy', 'Copy', 'Integration', 'Review', 'Correction', 'Final review']);
   assert.equal(out.status, 'draft');
 });
+
+test('invalid host identity types cannot establish an independent execution', async () => {
+  for (const executionId of [7, {}, ' ', 'x'.repeat(257)]) {
+    const host = { capabilities: { isolatedContexts: true, maxConcurrency: 1 }, async execute(packet) {
+      return { executionId, isolated: true, result: resultFor(packet) };
+    } };
+    await assert.rejects(runSpecialistTeam({ plan: plan(), root, host }), /Host execution identity/);
+  }
+});

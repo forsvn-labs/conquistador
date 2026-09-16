@@ -71,7 +71,8 @@ export async function runSpecialistTeam({ plan: input, root, host, parent, signa
         const response = await interruptible(() => work, abort);
         accepted = true;
         abort.throwIfAborted();
-        assert.ok(response?.executionId && response.isolated === isolated, 'Host execution identity or isolation mismatch');
+        assert.ok(typeof response?.executionId === 'string' && response.executionId.trim().length > 0
+          && Buffer.byteLength(response.executionId) <= 256 && response.isolated === isolated, 'Host execution identity or isolation mismatch');
         if (isolated) assert.ok(!executions.has(response.executionId), 'Host reused a specialist context');
         executions.add(response.executionId);
         const result = validateResult(response.result, packet);

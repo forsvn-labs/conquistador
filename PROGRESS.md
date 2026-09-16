@@ -86,9 +86,9 @@ git diff --check
 git diff --exit-code -- runtime/lib
 ```
 
-Bootstrap, build and the full suite passed. The full suite contains 658 tests: 135 tooling,
-293 runtime, 167 catalog and 63 Eval Lab. Focused install/operator tests passed 83/83 and schema
-checks passed 3/3. The final receipt/compatibility regression pass contains 24/24 tests. Catalog validation reported 17 valid operations. The local SDK example reported
+Bootstrap, build and the full suite passed. The final full suite contains 659 tests: 136 tooling,
+293 runtime, 167 catalog and 63 Eval Lab. Focused install/operator tests passed 85/85 and schema
+checks passed 3/3. The final receipt/compatibility regression pass contains 25/25 tests. Catalog validation reported 17 valid operations. The local SDK example reported
 synthetic-local-contract-example, executionAuthorized false, liveExecutions 0 and humanVerdicts 0.
 Build left maintained runtime/lib unchanged. The first bootstrap failed on the unwritable default
 npm cache; the task-owned cache above resolved it. An intermediate schema test caught a missing
@@ -213,3 +213,10 @@ tools/setup.mjs
 tools/setup.test.mjs
 tools/update-completeness.mjs
 ```
+
+
+The first local assembly at f557d6d exposed one npm-only broken link: docs/INTEGRATIONS.md linked to
+.github/workflows/integration-updates.yml, which the npm files list omitted. The package now includes
+the referenced workflow directory. Those definitions do not execute from an installed package.
+The final protocol check also rejects non-string, empty, and oversized host execution identities
+before they can support an independence claim. These follow-up fixes remain unshipped.

@@ -4598,7 +4598,7 @@
     },
     {
       "path": "hosts/coding-agent/orchestrate.mjs",
-      "sha256": "384cd1fef592a4a5ddd99bc193f3b727a3a3aba7ef887ac0219d5709d9637545"
+      "sha256": "e492dc61198792dba8d113ea621caf87d21c65ea6f340a60d365afd2987c2d58"
     },
     {
       "path": "hosts/coding-agent/bb.mjs",
