@@ -19,12 +19,35 @@ package ran the short npm launcher through help on Node 24.21.0. The unshipped o
 fetched from private Git until its channel exists. Bun 1.3.14 could execute the local tarball, but
 its HTTPS Git form requested an unauthenticated GitHub API tarball and received 404. The
 documentation therefore does not claim private Git Bun support. No curl-to-shell installer was
-added because it would create a separate download, integrity, and credential path.
+added because it would create a separate download, integrity, and credential path. npm requires
+`--package=FILE conquistador` for a local tarball; treating the tarball path as the command fails
+before installation, and the documented command retains the required package flag.
 
 Node 24.21.0 and npm 11.19.0 completed the build and all 660 default tests after this change: 137
 tooling, 293 runtime, 167 catalog, and 63 Eval Lab. Catalog validation reported 17 valid operations,
-and the synthetic local example retained zero live executions and zero human verdicts. Exact
-package-transport results are recorded below after clean committed-source assembly.
+and the synthetic local example retained zero live executions and zero human verdicts.
+
+## Short install transport verification
+
+Clean implementation commit `52312df81122f3b7c49b5c0f60554f53422ba74b` produced an unbound ZIP
+and npm tarball with Node 24.21.0 and npm 11.19.0. Source archive, ZIP, npm tarball, and Bun tarball
+each completed install, status, doctor, update, status, doctor, uninstall, and absent status in a
+fresh project whose path contained spaces. This was 32 successful lifecycle commands. Every doctor
+reported 38 methods, the complete BB adapter, a valid manual operator profile, zero issues, and
+unverified host activation and task execution. Every install produced managed digest
+`b0308f0695950527487b39d0156a97f5d4338f2305ac96e94132e239487b92c9`.
+
+The npm launcher used npm 11.19.0. The Bun launcher used Bun 1.3.14 with the same tarball and Node
+24 shebang. Neither added `node_modules`, a package manifest, or a lockfile to the receiving project.
+All four uninstall paths preserved the existing AGENTS.md and removed the managed folder. An
+initial bare-tarball npx trial failed before installation because npm treated the `.tgz` path as an
+executable. The guide now uses npm's required `--package=FILE conquistador` form. The proposed
+private-alpha Git branch still needs its exact release check after it exists.
+
+| Artifact at 52312df | SHA-256 |
+| --- | --- |
+| conquistador-0.1.0.zip | 7d4ad770a6eab4bcd73fd54650f7b0b17bfdbc024919f8678026883e1bcf5a9f |
+| forsvn-conquistador-0.1.0.tgz | f2769df17ab1f89285c824cf72cb5a6acd79c4bc314d695822363fe1423012ce |
 
 This review covers every changed file in `d2fc898..84f0008`, the complete 41-file operator diff on
 `bb/implement-conquistador-operator-experience-with-thr_dx5zj6re7b`. It also audits the source and

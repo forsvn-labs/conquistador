@@ -32,7 +32,8 @@ required.
 If you received the release tarball, npm and Bun can execute that exact local file:
 
 ```sh
-npx -y --ignore-scripts /absolute/path/forsvn-conquistador-0.1.0.tgz install
+npx -y --ignore-scripts \
+  --package=/absolute/path/forsvn-conquistador-0.1.0.tgz conquistador install
 
 bunx --package /absolute/path/forsvn-conquistador-0.1.0.tgz \
   conquistador install
