@@ -22,6 +22,9 @@ output, human acceptance, rights disposition and release authority require separ
 - Downloaded release ZIP `cb4fc7ebb334503d22c81f5c808c4d13ee30bd1524888ab1f7b8a717f59471f8`
   and npm tarball `383d5b2869ad84a681d7909a5ff568d1e6726c52daef957a456ef48d87250fc7`
   matched the exact committed-source artifacts.
+- Final Astra handoff found no executable work waiting to ship. A fresh Node 24 build and all 693
+  tests passed. After verified ref and ignored-artifact archives, nine stale BB worktrees and twelve
+  stale local branches were retired while canonical and historical release refs were preserved.
 
 ## 2026-09-17, 0.0.6 private alpha
 
