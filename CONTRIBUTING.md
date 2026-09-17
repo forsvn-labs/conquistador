@@ -49,7 +49,7 @@ to check plugin paths and metadata. These checks do not start a host or validate
 
 ## Package a local commit
 
-This phase is private-alpha preparation. Keep `package.json` marked `private: true`; local npm pack still
+This is a private-alpha release channel. Keep `package.json` marked `private: true`; local npm pack still
 works. Do not publish, remove that guard or change repository visibility without explicit approval.
 
 
@@ -72,7 +72,7 @@ and human verdicts. It is a source/archive identity record, not release approval
 tags, signs, uploads, or publishes. Before any public release, obtain the applicable external and
 human acceptance evidence and explicit operator authorization.
 
-CI runs the same local commands for pull requests and pushes to `main`, historical `dogfood/0.1.0`, or proposed `private-alpha`,
+CI runs the same local commands for pull requests and pushes to `main`, historical `dogfood/0.1.0`, or `private-alpha`,
 with read-only repository permissions. It never publishes.
 Historical `test:source`, candidate, live-evidence and inventory-maintenance pipelines retain their
 own private authority requirements and are not part of `npm test` or the public setup path.

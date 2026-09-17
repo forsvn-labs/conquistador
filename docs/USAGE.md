@@ -159,5 +159,5 @@ Use the original installer to update or remove your copy. A compact skill folder
 or development checkout. Build, package, and setup commands belong to a complete distribution.
 Get those instructions from the private [installation guide](https://github.com/forsvn-labs/conquistador/blob/private-alpha/INSTALL.md).
 
-Private-alpha Git links above refer to the proposed next channel. Until it is available, use the
-corresponding files in the complete distribution that supplied this install.
+Private-alpha Git links above follow the live private channel. Use the release tag or full source
+commit from its assembly record when you need an exact version.

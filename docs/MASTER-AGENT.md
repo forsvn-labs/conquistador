@@ -116,4 +116,4 @@ or perform external actions. Native Claude event delivery remains unverified.
 
 Keep project knowledge, credentials, runtime state, and finished work outside the installed package.
 Publication, spend, sends, deployment, memory writes, and feedback disclosure retain their documented
-human decisions in every mode. Private-alpha Git links in this guide are proposed until that channel is available. Before then, read the corresponding files in the supplied complete distribution.
+human decisions in every mode. Private-alpha Git links follow the live private channel. For exact release identity, use the fixed tag or source commit from its assembly record.

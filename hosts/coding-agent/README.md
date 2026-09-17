@@ -95,11 +95,18 @@ access but cannot bypass the installed restriction file.
 
 ## Evidence and limits
 
-Earlier adapter work, before the operator receipt implementation, recorded four separate BB contexts completing a two-specialist draft, integration, and
-review. The reviewer returned a real revision finding against the exact integrated digest. A
-separate host-driven same-context run completed with independent review false. These earlier checks recorded adapter execution and review identity; they do not establish general output
-quality, native activation in other hosts, human acceptance or live-provider support. The operator
-brief/receipt path is covered by synthetic protocol tests in this source. The two operator attempts recorded in PROGRESS both stopped before a completed integration/review/receipt sequence. Each observed public child titles and one Copy draft. FOR-247 and FOR-248 remain open. This review ran no live host task.
+Private alpha 0.0.5 has one uninterrupted provider-backed run through two visible specialists,
+integration, exact-digest review, one targeted correction and exact-digest re-review. All six BB
+children completed and were checked idle. The first review found a word-count mismatch and an
+unsupported activation-frequency claim; the correction removed both. Final provider review returned
+a draft ready for a human decision. Human acceptance is not recorded. This proves the observed
+manual BB/Codex sequence on macOS, not automatic request admission, native activation in other
+hosts, or quality across every method. A fresh manual file invocation also selected the copy method
+and explicitly labeled its review as same-context.
+
+Earlier adapter work recorded a host-driven same-context run with independent review false.
+Interrupted attempts remain partial historical evidence and are not counted as completed runs.
+FOR-247 and FOR-248 retain their remaining human and host acceptance scope.
 
 BB workers share their environment's filesystem and available host tools. Conversation isolation
 is not an access-control sandbox. This adapter instructs workers to use supplied context and
@@ -123,8 +130,7 @@ Assignment IDs `integrate` and `review` remain reserved. Correction and re-revie
 Existing user assignments named correct or final-review remain valid. Ordinary plans
 without presentation remain supported. The result's review field still holds the latest review;
 firstReview and finalReview preserve both observations after a correction. Receipt consumers must
-accept not-run rows and the additional reviewedDigest and status fields. The unshipped receipt
-contract remains v1; product and method versions have not been changed by this review.
+accept not-run rows and the additional reviewedDigest and status fields. The receipt contract remains v1. Product version 0.0.5 and method versions are separate.
 
 Correction and final re-review each have one attempt, even for a known pre-dispatch failure. This
 reserves the two remaining dispatch slots and prevents a hidden correction retry loop. Other

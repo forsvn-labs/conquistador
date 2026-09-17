@@ -5,7 +5,7 @@ knowledge work. Give the parent a result to produce. It selects methods, uses sp
 appropriate and available, integrates the work, reviews it, and proposes a next action.
 Your host supplies the model, tools, project access, and permissions.
 
-This source prepares private-alpha. The operator changes are unshipped and do not guarantee business results.
+Version 0.0.5 is a private alpha. Its operator methods do not guarantee business results.
 [Start with a task](USAGE.md) or use the [installation guide](../INSTALL.md).
 
 ## Useful deliverables

@@ -1,21 +1,34 @@
 # Install Conquistador
 
-The current implementation is unshipped private-alpha preparation. Product version remains 0.1.0;
-the proposed `private-alpha` channel is not an available release established by this checkout.
-Use a supplied private tarball containing this implementation. Do not substitute an older dogfood
-artifact. No public npm package, remote branch, tag, or release is created by these instructions.
+Version `0.0.5` is a private alpha on the `private-alpha` channel. It continues the same private
+delivery sequence as dogfood. Public alpha is planned to start at `0.1.0`.
+Use the [private release](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.5) and its
+exact tag or source commit. The repository remains private and no npm package is published.
+The observed installation platform is macOS with Node 24. Windows/Linux commands below are
+portability guidance; native execution and native host registration still need their own checks.
 
 ## Project operator, recommended
 
-Use Node 24 and npm. Verify the supplied tarball below, then run from your receiving project:
+Use Node 24, npm, Git, and a GitHub account with access to the private repository. Run from your receiving project:
 
 ```sh
-npx -y --ignore-scripts --package=/absolute/path/forsvn-conquistador-0.1.0.tgz conquistador setup
+npx -y --ignore-scripts --package=git+https://github.com/forsvn-labs/conquistador.git#v0.0.5 conquistador setup
 ```
 
-Replace the absolute path with your file. Quote the whole `--package=...` argument if it contains
-spaces. In PowerShell or cmd, use a Windows path such as
-`"--package=C:\Downloads\forsvn-conquistador-0.1.0.tgz"`.
+The tag is fixed for this release. For an exact commit pin, replace `v0.0.5` with the full
+`sourceCommit` in its `assembly.json`. If HTTPS Git lacks access, run `gh auth setup-git` with the
+authorized account. Never put a token in the command.
+
+For the tarball route, download the release assets and verify the checksum before running:
+
+```sh
+gh release download v0.0.5 --repo forsvn-labs/conquistador --dir /absolute/path/conquistador-download
+shasum -a 256 /absolute/path/conquistador-download/forsvn-conquistador-0.0.5.tgz
+npx -y --ignore-scripts --package=/absolute/path/conquistador-download/forsvn-conquistador-0.0.5.tgz conquistador setup
+```
+
+Compare the digest with `SHA256SUMS` before executing the last command. Quote the whole
+`--package=...` argument when its path contains spaces.
 
 Press Enter for the recommended operator, then confirm the displayed installation once. The guide
 defaults to the current project. It shows the selected payload, capability limits, scope, and
@@ -38,13 +51,13 @@ Setup does not change Git excludes or host settings. It starts no service, hook,
 Obtain the tarball and its `SHA256SUMS` from the same authorized private distribution, with a trusted
 release identity. Calculate the file's SHA-256 and compare it with the exact tarball entry before
 execution. A checksum detects changed bytes; a checksum supplied by an untrusted sender does not
-authenticate that sender. The filename and `0.1.0` version alone do not distinguish alpha builds.
+authenticate that sender. Keep the tag, full source commit, and checksum together when recording the installed build.
 
 | System | Calculate SHA-256 |
 | --- | --- |
-| macOS | `shasum -a 256 /absolute/path/forsvn-conquistador-0.1.0.tgz` |
-| Linux | `sha256sum /absolute/path/forsvn-conquistador-0.1.0.tgz` |
-| Windows PowerShell | `Get-FileHash -Algorithm SHA256 "C:\Downloads\forsvn-conquistador-0.1.0.tgz"` |
+| macOS | `shasum -a 256 /absolute/path/forsvn-conquistador-0.0.5.tgz` |
+| Linux | `sha256sum /absolute/path/forsvn-conquistador-0.0.5.tgz` |
+| Windows PowerShell | `Get-FileHash -Algorithm SHA256 "C:\Downloads\forsvn-conquistador-0.0.5.tgz"` |
 
 Node/npm must work before the guide can start. A supplied tarball does not require GitHub sign-in
 or Git, but npm may need registry access for package dependencies. No provider account is needed
@@ -181,10 +194,10 @@ listing nor a passing doctor proves activation or output quality. Record observa
 
 | Transport | Command or procedure |
 | --- | --- |
-| Optional persistent CLI | `npm install --global --ignore-scripts /absolute/path/forsvn-conquistador-0.1.0.tgz`, then `conquistador setup` in the receiving project |
-| Bun tarball | `bunx --package /absolute/path/forsvn-conquistador-0.1.0.tgz conquistador setup`; Node 24 remains required by the shebang |
+| Optional persistent CLI | `npm install --global --ignore-scripts /absolute/path/forsvn-conquistador-0.0.5.tgz`, then `conquistador setup` in the receiving project |
+| Bun tarball | `bunx --package /absolute/path/forsvn-conquistador-0.0.5.tgz conquistador setup`; Node 24 remains required by the shebang |
 | Source or ZIP | `node /absolute/path/conquistador-source/runtime/bin/conquistador.js setup` in the receiving project |
-| Exact private Git, once authorized and available | `npx -y --ignore-scripts --package=git+https://github.com/forsvn-labs/conquistador.git#COMMIT conquistador setup`; replace `COMMIT` with the supplied full commit |
+| Exact private Git | `npx -y --ignore-scripts --package=git+https://github.com/forsvn-labs/conquistador.git#COMMIT conquistador setup`; replace `COMMIT` with the full commit from the release assembly record |
 
 For a persistent CLI, repeat the global install with the intended verified tarball to update it.
 Remove project/plugin/connector copies first as needed, then `npm uninstall --global @forsvn/conquistador`.

@@ -4,6 +4,33 @@ No public release is claimed. Implemented but unshipped work is recorded in [PRO
 versions. Verification establishes the stated local scope; live provider operation, useful model
 output, human acceptance, rights disposition and release authority require separate evidence.
 
+## 2026-09-17, 0.0.5 private alpha
+
+- Fifth private release, continuing the dogfood sequence at
+  [`v0.0.5`](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.5) on `private-alpha`.
+  Product, plugin, host, agent and MCP versions now agree on `0.0.5`. Historical tags retain
+  their bytes. Public alpha remains planned for `0.1.0`; see the historical tag conflict in VERSIONS.
+- Ships the complete project operator with manual activation, one discoverable parent and 38
+  internal methods. Guided setup, owned update/removal, portable schemas, the BB adapter and
+  local doctor share the same installation path. Parent method version is `2.9.1`.
+- Makes pinned private Git through npm the default install. Verified npm/Bun tarballs, source and
+  ZIP remain equivalent complete transports. Local MCP owns its server/library copy and survives
+  removal of the acquisition cache. Installation starts no service, hook or watcher.
+- Ships visible engagement briefs, public specialist titles, exact-digest review, one bounded
+  correction and execution receipts. A real BB run completed six separate Codex contexts through
+  correction and re-review. The final draft passed provider review; human acceptance is pending.
+  A fresh manual file invocation also selected the copy method and disclosed same-context review.
+- Corrects content-learning consent and evidence claims. A cycle decision, durable promotion and
+  persistence permission are separate. Critic PASS grants no write authority; content-intelligence
+  runtime behavior remains locally implemented and fixture-verified.
+- Node 24.21.0 build, all 681 default tests and 66 focused checks passed. The release is scoped to
+  manual macOS use and the observed BB execution. Automatic request admission, native host/plugin
+  activation and native Windows/Linux execution remain unverified. Private shipment does not
+  close the remaining human acceptance issues.
+- The private prerelease carries fresh ZIP, npm tarball, SHA256SUMS and exact-commit assembly.json.
+  The assembly remains an UNBOUND local packaging record. GitHub publication is recorded separately;
+  neither the assembly nor provider draft review establishes human acceptance.
+
 ## 0.1.0-dogfood.4 private prerelease
 
 - Shipped private GitHub prerelease

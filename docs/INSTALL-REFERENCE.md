@@ -5,12 +5,11 @@ the direct commands for local source copies, native plugin managers, runtime ope
 containers. Use the original installer to update and remove a copy. Full skill and plugin packages
 include all 38 outcome methods; domain and standalone method packages can contain fewer.
 
-Version 0.1.0 is private. The primary path is a supplied, checksum-verified tarball through
-`conquistador setup`. No public npm package or currently available private-alpha Git reference is
-established by this source. `private: true` blocks registry publication; authorized Git and local
-package execution remain possible. See [package verification](../INSTALL.md#verify-the-package).
+Version 0.0.5 is private. The primary path is the pinned private Git release or its checksum-verified tarball through
+`conquistador setup`. The fixed release tag is `v0.0.5` on the `private-alpha` channel.
+`private: true` blocks registry publication; private Git and local package execution remain possible. See [package verification](../INSTALL.md#verify-the-package).
 
-For Git acquisition after authorization, use the supplied exact commit. Your GitHub account must
+For Git acquisition, use the fixed release tag or its full source commit. Your GitHub account must
 have repository access, including organization sign-in requirements. A not-found response can mean
 missing access or a missing reference. A supplied private ZIP/tarball avoids Git acquisition.
 
@@ -323,7 +322,7 @@ a stable distribution for runtime MCP. It creates dependencies only in the chose
 setup from the receiving project:
 
 ```sh
-npm install --global --prefix /absolute/path/conquistador-cli --ignore-scripts /absolute/path/forsvn-conquistador-0.1.0.tgz
+npm install --global --prefix /absolute/path/conquistador-cli --ignore-scripts /absolute/path/forsvn-conquistador-0.0.5.tgz
 /absolute/path/conquistador-cli/bin/conquistador setup
 ```
 
@@ -345,10 +344,10 @@ Node prefix can omit `--prefix`; administrator access is not a setup prerequisit
 Build the provided Dockerfile locally; no published image is claimed:
 
 ```sh
-docker build -t conquistador:0.1.0 .
+docker build -t conquistador:0.0.5 .
 docker volume create conquistador-data
-docker run --rm -v conquistador-data:/data conquistador:0.1.0 init
-docker run --rm -v conquistador-data:/data conquistador:0.1.0 doctor
+docker run --rm -v conquistador-data:/data conquistador:0.0.5 init
+docker run --rm -v conquistador-data:/data conquistador:0.0.5 doctor
 ```
 
 The image runs as the `node` user in writable `/data`. Configure the volume and model environment

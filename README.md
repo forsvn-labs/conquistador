@@ -1,21 +1,21 @@
-# Conquistador 0.1.0
+# Conquistador 0.0.5
 
 Conquistador is a project operator for growth, go-to-market, sales, marketing, and product work
 in your coding agent. Give it an outcome and the relevant facts. The parent selects from 38
 outcome methods, assigns specialist work when useful, integrates the drafts, and reports review
 findings. Your host supplies the model, tools, permissions, and any separate worker contexts.
 
-This source prepares the next private distribution channel, `private-alpha`. The operator changes
-are unshipped. No private-alpha branch, tag, version, or release is created by these instructions.
-Historical releases remain in [CHANGELOG.md](CHANGELOG.md). Review results before using them.
+Version `0.0.5` is the fifth private alpha, continuing the earlier dogfood releases on the
+`private-alpha` branch. Private alpha and dogfood are one channel. The future public alpha starts
+at `0.1.0`. See [version policy](VERSIONS.md) and [release history](CHANGELOG.md). Review drafts before use.
 
 ## Install in one project
 
-Use Node 24 and npm. Obtain the private tarball for this implementation and verify its checksum
-as described in [INSTALL.md](INSTALL.md#verify-the-package). From the receiving project, run:
+Use Node 24, npm, Git, and a GitHub account with access to the private repository. From the receiving
+project, run the pinned private release:
 
 ```sh
-npx -y --ignore-scripts --package=/absolute/path/forsvn-conquistador-0.1.0.tgz conquistador setup
+npx -y --ignore-scripts --package=git+https://github.com/forsvn-labs/conquistador.git#v0.0.5 conquistador setup
 ```
 
 Press Enter for the complete project operator, review the destination, and confirm once. Setup
@@ -34,8 +34,9 @@ commits and keep outputs elsewhere. The launcher adds no receiving-project depen
 
 The guide also explains native plugins, skills, portable agents, and MCP connectors. Each route
 states its capability and update owner. Native plugins use their host manager for activation.
-[INSTALL.md](INSTALL.md) covers the optional persistent CLI, Bun, source/ZIP recovery, and exact
-private Git references once authorized. Do not substitute an older dogfood package for this build.
+[INSTALL.md](INSTALL.md) covers checksum-verified release tarballs, the optional persistent CLI,
+Bun, and source/ZIP recovery. This release is verified on macOS with Node 24. Native Windows/Linux
+installation and native Codex, Claude, Copilot, Cursor, Eve, and Grok registration remain unverified.
 
 ## Start a task
 

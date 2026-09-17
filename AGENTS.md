@@ -4,7 +4,7 @@ For a complete product checkout, use the instructions below. A portable-only plu
 skills and documentation; its host loads the skill contracts and does not run these development
 commands.
 
-This is the editable product source, kept private during private-alpha preparation. Read README.md, CONTRIBUTING.md, INSTALL.md, and the
+This is the editable product source, kept private for private-alpha delivery. Read README.md, CONTRIBUTING.md, INSTALL.md, and the
 relevant module README before changing behavior. Node 24 and npm are the supported local toolchain.
 
 - Keep this repository private. Do not push, publish, change visibility or remove the npm private
