@@ -1,11 +1,12 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
-import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, realpathSync, rmSync, symlinkSync, unlinkSync, writeFileSync } from 'node:fs';
+import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, realpathSync, renameSync, rmSync, symlinkSync, unlinkSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createServer } from 'node:http';
+import { createHash } from 'node:crypto';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const script = join(root, 'tools/setup.mjs');
@@ -200,7 +201,7 @@ test('plugin, MCP, and harness cleanup reminders precede the removal result', ()
 test('default MCP connector uses local stdio with no server and preserves mode during update', () => temporary(path => {
   const output = good('install', '--target', 'mcp', '--path', path);
   assert.match(output, /stdio serves bundled methods/);
-  const expected = { command: process.execPath, args: [join(root, 'runtime/bin/conquistador.js'), 'mcp'] };
+  const expected = { command: process.execPath, args: [join(path, 'bundle/runtime/bin/conquistador.js'), 'mcp'] };
   assert.deepEqual(JSON.parse(readFileSync(join(path, 'connector.json'))), expected);
   good('update', '--path', path);
   assert.deepEqual(JSON.parse(readFileSync(join(path, 'connector.json'))), expected);
@@ -296,4 +297,77 @@ test('short operator commands default to the current project and preserve the co
   assert.match(ok('operator', 'uninstall'), /Local state: absent/);
   assert.equal(existsSync(installed), false);
   good('uninstall', '--target', 'operator', '--project', directProject);
+}));
+
+test('setup lists routes and requires an explicit lifecycle target', () => temporary((path, project) => {
+  const invoke = (...args) => spawnSync(process.execPath, [script, ...args], { cwd: project, encoding: 'utf8' });
+  const routes = JSON.parse(invoke('list', '--json').stdout);
+  assert.equal(routes.length, 7);
+  for (const action of ['status', 'doctor', 'update', 'uninstall']) {
+    const result = invoke(action);
+    assert.equal(result.status, 1);
+    assert.match(result.stderr, /Choose --target/);
+  }
+  assert.equal(invoke('install').status, 0);
+  assert.match(invoke('status', '--target', 'operator').stdout, /unchanged/);
+  assert.equal(JSON.parse(invoke('doctor', '--target', 'operator', '--json').stdout).library.available, 38);
+  assert.equal(invoke('uninstall', '--target', 'operator').status, 0);
+  assert.deepEqual(readdirSync(project), []);
+}));
+
+test('local MCP survives loss of the launching cache and does not add project dependencies', () => temporary((path, parent) => {
+  const source = join(parent, '_npx', 'cached-package');
+  mkdirSync(source, { recursive: true });
+  for (const name of ['package.json', 'LICENSE', 'NOTICE.md', 'SKILL.md', 'skills', 'release', 'tools', 'agents', 'hosts/coding-agent', 'runtime/bin']) {
+    mkdirSync(dirname(join(source, name)), { recursive: true });
+    cpSync(join(root, name), join(source, name), { recursive: true });
+  }
+  const runCached = (...args) => spawnSync(process.execPath, [join(source, 'tools/setup.mjs'), ...args], { encoding: 'utf8' });
+  const denied = runCached('install', '--target', 'mcp', '--path', path, '--url', 'https://runtime.example');
+  assert.equal(denied.status, 1);
+  assert.match(denied.stderr, /stable installation/);
+  assert.equal(existsSync(path), false);
+  const result = runCached('install', '--target', 'mcp', '--path', path);
+  assert.equal(result.status, 0, result.stderr);
+  const connector = JSON.parse(readFileSync(join(path, 'connector.json')));
+  renameSync(source, `${source}-removed`);
+  const messages = [
+    { jsonrpc: '2.0', id: 1, method: 'initialize', params: { protocolVersion: '2025-11-25', capabilities: {}, clientInfo: { name: 'lifecycle-test', version: '1' } } },
+    { jsonrpc: '2.0', method: 'notifications/initialized' },
+    { jsonrpc: '2.0', id: 2, method: 'tools/call', params: { name: 'conquistador_methods', arguments: {} } },
+  ];
+  const processResult = spawnSync(connector.command, connector.args, { encoding: 'utf8', input: messages.map(message => JSON.stringify(message)).join('\n') + '\n' });
+  assert.equal(processResult.status, 0, processResult.stderr);
+  const response = JSON.parse(processResult.stdout.trim().split('\n').at(-1));
+  assert.equal(JSON.parse(response.result.content[0].text).methods.length, 39);
+  assert.equal(JSON.parse(good('doctor', '--path', path, '--json')).library.available, 38);
+  for (const name of ['node_modules', 'package.json', 'package-lock.json', 'bun.lock']) assert.equal(existsSync(join(parent, name)), false);
+  good('update', '--path', path);
+  good('uninstall', '--path', path);
+}));
+
+test('runtime MCP can use an explicit stable distribution and rejects runtime flags on other routes', () => temporary(path => {
+  good('install', '--target', 'mcp', '--path', path, '--url', 'https://runtime.example', '--runtime-path', root);
+  assert.equal(JSON.parse(readFileSync(join(path, 'connector.json'))).args[0], join(root, 'runtime/bin/conquistador.js'));
+  good('uninstall', '--path', path);
+  assert.match(bad('install', '--target', 'skill', '--path', path, '--runtime-path', root), /MCP/);
+  assert.match(bad('install', '--target', 'mcp', '--path', path, '--runtime-path', root), /--url/);
+  assert.equal(existsSync(path), false);
+}));
+
+test('unchanged legacy local MCP receipts migrate even when the old source is missing', () => temporary(path => {
+  mkdirSync(path);
+  const connector = JSON.stringify({ command: process.execPath, args: ['/missing/runtime/bin/conquistador.js', 'mcp'] });
+  writeFileSync(join(path, 'connector.json'), connector);
+  const hash = value => createHash('sha256').update(value).digest('hex');
+  writeFileSync(join(path, '.conquistador-install.json'), JSON.stringify({
+    schemaVersion: 'conquistador.public-install/v1', mode: 'mcp',
+    digest: hash(`connector.json\0${hash(connector)}\n`), liveHostVerified: false,
+  }));
+  assert.match(good('status', '--path', path), /unchanged/);
+  assert.equal(setup('doctor', '--path', path).code, 1);
+  good('update', '--path', path);
+  assert.equal(JSON.parse(good('doctor', '--path', path, '--json')).library.available, 38);
+  assert.ok(existsSync(join(path, 'bundle/tools/skills-mcp.mjs')));
+  good('uninstall', '--path', path);
 }));

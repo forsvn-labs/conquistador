@@ -1,11 +1,12 @@
 #!/usr/bin/env node
 import { cpSync, existsSync, lstatSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, realpathSync, renameSync, rmSync, writeFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
-import { dirname, join, relative, resolve, sep } from 'node:path';
+import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { DOMAIN_SCHEMA_VERSION, PARENT_SKILL, RESTRICTION_NAME, REVIEW_SKILL, parseRestriction, readDomainManifestFile, resolveDomainSelection, shouldStageSkillPath } from './domain-package.mjs';
 
 import { operatorFiles } from './operator-package.mjs';
+import { containsPath } from './install-paths.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const receiptName = '.conquistador-install.json';
@@ -56,10 +57,7 @@ function safeDestination(path) {
     if (parent === cursor) break;
     cursor = parent;
   }
-  const fromPackage = relative(root, target);
-  const toPackage = relative(target, root);
-  if (!fromPackage || (!fromPackage.startsWith(`..${sep}`) && fromPackage !== '..') ||
-      !toPackage || (!toPackage.startsWith(`..${sep}`) && toPackage !== '..')) fail('Install outside the distribution, into a dedicated directory.');
+  if (containsPath(root, target) || containsPath(target, root)) fail('Install outside the distribution, into a dedicated directory.');
   return target;
 }
 

@@ -1,11 +1,63 @@
 # Implementation status
 
-The operator implementation and this independent review are unshipped. The proposed next private
+## Unified installation, unshipped
+
+`conquistador setup` is the guided front door. From the receiving project, it shows the recommended
+complete operator and asks for one route choice plus one apply confirmation. It then installs
+locally, runs doctor, and prints activation, first-task, update, and removal instructions. The other
+choices cover native plugin sources, compact host skills, portable harness or squad, local MCP,
+runtime MCP, and experimental import guidance. Native host managers still own plugin activation.
+Experimental routes install nothing and make no native support claim.
+
+The immediately usable private-alpha acquisition path is a supplied, checksum-verified tarball
+through npm. Optional persistent npm CLI, Bun tarball, source and ZIP paths remain documented.
+Exact Git acquisition requires an authorized available reference; no proposed channel is advertised
+as fetchable. `--ignore-scripts` remains in acquisition commands and is explained once. No lifecycle
+hook, curl installer, host registration, service startup, or receiving-project dependency is added.
+The product remains private, version 0.1.0, with parent method 2.9.0. No push, branch publication,
+tag, release, account change, or ship is part of this work; CHANGELOG is unchanged.
+
+`install` and the `operator` lifecycle retain their current-project defaults. Setup lifecycle
+subcommands require a target or explicit owned path; they do not silently select an operator.
+Legacy arguments, runtime status/doctor, v1 receipts, edited-file refusal, staged replacement and
+rollback, user files, and the harness alias remain intact.
+
+Local MCP now owns a self-contained server/library bundle. Removing an acquisition cache no longer
+removes its executable or methods. Updating an unchanged legacy connector migrates it to this
+layout. Client entries must be replaced after repair, Node replacement, or folder relocation.
+Runtime MCP requires a stable distribution and dependency, rejects known npm/Bun cache roots, and
+accepts `--runtime-path` from a cached launcher. It preserves the service URL on update and never
+installs or contacts the service. Windows cross-drive/UNC containment, native separator checks in
+MCP doctor, and PowerShell command quoting have portable unit coverage.
+
+[Architecture and specification](docs/INSTALLATION-ARCHITECTURE.md) records ownership and migration
+boundaries. The [official-source mechanism matrix](docs/INSTALL-MECHANISMS.md), README, INSTALL,
+platform and reference guides describe acquisition separately from host activation and execution.
+VISION states those boundaries; ROADMAP retains distribution and native-host acceptance work.
+
+Node 24.21.0 and npm 11.19.0 passed build and all 670 default tests: 147 tooling, 293 runtime,
+167 catalog, and 63 Eval Lab. Catalog validation reported 17 valid operations; the synthetic local
+example retained zero live executions and zero human verdicts. Tests used a task-owned npm cache
+because the host's shared cache was not writable. A real terminal guide check confirmed cancellation
+leaves the project empty, and Enter then apply installs all 38 methods with local doctor success.
+The test installation was removed through its lifecycle command. The focused setup, entry,
+installer, doctor, plugin, MCP, and portability suite also passed all 67 tests.
+
+Clean exact-commit packaging and transport lifecycle checks are pending the implementation commit.
+Native Windows/Linux execution, private Git acquisition for this unshipped source, native host
+activation, provider-backed tasks, and human acceptance remain unverified. Portable path tests and
+local MCP protocol tests do not substitute for those observations.
+
+## Previous operator command review, historical
+
+The evidence below belongs to earlier commits and does not verify the unified guide above.
+
+The preceding operator implementation and review were unshipped when recorded. The proposed next private
 channel is `private-alpha`; no channel branch, tag, version, release, push, or publication was made.
 Product version remains 0.1.0 and parent method version remains 2.9.0. The npm private guard remains
 true. Historical ships are recorded only in [CHANGELOG.md](CHANGELOG.md).
 
-The default private-alpha install now uses the package executable through the short command `npx -y
+The preceding review proposed a default private-alpha install using the package executable through the short command `npx -y
 --ignore-scripts 'forsvn-labs/conquistador#private-alpha' install`. The public operator lifecycle is
 `install` plus `operator status|doctor|update|uninstall`; each command defaults to the current
 project. Existing runtime `status`, runtime `doctor`, and advanced `setup` commands retain their

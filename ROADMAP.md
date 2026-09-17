@@ -12,7 +12,7 @@
 3. Obtain the private-alpha distribution decision and authorized source reference. Check the exact
    ZIP, npm tarball, checksums and assembly record before any channel creation or distribution.
    Product version remains 0.1.0; do not infer a new version or tag. Keep the repository private and
-   npm publication disabled. Make the short npm package runner command the default install. For
+   npm publication disabled. Validate the guided npm tarball setup as the default install. For
    one exact release, compare the managed digest and doctor result across npm private Git, npm
    tarball, Bun tarball, source, and ZIP installs. Each complete transport must contain 38 methods,
    the operator profile, schemas, agent contracts, and the BB adapter. Keep compact skill and MCP
@@ -26,7 +26,8 @@ provider observations, human acceptance and release authority are separate evide
 - Verify Executor setup and task resumption with a separately authorized account operation. Observe
   permissions, cancellation and recovery. Discovery or login alone does not prove an operation.
 - Check exact update identity across source copies, npm and Bun cache changes, Node changes, and
-  host caches. Copies without Git still lack source commit provenance.
+  host caches. Copies without Git still lack source commit provenance. Verify local MCP repair after Node
+  replacement, and native Windows setup including cross-drive paths, quoting, file locks, and host discovery.
 - Exercise optional previews, Claude hooks, and domain restrictions in the consuming host. Compact
   copies rely on host access enforcement. Native hook delivery remains unverified.
 - Exercise an explicitly requested Eve job with a named owner, selected model and budget, approval,

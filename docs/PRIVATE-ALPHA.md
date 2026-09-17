@@ -6,8 +6,8 @@ checks, observed behavior, and your acceptance of the result separate.
 ## Install and check
 
 1. Follow the [recommended operator installation](../INSTALL.md#project-operator-recommended). Use
-   the npm private Git launcher or the exact supplied tarball in the project where you intend to
-   work. Record the tag, commit, or tarball digest. The private-alpha channel is proposed, not
+   the verified supplied tarball and guided setup in the project where you intend to
+   work. Record the supplied commit and tarball digest where available. The private-alpha channel is proposed, not
    released.
 2. From the receiving project, run `conquistador operator status` and `conquistador operator
    doctor --json` through the same package source used for installation. The doctor must report 38
@@ -28,7 +28,8 @@ observations. Record the exact source commit when available; otherwise keep the 
 identity and mark the commit unknown.
 
 When checking more than one full transport, use the same release bytes and compare the managed
-receipt digest. npm private Git, npm tarball, Bun tarball, source, and ZIP installs must agree.
+receipt digest. npm tarball, Bun tarball, source, and ZIP installs must agree. Test an exact private Git source
+only after the owner makes that reference available.
 Compact skill and local MCP integrations have stated capability limits and do not satisfy this
 operator parity check.
 

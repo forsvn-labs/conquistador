@@ -41,6 +41,8 @@ function rootBundle(path) {
   for (const name of ['SKILL.md', 'skills', 'release']) cpSync(join(root, name), join(path, name), { recursive: true });
 }
 function rewriteConnector(path, connector) {
+  // These cases model the legacy connector-only receipt, still supported.
+  rmSync(join(path, 'bundle'), { recursive: true, force: true });
   writeFileSync(join(path, 'connector.json'), JSON.stringify(connector));
   const receipt = JSON.parse(readFileSync(join(path, '.conquistador-install.json')));
   receipt.digest = hash(`connector.json\0${hash(readFileSync(join(path, 'connector.json')))}\n`);
@@ -257,7 +259,8 @@ test('Git identity belongs only to an exact source root and marks modified check
 
 test('doctor is usable before runtime libraries and dependencies exist and rejects invalid flags', () => temporary((path, parent) => {
   rootBundle(path);
-  for (const file of ['runtime/bin/conquistador.js', 'tools/setup.mjs', 'tools/domain-package.mjs', 'tools/installation-doctor.mjs']) {
+  for (const file of ['runtime/bin/conquistador.js', 'tools/setup.mjs', 'tools/domain-package.mjs', 'tools/installation-doctor.mjs',
+    'tools/install-paths.mjs', 'tools/setup-routes.mjs', 'tools/setup-guide.mjs', 'tools/setup-mcp.mjs', 'tools/operator-package.mjs']) {
     mkdirSync(dirname(join(path, file)), { recursive: true });
     cpSync(join(root, file), join(path, file));
   }
@@ -265,7 +268,7 @@ test('doctor is usable before runtime libraries and dependencies exist and rejec
   assert.equal(result.status, 0, result.stderr);
   assert.equal(existsSync(join(path, 'runtime/lib')), false);
   assert.equal(existsSync(join(path, 'node_modules')), false);
-  for (const args of [[], ['--path', 'relative'], ['--path', path, '--path', path], ['--path', path, '--json', '--json'], ['--path', path, '--target', 'skill']]) assert.equal(run('doctor', ...args).status, 1);
+  for (const args of [[], ['--path', 'relative'], ['--path', path, '--path', path], ['--path', path, '--json', '--json'], ['--path', path, '--target', 'unknown']]) assert.equal(run('doctor', ...args).status, 1);
   assert.match(run('--help').stdout, /setup doctor --path ABS \[--json\]/);
 }));
 

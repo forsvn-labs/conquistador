@@ -5,19 +5,14 @@ the direct commands for local source copies, native plugin managers, runtime ope
 containers. Use the original installer to update and remove a copy. Full skill and plugin packages
 include all 38 outcome methods; domain and standalone method packages can contain fewer.
 
-Version 0.1.0 is private. The proposed next source channel is
-[forsvn-labs/conquistador, branch private-alpha](https://github.com/forsvn-labs/conquistador/tree/private-alpha).
-This review did not create that branch. Until the owner makes it available, use a supplied source
-copy or ZIP.
-Your GitHub account must have access, including any organization sign-in requirements.
-A repository-not-found response can mean that the account lacks access. Use a supplied private
-ZIP if you do not have repository access. There is no public package to install from npm.
+Version 0.1.0 is private. The primary path is a supplied, checksum-verified tarball through
+`conquistador setup`. No public npm package or currently available private-alpha Git reference is
+established by this source. `private: true` blocks registry publication; authorized Git and local
+package execution remain possible. See [package verification](../INSTALL.md#verify-the-package).
 
-The recommended `npx` command uses the package's existing `conquistador` executable and a Git
-package reference. `private: true` prevents registry publication; it does not prevent an authorized
-Git or local tarball package from running. npm keeps that package in its cache and does not add it to
-the receiving project's dependencies. For repeatable installation, replace the moving channel with
-the exact release tag or commit supplied in the release notes.
+For Git acquisition after authorization, use the supplied exact commit. Your GitHub account must
+have repository access, including organization sign-in requirements. A not-found response can mean
+missing access or a missing reference. A supplied private ZIP/tarball avoids Git acquisition.
 
 The private release tarball is also the supported Bun package runner input. Bun still starts the
 Node shebang, so Node 24 is required. Do not use the private HTTPS Git reference with Bun unless a
@@ -30,7 +25,7 @@ Use this route when a package runner cannot use your Git credentials or when you
 the source before installation. From the receiving project, run:
 
 ```sh
-node /absolute/path/conquistador-source/runtime/bin/conquistador.js install
+node /absolute/path/conquistador-source/runtime/bin/conquistador.js setup
 node /absolute/path/conquistador-source/runtime/bin/conquistador.js operator doctor
 ```
 
@@ -65,16 +60,18 @@ with your own path. Keep the source clone separate from the project receiving th
    Expect `forsvn-labs/conquistador` and `isPrivate: true`. If access fails, complete GitHub sign-in
    or request repository access from the owner, then retry. Do not bypass this with another source.
 
-2. Clone the private-alpha branch into a new, dedicated directory:
+2. Once the owner supplies an available authorized commit, clone into a new dedicated directory
+   and check out that exact commit. Replace `COMMIT` below:
 
    ```sh
-   gh repo clone forsvn-labs/conquistador /absolute/path/conquistador-source -- --branch private-alpha --single-branch
+   gh repo clone forsvn-labs/conquistador /absolute/path/conquistador-source
+   git -C /absolute/path/conquistador-source checkout --detach COMMIT
    git -C /absolute/path/conquistador-source rev-parse HEAD
    git -C /absolute/path/conquistador-source status --short
    ```
 
    Expect a commit ID and no status output. Record the full commit ID for your private-alpha notes.
-   The branch can advance; compare the ID with the build your maintainer asked you to test.
+   Compare the ID with the exact build your maintainer asked you to test.
    Do not install dependencies, build, or save project files in this source folder before copying it.
    If the destination already exists, choose a new directory instead of deleting or cleaning it.
 
@@ -356,12 +353,29 @@ only if bearer transport is enabled. Never provide human review/action tokens to
 See [runtime setup and review](../runtime/README.md) for the service configuration and authority flow.
 Skill-only routes give guidance; they are not silently turned into executable playbooks.
 
-The supplied npm tarball can also install the CLI into a dedicated prefix:
+## Persistent CLI
+
+A supplied verified tarball can install the CLI globally in a user-owned prefix. This also provides
+a stable distribution for runtime MCP. It creates dependencies only in the chosen prefix. Run
+setup from the receiving project:
 
 ```sh
-npm install --prefix /absolute/path/conquistador-cli --ignore-scripts /absolute/path/forsvn-conquistador-0.1.0.tgz
-/absolute/path/conquistador-cli/node_modules/.bin/conquistador --help
+npm install --global --prefix /absolute/path/conquistador-cli --ignore-scripts /absolute/path/forsvn-conquistador-0.1.0.tgz
+/absolute/path/conquistador-cli/bin/conquistador setup
 ```
+
+On macOS/Linux the executable is `PREFIX/bin/conquistador` and package directory is
+`PREFIX/lib/node_modules/@forsvn/conquistador`. On Windows they are `PREFIX/conquistador.cmd` and
+`PREFIX/node_modules/@forsvn/conquistador`. Add the executable directory to PATH through your
+normal user environment controls, or use its absolute path. Setup never edits PATH.
+For `--runtime-path`, pass the package directory, not the executable or prefix itself.
+[npm folder layout](https://docs.npmjs.com/cli/v11/configuring-npm/folders/)
+
+Repeat installation with an exact verified newer artifact to update the CLI. Installed project
+copies and native host caches do not update automatically. Remove those with their original owners
+as needed, then run `npm uninstall --global --prefix ABS @forsvn/conquistador`. Do not remove a
+prefix that also contains unrelated packages. A global install using your existing user-managed
+Node prefix can omit `--prefix`; administrator access is not a setup prerequisite.
 
 ## Container
 
@@ -393,7 +407,7 @@ release records. A package or install receipt is not live-provider evidence or r
 | The skill is in the wrong project or scope | Remove it through the original installer in that scope, then install from the intended project for the intended host |
 | Conquistador appears in the install summary but not in the host | Confirm the project and selected host, then start a fresh session; check the plugin namespace if applicable |
 | The parent cannot find a method | Use the [read-only completeness check](../INSTALL.md#read-only-completeness-check) from the complete CLI, preserve edits, and reinstall the root bundle; do not copy the nested parent alone |
-| Managed MCP has an unchanged receipt but will not start | Run `operator doctor --path ABS` from a complete distribution to check its saved Node/package paths; restore the source or recreate the connector, then update the client registration if needed |
+| Managed MCP has an unchanged receipt but will not start | Run `operator doctor --path ABS` from a complete distribution to check its saved Node/package paths; update/repair the managed local connector, then replace the client entry; a runtime bridge still needs its stable source |
 | The compact helper reports `Destination exists` | Choose a new directory, or use `upgrade` only for an unchanged helper-owned install |
 | The helper reports modified files or a differing receipt | Preserve the edits and stage a new directory; do not alter the receipt to force replacement |
 | Runtime configuration or model access fails | Follow `doctor` diagnostics and the runtime guide; verify the configured credential environment variable through the host's secret settings |

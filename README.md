@@ -11,27 +11,26 @@ Historical releases remain in [CHANGELOG.md](CHANGELOG.md). Review results befor
 
 ## Install in one project
 
-Use Node 24, npm, Git, and a GitHub account with access to the private repository. From the
-receiving project's root, run this command after the owner makes `private-alpha` available:
+Use Node 24 and npm. Obtain the private tarball for this implementation and verify its checksum
+as described in [INSTALL.md](INSTALL.md#verify-the-package). From the receiving project, run:
 
 ```sh
-npx -y --ignore-scripts 'forsvn-labs/conquistador#private-alpha' install
-npx -y --ignore-scripts 'forsvn-labs/conquistador#private-alpha' operator doctor
+npx -y --ignore-scripts --package=/absolute/path/forsvn-conquistador-0.1.0.tgz conquistador setup
 ```
 
-`npx` keeps Conquistador in npm's cache. It does not add a dependency, `node_modules`, or a
-lockfile to the receiving project. The managed folder `.conquistador-operator/` contains the
-parent, all methods, the operator profile, portable agent contracts, and the BB adapter. Keep it
-out of public commits and keep your outputs elsewhere. Installation starts no global CLI, service,
-hook, polling, or transcript capture.
+Press Enter for the complete project operator, review the destination, and confirm once. Setup
+checks local completeness and prints the first task. It does not register or activate your host.
+For automation, replace `setup` with `install`, then run `operator doctor` through the same launcher.
 
-If GitHub denies access, authenticate the intended account and run `gh auth setup-git`; do not put
-a token in the command. Until the channel exists, use the supplied npm tarball, source, or ZIP.
-Bun users can execute the supplied tarball with `bunx`; the private Git URL is not the documented
-Bun path. Every full operator transport installs the same package and must pass the same doctor
-checks. Compact skills and MCP are limited host integrations, not equivalent operator installs.
-Do not substitute an old dogfood release for this operator. [INSTALL.md](INSTALL.md) covers Bun,
-exact release references, lifecycle commands, source recovery, skills, plugins, and MCP.
+The operator folder `.conquistador-operator/` contains the parent, all 38 methods, the manual
+operator profile, portable contracts and schemas, and the BB adapter. Keep it out of public
+commits and keep outputs elsewhere. The launcher adds no receiving-project dependency manifest,
+`node_modules`, or lockfile. Installation starts no service, hook, watcher, or transcript capture.
+
+The guide also explains native plugins, skills, portable agents, and MCP connectors. Each route
+states its capability and update owner. Native plugins use their host manager for activation.
+[INSTALL.md](INSTALL.md) covers the optional persistent CLI, Bun, source/ZIP recovery, and exact
+private Git references once authorized. Do not substitute an older dogfood package for this build.
 
 ## Start a task
 

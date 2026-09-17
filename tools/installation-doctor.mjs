@@ -4,6 +4,7 @@ import { createHash } from 'node:crypto';
 import { accessSync, constants, lstatSync, readFileSync, realpathSync, statSync } from 'node:fs';
 import { dirname, isAbsolute, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { isRuntimeExecutable } from './install-paths.mjs';
 
 const distribution = fileURLToPath(new URL('../', import.meta.url));
 const manifestPath = 'release/completeness.json';
@@ -77,12 +78,12 @@ function connectorTarget(path, issues) {
     if (!Array.isArray(args) || ![2, 4].includes(args.length) || args[1] !== 'mcp' ||
         (args.length === 4 && (args[2] !== '--url' || typeof args[3] !== 'string'))) throw Error('Unrecognized connector');
     result.nodeExecutable = executable(connector.command, constants.X_OK);
-    result.packageExecutable = executable(args[0], constants.R_OK) && args[0].endsWith('/runtime/bin/conquistador.js');
+    result.packageExecutable = executable(args[0], constants.R_OK) && isRuntimeExecutable(args[0]);
     result.mode = args.length === 4 ? 'runtime-bridge' : 'local-methods';
     if (!result.nodeExecutable) issues.push('Saved MCP Node executable is missing or not executable. Recreate the connector with the current Node installation.');
     if (!result.packageExecutable) issues.push('Saved MCP package executable is missing or unreadable. Restore its source/package or recreate the connector.');
     const packagePath = result.packageExecutable ? realpathSync(args[0]) : null;
-    if (packagePath && !packagePath.endsWith('/runtime/bin/conquistador.js')) {
+    if (packagePath && !isRuntimeExecutable(packagePath)) {
       issues.push('Saved MCP package executable resolves outside the expected runtime/bin layout. Recreate the connector.');
       return { checks: result, root: null };
     }

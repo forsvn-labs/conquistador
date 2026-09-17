@@ -225,7 +225,7 @@ Usage:
   conquistador operator --help         Manage and verify a project operator
   conquistador setup doctor --path ABS [--json]  Check installed files; no host activation proof
   conquistador                         Show help
-  conquistador setup                   Install, inspect, update or uninstall a host package
+  conquistador setup                   Guided project installation; setup list shows routes
   conquistador connections --help      Inspect Executor, help install it, connect accounts
   conquistador jobs --help             Prepare a host for explicit durable jobs
   conquistador integrations status     Inspect pinned integration dependencies

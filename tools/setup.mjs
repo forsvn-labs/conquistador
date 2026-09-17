@@ -2,21 +2,18 @@
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import { lstatSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, renameSync, rmSync, writeFileSync } from 'node:fs';
-import { dirname, isAbsolute, join, relative, resolve, sep } from 'node:path';
+import { dirname, isAbsolute, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createInterface } from 'node:readline/promises';
 import { parseKnowledgeRoots, readDomainManifestFile, resolveDomainSelection, resolveKnowledgeRoot } from './domain-package.mjs';
+import { containsPath, shellCommand as formatCommand } from './install-paths.mjs';
+import { targets, projectPaths, routes, defaultPath, describeRoute } from './setup-routes.mjs';
+import { collectSetupArgs } from './setup-guide.mjs';
+import { runtimeSource, stageMcp } from './setup-mcp.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const script = join(root, 'tools/setup.mjs');
 const receiptName = '.conquistador-install.json';
 const schema = 'conquistador.public-install/v1';
-const targets = {
-  codex: 'conquistador', 'claude-code': 'conquistador', copilot: 'conquistador', cursor: 'conquistador', skill: 'conquistador',
-  'claude-plugin': 'plugin', 'codex-plugin': 'plugin', 'copilot-plugin': 'plugin', 'agent-plugins': 'plugin',
-  mcp: 'mcp', operator: 'single-agent', harness: 'single-agent', squad: 'squad', 'grok-bot': 'grok-bot', eve: 'eve',
-};
-const projectPaths = { operator: '.conquistador-operator', codex: '.agents/skills/conquistador', 'claude-code': '.claude/skills/conquistador', copilot: '.github/skills/conquistador', cursor: '.cursor/skills/conquistador' };
 const fail = message => { throw new Error(message); };
 function stat(path) {
   try { return lstatSync(path); } catch (error) { if (error.code === 'ENOENT') return null; throw error; }
@@ -32,8 +29,7 @@ function absolutePath(path) {
 }
 function safePath(path) {
   const target = absolutePath(path);
-  const inside = (a, b) => { const part = relative(a, b); return !part || (part !== '..' && !part.startsWith(`..${sep}`)); };
-  if (inside(root, target) || inside(target, root)) fail('Choose a dedicated directory outside the distribution.');
+  if (containsPath(root, target) || containsPath(target, root)) fail('Choose a dedicated directory outside the distribution.');
   return target;
 }
 function serviceUrl(value) {
@@ -52,10 +48,16 @@ function parse(args) {
   const options = { action };
   for (let i = 0; i < rest.length; i += 2) {
     const flag = rest[i];
-    if (!['--target', '--project', '--path', '--url', '--domain', '--knowledge-roots'].includes(flag) || options[flag.slice(2)] !== undefined || !rest[i + 1] || rest[i + 1].startsWith('--')) fail('Unknown, duplicate, or incomplete option.');
+    if (!['--target', '--project', '--path', '--url', '--runtime-path', '--domain', '--knowledge-roots'].includes(flag) || options[flag.slice(2)] !== undefined || !rest[i + 1] || rest[i + 1].startsWith('--')) fail('Unknown, duplicate, or incomplete option.');
     options[flag.slice(2)] = rest[i + 1];
   }
   if (options.target !== undefined && !Object.hasOwn(targets, options.target)) fail('Unknown target.');
+  if (action === 'install') options.target ??= 'operator';
+  if (!options.project && !options.path) {
+    if (action !== 'install' && !options.target) fail('Choose --target TARGET or --path ABS. For the default operator use conquistador operator ' + action + '.');
+    options.target ??= 'operator';
+    options.path = defaultPath(options.target, process.cwd(), options.url);
+  }
   if (!!options.project === !!options.path) fail('Supply exactly one of --project ABS or --path ABS.');
   if (options.project) {
     if (!Object.hasOwn(projectPaths, options.target ?? '')) fail('--project requires a named coding-agent target; use --path for other targets.');
@@ -67,6 +69,10 @@ function parse(args) {
   if (options.url !== undefined) {
     if (options.target !== 'mcp' || !['install', 'update'].includes(action)) fail('--url requires install/update --target mcp.');
     options.url = serviceUrl(options.url);
+  }
+  if (options['runtime-path'] !== undefined) {
+    if (!['install', 'update'].includes(action) || (options.target && options.target !== 'mcp')) fail('--runtime-path requires MCP install/update.');
+    options['runtime-path'] = absolutePath(options['runtime-path']);
   }
   if (options.domain !== undefined) {
     if (!['install', 'update'].includes(action)) fail('--domain requires install or update.');
@@ -111,9 +117,9 @@ function inspect(path, expectedMode) {
     return { state: record.digest === digest(path) ? 'unchanged' : 'modified', mode: record.mode, domainId: record.domainId };
   } catch { return { state: 'modified', ownership: 'unverified' }; }
 }
-const quote = value => `'${value.replaceAll("'", "'\\''")}'`;
-const shellCommand = (...args) => args.map(quote).join(' ');
-const command = (...args) => shellCommand(process.execPath, script, ...args);
+const shellCommand = (...args) => formatCommand(args);
+// A cached source path is not a durable lifecycle command.
+const command = (...args) => shellCommand('conquistador', 'setup', ...args);
 function pluginNext(target, path, action) {
   const host = { 'claude-plugin': 'claude', 'codex-plugin': 'codex', 'copilot-plugin': 'copilot' }[target];
   if (!host) return;
@@ -132,6 +138,7 @@ function pluginNext(target, path, action) {
 }
 function report(options, result) {
   const { path, target } = options;
+  if (process.platform === 'win32' && options.action !== 'uninstall') console.log('Commands below use PowerShell.');
   console.log(`Local state: ${result.state}. Path: ${path}`);
   if (options.action === 'uninstall') {
     console.log('Removed the unchanged owned local copy.');
@@ -154,6 +161,18 @@ function report(options, result) {
             ? 'In a fresh session in the receiving project, ask your agent to read ' + join(path, 'agent/skills/conquistador/SKILL.md') + ' and follow it for your task. BB users can explicitly run hosts/coding-agent/team.mjs from this folder. Project routing needs a host adapter; no registration or watcher was created.'
           : 'Load the prepared contract or skill in your host, start a fresh session, and verify discovery with a small task.'));
     if (result.mode === 'plugin') pluginNext(target, path, options.action);
+    if (result.mode === 'mcp') {
+      console.log('After update or repair, copy the new connector.json into the client and restart the entry.');
+      console.log('First task: for local MCP, read conquistador/SKILL.md, then draft a launch email from supplied product facts. For runtime MCP, run a supported playbook against your configured service.');
+    } else if (result.mode === 'single-agent') {
+      console.log(`First task: Read ${join(path, 'agent/skills/conquistador/SKILL.md')} and follow it. Draft a launch email from my product facts. Keep it as a draft.`);
+    } else if (['plugin', 'conquistador'].includes(result.mode)) {
+      console.log('First task: in a fresh host session select Conquistador, then ask: Draft a launch email from my product facts. Keep it as a draft.');
+    } else if (result.mode === 'squad') console.log('First task: attach squad.json in your adapter, then request a draft launch email and a labeled review.');
+    console.log(result.mode === 'plugin' ? 'Update owner: setup owns this source; the original host manager owns the activated copy.'
+      : result.mode === 'mcp' ? 'Update owner: setup owns this connector; the client owns registration; runtime service/data remain separate.'
+        : 'Update owner: setup owns this folder. Keep outputs and host settings elsewhere.');
+    console.log('Use your original verified package launcher in place of conquistador if no persistent CLI is installed.');
     console.log(`Update local copy: ${command('update', '--path', path)}`);
     console.log(`Uninstall local copy: ${command('uninstall', '--path', path)}`);
   } else if (result.state === 'absent' && target === 'mcp') {
@@ -174,12 +193,13 @@ function mcpLifecycle(options) {
         !([2, 4].includes(priorArgs.length)) || (priorArgs.length === 4 && priorArgs[2] !== '--url')) fail('Unrecognized MCP connector. Preserve it and choose a new folder.');
     if (priorArgs.length === 4) url = serviceUrl(priorArgs[3]);
   }
-  const connector = { command: process.execPath, args: [join(root, 'runtime/bin/conquistador.js'), 'mcp', ...(url ? ['--url', url] : [])] };
+  if (options['runtime-path'] && !url) fail('--runtime-path needs a runtime MCP connector with --url.');
+  const source = url ? runtimeSource(options['runtime-path'] ?? root) : root;
   mkdirSync(dirname(path), { recursive: true });
   const temporary = mkdtempSync(join(dirname(path), '.conquistador-connector-'));
   let previous;
   try {
-    writeFileSync(join(temporary, 'connector.json'), JSON.stringify(connector, null, 2) + '\n');
+    stageMcp(temporary, path, source, url);
     writeFileSync(join(temporary, receiptName), JSON.stringify({ schemaVersion: schema, mode: 'mcp', digest: digest(temporary), liveHostVerified: false }, null, 2) + '\n');
     if (action === 'update') {
       if (inspect(path, 'mcp').state !== 'unchanged') fail('Files changed during staging.');
@@ -210,50 +230,83 @@ function run(options, reminderShown = false) {
     }
   } else if (result.state !== 'unchanged') fail(`Refusing ${options.action}: ${result.state}; unowned or modified files are preserved.`);
   const ownedMode = mode ?? result.mode;
+  if (options['runtime-path'] && ownedMode !== 'mcp') fail('--runtime-path requires MCP install/update.');
+  let displayUrl = options.url;
+  if (ownedMode === 'mcp' && options.action === 'update' && !displayUrl) {
+    const prior = JSON.parse(readFileSync(join(options.path, 'connector.json'), 'utf8'));
+    if (prior.args?.length === 4) displayUrl = prior.args[3];
+  }
+  const displayTarget = options.target ?? { mcp: 'mcp', plugin: 'agent-plugins', conquistador: 'skill', 'single-agent': 'harness', squad: 'squad' }[ownedMode];
+  for (const line of describeRoute(displayTarget, displayUrl)) console.log(line);
+  if (options.selection) console.log('Domain selection reduces the copied library. Full-library doctor does not certify domain readiness.');
   if (options.action === 'uninstall' && !reminderShown) removalReminder(ownedMode);
   if (ownedMode === 'mcp') mcpLifecycle(options);
   else execFileSync(process.execPath, [join(root, 'tools/install.mjs'), { install: 'install', update: 'upgrade', uninstall: 'remove' }[options.action], ownedMode, options.path, ...(options.domain ? ['--domain', options.domain] : [])], { stdio: 'pipe' });
   const checked = inspect(options.path, ownedMode);
   report(options, { ...checked, mode: ownedMode });
+  return { ...checked, mode: ownedMode };
 }
 async function guided() {
   if (!process.stdin.isTTY || !process.stdout.isTTY) fail('Interactive setup requires a terminal. Use install|status|update|uninstall --target TARGET --path ABS.');
   const prompt = createInterface({ input: process.stdin, output: process.stdout });
   try {
-    const action = (await prompt.question('Action: install, status, update, uninstall [install]: ')).trim() || 'install';
-    if (!['install', 'status', 'update', 'uninstall'].includes(action)) fail('Unknown action.');
-    const args = [action];
-    if (action === 'install') {
-      console.log('Where will you use Conquistador?\n1. Project operator (recommended)\n2. Host plugin\n3. MCP over stdio\n4. Compact skill or custom host\n5. Experimental Grok/Eve');
-      const groups = { 1: ['operator'], 2: ['claude-plugin', 'codex-plugin', 'copilot-plugin', 'agent-plugins'], 3: ['mcp'], 4: ['codex', 'claude-code', 'copilot', 'cursor', 'skill', 'harness', 'squad'], 5: ['grok-bot', 'eve'] };
-      const group = groups[(await prompt.question('Group [1]: ')).trim() || '1'];
-      if (!Array.isArray(group)) fail('Unknown group.');
-      console.log(group.join(', '));
-      const target = (await prompt.question(`Target [${group[0]}]: `)).trim() || group[0];
-      if (!group.includes(target)) fail('Choose a target from this group.');
-      const location = Object.hasOwn(projectPaths, target) ? '--project' : '--path';
-      const path = await prompt.question(location === '--project' ? 'Absolute project directory: ' : 'Absolute owned folder: ');
-      args.push('--target', target, location, path);
-      if (target === 'mcp') {
-        const url = (await prompt.question('Runtime service origin, or Enter for local methods: ')).trim();
-        if (url) args.push('--url', url);
-      }
-    } else args.push('--path', await prompt.question('Absolute owned folder: '));
+    const args = await collectSetupArgs(text => prompt.question(text));
     const options = parse(args);
+    for (const line of describeRoute(options.target, options.url)) console.log(line);
+    console.log(`Destination: ${options.path}. Scope: this owned folder; host registration remains separate.`);
+    if (process.platform === 'win32') console.log('Commands below use PowerShell.');
     console.log(command(...args));
-    if (action === 'uninstall') removalReminder(inspect(options.path).mode);
-    if (action === 'status' || (await prompt.question('Apply this local action? [y/N]: ')).trim().toLowerCase() === 'y') run(options, action === 'uninstall');
-    else console.log('Cancelled. No files changed.');
+    if (['grok-bot', 'eve'].includes(options.target)) { run(options); return 0; }
+    if ((await prompt.question('Apply this local installation? [y/N]: ')).trim().toLowerCase() !== 'y') {
+      console.log('Cancelled. No files changed.');
+      return 0;
+    }
+    const result = run(options);
+    if (['single-agent', 'plugin', 'conquistador', 'mcp'].includes(result?.mode)) {
+      const { runInstallationDoctor } = await import('./installation-doctor.mjs');
+      return runInstallationDoctor(['--path', options.path], inspect);
+    }
+    return 0;
   } finally { prompt.close(); }
 }
+export const setupHelp = `Usage:
+  conquistador setup                 Guided installation in the current project
+  conquistador setup list [--json]   List routes and capability boundaries
+  conquistador setup install [--target TARGET] [--project ABS | --path ABS]
+  conquistador setup status|doctor|update|uninstall (--target TARGET | --path ABS)
+  conquistador setup doctor --path ABS [--json]
+
+install defaults to the complete operator; a target without a path uses its project folder.
+Lifecycle commands require a target or path. operator status|doctor|update|uninstall defaults to
+the project operator. Bare runtime status and doctor keep their existing meaning.
+Legacy --project ABS and --path ABS arguments remain supported.
+MCP: --url ORIGIN selects an existing runtime; --runtime-path ABS selects its stable distribution.
+Local MCP copies its server and methods; neither mode registers a client or starts a service.
+--domain ABS and --knowledge-roots ABS retain domain selection for supported package targets.
+Use the original verified package launcher if no persistent conquistador CLI is installed.
+Doctor checks local files, not host activation, provider access, or task success.
+Targets: ${Object.keys(targets).join(', ')}`;
+
 export async function runSetup(args) {
   try {
+    if (Number(process.versions.node.split('.')[0]) !== 24) fail('Use Node 24 for Conquistador setup.');
+    if (args[0] === 'list') {
+      if (args.length > 2 || (args[1] !== undefined && args[1] !== '--json')) fail('Usage: conquistador setup list [--json]');
+      console.log(args[1] === '--json' ? JSON.stringify(routes, null, 2) : routes.map(route =>
+        `${route.id}: ${route.label}\n  Targets: ${route.targets.join(', ')}\n  ${route.contents}\n  ${route.boundary}`).join('\n'));
+      return 0;
+    }
     if (args[0] === 'doctor') {
       const { runInstallationDoctor } = await import('./installation-doctor.mjs');
-      return runInstallationDoctor(args.slice(1), inspect);
+      // Preserve the existing doctor parser and its JSON error behavior for --path callers.
+      if (args.includes('--path') && !args.includes('--target')) return runInstallationDoctor(args.slice(1), inspect);
+      if (!args.includes('--target')) fail('Choose --target TARGET or --path ABS. For the default operator use conquistador operator doctor.');
+      if (args.filter(arg => arg === '--json').length > 1) fail('Duplicate --json.');
+      const options = parse(['status', ...args.slice(1).filter(arg => arg !== '--json')]);
+      return runInstallationDoctor(['--path', options.path, ...(args.includes('--json') ? ['--json'] : [])], inspect);
     }
-    if (args.length === 0) await guided();
-    else if (args.length === 1 && args[0] === '--help') console.log('Usage: node tools/setup.mjs [install|status|update|uninstall --target TARGET (--project ABS | --path ABS) [--url ORIGIN] [--domain ABS] [--knowledge-roots ABS]]\n       conquistador setup doctor --path ABS [--json]\nDoctor checks local library completeness, build identity where available, and saved MCP executable paths. It does not verify host activation or provider access.\nTargets: ' + Object.keys(targets).join(', ') + '\noperator installs at PROJECT/.conquistador-operator with --project; harness uses --path for the same package. Activation is manual.\nOmit target with --path for receipt-owned status, update, or uninstall. --domain selects roles, outcomes, workflows, tools, and logical knowledge handles from the canonical library. Knowledge roots stay in operator-owned configuration. No arguments opens guided setup.');
+    if (args.length === 0) return await guided();
+    else if (args.length === 1 && args[0] === '--help') console.log(setupHelp);
     else run(parse(args));
     return 0;
   } catch (error) {

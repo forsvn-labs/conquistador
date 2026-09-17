@@ -7,9 +7,11 @@ Research, creative work, engineering, and review support that mission.
 
 ## Make the first task easy
 
-Offer one package runner command that installs the complete project operator. Put prerequisites,
+Offer one package runner command that opens guided setup for the complete project operator.
+Default to the current project, explain the chosen form, and confirm the local installation once. Put prerequisites,
 installation traps, and recovery beside the command. It must not add a dependency or lockfile to
-the receiving project. Follow it with a real task. npm private Git, npm and Bun tarballs, source,
+the receiving project. Follow it with a real task. Native plugins retain their host manager and trust boundary.
+Verified npm tarballs lead private acquisition; authorized exact Git, Bun tarballs, source,
 and ZIP are transports for the same complete package. The runtime, typed catalog, Eval Lab, and
 durable jobs are optional. Every installation route needs a clear update and removal path.
 

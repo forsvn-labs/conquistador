@@ -1,306 +1,231 @@
 # Install Conquistador
 
-The next proposed channel is `private-alpha`. These operator changes have not shipped. Product
-version remains 0.1.0. The channel commands below become usable only when the owner makes that
-private Git branch available. No tag or release is implied. Until then, use a supplied complete
-npm tarball, source copy, or ZIP containing this implementation.
+The current implementation is unshipped private-alpha preparation. Product version remains 0.1.0;
+the proposed `private-alpha` channel is not an available release established by this checkout.
+Use a supplied private tarball containing this implementation. Do not substitute an older dogfood
+artifact. No public npm package, remote branch, tag, or release is created by these instructions.
 
 ## Project operator, recommended
 
-Use Node 24, npm, Git, a coding agent that can read project files, and a GitHub account with access
-to the private repository. From the receiving project, run this command after `private-alpha`
-exists:
+Use Node 24 and npm. Verify the supplied tarball below, then run from your receiving project:
 
 ```sh
-npx -y --ignore-scripts 'forsvn-labs/conquistador#private-alpha' install
-npx -y --ignore-scripts 'forsvn-labs/conquistador#private-alpha' operator doctor
+npx -y --ignore-scripts --package=/absolute/path/forsvn-conquistador-0.1.0.tgz conquistador setup
 ```
 
-`npx` obtains the package through Git and runs its declared `conquistador` executable from
-npm's cache. It does not add a dependency, `node_modules`, or a lockfile to the receiving project.
-Use the exact release tag or commit from the private-alpha release notes when repeatable bytes
-matter; the channel branch can advance. If GitHub denies access, authenticate the intended account
-and run `gh auth setup-git`. Do not put a token in the command.
+Replace the absolute path with your file. Quote the whole `--package=...` argument if it contains
+spaces. In PowerShell or cmd, use a Windows path such as
+`"--package=C:\Downloads\forsvn-conquistador-0.1.0.tgz"`.
 
-This creates `.conquistador-operator/` with `agent/agent.json`, the parent and 38 methods under
-`agent/skills/`, the operator profile, contract schemas, compatibility v1 metadata, and
-`hosts/coding-agent/`. The `harness` target with `--path ABS` installs the same single-agent package.
-Keep the folder private and outputs outside it. No global CLI, host registration, daemon, poller,
-background capture, or external operation starts. No source checkout or development bootstrap is
-required.
+Press Enter for the recommended operator, then confirm the displayed installation once. The guide
+defaults to the current project. It shows the selected payload, capability limits, scope, and
+activation step. It checks local files after installation and prints a first task. Other routes
+ask for their host and owned folder. `conquistador setup list` explains every route without writing.
 
-If you received the release tarball, npm and Bun can execute that exact local file:
+`--ignore-scripts` is a safety flag: npm skips automatic package lifecycle hooks during acquisition.
+The explicitly requested Conquistador command still runs. The flag is not a sandbox or proof of
+package trust. [npm configuration](https://docs.npmjs.com/cli/v11/using-npm/config/#ignore-scripts)
 
-```sh
-npx -y --ignore-scripts \
-  --package=/absolute/path/forsvn-conquistador-0.1.0.tgz conquistador install
+The package runs from npm's cache. It adds no dependency manifest, `node_modules`, or lockfile to
+the receiving project. The default `.conquistador-operator/` contains the parent, 38 methods,
+manual operator profile, portable contracts and schemas, and BB adapter. Keep this private folder
+out of public commits, for example through a project-local Git exclude, and keep outputs elsewhere.
+Setup does not change Git excludes or host settings. It starts no service, hook, or watcher.
+[How npm exec uses its cache](https://docs.npmjs.com/cli/v11/commands/npm-exec/)
 
-bunx --package /absolute/path/forsvn-conquistador-0.1.0.tgz \
-  conquistador install
-```
+### Verify the package
 
-Choose one command. The Bun launcher follows the package's Node shebang, so Node 24 remains a
-prerequisite. For this private repository, use the release tarball with Bun; the private HTTPS Git
-form is not a supported path. Verify a downloaded tarball against the release `SHA256SUMS` before
-running it.
+Obtain the tarball and its `SHA256SUMS` from the same authorized private distribution, with a trusted
+release identity. Calculate the file's SHA-256 and compare it with the exact tarball entry before
+execution. A checksum detects changed bytes; a checksum supplied by an untrusted sender does not
+authenticate that sender. The filename and `0.1.0` version alone do not distinguish alpha builds.
 
-### Capability parity
+| System | Calculate SHA-256 |
+| --- | --- |
+| macOS | `shasum -a 256 /absolute/path/forsvn-conquistador-0.1.0.tgz` |
+| Linux | `sha256sum /absolute/path/forsvn-conquistador-0.1.0.tgz` |
+| Windows PowerShell | `Get-FileHash -Algorithm SHA256 "C:\Downloads\forsvn-conquistador-0.1.0.tgz"` |
 
-The package transport must not change the installed operator. These routes install the complete
-operator into `.conquistador-operator/`:
-
-| Transport | Command input | Capability contract |
-| --- | --- | --- |
-| npm private Git | Exact branch, tag, or commit | Complete operator |
-| npm tarball | Verified release `.tgz` | Complete operator |
-| Bun tarball | The same verified release `.tgz` | Complete operator |
-| Source clone or ZIP | The same release source | Complete operator |
-
-For the same release bytes, each route must produce the same managed receipt digest. `operator
-doctor --json` must report 38 methods, the operator profile, and the BB adapter. It also reports
-host activation and task execution as unverified until the host runs a task. Release validation
-must fail if a transport omits a method, schema, agent contract, profile, or adapter.
-
-Skills, plugins, and MCP below connect Conquistador to specific hosts. They have their own discovery
-and execution behavior. A compact skill copy omits the BB adapter. Local MCP lists and reads methods
-but does not run the complete operator. These integrations must not be presented as substitutes for
-the complete operator unless they pass the same package and host checks.
-
-Start a fresh host session in that project and ask:
-
-```text
-Read .conquistador-operator/agent/skills/conquistador/SKILL.md and follow it for
-this task. Use docs/product.md and docs/audience.md to prepare our beta launch.
-Deliver landing-page copy, one launch email and a two-week campaign plan in
-docs/launch/. Mark claims that need evidence. Keep this as a draft.
-```
-
-Use your own inputs. This explicit file request loads the parent without assuming that your host
-understands portable JSON agents. If the host cannot read files, choose a skills/plugin or MCP
-route below. In BB, the explicit [team command](hosts/coding-agent/README.md#run-a-team) executes
-specialists when needed. Setup does not automatically call it or register project routing.
-
-The installed profile defaults to `manual`. A host integration can call `admitRequest` at each
-user turn with a host-owned `activation` override. `project` enables conservative request routing;
-`off` makes the router abstain, including explicit invocation. No generic host setting is installed.
-Keep activation settings outside the managed package. [Activation details](docs/MASTER-AGENT.md)
-include the API and limits.
-
-Use the same package source for each lifecycle command. For the private Git channel:
-
-```sh
-CONQUISTADOR_PACKAGE='forsvn-labs/conquistador#private-alpha'
-npx -y --ignore-scripts "$CONQUISTADOR_PACKAGE" operator status
-npx -y --ignore-scripts "$CONQUISTADOR_PACKAGE" operator doctor
-npx -y --ignore-scripts "$CONQUISTADOR_PACKAGE" operator update
-npx -y --ignore-scripts "$CONQUISTADOR_PACKAGE" operator uninstall
-```
-
-For an update, replace the package reference with the exact newer release tag or commit you intend
-to install. Reuse the local tarball form when that is your distribution. Status verifies owned
-files; doctor verifies library completeness. Both leave host activation and execution unverified.
-Edited files cause update/removal to refuse. Preserve edits and use a new folder if needed. Before
-removal, disable any host routing, detach the contract, and stop active teams. Uninstall leaves
-host settings and running agents alone. Refresh the host after update/removal.
-
-## Host skill integration
-
-Use this integration when the host needs native skill discovery. The host decides which files it
-loads and whether it can create specialist contexts, so installation alone does not establish full
-operator parity. Its private-alpha command is proposed until the channel exists. For immediate use,
-install from the [supplied local source](docs/INSTALL-REFERENCE.md#skillssh-from-a-local-source).
-
-
-Use Node 24, Git, an existing coding agent, and a GitHub account with access to the private
-repository. From the project where you want to use Conquistador, run:
-
-```sh
-DISABLE_TELEMETRY=1 npx --yes skills@1.5.26 add "forsvn-labs/conquistador#private-alpha" --skill conquistador
-```
-
-Choose your host when prompted. Keep `--skill conquistador` as shown. Do not add `--full-depth`,
-`--skill '*'`, or `--all`. Do not install only the nested `skills/conquistador` folder: it needs
-its sibling methods. The pinned root install copies the complete bundle.
+Node/npm must work before the guide can start. A supplied tarball does not require GitHub sign-in
+or Git, but npm may need registry access for package dependencies. No provider account is needed
+for work based on supplied facts.
 
 ### First task
 
-Start a fresh host session in the receiving project. Select `/conquistador`, `$conquistador`, or
-the host's skill picker, then give it a real task:
+In a fresh coding-agent session in the receiving project, ask:
 
 ```text
-/conquistador Use docs/product.md and docs/audience.md to prepare our beta
-launch. Deliver landing-page copy, one launch email and a two-week campaign
-plan in docs/launch/. Mark claims that need evidence. Keep this as a draft.
+Read .conquistador-operator/agent/skills/conquistador/SKILL.md and follow it.
+Use docs/product.md and docs/audience.md to draft a launch email in docs/launch/.
+Mark claims that need evidence. Keep this as a draft.
 ```
 
-Use your own paths, or paste the relevant facts. Expect finished copy, a plan, evidence gaps, and
-for this multi-part task a short engagement brief plus an execution receipt. Review the output.
-[More task examples](docs/USAGE.md) explain direct work, isolated teams, same-context review,
-project activation, inputs, corrections, and follow-up. No provider account, Executor service, or
-runtime is required for work based on supplied context.
+Use your own input paths or paste facts. This explicit file invocation needs no native skill
+registration. The host must be able to read the file. A portable JSON contract does not register
+a native agent. The BB adapter can execute an explicit [specialist team](hosts/coding-agent/README.md).
+Project routing requires a host adapter calling `admitRequest`; installation does not wire it up.
+Activation remains `manual`. [Activation and execution](docs/MASTER-AGENT.md)
 
-### What successful installation means
+### Capability parity
 
-Check these separately:
+npm tarball, Bun tarball, source, ZIP, and an authorized exact Git reference must install the same
+operator payload for the same release. Compare its managed digest and doctor result. A complete
+operator has all 38 methods, the profile, contracts, schemas, and BB adapter. Identical files do
+not establish equal host execution. Reduced integrations below must retain their stated limits.
 
-1. Run `DISABLE_TELEMETRY=1 npx --yes skills@1.5.26 list` from the same project to check inventory.
-   Confirm the intended host and scope.
-2. Use the doctor below to check local file completeness.
-3. Start a fresh session and finish the first task. A listing or doctor result cannot
-   establish activation or the quality of that result.
+## Choose a different integration
 
-The normal destination is `.agents/skills/conquistador/`, with host links or copies as selected
-by the installer. Inside it are root `SKILL.md`, `skills/conquistador/SKILL.md`, all outcome
-folders under `skills/`, the operator profile, supporting docs, `release/completeness.json`, tools, and runtime source.
-The code files are available but do not start automatically. Skill installation adds no global CLI,
-daemon, watcher, or schedule. The operator profile defaults to `manual` activation.
+Prefer a host's native manager when you want a native plugin. The generic guide prepares local
+files and prints host steps; it does not implement universal registration.
 
-Managed compact setup places methods under `library/` and omits `hosts/coding-agent/`. It is a
-reduced integration. Plugin and operator/harness packages include that BB adapter. All three include
-the methods, but executing specialists still depends on the host. [Platform details](docs/PLATFORMS.md)
-describe locations and host registration.
+| Form | Guide target | Contents and execution | Update and removal owner |
+| --- | --- | --- | --- |
+| Complete project operator | `operator` | 38 methods, profile, contracts/schemas, BB adapter; host executes | `operator` lifecycle |
+| Native plugin source | `claude-plugin`, `codex-plugin`, `copilot-plugin`, `agent-plugins` | Complete operator inventory plus discovery metadata; native capabilities depend on host | Setup owns source; original host manager owns activated copy |
+| Compact skill | `codex`, `claude-code`, `copilot`, `cursor`, `skill` | 38 methods and profile; no portable schemas or BB adapter | Setup for managed copies; skills CLI for its copies |
+| Portable agent | `harness` | Same complete operator; consuming adapter required | Setup plus host detachment |
+| Fixed squad | `squad` | Worker/advisor contracts and declared method subsets; no BB adapter | Setup plus host detachment |
+| Local MCP | `mcp`, no URL | Owned server and library copy, including operator inventory; tools only list/read methods | Setup owns copy; client owns registration/process |
+| Runtime MCP | `mcp` with `--url` | Connector only; separate service executes supported playbooks, not all 38 methods | Setup/client; runtime and data remain separate |
+| Experimental import | `eve`, `grok-bot` | Guidance only; guide creates no files; native activation unverified | Consuming app, if supported |
+
+Domain packages and standalone methods contain fewer methods and do not pass the full-library
+doctor. The [architecture and specification](docs/INSTALLATION-ARCHITECTURE.md) defines these
+contracts. The [official mechanism matrix](docs/INSTALL-MECHANISMS.md) explains host differences,
+including AI-app plugins and permission boundaries.
+
+## CLI lifecycle
+
+The examples use a persistent `conquistador` command. With the tarball launcher, replace that word
+with the entire verified `npx ... conquistador` prefix above. Choose the exact newer package when
+updating. Updating a CLI package does not update any project copy automatically.
+
+```sh
+conquistador setup list
+conquistador install
+conquistador operator status
+conquistador operator doctor --json
+conquistador operator update
+conquistador operator uninstall
+```
+
+`install` is the concise noninteractive complete-operator command. It defaults to the current
+project; `--project PATH` selects another. `operator` lifecycle commands share those defaults.
+For any other managed copy, use its target or absolute owned path:
+
+```sh
+conquistador setup install --target cursor
+conquistador setup status --target cursor
+conquistador setup doctor --target cursor --json
+conquistador setup update --target cursor
+conquistador setup uninstall --target cursor
+```
+
+`setup status|doctor|update|uninstall` requires a target or path, so it cannot silently choose a
+wrong installation. Existing `setup ... --target TARGET --project ABS` and `--path ABS` forms remain
+supported. Bare `conquistador status` and `conquistador doctor` remain runtime diagnostics.
+
+Managed updates/removal refuse edited or unowned files. Preserve edits and use a fresh folder
+when needed. Disable host routing and stop active teams before removal. Remove plugin/client
+registration through the original host and scope, then remove the prepared copy. Refresh the host.
+User outputs, host settings, service data, and secrets are not installer-owned.
 
 ### Read-only completeness check
 
-For a root skill copy that contains the doctor, run from the receiving project:
-
-```sh
-node .agents/skills/conquistador/runtime/bin/conquistador.js operator doctor \
-  --path "$PWD/.agents/skills/conquistador"
-```
-
-Adjust the path if your installer chose another location. From a complete source checkout or
-extracted distribution, inspect any supported installed copy with:
-
-```sh
-node runtime/bin/conquistador.js operator doctor --path /absolute/path/to/installation --json
-```
-
-Omit `--json` for readable output. Expect:
+`operator doctor --path ABS --json` checks files, method versions/hashes, receipt integrity, saved
+MCP paths, and Git identity where available. It does not start executables or contact services.
+A copy without Git still has unknown source commit identity. Use the doctor from the same release.
 
 ```text
 38 methods available; local files verified; host activation and task execution unverified.
 ```
 
-The doctor compares method versions, content hashes, and supporting resources with its release
-manifest. It reports source Git identity and cleanliness where available, managed receipt
-integrity, operator-profile presence, and product version where present. A copy without Git has an
-unknown source commit. A digest does not prove provenance, routing, or load methods into model
-context. Files ready is not host activation. If the host cannot activate the operator package,
-the first task should explain that host's invocation step.
+### What successful installation means
 
-For managed MCP, it also checks the saved Node executable and package script, then the library the
-script resolves to. A matching receipt cannot hide paths lost after a source move, Node replacement,
-or npm-cache cleanup. The check changes no files, runs no saved executable, and contacts no service.
+Check local completeness, host discovery, and a real first task separately. For substantial tasks,
+check the engagement brief, deliverable, labeled review, and execution receipt. Neither a plugin
+listing nor a passing doctor proves activation or output quality. Record observations with the
+[private-alpha checklist](docs/PRIVATE-ALPHA.md).
 
-Exit code 0 means local checks passed; 1 means a failed check or invalid input. Domain-restricted
-and standalone method installs do not satisfy this full-library check. If manifests differ, use
-the doctor from the same release or preserve edits and reinstall. Older releases, including
-`v0.1.0-dogfood.3`, predate this doctor; use a complete source/distribution that includes it.
-Bare `conquistador doctor` is the separate runtime diagnostic.
+## Other ways to obtain the same package
 
-### Recovery
-
-| Symptom | Action |
+| Transport | Command or procedure |
 | --- | --- |
-| GitHub denies access | Sign in with the account that has repository access. If `gh` works but HTTPS Git fails, run `gh auth setup-git` and retry. |
-| Installed in the wrong project or scope | Remove through the original installer in that scope, then install from the intended project for the intended host. |
-| Listed but missing in the host | Check the project, host, and scope; start a fresh session. Plugin installs use the host's plugin invocation. |
-| Doctor reports missing or changed files | Preserve edits, then repair or reinstall through the original installer. Do not rewrite the receipt to force a pass. |
-| Doctor passes but the task fails | Record the host, build, task, and failure in private-alpha notes. Local completeness does not prove execution. |
-| Managed MCP has stale executable paths | Restore the source/package or recreate the connector with the current Node installation. Update the client's registration if its path changed. |
+| Optional persistent CLI | `npm install --global --ignore-scripts /absolute/path/forsvn-conquistador-0.1.0.tgz`, then `conquistador setup` in the receiving project |
+| Bun tarball | `bunx --package /absolute/path/forsvn-conquistador-0.1.0.tgz conquistador setup`; Node 24 remains required by the shebang |
+| Source or ZIP | `node /absolute/path/conquistador-source/runtime/bin/conquistador.js setup` in the receiving project |
+| Exact private Git, once authorized and available | `npx -y --ignore-scripts --package=git+https://github.com/forsvn-labs/conquistador.git#COMMIT conquistador setup`; replace `COMMIT` with the supplied full commit |
 
-Never place tokens in chat, commands, or MCP configuration. [Dogfood notes](docs/PRIVATE-ALPHA.md) keep
-observations separate from installation checks.
+For a persistent CLI, repeat the global install with the intended verified tarball to update it.
+Remove project/plugin/connector copies first as needed, then `npm uninstall --global @forsvn/conquistador`.
+A user-owned prefix avoids administrator permissions; see the [prefix instructions](docs/INSTALL-REFERENCE.md#persistent-cli).
+A normal project-local `npm install PACKAGE` changes that project's dependencies and is not the
+recommended operator flow. The npm publication guard remains `private: true`.
+
+Private Git requires Git and the intended GitHub account's repository access, including organization
+sign-in rules. If GitHub CLI can read the repo but HTTPS Git cannot, use `gh auth setup-git`.
+Never put a token in the command. A missing branch is distinct from missing account access.
+[GitHub credential-helper setup](https://cli.github.com/manual/gh_auth_setup-git)
+
+The private HTTPS Git form is not the supported Bun route. Use its verified tarball form. There is
+no curl-to-shell installer. A future standalone installer needs authenticated private acquisition,
+verified signed versioned artifacts, Windows/macOS/Linux support, safe PATH handling, rollback and
+removal, and the same payload checks. [Future installer criteria](docs/INSTALLATION-ARCHITECTURE.md#future-standalone-installer)
+
+<a id="skills"></a>
+## Host skill integration
+
+For native skill discovery, select the host in the guide or use its `setup install --target` command.
+For a skills.sh-managed root copy, follow the [pinned local-source procedure](docs/INSTALL-REFERENCE.md#skillssh-from-a-local-source).
+That root copy includes the BB adapter; the compact guide route does not. Never install only the
+nested `skills/conquistador` folder, which needs sibling methods. Select the skill in a fresh session.
 
 ### Update or remove the skill
 
-Preserve local edits before updating, then repeat the same pinned `skills add` command in the same
-project and scope. The branch can advance, and an agent-run installer can replace files without a
-prompt. Keep outputs outside the installed folder. After updating, check completeness, refresh the
-host, and repeat a small task.
+Use the original installer and scope. For the pinned skills CLI, repeat its root `add` command to
+update; use `npx --yes skills@1.5.26 remove conquistador` to remove. Keep outputs outside its folder.
+See [host paths and invocation](docs/PLATFORMS.md#coding-agents).
 
-Remove from the original project with:
+## Plugins
 
-```sh
-DISABLE_TELEMETRY=1 npx --yes skills@1.5.26 remove conquistador
-```
+Use [native host-manager instructions](docs/PLATFORMS.md#plugins). The guide can prepare a local
+plugin source from the supplied distribution before registration. Claude local scope is specific
+to the receiving project; Codex and Copilot plugin registration is user-level. Host trust and
+permission checks still apply. Conquistador does not bundle an auto-starting MCP server or hook.
 
-Use the original plugin manager or managed installer for copies it owns. The
-[deep reference](docs/INSTALL-REFERENCE.md#update-or-remove-an-installation) lists their lifecycles.
+## MCP over stdio
 
-## Alternatives
-
-Choose one route. None is an additional prerequisite for the recommended operator install.
-
-### Plugins
-
-For Claude Code, run from the receiving project:
+Choose local MCP in the guide, or run:
 
 ```sh
-claude plugin marketplace add forsvn-labs/conquistador@private-alpha --scope local
-claude plugin install conquistador@conquistador --scope local
+conquistador setup install --target mcp
 ```
 
-Use `/conquistador:conquistador` or select the Conquistador agent. The host owns activation and
-updates. [Plugin commands](docs/PLATFORMS.md#plugins) cover Claude, Codex, and Copilot, including
-removal. Keep the original scope and manager.
+Copy `.conquistador-mcp/connector.json` into your client's server entry. It contains `command` and
+`args`; clients with `mcpServers` wrap that object under the chosen server name. The client starts
+and stops the process. Ask it to read `conquistador/SKILL.md`, then request a draft from supplied facts.
 
-### MCP over stdio
+The managed folder includes its server and library, so deleting the original source or clearing
+npm's cache does not break it. Node itself must remain installed. After Node replacement or moving
+this folder, stop the client, run `setup update --path ABS` through the current package launcher,
+replace the client's saved entry with the new connector, and restart it. Modified files still cause
+repair to refuse. Old connector-only receipts are supported and become self-contained on local update.
 
-For an MCP client, add:
+For runtime MCP, choose the separate guide route and supply an existing service origin plus a stable
+runtime distribution. Cache-backed runtime creation fails before writing. See the
+[runtime bridge instructions](docs/PLATFORMS.md#optional-runtime-bridge). Removing a connector never
+erases service data or stops a shared service.
 
-```json
-{
-  "mcpServers": {
-    "conquistador": {
-      "command": "npx",
-      "args": [
-        "--yes",
-        "--ignore-scripts",
-        "--package=git+https://github.com/forsvn-labs/conquistador.git#private-alpha",
-        "conquistador",
-        "mcp"
-      ]
-    }
-  }
-}
-```
+## Recovery
 
-Git in the client's environment must have private repository access. The package stays in npm's
-cache; no public npm package or global CLI is required. The client starts and stops the process.
-It lists and reads methods; your agent supplies the model, project tools, and permissions. Ask it
-to read the parent guide first. Remove the client entry to disconnect.
-[The MCP reference](docs/PLATFORMS.md#mcp) covers updates and the separate runtime bridge.
+| Problem | Action |
+| --- | --- |
+| Unsupported Node version | Use Node 24 before starting setup |
+| Tarball identity is unclear | Obtain the exact private build and trusted checksum; do not infer identity from its filename |
+| Destination already exists or has edits | Inspect its original owner; preserve edits and select a new folder |
+| Doctor passes but host cannot invoke it | Follow the selected host's activation step and use a fresh session |
+| MCP entry has old paths | Update/repair the owned copy, replace client configuration, and restart the entry |
+| Runtime MCP rejects a cache | Install a separate stable runtime prefix and pass its package directory with `--runtime-path` |
 
-### CLI setup
-
-The recommended package runner also opens the interactive guide:
-
-```sh
-npx -y --ignore-scripts 'forsvn-labs/conquistador#private-alpha' setup
-```
-
-For other targets, select them in that guide or replace the operator arguments. The command can
-prepare an owned compact copy, plugin folder, or MCP connector. Status checks local integrity;
-doctor checks completeness. Neither registers or activates the host. Keep the cached package
-available while a saved MCP connector points to it.
-
-### Clone for recovery or development
-
-```sh
-gh repo clone forsvn-labs/conquistador -- --branch private-alpha --single-branch
-node conquistador/runtime/bin/conquistador.js install --project /absolute/path/to/receiving-project
-```
-
-Use a separate receiving project. Keep the source for managed updates and removal. This path is
-useful when the package runner cannot use your Git credentials or when you need to inspect the
-source before installation. For frozen ZIPs, custom hosts, and runtime operators, use the
-[manual reference](docs/INSTALL-REFERENCE.md).
-
-## Optional account and job hosts
-
-Start the task before setting up accounts. When missing live access blocks it, Conquistador helps
-connect Executor and resumes the work. Eve is for explicitly requested durable jobs. The runtime
-executes its declared playbooks, not all 38 methods. None starts during skill installation.
-[Accounts and durable jobs](docs/INTEGRATIONS.md) explains these paths and their separate checks.
+Accounts and durable jobs remain optional. Set up Executor only when live access blocks a task;
+Eve jobs and runtime playbooks have their own prerequisites. [Connection guidance](docs/INTEGRATIONS.md)

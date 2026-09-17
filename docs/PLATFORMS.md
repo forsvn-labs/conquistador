@@ -3,7 +3,8 @@
 Start with [installation](../INSTALL.md). This page contains the details for the one host you
 selected. Installing files, registering a host and running a real task are separate checks.
 [Master-agent modes](MASTER-AGENT.md) explains which installations can run isolated specialists and which
-use the sequential fallback.
+use the sequential fallback. The [official mechanism matrix](INSTALL-MECHANISMS.md) records
+the distribution formats and their limits.
 
 ## Coding agents
 
@@ -46,20 +47,21 @@ Folder references: [Codex](https://learn.chatgpt.com/docs/build-skills),
 
 ## Plugins
 
-The private-alpha Git commands below are proposed until that branch is available. Use a supplied
-local distribution before then. Register the private GitHub repository directly when you want host-managed plugin controls or the
-native Claude agent. Managed setup can also prepare a local plugin folder. The host owns its activated copy. Before
+Prefer the native host manager for a plugin. For private alpha now, select Native host plugin in
+`conquistador setup` to prepare a local source from the verified supplied package. The commands below
+use that source folder. Only use private Git after an authorized exact source exists. The host owns its activated copy. Before
 removing the prepared folder, uninstall the plugin through the same host and scope. Marketplace
 registrations may be shared; remove only the Conquistador registration when no other install uses it.
 
 ### Claude Code
 
 Run these from the project where you want Conquistador. Use local scope so the registration is not
-written into shared project settings. Your host needs GitHub access to this private repository.
+written into shared project settings. Git sources need repository access; a supplied local plugin
+source does not require GitHub authentication.
 
 | Action | Command |
 | --- | --- |
-| Register source | `claude plugin marketplace add forsvn-labs/conquistador@private-alpha --scope local` |
+| Register source | `claude plugin marketplace add /absolute/path/conquistador-plugin --scope local` |
 | Install | `claude plugin install conquistador@conquistador --scope local` |
 | Check | `claude plugin list --json` |
 | Refresh source | `claude plugin marketplace update conquistador` |
@@ -73,6 +75,8 @@ Only after checking other registrations, remove an unused local marketplace with
 scopes, and marketplace removal can uninstall remaining plugins. Do not use it as the first
 uninstall step. [Claude reference](https://code.claude.com/docs/en/plugins-reference).
 
+Claude can discover skills and agents and start declared MCP servers when a plugin is enabled.
+Trust and host approvals still apply. Conquistador declares no automatic MCP server or hook.
 The plugin includes the native `conquistador:conquistador` master agent. Select it in Claude's agent
 picker, or use the namespaced `/conquistador:conquistador` skill. It can request Claude worker
 contexts when the current host exposes them. The plugin contains one native Conquistador definition;
@@ -81,12 +85,14 @@ hook adapter; see [Proactive help](PROACTIVE.md#optional-conquistador-mode-for-c
 
 ### Codex
 
-Codex plugin registration uses user configuration. Choose the coding-agent skill route above
+Codex plugin registration uses user configuration. Current official guidance also exposes the
+`/plugins` browser for configured marketplaces and requires a fresh session.
+[OpenAI plugin guide](https://learn.chatgpt.com/docs/plugins). Choose the coding-agent skill route above
 when you want only project-local files.
 
 | Action | Command |
 | --- | --- |
-| Register source | `codex plugin marketplace add forsvn-labs/conquistador@private-alpha` |
+| Register source | `codex plugin marketplace add /absolute/path/conquistador-plugin` |
 | Install | `codex plugin add conquistador@conquistador` |
 | Check | `codex plugin list --json` |
 | Refresh Git source | `codex plugin marketplace upgrade conquistador` |
@@ -106,7 +112,7 @@ Copilot's native plugins are user-level installations. For project-only setup, u
 
 | Action | Command |
 | --- | --- |
-| Register source | `copilot plugin marketplace add forsvn-labs/conquistador#private-alpha` |
+| Register source | `copilot plugin marketplace add /absolute/path/conquistador-plugin` |
 | Install | `copilot plugin install conquistador@conquistador` |
 | Check and find installed name | `copilot plugin list` |
 | Refresh source | `copilot plugin marketplace update conquistador` |
@@ -120,8 +126,12 @@ uninstall are unverified, so keep project outputs and runtime data outside its i
 [Copilot reference](https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-plugin-reference).
 
 The commands above were checked against primary documentation or source. They were not executed
-in a native host. If a command is unavailable in your installed version, use the default skill
+in a native host. If a command is unavailable in your installed version, use the compact skill
 route instead.
+
+Cursor accepts Agent Plugins through its own plugin controls, but its MCP path-variable behavior
+differs from the standard. The Conquistador bundle has no `mcp.json`; no Cursor-native agent or
+universal registration command is claimed. [Cursor plugin reference](https://prod.cursor.com/docs/reference/plugins).
 
 For another [Agent Plugins 1.0.0](https://agent-plugins.org/specification) client, import the bundle
 through that client's controls and use the same client to disable, update or uninstall it. The
@@ -138,23 +148,39 @@ with `conquistador/SKILL.md`, then follow Conquistador's routing. The server doe
 write project files, collect feedback or run the optional runtime. Reads are bounded and restricted
 to the installed skill tree. The MCP client, not this server, creates any specialist contexts.
 
-Your MCP client owns the process. Remove its `conquistador` entry to disconnect. To update, stop
-the entry, refresh its package from the current branch, then restart it. The npm launcher caches
-packages; when you need to confirm an exact revision, use the clone route and inspect `git rev-parse HEAD`.
-For a local clone, the entry is `node /absolute/path/conquistador/runtime/bin/conquistador.js mcp`.
+Your MCP client owns the process. Managed setup creates `connector.json` and an owned `bundle/`
+with the local server, methods, and operator inventory. It does not edit client settings. Copy the
+connector object into the client's server entry; clients with `mcpServers` use that object under a
+server name. The Node executable must remain available, but the acquisition cache/source can be
+removed. Read the parent guide first, then request a draft from supplied facts.
 
-Managed setup with `--target mcp --path ABS` prepares a `connector.json` for this local command.
-It does not edit client settings. Status checks the connector's files, not host registration.
-The complete CLI's [operator doctor](../INSTALL.md#read-only-completeness-check) also checks managed
-MCP saved paths without starting the client or verifying account operations.
-Keep the source folder while using that connector. Disconnect the client before removing its
-owned connector folder through setup.
+Stop the entry before `conquistador setup update --path ABS`, copy the new connector into the
+client, and restart it. This also repairs unchanged legacy connector-only installs and paths after
+Node replacement or folder relocation. Edits still block replacement. Use the intended release
+launcher; an arbitrary newer doctor can reject an older library's manifest.
+
+The [operator doctor](../INSTALL.md#read-only-completeness-check) checks files and saved paths
+without starting the client or contacting a service. Remove the client entry first, then uninstall
+the owned folder with `setup uninstall --path ABS`. Direct `node /ABS_SOURCE/runtime/bin/conquistador.js
+mcp` remains available, but that direct entry still depends on keeping its source folder.
 
 ### Optional runtime bridge
 
 `conquistador mcp --url ORIGIN` retains the existing bridge to a configured HTTP runtime service.
 It runs supported playbooks and reads persisted draft artifacts; it does not expose all 38 methods
 as executable tools. Follow [runtime setup](../runtime/README.md#mcp-stdio-client) for this mode.
+To prepare this connector, use an existing stable runtime package, not an npm/Bun cache:
+
+```sh
+conquistador setup install --target mcp --path /absolute/path/runtime-connector --url https://runtime.example --runtime-path /absolute/path/stable-runtime/lib/node_modules/@forsvn/conquistador
+```
+
+The supplied URL is an example; use your configured service. Install the runtime tarball into a
+[stable prefix](INSTALL-REFERENCE.md#persistent-cli) first, then configure and start the service
+separately. Setup checks the built runtime and dependency locally and makes no service request.
+Use the same `--runtime-path` on updates invoked through npx. Runtime data and service ownership
+remain separate. Known cache paths fail before writing and report this repair path.
+
 Only this mode may need `CONQUISTADOR_CHAT_TOKEN`. Never pass human review or action credentials
 to an agent. Removing a connector does not erase service data or stop a shared service.
 

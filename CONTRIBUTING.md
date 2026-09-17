@@ -79,12 +79,14 @@ job. Other operating systems and CPU architectures still require their own obser
 
 ## Setup changes
 
-`tools/setup.mjs` coordinates local install, status, update and uninstall. It delegates skill,
-plugin and role copies to the existing owned installer. MCP connector configuration is separate
-from runtime service and data ownership. The executable's `setup` command and default `mcp` method server load Node-only tools without
+`tools/setup.mjs` coordinates guided installation, route listing, status, doctor, update and uninstall.
+The [installation architecture](docs/INSTALLATION-ARCHITECTURE.md) defines payload and lifecycle contracts. It delegates skill,
+plugin and role copies to the existing owned installer. Local MCP stages an owned server/library copy; runtime MCP requires a stable distribution.
+Connector configuration remains separate from runtime service and data ownership. The executable's `setup` command and default `mcp` method server load Node-only tools without
 importing runtime dependencies. Explicit `mcp --url` retains the HTTP runtime bridge. Keep the
 default entry points usable before bootstrap and test stdout as protocol data only.
 
-Run the setup lifecycle tests when changing host paths or removal behavior. Host registration
+Run setup, setup-portability, entry, doctor, plugin, and MCP tests when changing host paths or
+removal behavior. Cross-platform path tests do not establish native Windows activation. Host registration
 commands are instructions, not hidden subprocesses. Test files and synthetic fixtures cannot
 prove native registration or service connectivity.
