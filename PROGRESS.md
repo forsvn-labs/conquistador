@@ -47,10 +47,10 @@ Astra's focused review recommended this bounded patch. It rejects postinstall or
 the primary fix because a dangling executable cannot run its own diagnostic. Native-host expansion
 and the optional GBrain learning backend remain separate work.
 
-The final handoff audit found no executable change waiting to ship: local `private-alpha` and its
-remote agree at `ebdd951`, the v0.0.7 tag remains `e1bb066e`, both final CI runs are green, and the
+The final handoff audit found no executable change waiting to ship. It began from the release
+shipping record `ebdd951`; the v0.0.7 tag remains `e1bb066e`, both release CI runs are green, and the
 four downloaded assets match their recorded hashes. A fresh Node 24 build and all 693 tests passed.
-Current branch changes after the tag are shipping records only.
+Current branch changes after the tag are shipping, audit, and cleanup records only.
 
 After an all-ref recovery bundle and separate archives for ignored Eve and operator artifacts, BB
 destroyed nine stale linked worktree environments. Twelve stale local branch refs were removed.
