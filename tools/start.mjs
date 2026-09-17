@@ -1,6 +1,7 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
-import { hostFolders, projectIntegration } from './project-installation.mjs';
+import { installedHosts, projectIntegration } from './project-installation.mjs';
+import { operatorNextSteps } from './setup-surfaces.mjs';
 
 export function runStart(args, cwd = process.cwd(), list = false) {
   if (args.length && !(args.length === 2 && args[0] === '--project')) throw Error('Usage: conquistador start|skills [--project PATH]');
@@ -18,10 +19,8 @@ export function runStart(args, cwd = process.cwd(), list = false) {
   }
   console.log(`Conquistador in ${project}\n`);
   console.log(`Read the skill: ${entry}`);
-  for (const item of record?.skills ?? []) console.log(`Native skill (${item.host}): ${join(project, hostFolders[item.host], 'SKILL.md')}`);
-  console.log('\nOpen a fresh coding-agent session in this project, select Conquistador, and try:\n');
-  console.log('Use Conquistador to draft a launch plan from the product facts in this project.\nShow the selected capabilities. Mark missing facts. Keep it as a draft.');
-  console.log(`\nIf the skill is not listed, ask the agent to read ${entry} and follow it.\n`);
+  console.log(operatorNextSteps(path, installedHosts(record)));
+  console.log(`\nIf native discovery is unavailable, ask the agent to read ${entry} and follow it.\n`);
   console.log('Explore: conquistador skills\nCheck: conquistador operator doctor\nUpdate: conquistador operator update\nRemove: conquistador operator uninstall');
   console.log('Skill files are installed; host discovery and task quality still need a real task.');
   return 0;

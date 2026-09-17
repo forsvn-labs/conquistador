@@ -56,7 +56,7 @@ function receiptIdentity(path, inspectReceipt, issues) {
   if (integrity.state !== 'unchanged') issues.push('Managed receipt integrity failed; preserve edits before reinstalling.');
   try {
     const record = JSON.parse(textAt(path, receiptPath));
-    return { state: integrity.state, mode: integrity.mode ?? null,
+    return { state: integrity.state, mode: integrity.mode ?? null, hosts: integrity.hosts ?? [], nativeSkills: integrity.skills ?? [],
       productVersion: typeof record.productVersion === 'string' ? record.productVersion : null,
       digest: /^[a-f0-9]{64}$/.test(record.digest) ? record.digest : null };
   } catch { return { state: 'invalid', productVersion: null, digest: null }; }
@@ -245,6 +245,8 @@ export function runInstallationDoctor(args, inspectReceipt) {
     if (result.discovery) console.log(`Discovery: ${result.discovery.count} skill entry; name, description and path use ${result.discovery.metadataCharacters} characters. Host loading remains unverified.`);
     if (result.connector) console.log(`Saved MCP Node executable: ${result.connector.nodeExecutable ? 'available' : 'unavailable'}. Package executable: ${result.connector.packageExecutable ? 'available' : 'unavailable'}.`);
     console.log(`BB adapter files: ${result.bbAdapterPresent ? 'present; execution unverified' : 'not present'}.`);
+    if (result.receipt.hosts?.includes('bb')) console.log('BB selected: explicit project/environment and team adapter. No BB plugin, native skill registration, or automatic routing was installed.');
+    for (const item of result.receipt.nativeSkills ?? []) console.log(`Owned native skill: ${item.host}. Updated and removed with this operator; host discovery remains unverified.`);
     console.log(`Operator profile: ${result.operatorProfilePresent ? `present (activation ${result.operatorActivation ?? 'unparsed'}); host activation unverified` : 'not present; older packages degrade to explicit invocation'}. No daemon or schedule is started.`);
     for (const issue of result.issues) console.log(`FAIL: ${issue}`);
     for (const warning of result.warnings) console.log(`NOTE: ${warning}`);

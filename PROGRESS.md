@@ -1,5 +1,51 @@
 # Product progress
 
+## Setup selections and host boundaries, unshipped
+
+The guide now accepts several compatible integrations and host choices. Space toggles choices;
+Enter continues. Complete operator and native skill installation remain the default. Codex and
+BB have separate entries. Codex receives its native project skill; BB records explicit operator
+use and prints project/environment and team-adapter instructions without registering a BB plugin,
+provider skill or request router.
+
+Implemented in this checkout:
+
+- Multiple native skills share the operator's transaction and update/removal owner. `--hosts`
+  permits explicit additive changes; `--host`, default Codex behavior and legacy v1 records remain
+  supported. Standalone commands cannot separately change an operator-owned native copy.
+- Operator plus harness reuses one contract. Several plugin managers share one staged source and
+  receive separate activation/update instructions. Each manager still owns its activated copy.
+- Local MCP, runtime MCP, squads and explicit specialists keep separate receipts and lifecycle
+  commands. Experimental selections remain guidance only. A local choice cannot silently update
+  an existing runtime connector. Domain-restricted operators cannot add full-library local MCP in
+  the guide.
+- Read-only preflight checks all destinations before confirmation. Overlapping paths, duplicate
+  native skill/plugin choices, invalid methods, unsafe runtime sources and unowned/modified files
+  fail before applying the plan. Later filesystem failures can leave earlier independent copies
+  installed; the guide lists completed copies and their recovery commands. Operator/native
+  replacements still roll back together, including newly added hosts.
+- The bundled Clack interface now includes multi-select. README, installation architecture,
+  mechanism guide and host instructions describe the distinct owners and next steps.
+
+Validation passed on macOS ARM64 with Node 24.21.0 and npm 11.19.0:
+
+- `npm run build` and `npm test`: 703 tests, comprising 179 host/tooling, 294 runtime, 167 catalog
+  and 63 evaluation tests. An earlier run caught a stale assertion about MCP explanatory text;
+  the final full run passed after it was aligned with the separate local/runtime instructions.
+- A real mixed guide plan created `.conquistador`, Codex and Cursor skill copies, one staged
+  plugin source for Claude and Copilot, and separate local/runtime MCP connector folders. The
+  harness reused the operator contract. Removing the operator left the independent integrations
+  intact; each then removed through its own lifecycle. The receiving-project sentinel survived.
+- Native macOS PTY checks passed for Space-to-toggle, Codex plus BB, skill-only Codex plus Cursor,
+  confirmation, install/check completion and cancellation. Skill-only setup created no operator.
+  These checks exercised terminal input and real local files, not native host activation.
+- Domain-restricted legacy migration and added hosts preserve the same allowed subset. Failed
+  native replacement restores prior bytes. Linked, modified and independently owned files remain
+  protected, including dangling native links. Old v1 records without `hosts` still load.
+
+No version bump, push, tag or release is part of this change. The published v0.0.7 remains immutable; the updated guide is not present in that release.
+Native host activation and task quality remain separate from these local setup checks.
+
 ## Private-alpha 0.0.7 shipped
 
 Private alpha 0.0.6 shipped from `40a9b7b3f635d17e9c0e79ec8b83884afcb10650` after its exact

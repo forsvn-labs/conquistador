@@ -22,26 +22,34 @@ In each receiving project, run:
 conquistador
 ```
 
-The terminal guide has arrow-key choices, visible installation/checking progress and cancellation.
-Choose your coding agent and confirm the displayed folders. The complete operator goes into
-`.conquistador`, with `SKILL.md` at its root. Setup also creates one native skill entry for your host:
+The next guide in this source checkout is implemented but unshipped. It has multi-selection:
+Space toggles choices, arrows move, and Enter continues. The default selects the complete operator
+and native host skills. Choose one or more hosts, then review all folders before confirming once.
+The complete operator goes into `.conquistador`, with `SKILL.md` at its root. Native skills use:
 
 | Coding agent | Project skill |
 | --- | --- |
-| Codex / BB | `.agents/skills/conquistador` |
+| Codex | `.agents/skills/conquistador` |
+| BB | Complete `.conquistador` operator; no native skill registration |
 | Claude Code | `.claude/skills/conquistador` |
 | Cursor | `.cursor/skills/conquistador` |
 | GitHub Copilot | `.github/skills/conquistador` |
 | Other / files only | Read `.conquistador/SKILL.md` explicitly |
 
-Both copies contain the complete method library. The operator also includes the BB adapter,
-portable contracts, schemas and profile. They share one managed update/removal lifecycle. An
+The operator and selected native skills contain the method library. The operator also includes
+the BB adapter, portable contracts, schemas and profile. These owned copies share one
+update/removal lifecycle. BB uses an explicit project/environment and its chosen provider. It is
+not an alias for Codex. No BB plugin, provider registration or automatic request router is installed. An
 unchanged existing managed skill can be adopted; modified or unowned content is refused. Domain
 restrictions must agree. A new host session is needed to refresh native discovery. Setup does not
 start automatic project routing, watchers, services or hooks.
 
 For automation, `conquistador install` selects the current project and Codex skill. Use
-`--host cursor`, `--host claude-code`, `--host copilot` or `--host none` to choose differently.
+`--host bb`, `--host cursor`, `--host claude-code`, `--host copilot` or `--host none` to choose differently.
+This checkout also supports `--hosts codex,bb,cursor` for several hosts. During update, it can add
+hosts while retaining existing owned skills. Removing an owned native host requires uninstalling
+the unchanged operator first. Existing single-host commands and v1 receipts remain supported.
+`--dry-run` checks install/update paths and ownership without creating files.
 The CLI itself lives in npm's global prefix. The receiving project gets no `package.json`,
 `node_modules` or lockfile. Avoid `sudo`; choose a user-writable npm prefix if necessary.
 
@@ -134,6 +142,39 @@ package's contribution; it cannot prevent warnings caused by other installed ski
 An unchanged managed copy migrates through its normal update command. Modified copies remain
 protected. Refresh the native host or its activated plugin cache afterward. Independently installed
 specialists remain owned by their original manager and are not silently removed.
+
+## Combine integrations
+
+The next guide can prepare these together. Each folder has one owner:
+
+| Selection | Shared files and lifecycle | What to do after setup |
+| --- | --- | --- |
+| Complete operator + native skills | `.conquistador` owns the selected native skill copies; changes stage and roll back together | Refresh each selected native host; BB uses explicit file invocation or its team adapter |
+| Operator + portable harness | Reuses `.conquistador/agent/agent.json`; no duplicate operator | Attach the contract through your consuming adapter |
+| Several native plugins | One staged source; each host manager owns its activated copy | Register through each original manager and scope |
+| Local + runtime MCP | Separate connector folders and receipts | Register separate client entries; runtime also needs its existing service |
+| Squad or named specialist | Separate owned package | Load its specific contract or method in the consuming host |
+| Experimental imports | Guidance only, no installed copy | Review the target's documented limitations |
+
+The guide refuses overlapping destinations and a skill plus plugin for the same named native host.
+Both contain the same parent; choose one discovery route for that host. Cursor also scans
+`.agents/skills` and `.claude/skills`, so combined native copies need a fresh host check for
+duplicate discovery and precedence. File ownership does not certify that behavior.
+[Cursor discovery locations](https://cursor.com/docs/skills#skill-directories). It does not inspect
+external host registrations. Check those in the original manager. Generic Agent Plugins sources
+have no known host, so their activation must also avoid duplicate discovery.
+
+Adding skills to a project with an existing operator updates that operator's ownership record.
+Existing owned hosts are retained. A standalone installer cannot separately update or remove a
+paired native skill. An unrelated MCP/plugin/squad copy remains independently removable.
+
+Setup checks every selected destination before applying. The operator and native skills form one
+transaction. The entire selection is not one transaction: a later connector or plugin failure
+leaves earlier completed copies owned and usable. Setup lists those copies and their inspection
+and removal commands. It never claims a complete rollback of independent installations.
+
+A domain-restricted operator cannot be combined with full-library local MCP in the guide. Existing
+domain restrictions survive updates; the full-library doctor does not certify subset readiness.
 
 ## Choose a different integration
 

@@ -33,9 +33,10 @@ for the current private alpha because the registry package does not exist and pu
 blocked. It becomes the primary command only after the exact public package and clean registry
 lifecycle are verified.
 
-The guide asks where you will use Conquistador, which coding agent you use, and confirms the
-folders it will create. It installs the complete operator in `.conquistador/` and a discoverable
-skill for your chosen host. No receiving-project package manifest, dependency or lockfile is added.
+The next setup guide in this checkout is not released yet. It lets you select several compatible
+installations and hosts with Space, then confirm once. The default is a complete operator in
+`.conquistador/` and a Codex native skill. Add other hosts, plugins or connectors as needed.
+No receiving-project package manifest, dependency or lockfile is added.
 
 ```text
 .conquistador/
@@ -44,12 +45,15 @@ skill for your chosen host. No receiving-project package manifest, dependency or
   library/           All 38 methods and their resources
   agent/agent.json   Portable operator contract
   hosts/             BB specialist adapter
-.agents/skills/conquistador/   Codex / BB skill, when selected
+.agents/skills/conquistador/   Codex native skill, when selected
 ```
 
-Claude Code, Cursor and Copilot get their own project skill directory. Each host sees one
-Conquistador entry; the internal methods load after routing. The full operator retains the
-profile, contracts, schemas and BB adapter. The guide also supports skill-only, plugin, harness,
+BB is a separate host. It uses the complete operator and explicit team adapter in a selected
+project/environment. Setup does not register a BB plugin, provider skill or request router. Select
+Codex separately if you also need its native skill. Claude Code, Cursor and Copilot get their own
+project skill directory. Each prepared folder exposes one Conquistador entry; the internal methods
+load after routing. Hosts that scan several compatible directories still need discovery checks.
+The full operator retains the profile, contracts, schemas and BB adapter. The guide also supports skill-only, plugin, harness,
 squad and MCP installations. See [installation options](INSTALL.md).
 
 ## Start your first task

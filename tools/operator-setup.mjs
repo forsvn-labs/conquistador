@@ -6,11 +6,14 @@ const actions = new Set(['install', 'status', 'doctor', 'update', 'uninstall']);
 const pathFlags = new Set(['--project', '--path', '--domain', '--knowledge-roots']);
 
 export const operatorHelp = `Usage:
-  conquistador install [--project PATH] [--domain PATH --knowledge-roots PATH]
+  conquistador install [--project PATH] [--hosts codex,bb,cursor] [--domain PATH --knowledge-roots PATH]
   conquistador operator install|status|doctor|update|uninstall [--project PATH | --path PATH]
 
 Paths may be relative to the current directory. The default project is the current directory.
-The managed operator path is PROJECT/.conquistador. Doctor also accepts --json.`;
+The managed operator path is PROJECT/.conquistador. Doctor also accepts --json.
+--host keeps the single-host interface; --hosts permits multiple hosts and adding hosts on update.
+Codex, Cursor, Claude Code and Copilot get native skills. BB uses the explicit operator adapter.
+Existing owned skills are retained during update. --dry-run checks install/update without writes.`;
 
 function normalizePaths(args, cwd) {
   const normalized = [...args];

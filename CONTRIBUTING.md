@@ -98,4 +98,7 @@ The setup TUI uses the committed `tools/vendor/clack.mjs` bundle. To intentional
 run `npm ci --ignore-scripts --prefix tools/tui` and `npm run build --prefix tools/tui` under Node 24.
 Review the exact lockfile and preserve `tools/vendor/NOTICE.txt`. Ordinary setup and packaging
 use the committed bytes and do not require that dependency tree. The default test suite exercises
-project/native-skill ownership, migration, and the guided flow separately from native host acceptance.
+project/native-skill ownership, migration, mixed installation plans, cancellation, preflight,
+partial failures, and the guided flow separately from native host acceptance. A guide plan is not
+a global transaction. The operator and its native skills transact together; completed independent
+plugin/connector/squad installations must stay owned and be reported when a later step fails.

@@ -13,9 +13,11 @@ Bare runtime `status` and `doctor` retain their existing meanings.
 
 `tools/setup.mjs` parses and applies managed actions. `setup-routes.mjs` declares the forms, targets,
 default project folders, and capability boundaries. `setup-guide.mjs` collects an installation plan
-without writing. The default guide selects a route and coding agent, uses the current project, shows the
-complete payload and skill destination, and asks once before applying. Other forms select a host and
-owned folder. Lifecycle actions use explicit subcommands with a target or path.
+without writing. Routes and hosts allow multiple selections. The default is the complete operator
+and Codex native skill in the current project. The guide checks all destinations, shows their
+ownership and activation boundaries, and asks once before applying. Other forms select their
+manager, service or owned folder. `setup-surfaces.mjs` checks path overlap and duplicate native
+discovery choices, and supplies operator/BB next steps. Lifecycle actions use explicit subcommands with a target or path.
 
 `setup list [--json]` lists supported forms, not a global installation inventory. Installation
 receipts remain local. There is no background discovery, registry, host-settings crawler, or updater.
@@ -195,13 +197,14 @@ operator implementation or advertise host capabilities the package does not prov
 ## Project installation and migration
 
 Private alpha `0.0.6` introduced the complete operator in `.conquistador`. `SKILL.md` and `library/`
-are at its root. The project guide asks for a coding agent, then installs a contained compact
-copy at that host's native project skill path. A compact copy retains every method/resource; the
+are at its root. The guide can select multiple native hosts, then installs contained compact
+copies at their fixed project skill paths. BB is a separate operator host with no native skill
+folder. Selecting BB records intent to use the explicit adapter; it does not register a provider. A compact copy retains every method/resource; the
 operator additionally retains the executable BB adapter, profile, contracts and schemas.
 
 `project-installation.json` binds the selected host names and native-copy digests to the operator's
 managed digest. Hosts resolve only to fixed project-relative paths. Status and doctor check the
-paired skill, and update/removal refuse changed files in either copy. Both replacements stage
+owned skills, and update/removal refuse changed files in any copy. All replacements stage
 before any rename; failures roll back prior directories. Existing unchanged managed compact
 skills can be adopted through the displayed setup plan. Domain restrictions must agree.
 
@@ -215,6 +218,29 @@ Host skill placement is not live host acceptance. A fresh native session must st
 discovery, selection and useful method execution. The filesystem doctor does not certify it.
 
 The low-level `tools/install.mjs` refuses update/removal of a project-paired operator. Its public
-setup lifecycle owns both copies. This prevents a legacy low-level command from discarding the
+setup lifecycle owns the operator and all paired copies. The native copies also refuse independent
+setup or low-level update/removal while an operator owns them. This prevents a legacy low-level command from discarding the
 project record and leaving an unmanaged native skill behind. Rollback failures retain the
 transaction directory and report its recovery location rather than deleting the backups.
+
+
+The existing project-installation/v1 record remains readable. Its optional `hosts` list records
+Codex, BB and other selected hosts; `skills` contains only actual native-copy owners and digests.
+When `hosts` is absent, hosts derive from the legacy skills list. `--hosts` accepts distinct
+comma-separated hosts and can add hosts during update. It cannot drop an owned skill; removal
+requires the original operator lifecycle. The older `--host` interface keeps its single-host
+update behavior. Neither field reports activation as verified.
+
+The guide reuses the complete operator for the harness contract. Plugin managers can share a
+single staged plugin source, with one local receipt and separate manager-owned activated copies.
+Local and runtime MCP use different folders. Squad and explicit standalone methods stay separate.
+All selected destinations preflight with `--dry-run` before confirmation. Runtime MCP validates
+its stable source during that preflight. Individual installer transactions remain authoritative;
+there is no global transaction across independent integrations. A later failure reports completed
+copies and their lifecycle commands without removing successful work.
+
+
+Combined native copies have distinct owned paths. They do not establish discovery isolation:
+Cursor also scans `.agents/skills` and `.claude/skills`. Check host precedence and duplicate names
+in a fresh session before claiming one visible parent across all combined copies. The installer
+preserves the established native paths instead of silently moving legacy host files.

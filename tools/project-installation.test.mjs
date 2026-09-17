@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { execFileSync, spawnSync } from 'node:child_process';
-import { existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, realpathSync, renameSync, rmSync, symlinkSync, writeFileSync } from 'node:fs';
+import { existsSync, lstatSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, realpathSync, renameSync, rmSync, symlinkSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -85,6 +85,9 @@ test('legacy domain migration creates the same restricted native library and pre
   assert.deepEqual(JSON.parse(readFileSync(join(operator, 'domain-restriction.json'))), JSON.parse(readFileSync(join(skill, 'domain-restriction.json'))));
   assert.equal(existsSync(join(skill, 'library/write-copy')), false);
   assert.ok(existsSync(join(skill, 'library/diagnose-growth/METHOD.md')));
+  ok(project, 'operator', 'update', '--hosts', 'codex,bb,cursor');
+  assert.deepEqual(JSON.parse(readFileSync(join(project, hostFolders.cursor, 'domain-restriction.json'))), JSON.parse(readFileSync(join(operator, 'domain-restriction.json'))));
+  assert.equal(existsSync(join(project, hostFolders.cursor, 'library/write-copy')), false);
   ok(project, 'operator', 'uninstall'); assert.deepEqual(readdirSync(project), ['domain.json']);
 });
 
@@ -114,4 +117,83 @@ test('a failed second replacement rolls the operator and native skill back to th
   assert.deepEqual([treeDigest(path), treeDigest(native)], before);
   assert.equal(readdirSync(project).some(name => name.startsWith('.conquistador-transaction-')), false);
   ok(project, 'operator', 'uninstall');
+});
+
+test('BB is a separate operator host and creates no native skill unless selected explicitly', t => {
+  const project = fixture(t);
+  ok(project, 'install', '--host', 'bb');
+  assert.equal(existsSync(join(project, '.agents')), false);
+  const doctor = JSON.parse(ok(project, 'operator', 'doctor', '--json'));
+  assert.deepEqual(doctor.receipt.hosts, ['bb']); assert.deepEqual(doctor.receipt.nativeSkills, []);
+  assert.equal(doctor.bbAdapterPresent, true); assert.equal(doctor.hostActivationVerified, false);
+  assert.match(ok(project, 'start'), /BB owns the provider/);
+  ok(project, 'operator', 'update'); ok(project, 'operator', 'uninstall');
+  assert.deepEqual(readdirSync(project), []);
+});
+
+test('multiple hosts and legacy v1 records preserve one owner and support additive updates', t => {
+  const project = fixture(t); ok(project, 'install', '--host', 'codex');
+  const operator = join(project, '.conquistador');
+  const recordPath = join(operator, 'project-installation.json');
+  const record = JSON.parse(readFileSync(recordPath)); delete record.hosts;
+  writeFileSync(recordPath, JSON.stringify(record));
+  const receiptPath = join(operator, '.conquistador-install.json');
+  const receipt = JSON.parse(readFileSync(receiptPath)); receipt.digest = treeDigest(operator); writeFileSync(receiptPath, JSON.stringify(receipt));
+  ok(project, 'operator', 'update', '--hosts', 'codex,bb,cursor');
+  const after = JSON.parse(readFileSync(recordPath));
+  assert.deepEqual(after.hosts, ['codex', 'bb', 'cursor']);
+  assert.deepEqual(after.skills.map(item => item.host), ['codex', 'cursor']);
+  for (const host of ['codex', 'cursor']) assert.ok(existsSync(join(project, hostFolders[host], 'SKILL.md')));
+  assert.notEqual(run(project, 'operator', 'update', '--hosts', 'bb,cursor').status, 0);
+  ok(project, 'operator', 'update'); ok(project, 'operator', 'uninstall');
+  assert.deepEqual(readdirSync(project), []);
+});
+
+test('paired native skills refuse a second lifecycle owner through both installers', t => {
+  const project = fixture(t); ok(project, 'install', '--hosts', 'codex,cursor');
+  const native = join(project, hostFolders.codex); const before = treeDigest(native);
+  for (const action of ['update', 'uninstall']) {
+    const result = run(project, 'setup', action, '--path', native);
+    assert.notEqual(result.status, 0); assert.match(result.stderr, /owned by/);
+  }
+  for (const action of ['upgrade', 'remove']) {
+    const result = spawnSync(process.execPath, [join(root, 'tools/install.mjs'), action, 'conquistador', native], { encoding: 'utf8' });
+    assert.notEqual(result.status, 0); assert.match(result.stderr, /owned by/);
+  }
+  assert.equal(treeDigest(native), before);
+  ok(project, 'setup', 'doctor', '--path', native);
+  ok(project, 'operator', 'uninstall');
+});
+
+test('dry run checks every paired destination and invalid host sets without creating files', t => {
+  const project = fixture(t);
+  ok(project, 'install', '--hosts', 'codex,bb,cursor', '--dry-run');
+  assert.deepEqual(readdirSync(project), []);
+  for (const hosts of ['codex,codex', 'none,bb', 'bb,unknown', ',codex']) assert.notEqual(run(project, 'install', '--hosts', hosts, '--dry-run').status, 0);
+  assert.deepEqual(readdirSync(project), []);
+  mkdirSync(join(project, hostFolders.cursor), { recursive: true }); writeFileSync(join(project, hostFolders.cursor, 'mine'), 'Keep');
+  assert.notEqual(run(project, 'install', '--hosts', 'codex,cursor', '--dry-run').status, 0);
+  assert.equal(existsSync(join(project, '.conquistador')), false); assert.equal(existsSync(join(project, '.agents')), false);
+});
+
+test('failure adding a third folder restores all prior owned copies and removes empty parents', t => {
+  const project = fixture(t); ok(project, 'install');
+  const path = join(project, '.conquistador'), native = join(project, hostFolders.codex), added = join(project, hostFolders.cursor);
+  const before = [treeDigest(path), treeDigest(native)];
+  assert.throws(() => projectLifecycle(root, { action: 'update', path, project, hosts: 'codex,bb,cursor' }, { rename(from, to) {
+    if (to === added && from.includes('stage-')) throw Error('Injected new host failure');
+    renameSync(from, to);
+  } }), /Injected new host failure/);
+  assert.deepEqual([treeDigest(path), treeDigest(native)], before);
+  assert.equal(existsSync(join(project, '.cursor')), false);
+  ok(project, 'operator', 'uninstall'); assert.deepEqual(readdirSync(project), []);
+});
+
+test('dangling native links are refused without replacement', t => {
+  const project = fixture(t), path = join(project, hostFolders.cursor);
+  mkdirSync(dirname(path), { recursive: true }); symlinkSync(join(project, 'missing-target'), path);
+  assert.notEqual(run(project, 'install', '--hosts', 'codex,cursor').status, 0);
+  assert.equal(existsSync(join(project, '.conquistador')), false);
+  assert.equal(existsSync(join(project, '.agents')), false);
+  assert.equal(lstatSync(path).isSymbolicLink(), true);
 });

@@ -200,7 +200,7 @@ test('plugin, MCP, and harness cleanup reminders precede the removal result', ()
 
 test('default MCP connector uses local stdio with no server and preserves mode during update', () => temporary(path => {
   const output = good('install', '--target', 'mcp', '--path', path);
-  assert.match(output, /stdio serves bundled methods/);
+  assert.match(output, /lists and reads bundled methods/);
   const expected = { command: process.execPath, args: [join(path, 'bundle/runtime/bin/conquistador.js'), 'mcp'] };
   assert.deepEqual(JSON.parse(readFileSync(join(path, 'connector.json'))), expected);
   good('update', '--path', path);

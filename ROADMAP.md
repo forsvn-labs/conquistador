@@ -2,9 +2,8 @@
 
 ## Next private alpha
 
-1. Gather the user's first-run verdict from the exact v0.0.7 private tag in their receiving project.
-   Record guide clarity, selected host discovery, first-task usefulness, and observed startup after
-   the one-time Git acquisition.
+1. Review and ship the multi-selection setup correction after local acceptance. Obtain the user's
+   verdict on combined installations, distinct Codex/BB choices, next steps and first-task usefulness.
 2. Keep the authenticated private-Git durability check as a required gate for later private tags.
    It must delete acquisition cache before running the CLI lifecycle.
 
