@@ -183,7 +183,7 @@ export function inspectInstallation(path, inspectReceipt) {
     }
   }
   let bbAdapterPresent = false;
-  if (bundleRoot && library.layout && library.layout !== 'library') {
+  if (bundleRoot && library.layout && (library.layout !== 'library' || receipt.mode === 'single-agent')) {
     const resources = manifest.operatorResources ?? [];
     bbAdapterPresent = resources.length > 0;
     for (const resource of resources) {
@@ -194,7 +194,7 @@ export function inspectInstallation(path, inspectReceipt) {
         issues.push(`Missing or changed operator resource: ${resource.path}`);
       }
     }
-    if (library.layout?.startsWith('agent/skills')) {
+    if ((library.layout?.startsWith('agent/skills') || receipt.mode === 'single-agent')) {
       try {
         const installed = JSON.parse(textAt(bundleRoot, 'agent/agent.json'));
         installed.canonicalSkillRoot = 'skills/conquistador';

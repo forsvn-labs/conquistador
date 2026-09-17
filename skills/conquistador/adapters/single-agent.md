@@ -5,7 +5,7 @@ the portable master-agent contract, operator profile, specialist assignment file
 all 38 outcome skills. The consuming host decides whether it can create isolated specialists. Select
 only the roles and outcomes needed for the request. Preserve the user's scope and the host's declared
 capabilities. Default activation is `manual`; `project` routing needs a host adapter that calls admitRequest.
-Setup does not register that adapter. Explicitly load agent/skills/conquistador/SKILL.md in a fresh
+Setup does not register that adapter. Load the parent entry identified by canonicalSkillRoot in agent/agent.json in a fresh
 host session. Off disables the admission function, not direct file access.
 
 - Resolve sibling links relative to the installed parent tree, including when a wrapper loads it

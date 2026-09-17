@@ -5,7 +5,7 @@
   "role": "orchestrator",
   "displayName": "Conquistador",
   "productName": "conquistador",
-  "pluginVersion": "0.0.5",
+  "pluginVersion": "0.0.6",
   "canonicalSkill": "conquistador",
   "canonicalSkillRoot": "skills/conquistador",
   "installClass": "candidate-only",
@@ -124,7 +124,7 @@
   },
   "missingCapabilityBehavior": "fail-closed-draft",
   "lifecycle": {
-    "setup": "Run setup install --target operator --project ABS from a complete distribution. The harness target with --path remains compatible. In a fresh host session, explicitly load agent/skills/conquistador/SKILL.md from the installed folder. Project routing requires host integration with admitRequest; setup does not register it.",
+    "setup": "Run setup install --target operator --project ABS from a complete distribution. The harness target with --path remains compatible. In a fresh host session, select Conquistador in the configured host, or explicitly read SKILL.md at the installed root. Project routing requires host integration with admitRequest; setup does not register it.",
     "upgrade": "Replace the unchanged owned package from a newer source. Do not fetch at runtime. Preserve host-stored activation settings outside the package.",
     "remove": "Detach the contract and disable project routing in the host, then run setup uninstall --path ABS from the complete distribution. Host settings and running agents remain host-owned; uninstall does not stop them. Keep user artifacts outside the install."
   }

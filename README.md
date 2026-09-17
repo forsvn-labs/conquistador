@@ -1,75 +1,86 @@
-# Conquistador 0.0.5
+# Conquistador 0.0.6
 
-Conquistador is a project operator for growth, go-to-market, sales, marketing, and product work
-in your coding agent. Give it an outcome and the relevant facts. The parent selects from 38
-outcome methods, assigns specialist work when useful, integrates the drafts, and reports review
-findings. Your host supplies the model, tools, permissions, and any separate worker contexts.
+Conquistador helps your coding agent do growth, marketing, sales, product and knowledge work.
+Give it an outcome and the relevant facts. It selects from 38 methods, names the specialists it
+uses, and returns a draft with review findings. Your coding agent supplies the model and tools.
 
-Version `0.0.5` is the fifth private alpha, continuing the earlier dogfood releases on the
-`private-alpha` branch. Private alpha and dogfood are one channel. The future public alpha starts
-at `0.1.0`. See [version policy](VERSIONS.md) and [release history](CHANGELOG.md). Review drafts before use.
+This checkout prepares private alpha `0.0.6`. It is not released yet. The latest shipped private
+alpha is [v0.0.5](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.5).
+Private alpha and dogfood are the same `0.0.x` channel. Public alpha starts at `0.1.0`.
 
-## Install in one project
+## Install once, use in each project
 
-Use Node 24, npm, Git, and a GitHub account with access to the private repository. From the receiving
-project, run the pinned private release:
+Use Node 24 and a GitHub account with access to this private repository. When `v0.0.6` ships:
 
 ```sh
-npx -y --ignore-scripts --package=git+https://github.com/forsvn-labs/conquistador.git#v0.0.5 conquistador setup
+npm install -g --ignore-scripts github:forsvn-labs/conquistador#v0.0.6
 ```
 
-Press Enter for the complete project operator, review the destination, and confirm once. Setup
-checks local completeness and prints the first task. It does not register or activate your host.
-For automation, replace `setup` with `install`, then run `operator doctor` through the same launcher.
+Then open a terminal in the project where you want to use it:
 
-Native skill and staged plugin installs show one Conquistador entry. The parent selects from a
-compact internal catalog, shows the relevant public capability and specialist names during work,
-and loads only the selected methods. All 38 methods and their resources remain bundled. Individual
-specialists are an explicit installation choice, not additional default globals.
+```sh
+conquistador
+```
 
-The operator folder `.conquistador-operator/` contains the parent, all 38 methods, the manual
-operator profile, portable contracts and schemas, and the BB adapter. Keep it out of public
-commits and keep outputs elsewhere. The launcher adds no receiving-project dependency manifest,
-`node_modules`, or lockfile. Installation starts no service, hook, watcher, or transcript capture.
+The first command downloads the CLI once. Later launches start from your installed copy, without
+asking GitHub or npm to resolve the package again. `--ignore-scripts` skips automatic npm hooks.
+No package is published to the npm registry. GitHub authentication must already work; use
+`gh auth setup-git` if your authorized Git client needs configuration.
 
-The guide also explains native plugins, skills, portable agents, and MCP connectors. Each route
-states its capability and update owner. Native plugins use their host manager for activation.
-[INSTALL.md](INSTALL.md) covers checksum-verified release tarballs, the optional persistent CLI,
-Bun, and source/ZIP recovery. This release is verified on macOS with Node 24. Native Windows/Linux
-installation and native Codex, Claude, Copilot, Cursor, Eve, and Grok registration remain unverified.
-
-## Start a task
-
-Open a fresh host session in the receiving project and ask:
+The guide asks where you will use Conquistador, which coding agent you use, and confirms the
+folders it will create. It installs the complete operator in `.conquistador/` and a discoverable
+skill for your chosen host. No receiving-project package manifest, dependency or lockfile is added.
 
 ```text
-Read .conquistador-operator/agent/skills/conquistador/SKILL.md and follow it for
-this task. Use docs/product.md and docs/audience.md to prepare our beta launch.
-Deliver landing-page copy, one launch email, and a two-week campaign plan in
-docs/launch/. Mark claims that need evidence. Keep this as a draft.
+.conquistador/
+  SKILL.md           Start here
+  README.md          Usage and lifecycle
+  library/           All 38 methods and their resources
+  agent/agent.json   Portable operator contract
+  hosts/             BB specialist adapter
+.agents/skills/conquistador/   Codex / BB skill, when selected
 ```
 
-Use your own input paths or paste the facts. This explicit file invocation works without a native
-skill registration. If your host cannot read project files, use its skill or MCP route in INSTALL.
-The portable JSON contract does not register a native host agent by itself.
+Claude Code, Cursor and Copilot get their own project skill directory. Each host sees one
+Conquistador entry; the internal methods load after routing. The full operator retains the
+profile, contracts, schemas and BB adapter. The guide also supports skill-only, plugin, harness,
+squad and MCP installations. See [installation options](INSTALL.md).
 
-For a substantial task, the parent should present an engagement brief and return one deliverable
-with an execution receipt. Separate contexts, when used, must have public role labels. Same-context
-review must be identified. The [BB adapter](hosts/coding-agent/README.md) provides the executable
-team path with exact-digest reviews; ordinary skill use relies on the host following the contract.
-A passing doctor checks local files, not host activation or output quality.
+## Start your first task
 
-Activation defaults to `manual`. Project routing needs a host adapter that calls `admitRequest`
-at turn start; setup does not wire it into BB or another host. `off` disables that router, including
-explicit admission. See [activation and execution](docs/MASTER-AGENT.md).
+Open a fresh coding-agent session in that project. Select Conquistador from the skills menu, or ask:
 
-## Use accounts only when needed
+```text
+Use Conquistador to draft a launch plan from the product facts in this project.
+Show the selected capabilities. Mark missing facts. Keep it as a draft.
+```
 
-Work based on supplied facts needs no Executor account. If live access blocks the task, follow
-[connection setup](docs/INTEGRATIONS.md). Publication, spend, sends, external writes, saved memory,
-and feedback disclosure retain their applicable human decisions. The BB draft adapter authorizes
-none of these actions; host permissions enforce access.
+If the host has not refreshed its skill list, ask it to read `.conquistador/SKILL.md` and follow it.
+You do not need to navigate through adapter folders or install the specialists separately.
 
-The repository stays private and npm publication stays disabled. Keep private knowledge and
-credentials outside the installed product. Use the [private-alpha checklist](docs/PRIVATE-ALPHA.md)
-for observed results and limits. Development starts with [CONTRIBUTING.md](CONTRIBUTING.md).
+```sh
+conquistador start              # Show the skill location and first task again
+conquistador skills             # Browse the available capabilities
+conquistador operator doctor    # Check local files and the owned skill copy
+conquistador operator update    # Update this project from the installed CLI
+conquistador operator uninstall # Remove both unchanged owned copies
+```
+
+To upgrade the CLI itself, install the next authorized version with npm, then update the project.
+Existing `.conquistador-operator` installations migrate through `conquistador operator update`.
+Modified files are preserved. Keep drafts and runtime data outside the owned installation.
+
+## What installation proves
+
+Setup checks local completeness and places the skill in the selected host's discovery directory.
+The host loads it in a fresh session. Native discovery and task quality still need a real task in
+that host. Installation starts no watcher, hook or service and grants no external-action authority.
+The BB adapter supports explicit specialist teams with exact-artifact review. Automatic project
+routing requires a host integration. See [execution modes](docs/MASTER-AGENT.md).
+
+Work based on supplied facts needs no connected account. If a task needs live access, follow
+[connection setup](docs/INTEGRATIONS.md). Review drafts before use. Publication, spend, sends,
+external writes, saved memory and feedback disclosure retain their applicable human decisions.
+
+The repository stays private and npm publication stays disabled. See [private-alpha acceptance](docs/PRIVATE-ALPHA.md),
+[version policy](VERSIONS.md), [release history](CHANGELOG.md), and [development](CONTRIBUTING.md).

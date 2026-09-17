@@ -77,7 +77,8 @@ host-owned fields; the result has the closed shape checked by `validateResult` i
 `createBbHost({projectId, environmentId, parentThreadId})` implements that callback using BB.
 Operator activation is separate. Staged plugins store the profile at
 skills/conquistador/library/conquistador; operator/harness copies use
-agent/skills/conquistador/library/conquistador, and compact copies use library/conquistador.
+library/conquistador at the installation root. Legacy operators also support
+agent/skills/conquistador/library/conquistador. Compact copies use library/conquistador.
 Canonical source and older managed layouts remain readable. Installed copies expose one SKILL.md
 and keep selected method bodies as internal METHOD.md files. Logical method IDs stay unchanged. Call
 `loadOperatorProfile(root)` and `admitRequest(profile, {text}, hostSettings)`. Hosts may store

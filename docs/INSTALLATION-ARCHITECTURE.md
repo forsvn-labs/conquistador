@@ -13,8 +13,8 @@ Bare runtime `status` and `doctor` retain their existing meanings.
 
 `tools/setup.mjs` parses and applies managed actions. `setup-routes.mjs` declares the forms, targets,
 default project folders, and capability boundaries. `setup-guide.mjs` collects an installation plan
-without writing. The default guide asks one route question, uses the current project, shows the
-complete payload and destination, and asks once before applying. Other forms select a host and
+without writing. The default guide selects a route and coding agent, uses the current project, shows the
+complete payload and skill destination, and asks once before applying. Other forms select a host and
 owned folder. Lifecycle actions use explicit subcommands with a target or path.
 
 `setup list [--json]` lists supported forms, not a global installation inventory. Installation
@@ -59,8 +59,8 @@ resources. The catalog uses public capability labels and lists only included met
 the parent discloses relevant capabilities, specialist labels and actual execution/review mode.
 Installation does not create isolated workers or prove that a host followed these instructions.
 
-A staged plugin nests this same entry at `skills/conquistador/`; an operator/harness nests it at
-`agent/skills/conquistador/`. Both retain the complete operator inventory. The native Claude agent
+A staged plugin nests this same entry at `skills/conquistador/`; an operator/harness puts it at
+the installation root, with `SKILL.md` and `library/`. Both retain the complete operator inventory. The native Claude agent
 still targets that SKILL.md, and BB resolves its selected logical method IDs to internal METHOD.md
 files. Profile lookup supports both old and new layouts. Contracts, schemas and method IDs do not
 change. Squad members each have one parent entry plus their declared internal subset, intended for
@@ -177,3 +177,25 @@ Do not introduce curl-to-shell for private alpha. Before a standalone installer 
 
 The installer should delegate to the same setup contract. A new transport must not create a second
 operator implementation or advertise host capabilities the package does not provide.
+
+## Project installation and migration
+
+The `0.0.6` candidate puts the complete operator in `.conquistador`. `SKILL.md` and `library/`
+are at its root. The project guide asks for a coding agent, then installs a contained compact
+copy at that host's native project skill path. A compact copy retains every method/resource; the
+operator additionally retains the executable BB adapter, profile, contracts and schemas.
+
+`project-installation.json` binds the selected host names and native-copy digests to the operator's
+managed digest. Hosts resolve only to fixed project-relative paths. Status and doctor check the
+paired skill, and update/removal refuse changed files in either copy. Both replacements stage
+before any rename; failures roll back prior directories. Existing unchanged managed compact
+skills can be adopted through the displayed setup plan. Domain restrictions must agree.
+
+Default project update migrates an unchanged `.conquistador-operator` to `.conquistador`, including
+its domain selection. Explicit legacy `--path` stays supported. If both roots exist, a write
+requires an explicit path. Unowned `.conquistador` contents, including older runtime state, are
+preserved by refusal. Runtime's new default is `.conquistador-runs`; existing unmanaged `.conquistador/runs` remains
+the default when present. Explicit existing `--runs-dir` paths remain valid. No runtime data migrates or is deleted by setup.
+
+Host skill placement is not live host acceptance. A fresh native session must still demonstrate
+discovery, selection and useful method execution. The filesystem doctor does not certify it.

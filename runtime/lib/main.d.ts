@@ -1,6 +1,7 @@
 import { type ChatHost } from "./chat-client.ts";
 import { type CliCommand } from "./cli.ts";
 import type { JudgmentProvider } from "./judgment.ts";
+export declare function defaultRunsDirectory(cwd?: string): string;
 export type CliHost = {
     env: Record<string, string | undefined>;
     stdout: (value: string) => void;

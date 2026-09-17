@@ -1,3 +1,4 @@
+import { existsSync } from 'node:fs';
 import { isAbsolute, join, resolve } from 'node:path';
 import { runSetup } from './setup.mjs';
 
@@ -9,7 +10,7 @@ export const operatorHelp = `Usage:
   conquistador operator install|status|doctor|update|uninstall [--project PATH | --path PATH]
 
 Paths may be relative to the current directory. The default project is the current directory.
-The managed operator path is PROJECT/.conquistador-operator. Doctor also accepts --json.`;
+The managed operator path is PROJECT/.conquistador. Doctor also accepts --json.`;
 
 function normalizePaths(args, cwd) {
   const normalized = [...args];
@@ -39,13 +40,16 @@ export function operatorSetupArgs(argv, cwd = process.cwd()) {
   if (projects.length > 1 || paths.length > 1 || (projects.length && paths.length)) {
     throw new Error('Supply at most one of --project PATH or --path PATH.');
   }
+  const projectRoot = projects.length ? rest[projects[0] + 1] : cwd;
+  const current = join(projectRoot, '.conquistador');
+  const legacy = join(projectRoot, '.conquistador-operator');
+  const currentPath = !existsSync(current) && existsSync(legacy) ? legacy : current;
   if (action === 'doctor') {
     if (projects.length) {
       const index = projects[0];
-      const project = rest[index + 1];
       rest.splice(index, 2);
-      rest.push('--path', join(project, '.conquistador-operator'));
-    } else if (!paths.length) rest.push('--path', join(cwd, '.conquistador-operator'));
+      rest.push('--path', currentPath);
+    } else if (!paths.length) rest.push('--path', currentPath);
     return ['doctor', ...rest];
   }
   if (!projects.length && !paths.length) rest.push('--project', cwd);

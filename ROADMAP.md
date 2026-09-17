@@ -1,5 +1,11 @@
 # Product roadmap
 
+## Next private alpha
+
+1. Finish 0.0.6 installation acceptance against the user-reported first-run failures. Verify a
+   fresh native skill invocation, safe migration, exact transport parity and repeat startup.
+2. Review and ship the exact private candidate after the acceptance record is complete.
+
 ## Private-alpha follow-up
 
 1. Obtain the human verdict for the observed six-context BB run and record concrete task feedback.

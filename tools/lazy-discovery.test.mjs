@@ -241,7 +241,7 @@ test('doctor rejects stale SKILL links or an added specialist entry even without
   assert.equal(JSON.parse(result.stdout).discovery.count, 2);
   rmSync(path, { recursive: true });
   invoke(project, 'setup', 'install', '--target', 'operator', '--path', path);
-  rmSync(join(path, 'agent/skills'), { recursive: true });
+  rmSync(join(path, 'library'), { recursive: true });
   const missing = doctor();
   assert.equal(missing.status, 1);
   const report = JSON.parse(missing.stdout);

@@ -180,7 +180,7 @@ test('installed plugin and harness loaders enforce domain restrictions during ex
       const parent = { async execute(packet) { return { executionId: 'parent', isolated: false, result: resultFor(packet) }; } };
       const out = await installedModule.runSpecialistTeam({ plan: p, root: installed, parent });
       assert.equal(out.mode, 'sequential-in-context');
-      const skillRoot = mode === 'plugin' ? 'skills' : 'agent/skills';
+      const skillRoot = mode === 'plugin' ? 'skills/conquistador' : '.';
       cpSync(join(root, 'skills/create-paid-campaign'), join(installed, skillRoot, 'create-paid-campaign'), { recursive: true });
       p.assignments[0].skills = ['create-paid-campaign'];
       await assert.rejects(installedModule.runSpecialistTeam({ plan: p, root: installed, parent }), /Domain restriction forbids skill/);

@@ -66,7 +66,7 @@
       "const": "conquistador"
     },
     "pluginVersion": {
-      "const": "0.0.5"
+      "const": "0.0.6"
     },
     "canonicalSkill": {
       "const": "conquistador"
@@ -76,7 +76,8 @@
         "skills/conquistador",
         "agent/skills/conquistador",
         "advisor/skills/conquistador",
-        "worker/skills/conquistador"
+        "worker/skills/conquistador",
+        "."
       ]
     },
     "installClass": {

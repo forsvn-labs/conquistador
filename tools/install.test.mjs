@@ -35,7 +35,7 @@ test('one entry point contains every method and upgrades without losing user cha
 test('portable master contains specialist contracts, declared outcomes and its canonical parent', () => temporary(target => {
   install('install', 'single-agent', target);
   const agent = JSON.parse(readFileSync(join(target, 'agent/agent.json')));
-  assert.equal(agent.pluginVersion, '0.0.5');
+  assert.equal(agent.pluginVersion, '0.0.6');
   assert.equal(agent.kind, 'master-agent');
   assert.equal(agent.role, 'orchestrator');
   assert.equal(agent.schemaVersion, 'conquistador.agent-package/v2');
@@ -45,8 +45,8 @@ test('portable master contains specialist contracts, declared outcomes and its c
   for (const name of ['ads', 'copy', 'dr-landing', 'saas-landing', 'data-diagnosis', 'campaign-data', 'creative-assets']) {
     assert.ok(existsSync(join(target, agent.canonicalSkillRoot, 'library/conquistador/specialists', `${name}-agent.md`)));
   }
-  assert.deepEqual(readdirSync(join(target, 'agent/skills/conquistador/library')).sort(), skills);
-  for (const name of agent.mayLoadSkills) assert.ok(existsSync(join(target, 'agent/skills/conquistador/library', name, 'METHOD.md')));
+  assert.deepEqual(readdirSync(join(target, 'library')).sort(), skills);
+  for (const name of agent.mayLoadSkills) assert.ok(existsSync(join(target, 'library', name, 'METHOD.md')));
   install('remove', 'single-agent', target);
   assert.equal(existsSync(target), false);
 }));
@@ -77,7 +77,7 @@ test('host and squad declarations resolve inside each staged package', () => {
       }
     } else {
       const host = JSON.parse(readFileSync(join(target, 'host.json')));
-      assert.equal(host.pluginVersion, '0.0.5');
+      assert.equal(host.pluginVersion, '0.0.6');
       assert.deepEqual(readdirSync(join(target, host.canonicalSkillsRoot)).sort(), skills);
     }
     install('remove', mode, target);

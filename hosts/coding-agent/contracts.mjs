@@ -194,7 +194,7 @@ export async function loadAssignment(root, task, { authorize = () => {}, resolve
   const manifestPath = existsSync(resolve(root, 'agent/agent.json')) ? './agent/agent.json' : './agents/conquistador/agent.json';
   const manifest = JSON.parse(readFileSync(containedPath(root, manifestPath, 'file'), 'utf8'));
   assert.equal(manifest.schemaVersion, 'conquistador.agent-package/v2', 'Master execution requires v2');
-  assert.ok(['skills/conquistador', 'agent/skills/conquistador'].includes(manifest.canonicalSkillRoot), 'Unsupported canonical skills layout');
+  assert.ok(['.', 'skills/conquistador', 'agent/skills/conquistador'].includes(manifest.canonicalSkillRoot), 'Unsupported canonical skills layout');
   const layouts = methodLibrary(root);
   assert.equal(layouts.length, 1, 'Ambiguous or missing method library');
   const { layout: skillsRoot, internal } = layouts[0];

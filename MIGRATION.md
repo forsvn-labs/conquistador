@@ -23,3 +23,21 @@ provides.
 
 No runtime alias is installed. This product ships no compatibility shim, and no historical spelling
 resolves at install time.
+
+## Private alpha 0.0.6 project layout
+
+The next operator root is `.conquistador`, with the parent skill visible as `SKILL.md`. Run
+`conquistador operator update` from the receiving project to migrate an unchanged
+`.conquistador-operator` copy and prepare the default Codex skill. The guide lets you select
+Claude Code, Cursor, Copilot or files-only instead. Existing unchanged managed skills can join
+this lifecycle; unowned, edited or differently restricted copies are preserved by refusal.
+
+The operator and its configured native skill update and uninstall together. Keep artifacts outside
+both owned folders. If both old and new roots exist, use an explicit `--path` after inspecting them.
+Status and doctor can still read the legacy root. Explicit path updates retain that chosen path.
+
+Older runtime data may already occupy `.conquistador/runs`. Installation does not overwrite it.
+Keep using that explicit runtime path or move it yourself before choosing the new operator root.
+New runtime commands default to `.conquistador-runs`. Existing unmanaged `.conquistador/runs`
+remains the default when present so installed product files and run data have
+separate lifecycles. No existing runs are moved, reinterpreted or deleted.

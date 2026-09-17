@@ -25,3 +25,8 @@ https://github.com/UsefulSoftwareCo/executor.
 The separate app is UNLICENSED and excluded. Private course records, internal planning and review
 documents, source release authority, and landing are also excluded. Dependency notices and rights
 checks are separate acceptance evidence and must be verified for the exact artifact before release.
+
+The optional interactive setup bundles Clack prompts and its MIT-licensed dependencies.
+Exact versions are pinned in tools/tui/package-lock.json. Their notices are retained in
+`tools/vendor/NOTICE.txt` in the complete source distribution. The bundle runs locally and is loaded only
+for the terminal guide.

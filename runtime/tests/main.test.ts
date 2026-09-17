@@ -1,6 +1,7 @@
 import {
   existsSync,
   mkdtempSync,
+  mkdirSync,
   readFileSync,
   rmSync,
   writeFileSync,
@@ -10,7 +11,7 @@ import { resolve } from "node:path";
 
 import { afterEach, describe, expect, it } from "vitest";
 
-import { type CliHost, runCli } from "../src/main.ts";
+import { type CliHost, runCli, defaultRunsDirectory } from "../src/main.ts";
 import {
   createHostJudgmentProvider,
   type JudgmentProvider,
@@ -59,7 +60,7 @@ describe("owned CLI execution boundary", () => {
   it("reports version and fails closed for reserved later commands", async () => {
     const output = host();
     expect(await runCli(["version"], output.host)).toBe(0);
-    expect(output.stdout.at(-1)).toMatch(/^(?:1\.0\.0|0\.0\.5)$/);
+    expect(output.stdout.at(-1)).toMatch(/^(?:1\.0\.0|0\.0\.6)$/);
     expect(await runCli(["eval"], output.host)).toBe(2);
     expect(output.stderr.at(-1)).toMatch(/reserved but unavailable/);
   });
@@ -334,4 +335,16 @@ describe("owned CLI execution boundary", () => {
     expect(output.stdout.at(-1)).toContain("CONQUISTADOR_TOKEN");
     expect(output.stdout.at(-1)).not.toContain("provider-only");
   });
+});
+
+
+it("keeps existing unmanaged runtime state separate from the new installed operator", () => {
+  const directory = mkdtempSync(resolve(tmpdir(), "conquistador-runs-default-"));
+  try {
+    expect(defaultRunsDirectory(directory)).toBe(".conquistador-runs");
+    mkdirSync(resolve(directory, ".conquistador/runs"), { recursive: true });
+    expect(defaultRunsDirectory(directory)).toBe(".conquistador/runs");
+    writeFileSync(resolve(directory, ".conquistador/.conquistador-install.json"), "{}");
+    expect(defaultRunsDirectory(directory)).toBe(".conquistador-runs");
+  } finally { rmSync(directory, { recursive: true, force: true }); }
 });

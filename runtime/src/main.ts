@@ -26,6 +26,11 @@ import {
 import type { JudgmentProvider } from "./judgment.ts";
 import { buildService, inspectReadiness, loadConfigFile } from "./service.ts";
 
+export function defaultRunsDirectory(cwd = process.cwd()): string {
+  return existsSync(resolve(cwd, ".conquistador/runs")) && !existsSync(resolve(cwd, ".conquistador/.conquistador-install.json"))
+    ? ".conquistador/runs" : ".conquistador-runs";
+}
+
 function distributionVersion(): string {
   const manifest = resolve(import.meta.dirname, "../../package.json");
   if (!existsSync(manifest)) return "1.0.0";
@@ -162,7 +167,7 @@ export async function executeCli(
     const snapshot = await startPlaybookRun({
       playbook,
       inputs,
-      runsDir: command.runsDir ?? ".conquistador/runs",
+      runsDir: command.runsDir ?? defaultRunsDirectory(),
       runId: command.runId,
       judgment: host.judgment,
     });
@@ -175,7 +180,7 @@ export async function executeCli(
       judgmentResponse = readBoundedJson(command.judgmentResponse);
     }
     const snapshot = await resumePlaybookRun({
-      runsDir: command.runsDir ?? ".conquistador/runs",
+      runsDir: command.runsDir ?? defaultRunsDirectory(),
       runId: command.runId,
       ...(judgmentResponse !== undefined ? { judgmentResponse } : {}),
       ...(judgmentResponse === undefined && host.judgment
@@ -187,7 +192,7 @@ export async function executeCli(
   }
   if (command.command === "judgment" && command.action === "export") {
     const snapshot = loadPlaybookRun(
-      command.runsDir ?? ".conquistador/runs",
+      command.runsDir ?? defaultRunsDirectory(),
       command.runId,
     );
     const pending = Object.entries(snapshot.state.judgments ?? {}).find(
@@ -225,7 +230,7 @@ export async function executeCli(
   }
   if (command.command === "status") {
     const snapshot = loadPlaybookRun(
-      command.runsDir ?? ".conquistador/runs",
+      command.runsDir ?? defaultRunsDirectory(),
       command.runId,
     );
     host.stdout(JSON.stringify(runSummary(snapshot)));

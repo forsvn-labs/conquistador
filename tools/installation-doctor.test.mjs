@@ -88,7 +88,7 @@ test('root bundle and installer-owned host link pass without claiming source ide
 }));
 
 test('compact, plugin, and harness payloads include the manifest and distinguish BB adapter availability', () => temporary(path => {
-  for (const [target, layout, adapter] of [['skill', 'library', false], ['claude-plugin', 'skills/conquistador/library', true], ['harness', 'agent/skills/conquistador/library', true]]) {
+  for (const [target, layout, adapter] of [['skill', 'library', false], ['claude-plugin', 'skills/conquistador/library', true], ['harness', 'library', true]]) {
     install(path, target);
     const receipt = readFileSync(join(path, '.conquistador-install.json'));
     const report = doctor(path);
@@ -96,7 +96,7 @@ test('compact, plugin, and harness payloads include the manifest and distinguish
     assert.equal(report.library.available, 38);
     assert.equal(report.manifest.packaged, 'matches');
     assert.equal(report.receipt.state, 'unchanged');
-    assert.equal(report.receipt.productVersion, '0.0.5');
+    assert.equal(report.receipt.productVersion, '0.0.6');
     assert.equal(report.bbAdapterPresent, adapter);
     assert.equal(report.operatorProfilePresent, true);
     assert.equal(report.operatorActivation, 'manual');
@@ -260,7 +260,7 @@ test('Git identity belongs only to an exact source root and marks modified check
 test('doctor is usable before runtime libraries and dependencies exist and rejects invalid flags', () => temporary((path, parent) => {
   rootBundle(path);
   for (const file of ['runtime/bin/conquistador.js', 'tools/setup.mjs', 'tools/domain-package.mjs', 'tools/installation-doctor.mjs',
-    'tools/install-paths.mjs', 'tools/setup-routes.mjs', 'tools/method-library.mjs', 'tools/stage-method-library.mjs', 'tools/setup-guide.mjs', 'tools/setup-mcp.mjs', 'tools/operator-package.mjs']) {
+    'tools/install-paths.mjs', 'tools/setup-routes.mjs', 'tools/method-library.mjs', 'tools/stage-method-library.mjs', 'tools/setup-guide.mjs', 'tools/setup-mcp.mjs', 'tools/operator-package.mjs', 'tools/project-installation.mjs']) {
     mkdirSync(dirname(join(path, file)), { recursive: true });
     cpSync(join(root, file), join(path, file));
   }

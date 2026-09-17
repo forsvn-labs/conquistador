@@ -247,9 +247,9 @@ test('domain install records the restriction; knowledge roots stay outside the p
 test('project operator and harness alias share lifecycle without changing host routing or user work', () => temporary((path, project) => {
   const sentinel = join(project, 'AGENTS.md');
   writeFileSync(sentinel, 'Existing host instructions.');
-  const installed = join(project, '.conquistador-operator');
+  const installed = join(project, '.conquistador');
   const output = good('install', '--target', 'operator', '--project', project);
-  assert.match(output, /agent\/skills\/conquistador\/SKILL.md/);
+  assert.match(output, /SKILL.md/);
   assert.match(output, /Project routing needs a host adapter/);
   assert.ok(existsSync(join(installed, 'agents/execution-receipt.schema.json')));
   assert.ok(existsSync(join(installed, 'agents/conquistador/compatibility/v1.json')));
@@ -277,7 +277,7 @@ test('short operator commands default to the current project and preserve the co
     return result.stdout;
   };
   assert.match(ok('install'), /Prepared locally/);
-  const installed = join(project, '.conquistador-operator');
+  const installed = join(project, '.conquistador');
   const report = JSON.parse(ok('operator', 'doctor', '--json'));
   assert.equal(report.library.available, 38);
   assert.equal(report.bbAdapterPresent, true);
@@ -290,7 +290,7 @@ test('short operator commands default to the current project and preserve the co
 
   good('install', '--target', 'operator', '--project', directProject);
   const shortReceipt = JSON.parse(readFileSync(join(installed, '.conquistador-install.json')));
-  const directReceipt = JSON.parse(readFileSync(join(directProject, '.conquistador-operator', '.conquistador-install.json')));
+  const directReceipt = JSON.parse(readFileSync(join(directProject, '.conquistador', '.conquistador-install.json')));
   assert.equal(shortReceipt.mode, 'single-agent');
   assert.equal(shortReceipt.digest, directReceipt.digest);
 

@@ -5,8 +5,7 @@ the direct commands for local source copies, native plugin managers, runtime ope
 containers. Use the original installer to update and remove a copy. Full skill and plugin packages
 include all 38 outcome methods; domain and standalone method packages can contain fewer.
 
-Version 0.0.5 is private. The primary path is the pinned private Git release or its checksum-verified tarball through
-`conquistador setup`. The fixed release tag is `v0.0.5` on the `private-alpha` channel.
+Version 0.0.6 is an unshipped private-alpha candidate. See INSTALL.md for the persistent CLI and guided setup. Use a supplied local package until its tag is shipped. The current shipped tag is v0.0.5.
 `private: true` blocks registry publication; private Git and local package execution remain possible. See [package verification](../INSTALL.md#verify-the-package).
 
 For Git acquisition, use the fixed release tag or its full source commit. Your GitHub account must
@@ -29,7 +28,7 @@ node /absolute/path/conquistador-source/runtime/bin/conquistador.js operator doc
 ```
 
 The source path can be a clean clone or an extracted release ZIP. The command installs the same
-complete package at `.conquistador-operator/` as the npm and Bun routes. For the same release bytes,
+complete package at `.conquistador/` as the npm and Bun routes. For the same release bytes,
 the managed receipt digest and doctor result must match the package-runner installations.
 
 ## Let your coding agent do the setup
@@ -322,7 +321,7 @@ a stable distribution for runtime MCP. It creates dependencies only in the chose
 setup from the receiving project:
 
 ```sh
-npm install --global --prefix /absolute/path/conquistador-cli --ignore-scripts /absolute/path/forsvn-conquistador-0.0.5.tgz
+npm install --global --prefix /absolute/path/conquistador-cli --ignore-scripts /absolute/path/forsvn-conquistador-0.0.6.tgz
 /absolute/path/conquistador-cli/bin/conquistador setup
 ```
 

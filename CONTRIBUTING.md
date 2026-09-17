@@ -93,3 +93,9 @@ Run setup, setup-portability, entry, doctor, lazy-discovery, plugin, and MCP tes
 removal behavior. Cross-platform path tests do not establish native Windows activation. Host registration
 commands are instructions, not hidden subprocesses. Test files and synthetic fixtures cannot
 prove native registration or service connectivity.
+
+The setup TUI uses the committed `tools/vendor/clack.mjs` bundle. To intentionally rebuild it,
+run `npm ci --ignore-scripts --prefix tools/tui` and `npm run build --prefix tools/tui` under Node 24.
+Review the exact lockfile and preserve `tools/vendor/NOTICE.txt`. Ordinary setup and packaging
+use the committed bytes and do not require that dependency tree. The default test suite exercises
+project/native-skill ownership, migration, and the guided flow separately from native host acceptance.

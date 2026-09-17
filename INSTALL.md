@@ -1,50 +1,70 @@
 # Install Conquistador
 
-Version `0.0.5` is a private alpha on the `private-alpha` channel. It continues the same private
+Version `0.0.6` is an unshipped private-alpha candidate. `0.0.5` is the shipped private alpha on the `private-alpha` channel. It continues the same private
 delivery sequence as dogfood. Public alpha is planned to start at `0.1.0`.
 Use the [private release](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.5) and its
 exact tag or source commit. The repository remains private and no npm package is published.
 The observed installation platform is macOS with Node 24. Windows/Linux commands below are
 portability guidance; native execution and native host registration still need their own checks.
 
-## Project operator, recommended
+## Project operator and native skill, recommended
 
-Use Node 24, npm, Git, and a GitHub account with access to the private repository. Run from your receiving project:
-
-```sh
-npx -y --ignore-scripts --package=git+https://github.com/forsvn-labs/conquistador.git#v0.0.5 conquistador setup
-```
-
-The tag is fixed for this release. For an exact commit pin, replace `v0.0.5` with the full
-`sourceCommit` in its `assembly.json`. If HTTPS Git lacks access, run `gh auth setup-git` with the
-authorized account. Never put a token in the command.
-
-For the tarball route, download the release assets and verify the checksum before running:
+This source prepares `0.0.6`; the tag is not available until that private release is shipped.
+Use Node 24, npm, Git, and a GitHub account with access to the repository. Install the CLI once:
 
 ```sh
-gh release download v0.0.5 --repo forsvn-labs/conquistador --dir /absolute/path/conquistador-download
-shasum -a 256 /absolute/path/conquistador-download/forsvn-conquistador-0.0.5.tgz
-npx -y --ignore-scripts --package=/absolute/path/conquistador-download/forsvn-conquistador-0.0.5.tgz conquistador setup
+npm install -g --ignore-scripts github:forsvn-labs/conquistador#v0.0.6
 ```
 
-Compare the digest with `SHA256SUMS` before executing the last command. Quote the whole
-`--package=...` argument when its path contains spaces.
+In each receiving project, run:
 
-Press Enter for the recommended operator, then confirm the displayed installation once. The guide
-defaults to the current project. It shows the selected payload, capability limits, scope, and
-activation step. It checks local files after installation and prints a first task. Other routes
-ask for their host and owned folder. `conquistador setup list` explains every route without writing.
+```sh
+conquistador
+```
 
-`--ignore-scripts` is a safety flag: npm skips automatic package lifecycle hooks during acquisition.
-The explicitly requested Conquistador command still runs. The flag is not a sandbox or proof of
-package trust. [npm configuration](https://docs.npmjs.com/cli/v11/using-npm/config/#ignore-scripts)
+The terminal guide has arrow-key choices, visible installation/checking progress and cancellation.
+Choose your coding agent and confirm the displayed folders. The complete operator goes into
+`.conquistador`, with `SKILL.md` at its root. Setup also creates one native skill entry for your host:
 
-The package runs from npm's cache. It adds no dependency manifest, `node_modules`, or lockfile to
-the receiving project. The default `.conquistador-operator/` contains the parent, 38 methods,
-manual operator profile, portable contracts and schemas, and BB adapter. Keep this private folder
-out of public commits, for example through a project-local Git exclude, and keep outputs elsewhere.
-Setup does not change Git excludes or host settings. It starts no service, hook, or watcher.
-[How npm exec uses its cache](https://docs.npmjs.com/cli/v11/commands/npm-exec/)
+| Coding agent | Project skill |
+| --- | --- |
+| Codex / BB | `.agents/skills/conquistador` |
+| Claude Code | `.claude/skills/conquistador` |
+| Cursor | `.cursor/skills/conquistador` |
+| GitHub Copilot | `.github/skills/conquistador` |
+| Other / files only | Read `.conquistador/SKILL.md` explicitly |
+
+Both copies contain the complete method library. The operator also includes the BB adapter,
+portable contracts, schemas and profile. They share one managed update/removal lifecycle. An
+unchanged existing managed skill can be adopted; modified or unowned content is refused. Domain
+restrictions must agree. A new host session is needed to refresh native discovery. Setup does not
+start automatic project routing, watchers, services or hooks.
+
+For automation, `conquistador install` selects the current project and Codex skill. Use
+`--host cursor`, `--host claude-code`, `--host copilot` or `--host none` to choose differently.
+The CLI itself lives in npm's global prefix. The receiving project gets no `package.json`,
+`node_modules` or lockfile. Avoid `sudo`; choose a user-writable npm prefix if necessary.
+
+The one-time launcher remains available when you do not want a persistent CLI:
+
+```sh
+npx -y --ignore-scripts github:forsvn-labs/conquistador#v0.0.6
+```
+
+Git acquisition can take time before Conquistador starts. Repeated npx invocations may resolve
+GitHub again. The persistent CLI removes that repeated acquisition. `--ignore-scripts` skips npm's
+automatic lifecycle hooks; it does not block the explicitly requested Conquistador command.
+
+For a supplied release tarball, use the same persistent installation:
+
+```sh
+npm install -g --ignore-scripts /absolute/path/forsvn-conquistador-0.0.6.tgz
+conquistador
+```
+
+Verify the tarball checksum first. A private Git tag, source checkout, ZIP, npm or Bun tarball must
+produce the same complete operator. Git authentication can be configured with `gh auth setup-git`.
+No token belongs in the command. See the optional transport table below.
 
 ### Verify the package
 
@@ -55,9 +75,9 @@ authenticate that sender. Keep the tag, full source commit, and checksum togethe
 
 | System | Calculate SHA-256 |
 | --- | --- |
-| macOS | `shasum -a 256 /absolute/path/forsvn-conquistador-0.0.5.tgz` |
-| Linux | `sha256sum /absolute/path/forsvn-conquistador-0.0.5.tgz` |
-| Windows PowerShell | `Get-FileHash -Algorithm SHA256 "C:\Downloads\forsvn-conquistador-0.0.5.tgz"` |
+| macOS | `shasum -a 256 /absolute/path/forsvn-conquistador-0.0.6.tgz` |
+| Linux | `sha256sum /absolute/path/forsvn-conquistador-0.0.6.tgz` |
+| Windows PowerShell | `Get-FileHash -Algorithm SHA256 "C:\Downloads\forsvn-conquistador-0.0.6.tgz"` |
 
 Node/npm must work before the guide can start. A supplied tarball does not require GitHub sign-in
 or Git, but npm may need registry access for package dependencies. No provider account is needed
@@ -68,7 +88,7 @@ for work based on supplied facts.
 In a fresh coding-agent session in the receiving project, ask:
 
 ```text
-Read .conquistador-operator/agent/skills/conquistador/SKILL.md and follow it.
+Use Conquistador, or read .conquistador/SKILL.md and follow it.
 Use docs/product.md and docs/audience.md to draft a launch email in docs/launch/.
 Mark claims that need evidence. Keep this as a draft.
 ```
@@ -194,8 +214,8 @@ listing nor a passing doctor proves activation or output quality. Record observa
 
 | Transport | Command or procedure |
 | --- | --- |
-| Optional persistent CLI | `npm install --global --ignore-scripts /absolute/path/forsvn-conquistador-0.0.5.tgz`, then `conquistador setup` in the receiving project |
-| Bun tarball | `bunx --package /absolute/path/forsvn-conquistador-0.0.5.tgz conquistador setup`; Node 24 remains required by the shebang |
+| Optional persistent CLI | `npm install --global --ignore-scripts /absolute/path/forsvn-conquistador-0.0.6.tgz`, then `conquistador setup` in the receiving project |
+| Bun tarball | `bunx --package /absolute/path/forsvn-conquistador-0.0.6.tgz conquistador setup`; Node 24 remains required by the shebang |
 | Source or ZIP | `node /absolute/path/conquistador-source/runtime/bin/conquistador.js setup` in the receiving project |
 | Exact private Git | `npx -y --ignore-scripts --package=git+https://github.com/forsvn-labs/conquistador.git#COMMIT conquistador setup`; replace `COMMIT` with the full commit from the release assembly record |
 

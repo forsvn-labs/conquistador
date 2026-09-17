@@ -163,7 +163,11 @@ function stage(mode, target, selection) {
     copy('hosts/grok-bot/capabilities.md', 'capabilities.md');
     copy('skills', 'packaged-skills');
   } else if (mode === 'single-agent') {
-    role('agents/conquistador/agent.json', 'agent');
+    const agent = readJson(join(root, 'agents/conquistador/agent.json'));
+    agent.canonicalSkillRoot = '.';
+    mkdirSync(join(target, 'agent'), { recursive: true });
+    writeFileSync(join(target, 'agent/agent.json'), JSON.stringify(agent, null, 2) + '\n');
+    library('.');
   } else if (mode === 'squad') {
     copy('agents/squad/squad.json', 'squad.json');
     copy('docs/squad-sequential-fallback.md', 'sequential-fallback.md');
@@ -173,7 +177,7 @@ function stage(mode, target, selection) {
   const usage = mode === 'conquistador'
     ? 'Load SKILL.md as the Conquistador skill. It routes through library/conquistador/METHOD.md and a filtered capability catalog. There is one discoverable skill; specialist methods load only after routing. Start with /conquistador, or the equivalent named-skill invocation in your host. The operator profile defaults to manual activation; hosts may enable project routing without starting a daemon. Proactive help is opt-in; read docs/PROACTIVE.md. Native BB specialist dispatch (hosts/coding-agent/) requires the complete distribution, not this compact folder.'
     : mode === 'single-agent'
-    ? 'Load agent/agent.json and agent/skills/conquistador in your host. The portable master contract, operator profile, specialist roles, and declared outcome methods are bundled. The one discoverable parent contains its internal library under library/ with METHOD.md files. Native dispatch imports hosts/coding-agent/*.mjs. The callable coordinator automatically enforces domain-restriction.json when present. The host supplies isolated worker contexts. setup --target operator installs this package; harness is its compatibility alias. Start a fresh host session and explicitly ask it to read agent/skills/conquistador/SKILL.md and follow it for your task. Project activation requires a host adapter that calls admitRequest at turn start. No generic host registration is created.'
+    ? 'Read SKILL.md at the top of this folder or select Conquistador in your configured coding agent. The full method library is in library/. Load agent/agent.json in a portable adapter. The portable master contract, operator profile, specialist roles, and declared outcome methods are bundled. The one discoverable parent contains its internal library under library/ with METHOD.md files. Run conquistador start to see a first task, or conquistador skills to browse the library. Native dispatch imports hosts/coding-agent/*.mjs. The callable coordinator automatically enforces domain-restriction.json when present. The host supplies isolated worker contexts. setup --target operator installs this package; harness is its compatibility alias. Start a fresh host session and explicitly ask it to read SKILL.md and follow it for your task. Project activation requires a host adapter that calls admitRequest at turn start. No generic host registration is created.'
     : mode === 'squad'
       ? 'Load squad.json and each member contract with its own skills directory. Read sequential-fallback.md if your host cannot create separate contexts.'
       : mode === 'eve'

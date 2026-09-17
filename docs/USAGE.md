@@ -13,7 +13,7 @@ install contains only that method. The examples here assume the complete entry p
 ## Give it a task
 
 For the managed operator, start a fresh session in the receiving project and ask the host to read
-`.conquistador-operator/agent/skills/conquistador/SKILL.md` and follow it for your task. The JSON agent
+`.conquistador/SKILL.md` and follow it for your task. The JSON agent
 contract does not register a native host agent. In the examples below, replace `/conquistador` with
 that file instruction when using this route.
 

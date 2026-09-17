@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { win32, posix } from 'node:path';
 import { containsPath, isRuntimeExecutable, isPackageCache, shellCommand } from './install-paths.mjs';
-import { collectSetupArgs } from './setup-guide.mjs';
+import { runSetupGuide } from './setup-guide.mjs';
 
 test('containment distinguishes Windows drives and UNC shares from descendants', () => {
   for (const paths of [win32, posix]) {
@@ -34,30 +34,34 @@ test('generated PowerShell and POSIX commands preserve apostrophes and shell met
   assert.throws(() => shellCommand(['node', 'bad\ncommand']), /control/);
 });
 
-test('guided default asks one route question and uses the current project', async () => {
-  const questions = [], output = [];
-  const cwd = process.cwd();
-  const args = await collectSetupArgs(async text => { questions.push(text); return ''; }, text => output.push(text), cwd);
-  assert.deepEqual(args, ['install', '--target', 'operator', '--project', cwd]);
-  assert.equal(questions.length, 1);
-  assert.match(output.join('\n'), /manual activation/);
-  assert.match(output.join('\n'), /Experimental/);
+function fakeUi(answers, notes = []) {
+  return { intro() {}, outro() {}, cancel() {}, note(value) { notes.push(value); }, isCancel: value => typeof value === 'symbol',
+    select: async () => answers.shift(), text: async () => answers.shift(), confirm: async () => answers.shift(),
+    log: { info() {}, error(value) { notes.push(value); } }, spinner: () => ({ start() {}, stop() {} }) };
+}
+test('the guide confirms an operator and host then installs, verifies and explains the first task', async () => {
+  const answers = ['operator', 'cursor', true], notes = [], calls = [];
+  const result = await runSetupGuide({ cwd: '/example-project', version: '0.0.6', ui: fakeUi(answers, notes), run: async args => { calls.push(args); return ''; } });
+  assert.equal(result, 0); assert.equal(answers.length, 0);
+  assert.deepEqual(calls[0], ['install', '--target', 'operator', '--project', '/example-project', '--host', 'cursor']);
+  assert.deepEqual(calls[1], ['doctor', '--path', '/example-project/.conquistador']);
+  assert.match(notes.join('\n'), /fresh cursor session/); assert.match(notes.join('\n'), /conquistador start/);
 });
-
-test('guided forms select host and scope without applying changes', async () => {
-  for (const [answers, target, tail] of [
-    [['2', 'copilot-plugin', ''], 'copilot-plugin', '.conquistador-plugin'],
-    [['3', 'cursor', ''], 'cursor', '.cursor/skills/conquistador'],
-    [['4', 'squad', ''], 'squad', '.conquistador-squad'],
-    [['5', ''], 'mcp', '.conquistador-mcp'],
-    [['6', 'https://runtime.example', '', ''], 'mcp', '.conquistador-runtime-mcp'],
-    [['7', 'eve', ''], 'eve', '.conquistador-import'],
-  ]) {
-    const args = await collectSetupArgs(async () => answers.shift(), () => {});
-    assert.equal(args[2], target);
-    assert.ok(args.at(-1).replaceAll('\\', '/').endsWith(tail));
-    assert.equal(answers.length, 0);
+test('cancelling the guide applies no changes', async () => {
+  for (const answers of [[Symbol('cancel')], ['operator', 'codex', false]]) {
+    const calls = []; const result = await runSetupGuide({ cwd: '/example-project', version: '0.0.6', ui: fakeUi(answers), run: async args => { calls.push(args); } });
+    assert.equal(result, 0); assert.deepEqual(calls, []);
   }
-  const answers = ['6', ''];
-  await assert.rejects(collectSetupArgs(async () => answers.shift(), () => {}), /existing service/);
+});
+test('the guide retains connectors, plugins, squads and standalone methods', async () => {
+  for (const [answers, expected] of [
+    [['plugin', 'copilot-plugin', '/owned/plugin', true], ['install', '--target', 'copilot-plugin', '--path', '/owned/plugin']],
+    [['harness', 'squad', '/owned/squad', true], ['install', '--target', 'squad', '--path', '/owned/squad']],
+    [['skill', 'specialist', 'write-copy', '/owned/copy', true], ['install', '--target', 'skill:write-copy', '--path', '/owned/copy']],
+    [['runtime-mcp', 'https://runtime.example', '/stable', '/owned/mcp', true], ['install', '--target', 'mcp', '--url', 'https://runtime.example', '--runtime-path', '/stable', '--path', '/owned/mcp']],
+  ]) {
+    const calls = []; assert.equal(await runSetupGuide({ cwd: '/example-project', version: '0.0.6', ui: fakeUi(answers), run: async args => { calls.push(args); return ''; } }), 0);
+    assert.deepEqual(calls[0], expected); assert.equal(answers.length, 0);
+    if (expected[2].startsWith('skill:') || expected[2] === 'squad') assert.equal(calls.some(args => args[0] === 'doctor'), false);
+  }
 });

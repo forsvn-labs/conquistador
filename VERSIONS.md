@@ -1,7 +1,7 @@
 # Versions
 
-Product, plugin, host, and portable-agent manifests identify this release as `0.0.5`.
-Private alpha and dogfood are the same private delivery channel. This is its fifth release.
+Product, plugin, host, and portable-agent manifests identify this unshipped candidate as `0.0.6`.
+Private alpha and dogfood are the same private delivery channel. The shipped fifth release is `0.0.5`; this prepares the sixth.
 Future private releases increment the `0.0.x` version. The planned public alpha starts at `0.1.0`.
 The live private source branch is `private-alpha`. npm publication stays disabled.
 

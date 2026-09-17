@@ -7,9 +7,9 @@ Use [INSTALL.md](../INSTALL.md) for the short private-alpha path and
 
 | Mechanism | Official contract | Conquistador choice |
 | --- | --- | --- |
-| npm CLI | npm exec/npx runs a package executable and can keep fetched packages in its cache. A global install exposes its bin command. [npm exec](https://docs.npmjs.com/cli/v11/commands/npm-exec/), [npm install](https://docs.npmjs.com/cli/v11/commands/npm-install/) | Verified private tarball plus setup; optional persistent CLI. No receiving-project dependency or postinstall mutation. |
+| npm CLI | npm exec/npx runs a package executable and can keep fetched packages in its cache. A global install exposes its bin command. [npm exec](https://docs.npmjs.com/cli/v11/commands/npm-exec/), [npm install](https://docs.npmjs.com/cli/v11/commands/npm-install/) | Persistent CLI from an authorized private Git release or tarball, then guided setup. One-time npx remains available. No receiving-project dependency or postinstall mutation. |
 | Claude Code | Native plugins have host-managed scopes and discover skills/agents. Enabled plugins can start bundled MCP servers; host trust and approvals still apply. [Plugin reference](https://code.claude.com/docs/en/plugins-reference) | Prefer the native manager for plugins; stage a local source when necessary. This package declares no automatic MCP server or hook. |
-| Codex | Plugins use a configured marketplace and fresh session; local skills can use .agents/skills. [Plugins](https://learn.chatgpt.com/docs/plugins), [skills](https://learn.chatgpt.com/docs/build-skills), [packaging](https://learn.chatgpt.com/docs/build-plugins) | Native manager owns activated copies. Project skill is a separate option. Portable JSON is not native agent registration. |
+| Codex | Plugins use a configured marketplace and fresh session; local skills can use .agents/skills. [Plugins](https://learn.chatgpt.com/docs/plugins), [skills](https://learn.chatgpt.com/docs/build-skills), [packaging](https://learn.chatgpt.com/docs/build-plugins) | Native manager owns activated copies. The guide creates a project skill for the selected host. Portable JSON is not native agent registration. |
 | ChatGPT and other AI apps | OpenAI plugins can include skills and connected apps. App setup/authentication and account permissions remain separate. [OpenAI plugin help](https://help.openai.com/en/articles/20001256) | No public listing or universal private import is claimed. Use only a declared compatible private/local plugin mechanism or a client-supported connector. |
 | Copilot CLI | Its plugin manager handles discovery, installation, updates and removal; marketplace compatibility includes .claude-plugin. [Plugin reference](https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-plugin-reference) | Native user-level plugin is separate from the project operator or project skill. |
 | Cursor | Skills use project .cursor/skills or .agents/skills. Cursor also accepts Agent Plugins, with host-specific behavior for MCP path variables. [Skills](https://cursor.com/docs/skills), [plugin reference](https://prod.cursor.com/docs/reference/plugins) | Project skill is available; compatible plugin import uses host controls. Do not invent a universal CLI command or claim a Cursor-native agent package. |
@@ -49,3 +49,21 @@ Canonical source registration still exposes the authoring methods. Native manage
 Conquistador's local transformation implicitly. Stage first, then register that self-contained
 folder. Standalone specialist installs are explicit additions. No Copilot or Cursor native-agent
 parity is claimed merely because each can discover the plugin skill.
+
+## Terminal interface choice
+
+The next installer uses [Clack prompts](https://www.clack.cc/) `1.8.1`. Its select, confirm, text,
+spinner and cancellation primitives fit a short setup flow. The committed bundle is about 24 KB
+and loads only for interactive setup. Its lockfile and licenses are under `tools/tui/` and
+`tools/vendor/`; no dependency install is required in the receiving project or source/ZIP guide.
+[Upstream source and API](https://github.com/bombshell-dev/clack/tree/main/packages/prompts).
+
+[Inquirer](https://github.com/SBoudrias/Inquirer.js) also supplies maintained prompts. Clack gives
+this installer the desired consistent layout without maintaining custom prompt themes.
+[Ink](https://github.com/vadimdemedes/ink) uses React to build terminal applications and adds more
+rendering machinery than this short guide needs. This is a bounded installer decision, not a
+claim that Clack is best for a future full-screen product.
+
+Cold Git-based npm acquisition runs before the CLI can show progress. A polished guide cannot
+remove that delay. The recommended persistent CLI downloads once, then `conquistador` starts
+locally. A one-time npx launcher remains available for users who prefer it.

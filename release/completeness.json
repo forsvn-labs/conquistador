@@ -772,7 +772,7 @@
     },
     {
       "path": "conquistador/adapters/single-agent.md",
-      "sha256": "e18bf62deac49363abe224cd2ec67b6592db5ce5b4d93af8681150bd81458f32"
+      "sha256": "f9d5a93f95b77d8a91b907333aff87fc801526b1959861de0e658b6feb580889"
     },
     {
       "path": "conquistador/adapters/social-publishing-handoff.md",
@@ -4586,7 +4586,7 @@
   "operatorResources": [
     {
       "path": "hosts/coding-agent/contracts.mjs",
-      "sha256": "ea382a415ed59e062ac8746f024269a8f480fc37101404a0e4badea986b3c329"
+      "sha256": "5b90613184517d705ba662079f6fbb23002bcf3dfc151099eec4697c9f1b4582"
     },
     {
       "path": "hosts/coding-agent/operator.mjs",
@@ -4610,11 +4610,11 @@
     },
     {
       "path": "hosts/coding-agent/host.json",
-      "sha256": "72ae8bc7e8314a4d3e70f2e12c375bad52ed20c273647203fd60039044a3c998"
+      "sha256": "f3545e440cd7eb201c827b620ca057c9bf39e1d57146529baef9ba8cb631b4e4"
     },
     {
       "path": "hosts/coding-agent/README.md",
-      "sha256": "d2b0b8df1768b803140204f0740cc6b59c73a80ffde70cb4b5470c9b8800f0b0"
+      "sha256": "094ce687a3ab10fc8e6775deabc945b6c8f218079d88fd863937a293a1eff5b8"
     },
     {
       "path": "tools/domain-package.mjs",
@@ -4630,19 +4630,19 @@
     },
     {
       "path": "agents/conquistador/agent.json",
-      "sha256": "41f732b1791099afb4e638980910b192c0f3befe809c67693e9346ca80ba56c1"
+      "sha256": "6a09a2ac9e3ac28cbf4c416959f3cbee69fbcc4464023bc1adfc233e5e5f0392"
     },
     {
       "path": "agents/conquistador/compatibility/v1.json",
-      "sha256": "06fe53c93e83084dd121570e3d46d529ee25f0787dc7f31dce20c404150858fe"
+      "sha256": "16c8e2a98a688674b5c00938faf9c616dbaa7ae4ae4f10834ad6ed992b589fac"
     },
     {
       "path": "agents/agent-package.schema.json",
-      "sha256": "71cfd919262f1fcefe000628a5f552f15d9accae7a973745cf471552ed4b92b6"
+      "sha256": "6143dfb70aefe3328368478f388883ddd1c0b42ec1a362b8faf236fb6a70e724"
     },
     {
       "path": "agents/agent-package-v2.schema.json",
-      "sha256": "8e1bba056fa21775330d29aee5379a3f6127dd91db0b217368bcd9f7d4277a1b"
+      "sha256": "10facca3ce84997a07286557533f15dc013458d68a7381c13de87a812fdf5bc0"
     },
     {
       "path": "agents/operator-profile.schema.json",

@@ -7,6 +7,10 @@ import { applyMigrations, checkMigration, createLocalBackup, dataRoot, ensureLoc
 import { routeIntent } from "./router.js";
 import { loadPlaybookRun, playbookFixturePath, resumePlaybookRun, runSummary, startPlaybookRun, } from "./runner.js";
 import { buildService, inspectReadiness, loadConfigFile } from "./service.js";
+export function defaultRunsDirectory(cwd = process.cwd()) {
+    return existsSync(resolve(cwd, ".conquistador/runs")) && !existsSync(resolve(cwd, ".conquistador/.conquistador-install.json"))
+        ? ".conquistador/runs" : ".conquistador-runs";
+}
 function distributionVersion() {
     const manifest = resolve(import.meta.dirname, "../../package.json");
     if (!existsSync(manifest))
@@ -114,7 +118,7 @@ export async function executeCli(command, host) {
         const snapshot = await startPlaybookRun({
             playbook,
             inputs,
-            runsDir: command.runsDir ?? ".conquistador/runs",
+            runsDir: command.runsDir ?? defaultRunsDirectory(),
             runId: command.runId,
             judgment: host.judgment,
         });
@@ -127,7 +131,7 @@ export async function executeCli(command, host) {
             judgmentResponse = readBoundedJson(command.judgmentResponse);
         }
         const snapshot = await resumePlaybookRun({
-            runsDir: command.runsDir ?? ".conquistador/runs",
+            runsDir: command.runsDir ?? defaultRunsDirectory(),
             runId: command.runId,
             ...(judgmentResponse !== undefined ? { judgmentResponse } : {}),
             ...(judgmentResponse === undefined && host.judgment
@@ -138,7 +142,7 @@ export async function executeCli(command, host) {
         return snapshot.status === "failed" ? 2 : 0;
     }
     if (command.command === "judgment" && command.action === "export") {
-        const snapshot = loadPlaybookRun(command.runsDir ?? ".conquistador/runs", command.runId);
+        const snapshot = loadPlaybookRun(command.runsDir ?? defaultRunsDirectory(), command.runId);
         const pending = Object.entries(snapshot.state.judgments ?? {}).find(([, record]) => record.state === "pending");
         if (!pending) {
             throw new Error("[conquistador.cli] run has no pending judgment request to export");
@@ -167,7 +171,7 @@ export async function executeCli(command, host) {
         return 0;
     }
     if (command.command === "status") {
-        const snapshot = loadPlaybookRun(command.runsDir ?? ".conquistador/runs", command.runId);
+        const snapshot = loadPlaybookRun(command.runsDir ?? defaultRunsDirectory(), command.runId);
         host.stdout(JSON.stringify(runSummary(snapshot)));
         return 0;
     }
