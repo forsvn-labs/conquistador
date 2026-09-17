@@ -43,10 +43,45 @@ leaves the project empty, and Enter then apply installs all 38 methods with loca
 The test installation was removed through its lifecycle command. The focused setup, entry,
 installer, doctor, plugin, MCP, and portability suite also passed all 67 tests.
 
-Clean exact-commit packaging and transport lifecycle checks are pending the implementation commit.
+### Exact package and lifecycle verification
+
+Clean implementation commit `059501f00f28d7491f039c280601ba6090830502` passed `npm run package`
+on macOS arm64 with Node 24.21.0 and npm 11.19.0. The ZIP has 1,590 files and the npm tarball has
+1,588; every archive file matched its committed source bytes. Checksums matched the assembly record,
+which remains UNBOUND, unpublished, with zero live executions and zero human verdicts.
+
+Source archive, ZIP, npm tarball, Bun 1.3.14 tarball, and an isolated persistent npm CLI each passed
+install, status, doctor, update, status, doctor, uninstall, and absent status: 40 lifecycle commands.
+Every doctor reported 38 methods, a manual operator profile, the BB adapter, zero issues, and
+unverified host activation, provider use, and task execution. All five produced managed digest
+`b0308f0695950527487b39d0156a97f5d4338f2305ac96e94132e239487b92c9`, unchanged from the previous
+operator inventory. Every receiving project preserved its existing AGENTS.md and contained no
+package manifest, node_modules, or lockfile during install/update or after removal. The npm-owned persistent CLI also passed
+acquisition, replacement from the exact tarball, and removal in a dedicated temporary prefix.
+
+An actual npm tarball install of local MCP still initialized, listed all 39 entries (parent plus
+38 methods), and read the parent after its acquisition cache was moved away. Its local doctor,
+update, and uninstall passed. A runtime connector used the stable npm prefix and passed local
+configuration, update, and removal; no service was started or contacted. The primary npx tarball
+command was also exercised in a real terminal: Enter, one apply confirmation, automatic doctor,
+and subsequent removal. Source-guide cancellation was checked separately.
+
+| Artifact at 059501f | SHA-256 |
+| --- | --- |
+| conquistador-0.1.0.zip | 77d4019b77622514ecbcd5be2142bf1bb52212e6c7c15f6e70d630c271e515ad |
+| forsvn-conquistador-0.1.0.tgz | fcab8c9a5b3a6dd667c0b2c069793cbccbd6888b5b49cde32f1778f8beccb47c |
+
+This evidence is recorded in a separate documentation commit. Its package has a different source
+identity without changes to tested executable files. Package output remains local and uncommitted.
+All 70 local links and fragments in the changed documentation resolved. CHANGELOG remains unchanged
+because this is unshipped work.
+
 Native Windows/Linux execution, private Git acquisition for this unshipped source, native host
 activation, provider-backed tasks, and human acceptance remain unverified. Portable path tests and
-local MCP protocol tests do not substitute for those observations.
+local MCP protocol tests do not substitute for those observations. Custom cache layouts may not be
+recognized; runtime MCP still requires an operator-chosen persistent distribution. A client must
+refresh its saved connector after repair or Node changes. v1 receipts do not add authenticated
+source provenance, and repeated 0.1.0 builds may need host-specific cache refresh on activation.
 
 ## Previous operator command review, historical
 
