@@ -10,15 +10,30 @@ load_class: PROCEDURE
 
 > Format rules for the evaluate-content cycle artifact + results.tsv row + learnings.md promotion. Cited from SKILL.md "Artifact Contract" + "Evaluation Artifact Template" + "Results Row Discipline" sections. Schema changes require atomic update across `_shared/eval-loop-spec.md` + write-social (which produces the source artifact read by evaluate-content) + eval-loop owner.
 
-Aligned byte-for-byte with `evaluate-ad/references/format-conventions.md` where cross-eval consistency matters (frontmatter schema, Results Row 8-column schema, Evidence 6-column schema, side-effect order). Content-specific extensions are clearly marked.
+Uses the shared evaluation conventions for frontmatter, the 8-column Results Row and the 6-column
+Evidence table. Persistence follows the parent learning standard below.
+
+## Persistence consent
+
+Follow the [shared learning standard](../../../standards/learning.md). Before any persistent write,
+show the exact entry and destination and obtain explicit user approval. This applies to the eval
+artifact, ledger row, learning entry and any override note or manifest change. Use an approved
+private project store outside the product installation. Reuse approval only while its exact
+content and destination remain unchanged.
+
+A critic PASS is a quality check, not write permission. Accepting the content, approving publication
+or requesting a revision does not authorize persistence. Until consent exists, return the proposed
+content in the conversation and leave files unchanged. Approval to save an evaluation or ledger row
+does not authorize a learning write. In the template, promotion `yes` means eligible to propose;
+it never means permission to write.
 
 ## Output locations
 
 | Path | Lifecycle | Behavior |
 |---|---|---|
-| `.forsvn/loops/[slug]/evals/YYYY-MM-DD-cycle-N.md` | evaluation | Primary artifact, one per cycle, scoped to a single primary platform |
-| `.forsvn/loops/[slug]/results.tsv` | evaluation | Append exactly one row via `bun scripts/append-loop-result.ts` (validated 8-column helper) |
-| `.forsvn/loops/[slug]/learnings.md` | learning | Update ONLY for high-confidence keep/discard lessons reusable beyond this exact content piece; critic gates the promotion |
+| `.forsvn/loops/[slug]/evals/YYYY-MM-DD-cycle-N.md` | evaluation | Propose one artifact per cycle and primary platform; save only after exact-content and destination approval |
+| `.forsvn/loops/[slug]/results.tsv` | evaluation | Validate one 8-column row; append only after exact-row and destination approval |
+| `.forsvn/loops/[slug]/learnings.md` | learning | Propose only eligible high-confidence keep/discard lessons; require separate exact-entry and destination approval before writing |
 
 ## File naming
 
@@ -66,9 +81,9 @@ Date format: ISO `YYYY-MM-DD`. `lifecycle: evaluation` is required (eval-loop sp
 7. **Results Row** — fenced TSV block with the 8-column row (cycle / date / artifact / primary_metric / value / baseline / status / description) — description includes the primary platform
 8. **Learning Promotion** — Promote to learnings.md (yes/no) + Lesson + Expiry/caveat (platform/format scoped)
 
-## Full evaluation artifact template (byte-identical)
+## Full evaluation artifact template
 
-Save to `.forsvn/loops/[slug]/evals/YYYY-MM-DD-cycle-N.md`:
+Proposed destination, subject to persistence consent: `.forsvn/loops/[slug]/evals/YYYY-MM-DD-cycle-N.md`.
 
 ```markdown
 ---
@@ -160,7 +175,7 @@ N	YYYY-MM-DD	evals/YYYY-MM-DD-cycle-N.md	metric	value	baseline	keep|discard|watc
 ## Learning Promotion
 
 - Promote to `learnings.md`: yes | no
-- Lesson: [platform/format-scoped, durable, evidence-backed]
+- Lesson: [eligible platform/format-scoped lesson, or working hypothesis held in conversation]
 - Expiry / caveat: [platform scope? format scope? audience scope? what would break this lesson?]
 ```
 
@@ -192,25 +207,24 @@ Rules:
 - `artifact` is relative to the loop folder, e.g. `evals/2026-05-19-cycle-1.md`
 - `status` must be `keep`, `discard`, `watch`, or `blocked` (Critic Hard Fail #7 otherwise)
 - `description` is one sentence without tabs AND must include the primary-platform tag (Critic Hard Fail #8 otherwise)
-- Use the validated helper to append:
+- Check the existing header, cycle number, all eight columns and the evidence behind each value.
+  Prepare the exact row for review. After critic PASS or accepted PASS_WITH_CONCERNS, obtain explicit
+  user approval of the row and destination before using the host's file tools to append it once.
+  Do not overwrite an existing cycle.
 
-```bash
-bun scripts/append-loop-result.ts "<loop slug>" \
-  --artifact evals/YYYY-MM-DD-cycle-N.md \
-  --metric "<primary metric>" \
-  --value "<current value>" \
-  --baseline "<baseline value>" \
-  --status "<keep|discard|watch|blocked>" \
-  --description "<one sentence — include primary-platform tag>"
-```
+This distribution does not include `scripts/append-loop-result.ts` or `scripts/manifest-sync.ts`.
+Do not invoke either as an installation requirement. A host-owned helper is optional and requires
+verification of its availability and behavior; it cannot replace persistence consent.
 
 Example description: `"linkedin save rate 3.1% over 7d — keep hook+format, revise CTA per low click-through"`. The `linkedin` prefix is the primary-platform tag.
 
 - Do NOT append a row if the Critic verdict is FAIL. Return `BLOCKED`.
 
-### Known limitation — custom schemas
+### Custom schemas
 
-The validated helper enforces the 8-column standard schema. Loops with custom 10+ column `results.tsv` schemas currently require hand-edit. Schema migration is parked in the eval-loop owner's queue — flag affected loops to the eval-loop owner before manual append.
+If the existing header differs from the eight-column schema, stop before writing and return the
+proposed row with the mismatch. Do not silently migrate or hand-edit a custom ledger. A schema
+migration requires its own reviewed changes and explicit destination approval.
 
 ## Learning Promotion rules
 
@@ -218,10 +232,13 @@ The validated helper enforces the 8-column standard schema. Loops with custom 10
 
 | Promotion | Criteria |
 |---|---|
-| **yes** | High-confidence (`confidence: high` in verdict) AND status = `keep` or `discard` AND lesson is reusable beyond this exact content piece (e.g., "LinkedIn carousels in [vertical] earn save-rate lift when slide 1 names the reader's job title" generalizes; "this exact carousel with #hex slide-1 at 8am Tuesday lifted saves 12%" does not) |
-| **no** | Low-confidence OR `watch`/`blocked` status OR lesson is content-specific (won't generalize) OR lesson rests on a vanity spike (Critic Hard Fail #9) |
+| **yes** | High-confidence (`confidence: high` in verdict) AND status = `keep` or `discard` AND lesson is reusable beyond this content piece AND meets the shared learning standard. This is eligibility to propose, subject to separate persistence consent. |
+| **no** | Medium, low or blocked confidence OR `watch`/`blocked` status OR a single observation or two-cycle result OR a content-specific lesson OR a vanity spike (Critic Hard Fail #9). |
 
-Critic Hard Fail #9 enforces — learning promoted from low-confidence-or-blocked-or-vanity-spike evidence triggers FAIL. Critic owns gate-keeping on promotion.
+Keep a single observation or two-cycle result as a working hypothesis in the conversation, not a
+durable rule. Critic Hard Fail #9 rejects promotion when these evidence requirements fail. A critic
+can assess eligibility but cannot grant persistence consent. User approval does not turn weak
+evidence into a validated lesson.
 
 Lesson format:
 
@@ -231,25 +248,33 @@ Lesson format:
 - **Cycle:** [loop-slug] cycle N
 - **Primary-platform:** [platform]
 - **Evidence:** [primary metric delta with sample size + reach + confidence]
+- **Evidence class:** observed | inferred | assumed
 - **Expiry / caveat:** [when does this lesson stop being true? — e.g., "if the platform changes its engagement-rate denominator, retest"]
+- **Disconfirmer and recheck trigger:** [what would invalidate it, and when to check again]
 ```
 
-## Side effects (executed in order after critic PASS)
+## Writes after review and consent
 
-1. **Write eval artifact** at `.forsvn/loops/[slug]/evals/YYYY-MM-DD-cycle-N.md`
-2. **Append ledger row** via `bun scripts/append-loop-result.ts` (validated helper, 8-column schema)
-3. **Update learnings.md** ONLY if critic approved promotion (high-confidence platform/format-scoped keep/discard lesson)
-4. **Run manifest-sync** via `bun scripts/manifest-sync.ts` to refresh the manifest
+Prepare the complete proposed changes before seeking consent. After critic PASS, or accepted
+PASS_WITH_CONCERNS, apply only the writes whose exact content and destinations the user approved:
 
-If critic FAIL after revision: skip all 4 side effects. Return BLOCKED with missing evidence. If critic PASS but operator overrides on a `PASS_WITH_CONCERNS` verdict, the override-log invocation (a Review Packet override note) precedes side effect #2.
+1. Save the eval artifact at `.forsvn/loops/[slug]/evals/YYYY-MM-DD-cycle-N.md`.
+2. Append the validated ledger row once. If an override note is needed, obtain approval for its
+   exact entry and destination and save it before the row.
+3. Update `learnings.md` only when the lesson meets the evidence rules and has separate exact-entry
+   and destination consent. A `keep` decision alone never permits this write.
+
+There is no required manifest-sync step. Any host-owned manifest change needs the same explicit
+consent. If critic FAIL remains after revision, skip all writes and return BLOCKED with missing
+evidence. If consent is absent, return the draft and leave files unchanged.
 
 ## Cross-stack contract
 
-This skill produces:
+This skill proposes the following outputs. Save only the approved content at approved destinations:
 
 - `evals/[date]-cycle-N.md` — consumed by future evaluate-content cycles (read prior cycles for trend), by `write-social --rev=N+1` (latest eval seeds the next content's hypothesis), and by humans reviewing loop progress
-- `results.tsv` row — appended to the loop's ledger; consumed by any skill reading the loop's status (dashboard skills, ledger-summary skills, downstream campaign retrospectives)
-- `learnings.md` update — high-confidence platform/format-scoped lessons reusable beyond this content state; consumed by future write-social cycles + by humans
+- `results.tsv` row — after approval, appended to the loop's ledger; consumed by any skill reading the loop's status (dashboard skills, ledger-summary skills, downstream campaign retrospectives)
+- `learnings.md` update — only eligible, separately approved high-confidence platform/format-scoped lessons; consumed by future write-social cycles + by humans
 
 This skill does NOT directly consume write-social output via cross-skill import. write-social MIGHT be the strategy/execution artifact for the eval-loop cycle (its `docs/forsvn/artifacts/marketing/copy/[platform]-[date]-[slug].md` copied or linked into the loop's `execution/` directory); evaluate-content reads loop-local strategy/execution artifacts AND the source write-social artifact path stored in provenance. The coordination contract between write-social and evaluate-content is at the eval-loop boundary + the provenance.input_artifacts pointer, not at a shared-schema boundary.
 

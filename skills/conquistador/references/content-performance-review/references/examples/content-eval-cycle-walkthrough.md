@@ -1,6 +1,12 @@
 # Examples — content-eval Cycle Walkthrough (LinkedIn organic, save-rate loop)
 
-> Illustrative end-to-end run through the 4-agent dispatch graph (Metric Ingest + Diagnosis → Recommendation → Critic). Not prescriptive — the numbers below are **synthetic and labeled illustrative**, chosen to exercise the engagement-quality-vs-vanity discrimination that is the point of this skill. The procedural shape (Pre-Dispatch hard-blocks → Layer-1 parallel → Layer-2 → Layer-3 critic → side effects) IS the contract.
+> Illustrative walkthrough of Metric Ingest + Diagnosis, Recommendation and Critic. All numbers,
+> comments and verdicts below are synthetic. They illustrate engagement-quality discrimination;
+> they are not evidence of live execution, provider behavior or human acceptance.
+
+The sequence ends at a reviewed draft. Follow [persistence consent](../format-conventions.md#persistence-consent)
+before any file write: show the exact entry and destination and obtain explicit user approval.
+No persistence consent is present in this example, so no files are written.
 
 Cross-eval consistency: this walkthrough mirrors `evaluate-ad`'s 4-agent / 7-dim / 8-col shape. The two content-specific dimensions exercised here are **Engagement-Quality Discrimination** and **Platform-Fit**.
 
@@ -91,13 +97,15 @@ Verdict driven by the packet + the quality read, not the diagnosis story:
 - **keep** the line-1 pain-naming hook and the text-post format — both rest on meaningful engagement above a comparable baseline.
 - **watch** click-through (1.3%) — soft CTA may be under-converting saves into clicks.
 - **route next work to** `write-social --rev=3` with one narrow hypothesis: keep the hook, sharpen the CTA from soft-question to a concrete next step.
-- Proposes ledger `status: keep`, learning promotion = **yes** (high-confidence, platform/format-scoped).
+- Proposes ledger `status: keep`, learning promotion = **no**. Confidence is medium and this is
+  one observed cycle against a baseline. Keep the proposed explanation as a working hypothesis.
 
 ---
 
-## 4. The produced eval artifact (full)
+## 4. The proposed eval artifact (full)
 
-Written to `.forsvn/loops/forsvn-launch-organic/evals/2026-06-12-cycle-2.md`:
+Proposed destination, pending exact-content and destination approval:
+`.forsvn/loops/forsvn-launch-organic/evals/2026-06-12-cycle-2.md`.
 
 ```markdown
 ---
@@ -188,26 +196,21 @@ cycle	date	artifact	primary_metric	value	baseline	status	description
 
 ## Learning Promotion
 
-- Promote to `learnings.md`: yes
-- Lesson: On LinkedIn text posts to the agent-first ICP, a line-1 hook that names the reader's invisible-work pain (vs leading with a stat) lifts save rate on comparable reach.
-- Expiry / caveat: scope = LinkedIn text posts, agent-first audience. Retest if LinkedIn changes its save-count visibility or the engagement-rate denominator; one cycle (medium confidence) — promote-with-watch, confirm on cycle-3.
+- Promote to `learnings.md`: no
+- Lesson: Working hypothesis only. For this LinkedIn text post and audience, the pain-naming hook may explain the higher save rate. Keep this hypothesis in the conversation; it is not a durable rule.
+- Expiry / caveat: Medium confidence, one observed cycle against a baseline. Seek comparable exports and repeat evidence; a later cycle number alone does not justify promotion. Recheck if LinkedIn changes its save-count visibility or denominator. Comparable results without the hook would weaken the hypothesis.
 ```
 
 Brand note: FORSVN copy under evaluation stays on-house — Forest Shadow background, Leaf `#74B36B` as the single accent in any rendered review chrome; never Signal Lime. The eval scores the post's metrics, not its visuals, but the brand floor still applies if the cycle ever references rendered assets.
 
 ---
 
-## 5. results.tsv row (exact column order, appended via helper)
+## 5. Proposed results.tsv row
 
-```bash
-bun scripts/append-loop-result.ts "forsvn-launch-organic" \
-  --artifact evals/2026-06-12-cycle-2.md \
-  --metric "save rate" --value "3.1%" --baseline "1.9%" \
-  --status "keep" \
-  --description "linkedin save rate 3.1% over 7d — keep pain-naming hook + text format, watch CTA per low click-through"
-```
-
-Appended row (8 columns: `cycle date artifact primary_metric value baseline status description`):
+Proposed destination: `.forsvn/loops/forsvn-launch-organic/results.tsv`. The following row has eight
+columns in the required order, `cycle date artifact primary_metric value baseline status description`.
+It has not been appended. The host must check the current header and cycle for conflicts before
+seeking approval for this exact row and destination.
 
 ```tsv
 2	2026-06-12	evals/2026-06-12-cycle-2.md	save rate	3.1%	1.9%	keep	linkedin save rate 3.1% over 7d — keep pain-naming hook + text format, watch CTA per low click-through
@@ -231,20 +234,25 @@ Appended row (8 columns: `cycle date artifact primary_metric value baseline stat
   - decision_discipline: 9 — verdict matches the packet; routing to write-social CTA-only revision is correctly narrow, not "redo the content plan".
   - engagement_quality_discrimination: 9 — 4-way breakdown + meaningful-to-vanity ratio (1.26) computed; keep rests on saves+shares+comments+CTR, not likes.
   - platform_fit: 8 — 3.1% save rate read against a LinkedIn-specific benchmark; text-post format assessed as native; X kept in Cross-Platform Context only.
-  - ledger_correctness: 7 — one row appended; 8 columns; status valid; description carries "linkedin"; slightly verbose.
+  - ledger_correctness: 7 — one proposed row; 8 columns; status valid; description carries "linkedin"; slightly verbose. No write has occurred.
 - required_fixes:
   - none
 - concerns:
-  - Source is a screenshot summary, not a live export — confidence correctly held at medium; re-confirm with a live export before promoting beyond cycle-3.
+  - Source is a screenshot summary, so confidence remains medium. No learning promotion. A comparable export alone would not establish a durable rule from one observation or two cycles.
 - hard_fails_triggered:
   - none
 ```
 
 **Domain gate checked:** Engagement-Quality Discrimination = 9 — the keep is explicitly built on the meaningful half of engagement (ratio computed, vanity named), so the "keep on a vanity spike" Hard Fail (#11) does not fire. Cross-platform contamination (#4) avoided — X never entered `current_value`. Aggregate 58 ≥ 49 and every per-dim ≥ 6 → **PASS.**
 
-Side effects (in order, only after PASS): write the artifact → `append-loop-result.ts` → update `learnings.md` (critic approved the promotion) → `bun scripts/manifest-sync.ts`.
+The critic PASS checks the draft; it grants no write permission. Present the exact eval artifact,
+ledger row and their destinations for user approval. Until that approval exists, leave both files
+unchanged. If approved later without changes, the host can save the artifact and append the row
+once with its file tools. No learning write is eligible here; `learnings.md` remains unchanged.
+No bundled append or manifest-sync script is required or available.
 
-**Completion status: DONE_WITH_CONCERNS** — artifact + ledger row written, critic PASS, but confidence is medium (screenshot source), so the loop carries the concern forward.
+**Completion status: DONE_WITH_CONCERNS.** Return the reviewed draft with medium confidence and
+the proposed row. Persistence consent is pending. No files were written and no learning was promoted.
 
 ---
 
@@ -265,4 +273,10 @@ Same loop, hypothetical cycle-3. The operator brings: reach 31,000; likes 2,900;
   - #11 keep verdict resting on a vanity-heavy headline metric
 ```
 
-**Fix on the single revision:** Recommendation re-runs with `required_fixes` — name the algorithm boost as a confounder, compute the meaningful-to-vanity ratio, and reset the verdict to **watch** (a spike proves the algorithm surfaced the post, not that the content is durable). Learning promotion drops to **no** (spike window — Hard Fail #9 would catch a promotion). The revised cycle ships `status: watch`; the ledger row records the watch, and `learnings.md` is untouched. Had the operator insisted on shipping the `keep`, the override is logged via record a Review Packet override instead of `bun Review Packet override note` BEFORE the row is appended — and an override still never promotes a contested cycle to `keep`.
+On the single revision, Recommendation names the reach spike as a confounder, computes the
+meaningful-to-vanity ratio and resets the verdict to **watch**. Learning promotion is **no**;
+Hard Fail #9 would reject a lesson based on the vanity spike. The revised draft proposes
+`status: watch` and leaves `learnings.md` unchanged. A ledger append still needs exact-row and
+destination consent. If the operator contests the result, return a Review Packet override note
+for review. Any persistent override note needs exact-entry and destination consent before writing.
+An override does not bypass the evidence or learning gates; an unresolved critic FAIL permits no writes.

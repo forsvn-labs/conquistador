@@ -1,9 +1,12 @@
 # Content-intelligence-loop workflow
 
-This file is a prose-composition source, not a playbook. It is composition-only: the executable
-playbook of the same name stays release-required-unimplemented until an authorized judgment
-response and a real runner trace exist. This prose has no execution authority and must never be
-described as candidate-implemented.
+This file is a prose-composition source with no execution authority. The separate executable graph
+at `runtime/fixtures/playbooks/content-intelligence-loop.json` is locally implemented and verified
+with synthetic fixtures. Those checks establish local runner behavior only. Live execution,
+provider behavior and human acceptance remain unverified.
+
+The optional runtime requires validated host judgments and stops at human review. Installing this
+skill does not load that runner or authorize publication, spend or other external actions.
 
 Use privately when current audience signals must become a repeatable content learning loop.
 

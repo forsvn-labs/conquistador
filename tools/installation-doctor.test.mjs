@@ -83,7 +83,7 @@ test('root bundle and installer-owned host link pass without claiming source ide
   assert.match(report.summary, /^38 methods available;/);
   const text = run('doctor', '--path', path).stdout;
   assert.match(text, /No methods were loaded into the model context/);
-  assert.match(text, /Parent version: 2\.9\.0/);
+  assert.ok(text.includes(`Parent version: ${manifest.parent.version}`));
   assert.match(text, /Operator profile: present \(activation manual\)/);
 }));
 
@@ -127,7 +127,7 @@ test('missing outcomes and truncated methods fail even when frontmatter is intac
 test('parent version, missing contracts, entrypoint drift, and manifest drift are visible independently', () => temporary(path => {
   rootBundle(path);
   const parent = join(path, 'skills/conquistador/SKILL.md');
-  writeFileSync(parent, readFileSync(parent, 'utf8').replace('version: 2.9.0', 'version: 0.0.0'));
+  writeFileSync(parent, readFileSync(parent, 'utf8').replace(`version: ${manifest.parent.version}`, 'version: 0.0.0'));
   rmSync(join(path, 'skills/conquistador/methods/connect-accounts.md'));
   writeFileSync(join(path, 'SKILL.md'), '# A wrapper with no operating contract');
   writeFileSync(join(path, 'release/completeness.json'), '{}');

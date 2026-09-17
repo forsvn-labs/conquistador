@@ -2,7 +2,7 @@
 name: conquistador
 description: "Use /conquistador as the master agent for growth, GTM, sales, marketing, product, and knowledge work. Turn one request into a finished result. When the task needs the user's CRM, warehouse, ads, or docs, help install Executor and connect that stack so a new user can get going. Keep publishing, spend, credentials, and other consequential actions behind explicit human approval."
 metadata:
-  version: 2.9.0
+  version: 2.9.1
 
 ---
 
@@ -63,8 +63,9 @@ separate agent or independent reviewer ran unless the host created a separate co
 Read [capabilities.md](capabilities.md) for broad, ambiguous, or multi-stage requests. When the goal
 matches a file in [workflows/](workflows/), load that compact outcome contract privately. The flagship
 composition is [content-intelligence-loop](workflows/content-intelligence-loop.md): it is
-composition-only prose, and its executable playbook stays release-required-unimplemented until an
-authorized judgment response and a real runner trace exist. Its one social branch composes
+composition-only prose. Its separate executable graph in the optional runtime is locally
+implemented and verified with synthetic fixtures. Live execution, provider behavior and human
+acceptance remain unverified. This prose grants no execution authority. Its one social branch composes
 `research-content-ideas` → `write-social` → `fresh-eyes-review` → human verdict boundary → optional
 action handoff → `measure-growth`. For a narrow request, load the directly relevant sibling skill:
 

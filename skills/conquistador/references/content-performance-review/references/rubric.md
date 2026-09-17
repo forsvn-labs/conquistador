@@ -137,19 +137,23 @@ Was the content judged against a platform-appropriate benchmark? Was format-nati
 
 Exactly one valid `results.tsv` row, schema-compliant, primary-platform tagged?
 
+Score the proposed row before any append. A passing score does not authorize a write. Follow
+[persistence consent](format-conventions.md#persistence-consent) for the exact row and destination.
+
 | Band | Description |
 |------|-------------|
-| 9-10 | Exactly one row appended via `append-loop-result.ts`; 8 columns; status ∈ `{keep, discard, watch, blocked}`; description one sentence with no tabs; description includes the primary-platform tag; artifact path relative to loop folder |
-| 7-8 | One row appended; schema-compliant; description has the primary platform but is slightly verbose |
-| 5-6 | One row appended but description missing the primary platform explicitly (implicit only) |
+| 9-10 | Exactly one proposed row; 8 columns; status ∈ `{keep, discard, watch, blocked}`; description one sentence with no tabs; description includes the primary-platform tag; artifact path relative to loop folder |
+| 7-8 | One proposed row; schema-compliant; description has the primary platform but is slightly verbose |
+| 5-6 | One proposed row but description missing the primary platform explicitly (implicit only) |
 | 3-4 | Row schema drift (extra column, tab in description, status off-spec) |
-| 0-2 | Multiple rows appended OR row appended despite critic FAIL OR row contains a fabricated value |
+| 0-2 | Multiple rows proposed for one cycle OR row appended despite critic FAIL or without persistence consent OR row contains a fabricated value |
 
 **Auto-fail conditions:**
 
 - Ledger row status outside `keep | discard | watch | blocked` (Critic Hard Fail #7)
 - Ledger description missing the primary-platform tag (Critic Hard Fail #8)
 - Multiple rows appended for one cycle
+- Any persistent write without exact-entry and destination consent
 
 ---
 

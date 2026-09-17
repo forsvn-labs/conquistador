@@ -22,7 +22,7 @@ if (task === 'bootstrap') {
   run(npm, ['run', 'typecheck:public'], resolve(root, 'runtime'));
   run(npm, ['run', 'typecheck'], resolve(root, 'catalog'));
 } else if (task === 'test') {
-  run(process.execPath, ['--test', 'tools/dev.test.mjs', 'tools/install.test.mjs', 'tools/proactive.test.mjs', 'tools/plugin-contracts.test.mjs', 'tools/setup.test.mjs', 'tools/setup-portability.test.mjs', 'tools/lazy-discovery.test.mjs', 'tools/setup-entry.test.mjs', 'tools/installation-doctor.test.mjs', 'tools/skills-mcp.test.mjs', 'hosts/coding-agent/orchestrate.test.mjs', 'hosts/coding-agent/operator.test.mjs', 'hosts/coding-agent/operator-experience.test.mjs', 'tools/package-boundary.test.mjs', 'tools/domain-package.test.mjs', 'tools/conquistador-mode.test.mjs', 'tools/integration-releases.test.mjs']);
+  run(process.execPath, ['--test', 'tools/dev.test.mjs', 'tools/install.test.mjs', 'tools/proactive.test.mjs', 'tools/plugin-contracts.test.mjs', 'tools/setup.test.mjs', 'tools/setup-portability.test.mjs', 'tools/lazy-discovery.test.mjs', 'tools/setup-entry.test.mjs', 'tools/installation-doctor.test.mjs', 'tools/content-learning-contracts.test.mjs', 'tools/skills-mcp.test.mjs', 'hosts/coding-agent/orchestrate.test.mjs', 'hosts/coding-agent/operator.test.mjs', 'hosts/coding-agent/operator-experience.test.mjs', 'tools/package-boundary.test.mjs', 'tools/domain-package.test.mjs', 'tools/conquistador-mode.test.mjs', 'tools/integration-releases.test.mjs']);
   for (const module of ['runtime', 'catalog', 'evals']) run(npm, ['test'], resolve(root, module));
   run(npm, ['run', 'catalog:check'], resolve(root, 'catalog'));
   run(npm, ['run', 'example:local'], resolve(root, 'evals'));

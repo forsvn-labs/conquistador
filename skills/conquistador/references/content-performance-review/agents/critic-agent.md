@@ -61,7 +61,8 @@ Any of these = FAIL regardless of dimension scores:
 6. Any fabricated number, engagement count, or qualitative-sentiment claim.
 7. Ledger row status outside `keep | discard | watch | blocked`.
 8. Ledger description missing the primary-platform tag.
-9. Learning promoted from low-confidence, blocked, OR vanity-spike evidence.
+9. Learning promoted from medium, low or blocked confidence, a single observation or two-cycle
+   result, `watch`/`blocked` status, content-specific evidence, or a vanity spike.
 10. Source write-social artifact path unreadable or unverified.
 11. A `keep` verdict resting on a vanity-heavy headline metric (likes/impressions spike with collapsed meaningful engagement).
 12. Reach/impressions below the loop's confidence floor AND status = `keep` (low-sample keep claims are unfalsifiable).
@@ -72,7 +73,13 @@ On FAIL: orchestrator re-dispatches Recommendation (and optionally Diagnosis or 
 
 ## Critic Override Logging
 
-If the operator chooses to ship despite your FAIL (or accept your PASS_WITH_CONCERNS), the orchestrator MUST call record a Review Packet override instead of `bun Review Packet override note --skill evaluate-content --dimension "<failed dim>" --artifact "<path>" --critic-verdict <fail|pass-with-concerns> --operator-decision ship --reason "<sentence>" --follow-up "<none|watch metric|revise rubric|extract shared rubric>"` BEFORE the ledger row is appended. Three valid overrides on the same `evaluate-content:dimension` pair triggers rubric revision (D8 contract).
+If the operator contests your FAIL or accepts PASS_WITH_CONCERNS, propose a Review Packet override
+note with the affected dimension, artifact, verdict, decision, reason and follow-up. Follow
+[persistence consent](../references/format-conventions.md#persistence-consent) before writing the
+exact note at the approved destination. A critic verdict or override is not write permission.
+An unresolved FAIL still blocks writes; an override cannot promote ineligible evidence as learning.
+For an accepted PASS_WITH_CONCERNS, save any approved override note before the separately approved
+ledger row. Three valid overrides on the same `evaluate-content:dimension` pair trigger rubric revision.
 
 ## Self-Check
 

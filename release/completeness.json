@@ -2,8 +2,8 @@
   "schemaVersion": "conquistador.install-completeness/v1",
   "parent": {
     "name": "conquistador",
-    "version": "2.9.0",
-    "sha256": "6b9c35e7d102c97088202de2489345517da480603059a9555a7acb3a67b16652"
+    "version": "2.9.1",
+    "sha256": "0bebdd58c0bfbcd7854a9eab3e023a6696253964d360292b5bf87cbd9b4dd3c5"
   },
   "outcomes": [
     {
@@ -996,7 +996,7 @@
     },
     {
       "path": "conquistador/references/content-performance-review/agents/critic-agent.md",
-      "sha256": "094ef00b4e2a37f5d5ca22dd30eb58c71c44bd589300716ea7210bdf9fe8ebdc"
+      "sha256": "90a6f0306ba4b66879afe94398ee4f5709ffef83ebf52f6b5aa334481ec8ecbb"
     },
     {
       "path": "conquistador/references/content-performance-review/agents/diagnosis-agent.md",
@@ -1020,15 +1020,15 @@
     },
     {
       "path": "conquistador/references/content-performance-review/references/examples/content-eval-cycle-walkthrough.md",
-      "sha256": "af12c5965577a9e90394b72f6f960392e5eb54d15cd7facfc3045bb467838653"
+      "sha256": "06e3459447af6c2e0d521dcf997924dda11552ae788bea3f5988ff12e645935c"
     },
     {
       "path": "conquistador/references/content-performance-review/references/format-conventions.md",
-      "sha256": "478f6d19f351eb21ace930051183f1076468f578510962c31f1be215d9d68abe"
+      "sha256": "7d8503c016316c839e0a39d22f0669d9d26f12ef42313b75ec43c0c0502d9d6a"
     },
     {
       "path": "conquistador/references/content-performance-review/references/rubric.md",
-      "sha256": "ae1738c9014e4de477fa3317926703012ffff1eadb92aa2c38ced2f17fe28d1e"
+      "sha256": "24b8e37ff0d1978e8f0533a60e034524d3422298836561431587faf8d27e048c"
     },
     {
       "path": "conquistador/references/create-app-preview/agents/critic-agent.md",
@@ -1676,7 +1676,7 @@
     },
     {
       "path": "conquistador/workflows/content-intelligence-loop.md",
-      "sha256": "9fb16200d8daa3b3a24fd74f529f6b01587fa7bdc7581b3057782d2c86e249ee"
+      "sha256": "7ab35ecd3bfd8ffd117ed91c694d28b9b46fc6cfd8046565030531544ffbc0cd"
     },
     {
       "path": "conquistador/workflows/content-performance-review.md",

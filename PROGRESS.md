@@ -1,5 +1,31 @@
 # Implementation status
 
+## Workflow evidence and learning consent, unshipped
+
+Parent method 2.9.1 corrects the content-intelligence-loop status in both the parent and workflow.
+The optional executable graph is locally implemented and verified with synthetic fixtures. Live
+execution, provider behavior and human acceptance remain unverified. Prose grants no execution
+authority; this correction adds no runtime behavior or host activation.
+
+The content-performance-review format contract and walkthrough now distinguish a cycle decision
+from durable learning and permission to write. Medium-confidence, single-observation and two-cycle
+results remain working hypotheses. Critic PASS cannot authorize persistence. Every artifact, row,
+learning, override note or manifest change needs approval for its exact content and destination;
+unchanged approval can be reused. The example ends with a draft and no writes. The critic and ledger
+rubric apply the same boundary. Missing append/manifest helper scripts are no longer required.
+
+Four focused regression checks cover the workflow status, the example's rejected promotion,
+persistence consent, absent helper commands and links to the canonical standard. The parent version
+and resource hashes are refreshed in release/completeness.json. Runtime source and generated output,
+the shared safety standards, VISION, ROADMAP and CHANGELOG are unchanged. Product version remains
+0.1.0. The existing private-alpha release and native-host acceptance gates remain open.
+
+Node 24.21.0 passed the build, all 681 default tests and the 31-test focused contract, installation,
+lazy-discovery and plugin suite. The first full-suite attempt reached one packaging failure because
+the machine's default npm cache was not writable. Repeating the unchanged suite with the existing
+task-local npm cache passed; no cache ownership or account setting changed. This is local contract
+evidence only. No live host, provider, human, push, release or external action was observed.
+
 ## Parent-first discovery, unshipped
 
 Managed Codex, Claude Code, Copilot, Cursor and generic skill installs now expose one SKILL.md.
