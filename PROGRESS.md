@@ -38,9 +38,64 @@ created skills-lock.json. Removal for Codex alone preserved the shared directory
 hosts; removal without a host restriction removed the skill but retained the lockfile. This optional
 route cannot meet a no-lockfile requirement. Managed setup remains the default for that requirement.
 
-Clean exact-commit package and transport evidence is pending below. No external host activation,
-provider call, publish, push, release or visibility change is authorized by this work.
-The CHANGELOG edit adds only the pointer to this unshipped record; shipped entries are unchanged.
+### Exact package and migration evidence
+
+Clean implementation commit `f4226bf07226401e1c5125be1026a733058d9f22` passed `npm run package` on
+macOS arm64, Node 24.21.0 and npm 11.19.0. The ZIP contains 1,593 files and the npm tarball 1,591.
+Every archive file matched the committed source bytes and its assembly checksum. The package record
+remains UNBOUND, unpublished, with zero live executions and zero human verdicts.
+
+Five acquisition transports each passed a complete lifecycle for the operator, compact Codex skill,
+and staged Claude-compatible plugin: source archive, ZIP, npm tarball, Bun 1.3.14 tarball, and an
+isolated persistent npm CLI. These 15 cases ran 120 install/status/doctor/update/status/doctor/remove/
+absent-status commands. Each installed payload had one SKILL.md and 39 top-level METHOD.md entry
+files, the parent plus 38 outcomes. Five additional METHOD.md support files already existed in the
+canonical resources and remain preserved. Doctor reported 38 available methods, manual activation,
+zero issues, and the expected BB presence: complete operator/plugin present, compact copy absent.
+Initial name/description/path metadata measured 257 to 314 characters at the temporary test paths.
+This count varies with the receiving path; it is not a host-loading observation.
+
+All five transports produced the same managed digest for each layout:
+
+| Layout | Managed digest |
+| --- | --- |
+| Operator | 7121ee635f7c7753364f3ad9057a6287a82c20b4ffbdbab46214d6c19bf26ff1 |
+| Compact skill | bee05dd4340da1c708876e3e0405225d53c7f6fbc47111a641afbe79157e7f0f |
+| Staged plugin | a58dabe0be3b1d6baf5814db95682bd475dabca678f55b9df9b995c198f16f67 |
+
+Every receiving project preserved its AGENTS.md and contained no dependency manifest, node_modules,
+or lockfile during installation/update or after removal. Persistent npm acquisition, replacement
+and removal also passed in an isolated prefix. The optional third-party Skills CLI has the separate
+lockfile behavior described above.
+
+Six actual migrations used the previous exact commit `dd269eb83a9d60456b6669af34492cb2b66a2aa4`:
+compact, plugin and operator copies, each unrestricted and domain-restricted. Full compact/plugin
+copies changed from 40 discoverable files to one; full operators changed from 39 to one. Restricted
+copies changed from 11/11/10 to one, preserving their original mode and restriction. Each case first
+refused an edited legacy method without changing it, then updated after the original bytes were
+restored. Local doctor passed on complete copies. Removal preserved receiving-project files.
+
+A real npm-tarball terminal session accepted Enter for the default route and one apply confirmation,
+then ran doctor and printed manual host activation, a concrete first task, update and removal steps.
+Its payload had one entry and all 38 methods; removal left the project empty. An npm-installed local
+MCP copy still initialized, listed the parent plus 38 methods, and read the parent after the npm
+cache was moved away. Its doctor, update and removal passed. Runtime MCP configuration used a stable
+npm prefix and passed update/removal without starting or contacting the runtime service.
+
+| Artifact at f4226bf | SHA-256 |
+| --- | --- |
+| conquistador-0.1.0.zip | 94bd7397a4087d8f472235f0d2226bc2088c0815ade5991d9405de37bd9b6803 |
+| forsvn-conquistador-0.1.0.tgz | e11f622da2ad440e58c62a87e9e0b0db9bb245092c42c409d58f6d1848cc05e6 |
+
+All 82 local links/fragments in the changed documentation resolved. Entry-template links were
+checked in installed payloads, including links after domain filtering. This evidence is recorded in
+a separate documentation commit; tested executable and canonical method files are unchanged there.
+No native host was activated. Native Windows/Linux execution, authorized private-Git acquisition of
+this unshipped version, host cache refresh, actual skill routing/disclosure, provider tasks and human
+acceptance remain pending. Source-direct registration still exposes canonical specialists; it is an
+explicit opt-in and does not inherit the staged one-entry guarantee. Old host caches need their
+original owner's update/removal. No push, publication, release, visibility or external-account change
+was made. The CHANGELOG edit only points to this unshipped record; shipped entries are unchanged.
 
 ## Unified installation, unshipped
 
