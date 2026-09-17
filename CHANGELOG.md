@@ -4,6 +4,25 @@ No public release is claimed. Implemented but unshipped work is recorded in [PRO
 versions. Verification establishes the stated local scope; live provider operation, useful model
 output, human acceptance, rights disposition and release authority require separate evidence.
 
+## 2026-09-17, 0.0.7 private alpha
+
+- Seventh private release at
+  [`v0.0.7`](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.7) from
+  `e1bb066eaaab05022c12129ab2f06ba679b55ce8` on `private-alpha`.
+- Corrects the persistent private-Git command with npm `--install-links`. npm 11 could otherwise
+  report success while leaving the global executable linked to a temporary acquisition checkout.
+- Documents uninstall then corrected reinstall for affected v0.0.6 global entries. Existing project
+  `.conquistador/` and native skill copies remain available for ordinary update.
+- Adds an authenticated private-Git release check using a neutral project and isolated prefix/cache.
+  It verifies the executable resolves inside the durable prefix, deletes acquisition cache, then
+  runs version, install, 38-method doctor, start, update, removal, and project preservation.
+- Node 24 build and all 693 tests passed locally. Exact Linux CI passed at
+  [run 35196396669](https://github.com/forsvn-labs/conquistador/actions/runs/35196396669). The
+  immutable v0.0.7 tag passed the new cache-deletion lifecycle.
+- Downloaded release ZIP `cb4fc7ebb334503d22c81f5c808c4d13ee30bd1524888ab1f7b8a717f59471f8`
+  and npm tarball `383d5b2869ad84a681d7909a5ff568d1e6726c52daef957a456ef48d87250fc7`
+  matched the exact committed-source artifacts.
+
 ## 2026-09-17, 0.0.6 private alpha
 
 - Sixth private release at

@@ -1,6 +1,6 @@
 # Product progress
 
-## Private-alpha 0.0.7 acquisition correction
+## Private-alpha 0.0.7 shipped
 
 Private alpha 0.0.6 shipped from `40a9b7b3f635d17e9c0e79ec8b83884afcb10650` after its exact
 Linux CI run passed. The release assets reproduced from committed source and their downloaded
@@ -13,7 +13,7 @@ and `git+https` reproduced the failure from neutral projects and isolated prefix
 `--install-links` flag was a release-path defect; the `.conquistador` implementation and release
 artifacts were intact.
 
-The 0.0.7 candidate:
+The 0.0.7 release:
 
 - makes `npm install -g --ignore-scripts --install-links git+https://...#v0.0.7` the primary command;
 - explains why private-Git global installs need a durable copy and keeps `--ignore-scripts`;
@@ -33,11 +33,17 @@ Observed verification on macOS ARM64, Node 24.21.0 and npm 11.19.0:
   methods, ran start/update/uninstall, and preserved the receiving project's sentinel file.
 - Reinstalling directly over a dangling v0.0.6 link failed with npm `ENOTDIR`. Global uninstall then
   corrected reinstall repaired it; the same cache-deletion and lifecycle checks passed.
-- `tools/verify-private-git-install.mjs` independently passed against the immutable v0.0.6 tag with
-  cache removal before the lifecycle. This closes the test-shape gap; the exact future v0.0.7 tag
-  still needs the same check after shipment.
+- `tools/verify-private-git-install.mjs` independently passed against both immutable v0.0.6 and
+  v0.0.7 tags with cache removal before the lifecycle. Exact v0.0.7 source
+  `e1bb066eaaab05022c12129ab2f06ba679b55ce8` passed Linux CI
+  [run 35196396669](https://github.com/forsvn-labs/conquistador/actions/runs/35196396669).
+- Freshly downloaded v0.0.7 assets matched their release checksums: ZIP
+  `cb4fc7ebb334503d22c81f5c808c4d13ee30bd1524888ab1f7b8a717f59471f8` and npm tarball
+  `383d5b2869ad84a681d7909a5ff568d1e6726c52daef957a456ef48d87250fc7`.
+- The explicit npx fallback also launched version 0.0.6 from an empty cache. The durable global
+  install remains recommended because repeated private-Git acquisition took about 16–27 seconds.
 
-Astra's focused review recommends this bounded patch. It rejects postinstall or CLI self-repair as
+Astra's focused review recommended this bounded patch. It rejects postinstall or CLI self-repair as
 the primary fix because a dangling executable cannot run its own diagnostic. Native-host expansion
 and the optional GBrain learning backend remain separate work.
 
