@@ -1,6 +1,50 @@
 # Implementation status
 
+## Parent-first discovery, unshipped
+
+Managed Codex, Claude Code, Copilot, Cursor and generic skill installs now expose one SKILL.md.
+All 38 methods and their resources remain inside the parent as internal METHOD.md documents.
+The entry has a concise trigger and a filtered capability catalog. It instructs the parent to name
+relevant public capabilities/specialists and load method bodies only after routing. Staged plugins
+and complete operators/harnesses use the same contained layout and retain their full BB inventory.
+Canonical specialist sources and versions are unchanged. Standalone skill:NAME is an explicit
+setup target; MCP retains the canonical 39-entry method-read API. Squad members keep separate
+parent entries for their adapter contexts, and experimental imports retain their stated limits.
+
+The transform preserves metadata, text, scripts, resources and executable bits except for declared
+document/link adaptation. Full-library doctor reverses the filename adaptation and checks canonical
+hashes, verifies normal form and one-entry discovery, and reports metadata character count. Subsets
+include only allowed method files and replace omitted-file links with unavailable text. Full-library
+doctor still declines to certify domain/standalone completeness. v1 receipts, unchanged-copy update,
+edited-file refusal, rollback and host-owned activation remain in place.
+
+The official-source review confirmed that staged plugins can use one entry without removing the
+Claude native agent or BB adapter. Source-direct registration exposes canonical specialists and is
+an explicit opt-in boundary. Current source archives/npm packages must pass through setup before
+native registration. Existing activated caches and independently installed specialists need their
+original owner's refresh/removal. A filesystem count does not prove native discovery or routing.
+
+Node 24.21.0 and npm 11.19.0 passed build and all 677 default tests: 154 tooling, 293 runtime,
+167 catalog and 63 Eval Lab. Seven new regression tests check all default targets, byte/resource
+parity, metadata budget, contained links, domain and workflow filtering, standalone selection,
+legacy v1 migration, squad member counts and doctor rejection. Packaged BB loaders read parent,
+specialist, outcome resources and workflow files; disallowed domain loads fail before execution.
+The focused setup/entry/installer/doctor/plugin/MCP/portability suite passed 74 tests.
+Canonical specialist files have no diff. The read-only implementation review found no blocking
+defect; its requested installed-loader and migration checks are now included.
+
+A real pinned skills@1.5.26 copy/update from a staged parent exposed one skill. The upstream manager
+created skills-lock.json. Removal for Codex alone preserved the shared directory for other detected
+hosts; removal without a host restriction removed the skill but retained the lockfile. This optional
+route cannot meet a no-lockfile requirement. Managed setup remains the default for that requirement.
+
+Clean exact-commit package and transport evidence is pending below. No external host activation,
+provider call, publish, push, release or visibility change is authorized by this work.
+The CHANGELOG edit adds only the pointer to this unshipped record; shipped entries are unchanged.
+
 ## Unified installation, unshipped
+
+The following validation predates the parent-first change above. It records the earlier installation work.
 
 `conquistador setup` is the guided front door. From the receiving project, it shows the recommended
 complete operator and asks for one route choice plus one apply confirmation. It then installs

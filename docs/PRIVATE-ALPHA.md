@@ -11,13 +11,16 @@ checks, observed behavior, and your acceptance of the result separate.
    released.
 2. From the receiving project, run `conquistador operator status` and `conquistador operator
    doctor --json` through the same package source used for installation. The doctor must report 38
-   methods, the operator profile, and the BB adapter. Use `skills list` for a skills.sh copy. Record
+   methods, the operator profile, the BB adapter, and one discoverable skill entry. Use `skills list`
+   for a skills.sh copy. Record
    missing files or stale paths before continuing. Older releases may need a newer complete
    distribution to supply the doctor.
 3. Start a fresh host session and select Conquistador. Use a [task example](USAGE.md) with your own
    facts and files. Expect a finished deliverable, evidence gaps, and a next action. For a
    multi-part task, record whether a brief and receipt appeared, and whether child titles used
-   public role labels.
+   public role labels. Native skill/plugin installs should show one Conquistador entry. During work,
+   expect relevant capability and specialist names, with full methods loaded only after routing.
+   Record any discovery-budget warning and distinguish other installed specialists from this bundle.
 4. Review the output yourself, then supply one correction or measured result. Check whether the
    follow-up preserves the facts and fixes the problem. A second unresolved material failure should
    remain a gap, not a hidden retry loop.

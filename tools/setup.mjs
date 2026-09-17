@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url';
 import { createInterface } from 'node:readline/promises';
 import { parseKnowledgeRoots, readDomainManifestFile, resolveDomainSelection, resolveKnowledgeRoot } from './domain-package.mjs';
 import { containsPath, shellCommand as formatCommand } from './install-paths.mjs';
-import { targets, projectPaths, routes, defaultPath, describeRoute } from './setup-routes.mjs';
+import { targets, projectPaths, routes, defaultPath, describeRoute, targetMode } from './setup-routes.mjs';
 import { collectSetupArgs } from './setup-guide.mjs';
 import { runtimeSource, stageMcp } from './setup-mcp.mjs';
 
@@ -51,7 +51,7 @@ function parse(args) {
     if (!['--target', '--project', '--path', '--url', '--runtime-path', '--domain', '--knowledge-roots'].includes(flag) || options[flag.slice(2)] !== undefined || !rest[i + 1] || rest[i + 1].startsWith('--')) fail('Unknown, duplicate, or incomplete option.');
     options[flag.slice(2)] = rest[i + 1];
   }
-  if (options.target !== undefined && !Object.hasOwn(targets, options.target)) fail('Unknown target.');
+  if (options.target !== undefined && !targetMode(options.target)) fail('Unknown target.');
   if (action === 'install') options.target ??= 'operator';
   if (!options.project && !options.path) {
     if (action !== 'install' && !options.target) fail('Choose --target TARGET or --path ABS. For the default operator use conquistador operator ' + action + '.');
@@ -168,7 +168,8 @@ function report(options, result) {
       console.log(`First task: Read ${join(path, 'agent/skills/conquistador/SKILL.md')} and follow it. Draft a launch email from my product facts. Keep it as a draft.`);
     } else if (['plugin', 'conquistador'].includes(result.mode)) {
       console.log('First task: in a fresh host session select Conquistador, then ask: Draft a launch email from my product facts. Keep it as a draft.');
-    } else if (result.mode === 'squad') console.log('First task: attach squad.json in your adapter, then request a draft launch email and a labeled review.');
+    } else if (result.mode?.startsWith('skill:')) console.log('First task: load ' + join(path, 'skills', result.mode.slice(6), 'SKILL.md') + ' in your host and request the named outcome.');
+    else if (result.mode === 'squad') console.log('First task: attach squad.json in your adapter, then request a draft launch email and a labeled review.');
     console.log(result.mode === 'plugin' ? 'Update owner: setup owns this source; the original host manager owns the activated copy.'
       : result.mode === 'mcp' ? 'Update owner: setup owns this connector; the client owns registration; runtime service/data remain separate.'
         : 'Update owner: setup owns this folder. Keep outputs and host settings elsewhere.');
@@ -219,7 +220,7 @@ function removalReminder(mode) {
   else if (['single-agent', 'squad'].includes(mode)) console.log('Before removing this folder: disconnect the contract from your custom agent host. Host configuration and running agents remain host-owned.');
 }
 function run(options, reminderShown = false) {
-  const mode = options.target ? targets[options.target] : undefined;
+  const mode = options.target ? targetMode(options.target) : undefined;
   const result = inspect(options.path, mode);
   if (options.action === 'status') { report(options, result); return; }
   if (options.action === 'install') {
@@ -236,7 +237,7 @@ function run(options, reminderShown = false) {
     const prior = JSON.parse(readFileSync(join(options.path, 'connector.json'), 'utf8'));
     if (prior.args?.length === 4) displayUrl = prior.args[3];
   }
-  const displayTarget = options.target ?? { mcp: 'mcp', plugin: 'agent-plugins', conquistador: 'skill', 'single-agent': 'harness', squad: 'squad' }[ownedMode];
+  const displayTarget = options.target ?? (ownedMode?.startsWith('skill:') ? ownedMode : { mcp: 'mcp', plugin: 'agent-plugins', conquistador: 'skill', 'single-agent': 'harness', squad: 'squad' }[ownedMode]);
   for (const line of describeRoute(displayTarget, displayUrl)) console.log(line);
   if (options.selection) console.log('Domain selection reduces the copied library. Full-library doctor does not certify domain readiness.');
   if (options.action === 'uninstall' && !reminderShown) removalReminder(ownedMode);
@@ -285,7 +286,7 @@ Local MCP copies its server and methods; neither mode registers a client or star
 --domain ABS and --knowledge-roots ABS retain domain selection for supported package targets.
 Use the original verified package launcher if no persistent conquistador CLI is installed.
 Doctor checks local files, not host activation, provider access, or task success.
-Targets: ${Object.keys(targets).join(', ')}`;
+Targets: ${Object.keys(targets).join(', ')}, skill:NAME (one explicit specialist)`;
 
 export async function runSetup(args) {
   try {

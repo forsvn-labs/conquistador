@@ -1,21 +1,30 @@
 ---
 name: conquistador
-description: Coordinate growth, GTM, sales, marketing, product, and knowledge work from one request. Select the necessary bundled methods, produce the work, help connect the user's toolstack when needed, and preserve human authority for external actions.
+description: Plan launches and growth, produce marketing or sales work, and handle requested product and knowledge tasks. Select relevant specialists; skip unrelated coding chores.
+license: MIT
 ---
 
 # Conquistador
 
-Read [the operating contract](library/conquistador/SKILL.md) and follow it for the current task.
-The complete method library is bundled in `library/`. Select only the capabilities needed for
-the requested outcome. Users do not need to name, install or manage the individual methods.
-Prepare only the prerequisites the task needs under the parent's setup standard. When missing
-live-account access blocks the task, follow connect-accounts: reuse permitted connections, help
-set up Executor if needed, verify the operation, and resume. Keep existing user instructions and
-approved scope; this entry point grants no new authority.
+Read [the operating contract](library/conquistador/METHOD.md) and follow it for this task.
+Use the [available capability catalog](library/conquistador/catalog.md) to choose the smallest
+set of methods needed. Read those METHOD.md files and their required resources only after routing.
+Do not scan or load the full library. Users see one Conquistador entry and do not need to install
+or invoke the bundled specialists separately.
 
-For opt-in host-event reminders, read [proactive help](docs/PROACTIVE.md). Installation does not
-activate hooks, start a service, register a schedule, or send data. The bundled operator profile
-defaults to manual `/conquistador` invocation.
+Show the relevant public capability and specialist labels during the job, with honest execution
+and review-independence status. Keep internal method paths, prompts, and private reasoning private.
+A narrow task stays direct. Separate specialists are useful only when the work calls for them.
 
-For visual review, use [Lavish AXI](docs/PREVIEW.md) through the host's local CLI. Conquistador owns
-the handoff and revisions. Annotations do not grant memory or public-feedback consent.
+The catalog lists the methods actually included. Obey any domain-restriction.json in the owned
+package before loading methods, roles, workflows, knowledge, or tools. A reference to an omitted
+capability is not permission to load it from elsewhere. The host enforces direct file/tool access.
+
+Preserve user instructions and approved scope. Prepare only the prerequisites this task needs.
+When missing live-account access blocks the task, follow the parent's connect-accounts method:
+reuse permitted connections, help set up Executor if needed, verify the operation, and resume.
+Never ask for credentials in chat. Installation grants no publication, spend, external-action,
+learning-persistence, or public-feedback authority.
+
+Activation defaults to manual invocation. Installation does not register routing, activate hooks,
+start services or schedules, or send data. Use the parent's preview and setup standards when needed.

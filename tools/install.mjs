@@ -7,6 +7,7 @@ import { DOMAIN_SCHEMA_VERSION, PARENT_SKILL, RESTRICTION_NAME, REVIEW_SKILL, pa
 
 import { operatorFiles } from './operator-package.mjs';
 import { containsPath } from './install-paths.mjs';
+import { stageMethodLibrary } from './stage-method-library.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const receiptName = '.conquistador-install.json';
@@ -112,12 +113,17 @@ function stage(mode, target, selection) {
     if (!/^[a-z][a-z0-9-]*$/.test(name) || !existsSync(join(root, 'skills', name, 'SKILL.md'))) fail(`Unknown skill: ${name}`);
     copy(`skills/${name}`, `${into}/${name}`);
   };
+  const template = readFileSync(join(root, 'tools/entrypoint/SKILL.md'), 'utf8');
+  const library = (entry, names) => stageMethodLibrary(join(root, 'skills'), join(target, entry), {
+    template, subset: Boolean(selection) || Boolean(names),
+    include: key => (!names || names.has(key.split('/')[0])) && shouldStageSkillPath(`skills/${key}`, selection),
+  });
   const role = (source, into) => {
     const agent = readJson(join(root, source));
     agent.canonicalSkillRoot = `${into}/skills/conquistador`;
     mkdirSync(join(target, into), { recursive: true });
     writeFileSync(join(target, into, 'agent.json'), JSON.stringify(agent, null, 2) + '\n');
-    for (const name of new Set(['conquistador', ...agent.mayLoadSkills])) skill(name, `${into}/skills`);
+    library(`${into}/skills/conquistador`, new Set(['conquistador', ...agent.mayLoadSkills]));
   };
   copy('LICENSE');
   copy('NOTICE.md');
@@ -138,12 +144,11 @@ function stage(mode, target, selection) {
     }
   }
   if (mode === 'conquistador') {
-    copy('tools/entrypoint/SKILL.md', 'SKILL.md');
-    copy('skills', 'library');
-    copy('skills/conquistador/agents/openai.yaml', 'agents/openai.yaml');
+    library('.');
   } else if (mode === 'plugin') {
-    for (const path of ['plugin.json', '.claude-plugin', '.codex-plugin', '.agents', 'SKILL.md', 'skills', 'assets']) copy(path);
+    for (const path of ['plugin.json', '.claude-plugin', '.codex-plugin', '.agents', 'assets']) copy(path);
     copy('agents/conquistador.md');
+    library('skills/conquistador');
   } else if (mode.startsWith('skill:')) {
     const name = mode.slice(6);
     skill(name);
@@ -166,9 +171,9 @@ function stage(mode, target, selection) {
     role('agents/squad/worker.json', 'worker');
   } else fail(`Unknown install mode: ${mode}`);
   const usage = mode === 'conquistador'
-    ? 'Load SKILL.md as the Conquistador skill. It routes through library/conquistador and all bundled outcome methods. Start with /conquistador, or the equivalent named-skill invocation in your host. The operator profile defaults to manual activation; hosts may enable project routing without starting a daemon. Proactive help is opt-in; read docs/PROACTIVE.md. Native BB specialist dispatch (hosts/coding-agent/) requires the complete distribution, not this compact folder.'
+    ? 'Load SKILL.md as the Conquistador skill. It routes through library/conquistador/METHOD.md and a filtered capability catalog. There is one discoverable skill; specialist methods load only after routing. Start with /conquistador, or the equivalent named-skill invocation in your host. The operator profile defaults to manual activation; hosts may enable project routing without starting a daemon. Proactive help is opt-in; read docs/PROACTIVE.md. Native BB specialist dispatch (hosts/coding-agent/) requires the complete distribution, not this compact folder.'
     : mode === 'single-agent'
-    ? 'Load agent/agent.json and agent/skills/conquistador in your host. The portable master contract, operator profile, specialist roles, and declared outcome skills are bundled. Native dispatch imports hosts/coding-agent/*.mjs. The callable coordinator automatically enforces domain-restriction.json when present. The host supplies isolated worker contexts. setup --target operator installs this package; harness is its compatibility alias. Start a fresh host session and explicitly ask it to read agent/skills/conquistador/SKILL.md and follow it for your task. Project activation requires a host adapter that calls admitRequest at turn start. No generic host registration is created.'
+    ? 'Load agent/agent.json and agent/skills/conquistador in your host. The portable master contract, operator profile, specialist roles, and declared outcome methods are bundled. The one discoverable parent contains its internal library under library/ with METHOD.md files. Native dispatch imports hosts/coding-agent/*.mjs. The callable coordinator automatically enforces domain-restriction.json when present. The host supplies isolated worker contexts. setup --target operator installs this package; harness is its compatibility alias. Start a fresh host session and explicitly ask it to read agent/skills/conquistador/SKILL.md and follow it for your task. Project activation requires a host adapter that calls admitRequest at turn start. No generic host registration is created.'
     : mode === 'squad'
       ? 'Load squad.json and each member contract with its own skills directory. Read sequential-fallback.md if your host cannot create separate contexts.'
       : mode === 'eve'
@@ -176,7 +181,7 @@ function stage(mode, target, selection) {
         : mode === 'grok-bot'
           ? 'Use bot-profile.md and packaged-skills through the official Grok Bot app import controls, if supported. Read capabilities.md. Grok CLI is a different host.'
           : mode === 'plugin'
-            ? 'Add this directory as a local marketplace in Claude Code or Codex, then install conquistador@conquistador. Other Agent Plugins clients load plugin.json. Claude also discovers the Conquistador agent. Native dispatch imports hosts/coding-agent/*.mjs from this folder. The operator profile defaults to manual activation. No service, hook, watcher, or schedule starts on install; methods declare prerequisites when needed.'
+            ? 'Add this directory as a local marketplace in Claude Code or Codex, then install conquistador@conquistador. Other Agent Plugins clients load plugin.json. Only skills/conquistador/SKILL.md is discoverable as a skill; its library/ contains internal METHOD.md files. Claude also discovers the Conquistador agent. Native dispatch imports hosts/coding-agent/*.mjs from this folder. The operator profile defaults to manual activation. No service, hook, watcher, or schedule starts on install; methods declare prerequisites when needed.'
             : `Point your host at skills/${mode.slice(6)}. Read its SKILL.md for inputs, outputs and invocation prerequisites.`;
   writeFileSync(join(target, 'README.md'), `# Conquistador ${mode}\n\n${usage}\n\nRead [Use Conquistador](docs/USAGE.md) for requests, review and correction. Read [Master-agent modes](docs/MASTER-AGENT.md) for specialist execution and host limits. This staged folder contains methods and usage documentation. Run setup status, setup doctor, installation, upgrade, removal, runtime, build, test and package commands from the complete distribution, not this folder. The proactive helper is available only when tools/proactive.mjs is included.${selection ? (mode === 'conquistador' ? ' Domain selection filters the copied methods. This compact skill has no callable loader; its host must enforce domain-restriction.json before loading additional methods or tools.' : ' domain-restriction.json is the load-time allowlist for the callable coordinator; undeclared siblings are refused there even if copied later.') + ' Private knowledge roots stay in operator-owned configuration outside this folder. Direct host file and tool access requires host enforcement.' : ''}\n\nPrepared locally, not live-host verified. This folder is installer-owned. Keep user artifacts elsewhere. Run upgrade or remove from the original complete distribution using the same mode and this destination. Modified files are preserved by refusing replacement.\n`);
   if (selection) {

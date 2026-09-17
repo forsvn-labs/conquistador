@@ -1,5 +1,5 @@
 import { resolve } from 'node:path';
-import { defaultPath, routes } from './setup-routes.mjs';
+import { defaultPath, routes, specialistTarget } from './setup-routes.mjs';
 
 // Collect a plan only. The caller validates it before asking to apply changes.
 export async function collectSetupArgs(question, write = console.log, cwd = process.cwd()) {
@@ -13,8 +13,8 @@ export async function collectSetupArgs(question, write = console.log, cwd = proc
   if (!route) throw Error('Unknown route. Use setup list to see the choices.');
   let target = route.targets[0];
   if (route.targets.length > 1) {
-    target = (await question(`Target (${route.targets.join(', ')}) [${target}]: `)).trim() || target;
-    if (!route.targets.includes(target)) throw Error('Choose a target from this route.');
+    target = (await question(`Target (${route.targets.join(', ')}${route.id === 'skill' ? ', or skill:NAME for one specialist' : ''}) [${target}]: `)).trim() || target;
+    if (!route.targets.includes(target) && !(route.id === 'skill' && specialistTarget(target))) throw Error('Choose a target from this route.');
   }
   const args = ['install', '--target', target];
   let url;

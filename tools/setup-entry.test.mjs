@@ -21,7 +21,7 @@ test('the installed setup command works before runtime libraries or dependencies
   try {
     const source = join(temporary, 'distribution');
     for (const file of ['package.json', 'runtime/bin/conquistador.js', 'tools/setup.mjs', 'tools/operator-setup.mjs', 'tools/domain-package.mjs',
-      'tools/install-paths.mjs', 'tools/setup-routes.mjs', 'tools/setup-guide.mjs', 'tools/setup-mcp.mjs', 'tools/operator-package.mjs']) {
+      'tools/install-paths.mjs', 'tools/setup-routes.mjs', 'tools/method-library.mjs', 'tools/stage-method-library.mjs', 'tools/setup-guide.mjs', 'tools/setup-mcp.mjs', 'tools/operator-package.mjs']) {
       const target = join(source, file);
       mkdirSync(dirname(target), { recursive: true });
       copyFileSync(join(root, file), target);

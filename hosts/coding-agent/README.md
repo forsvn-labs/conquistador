@@ -75,8 +75,11 @@ coordinator API. A host declares `capabilities.isolatedContexts` and `maxConcurr
 `execute(packet, {signal})` returns `{executionId, isolated, result}`. Identity and isolation are
 host-owned fields; the result has the closed shape checked by `validateResult` in `contracts.mjs`.
 `createBbHost({projectId, environmentId, parentThreadId})` implements that callback using BB.
-Operator activation is separate. The profile is in skills/conquistador for a root/plugin copy,
-agent/skills/conquistador for operator/harness, and library/conquistador for compact mode. Call
+Operator activation is separate. Staged plugins store the profile at
+skills/conquistador/library/conquistador; operator/harness copies use
+agent/skills/conquistador/library/conquistador, and compact copies use library/conquistador.
+Canonical source and older managed layouts remain readable. Installed copies expose one SKILL.md
+and keep selected method bodies as internal METHOD.md files. Logical method IDs stay unchanged. Call
 `loadOperatorProfile(root)` and `admitRequest(profile, {text}, hostSettings)`. Hosts may store
 `project` or `off` in their own settings. No host automatically calls this function after setup. The package does not edit instruction files. Use the parent file explicitly until your host has an adapter. The off setting disables admission, including explicit requests. Before removal, detach host routing and stop active teams.
 

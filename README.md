@@ -22,6 +22,11 @@ Press Enter for the complete project operator, review the destination, and confi
 checks local completeness and prints the first task. It does not register or activate your host.
 For automation, replace `setup` with `install`, then run `operator doctor` through the same launcher.
 
+Native skill and staged plugin installs show one Conquistador entry. The parent selects from a
+compact internal catalog, shows the relevant public capability and specialist names during work,
+and loads only the selected methods. All 38 methods and their resources remain bundled. Individual
+specialists are an explicit installation choice, not additional default globals.
+
 The operator folder `.conquistador-operator/` contains the parent, all 38 methods, the manual
 operator profile, portable contracts and schemas, and the BB adapter. Keep it out of public
 commits and keep outputs elsewhere. The launcher adds no receiving-project dependency manifest,

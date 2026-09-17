@@ -7,6 +7,11 @@ Research, creative work, engineering, and review support that mission.
 
 ## Make the first task easy
 
+Give the host one Conquistador entry by default. Keep the full specialist library available behind
+that parent, loaded only after routing. Show the relevant public capability and specialist labels
+as work proceeds. Users should not need to manage every method or spend global discovery context
+on the whole library. One named specialist remains an explicit choice.
+
 Offer one package runner command that opens guided setup for the complete project operator.
 Default to the current project, explain the chosen form, and confirm the local installation once. Put prerequisites,
 installation traps, and recovery beside the command. It must not add a dependency or lockfile to

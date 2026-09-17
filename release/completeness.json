@@ -4586,11 +4586,11 @@
   "operatorResources": [
     {
       "path": "hosts/coding-agent/contracts.mjs",
-      "sha256": "6971ff54f1c8c0ea5fbf225c2c7588d391816caa256979055858b2e2705cc690"
+      "sha256": "ea382a415ed59e062ac8746f024269a8f480fc37101404a0e4badea986b3c329"
     },
     {
       "path": "hosts/coding-agent/operator.mjs",
-      "sha256": "9fdfa079e628e973224682e48b27842fb0618084f8f050ede53eda9645c681f7"
+      "sha256": "deb5477f1cee64d0393cdf4a0efa6e69781f2da6cdf648361ff9263d8f7036f7"
     },
     {
       "path": "hosts/coding-agent/receipt.mjs",
@@ -4614,7 +4614,7 @@
     },
     {
       "path": "hosts/coding-agent/README.md",
-      "sha256": "bb65a83817730c0ed00d50d8df1e54f7ddf81ea931c9d004bc52c46a1a29a36b"
+      "sha256": "fd92e6e99688fb22f7b8faa8d96cb77c21a261acf79c7f422183b44ccab0d106"
     },
     {
       "path": "tools/domain-package.mjs",
@@ -4622,7 +4622,11 @@
     },
     {
       "path": "tools/plugin-contracts.mjs",
-      "sha256": "77b4d36138b24eff256d32f1073faffc52e35de8cdd9af427a77d79343ad3128"
+      "sha256": "7815f2b1364b23346dbac61c9ba166f00e9424e1d0117ccd2da6d20480f15669"
+    },
+    {
+      "path": "tools/method-library.mjs",
+      "sha256": "bd685ee9dc04215fd7ba3004a03c6c0099042c18a8ed94bffd801f3fe8cdd068"
     },
     {
       "path": "agents/conquistador/agent.json",

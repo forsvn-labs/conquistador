@@ -37,7 +37,7 @@ test('host project mappings install complete compact bundles', () => temporary((
     const project = join(parent, target);
     good('install', '--target', target, '--project', project);
     const installed = join(project, folder, 'skills/conquistador');
-    assert.ok(existsSync(join(installed, 'library/conquistador/SKILL.md')));
+    assert.ok(existsSync(join(installed, 'library/conquistador/METHOD.md')));
     good('uninstall', '--path', installed);
   }
 }));
@@ -232,7 +232,7 @@ test('domain install records the restriction; knowledge roots stay outside the p
   }));
   assert.match(good('install', '--target', 'skill', '--path', path, '--domain', manifest, '--knowledge-roots', rootsFile), /Domain: domain:diagnosis/);
   assert.ok(existsSync(join(path, 'domain-restriction.json')));
-  assert.ok(existsSync(join(path, 'library/diagnose-growth/SKILL.md')));
+  assert.ok(existsSync(join(path, 'library/diagnose-growth/METHOD.md')));
   assert.equal(existsSync(join(path, 'library/write-copy')), false);
   good('uninstall', '--path', path);
   const inside = join(root, 'skills');

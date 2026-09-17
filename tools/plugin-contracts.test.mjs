@@ -41,6 +41,6 @@ test('package paths reject traversal, absent files, wrong kinds and symlink esca
 test('source package metadata resolves local marketplaces, native agent and bundled skills', () => {
   assert.deepEqual(validatePluginContracts(root), {
     manifestSchema: 'https://agent-plugins.org/schemas/1.0.0/plugin.schema.json',
-    nativeAgent: 'claude', hostActivationVerified: false,
+    nativeAgent: 'claude', discovery: 'canonical-specialists', hostActivationVerified: false,
   });
 });

@@ -8,10 +8,11 @@ the distribution formats and their limits.
 
 ## Coding agents
 
-The alternative [skills.sh install](../INSTALL.md#skills) copies the complete root payload,
-including `skills/` and the BB adapter at `hosts/coding-agent/`. Managed setup stages a compact
-entry point with all 38 outcome methods under `library/` and omits that adapter. Plugin and
-single-agent harness packages include it.
+Managed setup exposes one Conquistador skill, with all 38 methods stored as internal `METHOD.md`
+files under its `library/`. The parent loads the selected methods after routing and names the
+capabilities it uses. Compact host skills omit the BB adapter; staged plugins and operator/harness
+packages retain it. The [skills.sh alternative](../INSTALL.md#skills) must use the staged parent-first
+folder. Copying the authoring checkout instead exposes its canonical specialists.
 
 Managed setup uses the project's host-specific folder:
 
@@ -49,7 +50,11 @@ Folder references: [Codex](https://learn.chatgpt.com/docs/build-skills),
 
 Prefer the native host manager for a plugin. For private alpha now, select Native host plugin in
 `conquistador setup` to prepare a local source from the verified supplied package. The commands below
-use that source folder. Only use private Git after an authorized exact source exists. The host owns its activated copy. Before
+use that staged source folder. Do not register the editable checkout or an untransformed source
+archive by default: their canonical skills remain separately discoverable. Native managers do not
+run the Conquistador transformation. Source-direct registration is an explicit specialist-exposure
+option and spends more discovery context. An authorized Git reference can acquire the CLI/source;
+stage its plugin before native registration. The host owns its activated copy. Before
 removing the prepared folder, uninstall the plugin through the same host and scope. Marketplace
 registrations may be shared; remove only the Conquistador registration when no other install uses it.
 
@@ -188,7 +193,10 @@ to an agent. Removing a connector does not erase service data or stop a shared s
 
 Choose `operator` for the portable master agent, or `squad` for the fixed production and review roles.
 `harness` remains the compatible alias for that portable operator package. Setup prepares the
-contracts, operator profile, and their method libraries. Your host adapter executes those contracts.
+contracts, operator profile, and their method libraries. The operator/harness has one discoverable
+parent and an internal library. A squad has one parent entry per worker/advisor subtree for separate
+adapter contexts, not a global skill installation. Do not register the entire squad under a host's
+skills directory. Your host adapter executes those contracts.
 The master contract allows the number of specialist assignments needed by the task, subject to host
 limits. The fixed squad always has one worker and one advisor. Use the native Claude plugin if you
 want an already defined host-specific parent instead.

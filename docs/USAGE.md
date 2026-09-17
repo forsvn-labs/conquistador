@@ -2,7 +2,10 @@
 
 Ask for the result you need. Conquistador selects the relevant methods, produces one integrated
 deliverable, reviews it, and gives you a next action. The complete install includes all 38 methods;
-you do not need to learn their names or invoke them separately.
+you do not need to learn their names or invoke them separately. A managed host skill or staged
+plugin exposes one Conquistador entry. After selection, the parent reads a compact internal catalog
+and loads only the methods relevant to the job. It names the public capabilities and specialists
+in the engagement brief and result. Method files and routing details stay internal.
 
 Your coding-agent host supplies the model, file access, tools, and permissions. A standalone method
 install contains only that method. The examples here assume the complete entry point.
@@ -104,8 +107,8 @@ Same-context review is not independent review. See [execution modes](MASTER-AGEN
 
 ### Direct, isolated, same-context, and project activation
 
-Direct work. Rewrite one supplied headline. Conquistador should work in the parent, name the copy
-capability only if useful, and not spawn a team for display.
+Direct work. Rewrite one supplied headline. Conquistador should work in the parent, briefly name the copy
+capability, and not spawn a team for display.
 
 Isolated team in BB. Ask for a launch page, email, campaign plan, and measurement plan from
 supplied product and audience files. When the host explicitly uses the BB team adapter, expect

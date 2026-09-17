@@ -51,7 +51,8 @@ export function defaultInstalledProfile() {
 }
 
 function profileCandidates(root) {
-  const paths = [];
+  const paths = ['./agent/skills/conquistador/library/conquistador/operator-profile.json',
+    './skills/conquistador/library/conquistador/operator-profile.json'];
   if (existsSync(resolve(root, 'agent/agent.json'))) {
     paths.push('./agent/skills/conquistador/operator-profile.json');
     paths.push('./library/conquistador/operator-profile.json');

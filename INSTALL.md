@@ -73,6 +73,23 @@ operator payload for the same release. Compare its managed digest and doctor res
 operator has all 38 methods, the profile, contracts, schemas, and BB adapter. Identical files do
 not establish equal host execution. Reduced integrations below must retain their stated limits.
 
+## One entry, selected specialists
+
+Managed host skill targets install exactly one discoverable `SKILL.md`. Staged native plugins and
+the complete operator also contain one. Internal methods use `METHOD.md`; their versions, safety
+rules, scripts, and resources remain intact. Conquistador reads its operating contract and compact
+capability catalog after selection, then loads the relevant methods. It names the public capabilities
+and specialists it uses without exposing internal paths or claiming independent review that did not run.
+
+A long global skill list can shorten or omit descriptions. Codex budgets its initial names,
+descriptions and paths separately from the full method bodies, which load after selection.
+[Official discovery guidance](https://learn.chatgpt.com/docs/build-skills). One entry reduces this
+package's contribution; it cannot prevent warnings caused by other installed skills.
+
+An unchanged managed copy migrates through its normal update command. Modified copies remain
+protected. Refresh the native host or its activated plugin cache afterward. Independently installed
+specialists remain owned by their original manager and are not silently removed.
+
 ## Choose a different integration
 
 Prefer a host's native manager when you want a native plugin. The generic guide prepares local
@@ -82,7 +99,7 @@ files and prints host steps; it does not implement universal registration.
 | --- | --- | --- | --- |
 | Complete project operator | `operator` | 38 methods, profile, contracts/schemas, BB adapter; host executes | `operator` lifecycle |
 | Native plugin source | `claude-plugin`, `codex-plugin`, `copilot-plugin`, `agent-plugins` | Complete operator inventory plus discovery metadata; native capabilities depend on host | Setup owns source; original host manager owns activated copy |
-| Compact skill | `codex`, `claude-code`, `copilot`, `cursor`, `skill` | 38 methods and profile; no portable schemas or BB adapter | Setup for managed copies; skills CLI for its copies |
+| Parent-first compact skill | `codex`, `claude-code`, `copilot`, `cursor`, `skill` | One entry, 38 internal methods and profile; no portable schemas or BB adapter | Setup for managed copies; skills CLI for its copies |
 | Portable agent | `harness` | Same complete operator; consuming adapter required | Setup plus host detachment |
 | Fixed squad | `squad` | Worker/advisor contracts and declared method subsets; no BB adapter | Setup plus host detachment |
 | Local MCP | `mcp`, no URL | Owned server and library copy, including operator inventory; tools only list/read methods | Setup owns copy; client owns registration/process |
@@ -93,6 +110,19 @@ Domain packages and standalone methods contain fewer methods and do not pass the
 doctor. The [architecture and specification](docs/INSTALLATION-ARCHITECTURE.md) defines these
 contracts. The [official mechanism matrix](docs/INSTALL-MECHANISMS.md) explains host differences,
 including AI-app plugins and permission boundaries.
+
+### One named specialist, explicitly
+
+For example, prepare only the copy method and its resources:
+
+```sh
+conquistador setup install --target skill:write-copy --path /absolute/path/write-copy-package
+```
+
+Point the host at `write-copy-package/skills/write-copy`, or load its `SKILL.md` explicitly. This
+adds one named specialist when you register it. It has no parent router or complete operator.
+Use setup status/update/uninstall with the owned package path. Full-library doctor does not certify
+standalone or domain-restricted copies. The guide also accepts `skill:NAME` under Host skill integration.
 
 ## CLI lifecycle
 
@@ -176,14 +206,18 @@ removal, and the same payload checks. [Future installer criteria](docs/INSTALLAT
 ## Host skill integration
 
 For native skill discovery, select the host in the guide or use its `setup install --target` command.
-For a skills.sh-managed root copy, follow the [pinned local-source procedure](docs/INSTALL-REFERENCE.md#skillssh-from-a-local-source).
-That root copy includes the BB adapter; the compact guide route does not. Never install only the
-nested `skills/conquistador` folder, which needs sibling methods. Select the skill in a fresh session.
+The optional skills.sh manager writes its own project `skills-lock.json`; use managed setup for
+the no-lockfile path. For a skills.sh-managed parent-first copy, follow the [pinned local-source procedure](docs/INSTALL-REFERENCE.md#skillssh-from-a-local-source).
+That staged compact copy omits the BB adapter. Use the operator or staged plugin for the adapter.
+Never copy only the canonical source `skills/conquistador` folder, which needs sibling methods.
+Select the installed skill in a fresh session.
 
 ### Update or remove the skill
 
-Use the original installer and scope. For the pinned skills CLI, repeat its root `add` command to
-update; use `npx --yes skills@1.5.26 remove conquistador` to remove. Keep outputs outside its folder.
+Use the original installer and scope. For the pinned skills CLI, repeat its staged-folder `add`
+command to update; use `npx --yes skills@1.5.26 remove conquistador` to remove. Removal limited to
+one host can preserve a shared skill directory for another host. Review the selected hosts and
+check the remaining files. The manager can leave its lockfile. Keep outputs outside the skill folder.
 See [host paths and invocation](docs/PLATFORMS.md#coding-agents).
 
 ## Plugins

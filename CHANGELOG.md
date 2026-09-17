@@ -1,6 +1,6 @@
 # Changelog
 
-No public release is claimed. See [VERSIONS.md](VERSIONS.md) for independent product and method
+No public release is claimed. Implemented but unshipped work is recorded in [PROGRESS.md](PROGRESS.md). See [VERSIONS.md](VERSIONS.md) for independent product and method
 versions. Verification establishes the stated local scope; live provider operation, useful model
 output, human acceptance, rights disposition and release authority require separate evidence.
 

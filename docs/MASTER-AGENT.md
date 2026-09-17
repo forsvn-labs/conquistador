@@ -65,7 +65,7 @@ adapter runs do not establish general quality or human acceptance.
 
 | Install | What it contains | How work runs |
 | --- | --- | --- |
-| Repository-root skills.sh install | The complete distribution, including all 38 outcome methods under `skills/` and the BB adapter | Your coding agent runs the selected methods; the adapter needs explicit host setup |
+| Staged parent-first skills.sh copy | One parent entry and all 38 internal methods, without the BB adapter | Your coding agent loads selected methods; the skills CLI owns its copy |
 | Managed compact skill install | The parent, methods under `library/`, contracts, and selected usage docs | Your host supplies execution; this copy omits the BB adapter |
 | Plugin or `operator` / `harness` package | The complete method tree, operator profile, and BB adapter; the Claude plugin also has a native agent definition | The consuming host supplies model, tools, and worker contexts. `harness` remains the setup alias |
 | Fixed `squad` package | Worker and advisor role packages | The consuming host executes the handoff |
@@ -73,7 +73,7 @@ adapter runs do not establish general quality or human acceptance.
 | Runtime MCP bridge | Access to implemented runtime playbooks and draft artifacts | Explicit `mcp --url` and a configured runtime service are required |
 | Portable Eve or official Grok Bot package | Experimental instructions and packaged skills | Native import and specialist delegation remain unverified |
 
-The alternative repository-root skills.sh install is complete. Do not install only the nested parent
+Use the staged parent-first folder for the skills CLI. A raw source-root copy exposes canonical specialists. Do not install only the canonical nested parent
 folder. A managed compact copy is a different layout, and cannot run an adapter it does not contain.
 A standalone outcome install contains only that method and its required material.
 

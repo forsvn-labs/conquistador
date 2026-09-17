@@ -1,6 +1,6 @@
 ---
 name: conquistador
-description: Coordinate growth, GTM, sales, marketing, product, and knowledge work from one request. Select the necessary bundled methods, produce the work, help connect the user's toolstack when needed, and preserve human authority for external actions.
+description: Plan launches and growth, produce marketing or sales work, and handle requested product and knowledge tasks. Select relevant specialists; skip unrelated coding chores.
 license: MIT
 ---
 
@@ -9,6 +9,10 @@ license: MIT
 Read [the operating contract](skills/conquistador/SKILL.md) and follow it for this task.
 The complete method library is under `skills/`. Load only the methods and specialist roles needed
 for the user's outcome. Users do not need to install or invoke them individually.
+
+This directory is the editable distribution with independently discoverable canonical methods.
+Use conquistador setup to stage a parent-first host skill or plugin; do not copy this authoring tree
+as the default native skill. Direct source registration explicitly exposes the canonical specialists.
 
 This directory is the complete distribution. Its optional runtime source does not need to run
 for the host to use these skills. Do not install dependencies, enable hooks or start services as

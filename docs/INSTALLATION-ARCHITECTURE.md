@@ -36,6 +36,73 @@ Domain selection retains its existing restriction file and validation. Domain an
 copies cannot pass the full-library doctor. MCP does not interpret domain-restriction.json; do not
 use full-library MCP to bypass a host's domain access boundary.
 
+## Parent-first discovery and lazy methods
+
+Canonical authoring sources remain `skills/<method>/SKILL.md`. The managed installer transforms
+copies with `stage-method-library.mjs`; it never edits those sources. A compact host skill has:
+
+```text
+SKILL.md
+agents/openai.yaml
+library/conquistador/METHOD.md
+library/conquistador/catalog.md
+library/conquistador/operator-profile.json
+library/<outcome>/METHOD.md
+library/<outcome>/references/...
+library/<outcome>/scripts/...
+```
+
+The entry description starts with the product's task triggers and stays below 180 characters.
+The installed root contains exactly one file named SKILL.md, including recursive descendants.
+The entry reads the operating contract and catalog, then only the chosen method bodies and their
+resources. The catalog uses public capability labels and lists only included methods. During work,
+the parent discloses relevant capabilities, specialist labels and actual execution/review mode.
+Installation does not create isolated workers or prove that a host followed these instructions.
+
+A staged plugin nests this same entry at `skills/conquistador/`; an operator/harness nests it at
+`agent/skills/conquistador/`. Both retain the complete operator inventory. The native Claude agent
+still targets that SKILL.md, and BB resolves its selected logical method IDs to internal METHOD.md
+files. Profile lookup supports both old and new layouts. Contracts, schemas and method IDs do not
+change. Squad members each have one parent entry plus their declared internal subset, intended for
+separate adapter contexts. The whole squad is not a global skill installation.
+
+All method versions/frontmatter and non-Markdown resource bytes are preserved. Markdown adaptation
+changes the internal document token SKILL.md to METHOD.md, retaining relative sibling geometry.
+External URLs and the explicit operator/plugin wrapper path stay intact. Canonical methods may not
+use the reserved METHOD.md token, which keeps the transform reversible. Full-library doctor checks
+normal form and hashes the reversed bytes against the canonical completeness manifest. Tests also
+compare every method/resource byte, executable bits where supported, the catalog and local links.
+This establishes packaged content parity; it does not certify equivalent model performance.
+
+Domain/squad subsets retain only selected method files, roles and workflows. Links to omitted files
+become explicit unavailable text instead of dangling load instructions. This is the only additional
+subset adaptation. The filtered catalog is not a permission grant. The same domain restriction and
+callable admission checks remain authoritative. Full-library doctor continues to reject restricted
+or standalone copies as incomplete, rather than claiming full-library or domain execution proof.
+
+Local MCP retains its canonical resource API and all 39 entries, parent plus 38 outcomes. Those
+entries are MCP read resources, not native discoverable skills. Runtime MCP retains its separate
+playbook contract. Explicit standalone `skill:NAME` packages keep their original SKILL.md and
+independent resources. Experimental Eve/Grok guidance still creates no files; low-level legacy
+exports remain unverified import formats, not supported native skill installation targets.
+
+### Source and host-cache boundary
+
+Source archives and npm packages contain editable canonical sources. Their acquisition is followed
+by setup. Native plugin managers and third-party skill copiers do not run that transformation.
+Give them a staged parent-first folder by default. Registering the source root directly is an
+explicit specialist-exposure option, not the one-entry experience. Agent Plugins fixes discovery
+at immediate children of skills/, so no manifest pointer can hide canonical siblings across hosts.
+The staged layout satisfies that rule and also survives recursive host skill scans.
+[Agent Plugins specification](https://agent-plugins.org/specification).
+
+An unchanged v1 managed receipt can update to this layout through the same owner. Its digest changes
+because filenames and links change. Edited copies are still refused. Keep user work outside managed
+folders and refresh host registration/cache after the local update. Old hand-written specialist
+paths need the new library path or explicit standalone installation. The CLI does not remove other
+skill-manager copies, host caches, or independently registered specialists. Repeated 0.1.0 plugin
+builds may require an explicit manager refresh; no new release identity is inferred.
+
 ## Ownership and mutation
 
 `tools/install.mjs` continues to stage ordinary payloads beside the destination, verify ownership,

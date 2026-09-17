@@ -37,9 +37,12 @@ manifest entries. Use `node runtime/bin/conquistador.js operator doctor --path /
 to check local files without starting a host or service. This does not establish host activation,
 model context loading, provider access, or release acceptance.
 
-The repository-root SKILL.md is the skills.sh entry point. It forwards to the authored parent under
-skills/conquistador and travels with the complete public tree. Keep every required method contained.
-Do not move the wrapper into the parent folder without preserving sibling methods in installations.
+The repository-root SKILL.md is an authoring entry point over canonical skills. Host installations
+must use the transformation in tools/stage-method-library.mjs. It keeps source method bodies and
+resources intact apart from deterministic document-name/link adaptation. Compact installs, staged
+plugins and portable operators expose one SKILL.md and load internal METHOD.md files after routing.
+Do not copy the untransformed source tree as the default host skill/plugin. Test installed payloads,
+including byte parity, resource links, domain subsets, initial metadata size, and BB loader paths.
 Only native Claude agent definitions belong in agents/*.md; portable-role documentation belongs in
 docs/ because Claude scans the agents directory recursively. Run `node tools/plugin-contracts.mjs .`
 to check plugin paths and metadata. These checks do not start a host or validate model behavior.
@@ -86,7 +89,7 @@ Connector configuration remains separate from runtime service and data ownership
 importing runtime dependencies. Explicit `mcp --url` retains the HTTP runtime bridge. Keep the
 default entry points usable before bootstrap and test stdout as protocol data only.
 
-Run setup, setup-portability, entry, doctor, plugin, and MCP tests when changing host paths or
+Run setup, setup-portability, entry, doctor, lazy-discovery, plugin, and MCP tests when changing host paths or
 removal behavior. Cross-platform path tests do not establish native Windows activation. Host registration
 commands are instructions, not hidden subprocesses. Test files and synthetic fixtures cannot
 prove native registration or service connectivity.

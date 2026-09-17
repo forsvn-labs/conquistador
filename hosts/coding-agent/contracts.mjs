@@ -1,3 +1,4 @@
+import { methodDocument, methodLibrary } from '../../tools/method-library.mjs';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { existsSync, readFileSync } from 'node:fs';
@@ -193,14 +194,17 @@ export async function loadAssignment(root, task, { authorize = () => {}, resolve
   const manifestPath = existsSync(resolve(root, 'agent/agent.json')) ? './agent/agent.json' : './agents/conquistador/agent.json';
   const manifest = JSON.parse(readFileSync(containedPath(root, manifestPath, 'file'), 'utf8'));
   assert.equal(manifest.schemaVersion, 'conquistador.agent-package/v2', 'Master execution requires v2');
-  const skillsRoot = posix.dirname(manifest.canonicalSkillRoot);
-  assert.ok(['skills', 'agent/skills'].includes(skillsRoot), 'Unsupported canonical skills layout');
+  assert.ok(['skills/conquistador', 'agent/skills/conquistador'].includes(manifest.canonicalSkillRoot), 'Unsupported canonical skills layout');
+  const layouts = methodLibrary(root);
+  assert.equal(layouts.length, 1, 'Ambiguous or missing method library');
+  const { layout: skillsRoot, internal } = layouts[0];
+  const document = internal ? methodDocument : 'SKILL.md';
   const paths = [];
-  if (task.role === 'parent') paths.push(`${skillsRoot}/conquistador/SKILL.md`);
+  if (task.role === 'parent') paths.push(`${skillsRoot}/conquistador/${document}`);
   else if (Object.hasOwn(roleFiles, task.role)) paths.push(roleFiles[task.role].replace(/^skills/, skillsRoot));
   for (const skill of task.skills) {
     assert.ok(manifest.mayLoadSkills.includes(skill), `Undeclared skill ${skill}`);
-    paths.push(`${skillsRoot}/${skill}/SKILL.md`);
+    paths.push(`${skillsRoot}/${skill}/${document}`);
   }
   for (const workflow of task.workflows) {
     assert.ok(manifest.mayLoadWorkflows.includes(workflow), `Undeclared workflow ${workflow}`);

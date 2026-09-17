@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { methodLibrary, skillDiscovery } from './method-library.mjs';
 import { readFileSync, realpathSync, statSync, readdirSync } from 'node:fs';
 import { resolve, relative, isAbsolute, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -104,7 +105,9 @@ export function validatePluginContracts(root) {
   assert.ok(fields.description?.length > 0);
   assert.equal(fields.model, 'inherit');
   assert.ok(agent.includes('${CLAUDE_PLUGIN_ROOT}/skills/conquistador/SKILL.md'), 'Agent must load the bundled parent');
-  return { manifestSchema: schema, nativeAgent: 'claude', hostActivationVerified: false };
+  const internal = methodLibrary(root).some(library => library.internal);
+  if (internal) assert.equal(skillDiscovery(root).count, 1, 'A staged plugin exposes only the parent skill');
+  return { manifestSchema: schema, nativeAgent: 'claude', discovery: internal ? 'parent-first' : 'canonical-specialists', hostActivationVerified: false };
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {

@@ -15,7 +15,7 @@ Use [INSTALL.md](../INSTALL.md) for the short private-alpha path and
 | Cursor | Skills use project .cursor/skills or .agents/skills. Cursor also accepts Agent Plugins, with host-specific behavior for MCP path variables. [Skills](https://cursor.com/docs/skills), [plugin reference](https://prod.cursor.com/docs/reference/plugins) | Project skill is available; compatible plugin import uses host controls. Do not invent a universal CLI command or claim a Cursor-native agent package. |
 | Agent Skills | SKILL.md frontmatter/instructions and contained resources define a portable skill format. [Specification](https://agentskills.io/specification) | Keep methods contained. A format match does not guarantee discovery, tool access, or execution. |
 | Agent Plugins 1.0 | Root plugin.json, skills/ and optional mcp.json define fixed discovery for supported components. [Specification](https://agent-plugins.org/specification) | Portable plugin boundary only where the consuming client declares support; native metadata remains separate. |
-| Skills CLI | The upstream CLI supports installing selected skills from repositories or local paths into host skill locations. [Upstream documentation](https://github.com/vercel-labs/skills#install-a-skill) | Keep the tested 1.5.26 root-copy procedure as a secondary route, with its own update/removal owner. |
+| Skills CLI | The upstream CLI supports installing selected skills from repositories or local paths into host skill locations. [Upstream documentation](https://github.com/vercel-labs/skills#install-a-skill) | Use a staged parent-first input for the pinned 1.5.26 copier. It owns update/removal and writes skills-lock.json; managed setup is the no-lockfile default. |
 | Local MCP | The client registers command/args and owns a stdio subprocess. [Local-server guide](https://modelcontextprotocol.io/docs/develop/connect-local-servers) | Prepare a durable local connector and library; never imply full operator execution or automatic client registration. |
 | MCP Registry | The public registry requires a publicly available install/server and remains preview. [Registry documentation](https://modelcontextprotocol.io/registry/about) | Unsuitable for this private alpha; no publication or listing step. |
 | Portable agent/squad | Conquistador's [agent contracts](../agents/agent-package-v2.schema.json) and [BB adapter](../hosts/coding-agent/README.md) define its own execution interface. | A consuming host adapter must execute them. No universal agent-import standard or verified Eve/Grok activation is assumed. |
@@ -24,3 +24,28 @@ Native discovery, enabled state, trust approval, account authentication, and use
 are separate observations. A wizard can explain the next step without bypassing any of them.
 Public marketplaces, public package registries, or hosted MCP services require a later distribution
 and authorization decision. None is required to use the complete operator on supplied facts.
+
+## Discovery budget and contained methods
+
+Codex initially lists skill names, descriptions and paths, with a budget of 2% of model context or
+8,000 characters when that size is unknown. It shortens descriptions before potentially omitting
+skills; full instructions load after selection. Keep the trigger first and concise.
+[OpenAI skill guidance](https://learn.chatgpt.com/docs/build-skills).
+
+Conquistador's managed native skill and staged plugin therefore expose one parent. Its selected
+methods live inside that entry as METHOD.md resources. This is an installer choice, not a claim that
+hiding filenames makes content inaccessible or that a host always routes correctly. The methods
+remain available after parent selection, with public capability labels shown during the job.
+
+Agent Plugins discovers only immediate children of skills/ with SKILL.md. It forbids recursive
+skill discovery and does not let plugin.json override the location. The staged one-entry layout
+also avoids recursion in native skill folders. [Agent Plugins 1.0](https://agent-plugins.org/specification).
+A Codex overlay cannot replace the portable plugin's fixed skills discovery with an arbitrary path.
+[OpenAI plugin packaging](https://developers.openai.com/plugins/build/plugins).
+Claude's native agent remains a separate component and reads the staged parent.
+[Claude path rules](https://code.claude.com/docs/en/plugins-reference#path-behavior-rules).
+
+Canonical source registration still exposes the authoring methods. Native managers cannot perform
+Conquistador's local transformation implicitly. Stage first, then register that self-contained
+folder. Standalone specialist installs are explicit additions. No Copilot or Cursor native-agent
+parity is claimed merely because each can discover the plugin skill.

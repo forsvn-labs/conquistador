@@ -23,6 +23,11 @@ provider observations, human acceptance and release authority are separate evide
 
 ## Follow-up acceptance
 
+- Observe the parent-first install in fresh Codex, Claude, Copilot and Cursor sessions. Confirm one
+  Conquistador entry, relevant capability disclosure, selected-method loading, native plugin cache
+  refresh, and migration from existing copies. Measure host behavior separately from file counts.
+  Check restricted packages and explicit standalone specialists without re-exposing the library.
+
 - Verify Executor setup and task resumption with a separately authorized account operation. Observe
   permissions, cancellation and recovery. Discovery or login alone does not prove an operation.
 - Check exact update identity across source copies, npm and Bun cache changes, Node changes, and

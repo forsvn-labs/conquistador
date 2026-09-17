@@ -47,78 +47,40 @@ paid providers and external account connections remain separate.
 
 ## skills.sh from a local source
 
-Use an existing coding-agent project, Node 24 with npm, and Git. The clone route also needs an
-authenticated GitHub CLI with private repository access. Replace every `/absolute/path/...` below
-with your own path. Keep the source clone separate from the project receiving the skill.
+Prefer managed setup for the fewest installation steps. If your host uses the pinned skills CLI,
+first stage a parent-first compact folder from the authorized verified distribution:
 
-1. Confirm that the active GitHub account can read the private repository:
+```sh
+node /absolute/path/conquistador-source/runtime/bin/conquistador.js setup install --target skill --path /absolute/path/conquistador-parent
+```
 
-   ```sh
-   gh repo view forsvn-labs/conquistador --json nameWithOwner,isPrivate
-   ```
+From the receiving project, let the skills CLI copy that staged folder. Select the intended host
+and project scope when prompted:
 
-   Expect `forsvn-labs/conquistador` and `isPrivate: true`. If access fails, complete GitHub sign-in
-   or request repository access from the owner, then retry. Do not bypass this with another source.
+```sh
+DO_NOT_TRACK=1 DISABLE_TELEMETRY=1 npx --yes skills@1.5.26 add /absolute/path/conquistador-parent --skill conquistador --copy
+```
 
-2. Once the owner supplies an available authorized commit, clone into a new dedicated directory
-   and check out that exact commit. Replace `COMMIT` below:
+These environment assignments use POSIX shell syntax. In PowerShell set `$env:DO_NOT_TRACK="1"`
+and `$env:DISABLE_TELEMETRY="1"` before the npx command. Do not use `--full-depth`, `--all`, a wildcard,
+or the editable checkout as the source. Only the staged folder has the one-entry layout. It contains
+all 38 methods but omits the executable BB adapter. Use the operator or staged plugin for that adapter.
+The pinned upstream CLI creates receiving-project `skills-lock.json`. Use managed setup instead
+when the project must remain free of lockfiles. The upstream CLI owns its copied files, discovery
+links, and manager metadata. Its own status, update, and removal commands apply; do not use setup
+to adopt a third-party-owned copy. Host-specific removal can retain a shared skill directory for
+another detected host. Review all intended hosts on removal, then verify the directory is gone.
+The manager's lockfile can remain after the last skill is removed.
+[Skills CLI documentation](https://github.com/vercel-labs/skills#install-a-skill).
 
-   ```sh
-   gh repo clone forsvn-labs/conquistador /absolute/path/conquistador-source
-   git -C /absolute/path/conquistador-source checkout --detach COMMIT
-   git -C /absolute/path/conquistador-source rev-parse HEAD
-   git -C /absolute/path/conquistador-source status --short
-   ```
+After copying, start a fresh host session and select Conquistador. Run a first task from
+[the usage guide](USAGE.md). A manager listing does not establish activation. Keep the original
+staging folder unchanged so setup can update or remove it, and keep work outputs elsewhere.
 
-   Expect a commit ID and no status output. Record the full commit ID for your private-alpha notes.
-   Compare the ID with the exact build your maintainer asked you to test.
-   Do not install dependencies, build, or save project files in this source folder before copying it.
-   If the destination already exists, choose a new directory instead of deleting or cleaning it.
-
-   If you received a ZIP, extract it into a new directory and use the extracted root containing
-   `SKILL.md` instead. Record its supplied build identity. Git checks apply only to a clone.
-
-3. In the project where you want to use Conquistador, install the root entry point:
-
-   ```sh
-   cd /absolute/path/your-project
-   DO_NOT_TRACK=1 DISABLE_TELEMETRY=1 npx --yes skills@1.5.26 add /absolute/path/conquistador-source --skill conquistador --copy
-   ```
-
-   Do not add `--full-depth`, `--skill '*'`, or `--all`. Do not use the nested
-   `skills/conquistador` folder as the source.
-
-   Choose your host when prompted. Expect an installation summary for `conquistador` in the project
-   scope. To select a host explicitly, add `--agent codex` or `--agent claude-code` to that command.
-   Review the installer choices before accepting them.
-
-4. Check the installed inventory:
-
-   ```sh
-   DO_NOT_TRACK=1 DISABLE_TELEMETRY=1 npx --yes skills@1.5.26 list
-   ```
-
-   Expect `conquistador` in the intended project and host scope. This lists installation metadata.
-
-5. Start a fresh host session. Select Conquistador and try the first request
-   in [the usage guide](USAGE.md). The host may use `/conquistador`, `$conquistador` or a picker.
-   A listing proves installation metadata; the first task checks actual host activation.
-
-The root install with skills.sh 1.5.26 carries the complete library of 38 outcomes.
-See the [normal root payload](../INSTALL.md#what-successful-installation-means) and
-[completeness check](../INSTALL.md#read-only-completeness-check). Do not install only the nested
-`skills/conquistador` folder or use `--full-depth`; the parent needs its bundled methods.
-The agent selects the methods for each request.
-
-The skills CLI copies a local directory, which can include untracked files and dependencies.
-Use a fresh clone or extraction, never a working development tree with `node_modules`, `dist`,
-secrets, local state or symlinks. Keep this private product out of public project commits.
-The [compact helper](#compact-local-installation) stages a smaller alternative.
-
-The telemetry variables above disable the third-party installer's telemetry. Supported options and
-host names are in the [skills CLI source documentation](https://github.com/vercel-labs/skills#install-a-skill).
-This guide uses an authenticated clone plus a local install so the source branch and commit can be
-checked before installation.
+The historical source-root-copy procedure exposes the canonical specialist files and is no longer
+the default. Users deliberately opting into those globals can still use the canonical source, but
+must account for discovery budgets and remove each copy through its original owner. Existing native
+caches and source-root copies do not migrate when the CLI alone is updated.
 
 ## Optional private release ZIP
 
@@ -131,7 +93,8 @@ gh release download v0.1.0 --repo forsvn-labs/conquistador --pattern conquistado
 ```
 
 Expect `conquistador-0.1.0.zip` in that directory. Extract it into a new folder, locate the root
-containing `SKILL.md`, and use that root as the source in the skills.sh installation step above. This is a private
+containing `SKILL.md`. For this old archive, use its historical manual procedure; obtain the current
+implementation and stage a parent-first folder before using the skills CLI above. This is a private
 release asset, not a public npm registry package. The release also supplies the npm tarball,
 `SHA256SUMS` and `assembly.json` for package identity and integrity checks. A missing release or
 asset means this route is not available yet; use the authorized branch clone or supplied ZIP.
@@ -144,7 +107,7 @@ installed copy, and removing a skill does not erase project outputs or runtime d
 | Installed through | Update | Remove |
 | --- | --- | --- |
 | Complete project operator | Run the same release launcher with `operator update` from the receiving project | Run the same release launcher with `operator uninstall` from the receiving project |
-| skills.sh with the local path above | Obtain a fresh branch clone or distribution, record its commit, and repeat the same `skills add` command for the same project and host | Run `DO_NOT_TRACK=1 DISABLE_TELEMETRY=1 npx --yes skills@1.5.26 remove conquistador` in that project and review the selected hosts |
+| skills.sh with the local path above | Update the unchanged parent-first staging folder from an exact distribution and repeat the same `skills add` command for the same project and host | Run `DO_NOT_TRACK=1 DISABLE_TELEMETRY=1 npx --yes skills@1.5.26 remove conquistador` in that project and review the selected hosts |
 | Host plugin manager | Refresh its local marketplace source and use the host's update controls | Use the host's uninstall controls; remove the marketplace registration if no longer needed |
 | `tools/install.mjs` | Use `upgrade` with the original mode and destination from a complete distribution | Use `remove` with that same mode and destination |
 
@@ -158,7 +121,7 @@ host session and repeat a small task. For runtime state retention and erasure, u
 Use the [current host lifecycle](PLATFORMS.md#claude-code) for status, updates and uninstall with
 data retention. The commands below prepare a project-local registration.
 
-Use the fresh distribution root, or create a smaller plugin folder from it with Node 24:
+Stage a self-contained parent-first plugin from the verified distribution with Node 24:
 
 ```sh
 node tools/install.mjs install plugin /absolute/path/conquistador-plugin
@@ -186,7 +149,7 @@ See [Claude marketplaces](https://code.claude.com/docs/en/plugin-marketplaces) a
 
 Use the [current host lifecycle](PLATFORMS.md#codex) for status, local-source updates and removal.
 
-Use the same fresh distribution or staged plugin directory. With a Codex version that supports
+Use the staged parent-first plugin directory, not the authoring checkout. With a Codex version that supports
 plugin marketplaces, add the local marketplace and install Conquistador:
 
 ```sh
@@ -244,7 +207,7 @@ From the complete distribution with Node 24, choose a new directory in the host'
 node tools/install.mjs install conquistador /absolute/path/to/skills/conquistador
 ```
 
-This stages one root `SKILL.md`, the parent, all outcome methods under `library/`, and the optional
+This stages one root `SKILL.md`, the parent and all outcome methods as internal `METHOD.md` files under `library/`, and the optional
 proactive helper. Import that folder through the host's skill controls. No Node process or
 Conquistador service is needed when the host loads the methods. Native BB specialist dispatch
 (`hosts/coding-agent/`) is not in this compact folder; use the complete distribution, or stage

@@ -5,6 +5,7 @@ import { accessSync, constants, lstatSync, readFileSync, realpathSync, statSync 
 import { dirname, isAbsolute, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { isRuntimeExecutable } from './install-paths.mjs';
+import { canonicalText, capabilityCatalog, internalPath, internalText, methodLibrary, skillDiscovery } from './method-library.mjs';
 
 const distribution = fileURLToPath(new URL('../', import.meta.url));
 const manifestPath = 'release/completeness.json';
@@ -95,19 +96,27 @@ function connectorTarget(path, issues) {
 }
 
 function inspectLibrary(root, manifest, issues) {
-  const layouts = ['skills', 'library', 'agent/skills'].filter(path => present(join(root, path)));
+  const layouts = methodLibrary(root);
   if (layouts.length !== 1) {
     issues.push('Cannot identify one complete library. Select the installed bundle root, not the nested parent.');
     return { layout: null, available: 0, expected: manifest.outcomes.length, methods: [] };
   }
-  const layout = layouts[0];
+  const { layout, internal, entry } = layouts[0];
+  const resourcePath = path => `${layout}/${internal ? internalPath(path) : path}`;
+  const originalBytes = (path, bytes) => {
+    if (!internal || !path.endsWith('.md')) return bytes;
+    const text = bytes.toString('utf8');
+    const canonical = canonicalText(text);
+    if (internalText(canonical) !== text) throw Error('Noncanonical internal document references');
+    return canonical;
+  };
   const methods = [];
   for (const expected of [manifest.parent, ...manifest.outcomes]) {
-    const path = `${layout}/${expected.name}/SKILL.md`;
+    const path = resourcePath(`${expected.name}/SKILL.md`);
     try {
       const text = textAt(root, path);
       const identity = methodIdentity(text);
-      const valid = identity.name === expected.name && identity.version === expected.version && hash(text) === expected.sha256;
+      const valid = identity.name === expected.name && identity.version === expected.version && hash(originalBytes(path, Buffer.from(text))) === expected.sha256;
       methods.push({ name: expected.name, version: identity.version, expectedVersion: expected.version, valid });
       if (!valid) issues.push(`Method differs from the doctor release manifest: ${path}`);
     } catch {
@@ -116,19 +125,25 @@ function inspectLibrary(root, manifest, issues) {
     }
   }
   for (const resource of manifest.requiredResources) {
-    const path = `${layout}/${resource.path}`;
+    const path = resourcePath(resource.path);
     try {
-      if (hash(bytesAt(root, path)) !== resource.sha256) issues.push(`Required resource differs from the doctor release manifest: ${path}`);
+      if (hash(originalBytes(path, bytesAt(root, path))) !== resource.sha256) issues.push(`Required resource differs from the doctor release manifest: ${path}`);
     } catch { issues.push(`Missing or unreadable resource: ${path}`); }
   }
   try {
-    if (layout === 'agent/skills') {
+    if (internal) {
+      if (!textAt(root, entry).includes('](library/conquistador/METHOD.md)')) throw Error('Wrong internal parent');
+      if (!present(join(root, 'domain-restriction.json'))) {
+        const catalog = capabilityCatalog(join(distribution, 'skills'), [manifest.parent, ...manifest.outcomes].map(method => method.name));
+        if (textAt(root, `${layout}/conquistador/catalog.md`) !== catalog) throw Error('Changed capability catalog');
+      }
+    } else if (layout === 'agent/skills') {
       const agent = JSON.parse(textAt(root, 'agent/agent.json'));
       if (agent.canonicalSkillRoot !== 'agent/skills/conquistador') throw Error('Wrong parent');
     } else if (!textAt(root, 'SKILL.md').includes(`](${layout}/conquistador/SKILL.md)`)) throw Error('Wrong parent');
   } catch { issues.push('Entry point does not resolve the bundled parent contract. Reinstall the complete root bundle.'); }
   if (present(join(root, 'domain-restriction.json'))) issues.push('This is a domain-restricted install; the doctor checks the full library and does not certify domain readiness.');
-  return { layout, available: methods.filter(method => method.name !== manifest.parent.name && method.valid).length,
+  return { layout, internal, entry, available: methods.filter(method => method.name !== manifest.parent.name && method.valid).length,
     expected: manifest.outcomes.length, methods };
 }
 
@@ -179,7 +194,7 @@ export function inspectInstallation(path, inspectReceipt) {
         issues.push(`Missing or changed operator resource: ${resource.path}`);
       }
     }
-    if (library.layout === 'agent/skills') {
+    if (library.layout?.startsWith('agent/skills')) {
       try {
         const installed = JSON.parse(textAt(bundleRoot, 'agent/agent.json'));
         installed.canonicalSkillRoot = 'skills/conquistador';
@@ -188,12 +203,19 @@ export function inspectInstallation(path, inspectReceipt) {
       } catch { issues.push('Installed operator contract differs from its canonical package.'); }
     }
   }
+  let discovery = null;
+  if (bundleRoot && library.internal) {
+    try {
+      discovery = skillDiscovery(bundleRoot);
+      if (discovery.count !== 1) issues.push('Lazy package must contain exactly one discoverable SKILL.md.');
+    } catch { issues.push('Cannot inspect skill discovery safely.'); }
+  }
   const status = issues.length ? 'incomplete' : 'local-files-verified';
   return {
     schemaVersion: 'conquistador.install-doctor/v1', status, path, bundleRoot,
     summary: `${library.available} methods available; ${status === 'incomplete' ? 'local checks failed' : 'local files verified'}; host activation and task execution unverified.`,
     manifest: { schemaVersion: manifest.schemaVersion, sha256: hash(manifestText), packaged: packagedManifest },
-    library, identity, receipt, connector: connector?.checks ?? null,
+    library, discovery, identity, receipt, connector: connector?.checks ?? null,
     bbAdapterPresent,
     operatorProfilePresent,
     operatorActivation,
@@ -220,6 +242,7 @@ export function runInstallationDoctor(args, inspectReceipt) {
     console.log(`Source commit: ${result.identity.sourceCommit ?? 'unavailable'}. Receipt: ${result.receipt.state}.`);
     const parent = result.library.methods.find(method => method.name === 'conquistador');
     console.log(`Parent version: ${parent?.version ?? 'unavailable'}. Receipt product version: ${result.receipt.productVersion ?? 'unavailable'}.`);
+    if (result.discovery) console.log(`Discovery: ${result.discovery.count} skill entry; name, description and path use ${result.discovery.metadataCharacters} characters. Host loading remains unverified.`);
     if (result.connector) console.log(`Saved MCP Node executable: ${result.connector.nodeExecutable ? 'available' : 'unavailable'}. Package executable: ${result.connector.packageExecutable ? 'available' : 'unavailable'}.`);
     console.log(`BB adapter files: ${result.bbAdapterPresent ? 'present; execution unverified' : 'not present'}.`);
     console.log(`Operator profile: ${result.operatorProfilePresent ? `present (activation ${result.operatorActivation ?? 'unparsed'}); host activation unverified` : 'not present; older packages degrade to explicit invocation'}. No daemon or schedule is started.`);
