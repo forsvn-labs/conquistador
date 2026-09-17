@@ -84,6 +84,9 @@ export function projectLifecycle(root, options, { rename = renameSync } = {}) {
       for (const [index, slot] of slots.entries()) {
         slot.stage = join(temporary, `stage-${index}`);
         if (existsSync(slot.source) && (action === 'update' || slot.host)) cpSync(slot.source, slot.stage, { recursive: true, dereference: false });
+        if (slot.mode === 'single-agent' && existsSync(join(slot.stage, integration))) {
+          rmSync(join(slot.stage, integration)); seal(slot.stage);
+        }
         // Copying the old operator carries its domain restriction into upgrade.
         if (slot.host && !existsSync(slot.stage) && existsSync(join(source, 'domain-restriction.json')) && !options.domain) {
           const restriction = read(join(source, 'domain-restriction.json'));

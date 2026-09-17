@@ -224,7 +224,9 @@ Usage:
   conquistador install [--project PATH] Install the complete operator in a project
   conquistador operator --help         Manage and verify a project operator
   conquistador setup doctor --path ABS [--json]  Check installed files; no host activation proof
-  conquistador                         Show help
+  conquistador                         Open guided project setup
+  conquistador start                   Show the installed skill and first task
+  conquistador skills                  Browse installed capabilities
   conquistador setup                   Guided project installation; setup list shows routes
   conquistador connections --help      Inspect Executor, help install it, connect accounts
   conquistador jobs --help             Prepare a host for explicit durable jobs

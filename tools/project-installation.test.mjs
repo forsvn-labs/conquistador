@@ -19,6 +19,8 @@ test('complete operator installs an obvious parent and each selected native skil
     assert.ok(existsSync(join(project, '.conquistador/SKILL.md')));
     assert.ok(existsSync(join(project, hostFolders[host], 'SKILL.md')));
     assert.ok(existsSync(join(project, hostFolders[host], 'library/write-copy/METHOD.md')));
+    const bypass = spawnSync(process.execPath, [join(root, 'tools/install.mjs'), 'remove', 'single-agent', join(project, '.conquistador')], { encoding: 'utf8' });
+    assert.equal(bypass.status, 1); assert.match(bypass.stderr, /owns a native skill/);
     const doctor = JSON.parse(ok(project, 'operator', 'doctor', '--json'));
     assert.equal(doctor.library.available, 38); assert.equal(doctor.bbAdapterPresent, true); assert.equal(doctor.discovery.count, 1);
     assert.match(ok(project, 'start'), /first|launch plan/);

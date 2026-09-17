@@ -199,3 +199,8 @@ the default when present. Explicit existing `--runs-dir` paths remain valid. No 
 
 Host skill placement is not live host acceptance. A fresh native session must still demonstrate
 discovery, selection and useful method execution. The filesystem doctor does not certify it.
+
+The low-level `tools/install.mjs` refuses update/removal of a project-paired operator. Its public
+setup lifecycle owns both copies. This prevents a legacy low-level command from discarding the
+project record and leaving an unmanaged native skill behind. Rollback failures retain the
+transaction directory and report its recovery location rather than deleting the backups.
