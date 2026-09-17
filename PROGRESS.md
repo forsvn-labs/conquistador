@@ -1,6 +1,6 @@
 # Product progress
 
-## Private-alpha 0.0.8 release candidate
+## Private-alpha 0.0.8 shipped
 
 The guide now accepts several compatible integrations and host choices. Space toggles choices;
 Enter continues. Complete operator and native skill installation remain the default. Codex and
@@ -43,10 +43,22 @@ Validation passed on macOS ARM64 with Node 24.21.0 and npm 11.19.0:
   native replacement restores prior bytes. Linked, modified and independently owned files remain
   protected, including dangling native links. Old v1 records without `hosts` still load.
 
-The user authorized the next private-alpha shipment. Version 0.0.8 carries this setup correction;
-the immutable v0.0.7 release remains unchanged. Native host activation and task quality remain
-separate from these local setup checks. Exact release commit, artifacts, checksums, remote CI and
-private-Git lifecycle belong in the post-release shipping record.
+The user authorized the next private-alpha shipment. Version 0.0.8 shipped as a private prerelease
+from exact source `5e31b7c0f87a22018db50b8f52a1df454534bd06`; the immutable v0.0.7 release remains unchanged.
+The Node 24 build and all 703 tests passed locally. Exact source passed Linux CI in
+[run 35210717495](https://github.com/forsvn-labs/conquistador/actions/runs/35210717495).
+
+The clean source commit produced ZIP
+`b265144852bea4d30910316a3f21e683c919c07ba6724164e28c67758eb64087` and npm tarball
+`4939bf42ed9341470182c9c7771dc6dde75f3e9abe4e4918a14b342d96c76240`. Fresh release downloads
+matched both files, `SHA256SUMS`, and `assembly.json` byte for byte. ZIP and tarball multi-host
+lifecycles produced the same operator digest, survived npm acquisition-cache removal, and preserved
+receiving-project files after uninstall. The authenticated private-Git `v0.0.8` path also passed
+version, 38-method doctor, install, start, update and uninstall after cache removal.
+
+Native host activation and task quality remain separate from these file and lifecycle checks.
+Cursor scans other compatible skill directories as well as `.cursor/skills`; duplicate-name
+precedence across selected native directories still needs fresh Cursor acceptance.
 
 ## Private-alpha 0.0.7 shipped
 

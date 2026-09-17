@@ -4,6 +4,28 @@ No public release is claimed. Implemented but unshipped work is recorded in [PRO
 versions. Verification establishes the stated local scope; live provider operation, useful model
 output, human acceptance, rights disposition and release authority require separate evidence.
 
+## 2026-09-17, 0.0.8 private alpha
+
+- Eighth private release at
+  [`v0.0.8`](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.8) from
+  `5e31b7c0f87a22018db50b8f52a1df454534bd06` on `private-alpha`.
+- Replaces exclusive setup routes with compatible multi-selection, including several native host
+  skills, plugins, connectors, packages and experimental guidance in one reviewed plan.
+- Separates Codex native discovery from BB operator/team execution. BB no longer appears as a Codex
+  alias or claims a native skill, plugin registration or automatic router.
+- Adds shared ownership for multiple operator-native skills, operator/harness contract reuse,
+  shared staged plugin sources, read-only preflight, protected additive updates and truthful
+  partial-install recovery instructions.
+- Node 24 build and 703 tests passed locally. Exact source passed Linux CI in
+  [run 35210717495](https://github.com/forsvn-labs/conquistador/actions/runs/35210717495).
+- Downloaded release ZIP
+  `b265144852bea4d30910316a3f21e683c919c07ba6724164e28c67758eb64087` and npm tarball
+  `4939bf42ed9341470182c9c7771dc6dde75f3e9abe4e4918a14b342d96c76240` matched the clean source
+  assembly. Both artifact lifecycles and the authenticated private-Git cache-removal lifecycle
+  passed while preserving receiving-project files.
+- npm registry publication remains disabled. Native host activation and Cursor duplicate-name
+  precedence across compatible skill directories remain acceptance work.
+
 ## 2026-09-17, 0.0.7 private alpha
 
 - Seventh private release at
