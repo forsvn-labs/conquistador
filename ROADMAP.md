@@ -2,9 +2,11 @@
 
 ## Next private alpha
 
-1. Finish 0.0.6 installation acceptance against the user-reported first-run failures. Verify a
-   fresh native skill invocation, safe migration, exact transport parity and repeat startup.
-2. Review and ship the exact private candidate after the acceptance record is complete.
+1. Review and ship the exact 0.0.6 private candidate. Local installation acceptance is complete:
+   fresh Codex native discovery and a first task, safe migration, five-transport parity, repeat
+   startup and macOS terminal use. Keep unverified hosts and platforms explicit.
+2. Verify acquisition of the exact released Git tag after shipping and gather the user's first-run
+   verdict in their receiving project.
 
 ## Private-alpha follow-up
 
@@ -14,9 +16,10 @@
 2. Observe a host adapter calling request admission in project, manual and off modes. Check
    unrelated coding requests, removal and same-context fallback. Setup prepares files but does not
    register routing or start a watcher. Native automatic activation remains unverified.
-3. Verify native parent-first discovery in fresh Codex, Claude, Copilot and Cursor sessions. Confirm
+3. Extend native parent-first discovery acceptance to fresh Claude, Copilot and Cursor sessions. Confirm
    one entry, selected-method loading, capability disclosure, cache refresh, update and removal.
-   The observed manual BB/Codex file invocation does not establish native discovery.
+   Fresh Codex 0.154.0 name-only discovery and synthetic copy tasks passed on the 0.0.6 candidate;
+   these observations do not establish the other hosts or all methods.
 4. Verify native Windows/Linux installation and host execution before claiming those platforms.
    macOS transports and Linux CI results do not certify native Windows or Linux host activation.
 
