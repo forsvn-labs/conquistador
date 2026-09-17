@@ -1,19 +1,20 @@
 # Install Conquistador
 
-Version `0.0.7` is the shipped private alpha on the `private-alpha` channel. It continues the same private
-delivery sequence as dogfood. Public alpha is planned to start at `0.1.0`.
-Use the [private release](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.7) and its
-exact tag or source commit. The repository remains private and no npm package is published.
+Version `0.0.8` is prepared for the `private-alpha` channel. It continues the same private delivery
+sequence as dogfood. Public alpha is planned to start at `0.1.0`. Use the
+[private release](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.8) only after it is
+visible, and keep its exact tag, source commit and checksums together. The repository remains
+private and no npm package is published.
 The observed installation platform is macOS with Node 24. Windows/Linux commands below are
 portability guidance; native execution and native host registration still need their own checks.
 
 ## Project operator and native skill, recommended
 
-The commands below use the immutable `v0.0.7` tag.
+The commands below use the immutable `v0.0.8` tag after the private release is visible.
 Use Node 24, npm, Git, and a GitHub account with access to the repository. Install the CLI once:
 
 ```sh
-npm install -g --ignore-scripts --install-links git+https://github.com/forsvn-labs/conquistador.git#v0.0.7
+npm install -g --ignore-scripts --install-links git+https://github.com/forsvn-labs/conquistador.git#v0.0.8
 ```
 
 In each receiving project, run:
@@ -22,7 +23,7 @@ In each receiving project, run:
 conquistador
 ```
 
-The next guide in this source checkout is implemented but unshipped. It has multi-selection:
+The v0.0.8 guide has multi-selection:
 Space toggles choices, arrows move, and Enter continues. The default selects the complete operator
 and native host skills. Choose one or more hosts, then review all folders before confirming once.
 The complete operator goes into `.conquistador`, with `SKILL.md` at its root. Native skills use:
@@ -58,14 +59,14 @@ npm's cache, remove that dangling global entry before installing the corrected r
 
 ```sh
 npm uninstall -g @forsvn/conquistador
-npm install -g --ignore-scripts --install-links git+https://github.com/forsvn-labs/conquistador.git#v0.0.7
+npm install -g --ignore-scripts --install-links git+https://github.com/forsvn-labs/conquistador.git#v0.0.8
 conquistador version
 ```
 
 The one-time launcher remains available when you do not want a persistent CLI:
 
 ```sh
-npx -y --ignore-scripts --package=git+https://github.com/forsvn-labs/conquistador.git#v0.0.7 conquistador
+npx -y --ignore-scripts --package=git+https://github.com/forsvn-labs/conquistador.git#v0.0.8 conquistador
 ```
 
 Git acquisition can take time before Conquistador starts. Repeated npx invocations may resolve
@@ -78,7 +79,7 @@ and do not need that flag. Check acquisition immediately with `conquistador vers
 For a supplied release tarball, use the same persistent installation:
 
 ```sh
-npm install -g --ignore-scripts /absolute/path/forsvn-conquistador-0.0.7.tgz
+npm install -g --ignore-scripts /absolute/path/forsvn-conquistador-0.0.8.tgz
 conquistador
 ```
 
@@ -95,9 +96,9 @@ authenticate that sender. Keep the tag, full source commit, and checksum togethe
 
 | System | Calculate SHA-256 |
 | --- | --- |
-| macOS | `shasum -a 256 /absolute/path/forsvn-conquistador-0.0.7.tgz` |
-| Linux | `sha256sum /absolute/path/forsvn-conquistador-0.0.7.tgz` |
-| Windows PowerShell | `Get-FileHash -Algorithm SHA256 "C:\Downloads\forsvn-conquistador-0.0.7.tgz"` |
+| macOS | `shasum -a 256 /absolute/path/forsvn-conquistador-0.0.8.tgz` |
+| Linux | `sha256sum /absolute/path/forsvn-conquistador-0.0.8.tgz` |
+| Windows PowerShell | `Get-FileHash -Algorithm SHA256 "C:\Downloads\forsvn-conquistador-0.0.8.tgz"` |
 
 Node/npm must work before the guide can start. A supplied tarball does not require GitHub sign-in
 or Git, but npm may need registry access for package dependencies. No provider account is needed
@@ -267,8 +268,8 @@ listing nor a passing doctor proves activation or output quality. Record observa
 
 | Transport | Command or procedure |
 | --- | --- |
-| Optional persistent CLI | `npm install --global --ignore-scripts /absolute/path/forsvn-conquistador-0.0.7.tgz`, then `conquistador setup` in the receiving project |
-| Bun tarball | `bunx --package /absolute/path/forsvn-conquistador-0.0.7.tgz conquistador setup`; Node 24 remains required by the shebang |
+| Optional persistent CLI | `npm install --global --ignore-scripts /absolute/path/forsvn-conquistador-0.0.8.tgz`, then `conquistador setup` in the receiving project |
+| Bun tarball | `bunx --package /absolute/path/forsvn-conquistador-0.0.8.tgz conquistador setup`; Node 24 remains required by the shebang |
 | Source or ZIP | `node /absolute/path/conquistador-source/runtime/bin/conquistador.js setup` in the receiving project |
 | Exact private Git | `npx -y --ignore-scripts --package=git+https://github.com/forsvn-labs/conquistador.git#COMMIT conquistador setup`; replace `COMMIT` with the full commit from the release assembly record. For a persistent global copy add `--install-links` to `npm install -g`. |
 

@@ -41,7 +41,7 @@ function fakeUi(answers, notes = []) {
 }
 test('the guide selects compatible routes and hosts then verifies and explains each next step', async () => {
   const answers = [['operator', 'skill', 'harness', 'mcp'], ['codex', 'bb', 'cursor'], 'harness', '/owned/mcp', true], notes = [], calls = [];
-  const result = await runSetupGuide({ cwd: '/example-project', version: '0.0.7', ui: fakeUi(answers, notes), run: async args => { calls.push(args); return 'Connector next steps'; } });
+  const result = await runSetupGuide({ cwd: '/example-project', version: '0.0.8', ui: fakeUi(answers, notes), run: async args => { calls.push(args); return 'Connector next steps'; } });
   assert.equal(result, 0); assert.equal(answers.length, 0);
   assert.deepEqual(calls[0], ['install', '--target', 'operator', '--project', '/example-project', '--hosts', 'codex,bb,cursor', '--dry-run']);
   assert.deepEqual(calls[1], ['install', '--target', 'mcp', '--path', '/owned/mcp', '--dry-run']);
@@ -53,7 +53,7 @@ test('the guide selects compatible routes and hosts then verifies and explains e
 });
 test('cancelling the guide performs only read-only preflight, never mutations', async () => {
   for (const answers of [[Symbol('cancel')], [['operator', 'skill'], ['codex'], false]]) {
-    const calls = []; const result = await runSetupGuide({ cwd: '/example-project', version: '0.0.7', ui: fakeUi(answers), run: async args => { calls.push(args); } });
+    const calls = []; const result = await runSetupGuide({ cwd: '/example-project', version: '0.0.8', ui: fakeUi(answers), run: async args => { calls.push(args); } });
     assert.equal(result, 0); assert.ok(calls.every(args => args.includes('--dry-run')));
   }
 });
@@ -64,13 +64,13 @@ test('the guide retains connectors, shared plugin sources, squads, specialist sk
     [[['specialist'], 'write-copy', '/owned/copy', true], ['install', '--target', 'skill:write-copy', '--path', '/owned/copy']],
     [[['runtime-mcp'], 'https://runtime.example', '/stable', '/owned/mcp', true], ['install', '--target', 'mcp', '--path', '/owned/mcp', '--url', 'https://runtime.example', '--runtime-path', '/stable']],
   ]) {
-    const calls = []; assert.equal(await runSetupGuide({ cwd: '/example-project', version: '0.0.7', ui: fakeUi(answers), run: async args => { calls.push(args); return ''; } }), 0);
+    const calls = []; assert.equal(await runSetupGuide({ cwd: '/example-project', version: '0.0.8', ui: fakeUi(answers), run: async args => { calls.push(args); return ''; } }), 0);
     assert.deepEqual(calls[0], [...expected, '--dry-run']); assert.deepEqual(calls[1], expected); assert.equal(answers.length, 0);
     if (expected[2].startsWith('skill:') || expected[2] === 'squad') assert.equal(calls.some(args => args[0] === 'doctor'), false);
     if (expected[2] === 'copilot-plugin') assert.equal(calls.filter(args => args[0] === 'install' && !args.includes('--dry-run')).length, 1);
   }
   const calls = [], notes = [];
-  assert.equal(await runSetupGuide({ cwd: '/example-project', version: '0.0.7', ui: fakeUi([['experimental'], ['eve', 'grok-bot']], notes), run: async args => { calls.push(args); return 'Guidance'; } }), 0);
+  assert.equal(await runSetupGuide({ cwd: '/example-project', version: '0.0.8', ui: fakeUi([['experimental'], ['eve', 'grok-bot']], notes), run: async args => { calls.push(args); return 'Guidance'; } }), 0);
   assert.equal(calls.length, 2); assert.match(notes.join('\n'), /Guidance only. No files installed/);
 });
 test('the guide rejects overlapping folders and duplicate native discovery before preflight or mutation', async () => {
@@ -78,13 +78,13 @@ test('the guide rejects overlapping folders and duplicate native discovery befor
     [['operator', 'mcp'], ['bb'], '/example-project/.conquistador/connector'],
     [['operator', 'skill', 'plugin'], ['codex'], ['codex-plugin'], '/owned/plugin'],
   ]) {
-    const calls = []; assert.equal(await runSetupGuide({ cwd: '/example-project', version: '0.0.7', ui: fakeUi(answers), run: async args => { calls.push(args); } }), 1);
+    const calls = []; assert.equal(await runSetupGuide({ cwd: '/example-project', version: '0.0.8', ui: fakeUi(answers), run: async args => { calls.push(args); } }), 1);
     assert.deepEqual(calls, []);
   }
 });
 test('later failure reports completed owned copies and does not claim global rollback', async () => {
   const notes = [], calls = [];
-  const result = await runSetupGuide({ cwd: '/example-project', version: '0.0.7', ui: fakeUi([['operator', 'mcp'], ['bb'], '/owned/mcp', true], notes), run: async args => {
+  const result = await runSetupGuide({ cwd: '/example-project', version: '0.0.8', ui: fakeUi([['operator', 'mcp'], ['bb'], '/owned/mcp', true], notes), run: async args => {
     calls.push(args); if (args[0] === 'install' && args[2] === 'mcp' && !args.includes('--dry-run')) throw Error('Injected connector failure'); return '';
   } });
   assert.equal(result, 1); assert.match(notes.join('\n'), /partial installation/); assert.match(notes.join('\n'), /Completed copies remain owned/);

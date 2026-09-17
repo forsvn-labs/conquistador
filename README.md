@@ -1,10 +1,12 @@
-# Conquistador 0.0.7
+# Conquistador 0.0.8
 
 Conquistador helps your coding agent do growth, marketing, sales, product and knowledge work.
 Give it an outcome and the relevant facts. It selects from 38 methods, names the specialists it
 uses, and returns a draft with review findings. Your coding agent supplies the model and tools.
 
-The current private alpha is [v0.0.7](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.7).
+This source is prepared for private alpha `v0.0.8`. Use it only after the
+[private release](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.8) is visible with
+matching artifacts and checksums.
 Private alpha and dogfood are the same `0.0.x` channel. Public alpha starts at `0.1.0`.
 
 ## Install once, use in each project
@@ -12,7 +14,7 @@ Private alpha and dogfood are the same `0.0.x` channel. Public alpha starts at `
 Use Node 24 and a GitHub account with access to this private repository:
 
 ```sh
-npm install -g --ignore-scripts --install-links git+https://github.com/forsvn-labs/conquistador.git#v0.0.7
+npm install -g --ignore-scripts --install-links git+https://github.com/forsvn-labs/conquistador.git#v0.0.8
 ```
 
 Then open a terminal in the project where you want to use it:
@@ -33,7 +35,7 @@ for the current private alpha because the registry package does not exist and pu
 blocked. It becomes the primary command only after the exact public package and clean registry
 lifecycle are verified.
 
-The next setup guide in this checkout is not released yet. It lets you select several compatible
+The v0.0.8 setup guide lets you select several compatible
 installations and hosts with Space, then confirm once. The default is a complete operator in
 `.conquistador/` and a Codex native skill. Add other hosts, plugins or connectors as needed.
 No receiving-project package manifest, dependency or lockfile is added.

@@ -1,6 +1,6 @@
 # Product progress
 
-## Setup selections and host boundaries, unshipped
+## Private-alpha 0.0.8 release candidate
 
 The guide now accepts several compatible integrations and host choices. Space toggles choices;
 Enter continues. Complete operator and native skill installation remain the default. Codex and
@@ -43,8 +43,10 @@ Validation passed on macOS ARM64 with Node 24.21.0 and npm 11.19.0:
   native replacement restores prior bytes. Linked, modified and independently owned files remain
   protected, including dangling native links. Old v1 records without `hosts` still load.
 
-No version bump, push, tag or release is part of this change. The published v0.0.7 remains immutable; the updated guide is not present in that release.
-Native host activation and task quality remain separate from these local setup checks.
+The user authorized the next private-alpha shipment. Version 0.0.8 carries this setup correction;
+the immutable v0.0.7 release remains unchanged. Native host activation and task quality remain
+separate from these local setup checks. Exact release commit, artifacts, checksums, remote CI and
+private-Git lifecycle belong in the post-release shipping record.
 
 ## Private-alpha 0.0.7 shipped
 

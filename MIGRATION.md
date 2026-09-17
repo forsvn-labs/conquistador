@@ -46,12 +46,12 @@ separate lifecycles. No existing runs are moved, reinterpreted or deleted.
 
 The original v0.0.6 README omitted npm's `--install-links` option. npm 11 could report a successful
 global Git install while leaving the executable linked to its temporary acquisition directory.
-Remove that dangling package before installing v0.0.7; npm cannot always replace the broken link in
+Remove that dangling package before installing v0.0.7 or later; npm cannot always replace the broken link in
 place:
 
 ```sh
 npm uninstall -g @forsvn/conquistador
-npm install -g --ignore-scripts --install-links git+https://github.com/forsvn-labs/conquistador.git#v0.0.7
+npm install -g --ignore-scripts --install-links git+https://github.com/forsvn-labs/conquistador.git#v0.0.8
 conquistador version
 ```
 

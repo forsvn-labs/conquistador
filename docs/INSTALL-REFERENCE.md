@@ -5,7 +5,7 @@ the direct commands for local source copies, native plugin managers, runtime ope
 containers. Use the original installer to update and remove a copy. Full skill and plugin packages
 include all 38 outcome methods; domain and standalone method packages can contain fewer.
 
-Version 0.0.7 is the current shipped private alpha. See INSTALL.md for the persistent CLI and guided setup. Use its immutable tag or verified release tarball.
+Version 0.0.8 is prepared as the next private alpha. See INSTALL.md for the persistent CLI and guided setup. Use its immutable tag or verified release tarball only after the release is visible.
 `private: true` blocks registry publication; private Git and local package execution remain possible. See [package verification](../INSTALL.md#verify-the-package).
 
 For Git acquisition, use the fixed release tag or its full source commit. Your GitHub account must
@@ -321,7 +321,7 @@ a stable distribution for runtime MCP. It creates dependencies only in the chose
 setup from the receiving project:
 
 ```sh
-npm install --global --prefix /absolute/path/conquistador-cli --ignore-scripts /absolute/path/forsvn-conquistador-0.0.7.tgz
+npm install --global --prefix /absolute/path/conquistador-cli --ignore-scripts /absolute/path/forsvn-conquistador-0.0.8.tgz
 /absolute/path/conquistador-cli/bin/conquistador setup
 ```
 

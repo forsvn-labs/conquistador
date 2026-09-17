@@ -60,7 +60,7 @@ describe("owned CLI execution boundary", () => {
   it("reports version and fails closed for reserved later commands", async () => {
     const output = host();
     expect(await runCli(["version"], output.host)).toBe(0);
-    expect(output.stdout.at(-1)).toMatch(/^(?:1\.0\.0|0\.0\.7)$/);
+    expect(output.stdout.at(-1)).toMatch(/^(?:1\.0\.0|0\.0\.8)$/);
     expect(await runCli(["eval"], output.host)).toBe(2);
     expect(output.stderr.at(-1)).toMatch(/reserved but unavailable/);
   });
