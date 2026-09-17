@@ -180,7 +180,7 @@ operator implementation or advertise host capabilities the package does not prov
 
 ## Project installation and migration
 
-The `0.0.6` candidate puts the complete operator in `.conquistador`. `SKILL.md` and `library/`
+Private alpha `0.0.6` introduced the complete operator in `.conquistador`. `SKILL.md` and `library/`
 are at its root. The project guide asks for a coding agent, then installs a contained compact
 copy at that host's native project skill path. A compact copy retains every method/resource; the
 operator additionally retains the executable BB adapter, profile, contracts and schemas.

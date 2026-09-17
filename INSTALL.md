@@ -1,19 +1,19 @@
 # Install Conquistador
 
-Version `0.0.6` is an unshipped private-alpha candidate. `0.0.5` is the shipped private alpha on the `private-alpha` channel. It continues the same private
+Version `0.0.7` is an unshipped private-alpha candidate. `0.0.6` is the shipped private alpha on the `private-alpha` channel. It continues the same private
 delivery sequence as dogfood. Public alpha is planned to start at `0.1.0`.
-Use the [private release](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.5) and its
+Use the [private release](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.6) and its
 exact tag or source commit. The repository remains private and no npm package is published.
 The observed installation platform is macOS with Node 24. Windows/Linux commands below are
 portability guidance; native execution and native host registration still need their own checks.
 
 ## Project operator and native skill, recommended
 
-This source prepares `0.0.6`; the tag is not available until that private release is shipped.
+This source prepares `0.0.7`; the tag is not available until that private release is shipped.
 Use Node 24, npm, Git, and a GitHub account with access to the repository. Install the CLI once:
 
 ```sh
-npm install -g --ignore-scripts github:forsvn-labs/conquistador#v0.0.6
+npm install -g --ignore-scripts --install-links git+https://github.com/forsvn-labs/conquistador.git#v0.0.7
 ```
 
 In each receiving project, run:
@@ -45,20 +45,32 @@ For automation, `conquistador install` selects the current project and Codex ski
 The CLI itself lives in npm's global prefix. The receiving project gets no `package.json`,
 `node_modules` or lockfile. Avoid `sudo`; choose a user-writable npm prefix if necessary.
 
+If the earlier v0.0.6 Git command reported success but `conquistador` is missing or resolves into
+npm's cache, remove that dangling global entry before installing the corrected release:
+
+```sh
+npm uninstall -g @forsvn/conquistador
+npm install -g --ignore-scripts --install-links git+https://github.com/forsvn-labs/conquistador.git#v0.0.7
+conquistador version
+```
+
 The one-time launcher remains available when you do not want a persistent CLI:
 
 ```sh
-npx -y --ignore-scripts github:forsvn-labs/conquistador#v0.0.6
+npx -y --ignore-scripts --package=git+https://github.com/forsvn-labs/conquistador.git#v0.0.7 conquistador
 ```
 
 Git acquisition can take time before Conquistador starts. Repeated npx invocations may resolve
 GitHub again. The persistent CLI removes that repeated acquisition. `--ignore-scripts` skips npm's
 automatic lifecycle hooks; it does not block the explicitly requested Conquistador command.
+`--install-links` is required for the persistent private-Git route. It prevents npm 11 from keeping
+a global executable linked to its temporary Git checkout. Tarball installations already copy files
+and do not need that flag. Check acquisition immediately with `conquistador version`.
 
 For a supplied release tarball, use the same persistent installation:
 
 ```sh
-npm install -g --ignore-scripts /absolute/path/forsvn-conquistador-0.0.6.tgz
+npm install -g --ignore-scripts /absolute/path/forsvn-conquistador-0.0.7.tgz
 conquistador
 ```
 
@@ -75,9 +87,9 @@ authenticate that sender. Keep the tag, full source commit, and checksum togethe
 
 | System | Calculate SHA-256 |
 | --- | --- |
-| macOS | `shasum -a 256 /absolute/path/forsvn-conquistador-0.0.6.tgz` |
-| Linux | `sha256sum /absolute/path/forsvn-conquistador-0.0.6.tgz` |
-| Windows PowerShell | `Get-FileHash -Algorithm SHA256 "C:\Downloads\forsvn-conquistador-0.0.6.tgz"` |
+| macOS | `shasum -a 256 /absolute/path/forsvn-conquistador-0.0.7.tgz` |
+| Linux | `sha256sum /absolute/path/forsvn-conquistador-0.0.7.tgz` |
+| Windows PowerShell | `Get-FileHash -Algorithm SHA256 "C:\Downloads\forsvn-conquistador-0.0.7.tgz"` |
 
 Node/npm must work before the guide can start. A supplied tarball does not require GitHub sign-in
 or Git, but npm may need registry access for package dependencies. No provider account is needed
@@ -214,10 +226,10 @@ listing nor a passing doctor proves activation or output quality. Record observa
 
 | Transport | Command or procedure |
 | --- | --- |
-| Optional persistent CLI | `npm install --global --ignore-scripts /absolute/path/forsvn-conquistador-0.0.6.tgz`, then `conquistador setup` in the receiving project |
-| Bun tarball | `bunx --package /absolute/path/forsvn-conquistador-0.0.6.tgz conquistador setup`; Node 24 remains required by the shebang |
+| Optional persistent CLI | `npm install --global --ignore-scripts /absolute/path/forsvn-conquistador-0.0.7.tgz`, then `conquistador setup` in the receiving project |
+| Bun tarball | `bunx --package /absolute/path/forsvn-conquistador-0.0.7.tgz conquistador setup`; Node 24 remains required by the shebang |
 | Source or ZIP | `node /absolute/path/conquistador-source/runtime/bin/conquistador.js setup` in the receiving project |
-| Exact private Git | `npx -y --ignore-scripts --package=git+https://github.com/forsvn-labs/conquistador.git#COMMIT conquistador setup`; replace `COMMIT` with the full commit from the release assembly record |
+| Exact private Git | `npx -y --ignore-scripts --package=git+https://github.com/forsvn-labs/conquistador.git#COMMIT conquistador setup`; replace `COMMIT` with the full commit from the release assembly record. For a persistent global copy add `--install-links` to `npm install -g`. |
 
 For a persistent CLI, repeat the global install with the intended verified tarball to update it.
 Remove project/plugin/connector copies first as needed, then `npm uninstall --global @forsvn/conquistador`.
@@ -229,6 +241,11 @@ Private Git requires Git and the intended GitHub account's repository access, in
 sign-in rules. If GitHub CLI can read the repo but HTTPS Git cannot, use `gh auth setup-git`.
 Never put a token in the command. A missing branch is distinct from missing account access.
 [GitHub credential-helper setup](https://cli.github.com/manual/gh_auth_setup-git)
+
+Maintainers verify a released private-Git tag from a neutral project, isolated npm prefix and empty
+cache with `npm run verify:private-git -- --spec GIT_SPEC --version VERSION`. The check removes its
+acquisition cache before executing the CLI, then runs install, doctor, start, update and uninstall.
+A tarball lifecycle cannot substitute for this Git durability check.
 
 The private HTTPS Git form is not the supported Bun route. Use its verified tarball form. There is
 no curl-to-shell installer. A future standalone installer needs authenticated private acquisition,

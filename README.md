@@ -1,19 +1,19 @@
-# Conquistador 0.0.6
+# Conquistador 0.0.7
 
 Conquistador helps your coding agent do growth, marketing, sales, product and knowledge work.
 Give it an outcome and the relevant facts. It selects from 38 methods, names the specialists it
 uses, and returns a draft with review findings. Your coding agent supplies the model and tools.
 
-This checkout prepares private alpha `0.0.6`. It is not released yet. The latest shipped private
-alpha is [v0.0.5](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.5).
+This checkout prepares private alpha `0.0.7`. It is not released yet. The latest shipped private
+alpha is [v0.0.6](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.6).
 Private alpha and dogfood are the same `0.0.x` channel. Public alpha starts at `0.1.0`.
 
 ## Install once, use in each project
 
-Use Node 24 and a GitHub account with access to this private repository. When `v0.0.6` ships:
+Use Node 24 and a GitHub account with access to this private repository. When `v0.0.7` ships:
 
 ```sh
-npm install -g --ignore-scripts github:forsvn-labs/conquistador#v0.0.6
+npm install -g --ignore-scripts --install-links git+https://github.com/forsvn-labs/conquistador.git#v0.0.7
 ```
 
 Then open a terminal in the project where you want to use it:
@@ -24,7 +24,9 @@ conquistador
 
 The first command downloads the CLI once. Later launches start from your installed copy, without
 asking GitHub or npm to resolve the package again. `--ignore-scripts` skips automatic npm hooks.
-No package is published to the npm registry. GitHub authentication must already work; use
+`--install-links` makes npm copy the private Git checkout into its durable global location; without
+it, npm 11 can leave the executable linked to temporary acquisition files. No package is published
+to the npm registry. GitHub authentication must already work; use
 `gh auth setup-git` if your authorized Git client needs configuration.
 
 The guide asks where you will use Conquistador, which coding agent you use, and confirms the

@@ -1,6 +1,6 @@
 {
   "name": "@forsvn/conquistador",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "private": true,
   "description": "A project operator for growth, GTM, sales, marketing, product, and knowledge work.",
   "license": "MIT",
@@ -56,6 +56,7 @@
     "build": "node tools/dev.mjs build",
     "test": "node tools/dev.mjs test",
     "package": "node tools/package.mjs",
+    "verify:private-git": "node tools/verify-private-git-install.mjs",
     "setup": "node tools/setup.mjs",
     "integrations:status": "node tools/integration-releases.mjs status",
     "integrations:updates": "node tools/integration-releases.mjs check-updates"

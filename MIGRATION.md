@@ -26,7 +26,7 @@ resolves at install time.
 
 ## Private alpha 0.0.6 project layout
 
-The next operator root is `.conquistador`, with the parent skill visible as `SKILL.md`. Run
+The operator root is `.conquistador`, with the parent skill visible as `SKILL.md`. Run
 `conquistador operator update` from the receiving project to migrate an unchanged
 `.conquistador-operator` copy and prepare the default Codex skill. The guide lets you select
 Claude Code, Cursor, Copilot or files-only instead. Existing unchanged managed skills can join
@@ -41,3 +41,19 @@ Keep using that explicit runtime path or move it yourself before choosing the ne
 New runtime commands default to `.conquistador-runs`. Existing unmanaged `.conquistador/runs`
 remains the default when present so installed product files and run data have
 separate lifecycles. No existing runs are moved, reinterpreted or deleted.
+
+### Repair the v0.0.6 global Git launcher
+
+The original v0.0.6 README omitted npm's `--install-links` option. npm 11 could report a successful
+global Git install while leaving the executable linked to its temporary acquisition directory.
+Remove that dangling package before installing v0.0.7; npm cannot always replace the broken link in
+place:
+
+```sh
+npm uninstall -g @forsvn/conquistador
+npm install -g --ignore-scripts --install-links git+https://github.com/forsvn-labs/conquistador.git#v0.0.7
+conquistador version
+```
+
+This changes the global CLI only. Existing project `.conquistador/` and native skill copies remain
+owned and can be updated afterward with `conquistador operator update`.

@@ -4,7 +4,7 @@
   "hostKind": "official-xai-grok-bot",
   "displayName": "Official xAI Grok Bot",
   "productName": "conquistador",
-  "pluginVersion": "0.0.6",
+  "pluginVersion": "0.0.7",
   "canonicalSkillsRoot": "skills",
   "skillMount": "packaged-skills",
   "installClass": "candidate-only",

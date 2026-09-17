@@ -4,6 +4,27 @@ No public release is claimed. Implemented but unshipped work is recorded in [PRO
 versions. Verification establishes the stated local scope; live provider operation, useful model
 output, human acceptance, rights disposition and release authority require separate evidence.
 
+## 2026-09-17, 0.0.6 private alpha
+
+- Sixth private release at
+  [`v0.0.6`](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.6) from
+  `40a9b7b3f635d17e9c0e79ec8b83884afcb10650` on `private-alpha`.
+- Moved the complete operator to visible `.conquistador/`, added a root `SKILL.md`, and installed a
+  native project skill for the selected Codex/BB, Claude Code, Cursor, or Copilot host. The complete
+  package retains all 38 methods, resources, profile, contracts, schemas, and BB adapter.
+- Added the bundled terminal guide, bare setup command, `start`, `skills`, paired lifecycle,
+  protected updates, v0.0.5 migration, and `.conquistador-runs/` default for new runtime state.
+- Node 24 build and 692 tests passed locally. Five transports passed 45 lifecycle commands. Fresh
+  Codex 0.154.0 discovered the skill by name and a later fresh session no longer saw it after
+  removal. Exact Linux CI passed at [run 35194277976](https://github.com/forsvn-labs/conquistador/actions/runs/35194277976).
+- ZIP `59d0a91947c5a8787f82f5a072984b4bed9bb951629ae3b751b6e27aea5f8530` and npm tarball
+  `3ed31f6770ca7691a28acdeb2468c101f8d442e61a50bfb9950c70ad6347d893` reproduced from source and
+  matched their downloaded release assets.
+- Post-release verification found that the README's global private-Git command omitted npm
+  `--install-links`. npm 11 could leave a dangling executable despite reporting success. The release
+  page now shows the corrected command; v0.0.7 carries the source documentation, recovery steps,
+  regression check, and versioned fix without rewriting this tag.
+
 ## 2026-09-17, 0.0.5 private alpha
 
 - Fifth private release, continuing the dogfood sequence at

@@ -2,11 +2,11 @@
 
 ## Next private alpha
 
-1. Review and ship the exact 0.0.6 private candidate. Local installation acceptance is complete:
-   fresh Codex native discovery and a first task, safe migration, five-transport parity, repeat
-   startup and macOS terminal use. Keep unverified hosts and platforms explicit.
-2. Verify acquisition of the exact released Git tag after shipping and gather the user's first-run
-   verdict in their receiving project.
+1. Review and ship the focused 0.0.7 private correction. The operator remains the 0.0.6
+   `.conquistador` implementation; the patch fixes durable global acquisition with npm
+   `--install-links`, repairs documented commands, and adds a real private-Git release check.
+2. Run the authenticated durability check against the exact v0.0.7 tag after shipping. Then gather
+   the user's first-run verdict in their receiving project.
 
 ## Private-alpha follow-up
 
@@ -18,7 +18,7 @@
    register routing or start a watcher. Native automatic activation remains unverified.
 3. Extend native parent-first discovery acceptance to fresh Claude, Copilot and Cursor sessions. Confirm
    one entry, selected-method loading, capability disclosure, cache refresh, update and removal.
-   Fresh Codex 0.154.0 name-only discovery and synthetic copy tasks passed on the 0.0.6 candidate;
+   Fresh Codex 0.154.0 name-only discovery and synthetic copy tasks passed on the 0.0.6 release;
    these observations do not establish the other hosts or all methods.
 4. Verify native Windows/Linux installation and host execution before claiming those platforms.
    macOS transports and Linux CI results do not certify native Windows or Linux host activation.
