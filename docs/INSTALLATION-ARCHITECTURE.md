@@ -164,6 +164,20 @@ by skills.sh or a native manager. A future receipt extension must preserve v1 re
 transport-specific acquisition metadata out of the payload parity hash. No such provenance upgrade
 is claimed by the current receipt schema.
 
+## Public registry installation
+
+Private `0.0.x` releases use authenticated GitHub acquisition. Public alpha should publish
+`@forsvn/conquistador` to npm and make `npm i -g @forsvn/conquistador` the primary command. A
+registry install copies the published package into npm's global prefix, so the private-Git
+`--install-links` workaround is not part of that command.
+
+Keep `private: true` until the public release is approved. Before removing it, verify control of the
+`@forsvn` scope, release authentication and provenance, exact package contents, license files, and
+the registry tarball digest. Test the published version from an empty cache and a user-writable
+prefix through version, setup, doctor, start, update, and uninstall. The project must still receive
+no `package.json`, `node_modules`, or lockfile. Do not document the short command as available until
+`npm view @forsvn/conquistador` returns the intended release.
+
 ## Future standalone installer
 
 Do not introduce curl-to-shell for private alpha. Before a standalone installer is offered, require:

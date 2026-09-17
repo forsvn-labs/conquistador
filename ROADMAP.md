@@ -45,3 +45,11 @@ Public alpha is planned to start at `0.1.0`. The historical private tag already 
 resolve its migration explicitly before the public release. See [version policy](VERSIONS.md).
 Public distribution, registry publication, marketplaces, visibility changes and landing work need
 that later decision. The current private-alpha channel continues the earlier dogfood sequence.
+
+For the public-alpha release, publish the exact `@forsvn/conquistador` package to npm and make
+`npm i -g @forsvn/conquistador` the primary installation command. Before changing the publication
+guard, verify scope ownership, release authentication and provenance, package contents, license
+files, and registry tarball identity. From an empty npm cache and user-writable global prefix, run
+version, guided setup, doctor, start, update, and uninstall against the published version. Confirm
+that the receiving project gets no manifest, dependency directory, or lockfile. Keep the private
+Git and release-asset routes as documented fallbacks.

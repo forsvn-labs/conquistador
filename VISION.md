@@ -20,6 +20,11 @@ Pinned private Git references lead acquisition; verified npm and Bun tarballs, s
 and ZIP are transports for the same complete package. The runtime, typed catalog, Eval Lab, and
 durable jobs are optional. Every installation route needs a clear update and removal path.
 
+Public alpha should publish `@forsvn/conquistador` to the npm registry and make
+`npm i -g @forsvn/conquistador` the primary acquisition command. Keep the private Git command for
+private `0.0.x` releases and as a source fallback. Do not advertise the registry command until the
+exact public package exists, registry ownership is verified, and a clean global lifecycle passes.
+
 An installed library must contain the methods and resources its parent routes to. The transport
 must not change the package contents or managed digest. Check those files without loading the
 entire library into model context. Report local completeness, available build identity, host

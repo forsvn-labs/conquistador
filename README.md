@@ -28,6 +28,11 @@ it, npm 11 can leave the executable linked to temporary acquisition files. No pa
 to the npm registry. GitHub authentication must already work; use
 `gh auth setup-git` if your authorized Git client needs configuration.
 
+The planned public-alpha installation command is `npm i -g @forsvn/conquistador`. It does not work
+for the current private alpha because the registry package does not exist and publication remains
+blocked. It becomes the primary command only after the exact public package and clean registry
+lifecycle are verified.
+
 The guide asks where you will use Conquistador, which coding agent you use, and confirms the
 folders it will create. It installs the complete operator in `.conquistador/` and a discoverable
 skill for your chosen host. No receiving-project package manifest, dependency or lockfile is added.
