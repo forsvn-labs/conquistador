@@ -23,7 +23,10 @@ output, human acceptance, rights disposition and release authority require separ
 - Corrects content-learning consent and evidence claims. A cycle decision, durable promotion and
   persistence permission are separate. Critic PASS grants no write authority; content-intelligence
   runtime behavior remains locally implemented and fixture-verified.
-- Node 24.21.0 build, all 681 default tests and 66 focused checks passed. The release is scoped to
+- Fixed hook CLI input on Linux subprocess sockets. Complete input now has a one-second deadline;
+  malformed, oversized and unclosed streams return no advice. Linux container hook tests cover
+  fragmented input and a producer that leaves stdin open. Native Claude hook delivery is unverified.
+- Node 24.21.0 build, all 682 default tests and 66 focused checks passed. The release is scoped to
   manual macOS use and the observed BB execution. Automatic request admission, native host/plugin
   activation and native Windows/Linux execution remain unverified. Private shipment does not
   close the remaining human acceptance issues.

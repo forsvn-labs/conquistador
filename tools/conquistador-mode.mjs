@@ -1,4 +1,4 @@
-import { constants, closeSync, existsSync, lstatSync, mkdirSync, openSync, readFileSync, readSync, renameSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, lstatSync, mkdirSync, readFileSync, renameSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname, isAbsolute, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { advisory, readConfig } from './proactive.mjs';
@@ -238,39 +238,41 @@ export function applyMode(action, options) {
 }
 
 function readStdinLimited() {
-  let fd;
-  try {
-    fd = openSync('/dev/fd/0', constants.O_RDONLY | constants.O_NONBLOCK);
-  } catch {
-    return null;
-  }
-  try {
-    const bytes = Buffer.alloc(8192);
+  return new Promise(resolveInput => {
+    const chunks = [];
     let length = 0;
-    while (length < bytes.length) {
-      let count;
+    const finish = value => {
+      clearTimeout(deadline);
+      process.stdin.removeListener('data', onData);
+      process.stdin.removeListener('end', onEnd);
+      process.stdin.removeListener('error', onError);
+      process.stdin.destroy();
+      resolveInput(value);
+    };
+    const onData = chunk => {
+      length += chunk.length;
+      if (length >= 8192) return finish(null);
+      chunks.push(chunk);
+    };
+    const onError = () => finish(null);
+    const onEnd = () => {
       try {
-        count = readSync(fd, bytes, length, bytes.length - length, null);
-      } catch (error) {
-        if (error.code === 'EAGAIN' || error.code === 'EWOULDBLOCK') break;
-        return null;
-      }
-      if (!count) break;
-      length += count;
-    }
-    if (!length || length === bytes.length) return null;
-    const value = JSON.parse(new TextDecoder('utf-8', { fatal: true }).decode(bytes.subarray(0, length)));
-    return isObject(value) ? value : null;
-  } catch {
-    return null;
-  } finally {
-    closeSync(fd);
-  }
+        const value = JSON.parse(new TextDecoder('utf-8', { fatal: true }).decode(Buffer.concat(chunks)));
+        finish(isObject(value) ? value : null);
+      } catch { finish(null); }
+    };
+    // Read the supplied stream directly: Linux cannot reopen a stdin socket through /dev/fd/0.
+    // Require complete input within a deadline; partial or open streams must never inject advice.
+    const deadline = setTimeout(() => finish(null), 1000);
+    process.stdin.on('data', onData);
+    process.stdin.once('end', onEnd);
+    process.stdin.once('error', onError);
+  });
 }
 
 export function handleHostEvent({ host, event, config, input } = {}) {
   if (host !== SUPPORTED_HOST || !Object.hasOwn(HOST_EVENTS, event)) fail('Unsupported host event.');
-  const payload = input === undefined ? readStdinLimited() : input;
+  const payload = input;
   // Missing or truncated input must never bypass the host's recursion flag.
   if (!isObject(payload) || payload.hook_event_name !== HOST_EVENTS[event]) return {};
   if (event === 'before-delivery' && payload.stop_hook_active !== false) return {};
@@ -285,7 +287,7 @@ export function handleHostEvent({ host, event, config, input } = {}) {
   };
 }
 
-export function main(args) {
+export function main(args, input) {
   const options = {};
   const [action, ...rest] = args;
   if (action === '--handle') {
@@ -293,7 +295,7 @@ export function main(args) {
       if (!['--host', '--event', '--config'].includes(rest[i]) || options[rest[i].slice(2)] !== undefined || !rest[i + 1]) fail('Invalid mode handle arguments.');
       options[rest[i].slice(2)] = rest[i + 1];
     }
-    return handleHostEvent(options);
+    return handleHostEvent({ ...options, input });
   }
   if (!['enable', 'disable', 'status', 'remove'].includes(action)) fail('Usage: enable|disable|status|remove --host HOST --project ABS [--config ABS] [--events LIST]');
   for (let i = 0; i < rest.length; i += 2) {
@@ -310,7 +312,8 @@ export function main(args) {
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   try {
-    const value = main(process.argv.slice(2));
+    const input = process.argv[2] === '--handle' ? await readStdinLimited() : undefined;
+    const value = main(process.argv.slice(2), input);
     process.stdout.write(`${JSON.stringify(value)}\n`);
   } catch {
     // Parser and filesystem errors can include private configuration content or paths.

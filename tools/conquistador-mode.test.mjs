@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { mkdtempSync, mkdirSync, readFileSync, rmSync, writeFileSync, existsSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { spawnSync } from 'node:child_process';
+import { spawn, spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { HOST_EVENTS, applyMode, handleHostEvent, hostSupport, inspectMode } from './conquistador-mode.mjs';
 
@@ -205,4 +205,34 @@ test('status requires an enabled event that is actually registered', t => {
   const { dir, config } = project(t);
   writeFileSync(config, JSON.stringify({ schemaVersion: 1, enabled: true, events: ['results-updated'] }));
   assert.equal(applyMode('enable', { host: 'claude-code', project: dir, config }).state, 'registered-disabled');
+});
+
+test('hook CLI accepts complete chunked input and bounds a producer that leaves stdin open', async t => {
+  const { config } = project(t);
+  async function run(closeInput) {
+    const child = spawn(process.execPath, [script, '--handle', '--host', 'claude-code',
+      '--event', 'session-start', '--config', config], { stdio: ['pipe', 'pipe', 'pipe'] });
+    let stdout = '', stderr = '';
+    child.stdout.on('data', chunk => { stdout += chunk; });
+    child.stderr.on('data', chunk => { stderr += chunk; });
+    const result = new Promise((resolve, reject) => {
+      child.once('error', reject);
+      child.once('close', (code, signal) => resolve({ code, signal, stdout, stderr }));
+    });
+    const guard = setTimeout(() => child.kill(), 4000);
+    child.stdin.on('error', () => {});
+    child.stdin.write('{"hook_event_name":');
+    if (closeInput) setTimeout(() => child.stdin.end('"SessionStart"}'), 25);
+    else child.stdin.write('"SessionStart"}');
+    try { return await result; }
+    finally { clearTimeout(guard); child.stdin.destroy(); }
+  }
+  const complete = await run(true);
+  assert.equal(complete.code, 0);
+  assert.equal(complete.stderr, '');
+  assert.equal(JSON.parse(complete.stdout).hookSpecificOutput.hookEventName, 'SessionStart');
+  const unclosed = await run(false);
+  assert.equal(unclosed.code, 0);
+  assert.equal(unclosed.stderr, '');
+  assert.deepEqual(JSON.parse(unclosed.stdout), {});
 });
