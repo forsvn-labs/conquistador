@@ -7,7 +7,8 @@ output, human acceptance, rights disposition and release authority require separ
 ## 2026-09-17, 0.0.5 private alpha
 
 - Fifth private release, continuing the dogfood sequence at
-  [`v0.0.5`](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.5) on `private-alpha`.
+  [`v0.0.5`](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.5) from
+  `1010e865378302aa7da5ad062b957444979f47cf` on `private-alpha`.
   Product, plugin, host, agent and MCP versions now agree on `0.0.5`. Historical tags retain
   their bytes. Public alpha remains planned for `0.1.0`; see the historical tag conflict in VERSIONS.
 - Ships the complete project operator with manual activation, one discoverable parent and 38
@@ -33,6 +34,10 @@ output, human acceptance, rights disposition and release authority require separ
 - The private prerelease carries fresh ZIP, npm tarball, SHA256SUMS and exact-commit assembly.json.
   The assembly remains an UNBOUND local packaging record. GitHub publication is recorded separately;
   neither the assembly nor provider draft review establishes human acceptance.
+- Final source, ZIP, npm tarball, Bun tarball and immutable private-Git installation lifecycles all
+  passed with matching managed digest `8c97f61f182ebacacc73da50ccac95837fe6d9feda9ae5b75f6feb9705316763`.
+  All receiving projects were empty after removal. The final ZIP completed a six-context BB run
+  through correction and passing re-review. [Linux CI passed](https://github.com/forsvn-labs/conquistador/actions/runs/35181792784).
 
 ## 0.1.0-dogfood.4 private prerelease
 
