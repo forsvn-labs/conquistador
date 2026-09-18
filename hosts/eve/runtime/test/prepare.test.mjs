@@ -1,6 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtemp, readFile, mkdir, writeFile, symlink, stat, rm } from 'node:fs/promises';
+import { mkdtemp, readFile, mkdir, writeFile, symlink, stat, rm, realpath } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { prepareJob } from '../../jobs.mjs';
@@ -9,7 +10,7 @@ const source = fileURLToPath(new URL('../../../../', import.meta.url));
 const baseOptions = { source, owner: 'test-owner', model: 'test/model' };
 
 test('prepare copies canonical bytes and pinned lock into an unstarted private native app', async t => {
-  const parent = await mkdtemp('/private/tmp/conquistador-eve-');
+  const parent = await mkdtemp(join(await realpath(tmpdir()), 'conquistador-eve-'));
   t.after(() => rm(parent, { recursive: true, force: true }));
   const destination = join(parent, 'app');
   const result = await prepareJob({ ...baseOptions, destination });
@@ -28,7 +29,7 @@ test('prepare copies canonical bytes and pinned lock into an unstarted private n
 });
 
 test('prepare rejects symlinked skills and invalid destinations before writes', async t => {
-  const parent = await mkdtemp('/private/tmp/conquistador-eve-');
+  const parent = await mkdtemp(join(await realpath(tmpdir()), 'conquistador-eve-'));
   t.after(() => rm(parent, { recursive: true, force: true }));
   const local = join(parent, 'source');
   await mkdir(local);

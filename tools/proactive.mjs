@@ -1,10 +1,13 @@
 import { constants, openSync, fstatSync, readSync, closeSync } from 'node:fs';
-import { resolve } from 'node:path';
-import { pathToFileURL } from 'node:url';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath, pathToFileURL } from 'node:url';
+import { selectRequestContext } from './context-selection.mjs';
 
 export const MAX_CONFIG_BYTES = 4096;
+const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const advice = Object.freeze({
   'session-start': 'Route through /conquistador to identify the current user outcome and select only the relevant available capabilities. Offer one useful next step within the existing user scope.',
+  'prompt-submitted': null,
   'before-delivery': 'Route through /conquistador to review the current deliverable for usefulness, evidence gaps, and the smallest relevant quality checks before returning it.',
   'results-updated': 'Route through /conquistador to assess results already available in the authorized conversation and suggest one bounded next step. Do not infer missing results.',
 });
@@ -16,7 +19,7 @@ export function validateConfig(config) {
   const keys = Object.keys(config);
   if (keys.length !== 3 || !['schemaVersion', 'enabled', 'events'].every(key => Object.hasOwn(config, key))) fail();
   if (config.schemaVersion !== 1 || typeof config.enabled !== 'boolean' || !Array.isArray(config.events)) fail();
-  if (config.events.length > 3 || new Set(config.events).size !== config.events.length) fail();
+  if (config.events.length > 4 || new Set(config.events).size !== config.events.length) fail();
   if (!config.events.every(event => typeof event === 'string' && Object.hasOwn(advice, event))) fail();
   return config;
 }
@@ -42,10 +45,19 @@ export function readConfig(path) {
   }
 }
 
-export function advisory(event, config) {
+export function advisory(event, config, { prompt, packageRoot = root } = {}) {
   if (typeof event !== 'string' || !Object.hasOwn(advice, event)) fail();
   if (config !== undefined) validateConfig(config);
   const enabled = config !== undefined && config.enabled && config.events.includes(event);
+  if (enabled && event === 'prompt-submitted') {
+    const selected = selectRequestContext(prompt, { root: packageRoot });
+    return {
+      schemaVersion: 1,
+      event,
+      enabled,
+      instructions: selected.action === 'route' ? [selected.context] : [],
+    };
+  }
   return {
     schemaVersion: 1,
     event,

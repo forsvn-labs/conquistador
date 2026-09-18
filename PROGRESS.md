@@ -1,5 +1,47 @@
 # Product progress
 
+## Private-alpha 0.0.9 release candidate
+
+Conquistador can now route an ordinary submitted prompt against the methods that are actually
+installed. The deterministic selector reads existing method metadata, capability labels, domain
+restrictions, workflows, specialist roles, and contained resources. It injects a bounded context
+with at most three methods, one matching composition workflow, one role, short purpose excerpts,
+the installed package root, and exact contained paths. The parent is told to read the complete
+selected files and use relevant host tools, connections, and isolated specialist contexts. It
+abstains on unrelated coding, vague prompts, exclusions, routing-metadata requests, invalid input,
+an operator profile set to `off`, and omitted domain capabilities. It does not echo the submitted
+prompt, scan project artifacts, call a model or network, execute work, or grant external authority.
+
+The existing optional mode now connects `UserPromptSubmit` as `prompt-submitted` for both Codex and
+Claude Code. It owns only its handlers in `.codex/hooks.json` or
+`.claude/settings.local.json`, preserves unrelated settings, and supports status, disable, removal,
+bounded input, and Stop recursion protection. Installation remains inactive until the operator
+enables the selected events. Codex additionally requires the user to review the project and exact
+hook definition in its trust flow. Compact skill, plugin, and operator packages include the selector
+and its loader dependencies. The parent and compact entry contracts now tell the agent how to use
+injected context without claiming a specialist ran.
+
+An Astra design review recommended the bounded metadata selector, short excerpts plus exact paths,
+domain-aware abstention, and direct `UserPromptSubmit` integration. A live read-only smoke test with
+Codex CLI 0.154.0 and GPT-6 Astra then staged a complete operator in a temporary trusted project.
+After Codex's project and hook review, a normal copy request caused the agent to read the staged
+parent, selected `write-copy` method, and method resources. Its final response reproduced a synthetic
+marker available only in the hook-injected excerpt. Temporary trust records and the test project
+were removed afterward. This observes one Codex path; it does not prove Claude activation, broad
+routing quality, or human acceptance.
+
+Validation passed on macOS ARM64 with Node 24.21.0:
+
+- `npm run build` completed after the worktree's locked dependencies were bootstrapped.
+- `npm test` passed all 711 checks: 187 host/tooling, 294 runtime, 167 catalog, and 63 evaluation
+  tests.
+- The focused selector, proactive helper, host-mode, and staged-install run passed all 33 checks.
+
+The user authorized this private-alpha shipment. Version 0.0.9 carries the request-context selector
+and opt-in Codex and Claude Code hook adapters; the immutable v0.0.8 release remains unchanged.
+Exact release commit, artifacts, checksums, remote CI, and the private-Git lifecycle belong in the
+post-release shipping record.
+
 ## Private-alpha 0.0.8 shipped
 
 The guide now accepts several compatible integrations and host choices. Space toggles choices;

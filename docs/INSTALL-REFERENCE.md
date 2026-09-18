@@ -5,7 +5,7 @@ the direct commands for local source copies, native plugin managers, runtime ope
 containers. Use the original installer to update and remove a copy. Full skill and plugin packages
 include all 38 outcome methods; domain and standalone method packages can contain fewer.
 
-Version 0.0.8 is the current shipped private alpha. See INSTALL.md for the persistent CLI and guided setup. Use its immutable tag or verified release tarball.
+Version 0.0.9 is prepared as the next private alpha. See INSTALL.md for the persistent CLI and guided setup. Use its immutable tag or verified release tarball only after the release is visible.
 `private: true` blocks registry publication; private Git and local package execution remain possible. See [package verification](../INSTALL.md#verify-the-package).
 
 For Git acquisition, use the fixed release tag or its full source commit. Your GitHub account must
@@ -261,9 +261,10 @@ instructions to Conquistador. It cannot register hooks, run a schedule, access a
 authorize an action. Installation leaves it disabled. Installing methods grants no new permission
 to publish, spend, persist learning or submit feedback.
 
-Claude Code can also opt into Conquistador mode through `tools/conquistador-mode.mjs`, which writes
-only owned hooks into `.claude/settings.local.json`. See [Proactive help](PROACTIVE.md#optional-conquistador-mode-for-claude-code).
-Grok Bot and Eve have no mode adapter.
+Codex and Claude Code can opt into Conquistador mode through `tools/conquistador-mode.mjs`, which
+writes only owned hooks into `.codex/hooks.json` or `.claude/settings.local.json`. See
+[Proactive help](PROACTIVE.md#optional-conquistador-mode-for-codex-and-claude-code). Grok Bot and
+Eve have no mode adapter.
 
 ## Optional runtime, terminal chat and MCP
 
@@ -321,7 +322,7 @@ a stable distribution for runtime MCP. It creates dependencies only in the chose
 setup from the receiving project:
 
 ```sh
-npm install --global --prefix /absolute/path/conquistador-cli --ignore-scripts /absolute/path/forsvn-conquistador-0.0.8.tgz
+npm install --global --prefix /absolute/path/conquistador-cli --ignore-scripts /absolute/path/forsvn-conquistador-0.0.9.tgz
 /absolute/path/conquistador-cli/bin/conquistador setup
 ```
 

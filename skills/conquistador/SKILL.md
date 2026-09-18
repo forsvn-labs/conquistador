@@ -2,7 +2,7 @@
 name: conquistador
 description: "Use /conquistador as the master agent for growth, GTM, sales, marketing, product, and knowledge work. Turn one request into a finished result. When the task needs the user's CRM, warehouse, ads, or docs, help install Executor and connect that stack so a new user can get going. Keep publishing, spend, credentials, and other consequential actions behind explicit human approval."
 metadata:
-  version: 2.9.1
+  version: 2.9.2
 
 ---
 
@@ -53,6 +53,12 @@ the user clearly changes direction. The installed operator profile defaults to m
 Project routing requires a host adapter that calls admitRequest with an explicit project setting.
 Installation does not register that adapter. The off setting disables all admission through it. It never starts a daemon, watcher, transcript
 collector, or silent instruction-file edit.
+
+An approved request-time hook may provide `<conquistador-request-context>` with a bounded method,
+workflow, role, and resource selection. Treat it as routing advice. Read the complete selected files
+before substantive work, then use the available tools, connections, and isolated specialist support
+that materially help finish the user's request. The hook does not prove that a specialist ran or
+grant any external-action authority.
 
 The parent owns coordination. A delegated specialist cannot delegate again, widen the assignment, or
 authorize publication, spend, credentials, deployment, sends, or external writes. Do not claim that a

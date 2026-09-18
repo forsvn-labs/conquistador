@@ -1,18 +1,18 @@
 # Opt-in proactive advice
 
 `tools/proactive.mjs` is a host-neutral local helper for Node 24. An operator can connect
-explicit host events to this helper. It returns static advice that routes the current task
-through `/conquistador`. The parent skill selects the relevant available capabilities.
-The helper does not load skills, inspect results, or perform the suggested work.
+explicit host events to this helper. Session and delivery events return static advice. The
+`prompt-submitted` event uses `tools/context-selection.mjs` to rank the installed method metadata,
+then returns a bounded request context with up to three capabilities, one composition workflow,
+one specialist role, and a few contained resources. It does not execute the selected work.
 
 This is the optional hook input for Conquistador mode. It supplies an instruction to the parent. It
 does not create specialist agents. After the host delivers the instruction, the parent may use
 specialist team execution only if the host also exposes agent or worker contexts.
 
 The helper is disabled by default. Installation does not activate host hooks or change user
-host configuration. Native activation on any named platform remains unverified. Local tests
-prove only the generic helper contract. A platform-specific activation claim requires official
-evidence obtained through Executor and a separately verified integration.
+host configuration. The supported hook shapes come from the official host references below. One
+read-only Codex 0.154.0 smoke test observed the injected context; Claude Code remains unverified.
 
 ## Enable selected events
 
@@ -23,7 +23,7 @@ three fields. Do not place credentials, artifact paths, transcripts, or commands
 {
   "schemaVersion": 1,
   "enabled": true,
-  "events": ["session-start", "before-delivery", "results-updated"]
+  "events": ["session-start", "prompt-submitted", "before-delivery", "results-updated"]
 }
 ```
 
@@ -45,12 +45,14 @@ Flag order is fixed. The only accepted forms are `--event EVENT` and
 | Event | Advice |
 | --- | --- |
 | `session-start` | Identify the current outcome and offer one useful next step. |
+| `prompt-submitted` | Select relevant installed methods and resources from the submitted prompt. |
 | `before-delivery` | Review the deliverable and evidence gaps before returning it. |
 | `results-updated` | Assess results already available in the authorized conversation and suggest one next step. |
 
 A host adapter must map its event to one of these fixed names and pass an argument array to
-Node. Do not interpolate host event data into shell commands. This helper accepts no event
-payload and never reads stdin. A results event cannot supply metrics, artifact paths, or prompts.
+Node. Do not interpolate host event data into shell commands. The generic CLI never reads stdin.
+A host adapter imports `advisory` and passes the prompt through its explicit options object, or uses
+one of the hook adapters below. A results event cannot supply metrics or artifact paths.
 
 ## Output contract
 
@@ -60,9 +62,11 @@ Successful invocations exit with code 0 and emit one JSON line to stdout. Disabl
 {"schemaVersion":1,"event":"session-start","enabled":false,"instructions":[]}
 ```
 
-Enabled output has `enabled: true` and exactly two static instruction strings. The first
-routes through `/conquistador`; the second preserves user scope and human authority.
-Every supported response is less than 1 KiB. Output contains no config path or config content.
+Enabled static output has `enabled: true` and two instruction strings. Matched prompt output has one
+`<conquistador-request-context>` string. It names contained package paths and short method excerpts,
+then tells the parent to read the complete selected files and use relevant host tools and specialist
+support. Prompt context is capped at 7,500 characters. Output contains no config path, config
+content, submitted prompt, transcript path, or project artifact content.
 Treat these strings as advisory context, never as shell code, approval, or an action request.
 
 Invalid input exits with code 2, emits no stdout, and prints a fixed diagnostic to stderr.
@@ -77,9 +81,12 @@ remain operator-controlled. Reads remain bounded if the file grows during invoca
 The path argument is limited to 4,096 UTF-8 bytes. Unknown fields, unsupported schema versions,
 invalid types, unknown events, and duplicate entries in `events` are errors.
 
-Each invocation reads only the explicitly supplied configuration, if present. It performs
-no filesystem writes, network or model calls, scheduling, daemon work, artifact or secret
-discovery, approval or action submission, or external dispatch. It does not edit host config.
+Each invocation reads only the explicitly supplied configuration and installed Conquistador package,
+if present. Request selection reads method metadata, the selected method bodies, and their contained
+resource links. It honors `domain-restriction.json` and an operator profile set to `off`. It does not
+scan project files, transcripts, user artifacts, or private knowledge roots. It performs no
+filesystem writes, network or model calls, scheduling, daemon work, secret discovery, approval or
+action submission, or external dispatch. It does not edit host config.
 The operator must supply a dedicated config file, not a user artifact or secret file.
 
 There is no persistence, deduplication, or rate limiter. Repeated events return the same advice.
@@ -91,25 +98,31 @@ no evidence of human review, live provider operation, or native host compatibili
 From the complete distribution or source checkout with Node 24, run:
 
 ```sh
-node --test tools/proactive.test.mjs
+node --test tools/context-selection.test.mjs tools/proactive.test.mjs tools/conquistador-mode.test.mjs
 ```
 
 Staged skill, plugin and agent installs contain the helper and guide, not this test file.
 
 Tests use local synthetic configurations and child processes. They cover disabled defaults,
-event selection, validation, bounded reads and output, non-regular files, ignored stdin,
-and unchanged fixture files. They make no live calls.
+event selection, method distinctions, abstention, source and staged layouts, domain restrictions,
+bounded reads and output, non-regular files, ignored CLI stdin, and unchanged fixture files. They
+make no live calls.
 
-## Optional Conquistador mode for Claude Code
+## Optional Conquistador mode for Codex and Claude Code
 
-`tools/conquistador-mode.mjs` maps `session-start` and `before-delivery` to Claude Code's
-`SessionStart` and `Stop` hooks in `.claude/settings.local.json`. Installation leaves mode disabled.
-The current [Claude hooks reference](https://code.claude.com/docs/en/hooks#stop-decision-control)
-documents context feedback for both events. Native activation remains unverified.
+`tools/conquistador-mode.mjs` maps `session-start`, `prompt-submitted`, and `before-delivery` to
+`SessionStart`, `UserPromptSubmit`, and `Stop`. Codex stores the owned project hooks in
+`.codex/hooks.json`; Claude Code stores them in `.claude/settings.local.json`. Installation leaves
+mode disabled. The current [Codex hooks reference](https://developers.openai.com/codex/hooks) and
+[Claude hooks reference](https://code.claude.com/docs/en/hooks#userpromptsubmit-decision-control)
+document prompt input and context feedback. Codex must trust the project hook configuration and the
+exact hook definition before it will run project-local hooks. Codex 0.154.0 delivered the selected
+staged paths and excerpt in one read-only smoke test. Claude Code activation remains unverified.
 
-`results-updated` remains a generic helper event. The Claude adapter refuses to register it because
-`TaskCompleted` has no documented context-advice output. Enabling or removing mode also removes
-that older registration when it belongs to this installation, preserving unrelated hooks.
+`results-updated` remains a generic helper event. The hook adapters refuse to register it because
+neither supported host documents a matching context-advice event. Enabling or removing mode also
+removes the older Claude `TaskCompleted` registration when it belongs to this installation,
+preserving unrelated hooks.
 
 From a complete distribution or an install that includes the helper:
 
@@ -118,19 +131,27 @@ node /absolute/install/tools/conquistador-mode.mjs enable --host claude-code --p
 node /absolute/install/tools/conquistador-mode.mjs status --host claude-code --project /absolute/project --config /absolute/local/proactive.json
 node /absolute/install/tools/conquistador-mode.mjs disable --host claude-code --project /absolute/project --config /absolute/local/proactive.json
 node /absolute/install/tools/conquistador-mode.mjs remove --host claude-code --project /absolute/project
+
+node /absolute/install/tools/conquistador-mode.mjs enable --host codex --project /absolute/project --config /absolute/local/proactive.json
+node /absolute/install/tools/conquistador-mode.mjs status --host codex --project /absolute/project --config /absolute/local/proactive.json
+node /absolute/install/tools/conquistador-mode.mjs disable --host codex --project /absolute/project --config /absolute/local/proactive.json
+node /absolute/install/tools/conquistador-mode.mjs remove --host codex --project /absolute/project
 ```
 
-Use `--events session-start` to limit registration to session start. The default registers both
-supported events; the operator config must also enable an event before it emits advice.
+Use `--events prompt-submitted` to register only request-time selection. The default registers all
+three supported events; the operator config must also enable an event before it emits advice.
+Enabling this hook is the explicit opt-in to request-time routing even when the installed operator
+profile is `manual`. An operator profile set to `off` still prevents selection.
 
-The handler requires matching `hook_event_name` input and an explicit `stop_hook_active: false`
-for Stop advice. Recursive, missing, malformed, mismatched or oversized input returns `{}`.
-Input reads are nonblocking and limited to less than 8 KiB; partial or unavailable input suppresses
-advice. Handler errors emit a fixed diagnostic and exit 1 so they cannot block completion or expose
+The handler requires matching `hook_event_name` input, a bounded prompt for `UserPromptSubmit`, and
+an explicit `stop_hook_active: false` for Stop advice. Recursive, missing, malformed, mismatched or
+oversized input returns `{}`. Input reads are nonblocking and limited to less than 64 KiB; prompts
+are limited to 32,000 UTF-8 bytes. Partial or unavailable input suppresses advice. Handler errors
+emit a fixed diagnostic and exit 1 so they cannot block completion or expose
 configuration text. It does not create specialists, edit unrelated host settings, or enable Grok Bot or Eve. Those remain
 experimental imports without a mode adapter. `status` and `disable` use the config path stored in
 the owned hooks. A different `--config` is an error. `status` without that registered file is
 `unknown`; it does not report another file's enabled flag. Status reports enabled only when a
-registered event is also enabled in that config. The current official reference was read on
-2026-09-15 through web access. Native activation and source verification through Executor remain
-unverified. No documentation read establishes delivery in an installed Claude version.
+registered event is also enabled in that config. The current official references were read on
+2026-09-18 through web access. The observed Codex smoke does not establish another installed host
+version, Claude Code delivery, broad routing quality, or human acceptance.

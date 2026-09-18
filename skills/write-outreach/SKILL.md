@@ -1,8 +1,8 @@
 ---
 name: write-outreach
-description: "Create signal-led outreach and reply handling. Use for cold email, founder outreach, partnership or sales messages, LinkedIn or other DMs, proposals, follow-ups, inbound reply handling, deliverability, compliance, or planning how future qualified conversations will be judged."
+description: "Create signal-led outreach sequences and reply handling. Use for cold email, founder outreach, partnership or sales messages, LinkedIn DMs, other direct messages, proposals, follow-ups, inbound reply handling, deliverability, compliance, or planning how future qualified conversations will be judged."
 metadata:
-  version: 2.1.0
+  version: 2.1.1
 
 ---
 

@@ -21,15 +21,19 @@ function project(t) {
   const dir = mkdtempSync(join(tmpdir(), 'mode project '));
   t.after(() => rmSync(dir, { recursive: true, force: true }));
   const config = join(dir, 'proactive.json');
-  writeFileSync(config, JSON.stringify({ schemaVersion: 1, enabled: true, events: ['session-start', 'before-delivery', 'results-updated'] }));
+  writeFileSync(config, JSON.stringify({ schemaVersion: 1, enabled: true, events: ['session-start', 'prompt-submitted', 'before-delivery', 'results-updated'] }));
   return { dir, config, settings: join(dir, '.claude/settings.local.json') };
 }
 
-test('only Claude Code is offered; Grok Bot and Eve stay experimental', () => {
+test('Codex and Claude Code are offered; Grok Bot and Eve stay experimental', () => {
   assert.equal(hostSupport('claude-code').supported, true);
+  assert.equal(hostSupport('claude-code').nativeActivationVerified, false);
+  assert.equal(hostSupport('codex').supported, true);
+  assert.equal(hostSupport('codex').nativeActivationVerified, true);
+  assert.equal(hostSupport('codex').settings, '.codex/hooks.json');
   assert.equal(hostSupport('grok-bot').supported, false);
   assert.equal(hostSupport('eve').supported, false);
-  assert.match(hostSupport('cursor').explanation, /Claude Code/);
+  assert.match(hostSupport('cursor').explanation, /Codex and Claude Code/);
 });
 
 test('enable maps host events, preserves unrelated settings, and disable leaves registration', t => {
@@ -38,12 +42,14 @@ test('enable maps host events, preserves unrelated settings, and disable leaves 
   writeFileSync(settings, JSON.stringify({ permissions: { allow: ['Read'] }, hooks: { PreToolUse: [{ hooks: [{ type: 'command', command: 'echo keep' }] }] } }));
   const enabled = applyMode('enable', { host: 'claude-code', project: dir, config });
   assert.equal(enabled.state, 'enabled');
+  assert.equal(enabled.nativeActivationVerified, false);
   const stored = JSON.parse(readFileSync(settings, 'utf8'));
-  assert.deepEqual(Object.keys(HOST_EVENTS).sort(), ['before-delivery', 'session-start']);
+  assert.deepEqual(Object.keys(HOST_EVENTS).sort(), ['before-delivery', 'prompt-submitted', 'session-start']);
   assert.equal(stored.hooks.SessionStart[0].hooks[0].command.includes('--handle'), true);
   assert.equal(stored.hooks.SessionStart[0].hooks[0].command.startsWith(`'${process.execPath}' `), true);
   assert.equal(stored.hooks.SessionStart[0].hooks[0].command.includes(`'${script}'`), true);
   assert.equal(stored.hooks.Stop[0].hooks[0].command.includes('before-delivery'), true);
+  assert.equal(stored.hooks.UserPromptSubmit[0].hooks[0].command.includes('prompt-submitted'), true);
   assert.equal(stored.hooks.TaskCompleted, undefined);
   assert.deepEqual(stored.hooks.PreToolUse, [{ hooks: [{ type: 'command', command: 'echo keep' }] }]);
   assert.deepEqual(stored.permissions, { allow: ['Read'] });
@@ -55,6 +61,39 @@ test('enable maps host events, preserves unrelated settings, and disable leaves 
   const leftover = JSON.parse(readFileSync(settings, 'utf8'));
   assert.equal(leftover.hooks.SessionStart, undefined);
   assert.deepEqual(leftover.hooks.PreToolUse, [{ hooks: [{ type: 'command', command: 'echo keep' }] }]);
+});
+
+test('Codex mode writes owned project hooks and preserves unrelated handlers', t => {
+  const { dir, config } = project(t);
+  const settings = join(dir, '.codex/hooks.json');
+  mkdirSync(join(dir, '.codex'), { recursive: true });
+  writeFileSync(settings, JSON.stringify({
+    description: 'keep this',
+    hooks: { UserPromptSubmit: [{ hooks: [{ type: 'command', command: 'echo keep' }] }] },
+  }));
+  const enabled = applyMode('enable', {
+    host: 'codex', project: dir, config, events: 'prompt-submitted',
+  });
+  assert.equal(enabled.state, 'enabled');
+  assert.equal(enabled.nativeActivationVerified, true);
+  assert.equal(enabled.settings, settings);
+  const stored = JSON.parse(readFileSync(settings, 'utf8'));
+  assert.equal(stored.description, 'keep this');
+  assert.equal(stored.hooks.UserPromptSubmit[0].hooks[0].command, 'echo keep');
+  const owned = stored.hooks.UserPromptSubmit[1].hooks[0];
+  assert.match(owned.command, /--host codex --event prompt-submitted/);
+  assert.equal(owned.additionalContextLimit, 0);
+  const routed = handleHostEvent({
+    host: 'codex', event: 'prompt-submitted', config,
+    input: { hook_event_name: 'UserPromptSubmit', prompt: 'Write a LinkedIn DM sequence for founders.' },
+  });
+  assert.match(routed.hookSpecificOutput.additionalContext, /write-outreach/);
+  const removed = applyMode('remove', { host: 'codex', project: dir });
+  assert.equal(removed.state, 'disabled');
+  assert.deepEqual(JSON.parse(readFileSync(settings, 'utf8')), {
+    description: 'keep this',
+    hooks: { UserPromptSubmit: [{ hooks: [{ type: 'command', command: 'echo keep' }] }] },
+  });
 });
 
 test('remove keeps another absolute script with the same basename', t => {
@@ -140,6 +179,16 @@ test('handle ignores recursive stop hooks and returns additionalContext for Clau
   const stop = handleHostEvent({ host: 'claude-code', event: 'before-delivery', config, input: { hook_event_name: 'Stop', stop_hook_active: false } });
   assert.equal(stop.hookSpecificOutput.hookEventName, 'Stop');
   assert.match(stop.hookSpecificOutput.additionalContext, /review the current deliverable/);
+  const routed = handleHostEvent({
+    host: 'claude-code', event: 'prompt-submitted', config,
+    input: { hook_event_name: 'UserPromptSubmit', prompt: 'Write a LinkedIn DM sequence for founders.' },
+  });
+  assert.equal(routed.hookSpecificOutput.hookEventName, 'UserPromptSubmit');
+  assert.match(routed.hookSpecificOutput.additionalContext, /write-outreach/);
+  assert.deepEqual(handleHostEvent({
+    host: 'claude-code', event: 'prompt-submitted', config,
+    input: { hook_event_name: 'UserPromptSubmit', prompt: 'Fix a TypeScript error.' },
+  }), {});
 });
 
 test('CLI status and handle emit JSON; unsupported hosts fail closed', t => {
@@ -159,7 +208,7 @@ test('CLI status and handle emit JSON; unsupported hosts fail closed', t => {
 
 test('results-updated cannot register advisory hooks and owned legacy hooks can be removed', t => {
   const { dir, config, settings } = project(t);
-  assert.throws(() => applyMode('enable', { host: 'claude-code', project: dir, config, events: 'results-updated' }), /no Claude context-advice adapter/);
+  assert.throws(() => applyMode('enable', { host: 'claude-code', project: dir, config, events: 'results-updated' }), /no supported hook context adapter/);
   assert.equal(existsSync(settings), false);
   applyMode('enable', { host: 'claude-code', project: dir, config });
   const stored = JSON.parse(readFileSync(settings, 'utf8'));
@@ -180,7 +229,7 @@ test('invalid, missing, oversized and recursive event payloads never inject advi
   for (const input of ['', '{', 'null', '[]', '{}', '{"hook_event_name":"SessionStart"}',
     '{"hook_event_name":"Stop"}', '{"hook_event_name":"Stop","stop_hook_active":"false"}',
     '{"hook_event_name":"Stop","stop_hook_active":true}',
-    JSON.stringify({ hook_event_name: 'Stop', last_assistant_message: 'x'.repeat(9000), stop_hook_active: true })]) {
+    JSON.stringify({ hook_event_name: 'Stop', last_assistant_message: 'x'.repeat(70000), stop_hook_active: true })]) {
     const result = invoke(args, { input });
     assert.equal(result.status, 0);
     assert.deepEqual(JSON.parse(result.stdout), {});
@@ -188,6 +237,10 @@ test('invalid, missing, oversized and recursive event payloads never inject advi
   }
   const disabled = handleHostEvent({ host: 'claude-code', event: 'session-start', input: { hook_event_name: 'SessionStart' } });
   assert.deepEqual(disabled, {});
+  assert.deepEqual(handleHostEvent({
+    host: 'claude-code', event: 'prompt-submitted', config,
+    input: { hook_event_name: 'UserPromptSubmit', prompt: 'x'.repeat(32001) },
+  }), {});
 });
 
 test('hook failures do not block Claude or expose operator configuration', t => {

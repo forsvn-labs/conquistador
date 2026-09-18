@@ -1,11 +1,12 @@
-# Conquistador 0.0.8
+# Conquistador 0.0.9
 
 Conquistador helps your coding agent do growth, marketing, sales, product and knowledge work.
 Give it an outcome and the relevant facts. It selects from 38 methods, names the specialists it
 uses, and returns a draft with review findings. Your coding agent supplies the model and tools.
 
-The current private alpha is
-[v0.0.8](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.8).
+This source is prepared for private alpha `v0.0.9`. Use it only after the
+[private release](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.9) is visible with
+matching artifacts and checksums.
 Private alpha and dogfood are the same `0.0.x` channel. Public alpha starts at `0.1.0`.
 
 ## Install once, use in each project
@@ -13,7 +14,7 @@ Private alpha and dogfood are the same `0.0.x` channel. Public alpha starts at `
 Use Node 24 and a GitHub account with access to this private repository:
 
 ```sh
-npm install -g --ignore-scripts --install-links git+https://github.com/forsvn-labs/conquistador.git#v0.0.8
+npm install -g --ignore-scripts --install-links git+https://github.com/forsvn-labs/conquistador.git#v0.0.9
 ```
 
 Then open a terminal in the project where you want to use it:
@@ -34,7 +35,7 @@ for the current private alpha because the registry package does not exist and pu
 blocked. It becomes the primary command only after the exact public package and clean registry
 lifecycle are verified.
 
-The v0.0.8 setup guide lets you select several compatible
+The v0.0.9 setup guide lets you select several compatible
 installations and hosts with Space, then confirm once. The default is a complete operator in
 `.conquistador/` and a Codex native skill. Add other hosts, plugins or connectors as needed.
 No receiving-project package manifest, dependency or lockfile is added.
@@ -86,8 +87,11 @@ Modified files are preserved. Keep drafts and runtime data outside the owned ins
 Setup checks local completeness and places the skill in the selected host's discovery directory.
 The host loads it in a fresh session. Native discovery and task quality still need a real task in
 that host. Installation starts no watcher, hook or service and grants no external-action authority.
-The BB adapter supports explicit specialist teams with exact-artifact review. Automatic project
-routing requires a host integration. See [execution modes](docs/MASTER-AGENT.md).
+Codex and Claude Code can opt into the project-local context hook in
+[proactive help](docs/PROACTIVE.md): it ranks the installed methods for each prompt and injects the
+relevant method, workflow, resource, and specialist paths. The BB adapter supports explicit
+specialist teams with exact-artifact review. Other automatic project routing requires a host
+integration. See [execution modes](docs/MASTER-AGENT.md).
 
 Work based on supplied facts needs no connected account. If a task needs live access, follow
 [connection setup](docs/INTEGRATIONS.md). Review drafts before use. Publication, spend, sends,
