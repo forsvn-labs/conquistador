@@ -1,16 +1,16 @@
 # Install Conquistador
 
-Version `0.0.9` is prepared for the `private-alpha` channel. It continues the same private delivery
-sequence as dogfood. Public alpha is planned to start at `0.1.0`. Use the
-[private release](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.9) only after it is
-visible, and keep its exact tag, source commit and checksums together. The repository remains
-private and no npm package is published.
+Version `0.0.9` is the shipped private alpha on the `private-alpha` channel. It continues the same
+private delivery sequence as dogfood. Public alpha is planned to start at `0.1.0`. Use the
+[private release](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.9) and keep its
+exact tag, source commit and checksums together. The repository remains private and no npm package
+is published.
 The observed installation platform is macOS with Node 24. Windows/Linux commands below are
 portability guidance; native execution and native host registration still need their own checks.
 
 ## Project operator and native skill, recommended
 
-The commands below use the immutable `v0.0.9` tag after the private release is visible.
+The commands below use the immutable `v0.0.9` tag.
 Use Node 24, npm, Git, and a GitHub account with access to the repository. Install the CLI once:
 
 ```sh

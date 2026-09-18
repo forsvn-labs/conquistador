@@ -4,6 +4,27 @@ No public release is claimed. Implemented but unshipped work is recorded in [PRO
 versions. Verification establishes the stated local scope; live provider operation, useful model
 output, human acceptance, rights disposition and release authority require separate evidence.
 
+## 2026-09-18, 0.0.9 private alpha
+
+- Ninth private release at
+  [`v0.0.9`](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.9) from
+  `60d487476fa504f3473ba3a1429228ca569219d8` on `private-alpha` through
+  [PR #4](https://github.com/forsvn-labs/conquistador/pull/4).
+- Adds a bounded deterministic selector that routes ordinary requests against the methods actually
+  installed and can suggest up to three methods, one workflow, one role, and contained resources.
+- Adds opt-in Codex and Claude Code `UserPromptSubmit` hooks while preserving unrelated host
+  settings, domain restrictions, operator-off state, and explicit external-action authority.
+- Node 24 build and 711 product checks passed locally and on exact-source Linux
+  [run 35305874820](https://github.com/forsvn-labs/conquistador/actions/runs/35305874820). Both
+  optional integration legs passed; the Eve fixture now uses a portable real temp directory.
+- Downloaded release ZIP
+  `f699c43734c40c4039a92bbc217fc50c87f64535f2928b0f88c038febf37868c` and npm tarball
+  `0e51a4f654bbeb3acfe861d074b2f0c89b14720c0d50865c2fbdc8593a96a299` matched the clean source
+  assembly. The authenticated private-Git cache-removal lifecycle passed with all 38 methods and
+  preserved the receiving project.
+- npm registry publication remains disabled. Claude Code activation, native Windows activation,
+  broad routing quality, and human acceptance remain unverified.
+
 ## 2026-09-17, 0.0.8 private alpha
 
 - Eighth private release at

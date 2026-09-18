@@ -1,6 +1,6 @@
 # Product progress
 
-## Private-alpha 0.0.9 release candidate
+## Private-alpha 0.0.9 shipped
 
 Conquistador can now route an ordinary submitted prompt against the methods that are actually
 installed. The deterministic selector reads existing method metadata, capability labels, domain
@@ -37,10 +37,24 @@ Validation passed on macOS ARM64 with Node 24.21.0:
   tests.
 - The focused selector, proactive helper, host-mode, and staged-install run passed all 33 checks.
 
-The user authorized this private-alpha shipment. Version 0.0.9 carries the request-context selector
-and opt-in Codex and Claude Code hook adapters; the immutable v0.0.8 release remains unchanged.
-Exact release commit, artifacts, checksums, remote CI, and the private-Git lifecycle belong in the
-post-release shipping record.
+The user authorized this private-alpha shipment. Version 0.0.9 shipped through
+[PR #4](https://github.com/forsvn-labs/conquistador/pull/4) as a private prerelease from exact
+source `60d487476fa504f3473ba3a1429228ca569219d8`; the immutable v0.0.8 release remains unchanged.
+The Node 24 build and all 711 product checks passed locally. Exact source passed Linux CI in
+[run 35305874820](https://github.com/forsvn-labs/conquistador/actions/runs/35305874820). Both
+optional integration legs passed after the existing Eve fixture was corrected to use a portable
+real temp directory; its 13 tests, native build, and high-severity dependency audit passed.
+
+The clean source commit produced ZIP
+`f699c43734c40c4039a92bbc217fc50c87f64535f2928b0f88c038febf37868c` and npm tarball
+`0e51a4f654bbeb3acfe861d074b2f0c89b14720c0d50865c2fbdc8593a96a299`. Fresh release downloads
+matched both files, `SHA256SUMS`, and `assembly.json` byte for byte. The authenticated private-Git
+`v0.0.9` path installed a durable CLI, survived acquisition-cache removal, reported version 0.0.9,
+passed the 38-method doctor, and completed install, start, update, and uninstall while preserving
+the receiving project's sentinel.
+
+Claude Code activation, native Windows activation, broad routing quality, and human acceptance
+remain separate from these file, host, and lifecycle checks.
 
 ## Private-alpha 0.0.8 shipped
 

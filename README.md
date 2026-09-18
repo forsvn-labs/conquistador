@@ -4,9 +4,8 @@ Conquistador helps your coding agent do growth, marketing, sales, product and kn
 Give it an outcome and the relevant facts. It selects from 38 methods, names the specialists it
 uses, and returns a draft with review findings. Your coding agent supplies the model and tools.
 
-This source is prepared for private alpha `v0.0.9`. Use it only after the
-[private release](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.9) is visible with
-matching artifacts and checksums.
+The current private alpha is
+[v0.0.9](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.9).
 Private alpha and dogfood are the same `0.0.x` channel. Public alpha starts at `0.1.0`.
 
 ## Install once, use in each project
