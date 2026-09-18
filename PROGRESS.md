@@ -1,5 +1,30 @@
 # Product progress
 
+## Unshipped
+
+Recommended onboarding replaces the first-run multi-select with one complete project installation.
+Plain `conquistador` inspects the project, resolves one host, and asks for a single confirmation when
+detection is clear. `--bot`, `--skills`, `--plugin`, and `--mcp` select one integration family.
+`--advanced` keeps the combination guide. The candidate is version 0.0.10. It is not released yet.
+
+The review made adoption and manager scope visible before confirmation, added real preflight to
+shortcut dry runs, refused unresolved duplicate discovery, and preserved skills.sh ownership even
+when its copier carries a Conquistador receipt. Hermes uses the shared transaction with a v2
+project record; current readers retain v1 support. Recovery folders block a new installation until
+inspected. MCP handoffs quote shell arguments and provide client-shaped settings. Default success
+prints one first prompt. Escape returns 0 and Ctrl-C returns 130.
+
+Observed under Node 24.21.0: `npm run build` and `npm test` passed, including 227 host/tooling,
+294 runtime, 167 catalog and 63 evaluation checks. Focused tests cover onboarding, entry dispatch,
+ownership, portability, rollback and MCP protocol behavior. A narrow, no-color terminal smoke
+check observed confirmation, Escape, and Ctrl-C.
+
+The real `skills@1.5.26` manager copied the transformed parent into isolated projects for Claude
+Code, Codex, Cursor and Copilot. Each copy matched all 1,154 staged files and wrote its project
+lockfile. That establishes the manager copy, not native discovery. Hermes scanning/trust/discovery,
+Grok Bot private import, native Windows/Linux behavior and human acceptance remain unverified.
+Plugin and MCP registration remain manual handoffs. The 0.0.10 candidate is not released yet.
+
 ## Private-alpha 0.0.9 shipped
 
 Conquistador can now route an ordinary submitted prompt against the methods that are actually

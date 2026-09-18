@@ -3,7 +3,7 @@ import { join } from 'node:path';
 const complete = 'One discoverable parent with all 38 internal methods, manual operator profile, agent contracts and schemas, and BB adapter.';
 export const routes = [
   { id: 'operator', label: 'Complete project operator', targets: ['operator'], mode: 'single-agent', folder: '.conquistador',
-    contents: complete, boundary: 'Shared project files and the explicit BB team adapter. Select native host skills separately in the guide. Your host supplies execution; setup does not register BB or automatic request routing.' },
+    contents: complete, boundary: 'Shared project files and the explicit BB team adapter. Default onboarding selects one host. Use --advanced or --hosts to combine hosts. Your host supplies execution; setup does not register BB or automatic request routing.' },
   { id: 'plugin', label: 'Native host plugin', targets: ['claude-plugin', 'codex-plugin', 'copilot-plugin', 'agent-plugins'], mode: 'plugin', folder: '.conquistador-plugin',
     contents: complete, boundary: 'Prefer your native host manager. Setup prepares a local source only. Claude local scope is project-local; Codex and Copilot registration is user-level. The manager owns activated copies, updates, and removal.' },
   { id: 'skill', label: 'Native host skills', targets: ['codex', 'claude-code', 'copilot', 'cursor', 'skill'], mode: 'conquistador', folder: '.agents/skills/conquistador',

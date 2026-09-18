@@ -1,8 +1,8 @@
 # Install Conquistador
 
-Version `0.0.9` is the shipped private alpha on the `private-alpha` channel. It continues the same
+Version `0.0.10` is the shipped private alpha on the `private-alpha` channel. It continues the same
 private delivery sequence as dogfood. Public alpha is planned to start at `0.1.0`. Use the
-[private release](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.9) and keep its
+[private release](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.10) and keep its
 exact tag, source commit and checksums together. The repository remains private and no npm package
 is published.
 The observed installation platform is macOS with Node 24. Windows/Linux commands below are
@@ -10,11 +10,11 @@ portability guidance; native execution and native host registration still need t
 
 ## Project operator and native skill, recommended
 
-The commands below use the immutable `v0.0.9` tag.
+The commands below use the immutable `v0.0.10` tag.
 Use Node 24, npm, Git, and a GitHub account with access to the repository. Install the CLI once:
 
 ```sh
-npm install -g --ignore-scripts --install-links git+https://github.com/forsvn-labs/conquistador.git#v0.0.9
+npm install -g --ignore-scripts --install-links git+https://github.com/forsvn-labs/conquistador.git#v0.0.10
 ```
 
 In each receiving project, run:
@@ -23,10 +23,11 @@ In each receiving project, run:
 conquistador
 ```
 
-The v0.0.9 guide has multi-selection:
-Space toggles choices, arrows move, and Enter continues. The default selects the complete operator
-and native host skills. Choose one or more hosts, then review all folders before confirming once.
-The complete operator goes into `.conquistador`, with `SKILL.md` at its root. Native skills use:
+Plain `conquistador` inspects this project and installs one complete operator with its matching
+native entry. It chooses the package; you confirm. If host detection is inconclusive, it asks
+which coding agent to use. Architecture choices stay behind `conquistador --advanced` and the
+explicit setup commands below. The complete operator goes into `.conquistador`, with `SKILL.md`
+at its root. Native skills use:
 
 | Coding agent | Project skill |
 | --- | --- |
@@ -35,17 +36,33 @@ The complete operator goes into `.conquistador`, with `SKILL.md` at its root. Na
 | Claude Code | `.claude/skills/conquistador` |
 | Cursor | `.cursor/skills/conquistador` |
 | GitHub Copilot | `.github/skills/conquistador` |
+| Hermes Agent | `.hermes/skills/conquistador` via `conquistador --bot hermes` |
 | Other / files only | Read `.conquistador/SKILL.md` explicitly |
+
+```sh
+conquistador --bot hermes
+conquistador --bot grok-bot
+conquistador --skills [--host HOST]
+conquistador --plugin [--host claude-code|codex|copilot|none]
+conquistador --mcp [--host HOST]
+conquistador --advanced
+```
 
 The operator and selected native skills contain the method library. The operator also includes
 the BB adapter, portable contracts, schemas and profile. These owned copies share one
 update/removal lifecycle. BB uses an explicit project/environment and its chosen provider. It is
-not an alias for Codex. No BB plugin, provider registration or automatic request router is installed. An
-unchanged existing managed skill can be adopted; modified or unowned content is refused. Domain
+not an alias for Codex. No BB plugin, provider registration or automatic request router is installed.
+`--bot hermes` installs the operator plus a Hermes parent skill; `hermes skills trust` remains a
+separate host step and setup does not install Hermes. The local preparation path is tested;
+native Hermes scanning, trust and discovery remain unverified. `--bot grok-bot` prints the official app
+handoff; a private Conquistador installation in Grok Bot has not been verified. An
+unchanged independently managed skill can be adopted when the confirmation names the ownership
+change. Modified, linked, unowned, or skills.sh-managed copies are refused. Domain
 restrictions must agree. A new host session is needed to refresh native discovery. Setup does not
 start automatic project routing, watchers, services or hooks.
 
-For automation, `conquistador install` selects the current project and Codex skill. Use
+For automation, `conquistador install` selects the current project and Codex skill. Adaptive host
+choice belongs to plain `conquistador` and `conquistador setup`. Use
 `--host bb`, `--host cursor`, `--host claude-code`, `--host copilot` or `--host none` to choose differently.
 This checkout also supports `--hosts codex,bb,cursor` for several hosts. During update, it can add
 hosts while retaining existing owned skills. Removing an owned native host requires uninstalling
@@ -59,14 +76,14 @@ npm's cache, remove that dangling global entry before installing the corrected r
 
 ```sh
 npm uninstall -g @forsvn/conquistador
-npm install -g --ignore-scripts --install-links git+https://github.com/forsvn-labs/conquistador.git#v0.0.9
+npm install -g --ignore-scripts --install-links git+https://github.com/forsvn-labs/conquistador.git#v0.0.10
 conquistador version
 ```
 
 The one-time launcher remains available when you do not want a persistent CLI:
 
 ```sh
-npx -y --ignore-scripts --package=git+https://github.com/forsvn-labs/conquistador.git#v0.0.9 conquistador
+npx -y --ignore-scripts --package=git+https://github.com/forsvn-labs/conquistador.git#v0.0.10 conquistador
 ```
 
 Git acquisition can take time before Conquistador starts. Repeated npx invocations may resolve
@@ -79,7 +96,7 @@ and do not need that flag. Check acquisition immediately with `conquistador vers
 For a supplied release tarball, use the same persistent installation:
 
 ```sh
-npm install -g --ignore-scripts /absolute/path/forsvn-conquistador-0.0.9.tgz
+npm install -g --ignore-scripts /absolute/path/forsvn-conquistador-0.0.10.tgz
 conquistador
 ```
 
@@ -96,9 +113,9 @@ authenticate that sender. Keep the tag, full source commit, and checksum togethe
 
 | System | Calculate SHA-256 |
 | --- | --- |
-| macOS | `shasum -a 256 /absolute/path/forsvn-conquistador-0.0.9.tgz` |
-| Linux | `sha256sum /absolute/path/forsvn-conquistador-0.0.9.tgz` |
-| Windows PowerShell | `Get-FileHash -Algorithm SHA256 "C:\Downloads\forsvn-conquistador-0.0.9.tgz"` |
+| macOS | `shasum -a 256 /absolute/path/forsvn-conquistador-0.0.10.tgz` |
+| Linux | `sha256sum /absolute/path/forsvn-conquistador-0.0.10.tgz` |
+| Windows PowerShell | `Get-FileHash -Algorithm SHA256 "C:\Downloads\forsvn-conquistador-0.0.10.tgz"` |
 
 Node/npm must work before the guide can start. A supplied tarball does not require GitHub sign-in
 or Git, but npm may need registry access for package dependencies. No provider account is needed
@@ -268,8 +285,8 @@ listing nor a passing doctor proves activation or output quality. Record observa
 
 | Transport | Command or procedure |
 | --- | --- |
-| Optional persistent CLI | `npm install --global --ignore-scripts /absolute/path/forsvn-conquistador-0.0.9.tgz`, then `conquistador setup` in the receiving project |
-| Bun tarball | `bunx --package /absolute/path/forsvn-conquistador-0.0.9.tgz conquistador setup`; Node 24 remains required by the shebang |
+| Optional persistent CLI | `npm install --global --ignore-scripts /absolute/path/forsvn-conquistador-0.0.10.tgz`, then `conquistador setup` in the receiving project |
+| Bun tarball | `bunx --package /absolute/path/forsvn-conquistador-0.0.10.tgz conquistador setup`; Node 24 remains required by the shebang |
 | Source or ZIP | `node /absolute/path/conquistador-source/runtime/bin/conquistador.js setup` in the receiving project |
 | Exact private Git | `npx -y --ignore-scripts --package=git+https://github.com/forsvn-labs/conquistador.git#COMMIT conquistador setup`; replace `COMMIT` with the full commit from the release assembly record. For a persistent global copy add `--install-links` to `npm install -g`. |
 
@@ -297,11 +314,15 @@ removal, and the same payload checks. [Future installer criteria](docs/INSTALLAT
 <a id="skills"></a>
 ## Host skill integration
 
-For native skill discovery, select the host in the guide or use its `setup install --target` command.
-The optional skills.sh manager writes its own project `skills-lock.json`; use managed setup for
-the no-lockfile path. For a skills.sh-managed parent-first copy, follow the [pinned local-source procedure](docs/INSTALL-REFERENCE.md#skillssh-from-a-local-source).
-That staged compact copy omits the BB adapter. Use the operator or staged plugin for the adapter.
-Never copy only the canonical source `skills/conquistador` folder, which needs sibling methods.
+For native skill discovery, run `conquistador` and confirm the selected host, or use its
+`setup install --target` command. `conquistador --skills --host HOST` stages a transformed parent
+at `.conquistador-skills-source` and invokes the pinned skills.sh copier. That compact copy includes
+all methods and omits the BB adapter and portable schemas. The optional skills.sh manager writes
+its own project `skills-lock.json`; use managed setup for the no-lockfile path. For a skills.sh-managed
+parent-first copy, follow the [pinned local-source procedure](docs/INSTALL-REFERENCE.md#skillssh-from-a-local-source).
+The wrapper refuses an existing host copy or lock entry; use the original manager for updates
+and removal. A failed manager download preserves the staged source and prints a quoted retry
+command for the receiving project. Never copy only the canonical source `skills/conquistador` folder, which needs sibling methods.
 Select the installed skill in a fresh session.
 
 ### Update or remove the skill
@@ -314,14 +335,14 @@ See [host paths and invocation](docs/PLATFORMS.md#coding-agents).
 
 ## Plugins
 
-Use [native host-manager instructions](docs/PLATFORMS.md#plugins). The guide can prepare a local
-plugin source from the supplied distribution before registration. Claude local scope is specific
+Use [native host-manager instructions](docs/PLATFORMS.md#plugins). `conquistador --plugin` prepares
+a local plugin source from the supplied distribution before registration. Claude local scope is specific
 to the receiving project; Codex and Copilot plugin registration is user-level. Host trust and
 permission checks still apply. Conquistador does not bundle an auto-starting MCP server or hook.
 
 ## MCP over stdio
 
-Choose local MCP in the guide, or run:
+Choose local MCP with `conquistador --mcp`, or run:
 
 ```sh
 conquistador setup install --target mcp
@@ -337,7 +358,7 @@ this folder, stop the client, run `setup update --path ABS` through the current 
 replace the client's saved entry with the new connector, and restart it. Modified files still cause
 repair to refuse. Old connector-only receipts are supported and become self-contained on local update.
 
-For runtime MCP, choose the separate guide route and supply an existing service origin plus a stable
+For runtime MCP, use `conquistador --mcp --url ORIGIN` or the `--advanced` guide route and supply an existing service origin plus a stable
 runtime distribution. Cache-backed runtime creation fails before writing. See the
 [runtime bridge instructions](docs/PLATFORMS.md#optional-runtime-bridge). Removing a connector never
 erases service data or stops a shared service.
@@ -346,7 +367,7 @@ erases service data or stops a shared service.
 
 | Problem | Action |
 | --- | --- |
-| Unsupported Node version | Use Node 24 before starting setup |
+| Unsupported Node version | Conquistador needs Node 24. Switch Node versions and rerun this command. |
 | Tarball identity is unclear | Obtain the exact private build and trusted checksum; do not infer identity from its filename |
 | Destination already exists or has edits | Inspect its original owner; preserve edits and select a new folder |
 | Doctor passes but host cannot invoke it | Follow the selected host's activation step and use a fresh session |

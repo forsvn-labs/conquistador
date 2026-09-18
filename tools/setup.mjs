@@ -5,11 +5,10 @@ import { lstatSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, renameSyn
 import { dirname, isAbsolute, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { methodLibrary } from './method-library.mjs';
-import { spawn } from 'node:child_process';
 import { parseKnowledgeRoots, readDomainManifestFile, resolveDomainSelection, resolveKnowledgeRoot } from './domain-package.mjs';
-import { containsPath, shellCommand as formatCommand } from './install-paths.mjs';
+import { containsPath, shellCommand as formatCommand, serviceUrl } from './install-paths.mjs';
 import { targets, projectPaths, routes, defaultPath, describeRoute, targetMode } from './setup-routes.mjs';
-import { projectLifecycle, projectPlan, projectIntegration, inspectProjectSkills, projectSkillOwner, parseHosts, installedHosts, hostFolders, hostLabels } from './project-installation.mjs';
+import { projectLifecycle, projectPlan, projectIntegration, inspectProjectSkills, projectSkillOwner, skillsManagerOwner, parseHosts, installedHosts, hostFolders, hostLabels } from './project-installation.mjs';
 import { runtimeSource, stageMcp } from './setup-mcp.mjs';
 import { pluginNextSteps } from './setup-surfaces.mjs';
 
@@ -34,16 +33,7 @@ function safePath(path) {
   if (containsPath(root, target) || containsPath(target, root)) fail('Choose a dedicated directory outside the distribution.');
   return target;
 }
-function serviceUrl(value) {
-  let url;
-  try { url = new URL(value); } catch { fail('Use an HTTP/HTTPS service origin.'); }
-  if (!/^https?:\/\//.test(value) || /[\s\\?#]/.test(value) || url.username || url.password || url.pathname !== '/' ||
-      !['http:', 'https:'].includes(url.protocol) ||
-      (url.protocol === 'http:' && !['localhost', '127.0.0.1', '[::1]'].includes(url.hostname))) {
-    fail('Use an HTTPS origin or loopback HTTP origin without credentials, path, query, or fragment.');
-  }
-  return url.origin;
-}
+
 function parse(args) {
   const [action, ...rest] = args;
   if (!['install', 'status', 'update', 'uninstall'].includes(action)) fail('Use install, status, update, or uninstall.');
@@ -228,7 +218,13 @@ function removalReminder(mode) {
 function run(options, reminderShown = false, dryRun = false) {
   const mode = options.target ? targetMode(options.target) : undefined;
   const result = inspect(options.legacyPath ?? options.path, mode);
-  if (options.action === 'status') { report(options, result); return; }
+  const manager = skillsManagerOwner(options.path);
+  if (options.action === 'status') {
+    if (manager) console.log(`Local state: ${result.state}. Path: ${options.path}. Owner: skills.sh (${manager}). Use that manager to update or remove this copy.`);
+    else report(options, result);
+    return;
+  }
+  if (manager) fail(`skills.sh owns this copy (${manager}). Use that manager to update or remove it; the copied receipt does not transfer ownership.`);
   if (options.action === 'install') {
     if (result.state !== 'absent') fail('Destination exists. Use status, or choose a new directory.');
     if (['eve', 'grok-bot'].includes(mode)) {
@@ -263,33 +259,28 @@ function run(options, reminderShown = false, dryRun = false) {
   report(options, { ...checked, mode: ownedMode });
   return { ...checked, mode: ownedMode };
 }
-async function guided() {
-  if (!process.stdin.isTTY || !process.stdout.isTTY) fail('Interactive setup requires a terminal. Use conquistador install or setup install --target TARGET --path ABS.');
-  const { runSetupGuide } = await import('./setup-guide.mjs');
-  return runSetupGuide({ cwd: process.cwd(), version: JSON.parse(readFileSync(join(root, 'package.json'))).version,
-    run: args => new Promise((resolvePromise, reject) => {
-      const child = spawn(process.execPath, [join(root, 'tools/setup.mjs'), ...args], { stdio: ['ignore', 'pipe', 'pipe'] });
-      let output = ''; child.stdout.on('data', data => { output += data; }); child.stderr.on('data', data => { output += data; });
-      child.on('error', reject); child.on('close', code => code === 0 ? resolvePromise(output) : reject(Error(output.trim())));
-    }),
-  });
-}
 export const setupHelp = `Usage:
-  conquistador                       Guided installation in the current project
+  conquistador                       Set up the complete operator in this project
+  conquistador --bot [grok-bot|hermes]
+  conquistador --skills [--host HOST]
+  conquistador --plugin [--host claude-code|codex|copilot|none]
+  conquistador --mcp [--host HOST]
+  conquistador --advanced            Combination guide for multiple hosts and custom packages
+  conquistador operator status       Check the installed project operator
   conquistador start                 Show the first task and skill location
   conquistador skills                Browse installed capabilities
-  conquistador setup                 Guided installation in the current project
+  conquistador setup                 Recommended complete installation in the current project
   conquistador setup list [--json]   List routes and capability boundaries
   conquistador setup install [--target TARGET] [--project ABS | --path ABS]
   conquistador setup status|doctor|update|uninstall (--target TARGET | --path ABS)
   conquistador setup doctor --path ABS [--json]
 
-install defaults to .conquistador and a Codex skill in .agents/skills/conquistador;
---host codex|bb|cursor|copilot|claude-code|none selects one host; BB uses operator files, not a native skill.
---hosts codex,bb,cursor selects several hosts and may add hosts during update; existing owned skills stay managed.
+Recommended setup installs the complete operator and one native host entry.
+--host codex|bb|cursor|copilot|claude-code|none selects that host; BB uses operator files, not a native skill.
+install keeps its documented Codex default. Adaptive host choice belongs to conquistador / setup.
+--hosts codex,bb,cursor selects several hosts on explicit install/update; existing owned skills stay managed.
 Append --dry-run to install/update to check paths and ownership without writing files.
 Existing .conquistador-operator copies migrate with operator update.
-install defaults to the complete operator; a target without a path uses its project folder.
 Lifecycle commands require a target or path. operator status|doctor|update|uninstall defaults to
 the project operator. Bare runtime status and doctor keep their existing meaning.
 Legacy --project ABS and --path ABS arguments remain supported.
@@ -302,7 +293,16 @@ Targets: ${Object.keys(targets).join(', ')}, skill:NAME (one explicit specialist
 
 export async function runSetup(args) {
   try {
-    if (Number(process.versions.node.split('.')[0]) !== 24) fail('Use Node 24 for Conquistador setup.');
+    if (Number(process.versions.node.split('.')[0]) !== 24) fail('Conquistador needs Node 24. Switch Node versions and rerun this command.');
+    const mixed = args.some(arg => {
+      if (!arg.startsWith('--')) return false;
+      const name = arg.slice(2).split('=')[0];
+      return ['bot', 'skills', 'plugin', 'mcp'].includes(name);
+    });
+    if (mixed) {
+      console.error('[conquistador-setup] Do not mix --bot, --skills, --plugin, or --mcp with setup commands. Use the top-level flag, or conquistador --advanced.');
+      return 2;
+    }
     if (args[0] === 'list') {
       if (args.length > 2 || (args[1] !== undefined && args[1] !== '--json')) fail('Usage: conquistador setup list [--json]');
       console.log(args[1] === '--json' ? JSON.stringify(routes, null, 2) : routes.map(route =>
@@ -318,9 +318,11 @@ export async function runSetup(args) {
       const options = parse(['status', ...args.slice(1).filter(arg => arg !== '--json')]);
       return runInstallationDoctor(['--path', options.path, ...(args.includes('--json') ? ['--json'] : [])], inspect);
     }
-    if (args.length === 0) return await guided();
-    else if (args.length === 1 && args[0] === '--help') console.log(setupHelp);
-    else {
+    if (args.length === 1 && (args[0] === '--help' || args[0] === '-h')) console.log(setupHelp);
+    else if (args.length === 0 || args[0]?.startsWith('-')) {
+      const { runOnboarding } = await import('./onboarding.mjs');
+      return runOnboarding(args);
+    } else {
       const dryRun = args.includes('--dry-run');
       if (dryRun && (args.filter(arg => arg === '--dry-run').length !== 1 || !['install', 'update'].includes(args[0]))) fail('--dry-run requires install or update.');
       run(parse(args.filter(arg => arg !== '--dry-run')), false, dryRun);

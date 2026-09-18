@@ -3,11 +3,12 @@ import { join, relative, resolve } from 'node:path';
 import { defaultPath, routes, specialistTarget } from './setup-routes.mjs';
 import { hostFolders, hostLabels, installedHosts, projectIntegration } from './project-installation.mjs';
 import { operatorNextSteps, pluginHosts, pluginNextSteps, validateSurfacePlan } from './setup-surfaces.mjs';
+import { cancellableUi } from './onboarding-ui.mjs';
 import { containsPath, shellCommand } from './install-paths.mjs';
 
 // Choices describe compatible uses. Each resulting folder still has one lifecycle owner.
 export async function runSetupGuide({ cwd, version, run, ui }) {
-  ui ??= await import('./vendor/clack.mjs');
+  ui ??= cancellableUi(await import('./vendor/clack.mjs'));
   const completed = [], items = [], notes = [];
   const checked = value => { if (ui.isCancel(value)) throw Object.assign(Error('Cancelled. No files changed.'), { cancelled: true }); return value; };
   const multi = async options => checked(await ui.multiselect({ required: true, ...options }));
@@ -17,8 +18,8 @@ export async function runSetupGuide({ cwd, version, run, ui }) {
     const item = { route, target, path, args: [action, '--target', target, '--path', path, ...extra], ...data };
     items.push(item); return item;
   };
-  ui.intro(`Conquistador ${version}`);
-  ui.log.info(`Growth, marketing, sales, product and knowledge work.\nProject: ${cwd}\nSpace selects more than one option. Enter continues.`);
+  ui.intro(`Conquistador ${version} advanced setup`);
+  ui.log.info(`Combination guide for multiple hosts and custom packages.\nProject: ${cwd}\nSpace selects more than one option. Enter continues. Escape cancels.`);
   try {
     const choices = await multi({ message: 'What would you like to set up?', initialValues: ['operator', 'skill'],
       options: [...routes.map(route => ({ value: route.id, label: route.label, hint: route.id === 'operator' ? 'shared project files and BB adapter' : route.id === 'skill' ? 'Codex, Claude Code, Cursor or Copilot discovery' : undefined })),
@@ -32,7 +33,7 @@ export async function runSetupGuide({ cwd, version, run, ui }) {
     if (choices.includes('operator') || choices.includes('skill')) {
       const native = choices.includes('skill');
       const options = [
-        ...(native ? Object.keys(hostFolders).map(value => ({ value, label: hostLabels[value], hint: hostFolders[value] })) : []),
+        ...(native ? Object.keys(hostFolders).filter(host => host !== 'hermes' || choices.includes('operator')).map(value => ({ value, label: hostLabels[value], hint: hostFolders[value] })) : []),
         ...(native && !choices.includes('operator') && !existingPath ? [{ value: 'skill', label: 'Other host / custom skill folder', hint: 'compact library; host manages discovery' }] : []),
         ...(choices.includes('operator') ? [{ value: 'bb', label: 'BB', hint: 'explicit operator and team adapter; no native skill registration' }] : []),
         ...(!native ? [{ value: 'none', label: 'Other host / files only', hint: 'read .conquistador/SKILL.md explicitly' }] : []),
@@ -41,6 +42,7 @@ export async function runSetupGuide({ cwd, version, run, ui }) {
         initialValues: priorHosts.filter(host => options.some(option => option.value === host)).length ? priorHosts.filter(host => options.some(option => option.value === host)) : [native ? 'codex' : 'none'],
         options, validate: values => values.includes('none') && values.length > 1 ? 'Files only must be selected alone.' : undefined });
       if (hosts.includes('cursor') && hosts.some(host => ['codex', 'claude-code'].includes(host))) notes.push('Cursor also reads Codex and Claude skill folders. Check its refreshed Skills list for duplicate Conquistador entries; each folder retains its stated owner.');
+      if (hosts.includes('hermes') && hosts.includes('codex')) notes.push('Hermes also reads Codex skill folders under .agents/skills. Check for duplicate Conquistador entries; each folder retains its stated owner. Trust remains a separate hermes skills trust step.');
       if (choices.includes('operator') || existingPath) {
         hosts = [...new Set([...priorHosts, ...hosts])].filter(host => host !== 'none');
         if (!hosts.length) hosts = ['none'];
@@ -120,10 +122,10 @@ export async function runSetupGuide({ cwd, version, run, ui }) {
     if (sharedHarness) ui.note('Attach .conquistador/agent/agent.json through your consuming adapter. It shares the operator update/removal lifecycle. JSON files do not register a native agent.', 'Portable package next step');
     ui.outro('Selected files are ready. Follow each host or connector activation step above.'); return 0;
   } catch (error) {
-    if (error.cancelled) { ui.cancel(error.message); return 0; }
+    if (error.cancelled && !completed.length) { ui.cancel(error.message); return error.exitCode ?? 0; }
     ui.log.error(error.message);
     if (completed.length) ui.note(completed.map(item => [item.path, ...['doctor', 'uninstall'].map(action => shellCommand(['conquistador', 'setup', action, '--path', item.path]))].join('\n')).join('\n\n'), 'Completed copies retained');
     ui.outro(completed.length ? 'Setup stopped after a partial installation. Completed copies remain owned; inspect them before continuing.' : 'Setup stopped. Review the error before retrying.');
-    return 1;
+    return error.exitCode ?? 1;
   }
 }

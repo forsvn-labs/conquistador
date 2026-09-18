@@ -9,7 +9,7 @@ export function runStart(args, cwd = process.cwd(), list = false) {
   const current = join(project, '.conquistador');
   const path = existsSync(current) ? current : join(project, '.conquistador-operator');
   if (!existsSync(path)) {
-    console.log('Conquistador is not installed in this project. Run conquistador setup.'); return 1;
+    console.log('Conquistador is not installed in this project. Run conquistador.'); return 1;
   }
   const entry = existsSync(join(path, 'SKILL.md')) ? join(path, 'SKILL.md') : join(path, 'agent/skills/conquistador/SKILL.md');
   const record = projectIntegration(path);

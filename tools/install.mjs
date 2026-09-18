@@ -8,7 +8,7 @@ import { DOMAIN_SCHEMA_VERSION, PARENT_SKILL, RESTRICTION_NAME, REVIEW_SKILL, pa
 import { operatorFiles } from './operator-package.mjs';
 import { containsPath } from './install-paths.mjs';
 import { stageMethodLibrary } from './stage-method-library.mjs';
-import { projectSkillOwner } from './project-installation.mjs';
+import { projectSkillOwner, skillsManagerOwner } from './project-installation.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const receiptName = '.conquistador-install.json';
@@ -212,6 +212,8 @@ try {
     }
     const target = safeDestination(destination);
     if (existsSync(join(target, 'project-installation.json'))) fail('This operator owns a native skill too. Use conquistador operator update or uninstall so both copies remain managed.');
+    const manager = skillsManagerOwner(target);
+    if (manager) fail(`skills.sh owns this copy (${manager}). Use that manager to update or remove it.`);
     const owner = projectSkillOwner(target);
     if (owner) fail(`This skill is owned by ${owner}. Use its operator update or uninstall command.`);
     if (domainPath && !['conquistador', 'plugin', 'single-agent'].includes(mode)) fail('Domain packages apply to conquistador, plugin, and single-agent installs.');

@@ -6,15 +6,17 @@ release and observed validation state belong in PROGRESS.md.
 
 ## Entry points
 
-`runtime/bin/conquistador.js` dispatches `install`, `operator`, `setup`, and local `mcp` before
-importing the optional runtime. Setup needs Node 24 and core Node modules, not a build or bootstrap.
+`runtime/bin/conquistador.js` dispatches help and onboarding, then `install`, `operator`, `setup`, and local `mcp` before
+importing the optional runtime. Bare `conquistador` and interactive `conquistador setup` use the recommended
+complete-operator flow in `tools/onboarding.mjs`. `--bot`, `--skills`, `--plugin`, and `--mcp` select one
+integration family. `--advanced` opens the combination guide. Setup needs Node 24 and core Node modules, not a build or bootstrap.
 `tools/operator-setup.mjs` preserves the concise project operator commands and relative project paths.
 Bare runtime `status` and `doctor` retain their existing meanings.
 
 `tools/setup.mjs` parses and applies managed actions. `setup-routes.mjs` declares the forms, targets,
-default project folders, and capability boundaries. `setup-guide.mjs` collects an installation plan
-without writing. Routes and hosts allow multiple selections. The default is the complete operator
-and Codex native skill in the current project. The guide checks all destinations, shows their
+default project folders, and capability boundaries. `setup-guide.mjs` collects a combination installation plan
+without writing. The recommended path selects one host. Routes and hosts in `--advanced` allow multiple selections.
+The guide checks all destinations, shows their
 ownership and activation boundaries, and asks once before applying. Other forms select their
 manager, service or owned folder. `setup-surfaces.mjs` checks path overlap and duplicate native
 discovery choices, and supplies operator/BB next steps. Lifecycle actions use explicit subcommands with a target or path.
@@ -226,6 +228,9 @@ transaction directory and report its recovery location rather than deleting the 
 
 The existing project-installation/v1 record remains readable. Its optional `hosts` list records
 Codex, BB and other selected hosts; `skills` contains only actual native-copy owners and digests.
+Hermes installations write project-installation/v2 with the native `.hermes/skills/conquistador`
+slot in the same transaction. Current readers accept both versions; other hosts continue writing
+v1. Hermes writes require the Git root, including through advanced or explicit commands.
 When `hosts` is absent, hosts derive from the legacy skills list. `--hosts` accepts distinct
 comma-separated hosts and can add hosts during update. It cannot drop an owned skill; removal
 requires the original operator lifecycle. The older `--host` interface keeps its single-host
@@ -240,6 +245,8 @@ there is no global transaction across independent integrations. A later failure 
 copies and their lifecycle commands without removing successful work.
 
 
+Recommended onboarding refuses an unresolved cross-directory discovery conflict before writing.
+It reports the existing copy and its owner. Advanced combinations remain explicit.
 Combined native copies have distinct owned paths. They do not establish discovery isolation:
 Cursor also scans `.agents/skills` and `.claude/skills`. Check host precedence and duplicate names
 in a fresh session before claiming one visible parent across all combined copies. The installer

@@ -57,8 +57,9 @@ export function operatorNextSteps(path, hosts, cwd = process.cwd()) {
   for (const host of hosts.filter(host => hostFolders[host])) lines.push(
     `${hostLabels[host]}: start a fresh session in this project, select Conquistador, or name it in your prompt.`,
     `Native skill: ${local ? join(hostFolders[host], 'SKILL.md') : join(path, '..', hostFolders[host], 'SKILL.md')}.`);
+  if (hosts.includes('hermes')) lines.push('Hermes trust is separate: ' + shellCommand(['hermes', 'skills', 'trust', dirname(path)]) + '. Setup did not grant trust or install Hermes.');
   if (!hosts.some(host => hostFolders[host]) && !hosts.includes('bb')) lines.push(`Ask your coding agent or custom host to read ${join(display, 'SKILL.md')} and follow it.`);
-  lines.push('Try: Draft a launch plan from the product facts in this project. Show the selected capabilities. Mark missing facts. Keep it as a draft.',
+  lines.push('Use Conquistador to draft a launch plan from the product facts in this project. Mark missing facts. Keep it as a draft.',
     'Run conquistador start to show this again; conquistador skills lists the capabilities.',
     ...['doctor', 'update', 'uninstall'].map(action => local ? `conquistador operator ${action}` : shellCommand(['conquistador', 'setup', action, '--path', path])));
   return lines.join('\n');
