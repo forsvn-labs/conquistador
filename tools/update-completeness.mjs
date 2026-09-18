@@ -6,8 +6,10 @@ import { fileURLToPath } from 'node:url';
 import { methodIdentity } from './installation-doctor.mjs';
 
 import { operatorFiles } from './operator-package.mjs';
+import { writeRoutingContract } from './routing-contract.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
+writeRoutingContract(root);
 const skills = join(root, 'skills');
 const digest = path => createHash('sha256').update(readFileSync(join(skills, path))).digest('hex');
 const methods = readdirSync(skills).sort().map(name => {

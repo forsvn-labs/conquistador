@@ -5,7 +5,8 @@ import { existsSync, mkdtempSync, readFileSync, realpathSync, rmSync, symlinkSyn
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { MAX_CONTEXT_CHARACTERS, MAX_PROMPT_BYTES, selectRequestContext } from './context-selection.mjs';
+import { FIRST_PROMPT } from './onboarding-parse.mjs';
+import { MAX_CONTEXT_CHARACTERS, MAX_PROMPT_BYTES, explainRoute, selectRequestContext } from './context-selection.mjs';
 
 const root = resolve(fileURLToPath(new URL('../', import.meta.url)));
 const install = (...args) => execFileSync(process.execPath, [join(root, 'tools/install.mjs'), ...args], { stdio: 'pipe' });
@@ -29,9 +30,9 @@ test('routing separates channel, phase, product, and language intents', () => {
 
 test('a multi-stage request selects a bounded composition', () => {
   const result = selectRequestContext('Plan a Product Hunt launch with social posts and measurement.');
-  assert.deepEqual(names(result), ['write-social', 'plan-campaign', 'measure-growth']);
+  assert.deepEqual(names(result), ['plan-campaign', 'write-social', 'measure-growth']);
   assert.equal(result.workflow?.name, 'launch-product');
-  assert.ok(result.selected.every(item => item.resources.length > 0 && item.resources.length <= 3));
+  assert.ok(result.selected.every(item => Array.isArray(item.resources) && item.resources.every(path => path.startsWith('skills/'))));
   assert.ok(result.context.length <= MAX_CONTEXT_CHARACTERS);
   assert.match(result.context, /Partial purpose:/);
   assert.match(result.context, /read the complete parent contract/);
@@ -110,4 +111,41 @@ test('linked method replacements cannot escape through a symlink', t => {
   rmSync(method);
   symlinkSync(outside, method);
   assert.throws(() => selectRequestContext('Write landing page copy.', { root: target }));
+});
+
+test('documented first tasks and paraphrases keep requested stages without feedback or unrelated methods', () => {
+  const first = selectRequestContext(FIRST_PROMPT);
+  assert.deepEqual(names(first), ['plan-campaign']);
+  assert.equal(names(first).includes('submit-feedback'), false);
+  assert.equal(names(first).includes('knowledge-review'), false);
+  assert.deepEqual(names(selectRequestContext('Write a LinkedIn product announcement.')), ['write-social']);
+  const crm = selectRequestContext('Set up Executor and connect our HubSpot CRM.');
+  assert.equal(crm.parentMethod?.name, 'connect-accounts');
+  assert.equal(names(crm).some(name => ['create-run-of-show', 'research-content-ideas'].includes(name)), false);
+  const vietnamese = selectRequestContext('Viết lại landing page này cho tự nhiên hơn.');
+  assert.equal(vietnamese.action, 'route');
+  assert.ok(names(vietnamese).includes('polish-vietnamese'));
+  assert.equal(selectRequestContext('コピーを書いて').action, 'abstain');
+  assert.equal(names(selectRequestContext('Please submit feedback about Conquistador.')).includes('submit-feedback'), true);
+  assert.deepEqual(explainRoute(first).selected, ['plan-campaign']);
+  const mixed = selectRequestContext('Draft a launch plan, social posts, a landing page, and a measurement plan.');
+  assert.ok(names(mixed).includes('plan-campaign'));
+  assert.ok([...names(mixed), ...mixed.deferred.map(item => item.name)].includes('write-social'));
+  assert.ok([...names(mixed), ...mixed.deferred.map(item => item.name)].includes('measure-growth'));
+  assert.equal(names(selectRequestContext('Implement a responsive web app for this approved flow.')).includes('map-user-flow'), false);
+});
+
+test('mixed work, conjunctions, negation, examples and unsupported languages preserve scope', () => {
+  const all = prompt => { const route = selectRequestContext(prompt); return [...route.selected, ...route.deferred].map(item => item.name); };
+  assert.deepEqual(all('Fix the TypeScript error and draft a launch plan.'), ['plan-campaign']);
+  assert.deepEqual(all('Do not submit feedback and draft a launch plan.'), ['plan-campaign']);
+  assert.deepEqual(all('Draft a launch plan. Do not share feedback about it.'), ['plan-campaign']);
+  assert.deepEqual(all('The example is "share feedback". Write landing page copy.'), ['write-copy']);
+  assert.deepEqual(all('Write a LinkedIn launch announcement copy.'), ['write-social']);
+  assert.deepEqual(all('Write a LinkedIn announcement and landing page copy.'), ['write-social', 'write-copy']);
+  assert.deepEqual(all('Write landing page copy using the approved positioning.'), ['write-copy']);
+  assert.deepEqual(all('Nghiên cứu thị trường cho sản phẩm này.'), []);
+  assert.deepEqual(all('Sửa lỗi TypeScript trong ứng dụng.'), []);
+  assert.deepEqual(all('Research the Vietnamese market.'), []);
+  assert.deepEqual(all('Draft a launch plan, social posts, landing page copy and measurement.'), ['plan-campaign', 'write-social', 'write-copy', 'measure-growth']);
 });

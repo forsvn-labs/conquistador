@@ -47,6 +47,10 @@ test('manual admits only explicit invocation; off never routes; project admits l
   const installed = profile();
   const ask = text => ({ text });
   assert.equal(admitRequest(installed, ask('/conquistador prepare a campaign plan')).action, 'admit');
+  assert.equal(admitRequest(installed, ask('Use Conquistador to draft a launch plan from the product facts in this project. Mark missing facts. Keep it as a draft.')).action, 'admit');
+  assert.equal(admitRequest(installed, ask('read .conquistador/SKILL.md and follow it')).action, 'admit');
+  assert.equal(admitRequest(installed, ask('Do not use Conquistador for this task.')).action, 'abstain');
+  assert.equal(admitRequest(installed, ask('The example says "Use Conquistador to draft a launch plan".')).action, 'abstain');
   assert.equal(admitRequest(installed, ask('prepare a campaign plan')).reason, 'manual-requires-explicit');
   assert.equal(admitRequest(installed, ask('prepare a campaign plan'), { activation: 'off' }).reason, 'activation-off');
   const project = { activation: 'project' };

@@ -34,7 +34,7 @@ function temporary(check) {
 }
 function rootBundle(path) {
   mkdirSync(path, { recursive: true });
-  for (const file of operatorFiles) {
+  for (const file of [...operatorFiles, 'tools/conquistador-mode.mjs', 'tools/proactive.mjs', 'tools/context-selection.mjs']) {
     mkdirSync(dirname(join(path, file)), { recursive: true });
     cpSync(join(root, file), join(path, file));
   }
@@ -96,7 +96,7 @@ test('compact, plugin, and harness payloads include the manifest and distinguish
     assert.equal(report.library.available, 38);
     assert.equal(report.manifest.packaged, 'matches');
     assert.equal(report.receipt.state, 'unchanged');
-    assert.equal(report.receipt.productVersion, '0.0.10');
+    assert.equal(report.receipt.productVersion, '0.0.11');
     assert.equal(report.bbAdapterPresent, adapter);
     assert.equal(report.operatorProfilePresent, true);
     assert.equal(report.operatorActivation, 'manual');
@@ -298,4 +298,21 @@ test('doctor rejects unknown and duplicate operator domains with the same valida
     assert.equal(report.operatorActivation, null);
     assert.ok(report.issues.some(issue => issue.includes('Operator profile is present but invalid')));
   }
+}));
+
+test('doctor certifies a valid domain subset and checks its actual dependency graph', () => temporary((path, parent) => {
+  const domain = join(parent, 'domain.json');
+  writeFileSync(domain, JSON.stringify({ schemaVersion: 'conquistador.domain-package/v1', id: 'domain:copy', agentPackageSchemaVersion: 'conquistador.agent-package/v2', allowed: { roles: [], skills: ['write-copy'], workflows: [], tools: ['host-model'], knowledgeHandles: [] } }));
+  const installed = run('install', '--target', 'operator', '--path', path, '--domain', domain);
+  assert.equal(installed.status, 0, installed.stderr);
+  const report = doctor(path);
+  assert.equal(report.library.scope, 'domain-subset');
+  assert.equal(report.library.available, 2);
+  assert.equal(report.library.expected, 2);
+  assert.equal(report.routing.consistent, true);
+  const contractPath = join(path, 'library/conquistador/routing-contract.json');
+  const contract = JSON.parse(readFileSync(contractPath));
+  contract.methods['write-copy'].requiredResources = [];
+  writeFileSync(contractPath, JSON.stringify(contract));
+  assert.equal(doctor(path, 1).routing.consistent, false);
 }));

@@ -56,8 +56,7 @@ A minimal plan:
 }
 ```
 
-Add product facts to the goal or pass allowed knowledge through the host API. The CLI does not
-resolve private knowledge. `maxDispatches` includes one parent integration assignment and one
+Add product facts to the goal or pass allowed knowledge through the host API. The CLI resolves only an explicitly supplied private knowledge index. `maxDispatches` includes one parent integration assignment and one
 review assignment. Leave two extra dispatches if a `revise` verdict should receive one targeted
 correction and one exact-digest re-review. The portable protocol supports arbitrary allowed
 outcomes with role `outcome`.
@@ -136,3 +135,35 @@ accept not-run rows and the additional reviewedDigest and status fields. The rec
 Correction and final re-review each have one attempt, even for a known pre-dispatch failure. This
 reserves the two remaining dispatch slots and prevents a hidden correction retry loop. Other
 assignments may retry once only for a known failure before any accepted dispatch.
+
+## Progressive resources and optional knowledge
+
+Assignments include required core resources and the parent quality, safety, and context standards.
+Conditional resources are listed with their stage conditions. The host reads applicable resources
+under `context.resourceRoot` before that stage, or returns a labeled blocked result. Embedders can
+use `loadAssignmentResource(root, method, path)` for a bounded, contained read. The fixed 192 KiB /
+100-file initial budget remains enforced. Split oversized assignments; never drop required text.
+Composition workflows are instructions, not runtime graphs.
+
+To supply project knowledge to a BB team, pass `--knowledge-index /absolute/private/index.json`
+after the output argument. Keep this file and its source files outside the installed product:
+
+```json
+{
+  "schemaVersion": "conquistador.knowledge-index/v1",
+  "handles": [{
+    "handle": "project:facts",
+    "source": "Approved product brief",
+    "scope": "Launch draft",
+    "freshness": "2026-09-18",
+    "path": "facts.md"
+  }]
+}
+```
+
+List `project:facts` in only the assignments that need it. Paths are relative to the index directory;
+absolute paths, traversal, symlinks, duplicate handles, and sources inside the product are refused.
+Domain restrictions still apply. The parent supplies source, scope, freshness and body to the selected
+specialist. Missing sources become labeled gaps; the specialist must not invent their contents.
+The index and source bodies never enter a release or public receipt. Omit the option to work from
+the supplied task facts. No vault, private workspace, embedding service, or persistent memory is needed.

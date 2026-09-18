@@ -61,7 +61,7 @@ npm run package
 ```
 
 The command requires a clean Git checkout. It reads tracked files from the exact HEAD commit and
-writes `dist/<commit>/conquistador-<version>.zip`, an npm tarball, `SHA256SUMS`, and `assembly.json`.
+writes `dist/<commit>/conquistador-<version>.zip`, an npm tarball, prepared one-parent skill and plugin ZIPs, `SHA256SUMS`, and `assembly.json`.
 The ZIP uses stable paths, modes, timestamps and ordering. Repeated ZIP packaging of the same commit
 is byte-identical. npm tarball bytes are recorded with npm/Node/platform versions; cross-toolchain
 reproducibility is not claimed. Existing output is never overwritten. Choose another output root

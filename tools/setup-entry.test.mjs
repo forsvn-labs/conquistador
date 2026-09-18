@@ -32,6 +32,7 @@ test('the installed setup command works before runtime libraries or dependencies
     const source = join(temporary, 'distribution');
     for (const file of ['package.json', 'runtime/bin/conquistador.js', 'tools/setup.mjs', 'tools/operator-setup.mjs', 'tools/domain-package.mjs',
       'tools/install-paths.mjs', 'tools/setup-routes.mjs', 'tools/method-library.mjs', 'tools/stage-method-library.mjs', 'tools/setup-guide.mjs', 'tools/setup-mcp.mjs', 'tools/operator-package.mjs', 'tools/project-installation.mjs', 'tools/setup-surfaces.mjs',
+      'tools/conquistador-mode.mjs', 'tools/proactive.mjs', 'tools/context-selection.mjs', 'tools/routing-contract.mjs', 'tools/request-text.mjs', 'tools/plugin-contracts.mjs',
       'tools/onboarding-safety.mjs', 'tools/onboarding-ui.mjs', 'tools/onboarding.mjs', 'tools/onboarding-parse.mjs', 'tools/onboarding-hosts.mjs', 'tools/onboarding-routes.mjs', 'tools/vendor/clack.mjs']) {
       const target = join(source, file);
       mkdirSync(dirname(target), { recursive: true });

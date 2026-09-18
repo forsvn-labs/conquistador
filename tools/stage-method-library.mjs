@@ -1,6 +1,7 @@
 import { copyFileSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { capabilityCatalog, internalPath, internalText, regularFiles, subsetLinks } from './method-library.mjs';
+import { writeRoutingContract } from './routing-contract.mjs';
 
 // Transform a selected canonical library inside its one discoverable parent entry.
 export function stageMethodLibrary(source, entry, { include = () => true, subset = false, template } = {}) {
@@ -22,4 +23,5 @@ export function stageMethodLibrary(source, entry, { include = () => true, subset
   writeFileSync(join(entry, 'SKILL.md'), template);
   mkdirSync(join(entry, 'agents'), { recursive: true });
   copyFileSync(join(source, 'conquistador/agents/openai.yaml'), join(entry, 'agents/openai.yaml'));
+  writeRoutingContract(entry);
 }

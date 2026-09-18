@@ -25,11 +25,20 @@ function project(t) {
   return { dir, config, settings: join(dir, '.claude/settings.local.json') };
 }
 
+test('an unregistered Codex project never reports local activation verified', t => {
+  const { dir } = project(t);
+  const status = inspectMode({ host: 'codex', project: dir });
+  assert.equal(status.state, 'disabled');
+  assert.equal(status.nativeActivationVerified, false);
+  assert.equal(status.hookRegistered, false);
+  assert.equal(status.taskObservationVerified, false);
+});
+
 test('Codex and Claude Code are offered; Grok Bot and Eve stay experimental', () => {
   assert.equal(hostSupport('claude-code').supported, true);
   assert.equal(hostSupport('claude-code').nativeActivationVerified, false);
   assert.equal(hostSupport('codex').supported, true);
-  assert.equal(hostSupport('codex').nativeActivationVerified, true);
+  assert.equal(hostSupport('codex').nativeActivationVerified, false);
   assert.equal(hostSupport('codex').settings, '.codex/hooks.json');
   assert.equal(hostSupport('grok-bot').supported, false);
   assert.equal(hostSupport('eve').supported, false);
@@ -75,7 +84,8 @@ test('Codex mode writes owned project hooks and preserves unrelated handlers', t
     host: 'codex', project: dir, config, events: 'prompt-submitted',
   });
   assert.equal(enabled.state, 'enabled');
-  assert.equal(enabled.nativeActivationVerified, true);
+  assert.equal(enabled.nativeActivationVerified, false);
+  assert.equal(enabled.hookRegistered, true);
   assert.equal(enabled.settings, settings);
   const stored = JSON.parse(readFileSync(settings, 'utf8'));
   assert.equal(stored.description, 'keep this');
@@ -288,4 +298,25 @@ test('hook CLI accepts complete chunked input and bounds a producer that leaves 
   assert.equal(unclosed.code, 0);
   assert.equal(unclosed.stderr, '');
   assert.deepEqual(JSON.parse(unclosed.stdout), {});
+});
+
+test('ownership survives package/Node replacement and re-enable repairs commands', t => {
+  const { dir, config, settings } = project(t);
+  applyMode('enable', { host: 'claude-code', project: dir, config });
+  const stored = JSON.parse(readFileSync(settings));
+  const oldCommands = [];
+  for (const groups of Object.values(stored.hooks)) for (const group of groups) for (const item of group.hooks) {
+    item.command = item.command.replace(process.execPath, '/retired/node').replace(script, '/retired/package/tools/conquistador-mode.mjs');
+    oldCommands.push(item.command);
+  }
+  writeFileSync(settings, JSON.stringify(stored));
+  writeFileSync(`${settings}.conquistador.json`, JSON.stringify({ schemaVersion: 'conquistador.hook-owner/v1', commands: oldCommands }));
+  assert.equal(inspectMode({ host: 'claude-code', project: dir, config }).repairRequired, true);
+  assert.equal(inspectMode({ host: 'claude-code', project: dir, config }).routingAvailable, false);
+  const repaired = applyMode('enable', { host: 'claude-code', project: dir, config });
+  assert.equal(repaired.repairRequired, false);
+  assert.equal(repaired.routingAvailable, true);
+  applyMode('remove', { host: 'claude-code', project: dir });
+  assert.equal(existsSync(settings), false);
+  assert.equal(existsSync(`${settings}.conquistador.json`), false);
 });

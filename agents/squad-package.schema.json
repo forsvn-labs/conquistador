@@ -27,7 +27,7 @@
     "id": { "const": "squad:advisor-worker" },
     "displayName": { "type": "string", "minLength": 1 },
     "productName": { "const": "conquistador" },
-    "pluginVersion": { "const": "0.0.10" },
+    "pluginVersion": { "const": "0.0.11" },
     "installClass": { "const": "candidate-only" },
     "publicListing": { "const": false },
     "cleanHostProof": { "const": false },

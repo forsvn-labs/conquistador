@@ -23,7 +23,7 @@ export const HOST_EVIDENCE = Object.freeze({
     settings: '.codex/hooks.json',
     source: 'https://developers.openai.com/codex/hooks',
     documentationReviewed: '2026-09-18',
-    nativeActivationVerified: true,
+    nativeActivationVerified: false,
   }),
 });
 const EVENTS = Object.keys(HOST_EVENTS);
@@ -90,10 +90,10 @@ function tokenize(command) {
   return tokens;
 }
 
-function ownedCommand(command, host) {
+function ownedCommand(command, host, previous = []) {
   const tokens = tokenize(command);
   if (!tokens || tokens.length !== 9) return null;
-  if (tokens[0] !== process.execPath || tokens[1] !== script) return null;
+  if (!isAbsolute(tokens[0]) || (tokens[1] !== script && !previous.includes(command))) return null;
   if (tokens[2] !== '--handle' || tokens[3] !== '--host' || tokens[4] !== host) return null;
   // Recognize the removed TaskCompleted registration so upgrades can remove owned hooks.
   if (tokens[5] !== '--event' || (!Object.hasOwn(HOST_EVENTS, tokens[6]) && tokens[6] !== 'results-updated')) return null;
@@ -101,7 +101,7 @@ function ownedCommand(command, host) {
   return resolve(tokens[8]);
 }
 
-function registeredConfig(settings, host) {
+function registeredConfig(settings, host, previous = []) {
   const paths = new Set();
   if (!isObject(settings?.hooks)) return null;
   for (const groups of Object.values(settings.hooks)) {
@@ -109,7 +109,7 @@ function registeredConfig(settings, host) {
     for (const group of groups) {
       if (!Array.isArray(group?.hooks)) continue;
       for (const item of group.hooks) {
-        const path = ownedCommand(item?.command, host);
+        const path = ownedCommand(item?.command, host, previous);
         if (path) paths.add(path);
       }
     }
@@ -138,6 +138,19 @@ function readJsonFile(path) {
   return JSON.parse(readFileSync(path, 'utf8'));
 }
 
+function ownershipCommands(settings) {
+  const record = readJsonFile(`${settings}.conquistador.json`);
+  if (record === null) return [];
+  if (record.schemaVersion !== 'conquistador.hook-owner/v1' || !Array.isArray(record.commands) || record.commands.length > 4 || record.commands.some(value => typeof value !== 'string')) fail('Invalid hook ownership record.');
+  return record.commands;
+}
+function commandsCurrent(settings, host, previous, expectedScript = script) {
+  return Object.values(settings.hooks ?? {}).filter(Array.isArray).flatMap(groups => groups)
+    .flatMap(group => Array.isArray(group?.hooks) ? group.hooks : [])
+    .filter(item => ownedCommand(item?.command, host, previous))
+    .every(item => { const tokens = tokenize(item.command); return tokens[0] === process.execPath && tokens[1] === expectedScript && existsSync(tokens[0]) && existsSync(tokens[1]); });
+}
+
 function writeJsonAtomic(path, value) {
   mkdirSync(dirname(path), { recursive: true });
   const temporary = `${path}.conquistador-mode-stage`;
@@ -149,7 +162,7 @@ function writeJsonAtomic(path, value) {
   }
 }
 
-function withoutOwned(settings, host) {
+function withoutOwned(settings, host, previous = []) {
   if (!isObject(settings)) return {};
   const next = { ...settings };
   if (!isObject(settings.hooks)) return next;
@@ -165,7 +178,7 @@ function withoutOwned(settings, host) {
         kept.push(group);
         continue;
       }
-      const handlers = group.hooks.filter(item => !ownedCommand(item?.command, host));
+      const handlers = group.hooks.filter(item => !ownedCommand(item?.command, host, previous));
       if (handlers.length) kept.push({ ...group, hooks: handlers });
     }
     if (kept.length) hooks[event] = kept;
@@ -175,8 +188,8 @@ function withoutOwned(settings, host) {
   return next;
 }
 
-function withOwned(settings, host, events, configPath) {
-  const next = withoutOwned(settings, host);
+function withOwned(settings, host, events, configPath, previous) {
+  const next = withoutOwned(settings, host, previous);
   const hooks = { ...(isObject(next.hooks) ? next.hooks : {}) };
   for (const event of events) {
     const hostEvent = HOST_EVENTS[event];
@@ -192,19 +205,25 @@ function parseEvents(value) {
   return events;
 }
 
-export function inspectMode({ host, project, config } = {}) {
+export function inspectMode({ host, project, config, scriptPath = script } = {}) {
   const support = hostSupport(host);
   if (!support.supported) return { state: 'unsupported', ...support };
   const settings = settingsPath(project, host);
   const current = readJsonFile(settings) ?? {};
+  const previous = ownershipCommands(settings);
+  for (const groups of Object.values(current.hooks ?? {}).filter(Array.isArray)) {
+    for (const group of groups) for (const item of group?.hooks ?? []) {
+      if (tokenize(item?.command)?.[1] === scriptPath) previous.push(item.command);
+    }
+  }
   const registered = [];
   for (const [event, hostEvent] of Object.entries(HOST_EVENTS)) {
     const groups = current.hooks?.[hostEvent];
-    if (Array.isArray(groups) && groups.some(group => Array.isArray(group?.hooks) && group.hooks.some(item => ownedCommand(item?.command, host)))) {
+    if (Array.isArray(groups) && groups.some(group => Array.isArray(group?.hooks) && group.hooks.some(item => ownedCommand(item?.command, host, previous)))) {
       registered.push(event);
     }
   }
-  const bound = registeredConfig(current, host);
+  const bound = registeredConfig(current, host, previous);
   const supplied = config ? absoluteFile(config, 'Config') : null;
   if (supplied) assertRegisteredConfig(supplied, bound);
   let enabled = false;
@@ -224,7 +243,14 @@ export function inspectMode({ host, project, config } = {}) {
     config: bound,
     registered,
     enabled,
-    nativeActivationVerified: support.nativeActivationVerified,
+    nativeActivationVerified: false,
+    documentationReviewed: support.documentationReviewed ?? null,
+    hookRegistered: registered.length > 0,
+    routingAvailable: enabled && registered.includes('prompt-submitted') && commandsCurrent(current, host, previous, scriptPath),
+    repairRequired: registered.length > 0 && !commandsCurrent(current, host, previous, scriptPath),
+    activationEvidence: 'unobserved',
+    trust: 'host-managed-unverified',
+    taskObservationVerified: false,
     unrelatedSettingsPreserved: true,
   };
 }
@@ -236,20 +262,26 @@ export function applyMode(action, options) {
   if (!['enable', 'disable', 'remove'].includes(action)) fail('Use enable, disable, or remove.');
   const settings = settingsPath(project, host);
   const current = readJsonFile(settings) ?? {};
+  const previous = ownershipCommands(settings);
   if (action === 'remove') {
-    const next = withoutOwned(current, host);
+    const next = withoutOwned(current, host, previous);
     if (Object.keys(next).length) writeJsonAtomic(settings, next);
     else if (existsSync(settings)) rmSync(settings);
+    if (existsSync(`${settings}.conquistador.json`)) rmSync(`${settings}.conquistador.json`);
     return inspectMode({ host, project });
   }
   const configPath = absoluteFile(config, 'Config');
-  const bound = registeredConfig(current, host);
+  const bound = registeredConfig(current, host, previous);
   if (action !== 'enable') assertRegisteredConfig(configPath, bound);
   const record = readConfig(configPath);
   const events = parseEvents(options.events);
   if (action === 'enable') {
     if (!record.enabled) fail('Enable requires an operator config with enabled true.');
-    writeJsonAtomic(settings, withOwned(current, host, events, configPath));
+    writeJsonAtomic(settings, withOwned(current, host, events, configPath, previous));
+    writeJsonAtomic(`${settings}.conquistador.json`, {
+      schemaVersion: 'conquistador.hook-owner/v1',
+      commands: events.map(event => handler(host, event, configPath).command),
+    });
   } else {
     writeJsonAtomic(bound ?? configPath, { schemaVersion: 1, enabled: false, events: record.events });
   }

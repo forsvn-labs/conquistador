@@ -2,10 +2,13 @@ import { validateOperatorProfile } from '../hosts/coding-agent/operator.mjs';
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { accessSync, constants, lstatSync, readFileSync, realpathSync, statSync } from 'node:fs';
-import { dirname, isAbsolute, join, resolve } from 'node:path';
+import { basename, dirname, isAbsolute, join, resolve } from 'node:path';
+import { inspectMode } from './conquistador-mode.mjs';
 import { fileURLToPath } from 'node:url';
+import { loadRestriction, shouldStageSkillPath } from './domain-package.mjs';
+import { validateContractAgainstInstall } from './routing-contract.mjs';
 import { isRuntimeExecutable } from './install-paths.mjs';
-import { canonicalText, capabilityCatalog, internalPath, internalText, methodLibrary, skillDiscovery } from './method-library.mjs';
+import { canonicalText, capabilityCatalog, internalPath, internalText, methodLibrary, skillDiscovery, regularFiles, subsetLinks } from './method-library.mjs';
 
 const distribution = fileURLToPath(new URL('../', import.meta.url));
 const manifestPath = 'release/completeness.json';
@@ -102,6 +105,9 @@ function inspectLibrary(root, manifest, issues) {
     return { layout: null, available: 0, expected: manifest.outcomes.length, methods: [] };
   }
   const { layout, internal, entry } = layouts[0];
+  const restriction = loadRestriction(root);
+  const selection = restriction ? { ...restriction.allowed } : null;
+  const selectedFiles = restriction ? regularFiles(join(distribution, 'skills')).filter(path => shouldStageSkillPath(`skills/${path}`, selection)) : null;
   const resourcePath = path => `${layout}/${internal ? internalPath(path) : path}`;
   const originalBytes = (path, bytes) => {
     if (!internal || !path.endsWith('.md')) return bytes;
@@ -112,11 +118,13 @@ function inspectLibrary(root, manifest, issues) {
   };
   const methods = [];
   for (const expected of [manifest.parent, ...manifest.outcomes]) {
+    if (restriction && !restriction.allowed.skills.includes(expected.name)) continue;
     const path = resourcePath(`${expected.name}/SKILL.md`);
     try {
       const text = textAt(root, path);
       const identity = methodIdentity(text);
-      const valid = identity.name === expected.name && identity.version === expected.version && hash(originalBytes(path, Buffer.from(text))) === expected.sha256;
+      const expectedHash = restriction ? hash(subsetLinks(textAt(join(distribution, 'skills'), `${expected.name}/SKILL.md`), `${expected.name}/SKILL.md`, selectedFiles)) : expected.sha256;
+      const valid = identity.name === expected.name && identity.version === expected.version && hash(originalBytes(path, Buffer.from(text))) === expectedHash;
       methods.push({ name: expected.name, version: identity.version, expectedVersion: expected.version, valid });
       if (!valid) issues.push(`Method differs from the doctor release manifest: ${path}`);
     } catch {
@@ -125,9 +133,12 @@ function inspectLibrary(root, manifest, issues) {
     }
   }
   for (const resource of manifest.requiredResources) {
+    if (restriction && !shouldStageSkillPath(`skills/${resource.path}`, selection)) continue;
+    if (resource.path === 'conquistador/routing-contract.json' && internal) continue;
     const path = resourcePath(resource.path);
     try {
-      if (hash(originalBytes(path, bytesAt(root, path))) !== resource.sha256) issues.push(`Required resource differs from the doctor release manifest: ${path}`);
+      const expectedHash = restriction && resource.path.endsWith('.md') ? hash(subsetLinks(textAt(join(distribution, 'skills'), resource.path), resource.path, selectedFiles)) : resource.sha256;
+      if (hash(originalBytes(path, bytesAt(root, path))) !== expectedHash) issues.push(`Required resource differs from the doctor release manifest: ${path}`);
     } catch { issues.push(`Missing or unreadable resource: ${path}`); }
   }
   try {
@@ -142,9 +153,8 @@ function inspectLibrary(root, manifest, issues) {
       if (agent.canonicalSkillRoot !== 'agent/skills/conquistador') throw Error('Wrong parent');
     } else if (!textAt(root, 'SKILL.md').includes(`](${layout}/conquistador/SKILL.md)`)) throw Error('Wrong parent');
   } catch { issues.push('Entry point does not resolve the bundled parent contract. Reinstall the complete root bundle.'); }
-  if (present(join(root, 'domain-restriction.json'))) issues.push('This is a domain-restricted install; the doctor checks the full library and does not certify domain readiness.');
   return { layout, internal, entry, available: methods.filter(method => method.name !== manifest.parent.name && method.valid).length,
-    expected: manifest.outcomes.length, methods };
+    expected: restriction ? restriction.allowed.skills.length - 1 : manifest.outcomes.length, scope: restriction ? 'domain-subset' : 'complete', methods };
 }
 
 export function inspectInstallation(path, inspectReceipt) {
@@ -210,15 +220,37 @@ export function inspectInstallation(path, inspectReceipt) {
       if (discovery.count !== 1) issues.push('Lazy package must contain exactly one discoverable SKILL.md.');
     } catch { issues.push('Cannot inspect skill discovery safely.'); }
   }
+  let routing = { consistent: false, issues: ['Routing overlay was not checked.'] };
+  if (bundleRoot && library.layout) {
+    try {
+      const checked = validateContractAgainstInstall(bundleRoot, loadRestriction(bundleRoot));
+      routing = { consistent: checked.issues.length === 0, methodCount: Object.keys(checked.contract.methods).length, issues: checked.issues };
+      issues.push(...checked.issues);
+    } catch (error) {
+      routing = { consistent: false, issues: [`Routing/resource validation failed: ${error.message}`] };
+      issues.push(...routing.issues);
+    }
+  }
+
   const status = issues.length ? 'incomplete' : 'local-files-verified';
+  const hooks = [];
+  if (['.conquistador', '.conquistador-operator'].includes(basename(path))) {
+    for (const host of ['codex', 'claude-code']) {
+      try {
+        const registered = inspectMode({ host, project: dirname(path), scriptPath: join(path, 'tools/conquistador-mode.mjs') });
+        hooks.push(registered.config ? inspectMode({ host, project: dirname(path), config: registered.config, scriptPath: join(path, 'tools/conquistador-mode.mjs') }) : registered);
+      } catch { hooks.push({ host, state: 'invalid', nativeActivationVerified: false, routingAvailable: false }); }
+    }
+  }
   return {
     schemaVersion: 'conquistador.install-doctor/v1', status, path, bundleRoot,
-    summary: `${library.available} methods available; ${status === 'incomplete' ? 'local checks failed' : 'local files verified'}; host activation and task execution unverified.`,
+    summary: `${library.available} methods available; ${status === 'incomplete' ? 'local checks failed' : 'local files verified'}; routing ${routing.consistent ? 'consistent' : 'unchecked or inconsistent'}; host activation and task execution unverified.`,
     manifest: { schemaVersion: manifest.schemaVersion, sha256: hash(manifestText), packaged: packagedManifest },
     library, discovery, identity, receipt, connector: connector?.checks ?? null,
     bbAdapterPresent,
     operatorProfilePresent,
     operatorActivation,
+    routing, hooks,
     hostActivationVerified: false, taskExecutionVerified: false, providerVerified: false,
     issues, warnings,
   };
@@ -243,6 +275,7 @@ export function runInstallationDoctor(args, inspectReceipt) {
     const parent = result.library.methods.find(method => method.name === 'conquistador');
     console.log(`Parent version: ${parent?.version ?? 'unavailable'}. Receipt product version: ${result.receipt.productVersion ?? 'unavailable'}.`);
     if (result.discovery) console.log(`Discovery: ${result.discovery.count} skill entry; name, description and path use ${result.discovery.metadataCharacters} characters. Host loading remains unverified.`);
+    for (const hook of result.hooks) console.log(`Hook ${hook.host}: ${hook.state}; routing ${hook.routingAvailable ? 'available' : 'unavailable'}; activation and task observation unverified.${hook.repairRequired ? ' Re-enable through conquistador hooks to repair saved executable paths.' : ''}`);
     if (result.connector) console.log(`Saved MCP Node executable: ${result.connector.nodeExecutable ? 'available' : 'unavailable'}. Package executable: ${result.connector.packageExecutable ? 'available' : 'unavailable'}.`);
     console.log(`BB adapter files: ${result.bbAdapterPresent ? 'present; execution unverified' : 'not present'}.`);
     if (result.receipt.hosts?.includes('bb')) console.log('BB selected: explicit project/environment and team adapter. No BB plugin, native skill registration, or automatic routing was installed.');

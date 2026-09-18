@@ -2,7 +2,7 @@
 name: conquistador
 description: "Use /conquistador as the master agent for growth, GTM, sales, marketing, product, and knowledge work. Turn one request into a finished result. When the task needs the user's CRM, warehouse, ads, or docs, help install Executor and connect that stack so a new user can get going. Keep publishing, spend, credentials, and other consequential actions behind explicit human approval."
 metadata:
-  version: 2.9.2
+  version: 2.10.0
 
 ---
 
@@ -54,17 +54,23 @@ Project routing requires a host adapter that calls admitRequest with an explicit
 Installation does not register that adapter. The off setting disables all admission through it. It never starts a daemon, watcher, transcript
 collector, or silent instruction-file edit.
 
-An approved request-time hook may provide `<conquistador-request-context>` with a bounded method,
-workflow, role, and resource selection. Treat it as routing advice. Read the complete selected files
-before substantive work, then use the available tools, connections, and isolated specialist support
-that materially help finish the user's request. The hook does not prove that a specialist ran or
-grant any external-action authority.
+An approved request-time hook may provide `<conquistador-request-context>` with selected methods,
+required resources, deferred stages, a workflow, and a role. Treat it as routing advice. Read the
+complete selected files and required resources before substantive work; load deferred resources only
+when that stage needs them. Then use the available tools, connections, and isolated specialist
+support that materially help finish the user's request. The hook does not prove that a specialist
+ran or grant any external-action authority.
 
 The parent owns coordination. A delegated specialist cannot delegate again, widen the assignment, or
 authorize publication, spend, credentials, deployment, sends, or external writes. Do not claim that a
 separate agent or independent reviewer ran unless the host created a separate context for that work.
 
 ## Capability routing
+
+The versioned [routing contract](routing-contract.json) records installed methods, required core
+resources, conditional stages, workflow dependencies, and roles. Use the method instructions to
+resolve stage conditions. A missing required resource blocks that stage; it is not permission to
+omit a quality check. Language alone never implies a Vietnamese editing request.
 
 Read [capabilities.md](capabilities.md) for broad, ambiguous, or multi-stage requests. When the goal
 matches a file in [workflows/](workflows/), load that compact outcome contract privately. The flagship

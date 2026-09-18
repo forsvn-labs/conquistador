@@ -1,3 +1,4 @@
+import { buildRoutingContract } from './routing-contract.mjs';
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
@@ -45,6 +46,7 @@ function checkFullParity(library) {
     const actual = readFileSync(join(library, internalPath(path)));
     // Compare every byte after reversing only the declared internal filename adaptation.
     if (path.endsWith('.md')) assert.equal(canonicalText(actual.toString('utf8')), expected.toString('utf8'), path);
+    else if (path === 'conquistador/routing-contract.json') assert.deepEqual(JSON.parse(actual), buildRoutingContract(dirname(library)));
     else assert.deepEqual(actual, expected, path);
     if (process.platform !== 'win32') assert.equal(statSync(join(library, internalPath(path))).mode & 0o111, statSync(join(root, 'skills', path)).mode & 0o111, path);
   }

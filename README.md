@@ -1,11 +1,11 @@
-# Conquistador 0.0.10
+# Conquistador 0.0.11
 
 Conquistador helps your coding agent do growth, marketing, sales, product and knowledge work.
 Give it an outcome and the relevant facts. It selects from 38 methods, names the specialists it
 uses, and returns a draft with review findings. Your coding agent supplies the model and tools.
 
 The current private alpha is
-[v0.0.10](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.10).
+[v0.0.11](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.11).
 Private alpha and dogfood are the same `0.0.x` channel. Public alpha starts at `0.1.0`.
 
 ## Install once, use in each project
@@ -13,7 +13,7 @@ Private alpha and dogfood are the same `0.0.x` channel. Public alpha starts at `
 Use Node 24 and a GitHub account with access to this private repository:
 
 ```sh
-npm install -g --ignore-scripts --install-links git+https://github.com/forsvn-labs/conquistador.git#v0.0.10
+npm install -g --ignore-scripts --install-links git+https://github.com/forsvn-labs/conquistador.git#v0.0.11
 ```
 
 Then open a terminal in the project where you want to use it:
@@ -82,9 +82,9 @@ You do not need to navigate through adapter folders or install the specialists s
 ```sh
 conquistador start              # Show the skill location and first task again
 conquistador skills             # Browse the available capabilities
-conquistador operator doctor    # Check local files and the owned skill copy
-conquistador operator update    # Update this project from the installed CLI
-conquistador operator uninstall # Remove both unchanged owned copies
+conquistador doctor             # Check local files, routing, and hook registration
+conquistador update             # Update this project from the installed CLI
+conquistador uninstall          # Remove both unchanged owned copies
 ```
 
 To upgrade the CLI itself, install the next authorized version with npm, then update the project.

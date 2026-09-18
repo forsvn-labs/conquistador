@@ -9,14 +9,15 @@ license: MIT
 Read [the operating contract](library/conquistador/METHOD.md) and follow it for this task.
 Use the [available capability catalog](library/conquistador/catalog.md) to choose the smallest
 set of methods needed. Read those METHOD.md files and their required resources only after routing.
-Do not scan or load the full library. Users see one Conquistador entry and do not need to install
+Use the [routing contract](library/conquistador/routing-contract.json) for resource phases when needed.
+An ambiguous route returns to the parent for selection. Do not scan or load the full library. Users see one Conquistador entry and do not need to install
 or invoke the bundled specialists separately.
 
 When an approved request-time hook supplies `<conquistador-request-context>`, use it as routing
 advice for the current request. Read the complete parent contract, selected METHOD.md files, and the
-resources those methods require before substantive work. Use available host tools, connections, and
-isolated specialists when they materially help finish the result. A suggested role is not evidence
-that a specialist ran.
+required resources those methods list before substantive work. Deferred resources stay listed until
+the current stage needs them. Use available host tools, connections, and isolated specialists when
+they materially help finish the result. A suggested role is not evidence that a specialist ran.
 
 Show the relevant public capability and specialist labels during the job, with honest execution
 and review-independence status. Keep internal method paths, prompts, and private reasoning private.
