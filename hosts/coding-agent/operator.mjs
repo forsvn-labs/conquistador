@@ -1,3 +1,4 @@
+import { explicitInvocation as isExplicitInvocation } from '../../tools/request-text.mjs';
 import assert from 'node:assert/strict';
 import { existsSync, readFileSync, lstatSync } from 'node:fs';
 import { posix, resolve } from 'node:path';
@@ -17,7 +18,6 @@ export const defaultOperatorProfile = Object.freeze({
   externalMutation: 'human-gated',
 });
 
-const explicitInvocation = /(?:^|[\s`])[/$@]conquistador(?:[/:][a-z][a-z0-9-]*)?(?=[\s`,.:;!?]|$)/i;
 const domainSignals = Object.freeze({
   product: /\b(?:positioning|pricing|packaging|icp|value proposition|product strategy|go-to-market|\bgtm\b|initiative scope)\b/i,
   marketing: /\b(?:campaign plan|launch email|landing-?page copy|brand voice|conversion copy|seo|lifecycle campaign)\b/i,
@@ -118,7 +118,7 @@ export function admitRequest(profile, request, hostSettings = {}) {
     const validated = validateOperatorProfile(profile);
     const activation = resolveActivation(validated, hostSettings);
     if (activation === 'off') return abstain('activation-off');
-    const explicit = explicitInvocation.test(text);
+    const explicit = isExplicitInvocation(text);
     if (activation === 'manual') return explicit ? admit('explicit-invocation', activation) : abstain('manual-requires-explicit');
     if (explicit) return admit('explicit-invocation', activation);
     const body = stripSourceFiles(text);

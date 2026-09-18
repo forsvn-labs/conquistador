@@ -5,7 +5,7 @@ export function checkPackageBoundary(files, privateFingerprints = []) {
   }
   for (const [path, file] of Object.entries(files)) {
     if (/\.(?:epub|mobi|azw3?|vtt|srt)$/i.test(path) ||
-        /(?:^|\/)(?:raw-urls\.md|theses\.md|knowledge-roots\.json)$/.test(path) ||
+        /(?:^|\/)(?:raw-urls\.md|theses\.md|knowledge-roots\.json|knowledge-index\.json)$/.test(path) ||
         /^(?:company|wiki|knowledge|private-provenance)\//.test(path)) {
       throw new Error(`Source import is outside the product boundary: ${path}`);
     }

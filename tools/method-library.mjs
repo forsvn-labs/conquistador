@@ -37,12 +37,8 @@ export function methodLibrary(root) {
 }
 
 export function capabilityCatalog(source, names) {
-  const labels = new Map();
-  const map = readFileSync(join(source, 'conquistador/capabilities.md'), 'utf8');
-  for (const row of map.split('\n')) {
-    const match = /^\| ([^|]+) \| `([a-z][a-z0-9-]+)` \|/.exec(row);
-    if (match) labels.set(match[2], match[1].trim());
-  }
+  const contract = JSON.parse(readFileSync(join(source, 'conquistador/routing-contract.json'), 'utf8'));
+  const labels = new Map(Object.values(contract.methods).map(method => [method.name, method.label]));
   const rows = names.filter(name => name !== 'conquistador').sort().map(name => {
     if (!labels.has(name)) throw Error(`Missing public capability label: ${name}`);
     return `| ${labels.get(name)} | [${name}](../${name}/${methodDocument}) |`;

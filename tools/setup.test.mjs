@@ -371,3 +371,30 @@ test('unchanged legacy local MCP receipts migrate even when the old source is mi
   assert.ok(existsSync(join(path, 'bundle/tools/skills-mcp.mjs')));
   good('uninstall', '--path', path);
 }));
+
+test('normal hook CLI uses the installed domain and uninstall preserves registered hooks', () => temporary((path, parent) => {
+  const project = join(parent, 'hook-project');
+  mkdirSync(project);
+  const domain = join(parent, 'hook-domain.json');
+  writeFileSync(domain, JSON.stringify({ schemaVersion: 'conquistador.domain-package/v1', id: 'domain:diagnosis', agentPackageSchemaVersion: 'conquistador.agent-package/v2', allowed: { roles: [], skills: ['diagnose-growth'], workflows: [], tools: ['host-model'], knowledgeHandles: [] } }));
+  const config = join(parent, 'proactive.json');
+  writeFileSync(config, JSON.stringify({ schemaVersion: 1, enabled: true, events: ['prompt-submitted'] }));
+  const cli = join(root, 'runtime/bin/conquistador.js');
+  const invoke = (...args) => spawnSync(process.execPath, [cli, ...args], { cwd: project, encoding: 'utf8' });
+  assert.equal(invoke('install', '--host', 'codex', '--domain', domain).status, 0);
+  assert.equal(invoke('hooks', 'enable', '--host', 'codex', '--project', project, '--config', config, '--events', 'prompt-submitted').status, 0);
+  const settings = JSON.parse(readFileSync(join(project, '.codex/hooks.json')));
+  assert.ok(settings.hooks.UserPromptSubmit[0].hooks[0].command.includes(join(project, '.conquistador/tools/conquistador-mode.mjs')));
+  const report = JSON.parse(invoke('doctor', '--json').stdout);
+  assert.equal(report.hooks.find(item => item.host === 'codex').routingAvailable, true);
+  assert.equal(report.hostActivationVerified, false);
+  const route = JSON.parse(invoke('route', '--prompt', 'Write landing page copy.').stdout);
+  assert.deepEqual(route.selected, []);
+  assert.ok(route.unavailable.includes('write-copy'));
+  const refused = invoke('uninstall');
+  assert.equal(refused.status, 1);
+  assert.match(refused.stderr, /hooks remove/);
+  assert.equal(existsSync(join(project, '.conquistador')), true);
+  assert.equal(invoke('hooks', 'remove', '--host', 'codex', '--project', project).status, 0);
+  assert.equal(invoke('uninstall').status, 0);
+}));

@@ -28,6 +28,26 @@ if (args.length === 0) {
 } else if (args[0] === "operator") {
   const { runOperatorSetup } = await import("../../tools/operator-setup.mjs");
   process.exitCode = await runOperatorSetup(args.slice(1));
+} else if ((args[0] === "status" && args.some(arg => arg === "--run-id" || arg.startsWith("--run-id="))) ||
+           (args[0] === "doctor" && args.some(arg => arg === "--config" || arg.startsWith("--config=")))) {
+  const { runCli } = await import("../lib/main.js");
+  process.exitCode = await runCli(args);
+} else if (["status", "doctor", "update", "uninstall"].includes(args[0])) {
+  const { runOperatorSetup } = await import("../../tools/operator-setup.mjs");
+  process.exitCode = await runOperatorSetup(args);
+} else if (args[0] === "runtime") {
+  const { runCli } = await import("../lib/main.js");
+  process.exitCode = await runCli(args.slice(1));
+} else if (args[0] === "hooks") {
+  try {
+    const { runHooks } = await import("../../tools/hooks-cli.mjs");
+    await runHooks(args.slice(1));
+  } catch (error) { console.error(error.message); process.exitCode = 1; }
+} else if (args[0] === "route") {
+  try {
+    const { runRouteExplanation } = await import("../../tools/route-explanation.mjs");
+    runRouteExplanation(args.slice(1));
+  } catch (error) { console.error(error.message); process.exitCode = 1; }
 } else if (args[0] === "setup") {
   const { runSetup } = await import("../../tools/setup.mjs");
   process.exitCode = await runSetup(args.slice(1));

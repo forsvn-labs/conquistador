@@ -51,7 +51,7 @@ place:
 
 ```sh
 npm uninstall -g @forsvn/conquistador
-npm install -g --ignore-scripts --install-links git+https://github.com/forsvn-labs/conquistador.git#v0.0.10
+npm install -g --ignore-scripts --install-links git+https://github.com/forsvn-labs/conquistador.git#v0.0.11
 conquistador version
 ```
 

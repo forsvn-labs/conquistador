@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import { inspectMode } from './conquistador-mode.mjs';
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import { lstatSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, renameSync, rmSync, writeFileSync } from 'node:fs';
@@ -250,7 +251,13 @@ function run(options, reminderShown = false, dryRun = false) {
   if (dryRun) { console.log(`Ready to ${options.action}: ${options.path}. No files changed.`); return; }
   const displayTarget = options.target ?? (ownedMode?.startsWith('skill:') ? ownedMode : { mcp: 'mcp', plugin: 'agent-plugins', conquistador: 'skill', 'single-agent': 'harness', squad: 'squad' }[ownedMode]);
   for (const line of describeRoute(displayTarget, displayUrl)) console.log(line);
-  if (options.selection) console.log('Domain selection reduces the copied library. Full-library doctor does not certify domain readiness.');
+  if (options.selection) console.log('Domain selection reduces the copied library. Doctor checks the selected domain inventory and restrictions.');
+  if (options.action === 'uninstall' && ownedMode === 'single-agent' && projectIntegration(options.path)) {
+    for (const host of ['codex', 'claude-code']) {
+      const hooks = inspectMode({ host, project: dirname(options.path), scriptPath: join(options.path, 'tools/conquistador-mode.mjs') });
+      if (hooks.hookRegistered) fail(`Remove the registered ${host} hooks first: conquistador hooks remove --host ${host} --project ${JSON.stringify(dirname(options.path))}. Unrelated host settings will be preserved.`);
+    }
+  }
   if (options.action === 'uninstall' && !reminderShown) removalReminder(ownedMode);
   if (ownedMode === 'single-agent' && (options.project || projectIntegration(options.path))) projectLifecycle(root, options);
   else if (ownedMode === 'mcp') mcpLifecycle(options);
@@ -282,7 +289,7 @@ install keeps its documented Codex default. Adaptive host choice belongs to conq
 Append --dry-run to install/update to check paths and ownership without writing files.
 Existing .conquistador-operator copies migrate with operator update.
 Lifecycle commands require a target or path. operator status|doctor|update|uninstall defaults to
-the project operator. Bare runtime status and doctor keep their existing meaning.
+the project operator. Bare status and doctor check the project operator; runtime diagnostics use conquistador runtime.
 Legacy --project ABS and --path ABS arguments remain supported.
 MCP: --url ORIGIN selects an existing runtime; --runtime-path ABS selects its stable distribution.
 Local MCP copies its server and methods; neither mode registers a client or starts a service.

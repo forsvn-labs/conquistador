@@ -29,12 +29,20 @@ export function topHelp(version) {
 
 Usage:
   conquistador                       Set up the complete operator in this project
+  conquistador start                 Show the skill location and first task
+  conquistador status                Check this project's operator
+  conquistador doctor                Local files, routing, and hook registration
+  conquistador update                Update this project's operator from the CLI
+  conquistador uninstall             Remove unchanged owned copies
+  conquistador --advanced            Other installation families
   conquistador --bot [grok-bot|hermes]
   conquistador --skills [--host HOST]
   conquistador --plugin [--host claude-code|codex|copilot|none]
   conquistador --mcp [--host codex|claude-code|cursor|copilot|none]
-  conquistador --advanced            Combination guide for multiple hosts and custom packages
-  conquistador operator status       Check the installed project operator
+  conquistador route --prompt TEXT   Explain routing without executing
+  conquistador hooks status --host HOST --project ABS
+  conquistador runtime --help        Optional runtime graphs
+  conquistador operator status       Alias for project-operator status
 
 Route help: conquistador --skills --help
 Detailed targets: conquistador setup list

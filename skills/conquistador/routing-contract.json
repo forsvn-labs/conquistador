@@ -1,0 +1,3978 @@
+{
+  "schemaVersion": "conquistador.routing-contract/v1",
+  "parentPath": "skills/conquistador",
+  "document": "SKILL.md",
+  "requiredStandards": [
+    "skills/conquistador/standards/quality.md",
+    "skills/conquistador/standards/safety.md",
+    "skills/conquistador/standards/context.md"
+  ],
+  "channelLocks": {
+    "linkedin": {
+      "ads": "create-paid-campaign",
+      "dm": "write-outreach",
+      "message": "write-outreach",
+      "sequence": "write-outreach",
+      "post": "write-social",
+      "announcement": "write-social",
+      "update": "write-social",
+      "article": "write-social",
+      "thread": "write-social"
+    },
+    "reddit": {
+      "post": "write-social",
+      "ads": "create-paid-campaign"
+    },
+    "product hunt": {
+      "listing": "write-social",
+      "launch": "plan-campaign"
+    }
+  },
+  "parentMethods": {
+    "connect-accounts": {
+      "name": "connect-accounts",
+      "label": "Connect accounts",
+      "path": "skills/conquistador/methods/connect-accounts.md",
+      "intents": [
+        "connect accounts",
+        "set up executor",
+        "setup executor",
+        "install executor",
+        "connect crm",
+        "connect hubspot",
+        "connect salesforce",
+        "wire executor",
+        "executor and connect"
+      ]
+    },
+    "stack-setup": {
+      "name": "stack-setup",
+      "label": "Stack setup",
+      "path": "skills/conquistador/methods/stack-setup.md",
+      "intents": [
+        "stack setup",
+        "map the exact job to an existing cli"
+      ]
+    }
+  },
+  "methods": {
+    "allocate-marketing-budget": {
+      "name": "allocate-marketing-budget",
+      "label": "Allocate marketing budget",
+      "description": "Allocate a bounded marketing budget across channels, experiments, and reserves using owned evidence or an explicit learning-budget mode. Use for spend scenarios, channel floors, marginal-return choices, concentration limits, and reallocation rules.",
+      "path": "skills/allocate-marketing-budget/SKILL.md",
+      "kind": "plan",
+      "explicitOnly": false,
+      "intents": [
+        "allocate marketing budget",
+        "budget allocation",
+        "spend scenario",
+        "channel floors"
+      ],
+      "exclusions": [
+        "create ads",
+        "evaluate actual paid"
+      ],
+      "requiredResources": [
+        "skills/allocate-marketing-budget/references/rubric.md",
+        "skills/allocate-marketing-budget/references/anti-patterns.md",
+        "skills/allocate-marketing-budget/fallbacks/sequential.md"
+      ],
+      "conditionalResources": [
+        "skills/allocate-marketing-budget/agents/allocator.md",
+        "skills/allocate-marketing-budget/agents/constraint-checker.md",
+        "skills/allocate-marketing-budget/agents/critic.md",
+        "skills/allocate-marketing-budget/references/marginal-return-model.md",
+        "skills/allocate-marketing-budget/references/next-dollar-earns-most.md",
+        "skills/allocate-marketing-budget/references/format-conventions.md"
+      ],
+      "resourceConditions": [
+        {
+          "path": "skills/allocate-marketing-budget/agents/allocator.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/allocate-marketing-budget/agents/constraint-checker.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/allocate-marketing-budget/agents/critic.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/allocate-marketing-budget/references/marginal-return-model.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/allocate-marketing-budget/references/next-dollar-earns-most.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/allocate-marketing-budget/references/format-conventions.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        }
+      ],
+      "optionalResources": [
+        "skills/allocate-marketing-budget/references/examples/allocate-marketing-budget-walkthrough.md"
+      ],
+      "workflows": [
+        "paid-campaign-loop",
+        "target-to-growth-plan"
+      ],
+      "roles": [
+        "ads"
+      ],
+      "knowledgeHandles": []
+    },
+    "analyze-video": {
+      "name": "analyze-video",
+      "label": "Inspect supplied video",
+      "description": "Analyze a local video file with Gemini for timestamped summaries, spoken content, visual explanation, critique, and finding specific moments. Use when the user supplies a video path or asks you to inspect footage on their machine. Requires a Gemini API key in the agent environment; never paste keys into chat or skill files.",
+      "path": "skills/analyze-video/SKILL.md",
+      "kind": "research",
+      "explicitOnly": false,
+      "intents": [
+        "analyze video",
+        "timestamped summary",
+        "inspect this video",
+        "find the scene"
+      ],
+      "exclusions": [
+        "create short-form",
+        "script a video"
+      ],
+      "requiredResources": [],
+      "conditionalResources": [
+        "skills/analyze-video/references/gemini-recipe.md",
+        "skills/analyze-video/agents/critic-agent.md"
+      ],
+      "resourceConditions": [
+        {
+          "path": "skills/analyze-video/references/gemini-recipe.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/analyze-video/agents/critic-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        }
+      ],
+      "optionalResources": [],
+      "workflows": [],
+      "roles": [],
+      "knowledgeHandles": []
+    },
+    "architect-software-system": {
+      "name": "architect-software-system",
+      "label": "Architect a demanded system",
+      "description": "Design an implementation-ready software architecture for an explicit build, migration, or technical-product decision. Use for greenfield or brownfield systems, service boundaries, schemas, APIs, integrations, reliability, security, rollout, and technical tradeoffs—not routine marketing work.",
+      "path": "skills/architect-software-system/SKILL.md",
+      "kind": "build",
+      "explicitOnly": false,
+      "intents": [
+        "software architecture",
+        "system architecture",
+        "service boundaries",
+        "architect the system"
+      ],
+      "exclusions": [
+        "marketing architecture",
+        "campaign architecture"
+      ],
+      "requiredResources": [
+        "skills/architect-software-system/references/system-architecture-method.md",
+        "skills/architect-software-system/references/anti-patterns.md",
+        "skills/architect-software-system/fallbacks/sequential.md"
+      ],
+      "conditionalResources": [
+        "skills/architect-software-system/agents/stack-selection-agent.md",
+        "skills/architect-software-system/agents/infrastructure-agent.md",
+        "skills/architect-software-system/agents/schema-agent.md",
+        "skills/architect-software-system/agents/api-agent.md",
+        "skills/architect-software-system/agents/integration-agent.md",
+        "skills/architect-software-system/agents/scaling-agent.md",
+        "skills/architect-software-system/agents/critic-agent.md",
+        "skills/architect-software-system/references/report-template.md",
+        "skills/architect-software-system/references/dependency-classification.md",
+        "skills/architect-software-system/references/intake-prompts.md",
+        "skills/architect-software-system/references/tech-stack-patterns.md",
+        "skills/architect-software-system/references/tech-stack-matrix.md",
+        "skills/architect-software-system/references/file-structure-patterns.md",
+        "skills/architect-software-system/references/database-patterns.md",
+        "skills/architect-software-system/references/api-patterns.md",
+        "skills/architect-software-system/references/auth-patterns.md",
+        "skills/architect-software-system/references/deployment-patterns.md",
+        "skills/architect-software-system/references/failure-modes.md",
+        "skills/architect-software-system/references/interaction-edge-cases.md",
+        "skills/architect-software-system/references/security-patterns.md"
+      ],
+      "resourceConditions": [
+        {
+          "path": "skills/architect-software-system/agents/stack-selection-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/architect-software-system/agents/infrastructure-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/architect-software-system/agents/schema-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/architect-software-system/agents/api-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/architect-software-system/agents/integration-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/architect-software-system/agents/scaling-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/architect-software-system/agents/critic-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/architect-software-system/references/report-template.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/architect-software-system/references/dependency-classification.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/architect-software-system/references/intake-prompts.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/architect-software-system/references/tech-stack-patterns.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/architect-software-system/references/tech-stack-matrix.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/architect-software-system/references/file-structure-patterns.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/architect-software-system/references/database-patterns.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/architect-software-system/references/api-patterns.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/architect-software-system/references/auth-patterns.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/architect-software-system/references/deployment-patterns.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/architect-software-system/references/failure-modes.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/architect-software-system/references/interaction-edge-cases.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/architect-software-system/references/security-patterns.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        }
+      ],
+      "optionalResources": [],
+      "workflows": [],
+      "roles": [],
+      "knowledgeHandles": []
+    },
+    "audit-marketing": {
+      "name": "audit-marketing",
+      "label": "Audit a marketing package",
+      "description": "Audit a bounded marketing package before ship for unsupported claims, specificity, argument, voice, channel fit, action clarity, and internal consistency. Use for a pre-ship marketing audit or AI-tell concern. Returns severity-ranked findings and a verdict; never infers cleanup or release authority.",
+      "path": "skills/audit-marketing/SKILL.md",
+      "kind": "evaluate",
+      "explicitOnly": false,
+      "intents": [
+        "audit marketing",
+        "pre-ship marketing audit",
+        "audit this marketing package"
+      ],
+      "exclusions": [
+        "knowledge review",
+        "code audit"
+      ],
+      "requiredResources": [
+        "skills/audit-marketing/fallbacks/sequential.md"
+      ],
+      "conditionalResources": [
+        "skills/audit-marketing/references/audit-flow.md",
+        "skills/audit-marketing/references/noise-filter.md",
+        "skills/audit-marketing/references/report-template.md",
+        "skills/audit-marketing/references/fix-routing.md",
+        "skills/audit-marketing/references/polish-flow.md",
+        "skills/audit-marketing/references/reverify-gate.md",
+        "skills/audit-marketing/references/quality-feedback-protocol.md"
+      ],
+      "resourceConditions": [
+        {
+          "path": "skills/audit-marketing/references/audit-flow.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/audit-marketing/references/noise-filter.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/audit-marketing/references/report-template.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/audit-marketing/references/fix-routing.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/audit-marketing/references/polish-flow.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/audit-marketing/references/reverify-gate.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/audit-marketing/references/quality-feedback-protocol.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        }
+      ],
+      "optionalResources": [],
+      "workflows": [],
+      "roles": [],
+      "knowledgeHandles": []
+    },
+    "brief-creative": {
+      "name": "brief-creative",
+      "label": "Create a production brief",
+      "description": "Create an implementation-ready creative brief. Use for landing pages, campaign graphics, product previews, screenshots, demo videos, short-form video, out-of-home, social media assets, or any design and production request that needs a clear communication job, concept, hierarchy, requirements, and acceptance criteria.",
+      "path": "skills/brief-creative/SKILL.md",
+      "kind": "create",
+      "explicitOnly": false,
+      "intents": [
+        "creative brief",
+        "production brief",
+        "design brief",
+        "brief the designer"
+      ],
+      "exclusions": [
+        "write the copy",
+        "finished ads"
+      ],
+      "requiredResources": [
+        "skills/brief-creative/references/visual-rubric.md",
+        "skills/brief-creative/references/graphic-brief-method.md",
+        "skills/brief-creative/references/anti-patterns.md",
+        "skills/brief-creative/fallbacks/sequential.md"
+      ],
+      "conditionalResources": [
+        "skills/brief-creative/agents/brand-anchor-agent.md",
+        "skills/brief-creative/agents/concept-agent.md",
+        "skills/brief-creative/agents/copy-anchor-agent.md",
+        "skills/brief-creative/agents/brief-synth-agent.md",
+        "skills/brief-creative/agents/prompt-craft-agent.md",
+        "skills/brief-creative/agents/figma-spec-agent.md",
+        "skills/brief-creative/agents/critic-agent.md",
+        "skills/brief-creative/references/asset-types.md",
+        "skills/brief-creative/references/platform-modules.md",
+        "skills/brief-creative/references/prompt-patterns.md",
+        "skills/brief-creative/references/failure-modes.md",
+        "skills/brief-creative/agents/prompt-author-agent.md",
+        "skills/brief-creative/agents/asset-critic-agent.md",
+        "skills/brief-creative/references/asset-critical-gates.md",
+        "skills/brief-creative/references/image-engine-dialects.md",
+        "skills/brief-creative/references/render-engines.md",
+        "skills/brief-creative/references/production-pattern.md",
+        "skills/brief-creative/references/asset-anti-patterns.md",
+        "skills/brief-creative/agents/ooh-concept-agent.md",
+        "skills/brief-creative/agents/ooh-spec-legibility-agent.md",
+        "skills/brief-creative/agents/ooh-critic-agent.md",
+        "skills/brief-creative/references/ooh-format-conventions.md",
+        "skills/brief-creative/references/ooh-anti-patterns.md",
+        "skills/brief-creative/references/roughdraft-review-protocol.md",
+        "skills/brief-creative/references/reviewable-artifact-contract.md"
+      ],
+      "resourceConditions": [
+        {
+          "path": "skills/brief-creative/agents/brand-anchor-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/brief-creative/agents/concept-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/brief-creative/agents/copy-anchor-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/brief-creative/agents/brief-synth-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/brief-creative/agents/prompt-craft-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/brief-creative/agents/figma-spec-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/brief-creative/agents/critic-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/brief-creative/references/asset-types.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/brief-creative/references/platform-modules.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/brief-creative/references/prompt-patterns.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/brief-creative/references/failure-modes.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/brief-creative/agents/prompt-author-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/brief-creative/agents/asset-critic-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/brief-creative/references/asset-critical-gates.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/brief-creative/references/image-engine-dialects.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/brief-creative/references/render-engines.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/brief-creative/references/production-pattern.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/brief-creative/references/asset-anti-patterns.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/brief-creative/agents/ooh-concept-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/brief-creative/agents/ooh-spec-legibility-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/brief-creative/agents/ooh-critic-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/brief-creative/references/ooh-format-conventions.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/brief-creative/references/ooh-anti-patterns.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/brief-creative/references/roughdraft-review-protocol.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/brief-creative/references/reviewable-artifact-contract.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        }
+      ],
+      "optionalResources": [],
+      "workflows": [
+        "create-app-preview",
+        "create-landing-page",
+        "creative-asset-review",
+        "interactive-campaign",
+        "launch-product",
+        "optimize-app-store-listing",
+        "paid-campaign-loop"
+      ],
+      "roles": [
+        "dr-landing",
+        "saas-landing",
+        "creative-assets"
+      ],
+      "knowledgeHandles": []
+    },
+    "brief-product-ui": {
+      "name": "brief-product-ui",
+      "label": "Specify an interface",
+      "description": "Turn an approved product flow into an implementation-ready UI brief. Use for screen inventory, reusable components, design-token application, interaction and system states, accessibility, and build handoff. Not for marketing landing pages or brand identity.",
+      "path": "skills/brief-product-ui/SKILL.md",
+      "kind": "build",
+      "explicitOnly": false,
+      "intents": [
+        "ui brief",
+        "interface spec",
+        "product ui",
+        "component states",
+        "in-product ui",
+        "in product ui"
+      ],
+      "exclusions": [
+        "marketing landing",
+        "brand visual identity"
+      ],
+      "requiredResources": [
+        "skills/brief-product-ui/references/gates-and-rubric.md",
+        "skills/brief-product-ui/references/ui-brief-method.md",
+        "skills/brief-product-ui/references/anti-patterns.md",
+        "skills/brief-product-ui/fallbacks/sequential.md"
+      ],
+      "conditionalResources": [
+        "skills/brief-product-ui/agents/intake-validator-agent.md",
+        "skills/brief-product-ui/agents/screen-inventory-agent.md",
+        "skills/brief-product-ui/agents/component-system-agent.md",
+        "skills/brief-product-ui/agents/token-application-agent.md",
+        "skills/brief-product-ui/agents/layout-state-agent.md",
+        "skills/brief-product-ui/agents/handoff-agent.md",
+        "skills/brief-product-ui/agents/critic-agent.md",
+        "skills/brief-product-ui/references/format-conventions.md",
+        "skills/brief-product-ui/references/component-patterns.md",
+        "skills/brief-product-ui/references/layout-conventions.md",
+        "skills/brief-product-ui/references/token-application-patterns.md",
+        "skills/brief-product-ui/references/house-token-bindings.md"
+      ],
+      "resourceConditions": [
+        {
+          "path": "skills/brief-product-ui/agents/intake-validator-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/brief-product-ui/agents/screen-inventory-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/brief-product-ui/agents/component-system-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/brief-product-ui/agents/token-application-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/brief-product-ui/agents/layout-state-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/brief-product-ui/agents/handoff-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/brief-product-ui/agents/critic-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/brief-product-ui/references/format-conventions.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/brief-product-ui/references/component-patterns.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/brief-product-ui/references/layout-conventions.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/brief-product-ui/references/token-application-patterns.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/brief-product-ui/references/house-token-bindings.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        }
+      ],
+      "optionalResources": [
+        "skills/brief-product-ui/references/examples/semantic-token-walkthrough.md"
+      ],
+      "workflows": [
+        "specify-product-experience"
+      ],
+      "roles": [],
+      "knowledgeHandles": []
+    },
+    "build-ios-app": {
+      "name": "build-ios-app",
+      "label": "Build an iOS experience",
+      "description": "Implement and verify an explicit native iOS or iPadOS product outcome in an existing or approved project. Use for Swift or SwiftUI vertical slices, state, persistence, networking, permissions, capabilities, accessibility, testing, simulator/device readiness, and bounded distribution handoffs.",
+      "path": "skills/build-ios-app/SKILL.md",
+      "kind": "build",
+      "explicitOnly": false,
+      "intents": [
+        "build ios",
+        "swiftui",
+        "native ios",
+        "ipados"
+      ],
+      "exclusions": [
+        "web app",
+        "marketing copy about an app"
+      ],
+      "requiredResources": [
+        "skills/build-ios-app/fallbacks/sequential.md"
+      ],
+      "conditionalResources": [
+        "skills/build-ios-app/references/apple-platform-authority.md",
+        "skills/build-ios-app/references/capabilities.md",
+        "skills/build-ios-app/references/gotchas.md",
+        "skills/build-ios-app/references/publishing.md",
+        "skills/build-ios-app/references/publishing-readiness.md",
+        "skills/build-ios-app/references/publishing-production.md",
+        "skills/build-ios-app/references/publishing-testflight.md",
+        "skills/build-ios-app/references/publishing-gotchas.md",
+        "skills/build-ios-app/references/device-registration.md",
+        "skills/build-ios-app/references/screenshots.md",
+        "skills/build-ios-app/references/api-reference.md"
+      ],
+      "resourceConditions": [
+        {
+          "path": "skills/build-ios-app/references/apple-platform-authority.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/build-ios-app/references/capabilities.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/build-ios-app/references/gotchas.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/build-ios-app/references/publishing.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/build-ios-app/references/publishing-readiness.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/build-ios-app/references/publishing-production.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/build-ios-app/references/publishing-testflight.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/build-ios-app/references/publishing-gotchas.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/build-ios-app/references/device-registration.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/build-ios-app/references/screenshots.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/build-ios-app/references/api-reference.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        }
+      ],
+      "optionalResources": [],
+      "workflows": [],
+      "roles": [],
+      "knowledgeHandles": []
+    },
+    "build-web-app": {
+      "name": "build-web-app",
+      "label": "Build a web experience",
+      "description": "Implement and verify an explicit web-product outcome in an existing or approved project. Use for end-to-end vertical slices, responsive accessible UI, client/server state, data, validation, auth, security, recovery, tests, browser checks, migrations, and bounded deployment handoffs.",
+      "path": "skills/build-web-app/SKILL.md",
+      "kind": "build",
+      "explicitOnly": false,
+      "intents": [
+        "build web app",
+        "implement a web",
+        "responsive web app",
+        "web implementation",
+        "responsive web app"
+      ],
+      "exclusions": [
+        "marketing copy about an app",
+        "landing page copy"
+      ],
+      "requiredResources": [
+        "skills/build-web-app/references/web-engineering-method.md",
+        "skills/build-web-app/fallbacks/sequential.md"
+      ],
+      "conditionalResources": [
+        "skills/build-web-app/references/test-contract.md"
+      ],
+      "resourceConditions": [
+        {
+          "path": "skills/build-web-app/references/test-contract.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        }
+      ],
+      "optionalResources": [
+        "skills/build-web-app/references/examples/settings-slice-walkthrough.md"
+      ],
+      "workflows": [],
+      "roles": [],
+      "knowledgeHandles": []
+    },
+    "create-brand": {
+      "name": "create-brand",
+      "label": "Establish a brand foundation",
+      "description": "Create or refine a practical brand foundation. Use for brand strategy, point of view, voice, messaging architecture, naming direction, verbal identity, visual creative direction, founder-versus-company voice, or a compact brand system that operators and creators can apply consistently.",
+      "path": "skills/create-brand/SKILL.md",
+      "kind": "create",
+      "explicitOnly": false,
+      "intents": [
+        "brand foundation",
+        "brand voice",
+        "visual identity",
+        "naming direction",
+        "create a brand"
+      ],
+      "exclusions": [
+        "write a landing page",
+        "social posts"
+      ],
+      "requiredResources": [
+        "skills/create-brand/references/brand-system-method.md",
+        "skills/create-brand/references/anti-patterns.md",
+        "skills/create-brand/fallbacks/sequential.md"
+      ],
+      "conditionalResources": [
+        "skills/create-brand/references/narrative-tension.md",
+        "skills/create-brand/agents/strategy-agent.md",
+        "skills/create-brand/agents/personality-agent.md",
+        "skills/create-brand/agents/voice-agent.md",
+        "skills/create-brand/agents/visual-agent.md",
+        "skills/create-brand/agents/token-architect-agent.md",
+        "skills/create-brand/agents/component-token-agent.md",
+        "skills/create-brand/agents/accessibility-agent.md",
+        "skills/create-brand/agents/critic-agent.md",
+        "skills/create-brand/references/format-conventions.md",
+        "skills/create-brand/references/platform-surfaces.md"
+      ],
+      "resourceConditions": [
+        {
+          "path": "skills/create-brand/references/narrative-tension.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/create-brand/agents/strategy-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/create-brand/agents/personality-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/create-brand/agents/voice-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/create-brand/agents/visual-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/create-brand/agents/token-architect-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/create-brand/agents/component-token-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/create-brand/agents/accessibility-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/create-brand/agents/critic-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/create-brand/references/format-conventions.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/create-brand/references/platform-surfaces.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        }
+      ],
+      "optionalResources": [],
+      "workflows": [],
+      "roles": [],
+      "knowledgeHandles": []
+    },
+    "create-paid-campaign": {
+      "name": "create-paid-campaign",
+      "label": "Create paid media",
+      "description": "Create a focused paid-media test. Use for Meta, Google, LinkedIn, TikTok, or another ad network when the user needs audience and offer strategy, finished ads, creative direction, landing-page congruence, budget logic, policy awareness, and a measurement plan before launch.",
+      "path": "skills/create-paid-campaign/SKILL.md",
+      "kind": "create",
+      "explicitOnly": false,
+      "intents": [
+        "paid campaign",
+        "create ads",
+        "meta ads",
+        "google ads",
+        "linkedin ads",
+        "tiktok ads",
+        "paid-media"
+      ],
+      "exclusions": [
+        "evaluate actual paid",
+        "organic social posts"
+      ],
+      "requiredResources": [
+        "skills/create-paid-campaign/references/rubric.md",
+        "skills/create-paid-campaign/references/anti-patterns.md",
+        "skills/create-paid-campaign/fallbacks/sequential.md"
+      ],
+      "conditionalResources": [
+        "skills/create-paid-campaign/references/earn-the-impression.md",
+        "skills/create-paid-campaign/agents/strategist.md",
+        "skills/create-paid-campaign/agents/composer.md",
+        "skills/create-paid-campaign/agents/format-checker.md",
+        "skills/create-paid-campaign/agents/voice-auditor.md",
+        "skills/create-paid-campaign/agents/critic.md",
+        "skills/create-paid-campaign/references/ad-intelligence/meta-cold-traffic.md",
+        "skills/create-paid-campaign/references/ad-intelligence/meta-retargeting.md",
+        "skills/create-paid-campaign/references/ad-intelligence/google-ads.md",
+        "skills/create-paid-campaign/references/ad-intelligence/linkedin-ads.md",
+        "skills/create-paid-campaign/references/ad-intelligence/tiktok-ads.md",
+        "skills/create-paid-campaign/references/ad-intelligence/creative-cadence.md",
+        "skills/create-paid-campaign/references/format-spec.md",
+        "skills/create-paid-campaign/references/policy-floor.md",
+        "skills/create-paid-campaign/references/message-transmutation.md"
+      ],
+      "resourceConditions": [
+        {
+          "path": "skills/create-paid-campaign/references/earn-the-impression.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/create-paid-campaign/agents/strategist.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/create-paid-campaign/agents/composer.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/create-paid-campaign/agents/format-checker.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/create-paid-campaign/agents/voice-auditor.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/create-paid-campaign/agents/critic.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/create-paid-campaign/references/ad-intelligence/meta-cold-traffic.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/create-paid-campaign/references/ad-intelligence/meta-retargeting.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/create-paid-campaign/references/ad-intelligence/google-ads.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/create-paid-campaign/references/ad-intelligence/linkedin-ads.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/create-paid-campaign/references/ad-intelligence/tiktok-ads.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/create-paid-campaign/references/ad-intelligence/creative-cadence.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/create-paid-campaign/references/format-spec.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/create-paid-campaign/references/policy-floor.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/create-paid-campaign/references/message-transmutation.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        }
+      ],
+      "optionalResources": [],
+      "workflows": [
+        "paid-campaign-loop"
+      ],
+      "roles": [
+        "ads",
+        "copy",
+        "creative-assets"
+      ],
+      "knowledgeHandles": []
+    },
+    "create-run-of-show": {
+      "name": "create-run-of-show",
+      "label": "Create a run of show",
+      "description": "Create an owner-ready, minute-by-minute run of show for a live, virtual, community, partner, or in-person event. Use when hosts, speakers, producers, technical operators, cues, contingencies, consent, and follow-up must work as one executable plan.",
+      "path": "skills/create-run-of-show/SKILL.md",
+      "kind": "create",
+      "explicitOnly": false,
+      "intents": [
+        "run of show",
+        "cue sheet",
+        "minute-by-minute",
+        "event rundown",
+        "live event plan"
+      ],
+      "exclusions": [
+        "campaign plan",
+        "connect crm",
+        "executor",
+        "content ideas"
+      ],
+      "requiredResources": [
+        "skills/create-run-of-show/references/anti-patterns.md",
+        "skills/create-run-of-show/fallbacks/sequential.md"
+      ],
+      "conditionalResources": [
+        "skills/create-run-of-show/agents/segment-planner-agent.md",
+        "skills/create-run-of-show/agents/logistics-director-agent.md",
+        "skills/create-run-of-show/agents/critic-agent.md",
+        "skills/create-run-of-show/references/format-conventions.md"
+      ],
+      "resourceConditions": [
+        {
+          "path": "skills/create-run-of-show/agents/segment-planner-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/create-run-of-show/agents/logistics-director-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/create-run-of-show/agents/critic-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/create-run-of-show/references/format-conventions.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        }
+      ],
+      "optionalResources": [
+        "skills/create-run-of-show/references/examples/runofshow-walkthrough.md"
+      ],
+      "workflows": [
+        "launch-product"
+      ],
+      "roles": [],
+      "knowledgeHandles": []
+    },
+    "create-shortform": {
+      "name": "create-shortform",
+      "label": "Create short-form video",
+      "description": "Research, brief, and script production-ready short-form video. Use for TikTok, Instagram Reels, YouTube Shorts, founder demos, UGC-style concepts, hooks, storyboards, recuts, production specifications, or planning how future watch and qualified-response data will be judged.",
+      "path": "skills/create-shortform/SKILL.md",
+      "kind": "create",
+      "explicitOnly": false,
+      "intents": [
+        "short-form video",
+        "tiktok script",
+        "reels script",
+        "youtube shorts",
+        "ugc-style"
+      ],
+      "exclusions": [
+        "analyze a supplied video",
+        "evaluate published short-form"
+      ],
+      "requiredResources": [
+        "skills/create-shortform/references/shortform-brief-method.md",
+        "skills/create-shortform/references/anti-patterns.md",
+        "skills/create-shortform/fallbacks/sequential.md"
+      ],
+      "conditionalResources": [
+        "skills/create-shortform/agents/hook-agent.md",
+        "skills/create-shortform/agents/format-agent.md",
+        "skills/create-shortform/agents/voc-extraction-agent.md",
+        "skills/create-shortform/agents/production-mode-agent.md",
+        "skills/create-shortform/agents/storyboard-agent.md",
+        "skills/create-shortform/agents/audio-agent.md",
+        "skills/create-shortform/agents/copy-pack-agent.md",
+        "skills/create-shortform/agents/platform-tailor-agent.md",
+        "skills/create-shortform/agents/critic-agent.md",
+        "skills/create-shortform/references/storyboard-grammar.md",
+        "skills/create-shortform/references/caption-cta-rules.md",
+        "skills/create-shortform/references/production-modes.md",
+        "skills/create-shortform/references/hook-archetypes.md",
+        "skills/create-shortform/references/platform-intelligence/CONTRACT.md",
+        "skills/create-shortform/references/platform-intelligence/facebook.md",
+        "skills/create-shortform/references/platform-intelligence/founder-demo.md",
+        "skills/create-shortform/references/platform-intelligence/linkedin.md",
+        "skills/create-shortform/references/platform-intelligence/linkedin-launch.md",
+        "skills/create-shortform/references/platform-intelligence/motion-background.md",
+        "skills/create-shortform/references/platform-intelligence/newsletter.md",
+        "skills/create-shortform/references/platform-intelligence/producthunt.md",
+        "skills/create-shortform/references/platform-intelligence/reddit.md",
+        "skills/create-shortform/references/platform-intelligence/reels.md",
+        "skills/create-shortform/references/platform-intelligence/shorts.md",
+        "skills/create-shortform/references/platform-intelligence/showhn.md",
+        "skills/create-shortform/references/platform-intelligence/tiktok.md",
+        "skills/create-shortform/references/platform-intelligence/ugc.md",
+        "skills/create-shortform/references/platform-intelligence/x.md",
+        "skills/create-shortform/references/platform-intelligence/x-launch.md",
+        "skills/create-shortform/references/platform-intelligence/youtube.md",
+        "skills/create-shortform/agents/prompt-author-agent.md",
+        "skills/create-shortform/agents/produce-critic-agent.md",
+        "skills/create-shortform/references/video-brief-schema.md",
+        "skills/create-shortform/references/production-lanes.md",
+        "skills/create-shortform/references/production-pattern.md",
+        "skills/create-shortform/references/produce-quality-gate.md",
+        "skills/create-shortform/references/produce-anti-patterns.md"
+      ],
+      "resourceConditions": [
+        {
+          "path": "skills/create-shortform/agents/hook-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/create-shortform/agents/format-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/create-shortform/agents/voc-extraction-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/create-shortform/agents/production-mode-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/create-shortform/agents/storyboard-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/create-shortform/agents/audio-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/create-shortform/agents/copy-pack-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/create-shortform/agents/platform-tailor-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/create-shortform/agents/critic-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/create-shortform/references/storyboard-grammar.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/create-shortform/references/caption-cta-rules.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/create-shortform/references/production-modes.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/create-shortform/references/hook-archetypes.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/create-shortform/references/platform-intelligence/CONTRACT.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/create-shortform/references/platform-intelligence/facebook.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/create-shortform/references/platform-intelligence/founder-demo.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/create-shortform/references/platform-intelligence/linkedin.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/create-shortform/references/platform-intelligence/linkedin-launch.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/create-shortform/references/platform-intelligence/motion-background.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/create-shortform/references/platform-intelligence/newsletter.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/create-shortform/references/platform-intelligence/producthunt.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/create-shortform/references/platform-intelligence/reddit.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/create-shortform/references/platform-intelligence/reels.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/create-shortform/references/platform-intelligence/shorts.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/create-shortform/references/platform-intelligence/showhn.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/create-shortform/references/platform-intelligence/tiktok.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/create-shortform/references/platform-intelligence/ugc.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/create-shortform/references/platform-intelligence/x.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/create-shortform/references/platform-intelligence/x-launch.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/create-shortform/references/platform-intelligence/youtube.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/create-shortform/agents/prompt-author-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/create-shortform/agents/produce-critic-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/create-shortform/references/video-brief-schema.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/create-shortform/references/production-lanes.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/create-shortform/references/production-pattern.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/create-shortform/references/produce-quality-gate.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/create-shortform/references/produce-anti-patterns.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        }
+      ],
+      "optionalResources": [],
+      "workflows": [
+        "shortform-campaign"
+      ],
+      "roles": [
+        "creative-assets"
+      ],
+      "knowledgeHandles": []
+    },
+    "decision-panel": {
+      "name": "decision-panel",
+      "label": "Resolve a consequential decision",
+      "description": "Resolve a consequential decision through independent positions, dissent, uncertainty, and explicit resolver criteria. Use for requests historically called debate-agents or agents-panel, and for stochastic multi-agent discussion only as an optional deep mode. Works through a sequential single-context fallback when separate contexts are unavailable.",
+      "path": "skills/decision-panel/SKILL.md",
+      "kind": "review",
+      "explicitOnly": false,
+      "intents": [
+        "decision panel",
+        "independent positions",
+        "resolve this decision",
+        "debate agents"
+      ],
+      "exclusions": [
+        "write copy",
+        "campaign plan"
+      ],
+      "requiredResources": [
+        "skills/decision-panel/fallbacks/sequential.md",
+        "skills/decision-panel/references/independent-positions-method.md",
+        "skills/decision-panel/references/anti-patterns.md"
+      ],
+      "conditionalResources": [
+        "skills/decision-panel/references/decision-tree.md",
+        "skills/decision-panel/agents/optimist-agent.md",
+        "skills/decision-panel/agents/skeptic-agent.md",
+        "skills/decision-panel/agents/synthesizer-agent.md",
+        "skills/decision-panel/agents/architect-agent.md",
+        "skills/decision-panel/agents/pragmatist-agent.md",
+        "skills/decision-panel/agents/critic-agent.md",
+        "skills/decision-panel/references/debate-rounds.md",
+        "skills/decision-panel/references/anti-sycophancy.md",
+        "skills/decision-panel/references/poll-protocol.md",
+        "skills/decision-panel/references/idea-ranking-core.md",
+        "skills/decision-panel/agents/resolver-agent.md",
+        "skills/decision-panel/references/report-template.md"
+      ],
+      "resourceConditions": [
+        {
+          "path": "skills/decision-panel/references/decision-tree.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/decision-panel/agents/optimist-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/decision-panel/agents/skeptic-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/decision-panel/agents/synthesizer-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/decision-panel/agents/architect-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/decision-panel/agents/pragmatist-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/decision-panel/agents/critic-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/decision-panel/references/debate-rounds.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/decision-panel/references/anti-sycophancy.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/decision-panel/references/poll-protocol.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/decision-panel/references/idea-ranking-core.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/decision-panel/agents/resolver-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/decision-panel/references/report-template.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        }
+      ],
+      "optionalResources": [],
+      "workflows": [],
+      "roles": [],
+      "knowledgeHandles": []
+    },
+    "design-pricing-and-packaging": {
+      "name": "design-pricing-and-packaging",
+      "label": "Design pricing and packaging",
+      "description": "Design evidence-bounded pricing, packaging, value metrics, tier boundaries, and migration tests. Use when deciding what to charge, what belongs in each package, how customers upgrade, or how to test a price change safely.",
+      "path": "skills/design-pricing-and-packaging/SKILL.md",
+      "kind": "plan",
+      "explicitOnly": false,
+      "intents": [
+        "pricing and packaging",
+        "value metric",
+        "tier boundaries",
+        "what to charge"
+      ],
+      "exclusions": [
+        "landing page copy"
+      ],
+      "requiredResources": [
+        "skills/design-pricing-and-packaging/references/pricing-method.md",
+        "skills/design-pricing-and-packaging/references/pricing-rubric.md",
+        "skills/design-pricing-and-packaging/fallbacks/sequential.md"
+      ],
+      "conditionalResources": [
+        "skills/design-pricing-and-packaging/references/wtp-evidence.md",
+        "skills/design-pricing-and-packaging/references/package-fences.md",
+        "skills/design-pricing-and-packaging/references/unit-economics-checks.md"
+      ],
+      "resourceConditions": [
+        {
+          "path": "skills/design-pricing-and-packaging/references/wtp-evidence.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/design-pricing-and-packaging/references/package-fences.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/design-pricing-and-packaging/references/unit-economics-checks.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        }
+      ],
+      "optionalResources": [
+        "skills/design-pricing-and-packaging/references/examples/seasonal-teams-walkthrough.md"
+      ],
+      "workflows": [],
+      "roles": [],
+      "knowledgeHandles": []
+    },
+    "diagnose-growth": {
+      "name": "diagnose-growth",
+      "label": "Diagnose a growth problem",
+      "description": "Diagnose a growth, funnel, revenue, retention, or campaign performance problem before prescribing tactics. Use when a metric moved, a target is missed, a funnel is weak, or competing explanations need one discriminating test.",
+      "path": "skills/diagnose-growth/SKILL.md",
+      "kind": "diagnose",
+      "explicitOnly": false,
+      "intents": [
+        "diagnose growth",
+        "funnel is weak",
+        "metric moved",
+        "activation is weak",
+        "growth problem",
+        "weak activation funnel",
+        "weak activation",
+        "growth diagnosis"
+      ],
+      "exclusions": [
+        "write a campaign",
+        "create ads"
+      ],
+      "requiredResources": [
+        "skills/diagnose-growth/references/diagnostic-evidence-method.md",
+        "skills/diagnose-growth/fallbacks/sequential.md",
+        "skills/diagnose-growth/references/anti-patterns.md"
+      ],
+      "conditionalResources": [
+        "skills/diagnose-growth/agents/tree-builder-agent.md",
+        "skills/diagnose-growth/agents/external-check-agent.md",
+        "skills/diagnose-growth/agents/hypothesis-agent.md",
+        "skills/diagnose-growth/agents/data-mapper-agent.md",
+        "skills/diagnose-growth/agents/verdict-agent.md",
+        "skills/diagnose-growth/agents/critic-agent.md",
+        "skills/diagnose-growth/references/diagnosis-playbook.md",
+        "skills/diagnose-growth/references/hypothesis-framework.md",
+        "skills/diagnose-growth/references/logic-tree-examples.md",
+        "skills/diagnose-growth/references/format-conventions.md"
+      ],
+      "resourceConditions": [
+        {
+          "path": "skills/diagnose-growth/agents/tree-builder-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/diagnose-growth/agents/external-check-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/diagnose-growth/agents/hypothesis-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/diagnose-growth/agents/data-mapper-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/diagnose-growth/agents/verdict-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/diagnose-growth/agents/critic-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/diagnose-growth/references/diagnosis-playbook.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/diagnose-growth/references/hypothesis-framework.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/diagnose-growth/references/logic-tree-examples.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/diagnose-growth/references/format-conventions.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        }
+      ],
+      "optionalResources": [
+        "skills/diagnose-growth/references/examples/diagnose-walkthrough.md"
+      ],
+      "workflows": [],
+      "roles": [
+        "data-diagnosis"
+      ],
+      "knowledgeHandles": []
+    },
+    "evaluate-outreach": {
+      "name": "evaluate-outreach",
+      "label": "Evaluate a sent outreach cycle",
+      "description": "Evaluate an actually sent outreach batch or sequence using delivery, reply quality, compliance, and segment-level evidence. Use after cold email, founder outreach, partnership outreach, or DMs have results. Not for writing the sequence or authorizing another send.",
+      "path": "skills/evaluate-outreach/SKILL.md",
+      "kind": "evaluate",
+      "explicitOnly": false,
+      "intents": [
+        "evaluate outreach",
+        "sent outreach",
+        "reply quality",
+        "outreach results"
+      ],
+      "exclusions": [
+        "write outreach",
+        "create a sequence"
+      ],
+      "requiredResources": [
+        "skills/evaluate-outreach/references/rubric.md",
+        "skills/evaluate-outreach/references/evaluation-loop-rubric.md",
+        "skills/evaluate-outreach/references/anti-patterns.md",
+        "skills/evaluate-outreach/fallbacks/sequential.md"
+      ],
+      "conditionalResources": [
+        "skills/evaluate-outreach/agents/metric-ingest-agent.md",
+        "skills/evaluate-outreach/agents/diagnosis-agent.md",
+        "skills/evaluate-outreach/agents/recommendation-agent.md",
+        "skills/evaluate-outreach/agents/critic-agent.md"
+      ],
+      "resourceConditions": [
+        {
+          "path": "skills/evaluate-outreach/agents/metric-ingest-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/evaluate-outreach/agents/diagnosis-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/evaluate-outreach/agents/recommendation-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/evaluate-outreach/agents/critic-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        }
+      ],
+      "optionalResources": [],
+      "workflows": [
+        "earned-media-outreach",
+        "outreach-sequence"
+      ],
+      "roles": [],
+      "knowledgeHandles": []
+    },
+    "evaluate-paid-campaign": {
+      "name": "evaluate-paid-campaign",
+      "label": "Evaluate actual paid results",
+      "description": "Evaluate actual paid-media performance by network, audience, creative, and time period. Use after a campaign has delivery or outcome evidence to diagnose attribution limits, fatigue, and qualified results and recommend a bounded keep, revise, pause, or stop decision. Not for creating ads or granting spend authority.",
+      "path": "skills/evaluate-paid-campaign/SKILL.md",
+      "kind": "evaluate",
+      "explicitOnly": false,
+      "intents": [
+        "evaluate paid",
+        "paid campaign results",
+        "actual paid",
+        "what to pause",
+        "paid-media performance"
+      ],
+      "exclusions": [
+        "create ads",
+        "organic posts"
+      ],
+      "requiredResources": [
+        "skills/evaluate-paid-campaign/references/rubric.md",
+        "skills/evaluate-paid-campaign/references/evaluation-loop-rubric.md",
+        "skills/evaluate-paid-campaign/references/anti-patterns.md",
+        "skills/evaluate-paid-campaign/fallbacks/sequential.md"
+      ],
+      "conditionalResources": [
+        "skills/evaluate-paid-campaign/agents/metric-ingest-agent.md",
+        "skills/evaluate-paid-campaign/agents/diagnosis-agent.md",
+        "skills/evaluate-paid-campaign/agents/recommendation-agent.md",
+        "skills/evaluate-paid-campaign/agents/critic-agent.md",
+        "skills/evaluate-paid-campaign/references/measurement-over-heuristics.md"
+      ],
+      "resourceConditions": [
+        {
+          "path": "skills/evaluate-paid-campaign/agents/metric-ingest-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/evaluate-paid-campaign/agents/diagnosis-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/evaluate-paid-campaign/agents/recommendation-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/evaluate-paid-campaign/agents/critic-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/evaluate-paid-campaign/references/measurement-over-heuristics.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        }
+      ],
+      "optionalResources": [],
+      "workflows": [
+        "paid-campaign-loop"
+      ],
+      "roles": [
+        "ads"
+      ],
+      "knowledgeHandles": []
+    },
+    "evaluate-shortform": {
+      "name": "evaluate-shortform",
+      "label": "Evaluate actual short-form output",
+      "description": "Evaluate an actual published or rendered short-form video against its brief, platform reality, audience response, and business signal, then produce a bounded next brief. Use after real output or performance evidence exists. Not for scripting a new video from scratch or authorizing publication.",
+      "path": "skills/evaluate-shortform/SKILL.md",
+      "kind": "evaluate",
+      "explicitOnly": false,
+      "intents": [
+        "evaluate short-form",
+        "published short-form",
+        "short-form results"
+      ],
+      "exclusions": [
+        "script short-form",
+        "create short-form"
+      ],
+      "requiredResources": [
+        "skills/evaluate-shortform/references/rubric.md",
+        "skills/evaluate-shortform/references/anti-patterns.md",
+        "skills/evaluate-shortform/references/shortform-eval-method.md",
+        "skills/evaluate-shortform/fallbacks/sequential.md"
+      ],
+      "conditionalResources": [
+        "skills/evaluate-shortform/agents/hook-strength-agent.md",
+        "skills/evaluate-shortform/agents/eval-runner-agent.md",
+        "skills/evaluate-shortform/references/platform-intelligence/CONTRACT.md",
+        "skills/evaluate-shortform/references/platform-intelligence/facebook.md",
+        "skills/evaluate-shortform/references/platform-intelligence/founder-demo.md",
+        "skills/evaluate-shortform/references/platform-intelligence/linkedin.md",
+        "skills/evaluate-shortform/references/platform-intelligence/linkedin-launch.md",
+        "skills/evaluate-shortform/references/platform-intelligence/motion-background.md",
+        "skills/evaluate-shortform/references/platform-intelligence/newsletter.md",
+        "skills/evaluate-shortform/references/platform-intelligence/producthunt.md",
+        "skills/evaluate-shortform/references/platform-intelligence/reddit.md",
+        "skills/evaluate-shortform/references/platform-intelligence/reels.md",
+        "skills/evaluate-shortform/references/platform-intelligence/shorts.md",
+        "skills/evaluate-shortform/references/platform-intelligence/showhn.md",
+        "skills/evaluate-shortform/references/platform-intelligence/tiktok.md",
+        "skills/evaluate-shortform/references/platform-intelligence/ugc.md",
+        "skills/evaluate-shortform/references/platform-intelligence/x.md",
+        "skills/evaluate-shortform/references/platform-intelligence/x-launch.md",
+        "skills/evaluate-shortform/references/platform-intelligence/youtube.md",
+        "skills/evaluate-shortform/agents/pattern-extractor-agent.md",
+        "skills/evaluate-shortform/agents/critic-agent.md",
+        "skills/evaluate-shortform/references/hook-archetypes.md",
+        "skills/evaluate-shortform/references/format-conventions.md"
+      ],
+      "resourceConditions": [
+        {
+          "path": "skills/evaluate-shortform/agents/hook-strength-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/evaluate-shortform/agents/eval-runner-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/evaluate-shortform/references/platform-intelligence/CONTRACT.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/evaluate-shortform/references/platform-intelligence/facebook.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/evaluate-shortform/references/platform-intelligence/founder-demo.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/evaluate-shortform/references/platform-intelligence/linkedin.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/evaluate-shortform/references/platform-intelligence/linkedin-launch.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/evaluate-shortform/references/platform-intelligence/motion-background.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/evaluate-shortform/references/platform-intelligence/newsletter.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/evaluate-shortform/references/platform-intelligence/producthunt.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/evaluate-shortform/references/platform-intelligence/reddit.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/evaluate-shortform/references/platform-intelligence/reels.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/evaluate-shortform/references/platform-intelligence/shorts.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/evaluate-shortform/references/platform-intelligence/showhn.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/evaluate-shortform/references/platform-intelligence/tiktok.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/evaluate-shortform/references/platform-intelligence/ugc.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/evaluate-shortform/references/platform-intelligence/x.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/evaluate-shortform/references/platform-intelligence/x-launch.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/evaluate-shortform/references/platform-intelligence/youtube.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/evaluate-shortform/agents/pattern-extractor-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/evaluate-shortform/agents/critic-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/evaluate-shortform/references/hook-archetypes.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/evaluate-shortform/references/format-conventions.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        }
+      ],
+      "optionalResources": [],
+      "workflows": [
+        "content-performance-review",
+        "shortform-campaign"
+      ],
+      "roles": [],
+      "knowledgeHandles": []
+    },
+    "fresh-eyes-review": {
+      "name": "fresh-eyes-review",
+      "label": "Review a consequential artifact",
+      "description": "Independently review a consequential finished artifact against its intended outcome, evidence, actual output, risk, and release boundary. Use for a fresh-eyes second opinion before a human ship decision. Claims independence only when a separate context actually reviewed it.",
+      "path": "skills/fresh-eyes-review/SKILL.md",
+      "kind": "review",
+      "explicitOnly": false,
+      "intents": [
+        "fresh-eyes",
+        "fresh eyes review",
+        "second opinion on this artifact"
+      ],
+      "exclusions": [
+        "write the first draft",
+        "create the campaign"
+      ],
+      "requiredResources": [
+        "skills/fresh-eyes-review/fallbacks/sequential.md",
+        "skills/fresh-eyes-review/references/independent-review-method.md",
+        "skills/fresh-eyes-review/references/anti-patterns.md"
+      ],
+      "conditionalResources": [
+        "skills/fresh-eyes-review/references/review-target-and-closeout.md",
+        "skills/fresh-eyes-review/agents/reviewer-agent.md",
+        "skills/fresh-eyes-review/agents/security-reviewer-agent.md",
+        "skills/fresh-eyes-review/agents/performance-reviewer-agent.md",
+        "skills/fresh-eyes-review/agents/correctness-reviewer-agent.md",
+        "skills/fresh-eyes-review/references/specialist-lenses.md",
+        "skills/fresh-eyes-review/references/critic-consensus.md",
+        "skills/fresh-eyes-review/references/noise-filter.md",
+        "skills/fresh-eyes-review/references/scope-drift.md",
+        "skills/fresh-eyes-review/agents/resolver-agent.md",
+        "skills/fresh-eyes-review/references/report-template.md",
+        "skills/fresh-eyes-review/references/quality-feedback-protocol.md"
+      ],
+      "resourceConditions": [
+        {
+          "path": "skills/fresh-eyes-review/references/review-target-and-closeout.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/fresh-eyes-review/agents/reviewer-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/fresh-eyes-review/agents/security-reviewer-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/fresh-eyes-review/agents/performance-reviewer-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/fresh-eyes-review/agents/correctness-reviewer-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/fresh-eyes-review/references/specialist-lenses.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/fresh-eyes-review/references/critic-consensus.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/fresh-eyes-review/references/noise-filter.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/fresh-eyes-review/references/scope-drift.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/fresh-eyes-review/agents/resolver-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/fresh-eyes-review/references/report-template.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/fresh-eyes-review/references/quality-feedback-protocol.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        }
+      ],
+      "optionalResources": [
+        "skills/fresh-eyes-review/references/examples/review-cycle-walkthrough.md"
+      ],
+      "workflows": [
+        "content-intelligence-loop"
+      ],
+      "roles": [],
+      "knowledgeHandles": []
+    },
+    "improve-conversion": {
+      "name": "improve-conversion",
+      "label": "Improve a conversion surface",
+      "description": "Diagnose and revise one conversion surface — landing page, funnel step, offer, message, or acquisition handoff — and return a ready-to-use revision plus exactly one discriminating test. Use when the outcome changes the surface itself. Route paid-media performance readouts to evaluate-paid-campaign, full SEO work to optimize-search, and brand or messaging foundations to create-brand.",
+      "path": "skills/improve-conversion/SKILL.md",
+      "kind": "create",
+      "explicitOnly": false,
+      "intents": [
+        "improve conversion",
+        "conversion experiment",
+        "revise the landing",
+        "onboarding conversion"
+      ],
+      "exclusions": [
+        "seo ranking",
+        "paid results"
+      ],
+      "requiredResources": [
+        "skills/improve-conversion/references/conversion-diagnosis-method.md",
+        "skills/improve-conversion/references/diagnostic-evidence-method.md",
+        "skills/improve-conversion/references/landing-eval-method.md",
+        "skills/improve-conversion/references/landing-eval-rubric.md",
+        "skills/improve-conversion/fallbacks/sequential.md"
+      ],
+      "conditionalResources": [
+        "skills/improve-conversion/agents/conversion-tree-builder-agent.md",
+        "skills/improve-conversion/agents/conversion-external-check-agent.md",
+        "skills/improve-conversion/agents/conversion-hypothesis-agent.md",
+        "skills/improve-conversion/agents/conversion-data-mapper-agent.md",
+        "skills/improve-conversion/agents/conversion-verdict-agent.md",
+        "skills/improve-conversion/agents/conversion-critic-agent.md",
+        "skills/improve-conversion/references/hypothesis-framework.md",
+        "skills/improve-conversion/references/logic-tree-examples.md",
+        "skills/improve-conversion/agents/landing-metric-ingest-agent.md",
+        "skills/improve-conversion/agents/landing-diagnosis-agent.md",
+        "skills/improve-conversion/agents/landing-recommendation-agent.md",
+        "skills/improve-conversion/agents/landing-critic-agent.md",
+        "skills/improve-conversion/references/anti-sycophancy.md",
+        "skills/improve-conversion/references/conversion-diagnosis-anti-patterns.md",
+        "skills/improve-conversion/references/landing-anti-patterns.md"
+      ],
+      "resourceConditions": [
+        {
+          "path": "skills/improve-conversion/agents/conversion-tree-builder-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/improve-conversion/agents/conversion-external-check-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/improve-conversion/agents/conversion-hypothesis-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/improve-conversion/agents/conversion-data-mapper-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/improve-conversion/agents/conversion-verdict-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/improve-conversion/agents/conversion-critic-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/improve-conversion/references/hypothesis-framework.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/improve-conversion/references/logic-tree-examples.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/improve-conversion/agents/landing-metric-ingest-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/improve-conversion/agents/landing-diagnosis-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/improve-conversion/agents/landing-recommendation-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/improve-conversion/agents/landing-critic-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/improve-conversion/references/anti-sycophancy.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/improve-conversion/references/conversion-diagnosis-anti-patterns.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/improve-conversion/references/landing-anti-patterns.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        }
+      ],
+      "optionalResources": [],
+      "workflows": [
+        "content-performance-review",
+        "create-landing-page",
+        "creative-asset-review",
+        "optimize-app-store-listing"
+      ],
+      "roles": [
+        "dr-landing",
+        "saas-landing"
+      ],
+      "knowledgeHandles": []
+    },
+    "knowledge-review": {
+      "name": "knowledge-review",
+      "label": "Audit the facts behind a claim",
+      "description": "Audit the authority, freshness, and uncertainty of the sources and claims behind a decision, and reconcile conflicting evidence. Use for research synthesis, factual-claim checks, or reframing a recommendation built on weak sourcing. This is knowledge review, never code review.",
+      "path": "skills/knowledge-review/SKILL.md",
+      "kind": "review",
+      "explicitOnly": false,
+      "intents": [
+        "knowledge review",
+        "source audit",
+        "conflicting evidence",
+        "authority and freshness",
+        "factual-claim check"
+      ],
+      "exclusions": [
+        "launch plan",
+        "mark missing facts",
+        "keep it as a draft",
+        "code review"
+      ],
+      "requiredResources": [
+        "skills/knowledge-review/references/knowledge-review-method.md",
+        "skills/knowledge-review/fallbacks/sequential.md",
+        "skills/knowledge-review/references/review-rubric.md"
+      ],
+      "conditionalResources": [
+        "skills/knowledge-review/references/provenance.md",
+        "skills/knowledge-review/references/contradiction-protocol.md"
+      ],
+      "resourceConditions": [
+        {
+          "path": "skills/knowledge-review/references/provenance.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/knowledge-review/references/contradiction-protocol.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        }
+      ],
+      "optionalResources": [
+        "skills/knowledge-review/references/examples/activation-claim-walkthrough.md"
+      ],
+      "workflows": [
+        "answer-visibility-monitor"
+      ],
+      "roles": [],
+      "knowledgeHandles": []
+    },
+    "map-user-flow": {
+      "name": "map-user-flow",
+      "label": "Map a product journey",
+      "description": "Map an in-product flow across screens, decisions, transitions, native platform surfaces, and recovery states. Use for a feature or user journey that spans multiple screens or states, before visual UI design or technical architecture.",
+      "path": "skills/map-user-flow/SKILL.md",
+      "kind": "build",
+      "explicitOnly": false,
+      "intents": [
+        "user flow",
+        "map the journey",
+        "screen transitions",
+        "recovery states"
+      ],
+      "exclusions": [
+        "approved flow",
+        "implement the app"
+      ],
+      "requiredResources": [
+        "skills/map-user-flow/references/flow-mapping-method.md",
+        "skills/map-user-flow/references/gates-and-rubric.md",
+        "skills/map-user-flow/references/anti-patterns.md",
+        "skills/map-user-flow/fallbacks/sequential.md"
+      ],
+      "conditionalResources": [
+        "skills/map-user-flow/references/platform-touchpoints.md",
+        "skills/map-user-flow/references/intake-prompts.md",
+        "skills/map-user-flow/agents/structure-agent.md",
+        "skills/map-user-flow/agents/edge-case-agent.md",
+        "skills/map-user-flow/agents/diagram-agent.md",
+        "skills/map-user-flow/agents/wireframe-agent.md",
+        "skills/map-user-flow/agents/validation-agent.md",
+        "skills/map-user-flow/agents/critic-agent.md",
+        "skills/map-user-flow/references/research-checklist.md",
+        "skills/map-user-flow/references/report-template.md"
+      ],
+      "resourceConditions": [
+        {
+          "path": "skills/map-user-flow/references/platform-touchpoints.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/map-user-flow/references/intake-prompts.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/map-user-flow/agents/structure-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/map-user-flow/agents/edge-case-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/map-user-flow/agents/diagram-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/map-user-flow/agents/wireframe-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/map-user-flow/agents/validation-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/map-user-flow/agents/critic-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/map-user-flow/references/research-checklist.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/map-user-flow/references/report-template.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        }
+      ],
+      "optionalResources": [
+        "skills/map-user-flow/references/examples/checkout-walkthrough.md"
+      ],
+      "workflows": [
+        "create-app-preview",
+        "interactive-campaign",
+        "specify-product-experience"
+      ],
+      "roles": [],
+      "knowledgeHandles": []
+    },
+    "measure-growth": {
+      "name": "measure-growth",
+      "label": "Learn from aggregate growth results",
+      "description": "Design growth measurement or learn from marketing results. Use for analytics and tracking plans, KPI trees, campaign measurement, attribution boundaries, experiment readouts, performance reviews, launch retrospectives, cohort or funnel analysis, deciding what to keep or stop, or converting observed results into bounded reusable learning.",
+      "path": "skills/measure-growth/SKILL.md",
+      "kind": "evaluate",
+      "explicitOnly": false,
+      "intents": [
+        "measurement plan",
+        "measure growth",
+        "measurement",
+        "kpi tree",
+        "campaign measurement",
+        "learn from results"
+      ],
+      "exclusions": [
+        "write social posts",
+        "create ads"
+      ],
+      "requiredResources": [
+        "skills/measure-growth/references/measure-rubric.md",
+        "skills/measure-growth/references/campaign-rubric.md",
+        "skills/measure-growth/references/evaluation-loop-rubric.md",
+        "skills/measure-growth/fallbacks/sequential.md"
+      ],
+      "conditionalResources": [
+        "skills/measure-growth/references/measurement-design-contract.md",
+        "skills/measure-growth/agents/measure-metric-ingest-agent.md",
+        "skills/measure-growth/agents/measure-diagnosis-agent.md",
+        "skills/measure-growth/agents/pack-feedback-agent.md",
+        "skills/measure-growth/agents/measure-critic-agent.md",
+        "skills/measure-growth/references/anti-sycophancy.md",
+        "skills/measure-growth/references/legibility-convention.md",
+        "skills/measure-growth/references/performance-data.md",
+        "skills/measure-growth/agents/campaign-metric-ingest-agent.md",
+        "skills/measure-growth/agents/campaign-diagnosis-agent.md",
+        "skills/measure-growth/agents/campaign-recommendation-agent.md",
+        "skills/measure-growth/agents/campaign-critic-agent.md",
+        "skills/measure-growth/references/measure-anti-patterns.md",
+        "skills/measure-growth/references/campaign-anti-patterns.md"
+      ],
+      "resourceConditions": [
+        {
+          "path": "skills/measure-growth/references/measurement-design-contract.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/measure-growth/agents/measure-metric-ingest-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/measure-growth/agents/measure-diagnosis-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/measure-growth/agents/pack-feedback-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/measure-growth/agents/measure-critic-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/measure-growth/references/anti-sycophancy.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/measure-growth/references/legibility-convention.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/measure-growth/references/performance-data.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/measure-growth/agents/campaign-metric-ingest-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/measure-growth/agents/campaign-diagnosis-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/measure-growth/agents/campaign-recommendation-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/measure-growth/agents/campaign-critic-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/measure-growth/references/measure-anti-patterns.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/measure-growth/references/campaign-anti-patterns.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        }
+      ],
+      "optionalResources": [
+        "skills/measure-growth/references/examples/measure-walkthrough.md",
+        "skills/measure-growth/references/examples/campaign-eval-cycle-walkthrough.md"
+      ],
+      "workflows": [
+        "answer-visibility-monitor",
+        "content-intelligence-loop",
+        "content-performance-review",
+        "earned-media-outreach",
+        "interactive-campaign",
+        "launch-product",
+        "lifecycle-campaign",
+        "measured-initiative-loop",
+        "outreach-sequence",
+        "paid-campaign-loop",
+        "position-to-campaign",
+        "referral-loop",
+        "shortform-campaign"
+      ],
+      "roles": [
+        "data-diagnosis",
+        "campaign-data"
+      ],
+      "knowledgeHandles": []
+    },
+    "model-growth-funnel": {
+      "name": "model-growth-funnel",
+      "label": "Model a growth or revenue target",
+      "description": "Build a decision-grade growth or revenue funnel backward from a business target. Use for numeric funnel plans, baseline assumptions, conversion targets, capacity checks, unit economics, sensitivity analysis, or deciding whether a growth goal is feasible.",
+      "path": "skills/model-growth-funnel/SKILL.md",
+      "kind": "plan",
+      "explicitOnly": false,
+      "intents": [
+        "growth funnel model",
+        "unit economics",
+        "numeric funnel",
+        "revenue funnel"
+      ],
+      "exclusions": [
+        "write copy"
+      ],
+      "requiredResources": [
+        "skills/model-growth-funnel/references/funnel-model-method.md",
+        "skills/model-growth-funnel/fallbacks/sequential.md",
+        "skills/model-growth-funnel/references/anti-patterns.md"
+      ],
+      "conditionalResources": [
+        "skills/model-growth-funnel/agents/model-selection-agent.md",
+        "skills/model-growth-funnel/agents/baseline-collector-agent.md",
+        "skills/model-growth-funnel/agents/target-setter-agent.md",
+        "skills/model-growth-funnel/agents/sanity-check-agent.md",
+        "skills/model-growth-funnel/agents/stress-test-agent.md",
+        "skills/model-growth-funnel/agents/critic-agent.md",
+        "skills/model-growth-funnel/references/funnel-models.md",
+        "skills/model-growth-funnel/references/benchmarks.md",
+        "skills/model-growth-funnel/references/unit-economics.md",
+        "skills/model-growth-funnel/references/stress-tests.md",
+        "skills/model-growth-funnel/references/format-conventions.md"
+      ],
+      "resourceConditions": [
+        {
+          "path": "skills/model-growth-funnel/agents/model-selection-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/model-growth-funnel/agents/baseline-collector-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/model-growth-funnel/agents/target-setter-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/model-growth-funnel/agents/sanity-check-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/model-growth-funnel/agents/stress-test-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/model-growth-funnel/agents/critic-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/model-growth-funnel/references/funnel-models.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/model-growth-funnel/references/benchmarks.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/model-growth-funnel/references/unit-economics.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/model-growth-funnel/references/stress-tests.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/model-growth-funnel/references/format-conventions.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        }
+      ],
+      "optionalResources": [
+        "skills/model-growth-funnel/references/examples/funnel-planner-walkthrough.md"
+      ],
+      "workflows": [
+        "target-to-growth-plan"
+      ],
+      "roles": [
+        "data-diagnosis"
+      ],
+      "knowledgeHandles": []
+    },
+    "optimize-search": {
+      "name": "optimize-search",
+      "label": "Improve search or answer visibility",
+      "description": "Diagnose and improve search and answer visibility for a named surface. One entry covering five modes — technical/content SEO, answer-engine (AEO) visibility, app-store ASO, programmatic page systems, competitor comparison pages — with the mode selected by in-body rules. Use when the finished outcome is a diagnosis of why a page, listing, or page system is not ranking, appearing, or being cited, plus prioritized corrections. Route paid-media performance readouts to evaluate-paid-campaign and landing conversion rewrites to improve-conversion.",
+      "path": "skills/optimize-search/SKILL.md",
+      "kind": "diagnose",
+      "explicitOnly": false,
+      "intents": [
+        "optimize search",
+        "seo",
+        "aeo",
+        "aso",
+        "search visibility",
+        "answer visibility"
+      ],
+      "exclusions": [
+        "paid search ads",
+        "landing conversion rewrite"
+      ],
+      "requiredResources": [
+        "skills/optimize-search/references/eval-rubric.md",
+        "skills/optimize-search/references/evaluation-loop-rubric.md",
+        "skills/optimize-search/fallbacks/sequential.md",
+        "skills/optimize-search/references/anti-patterns.md"
+      ],
+      "conditionalResources": [
+        "skills/optimize-search/references/retrieval-layer-seo.md",
+        "skills/optimize-search/agents/crawl-agent.md",
+        "skills/optimize-search/agents/foundations-agent.md",
+        "skills/optimize-search/agents/content-quality-agent.md",
+        "skills/optimize-search/agents/authority-agent.md",
+        "skills/optimize-search/agents/ai-structure-agent.md",
+        "skills/optimize-search/agents/ai-presence-agent.md",
+        "skills/optimize-search/references/platform-intelligence/bing-readiness.md",
+        "skills/optimize-search/references/geo-citation-readiness-checklist.md",
+        "skills/optimize-search/agents/programmatic-template-agent.md",
+        "skills/optimize-search/agents/programmatic-quality-agent.md",
+        "skills/optimize-search/agents/comparison-page-agent.md",
+        "skills/optimize-search/agents/aso-keyword-agent.md",
+        "skills/optimize-search/agents/aso-listing-agent.md",
+        "skills/optimize-search/agents/aso-reviews-agent.md",
+        "skills/optimize-search/agents/aso-competitive-agent.md",
+        "skills/optimize-search/agents/prioritization-agent.md",
+        "skills/optimize-search/agents/critic-agent.md",
+        "skills/optimize-search/references/technical-audit.md",
+        "skills/optimize-search/references/technical-crawler-checklist.md",
+        "skills/optimize-search/references/ai-seo.md",
+        "skills/optimize-search/references/schema-reference.md",
+        "skills/optimize-search/references/aso.md",
+        "skills/optimize-search/references/evidence-classes.md",
+        "skills/optimize-search/agents/eval-metric-ingest-agent.md",
+        "skills/optimize-search/agents/eval-diagnosis-agent.md",
+        "skills/optimize-search/agents/eval-recommendation-agent.md",
+        "skills/optimize-search/agents/eval-critic-agent.md"
+      ],
+      "resourceConditions": [
+        {
+          "path": "skills/optimize-search/references/retrieval-layer-seo.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/optimize-search/agents/crawl-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/optimize-search/agents/foundations-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/optimize-search/agents/content-quality-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/optimize-search/agents/authority-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/optimize-search/agents/ai-structure-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/optimize-search/agents/ai-presence-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/optimize-search/references/platform-intelligence/bing-readiness.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/optimize-search/references/geo-citation-readiness-checklist.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/optimize-search/agents/programmatic-template-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/optimize-search/agents/programmatic-quality-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/optimize-search/agents/comparison-page-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/optimize-search/agents/aso-keyword-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/optimize-search/agents/aso-listing-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/optimize-search/agents/aso-reviews-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/optimize-search/agents/aso-competitive-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/optimize-search/agents/prioritization-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/optimize-search/agents/critic-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/optimize-search/references/technical-audit.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/optimize-search/references/technical-crawler-checklist.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/optimize-search/references/ai-seo.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/optimize-search/references/schema-reference.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/optimize-search/references/aso.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/optimize-search/references/evidence-classes.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/optimize-search/agents/eval-metric-ingest-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/optimize-search/agents/eval-diagnosis-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/optimize-search/agents/eval-recommendation-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/optimize-search/agents/eval-critic-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        }
+      ],
+      "optionalResources": [],
+      "workflows": [
+        "answer-visibility-monitor",
+        "build-programmatic-search",
+        "optimize-app-store-listing"
+      ],
+      "roles": [],
+      "knowledgeHandles": []
+    },
+    "plan-campaign": {
+      "name": "plan-campaign",
+      "label": "Plan a campaign or launch",
+      "description": "Plan an executable product launch or growth campaign. Use for go-to-market plans, Product Hunt or community launches, positioning-to-launch sequencing, channel mix at plan level, campaign pillars and angles, growth experiment design, or turning a product goal into one focused launch sequence with owners and timing. Budget math, run-of-show detail, individual asset writing, and performance readouts belong to their dedicated skills.",
+      "path": "skills/plan-campaign/SKILL.md",
+      "kind": "plan",
+      "explicitOnly": false,
+      "intents": [
+        "launch plan",
+        "campaign plan",
+        "go-to-market",
+        "product hunt launch",
+        "growth campaign",
+        "gtm plan",
+        "plan a launch",
+        "launch strategy",
+        "launch campaign"
+      ],
+      "exclusions": [
+        "run of show",
+        "submit feedback",
+        "knowledge review",
+        "write social only"
+      ],
+      "requiredResources": [
+        "skills/plan-campaign/references/anti-patterns.md",
+        "skills/plan-campaign/fallbacks/sequential.md"
+      ],
+      "conditionalResources": [
+        "skills/plan-campaign/agents/pillar-agent.md",
+        "skills/plan-campaign/agents/angle-agent.md",
+        "skills/plan-campaign/agents/channel-agent.md",
+        "skills/plan-campaign/agents/timeline-agent.md",
+        "skills/plan-campaign/agents/launch-sequencing-agent.md",
+        "skills/plan-campaign/agents/critic-agent.md",
+        "skills/plan-campaign/references/3d-angle-framework.md",
+        "skills/plan-campaign/references/channel-strategy.md",
+        "skills/plan-campaign/references/platform-channels.md",
+        "skills/plan-campaign/references/growth-play-patterns.md",
+        "skills/plan-campaign/references/pillars-before-angles.md"
+      ],
+      "resourceConditions": [
+        {
+          "path": "skills/plan-campaign/agents/pillar-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/plan-campaign/agents/angle-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/plan-campaign/agents/channel-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/plan-campaign/agents/timeline-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/plan-campaign/agents/launch-sequencing-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/plan-campaign/agents/critic-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/plan-campaign/references/3d-angle-framework.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/plan-campaign/references/channel-strategy.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/plan-campaign/references/platform-channels.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/plan-campaign/references/growth-play-patterns.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/plan-campaign/references/pillars-before-angles.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        }
+      ],
+      "optionalResources": [],
+      "workflows": [
+        "channel-to-campaign",
+        "interactive-campaign",
+        "launch-product",
+        "lifecycle-campaign",
+        "measured-initiative-loop",
+        "position-to-campaign",
+        "referral-loop",
+        "target-to-growth-plan"
+      ],
+      "roles": [],
+      "knowledgeHandles": []
+    },
+    "polish-vietnamese": {
+      "name": "polish-vietnamese",
+      "label": "Create or revise Vietnamese",
+      "description": "Create, rewrite, translate, or edit Vietnamese marketing and product language so it sounds natural, precise, and appropriate to the audience. Use for Vietnamese copy, localization, tone and pronoun consistency, removing English calques, regional register, founder or company voice, and preserving factual claims while improving rhythm.",
+      "path": "skills/polish-vietnamese/SKILL.md",
+      "kind": "language",
+      "explicitOnly": false,
+      "intents": [
+        "localize to vietnamese",
+        "polish vietnamese",
+        "rewrite in vietnamese",
+        "rewrite this landing page in vietnamese",
+        "viet lai",
+        "chinh sua tieng viet",
+        "draft vietnamese copy",
+        "write vietnamese copy"
+      ],
+      "exclusions": [],
+      "requiredResources": [
+        "skills/polish-vietnamese/references/absolute-prohibitions.md",
+        "skills/polish-vietnamese/references/anti-patterns.md",
+        "skills/polish-vietnamese/fallbacks/sequential.md"
+      ],
+      "conditionalResources": [
+        "skills/polish-vietnamese/agents/diagnostic-agent.md",
+        "skills/polish-vietnamese/agents/polisher-agent.md",
+        "skills/polish-vietnamese/agents/critic-agent.md",
+        "skills/polish-vietnamese/references/vn-tone-corpus.md",
+        "skills/polish-vietnamese/references/translation-artifacts.md"
+      ],
+      "resourceConditions": [
+        {
+          "path": "skills/polish-vietnamese/agents/diagnostic-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/polish-vietnamese/agents/polisher-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/polish-vietnamese/agents/critic-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/polish-vietnamese/references/vn-tone-corpus.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/polish-vietnamese/references/translation-artifacts.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        }
+      ],
+      "optionalResources": [],
+      "workflows": [],
+      "roles": [],
+      "knowledgeHandles": []
+    },
+    "prioritize-opportunities": {
+      "name": "prioritize-opportunities",
+      "label": "Prioritize opportunities",
+      "description": "Force-rank cross-functional opportunities into proceed, park, and stop decisions. Use when product, growth, sales, operational, or unconventional bets compete for limited time, money, attention, or sequencing.",
+      "path": "skills/prioritize-opportunities/SKILL.md",
+      "kind": "plan",
+      "explicitOnly": false,
+      "intents": [
+        "prioritize opportunities",
+        "force-rank",
+        "proceed park stop"
+      ],
+      "exclusions": [
+        "write copy"
+      ],
+      "requiredResources": [
+        "skills/prioritize-opportunities/references/force-rank-method.md",
+        "skills/prioritize-opportunities/references/ice-scoring-rubric.md",
+        "skills/prioritize-opportunities/references/anti-patterns.md",
+        "skills/prioritize-opportunities/fallbacks/sequential.md"
+      ],
+      "conditionalResources": [
+        "skills/prioritize-opportunities/agents/research-agent.md",
+        "skills/prioritize-opportunities/agents/initiative-generator-agent.md",
+        "skills/prioritize-opportunities/agents/unconventional-agent.md",
+        "skills/prioritize-opportunities/agents/ranking-agent.md",
+        "skills/prioritize-opportunities/agents/ice-scoring-agent.md",
+        "skills/prioritize-opportunities/agents/cut-line-agent.md",
+        "skills/prioritize-opportunities/agents/critic-agent.md",
+        "skills/prioritize-opportunities/references/hypothesis-framework.md",
+        "skills/prioritize-opportunities/references/idea-ranking-core.md",
+        "skills/prioritize-opportunities/references/initiative-types.md",
+        "skills/prioritize-opportunities/references/initiative-planning.md",
+        "skills/prioritize-opportunities/references/format-conventions.md",
+        "skills/prioritize-opportunities/references/churn-playbook.md",
+        "skills/prioritize-opportunities/references/churn-cancel-flow-templates.md",
+        "skills/prioritize-opportunities/references/churn-health-score-guide.md"
+      ],
+      "resourceConditions": [
+        {
+          "path": "skills/prioritize-opportunities/agents/research-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/prioritize-opportunities/agents/initiative-generator-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/prioritize-opportunities/agents/unconventional-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/prioritize-opportunities/agents/ranking-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/prioritize-opportunities/agents/ice-scoring-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/prioritize-opportunities/agents/cut-line-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/prioritize-opportunities/agents/critic-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/prioritize-opportunities/references/hypothesis-framework.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/prioritize-opportunities/references/idea-ranking-core.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/prioritize-opportunities/references/initiative-types.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/prioritize-opportunities/references/initiative-planning.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/prioritize-opportunities/references/format-conventions.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/prioritize-opportunities/references/churn-playbook.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/prioritize-opportunities/references/churn-cancel-flow-templates.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/prioritize-opportunities/references/churn-health-score-guide.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        }
+      ],
+      "optionalResources": [],
+      "workflows": [
+        "target-to-growth-plan"
+      ],
+      "roles": [],
+      "knowledgeHandles": []
+    },
+    "research-channel": {
+      "name": "research-channel",
+      "label": "Research or choose a channel",
+      "description": "Research and choose a marketing channel using owned performance, current public evidence, platform mechanics, audience habitat, native format, proof requirements, operator capacity, benchmarks, and freshness. Use when channel choice needs evidence rather than generic best practices. Not for budget math, campaign planning, or performance readouts — hand those off (see Route elsewhere).",
+      "path": "skills/research-channel/SKILL.md",
+      "kind": "research",
+      "explicitOnly": false,
+      "intents": [
+        "research channel",
+        "choose a channel",
+        "channel research",
+        "platform fit"
+      ],
+      "exclusions": [
+        "write the posts",
+        "create ads"
+      ],
+      "requiredResources": [
+        "skills/research-channel/references/evidence-protocol.md",
+        "skills/research-channel/references/confidence-labeling.md",
+        "skills/research-channel/references/anti-patterns.md",
+        "skills/research-channel/fallbacks/sequential.md"
+      ],
+      "conditionalResources": [
+        "skills/research-channel/agents/evidence-intake-agent.md",
+        "skills/research-channel/agents/benchmark-agent.md",
+        "skills/research-channel/agents/synthesis-agent.md",
+        "skills/research-channel/agents/recommendation-agent.md",
+        "skills/research-channel/agents/critic-agent.md",
+        "skills/research-channel/references/scoring-rubrics.md"
+      ],
+      "resourceConditions": [
+        {
+          "path": "skills/research-channel/agents/evidence-intake-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/research-channel/agents/benchmark-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/research-channel/agents/synthesis-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/research-channel/agents/recommendation-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/research-channel/agents/critic-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/research-channel/references/scoring-rubrics.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        }
+      ],
+      "optionalResources": [],
+      "workflows": [
+        "channel-to-campaign",
+        "content-intelligence-loop",
+        "earned-media-outreach"
+      ],
+      "roles": [],
+      "knowledgeHandles": []
+    },
+    "research-content-ideas": {
+      "name": "research-content-ideas",
+      "label": "Research content opportunities",
+      "description": "Research, select, and brief a small set of evidence-backed content ideas. Use when choosing topics, angles, hooks, formats, or editorial bets for a defined audience and channel without drafting or publishing the content itself.",
+      "path": "skills/research-content-ideas/SKILL.md",
+      "kind": "research",
+      "explicitOnly": false,
+      "intents": [
+        "content ideas",
+        "editorial bets",
+        "topic angles",
+        "content research"
+      ],
+      "exclusions": [
+        "write the posts",
+        "connect crm",
+        "executor",
+        "run of show"
+      ],
+      "requiredResources": [
+        "skills/research-content-ideas/references/anti-patterns.md",
+        "skills/research-content-ideas/references/confidence-labeling.md",
+        "skills/research-content-ideas/references/content-ideas-method.md",
+        "skills/research-content-ideas/fallbacks/sequential.md"
+      ],
+      "conditionalResources": [
+        "skills/research-content-ideas/agents/platform-scout-agent.md",
+        "skills/research-content-ideas/references/scout-protocol.md",
+        "skills/research-content-ideas/agents/audience-fit-agent.md",
+        "skills/research-content-ideas/agents/pattern-extractor-agent.md",
+        "skills/research-content-ideas/agents/audio-trend-agent.md",
+        "skills/research-content-ideas/agents/synthesis-agent.md",
+        "skills/research-content-ideas/agents/critic-agent.md",
+        "skills/research-content-ideas/references/scoring-rubrics.md",
+        "skills/research-content-ideas/references/format-conventions.md",
+        "skills/research-content-ideas/references/clipping-and-live.md"
+      ],
+      "resourceConditions": [
+        {
+          "path": "skills/research-content-ideas/agents/platform-scout-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/research-content-ideas/references/scout-protocol.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/research-content-ideas/agents/audience-fit-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/research-content-ideas/agents/pattern-extractor-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/research-content-ideas/agents/audio-trend-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/research-content-ideas/agents/synthesis-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/research-content-ideas/agents/critic-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/research-content-ideas/references/scoring-rubrics.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/research-content-ideas/references/format-conventions.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/research-content-ideas/references/clipping-and-live.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        }
+      ],
+      "optionalResources": [
+        "skills/research-content-ideas/references/examples/shortform-research-walkthrough.md"
+      ],
+      "workflows": [
+        "content-intelligence-loop",
+        "shortform-campaign"
+      ],
+      "roles": [],
+      "knowledgeHandles": []
+    },
+    "research-positioning": {
+      "name": "research-positioning",
+      "label": "Understand a market, customer, offer, or position",
+      "description": "Research a product's market, ideal customer, alternatives, demand, offer, and positioning. Use for ICP research, market or competitor analysis, customer-language synthesis, segmentation, category framing, positioning, messaging foundations, or deciding who a product should serve and why it should win.",
+      "path": "skills/research-positioning/SKILL.md",
+      "kind": "research",
+      "explicitOnly": false,
+      "intents": [
+        "positioning",
+        "icp research",
+        "competitor analysis",
+        "market research",
+        "who we should serve"
+      ],
+      "exclusions": [
+        "write the campaign",
+        "submit feedback"
+      ],
+      "requiredResources": [
+        "skills/research-positioning/fallbacks/sequential.md"
+      ],
+      "conditionalResources": [
+        "skills/research-positioning/references/confidence-labeling.md",
+        "skills/research-positioning/agents/voc-collector-agent.md",
+        "skills/research-positioning/agents/persona-agent.md",
+        "skills/research-positioning/agents/pain-analysis-agent.md",
+        "skills/research-positioning/agents/habitat-agent.md",
+        "skills/research-positioning/agents/decision-psychology-agent.md",
+        "skills/research-positioning/agents/synthesis-agent.md",
+        "skills/research-positioning/agents/icp-critic-agent.md",
+        "skills/research-positioning/references/voice-of-customer.md",
+        "skills/research-positioning/references/customer-interviews.md",
+        "skills/research-positioning/references/habitat-mapping.md",
+        "skills/research-positioning/references/confidence-and-bias.md",
+        "skills/research-positioning/references/icp-format-conventions.md",
+        "skills/research-positioning/references/icp-anti-patterns.md",
+        "skills/research-positioning/agents/trends-agent.md",
+        "skills/research-positioning/agents/sizing-agent.md",
+        "skills/research-positioning/agents/competitor-agent.md",
+        "skills/research-positioning/agents/consumer-landscape-agent.md",
+        "skills/research-positioning/agents/cross-analysis-agent.md",
+        "skills/research-positioning/agents/opportunity-agent.md",
+        "skills/research-positioning/agents/market-critic-agent.md",
+        "skills/research-positioning/references/competitor-analysis-framework.md",
+        "skills/research-positioning/references/market-sizing-guide.md",
+        "skills/research-positioning/references/gap-analysis-template.md",
+        "skills/research-positioning/references/market-format-conventions.md",
+        "skills/research-positioning/references/market-anti-patterns.md"
+      ],
+      "resourceConditions": [
+        {
+          "path": "skills/research-positioning/references/confidence-labeling.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/research-positioning/agents/voc-collector-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/research-positioning/agents/persona-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/research-positioning/agents/pain-analysis-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/research-positioning/agents/habitat-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/research-positioning/agents/decision-psychology-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/research-positioning/agents/synthesis-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/research-positioning/agents/icp-critic-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/research-positioning/references/voice-of-customer.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/research-positioning/references/customer-interviews.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/research-positioning/references/habitat-mapping.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/research-positioning/references/confidence-and-bias.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/research-positioning/references/icp-format-conventions.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/research-positioning/references/icp-anti-patterns.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/research-positioning/agents/trends-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/research-positioning/agents/sizing-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/research-positioning/agents/competitor-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/research-positioning/agents/consumer-landscape-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/research-positioning/agents/cross-analysis-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/research-positioning/agents/opportunity-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/research-positioning/agents/market-critic-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/research-positioning/references/competitor-analysis-framework.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/research-positioning/references/market-sizing-guide.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/research-positioning/references/gap-analysis-template.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/research-positioning/references/market-format-conventions.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/research-positioning/references/market-anti-patterns.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        }
+      ],
+      "optionalResources": [],
+      "workflows": [
+        "create-landing-page",
+        "earned-media-outreach",
+        "launch-product",
+        "outreach-sequence",
+        "paid-campaign-loop",
+        "position-to-campaign"
+      ],
+      "roles": [
+        "dr-landing",
+        "saas-landing"
+      ],
+      "knowledgeHandles": []
+    },
+    "shape-initiative": {
+      "name": "shape-initiative",
+      "label": "Shape an ambiguous initiative",
+      "description": "Turn an ambiguous initiative into one bounded decision and immediate next move. Use when a request is vague, over-broad, solution-first, or missing a success boundary, owner, constraint, or reversible starting point.",
+      "path": "skills/shape-initiative/SKILL.md",
+      "kind": "plan",
+      "explicitOnly": false,
+      "intents": [
+        "shape this initiative",
+        "ambiguous initiative",
+        "bounded decision",
+        "what should we do"
+      ],
+      "exclusions": [
+        "write finished copy"
+      ],
+      "requiredResources": [
+        "skills/shape-initiative/references/initiative-shaping-method.md",
+        "skills/shape-initiative/references/anti-patterns.md",
+        "skills/shape-initiative/fallbacks/sequential.md"
+      ],
+      "conditionalResources": [
+        "skills/shape-initiative/references/orchestration-steps.md",
+        "skills/shape-initiative/references/context-gathering.md",
+        "skills/shape-initiative/references/interview-techniques.md",
+        "skills/shape-initiative/references/communication-discipline.md",
+        "skills/shape-initiative/references/divergence-pass.md",
+        "skills/shape-initiative/references/idea-ranking-core.md",
+        "skills/shape-initiative/agents/idea-critic-agent.md",
+        "skills/shape-initiative/references/output-formats.md",
+        "skills/shape-initiative/references/plan-review-modes.md",
+        "skills/shape-initiative/references/question-bank.md",
+        "skills/shape-initiative/references/configuration.md",
+        "skills/shape-initiative/references/example-contracts.md"
+      ],
+      "resourceConditions": [
+        {
+          "path": "skills/shape-initiative/references/orchestration-steps.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/shape-initiative/references/context-gathering.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/shape-initiative/references/interview-techniques.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/shape-initiative/references/communication-discipline.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/shape-initiative/references/divergence-pass.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/shape-initiative/references/idea-ranking-core.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/shape-initiative/agents/idea-critic-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/shape-initiative/references/output-formats.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/shape-initiative/references/plan-review-modes.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/shape-initiative/references/question-bank.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/shape-initiative/references/configuration.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/shape-initiative/references/example-contracts.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        }
+      ],
+      "optionalResources": [],
+      "workflows": [],
+      "roles": [],
+      "knowledgeHandles": []
+    },
+    "submit-feedback": {
+      "name": "submit-feedback",
+      "label": "Share a Conquistador experience or report a product failure",
+      "description": "Prepare an opt-in, redacted GitHub issue about the user's experience with Conquistador and submit only after approval of the exact public payload and destination. Use when the user asks to share feedback, report a Conquistador failure, or contribute a session excerpt. Do not use for ordinary copy revision, private journaling, or feedback about another product.",
+      "path": "skills/submit-feedback/SKILL.md",
+      "kind": "review",
+      "explicitOnly": true,
+      "intents": [
+        "submit feedback",
+        "share feedback",
+        "report a conquistador failure",
+        "file a conquistador issue"
+      ],
+      "exclusions": [
+        "launch plan",
+        "draft a launch",
+        "product facts",
+        "keep it as a draft"
+      ],
+      "requiredResources": [
+        "skills/submit-feedback/references/method.md",
+        "skills/submit-feedback/references/output-contract.md"
+      ],
+      "conditionalResources": [],
+      "resourceConditions": [],
+      "optionalResources": [],
+      "workflows": [],
+      "roles": [],
+      "knowledgeHandles": []
+    },
+    "write-copy": {
+      "name": "write-copy",
+      "label": "Write product or campaign copy",
+      "description": "Write or rewrite finished product-marketing copy blocks: landing pages, product pages, headlines, calls to action, messaging variants, and launch announcement copy. Use when the deliverable is paste-ready copy that is specific, credible, on-brand, and ready to publish. Route multi-touch outreach sequences to write-outreach, channel-native social posts to write-social, long-form articles to write-longform, and full paid-campaign buildouts to create-paid-campaign.",
+      "path": "skills/write-copy/SKILL.md",
+      "kind": "create",
+      "explicitOnly": false,
+      "intents": [
+        "landing page copy",
+        "landing page",
+        "launch email",
+        "headline",
+        "call to action",
+        "product page copy",
+        "launch announcement copy",
+        "landing copy",
+        "draft a headline"
+      ],
+      "exclusions": [
+        "linkedin post",
+        "linkedin announcement",
+        "outreach sequence",
+        "social posts",
+        "long-form article"
+      ],
+      "requiredResources": [
+        "skills/write-copy/references/sales-argument.md",
+        "skills/write-copy/references/copy-review.md",
+        "skills/write-copy/references/anti-patterns.md",
+        "skills/write-copy/fallbacks/sequential.md"
+      ],
+      "conditionalResources": [
+        "skills/write-copy/agents/hook-agent.md",
+        "skills/write-copy/agents/body-agent.md",
+        "skills/write-copy/agents/cta-agent.md",
+        "skills/write-copy/agents/social-proof-agent.md",
+        "skills/write-copy/agents/variant-agent.md",
+        "skills/write-copy/agents/voice-agent.md",
+        "skills/write-copy/agents/psychology-agent.md",
+        "skills/write-copy/agents/zero-risk-agent.md",
+        "skills/write-copy/agents/critic-agent.md",
+        "skills/write-copy/references/discovery-story.md",
+        "skills/write-copy/references/lifecycle-sequences.md"
+      ],
+      "resourceConditions": [
+        {
+          "path": "skills/write-copy/agents/hook-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/write-copy/agents/body-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/write-copy/agents/cta-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/write-copy/agents/social-proof-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/write-copy/agents/variant-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/write-copy/agents/voice-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/write-copy/agents/psychology-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/write-copy/agents/zero-risk-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/write-copy/agents/critic-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/write-copy/references/discovery-story.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/write-copy/references/lifecycle-sequences.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        }
+      ],
+      "optionalResources": [],
+      "workflows": [
+        "build-programmatic-search",
+        "channel-to-campaign",
+        "create-landing-page",
+        "launch-product",
+        "lifecycle-campaign",
+        "optimize-app-store-listing",
+        "position-to-campaign",
+        "referral-loop"
+      ],
+      "roles": [
+        "copy",
+        "dr-landing",
+        "saas-landing"
+      ],
+      "knowledgeHandles": []
+    },
+    "write-longform": {
+      "name": "write-longform",
+      "label": "Write long-form work",
+      "description": "Research, structure, and write a substantive long-form argument. Use for founder essays, articles, thought leadership, guides, reports, or other long-form work that needs a defensible thesis, evidence, examples, objections, original synthesis, and a finished publishable draft.",
+      "path": "skills/write-longform/SKILL.md",
+      "kind": "create",
+      "explicitOnly": false,
+      "intents": [
+        "long-form",
+        "founder essay",
+        "thought leadership",
+        "write an article",
+        "write a guide"
+      ],
+      "exclusions": [
+        "landing page copy",
+        "social posts"
+      ],
+      "requiredResources": [
+        "skills/write-longform/references/research-method.md",
+        "skills/write-longform/references/rubric.md",
+        "skills/write-longform/references/anti-patterns.md",
+        "skills/write-longform/fallbacks/sequential.md"
+      ],
+      "conditionalResources": [
+        "skills/write-longform/agents/research.md",
+        "skills/write-longform/agents/outline.md",
+        "skills/write-longform/agents/draft.md",
+        "skills/write-longform/agents/critic.md",
+        "skills/write-longform/references/structure-patterns.md",
+        "skills/write-longform/references/anti-collapse.md",
+        "skills/write-longform/references/format-conventions.md"
+      ],
+      "resourceConditions": [
+        {
+          "path": "skills/write-longform/agents/research.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/write-longform/agents/outline.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/write-longform/agents/draft.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/write-longform/agents/critic.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/write-longform/references/structure-patterns.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/write-longform/references/anti-collapse.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/write-longform/references/format-conventions.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        }
+      ],
+      "optionalResources": [],
+      "workflows": [],
+      "roles": [
+        "copy"
+      ],
+      "knowledgeHandles": []
+    },
+    "write-outreach": {
+      "name": "write-outreach",
+      "label": "Write direct outreach",
+      "description": "Create signal-led outreach sequences and reply handling. Use for cold email, founder outreach, partnership or sales messages, LinkedIn DMs, other direct messages, proposals, follow-ups, inbound reply handling, deliverability, compliance, or planning how future qualified conversations will be judged.",
+      "path": "skills/write-outreach/SKILL.md",
+      "kind": "create",
+      "explicitOnly": false,
+      "intents": [
+        "outreach sequence",
+        "cold email",
+        "linkedin dm",
+        "direct message sequence",
+        "sales sequence"
+      ],
+      "exclusions": [
+        "linkedin post",
+        "linkedin announcement",
+        "landing page copy"
+      ],
+      "requiredResources": [
+        "skills/write-outreach/references/copy-validation-rubric.md",
+        "skills/write-outreach/references/anti-patterns.md",
+        "skills/write-outreach/fallbacks/sequential.md"
+      ],
+      "conditionalResources": [
+        "skills/write-outreach/references/frameworks/outreach-decisions.md",
+        "skills/write-outreach/references/modes/no-pitch-research.md",
+        "skills/write-outreach/agents/signal-analyst.md",
+        "skills/write-outreach/agents/strategist.md",
+        "skills/write-outreach/agents/proof-selector.md",
+        "skills/write-outreach/agents/composer.md",
+        "skills/write-outreach/agents/voice-auditor.md",
+        "skills/write-outreach/agents/critic.md",
+        "skills/write-outreach/agents/reply-classifier.md",
+        "skills/write-outreach/agents/reply-composer.md",
+        "skills/write-outreach/references/proof-types.md"
+      ],
+      "resourceConditions": [
+        {
+          "path": "skills/write-outreach/references/frameworks/outreach-decisions.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/write-outreach/references/modes/no-pitch-research.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/write-outreach/agents/signal-analyst.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/write-outreach/agents/strategist.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/write-outreach/agents/proof-selector.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/write-outreach/agents/composer.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/write-outreach/agents/voice-auditor.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/write-outreach/agents/critic.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/write-outreach/agents/reply-classifier.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/write-outreach/agents/reply-composer.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/write-outreach/references/proof-types.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        }
+      ],
+      "optionalResources": [],
+      "workflows": [
+        "channel-to-campaign",
+        "earned-media-outreach",
+        "measured-initiative-loop",
+        "outreach-sequence"
+      ],
+      "roles": [
+        "copy"
+      ],
+      "knowledgeHandles": []
+    },
+    "write-social": {
+      "name": "write-social",
+      "label": "Write social/community work",
+      "description": "Create channel-native social and community marketing. Use for Product Hunt listings, Reddit posts or community launches, X posts and threads, LinkedIn posts, founder or company social content, reply banks, launch sequences, community participation, or rewriting social work so it delivers value in-platform without deceptive engagement tactics. Not for ad copy, landing copy, or outreach DMs — hand those off (see Route elsewhere).",
+      "path": "skills/write-social/SKILL.md",
+      "kind": "create",
+      "explicitOnly": false,
+      "intents": [
+        "linkedin post",
+        "linkedin announcement",
+        "social posts",
+        "reddit post",
+        "product hunt listing",
+        "x thread",
+        "community post",
+        "social post",
+        "linkedin product announcement",
+        "linkedin update"
+      ],
+      "exclusions": [
+        "linkedin dm",
+        "linkedin ads",
+        "landing page copy",
+        "outreach sequence"
+      ],
+      "requiredResources": [
+        "skills/write-social/references/rubric.md",
+        "skills/write-social/references/method.md",
+        "skills/write-social/references/anti-patterns.md",
+        "skills/write-social/references/critical-gates.md",
+        "skills/write-social/fallbacks/sequential.md"
+      ],
+      "conditionalResources": [
+        "skills/write-social/agents/launch-copywriter-agent.md",
+        "skills/write-social/agents/guard-checker-agent.md",
+        "skills/write-social/agents/copywriter-agent.md",
+        "skills/write-social/agents/format-checker-agent.md",
+        "skills/write-social/agents/critic-agent.md",
+        "skills/write-social/references/hook-archetypes.md",
+        "skills/write-social/references/legibility-convention.md",
+        "skills/write-social/references/why-this-works-convention.md"
+      ],
+      "resourceConditions": [
+        {
+          "path": "skills/write-social/agents/launch-copywriter-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/write-social/agents/guard-checker-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/write-social/agents/copywriter-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/write-social/agents/format-checker-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/write-social/agents/critic-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/write-social/references/hook-archetypes.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/write-social/references/legibility-convention.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/write-social/references/why-this-works-convention.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        }
+      ],
+      "optionalResources": [
+        "skills/write-social/references/examples/social-walkthrough.md",
+        "skills/write-social/references/examples/launch-walkthrough.md"
+      ],
+      "workflows": [
+        "channel-to-campaign",
+        "content-intelligence-loop",
+        "launch-product"
+      ],
+      "roles": [
+        "copy"
+      ],
+      "knowledgeHandles": []
+    },
+    "write-technical-docs": {
+      "name": "write-technical-docs",
+      "label": "Write technical documentation",
+      "description": "Create or update code-grounded technical documentation. Use for README and setup guides, user/developer/operator docs, configuration and troubleshooting, API examples, architecture decisions, runbooks, migrations, incidents, changelogs, release drafts, ship snapshots, or staleness audits.",
+      "path": "skills/write-technical-docs/SKILL.md",
+      "kind": "build",
+      "explicitOnly": false,
+      "intents": [
+        "technical documentation",
+        "api docs",
+        "readme and setup",
+        "operator docs"
+      ],
+      "exclusions": [
+        "marketing copy",
+        "launch email"
+      ],
+      "requiredResources": [
+        "skills/write-technical-docs/references/docs-writing-method.md",
+        "skills/write-technical-docs/references/anti-patterns.md",
+        "skills/write-technical-docs/fallbacks/sequential.md"
+      ],
+      "conditionalResources": [
+        "skills/write-technical-docs/agents/scanner-agent.md",
+        "skills/write-technical-docs/agents/audience-profiler-agent.md",
+        "skills/write-technical-docs/agents/concept-extractor-agent.md",
+        "skills/write-technical-docs/agents/writer-agent.md",
+        "skills/write-technical-docs/references/doc-template.md",
+        "skills/write-technical-docs/agents/staleness-checker-agent.md",
+        "skills/write-technical-docs/agents/critic-agent.md",
+        "skills/write-technical-docs/references/intake-prompts.md",
+        "skills/write-technical-docs/references/artifact-paths.md",
+        "skills/write-technical-docs/references/report-template.md",
+        "skills/write-technical-docs/references/ship-log-template.md"
+      ],
+      "resourceConditions": [
+        {
+          "path": "skills/write-technical-docs/agents/scanner-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/write-technical-docs/agents/audience-profiler-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/write-technical-docs/agents/concept-extractor-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/write-technical-docs/agents/writer-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/write-technical-docs/references/doc-template.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/write-technical-docs/agents/staleness-checker-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/write-technical-docs/agents/critic-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/write-technical-docs/references/intake-prompts.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/write-technical-docs/references/artifact-paths.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/write-technical-docs/references/report-template.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/write-technical-docs/references/ship-log-template.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        }
+      ],
+      "optionalResources": [
+        "skills/write-technical-docs/references/examples/api-readme-walkthrough.md"
+      ],
+      "workflows": [],
+      "roles": [],
+      "knowledgeHandles": []
+    }
+  },
+  "unavailableMethods": [],
+  "workflows": [
+    {
+      "name": "answer-visibility-monitor",
+      "label": "answer visibility monitor",
+      "description": "Use privately for an on-demand, dated audit of whether a product or source appears or is cited in AI answer systems.",
+      "path": "skills/conquistador/workflows/answer-visibility-monitor.md",
+      "dependencies": [
+        "optimize-search",
+        "knowledge-review",
+        "measure-growth"
+      ],
+      "executableGraph": false
+    },
+    {
+      "name": "build-programmatic-search",
+      "label": "build programmatic search",
+      "description": "Use privately for programmatic SEO, comparison pages, location/category templates, or other scaled search inventory.",
+      "path": "skills/conquistador/workflows/build-programmatic-search.md",
+      "dependencies": [
+        "optimize-search",
+        "write-copy"
+      ],
+      "executableGraph": false
+    },
+    {
+      "name": "channel-to-campaign",
+      "label": "channel to campaign",
+      "description": "Use privately when channel choice needs current evidence and must end in a real native test.",
+      "path": "skills/conquistador/workflows/channel-to-campaign.md",
+      "dependencies": [
+        "research-channel",
+        "plan-campaign",
+        "write-social",
+        "write-copy",
+        "write-outreach"
+      ],
+      "executableGraph": false
+    },
+    {
+      "name": "content-intelligence-loop",
+      "label": "content intelligence loop",
+      "description": "This file is a prose-composition source with no execution authority. The separate executable graph at `runtime/fixtures/playbooks/content-intelligence-loop.json` is locally implemented and verified with synthetic fixtures. Those checks establish local runner behavior only. Live execution, provider behavior and human acceptance remain unverified.",
+      "path": "skills/conquistador/workflows/content-intelligence-loop.md",
+      "dependencies": [
+        "research-content-ideas",
+        "write-social",
+        "fresh-eyes-review",
+        "measure-growth",
+        "research-channel"
+      ],
+      "executableGraph": false
+    },
+    {
+      "name": "content-performance-review",
+      "label": "content performance review",
+      "description": "Use privately for measured organic text, image, carousel, newsletter, or video content.",
+      "path": "skills/conquistador/workflows/content-performance-review.md",
+      "dependencies": [
+        "measure-growth",
+        "improve-conversion",
+        "evaluate-shortform"
+      ],
+      "executableGraph": false
+    },
+    {
+      "name": "create-app-preview",
+      "label": "create app preview",
+      "description": "Use privately for a screenshot sequence, store preview, founder demo, or short app interaction story.",
+      "path": "skills/conquistador/workflows/create-app-preview.md",
+      "dependencies": [
+        "map-user-flow",
+        "brief-creative"
+      ],
+      "executableGraph": false
+    },
+    {
+      "name": "create-landing-page",
+      "label": "create landing page",
+      "description": "Use privately when the user needs a complete page argument and implementation-ready handoff.",
+      "path": "skills/conquistador/workflows/create-landing-page.md",
+      "dependencies": [
+        "research-positioning",
+        "write-copy",
+        "brief-creative",
+        "improve-conversion"
+      ],
+      "executableGraph": false
+    },
+    {
+      "name": "creative-asset-review",
+      "label": "creative asset review",
+      "description": "Use privately to review an actual rendered image, graphic, carousel frame, share card, or similar asset.",
+      "path": "skills/conquistador/workflows/creative-asset-review.md",
+      "dependencies": [
+        "brief-creative",
+        "improve-conversion"
+      ],
+      "executableGraph": false
+    },
+    {
+      "name": "earned-media-outreach",
+      "label": "earned media outreach",
+      "description": "Use privately for press, podcast, newsletter, analyst, creator, or other earned-media opportunities.",
+      "path": "skills/conquistador/workflows/earned-media-outreach.md",
+      "dependencies": [
+        "research-channel",
+        "research-positioning",
+        "write-outreach",
+        "evaluate-outreach",
+        "measure-growth"
+      ],
+      "executableGraph": false
+    },
+    {
+      "name": "interactive-campaign",
+      "label": "interactive campaign",
+      "description": "Use privately for a minigame, calculator, quiz, simulation, challenge, or other interactive growth asset.",
+      "path": "skills/conquistador/workflows/interactive-campaign.md",
+      "dependencies": [
+        "plan-campaign",
+        "brief-creative",
+        "map-user-flow",
+        "measure-growth"
+      ],
+      "executableGraph": false
+    },
+    {
+      "name": "launch-product",
+      "label": "launch product",
+      "description": "Use privately for a focused product launch or relaunch on one or more named channels.",
+      "path": "skills/conquistador/workflows/launch-product.md",
+      "dependencies": [
+        "research-positioning",
+        "plan-campaign",
+        "write-social",
+        "write-copy",
+        "brief-creative",
+        "create-run-of-show",
+        "measure-growth"
+      ],
+      "executableGraph": false
+    },
+    {
+      "name": "lifecycle-campaign",
+      "label": "lifecycle campaign",
+      "description": "Use privately for activation, onboarding, retention, re-engagement, or other behavior-triggered communication.",
+      "path": "skills/conquistador/workflows/lifecycle-campaign.md",
+      "dependencies": [
+        "plan-campaign",
+        "write-copy",
+        "measure-growth"
+      ],
+      "executableGraph": false
+    },
+    {
+      "name": "measured-initiative-loop",
+      "label": "measured initiative loop",
+      "description": "Use privately for a campaign or growth initiative that must learn across bounded cycles.",
+      "path": "skills/conquistador/workflows/measured-initiative-loop.md",
+      "dependencies": [
+        "plan-campaign",
+        "write-outreach",
+        "measure-growth"
+      ],
+      "executableGraph": false
+    },
+    {
+      "name": "optimize-app-store-listing",
+      "label": "optimize app store listing",
+      "description": "Use privately for App Store or marketplace listing search, conversion, and review intelligence.",
+      "path": "skills/conquistador/workflows/optimize-app-store-listing.md",
+      "dependencies": [
+        "optimize-search",
+        "write-copy",
+        "brief-creative",
+        "improve-conversion"
+      ],
+      "executableGraph": false
+    },
+    {
+      "name": "outreach-sequence",
+      "label": "outreach sequence",
+      "description": "Use privately for founder, sales, partnership, or other direct outreach from creation through readout.",
+      "path": "skills/conquistador/workflows/outreach-sequence.md",
+      "dependencies": [
+        "research-positioning",
+        "write-outreach",
+        "evaluate-outreach",
+        "measure-growth"
+      ],
+      "executableGraph": false
+    },
+    {
+      "name": "paid-campaign-loop",
+      "label": "paid campaign loop",
+      "description": "Use privately when paid-media creation and actual-result evaluation must share one decision spine.",
+      "path": "skills/conquistador/workflows/paid-campaign-loop.md",
+      "dependencies": [
+        "research-positioning",
+        "create-paid-campaign",
+        "allocate-marketing-budget",
+        "brief-creative",
+        "evaluate-paid-campaign",
+        "measure-growth"
+      ],
+      "executableGraph": false
+    },
+    {
+      "name": "position-to-campaign",
+      "label": "position to campaign",
+      "description": "Use privately when the product needs an evidenced audience and position carried through to one first campaign, rather than isolated copy.",
+      "path": "skills/conquistador/workflows/position-to-campaign.md",
+      "dependencies": [
+        "research-positioning",
+        "plan-campaign",
+        "write-copy",
+        "measure-growth"
+      ],
+      "executableGraph": false
+    },
+    {
+      "name": "referral-loop",
+      "label": "referral loop",
+      "description": "Use privately when the user wants referral, invitation, or sharing-led growth.",
+      "path": "skills/conquistador/workflows/referral-loop.md",
+      "dependencies": [
+        "measure-growth",
+        "plan-campaign",
+        "write-copy"
+      ],
+      "executableGraph": false
+    },
+    {
+      "name": "shortform-campaign",
+      "label": "shortform campaign",
+      "description": "Use privately for TikTok, Reels, Shorts, founder demos, UGC-style video, and measured recuts.",
+      "path": "skills/conquistador/workflows/shortform-campaign.md",
+      "dependencies": [
+        "research-content-ideas",
+        "create-shortform",
+        "evaluate-shortform",
+        "measure-growth"
+      ],
+      "executableGraph": false
+    },
+    {
+      "name": "specify-product-experience",
+      "label": "specify product experience",
+      "description": "This workflow is parent-routed skill composition, not an executable playbook. Load it only when the requested product specification needs multiple outcomes. A narrow flow or UI request can use its primary outcome alone.",
+      "path": "skills/conquistador/workflows/specify-product-experience.md",
+      "dependencies": [
+        "map-user-flow",
+        "brief-product-ui"
+      ],
+      "executableGraph": false
+    },
+    {
+      "name": "target-to-growth-plan",
+      "label": "target to growth plan",
+      "description": "Use privately when a growth or revenue target needs numeric feasibility and a focused first move.",
+      "path": "skills/conquistador/workflows/target-to-growth-plan.md",
+      "dependencies": [
+        "model-growth-funnel",
+        "prioritize-opportunities",
+        "allocate-marketing-budget",
+        "plan-campaign"
+      ],
+      "executableGraph": false
+    }
+  ],
+  "roles": [
+    {
+      "name": "ads",
+      "label": "Ads",
+      "description": "Paid campaign creation and account-ready changes",
+      "path": "skills/conquistador/specialists/ads-agent.md",
+      "dependencies": [
+        "create-paid-campaign",
+        "evaluate-paid-campaign",
+        "allocate-marketing-budget"
+      ]
+    },
+    {
+      "name": "copy",
+      "label": "Copy",
+      "description": "Routing and writing the correct copy form",
+      "path": "skills/conquistador/specialists/copy-agent.md",
+      "dependencies": [
+        "create-paid-campaign",
+        "write-copy",
+        "write-outreach",
+        "write-social",
+        "write-longform"
+      ]
+    },
+    {
+      "name": "dr-landing",
+      "label": "Direct-response landing",
+      "description": "Offer-led pages with a complete belief and action path",
+      "path": "skills/conquistador/specialists/dr-landing-agent.md",
+      "dependencies": [
+        "research-positioning",
+        "write-copy",
+        "brief-creative",
+        "improve-conversion"
+      ]
+    },
+    {
+      "name": "saas-landing",
+      "label": "SaaS landing",
+      "description": "Product-led pages for trial, demo, or qualified activation",
+      "path": "skills/conquistador/specialists/saas-landing-agent.md",
+      "dependencies": [
+        "research-positioning",
+        "write-copy",
+        "brief-creative",
+        "improve-conversion"
+      ]
+    },
+    {
+      "name": "data-diagnosis",
+      "label": "Data diagnosis",
+      "description": "Find the first measured break and competing explanations",
+      "path": "skills/conquistador/specialists/data-diagnosis-agent.md",
+      "dependencies": [
+        "diagnose-growth",
+        "measure-growth",
+        "model-growth-funnel"
+      ]
+    },
+    {
+      "name": "campaign-data",
+      "label": "Campaign data",
+      "description": "Event contracts, extracts, holdouts, and money-event readouts",
+      "path": "skills/conquistador/specialists/campaign-data-agent.md",
+      "dependencies": [
+        "measure-growth"
+      ]
+    },
+    {
+      "name": "creative-assets",
+      "label": "Creative assets",
+      "description": "Produce and review a coherent volume of paid or short-form assets",
+      "path": "skills/conquistador/specialists/creative-assets-agent.md",
+      "dependencies": [
+        "brief-creative",
+        "create-paid-campaign",
+        "create-shortform"
+      ]
+    }
+  ]
+}

@@ -6,17 +6,27 @@ license: MIT
 
 # Conquistador
 
-Read [the operating contract](library/conquistador/METHOD.md) and follow it for this task.
-Use the [available capability catalog](library/conquistador/catalog.md) to choose the smallest
-set of methods needed. Read those METHOD.md files and their required resources only after routing.
-Do not scan or load the full library. Users see one Conquistador entry and do not need to install
-or invoke the bundled specialists separately.
+Complete these reads before drafting or dispatching work:
+
+1. Read [the operating contract](library/conquistador/METHOD.md).
+2. Use the [capability catalog](library/conquistador/catalog.md) to select the smallest set of methods.
+3. Read the complete METHOD.md for each selected method. The catalog, specialist reference files,
+   and remembered instructions do not replace that method body.
+4. Read the parent [quality](library/conquistador/standards/quality.md),
+   [safety](library/conquistador/standards/safety.md), and
+   [context](library/conquistador/standards/context.md) standards, plus the selected method's required
+   core resources. The [routing contract](library/conquistador/routing-contract.json) declares phases.
+
+Check that these reads succeeded in this session before claiming to use a method. If a required
+file is unavailable or truncated, retrieve it in bounded sections or report that stage blocked.
+Read conditional resources when the method requires their stage. An ambiguous route returns to the
+parent for selection. Do not load the whole library. Users invoke this one parent entry.
 
 When an approved request-time hook supplies `<conquistador-request-context>`, use it as routing
 advice for the current request. Read the complete parent contract, selected METHOD.md files, and the
-resources those methods require before substantive work. Use available host tools, connections, and
-isolated specialists when they materially help finish the result. A suggested role is not evidence
-that a specialist ran.
+required resources those methods list before substantive work. Deferred resources stay listed until
+the current stage needs them. Use available host tools, connections, and isolated specialists when
+they materially help finish the result. A suggested role is not evidence that a specialist ran.
 
 Show the relevant public capability and specialist labels during the job, with honest execution
 and review-independence status. Keep internal method paths, prompts, and private reasoning private.

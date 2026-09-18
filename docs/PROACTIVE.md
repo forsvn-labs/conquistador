@@ -2,9 +2,9 @@
 
 `tools/proactive.mjs` is a host-neutral local helper for Node 24. An operator can connect
 explicit host events to this helper. Session and delivery events return static advice. The
-`prompt-submitted` event uses `tools/context-selection.mjs` to rank the installed method metadata,
-then returns a bounded request context with up to three capabilities, one composition workflow,
-one specialist role, and a few contained resources. It does not execute the selected work.
+`prompt-submitted` event uses `tools/context-selection.mjs` and the installed routing contract
+to select methods, then returns a bounded request context with required resources, deferred stages,
+one composition workflow, and one specialist role. It does not execute the selected work.
 
 This is the optional hook input for Conquistador mode. It supplies an instruction to the parent. It
 does not create specialist agents. After the host delivers the instruction, the parent may use
@@ -82,8 +82,7 @@ The path argument is limited to 4,096 UTF-8 bytes. Unknown fields, unsupported s
 invalid types, unknown events, and duplicate entries in `events` are errors.
 
 Each invocation reads only the explicitly supplied configuration and installed Conquistador package,
-if present. Request selection reads method metadata, the selected method bodies, and their contained
-resource links. It honors `domain-restriction.json` and an operator profile set to `off`. It does not
+if present. Request selection reads the generated routing contract and validates installed method paths. It honors `domain-restriction.json` and an operator profile set to `off`. It does not
 scan project files, transcripts, user artifacts, or private knowledge roots. It performs no
 filesystem writes, network or model calls, scheduling, daemon work, secret discovery, approval or
 action submission, or external dispatch. It does not edit host config.
@@ -124,18 +123,20 @@ neither supported host documents a matching context-advice event. Enabling or re
 removes the older Claude `TaskCompleted` registration when it belongs to this installation,
 preserving unrelated hooks.
 
-From a complete distribution or an install that includes the helper:
+With a project operator installed, use the normal CLI. It binds hooks to that installed library
+and its domain restriction. Compact or plugin users can instead run their owned
+`node /absolute/install/tools/conquistador-mode.mjs` helper with the same arguments.
 
 ```sh
-node /absolute/install/tools/conquistador-mode.mjs enable --host claude-code --project /absolute/project --config /absolute/local/proactive.json
-node /absolute/install/tools/conquistador-mode.mjs status --host claude-code --project /absolute/project --config /absolute/local/proactive.json
-node /absolute/install/tools/conquistador-mode.mjs disable --host claude-code --project /absolute/project --config /absolute/local/proactive.json
-node /absolute/install/tools/conquistador-mode.mjs remove --host claude-code --project /absolute/project
+conquistador hooks enable --host claude-code --project /absolute/project --config /absolute/local/proactive.json
+conquistador hooks status --host claude-code --project /absolute/project --config /absolute/local/proactive.json
+conquistador hooks disable --host claude-code --project /absolute/project --config /absolute/local/proactive.json
+conquistador hooks remove --host claude-code --project /absolute/project
 
-node /absolute/install/tools/conquistador-mode.mjs enable --host codex --project /absolute/project --config /absolute/local/proactive.json
-node /absolute/install/tools/conquistador-mode.mjs status --host codex --project /absolute/project --config /absolute/local/proactive.json
-node /absolute/install/tools/conquistador-mode.mjs disable --host codex --project /absolute/project --config /absolute/local/proactive.json
-node /absolute/install/tools/conquistador-mode.mjs remove --host codex --project /absolute/project
+conquistador hooks enable --host codex --project /absolute/project --config /absolute/local/proactive.json
+conquistador hooks status --host codex --project /absolute/project --config /absolute/local/proactive.json
+conquistador hooks disable --host codex --project /absolute/project --config /absolute/local/proactive.json
+conquistador hooks remove --host codex --project /absolute/project
 ```
 
 Use `--events prompt-submitted` to register only request-time selection. The default registers all
@@ -155,3 +156,27 @@ the owned hooks. A different `--config` is an error. `status` without that regis
 registered event is also enabled in that config. The current official references were read on
 2026-09-18 through web access. The observed Codex smoke does not establish another installed host
 version, Claude Code delivery, broad routing quality, or human acceptance.
+
+## Diagnose and repair
+
+`conquistador doctor` reports payload integrity, the routing/resource graph, hook registration,
+routing availability, and unverified host/task observation separately. An enabled configuration
+does not prove that the host trusts or invokes a hook. Historical smoke evidence is never copied
+into a local activation claim.
+
+The hook manager records exact owned commands beside host settings in a `.conquistador.json`
+sidecar. After replacing Node or moving the CLI package, rerun `hooks enable` with the same project
+and private config to rewrite those commands. Unrelated hooks stay intact. Legacy hooks without a
+sidecar are recognized only at the exact script path. Remove them through their original helper
+before deleting that installation. Project uninstall refuses remaining registered owned hooks and
+prints the cleanup command.
+
+Inspect a route without starting work:
+
+```sh
+conquistador route --prompt 'Write a LinkedIn product announcement.'
+conquistador route --path /absolute/package --prompt 'Draft a launch plan and landing page copy.'
+```
+
+The result lists selected, deferred, excluded, and unavailable capabilities. Unsupported or ambiguous
+phrasing returns control to the parent. It does not imply a failed task or authorize feedback.

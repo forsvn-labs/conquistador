@@ -11,7 +11,8 @@ importing the optional runtime. Bare `conquistador` and interactive `conquistado
 complete-operator flow in `tools/onboarding.mjs`. `--bot`, `--skills`, `--plugin`, and `--mcp` select one
 integration family. `--advanced` opens the combination guide. Setup needs Node 24 and core Node modules, not a build or bootstrap.
 `tools/operator-setup.mjs` preserves the concise project operator commands and relative project paths.
-Bare runtime `status` and `doctor` retain their existing meanings.
+Bare `status` and `doctor` diagnose the project operator. Runtime graphs are namespaced under
+`conquistador runtime` and keep `--run-id` / `--config` compatibility aliases.
 
 `tools/setup.mjs` parses and applies managed actions. `setup-routes.mjs` declares the forms, targets,
 default project folders, and capability boundaries. `setup-guide.mjs` collects a combination installation plan

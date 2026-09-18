@@ -58,11 +58,13 @@ test('rejects unknown roles, dependency cycles, reuse of isolated context and st
   await assert.rejects(runSpecialistTeam({ plan: plan(), root, host }), /reused/);
 });
 
-test('preflight refuses unknown knowledge and domain denials before any dispatch', async () => {
+test('preflight labels missing knowledge and still refuses domain denials before any dispatch', async () => {
   let called = false;
   const parent = { execute() { called = true; } };
   const p = plan(); p.assignments[0].knowledgeHandles = ['project:private-source'];
-  await assert.rejects(runSpecialistTeam({ plan: p, root, parent }), /Missing knowledge connection/);
+  const loaded = await (await import('./contracts.mjs')).loadAssignment(root, p.assignments[0]);
+  assert.equal(loaded.knowledge[0].status, 'missing-source');
+  assert.equal(loaded.knowledge[0].body, null);
   await assert.rejects(runSpecialistTeam({ plan: plan(), root, parent, authorize: () => { throw new Error('domain denied'); } }), /domain denied/);
   assert.equal(called, false);
 });

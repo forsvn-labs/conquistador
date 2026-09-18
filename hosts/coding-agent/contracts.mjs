@@ -2,9 +2,10 @@ import { methodDocument, methodLibrary } from '../../tools/method-library.mjs';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { existsSync, readFileSync } from 'node:fs';
-import { posix, resolve } from 'node:path';
+import { resolve } from 'node:path';
 import { containedPath } from '../../tools/plugin-contracts.mjs';
 import { assertLoadAllowed, parseRestriction, RESTRICTION_NAME } from '../../tools/domain-package.mjs';
+import { loadBoundedDocuments, loadRoutingContract, prepareAssignmentResources, resolveOptionalKnowledge } from '../../tools/routing-contract.mjs';
 
 export const protocol = 'conquistador.specialist/v1';
 export const receiptProtocol = 'conquistador.execution-receipt/v1';
@@ -199,7 +200,7 @@ export async function loadAssignment(root, task, { authorize = () => {}, resolve
   assert.equal(layouts.length, 1, 'Ambiguous or missing method library');
   const { layout: skillsRoot, internal } = layouts[0];
   const document = internal ? methodDocument : 'SKILL.md';
-  const paths = [];
+  const paths = [...loadRoutingContract(root).requiredStandards];
   if (task.role === 'parent') paths.push(`${skillsRoot}/conquistador/${document}`);
   else if (Object.hasOwn(roleFiles, task.role)) paths.push(roleFiles[task.role].replace(/^skills/, skillsRoot));
   for (const skill of task.skills) {
@@ -210,37 +211,27 @@ export async function loadAssignment(root, task, { authorize = () => {}, resolve
     assert.ok(manifest.mayLoadWorkflows.includes(workflow), `Undeclared workflow ${workflow}`);
     paths.push(`${skillsRoot}/conquistador/workflows/${workflow}.md`);
   }
-  const methods = [];
-  const seen = new Set();
-  let contextBytes = 0;
-  for (let index = 0; index < paths.length; index++) {
-    const path = paths[index];
-    if (seen.has(path)) continue;
-    seen.add(path);
-    const body = readFileSync(containedPath(root, `./${path}`, 'file'), 'utf8');
-    contextBytes += Buffer.byteLength(body);
-    assert.ok(contextBytes <= 196608 && seen.size <= 100, 'Selected method context exceeds budget');
-    methods.push({ path, body });
-    // Load contained outcome agents and references, without following links into sibling outcomes.
-    const owner = task.skills.find(skill => path.startsWith(`${skillsRoot}/${skill}/`));
-    if (!owner) continue;
-    for (const match of body.matchAll(/\[[^\]]*\]\(([^)#]+)(?:#[^)]*)?\)/g)) {
-      const link = match[1];
-      if (/^(?:[a-z]+:|\/)/i.test(link) || !link.endsWith('.md')) continue;
-      const target = posix.normalize(posix.join(posix.dirname(path), link));
-      if (target.startsWith(`${skillsRoot}/${owner}/`)) paths.push(target);
-    }
+  const extra = [];
+  const deferred = [];
+  for (const skill of task.skills) {
+    const prepared = prepareAssignmentResources(root, skill);
+    extra.push(...prepared.required.filter(path => !paths.includes(path)));
+    deferred.push(...prepared.deferred);
   }
+  const loaded = loadBoundedDocuments(root, [...paths, ...extra]);
   const knowledge = [];
+  let contextBytes = loaded.contextBytes;
   for (const handle of task.knowledgeHandles) {
-    assert.equal(typeof resolveKnowledge, 'function', `Missing knowledge connection ${handle}`);
-    const body = await resolveKnowledge(handle);
-    textField(body);
-    contextBytes += Buffer.byteLength(body);
-    assert.ok(contextBytes <= 196608, 'Selected knowledge exceeds context budget');
-    knowledge.push({ handle, body });
+    const resolved = await resolveOptionalKnowledge(handle, { resolveKnowledge });
+    if (resolved.body) {
+      textField(resolved.body);
+      contextBytes += Buffer.byteLength(resolved.body);
+      assert.ok(contextBytes <= 196608, 'Selected knowledge exceeds context budget');
+    }
+    knowledge.push(resolved);
   }
-  return { methods, knowledge };
+  return { methods: loaded.methods, knowledge, deferred, resourceRoot: resolve(root),
+    retrieval: 'Read only declared deferred paths under resourceRoot as their method requires. Follow nested contained resource links for that stage. If the host cannot read them, block that stage or split the assignment; never omit mandatory instructions.' };
 }
 
 export function validateResult(value, packet) {

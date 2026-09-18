@@ -1,6 +1,11 @@
 # Product progress
 
-No unshipped work is recorded. Current private delivery:
+Unshipped candidate 0.0.11: shared routing and resource contracts, conservative prompt selection,
+bounded progressive assignments for all 38 methods, explicit private knowledge resolution,
+project diagnostics, durable hook ownership, and prepared one-parent skill/plugin release assets.
+Review and verification are in progress. No delivery is claimed before remote verification.
+
+Current private delivery:
 [`v0.0.10`](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.10) from
 `6cb5f51518039f541a804064777d5817c4c70296` through
 [PR #5](https://github.com/forsvn-labs/conquistador/pull/5).

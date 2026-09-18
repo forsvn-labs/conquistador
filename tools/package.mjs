@@ -1,6 +1,6 @@
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
-import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync, chmodSync, existsSync, realpathSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync, chmodSync, existsSync, realpathSync, readdirSync, statSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -90,6 +90,7 @@ export function packageSource(root, outputRoot = join(root, 'dist')) {
   checkPackageBoundary(files);
   const manifest = JSON.parse(files['package.json']?.bytes.toString() || '{}');
   if (manifest.name !== '@forsvn/conquistador' || !/^\d+\.\d+\.\d+$/.test(manifest.version)) throw new Error('Expected public product identity');
+  if (manifest.private !== true) throw new Error('Keep the private publication guard enabled.');
   for (const name of Object.keys(files)) {
     if (name.split('/').some(part => ['node_modules', '.conquistador', 'dist'].includes(part)) || /(?:^|\/)\.env(?:\.|$)/.test(name) && !name.endsWith('.env.example')) {
       throw new Error('Tracked dependency, local state, or credential file is not packageable');
@@ -109,6 +110,30 @@ export function packageSource(root, outputRoot = join(root, 'dist')) {
     const zipName = `conquistador-${manifest.version}.zip`, npmName = packed[0].filename;
     const zip = sourceZip(files), tarball = readFileSync(join(temp, npmName));
     const checksums = { [zipName]: hash(zip), [npmName]: hash(tarball) };
+    const prepared = {};
+    if (files['tools/install.mjs']) {
+      const staging = realpathSync(mkdtempSync(join(tmpdir(), 'conquistador-prepared-')));
+      try {
+        for (const [label, mode] of [['skill', 'conquistador'], ['plugin', 'plugin']]) {
+          const target = join(staging, label);
+          execFileSync(process.execPath, [join(temp, 'tools/install.mjs'), 'install', mode, target], { stdio: 'pipe', timeout: 60000 });
+          const payload = {};
+          function visit(prefix = '') {
+            for (const name of readdirSync(join(target, prefix)).sort()) {
+              const path = prefix ? `${prefix}/${name}` : name;
+              if (path === '.conquistador-install.json') continue;
+              const stat = statSync(join(target, path));
+              if (stat.isDirectory()) visit(path);
+              else payload[path] = { bytes: readFileSync(join(target, path)), mode: stat.mode & 0o111 ? '100755' : '100644' };
+            }
+          }
+          visit();
+          const name = `conquistador-${label}-${manifest.version}.zip`;
+          prepared[name] = sourceZip(payload);
+          checksums[name] = hash(prepared[name]);
+        }
+      } finally { rmSync(staging, { recursive: true, force: true }); }
+    }
     const record = {
       schemaVersion: 'conquistador.public-source-assembly/v1', productVersion: manifest.version,
       sourceCommit: commit, sourceTree: tree, authority: 'UNBOUND', published: false,
@@ -119,6 +144,7 @@ export function packageSource(root, outputRoot = join(root, 'dist')) {
     mkdirSync(dirname(output), { recursive: true }); mkdirSync(output);
     writeFileSync(join(output, zipName), zip, { flag: 'wx' });
     writeFileSync(join(output, npmName), tarball, { flag: 'wx' });
+    for (const [name, bytes] of Object.entries(prepared)) writeFileSync(join(output, name), bytes, { flag: 'wx' });
     writeFileSync(join(output, 'SHA256SUMS'), Object.entries(checksums).map(([name, digest]) => `${digest}  ${name}\n`).join(''), { flag: 'wx' });
     writeFileSync(join(output, 'assembly.json'), JSON.stringify(record, null, 2) + '\n', { flag: 'wx' });
     return { output, ...record };
