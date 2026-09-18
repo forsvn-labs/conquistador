@@ -7,15 +7,24 @@ export const MODE_SCHEMA_VERSION = 'conquistador.mode/v1';
 export const SUPPORTED_HOST = 'claude-code';
 export const HOST_EVENTS = Object.freeze({
   'session-start': 'SessionStart',
+  'prompt-submitted': 'UserPromptSubmit',
   'before-delivery': 'Stop',
 });
 export const HOST_EVIDENCE = Object.freeze({
-  host: SUPPORTED_HOST,
-  source: 'https://code.claude.com/docs/en/hooks',
-  mapping: HOST_EVENTS,
-  nativeActivationVerified: false,
-  executorVerified: false,
-  documentationReviewed: '2026-09-15',
+  'claude-code': Object.freeze({
+    label: 'Claude Code',
+    settings: '.claude/settings.local.json',
+    source: 'https://code.claude.com/docs/en/hooks',
+    documentationReviewed: '2026-09-18',
+    nativeActivationVerified: false,
+  }),
+  codex: Object.freeze({
+    label: 'Codex',
+    settings: '.codex/hooks.json',
+    source: 'https://developers.openai.com/codex/hooks',
+    documentationReviewed: '2026-09-18',
+    nativeActivationVerified: true,
+  }),
 });
 const EVENTS = Object.keys(HOST_EVENTS);
 const fail = message => { throw new Error(message); };
@@ -24,8 +33,15 @@ const script = fileURLToPath(import.meta.url);
 const quote = value => `'${value.replaceAll("'", "'\\''")}'`;
 
 export function hostSupport(host) {
-  if (host === SUPPORTED_HOST) {
-    return { supported: true, host, ...HOST_EVIDENCE };
+  const evidence = HOST_EVIDENCE[host];
+  if (evidence) {
+    return {
+      supported: true,
+      host,
+      ...evidence,
+      mapping: HOST_EVENTS,
+      executorVerified: false,
+    };
   }
   return {
     supported: false,
@@ -33,7 +49,7 @@ export function hostSupport(host) {
     nativeActivationVerified: false,
     explanation: host === 'grok-bot' || host === 'eve'
       ? 'Experimental import only. Native hook import and removal are unverified; Conquistador mode is not offered.'
-      : 'Conquistador mode is implemented only for Claude Code using SessionStart and Stop. Native activation remains unverified. Other hosts keep the disabled proactive helper.',
+      : 'Conquistador mode is implemented for Codex and Claude Code using SessionStart, UserPromptSubmit, and Stop. Other hosts keep the disabled proactive helper.',
   };
 }
 
@@ -42,8 +58,8 @@ function absoluteFile(path, label) {
   return resolve(path);
 }
 
-function settingsPath(project) {
-  return join(absoluteFile(project, 'Project'), '.claude/settings.local.json');
+function settingsPath(project, host) {
+  return join(absoluteFile(project, 'Project'), HOST_EVIDENCE[host].settings);
 }
 
 function tokenize(command) {
@@ -74,18 +90,18 @@ function tokenize(command) {
   return tokens;
 }
 
-function ownedCommand(command) {
+function ownedCommand(command, host) {
   const tokens = tokenize(command);
   if (!tokens || tokens.length !== 9) return null;
   if (tokens[0] !== process.execPath || tokens[1] !== script) return null;
-  if (tokens[2] !== '--handle' || tokens[3] !== '--host' || tokens[4] !== SUPPORTED_HOST) return null;
+  if (tokens[2] !== '--handle' || tokens[3] !== '--host' || tokens[4] !== host) return null;
   // Recognize the removed TaskCompleted registration so upgrades can remove owned hooks.
   if (tokens[5] !== '--event' || (!Object.hasOwn(HOST_EVENTS, tokens[6]) && tokens[6] !== 'results-updated')) return null;
   if (tokens[7] !== '--config' || !isAbsolute(tokens[8])) return null;
   return resolve(tokens[8]);
 }
 
-function registeredConfig(settings) {
+function registeredConfig(settings, host) {
   const paths = new Set();
   if (!isObject(settings?.hooks)) return null;
   for (const groups of Object.values(settings.hooks)) {
@@ -93,7 +109,7 @@ function registeredConfig(settings) {
     for (const group of groups) {
       if (!Array.isArray(group?.hooks)) continue;
       for (const item of group.hooks) {
-        const path = ownedCommand(item?.command);
+        const path = ownedCommand(item?.command, host);
         if (path) paths.add(path);
       }
     }
@@ -106,11 +122,14 @@ function assertRegisteredConfig(supplied, registered) {
   if (registered && supplied !== registered) fail('Operator config does not match the registered host hooks.');
 }
 
-function handler(event, configPath) {
-  return {
+function handler(host, event, configPath) {
+  const value = {
     type: 'command',
-    command: [quote(process.execPath), quote(script), '--handle', '--host', SUPPORTED_HOST, '--event', event, '--config', quote(configPath)].join(' '),
+    command: [quote(process.execPath), quote(script), '--handle', '--host', host, '--event', event, '--config', quote(configPath)].join(' '),
   };
+  // The selector already enforces a 7,500-character ceiling; keep the complete result inline.
+  if (host === 'codex') value.additionalContextLimit = 0;
+  return value;
 }
 
 function readJsonFile(path) {
@@ -130,7 +149,7 @@ function writeJsonAtomic(path, value) {
   }
 }
 
-function withoutOwned(settings) {
+function withoutOwned(settings, host) {
   if (!isObject(settings)) return {};
   const next = { ...settings };
   if (!isObject(settings.hooks)) return next;
@@ -146,7 +165,7 @@ function withoutOwned(settings) {
         kept.push(group);
         continue;
       }
-      const handlers = group.hooks.filter(item => !ownedCommand(item?.command));
+      const handlers = group.hooks.filter(item => !ownedCommand(item?.command, host));
       if (handlers.length) kept.push({ ...group, hooks: handlers });
     }
     if (kept.length) hooks[event] = kept;
@@ -156,12 +175,12 @@ function withoutOwned(settings) {
   return next;
 }
 
-function withOwned(settings, events, configPath) {
-  const next = withoutOwned(settings);
+function withOwned(settings, host, events, configPath) {
+  const next = withoutOwned(settings, host);
   const hooks = { ...(isObject(next.hooks) ? next.hooks : {}) };
   for (const event of events) {
     const hostEvent = HOST_EVENTS[event];
-    hooks[hostEvent] = [...(Array.isArray(hooks[hostEvent]) ? hooks[hostEvent] : []), { hooks: [handler(event, configPath)] }];
+    hooks[hostEvent] = [...(Array.isArray(hooks[hostEvent]) ? hooks[hostEvent] : []), { hooks: [handler(host, event, configPath)] }];
   }
   next.hooks = hooks;
   return next;
@@ -169,23 +188,23 @@ function withOwned(settings, events, configPath) {
 
 function parseEvents(value) {
   const events = value === undefined ? EVENTS : String(value).split(',').map(item => item.trim()).filter(Boolean);
-  if (!events.length || new Set(events).size !== events.length || events.some(event => !EVENTS.includes(event))) fail('Choose only session-start and before-delivery. results-updated has no Claude context-advice adapter.');
+  if (!events.length || new Set(events).size !== events.length || events.some(event => !EVENTS.includes(event))) fail('Choose only session-start, prompt-submitted, and before-delivery. results-updated has no supported hook context adapter.');
   return events;
 }
 
 export function inspectMode({ host, project, config } = {}) {
   const support = hostSupport(host);
   if (!support.supported) return { state: 'unsupported', ...support };
-  const settings = settingsPath(project);
+  const settings = settingsPath(project, host);
   const current = readJsonFile(settings) ?? {};
   const registered = [];
   for (const [event, hostEvent] of Object.entries(HOST_EVENTS)) {
     const groups = current.hooks?.[hostEvent];
-    if (Array.isArray(groups) && groups.some(group => Array.isArray(group?.hooks) && group.hooks.some(item => ownedCommand(item?.command)))) {
+    if (Array.isArray(groups) && groups.some(group => Array.isArray(group?.hooks) && group.hooks.some(item => ownedCommand(item?.command, host)))) {
       registered.push(event);
     }
   }
-  const bound = registeredConfig(current);
+  const bound = registeredConfig(current, host);
   const supplied = config ? absoluteFile(config, 'Config') : null;
   if (supplied) assertRegisteredConfig(supplied, bound);
   let enabled = false;
@@ -200,12 +219,12 @@ export function inspectMode({ host, project, config } = {}) {
   }
   return {
     state,
-    host: SUPPORTED_HOST,
+    host,
     settings,
     config: bound,
     registered,
     enabled,
-    nativeActivationVerified: false,
+    nativeActivationVerified: support.nativeActivationVerified,
     unrelatedSettingsPreserved: true,
   };
 }
@@ -215,22 +234,22 @@ export function applyMode(action, options) {
   const support = hostSupport(host);
   if (!support.supported) fail(support.explanation);
   if (!['enable', 'disable', 'remove'].includes(action)) fail('Use enable, disable, or remove.');
-  const settings = settingsPath(project);
+  const settings = settingsPath(project, host);
   const current = readJsonFile(settings) ?? {};
   if (action === 'remove') {
-    const next = withoutOwned(current);
+    const next = withoutOwned(current, host);
     if (Object.keys(next).length) writeJsonAtomic(settings, next);
     else if (existsSync(settings)) rmSync(settings);
     return inspectMode({ host, project });
   }
   const configPath = absoluteFile(config, 'Config');
-  const bound = registeredConfig(current);
+  const bound = registeredConfig(current, host);
   if (action !== 'enable') assertRegisteredConfig(configPath, bound);
   const record = readConfig(configPath);
   const events = parseEvents(options.events);
   if (action === 'enable') {
     if (!record.enabled) fail('Enable requires an operator config with enabled true.');
-    writeJsonAtomic(settings, withOwned(current, events, configPath));
+    writeJsonAtomic(settings, withOwned(current, host, events, configPath));
   } else {
     writeJsonAtomic(bound ?? configPath, { schemaVersion: 1, enabled: false, events: record.events });
   }
@@ -251,7 +270,7 @@ function readStdinLimited() {
     };
     const onData = chunk => {
       length += chunk.length;
-      if (length >= 8192) return finish(null);
+      if (length >= 65536) return finish(null);
       chunks.push(chunk);
     };
     const onError = () => finish(null);
@@ -271,13 +290,15 @@ function readStdinLimited() {
 }
 
 export function handleHostEvent({ host, event, config, input } = {}) {
-  if (host !== SUPPORTED_HOST || !Object.hasOwn(HOST_EVENTS, event)) fail('Unsupported host event.');
+  if (!HOST_EVIDENCE[host] || !Object.hasOwn(HOST_EVENTS, event)) fail('Unsupported host event.');
   const payload = input;
   // Missing or truncated input must never bypass the host's recursion flag.
   if (!isObject(payload) || payload.hook_event_name !== HOST_EVENTS[event]) return {};
   if (event === 'before-delivery' && payload.stop_hook_active !== false) return {};
-  const result = advisory(event, config ? readConfig(config) : undefined);
-  if (!result.enabled) return {};
+  const result = advisory(event, config ? readConfig(config) : undefined, {
+    prompt: event === 'prompt-submitted' ? payload.prompt : undefined,
+  });
+  if (!result.enabled || result.instructions.length === 0) return {};
   const instructions = result.instructions.join('\n');
   return {
     hookSpecificOutput: {
@@ -318,7 +339,7 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
   } catch {
     // Parser and filesystem errors can include private configuration content or paths.
     process.stderr.write('Invalid Conquistador mode input. See docs/PROACTIVE.md.\n');
-    // Exit 2 blocks Stop/TaskCompleted in Claude. Advisory failures must not block work.
+    // Hook handlers are advisory. Their failures must not block host work.
     process.exitCode = process.argv[2] === '--handle' ? 1 : 2;
   }
 }

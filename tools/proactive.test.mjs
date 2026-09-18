@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
 import { advisory, validateConfig, MAX_CONFIG_BYTES } from './proactive.mjs';
 
-const events = ['session-start', 'before-delivery', 'results-updated'];
+const events = ['session-start', 'prompt-submitted', 'before-delivery', 'results-updated'];
 const config = { schemaVersion: 1, enabled: true, events };
 const script = fileURLToPath(new URL('./proactive.mjs', import.meta.url));
 function invoke(args, options = {}) {
@@ -21,8 +21,8 @@ function fixture(t) {
   return { dir, path };
 }
 
-test('default is disabled; only explicit selected events enable static bounded advice', () => {
-  for (const event of events) {
+test('default is disabled; only explicit selected events enable bounded advice', () => {
+  for (const event of events.filter(value => value !== 'prompt-submitted')) {
     assert.deepEqual(advisory(event), { schemaVersion: 1, event, enabled: false, instructions: [] });
     assert.equal(advisory(event, { ...config, enabled: false }).enabled, false);
     assert.equal(advisory(event, { ...config, events: [] }).enabled, false);
@@ -37,6 +37,12 @@ test('default is disabled; only explicit selected events enable static bounded a
       assert.equal(advisory(other, { ...config, events: [event] }).enabled, false);
     }
   }
+  const prompt = advisory('prompt-submitted', config, { prompt: 'Write landing page copy.' });
+  assert.equal(prompt.enabled, true);
+  assert.equal(prompt.instructions.length, 1);
+  assert.match(prompt.instructions[0], /write-copy/);
+  assert.equal(advisory('prompt-submitted', config, { prompt: 'Fix a TypeScript error.' }).instructions.length, 0);
+  assert.equal(advisory('prompt-submitted', { ...config, events: [] }, { prompt: 'Write landing page copy.' }).enabled, false);
 });
 
 test('strict config version, fields, types, event allowlist, and duplicates', () => {
@@ -65,6 +71,8 @@ test('CLI ignores stdin and ambient files; does not write config or artifacts', 
   assert.deepEqual(JSON.parse(active.stdout), advisory('session-start', config));
   assert.deepEqual(readFileSync(path), before);
   assert.deepEqual(readdirSync(dir), ['config.json']);
+  const prompt = invoke(['--event', 'prompt-submitted', '--config', path], { cwd: dir, input: 'Write landing page copy.' });
+  assert.deepEqual(JSON.parse(prompt.stdout).instructions, []);
 });
 
 test('CLI fails closed without echoing input or emitting advice', t => {

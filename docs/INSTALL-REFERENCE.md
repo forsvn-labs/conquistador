@@ -261,9 +261,10 @@ instructions to Conquistador. It cannot register hooks, run a schedule, access a
 authorize an action. Installation leaves it disabled. Installing methods grants no new permission
 to publish, spend, persist learning or submit feedback.
 
-Claude Code can also opt into Conquistador mode through `tools/conquistador-mode.mjs`, which writes
-only owned hooks into `.claude/settings.local.json`. See [Proactive help](PROACTIVE.md#optional-conquistador-mode-for-claude-code).
-Grok Bot and Eve have no mode adapter.
+Codex and Claude Code can opt into Conquistador mode through `tools/conquistador-mode.mjs`, which
+writes only owned hooks into `.codex/hooks.json` or `.claude/settings.local.json`. See
+[Proactive help](PROACTIVE.md#optional-conquistador-mode-for-codex-and-claude-code). Grok Bot and
+Eve have no mode adapter.
 
 ## Optional runtime, terminal chat and MCP
 

@@ -2,8 +2,8 @@
   "schemaVersion": "conquistador.install-completeness/v1",
   "parent": {
     "name": "conquistador",
-    "version": "2.9.1",
-    "sha256": "0bebdd58c0bfbcd7854a9eab3e023a6696253964d360292b5bf87cbd9b4dd3c5"
+    "version": "2.9.2",
+    "sha256": "ded88437de9c5e41eb26f74b5ae83ee59f9b2cacffd3bfd302f4abb43c7b450d"
   },
   "outcomes": [
     {
@@ -183,8 +183,8 @@
     },
     {
       "name": "write-outreach",
-      "version": "2.1.0",
-      "sha256": "0d43bbdc9402530e383caa16d0ecdbf805e45a5c3bff0e2fbbd917b4b6360d49"
+      "version": "2.1.1",
+      "sha256": "9a5e292f1e3944fb6fcf17400feb282cda507b0b71c3ba96190fe02145c714c4"
     },
     {
       "name": "write-social",

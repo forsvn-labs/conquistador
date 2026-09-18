@@ -86,7 +86,7 @@ The plugin includes the native `conquistador:conquistador` master agent. Select 
 picker, or use the namespaced `/conquistador:conquistador` skill. It can request Claude worker
 contexts when the current host exposes them. The plugin contains one native Conquistador definition;
 specialist role files stay inside its method tree. Optional Conquistador mode is a separate, disabled
-hook adapter; see [Proactive help](PROACTIVE.md#optional-conquistador-mode-for-claude-code).
+hook adapter; see [Proactive help](PROACTIVE.md#optional-conquistador-mode-for-codex-and-claude-code).
 
 ### Codex
 
@@ -103,6 +103,9 @@ when you want only project-local files.
 | Refresh Git source | `codex plugin marketplace upgrade conquistador` |
 | Update installed plugin | `codex plugin add conquistador@conquistador` |
 | Uninstall | `codex plugin remove conquistador@conquistador` |
+
+Optional Conquistador mode is a separate, disabled project-hook adapter; see
+[Proactive help](PROACTIVE.md#optional-conquistador-mode-for-codex-and-claude-code).
 
 Refresh the Git marketplace before adding the plugin again. There is no `codex plugin update`
 command in the audited CLI. For staged local folders, update the files through setup and repeat

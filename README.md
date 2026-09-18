@@ -86,8 +86,11 @@ Modified files are preserved. Keep drafts and runtime data outside the owned ins
 Setup checks local completeness and places the skill in the selected host's discovery directory.
 The host loads it in a fresh session. Native discovery and task quality still need a real task in
 that host. Installation starts no watcher, hook or service and grants no external-action authority.
-The BB adapter supports explicit specialist teams with exact-artifact review. Automatic project
-routing requires a host integration. See [execution modes](docs/MASTER-AGENT.md).
+Codex and Claude Code can opt into the project-local context hook in
+[proactive help](docs/PROACTIVE.md): it ranks the installed methods for each prompt and injects the
+relevant method, workflow, resource, and specialist paths. The BB adapter supports explicit
+specialist teams with exact-artifact review. Other automatic project routing requires a host
+integration. See [execution modes](docs/MASTER-AGENT.md).
 
 Work based on supplied facts needs no connected account. If a task needs live access, follow
 [connection setup](docs/INTEGRATIONS.md). Review drafts before use. Publication, spend, sends,
