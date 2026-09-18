@@ -227,12 +227,14 @@ export function inspectMode({ host, project, config, scriptPath = script } = {})
   const supplied = config ? absoluteFile(config, 'Config') : null;
   if (supplied) assertRegisteredConfig(supplied, bound);
   let enabled = false;
+  let promptEnabled = false;
   let state = 'disabled';
   if (bound) {
     if (!supplied) state = 'unknown';
     else {
       const record = readConfig(bound);
       enabled = record.enabled === true && record.events.some(event => registered.includes(event));
+      promptEnabled = record.enabled === true && record.events.includes('prompt-submitted');
       state = enabled ? 'enabled' : 'registered-disabled';
     }
   }
@@ -246,7 +248,7 @@ export function inspectMode({ host, project, config, scriptPath = script } = {})
     nativeActivationVerified: false,
     documentationReviewed: support.documentationReviewed ?? null,
     hookRegistered: registered.length > 0,
-    routingAvailable: enabled && registered.includes('prompt-submitted') && commandsCurrent(current, host, previous, scriptPath),
+    routingAvailable: promptEnabled && registered.includes('prompt-submitted') && commandsCurrent(current, host, previous, scriptPath),
     repairRequired: registered.length > 0 && !commandsCurrent(current, host, previous, scriptPath),
     activationEvidence: 'unobserved',
     trust: 'host-managed-unverified',

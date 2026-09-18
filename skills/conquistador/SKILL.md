@@ -26,6 +26,10 @@ scores, private chain-of-thought, tokens, budgets, and non-user-facing schemas p
    - launch or grow this;
    - create or improve marketing work or a requested product/engineering artifact;
    - learn from these results.
+   Before drafting or dispatching, read the complete selected outcome SKILL.md files and the
+   parent quality, safety, and context standards. Verify those reads succeeded in this session.
+   A catalog entry or specialist reference is not the method body. Retrieve truncated files in
+   bounded sections; block a stage if its required instructions are unavailable.
 5. Inspect the host's available tools, connections, and specialist-agent support. Follow
    [connect accounts](methods/connect-accounts.md) when the user needs Executor or a live system
    this host cannot yet reach. Help a new user install Executor with the official CLI or Cloud

@@ -320,3 +320,11 @@ test('ownership survives package/Node replacement and re-enable repairs commands
   assert.equal(existsSync(settings), false);
   assert.equal(existsSync(`${settings}.conquistador.json`), false);
 });
+
+test('an enabled session event does not imply prompt routing is enabled', t => {
+  const { dir, config } = project(t);
+  writeFileSync(config, JSON.stringify({ schemaVersion: 1, enabled: true, events: ['session-start'] }));
+  const state = applyMode('enable', { host: 'codex', project: dir, config });
+  assert.equal(state.enabled, true);
+  assert.equal(state.routingAvailable, false);
+});
