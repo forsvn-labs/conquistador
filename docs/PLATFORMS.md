@@ -22,6 +22,7 @@ Managed setup uses the project's host-specific folder:
 | Claude Code | `claude-code` | `.claude/skills/conquistador` |
 | GitHub Copilot | `copilot` | `.github/skills/conquistador` |
 | Cursor | `cursor` | `.cursor/skills/conquistador` |
+| Hermes Agent | `--bot hermes` | `.hermes/skills/conquistador` |
 
 After setup, start a fresh host session and select Conquistador. Invocation may use `/conquistador`,
 `$conquistador` or the host's skill picker. A local receipt records the prepared file digest;
@@ -44,12 +45,17 @@ checks managed receipt integrity. Neither checks activation. See the
 Folder references: [Codex](https://learn.chatgpt.com/docs/build-skills),
 [Claude Code](https://code.claude.com/docs/en/skills),
 [Copilot](https://docs.github.com/en/copilot/concepts/agents/about-agent-skills),
-[Cursor](https://cursor.com/docs/skills).
+[Cursor](https://cursor.com/docs/skills),
+[Hermes Agent](https://hermes-agent.nousresearch.com/docs/user-guide/features/skills/).
+Hermes discovers project skills from the nearest Git root and requires `hermes skills trust` before
+loading them. Setup does not install Hermes, configure a model, start its gateway, or grant trust.
+Hermes can quarantine a trusted project skill during scanning. Conquistador preparation is locally
+tested; native Hermes scanning and discovery remain unverified. Plain relaunch preserves the
+recorded Hermes host and presents the separate trust step again.
 
 ## Plugins
 
-Prefer the native host manager for a plugin. For private alpha now, select Native host plugin in
-`conquistador setup` to prepare a local source from the verified supplied package. The commands below
+Prefer the native host manager for a plugin. For private alpha now, run `conquistador --plugin` to prepare a local source from the verified supplied package. The commands below
 use that staged source folder. Do not register the editable checkout or an untransformed source
 archive by default: their canonical skills remain separately discoverable. Native managers do not
 run the Conquistador transformation. Source-direct registration is an explicit specialist-exposure
@@ -226,9 +232,11 @@ setup, credential boundaries, and update checks.
 
 ## Portable Grok Bot and Eve packages
 
-These are experimental import contracts. Native import, specialist delegation, and execution have not been verified, so
-the setup guide does not offer them as ready integrations. Grok CLI is a different host from the
-Grok Bot app. Use the coding-agent route for private-alpha testing.
+These are experimental import contracts. Native import, specialist delegation, and execution have not been verified.
+`conquistador --bot grok-bot` prints the official Grok Bot app handoff and states that a private
+Conquistador installation in Grok Bot has not been verified. Grok CLI is a different host from the
+Grok Bot app. Use the coding-agent route for private-alpha testing. Eve stays available through
+existing explicit experimental commands and `--advanced`.
 
 If you previously staged one of these packages with `install.mjs`, managed status and removal can
 inspect its receipt. Remove any host registration in that app before deleting the prepared folder.

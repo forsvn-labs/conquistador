@@ -3,11 +3,11 @@ import { execFileSync } from 'node:child_process';
 import { cpSync, lstatSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, renameSync, rmSync, rmdirSync, writeFileSync } from 'node:fs';
 import { basename, dirname, join, resolve } from 'node:path';
 
-export const hostFolders = { codex: '.agents/skills/conquistador', cursor: '.cursor/skills/conquistador', copilot: '.github/skills/conquistador', 'claude-code': '.claude/skills/conquistador' };
-export const hostLabels = { codex: 'Codex', bb: 'BB', cursor: 'Cursor', copilot: 'GitHub Copilot', 'claude-code': 'Claude Code', none: 'Files only' };
+export const hostFolders = { codex: '.agents/skills/conquistador', cursor: '.cursor/skills/conquistador', copilot: '.github/skills/conquistador', 'claude-code': '.claude/skills/conquistador', hermes: '.hermes/skills/conquistador' };
+export const hostLabels = { codex: 'Codex', bb: 'BB', cursor: 'Cursor', copilot: 'GitHub Copilot', 'claude-code': 'Claude Code', hermes: 'Hermes Agent', none: 'Files only' };
 export function parseHosts(value) {
   const hosts = value.split(',');
-  if (!hosts.length || hosts.some(host => !Object.hasOwn(hostLabels, host)) || new Set(hosts).size !== hosts.length || (hosts.includes('none') && hosts.length > 1)) throw Error('Choose distinct hosts: codex, bb, cursor, copilot, claude-code; or none alone.');
+  if (!hosts.length || hosts.some(host => !Object.hasOwn(hostLabels, host)) || new Set(hosts).size !== hosts.length || (hosts.includes('none') && hosts.length > 1)) throw Error('Choose distinct hosts: codex, bb, cursor, copilot, claude-code, hermes; or none alone.');
   return hosts;
 }
 export const installedHosts = record => record?.hosts ?? record?.skills.map(item => item.host) ?? [];
@@ -43,14 +43,14 @@ export function projectIntegration(path) {
   assertNoLinks(path);
   if (!present(join(path, integration))) return null;
   const value = read(join(path, integration));
-  if (!['.conquistador', '.conquistador-operator'].includes(basename(path)) || value.schemaVersion !== 'conquistador.project-installation/v1' || !Array.isArray(value.skills) || value.skills.length > 4) throw Error('Invalid project installation record.');
+  if (!['.conquistador', '.conquistador-operator'].includes(basename(path)) || !['conquistador.project-installation/v1', 'conquistador.project-installation/v2'].includes(value.schemaVersion) || !Array.isArray(value.skills) || value.skills.length > 5) throw Error('Invalid project installation record.');
   const seen = new Set();
   for (const item of value.skills) {
     if (!Object.hasOwn(hostFolders, item.host) || seen.has(item.host) || !/^[a-f0-9]{64}$/.test(item.digest)) throw Error('Invalid owned skill entry.');
     seen.add(item.host);
   }
   if (value.hosts !== undefined) {
-    if (!Array.isArray(value.hosts) || !value.hosts.length || value.hosts.length > 5 || value.hosts.some(host => typeof host !== 'string')) throw Error('Invalid project host choices.');
+    if (!Array.isArray(value.hosts) || !value.hosts.length || value.hosts.length > 6 || value.hosts.some(host => typeof host !== 'string')) throw Error('Invalid project host choices.');
     parseHosts(value.hosts.join(','));
     if (JSON.stringify(value.hosts.filter(host => Object.hasOwn(hostFolders, host)).sort()) !== JSON.stringify([...seen].sort())) throw Error('Project host choices differ from owned skills.');
   }
@@ -66,6 +66,18 @@ export function projectSkillOwner(path) {
       const operator = join(project, name);
       if (present(join(operator, integration)) && projectIntegration(operator)?.skills.some(item => item.host === host)) return operator;
     }
+  }
+  return null;
+}
+// The skills CLI copies our receipt as part of its payload. That receipt does
+// not transfer lifecycle ownership back from the manager to Conquistador.
+export function skillsManagerOwner(path) {
+  for (const folder of [hostFolders.codex, hostFolders['claude-code']]) {
+    let project = resolve(path);
+    for (const _part of folder.split('/')) project = dirname(project);
+    if (join(project, folder) !== resolve(path)) continue;
+    const lock = join(project, 'skills-lock.json');
+    if (present(lock) && read(lock).skills?.conquistador) return lock;
   }
   return null;
 }
@@ -94,13 +106,17 @@ export function projectPlan(options) {
   if (old) inspectProjectSkills(source);
   const hosts = options.hosts ? parseHosts(options.hosts) : options.host ? parseHosts(options.host) : old ? installedHosts(old) : options.project && action !== 'uninstall' ? ['codex'] : [];
   const nativeHosts = hosts.filter(host => Object.hasOwn(hostFolders, host));
+  if (hosts.includes('hermes') && action !== 'uninstall' && !present(join(project, '.git'))) throw Error('Hermes project skills require the Git root. Use conquistador --bot hermes from that root; no files changed.');
   if (old?.skills.some(item => !nativeHosts.includes(item.host))) throw Error('Keep existing owned native hosts during update. Uninstall the unchanged operator before removing or replacing hosts.');
   if (options.host && old && JSON.stringify(nativeHosts) !== JSON.stringify(old.skills.map(item => item.host))) throw Error('Keep the current host with --host. Use --hosts to add hosts, or uninstall before replacing them.');
   const slots = [{ target: path, source, mode: 'single-agent' }, ...nativeHosts.map(host => ({ target: join(project, hostFolders[host]), source: join(project, hostFolders[host]), mode: 'conquistador', host }))];
   for (const slot of slots) {
     assertNoLinks(slot.target);
     if (action === 'install' && !slot.host && present(slot.target)) throw Error(`Destination already exists: ${slot.target}. Preserve it or use its original update command.`);
-    if (slot.host && present(slot.target) && !old?.skills.some(item => item.host === slot.host)) slot.adoptedDigest = owned(slot.target, 'conquistador').digest;
+    if (slot.host && present(slot.target) && !old?.skills.some(item => item.host === slot.host)) {
+      if (skillsManagerOwner(slot.target)) throw Error('skills.sh owns the existing Conquistador skill. Preserve it and use that manager before changing installation owners.');
+      slot.adoptedDigest = owned(slot.target, 'conquistador').digest;
+    }
     if (source !== path && present(path)) throw Error('Both .conquistador and .conquistador-operator exist. Choose an explicit path; neither folder was changed.');
     if (slot.host && present(slot.target) && !options.domain) {
       const restriction = directory => present(join(directory, 'domain-restriction.json')) ? read(join(directory, 'domain-restriction.json')) : null;
@@ -139,7 +155,7 @@ export function projectLifecycle(root, options, { rename = renameSync } = {}) {
         if (JSON.stringify(restriction(slot.stage)) !== JSON.stringify(restriction(slots[0].stage))) throw Error('Existing skill and operator have different domain restrictions. Preserve both and choose a separate project.');
       }
       const skills = slots.filter(slot => slot.host).map(slot => ({ host: slot.host, digest: read(join(slot.stage, receipt)).digest, adopted: Boolean(slot.adoptedDigest || old?.skills.find(item => item.host === slot.host)?.adopted) }));
-      writeFileSync(join(slots[0].stage, integration), JSON.stringify({ schemaVersion: 'conquistador.project-installation/v1', hosts: hosts.length ? hosts : ['none'], skills }, null, 2) + '\n');
+      writeFileSync(join(slots[0].stage, integration), JSON.stringify({ schemaVersion: hosts.includes('hermes') ? 'conquistador.project-installation/v2' : 'conquistador.project-installation/v1', hosts: hosts.length ? hosts : ['none'], skills }, null, 2) + '\n');
       seal(slots[0].stage);
     }
     if (previous) { owned(source, 'single-agent', previous.digest); if (old) inspectProjectSkills(source); }

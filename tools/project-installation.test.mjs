@@ -15,6 +15,7 @@ function ok(project, ...args) { const result = run(project, ...args); assert.equ
 test('complete operator installs an obvious parent and each selected native skill with one owned lifecycle', t => {
   const project = fixture(t);
   for (const host of Object.keys(hostFolders)) {
+    if (host === 'hermes') mkdirSync(join(project, '.git'));
     ok(project, 'install', '--host', host);
     assert.ok(existsSync(join(project, '.conquistador/SKILL.md')));
     assert.ok(existsSync(join(project, hostFolders[host], 'SKILL.md')));
@@ -26,6 +27,7 @@ test('complete operator installs an obvious parent and each selected native skil
     assert.match(ok(project, 'start'), /first|launch plan/);
     assert.match(ok(project, 'skills'), /Write product or campaign copy/);
     ok(project, 'operator', 'update'); ok(project, 'operator', 'uninstall');
+    if (host === 'hermes') rmSync(join(project, '.git'), { recursive: true });
     assert.deepEqual(readdirSync(project), []);
   }
 });

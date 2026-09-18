@@ -5,7 +5,7 @@ the direct commands for local source copies, native plugin managers, runtime ope
 containers. Use the original installer to update and remove a copy. Full skill and plugin packages
 include all 38 outcome methods; domain and standalone method packages can contain fewer.
 
-Version 0.0.9 is the current shipped private alpha. See INSTALL.md for the persistent CLI and guided setup. Use its immutable tag or verified release tarball.
+Version 0.0.10 is the current shipped private alpha. See INSTALL.md for the persistent CLI and recommended setup. Use its immutable tag or verified release tarball.
 `private: true` blocks registry publication; private Git and local package execution remain possible. See [package verification](../INSTALL.md#verify-the-package).
 
 For Git acquisition, use the fixed release tag or its full source commit. Your GitHub account must
@@ -23,7 +23,7 @@ Use this route when a package runner cannot use your Git credentials or when you
 the source before installation. From the receiving project, run:
 
 ```sh
-node /absolute/path/conquistador-source/runtime/bin/conquistador.js setup
+node /absolute/path/conquistador-source/runtime/bin/conquistador.js
 node /absolute/path/conquistador-source/runtime/bin/conquistador.js operator doctor
 ```
 
@@ -45,7 +45,7 @@ paid providers and external account connections remain separate.
 
 ## skills.sh from a local source
 
-Prefer managed setup for the fewest installation steps. If your host uses the pinned skills CLI,
+Prefer `conquistador --skills --host HOST` or managed setup for the fewest installation steps. If your host uses the pinned skills CLI,
 first stage a parent-first compact folder from the authorized verified distribution:
 
 ```sh
@@ -63,12 +63,21 @@ These environment assignments use POSIX shell syntax. In PowerShell set `$env:DO
 and `$env:DISABLE_TELEMETRY="1"` before the npx command. Do not use `--full-depth`, `--all`, a wildcard,
 or the editable checkout as the source. Only the staged folder has the one-entry layout. It contains
 all 38 methods but omits the executable BB adapter. Use the operator or staged plugin for that adapter.
+The `--skills` wrapper shows the manager download, host, destination, project scope and lockfile
+before approval. It preflights the source and host paths even with `--dry-run`. The pinned CLI
+copies to `.claude/skills/conquistador` for Claude Code and `.agents/skills/conquistador` for
+Codex, Cursor and Copilot. These four mappings were exercised with `skills@1.5.26` in isolated
+projects, including byte parity with the staged source. This proves copied files, not host discovery.
+
 The pinned upstream CLI creates receiving-project `skills-lock.json`. Use managed setup instead
 when the project must remain free of lockfiles. The upstream CLI owns its copied files, discovery
 links, and manager metadata. Its own status, update, and removal commands apply; do not use setup
 to adopt a third-party-owned copy. Host-specific removal can retain a shared skill directory for
 another detected host. Review all intended hosts on removal, then verify the directory is gone.
-The manager's lockfile can remain after the last skill is removed.
+The manager's lockfile can remain after the last skill is removed. A copied Conquistador receipt
+does not change that ownership. Setup refuses to adopt, update or uninstall copies recorded by
+skills.sh. The wrapper also refuses existing copies before running the manager, so it cannot
+use the manager's overwrite option to discard local edits.
 [Skills CLI documentation](https://github.com/vercel-labs/skills#install-a-skill).
 
 After copying, start a fresh host session and select Conquistador. Run a first task from
@@ -322,7 +331,7 @@ a stable distribution for runtime MCP. It creates dependencies only in the chose
 setup from the receiving project:
 
 ```sh
-npm install --global --prefix /absolute/path/conquistador-cli --ignore-scripts /absolute/path/forsvn-conquistador-0.0.9.tgz
+npm install --global --prefix /absolute/path/conquistador-cli --ignore-scripts /absolute/path/forsvn-conquistador-0.0.10.tgz
 /absolute/path/conquistador-cli/bin/conquistador setup
 ```
 

@@ -6,7 +6,7 @@ checks, observed behavior, and your acceptance of the result separate.
 ## Install and check
 
 1. Follow the [recommended operator installation](../INSTALL.md#project-operator-and-native-skill-recommended). Use
-   the fixed release tag or checksum-verified tarball and guided setup in the project where you
+   the fixed release tag or checksum-verified tarball and recommended setup in the project where you
    intend to work. Record the source commit and artifact digest from the release assembly record.
 2. From the receiving project, run `conquistador operator status` and `conquistador operator
    doctor --json` through the same package source used for installation. The doctor must report 38
