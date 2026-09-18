@@ -4,6 +4,33 @@ No public release is claimed. Implemented but unshipped work is recorded in [PRO
 versions. Verification establishes the stated local scope; live provider operation, useful model
 output, human acceptance, rights disposition and release authority require separate evidence.
 
+## 2026-09-18, 0.0.10 private alpha
+
+- Tenth private release at
+  [`v0.0.10`](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.10) from
+  `6cb5f51518039f541a804064777d5817c4c70296` on `private-alpha` through
+  [PR #5](https://github.com/forsvn-labs/conquistador/pull/5).
+- Replaces the first-run architecture checklist with one complete project installation. Plain
+  `conquistador` resolves one host and asks for one confirmation when the choice is clear.
+  `--bot`, `--skills`, `--plugin`, and `--mcp` select one integration family;
+  `--advanced` retains the combination guide.
+- Makes manager ownership, adoption, duplicate discovery, dry-run preflight, recovery folders,
+  Hermes trust, Grok Bot limitations, and plugin/MCP activation boundaries explicit. The default
+  path finishes with one host-specific next step and one starter prompt.
+- Node 24.21.0 build and all 751 checks passed locally: 227 host/tooling, 294 runtime, 167 catalog,
+  and 63 evaluation. Exact-source Linux
+  [run 35313351430](https://github.com/forsvn-labs/conquistador/actions/runs/35313351430)
+  passed with both optional integration jobs.
+- Fresh release downloads matched the clean source assembly. ZIP
+  `c1398de2948ed43294182bb1c37433ddec918e1ad00172268b86653135bcfe2e`
+  and npm tarball
+  `1b20ae3f04a2737eee75395bab3d15c2bc883777022ed0e6bdd6d03e430ed10f`
+  passed their 38-method install, doctor, and uninstall lifecycles. The authenticated private-Git
+  path also passed after deleting npm's acquisition cache.
+- npm registry publication remains disabled. Native Hermes trust/discovery, private Grok Bot
+  import, native Windows/Linux host behavior, plugin/MCP host registration, and human first-task
+  usefulness remain unverified.
+
 ## 2026-09-18, 0.0.9 private alpha
 
 - Ninth private release at

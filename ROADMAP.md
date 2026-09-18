@@ -2,8 +2,8 @@
 
 ## Next private alpha
 
-1. Obtain the user's verdict on the shipped v0.0.10 routing relevance, unnecessary activations,
-   selected resources, and first-task usefulness.
+1. Obtain the user's verdict on the shipped v0.0.10 first-run clarity, host choice, routing
+   relevance, unnecessary activations, selected resources, and first-task usefulness.
 2. Keep the authenticated private-Git durability check as a required gate for later private tags.
    It must delete acquisition cache before running the CLI lifecycle.
 
