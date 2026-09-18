@@ -8,7 +8,7 @@
     {
       "name": "conquistador",
       "description": "A project operator for growth, GTM, sales, marketing, product, and knowledge work.",
-      "version": "0.0.8",
+      "version": "0.0.9",
       "author": {
         "name": "FORSVN",
         "url": "https://forsvn.com"
@@ -19,7 +19,7 @@
     }
   ],
   "metadata": {
-    "version": "0.0.8",
+    "version": "0.0.9",
     "description": "Conquistador methods for growth, GTM, sales, marketing, product, and knowledge work."
   }
 }

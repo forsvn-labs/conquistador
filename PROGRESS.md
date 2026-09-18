@@ -1,6 +1,6 @@
 # Product progress
 
-## Request-context hooks implemented, unshipped
+## Private-alpha 0.0.9 release candidate
 
 Conquistador can now route an ordinary submitted prompt against the methods that are actually
 installed. The deterministic selector reads existing method metadata, capability labels, domain
@@ -36,6 +36,11 @@ Validation passed on macOS ARM64 with Node 24.21.0:
 - `npm test` passed all 711 checks: 187 host/tooling, 294 runtime, 167 catalog, and 63 evaluation
   tests.
 - The focused selector, proactive helper, host-mode, and staged-install run passed all 33 checks.
+
+The user authorized this private-alpha shipment. Version 0.0.9 carries the request-context selector
+and opt-in Codex and Claude Code hook adapters; the immutable v0.0.8 release remains unchanged.
+Exact release commit, artifacts, checksums, remote CI, and the private-Git lifecycle belong in the
+post-release shipping record.
 
 ## Private-alpha 0.0.8 shipped
 
