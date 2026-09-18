@@ -1,14 +1,13 @@
 # Product progress
 
-Unshipped candidate 0.0.11: shared routing and resource contracts, conservative prompt selection,
-bounded progressive assignments for all 38 methods, explicit private knowledge resolution,
-project diagnostics, durable hook ownership, and prepared one-parent skill/plugin release assets.
-Review and verification are in progress. No delivery is claimed before remote verification.
+The 0.0.11 hardening work has shipped. No implementation from that change remains unshipped.
+See [CHANGELOG.md](CHANGELOG.md) for verified delivery and [ROADMAP.md](ROADMAP.md) for remaining
+native-host and human acceptance work.
 
 Current private delivery:
-[`v0.0.10`](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.10) from
-`6cb5f51518039f541a804064777d5817c4c70296` through
-[PR #5](https://github.com/forsvn-labs/conquistador/pull/5).
+[`v0.0.11`](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.11) from
+`3e9f07be8e825b0057225f1172745a2c21bd535e` through
+[PR #6](https://github.com/forsvn-labs/conquistador/pull/6).
 
 ## Private-alpha 0.0.9 shipped
 

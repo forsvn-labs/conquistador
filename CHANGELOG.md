@@ -4,6 +4,50 @@ No public release is claimed. Implemented but unshipped work is recorded in [PRO
 versions. Verification establishes the stated local scope; live provider operation, useful model
 output, human acceptance, rights disposition and release authority require separate evidence.
 
+## 2026-09-18, 0.0.11 private alpha
+
+- Eleventh private release at
+  [`v0.0.11`](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.11) from
+  `3e9f07be8e825b0057225f1172745a2c21bd535e` on `private-alpha` through
+  [PR #6](https://github.com/forsvn-labs/conquistador/pull/6). The release tree equals reviewed
+  candidate `7e9cd2a7559cba2bf99601813470b2ddc29a0d6e`.
+- Keeps one complete project operator and one selected native parent as the default. A shared
+  routing/resource contract now drives conservative selection, progressive context and installed
+  graph diagnostics. All 38 methods load bounded required context; conditional resources remain
+  explicit and retrievable. Ambiguous requests return control to the parent, feedback requires
+  opt-in, social announcements select social writing, and account setup stays with the parent.
+- Adds project lifecycle defaults, read-only route explanations, installed-library hook commands,
+  durable hook ownership and separate registration, routing, trust and observation diagnostics.
+  Optional private knowledge resolves through an explicitly scoped external index. Prepared skill
+  and plugin archives expose one parent and disclose their different adapter/schema capabilities.
+- Node 24.21.0 build and all 763 checks passed locally: 239 host/tooling, 294 runtime, 167 catalog,
+  and 63 evaluation checks. Exact-source Linux
+  [run 35323945278](https://github.com/forsvn-labs/conquistador/actions/runs/35323945278)
+  passed, including maintained runtime output. Both optional integration jobs passed on the
+  identical candidate tree in
+  [run 35323178867](https://github.com/forsvn-labs/conquistador/actions/runs/35323178867).
+- All 38 methods passed bounded loading in source, operator and plugin packages. Compact skill
+  resources also passed for all 38 methods; the largest required load was 52,737 bytes against the
+  unchanged 196,608-byte limit. Compact skills deliberately omit the BB executor and schemas.
+- A fresh Codex CLI 0.154.0 task read the installed parent, required standards, full campaign method
+  and relevant resources before producing a synthetic launch draft. A correction changed audience
+  and weekly capacity, preserved facts and gaps, and retained truthful same-context review. An
+  earlier observation skipped the method body; it prompted the explicit read gate verified by this
+  fresh run. These observations are not independent specialist review or human acceptance.
+- Fresh downloads matched all six release files byte for byte. Artifact SHA-256 values:
+  source ZIP `88687506af5f3e9427cf0563c4cdb29b6b409ef4697c306aefe1db0fb9394379`;
+  npm tarball `8a5d9c7f44bab9185bd67deef487f88c5d8df040fa79b963f4454f893dc192a9`;
+  prepared skill `38cff9b5c9c55c2a92fe4eec3d19d60adfa2ceb925fa5e86ef9f70e1afe8fa57`;
+  prepared plugin `5ecc6842a04abd471a6499a4f8582d07b74fb30eb73592909ad4b682e5e9c534`.
+- Source, ZIP, tarball and authenticated private-Git installs produced identical operator/native
+  payload digests, passed graph diagnostics and preserved receiving-project files through the
+  install/start/update/uninstall lifecycle. Both npm acquisition paths survived cache deletion.
+  The default created no project manifest, dependency tree, lockfile, hook or service.
+- Repository privacy, the remote branch/tag and prerelease status were verified. No registry
+  package was published. CodeRabbit Free remained summary-only/pending with no actionable findings
+  in its rechecked PR comment or inline comments; it is not counted as independent review. Other
+  native hosts, plugin/MCP activation and human acceptance remain unverified.
+
 ## 2026-09-18, 0.0.10 private alpha
 
 - Tenth private release at

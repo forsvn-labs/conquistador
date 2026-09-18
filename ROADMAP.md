@@ -2,7 +2,7 @@
 
 ## Next private alpha
 
-1. Obtain the user's verdict on the shipped v0.0.10 first-run clarity, host choice, routing
+1. Obtain the user's verdict on the shipped v0.0.11 first-run clarity, host choice, routing
    relevance, unnecessary activations, selected resources, and first-task usefulness.
 2. Keep the authenticated private-Git durability check as a required gate for later private tags.
    It must delete acquisition cache before running the CLI lifecycle.
@@ -17,8 +17,9 @@
    register routing or start a watcher. Native automatic activation remains unverified.
 3. Extend native parent-first discovery acceptance to fresh Claude, Copilot and Cursor sessions. Confirm
    one entry, selected-method loading, capability disclosure, cache refresh, update and removal.
-   Fresh Codex 0.154.0 name-only discovery and synthetic copy tasks passed on the 0.0.6 release;
-   these observations do not establish the other hosts or all methods.
+   A fresh Codex CLI 0.154.0 launch task and correction on the 0.0.11 tree read the native parent,
+   full selected method, required standards and relevant resources. These observations do not
+   establish the other hosts, all methods, independent review or human acceptance.
 4. Verify native Windows/Linux installation and host execution before claiming those platforms.
    macOS transports and Linux CI results do not certify native Windows or Linux host activation.
 
