@@ -1,6 +1,8 @@
+import { existsSync, readFileSync } from 'node:fs';
 import { basename, dirname, join } from 'node:path';
 import { containsPath, shellCommand } from './install-paths.mjs';
 import { hostFolders, hostLabels } from './project-installation.mjs';
+import { inspectMode } from './conquistador-mode.mjs';
 
 export const pluginHosts = { 'codex-plugin': 'codex', 'claude-plugin': 'claude-code', 'copilot-plugin': 'copilot' };
 
@@ -45,7 +47,35 @@ export function validateSurfacePlan(items) {
   }
 }
 
-export function operatorNextSteps(path, hosts, cwd = process.cwd()) {
+function activationAt(path) {
+  const profile = join(path, 'library/conquistador/operator-profile.json');
+  if (!existsSync(profile)) return 'unknown; run conquistador doctor';
+  try {
+    const activation = JSON.parse(readFileSync(profile, 'utf8')).activation;
+    return ['manual', 'project', 'off'].includes(activation) ? activation : 'unknown; run conquistador doctor';
+  } catch {
+    return 'unknown; run conquistador doctor';
+  }
+}
+
+function hookState(path, host, project) {
+  try {
+    const input = { host, project, scriptPath: join(path, 'tools/conquistador-mode.mjs') };
+    const registered = inspectMode(input);
+    if (!registered.hookRegistered) return 'not registered';
+    const current = registered.config ? inspectMode({ ...input, config: registered.config }) : registered;
+    if (current.repairRequired) return 'registered; saved command needs repair';
+    if (current.routingAvailable) return 'configured; host trust and delivery unverified';
+    return 'registered but disabled or unverified';
+  } catch {
+    return 'needs inspection; run conquistador doctor';
+  }
+}
+
+export function operatorNextSteps(path, hosts, cwd = process.cwd(), task = {
+  label: 'Plan a launch',
+  prompt: 'Use Conquistador to draft a launch plan from the product facts in this project. Mark missing facts. Keep it as a draft.',
+}) {
   const local = dirname(path) === cwd;
   const display = local ? basename(path) : path;
   const lines = [];
@@ -59,8 +89,15 @@ export function operatorNextSteps(path, hosts, cwd = process.cwd()) {
     `Native skill: ${local ? join(hostFolders[host], 'SKILL.md') : join(path, '..', hostFolders[host], 'SKILL.md')}.`);
   if (hosts.includes('hermes')) lines.push('Hermes trust is separate: ' + shellCommand(['hermes', 'skills', 'trust', dirname(path)]) + '. Setup did not grant trust or install Hermes.');
   if (!hosts.some(host => hostFolders[host]) && !hosts.includes('bb')) lines.push(`Ask your coding agent or custom host to read ${join(display, 'SKILL.md')} and follow it.`);
-  lines.push('Use Conquistador to draft a launch plan from the product facts in this project. Mark missing facts. Keep it as a draft.',
-    'Run conquistador start to show this again; conquistador skills lists the capabilities.',
+  lines.push(`Activation: ${activationAt(path)}. The host owns skill discovery and model selection; setup did not run a task.`);
+  for (const host of hosts.filter(value => ['codex', 'claude-code'].includes(value))) {
+    lines.push(`${hostLabels[host]} request-time hook: ${hookState(path, host, dirname(path))}.`);
+  }
+  lines.push(`First task: ${task.label}`, task.prompt,
+    `Method use: check the host trace for the selected full method and required resource reads; then review the result. Local doctor cannot verify this.`,
+    `If discovery fails: refresh the host session, run conquistador doctor, or ask the host to read ${join(display, 'SKILL.md')} and follow it.`);
+  if (hosts.includes('codex')) lines.push('Hook trust: if prompt routing is enabled, review the project and exact hook in Codex; run conquistador doctor to check registration. Registration does not prove delivery.');
+  lines.push('Run conquistador start --task ID to choose another first task; conquistador skills lists the capabilities. Use conquistador --help for other integration forms and their owners.',
     ...['doctor', 'update', 'uninstall'].map(action => local ? `conquistador operator ${action}` : shellCommand(['conquistador', 'setup', action, '--path', path])));
   return lines.join('\n');
 }

@@ -32,6 +32,23 @@ It should finish useful work with available evidence and identify what remains b
 For missing skills, wrong scope, or stale sessions, see
 [installation and recovery](https://github.com/forsvn-labs/conquistador/blob/private-alpha/INSTALL.md).
 
+## Diagnose stalled growth
+
+Run `conquistador start --task diagnose-growth` in the installed project for a prompt to
+paste into your coding agent. Include comparable periods, metric definitions, funnel
+counts, segment changes, and known tracking limits. If only totals exist, a useful
+answer computes the observed rates, locates the first break, names competing causes,
+and proposes a bounded check. It must not claim a cause from the totals alone.
+
+For example, if visits hold at 10,000 while trials fall from 800 to 500 and paid
+upgrades fall from 160 to 75 across comparable periods, the visit-to-trial rate fell
+from 8% to 5%, and the trial-to-paid rate fell from 20% to 15%. Ask the host to read
+the complete `diagnose-growth` method and its required resources before it writes a
+recommendation. `conquistador route --prompt 'Growth stalled while visits stayed flat
+and signups fell'` previews the local selector. The host trace and the answer establish
+whether the method was used. `conquistador doctor` checks installation and local hook
+state only.
+
 ## Prepare a beta launch
 
 Supply the product, audience, offer, and approved claims:

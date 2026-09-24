@@ -123,6 +123,21 @@ for work based on supplied facts.
 
 ### First task
 
+The TUI lets you choose a first task before installation. For a scripted Codex install,
+`conquistador --host codex --task diagnose-growth --yes` prints the same task handoff.
+After installation, `conquistador start --task diagnose-growth` repeats it. The default
+task remains a launch plan. Both commands print the saved activation setting, local
+request-time hook state, method-read check, and recovery steps. They do not execute a
+model task. `conquistador route --prompt 'Growth stalled while visits stayed flat and
+signups fell'` previews local selection; it does not prove host delivery. Use
+`conquistador doctor` to inspect installed files and hook registration, then check a
+fresh host session and its trace for the selected full method and required resources.
+
+The complete operator and one native skill are the default interaction form. The other
+commands above prepare portable skills, plugins, MCP, or a BB adapter with their stated
+host ownership and activation steps. Installing those files does not register them in a
+host or give a specialist an independent execution context.
+
 In a fresh coding-agent session in the receiving project, ask:
 
 ```text

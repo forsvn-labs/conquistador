@@ -79,10 +79,18 @@ Mark missing facts. Keep it as a draft.
 If the host has not refreshed its skill list, ask it to read `.conquistador/SKILL.md` and follow it.
 You do not need to navigate through adapter folders or install the specialists separately.
 
+For a growth diagnosis, choose **Diagnose a growth stall** in the setup guide or run
+`conquistador start --task diagnose-growth` after installation. Give the agent a baseline,
+current figures, and known limits. Check its trace for reads of the complete
+`diagnose-growth` method and required resources before trusting the answer. The local doctor
+checks installed files and hook registration; it cannot verify those reads or the result.
+
 ```sh
 conquistador start              # Show the skill location and first task again
+conquistador start --task diagnose-growth  # Show a growth diagnosis task
 conquistador skills             # Browse the available capabilities
 conquistador doctor             # Check local files, routing, and hook registration
+conquistador route --prompt 'Growth stalled while visits stayed flat and trial signups fell'  # Preview a route
 conquistador update             # Update this project from the installed CLI
 conquistador uninstall          # Remove both unchanged owned copies
 ```
@@ -100,7 +108,9 @@ Codex and Claude Code can opt into the project-local context hook in
 [proactive help](docs/PROACTIVE.md): it ranks the installed methods for each prompt and injects the
 relevant method, workflow, resource, and specialist paths. The BB adapter supports explicit
 specialist teams with exact-artifact review. Other automatic project routing requires a host
-integration. See [execution modes](docs/MASTER-AGENT.md).
+integration. The setup guide shows the installed activation setting and hook registration state.
+Hook registration still requires host trust and an observed prompt to establish delivery. See
+[execution modes](docs/MASTER-AGENT.md).
 
 Work based on supplied facts needs no connected account. If a task needs live access, follow
 [connection setup](docs/INTEGRATIONS.md). Review drafts before use. Publication, spend, sends,

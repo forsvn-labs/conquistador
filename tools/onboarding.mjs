@@ -2,10 +2,10 @@ import { existsSync, lstatSync, readFileSync, readdirSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawn, spawnSync } from 'node:child_process';
-import { FIRST_PROMPT, UsageError, parseOnboarding, requireNoninteractivePlan, routeHelp, topHelp } from './onboarding-parse.mjs';
-import { commandOnPath, destinationsFor, hostChoices, hostFolders, hostLabels, resolveHost, installedHosts } from './onboarding-hosts.mjs';
+import { FIRST_TASKS, UsageError, parseOnboarding, requireNoninteractivePlan, routeHelp, topHelp } from './onboarding-parse.mjs';
+import { destinationsFor, hostChoices, hostFolders, hostLabels, resolveHost, installedHosts } from './onboarding-hosts.mjs';
 import { inspectProjectSkills, projectIntegration, treeDigest } from './project-installation.mjs';
-import { shellCommand } from './install-paths.mjs';
+import { operatorNextSteps } from './setup-surfaces.mjs';
 import { assertNoDiscoveryConflict } from './onboarding-safety.mjs';
 import { cancellableUi } from './onboarding-ui.mjs';
 import { assertNode24, need, runBotRoute, runMcpRoute, runPluginRoute, runSetupAction, runSkillsRoute, resolveProject } from './onboarding-routes.mjs';
@@ -78,32 +78,18 @@ function versionNotice(inspection) {
   return `This project's payload differs from the current CLI (installed ${receipt.productVersion ?? 'unknown'}; CLI ${version}). Files were not changed.\nUpdate with: conquistador operator update`;
 }
 
-function activation(project, hosts, env) {
-  for (const host of hosts) {
-    if (host === 'hermes') {
-      if (!commandOnPath('hermes', env)) console.log('Install Hermes Agent from https://hermes-agent.nousresearch.com/docs/getting-started/installation/ then run hermes setup.');
-      console.log(`Local files are ready. ${shellCommand(['hermes', 'skills', 'trust', project])} is still required. Then open a fresh Hermes session and check /skills. Native discovery and scanning are unverified.`);
-    } else if (host === 'bb') {
-      console.log(`Open a BB thread in ${project}. Ask its agent to read ${join(project, '.conquistador/SKILL.md')} and follow it. The BB team adapter is available at .conquistador/hosts/coding-agent/README.md.`);
-    } else if (host === 'none') console.log(`Ask your host to read ${join(project, '.conquistador/SKILL.md')} and follow it.`);
-    else console.log(`Open a fresh ${hostLabels[host]} session to use Conquistador.`);
-  }
-}
-
-function printStart(inspection, env) {
+function printStart(inspection, task) {
   const hosts = inspection.hosts?.length ? inspection.hosts : ['none'];
   console.log(`Installed: ${inspection.path}`);
   console.log(`Use with: ${hosts.map(host => hostLabels[host] ?? host).join(', ')}`);
-  for (const host of hosts.filter(host => hostFolders[host])) console.log(`Native skill: ${join(inspection.project, hostFolders[host])}`);
-  activation(inspection.project, hosts, env);
-  console.log(FIRST_PROMPT);
+  console.log(operatorNextSteps(inspection.path, hosts, inspection.project, FIRST_TASKS[task ?? 'launch-plan']));
 }
 
-function planText(project, host) {
+function planText(project, host, task) {
   const creates = destinationsFor(project, host);
   const adoption = hostFolders[host] && existsSync(join(project, hostFolders[host]))
     ? ` Adopt the unchanged independently managed skill at ${join(project, hostFolders[host])}; operator uninstall will remove it too.` : '';
-  return `Set up Conquistador in ${project}? All 38 methods through one Conquistador entry. Use with: ${hostLabels[host]}. Creates: ${creates.join(' and ')}.${adoption}`;
+  return `Set up Conquistador in ${project}? All 38 methods through one Conquistador entry. Use with: ${hostLabels[host]}. First task: ${FIRST_TASKS[task].label}. Creates: ${creates.join(' and ')}.${adoption}`;
 }
 
 function viewChanges(project, host, inspection) {
@@ -153,7 +139,7 @@ async function recommended({ options, cwd, run, ui, env, tty: interactive }) {
       console.log('Local files verified. Host discovery and task execution remain unverified.');
     } else console.log('Installed receipt integrity checked. Use the doctor from the installed release to verify completeness.');
     if (options.host && !inspection.hosts?.includes(options.host)) console.log('Recorded hosts were preserved. Use conquistador --advanced to review adding a host.');
-    printStart(inspection, env);
+    printStart(inspection, options.task);
     return 0;
   }
   if (inspection.legacy) {
@@ -178,7 +164,7 @@ async function recommended({ options, cwd, run, ui, env, tty: interactive }) {
       await runSetupAction(run, ['doctor', '--path', after.path]);
       console.log('Local files verified.');
     } else console.log('Domain restriction retained. Receipt integrity checked; subset readiness remains unverified.');
-    printStart(after, env);
+    printStart(after, options.task);
     return 0;
   }
 
@@ -200,43 +186,53 @@ async function recommended({ options, cwd, run, ui, env, tty: interactive }) {
     await preflight(host);
     const args = ['install', '--target', 'operator', '--project', project, '--host', host];
     if (options['dry-run']) {
-      console.log(planText(project, host));
+      console.log(planText(project, host, options.task ?? 'launch-plan'));
       console.log(viewChanges(project, host, inspection));
       console.log('Dry run. No files changed.');
       return 0;
     }
     if (options.yes) {
-      console.log(planText(project, host));
+      console.log(planText(project, host, options.task ?? 'launch-plan'));
       await runSetupAction(run, args);
       await runSetupAction(run, ['doctor', '--path', join(project, '.conquistador')]);
-      finish(project, host);
+      finish(project, host, options.task);
       return 0;
     }
     return interactiveApply(host);
   };
 
-  const finish = (dest, host) => {
+  const finish = (dest, host, task) => {
     console.log('Local files verified. Host discovery and task execution remain unverified.');
-    printStart({ project: dest, path: join(dest, '.conquistador'), hosts: [host] }, env);
+    printStart({ project: dest, path: join(dest, '.conquistador'), hosts: [host] }, task);
   };
 
   const interactiveApply = async host => {
     ui.intro(`Conquistador ${version}`);
     ui.log.info('Other integrations: conquistador --help');
     let current = host;
+    let firstTask = options.task ?? 'launch-plan';
     for (;;) {
       const action = await need(ui, await ui.select({
-        message: planText(project, current),
+        message: planText(project, current, firstTask),
         initialValue: 'setup',
         options: [
           { value: 'setup', label: 'Set up Conquistador' },
           { value: 'host', label: 'Change host' },
+          { value: 'task', label: 'Choose first task' },
           { value: 'changes', label: 'View changes' },
         ],
       }));
       if (action === 'host') {
         current = await chooseHost(ui, { reason: 'unresolved' }, env);
         await preflight(current);
+        continue;
+      }
+      if (action === 'task') {
+        firstTask = await need(ui, await ui.select({
+          message: 'Which task will you try first in your coding agent?',
+          initialValue: firstTask,
+          options: Object.entries(FIRST_TASKS).map(([value, details]) => ({ value, label: details.label })),
+        }));
         continue;
       }
       if (action === 'changes') {
@@ -250,7 +246,7 @@ async function recommended({ options, cwd, run, ui, env, tty: interactive }) {
         console.log('Local files are ready. conquistador operator doctor is still required.');
         throw error;
       }
-      finish(project, current);
+      finish(project, current, firstTask);
       ui.outro('Conquistador files are ready.');
       return 0;
     }

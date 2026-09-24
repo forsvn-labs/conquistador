@@ -15,7 +15,9 @@ on the whole library. One named specialist remains an explicit choice.
 Offer one package runner command that opens guided setup for the complete project operator.
 Default to the current project, explain the chosen form, and confirm the local installation once. Put prerequisites,
 installation traps, and recovery beside the command. It must not add a dependency or lockfile to
-the receiving project. Follow it with a real task. Native plugins retain their host manager and trust boundary.
+the receiving project. Let the user choose a concrete first task and show the saved activation
+state, host trust step, method-read check, and recovery command. Follow it with a real task.
+Native plugins retain their host manager and trust boundary.
 Pinned private Git references lead acquisition; verified npm and Bun tarballs, source,
 and ZIP are transports for the same complete package. The runtime, typed catalog, Eval Lab, and
 durable jobs are optional. Every installation route needs a clear update and removal path.

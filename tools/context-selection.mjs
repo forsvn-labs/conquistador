@@ -44,6 +44,14 @@ function matchingMethods(query, contract) {
     if (!score || method.exclusions.some(phrase => includesPhrase(text, phrase))) continue;
     matches.push({ ...method, score });
   }
+  const growthMetric = /\b(?:growth|revenue|signups?|upgrades?|conversion|activation|retention|funnel|churn|trials?|leads?|orders?|sales|pipeline|trial to paid)\b/.test(text);
+  const adverseChange = /\b(?:stall(?:ed|ing)?|flat|flattened|fall(?:ing)?|fell|drop(?:ped|ping)?|declin(?:e|ed|ing)|down|weak(?:en|ened|ening)?|slowed|missed target)\b/.test(text);
+  const creationRequest = /\b(?:write|draft|create|post|email|article|copy|ads|campaign|blog)\b/.test(text);
+  const asksForDiagnosis = /\b(?:diagnos(?:e|is)|investigat(?:e|ion)|analy[sz]e)\b/.test(text);
+  if (growthMetric && adverseChange && (!creationRequest || asksForDiagnosis) && !matches.some(item => item.name === 'diagnose-growth')) {
+    const method = contract.methods['diagnose-growth'] ?? contract.unavailableMethods.find(item => item.name === 'diagnose-growth');
+    if (method && !method.exclusions.some(phrase => includesPhrase(text, phrase))) matches.push({ ...method, score: 30, inferredGrowth: true });
+  }
   // Channel disambiguation is local to a requested stage; other clauses keep their own methods.
   for (const [channel, modes] of Object.entries(contract.channelLocks)) {
     if (!includesPhrase(text, channel)) continue;
@@ -196,6 +204,23 @@ export function selectRequestContext(prompt, { root = moduleRoot } = {}) {
       if (!contract.methods[item.name] || !allowedKind(restriction, 'skill', item.name)) { unavailable.push(item.name); continue; }
       if (!selectedAll.some(value => value.name === item.name)) selectedAll.push(item);
     }
+  }
+  const shapingRequested = ['shape this initiative', 'ambiguous initiative', 'bounded decision']
+    .some(phrase => includesPhrase(normalized(query), phrase));
+  const codingAction = /\b(?:refactor|rewrite|debug|implement|patch)\b/i.test(query)
+    && /\b(?:code|function|handler|middleware|component|module|file|test|validation)\b/i.test(query);
+  const diagnosisRequested = /\b(?:diagnos(?:e|is)|investigat(?:e|ion)|analy[sz]e|explain|why|what is going on)\b/i.test(query);
+  if (codingAction && !diagnosisRequested) {
+    const incidentalGrowth = selectedAll.findIndex(item => item.name === 'diagnose-growth' && item.inferredGrowth);
+    if (incidentalGrowth !== -1) selectedAll.splice(incidentalGrowth, 1);
+  }
+  if (shapingRequested && !selectedAll.some(item => item.name === 'shape-initiative')) {
+    const method = contract.methods['shape-initiative'];
+    if (method && allowedKind(restriction, 'skill', method.name)) selectedAll.push(method);
+  }
+  if (selectedAll.length > 1 && !shapingRequested) {
+    const broadPlanning = selectedAll.findIndex(item => item.name === 'shape-initiative');
+    if (broadPlanning !== -1) selectedAll.splice(broadPlanning, 1);
   }
   if (!clauses.some(clause => feedbackOptIn.test(clause))) excluded.push({ name: 'submit-feedback', reason: 'explicit-only' });
   if (!selectedAll.length && !parentMethod) {

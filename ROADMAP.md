@@ -2,8 +2,11 @@
 
 ## Next private alpha
 
-1. Obtain the user's verdict on the shipped v0.0.11 first-run clarity, host choice, routing
-   relevance, unnecessary activations, selected resources, and first-task usefulness.
+1. Review the local growth-diagnosis and first-run repair recorded in [PROGRESS.md](PROGRESS.md).
+   Repeat the installed growth route and host method-read check with an ordinary request and
+   an unrelated coding request. Check the first-run task choice in a real TUI and a fresh host
+   session. Obtain the user's verdict on clarity, routing relevance, selected resources, and
+   first-task usefulness before claiming acceptance.
 2. Keep the authenticated private-Git durability check as a required gate for later private tags.
    It must delete acquisition cache before running the CLI lifecycle.
 

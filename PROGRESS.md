@@ -1,13 +1,52 @@
 # Product progress
 
-The 0.0.11 hardening work has shipped. No implementation from that change remains unshipped.
-See [CHANGELOG.md](CHANGELOG.md) for verified delivery and [ROADMAP.md](ROADMAP.md) for remaining
+The 0.0.11 hardening work has shipped. The growth-diagnosis and first-run changes below are a
+local candidate. They have not been pushed, reviewed independently, or released. See
+[CHANGELOG.md](CHANGELOG.md) for verified delivery and [ROADMAP.md](ROADMAP.md) for remaining
 native-host and human acceptance work.
 
 Current private delivery:
 [`v0.0.11`](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.11) from
 `3e9f07be8e825b0057225f1172745a2c21bd535e` through
 [PR #6](https://github.com/forsvn-labs/conquistador/pull/6).
+
+## Local growth-diagnosis and first-run candidate
+
+The installed 0.0.11 route selected `shape-initiative` for a synthetic growth-stall prompt with
+flat visits, falling trials and upgrades, and a broad "what should we do next" question. Adding
+"Diagnose growth" selected the intended method. A fresh Codex CLI 0.155.1 session with GPT-6
+Astra read the full installed `diagnose-growth` method and required resources and produced a
+bounded analysis. This supports a routing repair; the original captain prompt and host trace
+remain unavailable, so the historical answer cannot be attributed to one cause.
+
+This candidate routes adverse growth-metric changes to `diagnose-growth` and drops incidental
+`shape-initiative` matches unless the user asks to shape an initiative. An incidental growth
+reference in a code-refactor request abstains; explicit initiative shaping remains selectable.
+The default guide now
+offers four first tasks. `--task diagnose-growth` works in noninteractive setup and `start`; the
+handoff prints saved activation, local hook registration, method-read verification, and recovery
+steps. The operator, native skill, plugin, MCP, and BB paths retain separate host ownership.
+
+An installed-project end-to-end check stages a source copy in `dist/e2e-tmp`, installs the Codex
+operator, checks 38 methods, routes the representative prompt and three paraphrases, checks
+unrelated-request abstention, invokes the installed prompt hook, verifies its method/resource
+paths, removes the hook and operator, and preserves a project file. It can write a JSON evidence
+artifact with `CONQUISTADOR_E2E_ARTIFACT=dist/growth-diagnosis-e2e.json`.
+
+On macOS ARM64 with Node 24.21.0, `npm run build` passed. `npm test` passed 764 checks:
+240 host/tooling, 294 runtime, 167 catalog, and 63 evaluation. A live terminal guide chose
+the diagnosis task and installed the Codex operator with manual activation and no hook. Codex CLI
+0.155.1 with GPT-6 Astra then read that installed native parent, the complete diagnosis method,
+all three required resources, and relevant optional files. Its answer computed the observed
+rates, separated accounting from causal claims, marked cohort and denominator limits, and proposed
+one read-only reconciliation. It reported same-context review and no independent agent. The
+trace is a local observation, not acceptance for other prompts, models, or hosts.
+
+The repository's catalog already registered anti-slop rules but lacked their vendored plugin.
+The local candidate restores the pinned plugin, adds a source configuration, and records the
+bundled source digest in `tools/oxlint/anti-slop/UPSTREAM.md`. The plugin runs; its readable-spacing
+rule reports a large pre-existing baseline in touched files, so this candidate does not claim a
+clean anti-slop lint gate. Build and full product-test results are recorded after verification.
 
 ## Private-alpha 0.0.9 shipped
 
