@@ -4598,7 +4598,7 @@
     },
     {
       "path": "hosts/coding-agent/operator.mjs",
-      "sha256": "2ecad63174112f1159c76eb4576c5551223f8c1f3c8c4473b2d175cb668841c7"
+      "sha256": "496fe7571640dbc7af03195f8cadfd94053d3b7f08f7400a93c2c7a993896a05"
     },
     {
       "path": "hosts/coding-agent/receipt.mjs",

@@ -1,6 +1,6 @@
 import { explicitInvocation as isExplicitInvocation } from '../../tools/request-text.mjs';
 import { posix } from 'node:path';
-import { operatorProtocol, admittedDomains, validateOperatorProfile } from '../../tools/operator-profile.mjs';
+import { operatorProtocol, validateOperatorProfile } from '../../tools/operator-profile.mjs';
 
 export { operatorProtocol, admittedDomains, defaultOperatorProfile, validateOperatorProfile,
   defaultInstalledProfile, loadOperatorProfile } from '../../tools/operator-profile.mjs';

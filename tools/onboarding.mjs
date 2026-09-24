@@ -132,6 +132,7 @@ async function chooseFirstTask(ui, initial = 'launch-plan') {
   const input = await need(ui, await ui.text({ message: 'What should Conquistador help you do?' }));
   const request = input?.trim();
 
+  // Control characters cannot appear in a printable first-task handoff.
   if (!request || request.length > 2000 || /[\x00-\x1f\x7f]/.test(request)) throw new UsageError('Describe one task in 1–2000 characters on one line.');
   const outcome = request.replace(/^use\s+conquistador\s+to\s+/i, '');
 

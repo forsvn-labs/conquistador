@@ -124,6 +124,9 @@ prints a shell-quoted `--path` for the selected operator. The two-project instal
 that printed command from project A, updates project B, and confirms A's receipt is unchanged.
 These are local CLI and hook observations, not proof of native host event delivery or useful model
 output across the library.
+The changed-line lint pass also removed an unused host import. The remaining control-character
+regex warning is intentional: the TUI rejects nonprintable text before generating a first-task
+handoff.
 
 A second live Codex CLI task used a freshly installed native skill to plan a one-week beta
 campaign, draft one launch email, and specify growth measurement from supplied facts. The trace
