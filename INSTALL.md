@@ -1,8 +1,10 @@
 # Install Conquistador
 
-This checkout is versioned private-alpha `0.0.12` on the same delivery channel as dogfood.
-The `v0.0.12` commands and assets below are usable **only if** the private tag and
-checksummed assets exist and their identity is verified. If unavailable, use the prior
+The current private-alpha release is
+[v0.0.12](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.12),
+from source commit `738d24268bee03e0bc8880d22b21b665951881c9` on the same delivery channel
+as dogfood. Its private tag and six downloaded assets were verified against the exact local
+assembly. If this release is unavailable to your authorized account, use the prior
 [v0.0.11 release](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.11).
 A local package or branch install is not a released artifact. Keep the exact tag, full
 source commit, and checksums together. Public alpha is planned to start at `0.1.0`.
@@ -12,15 +14,15 @@ portability guidance; native execution and native host registration still need t
 
 ## Project operator and native skill, recommended
 
-The examples below target `v0.0.12` if its private release is verified. Use Node 24,
+The examples below target the verified private `v0.0.12` release. Use Node 24,
 npm, Git, and a GitHub account with access to the repository. Install the CLI once:
 
 ```sh
 npm install -g --ignore-scripts --install-links git+https://github.com/forsvn-labs/conquistador.git#v0.0.12
 ```
 
-If that tag or verified assets are unavailable, use the identical command ending in
-`#v0.0.11` for the prior verified release.
+If v0.0.12 is unavailable to your authorized account, use the identical command ending in
+`#v0.0.11` for the prior release.
 
 In each receiving project, run:
 
@@ -309,13 +311,14 @@ A copy without Git still has unknown source commit identity. Use the doctor from
 
 Check the global CLI with `conquistador version`, then inspect each installed operator and native
 skill receipt with `conquistador operator status` and `conquistador operator doctor --json` in
-the selected project. In one observed environment `/opt/homebrew/bin/conquistador` reports
-0.0.11, while `~/.agents/skills/conquistador/.conquistador-install.json` and
-`~/.claude/skills/conquistador/.conquistador-install.json` each report productVersion 0.0.8.
-A newer CLI does not update those copies. After the reviewed 0.0.12 release, use its authorized
-CLI to update each owned installation through its original lifecycle, then recheck receipts,
-doctor, native discovery, and a real task. Do not update those installed copies from this
-unverified branch.
+the selected project. In the observed macOS installation, `/opt/homebrew/bin/conquistador` and the project operator
+plus Codex, Claude Code, Cursor, and Copilot native skill copies report 0.0.12 and 38 methods.
+Codex and Cursor retain a three-line private FORSVN instruction: their installer receipts report
+modified, so automatic updates must preserve those edits rather than overwrite them. Claude Code
+and Copilot copies are clean. A newer CLI alone does not update project copies. These local
+version and completeness checks do not prove native discovery or task quality. Fresh Codex CLI
+execution could not be checked because even `codex --version` hung and exited without output.
+Check native discovery and a real task in a fresh host session; seek a human usefulness verdict.
 
 Check local completeness, host discovery, and a real first task separately. For substantial tasks,
 check the engagement brief, deliverable, labeled review, and execution receipt. Neither a plugin
@@ -376,7 +379,7 @@ See [host paths and invocation](docs/PLATFORMS.md#coding-agents).
 
 ## Prepared release assets
 
-When available, the 0.0.12 private assets include `conquistador-skill-0.0.12.zip` and
+The v0.0.12 private release assets include `conquistador-skill-0.0.12.zip` and
 `conquistador-plugin-0.0.12.zip`, both covered by `SHA256SUMS`. These expose one parent
 with internal method files. Use the skill ZIP as a skills.sh local source or the plugin ZIP with a
 host plugin manager. The manager owns its installed copies. The source ZIP and Git checkout retain

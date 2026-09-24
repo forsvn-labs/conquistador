@@ -1,16 +1,23 @@
 # Product roadmap
 
-## Next private alpha
+## Next private-alpha acceptance
 
-1. Review and merge the 0.0.12 candidate based on the integrated
-   [growth-diagnosis hardening](https://github.com/forsvn-labs/conquistador/pull/7). Only after
-   merge and a Firstmate steer, create the private tag and upload checksum-verified release assets.
-   Repeat authenticated private-Git cold acquisition against that immutable tag before claiming
-   released durability. A candidate-commit lifecycle check is not the tag check.
-2. Repeat a fresh native task on the exact released build and obtain the user's verdict on clarity,
-   routing relevance, and usefulness. Retain installed route, negative-control, selected-project
-   update, malformed-profile, and MCP-read checks as acceptance evidence. The composed Codex run
-   shows method and workflow reads; a second real host and independent specialists remain unverified.
+The [v0.0.12 private release](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.12)
+is shipped from `738d24268bee03e0bc8880d22b21b665951881c9`. Its six downloaded assets,
+Node 24 build, 764 tests, and authenticated cold private-Git tag acquisition passed. The observed
+CLI, operator and four native skills report 0.0.12 and 38 methods. Codex and Cursor copies have
+intentional private edits and need preservation on update; Claude Code and Copilot copies are clean.
+These are package and local installation checks, not native task or human acceptance.
+
+1. Restore fresh Codex CLI execution on the exact released build, then observe native skill
+   discovery, full method/resource reads, a useful first task and a correction. Even
+   `codex --version` hung and exited without output in the release check, so no fresh
+   v0.0.12 native task was observed. Seek the user's verdict on clarity, routing relevance and
+   usefulness. Keep the installed route, negative-control, selected-project update,
+   malformed-profile and MCP-read checks as separate local evidence.
+2. Check update preservation for the modified Codex and Cursor copies before any automatic
+   replacement. Observe fresh host behavior separately from clean receipts. A second native
+   host and independent specialist contexts remain unverified.
 
 ## Private-alpha follow-up
 
@@ -23,8 +30,8 @@
 3. Extend native parent-first discovery acceptance to fresh Claude, Copilot and Cursor sessions. Confirm
    one entry, selected-method loading, capability disclosure, cache refresh, update and removal.
    A fresh Codex CLI 0.154.0 launch task and correction on the 0.0.11 tree read the native parent,
-   full selected method, required standards and relevant resources. These observations do not
-   establish the other hosts, all methods, independent review or human acceptance.
+   full selected method, required standards and relevant resources. That earlier observation does
+   not establish v0.0.12 behavior, the other hosts, all methods, independent review or human acceptance.
 4. Verify native Windows/Linux installation and host execution before claiming those platforms.
    macOS transports and Linux CI results do not certify native Windows or Linux host activation.
 
