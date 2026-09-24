@@ -1,10 +1,12 @@
 # Versions
 
-Product, plugin, host, and portable-agent manifests identify this unreleased private-alpha
-source candidate as `0.0.13`. The latest verified private release remains `0.0.12`; check its
-tag, source commit, and checksummed assets before treating it as released. This 0.0.13 branch
-is not a tag, release, or published package. Do not use a v0.0.13 install command until a
-separate release decision, exact package checks, and private tag/assets exist.
+Product, plugin, host, and portable-agent manifests identify private-alpha `0.0.13`.
+The latest verified private prerelease is
+[`v0.0.13`](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.13),
+from exact merged source `653058ac2b9c5f0cefe926bb238879191caf8a9b`.
+Its annotated tag and six downloaded assets were verified; check the tag, source commit,
+and `SHA256SUMS` before installation. The local `assembly.json` remains `UNBOUND`.
+No npm registry package was published, and package verification is not host or human acceptance.
 Private alpha and dogfood are the same private delivery channel. Future private releases increment the `0.0.x` version. The planned public alpha starts at `0.1.0`.
 The live private source branch is `private-alpha`. npm publication stays disabled.
 

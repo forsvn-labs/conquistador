@@ -1,6 +1,28 @@
 # Product progress
 
-## Unshipped 0.0.13 candidate: Node preflight and first-run setup
+## Shipped 0.0.13 and installed-copy acceptance
+
+The [v0.0.13 private prerelease](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.13)
+resolves to merged `private-alpha` commit `653058ac2b9c5f0cefe926bb238879191caf8a9b`.
+Node 24.21.0 build and 764 local checks passed (240 host/tooling, 294 runtime, 167 catalog,
+63 evaluation). Six assets were downloaded fresh; four archives passed downloaded `SHA256SUMS`,
+and downloaded checksums and `assembly.json` matched local assembly bytes. The authenticated
+private-Git lifecycle passed after cache deletion, including version, 38-method doctor, install,
+start, update, uninstall, and receiving-project preservation. Local assembly remains `UNBOUND`.
+
+Both npm-owned CLI copies (`/opt/homebrew` and `~/.local`) and the home operator plus four native
+skills report 0.0.13. A real login-shell bare command under Node 26 reached a verified Node 24,
+completed setup and local doctor, and printed a first-task handoff in a disposable project.
+The installed-package suite passed 21 scenarios with each CLI. Codex and Cursor retain their
+private three-line insertion and correctly report modified receipts; the home operator doctor
+exits 1 for receipt integrity while showing 38 methods and matching completeness. Clean Claude
+Code and Copilot native doctors pass. No PATH or shell startup changes were made.
+
+This proves local setup and ownership only. Fresh host discovery, model method reads, useful task
+output, provider access, and the captain's own verdict remain unverified. See the release entry
+in [CHANGELOG.md](CHANGELOG.md) and remaining gates in [ROADMAP.md](ROADMAP.md).
+
+## 0.0.13 candidate development (historical, shipped after verification)
 
 Follow-up installed-package E2E failure matrix (independent review of PR head `87d7a03`):
 
@@ -70,9 +92,8 @@ scenarios again in `dist/node-onboarding-e2e/clean-evidence-013/node-onboarding-
 The clean installed CLI and sampled package, plugin, host, and agent manifests all report
 0.0.13. The versioned operator resources were rehashed in `release/completeness.json`.
 The touched-JS anti-slop run reports only the inherited readable-spacing rule (no other rules).
-These tests establish local setup behavior, not host registration, model task quality, or a
-private release. CHANGELOG.md records shipped versions only, so this unshipped change does not
-alter the 0.0.12 release entry.
+At the candidate stage, these tests established local setup behavior, not host registration,
+model task quality, or a private release. The later release verification is recorded above.
 
 The growth-diagnosis and first-run work below shipped in the
 [v0.0.12 private release](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.12)
@@ -85,13 +106,13 @@ Node 24.21.0 build and 764 local tests passed (240 host/tooling, 294 runtime, 16
 behavior, not native host output. The anti-slop readable-spacing rule still reports a
 pre-existing baseline; it is not a clean repository-wide lint gate.
 
-The observed `/opt/homebrew` CLI, operator and four native skills now report 0.0.12 and
-38 methods. Codex and Cursor receipts intentionally report modified because their copies
-retain a three-line private FORSVN instruction; preserve it during later updates. Claude
+At the v0.0.12 release check, the observed `/opt/homebrew` CLI, operator and four native skills
+reported 0.0.12 and 38 methods. Codex and Cursor receipts intentionally report modified
+because their copies retain a three-line private FORSVN instruction; preserve it during later updates. Claude
 Code and Copilot copies are clean. Fresh Codex native execution could not be checked: even
 `codex --version` hung and exited without output. No human usefulness verdict exists.
-No new implementation is waiting to ship; native-host execution and human acceptance remain
-separate work, not implied by the verified tag, downloaded assets or local checks.
+Native-host execution and human acceptance remained separate work, not implied by the
+v0.0.12 tag, downloaded assets or local checks.
 
 ## Shipped growth-diagnosis and first-run hardening (historical verification)
 
