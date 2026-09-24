@@ -255,7 +255,11 @@ async function recommended({ options, cwd, run, ui, env, tty: interactive, spawn
         const hosts = [...new Set([...(inspection.hosts ?? []), options.host])];
         const add = ['update', '--target', 'operator', '--project', project, '--hosts', hosts.join(',')];
         await runSetupAction(run, [...add, '--dry-run']);
-        ui.note(`Add ${hostLabels[options.host]} to the unchanged operator at ${inspection.path}. Existing hosts remain: ${(inspection.hosts ?? []).join(', ') || 'none'}. No optional plugin or client registration is implied.`, 'Host plan');
+        const native = hostFolders[options.host] && join(project, hostFolders[options.host]);
+        const adoption = native && existsSync(native)
+          ? `\nAdopt the unchanged independently managed skill at ${native}. This transfers ownership to the operator; operator uninstall will remove it too.`
+          : '';
+        ui.note(`Add ${hostLabels[options.host]} to the unchanged operator at ${inspection.path}. Existing hosts remain: ${(inspection.hosts ?? []).join(', ') || 'none'}. No optional plugin or client registration is implied.${adoption}`, 'Host plan');
 
         if (await need(ui, await ui.confirm({ message: 'Add this host to the existing operator?', initialValue: false }))) {
           await runSetupAction(run, add);

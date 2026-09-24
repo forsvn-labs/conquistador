@@ -24,12 +24,18 @@ repeats the same cwd and arguments without changing the parent shell. No-TTY exi
 selection instructions. The bare terminal guide now chooses a project (including an existing
 project outside the cwd), one host, an installation plan, apply, local doctor and first-task handoff.
 Optional routes can be selected and run with their own checks and confirmations; manual host
-activation remains distinct. Existing modified copies are not updated on bare invocation.
+activation remains distinct. Existing modified copies are not updated on bare invocation. Independent review found that
+adding a host to an unchanged BB operator could adopt an independently managed native skill
+without naming that ownership transfer at confirmation. The returning-host plan now names the
+exact folder and warns that operator uninstall will remove it. Declining preserves the original
+skill and host record; accepting marks it adopted. The installed-package E2E covers both outcomes
+and the subsequent uninstall.
 
 Node 24.21.0 `npm run build` and `npm test` passed (240 host/tooling checks plus runtime,
-catalog and evaluation suites). A locally packed and installed tarball passed 11 TTY/non-TTY
+catalog and evaluation suites). A locally packed and installed tarball passed 13 TTY/non-TTY
 scenarios: wrong-Node continuation, cancel, no-candidate guidance, repeat setup, right-Node
-repeat, optional MCP selection, noninteractive and help/version paths. Repeat with
+repeat, optional MCP selection, returning-host adoption decline and acceptance, noninteractive
+and help/version paths. Repeat with
 `CONQUISTADOR_E2E_WRONG_NODE=/path/to/node26 CONQUISTADOR_E2E_NODE24=/path/to/node24
 python3 tools/node-onboarding.e2e.py INSTALLED_CLI OUTPUT_DIR` after `npm pack` and an isolated
 `npm install --prefix` of the resulting tarball. The uncommitted evidence is in

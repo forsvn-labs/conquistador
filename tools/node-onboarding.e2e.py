@@ -29,7 +29,7 @@ if not subprocess.check_output([wrong_node, '-v']).startswith(b'v26') or not sub
     sys.exit('Expected Node 26 and Node 24 executables, respectively.')
 if wrong in ('/opt/homebrew/bin', '/usr/local/bin'):
     sys.exit('Use an isolated Node 26 bin directory, not Homebrew bin, to exercise the no-candidate path.')
-for name in ['neutral', 'project', 'other', 'empty-home']:
+for name in ['neutral', 'project', 'other', 'empty-home', 'adoption']:
     shutil.rmtree(root / name, ignore_errors=True)
     (root / name).mkdir(parents=True)
 env = {**os.environ, 'PATH': wrong + ':/usr/bin:/bin', 'CLAUDECODE': '1'}
@@ -40,10 +40,10 @@ def clean(data):
     return re.sub(r'\x1b(?:\[[0-9;?]*[A-Za-z]|\][^\x07]*\x07)', '', data.decode('utf8', 'replace')).replace('\r', '')
 
 
-def terminal(name, cwd, steps, environment=env):
+def terminal(name, cwd, steps, environment=env, args=()):
     master, slave = pty.openpty()
     fcntl.ioctl(slave, termios.TIOCSWINSZ, struct.pack('HHHH', 40, 120, 0, 0))
-    process = subprocess.Popen([cli], cwd=cwd, env=environment, stdin=slave, stdout=slave, stderr=slave)
+    process = subprocess.Popen([cli, *args], cwd=cwd, env=environment, stdin=slave, stdout=slave, stderr=slave)
     os.close(slave)
     transcript = b''
     for phrase, keys in steps:
@@ -115,6 +115,37 @@ code, text = terminal('repeat-optional-mcp', project, [
 ])
 assert code == 0 and (project / '.conquistador-mcp/connector.json').is_file() and 'Client registration is still required' in text
 assert (project / '.conquistador/.conquistador-install.json').read_bytes() == receipt
+
+adoption = root / 'adoption'
+adoption.mkdir(exist_ok=True)
+right_env = {**env, 'PATH': right + ':/usr/bin:/bin'}
+for args in [
+    ['--host', 'bb', '--yes'],
+    ['setup', 'install', '--target', 'claude-code', '--project', str(adoption)],
+]:
+    result = subprocess.run([cli, *args], cwd=adoption, env=right_env, text=True, capture_output=True)
+    assert result.returncode == 0, (args, result.stdout, result.stderr)
+native = adoption / '.claude/skills/conquistador'
+before = (native / 'SKILL.md').read_bytes()
+code, text = terminal('returning-host-decline-adoption', adoption, [
+    (b'Add this host', b'n\r'),
+    (b'What do you want to do first', b'\r'),
+], right_env, ['--host', 'claude-code'])
+plan = ''.join(line.strip(' │') for line in text.splitlines())
+assert code == 0 and str(native) in plan and 'operatoruninstallwillremoveittoo' in ''.join(plan.split()), text
+assert (native / 'SKILL.md').read_bytes() == before
+assert json.loads((adoption / '.conquistador/project-installation.json').read_text())['hosts'] == ['bb']
+code, text = terminal('returning-host-adopt', adoption, [
+    (b'Add this host', b'y\r'),
+    (b'What do you want to do first', b'\r'),
+], right_env, ['--host', 'claude-code'])
+plan = ''.join(line.strip(' │') for line in text.splitlines())
+assert code == 0 and str(native) in plan and 'operatoruninstallwillremoveittoo' in ''.join(plan.split()), text
+record = json.loads((adoption / '.conquistador/project-installation.json').read_text())
+assert record['hosts'] == ['bb', 'claude-code'] and record['skills'][0]['adopted'] is True, record
+result = subprocess.run([cli, 'uninstall'], cwd=adoption, env=right_env, text=True, capture_output=True)
+assert result.returncode == 0 and not native.exists(), (result.stdout, result.stderr)
+
 for name, args, environment, expected in [
     ('wrong-noninteractive', [], env, 1),
     ('right-noninteractive-bare', [], {**env, 'PATH': right + ':/usr/bin:/bin'}, 0),

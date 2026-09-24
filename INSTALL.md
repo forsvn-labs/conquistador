@@ -62,8 +62,9 @@ not an alias for Codex. No BB plugin, provider registration or automatic request
 separate host step and setup does not install Hermes. The local preparation path is tested;
 native Hermes scanning, trust and discovery remain unverified. `--bot grok-bot` prints the official app
 handoff; a private Conquistador installation in Grok Bot has not been verified. An
-unchanged independently managed skill can be adopted when the confirmation names the ownership
-change. Modified, linked, unowned, or skills.sh-managed copies are refused. Domain
+unchanged independently managed skill can be adopted when the confirmation names the exact folder
+and warns that future operator uninstall will remove it. This also applies when adding a host to
+an existing operator. Modified, linked, unowned, or skills.sh-managed copies are refused. Domain
 restrictions must agree. A new host session is needed to refresh native discovery. Setup does not
 start automatic project routing, watchers, services or hooks.
 
