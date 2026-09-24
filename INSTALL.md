@@ -1,9 +1,9 @@
 # Install Conquistador
 
-This checkout prepares private-alpha `0.0.12` on the same delivery channel as dogfood.
-The `v0.0.12` commands and assets below are usable **only after** the private tag and
-checksummed assets exist and their identity is verified. They are not available yet. Until
-then, use the shipped [v0.0.11 release](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.11).
+This checkout is versioned private-alpha `0.0.12` on the same delivery channel as dogfood.
+The `v0.0.12` commands and assets below are usable **only if** the private tag and
+checksummed assets exist and their identity is verified. If unavailable, use the prior
+[v0.0.11 release](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.11).
 A local package or branch install is not a released artifact. Keep the exact tag, full
 source commit, and checksums together. Public alpha is planned to start at `0.1.0`.
 The repository remains private and no npm package is published.
@@ -12,14 +12,15 @@ portability guidance; native execution and native host registration still need t
 
 ## Project operator and native skill, recommended
 
-The examples below target `v0.0.12` after its private release is verified. Use Node 24,
+The examples below target `v0.0.12` if its private release is verified. Use Node 24,
 npm, Git, and a GitHub account with access to the repository. Install the CLI once:
 
 ```sh
 npm install -g --ignore-scripts --install-links git+https://github.com/forsvn-labs/conquistador.git#v0.0.12
 ```
 
-Before that tag exists, use the identical command ending in `#v0.0.11` for the current release.
+If that tag or verified assets are unavailable, use the identical command ending in
+`#v0.0.11` for the prior verified release.
 
 In each receiving project, run:
 
@@ -131,7 +132,7 @@ for work based on supplied facts.
 
 ### First task
 
-The chooser and `--task` flag below describe the 0.0.12 candidate. The currently shipped
+The chooser and `--task` flag below describe the 0.0.12 source. The prior
 `v0.0.11` fallback retains its original launch-plan handoff.
 
 The TUI lets you choose a first task before installation. For a scripted Codex install,
@@ -314,7 +315,7 @@ the selected project. In one observed environment `/opt/homebrew/bin/conquistado
 A newer CLI does not update those copies. After the reviewed 0.0.12 release, use its authorized
 CLI to update each owned installation through its original lifecycle, then recheck receipts,
 doctor, native discovery, and a real task. Do not update those installed copies from this
-candidate branch.
+unverified branch.
 
 Check local completeness, host discovery, and a real first task separately. For substantial tasks,
 check the engagement brief, deliverable, labeled review, and execution receipt. Neither a plugin
@@ -375,7 +376,7 @@ See [host paths and invocation](docs/PLATFORMS.md#coding-agents).
 
 ## Prepared release assets
 
-Once released, the 0.0.12 private assets include `conquistador-skill-0.0.12.zip` and
+When available, the 0.0.12 private assets include `conquistador-skill-0.0.12.zip` and
 `conquistador-plugin-0.0.12.zip`, both covered by `SHA256SUMS`. These expose one parent
 with internal method files. Use the skill ZIP as a skills.sh local source or the plugin ZIP with a
 host plugin manager. The manager owns its installed copies. The source ZIP and Git checkout retain

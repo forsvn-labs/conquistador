@@ -5,7 +5,7 @@ reviewed through [the hardening review](https://github.com/forsvn-labs/conquista
 and merged at `f540d258d2555135affa75c0ce44376949136e71`. The 0.0.12 candidate aligns
 product, host, plugin, agent, schema, CLI, and MCP versions. Installation examples now
 pin the intended v0.0.12 release, but are gated on the tag and checksummed assets;
-v0.0.11 remains the usable shipped fallback until those exist. An observed
+v0.0.11 is the prior verified fallback if those are unavailable. An observed
 installation has `/opt/homebrew/bin/conquistador` at 0.0.11 but both
 `~/.agents/skills/conquistador/.conquistador-install.json` and
 `~/.claude/skills/conquistador/.conquistador-install.json` at 0.0.8. Those project/host
@@ -20,9 +20,9 @@ readable-spacing rule still reports pre-existing violations in touched files, so
 not a clean lint gate.
 The independently reviewed product commit is `855acdf618e6fd85548dbcc94496cdf53374a951`.
 Its local build and 764 tests passed, and all four review checks passed on that commit.
-The latest versioned private release remains 0.0.11. A clean exact-commit assembly and
-candidate-commit private-Git lifecycle are local preparation, not a released artifact or native
-host/human acceptance. See [CHANGELOG.md](CHANGELOG.md) for verified delivery and
+The prior verified versioned private release is 0.0.11. A clean exact-commit assembly and
+candidate-commit private-Git lifecycle are local preparation, not by themselves a released
+artifact or native host/human acceptance. See [CHANGELOG.md](CHANGELOG.md) for verified delivery and
 [ROADMAP.md](ROADMAP.md) for remaining release, native-host, and human acceptance work.
 
 Current private delivery:

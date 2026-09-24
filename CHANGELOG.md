@@ -10,12 +10,12 @@ product commit is `855acdf618e6fd85548dbcc94496cdf53374a951`; all four review ch
 on that commit. It repairs compound phrases beside negation, technical explanation false
 positives, selected-project stale-update commands, and subsequent parser and explicit-name
 regressions found by installed adversarial review. See [PROGRESS.md](PROGRESS.md) for evidence.
-No new versioned release is claimed. The 0.0.12 candidate prepares consistent product and
-integration manifests and stages v0.0.12-pinned install instructions with an explicit
-v0.0.11 fallback until a verified private release exists. Exact-commit local packaging
-and a candidate private-Git lifecycle are not a tag, uploaded assets, native-host
-execution, or human acceptance.
-The latest shipped version remains 0.0.11.
+This entry records 0.0.12 preparation, not release acceptance. It aligns product and
+integration manifests and stages v0.0.12-pinned install instructions with a prior
+v0.0.11 fallback if the new tag or verified assets are unavailable. Exact-commit local
+packaging and a candidate private-Git lifecycle alone do not establish a tag, uploaded
+assets, native-host execution, or human acceptance. See the release record below for
+the prior verified v0.0.11 delivery.
 
 ## 2026-09-18, 0.0.11 private alpha
 
