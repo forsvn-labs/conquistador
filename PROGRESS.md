@@ -3,8 +3,9 @@
 The 0.0.11 hardening work has shipped. The growth-diagnosis and first-run changes below were
 reviewed through [the hardening review](https://github.com/forsvn-labs/conquistador/pull/7)
 and merged at `f540d258d2555135affa75c0ce44376949136e71`. The 0.0.12 candidate aligns
-product, host, plugin, agent, schema, CLI, and MCP versions. The existing v0.0.11 commands
-remain the shipped install path until a private tag and assets are verified. An observed
+product, host, plugin, agent, schema, CLI, and MCP versions. Installation examples now
+pin the intended v0.0.12 release, but are gated on the tag and checksummed assets;
+v0.0.11 remains the usable shipped fallback until those exist. An observed
 installation has `/opt/homebrew/bin/conquistador` at 0.0.11 but both
 `~/.agents/skills/conquistador/.conquistador-install.json` and
 `~/.claude/skills/conquistador/.conquistador-install.json` at 0.0.8. Those project/host

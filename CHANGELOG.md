@@ -11,9 +11,10 @@ on that commit. It repairs compound phrases beside negation, technical explanati
 positives, selected-project stale-update commands, and subsequent parser and explicit-name
 regressions found by installed adversarial review. See [PROGRESS.md](PROGRESS.md) for evidence.
 No new versioned release is claimed. The 0.0.12 candidate prepares consistent product and
-integration manifests and keeps the v0.0.11 install instructions pinned until a verified
-private release exists. Exact-commit local packaging and a candidate private-Git lifecycle
-are not a tag, uploaded assets, native-host execution, or human acceptance.
+integration manifests and stages v0.0.12-pinned install instructions with an explicit
+v0.0.11 fallback until a verified private release exists. Exact-commit local packaging
+and a candidate private-Git lifecycle are not a tag, uploaded assets, native-host
+execution, or human acceptance.
 The latest shipped version remains 0.0.11.
 
 ## 2026-09-18, 0.0.11 private alpha

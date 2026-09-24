@@ -8,21 +8,21 @@ The latest shipped private alpha is
 [v0.0.11](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.11).
 This source tree prepares 0.0.12; it is not a released tag or accepted artifact yet.
 Private alpha and dogfood are the same `0.0.x` channel. Public alpha starts at `0.1.0`.
-The first-task chooser and `--task` examples below describe this 0.0.12 candidate;
-the pinned `v0.0.11` install retains its original launch-plan handoff. Only after the
-private `v0.0.12` tag and release assets are verified, replace the shipped command below with:
+The first-task chooser and `--task` examples below describe this 0.0.12 candidate.
+The pinned `v0.0.11` install retains its original launch-plan handoff.
+
+## Install once, use in each project
+
+Use Node 24 and a GitHub account with access to this private repository. The 0.0.12
+command is for the prepared release **only after** its private tag and checksummed assets
+exist and their identity is verified:
 
 ```sh
 npm install -g --ignore-scripts --install-links git+https://github.com/forsvn-labs/conquistador.git#v0.0.12
 ```
 
-## Install once, use in each project
-
-Use Node 24 and a GitHub account with access to this private repository:
-
-```sh
-npm install -g --ignore-scripts --install-links git+https://github.com/forsvn-labs/conquistador.git#v0.0.11
-```
+Until then, use the currently shipped [v0.0.11 release](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.11)
+with the same command ending in `#v0.0.11`.
 
 Then open a terminal in the project where you want to use it:
 
