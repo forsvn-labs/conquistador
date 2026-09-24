@@ -2,6 +2,14 @@
 
 ## Next private-alpha acceptance
 
+The 0.0.13 private-alpha candidate contains the unshipped Node 24 preflight and revised
+bare-command guide; neither is part of the verified 0.0.12 tag. Before an authorized 0.0.13
+private release, merge the reviewed source, verify exact package acquisition under wrong and
+supported Node versions, and record a fresh host's discovery and first task. The clean local
+installed-tarball terminal suite checks setup and ownership only; it does not prove host
+activation. Do not tag, upload assets, update a global installation or call 0.0.13 released
+from this PR alone.
+
 The [v0.0.12 private release](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.12)
 is shipped from `738d24268bee03e0bc8880d22b21b665951881c9`. Its six downloaded assets,
 Node 24 build, 764 tests, and authenticated cold private-Git tag acquisition passed. The observed

@@ -2,7 +2,9 @@
 
 No public release is claimed. See [VERSIONS.md](VERSIONS.md) for independent product and method
 versions. Verification establishes the stated local scope; native host behavior, useful model
-output, human acceptance and rights disposition require separate evidence.
+output, human acceptance and rights disposition require separate evidence. The 0.0.13 source
+candidate is unshipped; its behavior and validation are recorded in PROGRESS.md, not as a
+release entry here. The latest shipped version remains 0.0.12.
 
 ## 2026-09-24, 0.0.12 private alpha
 

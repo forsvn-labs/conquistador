@@ -5,7 +5,7 @@ the direct commands for local source copies, native plugin managers, runtime ope
 containers. Use the original installer to update and remove a copy. Full skill and plugin packages
 include all 38 outcome methods; domain and standalone method packages can contain fewer.
 
-Version 0.0.11 is the prior verified private alpha; this checkout is versioned 0.0.12. See INSTALL.md for the recommended persistent CLI. The 0.0.12 commands require a verified private tag and release assets; if unavailable, use the v0.0.11 tag or verified tarball.
+Version 0.0.12 is the latest verified private alpha; this checkout is an unreleased 0.0.13 candidate. See INSTALL.md for the current verified persistent CLI. Do not use a 0.0.13 tag or asset until it is separately verified and released.
 `private: true` blocks registry publication; private Git and local package execution remain possible. See [package verification](../INSTALL.md#verify-the-package).
 
 For Git acquisition, use the fixed release tag or its full source commit. Your GitHub account must

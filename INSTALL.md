@@ -1,6 +1,6 @@
 # Install Conquistador
 
-The current private-alpha release is
+The latest verified private-alpha release is
 [v0.0.12](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.12),
 from source commit `738d24268bee03e0bc8880d22b21b665951881c9` on the same delivery channel
 as dogfood. Its private tag and six downloaded assets were verified against the exact local
@@ -8,7 +8,10 @@ assembly. If this release is unavailable to your authorized account, use the pri
 [v0.0.11 release](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.11).
 A local package or branch install is not a released artifact. Keep the exact tag, full
 source commit, and checksums together. Public alpha is planned to start at `0.1.0`.
-The repository remains private and no npm package is published.
+The repository remains private and no npm package is published. This checkout is an unreleased
+0.0.13 candidate; its revised Node and project guide is not in the pinned v0.0.12 install. No
+v0.0.13 tag or release asset exists yet. Do not install it as a released version before separate
+authorization and exact package verification.
 The observed installation platform is macOS with Node 24. Windows/Linux commands below are
 portability guidance; native execution and native host registration still need their own checks.
 
@@ -30,10 +33,10 @@ In each receiving project, run:
 conquistador
 ```
 
-Plain `conquistador` inspects this project and installs one complete operator with its matching
-native entry. It chooses the package; you confirm. If host detection is inconclusive, it asks
+The pinned v0.0.12 release retains its earlier guide. In this unreleased 0.0.13 candidate,
+plain `conquistador` asks which existing project directory to use (the current Git root is suggested when applicable), selects one host, shows its installation plan, applies after confirmation, runs the local doctor, and prints a first-task handoff. It installs one complete operator with its matching native entry. It chooses the package; you confirm. If host detection is inconclusive, it asks
 which coding agent to use. Architecture choices stay behind `conquistador --advanced` and the
-explicit setup commands below. The complete operator goes into `.conquistador`, with `SKILL.md`
+explicit setup commands below. You can also choose an optional route in this guide, including on a later launch; that route performs its own preflight and confirmation in the same invocation. A failed or interrupted optional route returns nonzero while preserving completed copies; if the operator was already installed, cancellation names that owned copy. The default does not install all integrations. A plugin still needs host-manager registration, MCP needs client registration, skills.sh owns its copy and lockfile, and Hermes needs trust. The complete operator goes into `.conquistador`, with `SKILL.md`
 at its root. Native skills use:
 
 | Coding agent | Project skill |
@@ -63,8 +66,9 @@ not an alias for Codex. No BB plugin, provider registration or automatic request
 separate host step and setup does not install Hermes. The local preparation path is tested;
 native Hermes scanning, trust and discovery remain unverified. `--bot grok-bot` prints the official app
 handoff; a private Conquistador installation in Grok Bot has not been verified. An
-unchanged independently managed skill can be adopted when the confirmation names the ownership
-change. Modified, linked, unowned, or skills.sh-managed copies are refused. Domain
+unchanged independently managed skill can be adopted when the confirmation names the exact folder
+and warns that future operator uninstall will remove it. This also applies when adding a host to
+an existing operator. Modified, linked, unowned, or skills.sh-managed copies are refused. Domain
 restrictions must agree. A new host session is needed to refresh native discovery. Setup does not
 start automatic project routing, watchers, services or hooks.
 
@@ -76,7 +80,9 @@ For automation, `conquistador install` selects the current project and Codex ski
 choice belongs to plain `conquistador` and `conquistador setup`. Use
 `--host bb`, `--host cursor`, `--host claude-code`, `--host copilot` or `--host none` to choose differently.
 This checkout also supports `--hosts codex,bb,cursor` for several hosts. During update, it can add
-hosts while retaining existing owned skills. Removing an owned native host requires uninstalling
+hosts while retaining existing owned skills; the interactive guide also adds the first native
+host to a files-only operator. `--host none` on an existing native operator leaves its hosts
+and ownership intact. Removing an owned native host requires uninstalling
 the unchanged operator first. Existing single-host commands and v1 receipts remain supported.
 `--dry-run` checks install/update paths and ownership without creating files.
 The CLI itself lives in npm's global prefix. The receiving project gets no `package.json`,
@@ -134,8 +140,8 @@ for work based on supplied facts.
 
 ### First task
 
-The chooser and `--task` flag below describe the 0.0.12 source. The prior
-`v0.0.11` fallback retains its original launch-plan handoff.
+The chooser and `--task` flag below are available in the verified v0.0.12 release and
+this 0.0.13 source candidate. The prior `v0.0.11` fallback retains its original launch-plan handoff.
 
 The TUI lets you choose a first task before installation. For a scripted Codex install,
 `conquistador --host codex --task diagnose-growth --yes` prints the same task handoff.
@@ -421,7 +427,7 @@ erases service data or stops a shared service.
 
 | Problem | Action |
 | --- | --- |
-| Unsupported Node version | Conquistador needs Node 24. Switch Node versions and rerun this command. |
+| Unsupported Node version | In a terminal, choose the verified Node 24 executable when offered, or follow the printed nvm/Homebrew/Node download steps. The command does not install Node or change your parent shell. With no terminal, select Node 24 and rerun; setup exits nonzero. `--help` and `--version` still work. |
 | Tarball identity is unclear | Obtain the exact private build and trusted checksum; do not infer identity from its filename |
 | Destination already exists or has edits | Inspect its original owner; preserve edits and select a new folder |
 | Doctor passes but host cannot invoke it | Follow the selected host's activation step and use a fresh session |

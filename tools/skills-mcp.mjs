@@ -147,7 +147,7 @@ export async function runSkillsMcp({ input = process.stdin, output = process.std
     if (method === 'initialize' && !initialized) {
       if (typeof params.protocolVersion !== 'string' || !object(params.capabilities) || !object(params.clientInfo)) return error(id, -32602, 'Invalid initialization');
       initialized = true;
-      return send({ jsonrpc: '2.0', id, result: { protocolVersion: protocolVersions.has(params.protocolVersion) ? params.protocolVersion : '2025-11-25', capabilities: { tools: {} }, serverInfo: { name: 'conquistador-methods', version: '0.0.12' }, instructions: 'Read conquistador/SKILL.md with conquistador_read, then select relevant methods. Your host supplies the model, tools and permissions. Reading methods does not execute them or grant authority.' } });
+      return send({ jsonrpc: '2.0', id, result: { protocolVersion: protocolVersions.has(params.protocolVersion) ? params.protocolVersion : '2025-11-25', capabilities: { tools: {} }, serverInfo: { name: 'conquistador-methods', version: '0.0.13' }, instructions: 'Read conquistador/SKILL.md with conquistador_read, then select relevant methods. Your host supplies the model, tools and permissions. Reading methods does not execute them or grant authority.' } });
     }
     if (!ready) return error(id, -32600, 'Initialize the connection first');
     if (method === 'tools/list') return send({ jsonrpc: '2.0', id, result: { tools: TOOLS } });

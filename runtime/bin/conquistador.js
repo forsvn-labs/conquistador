@@ -7,8 +7,15 @@ function shortcut(arg) {
   return ["bot", "skills", "plugin", "mcp", "advanced"].includes(name) ? name : null;
 }
 
-// Installation must work before runtime dependencies exist.
-if (args.length === 0) {
+// Installation must work before runtime dependencies exist. Keep help and version
+// available even when the shell selected an unsupported Node.
+const helpOrVersion = args.includes('--help') || args.includes('-h') || args.includes('--version') || (args.length === 1 && args[0] === 'version');
+const supportedNode = Number(process.versions.node.split('.')[0]) === 24;
+const onboarding = args.length === 0 || args[0].startsWith('-');
+const preflight = helpOrVersion || supportedNode || !onboarding ? null : await (await import('../../tools/node-preflight.mjs')).nodePreflight();
+if (preflight !== null) {
+  process.exitCode = preflight;
+} else if (args.length === 0) {
   const { runOnboarding } = await import("../../tools/onboarding.mjs");
   process.exitCode = await runOnboarding((process.stdin.isTTY && process.stdout.isTTY) ? [] : ["--help"]);
 } else if (args[0].startsWith("-")) {
