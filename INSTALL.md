@@ -321,8 +321,8 @@ disposable project. Codex and Cursor retain a three-line private instruction: th
 receipts report modified, so the home operator doctor exits 1 for receipt integrity despite
 matching packaged completeness. Preserve those edits; Claude Code and Copilot doctors pass.
 A newer CLI alone does not update project copies. These checks do not prove native host discovery,
-model method reads, useful output, provider access, or the captain's verdict. Check a real task
-in a fresh host session and seek the captain's usefulness verdict.
+model method reads, useful output, provider access, or the user's verdict. Check a real task
+in a fresh host session and seek the user's usefulness verdict.
 
 Check local completeness, host discovery, and a real first task separately. For substantial tasks,
 check the engagement brief, deliverable, labeled review, and execution receipt. Neither a plugin

@@ -30,7 +30,7 @@ output, human acceptance and rights disposition require separate evidence.
 - Codex and Cursor keep private edits; their receipts remain modified and home operator doctor
   exits 1 for receipt integrity despite matching packaged completeness. Clean Claude Code and
   Copilot native doctors pass. Fresh host discovery, model method reads, useful task output,
-  provider access, and the captain's own verdict remain unverified.
+  provider access, and the user's verdict remain unverified.
 
 ## 2026-09-24, 0.0.12 private alpha
 

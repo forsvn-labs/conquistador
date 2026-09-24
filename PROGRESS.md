@@ -19,7 +19,7 @@ exits 1 for receipt integrity while showing 38 methods and matching completeness
 Code and Copilot native doctors pass. No PATH or shell startup changes were made.
 
 This proves local setup and ownership only. Fresh host discovery, model method reads, useful task
-output, provider access, and the captain's own verdict remain unverified. See the release entry
+output, provider access, and the user's verdict remain unverified. See the release entry
 in [CHANGELOG.md](CHANGELOG.md) and remaining gates in [ROADMAP.md](ROADMAP.md).
 
 ## 0.0.13 candidate development (historical, shipped after verification)

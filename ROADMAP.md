@@ -13,8 +13,8 @@ doctor fails receipt integrity as expected. These are local installation checks,
 or human acceptance.
 
 1. Observe fresh native host discovery on the exact released build, full method/resource reads,
-   a useful first task, and a correction. Seek the captain's verdict on clarity, routing relevance,
-   and usefulness. The captain's own host session remains unverified; local shell success cannot
+   a useful first task, and a correction. Seek the user's verdict on clarity, routing relevance,
+   and usefulness. The user's own host session remains unverified; local shell success cannot
    establish it. Keep installed-route and other local diagnostics separate from model evidence.
 2. Preserve the modified Codex and Cursor overlays on later updates. Observe fresh host behavior
    separately from clean receipts. A second native host and independent specialist contexts remain
