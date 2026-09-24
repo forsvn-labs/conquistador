@@ -4,11 +4,13 @@ No public release is claimed. Implemented but unshipped work is recorded in [PRO
 versions. Verification establishes the stated local scope; live provider operation, useful model
 output, human acceptance, rights disposition and release authority require separate evidence.
 
-The current local growth-diagnosis and onboarding candidate, including repairs from independent
-review, is recorded in [PROGRESS.md](PROGRESS.md). No new release is claimed.
-The final local review repairs compound phrases beside negation, technical explanation false
+The growth-diagnosis and onboarding candidate is in the
+[draft review](https://github.com/forsvn-labs/conquistador/pull/7). Its independently reviewed
+product commit is `855acdf618e6fd85548dbcc94496cdf53374a951`; all four review checks passed
+on that commit. It repairs compound phrases beside negation, technical explanation false
 positives, selected-project stale-update commands, and subsequent parser and explicit-name
-regressions found by installed adversarial review.
+regressions found by installed adversarial review. See [PROGRESS.md](PROGRESS.md) for evidence.
+The branch is pushed but unmerged; no new versioned release is claimed.
 The latest shipped version remains 0.0.11.
 
 ## 2026-09-18, 0.0.11 private alpha

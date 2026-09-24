@@ -1,17 +1,19 @@
 # Product progress
 
-The 0.0.11 hardening work has shipped. The growth-diagnosis and first-run changes below are a
-local candidate. An independent review identified routing, handoff, profile-reading, and help
-defects; local follow-up repairs are under verification. They have not been pushed or released. See
-[CHANGELOG.md](CHANGELOG.md) for verified delivery and [ROADMAP.md](ROADMAP.md) for remaining
-native-host and human acceptance work.
+The 0.0.11 hardening work has shipped. The growth-diagnosis and first-run changes below are in
+the [draft review](https://github.com/forsvn-labs/conquistador/pull/7) against `private-alpha`.
+The independently reviewed product commit is `855acdf618e6fd85548dbcc94496cdf53374a951`.
+Its local build and 764 tests passed, and all four draft-review checks passed on that commit.
+The branch has been pushed but has not been merged, tagged, or released. The latest versioned
+private release remains 0.0.11. See [CHANGELOG.md](CHANGELOG.md) for verified delivery and
+[ROADMAP.md](ROADMAP.md) for remaining native-host and human acceptance work.
 
 Current private delivery:
 [`v0.0.11`](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.11) from
 `3e9f07be8e825b0057225f1172745a2c21bd535e` through
 [PR #6](https://github.com/forsvn-labs/conquistador/pull/6).
 
-## Local growth-diagnosis and first-run candidate
+## Growth-diagnosis and first-run candidate in review
 
 The installed 0.0.11 route selected `shape-initiative` for a synthetic growth-stall prompt with
 flat visits, falling trials and upgrades, and a broad "what should we do next" question. Adding
@@ -44,12 +46,12 @@ one read-only reconciliation. It reported same-context review and no independent
 trace is a local observation, not acceptance for other prompts, models, or hosts.
 
 The repository's catalog already registered anti-slop rules but lacked their vendored plugin.
-The local candidate restores the pinned plugin, adds a source configuration, and records the
+The review branch restores the pinned plugin, adds a source configuration, and records the
 bundled source digest in `tools/oxlint/anti-slop/UPSTREAM.md`. The plugin runs; its readable-spacing
 rule reports a large pre-existing baseline in touched files, so this candidate does not claim a
 clean anti-slop lint gate. Build and full product-test results are recorded after verification.
 
-### Independent review repairs, still local
+### Independent review repairs in the branch
 
 The first independent review of `ae4fc37` found that the selector dropped an explicitly named
 `shape-initiative` method beside `plan-campaign`, treated a slowing CI pipeline as a growth
@@ -77,7 +79,7 @@ abstention, first-task hook context, cross-project ownership, and managed MCP li
 These checks cover the installed CLI and local protocol. They do not establish live delivery by
 another native host, independent specialist contexts, provider access, or a human verdict.
 
-### Wider product and onboarding repairs, still local
+### Wider product and onboarding repairs in the branch
 
 The independent review confirmed that a cross-project handoff could still print bare management
 commands. Every printed doctor, update, and uninstall command now carries the selected absolute
@@ -105,7 +107,7 @@ operator was detected. The corresponding installed CLI route selected
 installation; its natural phrase is now a declared `knowledge-review` intent. Setup did not launch
 a model or confirm native discovery.
 
-### Final review repairs, still local
+### Final review repairs in the branch
 
 The final independent review found three remaining defects. A compound method name or declared
 intent beside a negated task could disappear because one pass split at "and" and a second pass

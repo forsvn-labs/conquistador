@@ -2,13 +2,13 @@
 
 ## Next private alpha
 
-1. Finish the local repair review recorded in [PROGRESS.md](PROGRESS.md). Keep installed routes,
-   compound-intent and technical-explanation negative controls, selected-project update commands,
-   malformed-profile handling, and local MCP reads
-   in the acceptance artifact. Repeat a fresh native task on the reviewed exact commit and
-   obtain the user's verdict on clarity, routing relevance, and usefulness. The current composed
-   Codex run shows method and workflow reads; a second real host and independent specialists
-   remain unverified.
+1. Complete the guarded review and merge of the
+   [growth-diagnosis branch](https://github.com/forsvn-labs/conquistador/pull/7). Keep installed
+   routes, compound-intent and technical-explanation negative controls, selected-project update
+   commands, malformed-profile handling, and local MCP reads in its acceptance artifact. After
+   merge, repeat a fresh native task on the exact merged commit and obtain the user's verdict on
+   clarity, routing relevance, and usefulness. The current composed Codex run shows method and
+   workflow reads; a second real host and independent specialists remain unverified.
 2. Keep the authenticated private-Git durability check as a required gate for later private tags.
    It must delete acquisition cache before running the CLI lifecycle.
 
