@@ -4,7 +4,8 @@ No public release is claimed. Implemented but unshipped work is recorded in [PRO
 versions. Verification establishes the stated local scope; live provider operation, useful model
 output, human acceptance, rights disposition and release authority require separate evidence.
 
-The current local growth-diagnosis and onboarding candidate is recorded in [PROGRESS.md](PROGRESS.md).
+The current local growth-diagnosis and onboarding candidate, including repairs from independent
+review, is recorded in [PROGRESS.md](PROGRESS.md). No new release is claimed.
 The latest shipped version remains 0.0.11.
 
 ## 2026-09-18, 0.0.11 private alpha

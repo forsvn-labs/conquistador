@@ -7,6 +7,7 @@ import { FIRST_TASKS } from './onboarding-parse.mjs';
 export function runStart(args, cwd = process.cwd(), list = false) {
   let project = cwd;
   let task = 'launch-plan';
+
   for (let i = 0; i < args.length; i += 2) {
     if (args[i] === '--project' && args[i + 1]) project = resolve(cwd, args[i + 1]);
     else if (!list && args[i] === '--task' && Object.hasOwn(FIRST_TASKS, args[i + 1])) task = args[i + 1];

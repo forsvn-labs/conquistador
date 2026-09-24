@@ -1,7 +1,8 @@
 # Product progress
 
 The 0.0.11 hardening work has shipped. The growth-diagnosis and first-run changes below are a
-local candidate. They have not been pushed, reviewed independently, or released. See
+local candidate. An independent review identified routing, handoff, profile-reading, and help
+defects; local follow-up repairs are under verification. They have not been pushed or released. See
 [CHANGELOG.md](CHANGELOG.md) for verified delivery and [ROADMAP.md](ROADMAP.md) for remaining
 native-host and human acceptance work.
 
@@ -75,6 +76,51 @@ growth request and paraphrases, explicit multi-method selection, unrelated and C
 abstention, first-task hook context, cross-project ownership, and managed MCP listing and read.
 These checks cover the installed CLI and local protocol. They do not establish live delivery by
 another native host, independent specialist contexts, provider access, or a human verdict.
+
+### Wider product and onboarding repairs, still local
+
+The independent review confirmed that a cross-project handoff could still print bare management
+commands. Every printed doctor, update, and uninstall command now carries the selected absolute
+operator path. An installed two-project check executes the printed doctor from project A and
+confirms it inspected project B. A malformed profile presented as a FIFO no longer blocks
+`start`; onboarding uses the same bounded, non-symlink profile loader as request admission. The
+runtime playbook help now names `conquistador runtime route --intent`, which is the public
+dispatcher path. The tool tests retain minimal-source CLI coverage for this shared loader.
+
+The selector now keeps the source of each match: normalized method name, declared intent, channel
+lock, or inference. It demotes only the broad `what should we do` shaping intent when another
+method is present. It preserves explicit shaping, compound method names, compound declared
+intents, and negated or quoted scope. Technical pipeline failures abstain. A source audit of all
+191 declared intents found each owning method; the Vietnamese landing-page rewrite also selected
+`write-copy`, which is a documented composition rather than a missing owner. Installed adversarial
+routes cover CI and data pipelines, explicit method sequences, negation, quotations, pricing,
+knowledge freshness, technical documentation, and campaign-related growth diagnosis.
+
+A returning user now gets a first-task chooser in the interactive terminal. New and returning
+users can describe another task beyond the four starter prompts; the handoff prints its prompt,
+a local route preview, host ownership, manual or configured activation, trace-read check, and target-qualified recovery
+commands. A real terminal run chose a custom pricing-and-packaging task after an installed Codex
+operator was detected. The corresponding installed CLI route selected
+`design-pricing-and-packaging`. A first-run terminal task about knowledge freshness also completed
+installation; its natural phrase is now a declared `knowledge-review` intent. Setup did not launch
+a model or confirm native discovery.
+
+A second live Codex CLI task used a freshly installed native skill to plan a one-week beta
+campaign, draft one launch email, and specify growth measurement from supplied facts. The trace
+recorded successful full reads of the parent method, `plan-campaign`, `write-copy`,
+`measure-growth`, all declared required resources for those three methods, and the
+`launch-product` composition workflow. Twelve successful `cat` outputs matched replays byte for
+byte; the initial false path flags came from a trace parser that did not expand shell braces.
+The model returned drafts with no invented conversion figures and disclosed same-context review;
+no independent specialists, send, spend, or tracking mutation occurred. This is one capable-host
+observation, not semantic acceptance of every method or another host.
+
+The bounded root anti-slop command still reports inherited violations. Its diagnostics on authored
+new lines are zero after cleanup; the remaining 253 diagnostics are outside the changed lines.
+The root does not yet have a clean repository-wide lint gate. A final-source Node 24 build and
+full suite passed: 240 host/tooling, 294 runtime, 167 catalog, and 63 evaluation checks (764
+total). The installed end-to-end artifact includes the adversarial routes and copied doctor
+execution. Host acceptance and private acquisition remain later gates.
 
 ## Private-alpha 0.0.9 shipped
 

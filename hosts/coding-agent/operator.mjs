@@ -1,22 +1,9 @@
 import { explicitInvocation as isExplicitInvocation } from '../../tools/request-text.mjs';
-import assert from 'node:assert/strict';
-import { existsSync, readFileSync, lstatSync } from 'node:fs';
-import { posix, resolve } from 'node:path';
-import { closed, identifier } from './contracts.mjs';
-import { containedPath } from '../../tools/plugin-contracts.mjs';
+import { posix } from 'node:path';
+import { operatorProtocol, admittedDomains, validateOperatorProfile } from '../../tools/operator-profile.mjs';
 
-export const operatorProtocol = 'conquistador.operator-profile/v1';
-export const admittedDomains = Object.freeze([
-  'product', 'marketing', 'growth', 'sales', 'research', 'creative', 'product-engineering',
-]);
-export const defaultOperatorProfile = Object.freeze({
-  schemaVersion: operatorProtocol,
-  activation: 'manual',
-  admittedDomains: [...admittedDomains],
-  disclosure: 'capabilities-and-specialists',
-  backgroundWatch: false,
-  externalMutation: 'human-gated',
-});
+export { operatorProtocol, admittedDomains, defaultOperatorProfile, validateOperatorProfile,
+  defaultInstalledProfile, loadOperatorProfile } from '../../tools/operator-profile.mjs';
 
 const domainSignals = Object.freeze({
   product: /\b(?:positioning|pricing|packaging|icp|value proposition|product strategy|go-to-market|\bgtm\b|initiative scope)\b/i,
@@ -29,56 +16,6 @@ const domainSignals = Object.freeze({
 });
 const codingAbstain = /\b(?:fix(?:ing)? (?:a |the )?(?:bug|type ?error|compile error|lint)|refactor(?:ing)?|merge conflict|unit tests?|eslint|prettier|null pointer|typescript error)\b/i;
 const sourceFile = /(?:^|[\s`'"(])([\w./-]+\.(?:tsx?|jsx?|mjs|cjs|css|scss|vue|svelte|py|go|rs|java|rb))\b/gi;
-
-export function validateOperatorProfile(value) {
-  closed(value, ['schemaVersion', 'activation', 'admittedDomains', 'disclosure', 'backgroundWatch', 'externalMutation']);
-  assert.equal(value.schemaVersion, operatorProtocol);
-  assert.ok(['manual', 'project', 'off'].includes(value.activation), 'activation must be manual, project, or off');
-  assert.ok(Array.isArray(value.admittedDomains) && value.admittedDomains.length > 0, 'admittedDomains required');
-  assert.equal(new Set(value.admittedDomains).size, value.admittedDomains.length, 'admittedDomains must be unique');
-  for (const domain of value.admittedDomains) {
-    identifier(domain);
-    assert.ok(admittedDomains.includes(domain), `Unknown admitted domain ${domain}`);
-  }
-  assert.equal(value.disclosure, 'capabilities-and-specialists');
-  assert.equal(value.backgroundWatch, false, 'backgroundWatch must remain false');
-  assert.equal(value.externalMutation, 'human-gated');
-  return structuredClone(value);
-}
-
-export function defaultInstalledProfile() {
-  return structuredClone(defaultOperatorProfile);
-}
-
-function profileCandidates(root) {
-  const paths = ['./agent/skills/conquistador/library/conquistador/operator-profile.json',
-    './skills/conquistador/library/conquistador/operator-profile.json'];
-  if (existsSync(resolve(root, 'agent/agent.json'))) {
-    paths.push('./agent/skills/conquistador/operator-profile.json');
-    paths.push('./library/conquistador/operator-profile.json');
-  }
-  paths.push('./skills/conquistador/operator-profile.json');
-  paths.push('./library/conquistador/operator-profile.json');
-  paths.push('./agent/skills/conquistador/operator-profile.json');
-  return [...new Set(paths)];
-}
-
-/** Older v2 packages without a profile degrade to explicit-invocation-only. Invalid profiles fail closed. */
-export function loadOperatorProfile(root) {
-  for (const relative of profileCandidates(root)) {
-    const absolute = resolve(root, relative);
-    try {
-      const info = lstatSync(absolute);
-      assert.ok(info.isFile() && !info.isSymbolicLink() && info.size <= 16384, 'Invalid operator profile file');
-    } catch (error) {
-      if (error.code === 'ENOENT') continue;
-      throw error;
-    }
-    const parsed = JSON.parse(readFileSync(containedPath(root, relative, 'file'), 'utf8'));
-    return validateOperatorProfile(parsed);
-  }
-  return defaultInstalledProfile();
-}
 
 export function resolveActivation(profile, hostSettings = {}) {
   const installed = validateOperatorProfile(profile).activation;

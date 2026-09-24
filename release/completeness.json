@@ -1584,11 +1584,11 @@
     },
     {
       "path": "conquistador/routing-contract.json",
-      "sha256": "b3a90a322e7a9cf399e24d298e6a07d15c593a3077228c0df42bb20d72870ca5"
+      "sha256": "c7acff38effa6688f23ccdf275c70f3ba949932b73b21eb8e9a603b64711418c"
     },
     {
       "path": "conquistador/routing-overlay.json",
-      "sha256": "a2fc81af25eb792480bbe4386e8043ca6392863b14ece0088562122f47e37ca5"
+      "sha256": "35a398478c7d3a2d30d0ae520d4bb9847ba0302873abac8497a6293a04953091"
     },
     {
       "path": "conquistador/rubrics/composition.md",
@@ -4598,7 +4598,7 @@
     },
     {
       "path": "hosts/coding-agent/operator.mjs",
-      "sha256": "daa9193f0e04e4c69f300602911f008d5a2fea0163739291dea7bfe6f311230c"
+      "sha256": "2ecad63174112f1159c76eb4576c5551223f8c1f3c8c4473b2d175cb668841c7"
     },
     {
       "path": "hosts/coding-agent/receipt.mjs",
@@ -4642,7 +4642,7 @@
     },
     {
       "path": "tools/request-text.mjs",
-      "sha256": "d8ca0746f53d317cacbf3cfce5b34d542a2657d435b008c7881e8d6366522941"
+      "sha256": "dc66bf8d81a44b7ab68166c4dd8adfd93d128c106b1bb60bd5067ca6f8fe7e57"
     },
     {
       "path": "tools/knowledge-index.mjs",

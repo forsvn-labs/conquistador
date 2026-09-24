@@ -2,12 +2,12 @@
 
 ## Next private alpha
 
-1. Review the local growth-diagnosis and first-run repair recorded in [PROGRESS.md](PROGRESS.md).
-   Repeat installed routes for all 38 declared methods and negative controls, then check the
-   selected method and required resource reads in a fresh host session. Exercise a multi-method
-   task with truthful specialist and workflow disclosure, a real second host, and cross-project
-   handoffs. Obtain the user's verdict on clarity, routing relevance, and usefulness before
-   claiming acceptance.
+1. Finish the local repair review recorded in [PROGRESS.md](PROGRESS.md). Keep installed routes,
+   negative controls, cross-project management, malformed-profile handling, and local MCP reads
+   in the acceptance artifact. Repeat a fresh native task on the reviewed exact commit and
+   obtain the user's verdict on clarity, routing relevance, and usefulness. The current composed
+   Codex run shows method and workflow reads; a second real host and independent specialists
+   remain unverified.
 2. Keep the authenticated private-Git durability check as a required gate for later private tags.
    It must delete acquisition cache before running the CLI lifecycle.
 

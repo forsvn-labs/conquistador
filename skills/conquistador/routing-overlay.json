@@ -1441,6 +1441,7 @@
       "kind": "review",
       "intents": [
         "knowledge review",
+        "review knowledge freshness",
         "source audit",
         "conflicting evidence",
         "authority and freshness",

@@ -8,6 +8,7 @@ export function explicitInvocation(prompt) {
   return unquotedRequest(prompt).split(/(?<=[.!?;])\s+|\n+|\b(?:and|but)\b/i)
     .some(clause => !/\b(?:do not|don't|never|without)\b/i.test(clause) && new RegExp(invocation.source, 'i').test(clause));
 }
+
 export function requestClauses(prompt, { splitAnd = true } = {}) {
   return unquotedRequest(prompt).replace(invocation, ' ')
     .replace(/\b[\w/-]+\.(?:tsx?|jsx?|mjs|cjs|css|scss|vue|svelte|py|go|rs|java|rb)\b/gi, ' ')

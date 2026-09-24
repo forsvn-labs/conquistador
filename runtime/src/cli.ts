@@ -317,7 +317,7 @@ Usage:
   conquistador resume --run-id ID [--judgment-response FILE]
    conquistador judgment export --run-id ID --output FILE
   conquistador status --run-id ID
-   conquistador route --intent TEXT
+   conquistador runtime route --intent TEXT
    conquistador eval [--url URL]        Reserved; use the Eval Lab SDK
    conquistador backup create|verify --file FILE
                                         Local state backup under <data-root>/backups/

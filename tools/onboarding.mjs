@@ -80,16 +80,18 @@ function versionNotice(inspection) {
 
 function printStart(inspection, task, cwd) {
   const hosts = inspection.hosts?.length ? inspection.hosts : ['none'];
+  const firstTask = Object.hasOwn(FIRST_TASKS, task) ? FIRST_TASKS[task] : (task ?? FIRST_TASKS['launch-plan']);
   console.log(`Installed: ${inspection.path}`);
   console.log(`Use with: ${hosts.map(host => hostLabels[host] ?? host).join(', ')}`);
-  console.log(operatorNextSteps(inspection.path, hosts, cwd, FIRST_TASKS[task ?? 'launch-plan']));
+  console.log(operatorNextSteps(inspection.path, hosts, cwd, firstTask));
 }
 
 function planText(project, host, task) {
   const creates = destinationsFor(project, host);
   const adoption = hostFolders[host] && existsSync(join(project, hostFolders[host]))
     ? ` Adopt the unchanged independently managed skill at ${join(project, hostFolders[host])}; operator uninstall will remove it too.` : '';
-  return `Set up Conquistador in ${project}? All 38 methods through one Conquistador entry. Use with: ${hostLabels[host]}. First task: ${FIRST_TASKS[task].label}. Creates: ${creates.join(' and ')}.${adoption}`;
+
+  return `Set up Conquistador in ${project}? All 38 methods through one Conquistador entry. Use with: ${hostLabels[host]}. First task: ${task.label}. Creates: ${creates.join(' and ')}.${adoption}`;
 }
 
 function viewChanges(project, host, inspection) {
@@ -112,6 +114,26 @@ async function chooseHost(ui, resolved, env) {
     ? 'I could not identify your coding agent. Choose one, or use --host none.'
     : 'Choose one host. Conquistador installs into a single host.';
   return need(ui, await ui.select({ message, options: hostChoices(env), initialValue: resolved.candidates?.[0] ?? 'none' }));
+}
+
+async function chooseFirstTask(ui, initial = 'launch-plan') {
+  const id = await need(ui, await ui.select({
+    message: 'What do you want to do first in your coding agent?',
+    initialValue: initial,
+    options: [...Object.entries(FIRST_TASKS).map(([value, details]) => ({ value, label: details.label })),
+      { value: 'custom', label: 'Describe another task' }],
+  }));
+
+  if (!id) return { id: initial, task: FIRST_TASKS[initial] };
+
+  if (id !== 'custom') return { id, task: FIRST_TASKS[id] };
+  const input = await need(ui, await ui.text({ message: 'What should Conquistador help you do?' }));
+  const request = input?.trim();
+
+  if (!request || request.length > 2000 || /[\x00-\x1f\x7f]/.test(request)) throw new UsageError('Describe one task in 1–2000 characters on one line.');
+  const outcome = request.replace(/^use\s+conquistador\s+to\s+/i, '');
+
+  return { id, task: { label: 'Your task', prompt: `Use Conquistador to ${outcome}` } };
 }
 
 async function recommended({ options, cwd, run, ui, env, tty: interactive }) {
@@ -139,7 +161,11 @@ async function recommended({ options, cwd, run, ui, env, tty: interactive }) {
       console.log('Local files verified. Host discovery and task execution remain unverified.');
     } else console.log('Installed receipt integrity checked. Use the doctor from the installed release to verify completeness.');
     if (options.host && !inspection.hosts?.includes(options.host)) console.log('Recorded hosts were preserved. Use conquistador --advanced to review adding a host.');
-    printStart(inspection, options.task, cwd);
+
+    const task = interactive && !options.task && !options.yes && !options['dry-run']
+      ? (await chooseFirstTask(ui)).task : options.task;
+
+    printStart(inspection, task, cwd);
     return 0;
   }
   if (inspection.legacy) {
@@ -186,13 +212,13 @@ async function recommended({ options, cwd, run, ui, env, tty: interactive }) {
     await preflight(host);
     const args = ['install', '--target', 'operator', '--project', project, '--host', host];
     if (options['dry-run']) {
-      console.log(planText(project, host, options.task ?? 'launch-plan'));
+      console.log(planText(project, host, FIRST_TASKS[options.task ?? 'launch-plan']));
       console.log(viewChanges(project, host, inspection));
       console.log('Dry run. No files changed.');
       return 0;
     }
     if (options.yes) {
-      console.log(planText(project, host, options.task ?? 'launch-plan'));
+      console.log(planText(project, host, FIRST_TASKS[options.task ?? 'launch-plan']));
       await runSetupAction(run, args);
       await runSetupAction(run, ['doctor', '--path', join(project, '.conquistador')]);
       finish(project, host, options.task);
@@ -210,10 +236,10 @@ async function recommended({ options, cwd, run, ui, env, tty: interactive }) {
     ui.intro(`Conquistador ${version}`);
     ui.log.info('Other integrations: conquistador --help');
     let current = host;
-    let firstTask = options.task ?? 'launch-plan';
+    let firstTask = { id: options.task ?? 'launch-plan', task: FIRST_TASKS[options.task ?? 'launch-plan'] };
     for (;;) {
       const action = await need(ui, await ui.select({
-        message: planText(project, current, firstTask),
+        message: planText(project, current, firstTask.task),
         initialValue: 'setup',
         options: [
           { value: 'setup', label: 'Set up Conquistador' },
@@ -227,12 +253,9 @@ async function recommended({ options, cwd, run, ui, env, tty: interactive }) {
         await preflight(current);
         continue;
       }
+
       if (action === 'task') {
-        firstTask = await need(ui, await ui.select({
-          message: 'Which task will you try first in your coding agent?',
-          initialValue: firstTask,
-          options: Object.entries(FIRST_TASKS).map(([value, details]) => ({ value, label: details.label })),
-        }));
+        firstTask = await chooseFirstTask(ui, firstTask.id);
         continue;
       }
       if (action === 'changes') {
@@ -246,7 +269,8 @@ async function recommended({ options, cwd, run, ui, env, tty: interactive }) {
         console.log('Local files are ready. conquistador operator doctor is still required.');
         throw error;
       }
-      finish(project, current, firstTask);
+
+      finish(project, current, firstTask.task);
       ui.outro('Conquistador files are ready.');
       return 0;
     }

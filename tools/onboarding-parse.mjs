@@ -18,11 +18,13 @@ export const SKILLS_PIN = 'skills@1.5.26';
 export const SKILLS_AGENTS = { 'claude-code': 'claude-code', cursor: 'cursor', copilot: 'github-copilot', codex: 'codex' };
 export const PLUGIN_TARGETS = { 'claude-code': 'claude-plugin', codex: 'codex-plugin', copilot: 'copilot-plugin', none: 'agent-plugins' };
 export const SHORTCUT_NAMES = ['bot', 'skills', 'plugin', 'mcp'];
+
 const VALUE_FLAGS = new Set(['host', 'project', 'path', 'url', 'runtime-path', 'task']);
 const BOOL_FLAGS = new Set(['skills', 'plugin', 'mcp', 'advanced', 'yes', 'dry-run', 'help', 'version']);
 const ALIASES = { h: 'help' };
 
 export const FIRST_PROMPT = 'Use Conquistador to draft a launch plan from the product facts in this project. Mark missing facts. Keep it as a draft.';
+
 export const FIRST_TASKS = Object.freeze({
   'launch-plan': {
     label: 'Plan a launch',
@@ -173,6 +175,7 @@ export function parseOnboarding(args) {
   const selected = SHORTCUT_NAMES.filter(name => name === 'bot' ? Object.hasOwn(options, 'bot') : options[name]);
   if (selected.length > 1) throw new UsageError('The --bot, --skills, --plugin, and --mcp routes are mutually exclusive. Use conquistador --advanced to combine installation families.');
   if (options.advanced && selected.length) throw new UsageError('Do not mix --advanced with --bot, --skills, --plugin, or --mcp.');
+
   if (options.advanced && (options.yes || options['dry-run'] || options.host || options.path || options.url || options['runtime-path'] || options.task)) {
     throw new UsageError('--advanced opens the combination guide. It accepts only --project.');
   }
@@ -181,7 +184,9 @@ export function parseOnboarding(args) {
   }
 
   options.route = options.advanced ? 'advanced' : selected[0] ?? 'default';
+
   if (options.task && options.route !== 'default') throw new UsageError('--task applies to the complete project operator.');
+
   if (options.task && !Object.hasOwn(FIRST_TASKS, options.task)) {
     throw new UsageError(`Unknown first task: ${options.task}. Choose ${Object.keys(FIRST_TASKS).join(', ')}.`);
   }

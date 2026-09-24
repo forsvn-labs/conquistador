@@ -127,6 +127,9 @@ for work based on supplied facts.
 
 ### First task
 
+The chooser and `--task` flag below describe this unshipped source checkout. The pinned
+`v0.0.11` release above retains its original launch-plan handoff.
+
 The TUI lets you choose a first task before installation. For a scripted Codex install,
 `conquistador --host codex --task diagnose-growth --yes` prints the same task handoff.
 After installation, `conquistador start --task diagnose-growth` repeats it. The default
@@ -136,6 +139,8 @@ model task. `conquistador route --prompt 'Growth stalled while visits stayed fla
 signups fell'` previews local selection; it does not prove host delivery. Use
 `conquistador doctor` to inspect installed files and hook registration, then check a
 fresh host session and its trace for the selected full method and required resources.
+On a later interactive launch, the TUI asks for a starter task or one custom task and prints
+the selected-project handoff. Printed management commands carry the selected absolute path.
 
 The complete operator and one native skill are the default interaction form. The other
 commands above prepare portable skills, plugins, MCP, or a BB adapter with their stated
