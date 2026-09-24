@@ -60,5 +60,9 @@
     "setup": "node tools/setup.mjs",
     "integrations:status": "node tools/integration-releases.mjs status",
     "integrations:updates": "node tools/integration-releases.mjs check-updates"
+  },
+  "devDependencies": {
+    "@oxlint/plugins": "1.82.0",
+    "oxlint": "1.82.0"
   }
 }

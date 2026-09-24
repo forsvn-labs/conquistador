@@ -12,6 +12,8 @@ const moduleRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const fail = message => { throw new Error(message); };
 const feedbackOptIn = /\b(?:submit|share|send)\s+(?:product\s+)?feedback\b|\breport (?:a )?conquistador (?:bug|failure|issue)\b|\bfile a conquistador issue\b/i;
 const connectionSetup = /\b(?:set\s*up|setup|install|connect|wire|configure)\b[\s\S]{0,80}\b(?:executor|hubspot|salesforce|pipedrive|crm|ads account)\b/i;
+
+const technicalNoun = /\b(?:code|functions?|handlers?|middleware|components?|modules?|files?|tests?|validation)\b/i;
 function allowedKind(restriction, kind, name) {
   if (!restriction) return true;
   try {
@@ -32,17 +34,43 @@ function parentMatch(query, contract, restriction) {
   return null;
 }
 
-function matchingMethods(query, contract) {
+function matchingMethods(query, contract, { permitGrowthInference = true } = {}) {
   const text = normalized(query).replace(/\bposts\b/g, 'post');
   const inspect = /\b(?:evaluate|audit|results|performance)\b/i.test(query);
   const matches = [];
   for (const method of [...Object.values(contract.methods), ...contract.unavailableMethods]) {
     if (method.explicitOnly && !feedbackOptIn.test(query)) continue;
-    if (inspect && method.kind === 'create' && !/\b(?:write|create|draft)\b/i.test(query)) continue;
     const intents = [method.name, ...method.intents];
-    const score = Math.max(0, ...intents.filter(intent => includesPhrase(text, intent)).map(intent => normalized(intent).length));
-    if (!score || method.exclusions.some(phrase => includesPhrase(text, phrase))) continue;
-    matches.push({ ...method, score });
+
+    const hit = intents.flatMap((intent, index) => includesPhrase(text, intent)
+      ? [{ phrase: intent, kind: index === 0 ? 'name' : 'intent', score: normalized(intent).length }]
+      : [])
+      .sort((a, b) => (b.kind === 'name') - (a.kind === 'name') || b.score - a.score)[0];
+
+    if (!hit || method.exclusions.some(phrase => includesPhrase(text, phrase))) continue;
+
+    if (inspect && method.kind === 'create' && hit.kind !== 'name' && !/\b(?:write|create|draft)\b/i.test(query)) continue;
+    matches.push({ ...method, score: hit.score, matchKind: hit.kind, matchPhrase: hit.phrase });
+  }
+
+  const growthMetric = /\b(?:growth|revenue|signups?|upgrades?|conversion|activation|retention|funnel|churn|trials?|leads?|orders?|sales|trial to paid|(?:sales|deal|revenue|lead) pipeline)\b/.test(text);
+  const adverseChange = /\b(?:stall(?:ed|ing)?|flat|flattened|fall(?:ing)?|fell|drop(?:ped|ping)?|declin(?:e|ed|ing)|down|weak(?:en|ened|ening)?|slowed|missed target)\b/.test(text);
+  const creationRequest = /\b(?:write|draft|create|publish|post)\b/.test(text);
+  const asksForDiagnosis = /\b(?:diagnos(?:e|is)|investigat(?:e|ion)|analy[sz]e|explain|why)\b/.test(text);
+
+  if (permitGrowthInference && growthMetric && adverseChange && (!creationRequest || asksForDiagnosis) && !matches.some(item => item.name === 'diagnose-growth')) {
+    const method = contract.methods['diagnose-growth'] ?? contract.unavailableMethods.find(item => item.name === 'diagnose-growth');
+
+    if (method && !method.exclusions.some(phrase => includesPhrase(text, phrase))) matches.push({ ...method, score: 30, matchKind: 'inferred-growth' });
+  }
+
+  const growthResults = /\bgrowth\b(?:\s+\w+){0,3}\s+\b(?:results|performance)\b/.test(text);
+  const resultsReview = /\b(?:review|evaluate|assess|analy[sz]e|learn from)\b/.test(text);
+
+  if (growthResults && resultsReview && !matches.some(item => item.name === 'measure-growth')) {
+    const method = contract.methods['measure-growth'] ?? contract.unavailableMethods.find(item => item.name === 'measure-growth');
+
+    if (method && !method.exclusions.some(phrase => includesPhrase(text, phrase))) matches.push({ ...method, score: 30, matchKind: 'inferred-results' });
   }
   // Channel disambiguation is local to a requested stage; other clauses keep their own methods.
   for (const [channel, modes] of Object.entries(contract.channelLocks)) {
@@ -54,7 +82,8 @@ function matchingMethods(query, contract) {
       for (let i = matches.length - 1; i >= 0; i--) {
         if (['write-social', 'write-outreach', 'write-copy', 'create-paid-campaign'].includes(matches[i].name) && matches[i].name !== record.name) matches.splice(i, 1);
       }
-      if (!matches.some(item => item.name === record.name)) matches.push({ ...record, score: 30 });
+
+      if (!matches.some(item => item.name === record.name)) matches.push({ ...record, score: 30, matchKind: 'channel-lock' });
     }
   }
   return matches.sort((a, b) => b.score - a.score || a.name.localeCompare(b.name));
@@ -184,18 +213,52 @@ export function selectRequestContext(prompt, { root = moduleRoot } = {}) {
     if (profile.activation === 'off') return abstain('activation-off');
   }
   const parent = posix.join(contract.parentPath, contract.document);
-  const clauses = requestClauses(prompt);
+  const methods = [...Object.values(contract.methods), ...contract.unavailableMethods];
+
+  const protectedPhrases = methods.flatMap(method => [method.name, ...method.intents])
+    .filter(phrase => /\band\b/.test(normalized(phrase)));
+
+  const clauses = requestClauses(prompt, { protectedPhrases });
   const query = clauses.join('. ');
   const excluded = [];
   const unavailable = [];
   const selectedAll = [];
   let parentMethod = null;
+
+  const codingAction = /\b(?:refactor|rewrite|debug|implement|patch)\b/i.test(query)
+    && technicalNoun.test(query);
+
+  const businessDiagnosisRequested = clauses.some(clause =>
+    /\b(?:diagnos(?:e|is)|investigat(?:e|ion)|analy[sz]e|explain|why|what is going on)\b/i.test(clause)
+    && /\b(?:growth|revenue|signups?|upgrades?|conversion|activation|retention|funnel|churn|trials?|leads?|orders?|sales)\b/i.test(clause)
+    && !technicalNoun.test(clause));
+
+  const consider = item => {
+
+    if (!contract.methods[item.name] || !allowedKind(restriction, 'skill', item.name)) {
+      unavailable.push(item.name);
+
+      return;
+    }
+
+    const strength = value => value.matchKind === 'name' ? 3 : value.matchKind === 'intent' && value.matchPhrase !== 'what should we do' ? 2 : value.matchKind === 'intent' ? 1 : 0;
+    const existing = selectedAll.findIndex(value => value.name === item.name);
+
+    if (existing === -1) selectedAll.push(item);
+    else if (strength(item) > strength(selectedAll[existing])) selectedAll[existing] = item;
+  };
   for (const clause of clauses) {
     parentMethod ??= parentMatch(clause, contract, restriction);
-    for (const item of matchingMethods(clause, contract)) {
-      if (!contract.methods[item.name] || !allowedKind(restriction, 'skill', item.name)) { unavailable.push(item.name); continue; }
-      if (!selectedAll.some(value => value.name === item.name)) selectedAll.push(item);
-    }
+
+    const technicalStage = technicalNoun.test(clause);
+
+    for (const item of matchingMethods(clause, contract, { permitGrowthInference: !codingAction || (businessDiagnosisRequested && !technicalStage) })) consider(item);
+  }
+
+  if (selectedAll.length > 1) {
+    const broadPlanning = selectedAll.findIndex(item => item.name === 'shape-initiative' && item.matchKind === 'intent' && item.matchPhrase === 'what should we do');
+
+    if (broadPlanning !== -1) selectedAll.splice(broadPlanning, 1);
   }
   if (!clauses.some(clause => feedbackOptIn.test(clause))) excluded.push({ name: 'submit-feedback', reason: 'explicit-only' });
   if (!selectedAll.length && !parentMethod) {

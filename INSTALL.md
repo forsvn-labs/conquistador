@@ -61,6 +61,10 @@ change. Modified, linked, unowned, or skills.sh-managed copies are refused. Doma
 restrictions must agree. A new host session is needed to refresh native discovery. Setup does not
 start automatic project routing, watchers, services or hooks.
 
+When `--project PATH` targets a different directory, setup and `start --project PATH` print
+absolute skill paths for that project. Open the host session in the selected project; `doctor`
+checks that selected installation, while the host must still perform and verify the task.
+
 For automation, `conquistador install` selects the current project and Codex skill. Adaptive host
 choice belongs to plain `conquistador` and `conquistador setup`. Use
 `--host bb`, `--host cursor`, `--host claude-code`, `--host copilot` or `--host none` to choose differently.
@@ -122,6 +126,26 @@ or Git, but npm may need registry access for package dependencies. No provider a
 for work based on supplied facts.
 
 ### First task
+
+The chooser and `--task` flag below describe this unshipped source checkout. The pinned
+`v0.0.11` release above retains its original launch-plan handoff.
+
+The TUI lets you choose a first task before installation. For a scripted Codex install,
+`conquistador --host codex --task diagnose-growth --yes` prints the same task handoff.
+After installation, `conquistador start --task diagnose-growth` repeats it. The default
+task remains a launch plan. Both commands print the saved activation setting, local
+request-time hook state, method-read check, and recovery steps. They do not execute a
+model task. `conquistador route --prompt 'Growth stalled while visits stayed flat and
+signups fell'` previews local selection; it does not prove host delivery. Use
+`conquistador doctor` to inspect installed files and hook registration, then check a
+fresh host session and its trace for the selected full method and required resources.
+On a later interactive launch, the TUI asks for a starter task or one custom task and prints
+the selected-project handoff. Printed management commands carry the selected absolute path.
+
+The complete operator and one native skill are the default interaction form. The other
+commands above prepare portable skills, plugins, MCP, or a BB adapter with their stated
+host ownership and activation steps. Installing those files does not register them in a
+host or give a specialist an independent execution context.
 
 In a fresh coding-agent session in the receiving project, ask:
 
@@ -361,6 +385,8 @@ conquistador setup install --target mcp
 Copy `.conquistador-mcp/connector.json` into your client's server entry. It contains `command` and
 `args`; clients with `mcpServers` wrap that object under the chosen server name. The client starts
 and stops the process. Ask it to read `conquistador/SKILL.md`, then request a draft from supplied facts.
+The method tool can list and read the parent routing contract as well as method files. This is
+access to instructions, not execution of a method or specialist.
 
 The managed folder includes its server and library, so deleting the original source or clearing
 npm's cache does not break it. Node itself must remain installed. After Node replacement or moving

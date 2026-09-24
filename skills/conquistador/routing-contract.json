@@ -1941,6 +1941,7 @@
       "explicitOnly": false,
       "intents": [
         "knowledge review",
+        "review knowledge freshness",
         "source audit",
         "conflicting evidence",
         "authority and freshness",

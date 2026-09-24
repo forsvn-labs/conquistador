@@ -1,13 +1,158 @@
 # Product progress
 
-The 0.0.11 hardening work has shipped. No implementation from that change remains unshipped.
-See [CHANGELOG.md](CHANGELOG.md) for verified delivery and [ROADMAP.md](ROADMAP.md) for remaining
-native-host and human acceptance work.
+The 0.0.11 hardening work has shipped. The growth-diagnosis and first-run changes below were
+reviewed through [the hardening review](https://github.com/forsvn-labs/conquistador/pull/7).
+The independently reviewed product commit is `855acdf618e6fd85548dbcc94496cdf53374a951`.
+Its local build and 764 tests passed, and all four review checks passed on that commit.
+The latest versioned private release remains 0.0.11. See [CHANGELOG.md](CHANGELOG.md) for verified
+delivery and [ROADMAP.md](ROADMAP.md) for remaining native-host and human acceptance work.
 
 Current private delivery:
 [`v0.0.11`](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.11) from
 `3e9f07be8e825b0057225f1172745a2c21bd535e` through
 [PR #6](https://github.com/forsvn-labs/conquistador/pull/6).
+
+## Growth-diagnosis and first-run hardening
+
+The installed 0.0.11 route selected `shape-initiative` for a synthetic growth-stall prompt with
+flat visits, falling trials and upgrades, and a broad "what should we do next" question. Adding
+"Diagnose growth" selected the intended method. A fresh Codex CLI 0.155.1 session with GPT-6
+Astra read the full installed `diagnose-growth` method and required resources and produced a
+bounded analysis. This supports a routing repair; the original captain prompt and host trace
+remain unavailable, so the historical answer cannot be attributed to one cause.
+
+This candidate routes adverse growth-metric changes to `diagnose-growth` and drops incidental
+`shape-initiative` matches unless the user asks to shape an initiative. An incidental growth
+reference in a code-refactor request abstains; explicit initiative shaping remains selectable.
+The default guide now
+offers four first tasks. `--task diagnose-growth` works in noninteractive setup and `start`; the
+handoff prints saved activation, local hook registration, method-read verification, and recovery
+steps. The operator, native skill, plugin, MCP, and BB paths retain separate host ownership.
+
+An installed-project end-to-end check stages a source copy in `dist/e2e-tmp`, installs the Codex
+operator, checks 38 methods, routes the representative prompt and three paraphrases, checks
+unrelated-request abstention, invokes the installed prompt hook, verifies its method/resource
+paths, removes the hook and operator, and preserves a project file. It can write a JSON evidence
+artifact with `CONQUISTADOR_E2E_ARTIFACT=dist/growth-diagnosis-e2e.json`.
+
+On macOS ARM64 with Node 24.21.0, `npm run build` passed. `npm test` passed 764 checks:
+240 host/tooling, 294 runtime, 167 catalog, and 63 evaluation. A live terminal guide chose
+the diagnosis task and installed the Codex operator with manual activation and no hook. Codex CLI
+0.155.1 with GPT-6 Astra then read that installed native parent, the complete diagnosis method,
+all three required resources, and relevant optional files. Its answer computed the observed
+rates, separated accounting from causal claims, marked cohort and denominator limits, and proposed
+one read-only reconciliation. It reported same-context review and no independent agent. The
+trace is a local observation, not acceptance for other prompts, models, or hosts.
+
+The repository's catalog already registered anti-slop rules but lacked their vendored plugin.
+This change restores the pinned plugin, adds a source configuration, and records the
+bundled source digest in `tools/oxlint/anti-slop/UPSTREAM.md`. The plugin runs; its readable-spacing
+rule reports a large pre-existing baseline in touched files, so this work does not claim a
+clean anti-slop lint gate. Build and full product-test results are recorded after verification.
+
+### Independent review repairs
+
+The first independent review of `ae4fc37` found that the selector dropped an explicitly named
+`shape-initiative` method beside `plan-campaign`, treated a slowing CI pipeline as a growth
+problem, and failed to route the guide's "Review growth results" prompt. The corrected selector
+preserves named methods, requires a business pipeline phrase for growth inference, and selects
+`measure-growth` for a growth-results review. The installed CLI and prompt hook check all three.
+
+The wider review found that splitting requests at "and" made
+`design-pricing-and-packaging` unreachable by its exact name and its natural "pricing and
+packaging" intent. It also found that local MCP listed the parent's 193,854-byte routing
+contract but refused to read it under a 131,072-byte file limit. Compound declared intents now
+stay intact during clause segmentation, while ordinary clauses retain their separate routing.
+MCP accepts up to 262,144 bytes per file, still enforces its 524,288-byte encoded response limit,
+and reads the contract from a managed connector.
+
+A separate cross-project check found a handoff problem. Doctor and status targeted the requested
+project, but setup and `start` showed relative skill paths from the current working directory
+when `--project` selected another project. Handoffs now use absolute paths in that case. An
+installed two-project end-to-end check confirms doctor and status target the selected project,
+both handoffs name its absolute skill path, and uninstall removes only that project.
+
+The end-to-end artifact now includes one-route checks for all 38 declared first intents, the
+growth request and paraphrases, explicit multi-method selection, unrelated and CI coding
+abstention, first-task hook context, cross-project ownership, and managed MCP listing and read.
+These checks cover the installed CLI and local protocol. They do not establish live delivery by
+another native host, independent specialist contexts, provider access, or a human verdict.
+
+### Wider product and onboarding repairs
+
+The independent review confirmed that a cross-project handoff could still print bare management
+commands. Every printed doctor, update, and uninstall command now carries the selected absolute
+operator path. An installed two-project check executes the printed doctor from project A and
+confirms it inspected project B. A malformed profile presented as a FIFO no longer blocks
+`start`; onboarding uses the same bounded, non-symlink profile loader as request admission. The
+runtime playbook help now names `conquistador runtime route --intent`, which is the public
+dispatcher path. The tool tests retain minimal-source CLI coverage for this shared loader.
+
+The selector now keeps the source of each match: normalized method name, declared intent, channel
+lock, or inference. It demotes only the broad `what should we do` shaping intent when another
+method is present. It preserves explicit shaping, compound method names, compound declared
+intents, and negated or quoted scope. Technical pipeline failures abstain. A source audit of all
+191 declared intents found each owning method; the Vietnamese landing-page rewrite also selected
+`write-copy`, which is a documented composition rather than a missing owner. Installed adversarial
+routes cover CI and data pipelines, explicit method sequences, negation, quotations, pricing,
+knowledge freshness, technical documentation, and campaign-related growth diagnosis.
+
+A returning user now gets a first-task chooser in the interactive terminal. New and returning
+users can describe another task beyond the four starter prompts; the handoff prints its prompt,
+a local route preview, host ownership, manual or configured activation, trace-read check, and target-qualified recovery
+commands. A real terminal run chose a custom pricing-and-packaging task after an installed Codex
+operator was detected. The corresponding installed CLI route selected
+`design-pricing-and-packaging`. A first-run terminal task about knowledge freshness also completed
+installation; its natural phrase is now a declared `knowledge-review` intent. Setup did not launch
+a model or confirm native discovery.
+
+### Final review repairs
+
+The final independent review found three remaining defects. A compound method name or declared
+intent beside a negated task could disappear because one pass split at "and" and a second pass
+dropped the combined clause. The selector now protects declared compound phrases during one
+clause parse. Installed CLI and hook checks retain the requested pricing, knowledge-review, and
+technical-docs methods while excluding `write-copy`; a wholly negated compound request abstains.
+
+A technical request containing "why" or "explain" could enable growth inference from nearby
+signup or stall words. The selector now requires an explicit business diagnosis in a nontechnical
+clause before inferring growth inside a coding task, and it keeps technical clauses out of that
+inference. Three technical explanations abstain through the installed CLI and hook; a mixed
+explicit business diagnosis still selects `diagnose-growth`.
+
+The returning-user stale-installation notice printed an unqualified update command. It now
+prints a shell-quoted `--path` for the selected operator. The two-project installed check executes
+that printed command from project A, updates project B, and confirms A's receipt is unchanged.
+These are local CLI and hook observations, not proof of native host event delivery or useful model
+output across the library.
+The changed-line lint pass also removed an unused host import. The remaining control-character
+regex warning is intentional: the TUI rejects nonprintable text before generating a first-task
+handoff.
+
+A later installed adversarial review found that a literal parser marker could restore a negated
+pricing method, an inspection phrase could hide an explicitly named creative or conversion
+method, and plural "signup tests" could infer a growth problem. Clause parsing now protects
+compound phrases by their positions in the original request, with no text marker to collide
+with user input. An explicit method name survives an inspection phrase, while inferred creation
+still yields to inspection. Singular and plural technical nouns use one shared guard. The
+installed end-to-end check covers all three failures and positive business-diagnosis controls.
+
+A second live Codex CLI task used a freshly installed native skill to plan a one-week beta
+campaign, draft one launch email, and specify growth measurement from supplied facts. The trace
+recorded successful full reads of the parent method, `plan-campaign`, `write-copy`,
+`measure-growth`, all declared required resources for those three methods, and the
+`launch-product` composition workflow. Twelve successful `cat` outputs matched replays byte for
+byte; the initial false path flags came from a trace parser that did not expand shell braces.
+The model returned drafts with no invented conversion figures and disclosed same-context review;
+no independent specialists, send, spend, or tracking mutation occurred. This is one capable-host
+observation, not semantic acceptance of every method or another host.
+
+The bounded root anti-slop command still reports inherited violations. Its diagnostics on authored
+new lines are zero after cleanup; the remaining 253 diagnostics are outside the changed lines.
+The root does not yet have a clean repository-wide lint gate. A final-source Node 24 build and
+full suite passed: 240 host/tooling, 294 runtime, 167 catalog, and 63 evaluation checks (764
+total). The installed end-to-end artifact includes the adversarial routes and copied doctor
+execution. Host acceptance and private acquisition remain later gates.
 
 ## Private-alpha 0.0.9 shipped
 

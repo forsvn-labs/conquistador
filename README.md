@@ -7,6 +7,8 @@ uses, and returns a draft with review findings. Your coding agent supplies the m
 The current private alpha is
 [v0.0.11](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.11).
 Private alpha and dogfood are the same `0.0.x` channel. Public alpha starts at `0.1.0`.
+The first-task chooser and `--task` examples below describe this unshipped source checkout;
+the pinned `v0.0.11` install retains its original launch-plan handoff.
 
 ## Install once, use in each project
 
@@ -79,13 +81,26 @@ Mark missing facts. Keep it as a draft.
 If the host has not refreshed its skill list, ask it to read `.conquistador/SKILL.md` and follow it.
 You do not need to navigate through adapter folders or install the specialists separately.
 
+For a growth diagnosis in this checkout, choose **Diagnose a growth stall** in the setup guide or run
+`conquistador start --task diagnose-growth` after installation. Give the agent a baseline,
+current figures, and known limits. Check its trace for reads of the complete
+`diagnose-growth` method and required resources before trusting the answer. The local doctor
+checks installed files and hook registration; it cannot verify those reads or the result.
+
 ```sh
 conquistador start              # Show the skill location and first task again
+conquistador start --task diagnose-growth  # Show a growth diagnosis task
 conquistador skills             # Browse the available capabilities
 conquistador doctor             # Check local files, routing, and hook registration
+conquistador route --prompt 'Growth stalled while visits stayed flat and trial signups fell'  # Preview a route
 conquistador update             # Update this project from the installed CLI
 conquistador uninstall          # Remove both unchanged owned copies
 ```
+
+If you pass `--project PATH` from another directory, the setup and `start` handoffs print
+absolute skill paths and target-qualified management commands for that project. Run the first
+task in a fresh host session opened there. On a later interactive launch, choose a starter task
+or describe your own. Setup still cannot verify host discovery or the task result.
 
 To upgrade the CLI itself, install the next authorized version with npm, then update the project.
 Existing `.conquistador-operator` installations migrate through `conquistador operator update`.
@@ -100,7 +115,9 @@ Codex and Claude Code can opt into the project-local context hook in
 [proactive help](docs/PROACTIVE.md): it ranks the installed methods for each prompt and injects the
 relevant method, workflow, resource, and specialist paths. The BB adapter supports explicit
 specialist teams with exact-artifact review. Other automatic project routing requires a host
-integration. See [execution modes](docs/MASTER-AGENT.md).
+integration. The setup guide shows the installed activation setting and hook registration state.
+Hook registration still requires host trust and an observed prompt to establish delivery. See
+[execution modes](docs/MASTER-AGENT.md).
 
 Work based on supplied facts needs no connected account. If a task needs live access, follow
 [connection setup](docs/INTEGRATIONS.md). Review drafts before use. Publication, spend, sends,

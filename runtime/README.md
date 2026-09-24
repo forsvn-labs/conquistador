@@ -28,7 +28,7 @@ conquistador run --playbook ID|--playbook-file FILE --input FILE
 conquistador resume --run-id ID [--judgment-response FILE]
 conquistador judgment export --run-id ID --output FILE
 conquistador status --run-id ID
-conquistador route --intent TEXT
+conquistador runtime route --intent TEXT
 conquistador eval [--url URL]
 conquistador backup create|verify --file FILE
 conquistador restore --file FILE

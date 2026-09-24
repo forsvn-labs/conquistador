@@ -18,11 +18,31 @@ export const SKILLS_PIN = 'skills@1.5.26';
 export const SKILLS_AGENTS = { 'claude-code': 'claude-code', cursor: 'cursor', copilot: 'github-copilot', codex: 'codex' };
 export const PLUGIN_TARGETS = { 'claude-code': 'claude-plugin', codex: 'codex-plugin', copilot: 'copilot-plugin', none: 'agent-plugins' };
 export const SHORTCUT_NAMES = ['bot', 'skills', 'plugin', 'mcp'];
-const VALUE_FLAGS = new Set(['host', 'project', 'path', 'url', 'runtime-path']);
+
+const VALUE_FLAGS = new Set(['host', 'project', 'path', 'url', 'runtime-path', 'task']);
 const BOOL_FLAGS = new Set(['skills', 'plugin', 'mcp', 'advanced', 'yes', 'dry-run', 'help', 'version']);
 const ALIASES = { h: 'help' };
 
 export const FIRST_PROMPT = 'Use Conquistador to draft a launch plan from the product facts in this project. Mark missing facts. Keep it as a draft.';
+
+export const FIRST_TASKS = Object.freeze({
+  'launch-plan': {
+    label: 'Plan a launch',
+    prompt: FIRST_PROMPT,
+  },
+  'diagnose-growth': {
+    label: 'Diagnose a growth stall',
+    prompt: 'Use Conquistador to diagnose why growth has stalled in this project. Compare the metric with a baseline, locate the first funnel break, and test competing explanations using available evidence. Mark unknowns and propose one bounded next check. Do not change tracking or run an experiment.',
+  },
+  'review-results': {
+    label: 'Review growth results',
+    prompt: 'Use Conquistador to review the latest growth results in this project. Name the sources and baseline, separate observed changes from assumptions, and recommend one keep, drop, or test decision. Mark missing data.',
+  },
+  'write-copy': {
+    label: 'Draft launch copy',
+    prompt: 'Use Conquistador to draft a launch email from the product and audience facts in this project. Mark missing facts and claims that need evidence. Keep it as a draft.',
+  },
+});
 
 export function topHelp(version) {
   return `Conquistador ${version}
@@ -30,6 +50,7 @@ export function topHelp(version) {
 Usage:
   conquistador                       Set up the complete operator in this project
   conquistador start                 Show the skill location and first task
+  conquistador start --task ID       Show a specific first task
   conquistador status                Check this project's operator
   conquistador doctor                Local files, routing, and hook registration
   conquistador update                Update this project's operator from the CLI
@@ -47,6 +68,7 @@ Usage:
 Route help: conquistador --skills --help
 Detailed targets: conquistador setup list
 Shared controls: --host, --project, --path, --dry-run, --yes
+First task: --task launch-plan|diagnose-growth|review-results|write-copy
 --path sets the staged source or connector folder for --skills, --plugin, and --mcp.
 Noninteractive shortcuts need a resolved plan and --yes or --dry-run.
 Without a terminal, conquistador prints this help and does not write files.
@@ -153,7 +175,8 @@ export function parseOnboarding(args) {
   const selected = SHORTCUT_NAMES.filter(name => name === 'bot' ? Object.hasOwn(options, 'bot') : options[name]);
   if (selected.length > 1) throw new UsageError('The --bot, --skills, --plugin, and --mcp routes are mutually exclusive. Use conquistador --advanced to combine installation families.');
   if (options.advanced && selected.length) throw new UsageError('Do not mix --advanced with --bot, --skills, --plugin, or --mcp.');
-  if (options.advanced && (options.yes || options['dry-run'] || options.host || options.path || options.url || options['runtime-path'])) {
+
+  if (options.advanced && (options.yes || options['dry-run'] || options.host || options.path || options.url || options['runtime-path'] || options.task)) {
     throw new UsageError('--advanced opens the combination guide. It accepts only --project.');
   }
   if (options.version && Object.keys(options).some(key => !['version', 'help', 'route'].includes(key))) {
@@ -161,6 +184,12 @@ export function parseOnboarding(args) {
   }
 
   options.route = options.advanced ? 'advanced' : selected[0] ?? 'default';
+
+  if (options.task && options.route !== 'default') throw new UsageError('--task applies to the complete project operator.');
+
+  if (options.task && !Object.hasOwn(FIRST_TASKS, options.task)) {
+    throw new UsageError(`Unknown first task: ${options.task}. Choose ${Object.keys(FIRST_TASKS).join(', ')}.`);
+  }
   if (options.path && !['skills', 'plugin', 'mcp'].includes(options.route)) {
     throw new UsageError('--path applies to --skills, --plugin, and --mcp. Complete-operator paths stay on conquistador setup install --path.');
   }

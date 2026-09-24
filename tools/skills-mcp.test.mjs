@@ -44,12 +44,12 @@ async function run(path, input, args = ['mcp']) {
 }
 const lines = messages => messages.map(message => JSON.stringify(message)).join('\n') + '\n';
 
-test('cold spawned stdio initializes, lists bundled methods/resources, and reads the parent and outcome', async t => {
+test('cold spawned stdio lists methods and reads the parent, outcome, and routing contract', async t => {
   const path = cold(t);
-  const result = await run(path, lines([...start, rpc(2, 'tools/list'), call(3, 'conquistador_methods'), call(4, 'conquistador_files', { method: 'conquistador' }), call(5, 'conquistador_read', { path: 'conquistador/SKILL.md' }), call(6, 'conquistador_read', { path: 'write-copy/SKILL.md' })]));
+  const result = await run(path, lines([...start, rpc(2, 'tools/list'), call(3, 'conquistador_methods'), call(4, 'conquistador_files', { method: 'conquistador' }), call(5, 'conquistador_read', { path: 'conquistador/SKILL.md' }), call(6, 'conquistador_read', { path: 'write-copy/SKILL.md' }), call(7, 'conquistador_read', { path: 'conquistador/routing-contract.json' })]));
   assert.equal(result.code, 0);
   assert.equal(result.stderr, '');
-  assert.equal(result.messages.length, 6);
+  assert.equal(result.messages.length, 7);
   assert.match(result.messages[0].result.instructions, /parent|conquistador\/SKILL.md/);
   assert.deepEqual(result.messages[1].result.tools.map(tool => tool.name), ['conquistador_methods', 'conquistador_files', 'conquistador_read']);
   const methods = JSON.parse(result.messages[2].result.content[0].text);
@@ -58,6 +58,9 @@ test('cold spawned stdio initializes, lists bundled methods/resources, and reads
   assert.ok(JSON.parse(result.messages[3].result.content[0].text).files.includes('conquistador/standards/safety.md'));
   assert.match(result.messages[4].result.content[0].text, /# Conquistador master agent/);
   assert.match(result.messages[5].result.content[0].text, /name: write-copy/);
+  const routing = JSON.parse(result.messages[6].result.content[0].text);
+  assert.equal(routing.schemaVersion, 'conquistador.routing-contract/v1');
+  assert.equal(Object.keys(routing.methods).length, 38);
 });
 
 test('contained reads refuse traversal, symlinks, hidden files, binary and oversized resources', t => {

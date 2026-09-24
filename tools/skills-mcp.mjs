@@ -2,7 +2,7 @@ import { constants, openSync, closeSync, readSync, fstatSync, lstatSync, realpat
 import { dirname, join, extname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-export const LIMITS = Object.freeze({ request: 65536, file: 131072, response: 524288, files: 256, depth: 8, methods: 128, entries: 2048 });
+export const LIMITS = Object.freeze({ request: 65536, file: 262144, response: 524288, files: 256, depth: 8, methods: 128, entries: 2048 });
 const bundledRoot = fileURLToPath(new URL('../skills', import.meta.url));
 const decoder = new TextDecoder('utf-8', { fatal: true });
 const extensions = new Set(['.md', '.json', '.yaml', '.yml', '.txt', '.csv', '.tsv', '.py', '.sh', '.swift', '.pbxproj', '.xcworkspacedata']);
