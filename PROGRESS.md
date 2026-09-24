@@ -2,7 +2,7 @@
 
 The 0.0.11 hardening work has shipped. The growth-diagnosis and first-run changes below were
 reviewed through [the hardening review](https://github.com/forsvn-labs/conquistador/pull/7)
-and merged at `f540d258d2555135affa75c0ce44376949136e71`. The 0.0.12 candidate aligns
+and merged at `f540d258d2555135affa75c0ce44376949136e71`. The 0.0.12 version preparation aligns
 product, host, plugin, agent, schema, CLI, and MCP versions. Installation examples now
 pin the intended v0.0.12 release, but are gated on the tag and checksummed assets;
 v0.0.11 is the prior verified fallback if those are unavailable. An observed
@@ -10,7 +10,7 @@ installation has `/opt/homebrew/bin/conquistador` at 0.0.11 but both
 `~/.agents/skills/conquistador/.conquistador-install.json` and
 `~/.claude/skills/conquistador/.conquistador-install.json` at 0.0.8. Those project/host
 copies must not be described as updated merely because the global CLI changes; no installed
-copy is changed in this candidate.
+copy was changed during release preparation.
 
 Node 24.21.0 build and the full 764-check suite passed locally (240 host/tooling,
 294 runtime, 167 catalog, 63 evaluation). The existing installed-project end-to-end
@@ -25,7 +25,7 @@ candidate-commit private-Git lifecycle are local preparation, not by themselves 
 artifact or native host/human acceptance. See [CHANGELOG.md](CHANGELOG.md) for verified delivery and
 [ROADMAP.md](ROADMAP.md) for remaining release, native-host, and human acceptance work.
 
-Current private delivery:
+Prior verified private delivery:
 [`v0.0.11`](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.11) from
 `3e9f07be8e825b0057225f1172745a2c21bd535e` through
 [PR #6](https://github.com/forsvn-labs/conquistador/pull/6).
@@ -39,7 +39,7 @@ Astra read the full installed `diagnose-growth` method and required resources an
 bounded analysis. This supports a routing repair; the original captain prompt and host trace
 remain unavailable, so the historical answer cannot be attributed to one cause.
 
-This candidate routes adverse growth-metric changes to `diagnose-growth` and drops incidental
+The reviewed routing change sends adverse growth-metric changes to `diagnose-growth` and drops incidental
 `shape-initiative` matches unless the user asks to shape an initiative. An incidental growth
 reference in a code-refactor request abstains; explicit initiative shaping remains selectable.
 The default guide now
