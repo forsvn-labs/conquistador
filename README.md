@@ -27,7 +27,7 @@ If v0.0.12 is unavailable to your authorized account, use the prior
 [v0.0.11 release](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.11)
 with the same command ending in `#v0.0.11`.
 
-Then open a terminal in the project where you want to use it:
+Then run the command. The terminal guide asks you to confirm or choose an existing project directory, select a coding-agent host, review the installation plan, apply it, check local files, and take a first-task prompt into a fresh host session. You can start outside the project and choose its directory in the guide:
 
 ```sh
 conquistador
@@ -48,7 +48,7 @@ lifecycle are verified.
 Plain `conquistador` installs one complete project operator. It chooses the package; you confirm.
 If it cannot tell which coding agent you are using, it asks for one host. The happy path is one
 confirmation. Architecture choices stay behind `conquistador --advanced` and explicit setup
-commands. No receiving-project package manifest, dependency or lockfile is added.
+commands. The guide also lets you select an optional plugin, skills.sh copy, MCP connector, or bot route within the same session; each has its own plan and confirmation. Client registration, host trust, and native discovery remain manual. No optional surface is installed by default. No receiving-project package manifest, dependency or lockfile is added by the recommended operator path.
 
 ```text
 .conquistador/
@@ -105,6 +105,8 @@ conquistador route --prompt 'Growth stalled while visits stayed flat and trial s
 conquistador update             # Update this project from the installed CLI
 conquistador uninstall          # Remove both unchanged owned copies
 ```
+
+If your shell uses a Node version other than 24, an interactive run offers a verified local Node 24 executable when detected, or prints manager-aware selection steps. It asks before continuing under that executable; it does not change the parent shell or install Node. Without a terminal it prints Node 24 guidance and exits nonzero. `--help` and `--version` remain available. Install the CLI with Node 24 when possible; the preflight helps if your shell later changes versions.
 
 If you pass `--project PATH` from another directory, the setup and `start` handoffs print
 absolute skill paths and target-qualified management commands for that project. Run the first

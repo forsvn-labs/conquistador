@@ -1,5 +1,44 @@
 # Product progress
 
+## Unshipped Node preflight and first-run setup investigation
+
+E2E failure matrix (installed 0.0.12 CLI, neutral `/tmp`, before implementation):
+
+| Node / terminal / invocation | Expected safe outcome | Observed baseline |
+| --- | --- | --- |
+| 26 / TTY / bare | Ask before writing; identify verified Node 24 or give selection steps | Exit 1 with `Switch Node versions`, before project prompt |
+| 24 / TTY / bare | Project, host, plan, apply, doctor, first task | Reached `Project: /private/tmp` and guide; stopped before apply |
+| 26 / no TTY / bare | Actionable Node 24 instructions, nonzero | Help, exit 0 (entry masks preflight) |
+| 24 / no TTY / bare | Help, no write | Help, exit 0 |
+| 26 / TTY / decline or no Node 24 | No project write; cancellation or manager-specific recovery | No choice exists |
+| 24 / TTY / repeated bare in installed project | Doctor and first-task handoff; optional choices visible | Returning path bypasses project/host/plan selection |
+| 26 / no TTY / explicit `--host codex --yes` | Guidance, nonzero; no project write | Generic Node error, exit 1 |
+
+The installed bin is `runtime/bin/conquistador.js` with `#!/usr/bin/env node`; interactive bare imports `tools/onboarding.mjs` and `assertNode24` runs after parsing but before the TUI. The environment mask is the shebang's PATH-selected Node 26, despite an independently installed nvm Node 24.21.0; non-TTY bare passes `--help` at the bin and never checks Node. A small counterfactual with the same installed bin, cwd and arguments but PATH headed by nvm Node 24 reaches the project guide. `--version` and `--help` on 26 work, disconfirming a broken bin/package hypothesis. History `084593d` introduced this path and `f540d25` added returning-user first-task handling. Neither preflight nor help provides a version manager command. These are local command observations, not host acceptance or a new release.
+
+The unshipped repair uses a bounded Node 24 preflight only for bare and top-level onboarding flags;
+help/version and unrelated minimal command bundles do not import the new module on supported Node.
+A candidate is offered only from a known nvm account-home or Homebrew installation after checking
+its executable, ownership, permissions and reported version. The user must select it; the child
+repeats the same cwd and arguments without changing the parent shell. No-TTY exits nonzero with
+selection instructions. The bare terminal guide now chooses a project (including an existing
+project outside the cwd), one host, an installation plan, apply, local doctor and first-task handoff.
+Optional routes can be selected and run with their own checks and confirmations; manual host
+activation remains distinct. Existing modified copies are not updated on bare invocation.
+
+Node 24.21.0 `npm run build` and `npm test` passed (240 host/tooling checks plus runtime,
+catalog and evaluation suites). A locally packed and installed tarball passed 11 TTY/non-TTY
+scenarios: wrong-Node continuation, cancel, no-candidate guidance, repeat setup, right-Node
+repeat, optional MCP selection, noninteractive and help/version paths. Repeat with
+`CONQUISTADOR_E2E_WRONG_NODE=/path/to/node26 CONQUISTADOR_E2E_NODE24=/path/to/node24
+python3 tools/node-onboarding.e2e.py INSTALLED_CLI OUTPUT_DIR` after `npm pack` and an isolated
+`npm install --prefix` of the resulting tarball. The uncommitted evidence is in
+`dist/node-onboarding-e2e/node-onboarding-e2e.json` and matching terminal transcripts.
+The touched-JS anti-slop run reports only the inherited readable-spacing rule (no other rules).
+These tests establish local setup behavior, not host registration, model task quality, or a
+private release. CHANGELOG.md records shipped versions only, so this unshipped change does not
+alter the 0.0.12 release entry.
+
 The growth-diagnosis and first-run work below shipped in the
 [v0.0.12 private release](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.12)
 from `738d24268bee03e0bc8880d22b21b665951881c9` on 2026-09-24. See

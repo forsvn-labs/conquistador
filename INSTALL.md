@@ -30,10 +30,9 @@ In each receiving project, run:
 conquistador
 ```
 
-Plain `conquistador` inspects this project and installs one complete operator with its matching
-native entry. It chooses the package; you confirm. If host detection is inconclusive, it asks
+Plain `conquistador` asks which existing project directory to use (the current Git root is suggested when applicable), selects one host, shows its installation plan, applies after confirmation, runs the local doctor, and prints a first-task handoff. It installs one complete operator with its matching native entry. It chooses the package; you confirm. If host detection is inconclusive, it asks
 which coding agent to use. Architecture choices stay behind `conquistador --advanced` and the
-explicit setup commands below. The complete operator goes into `.conquistador`, with `SKILL.md`
+explicit setup commands below. You can also choose an optional route in this guide, including on a later launch; that route performs its own preflight and confirmation in the same invocation. The default does not install all integrations. A plugin still needs host-manager registration, MCP needs client registration, skills.sh owns its copy and lockfile, and Hermes needs trust. The complete operator goes into `.conquistador`, with `SKILL.md`
 at its root. Native skills use:
 
 | Coding agent | Project skill |
@@ -421,7 +420,7 @@ erases service data or stops a shared service.
 
 | Problem | Action |
 | --- | --- |
-| Unsupported Node version | Conquistador needs Node 24. Switch Node versions and rerun this command. |
+| Unsupported Node version | In a terminal, choose the verified Node 24 executable when offered, or follow the printed nvm/Homebrew/Node download steps. The command does not install Node or change your parent shell. With no terminal, select Node 24 and rerun; setup exits nonzero. `--help` and `--version` still work. |
 | Tarball identity is unclear | Obtain the exact private build and trusted checksum; do not infer identity from its filename |
 | Destination already exists or has edits | Inspect its original owner; preserve edits and select a new folder |
 | Doctor passes but host cannot invoke it | Follow the selected host's activation step and use a fresh session |

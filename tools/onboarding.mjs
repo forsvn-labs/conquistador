@@ -3,7 +3,7 @@ import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawn, spawnSync } from 'node:child_process';
 import { FIRST_TASKS, UsageError, parseOnboarding, requireNoninteractivePlan, routeHelp, topHelp } from './onboarding-parse.mjs';
-import { destinationsFor, hostChoices, hostFolders, hostLabels, resolveHost, installedHosts } from './onboarding-hosts.mjs';
+import { destinationsFor, gitRoot, hostChoices, hostFolders, hostLabels, resolveHost, installedHosts } from './onboarding-hosts.mjs';
 import { inspectProjectSkills, projectIntegration, treeDigest } from './project-installation.mjs';
 import { operatorNextSteps } from './setup-surfaces.mjs';
 import { shellCommand } from './install-paths.mjs';
@@ -118,28 +118,94 @@ async function chooseHost(ui, resolved, env) {
   return need(ui, await ui.select({ message, options: hostChoices(env), initialValue: resolved.candidates?.[0] ?? 'none' }));
 }
 
-async function chooseFirstTask(ui, initial = 'launch-plan') {
-  const id = await need(ui, await ui.select({
-    message: 'What do you want to do first in your coding agent?',
-    initialValue: initial,
-    options: [...Object.entries(FIRST_TASKS).map(([value, details]) => ({ value, label: details.label })),
-      { value: 'custom', label: 'Describe another task' }],
+async function chooseProject(ui, cwd) {
+  const root = gitRoot(cwd);
+  const suggested = existsSync(join(cwd, '.conquistador')) || existsSync(join(cwd, '.conquistador-operator')) ? cwd : root ?? cwd;
+  const choice = await need(ui, await ui.select({
+    message: `Where should Conquistador set up? Current directory: ${cwd}`,
+    options: [
+      { value: 'current', label: suggested !== cwd ? `Use Git project root: ${suggested}` : `Use current directory: ${cwd}` },
+      { value: 'other', label: 'Choose another existing project directory' },
+      { value: 'cancel', label: 'Cancel' },
+    ],
   }));
-
-  if (!id) return { id: initial, task: FIRST_TASKS[initial] };
-
-  if (id !== 'custom') return { id, task: FIRST_TASKS[id] };
-  const input = await need(ui, await ui.text({ message: 'What should Conquistador help you do?' }));
-  const request = input?.trim();
-
-  // Control characters cannot appear in a printable first-task handoff.
-  if (!request || request.length > 2000 || /[\x00-\x1f\x7f]/.test(request)) throw new UsageError('Describe one task in 1–2000 characters on one line.');
-  const outcome = request.replace(/^use\s+conquistador\s+to\s+/i, '');
-
-  return { id, task: { label: 'Your task', prompt: `Use Conquistador to ${outcome}` } };
+  if (choice === 'cancel') throw Object.assign(Error('Cancelled. No files changed.'), { cancelled: true });
+  if (choice === 'other') {
+    const path = await need(ui, await ui.text({ message: 'Absolute or relative project directory' }));
+    if (!path?.trim()) throw new UsageError('Choose an existing project directory.');
+    return resolveProject(path.trim(), cwd);
+  }
+  return suggested;
 }
 
-async function recommended({ options, cwd, run, ui, env, tty: interactive }) {
+async function selectOptional(ui, project) {
+  return need(ui, await ui.select({
+    message: 'Optional integrations (none are needed for the project operator)',
+    options: [
+      { value: 'back', label: 'Back to setup or first task' },
+      { value: 'skills', label: 'skills.sh copy (manager download and lockfile)' },
+      { value: 'plugin', label: 'Native plugin source (host registration stays manual)' },
+      { value: 'mcp', label: 'Local MCP method server (client registration stays manual)' },
+      { value: 'bot', label: 'Hermes or Grok Bot (host trust or app setup stays manual)' },
+      { value: 'advanced', label: 'Several hosts, squads, runtime MCP and custom packages' },
+    ],
+  }));
+}
+
+async function optionalIntegrations(ui, project, ctx) {
+  const choice = await selectOptional(ui, project);
+  if (choice !== 'back') await optionalIntegrationsSelected(choice, ui, project, ctx);
+}
+
+async function optionalIntegrationsSelected(choice, ui, project, ctx) {
+  ui.note(`Selected ${choice} for ${project}. This route has its own preflight and confirmation. Host registration, trust, and activation remain manual. No other integration is installed automatically.`, 'Optional integration');
+  const options = { route: choice, project };
+  if (choice === 'bot') options.bot = null;
+  if (choice === 'advanced') {
+    const { runSetupGuide } = await import('./setup-guide.mjs');
+    await runSetupGuide({ cwd: project, version, run: args => runSetupAction(ctx.run, args), ui });
+    return;
+  }
+  const route = { ...ctx, options };
+  if (choice === 'bot') await runBotRoute({ ...route, runRecommended: overrides => recommended({ ...route, ...overrides }) });
+  else {
+    await runSetupAction(ctx.run, ['doctor', '--path', root]);
+    if (choice === 'skills') await runSkillsRoute(route);
+    if (choice === 'plugin') await runPluginRoute(route);
+    if (choice === 'mcp') await runMcpRoute(route);
+  }
+}
+
+async function chooseFirstTask(ui, initial = 'launch-plan', project, ctx) {
+  for (;;) {
+    const id = await need(ui, await ui.select({
+      message: 'What do you want to do first in your coding agent?',
+      initialValue: initial,
+      options: [...Object.entries(FIRST_TASKS).map(([value, details]) => ({ value, label: details.label })),
+        { value: 'custom', label: 'Describe another task' },
+        ...(project ? [{ value: 'integrations', label: 'Explore optional integrations and manual steps' }] : [])],
+    }));
+
+    if (id === 'integrations') {
+      await optionalIntegrations(ui, project, ctx);
+      continue;
+    }
+    if (!id) return { id: initial, task: FIRST_TASKS[initial] };
+
+    if (id !== 'custom') return { id, task: FIRST_TASKS[id] };
+    const input = await need(ui, await ui.text({ message: 'What should Conquistador help you do?' }));
+    const request = input?.trim();
+
+    // Control characters cannot appear in a printable first-task handoff.
+    if (!request || request.length > 2000 || /[\x00-\x1f\x7f]/.test(request)) throw new UsageError('Describe one task in 1–2000 characters on one line.');
+    const outcome = request.replace(/^use\s+conquistador\s+to\s+/i, '');
+
+    return { id, task: { label: 'Your task', prompt: `Use Conquistador to ${outcome}` } };
+  }
+}
+
+async function recommended({ options, cwd, run, ui, env, tty: interactive, spawn: spawnProcess }) {
+  const optionalContext = { cwd, run, ui, env, tty: interactive, spawn: spawnProcess };
   const project = resolveProject(options.project, cwd);
   console.log(`Project: ${project}`);
   const recovery = readdirSync(project).filter(name => name.startsWith('.conquistador-transaction-'));
@@ -163,10 +229,25 @@ async function recommended({ options, cwd, run, ui, env, tty: interactive }) {
       await runSetupAction(run, ['doctor', '--path', inspection.path]);
       console.log('Local files verified. Host discovery and task execution remain unverified.');
     } else console.log('Installed receipt integrity checked. Use the doctor from the installed release to verify completeness.');
-    if (options.host && !inspection.hosts?.includes(options.host)) console.log('Recorded hosts were preserved. Use conquistador --advanced to review adding a host.');
+    if (options.host && !inspection.hosts?.includes(options.host)) {
+      if (!interactive || options.yes || options['dry-run']) {
+        console.log('Recorded hosts were preserved. Use conquistador --advanced to review adding a host.');
+      } else {
+        assertNoDiscoveryConflict(project, options.host);
+        const hosts = [...new Set([...(inspection.hosts ?? []), options.host])];
+        const add = ['update', '--target', 'operator', '--project', project, '--hosts', hosts.join(',')];
+        await runSetupAction(run, [...add, '--dry-run']);
+        ui.note(`Add ${hostLabels[options.host]} to the unchanged operator at ${inspection.path}. Existing hosts remain: ${(inspection.hosts ?? []).join(', ') || 'none'}. No optional plugin or client registration is implied.`, 'Host plan');
+        if (await need(ui, await ui.confirm({ message: 'Add this host to the existing operator?', initialValue: false }))) {
+          await runSetupAction(run, add);
+          await runSetupAction(run, ['doctor', '--path', inspection.path]);
+          return recommended({ options: { ...options, host: undefined }, cwd, run, ui, env, tty: interactive, spawn: spawnProcess });
+        }
+      }
+    }
 
     const task = interactive && !options.task && !options.yes && !options['dry-run']
-      ? (await chooseFirstTask(ui)).task : options.task;
+      ? (await chooseFirstTask(ui, 'launch-plan', project, optionalContext)).task : options.task;
 
     printStart(inspection, task, cwd);
     return 0;
@@ -240,6 +321,7 @@ async function recommended({ options, cwd, run, ui, env, tty: interactive }) {
     ui.log.info('Other integrations: conquistador --help');
     let current = host;
     let firstTask = { id: options.task ?? 'launch-plan', task: FIRST_TASKS[options.task ?? 'launch-plan'] };
+    let optional = null;
     for (;;) {
       const action = await need(ui, await ui.select({
         message: planText(project, current, firstTask.task),
@@ -249,6 +331,7 @@ async function recommended({ options, cwd, run, ui, env, tty: interactive }) {
           { value: 'host', label: 'Change host' },
           { value: 'task', label: 'Choose first task' },
           { value: 'changes', label: 'View changes' },
+          { value: 'integrations', label: 'Explore optional integrations and manual steps' },
         ],
       }));
       if (action === 'host') {
@@ -259,6 +342,11 @@ async function recommended({ options, cwd, run, ui, env, tty: interactive }) {
 
       if (action === 'task') {
         firstTask = await chooseFirstTask(ui, firstTask.id);
+        continue;
+      }
+      if (action === 'integrations') {
+        optional = await selectOptional(ui, project);
+        if (optional === 'back') optional = null;
         continue;
       }
       if (action === 'changes') {
@@ -274,6 +362,7 @@ async function recommended({ options, cwd, run, ui, env, tty: interactive }) {
       }
 
       finish(project, current, firstTask.task);
+      if (optional) await optionalIntegrationsSelected(optional, ui, project, optionalContext);
       ui.outro('Conquistador files are ready.');
       return 0;
     }
@@ -310,6 +399,7 @@ export async function runOnboarding(args, extra = {}) {
       confirm: async () => { throw new Error('Interactive setup requires a terminal.'); },
       log: { info() {}, error() {} },
     };
+    if (interactive && !extra.ui && args.length === 0 && !options.project) options.project = await chooseProject(ui, cwd);
     const ctx = { options, cwd, run, ui, tty: interactive, env, spawn: extra.spawn ?? spawnSync };
     ctx.runRecommended = overrides => recommended({ ...ctx, ...overrides });
     if (options.route === 'advanced') {
