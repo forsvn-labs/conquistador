@@ -210,7 +210,12 @@ export function selectRequestContext(prompt, { root = moduleRoot } = {}) {
     if (profile.activation === 'off') return abstain('activation-off');
   }
   const parent = posix.join(contract.parentPath, contract.document);
-  const clauses = requestClauses(prompt);
+  const methods = [...Object.values(contract.methods), ...contract.unavailableMethods];
+
+  const protectedPhrases = methods.flatMap(method => [method.name, ...method.intents])
+    .filter(phrase => /\band\b/.test(normalized(phrase)));
+
+  const clauses = requestClauses(prompt, { protectedPhrases });
   const query = clauses.join('. ');
   const excluded = [];
   const unavailable = [];
@@ -220,7 +225,10 @@ export function selectRequestContext(prompt, { root = moduleRoot } = {}) {
   const codingAction = /\b(?:refactor|rewrite|debug|implement|patch)\b/i.test(query)
     && /\b(?:code|function|handler|middleware|component|module|file|test|validation)\b/i.test(query);
 
-  const diagnosisRequested = /\b(?:diagnos(?:e|is)|investigat(?:e|ion)|analy[sz]e|explain|why|what is going on)\b/i.test(query);
+  const businessDiagnosisRequested = clauses.some(clause =>
+    /\b(?:diagnos(?:e|is)|investigat(?:e|ion)|analy[sz]e|explain|why|what is going on)\b/i.test(clause)
+    && /\b(?:growth|revenue|signups?|upgrades?|conversion|activation|retention|funnel|churn|trials?|leads?|orders?|sales)\b/i.test(clause)
+    && !/\b(?:code|function|handler|middleware|component|module|file|test|validation)\b/i.test(clause));
 
   const consider = item => {
 
@@ -239,21 +247,9 @@ export function selectRequestContext(prompt, { root = moduleRoot } = {}) {
   for (const clause of clauses) {
     parentMethod ??= parentMatch(clause, contract, restriction);
 
-    for (const item of matchingMethods(clause, contract, { permitGrowthInference: !codingAction || diagnosisRequested })) consider(item);
-  }
+    const technicalStage = /\b(?:code|function|handler|middleware|component|module|file|test|validation)\b/i.test(clause);
 
-  for (const clause of requestClauses(prompt, { splitAnd: false })) {
-    const text = normalized(clause);
-
-    for (const method of [...Object.values(contract.methods), ...contract.unavailableMethods]) {
-      if (method.explicitOnly && !feedbackOptIn.test(clause)) continue;
-      const named = includesPhrase(text, method.name);
-      const compoundIntent = method.intents.some(intent => /\band\b/.test(intent) && includesPhrase(text, intent));
-
-      if ((named || compoundIntent) && !method.exclusions.some(phrase => includesPhrase(text, phrase))) {
-        consider({ ...method, matchKind: named ? 'name' : 'intent', matchPhrase: named ? method.name : method.intents.find(intent => /\band\b/.test(intent) && includesPhrase(text, intent)) });
-      }
-    }
+    for (const item of matchingMethods(clause, contract, { permitGrowthInference: !codingAction || (businessDiagnosisRequested && !technicalStage) })) consider(item);
   }
 
   if (selectedAll.length > 1) {

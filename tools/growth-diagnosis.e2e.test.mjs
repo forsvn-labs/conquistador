@@ -80,6 +80,24 @@ test('installed growth route, first task, hook context, and removal work togethe
 
   const printedDoctorTarget = JSON.parse(checked(printedDoctorResult, 'printed other-project doctor')).path;
   assert.equal(printedDoctorTarget, join(otherProject, '.conquistador'));
+  const callerReceipt = readFileSync(join(project, '.conquistador/.conquistador-install.json'), 'utf8');
+  const selectedReceiptPath = join(otherProject, '.conquistador/.conquistador-install.json');
+  const selectedReceipt = JSON.parse(readFileSync(selectedReceiptPath, 'utf8'));
+  selectedReceipt.productVersion = '0.0.1';
+  writeFileSync(selectedReceiptPath, JSON.stringify(selectedReceipt, null, 2) + '\n');
+  const staleHandoff = checked(run(cli, project, '--project', otherProject, '--host', 'codex', '--yes'), 'stale selected-project handoff');
+  const notice = staleHandoff.split('\n').find(line => line.startsWith('Update with: '));
+  assert.ok(notice, 'stale installation must print an update command');
+  const printedUpdate = notice.slice('Update with: '.length);
+  assert.ok(printedUpdate.includes(`'--path' '${join(otherProject, '.conquistador')}'`));
+
+  const printedUpdateResult = spawnSync('/bin/sh', ['-c', printedUpdate], {
+    cwd: project, encoding: 'utf8', env: { ...process.env, PATH: `${bin}:${process.env.PATH}` },
+  });
+
+  checked(printedUpdateResult, 'printed other-project update');
+  assert.equal(JSON.parse(readFileSync(selectedReceiptPath, 'utf8')).productVersion, '0.0.11');
+  assert.equal(readFileSync(join(project, '.conquistador/.conquistador-install.json'), 'utf8'), callerReceipt);
   const otherDoctor = JSON.parse(checked(run(cli, project, 'operator', 'doctor', '--project', otherProject, '--json'), 'other-project doctor'));
   assert.equal(otherDoctor.path, join(otherProject, '.conquistador'));
   const otherStatus = checked(run(cli, project, 'operator', 'status', '--project', otherProject), 'other-project status');
@@ -150,6 +168,9 @@ test('installed growth route, first task, hook context, and removal work togethe
     ['Use Conquistador to plan-campaign. "Use shape-initiative" is only a quoted example.', ['plan-campaign']],
     ['Use Conquistador for authority and freshness.', ['knowledge-review']],
     ['Use Conquistador to review knowledge freshness for this project.', ['knowledge-review']],
+    ['Use Conquistador to design-pricing-and-packaging and do not write-copy.', ['design-pricing-and-packaging']],
+    ['Use Conquistador to review authority and freshness and do not write-copy.', ['knowledge-review']],
+    ['Use Conquistador to write readme and setup and do not write-copy.', ['write-technical-docs']],
     ['Use Conquistador for readme and setup.', ['write-technical-docs']],
     ['Why did signups drop after our campaign?', ['diagnose-growth']],
   ].map(([text, expected]) => {
@@ -169,6 +190,27 @@ test('installed growth route, first task, hook context, and removal work togethe
     const route = JSON.parse(checked(run(cli, project, 'route', '--prompt', text), `technical pipeline: ${text}`));
     assert.equal(route.action, 'abstain', `${text}: ${JSON.stringify(route)}`);
   }
+
+  const technicalExplanations = [
+    'Debug why the trial signup handler is down.',
+    'Refactor the handler after growth stalled. Explain the code changes.',
+    'I updated the trial signup code after growth stalled. Refactor the validation handler. Explain the code changes.',
+  ];
+
+  for (const text of technicalExplanations) {
+    const route = JSON.parse(checked(run(cli, project, 'route', '--prompt', text), `technical explanation: ${text}`));
+    assert.equal(route.action, 'abstain', `${text}: ${JSON.stringify(route)}`);
+  }
+
+  const explicitBusinessDiagnosis = JSON.parse(checked(run(cli, project, 'route', '--prompt',
+    'Diagnose why trial signups fell, then refactor the validation handler.'), 'mixed business diagnosis and coding'));
+
+  assert.ok(explicitBusinessDiagnosis.selected.includes('diagnose-growth'));
+
+  const whollyNegated = JSON.parse(checked(run(cli, project, 'route', '--prompt',
+    'Use Conquistador to do not design-pricing-and-packaging.'), 'wholly negated compound method'));
+
+  assert.equal(whollyNegated.action, 'abstain');
 
   const reviewPrompt = 'Use Conquistador to review the latest growth results in this project. Name the sources and baseline, separate observed changes from assumptions, and recommend one keep, drop, or test decision. Mark missing data.';
   const reviewRoute = JSON.parse(checked(run(cli, project, 'route', '--prompt', reviewPrompt), 'review growth first task'));
@@ -248,6 +290,24 @@ test('installed growth route, first task, hook context, and removal work togethe
   });
 
   assert.deepEqual(JSON.parse(checked(ciHandled, 'CI pipeline hook')), {});
+
+  for (const { prompt: text, selected } of adversarialRoutes.filter(item => item.prompt.includes('do not write-copy'))) {
+    const response = spawnSync(process.execPath, [handler, '--handle', '--host', 'codex', '--event', 'prompt-submitted',
+      '--config', config], { cwd: project, encoding: 'utf8', input: JSON.stringify({ hook_event_name: 'UserPromptSubmit', prompt: text }) });
+
+    const routed = JSON.parse(checked(response, `compound intent hook: ${text}`)).hookSpecificOutput.additionalContext;
+
+    assert.match(routed, new RegExp(`\\[${selected[0]}\\]`));
+    assert.doesNotMatch(routed, /\[write-copy\]/);
+  }
+
+  for (const text of technicalExplanations) {
+    const response = spawnSync(process.execPath, [handler, '--handle', '--host', 'codex', '--event', 'prompt-submitted',
+      '--config', config], { cwd: project, encoding: 'utf8', input: JSON.stringify({ hook_event_name: 'UserPromptSubmit', prompt: text }) });
+
+    assert.deepEqual(JSON.parse(checked(response, `technical explanation hook: ${text}`)), {});
+  }
+
   const after = JSON.parse(checked(run(cli, project, 'operator', 'doctor', '--json'), 'doctor after hook'));
   const hook = after.hooks.find(item => item.host === 'codex');
   assert.equal(hook.routingAvailable, true);
@@ -301,12 +361,14 @@ test('installed growth route, first task, hook context, and removal work togethe
       routes,
       methodRoutes,
       crossProject: { doctorTarget: otherDoctor.path, printedDoctorTarget, absoluteHandoff: true,
-        removedOnlySelectedProject: true, invalidProfileNonblocking: true },
+        printedUpdateTarget: join(otherProject, '.conquistador'), removedOnlySelectedProject: true,
+        invalidProfileNonblocking: true },
       unrelated: unrelated.action,
       incidental: incidental.action,
       initiativeRoute: initiativeRoute.selected,
       namedMethods: namedMethods.selected,
       adversarialRoutes,
+      technicalExplanations,
       ciFailure: ciFailure.action,
       reviewRoute: reviewRoute.selected,
       pricing: pricing.selected,

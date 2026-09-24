@@ -6,6 +6,8 @@ output, human acceptance, rights disposition and release authority require separ
 
 The current local growth-diagnosis and onboarding candidate, including repairs from independent
 review, is recorded in [PROGRESS.md](PROGRESS.md). No new release is claimed.
+The final local review repairs compound phrases beside negation, technical explanation false
+positives, and selected-project stale-update commands.
 The latest shipped version remains 0.0.11.
 
 ## 2026-09-18, 0.0.11 private alpha

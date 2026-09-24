@@ -21,6 +21,8 @@ Native plugins retain their host manager and trust boundary.
 Pinned private Git references lead acquisition; verified npm and Bun tarballs, source,
 and ZIP are transports for the same complete package. The runtime, typed catalog, Eval Lab, and
 durable jobs are optional. Every installation route needs a clear update and removal path.
+When setup targets another project, printed recovery commands must name that project's operator
+path so they work from the current directory.
 
 Public alpha should publish `@forsvn/conquistador` to the npm registry and make
 `npm i -g @forsvn/conquistador` the primary acquisition command. Keep the private Git command for

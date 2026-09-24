@@ -6,6 +6,7 @@ import { FIRST_TASKS, UsageError, parseOnboarding, requireNoninteractivePlan, ro
 import { destinationsFor, hostChoices, hostFolders, hostLabels, resolveHost, installedHosts } from './onboarding-hosts.mjs';
 import { inspectProjectSkills, projectIntegration, treeDigest } from './project-installation.mjs';
 import { operatorNextSteps } from './setup-surfaces.mjs';
+import { shellCommand } from './install-paths.mjs';
 import { assertNoDiscoveryConflict } from './onboarding-safety.mjs';
 import { cancellableUi } from './onboarding-ui.mjs';
 import { assertNode24, need, runBotRoute, runMcpRoute, runPluginRoute, runSetupAction, runSkillsRoute, resolveProject } from './onboarding-routes.mjs';
@@ -75,7 +76,8 @@ function versionNotice(inspection) {
   let manifestChanged = false;
   try { manifestChanged = readFileSync(join(path, 'release/completeness.json'), 'utf8') !== readFileSync(join(root, 'release/completeness.json'), 'utf8'); } catch { manifestChanged = true; }
   if (receipt.productVersion === version && !manifestChanged) return null;
-  return `This project's payload differs from the current CLI (installed ${receipt.productVersion ?? 'unknown'}; CLI ${version}). Files were not changed.\nUpdate with: conquistador operator update`;
+
+  return `This project's payload differs from the current CLI (installed ${receipt.productVersion ?? 'unknown'}; CLI ${version}). Files were not changed.\nUpdate with: ${shellCommand(['conquistador', 'operator', 'update', '--path', path])}`;
 }
 
 function printStart(inspection, task, cwd) {

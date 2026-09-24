@@ -61,7 +61,7 @@ The wider review found that splitting requests at "and" made
 `design-pricing-and-packaging` unreachable by its exact name and its natural "pricing and
 packaging" intent. It also found that local MCP listed the parent's 193,854-byte routing
 contract but refused to read it under a 131,072-byte file limit. Compound declared intents now
-match within a bounded unsplit clause, while ordinary clauses retain their separate routing.
+stay intact during clause segmentation, while ordinary clauses retain their separate routing.
 MCP accepts up to 262,144 bytes per file, still enforces its 524,288-byte encoded response limit,
 and reads the contract from a managed connector.
 
@@ -104,6 +104,26 @@ operator was detected. The corresponding installed CLI route selected
 `design-pricing-and-packaging`. A first-run terminal task about knowledge freshness also completed
 installation; its natural phrase is now a declared `knowledge-review` intent. Setup did not launch
 a model or confirm native discovery.
+
+### Final review repairs, still local
+
+The final independent review found three remaining defects. A compound method name or declared
+intent beside a negated task could disappear because one pass split at "and" and a second pass
+dropped the combined clause. The selector now protects declared compound phrases during one
+clause parse. Installed CLI and hook checks retain the requested pricing, knowledge-review, and
+technical-docs methods while excluding `write-copy`; a wholly negated compound request abstains.
+
+A technical request containing "why" or "explain" could enable growth inference from nearby
+signup or stall words. The selector now requires an explicit business diagnosis in a nontechnical
+clause before inferring growth inside a coding task, and it keeps technical clauses out of that
+inference. Three technical explanations abstain through the installed CLI and hook; a mixed
+explicit business diagnosis still selects `diagnose-growth`.
+
+The returning-user stale-installation notice printed an unqualified update command. It now
+prints a shell-quoted `--path` for the selected operator. The two-project installed check executes
+that printed command from project A, updates project B, and confirms A's receipt is unchanged.
+These are local CLI and hook observations, not proof of native host event delivery or useful model
+output across the library.
 
 A second live Codex CLI task used a freshly installed native skill to plan a one-week beta
 campaign, draft one launch email, and specify growth measurement from supplied facts. The trace
