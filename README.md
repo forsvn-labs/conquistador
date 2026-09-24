@@ -4,26 +4,26 @@ Conquistador helps your coding agent do growth, marketing, sales, product and kn
 Give it an outcome and the relevant facts. It selects from 38 methods, names the specialists it
 uses, and returns a draft with review findings. Your coding agent supplies the model and tools.
 
-The prior verified private alpha is
-[v0.0.11](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.11).
-This source tree is versioned 0.0.12. Check the private tag, assets, source commit, and
-checksums before treating it as a release. Local assembly alone does not establish
-release or human acceptance.
+The current private alpha is
+[v0.0.12](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.12),
+from source commit `738d24268bee03e0bc8880d22b21b665951881c9`.
+[v0.0.11](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.11) remains
+an earlier fallback. Verify the private release identity and checksums before installation;
+local assembly alone does not establish release or human acceptance.
 Private alpha and dogfood are the same `0.0.x` channel. Public alpha starts at `0.1.0`.
 The first-task chooser and `--task` examples below describe the 0.0.12 source.
 The pinned `v0.0.11` install retains its original launch-plan handoff.
 
 ## Install once, use in each project
 
-Use Node 24 and a GitHub account with access to this private repository. The 0.0.12
-command applies **only if** its private tag and checksummed assets exist and their
-identity is verified:
+Use Node 24 and a GitHub account with access to this private repository. The v0.0.12
+private tag and checksummed assets have been verified:
 
 ```sh
 npm install -g --ignore-scripts --install-links git+https://github.com/forsvn-labs/conquistador.git#v0.0.12
 ```
 
-If the 0.0.12 tag or verified assets are unavailable, use the prior
+If v0.0.12 is unavailable to your authorized account, use the prior
 [v0.0.11 release](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.11)
 with the same command ending in `#v0.0.11`.
 

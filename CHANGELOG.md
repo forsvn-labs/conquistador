@@ -1,21 +1,31 @@
 # Changelog
 
-No public release is claimed. Implemented but unshipped work is recorded in [PROGRESS.md](PROGRESS.md). See [VERSIONS.md](VERSIONS.md) for independent product and method
-versions. Verification establishes the stated local scope; live provider operation, useful model
-output, human acceptance, rights disposition and release authority require separate evidence.
+No public release is claimed. See [VERSIONS.md](VERSIONS.md) for independent product and method
+versions. Verification establishes the stated local scope; native host behavior, useful model
+output, human acceptance and rights disposition require separate evidence.
 
-The growth-diagnosis and onboarding changes were reviewed through
-[the hardening review](https://github.com/forsvn-labs/conquistador/pull/7). Their independently reviewed
-product commit is `855acdf618e6fd85548dbcc94496cdf53374a951`; all four review checks passed
-on that commit. It repairs compound phrases beside negation, technical explanation false
-positives, selected-project stale-update commands, and subsequent parser and explicit-name
-regressions found by installed adversarial review. See [PROGRESS.md](PROGRESS.md) for evidence.
-This entry records 0.0.12 preparation, not release acceptance. It aligns product and
-integration manifests and stages v0.0.12-pinned install instructions with a prior
-v0.0.11 fallback if the new tag or verified assets are unavailable. Exact-commit local
-packaging and a candidate private-Git lifecycle alone do not establish a tag, uploaded
-assets, native-host execution, or human acceptance. See the release record below for
-the prior verified v0.0.11 delivery.
+## 2026-09-24, 0.0.12 private alpha
+
+- Twelfth private release at
+  [`v0.0.12`](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.12) from
+  `738d24268bee03e0bc8880d22b21b665951881c9`, merged through
+  [the release PR](https://github.com/forsvn-labs/conquistador/pull/8). The prior
+  [v0.0.11 release](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.11)
+  remains a fallback. The repository stayed private and npm publication stayed off.
+- Ships the reviewed growth-diagnosis routing and first-task chooser, cross-project handoff
+  repairs, compound-intent and negation guards, technical false-positive guards, and managed
+  MCP parent reads. The hardening review's product commit
+  `855acdf618e6fd85548dbcc94496cdf53374a951` passed four review checks.
+- Node 24 build and all 764 local tests passed. Six downloaded release assets matched the
+  exact local assembly bytes. The annotated tag resolves to the merge commit. Authenticated
+  cold private-Git acquisition from that tag passed the install lifecycle. These checks
+  establish package and local behavior, not native host task quality.
+- The `/opt/homebrew` CLI and observed operator plus four native skill copies report 0.0.12
+  and 38 methods. Codex and Cursor retain a three-line private FORSVN instruction; their
+  receipts intentionally report modified, so automatic updates require preservation. Claude
+  Code and Copilot copies are clean. Fresh Codex native execution was unavailable because
+  even `codex --version` hung and exited without output. No human usefulness verdict exists.
+  Native-host execution and human acceptance remain open.
 
 ## 2026-09-18, 0.0.11 private alpha
 
