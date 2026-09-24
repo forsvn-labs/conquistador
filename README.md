@@ -1,38 +1,33 @@
-# Conquistador 0.0.13 private-alpha candidate (unreleased)
+# Conquistador 0.0.13 private alpha
 
 Conquistador helps your coding agent do growth, marketing, sales, product and knowledge work.
 Give it an outcome and the relevant facts. It selects from 38 methods, names the specialists it
 uses, and returns a draft with review findings. Your coding agent supplies the model and tools.
 
 The latest verified private release is
-[v0.0.12](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.12),
-from source commit `738d24268bee03e0bc8880d22b21b665951881c9`.
-[v0.0.11](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.11) remains
+[v0.0.13](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.13),
+from source commit `653058ac2b9c5f0cefe926bb238879191caf8a9b`.
+[v0.0.12](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.12) remains
 an earlier fallback. Verify the private release identity and checksums before installation;
 local assembly alone does not establish release or human acceptance.
 Private alpha and dogfood are the same `0.0.x` channel. Public alpha starts at `0.1.0`.
-This checkout is an unreleased 0.0.13 candidate. The pinned v0.0.12 command below still
-installs the earlier guide, not the Node 24 preflight or revised project chooser described for
-this checkout. Do not install from a supposed v0.0.13 tag until its release is authorized and
-verified. The pinned v0.0.11 install retains its original launch-plan handoff.
 
 ## Install once, use in each project
 
-Use Node 24 and a GitHub account with access to this private repository. The v0.0.12
-private tag and checksummed assets have been verified:
+Use Node 24, npm, Git, and a GitHub account with access to this private repository. The v0.0.13
+private tag and six downloaded assets have been verified:
 
 ```sh
-npm install -g --ignore-scripts --install-links git+https://github.com/forsvn-labs/conquistador.git#v0.0.12
+npm install -g --ignore-scripts --install-links git+https://github.com/forsvn-labs/conquistador.git#v0.0.13
 ```
 
-If v0.0.12 is unavailable to your authorized account, use the prior
-[v0.0.11 release](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.11)
-with the same command ending in `#v0.0.11`.
+If v0.0.13 is unavailable to your authorized account, use the prior
+[v0.0.12 release](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.12)
+with the same command ending in `#v0.0.12` (it has the earlier guide).
 
-Then run the installed command in the receiving project. The verified v0.0.12 release has its
-earlier guide. This 0.0.13 source candidate adds project-directory selection, including from
-outside the project, followed by host selection, plan, apply, local doctor, and a first-task
-handoff. That revised experience is not yet in the verified release:
+Then run the installed command in the receiving project. Version 0.0.13 selects a project directory,
+including one outside the current directory, then a host, plan, apply, local doctor, and first-task
+handoff:
 
 ```sh
 conquistador
@@ -50,7 +45,8 @@ for the current private alpha because the registry package does not exist and pu
 blocked. It becomes the primary command only after the exact public package and clean registry
 lifecycle are verified.
 
-In the 0.0.13 candidate, plain `conquistador` installs one complete project operator. It chooses the package; you confirm.
+In v0.0.13, plain `conquistador` installs one complete project operator. It chooses the
+package; you confirm.
 If it cannot tell which coding agent you are using, it asks for one host. The happy path is one
 confirmation. Architecture choices stay behind `conquistador --advanced` and explicit setup
 commands. The guide also lets you select an optional plugin, skills.sh copy, MCP connector, or bot route within the same session; each has its own plan and confirmation. If a selected integration fails or is interrupted, setup preserves completed copies and returns that failure instead of claiming success. A cancelled optional step after the operator install names the completed owned operator. Client registration, host trust, and native discovery remain manual. No optional surface is installed by default. No receiving-project package manifest, dependency or lockfile is added by the recommended operator path.
@@ -111,7 +107,7 @@ conquistador update             # Update this project from the installed CLI
 conquistador uninstall          # Remove both unchanged owned copies
 ```
 
-In this unreleased candidate, if your shell uses a Node version other than 24, an interactive run offers a verified local Node 24 executable when detected, or prints manager-aware selection steps. It asks before continuing under that executable; it does not change the parent shell or install Node. Terminating the launcher forwards the signal to its local setup process group and waits for its child; interrupted transactions may still need recovery. Without a terminal it prints Node 24 guidance and exits nonzero. `--help` and `--version` remain available. Install the CLI with Node 24 when possible; the preflight helps if your shell later changes versions.
+In v0.0.13, if your shell uses a Node version other than 24, an interactive run offers a verified local Node 24 executable when detected, or prints manager-aware selection steps. It asks before continuing under that executable; it does not change the parent shell or install Node. Terminating the launcher forwards the signal to its local setup process group and waits for its child; interrupted transactions may still need recovery. Without a terminal it prints Node 24 guidance and exits nonzero. `--help` and `--version` remain available. Install the CLI with Node 24 when possible; the preflight helps if your shell later changes versions.
 
 If you pass `--project PATH` from another directory, the setup and `start` handoffs print
 absolute skill paths and target-qualified management commands for that project. Run the first
@@ -124,8 +120,10 @@ Modified files are preserved. A files-only operator can add its first native hos
 
 ## What installation proves
 
-Setup checks local completeness and places the skill in the selected host's discovery directory.
-Open a fresh session to check that the host discovers it. Native discovery and task quality
+The installed v0.0.13 bare command completed local setup from a login shell under Node 26
+by selecting a verified Node 24, then ran local doctor and printed the first-task handoff in a
+disposable project. Setup checks local completeness and places the skill in the selected host's
+discovery directory. Open a fresh session to check that the host discovers it. Native discovery and task quality
 still need an observed task in that host. Installation starts no watcher, hook or service and grants no external-action authority.
 Codex and Claude Code can opt into the project-local context hook in
 [proactive help](docs/PROACTIVE.md): it ranks the installed methods for each prompt and injects the

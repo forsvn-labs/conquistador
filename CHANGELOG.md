@@ -2,9 +2,35 @@
 
 No public release is claimed. See [VERSIONS.md](VERSIONS.md) for independent product and method
 versions. Verification establishes the stated local scope; native host behavior, useful model
-output, human acceptance and rights disposition require separate evidence. The 0.0.13 source
-candidate is unshipped; its behavior and validation are recorded in PROGRESS.md, not as a
-release entry here. The latest shipped version remains 0.0.12.
+output, human acceptance and rights disposition require separate evidence.
+
+## 2026-09-25, 0.0.13 private alpha
+
+- Thirteenth private prerelease at
+  [`v0.0.13`](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.13) from exact merged
+  `private-alpha` commit `653058ac2b9c5f0cefe926bb238879191caf8a9b` through
+  [the release PR](https://github.com/forsvn-labs/conquistador/pull/10). The repository stayed
+  private and npm registry publication stayed disabled.
+- Ships the interactive Node 24 preflight and bare-command project, host, plan, apply, local doctor,
+  and first-task guide, with explicit optional routes, ownership protection, and process-group
+  termination during local setup.
+- Node 24.21.0 build and 764 local checks passed (240 host/tooling, 294 runtime, 167 catalog,
+  63 evaluation). All six assets were downloaded fresh. Four archives passed downloaded
+  `SHA256SUMS`; the checksum file and `assembly.json` matched the local assembly bytes. Source ZIP
+  SHA-256: `60cdd178fa1f9670edbc9acd33a9233192e678a4db05d3891190c5d818636884`;
+  npm tarball: `3e02791b9a2ca9deee606c68c5d8dc67615208b0c7cf94fcfbed2be782d0c883`;
+  prepared skill: `e1d31aab6abc246114a033b69de2f088f9a42d823afefe5c7511b87fe31a5eb6`;
+  prepared plugin: `6b1f9f914cf0ab8b98f3189ac818a292e574422ee6f09e15bc10f939a1dfe2ed`.
+  Local assembly remains `UNBOUND`.
+- Authenticated private-Git tag acquisition passed version, install, 38-method doctor, start,
+  update, uninstall, and receiving-project preservation after npm cache removal. Both npm-owned
+  CLI copies and the home operator/four native skills report 0.0.13. A real login-shell bare command
+  under Node 26 continued through verified Node 24 to local setup, doctor, and handoff in a
+  disposable project; installed-package suites passed 21 scenarios with each CLI.
+- Codex and Cursor keep private edits; their receipts remain modified and home operator doctor
+  exits 1 for receipt integrity despite matching packaged completeness. Clean Claude Code and
+  Copilot native doctors pass. Fresh host discovery, model method reads, useful task output,
+  provider access, and the user's verdict remain unverified.
 
 ## 2026-09-24, 0.0.12 private alpha
 

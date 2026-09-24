@@ -2,30 +2,23 @@
 
 ## Next private-alpha acceptance
 
-The 0.0.13 private-alpha candidate contains the unshipped Node 24 preflight and revised
-bare-command guide; neither is part of the verified 0.0.12 tag. Before an authorized 0.0.13
-private release, merge the reviewed source, verify exact package acquisition under wrong and
-supported Node versions, and record a fresh host's discovery and first task. The clean local
-installed-tarball terminal suite checks setup and ownership only; it does not prove host
-activation. Do not tag, upload assets, update a global installation or call 0.0.13 released
-from this PR alone.
+The [v0.0.13 private prerelease](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.13)
+shipped from exact merged source `653058ac2b9c5f0cefe926bb238879191caf8a9b`.
+The Node 24 build, 764 local checks, six downloaded assets, authenticated private-Git lifecycle,
+and 21 installed-package terminal scenarios passed. Both npm-owned CLI copies and the home operator
+plus four native skill copies report 0.0.13. A login-shell bare command under Node 26 reached
+verified Node 24 and completed local setup, doctor, and handoff in a disposable project.
+Codex and Cursor retain private edits, so their receipts are modified and the home operator
+doctor fails receipt integrity as expected. These are local installation checks, not native task
+or human acceptance.
 
-The [v0.0.12 private release](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.12)
-is shipped from `738d24268bee03e0bc8880d22b21b665951881c9`. Its six downloaded assets,
-Node 24 build, 764 tests, and authenticated cold private-Git tag acquisition passed. The observed
-CLI, operator and four native skills report 0.0.12 and 38 methods. Codex and Cursor copies have
-intentional private edits and need preservation on update; Claude Code and Copilot copies are clean.
-These are package and local installation checks, not native task or human acceptance.
-
-1. Restore fresh Codex CLI execution on the exact released build, then observe native skill
-   discovery, full method/resource reads, a useful first task and a correction. Even
-   `codex --version` hung and exited without output in the release check, so no fresh
-   v0.0.12 native task was observed. Seek the user's verdict on clarity, routing relevance and
-   usefulness. Keep the installed route, negative-control, selected-project update,
-   malformed-profile and MCP-read checks as separate local evidence.
-2. Check update preservation for the modified Codex and Cursor copies before any automatic
-   replacement. Observe fresh host behavior separately from clean receipts. A second native
-   host and independent specialist contexts remain unverified.
+1. Observe fresh native host discovery on the exact released build, full method/resource reads,
+   a useful first task, and a correction. Seek the user's verdict on clarity, routing relevance,
+   and usefulness. The user's own host session remains unverified; local shell success cannot
+   establish it. Keep installed-route and other local diagnostics separate from model evidence.
+2. Preserve the modified Codex and Cursor overlays on later updates. Observe fresh host behavior
+   separately from clean receipts. A second native host and independent specialist contexts remain
+   unverified.
 
 ## Private-alpha follow-up
 
@@ -39,7 +32,7 @@ These are package and local installation checks, not native task or human accept
    one entry, selected-method loading, capability disclosure, cache refresh, update and removal.
    A fresh Codex CLI 0.154.0 launch task and correction on the 0.0.11 tree read the native parent,
    full selected method, required standards and relevant resources. That earlier observation does
-   not establish v0.0.12 behavior, the other hosts, all methods, independent review or human acceptance.
+   not establish v0.0.13 behavior, the other hosts, all methods, independent review or human acceptance.
 4. Verify native Windows/Linux installation and host execution before claiming those platforms.
    macOS transports and Linux CI results do not certify native Windows or Linux host activation.
 
