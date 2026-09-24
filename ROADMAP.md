@@ -2,14 +2,15 @@
 
 ## Next private alpha
 
-1. After integrating the [reviewed growth-diagnosis work](https://github.com/forsvn-labs/conquistador/pull/7),
-   repeat a fresh native task on the exact integrated commit and obtain the user's verdict on
-   clarity, routing relevance, and usefulness. Retain the installed route, negative-control,
-   selected-project update, malformed-profile, and MCP-read checks as acceptance evidence. The
-   current composed Codex run shows method and workflow reads; a second real host and independent
-   specialists remain unverified.
-2. Keep the authenticated private-Git durability check as a required gate for later private tags.
-   It must delete acquisition cache before running the CLI lifecycle.
+1. Review and merge the 0.0.12 candidate based on the integrated
+   [growth-diagnosis hardening](https://github.com/forsvn-labs/conquistador/pull/7). Only after
+   merge and a Firstmate steer, create the private tag and upload checksum-verified release assets.
+   Repeat authenticated private-Git cold acquisition against that immutable tag before claiming
+   released durability. A candidate-commit lifecycle check is not the tag check.
+2. Repeat a fresh native task on the exact released build and obtain the user's verdict on clarity,
+   routing relevance, and usefulness. Retain installed route, negative-control, selected-project
+   update, malformed-profile, and MCP-read checks as acceptance evidence. The composed Codex run
+   shows method and workflow reads; a second real host and independent specialists remain unverified.
 
 ## Private-alpha follow-up
 

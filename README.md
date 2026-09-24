@@ -1,14 +1,20 @@
-# Conquistador 0.0.11
+# Conquistador 0.0.12 candidate
 
 Conquistador helps your coding agent do growth, marketing, sales, product and knowledge work.
 Give it an outcome and the relevant facts. It selects from 38 methods, names the specialists it
 uses, and returns a draft with review findings. Your coding agent supplies the model and tools.
 
-The current private alpha is
+The latest shipped private alpha is
 [v0.0.11](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.11).
+This source tree prepares 0.0.12; it is not a released tag or accepted artifact yet.
 Private alpha and dogfood are the same `0.0.x` channel. Public alpha starts at `0.1.0`.
-The first-task chooser and `--task` examples below describe this unshipped source checkout;
-the pinned `v0.0.11` install retains its original launch-plan handoff.
+The first-task chooser and `--task` examples below describe this 0.0.12 candidate;
+the pinned `v0.0.11` install retains its original launch-plan handoff. Only after the
+private `v0.0.12` tag and release assets are verified, replace the shipped command below with:
+
+```sh
+npm install -g --ignore-scripts --install-links git+https://github.com/forsvn-labs/conquistador.git#v0.0.12
+```
 
 ## Install once, use in each project
 

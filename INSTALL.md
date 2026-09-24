@@ -1,7 +1,11 @@
 # Install Conquistador
 
-Version `0.0.11` is the shipped private alpha on the `private-alpha` channel. It continues the same
-private delivery sequence as dogfood. Public alpha is planned to start at `0.1.0`. Use the
+Version `0.0.11` remains the shipped private alpha on the `private-alpha` channel.
+This checkout prepares `0.0.12`, but its tag and assets do not exist yet; do not treat a
+local package or branch install as a released artifact. After the reviewed candidate merges,
+verify the private tag, full source commit, and release checksums before switching the
+pinned commands below to `v0.0.12`. Until then, use the existing `v0.0.11` release.
+It continues the same private delivery sequence as dogfood. Public alpha is planned to start at `0.1.0`. Use the
 [private release](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.11) and keep its
 exact tag, source commit and checksums together. The repository remains private and no npm package
 is published.
@@ -10,7 +14,13 @@ portability guidance; native execution and native host registration still need t
 
 ## Project operator and native skill, recommended
 
-The commands below use the immutable `v0.0.11` tag.
+The commands below use the immutable `v0.0.11` tag. After the private `v0.0.12` tag and
+assets are verified, use this replacement command for the new release (not before):
+
+```sh
+npm install -g --ignore-scripts --install-links git+https://github.com/forsvn-labs/conquistador.git#v0.0.12
+```
+
 Use Node 24, npm, Git, and a GitHub account with access to the repository. Install the CLI once:
 
 ```sh
@@ -127,7 +137,7 @@ for work based on supplied facts.
 
 ### First task
 
-The chooser and `--task` flag below describe this unshipped source checkout. The pinned
+The chooser and `--task` flag below describe this 0.0.12 source candidate. The pinned
 `v0.0.11` release above retains its original launch-plan handoff.
 
 The TUI lets you choose a first task before installation. For a scripted Codex install,
@@ -301,6 +311,16 @@ A copy without Git still has unknown source commit identity. Use the doctor from
 ```
 
 ### What successful installation means
+
+Check the global CLI with `conquistador version`, then inspect each installed operator and native
+skill receipt with `conquistador operator status` and `conquistador operator doctor --json` in
+the selected project. In one observed environment `/opt/homebrew/bin/conquistador` reports
+0.0.11, while `~/.agents/skills/conquistador/.conquistador-install.json` and
+`~/.claude/skills/conquistador/.conquistador-install.json` each report productVersion 0.0.8.
+A newer CLI does not update those copies. After the reviewed 0.0.12 release, use its authorized
+CLI to update each owned installation through its original lifecycle, then recheck receipts,
+doctor, native discovery, and a real task. Do not update those installed copies from this
+candidate branch.
 
 Check local completeness, host discovery, and a real first task separately. For substantial tasks,
 check the engagement brief, deliverable, labeled review, and execution receipt. Neither a plugin

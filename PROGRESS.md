@@ -1,11 +1,28 @@
 # Product progress
 
 The 0.0.11 hardening work has shipped. The growth-diagnosis and first-run changes below were
-reviewed through [the hardening review](https://github.com/forsvn-labs/conquistador/pull/7).
+reviewed through [the hardening review](https://github.com/forsvn-labs/conquistador/pull/7)
+and merged at `f540d258d2555135affa75c0ce44376949136e71`. The 0.0.12 candidate aligns
+product, host, plugin, agent, schema, CLI, and MCP versions. The existing v0.0.11 commands
+remain the shipped install path until a private tag and assets are verified. An observed
+installation has `/opt/homebrew/bin/conquistador` at 0.0.11 but both
+`~/.agents/skills/conquistador/.conquistador-install.json` and
+`~/.claude/skills/conquistador/.conquistador-install.json` at 0.0.8. Those project/host
+copies must not be described as updated merely because the global CLI changes; no installed
+copy is changed in this candidate.
+
+Node 24.21.0 build and the full 764-check suite passed locally (240 host/tooling,
+294 runtime, 167 catalog, 63 evaluation). The existing installed-project end-to-end
+checks are part of that suite; they verify local route, hook, MCP, and ownership behavior,
+not native host output. Anti-slop runs on touched TypeScript/JavaScript files; its
+readable-spacing rule still reports pre-existing violations in touched files, so it is
+not a clean lint gate.
 The independently reviewed product commit is `855acdf618e6fd85548dbcc94496cdf53374a951`.
 Its local build and 764 tests passed, and all four review checks passed on that commit.
-The latest versioned private release remains 0.0.11. See [CHANGELOG.md](CHANGELOG.md) for verified
-delivery and [ROADMAP.md](ROADMAP.md) for remaining native-host and human acceptance work.
+The latest versioned private release remains 0.0.11. A clean exact-commit assembly and
+candidate-commit private-Git lifecycle are local preparation, not a released artifact or native
+host/human acceptance. See [CHANGELOG.md](CHANGELOG.md) for verified delivery and
+[ROADMAP.md](ROADMAP.md) for remaining release, native-host, and human acceptance work.
 
 Current private delivery:
 [`v0.0.11`](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.11) from
