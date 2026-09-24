@@ -1,18 +1,20 @@
-# Conquistador 0.0.12
+# Conquistador 0.0.13 private-alpha candidate (unreleased)
 
 Conquistador helps your coding agent do growth, marketing, sales, product and knowledge work.
 Give it an outcome and the relevant facts. It selects from 38 methods, names the specialists it
 uses, and returns a draft with review findings. Your coding agent supplies the model and tools.
 
-The current private alpha is
+The latest verified private release is
 [v0.0.12](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.12),
 from source commit `738d24268bee03e0bc8880d22b21b665951881c9`.
 [v0.0.11](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.11) remains
 an earlier fallback. Verify the private release identity and checksums before installation;
 local assembly alone does not establish release or human acceptance.
 Private alpha and dogfood are the same `0.0.x` channel. Public alpha starts at `0.1.0`.
-The first-task chooser and `--task` examples below describe the 0.0.12 source.
-The pinned `v0.0.11` install retains its original launch-plan handoff.
+This checkout is an unreleased 0.0.13 candidate. The pinned v0.0.12 command below still
+installs the earlier guide, not the Node 24 preflight or revised project chooser described for
+this checkout. Do not install from a supposed v0.0.13 tag until its release is authorized and
+verified. The pinned v0.0.11 install retains its original launch-plan handoff.
 
 ## Install once, use in each project
 
@@ -27,7 +29,10 @@ If v0.0.12 is unavailable to your authorized account, use the prior
 [v0.0.11 release](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.11)
 with the same command ending in `#v0.0.11`.
 
-Then run the command. The terminal guide asks you to confirm or choose an existing project directory, select a coding-agent host, review the installation plan, apply it, check local files, and take a first-task prompt into a fresh host session. You can start outside the project and choose its directory in the guide:
+Then run the installed command in the receiving project. The verified v0.0.12 release has its
+earlier guide. This 0.0.13 source candidate adds project-directory selection, including from
+outside the project, followed by host selection, plan, apply, local doctor, and a first-task
+handoff. That revised experience is not yet in the verified release:
 
 ```sh
 conquistador
@@ -45,10 +50,10 @@ for the current private alpha because the registry package does not exist and pu
 blocked. It becomes the primary command only after the exact public package and clean registry
 lifecycle are verified.
 
-Plain `conquistador` installs one complete project operator. It chooses the package; you confirm.
+In the 0.0.13 candidate, plain `conquistador` installs one complete project operator. It chooses the package; you confirm.
 If it cannot tell which coding agent you are using, it asks for one host. The happy path is one
 confirmation. Architecture choices stay behind `conquistador --advanced` and explicit setup
-commands. The guide also lets you select an optional plugin, skills.sh copy, MCP connector, or bot route within the same session; each has its own plan and confirmation. If a selected integration fails or is interrupted, setup preserves completed copies and returns that failure instead of claiming success. Client registration, host trust, and native discovery remain manual. No optional surface is installed by default. No receiving-project package manifest, dependency or lockfile is added by the recommended operator path.
+commands. The guide also lets you select an optional plugin, skills.sh copy, MCP connector, or bot route within the same session; each has its own plan and confirmation. If a selected integration fails or is interrupted, setup preserves completed copies and returns that failure instead of claiming success. A cancelled optional step after the operator install names the completed owned operator. Client registration, host trust, and native discovery remain manual. No optional surface is installed by default. No receiving-project package manifest, dependency or lockfile is added by the recommended operator path.
 
 ```text
 .conquistador/
@@ -106,7 +111,7 @@ conquistador update             # Update this project from the installed CLI
 conquistador uninstall          # Remove both unchanged owned copies
 ```
 
-If your shell uses a Node version other than 24, an interactive run offers a verified local Node 24 executable when detected, or prints manager-aware selection steps. It asks before continuing under that executable; it does not change the parent shell or install Node. Without a terminal it prints Node 24 guidance and exits nonzero. `--help` and `--version` remain available. Install the CLI with Node 24 when possible; the preflight helps if your shell later changes versions.
+In this unreleased candidate, if your shell uses a Node version other than 24, an interactive run offers a verified local Node 24 executable when detected, or prints manager-aware selection steps. It asks before continuing under that executable; it does not change the parent shell or install Node. Terminating the launcher forwards the signal to its local setup process group and waits for its child; interrupted transactions may still need recovery. Without a terminal it prints Node 24 guidance and exits nonzero. `--help` and `--version` remain available. Install the CLI with Node 24 when possible; the preflight helps if your shell later changes versions.
 
 If you pass `--project PATH` from another directory, the setup and `start` handoffs print
 absolute skill paths and target-qualified management commands for that project. Run the first

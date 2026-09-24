@@ -1,6 +1,6 @@
 # Product progress
 
-## Unshipped Node preflight and first-run setup investigation
+## Unshipped 0.0.13 candidate: Node preflight and first-run setup
 
 Follow-up installed-package E2E failure matrix (independent review of PR head `87d7a03`):
 
@@ -10,7 +10,8 @@ Follow-up installed-package E2E failure matrix (independent review of PR head `8
 | Native operator → explicit `--host none` | Preserve existing native host; do not convert ownership | Invalid host union or misleading host-add attempt |
 | Returning or fresh operator → optional route fails or interrupts | Preserve route exit 1/130 and completed copies | First-task chooser resumes; command exits 0 |
 | Unsupported Node launcher → verified Node 24 child → outer SIGTERM | Forward termination and reap setup child | Launcher exits; child remains orphaned |
-
+| Unsupported Node launcher → SIGTERM during apply | Stop the setup process tree before exit; do not claim rollback | Installer re-parents and writes an operator after launcher exit |
+| Fresh operator → Ctrl-C in optional route | Exit 130; identify the completed owned operator | `No files changed` despite installed operator |
 
 E2E failure matrix (installed 0.0.12 CLI, neutral `/tmp`, before implementation):
 
@@ -26,7 +27,9 @@ E2E failure matrix (installed 0.0.12 CLI, neutral `/tmp`, before implementation)
 
 The installed bin is `runtime/bin/conquistador.js` with `#!/usr/bin/env node`; interactive bare imports `tools/onboarding.mjs` and `assertNode24` runs after parsing but before the TUI. The environment mask is the shebang's PATH-selected Node 26, despite an independently installed nvm Node 24.21.0; non-TTY bare passes `--help` at the bin and never checks Node. A small counterfactual with the same installed bin, cwd and arguments but PATH headed by nvm Node 24 reaches the project guide. `--version` and `--help` on 26 work, disconfirming a broken bin/package hypothesis. History `084593d` introduced this path and `f540d25` added returning-user first-task handling. Neither preflight nor help provides a version manager command. These are local command observations, not host acceptance or a new release.
 
-The unshipped repair uses a bounded Node 24 preflight only for bare and top-level onboarding flags;
+The unreleased 0.0.13 candidate advances the product version in package, plugin, host,
+portable-agent, and matching schema metadata; provider API versions and internal schema versions
+remain independent. It uses a bounded Node 24 preflight only for bare and top-level onboarding flags;
 help/version and unrelated minimal command bundles do not import the new module on supported Node.
 A candidate is offered only from a known nvm account-home or Homebrew installation after checking
 its executable, ownership, permissions and reported version. The user must select it; the child
@@ -43,22 +46,29 @@ and the subsequent uninstall. The next review found three additional P2 defects 
 paths: `none` combined with a native host, lost optional-route statuses, and an orphaned Node 24
 child after launcher SIGTERM. The returning-host union now removes the files-only sentinel,
 `--host none` explicitly preserves existing native owners, optional routes stop and return their
-nonzero or 130 status, and the unsupported-Node launcher forwards termination to its child and
-waits for it. No partial setup is rolled back or called complete.
+nonzero or 130 status. A later real-process review found that forwarding SIGTERM to only the
+Node 24 child still left its setup descendant running during apply. The launcher now isolates
+the continuation in a process group, signals the whole group and waits for the child before
+returning. It does not claim rollback of partial setup; preserve any transaction recovery files.
+Fresh optional-prompt cancellation now names the already installed, owned operator instead of
+saying no files changed.
 
 Node 24.21.0 `npm run build` and `npm test` passed (240 host/tooling checks plus runtime,
-catalog and evaluation suites). A locally packed and installed tarball passed 19 TTY/non-TTY
+catalog and evaluation suites). A locally packed and installed tarball passed 21 TTY/non-TTY
 scenarios: wrong-Node continuation, cancel, no-candidate guidance, repeat setup, right-Node
 repeat, optional MCP selection, returning-host adoption decline and acceptance, files-only host
 addition and native-owner preservation, optional-route failure/interrupt (fresh and returning),
-launcher SIGTERM child cleanup, noninteractive and help/version paths. Repeat with
+launcher SIGTERM child and during-apply setup-tree cleanup, fresh optional-prompt cancellation
+wording, noninteractive and help/version paths. Repeat with
 `CONQUISTADOR_E2E_WRONG_NODE=/path/to/node26 CONQUISTADOR_E2E_NODE24=/path/to/node24
 python3 tools/node-onboarding.e2e.py INSTALLED_CLI OUTPUT_DIR` after `npm pack` and an isolated
 `npm install --prefix` of the resulting tarball. The uncommitted evidence is in
 `dist/node-onboarding-e2e/node-onboarding-e2e.json` and matching terminal transcripts. The
 exact committed HEAD was also archived into a clean tracked-source copy, packed without
-`node_modules` (1,663 files, 4.26 MB), installed in an isolated prefix and passed all 19
-scenarios again in `dist/node-onboarding-e2e/clean-evidence/node-onboarding-e2e.json`.
+`node_modules` (1,663 files, approximately 4.26 MB), installed in an isolated prefix and passed all 21
+scenarios again in `dist/node-onboarding-e2e/clean-evidence-013/node-onboarding-e2e.json`.
+The clean installed CLI and sampled package, plugin, host, and agent manifests all report
+0.0.13. The versioned operator resources were rehashed in `release/completeness.json`.
 The touched-JS anti-slop run reports only the inherited readable-spacing rule (no other rules).
 These tests establish local setup behavior, not host registration, model task quality, or a
 private release. CHANGELOG.md records shipped versions only, so this unshipped change does not

@@ -385,7 +385,14 @@ async function recommended({ options, cwd, run, ui, env, tty: interactive, spawn
 
       finish(project, current, firstTask.task);
 
-      if (optional) await optionalIntegrationsSelected(optional, ui, project, optionalContext);
+      if (optional) {
+        try {
+          await optionalIntegrationsSelected(optional, ui, project, optionalContext);
+        } catch (error) {
+          if (error.cancelled) error.message = `Optional integration cancelled. The completed operator at ${join(project, '.conquistador')} remains installed and owned. Inspect any staged files before retrying.`;
+          throw error;
+        }
+      }
       ui.outro('Conquistador files are ready.');
       return 0;
     }

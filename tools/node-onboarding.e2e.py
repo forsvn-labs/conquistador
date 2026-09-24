@@ -31,7 +31,7 @@ if not subprocess.check_output([wrong_node, '-v']).startswith(b'v26') or not sub
     sys.exit('Expected Node 26 and Node 24 executables, respectively.')
 if wrong in ('/opt/homebrew/bin', '/usr/local/bin'):
     sys.exit('Use an isolated Node 26 bin directory, not Homebrew bin, to exercise the no-candidate path.')
-for name in ['neutral', 'project', 'other', 'empty-home', 'adoption', 'files-only', 'fresh-failure', 'optional-failure']:
+for name in ['neutral', 'project', 'other', 'empty-home', 'adoption', 'files-only', 'fresh-failure', 'fresh-optional-cancel', 'optional-failure', 'term-apply']:
     shutil.rmtree(root / name, ignore_errors=True)
     (root / name).mkdir(parents=True)
 env = {**os.environ, 'PATH': wrong + ':/usr/bin:/bin', 'CLAUDECODE': '1'}
@@ -196,6 +196,18 @@ code, text = terminal('fresh-optional-interrupt', neutral, [
 ], right_env)
 assert code == 130 and (fresh / '.conquistador/SKILL.md').is_file() and 'Conquistador files are ready.' not in text, (code, text)
 
+cancel_project = root / 'fresh-optional-cancel'
+code, text = terminal('fresh-optional-prompt-cancel', neutral, [
+    (b'Where should Conquistador', b'\x1b[B\r'),
+    (b'Absolute or relative', b'../fresh-optional-cancel\r'),
+    (b'Set up Conquistador', b'\x1b[B\x1b[B\x1b[B\x1b[B\r'),
+    (b'Optional integrations', b'\x1b[B\r'),
+    (b'Set up Conquistador', b'\r'),
+    (b'Which host should skills.sh', b'\x03'),
+], right_env)
+assert code == 130 and (cancel_project / '.conquistador/SKILL.md').is_file(), (code, text)
+assert 'remains installed and owned' in text and 'No files changed' not in text, text
+
 # Terminate the launched PID while its verified Node 24 child is waiting for a project.
 master, slave = pty.openpty()
 fcntl.ioctl(slave, termios.TIOCSWINSZ, struct.pack('HHHH', 40, 120, 0, 0))
@@ -237,6 +249,83 @@ finally:
             os.kill(child_pid, signal.SIGKILL)
         except ProcessLookupError:
             pass
+    os.close(master)
+
+# Killing the launcher during apply must stop the setup process tree before returning.
+apply_project = root / 'term-apply'
+master, slave = pty.openpty()
+fcntl.ioctl(slave, termios.TIOCSWINSZ, struct.pack('HHHH', 40, 120, 0, 0))
+outer = subprocess.Popen([cli], cwd=neutral, env=env, stdin=slave, stdout=slave, stderr=slave, start_new_session=True)
+os.close(slave)
+node_pid = setup_pid = None
+try:
+    output = b''
+    for phrase, keys in [
+        (b'How do you want to continue', b'\r'),
+        (b'Where should Conquistador', b'\x1b[B\r'),
+        (b'Absolute or relative', b'../term-apply\r'),
+        (b'Set up Conquistador', b'\r'),
+    ]:
+        for _ in range(200):
+            ready, _, _ = select.select([master], [], [], .1)
+            if ready:
+                output += os.read(master, 65536)
+            if phrase in output:
+                break
+        assert phrase in output, clean(output[-1500:])
+        os.write(master, keys)
+    deadline = time.monotonic() + 20
+    seen = []
+    while time.monotonic() < deadline:
+        ready, _, _ = select.select([master], [], [], 0)
+        if ready:
+            try:
+                output += os.read(master, 65536)
+            except OSError:
+                pass
+        children = subprocess.run(['pgrep', '-P', str(outer.pid)], text=True, capture_output=True).stdout.split()
+        if children:
+            node_pid = int(children[0])
+            descendants = subprocess.run(['pgrep', '-P', str(node_pid)], text=True, capture_output=True).stdout.split()
+            for descendant in descendants:
+                command = subprocess.run(['ps', '-p', descendant, '-o', 'command='], text=True, capture_output=True).stdout
+                seen.append(command)
+                if 'tools/setup.mjs install' in command:
+                    setup_pid = int(descendant)
+                    break
+        if setup_pid:
+            break
+        time.sleep(.01)
+    assert setup_pid, f'Setup apply was not observed: {seen[-5:]} / {clean(output[-1500:])}'
+    os.kill(outer.pid, signal.SIGTERM)
+    outer.wait(timeout=15)
+    def alive(pid):
+        state = subprocess.run(['ps', '-p', str(pid), '-o', 'stat='], text=True, capture_output=True).stdout.strip()
+        return bool(state and not state.startswith('Z'))
+    assert not alive(node_pid) and not alive(setup_pid), (outer.returncode, node_pid, setup_pid)
+    group = subprocess.run(['ps', '-axo', 'pid=,pgid=,stat='], text=True, capture_output=True, check=True).stdout
+    active = [line for line in group.splitlines() if (parts := line.split()) and len(parts) >= 3
+              and parts[1] == str(node_pid) and not parts[2].startswith('Z')]
+    assert not active, f'Setup process group survived launcher exit: {active}'
+    def footprint():
+        return sorted((str(path.relative_to(apply_project)), path.stat().st_size, path.stat().st_mtime_ns)
+                      for path in apply_project.rglob('*'))
+    stable = footprint()
+    time.sleep(1)
+    assert footprint() == stable, 'Project writes continued after launcher exit'
+    assert outer.returncode in (-signal.SIGTERM, 128 + signal.SIGTERM), outer.returncode
+    (root / 'launcher-term-apply.terminal.txt').write_text(clean(output) + f'\nOuter exit: {outer.returncode}; setup PID: {setup_pid}; no descendants or later writes.\n')
+    records.append({'scenario': 'launcher-term-apply', 'exit': outer.returncode, 'transcript': 'launcher-term-apply.terminal.txt'})
+    node_pid = setup_pid = None
+finally:
+    if outer.poll() is None:
+        os.kill(outer.pid, signal.SIGKILL)
+    for group in (node_pid, outer.pid):
+        if group:
+            try:
+                os.killpg(group, signal.SIGKILL)
+            except ProcessLookupError:
+                pass
     os.close(master)
 
 for name, args, environment, expected in [

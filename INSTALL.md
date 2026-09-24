@@ -1,6 +1,6 @@
 # Install Conquistador
 
-The current private-alpha release is
+The latest verified private-alpha release is
 [v0.0.12](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.12),
 from source commit `738d24268bee03e0bc8880d22b21b665951881c9` on the same delivery channel
 as dogfood. Its private tag and six downloaded assets were verified against the exact local
@@ -8,7 +8,10 @@ assembly. If this release is unavailable to your authorized account, use the pri
 [v0.0.11 release](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.11).
 A local package or branch install is not a released artifact. Keep the exact tag, full
 source commit, and checksums together. Public alpha is planned to start at `0.1.0`.
-The repository remains private and no npm package is published.
+The repository remains private and no npm package is published. This checkout is an unreleased
+0.0.13 candidate; its revised Node and project guide is not in the pinned v0.0.12 install. No
+v0.0.13 tag or release asset exists yet. Do not install it as a released version before separate
+authorization and exact package verification.
 The observed installation platform is macOS with Node 24. Windows/Linux commands below are
 portability guidance; native execution and native host registration still need their own checks.
 
@@ -30,9 +33,10 @@ In each receiving project, run:
 conquistador
 ```
 
-Plain `conquistador` asks which existing project directory to use (the current Git root is suggested when applicable), selects one host, shows its installation plan, applies after confirmation, runs the local doctor, and prints a first-task handoff. It installs one complete operator with its matching native entry. It chooses the package; you confirm. If host detection is inconclusive, it asks
+The pinned v0.0.12 release retains its earlier guide. In this unreleased 0.0.13 candidate,
+plain `conquistador` asks which existing project directory to use (the current Git root is suggested when applicable), selects one host, shows its installation plan, applies after confirmation, runs the local doctor, and prints a first-task handoff. It installs one complete operator with its matching native entry. It chooses the package; you confirm. If host detection is inconclusive, it asks
 which coding agent to use. Architecture choices stay behind `conquistador --advanced` and the
-explicit setup commands below. You can also choose an optional route in this guide, including on a later launch; that route performs its own preflight and confirmation in the same invocation. A failed or interrupted optional route returns nonzero while preserving completed copies. The default does not install all integrations. A plugin still needs host-manager registration, MCP needs client registration, skills.sh owns its copy and lockfile, and Hermes needs trust. The complete operator goes into `.conquistador`, with `SKILL.md`
+explicit setup commands below. You can also choose an optional route in this guide, including on a later launch; that route performs its own preflight and confirmation in the same invocation. A failed or interrupted optional route returns nonzero while preserving completed copies; if the operator was already installed, cancellation names that owned copy. The default does not install all integrations. A plugin still needs host-manager registration, MCP needs client registration, skills.sh owns its copy and lockfile, and Hermes needs trust. The complete operator goes into `.conquistador`, with `SKILL.md`
 at its root. Native skills use:
 
 | Coding agent | Project skill |
@@ -136,8 +140,8 @@ for work based on supplied facts.
 
 ### First task
 
-The chooser and `--task` flag below describe the 0.0.12 source. The prior
-`v0.0.11` fallback retains its original launch-plan handoff.
+The chooser and `--task` flag below are available in the verified v0.0.12 release and
+this 0.0.13 source candidate. The prior `v0.0.11` fallback retains its original launch-plan handoff.
 
 The TUI lets you choose a first task before installation. For a scripted Codex install,
 `conquistador --host codex --task diagnose-growth --yes` prints the same task handoff.

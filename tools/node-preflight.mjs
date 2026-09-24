@@ -91,15 +91,23 @@ export async function nodePreflight() {
   }
   ui.outro(`Continuing with ${found.path}. Your shell's Node selection is unchanged.`);
   return new Promise(resolve => {
+    // A separate process group keeps the re-exec and every local setup descendant
+    // together. Killing only the Node 24 PID can orphan its installer mid-write.
+    const grouped = process.platform !== 'win32';
     const child = spawn(found.path, [process.argv[1], ...process.argv.slice(2)], {
-      cwd: process.cwd(), env: { ...process.env, CONQUISTADOR_NODE_PREFLIGHT: '1' }, stdio: 'inherit',
+      cwd: process.cwd(), env: { ...process.env, CONQUISTADOR_NODE_PREFLIGHT: '1' }, stdio: 'inherit', detached: grouped,
     });
     let forwarded;
     let spawnError;
     const signals = ['SIGINT', 'SIGTERM', 'SIGHUP'];
     const forward = Object.fromEntries(signals.map(signal => [signal, () => {
       forwarded ??= signal;
-      child.kill(signal);
+      try {
+        if (grouped && child.pid) process.kill(-child.pid, signal);
+        else child.kill(signal);
+      } catch (error) {
+        if (error.code !== 'ESRCH') child.kill(signal);
+      }
     }]));
     for (const signal of signals) process.on(signal, forward[signal]);
     child.on('error', error => { spawnError = error; });

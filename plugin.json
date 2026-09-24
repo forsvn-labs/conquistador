@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "conquistador",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "description": "A project operator for growth, GTM, sales, marketing, product, and knowledge work.",
   "author": {
     "name": "FORSVN",

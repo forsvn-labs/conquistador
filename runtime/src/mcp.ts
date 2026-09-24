@@ -138,7 +138,7 @@ export async function runMcpStdio(options: McpOptions = {}): Promise<void> {
     if (message.method === "initialize" && !initialized) {
       if (typeof params.protocolVersion !== "string" || !params.clientInfo || !params.capabilities) { await error(id, -32602, "Invalid initialization"); return; }
       initialized = true;
-      await send({ jsonrpc: "2.0", id, result: { protocolVersion: "2025-11-25", capabilities: { tools: {} }, serverInfo: { name: "conquistador", version: "0.0.12" } } }); return;
+      await send({ jsonrpc: "2.0", id, result: { protocolVersion: "2025-11-25", capabilities: { tools: {} }, serverInfo: { name: "conquistador", version: "0.0.13" } } }); return;
     }
     if (message.method === "ping") { await send({ jsonrpc: "2.0", id, result: {} }); return; }
     if (!ready) { await error(id, -32600, "Initialize the connection first"); return; }

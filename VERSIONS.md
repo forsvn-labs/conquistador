@@ -1,8 +1,10 @@
 # Versions
 
-Product, plugin, host, and portable-agent manifests identify this private-alpha source as `0.0.12`.
-The prior verified private release is `0.0.11`. Check the `v0.0.12` tag, source commit,
-and checksummed assets before treating version 0.0.12 as released.
+Product, plugin, host, and portable-agent manifests identify this unreleased private-alpha
+source candidate as `0.0.13`. The latest verified private release remains `0.0.12`; check its
+tag, source commit, and checksummed assets before treating it as released. This 0.0.13 branch
+is not a tag, release, or published package. Do not use a v0.0.13 install command until a
+separate release decision, exact package checks, and private tag/assets exist.
 Private alpha and dogfood are the same private delivery channel. Future private releases increment the `0.0.x` version. The planned public alpha starts at `0.1.0`.
 The live private source branch is `private-alpha`. npm publication stays disabled.
 
