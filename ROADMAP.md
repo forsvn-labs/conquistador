@@ -3,10 +3,11 @@
 ## Next private alpha
 
 1. Review the local growth-diagnosis and first-run repair recorded in [PROGRESS.md](PROGRESS.md).
-   Repeat the installed growth route and host method-read check with an ordinary request and
-   an unrelated coding request. Check the first-run task choice in a real TUI and a fresh host
-   session. Obtain the user's verdict on clarity, routing relevance, selected resources, and
-   first-task usefulness before claiming acceptance.
+   Repeat installed routes for all 38 declared methods and negative controls, then check the
+   selected method and required resource reads in a fresh host session. Exercise a multi-method
+   task with truthful specialist and workflow disclosure, a real second host, and cross-project
+   handoffs. Obtain the user's verdict on clarity, routing relevance, and usefulness before
+   claiming acceptance.
 2. Keep the authenticated private-Git durability check as a required gate for later private tags.
    It must delete acquisition cache before running the CLI lifecycle.
 

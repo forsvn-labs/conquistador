@@ -95,6 +95,9 @@ conquistador update             # Update this project from the installed CLI
 conquistador uninstall          # Remove both unchanged owned copies
 ```
 
+If you pass `--project PATH` from another directory, the setup and `start` handoffs print
+absolute skill paths for that project. Run the first task in a fresh host session opened there.
+
 To upgrade the CLI itself, install the next authorized version with npm, then update the project.
 Existing `.conquistador-operator` installations migrate through `conquistador operator update`.
 Modified files are preserved. Keep drafts and runtime data outside the owned installation.

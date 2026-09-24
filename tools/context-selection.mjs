@@ -44,13 +44,19 @@ function matchingMethods(query, contract) {
     if (!score || method.exclusions.some(phrase => includesPhrase(text, phrase))) continue;
     matches.push({ ...method, score });
   }
-  const growthMetric = /\b(?:growth|revenue|signups?|upgrades?|conversion|activation|retention|funnel|churn|trials?|leads?|orders?|sales|pipeline|trial to paid)\b/.test(text);
+  const growthMetric = /\b(?:growth|revenue|signups?|upgrades?|conversion|activation|retention|funnel|churn|trials?|leads?|orders?|sales|trial to paid|(?:sales|deal|revenue|lead) pipeline)\b/.test(text);
   const adverseChange = /\b(?:stall(?:ed|ing)?|flat|flattened|fall(?:ing)?|fell|drop(?:ped|ping)?|declin(?:e|ed|ing)|down|weak(?:en|ened|ening)?|slowed|missed target)\b/.test(text);
   const creationRequest = /\b(?:write|draft|create|post|email|article|copy|ads|campaign|blog)\b/.test(text);
   const asksForDiagnosis = /\b(?:diagnos(?:e|is)|investigat(?:e|ion)|analy[sz]e)\b/.test(text);
   if (growthMetric && adverseChange && (!creationRequest || asksForDiagnosis) && !matches.some(item => item.name === 'diagnose-growth')) {
     const method = contract.methods['diagnose-growth'] ?? contract.unavailableMethods.find(item => item.name === 'diagnose-growth');
     if (method && !method.exclusions.some(phrase => includesPhrase(text, phrase))) matches.push({ ...method, score: 30, inferredGrowth: true });
+  }
+  const growthResults = /\bgrowth\b(?:\s+\w+){0,3}\s+\b(?:results|performance)\b/.test(text);
+  const resultsReview = /\b(?:review|evaluate|assess|analy[sz]e|learn from)\b/.test(text);
+  if (growthResults && resultsReview && !matches.some(item => item.name === 'measure-growth')) {
+    const method = contract.methods['measure-growth'] ?? contract.unavailableMethods.find(item => item.name === 'measure-growth');
+    if (method && !method.exclusions.some(phrase => includesPhrase(text, phrase))) matches.push({ ...method, score: 30 });
   }
   // Channel disambiguation is local to a requested stage; other clauses keep their own methods.
   for (const [channel, modes] of Object.entries(contract.channelLocks)) {
@@ -198,14 +204,24 @@ export function selectRequestContext(prompt, { root = moduleRoot } = {}) {
   const unavailable = [];
   const selectedAll = [];
   let parentMethod = null;
+  const consider = item => {
+    if (!contract.methods[item.name] || !allowedKind(restriction, 'skill', item.name)) { unavailable.push(item.name); return; }
+    if (!selectedAll.some(value => value.name === item.name)) selectedAll.push(item);
+  };
   for (const clause of clauses) {
     parentMethod ??= parentMatch(clause, contract, restriction);
-    for (const item of matchingMethods(clause, contract)) {
-      if (!contract.methods[item.name] || !allowedKind(restriction, 'skill', item.name)) { unavailable.push(item.name); continue; }
-      if (!selectedAll.some(value => value.name === item.name)) selectedAll.push(item);
+    for (const item of matchingMethods(clause, contract)) consider(item);
+  }
+  for (const clause of requestClauses(prompt, { splitAnd: false })) {
+    const text = normalized(clause);
+    for (const method of [...Object.values(contract.methods), ...contract.unavailableMethods]) {
+      if (method.explicitOnly && !feedbackOptIn.test(clause)) continue;
+      const named = includesPhrase(text, method.name);
+      const compoundIntent = method.intents.some(intent => /\band\b/.test(intent) && includesPhrase(text, intent));
+      if ((named || compoundIntent) && !method.exclusions.some(phrase => includesPhrase(text, phrase))) consider(method);
     }
   }
-  const shapingRequested = ['shape this initiative', 'ambiguous initiative', 'bounded decision']
+  const shapingRequested = ['shape-initiative', 'shape this initiative', 'ambiguous initiative', 'bounded decision']
     .some(phrase => includesPhrase(normalized(query), phrase));
   const codingAction = /\b(?:refactor|rewrite|debug|implement|patch)\b/i.test(query)
     && /\b(?:code|function|handler|middleware|component|module|file|test|validation)\b/i.test(query);

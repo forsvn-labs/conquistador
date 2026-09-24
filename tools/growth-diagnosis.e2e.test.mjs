@@ -53,11 +53,34 @@ test('installed growth route, first task, hook context, and removal work togethe
   assert.ok(existsSync(join(project, '.conquistador/SKILL.md')));
   assert.ok(existsSync(join(project, '.agents/skills/conquistador/SKILL.md')));
 
+  const otherProject = join(work, 'other-project');
+  mkdirSync(otherProject);
+  const otherSetup = checked(run(cli, project, '--project', otherProject, '--host', 'codex', '--yes'), 'other-project setup');
+  assert.match(otherSetup, new RegExp(`Native skill: ${join(otherProject, '.agents/skills/conquistador/SKILL.md')}`));
+  assert.match(otherSetup, new RegExp(`read ${join(otherProject, '.conquistador/SKILL.md')}`));
+  const otherStart = checked(run(cli, project, 'start', '--project', otherProject), 'other-project start');
+  assert.match(otherStart, new RegExp(`Native skill: ${join(otherProject, '.agents/skills/conquistador/SKILL.md')}`));
+  const otherDoctor = JSON.parse(checked(run(cli, project, 'operator', 'doctor', '--project', otherProject, '--json'), 'other-project doctor'));
+  assert.equal(otherDoctor.path, join(otherProject, '.conquistador'));
+  const otherStatus = checked(run(cli, project, 'operator', 'status', '--project', otherProject), 'other-project status');
+  assert.ok(otherStatus.includes(join(otherProject, '.conquistador')));
+  checked(run(cli, project, 'operator', 'uninstall', '--project', otherProject), 'other-project uninstall');
+  assert.equal(existsSync(join(otherProject, '.conquistador')), false);
+  assert.ok(existsSync(join(project, '.conquistador')));
+
   const before = JSON.parse(checked(run(cli, project, 'operator', 'doctor', '--json'), 'doctor before hook'));
   assert.equal(before.library.available, 38);
   assert.equal(before.operatorActivation, 'manual');
   assert.equal(before.hooks.find(item => item.host === 'codex').routingAvailable, false);
   assert.equal(before.taskExecutionVerified, false);
+  const installedContract = JSON.parse(readFileSync(join(project, '.conquistador/library/conquistador/routing-contract.json'), 'utf8'));
+  const methodRoutes = Object.entries(installedContract.methods).map(([name, method]) => {
+    const text = `Use Conquistador to ${method.intents[0]}.`;
+    const route = JSON.parse(checked(run(cli, project, 'route', '--prompt', text), `method route: ${name}`));
+    assert.deepEqual(route.selected, [name], `${name}: ${JSON.stringify(route)}`);
+    return { name, prompt: text, selected: route.selected };
+  });
+  assert.equal(methodRoutes.length, 38);
 
   const routes = [prompt, ...paraphrases].map(text => {
     const route = JSON.parse(checked(run(cli, project, 'route', '--prompt', text), `route: ${text}`));
@@ -72,6 +95,21 @@ test('installed growth route, first task, hook context, and removal work togethe
   const explicitShape = JSON.parse(checked(run(cli, project, 'route', '--prompt',
     'Growth stalled and signups fell. Shape this initiative for our team.'), 'explicit initiative shaping'));
   assert.deepEqual(explicitShape.selected, ['diagnose-growth', 'shape-initiative']);
+  const namedMethods = JSON.parse(checked(run(cli, project, 'route', '--prompt',
+    'Use shape-initiative and plan-campaign to decide a launch approach.'), 'named methods'));
+  assert.deepEqual(namedMethods.selected, ['shape-initiative', 'plan-campaign']);
+  const ciFailure = JSON.parse(checked(run(cli, project, 'route', '--prompt',
+    'Our CI pipeline has slowed and deploy success fell. Diagnose the build failure.'), 'CI pipeline failure'));
+  assert.equal(ciFailure.action, 'abstain');
+  const reviewPrompt = 'Use Conquistador to review the latest growth results in this project. Name the sources and baseline, separate observed changes from assumptions, and recommend one keep, drop, or test decision. Mark missing data.';
+  const reviewRoute = JSON.parse(checked(run(cli, project, 'route', '--prompt', reviewPrompt), 'review growth first task'));
+  assert.deepEqual(reviewRoute.selected, ['measure-growth']);
+  const pricing = JSON.parse(checked(run(cli, project, 'route', '--prompt',
+    'Use Conquistador to design pricing and packaging for our B2B SaaS.'), 'pricing and packaging'));
+  assert.ok(pricing.selected.includes('design-pricing-and-packaging'));
+  const namedPricing = JSON.parse(checked(run(cli, project, 'route', '--prompt',
+    'Use design-pricing-and-packaging for this offer.'), 'named pricing method'));
+  assert.ok(namedPricing.selected.includes('design-pricing-and-packaging'));
   const launch = JSON.parse(checked(run(cli, project, 'route', '--prompt', 'Use Conquistador to draft a launch plan from product facts.'), 'launch route'));
   assert.deepEqual(launch.selected, ['plan-campaign']);
 
@@ -103,6 +141,27 @@ test('installed growth route, first task, hook context, and removal work togethe
     assert.ok(existsSync(location), `Missing installed resource: ${path}`);
     return { path, sha256: digest(readFileSync(location)) };
   });
+  const reviewHandled = spawnSync(process.execPath, [handler, '--handle', '--host', 'codex', '--event', 'prompt-submitted',
+    '--config', config], {
+    cwd: project, encoding: 'utf8', input: JSON.stringify({ hook_event_name: 'UserPromptSubmit', prompt: reviewPrompt }),
+  });
+  const reviewContext = JSON.parse(checked(reviewHandled, 'review growth hook')).hookSpecificOutput.additionalContext;
+  assert.match(reviewContext, /Learn from aggregate growth results \[measure-growth\]/);
+  assert.match(reviewContext, /Full method: library\/measure-growth\/METHOD.md/);
+  const namedHandled = spawnSync(process.execPath, [handler, '--handle', '--host', 'codex', '--event', 'prompt-submitted',
+    '--config', config], {
+    cwd: project, encoding: 'utf8', input: JSON.stringify({ hook_event_name: 'UserPromptSubmit',
+      prompt: 'Use shape-initiative and plan-campaign to decide a launch approach.' }),
+  });
+  const namedContext = JSON.parse(checked(namedHandled, 'named methods hook')).hookSpecificOutput.additionalContext;
+  assert.match(namedContext, /Shape an ambiguous initiative \[shape-initiative\]/);
+  assert.match(namedContext, /Plan a campaign or launch \[plan-campaign\]/);
+  const ciHandled = spawnSync(process.execPath, [handler, '--handle', '--host', 'codex', '--event', 'prompt-submitted',
+    '--config', config], {
+    cwd: project, encoding: 'utf8', input: JSON.stringify({ hook_event_name: 'UserPromptSubmit',
+      prompt: 'Our CI pipeline has slowed and deploy success fell. Diagnose the build failure.' }),
+  });
+  assert.deepEqual(JSON.parse(checked(ciHandled, 'CI pipeline hook')), {});
   const after = JSON.parse(checked(run(cli, project, 'operator', 'doctor', '--json'), 'doctor after hook'));
   const hook = after.hooks.find(item => item.host === 'codex');
   assert.equal(hook.routingAvailable, true);
@@ -115,6 +174,34 @@ test('installed growth route, first task, hook context, and removal work togethe
   assert.equal(existsSync(join(project, '.agents/skills/conquistador')), false);
   assert.equal(readFileSync(join(project, 'keep.txt'), 'utf8'), 'Keep this project file.\n');
 
+  const mcpPath = join(project, '.conquistador-mcp');
+  checked(run(cli, project, 'setup', 'install', '--target', 'mcp', '--path', mcpPath), 'local MCP install');
+  const connector = JSON.parse(readFileSync(join(mcpPath, 'connector.json'), 'utf8'));
+  const frames = [
+    { jsonrpc: '2.0', id: 1, method: 'initialize', params: {
+      protocolVersion: '2025-11-25', capabilities: {}, clientInfo: { name: 'growth-e2e', version: '1' },
+    } },
+    { jsonrpc: '2.0', method: 'notifications/initialized' },
+    { jsonrpc: '2.0', id: 2, method: 'tools/call', params: {
+      name: 'conquistador_files', arguments: { method: 'conquistador' },
+    } },
+    { jsonrpc: '2.0', id: 3, method: 'tools/call', params: {
+      name: 'conquistador_read', arguments: { path: 'conquistador/routing-contract.json' },
+    } },
+  ];
+  const mcp = spawnSync(connector.command, connector.args, {
+    cwd: project, encoding: 'utf8', input: frames.map(frame => JSON.stringify(frame)).join('\n') + '\n',
+  });
+  const mcpMessages = checked(mcp, 'installed MCP read').trim().split('\n').map(JSON.parse);
+  assert.equal(mcpMessages.length, 3);
+  const mcpFiles = JSON.parse(mcpMessages[1].result.content[0].text).files;
+  assert.ok(mcpFiles.includes('conquistador/routing-contract.json'));
+  const mcpContractText = mcpMessages[2].result.content[0].text;
+  assert.equal(Object.keys(JSON.parse(mcpContractText).methods).length, 38);
+  checked(run(cli, project, 'setup', 'uninstall', '--target', 'mcp', '--path', mcpPath), 'local MCP uninstall');
+  assert.equal(existsSync(mcpPath), false);
+  assert.equal(readFileSync(join(project, 'keep.txt'), 'utf8'), 'Keep this project file.\n');
+
   if (process.env.CONQUISTADOR_E2E_ARTIFACT) {
     const artifact = resolve(process.env.CONQUISTADOR_E2E_ARTIFACT);
     mkdirSync(dirname(artifact), { recursive: true });
@@ -123,9 +210,21 @@ test('installed growth route, first task, hook context, and removal work togethe
       packageVersion: JSON.parse(readFileSync(join(root, 'package.json'), 'utf8')).version,
       prompt,
       routes,
+      methodRoutes,
+      crossProject: { doctorTarget: otherDoctor.path, absoluteHandoff: true, removedOnlySelectedProject: true },
       unrelated: unrelated.action,
       incidental: incidental.action,
       explicitShape: explicitShape.selected,
+      namedMethods: namedMethods.selected,
+      ciFailure: ciFailure.action,
+      reviewRoute: reviewRoute.selected,
+      pricing: pricing.selected,
+      namedPricing: namedPricing.selected,
+      reviewHookContextSha256: digest(reviewContext),
+      namedHookContextSha256: digest(namedContext),
+      ciHookAbstained: true,
+      mcp: { listedRoutingContract: true, readRoutingContractSha256: digest(mcpContractText), methods: 38,
+        removed: true },
       launch: launch.selected,
       sourceReads,
       hookContextSha256: digest(context),

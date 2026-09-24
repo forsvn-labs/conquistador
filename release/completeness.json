@@ -4642,7 +4642,7 @@
     },
     {
       "path": "tools/request-text.mjs",
-      "sha256": "5051a079a41cbc70b55055dd8ae40dd471a7525dcf68a3577dd3013ff65c376f"
+      "sha256": "d8ca0746f53d317cacbf3cfce5b34d542a2657d435b008c7881e8d6366522941"
     },
     {
       "path": "tools/knowledge-index.mjs",

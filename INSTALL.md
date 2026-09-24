@@ -61,6 +61,10 @@ change. Modified, linked, unowned, or skills.sh-managed copies are refused. Doma
 restrictions must agree. A new host session is needed to refresh native discovery. Setup does not
 start automatic project routing, watchers, services or hooks.
 
+When `--project PATH` targets a different directory, setup and `start --project PATH` print
+absolute skill paths for that project. Open the host session in the selected project; `doctor`
+checks that selected installation, while the host must still perform and verify the task.
+
 For automation, `conquistador install` selects the current project and Codex skill. Adaptive host
 choice belongs to plain `conquistador` and `conquistador setup`. Use
 `--host bb`, `--host cursor`, `--host claude-code`, `--host copilot` or `--host none` to choose differently.
@@ -376,6 +380,8 @@ conquistador setup install --target mcp
 Copy `.conquistador-mcp/connector.json` into your client's server entry. It contains `command` and
 `args`; clients with `mcpServers` wrap that object under the chosen server name. The client starts
 and stops the process. Ask it to read `conquistador/SKILL.md`, then request a draft from supplied facts.
+The method tool can list and read the parent routing contract as well as method files. This is
+access to instructions, not execution of a method or specialist.
 
 The managed folder includes its server and library, so deleting the original source or clearing
 npm's cache does not break it. Node itself must remain installed. After Node replacement or moving

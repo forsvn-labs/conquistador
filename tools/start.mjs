@@ -25,9 +25,7 @@ export function runStart(args, cwd = process.cwd(), list = false) {
   }
   console.log(`Conquistador in ${project}\n`);
   console.log(`Read the skill: ${entry}`);
-  console.log(operatorNextSteps(path, installedHosts(record), project, FIRST_TASKS[task]));
-  console.log(`\nIf native discovery is unavailable, ask the agent to read ${entry} and follow it.\n`);
-  console.log('Explore: conquistador skills\nCheck: conquistador doctor\nUpdate: conquistador update\nRemove: conquistador uninstall');
+  console.log(operatorNextSteps(path, installedHosts(record), cwd, FIRST_TASKS[task]));
   console.log('Skill files are installed; host discovery and task quality still need a real task.');
   return 0;
 }

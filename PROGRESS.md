@@ -48,6 +48,34 @@ bundled source digest in `tools/oxlint/anti-slop/UPSTREAM.md`. The plugin runs; 
 rule reports a large pre-existing baseline in touched files, so this candidate does not claim a
 clean anti-slop lint gate. Build and full product-test results are recorded after verification.
 
+### Independent review repairs, still local
+
+The first independent review of `ae4fc37` found that the selector dropped an explicitly named
+`shape-initiative` method beside `plan-campaign`, treated a slowing CI pipeline as a growth
+problem, and failed to route the guide's "Review growth results" prompt. The corrected selector
+preserves named methods, requires a business pipeline phrase for growth inference, and selects
+`measure-growth` for a growth-results review. The installed CLI and prompt hook check all three.
+
+The wider review found that splitting requests at "and" made
+`design-pricing-and-packaging` unreachable by its exact name and its natural "pricing and
+packaging" intent. It also found that local MCP listed the parent's 193,854-byte routing
+contract but refused to read it under a 131,072-byte file limit. Compound declared intents now
+match within a bounded unsplit clause, while ordinary clauses retain their separate routing.
+MCP accepts up to 262,144 bytes per file, still enforces its 524,288-byte encoded response limit,
+and reads the contract from a managed connector.
+
+A separate cross-project check found a handoff problem. Doctor and status targeted the requested
+project, but setup and `start` showed relative skill paths from the current working directory
+when `--project` selected another project. Handoffs now use absolute paths in that case. An
+installed two-project end-to-end check confirms doctor and status target the selected project,
+both handoffs name its absolute skill path, and uninstall removes only that project.
+
+The end-to-end artifact now includes one-route checks for all 38 declared first intents, the
+growth request and paraphrases, explicit multi-method selection, unrelated and CI coding
+abstention, first-task hook context, cross-project ownership, and managed MCP listing and read.
+These checks cover the installed CLI and local protocol. They do not establish live delivery by
+another native host, independent specialist contexts, provider access, or a human verdict.
+
 ## Private-alpha 0.0.9 shipped
 
 Conquistador can now route an ordinary submitted prompt against the methods that are actually

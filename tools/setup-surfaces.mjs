@@ -80,12 +80,12 @@ export function operatorNextSteps(path, hosts, cwd = process.cwd(), task = {
   const display = local ? basename(path) : path;
   const lines = [];
   if (hosts.includes('bb')) lines.push(
-    'BB: open or create a thread in the receiving project and environment.',
+    `BB: open or create a thread in ${dirname(path)} and its environment.`,
     `Ask its agent to read ${join(display, 'SKILL.md')} and follow it for your task.`,
     `For an explicit specialist team, follow ${join(display, 'hosts/coding-agent/README.md')}.`,
     'BB owns the provider, model, permissions and child threads. Setup did not install a BB plugin or request router. Native provider discovery is separate.');
   for (const host of hosts.filter(host => hostFolders[host])) lines.push(
-    `${hostLabels[host]}: start a fresh session in this project, select Conquistador, or name it in your prompt.`,
+    `${hostLabels[host]}: start a fresh session in ${local ? 'this project' : dirname(path)}, select Conquistador, or name it in your prompt.`,
     `Native skill: ${local ? join(hostFolders[host], 'SKILL.md') : join(path, '..', hostFolders[host], 'SKILL.md')}.`);
   if (hosts.includes('hermes')) lines.push('Hermes trust is separate: ' + shellCommand(['hermes', 'skills', 'trust', dirname(path)]) + '. Setup did not grant trust or install Hermes.');
   if (!hosts.some(host => hostFolders[host]) && !hosts.includes('bb')) lines.push(`Ask your coding agent or custom host to read ${join(display, 'SKILL.md')} and follow it.`);
@@ -97,7 +97,7 @@ export function operatorNextSteps(path, hosts, cwd = process.cwd(), task = {
     `Method use: check the host trace for the selected full method and required resource reads; then review the result. Local doctor cannot verify this.`,
     `If discovery fails: refresh the host session, run conquistador doctor, or ask the host to read ${join(display, 'SKILL.md')} and follow it.`);
   if (hosts.includes('codex')) lines.push('Hook trust: if prompt routing is enabled, review the project and exact hook in Codex; run conquistador doctor to check registration. Registration does not prove delivery.');
-  lines.push('Run conquistador start --task ID to choose another first task; conquistador skills lists the capabilities. Use conquistador --help for other integration forms and their owners.',
+  lines.push(`Run ${local ? 'conquistador start --task ID' : shellCommand(['conquistador', 'start', '--task', 'ID', '--project', dirname(path)])} to choose another first task; conquistador skills lists the capabilities. Use conquistador --help for other integration forms and their owners.`,
     ...['doctor', 'update', 'uninstall'].map(action => local ? `conquistador operator ${action}` : shellCommand(['conquistador', 'setup', action, '--path', path])));
   return lines.join('\n');
 }

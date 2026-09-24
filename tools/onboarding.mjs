@@ -78,11 +78,11 @@ function versionNotice(inspection) {
   return `This project's payload differs from the current CLI (installed ${receipt.productVersion ?? 'unknown'}; CLI ${version}). Files were not changed.\nUpdate with: conquistador operator update`;
 }
 
-function printStart(inspection, task) {
+function printStart(inspection, task, cwd) {
   const hosts = inspection.hosts?.length ? inspection.hosts : ['none'];
   console.log(`Installed: ${inspection.path}`);
   console.log(`Use with: ${hosts.map(host => hostLabels[host] ?? host).join(', ')}`);
-  console.log(operatorNextSteps(inspection.path, hosts, inspection.project, FIRST_TASKS[task ?? 'launch-plan']));
+  console.log(operatorNextSteps(inspection.path, hosts, cwd, FIRST_TASKS[task ?? 'launch-plan']));
 }
 
 function planText(project, host, task) {
@@ -139,7 +139,7 @@ async function recommended({ options, cwd, run, ui, env, tty: interactive }) {
       console.log('Local files verified. Host discovery and task execution remain unverified.');
     } else console.log('Installed receipt integrity checked. Use the doctor from the installed release to verify completeness.');
     if (options.host && !inspection.hosts?.includes(options.host)) console.log('Recorded hosts were preserved. Use conquistador --advanced to review adding a host.');
-    printStart(inspection, options.task);
+    printStart(inspection, options.task, cwd);
     return 0;
   }
   if (inspection.legacy) {
@@ -164,7 +164,7 @@ async function recommended({ options, cwd, run, ui, env, tty: interactive }) {
       await runSetupAction(run, ['doctor', '--path', after.path]);
       console.log('Local files verified.');
     } else console.log('Domain restriction retained. Receipt integrity checked; subset readiness remains unverified.');
-    printStart(after, options.task);
+    printStart(after, options.task, cwd);
     return 0;
   }
 
@@ -203,7 +203,7 @@ async function recommended({ options, cwd, run, ui, env, tty: interactive }) {
 
   const finish = (dest, host, task) => {
     console.log('Local files verified. Host discovery and task execution remain unverified.');
-    printStart({ project: dest, path: join(dest, '.conquistador'), hosts: [host] }, task);
+    printStart({ project: dest, path: join(dest, '.conquistador'), hosts: [host] }, task, cwd);
   };
 
   const interactiveApply = async host => {

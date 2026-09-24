@@ -8,10 +8,10 @@ export function explicitInvocation(prompt) {
   return unquotedRequest(prompt).split(/(?<=[.!?;])\s+|\n+|\b(?:and|but)\b/i)
     .some(clause => !/\b(?:do not|don't|never|without)\b/i.test(clause) && new RegExp(invocation.source, 'i').test(clause));
 }
-export function requestClauses(prompt) {
+export function requestClauses(prompt, { splitAnd = true } = {}) {
   return unquotedRequest(prompt).replace(invocation, ' ')
     .replace(/\b[\w/-]+\.(?:tsx?|jsx?|mjs|cjs|css|scss|vue|svelte|py|go|rs|java|rb)\b/gi, ' ')
-    .split(/[.!?;\n]+|,|\b(?:and then|then|and|but)\b/i)
+    .split(splitAnd ? /[.!?;\n]+|,|\b(?:and then|then|and|but)\b/i : /[.!?;\n]+|,|\b(?:and then|then|but)\b/i)
     .map(clause => clause.trim())
     .filter(clause => clause && !/\b(?:do not|don't|dont|never|exclude|skip|without|not asking)\b/i.test(clause))
     .filter(clause => !/\b(?:string|fixture|example)\b/i.test(clause))
