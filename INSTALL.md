@@ -32,7 +32,7 @@ conquistador
 
 Plain `conquistador` asks which existing project directory to use (the current Git root is suggested when applicable), selects one host, shows its installation plan, applies after confirmation, runs the local doctor, and prints a first-task handoff. It installs one complete operator with its matching native entry. It chooses the package; you confirm. If host detection is inconclusive, it asks
 which coding agent to use. Architecture choices stay behind `conquistador --advanced` and the
-explicit setup commands below. You can also choose an optional route in this guide, including on a later launch; that route performs its own preflight and confirmation in the same invocation. The default does not install all integrations. A plugin still needs host-manager registration, MCP needs client registration, skills.sh owns its copy and lockfile, and Hermes needs trust. The complete operator goes into `.conquistador`, with `SKILL.md`
+explicit setup commands below. You can also choose an optional route in this guide, including on a later launch; that route performs its own preflight and confirmation in the same invocation. A failed or interrupted optional route returns nonzero while preserving completed copies. The default does not install all integrations. A plugin still needs host-manager registration, MCP needs client registration, skills.sh owns its copy and lockfile, and Hermes needs trust. The complete operator goes into `.conquistador`, with `SKILL.md`
 at its root. Native skills use:
 
 | Coding agent | Project skill |
@@ -76,7 +76,9 @@ For automation, `conquistador install` selects the current project and Codex ski
 choice belongs to plain `conquistador` and `conquistador setup`. Use
 `--host bb`, `--host cursor`, `--host claude-code`, `--host copilot` or `--host none` to choose differently.
 This checkout also supports `--hosts codex,bb,cursor` for several hosts. During update, it can add
-hosts while retaining existing owned skills. Removing an owned native host requires uninstalling
+hosts while retaining existing owned skills; the interactive guide also adds the first native
+host to a files-only operator. `--host none` on an existing native operator leaves its hosts
+and ownership intact. Removing an owned native host requires uninstalling
 the unchanged operator first. Existing single-host commands and v1 receipts remain supported.
 `--dry-run` checks install/update paths and ownership without creating files.
 The CLI itself lives in npm's global prefix. The receiving project gets no `package.json`,

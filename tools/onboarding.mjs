@@ -168,28 +168,22 @@ async function optionalIntegrationsSelected(choice, ui, project, ctx) {
   ui.note(`Selected ${choice} for ${project}. This route has its own preflight and confirmation. Host registration, trust, and activation remain manual. No other integration is installed automatically.`, 'Optional integration');
 
   const options = { route: choice, project };
-
-  if (choice === 'bot') options.bot = null;
-
+  let code;
   if (choice === 'advanced') {
     const { runSetupGuide } = await import('./setup-guide.mjs');
-    await runSetupGuide({ cwd: project, version, run: args => runSetupAction(ctx.run, args), ui });
-
-    return;
+    code = await runSetupGuide({ cwd: project, version, run: args => runSetupAction(ctx.run, args), ui });
+  } else {
+    if (choice === 'bot') options.bot = null;
+    const route = { ...ctx, options };
+    if (choice === 'bot') code = await runBotRoute({ ...route, runRecommended: overrides => recommended({ ...route, ...overrides }) });
+    else {
+      await runSetupAction(ctx.run, ['doctor', '--path', root]);
+      if (choice === 'skills') code = await runSkillsRoute(route);
+      if (choice === 'plugin') code = await runPluginRoute(route);
+      if (choice === 'mcp') code = await runMcpRoute(route);
+    }
   }
-
-  const route = { ...ctx, options };
-
-  if (choice === 'bot') await runBotRoute({ ...route, runRecommended: overrides => recommended({ ...route, ...overrides }) });
-  else {
-    await runSetupAction(ctx.run, ['doctor', '--path', root]);
-
-    if (choice === 'skills') await runSkillsRoute(route);
-
-    if (choice === 'plugin') await runPluginRoute(route);
-
-    if (choice === 'mcp') await runMcpRoute(route);
-  }
+  if (code) throw Object.assign(Error('Optional integration did not complete. Preserve any staged files and use its setup status before retrying.'), { exitCode: code });
 }
 
 async function chooseFirstTask(ui, initial = 'launch-plan', project, ctx) {
@@ -248,11 +242,13 @@ async function recommended({ options, cwd, run, ui, env, tty: interactive, spawn
     } else console.log('Installed receipt integrity checked. Use the doctor from the installed release to verify completeness.');
 
     if (options.host && !inspection.hosts?.includes(options.host)) {
-      if (!interactive || options.yes || options['dry-run']) {
+      if (options.host === 'none') {
+        console.log('Files-only requested. Existing native hosts and their ownership were preserved. Use explicit operator uninstall to remove unchanged owned copies.');
+      } else if (!interactive || options.yes || options['dry-run']) {
         console.log('Recorded hosts were preserved. Use conquistador --advanced to review adding a host.');
       } else {
         assertNoDiscoveryConflict(project, options.host);
-        const hosts = [...new Set([...(inspection.hosts ?? []), options.host])];
+        const hosts = [...new Set([...(inspection.hosts ?? []).filter(host => host !== 'none'), options.host])];
         const add = ['update', '--target', 'operator', '--project', project, '--hosts', hosts.join(',')];
         await runSetupAction(run, [...add, '--dry-run']);
         const native = hostFolders[options.host] && join(project, hostFolders[options.host]);

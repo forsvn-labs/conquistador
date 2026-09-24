@@ -1,7 +1,7 @@
 import { existsSync, lstatSync, readdirSync, realpathSync, statSync } from 'node:fs';
 import { constants, homedir, userInfo } from 'node:os';
 import { dirname, join } from 'node:path';
-import { spawnSync } from 'node:child_process';
+import { spawn, spawnSync } from 'node:child_process';
 import { cancellableUi } from './onboarding-ui.mjs';
 import { shellCommand } from './install-paths.mjs';
 
@@ -90,9 +90,23 @@ export async function nodePreflight() {
     return 1;
   }
   ui.outro(`Continuing with ${found.path}. Your shell's Node selection is unchanged.`);
-  const child = spawnSync(found.path, [process.argv[1], ...process.argv.slice(2)], {
-    cwd: process.cwd(), env: { ...process.env, CONQUISTADOR_NODE_PREFLIGHT: '1' }, stdio: 'inherit',
+  return new Promise(resolve => {
+    const child = spawn(found.path, [process.argv[1], ...process.argv.slice(2)], {
+      cwd: process.cwd(), env: { ...process.env, CONQUISTADOR_NODE_PREFLIGHT: '1' }, stdio: 'inherit',
+    });
+    let forwarded;
+    let spawnError;
+    const signals = ['SIGINT', 'SIGTERM', 'SIGHUP'];
+    const forward = Object.fromEntries(signals.map(signal => [signal, () => {
+      forwarded ??= signal;
+      child.kill(signal);
+    }]));
+    for (const signal of signals) process.on(signal, forward[signal]);
+    child.on('error', error => { spawnError = error; });
+    child.on('close', (code, signal) => {
+      for (const name of signals) process.off(name, forward[name]);
+      if (spawnError) console.error(`[conquistador] ${spawnError.message}\n${message}`);
+      resolve(spawnError ? 1 : (signal || forwarded) ? 128 + (constants.signals[signal || forwarded] ?? 1) : code ?? 1);
+    });
   });
-  if (child.error) { console.error(`[conquistador] ${child.error.message}\n${message}`); return 1; }
-  return child.signal ? 128 + (constants.signals[child.signal] ?? 1) : child.status ?? 1;
 }

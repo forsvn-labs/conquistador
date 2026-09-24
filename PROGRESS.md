@@ -2,6 +2,16 @@
 
 ## Unshipped Node preflight and first-run setup investigation
 
+Follow-up installed-package E2E failure matrix (independent review of PR head `87d7a03`):
+
+| Scenario | Required outcome | Observed before repair |
+| --- | --- | --- |
+| Files-only operator → add Claude Code | Confirm and record native host, preserving existing ownership | Invalid `none,claude-code` host set; exit 1 |
+| Native operator → explicit `--host none` | Preserve existing native host; do not convert ownership | Invalid host union or misleading host-add attempt |
+| Returning or fresh operator → optional route fails or interrupts | Preserve route exit 1/130 and completed copies | First-task chooser resumes; command exits 0 |
+| Unsupported Node launcher → verified Node 24 child → outer SIGTERM | Forward termination and reap setup child | Launcher exits; child remains orphaned |
+
+
 E2E failure matrix (installed 0.0.12 CLI, neutral `/tmp`, before implementation):
 
 | Node / terminal / invocation | Expected safe outcome | Observed baseline |
@@ -29,17 +39,26 @@ adding a host to an unchanged BB operator could adopt an independently managed n
 without naming that ownership transfer at confirmation. The returning-host plan now names the
 exact folder and warns that operator uninstall will remove it. Declining preserves the original
 skill and host record; accepting marks it adopted. The installed-package E2E covers both outcomes
-and the subsequent uninstall.
+and the subsequent uninstall. The next review found three additional P2 defects in the new
+paths: `none` combined with a native host, lost optional-route statuses, and an orphaned Node 24
+child after launcher SIGTERM. The returning-host union now removes the files-only sentinel,
+`--host none` explicitly preserves existing native owners, optional routes stop and return their
+nonzero or 130 status, and the unsupported-Node launcher forwards termination to its child and
+waits for it. No partial setup is rolled back or called complete.
 
 Node 24.21.0 `npm run build` and `npm test` passed (240 host/tooling checks plus runtime,
-catalog and evaluation suites). A locally packed and installed tarball passed 13 TTY/non-TTY
+catalog and evaluation suites). A locally packed and installed tarball passed 19 TTY/non-TTY
 scenarios: wrong-Node continuation, cancel, no-candidate guidance, repeat setup, right-Node
-repeat, optional MCP selection, returning-host adoption decline and acceptance, noninteractive
-and help/version paths. Repeat with
+repeat, optional MCP selection, returning-host adoption decline and acceptance, files-only host
+addition and native-owner preservation, optional-route failure/interrupt (fresh and returning),
+launcher SIGTERM child cleanup, noninteractive and help/version paths. Repeat with
 `CONQUISTADOR_E2E_WRONG_NODE=/path/to/node26 CONQUISTADOR_E2E_NODE24=/path/to/node24
 python3 tools/node-onboarding.e2e.py INSTALLED_CLI OUTPUT_DIR` after `npm pack` and an isolated
 `npm install --prefix` of the resulting tarball. The uncommitted evidence is in
-`dist/node-onboarding-e2e/node-onboarding-e2e.json` and matching terminal transcripts.
+`dist/node-onboarding-e2e/node-onboarding-e2e.json` and matching terminal transcripts. The
+exact committed HEAD was also archived into a clean tracked-source copy, packed without
+`node_modules` (1,663 files, 4.26 MB), installed in an isolated prefix and passed all 19
+scenarios again in `dist/node-onboarding-e2e/clean-evidence/node-onboarding-e2e.json`.
 The touched-JS anti-slop run reports only the inherited readable-spacing rule (no other rules).
 These tests establish local setup behavior, not host registration, model task quality, or a
 private release. CHANGELOG.md records shipped versions only, so this unshipped change does not

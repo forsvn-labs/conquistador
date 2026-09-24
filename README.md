@@ -48,7 +48,7 @@ lifecycle are verified.
 Plain `conquistador` installs one complete project operator. It chooses the package; you confirm.
 If it cannot tell which coding agent you are using, it asks for one host. The happy path is one
 confirmation. Architecture choices stay behind `conquistador --advanced` and explicit setup
-commands. The guide also lets you select an optional plugin, skills.sh copy, MCP connector, or bot route within the same session; each has its own plan and confirmation. Client registration, host trust, and native discovery remain manual. No optional surface is installed by default. No receiving-project package manifest, dependency or lockfile is added by the recommended operator path.
+commands. The guide also lets you select an optional plugin, skills.sh copy, MCP connector, or bot route within the same session; each has its own plan and confirmation. If a selected integration fails or is interrupted, setup preserves completed copies and returns that failure instead of claiming success. Client registration, host trust, and native discovery remain manual. No optional surface is installed by default. No receiving-project package manifest, dependency or lockfile is added by the recommended operator path.
 
 ```text
 .conquistador/
@@ -115,7 +115,7 @@ or describe your own. Setup still cannot verify host discovery or the task resul
 
 To upgrade the CLI itself, install the next authorized version with npm, then update the project.
 Existing `.conquistador-operator` installations migrate through `conquistador operator update`.
-Modified files are preserved. When adding a host to an existing operator, the confirmation names any unchanged independent skill that will be adopted; future operator uninstall removes adopted copies. Keep drafts and runtime data outside the owned installation.
+Modified files are preserved. A files-only operator can add its first native host through the interactive guide. `--host none` does not remove native hosts from an existing operator. When adding a host, the confirmation names any unchanged independent skill that will be adopted; future operator uninstall removes adopted copies. Keep drafts and runtime data outside the owned installation.
 
 ## What installation proves
 

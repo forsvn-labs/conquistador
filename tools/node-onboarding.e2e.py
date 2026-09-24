@@ -10,6 +10,8 @@ import os
 import pty
 import re
 import select
+import signal
+import time
 import shutil
 import struct
 import subprocess
@@ -29,7 +31,7 @@ if not subprocess.check_output([wrong_node, '-v']).startswith(b'v26') or not sub
     sys.exit('Expected Node 26 and Node 24 executables, respectively.')
 if wrong in ('/opt/homebrew/bin', '/usr/local/bin'):
     sys.exit('Use an isolated Node 26 bin directory, not Homebrew bin, to exercise the no-candidate path.')
-for name in ['neutral', 'project', 'other', 'empty-home', 'adoption']:
+for name in ['neutral', 'project', 'other', 'empty-home', 'adoption', 'files-only', 'fresh-failure', 'optional-failure']:
     shutil.rmtree(root / name, ignore_errors=True)
     (root / name).mkdir(parents=True)
 env = {**os.environ, 'PATH': wrong + ':/usr/bin:/bin', 'CLAUDECODE': '1'}
@@ -40,10 +42,10 @@ def clean(data):
     return re.sub(r'\x1b(?:\[[0-9;?]*[A-Za-z]|\][^\x07]*\x07)', '', data.decode('utf8', 'replace')).replace('\r', '')
 
 
-def terminal(name, cwd, steps, environment=env, args=()):
+def terminal(name, cwd, steps, environment=env, args=(), command=(cli,)):
     master, slave = pty.openpty()
     fcntl.ioctl(slave, termios.TIOCSWINSZ, struct.pack('HHHH', 40, 120, 0, 0))
-    process = subprocess.Popen([cli, *args], cwd=cwd, env=environment, stdin=slave, stdout=slave, stderr=slave)
+    process = subprocess.Popen([*command, *args], cwd=cwd, env=environment, stdin=slave, stdout=slave, stderr=slave)
     os.close(slave)
     transcript = b''
     for phrase, keys in steps:
@@ -115,6 +117,15 @@ code, text = terminal('repeat-optional-mcp', project, [
 ])
 assert code == 0 and (project / '.conquistador-mcp/connector.json').is_file() and 'Client registration is still required' in text
 assert (project / '.conquistador/.conquistador-install.json').read_bytes() == receipt
+code, text = terminal('returning-optional-interrupt', project, [
+    (b'How do you want to continue', b'\r'),
+    (b'Where should Conquistador', b'\r'),
+    (b'What do you want to do first', b'\x1b[B\x1b[B\x1b[B\x1b[B\x1b[B\r'),
+    (b'Optional integrations', b'\x1b[B\x1b[B\x1b[B\x1b[B\x1b[B\r'),
+    (b'What would you like to set up', b'\x03'),
+])
+assert code == 130 and text.count('◆  What do you want to do first') == 1, (code, text)
+assert (project / '.conquistador/.conquistador-install.json').read_bytes() == receipt
 
 adoption = root / 'adoption'
 adoption.mkdir(exist_ok=True)
@@ -145,6 +156,88 @@ record = json.loads((adoption / '.conquistador/project-installation.json').read_
 assert record['hosts'] == ['bb', 'claude-code'] and record['skills'][0]['adopted'] is True, record
 result = subprocess.run([cli, 'uninstall'], cwd=adoption, env=right_env, text=True, capture_output=True)
 assert result.returncode == 0 and not native.exists(), (result.stdout, result.stderr)
+
+files_only = root / 'files-only'
+result = subprocess.run([cli, '--host', 'none', '--yes'], cwd=files_only, env=right_env, text=True, capture_output=True)
+assert result.returncode == 0, result.stderr
+code, text = terminal('files-only-add-first-host', files_only, [
+    (b'Add this host', b'y\r'),
+    (b'What do you want to do first', b'\r'),
+], right_env, ['--host', 'claude-code'])
+assert code == 0 and (files_only / '.claude/skills/conquistador/SKILL.md').is_file(), (code, text)
+assert json.loads((files_only / '.conquistador/project-installation.json').read_text())['hosts'] == ['claude-code']
+receipt = (files_only / '.conquistador/.conquistador-install.json').read_bytes()
+code, text = terminal('native-host-none-preserved', files_only, [
+    (b'What do you want to do first', b'\r'),
+], right_env, ['--host', 'none'])
+assert code == 0 and (files_only / '.conquistador/.conquistador-install.json').read_bytes() == receipt
+
+no_npx = {**env, 'PATH': '/usr/bin:/bin'}
+optional_failure = root / 'optional-failure'
+result = subprocess.run([cli, '--host', 'none', '--yes'], cwd=optional_failure, env=right_env, text=True, capture_output=True)
+assert result.returncode == 0, result.stderr
+code, text = terminal('returning-optional-failure', optional_failure, [
+    (b'Where should Conquistador', b'\r'),
+    (b'What do you want to do first', b'\x1b[B\x1b[B\x1b[B\x1b[B\x1b[B\r'),
+    (b'Optional integrations', b'\x1b[B\r'),
+    (b'Which host should skills.sh', b'\r'),
+    (b'Install the compact', b'\r'),
+], no_npx, command=(right_node, cli))
+assert code == 1 and 'The skills manager step did not complete' in text and text.count('◆  What do you want to do first') == 1, (code, text)
+
+fresh = root / 'fresh-failure'
+code, text = terminal('fresh-optional-interrupt', neutral, [
+    (b'Where should Conquistador', b'\x1b[B\r'),
+    (b'Absolute or relative', b'../fresh-failure\r'),
+    (b'Set up Conquistador', b'\x1b[B\x1b[B\x1b[B\x1b[B\r'),
+    (b'Optional integrations', b'\x1b[B\x1b[B\x1b[B\x1b[B\x1b[B\r'),
+    (b'Set up Conquistador', b'\r'),
+    (b'What would you like to set up', b'\x03'),
+], right_env)
+assert code == 130 and (fresh / '.conquistador/SKILL.md').is_file() and 'Conquistador files are ready.' not in text, (code, text)
+
+# Terminate the launched PID while its verified Node 24 child is waiting for a project.
+master, slave = pty.openpty()
+fcntl.ioctl(slave, termios.TIOCSWINSZ, struct.pack('HHHH', 40, 120, 0, 0))
+outer = subprocess.Popen([cli], cwd=neutral, env=env, stdin=slave, stdout=slave, stderr=slave, start_new_session=True)
+os.close(slave)
+child_pid = None
+try:
+    output = b''
+    for phrase, keys in [(b'How do you want to continue', b'\r'), (b'Where should Conquistador', None)]:
+        for _ in range(200):
+            ready, _, _ = select.select([master], [], [], .1)
+            if ready:
+                output += os.read(master, 65536)
+            if phrase in output:
+                break
+        assert phrase in output, clean(output)
+        if keys:
+            os.write(master, keys)
+    children = subprocess.check_output(['pgrep', '-P', str(outer.pid)], text=True).split()
+    assert len(children) == 1, children
+    child_pid = int(children[0])
+    os.kill(outer.pid, signal.SIGTERM)
+    outer.wait(timeout=10)
+    for _ in range(50):
+        state = subprocess.run(['ps', '-p', str(child_pid), '-o', 'stat='], text=True, capture_output=True).stdout.strip()
+        if not state or state.startswith('Z'):
+            break
+        time.sleep(.1)
+    assert not state or state.startswith('Z'), (outer.returncode, child_pid, state)
+    assert outer.returncode in (-signal.SIGTERM, 128 + signal.SIGTERM), outer.returncode
+    (root / 'launcher-term.terminal.txt').write_text(clean(output) + f'\nOuter exit: {outer.returncode}; Node 24 child reaped: {child_pid}\n')
+    records.append({'scenario': 'launcher-term', 'exit': outer.returncode, 'transcript': 'launcher-term.terminal.txt'})
+    child_pid = None
+finally:
+    if outer.poll() is None:
+        os.kill(outer.pid, signal.SIGKILL)
+    if child_pid:
+        try:
+            os.kill(child_pid, signal.SIGKILL)
+        except ProcessLookupError:
+            pass
+    os.close(master)
 
 for name, args, environment, expected in [
     ('wrong-noninteractive', [], env, 1),
