@@ -12,6 +12,8 @@ const moduleRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const fail = message => { throw new Error(message); };
 const feedbackOptIn = /\b(?:submit|share|send)\s+(?:product\s+)?feedback\b|\breport (?:a )?conquistador (?:bug|failure|issue)\b|\bfile a conquistador issue\b/i;
 const connectionSetup = /\b(?:set\s*up|setup|install|connect|wire|configure)\b[\s\S]{0,80}\b(?:executor|hubspot|salesforce|pipedrive|crm|ads account)\b/i;
+
+const technicalNoun = /\b(?:code|functions?|handlers?|middleware|components?|modules?|files?|tests?|validation)\b/i;
 function allowedKind(restriction, kind, name) {
   if (!restriction) return true;
   try {
@@ -38,7 +40,6 @@ function matchingMethods(query, contract, { permitGrowthInference = true } = {})
   const matches = [];
   for (const method of [...Object.values(contract.methods), ...contract.unavailableMethods]) {
     if (method.explicitOnly && !feedbackOptIn.test(query)) continue;
-    if (inspect && method.kind === 'create' && !/\b(?:write|create|draft)\b/i.test(query)) continue;
     const intents = [method.name, ...method.intents];
 
     const hit = intents.flatMap((intent, index) => includesPhrase(text, intent)
@@ -47,6 +48,8 @@ function matchingMethods(query, contract, { permitGrowthInference = true } = {})
       .sort((a, b) => (b.kind === 'name') - (a.kind === 'name') || b.score - a.score)[0];
 
     if (!hit || method.exclusions.some(phrase => includesPhrase(text, phrase))) continue;
+
+    if (inspect && method.kind === 'create' && hit.kind !== 'name' && !/\b(?:write|create|draft)\b/i.test(query)) continue;
     matches.push({ ...method, score: hit.score, matchKind: hit.kind, matchPhrase: hit.phrase });
   }
 
@@ -223,12 +226,12 @@ export function selectRequestContext(prompt, { root = moduleRoot } = {}) {
   let parentMethod = null;
 
   const codingAction = /\b(?:refactor|rewrite|debug|implement|patch)\b/i.test(query)
-    && /\b(?:code|function|handler|middleware|component|module|file|test|validation)\b/i.test(query);
+    && technicalNoun.test(query);
 
   const businessDiagnosisRequested = clauses.some(clause =>
     /\b(?:diagnos(?:e|is)|investigat(?:e|ion)|analy[sz]e|explain|why|what is going on)\b/i.test(clause)
     && /\b(?:growth|revenue|signups?|upgrades?|conversion|activation|retention|funnel|churn|trials?|leads?|orders?|sales)\b/i.test(clause)
-    && !/\b(?:code|function|handler|middleware|component|module|file|test|validation)\b/i.test(clause));
+    && !technicalNoun.test(clause));
 
   const consider = item => {
 
@@ -247,7 +250,7 @@ export function selectRequestContext(prompt, { root = moduleRoot } = {}) {
   for (const clause of clauses) {
     parentMethod ??= parentMatch(clause, contract, restriction);
 
-    const technicalStage = /\b(?:code|function|handler|middleware|component|module|file|test|validation)\b/i.test(clause);
+    const technicalStage = technicalNoun.test(clause);
 
     for (const item of matchingMethods(clause, contract, { permitGrowthInference: !codingAction || (businessDiagnosisRequested && !technicalStage) })) consider(item);
   }

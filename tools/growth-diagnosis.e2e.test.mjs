@@ -212,6 +212,27 @@ test('installed growth route, first task, hook context, and removal work togethe
 
   assert.equal(whollyNegated.action, 'abstain');
 
+  const literalMarker = 'Do not design-pricing-and-packaging. CQPHRASE0TOKEN';
+  const markerRoute = JSON.parse(checked(run(cli, project, 'route', '--prompt', literalMarker), 'literal marker after negation'));
+
+  assert.equal(markerRoute.action, 'abstain', JSON.stringify(markerRoute));
+
+  const explicitReviewNames = [
+    ['Use Conquistador to audit campaign performance with brief-creative.', 'brief-creative'],
+    ['Use Conquistador to evaluate landing-page performance with improve-conversion.', 'improve-conversion'],
+  ];
+
+  for (const [text, expected] of explicitReviewNames) {
+    const route = JSON.parse(checked(run(cli, project, 'route', '--prompt', text), `explicit review name: ${text}`));
+
+    assert.ok(route.selected.includes(expected), `${text}: ${JSON.stringify(route)}`);
+  }
+
+  const pluralTestDebug = 'Debug why the signup tests are down.';
+  const pluralTestRoute = JSON.parse(checked(run(cli, project, 'route', '--prompt', pluralTestDebug), 'plural signup tests'));
+
+  assert.equal(pluralTestRoute.action, 'abstain', JSON.stringify(pluralTestRoute));
+
   const reviewPrompt = 'Use Conquistador to review the latest growth results in this project. Name the sources and baseline, separate observed changes from assumptions, and recommend one keep, drop, or test decision. Mark missing data.';
   const reviewRoute = JSON.parse(checked(run(cli, project, 'route', '--prompt', reviewPrompt), 'review growth first task'));
   assert.deepEqual(reviewRoute.selected, ['measure-growth']);
@@ -308,6 +329,21 @@ test('installed growth route, first task, hook context, and removal work togethe
     assert.deepEqual(JSON.parse(checked(response, `technical explanation hook: ${text}`)), {});
   }
 
+  for (const [text, expected] of explicitReviewNames) {
+    const response = spawnSync(process.execPath, [handler, '--handle', '--host', 'codex', '--event', 'prompt-submitted',
+      '--config', config], { cwd: project, encoding: 'utf8', input: JSON.stringify({ hook_event_name: 'UserPromptSubmit', prompt: text }) });
+
+    assert.match(JSON.parse(checked(response, `explicit review name hook: ${text}`)).hookSpecificOutput.additionalContext,
+      new RegExp(`\\[${expected}\\]`));
+  }
+
+  for (const text of [literalMarker, pluralTestDebug]) {
+    const response = spawnSync(process.execPath, [handler, '--handle', '--host', 'codex', '--event', 'prompt-submitted',
+      '--config', config], { cwd: project, encoding: 'utf8', input: JSON.stringify({ hook_event_name: 'UserPromptSubmit', prompt: text }) });
+
+    assert.deepEqual(JSON.parse(checked(response, `adversarial abstention hook: ${text}`)), {});
+  }
+
   const after = JSON.parse(checked(run(cli, project, 'operator', 'doctor', '--json'), 'doctor after hook'));
   const hook = after.hooks.find(item => item.host === 'codex');
   assert.equal(hook.routingAvailable, true);
@@ -369,6 +405,9 @@ test('installed growth route, first task, hook context, and removal work togethe
       namedMethods: namedMethods.selected,
       adversarialRoutes,
       technicalExplanations,
+      explicitReviewNames,
+      literalMarker,
+      pluralTestDebug,
       ciFailure: ciFailure.action,
       reviewRoute: reviewRoute.selected,
       pricing: pricing.selected,

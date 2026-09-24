@@ -10,10 +10,10 @@ export function explicitInvocation(prompt) {
 }
 
 export function requestClauses(prompt, { protectedPhrases = [] } = {}) {
-  let request = unquotedRequest(prompt).replace(invocation, ' ')
+  const request = unquotedRequest(prompt).replace(invocation, ' ')
     .replace(/\b[\w/-]+\.(?:tsx?|jsx?|mjs|cjs|css|scss|vue|svelte|py|go|rs|java|rb)\b/gi, ' ');
 
-  const protectedMatches = [];
+  const protectedSpans = [];
 
   for (const phrase of [...new Set(protectedPhrases)].sort((a, b) => b.length - a.length)) {
     const words = normalizeRequest(phrase).split(' ').filter(Boolean);
@@ -21,21 +21,40 @@ export function requestClauses(prompt, { protectedPhrases = [] } = {}) {
     if (words.length < 2) continue;
     const expression = new RegExp(`(?<![a-z0-9])${words.join('[\\s_-]+')}(?![a-z0-9])`, 'gi');
 
-    request = request.replace(expression, match => {
-      const token = `CQPHRASE${protectedMatches.length}TOKEN`;
-      protectedMatches.push(match);
+    for (const match of request.matchAll(expression)) {
+      const span = { start: match.index, end: match.index + match[0].length };
 
-      return token;
-    });
+      if (!protectedSpans.some(item => span.start < item.end && span.end > item.start)) protectedSpans.push(span);
+    }
   }
 
-  return request.split(/[.!?;\n]+|,|\b(?:and then|then|and|but)\b/i)
-    .map(clause => clause.trim())
-    .filter(clause => clause && !/\b(?:do not|don't|dont|never|exclude|skip|without|not asking)\b/i.test(clause))
-    .filter(clause => !/\b(?:string|fixture|example)\b/i.test(clause))
-    .filter(clause => !/\b(?:developer context|system context|routing score|smoke_context_|method path)\b/i.test(clause))
-    .map(clause => clause.replace(/CQPHRASE(\d+)TOKEN/g, (_, index) => protectedMatches[Number(index)])
-      .replace(/\b(?:using|with|from|for)\s+(?:this |the |our )?(?:already )?(?:approved|accepted|supplied|existing)\s+[\w -]+/gi, ' '));
+  const clauses = [];
+  let start = 0;
+
+  for (const separator of request.matchAll(/[.!?;\n]+|,|\b(?:and then|then|and|but)\b/gi)) {
+    const end = separator.index + separator[0].length;
+
+    if (protectedSpans.some(span => separator.index < span.end && end > span.start)) continue;
+
+    clauses.push(request.slice(start, separator.index));
+    start = end;
+  }
+
+  clauses.push(request.slice(start));
+
+  const requested = [];
+
+  for (const raw of clauses) {
+    const clause = raw.trim();
+
+    if (!clause || /\b(?:do not|don't|dont|never|exclude|skip|without|not asking)\b/i.test(clause)
+      || /\b(?:string|fixture|example)\b/i.test(clause)
+      || /\b(?:developer context|system context|routing score|smoke_context_|method path)\b/i.test(clause)) continue;
+
+    requested.push(clause.replace(/\b(?:using|with|from|for)\s+(?:this |the |our )?(?:already )?(?:approved|accepted|supplied|existing)\s+[\w -]+/gi, ' '));
+  }
+
+  return requested;
 }
 export function normalizeRequest(value) {
   return value.normalize('NFKD').replace(/[\u0300-\u036f]/g, '').replace(/đ/gi, 'd')

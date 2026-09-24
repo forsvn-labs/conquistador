@@ -128,6 +128,14 @@ The changed-line lint pass also removed an unused host import. The remaining con
 regex warning is intentional: the TUI rejects nonprintable text before generating a first-task
 handoff.
 
+A later installed adversarial review found that a literal parser marker could restore a negated
+pricing method, an inspection phrase could hide an explicitly named creative or conversion
+method, and plural "signup tests" could infer a growth problem. Clause parsing now protects
+compound phrases by their positions in the original request, with no text marker to collide
+with user input. An explicit method name survives an inspection phrase, while inferred creation
+still yields to inspection. Singular and plural technical nouns use one shared guard. The
+installed end-to-end check covers all three failures and positive business-diagnosis controls.
+
 A second live Codex CLI task used a freshly installed native skill to plan a one-week beta
 campaign, draft one launch email, and specify growth measurement from supplied facts. The trace
 recorded successful full reads of the parent method, `plan-campaign`, `write-copy`,
