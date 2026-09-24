@@ -1,8 +1,9 @@
 # Versions
 
-Product, plugin, host, and portable-agent manifests identify the shipped private alpha as `0.0.11`.
-Private alpha and dogfood are the same private delivery channel. This is the eleventh `0.0.x` release.
-Future private releases increment the `0.0.x` version. The planned public alpha starts at `0.1.0`.
+Product, plugin, host, and portable-agent manifests identify this private-alpha source as `0.0.12`.
+The prior verified private release is `0.0.11`. Check the `v0.0.12` tag, source commit,
+and checksummed assets before treating version 0.0.12 as released.
+Private alpha and dogfood are the same private delivery channel. Future private releases increment the `0.0.x` version. The planned public alpha starts at `0.1.0`.
 The live private source branch is `private-alpha`. npm publication stays disabled.
 
 The four older private releases retain their original tags and bytes: `v0.1.0`,
