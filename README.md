@@ -117,6 +117,10 @@ or describe your own. Setup still cannot verify host discovery or the task resul
 To upgrade the CLI itself, install the next authorized version with npm, then update the project.
 Existing `.conquistador-operator` installations migrate through `conquistador operator update`.
 Modified files are preserved. A files-only operator can add its first native host through the interactive guide. `--host none` does not remove native hosts from an existing operator. When adding a host, the confirmation names any unchanged independent skill that will be adopted; future operator uninstall removes adopted copies. Keep drafts and runtime data outside the owned installation.
+On a later interactive run, edited operator or recorded native skill files offer a named backup
+and re-setup. The backup keeps local additions inside those folders. The new installation retains
+the recorded hosts. Unowned files and unrelated project files are not replaced. See
+[installation options](INSTALL.md) for recovery details.
 
 ## What installation proves
 

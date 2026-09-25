@@ -1,5 +1,34 @@
 # Product progress
 
+## Interactive recovery, pending private review
+
+The installed 0.0.13 CLI reproduced the reported failure in a disposable project. With an
+edited `.conquistador/SKILL.md`, the bare command selected the project, printed "Your
+Conquistador files have local edits," and exited 1. The edit remained on disk. A fresh project
+completed the existing Node 24 handoff, setup, doctor, and first-task path. The trigger is a
+receipt mismatch in the operator or a recorded native skill. Node version selection and project
+selection are preceding steps, not the cause of this exit.
+
+The branch adds interactive choices to use edited files, inspect affected paths, choose another
+project, cancel, or explicitly back up and set up again. Re-setup preserves the operator and all
+recorded native skill folders in a named project backup before installing with the same hosts.
+The backup includes local additions inside those folders and a path manifest. Other project files
+stay in place. A failed manifest write restores the original paths. Noninteractive install and
+update still refuse modified copies. Unowned folders, conflicting operator copies, incomplete
+transactions, and domain-restricted copies do not get an automatic replacement path.
+
+A packed and installed CLI passed 26 PTY terminal scenarios, including edited-file cancellation,
+two consecutive re-setups with distinct backups, four-host preservation, manifest-write rollback,
+fresh install, optional-route behavior, and Node 24 continuation. Repeat with
+`CONQUISTADOR_E2E_WRONG_NODE=/path/to/node26 CONQUISTADOR_E2E_NODE24=/path/to/node24
+python3 tools/node-onboarding.e2e.py INSTALLED_CLI OUTPUT_DIR`. The uncommitted evidence is
+`dist/setup-recovery-evidence/e2e-reviewed/node-onboarding-e2e.json` with terminal transcripts.
+These checks establish local file recovery and CLI behavior, not host discovery or task quality.
+Node 24.21.0 `npm run build` and `npm test` passed: 240 host/tooling, 294 runtime,
+167 catalog, and 63 evaluation checks. The vendored anti-slop plugin reported only the
+existing readable-spacing rule in the touched JavaScript. With that inherited rule disabled
+for the focused pass, the touched files had no errors and one existing control-regex warning.
+
 ## Shipped 0.0.13 and installed-copy acceptance
 
 The [v0.0.13 private prerelease](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.13)

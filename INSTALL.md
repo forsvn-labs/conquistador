@@ -151,6 +151,17 @@ fresh host session and its trace for the selected full method and required resou
 On a later interactive launch, the TUI asks for a starter task or one custom task and prints
 the selected-project handoff. Printed management commands carry the selected absolute path.
 
+If the operator or its recorded native skills have local edits, the interactive command offers
+to use those files as they are or back them up and set up again. Re-setup names a backup folder
+in the selected project before it moves the Conquistador-owned folders. The backup includes
+local additions inside those folders. Setup then installs a fresh operator with the recorded
+hosts and runs the local doctor. You can repeat re-setup; each attempt gets a new backup folder.
+Files elsewhere in the project stay in place. Cancellation before the backup changes nothing.
+If setup fails after the backup, the prompt reports its path so you can recover the earlier files.
+Noninteractive commands still refuse modified or unowned files. A domain-restricted operator,
+unowned folder, conflicting operator copies, or unfinished transaction needs its original
+installer or inspection; the interactive command lets you choose another project.
+
 The complete operator and one native skill are the default interaction form. The other
 commands above prepare portable skills, plugins, MCP, or a BB adapter with their stated
 host ownership and activation steps. Installing those files does not register them in a

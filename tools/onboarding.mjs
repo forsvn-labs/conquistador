@@ -8,6 +8,7 @@ import { inspectProjectSkills, projectIntegration, treeDigest } from './project-
 import { operatorNextSteps } from './setup-surfaces.mjs';
 import { shellCommand } from './install-paths.mjs';
 import { assertNoDiscoveryConflict } from './onboarding-safety.mjs';
+import { preserveForReset, recoveryPlan } from './onboarding-recovery.mjs';
 import { cancellableUi } from './onboarding-ui.mjs';
 import { assertNode24, need, runBotRoute, runMcpRoute, runPluginRoute, runSetupAction, runSkillsRoute, resolveProject } from './onboarding-routes.mjs';
 
@@ -50,13 +51,14 @@ export function inspectOperator(project) {
     if (!info.isFile() || info.isSymbolicLink() || info.size > 262144) return { state: 'unowned', path, project };
     const receipt = JSON.parse(readFileSync(receiptPath, 'utf8'));
     if (receipt.schemaVersion !== 'conquistador.public-install/v1' || receipt.mode !== 'single-agent') return { state: 'unowned', path, project };
-    if (receipt.digest !== treeDigest(path)) return { state: 'modified', path, project, receipt };
+    const intact = receipt.digest === treeDigest(path);
     const integration = projectIntegration(path);
     try {
       if (integration) inspectProjectSkills(path);
     } catch {
-      return { state: 'modified', path, project, receipt };
+      return { state: 'modified', path, project, receipt, integration, hosts: installedHosts(integration), legacy: path === legacy };
     }
+    if (!intact) return { state: 'modified', path, project, receipt, integration, hosts: installedHosts(integration), legacy: path === legacy };
     return {
       state: 'unchanged',
       path,
@@ -218,18 +220,92 @@ async function chooseFirstTask(ui, initial = 'launch-plan', project, ctx) {
 async function recommended({ options, cwd, run, ui, env, tty: interactive, spawn: spawnProcess }) {
   const optionalContext = { cwd, run, ui, env, tty: interactive, spawn: spawnProcess };
   const project = resolveProject(options.project, cwd);
+  const otherProject = async () => recommended({ options: { ...options, project: await chooseProject(ui, project) }, cwd, run, ui, env, tty: interactive, spawn: spawnProcess });
+  const recoveryChoice = async message => {
+    for (;;) {
+      const choice = await need(ui, await ui.select({
+        message: `Setup needs attention in ${project}. What next?`,
+        options: [
+          { value: 'inspect', label: 'Show what needs attention' },
+          { value: 'project', label: 'Choose another project' },
+          { value: 'cancel', label: 'Cancel' },
+        ],
+      }));
+      if (choice === 'inspect') { ui.note(message, 'Existing files'); continue; }
+      if (choice === 'project') return otherProject();
+      ui.cancel('Cancelled. Existing files were preserved.');
+      return 0;
+    }
+  };
   console.log(`Project: ${project}`);
   const recovery = readdirSync(project).filter(name => name.startsWith('.conquistador-transaction-'));
-  if (recovery.length) throw Error(`A previous installation left recovery files: ${recovery.map(name => join(project, name)).join(', ')}. Preserve them and inspect the receipts with conquistador operator status before retrying. No new files were changed.`);
+  if (recovery.length) {
+    const message = `A previous installation left recovery files: ${recovery.map(name => join(project, name)).join(', ')}. Preserve them and inspect the receipts with conquistador operator status before retrying.`;
+    if (!interactive || options.yes || options['dry-run']) throw Error(`${message} No new files were changed.`);
+    return recoveryChoice(message);
+  }
   const inspection = inspectOperator(project);
   if (inspection.state === 'conflict') {
-    throw new Error('Both .conquistador and .conquistador-operator exist. Use conquistador operator status --path ABS to select one explicitly. Neither folder was changed.');
+    const message = 'Both .conquistador and .conquistador-operator exist. Inspect each with conquistador operator status --path ABS. Neither folder was changed.';
+    if (!interactive || options.yes || options['dry-run']) throw Error(message);
+    return recoveryChoice(message);
   }
   if (inspection.state === 'unowned') {
-    throw new Error('This folder contains files Conquistador does not own. Nothing was changed. Check its original installer or choose another folder.');
+    const message = 'This folder contains files Conquistador does not own. Check its original installer or choose another project.';
+    if (!interactive || options.yes || options['dry-run']) throw Error(`${message} Nothing was changed.`);
+    return recoveryChoice(message);
   }
   if (inspection.state === 'modified') {
-    throw new Error('Your Conquistador files have local edits. They were preserved. Inspect them with conquistador operator status before updating.');
+    if (!interactive || options.yes || options['dry-run']) throw Error('Your Conquistador files have local edits. They were preserved. Inspect them with conquistador operator status before updating.');
+    const plan = recoveryPlan(project, inspection, version);
+    for (;;) {
+      const choice = await need(ui, await ui.select({
+        message: `How do you want to continue with edited Conquistador files in ${project}?`,
+        options: [
+          { value: 'use', label: 'Use existing files without changes' },
+          ...(plan ? [{ value: 'reset', label: 'Back up and set up again' }] : []),
+          { value: 'inspect', label: 'Show affected paths' },
+          { value: 'project', label: 'Choose another project' },
+          { value: 'cancel', label: 'Cancel' },
+        ],
+      }));
+      if (choice === 'inspect') {
+        ui.note(`Edited operator: ${inspection.path}\n${plan ? `Backup will preserve: ${plan.paths.join(', ')}` : 'Re-setup needs an explicit scoped or original installer.'}\nCheck: ${shellCommand(['conquistador', 'operator', 'status', '--path', inspection.path])}`, 'Local files');
+        continue;
+      }
+      if (choice === 'project') return otherProject();
+      if (choice === 'cancel') { ui.cancel('Cancelled. Existing files were preserved.'); return 0; }
+      if (choice === 'use') {
+        console.log('Using edited files as they are. Local integrity is unverified.');
+        const task = options.task ? FIRST_TASKS[options.task] : (await chooseFirstTask(ui, 'launch-plan', project, optionalContext)).task;
+        printStart(inspection, task, cwd);
+        return 0;
+      }
+      if (choice === 'reset' && plan) {
+        ui.note(`Preserve: ${plan.paths.join(', ')}\nBackup: ${plan.backup}\nInstall: ${join(project, '.conquistador')} with ${plan.hosts.join(', ')}. Other project files stay in place.`, 'Re-setup plan');
+        const confirmed = await need(ui, await ui.confirm({ message: 'Back up these Conquistador files and set up again?', initialValue: false }));
+        if (!confirmed) continue;
+        const backup = preserveForReset(plan);
+        console.log(`Existing Conquistador files saved in ${backup}`);
+        try {
+          await runSetupAction(run, ['install', '--target', 'operator', '--project', project, '--hosts', plan.hosts.join(',')]);
+          await runSetupAction(run, ['doctor', '--path', join(project, '.conquistador')]);
+        } catch (error) {
+          error.message = `${error.message}\nBackup preserved: ${backup}`;
+          throw error;
+        }
+        console.log('Local files verified. Host discovery and task execution remain unverified.');
+        const after = inspectOperator(project);
+        let task;
+        try { task = options.task ? FIRST_TASKS[options.task] : (await chooseFirstTask(ui, 'launch-plan', project, optionalContext)).task; }
+        catch (error) {
+          if (error.cancelled) error.message = `Cancelled after setup. The new operator is installed. Your earlier files remain in ${backup}.`;
+          throw error;
+        }
+        printStart(after, task, cwd);
+        return 0;
+      }
+    }
   }
   if (inspection.state === 'unchanged' && !inspection.legacy) {
     const notice = versionNotice(inspection);

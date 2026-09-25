@@ -23,6 +23,9 @@ and ZIP are transports for the same complete package. The runtime, typed catalog
 durable jobs are optional. Every installation route needs a clear update and removal path.
 When setup targets another project, printed recovery commands must name that project's operator
 path so they work from the current directory.
+When an existing operator has local edits, the interactive command must let the user continue
+with those files or explicitly back up its owned folders before re-setup. A failed attempt must
+leave a named recovery path. Unowned files and other project files stay under their current owner.
 
 Public alpha should publish `@forsvn/conquistador` to the npm registry and make
 `npm i -g @forsvn/conquistador` the primary acquisition command. Keep the private Git command for
