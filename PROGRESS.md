@@ -2,6 +2,12 @@
 
 ## Interactive recovery, pending private review
 
+The product, plugin, host, and portable-agent metadata now identify the 0.0.14 private-alpha
+candidate. The 0.0.13 tag and assets remain the latest verified private release. A branch package
+does not establish release acceptance; publication is still pending merge and release approval.
+Node 24.21.0 build and all 764 local checks passed after the candidate's host and agent
+resource hashes were refreshed in `release/completeness.json`.
+
 The installed 0.0.13 CLI reproduced the reported failure in a disposable project. With an
 edited `.conquistador/SKILL.md`, the bare command selected the project, printed "Your
 Conquistador files have local edits," and exited 1. The edit remained on disk. A fresh project

@@ -6,6 +6,8 @@ containers. Use the original installer to update and remove a copy. Full skill a
 include all 38 outcome methods; domain and standalone method packages can contain fewer.
 
 Version [0.0.13](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.13) is the latest verified private alpha. See [INSTALL.md](../INSTALL.md) for the authenticated private-Git persistent CLI and exact release identity.
+The 0.0.14 source candidate can be installed in an isolated prefix using the local tarball
+procedure in INSTALL.md. It has no release tag or published assets yet.
 `private: true` blocks registry publication; private Git and local package execution remain possible. See [package verification](../INSTALL.md#verify-the-package).
 
 For Git acquisition, use the fixed release tag or its full source commit. Your GitHub account must
