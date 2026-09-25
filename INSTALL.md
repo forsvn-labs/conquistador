@@ -1,41 +1,28 @@
 # Install Conquistador
 
 The latest verified private-alpha release is
-[v0.0.13](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.13),
-from source commit `653058ac2b9c5f0cefe926bb238879191caf8a9b` on the same delivery channel
-as dogfood. Its annotated private tag and six downloaded assets were verified against the exact
-local assembly. If this release is unavailable to your authorized account, use the prior
-[v0.0.12 release](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.12).
+[v0.0.14](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.14),
+from source commit `cd34526e790e73042ed974dee27096dcb4e08538`. Its private prerelease
+has six assets, including `SHA256SUMS` and `assembly.json`. If this release is unavailable to
+your authorized account, use the prior
+[v0.0.13 release](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.13).
 A local package or branch install is not a released artifact. Keep the exact tag, full
 source commit, and checksums together. Public alpha is planned to start at `0.1.0`.
 The repository remains private and no npm package is published.
-This source branch has a 0.0.14 candidate. The verified 0.0.13 release commands below remain
-the default until 0.0.14 has a reviewed, published private tag and matching assets.
-To check the candidate without replacing a global CLI, run these commands from this checkout
-under Node 24 and use a new, empty output directory and install prefix:
-
-```sh
-npm pack --ignore-scripts --pack-destination /absolute/path/to/artifacts
-npm install --prefix /absolute/path/to/isolated-cli --ignore-scripts /absolute/path/to/artifacts/forsvn-conquistador-0.0.14.tgz
-/absolute/path/to/isolated-cli/node_modules/.bin/conquistador --version
-```
-
-The version command should print `0.0.14`. Run the isolated CLI in a disposable receiving
-project to check its interactive recovery path. This local tarball is not a private release.
 The observed installation platform is macOS with Node 24. Windows/Linux commands below are
 portability guidance; native execution and native host registration still need their own checks.
 
 ## Project operator and native skill, recommended
 
-The examples below target the verified private `v0.0.13` release. Use Node 24,
+The examples below target the verified private `v0.0.14` release. Use Node 24,
 npm, Git, and a GitHub account with access to the repository. Install the CLI once:
 
 ```sh
-npm install -g --ignore-scripts --install-links git+https://github.com/forsvn-labs/conquistador.git#v0.0.13
+npm install -g --ignore-scripts --install-links git+https://github.com/forsvn-labs/conquistador.git#v0.0.14
 ```
 
-If v0.0.13 is unavailable to your authorized account, use the identical command ending in
-`#v0.0.12` for the prior release. It has the earlier guide.
+If v0.0.14 is unavailable to your authorized account, use the identical command ending in
+`#v0.0.13` for the prior release. It lacks interactive edited-file recovery.
 
 In each receiving project, run:
 
@@ -43,7 +30,7 @@ In each receiving project, run:
 conquistador
 ```
 
-In the verified v0.0.13 release, plain `conquistador` asks which existing project directory to use (the current Git root is suggested when applicable), selects one host, shows its installation plan, applies after confirmation, runs the local doctor, and prints a first-task handoff. It installs one complete operator with its matching native entry. It chooses the package; you confirm. If host detection is inconclusive, it asks
+In the verified v0.0.14 release, plain `conquistador` asks which existing project directory to use (the current Git root is suggested when applicable), selects one host, shows its installation plan, applies after confirmation, runs the local doctor, and prints a first-task handoff. It installs one complete operator with its matching native entry. It chooses the package; you confirm. If host detection is inconclusive, it asks
 which coding agent to use. Architecture choices stay behind `conquistador --advanced` and the
 explicit setup commands below. You can also choose an optional route in this guide, including on a later launch; that route performs its own preflight and confirmation in the same invocation. A failed or interrupted optional route returns nonzero while preserving completed copies; if the operator was already installed, cancellation names that owned copy. The default does not install all integrations. A plugin still needs host-manager registration, MCP needs client registration, skills.sh owns its copy and lockfile, and Hermes needs trust. The complete operator goes into `.conquistador`, with `SKILL.md`
 at its root. Native skills use:
@@ -88,7 +75,7 @@ checks that selected installation, while the host must still perform and verify 
 For automation, `conquistador install` selects the current project and Codex skill. Adaptive host
 choice belongs to plain `conquistador` and `conquistador setup`. Use
 `--host bb`, `--host cursor`, `--host claude-code`, `--host copilot` or `--host none` to choose differently.
-Version 0.0.13 also supports `--hosts codex,bb,cursor` for several hosts. During update, it can add
+Version 0.0.14 also supports `--hosts codex,bb,cursor` for several hosts. During update, it can add
 hosts while retaining existing owned skills; the interactive guide also adds the first native
 host to a files-only operator. `--host none` on an existing native operator leaves its hosts
 and ownership intact. Removing an owned native host requires uninstalling
@@ -102,14 +89,14 @@ npm's cache, remove that dangling global entry before installing the corrected r
 
 ```sh
 npm uninstall -g @forsvn/conquistador
-npm install -g --ignore-scripts --install-links git+https://github.com/forsvn-labs/conquistador.git#v0.0.13
+npm install -g --ignore-scripts --install-links git+https://github.com/forsvn-labs/conquistador.git#v0.0.14
 conquistador version
 ```
 
 The one-time launcher remains available when you do not want a persistent CLI:
 
 ```sh
-npx -y --ignore-scripts --package=git+https://github.com/forsvn-labs/conquistador.git#v0.0.13 conquistador
+npx -y --ignore-scripts --package=git+https://github.com/forsvn-labs/conquistador.git#v0.0.14 conquistador
 ```
 
 Git acquisition can take time before Conquistador starts. Repeated npx invocations may resolve
@@ -122,7 +109,7 @@ and do not need that flag. Check acquisition immediately with `conquistador vers
 For a supplied release tarball, use the same persistent installation:
 
 ```sh
-npm install -g --ignore-scripts /absolute/path/forsvn-conquistador-0.0.13.tgz
+npm install -g --ignore-scripts /absolute/path/forsvn-conquistador-0.0.14.tgz
 conquistador
 ```
 
@@ -139,9 +126,9 @@ authenticate that sender. Keep the tag, full source commit, and checksum togethe
 
 | System | Calculate SHA-256 |
 | --- | --- |
-| macOS | `shasum -a 256 /absolute/path/forsvn-conquistador-0.0.13.tgz` |
-| Linux | `sha256sum /absolute/path/forsvn-conquistador-0.0.13.tgz` |
-| Windows PowerShell | `Get-FileHash -Algorithm SHA256 "C:\Downloads\forsvn-conquistador-0.0.13.tgz"` |
+| macOS | `shasum -a 256 /absolute/path/forsvn-conquistador-0.0.14.tgz` |
+| Linux | `sha256sum /absolute/path/forsvn-conquistador-0.0.14.tgz` |
+| Windows PowerShell | `Get-FileHash -Algorithm SHA256 "C:\Downloads\forsvn-conquistador-0.0.14.tgz"` |
 
 Node/npm must work before the guide can start. A supplied tarball does not require GitHub sign-in
 or Git, but npm may need registry access for package dependencies. No provider account is needed
@@ -149,7 +136,7 @@ for work based on supplied facts.
 
 ### First task
 
-The chooser and `--task` flag below are available in v0.0.13 and v0.0.12.
+The chooser and `--task` flag below are available in v0.0.14 and earlier releases.
 The prior `v0.0.11` fallback retains its original launch-plan handoff.
 
 The TUI lets you choose a first task before installation. For a scripted Codex install,
@@ -164,7 +151,7 @@ fresh host session and its trace for the selected full method and required resou
 On a later interactive launch, the TUI asks for a starter task or one custom task and prints
 the selected-project handoff. Printed management commands carry the selected absolute path.
 
-In the 0.0.14 candidate, if the operator or its recorded native skills have local edits, the
+In v0.0.14, if the operator or its recorded native skills have local edits, the
 interactive command offers to use those files as they are or back them up and set up again.
 Re-setup names a backup folder
 in the selected project before it moves the Conquistador-owned folders. The backup includes
@@ -358,8 +345,8 @@ listing nor a passing doctor proves activation or output quality. Record observa
 
 | Transport | Command or procedure |
 | --- | --- |
-| Optional persistent CLI | `npm install --global --ignore-scripts /absolute/path/forsvn-conquistador-0.0.13.tgz`, then `conquistador setup` in the receiving project |
-| Bun tarball | `bunx --package /absolute/path/forsvn-conquistador-0.0.13.tgz conquistador setup`; Node 24 remains required by the shebang |
+| Optional persistent CLI | `npm install --global --ignore-scripts /absolute/path/forsvn-conquistador-0.0.14.tgz`, then `conquistador setup` in the receiving project |
+| Bun tarball | `bunx --package /absolute/path/forsvn-conquistador-0.0.14.tgz conquistador setup`; Node 24 remains required by the shebang |
 | Source or ZIP | `node /absolute/path/conquistador-source/runtime/bin/conquistador.js setup` in the receiving project |
 | Exact private Git | `npx -y --ignore-scripts --package=git+https://github.com/forsvn-labs/conquistador.git#COMMIT conquistador setup`; replace `COMMIT` with the full commit from the release assembly record. For a persistent global copy add `--install-links` to `npm install -g`. |
 
@@ -408,8 +395,8 @@ See [host paths and invocation](docs/PLATFORMS.md#coding-agents).
 
 ## Prepared release assets
 
-The v0.0.13 private release assets include `conquistador-skill-0.0.13.zip` and
-`conquistador-plugin-0.0.13.zip`, both covered by `SHA256SUMS`. These expose one parent
+The v0.0.14 private release assets include `conquistador-skill-0.0.14.zip` and
+`conquistador-plugin-0.0.14.zip`, both covered by `SHA256SUMS`. These expose one parent
 with internal method files. Use the skill ZIP as a skills.sh local source or the plugin ZIP with a
 host plugin manager. The manager owns its installed copies. The source ZIP and Git checkout retain
 canonical authoring files; always run setup before pointing a direct manager at them.

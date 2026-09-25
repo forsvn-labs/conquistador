@@ -4,6 +4,20 @@ No public release is claimed. See [VERSIONS.md](VERSIONS.md) for independent pro
 versions. Verification establishes the stated local scope; native host behavior, useful model
 output, human acceptance and rights disposition require separate evidence.
 
+## 2026-09-25, 0.0.14 private alpha
+
+- Fourteenth private prerelease at
+  [`v0.0.14`](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.14) from exact merged
+  `private-alpha` commit `cd34526e790e73042ed974dee27096dcb4e08538`. The repository
+  remains private, and no npm registry package was published.
+- The interactive bare command offers recovery for edited operator or recorded native skill files.
+  Explicit re-setup makes a named backup before replacing owned files and keeps unrelated project
+  files. Noninteractive commands still refuse modified or unowned files.
+- The release has six assets: source ZIP, npm tarball, portable skill ZIP, portable plugin ZIP,
+  `SHA256SUMS`, and `assembly.json`. The assembly is `UNBOUND` and records no live execution or
+  human verdict. On the exact source commit, Node 24 bootstrap, build, full tests, package checksum
+  verification, and 26 installed-package PTY onboarding scenarios passed.
+
 ## 2026-09-25, 0.0.13 private alpha
 
 - Thirteenth private prerelease at

@@ -1,33 +1,31 @@
-# Conquistador 0.0.14 private-alpha candidate
+# Conquistador 0.0.14 private alpha
 
 Conquistador helps your coding agent do growth, marketing, sales, product and knowledge work.
 Give it an outcome and the relevant facts. It selects from 38 methods, names the specialists it
 uses, and returns a draft with review findings. Your coding agent supplies the model and tools.
 
 The latest verified private release is
-[v0.0.13](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.13),
-from source commit `653058ac2b9c5f0cefe926bb238879191caf8a9b`.
-[v0.0.12](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.12) remains
+[v0.0.14](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.14),
+from source commit `cd34526e790e73042ed974dee27096dcb4e08538`.
+[v0.0.13](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.13) remains
 an earlier fallback. Verify the private release identity and checksums before installation;
 local assembly alone does not establish release or human acceptance.
-This source branch identifies as 0.0.14. Its edited-file setup recovery is pending private
-release; the verified 0.0.13 install command below does not include that change.
 Private alpha and dogfood are the same `0.0.x` channel. Public alpha starts at `0.1.0`.
 
 ## Install once, use in each project
 
-Use Node 24, npm, Git, and a GitHub account with access to this private repository. The v0.0.13
-private tag and six downloaded assets have been verified:
+Use Node 24, npm, Git, and a GitHub account with access to this private repository. The v0.0.14
+private tag and six assets are available to authorized accounts:
 
 ```sh
-npm install -g --ignore-scripts --install-links git+https://github.com/forsvn-labs/conquistador.git#v0.0.13
+npm install -g --ignore-scripts --install-links git+https://github.com/forsvn-labs/conquistador.git#v0.0.14
 ```
 
-If v0.0.13 is unavailable to your authorized account, use the prior
-[v0.0.12 release](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.12)
-with the same command ending in `#v0.0.12` (it has the earlier guide).
+If v0.0.14 is unavailable to your authorized account, use the prior
+[v0.0.13 release](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.13)
+with the same command ending in `#v0.0.13`. It lacks interactive edited-file recovery.
 
-Then run the installed command in the receiving project. Version 0.0.13 selects a project directory,
+Then run the installed command in the receiving project. Version 0.0.14 selects a project directory,
 including one outside the current directory, then a host, plan, apply, local doctor, and first-task
 handoff:
 
@@ -47,7 +45,7 @@ for the current private alpha because the registry package does not exist and pu
 blocked. It becomes the primary command only after the exact public package and clean registry
 lifecycle are verified.
 
-In v0.0.13, plain `conquistador` installs one complete project operator. It chooses the
+In v0.0.14, plain `conquistador` installs one complete project operator. It chooses the
 package; you confirm.
 If it cannot tell which coding agent you are using, it asks for one host. The happy path is one
 confirmation. Architecture choices stay behind `conquistador --advanced` and explicit setup
@@ -109,7 +107,7 @@ conquistador update             # Update this project from the installed CLI
 conquistador uninstall          # Remove both unchanged owned copies
 ```
 
-In v0.0.13, if your shell uses a Node version other than 24, an interactive run offers a verified local Node 24 executable when detected, or prints manager-aware selection steps. It asks before continuing under that executable; it does not change the parent shell or install Node. Terminating the launcher forwards the signal to its local setup process group and waits for its child; interrupted transactions may still need recovery. Without a terminal it prints Node 24 guidance and exits nonzero. `--help` and `--version` remain available. Install the CLI with Node 24 when possible; the preflight helps if your shell later changes versions.
+In v0.0.14, if your shell uses a Node version other than 24, an interactive run offers a verified local Node 24 executable when detected, or prints manager-aware selection steps. It asks before continuing under that executable; it does not change the parent shell or install Node. Terminating the launcher forwards the signal to its local setup process group and waits for its child; interrupted transactions may still need recovery. Without a terminal it prints Node 24 guidance and exits nonzero. `--help` and `--version` remain available. Install the CLI with Node 24 when possible; the preflight helps if your shell later changes versions.
 
 If you pass `--project PATH` from another directory, the setup and `start` handoffs print
 absolute skill paths and target-qualified management commands for that project. Run the first
@@ -119,7 +117,7 @@ or describe your own. Setup still cannot verify host discovery or the task resul
 To upgrade the CLI itself, install the next authorized version with npm, then update the project.
 Existing `.conquistador-operator` installations migrate through `conquistador operator update`.
 Modified files are preserved. A files-only operator can add its first native host through the interactive guide. `--host none` does not remove native hosts from an existing operator. When adding a host, the confirmation names any unchanged independent skill that will be adopted; future operator uninstall removes adopted copies. Keep drafts and runtime data outside the owned installation.
-In the 0.0.14 candidate, a later interactive run with edited operator or recorded native skill
+In v0.0.14, a later interactive run with edited operator or recorded native skill
 files offers a named backup and re-setup. The backup keeps local additions inside those folders.
 The new installation retains the recorded hosts. Unowned files and unrelated project files are
 not replaced. See

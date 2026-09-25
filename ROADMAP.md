@@ -16,10 +16,10 @@ or human acceptance.
    a useful first task, and a correction. Seek the user's verdict on clarity, routing relevance,
    and usefulness. The user's own host session remains unverified; local shell success cannot
    establish it. Keep installed-route and other local diagnostics separate from model evidence.
-2. Review and merge the 0.0.14 candidate with the interactive backup and re-setup path for modified operator and native
-   copies. Preserve the current Codex and Cursor overlays until their exact project backup is
-   inspected. Observe fresh host behavior separately from clean receipts. A second native host
-   and independent specialist contexts remain unverified.
+2. Verify the v0.0.14 edited-file recovery in the user's installed host. Preserve current Codex
+   and Cursor overlays until their project backups are inspected. Observe fresh host behavior
+   separately from clean receipts. A second native host and independent specialist contexts
+   remain unverified.
 
 ## Private-alpha follow-up
 
