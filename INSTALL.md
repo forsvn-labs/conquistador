@@ -9,6 +9,19 @@ local assembly. If this release is unavailable to your authorized account, use t
 A local package or branch install is not a released artifact. Keep the exact tag, full
 source commit, and checksums together. Public alpha is planned to start at `0.1.0`.
 The repository remains private and no npm package is published.
+This source branch has a 0.0.14 candidate. The verified 0.0.13 release commands below remain
+the default until 0.0.14 has a reviewed, published private tag and matching assets.
+To check the candidate without replacing a global CLI, run these commands from this checkout
+under Node 24 and use a new, empty output directory and install prefix:
+
+```sh
+npm pack --ignore-scripts --pack-destination /absolute/path/to/artifacts
+npm install --prefix /absolute/path/to/isolated-cli --ignore-scripts /absolute/path/to/artifacts/forsvn-conquistador-0.0.14.tgz
+/absolute/path/to/isolated-cli/node_modules/.bin/conquistador --version
+```
+
+The version command should print `0.0.14`. Run the isolated CLI in a disposable receiving
+project to check its interactive recovery path. This local tarball is not a private release.
 The observed installation platform is macOS with Node 24. Windows/Linux commands below are
 portability guidance; native execution and native host registration still need their own checks.
 
@@ -150,6 +163,18 @@ signups fell'` previews local selection; it does not prove host delivery. Use
 fresh host session and its trace for the selected full method and required resources.
 On a later interactive launch, the TUI asks for a starter task or one custom task and prints
 the selected-project handoff. Printed management commands carry the selected absolute path.
+
+In the 0.0.14 candidate, if the operator or its recorded native skills have local edits, the
+interactive command offers to use those files as they are or back them up and set up again.
+Re-setup names a backup folder
+in the selected project before it moves the Conquistador-owned folders. The backup includes
+local additions inside those folders. Setup then installs a fresh operator with the recorded
+hosts and runs the local doctor. You can repeat re-setup; each attempt gets a new backup folder.
+Files elsewhere in the project stay in place. Cancellation before the backup changes nothing.
+If setup fails after the backup, the prompt reports its path so you can recover the earlier files.
+Noninteractive commands still refuse modified or unowned files. A domain-restricted operator,
+unowned folder, conflicting operator copies, or unfinished transaction needs its original
+installer or inspection; the interactive command lets you choose another project.
 
 The complete operator and one native skill are the default interaction form. The other
 commands above prepare portable skills, plugins, MCP, or a BB adapter with their stated

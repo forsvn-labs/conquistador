@@ -96,7 +96,7 @@ test('compact, plugin, and harness payloads include the manifest and distinguish
     assert.equal(report.library.available, 38);
     assert.equal(report.manifest.packaged, 'matches');
     assert.equal(report.receipt.state, 'unchanged');
-    assert.equal(report.receipt.productVersion, '0.0.13');
+    assert.equal(report.receipt.productVersion, '0.0.14');
     assert.equal(report.bbAdapterPresent, adapter);
     assert.equal(report.operatorProfilePresent, true);
     assert.equal(report.operatorActivation, 'manual');

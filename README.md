@@ -1,4 +1,4 @@
-# Conquistador 0.0.13 private alpha
+# Conquistador 0.0.14 private-alpha candidate
 
 Conquistador helps your coding agent do growth, marketing, sales, product and knowledge work.
 Give it an outcome and the relevant facts. It selects from 38 methods, names the specialists it
@@ -10,6 +10,8 @@ from source commit `653058ac2b9c5f0cefe926bb238879191caf8a9b`.
 [v0.0.12](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.12) remains
 an earlier fallback. Verify the private release identity and checksums before installation;
 local assembly alone does not establish release or human acceptance.
+This source branch identifies as 0.0.14. Its edited-file setup recovery is pending private
+release; the verified 0.0.13 install command below does not include that change.
 Private alpha and dogfood are the same `0.0.x` channel. Public alpha starts at `0.1.0`.
 
 ## Install once, use in each project
@@ -117,6 +119,11 @@ or describe your own. Setup still cannot verify host discovery or the task resul
 To upgrade the CLI itself, install the next authorized version with npm, then update the project.
 Existing `.conquistador-operator` installations migrate through `conquistador operator update`.
 Modified files are preserved. A files-only operator can add its first native host through the interactive guide. `--host none` does not remove native hosts from an existing operator. When adding a host, the confirmation names any unchanged independent skill that will be adopted; future operator uninstall removes adopted copies. Keep drafts and runtime data outside the owned installation.
+In the 0.0.14 candidate, a later interactive run with edited operator or recorded native skill
+files offers a named backup and re-setup. The backup keeps local additions inside those folders.
+The new installation retains the recorded hosts. Unowned files and unrelated project files are
+not replaced. See
+[installation options](INSTALL.md) for recovery details.
 
 ## What installation proves
 

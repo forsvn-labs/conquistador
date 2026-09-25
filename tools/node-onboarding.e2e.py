@@ -31,10 +31,14 @@ if not subprocess.check_output([wrong_node, '-v']).startswith(b'v26') or not sub
     sys.exit('Expected Node 26 and Node 24 executables, respectively.')
 if wrong in ('/opt/homebrew/bin', '/usr/local/bin'):
     sys.exit('Use an isolated Node 26 bin directory, not Homebrew bin, to exercise the no-candidate path.')
-for name in ['neutral', 'project', 'other', 'empty-home', 'adoption', 'files-only', 'fresh-failure', 'fresh-optional-cancel', 'optional-failure', 'term-apply']:
+for name in ['neutral', 'project', 'other', 'empty-home', 'adoption', 'files-only', 'fresh-failure', 'fresh-optional-cancel', 'optional-failure', 'term-apply', 'reset-rollback', 'multi-host']:
     shutil.rmtree(root / name, ignore_errors=True)
     (root / name).mkdir(parents=True)
 env = {**os.environ, 'PATH': wrong + ':/usr/bin:/bin', 'CLAUDECODE': '1'}
+for signal_name in ['BB_THREAD_ID', 'BB_PROJECT_ID', 'BB_ENVIRONMENT_ID', 'CLAUDE_CODE',
+                    'CURSOR_TRACE_ID', 'CURSOR_AGENT', 'COPILOT_CLI', 'GITHUB_COPILOT',
+                    'CODEX_THREAD_ID', 'CODEX_SANDBOX']:
+    env.pop(signal_name, None)
 records = []
 
 
@@ -101,6 +105,75 @@ code, text = terminal('repeat-existing', project, [
     (b'What do you want to do first', b'\r'),
 ])
 assert code == 0 and 'Local files verified' in text and (project / '.conquistador/.conquistador-install.json').read_bytes() == receipt
+personal = project / 'personal-notes.txt'
+personal.write_text('outside Conquistador')
+operator_skill = project / '.conquistador/SKILL.md'
+operator_skill.write_text(operator_skill.read_text() + '\nlocal operator edit\n')
+native_skill = project / '.claude/skills/conquistador/SKILL.md'
+native_skill.write_text(native_skill.read_text() + '\nlocal native edit\n')
+local_extra = project / '.conquistador/private-note.txt'
+local_extra.write_text('preserve this additional file')
+code, text = terminal('modified-cancel', project, [
+    (b'Where should Conquistador', b'\r'),
+    (b'How do you want to continue with', b'\x03'),
+], {**env, 'PATH': right + ':/usr/bin:/bin'})
+assert code == 130 and 'local operator edit' in operator_skill.read_text()
+assert not list(project.glob('.conquistador-backup-*'))
+code, text = terminal('modified-reset', project, [
+    (b'Where should Conquistador', b'\r'),
+    (b'How do you want to continue with', b'\x1b[B\r'),
+    (b'Back up these Conquistador files', b'y\r'),
+    (b'What do you want to do first', b'\r'),
+], {**env, 'PATH': right + ':/usr/bin:/bin'})
+backups = sorted(project.glob('.conquistador-backup-*'))
+assert code == 0 and len(backups) == 1 and 'Local files verified' in text, (code, text)
+assert 'local operator edit' in (backups[0] / '.conquistador/SKILL.md').read_text()
+assert 'local native edit' in (backups[0] / '.claude/skills/conquistador/SKILL.md').read_text()
+assert (backups[0] / '.conquistador/private-note.txt').read_text() == 'preserve this additional file'
+assert personal.read_text() == 'outside Conquistador'
+assert 'local operator edit' not in operator_skill.read_text()
+operator_skill.write_text(operator_skill.read_text() + '\nsecond local edit\n')
+code, text = terminal('modified-reset-again', project, [
+    (b'Where should Conquistador', b'\r'),
+    (b'How do you want to continue with', b'\x1b[B\r'),
+    (b'Back up these Conquistador files', b'y\r'),
+    (b'What do you want to do first', b'\r'),
+], {**env, 'PATH': right + ':/usr/bin:/bin'})
+backups = sorted(project.glob('.conquistador-backup-*'))
+assert code == 0 and len(backups) == 2 and 'Local files verified' in text, (code, text)
+assert any('second local edit' in (backup / '.conquistador/SKILL.md').read_text() for backup in backups)
+assert personal.read_text() == 'outside Conquistador'
+receipt = (project / '.conquistador/.conquistador-install.json').read_bytes()
+
+# A failed manifest write must restore every moved operator and native path.
+rollback = root / 'reset-rollback'
+rollback.mkdir(exist_ok=True)
+for relative, content in [('.conquistador/SKILL.md', 'operator original'),
+                          ('.claude/skills/conquistador/SKILL.md', 'native original')]:
+    target = rollback / relative
+    target.parent.mkdir(parents=True, exist_ok=True)
+    target.write_text(content)
+module = Path(cli).resolve().parents[2] / 'tools/onboarding-recovery.mjs'
+plan = {'project': str(rollback), 'backup': str(rollback / '.conquistador-backup-failure'),
+        'paths': [str(rollback / '.conquistador'), str(rollback / '.claude/skills/conquistador')],
+        'hosts': ['claude-code'], 'version': '0.0.14'}
+plan['identities'] = [{'path': path, 'dev': os.lstat(path).st_dev, 'ino': os.lstat(path).st_ino}
+                      for path in plan['paths']]
+script = (f'import {{ preserveForReset }} from {json.dumps(module.as_uri())}; '
+          f'const plan = {json.dumps(plan)}; '
+          'try { preserveForReset(plan, { writeManifest() { throw Error("manifest write failed"); } }); '
+          'process.exitCode = 2; } catch (error) { '
+          'if (!error.message.includes("manifest write failed")) throw error; '
+          'console.log("Original paths restored after manifest failure"); }')
+failed = subprocess.run([right_node, '--input-type=module', '-e', script], cwd=rollback,
+                        env={**env, 'PATH': right + ':/usr/bin:/bin'}, text=True, capture_output=True)
+assert failed.returncode == 0, (failed.stdout, failed.stderr)
+assert (rollback / '.conquistador/SKILL.md').read_text() == 'operator original'
+assert (rollback / '.claude/skills/conquistador/SKILL.md').read_text() == 'native original'
+assert not (rollback / '.conquistador-backup-failure').exists()
+(root / 'manifest-failure.terminal.txt').write_text(failed.stdout + failed.stderr)
+records.append({'scenario': 'manifest-failure-rollback', 'exit': failed.returncode,
+                'transcript': 'manifest-failure.terminal.txt'})
 code, text = terminal('right-node-existing', project, [
     (b'Where should Conquistador', b'\r'),
     (b'What do you want to do first', b'\r'),
@@ -117,6 +190,29 @@ code, text = terminal('repeat-optional-mcp', project, [
 ])
 assert code == 0 and (project / '.conquistador-mcp/connector.json').is_file() and 'Client registration is still required' in text
 assert (project / '.conquistador/.conquistador-install.json').read_bytes() == receipt
+
+multi = root / 'multi-host'
+multi_hosts = ['codex', 'cursor', 'claude-code', 'copilot']
+installed = subprocess.run([cli, 'operator', 'install', '--project', str(multi), '--hosts', ','.join(multi_hosts)],
+                           cwd=multi, env={**env, 'PATH': right + ':/usr/bin:/bin'}, text=True, capture_output=True)
+assert installed.returncode == 0, (installed.stdout, installed.stderr)
+for native_path in ['.agents/skills/conquistador', '.cursor/skills/conquistador']:
+    skill = multi / native_path / 'SKILL.md'
+    skill.write_text(skill.read_text() + '\nlocal native edit\n')
+code, text = terminal('multi-host-reset', multi, [
+    (b'Where should Conquistador', b'\r'),
+    (b'How do you want to continue with', b'\x1b[B\r'),
+    (b'Back up these Conquistador files', b'y\r'),
+    (b'What do you want to do first', b'\r'),
+], {**env, 'PATH': right + ':/usr/bin:/bin'})
+multi_backups = list(multi.glob('.conquistador-backup-*'))
+assert code == 0 and len(multi_backups) == 1, (code, text)
+for native_path in ['.agents/skills/conquistador', '.cursor/skills/conquistador']:
+    assert 'local native edit' in (multi_backups[0] / native_path / 'SKILL.md').read_text()
+    assert 'local native edit' not in (multi / native_path / 'SKILL.md').read_text()
+record = json.loads((multi / '.conquistador/project-installation.json').read_text())
+assert record['hosts'] == multi_hosts, record
+
 code, text = terminal('returning-optional-interrupt', project, [
     (b'How do you want to continue', b'\r'),
     (b'Where should Conquistador', b'\r'),

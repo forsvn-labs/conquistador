@@ -22,6 +22,16 @@ ownership and activation boundaries, and asks once before applying. Other forms 
 manager, service or owned folder. `setup-surfaces.mjs` checks path overlap and duplicate native
 discovery choices, and supplies operator/BB next steps. Lifecycle actions use explicit subcommands with a target or path.
 
+The recommended interactive path classifies existing operator files before it installs.
+An unchanged copy proceeds to doctor and first-task handoff. An edited owned copy offers use
+as-is or an explicit re-setup. Re-setup moves the operator and its recorded native skill folders
+to a uniquely named project backup, writes a path manifest, installs with the recorded hosts,
+and runs doctor. The backup includes edits and added files inside those folders. If moving files
+or writing the manifest fails, the backup step restores the original paths. If installation
+fails after preservation, the backup remains for recovery. Unowned destinations, conflicting
+operator directories, domain restrictions, and unfinished transactions require inspection or
+another project. Noninteractive commands never select re-setup automatically.
+
 `setup list [--json]` lists supported forms, not a global installation inventory. Installation
 receipts remain local. There is no background discovery, registry, host-settings crawler, or updater.
 
