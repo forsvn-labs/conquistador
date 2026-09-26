@@ -148,6 +148,31 @@ Code and Copilot copies are clean. Fresh Codex native execution could not be che
 Native-host execution and human acceptance remained separate work, not implied by the
 v0.0.12 tag, downloaded assets or local checks.
 
+## Low-signal unit-test prune audit (2026-09-25, unshipped check)
+
+Audited all 92 test files against the installed-project E2E
+(`tools/growth-diagnosis.e2e.test.mjs`), which covers Codex install, 38-method routing plus
+adversarial cases, first task, hook context, doctor, uninstall, and local MCP. Removed 0,
+retained 92: every file asserts at least one fail-closed, security-boundary, contract, or
+regression behavior the E2E does not exercise (served runtime/API/HTTP, durable runner and
+review gates, provider wire mapping and credential redaction, OIDC/human auth, lifecycle
+backup/restore/erase, corpus/registry/judgment sealing, catalog gateway and receipts, eval-lab
+release-claim and calibration, host orchestration, and installer edge cases such as symlinks,
+traversal, malformed input, and cross-platform paths). No package-script, CI, or doc changes
+were needed: every test file runs under `npm test`, a module `test:source` run, or the hosts
+integration workflow, and no file was dead or fully subsumed. Deliberately kept borderline
+cases: `runtime/tests/publication.test.ts` (protocol schema shape and no-live-claim README
+guards), `runtime/tests/routing-manifest.test.ts` (exact parent-job/outcome arrays as a
+cross-module contract), and the `test:source`-only private-authority suites (`candidate`,
+`self-hosted-conformance`, `inventory-preflight`, `promptfoo-live`, `historical-readiness`),
+which are maintainer interfaces per AGENTS.md, not public checkout prerequisites.
+
+Verification on this checkout under Node 24.21.0: `npm run bootstrap`, `npm run build`
+(clean, `runtime/lib` in sync), full `npm test` passed, and the growth-diagnosis E2E passed
+with a repeatable artifact (`CONQUISTADOR_E2E_ARTIFACT=dist/growth-diagnosis-e2e.json
+node --test tools/growth-diagnosis.e2e.test.mjs`, schema
+`conquistador.growth-diagnosis-e2e/v1`, 38 methods).
+
 ## Shipped growth-diagnosis and first-run hardening (historical verification)
 
 The installed 0.0.11 route selected `shape-initiative` for a synthetic growth-stall prompt with
