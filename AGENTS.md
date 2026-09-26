@@ -6,6 +6,7 @@ commands.
 
 This is the editable product source, kept private for private-alpha delivery. Read README.md, CONTRIBUTING.md, INSTALL.md, and the
 relevant module README before changing behavior. Node 24 and npm are the supported local toolchain.
+FORSVN context and operating decisions live in [FORSVN · Start here](https://linear.app/hungv47/document/forsvn-start-here-cabfade69716); this repository owns product code and its release evidence.
 
 - Keep this repository private. Do not push, publish, change visibility or remove the npm private
   guard without the user's explicit authorization. Local commits and private packages are allowed.
