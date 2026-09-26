@@ -1,0 +1,27 @@
+{
+  "description": "Conquistador: brief relevant prompts and check that the selected playbooks were read.",
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/conquistador-hook.mjs\" claude prompt",
+            "timeout": 15
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/conquistador-hook.mjs\" claude stop",
+            "timeout": 15
+          }
+        ]
+      }
+    ]
+  }
+}

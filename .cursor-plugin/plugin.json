@@ -1,6 +1,6 @@
 {
-  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "conquistador",
+  "displayName": "Conquistador",
   "version": "0.0.14",
   "description": "Growth, GTM, launch, marketing, and sales playbooks for your agent: 39 skills, a playbook MCP server, and hooks that make the agent read them.",
   "author": {
@@ -20,5 +20,9 @@
     "seo",
     "positioning",
     "playbooks"
-  ]
+  ],
+  "logo": "assets/conquistador-icon.png",
+  "skills": "./skills/",
+  "mcpServers": "./mcp.json",
+  "hooks": "./hooks/cursor.json"
 }

@@ -3,8 +3,8 @@
 // every knowledge file in the selected methods, the shared parent library, and optional
 // user playbooks. The same brief feeds the MCP tool, the hooks, the CLI, and the bot pack.
 import { createHash } from 'node:crypto';
-import { lstatSync, readdirSync, readFileSync, realpathSync, statSync } from 'node:fs';
-import { homedir } from 'node:os';
+import { lstatSync, mkdirSync, readdirSync, readFileSync, realpathSync, renameSync, statSync, writeFileSync } from 'node:fs';
+import { homedir, tmpdir } from 'node:os';
 import { delimiter, dirname, extname, isAbsolute, join, posix, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { selectRequestContext } from './context-selection.mjs';
@@ -113,6 +113,7 @@ function walkMarkdown(root, { limitFiles, limitBytes, depth, followRoot = false 
 }
 
 function document(absolute, key, { source, method }) {
+  // Callers pass planned entries; only these fields matter.
   let raw;
   try { raw = readFileSync(absolute, 'utf8'); } catch { return null; }
   if (raw.includes('\0')) return null;
@@ -145,7 +146,13 @@ export function userPlaybookRoots({ env = process.env, home = homedir() } = {}) 
 }
 
 const cache = new Map();
-// Index every knowledge file once per process. Hooks are short-lived, so this is per call.
+const INDEX_VERSION = 3;
+const cacheDirectory = () => process.env.CONQUISTADOR_CACHE || join(tmpdir(), 'conquistador-cache');
+const serialize = doc => ({ ...doc, tf: [...doc.tf], nameTerms: [...doc.nameTerms] });
+const revive = doc => ({ ...doc, tf: new Map(doc.tf), nameTerms: new Set(doc.nameTerms) });
+
+// Index every knowledge file. The on-disk cache is keyed by each file's path, size, and mtime,
+// so an edited playbook or a plugin update rebuilds it. Hooks run per prompt and need this.
 export function knowledgeIndex(root = moduleRoot, { playbooks = userPlaybookRoots() } = {}) {
   const packageRoot = realpathSync(resolve(root));
   const cacheKey = `${packageRoot}\0${playbooks.join('\0')}`;
@@ -153,7 +160,7 @@ export function knowledgeIndex(root = moduleRoot, { playbooks = userPlaybookRoot
   const contract = loadRoutingContract(packageRoot);
   const libraryRoot = posix.dirname(contract.parentPath);
   const entryName = posix.basename(contract.methods[Object.keys(contract.methods)[0]].path);
-  const docs = [];
+  const planned = [];
   const library = join(packageRoot, libraryRoot);
   for (const name of readdirSync(library).sort()) {
     const methodDir = join(library, name);
@@ -161,11 +168,9 @@ export function knowledgeIndex(root = moduleRoot, { playbooks = userPlaybookRoot
     for (const absolute of walkMarkdown(methodDir, { limitFiles: 2000, limitBytes: 1_000_000, depth: 8 })) {
       const inner = relative(methodDir, absolute).split(sep).join('/');
       if (inner === entryName || inner === 'SKILL.md' || inner === 'METHOD.md') continue;
-      const doc = document(absolute, `${name}/${inner}`, { source: name === 'conquistador' ? 'shared' : 'method', method: name });
-      if (doc) docs.push(doc);
+      planned.push({ absolute, key: `${name}/${inner}`, source: name === 'conquistador' ? 'shared' : 'method', method: name });
     }
   }
-  const users = [];
   for (const userRoot of playbooks) {
     let real;
     try { real = realpathSync(userRoot); } catch { continue; }
@@ -173,12 +178,28 @@ export function knowledgeIndex(root = moduleRoot, { playbooks = userPlaybookRoot
     let stat;
     try { stat = statSync(real); } catch { continue; }
     const files = stat.isDirectory() ? walkMarkdown(real, { limitFiles: LIMITS.userFiles, limitBytes: LIMITS.userFileBytes, depth: LIMITS.userDepth, followRoot: true }) : stat.isFile() ? [real] : [];
-    for (const absolute of files) {
-      const doc = document(absolute, relative(dirname(real), absolute).split(sep).join('/'), { source: 'user', method: null });
-      if (doc) users.push(doc);
-    }
+    for (const absolute of files) planned.push({ absolute, key: relative(dirname(real), absolute).split(sep).join('/'), source: 'user', method: null });
   }
-  const all = [...docs, ...users];
+  const signature = createHash('sha256').update(JSON.stringify([INDEX_VERSION, packageRoot, planned.map(item => {
+    try { const stat = statSync(item.absolute); return [item.absolute, item.source, stat.size, stat.mtimeMs]; } catch { return [item.absolute]; }
+  })])).digest('hex');
+  const cacheFile = join(cacheDirectory(), `index-${signature.slice(0, 32)}.json`);
+  let all;
+  try {
+    const stored = JSON.parse(readFileSync(cacheFile, 'utf8'));
+    if (stored.signature === signature) all = stored.docs.map(revive);
+  } catch { /* Build below. */ }
+  if (!all) {
+    all = planned.map(item => document(item.absolute, item.key, item)).filter(Boolean);
+    try {
+      mkdirSync(cacheDirectory(), { recursive: true, mode: 0o700 });
+      const temporary = `${cacheFile}.${process.pid}.tmp`;
+      writeFileSync(temporary, JSON.stringify({ signature, docs: all.map(serialize) }), { mode: 0o600 });
+      renameSync(temporary, cacheFile);
+    } catch { /* A read-only temp directory only costs speed. */ }
+  }
+  const docs = all.filter(doc => doc.source !== 'user');
+  const users = all.filter(doc => doc.source === 'user');
   const df = new Map();
   for (const doc of all) for (const word of doc.tf.keys()) df.set(word, (df.get(word) ?? 0) + 1);
   const averageLength = all.reduce((sum, doc) => sum + doc.length, 0) / Math.max(all.length, 1);
@@ -248,13 +269,18 @@ const reasonFor = (doc, platforms) => {
 
 export function createBrief(prompt, { root = moduleRoot, playbooks, force = false } = {}) {
   if (typeof prompt !== 'string' || !prompt.trim()) throw Error('Describe the task.');
-  const index = knowledgeIndex(root, playbooks ? { playbooks } : undefined);
-  const { contract, packageRoot, libraryRoot } = index;
+  const packageRoot = realpathSync(resolve(root));
   const routed = selectRequestContext(prompt, { root: packageRoot });
-  let methods = routed.action === 'route' ? routed.selected.map(item => contract.methods[item.name]).filter(Boolean) : [];
   const explicit = explicitInvocation(prompt);
   const platforms = namedPlatforms(prompt);
   const business = BUSINESS.test(text(prompt)) && !CODING.test(text(prompt));
+  // Skip the index for prompts that are clearly not Conquistador work; hooks run on every prompt.
+  if (routed.action !== 'route' && !explicit && !force && !platforms.length && !business) {
+    return { schema: BRIEF_SCHEMA, action: 'none', reason: routed.reason ?? 'no-relevant-capability', methods: [], must: [], situational: [], platforms: [], packageRoot };
+  }
+  const index = knowledgeIndex(packageRoot, playbooks ? { playbooks } : undefined);
+  const { contract, libraryRoot } = index;
+  let methods = routed.action === 'route' ? routed.selected.map(item => contract.methods[item.name]).filter(Boolean) : [];
   if (!methods.length && (explicit || force || platforms.length || business)) methods = lexicalMethods(prompt, index, platforms);
   // A routed composition workflow brings its own sub-method folder.
   if (routed.action === 'route' && routed.workflow && !methods.some(item => item.name === routed.workflow.name)) {
@@ -347,6 +373,7 @@ export function createBrief(prompt, { root = moduleRoot, playbooks, force = fals
   };
 }
 
+const clip = value => (value.length > 150 ? `${value.slice(0, 147).replace(/\s+\S*$/, '')}…` : value);
 const location = (item, absolute) => (absolute || isAbsolute(item.path) ? item.absolute : item.path);
 
 // Compact form for hooks: paths and reasons, no file text. Stays under host context limits.
@@ -360,10 +387,10 @@ export function formatReadingList(brief, { absolute = true, limit = 9000 } = {})
     'READ IN FULL BEFORE YOU DRAFT (use your file-read tool; do not skim or guess their content):',
   ];
   for (const item of brief.methods) lines.push(`- ${location(item, absolute)}  — method: ${item.label}`);
-  brief.must.forEach(item => lines.push(`- ${location(item, absolute)}  — ${item.why}`));
+  brief.must.forEach(item => lines.push(`- ${location(item, absolute)}  — ${clip(item.why)}`));
   if (brief.situational.length) {
     lines.push('', 'Read when the task reaches that step:');
-    for (const item of brief.situational.slice(0, 6)) lines.push(`- ${location(item, absolute)}  — ${item.why}`);
+    for (const item of brief.situational.slice(0, 6)) lines.push(`- ${location(item, absolute)}  — ${clip(item.why)}`);
   }
   lines.push(
     '',

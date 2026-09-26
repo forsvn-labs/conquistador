@@ -2,7 +2,7 @@ import { cpSync, lstatSync, mkdirSync, readFileSync, readdirSync, realpathSync, 
 import { dirname, join } from 'node:path';
 import { createRequire } from 'node:module';
 import { isPackageCache } from './install-paths.mjs';
-import { operatorFiles } from './operator-package.mjs';
+import { briefFiles, operatorFiles } from './operator-package.mjs';
 
 export function runtimeSource(root) {
   const stable = realpathSync(root);
@@ -33,7 +33,7 @@ export function stageMcp(temporary, destination, source, url) {
   if (!url) {
     packageRoot = join(destination, 'bundle');
     const files = ['package.json', 'LICENSE', 'NOTICE.md', 'SKILL.md', 'skills', 'release/completeness.json',
-      'runtime/bin/conquistador.js', 'tools/skills-mcp.mjs', ...operatorFiles];
+      'runtime/bin/conquistador.js', ...new Set([...briefFiles, ...operatorFiles])];
     for (const file of files) copyRegular(join(source, file), join(temporary, 'bundle', file));
   }
   const connector = { command: process.execPath, args: [join(packageRoot, 'runtime/bin/conquistador.js'), 'mcp', ...(url ? ['--url', url] : [])] };

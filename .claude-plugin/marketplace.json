@@ -7,7 +7,7 @@
   "plugins": [
     {
       "name": "conquistador",
-      "description": "A project operator for growth, GTM, sales, marketing, product, and knowledge work.",
+      "description": "Growth, GTM, launch, marketing, and sales playbooks for your agent: 39 skills, a playbook MCP server, and hooks that make the agent read them.",
       "version": "0.0.14",
       "author": {
         "name": "FORSVN",
@@ -20,6 +20,6 @@
   ],
   "metadata": {
     "version": "0.0.14",
-    "description": "Conquistador methods for growth, GTM, sales, marketing, product, and knowledge work."
+    "description": "Conquistador growth, GTM, and marketing playbooks."
   }
 }
