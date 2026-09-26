@@ -90,9 +90,14 @@ export async function runAdd(args, { interactive = false } = {}) {
     spin.start('Installing');
     const source = stageSource({ dryRun });
     const results = chosen.map(agent => { spin.message(agent.label); return { agent, result: applyAgent(agent, 'install', { source, dryRun }) }; });
-    spin.stop('Done');
-    const failed = report(results);
-    nextSteps(chosen.filter((agent, index) => results[index].result.ok));
+    spin.stop('Installed');
+    let failed = 0;
+    for (const { agent, result } of results) {
+      if (result.ok) ui.log.success(agent.label);
+      else { failed += 1; ui.log.error(`${agent.label}: ${result.error}`); }
+    }
+    const ready = chosen.filter((agent, index) => results[index].result.ok);
+    if (ready.length) ui.note([...ready.map(agent => `${agent.label}: ${agent.tryIt}`), '', 'Add your own playbooks:  conquistador playbooks add ~/path/to/playbooks', 'See what a task reads:   conquistador brief "plan a Product Hunt launch"'].join('\n'), 'Next');
     ui.outro(failed ? `${failed} agent(s) failed. Fix the error above and run: conquistador add ${results.filter(item => !item.result.ok).map(item => item.agent.id).join(' ')}` : 'Installed.');
     return failed ? 1 : 0;
   }

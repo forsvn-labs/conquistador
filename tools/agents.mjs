@@ -47,6 +47,8 @@ export const AGENTS = [
   },
   {
     id: 'codex', label: 'Codex', command: 'codex', how: 'plugin',
+    // Codex refuses to run when its home folder does not exist yet (a fresh install).
+    prepare: () => mkdirSync(process.env.CODEX_HOME || join(homedir(), '.codex'), { recursive: true }),
     install: src => [step('codex', ['plugin', 'marketplace', 'add', src], { okIf: /already added/i }), step('codex', ['plugin', 'add', PLUGIN])],
     update: src => [step('codex', ['plugin', 'marketplace', 'add', src], { okIf: /already added/i }), step('codex', ['plugin', 'add', PLUGIN])],
     remove: () => [step('codex', ['plugin', 'remove', PLUGIN], { okIf: /not installed|not found/i }), step('codex', ['plugin', 'marketplace', 'remove', MARKETPLACE], { okIf: /not found|no marketplace/i })],
@@ -128,6 +130,7 @@ function writeState(state) {
 // Run one agent's steps. Every command is shown; nothing runs in dry-run mode.
 export function applyAgent(agent, action, { source, dryRun = false, log = () => {} } = {}) {
   const steps = agent[action](source);
+  if (!dryRun && action !== 'remove') agent.prepare?.();
   const done = [];
   for (const item of steps) {
     if (item.copy) {
