@@ -4,6 +4,37 @@ No public release is claimed. See [VERSIONS.md](VERSIONS.md) for independent pro
 versions. Verification establishes the stated local scope; native host behavior, useful model
 output, human acceptance and rights disposition require separate evidence.
 
+## 2026-09-28, 0.0.15 private alpha
+
+- Fifteenth private prerelease at
+  [`v0.0.15`](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.15) from exact merged
+  `private-alpha` commit `07112aeb0e18b0b3995fce2a4680b5c2fa52f4a9` through
+  [#14](https://github.com/forsvn-labs/conquistador/pull/14). The repository remains private, and
+  no npm registry package was published.
+- **Plugin-first install.** The repository root is one plugin for Claude Code, Codex, Cursor,
+  Copilot CLI, Grok CLI, and the Agent Plugins format: 39 skills, a playbook MCP server, and hooks.
+  Bare `conquistador` finds agents, asks one question, and installs with each agent's own plugin
+  manager from a stable copy in `~/.conquistador/plugin`. Node 24 or later.
+- **Enforced playbook reads.** A briefing engine ranks the must-read playbooks per task;
+  `conquistador_brief` returns them inline; the prompt hook adds the reading list and the stop
+  hook sends the agent back once when it skipped them; every method starts with a generated
+  playbook map; answers end with **Playbooks applied**. `conquistador playbooks add DIR` ranks the
+  user's own playbooks first, read in place.
+- **General-purpose scope.** 236 router aliases and platform rules route strategy, launches,
+  social, search and AI answers, paid ads, email and PR, in-product growth, content, and
+  measurement on any platform. Coding prompts stay silent. `conquistador tour` shows nine areas and
+  turns a first task into a ready prompt; `/conquistador` with no task shows the same map.
+- **Minimal CLI.** Default help lists install, tour, update, and remove; `help --all` lists the
+  rest. The per-project flow and the MCP prompt default to a marketing and growth plan.
+- Other surfaces: `conquistador mcp --http` for connector apps and `conquistador bot` for chat-app
+  knowledge packs. The previous per-project installer moves to `conquistador project`.
+- Six assets: source ZIP, npm tarball, portable skill ZIP, portable plugin ZIP, `SHA256SUMS`, and
+  `assembly.json` (`UNBOUND`, no live execution or human verdict). Verified: `npm test` 764 of 764
+  and CI on Node 24 and 26, routing breadth 109 of 109, install lifecycle for five agents,
+  installer and tour terminal E2Es, package checksums, and installs from the tarball and the Git
+  tag reporting `0.0.15`. Live headless Claude Code runs read 100% of must-read playbooks on
+  launch and non-launch tasks (small samples).
+
 ## 2026-09-25, 0.0.14 private alpha
 
 - Fourteenth private prerelease at
