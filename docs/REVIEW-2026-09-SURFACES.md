@@ -131,7 +131,7 @@ Root causes, in order of impact:
 | --- | --- | --- |
 | Brief 1, 2: no method, or platform pack missed | Lexical and platform fallbacks; named platform always brings pack and channel guide | Sample prompts; E2E |
 | Brief 3, 4: scaffolding or too many files | Process files excluded; at most 8 must-read files and 90 KB | Sample prompts |
-| Brief 5: response too large | Inline pack limited to 400 KB, below the 512 KB MCP frame limit | MCP tests |
+| Brief 5: response too large | Inline pack limited to 160 KB (about 40,000 tokens), well below the 512 KB MCP frame limit | MCP tests |
 | Brief 6: coding prompt briefed | Router abstains, business-vocabulary gate, coding-vocabulary veto | Sample prompts; hook test |
 | Brief 7: bad user folder | Symlinks skipped, size and count limits, folder inside the product refused | Code review only |
 | Brief 8: path missing in an installed layout | Paths come from the routing contract, which rebases per layout | Installed plugin copy |

@@ -19,7 +19,7 @@ export const LIMITS = Object.freeze({
   userFiles: 4000,
   userFileBytes: 262_144,
   userDepth: 8,
-  packBytes: 400_000,
+  packBytes: 160_000,
 });
 const moduleRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 
