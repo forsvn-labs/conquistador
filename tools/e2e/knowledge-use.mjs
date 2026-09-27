@@ -54,16 +54,27 @@ function analyze(text, must) {
     for (const item of event.message?.content ?? []) {
       if (item.type !== 'tool_use') continue;
       if (/conquistador_brief/.test(item.name)) brief = true;
-      // Agents read with absolute paths, relative paths after cd, globs, and loops; keep every .md token.
-      for (const match of JSON.stringify(item.input).matchAll(/[\w./-]+\.md\b/g)) tokens.add(match[0]);
+      // Agents read with absolute paths, and with relative paths after `cd` into a method folder.
+      const input = JSON.stringify(item.input);
+      const base = [...input.matchAll(/cd\s+"?([^";&|\s]+)/g)].map(match => match[1].replace(/\/$/, '')).pop();
+      for (const match of input.matchAll(/[\w./-]+\.md\b/g)) {
+        const token = match[0];
+        tokens.add(base && !token.startsWith('/') ? `${base}/${token}` : token);
+      }
     }
   }
   const reads = new Set();
-  for (const token of tokens) for (const key of knownKeys) if (token.endsWith(key) || (token.includes('/') && key.endsWith(token))) reads.add(key);
+  for (const token of tokens) {
+    const exact = knownKeys.filter(key => token.endsWith(`/${key}`) || token === key);
+    // A bare relative path counts only when it names exactly one known file.
+    const partial = exact.length ? [] : knownKeys.filter(key => token.includes('/') && key.endsWith(`/${token}`));
+    for (const key of exact.length ? exact : partial.length === 1 ? partial : []) reads.add(key);
+  }
   const tail = path => path.split('/').slice(-3).join('/');
   const covered = brief ? must.length : must.filter(path => [...reads].some(read => read.endsWith(tail(path)) || tail(path).endsWith(read))).length;
   const answer = result?.result ?? '';
-  return { knowledgeFilesRead: reads.size, reads: [...reads].sort(), briefToolCalled: brief, mustRead: must.length, mustReadCovered: covered, citesPlaybooks: /playbooks applied/i.test(answer), turns: result?.num_turns ?? null, costUsd: result?.total_cost_usd ?? null, answerTail: answer.slice(-600) };
+  const invalid = !result || result.is_error === true || /session limit|rate limit|usage limit/i.test(answer);
+  return { invalid, knowledgeFilesRead: reads.size, reads: [...reads].sort(), briefToolCalled: brief, mustRead: must.length, mustReadCovered: covered, citesPlaybooks: /playbooks applied/i.test(answer), turns: result?.num_turns ?? null, costUsd: result?.total_cost_usd ?? null, answerTail: answer.slice(-600) };
 }
 
 const rows = [];
@@ -77,17 +88,19 @@ for (const [pi, prompt] of PROMPTS.entries()) {
     const { code, text } = reanalyze ? { code: 0, text: readFileSync(transcript, 'utf8') } : await claude(prompt, configs[name], transcript);
     const row = { prompt: pi + 1, config: name, run, exit: code, ...analyze(text, must) };
     rows.push(row);
+    if (row.invalid) { console.log('invalid run (agent error or plan limit); excluded'); continue; }
     console.log(`read ${row.knowledgeFilesRead} files, must-read ${row.mustReadCovered}/${row.mustRead}${row.briefToolCalled ? ' (brief)' : ''}, cites=${row.citesPlaybooks}`);
   }
 }
 const summary = Object.fromEntries(only.map(name => {
-  const list = rows.filter(row => row.config === name);
+  // Runs that failed (for example, an exhausted plan limit) say nothing about knowledge use.
+  const list = rows.filter(row => row.config === name && !row.invalid);
   const mean = key => Number((list.reduce((sum, row) => sum + Number(row[key] ?? 0), 0) / Math.max(list.length, 1)).toFixed(2));
-  return [name, { runs: list.length, meanKnowledgeFilesRead: mean('knowledgeFilesRead'), mustReadCoverage: Number((list.reduce((s, r) => s + r.mustReadCovered, 0) / Math.max(list.reduce((s, r) => s + r.mustRead, 0), 1)).toFixed(2)), citesPlaybooksRate: mean('citesPlaybooks'), meanCostUsd: mean('costUsd') }];
+  return [name, { runs: list.length, invalidRuns: rows.filter(row => row.config === name && row.invalid).length, meanKnowledgeFilesRead: mean('knowledgeFilesRead'), mustReadCoverage: Number((list.reduce((s, r) => s + r.mustReadCovered, 0) / Math.max(list.reduce((s, r) => s + r.mustRead, 0), 1)).toFixed(2)), citesPlaybooksRate: mean('citesPlaybooks'), meanCostUsd: mean('costUsd') }];
 }));
 const report = { schema: 'conquistador.e2e.knowledge-use/v1', at: new Date().toISOString(), beforeRef, head: execFileSync('git', ['-C', root, 'rev-parse', 'HEAD'], { encoding: 'utf8' }).trim(), claude: execFileSync('claude', ['--version'], { encoding: 'utf8' }).trim(), prompts: PROMPTS, summary, rows };
 writeFileSync(join(out, 'report.json'), `${JSON.stringify(report, null, 2)}\n`);
-const table = ['| Config | Runs | Knowledge files read (mean) | Must-read coverage | Cites playbooks | Cost (mean USD) |', '| --- | --- | --- | --- | --- | --- |',
+const table = ['| Config | Valid runs | Knowledge files read (mean) | Must-read coverage | Cites playbooks | Cost (mean USD) |', '| --- | --- | --- | --- | --- | --- |',
   ...Object.entries(summary).map(([name, s]) => `| ${name} | ${s.runs} | ${s.meanKnowledgeFilesRead} | ${Math.round(s.mustReadCoverage * 100)}% | ${Math.round(s.citesPlaybooksRate * 100)}% | ${s.meanCostUsd} |`)];
 writeFileSync(join(out, 'report.md'), `# Knowledge-use E2E\n\n${report.at} · head ${report.head.slice(0, 7)} · before ${beforeRef} · ${report.claude}\n\n${table.join('\n')}\n\nTranscripts: transcripts/. Raw rows: report.json.\n`);
 console.log(`\n${table.join('\n')}\n\nReport: ${join(out, 'report.md')}`);

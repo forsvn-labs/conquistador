@@ -69,9 +69,10 @@ Agents often skip reference files. Conquistador uses four layers so that it does
 Each method also starts with a generated "Playbooks for this method" list, so skills-only installs
 still point the agent at the right files.
 
-In a before-and-after test, the previous plugin read 2 knowledge files for a launch plan and
-skipped the Product Hunt pack. The new plugin read the method and 6 playbooks, including the
-Product Hunt pack, and cited them. Run `node tools/e2e/knowledge-use.mjs` to repeat the test.
+In a before-and-after test with headless Claude Code (two tasks, nine valid runs), the previous
+plugin read 17% of the must-read playbooks and never cited them; for the pricing task it read
+none. With the new plugin, the agent read all of them and cited them in every run. The sample is
+small. Run `node tools/e2e/knowledge-use.mjs` to repeat the test.
 
 ## Add your own playbooks
 
