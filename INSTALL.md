@@ -20,20 +20,14 @@ conquistador
 The command does these steps:
 
 1. It finds the supported agents on your computer.
-2. It asks which agents to use. All found agents are selected by default.
-3. It shows the exact commands, then asks you to confirm.
-4. It copies the plugin to `~/.conquistador/plugin` and registers that folder with each agent's
+2. It asks one question: which agents to use. All found agents are preselected; press Enter to
+   install. With one agent, it asks you to confirm that agent. `--dry-run` prints the exact
+   commands instead.
+3. It copies the plugin to `~/.conquistador/plugin` and registers that folder with each agent's
    own plugin manager.
 
 The stable copy matters: with nvm or another Node version manager, the npm global folder changes
 when you switch Node versions. The agents point at `~/.conquistador/plugin`, not at npm.
-
-Until the v0.0.15 tag is published, the latest verified private release is v0.0.14. It has the
-older per-project installer:
-
-```sh
-npm install -g --ignore-scripts --install-links git+https://github.com/forsvn-labs/conquistador.git#v0.0.14
-```
 
 `--ignore-scripts` skips npm lifecycle scripts. `--install-links` makes npm copy the Git checkout
 instead of linking to temporary files.

@@ -18,7 +18,7 @@ test('package acquisition has no automatic install or publication hooks', () => 
 
 test('the advertised persistent private-Git command copies out of npm acquisition storage', () => {
   // The advertised command must pin the latest verified private release.
-  const expected = 'npm install -g --ignore-scripts --install-links git+https://github.com/forsvn-labs/conquistador.git#v0.0.14';
+  const expected = 'npm install -g --ignore-scripts --install-links git+https://github.com/forsvn-labs/conquistador.git#v0.0.15';
   for (const file of ['README.md', 'INSTALL.md']) {
     const contents = readFileSync(join(root, file), 'utf8');
     assert.match(contents, new RegExp(expected.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
@@ -43,8 +43,8 @@ test('the installed setup command works before runtime libraries or dependencies
     const run = (...args) => execFileSync(process.execPath, [join(source, 'runtime/bin/conquistador.js'), 'setup', ...args], { encoding: 'utf8' });
     assert.match(run('--help'), /status\|doctor\|update\|uninstall/);
     const cli = (...args) => execFileSync(process.execPath, [join(source, 'runtime/bin/conquistador.js'), ...args], { encoding: 'utf8' });
-    assert.match(cli('--help'), /conquistador --bot/);
-    assert.match(cli('--help'), /--advanced/);
+    assert.match(cli('help', '--all'), /--bot/);
+    assert.match(cli('help', '--all'), /--advanced/);
     assert.doesNotMatch(cli('--help'), /What would you like to set up/);
     for (const flag of ['--bot', '--skills', '--plugin', '--mcp', '--advanced']) assert.match(cli(flag, '--help'), /Usage:/);
     assert.match(cli('install', '--help'), /conquistador install/);

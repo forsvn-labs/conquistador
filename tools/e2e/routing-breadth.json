@@ -115,6 +115,20 @@
       ]
     },
     {
+      "area": "launch",
+      "task": "Use Conquistador to draft a marketing and growth plan from the product facts in this project. Mark missing facts. Keep it as a draft.",
+      "any": [
+        "plan-campaign"
+      ]
+    },
+    {
+      "area": "launch",
+      "task": "Plan marketing and growth for our budgeting app",
+      "any": [
+        "plan-campaign"
+      ]
+    },
+    {
       "area": "social",
       "task": "Write LinkedIn thought leadership posts for our CEO",
       "any": [

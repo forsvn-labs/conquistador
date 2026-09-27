@@ -6,11 +6,21 @@ import { AGENTS, applyAgent, copyPayload, detectAgents, home, pluginHome, readSt
 const bold = text => (process.stdout.isTTY ? `\x1b[1m${text}\x1b[22m` : text);
 const dim = text => (process.stdout.isTTY ? `\x1b[2m${text}\x1b[22m` : text);
 
+// Default help shows only what a new user needs. Everything else stays available under --all.
 export const HELP = `Conquistador ${version}
-Marketing and growth playbooks for your AI agents: any platform, any service, and inside the product.
+Marketing and growth playbooks for your AI agents.
+
+  conquistador           Install into your AI agents
+  conquistador tour      See what it covers and try a task
+  conquistador update    Update to the latest version
+  conquistador remove    Uninstall
+
+All commands: conquistador help --all`;
+
+export const HELP_ALL = `Conquistador ${version}: all commands
 
 Install
-  conquistador                      Find your agents and install (recommended)
+  conquistador                      Find your agents and install
   conquistador add [AGENT...]       Install into agents: ${AGENTS.map(agent => agent.id).join(', ')}
   conquistador update               Update every agent you installed into
   conquistador remove [AGENT...]    Remove from agents (all when none named)
@@ -20,22 +30,13 @@ Use
   conquistador tour [AREA]          See what Conquistador covers and try a task (--list prints all)
   conquistador brief "TASK"         Show which playbooks a task needs (--full prints them)
   conquistador playbooks add DIR    Add your own playbook folder; it ranks first
-  conquistador mcp                  Run the playbook MCP server (stdio)
-  conquistador mcp --http           Run it over HTTP for bots and remote apps
+  conquistador mcp [--http]         Run the playbook MCP server (stdio, or HTTP for remote apps)
   conquistador bot [--out DIR]      Write a system prompt and knowledge files for chat bots
 
-Other ways to install
-  Claude Code     /plugin marketplace add forsvn-labs/conquistador
-  Skills only     npx skills add https://github.com/forsvn-labs/conquistador/tree/private-alpha/skills
-  Project copy    conquistador project        (per-project operator; see INSTALL.md)
-
-Advanced (per-project and legacy routes)
-  conquistador project              Per-project operator guide
-  conquistador --advanced           Combine installation families in one folder
-  conquistador --skills | --plugin | --mcp [--host HOST]
-  conquistador --bot [grok-bot|hermes]
-  conquistador status | doctor | route --prompt TEXT | hooks | runtime --help
-  conquistador operator status      Per-project operator lifecycle
+Other routes (see INSTALL.md)
+  conquistador project              Per-project operator copy
+  conquistador --advanced | --skills | --plugin | --mcp [--host HOST] | --bot [grok-bot|hermes]
+  conquistador status | doctor | route --prompt TEXT | hooks | runtime --help | operator status
 
 Flags: --yes (no questions), --dry-run (print commands only).
 Turn hooks off: CONQUISTADOR_HOOKS=off.`;
@@ -58,28 +59,21 @@ function report(results) {
   return failed;
 }
 
-// What a new user sees after install: where to go, what it covers, and what to ask first.
+// What a new user sees after install: where to go and what to ask first. The tour holds the rest.
 async function nextLines(agents) {
-  const { ALSO, STARTERS, mapLines } = await import('./tour.mjs');
+  const { STARTERS } = await import('./tour.mjs');
   return [
     ...agents.map(agent => `${agent.label}: ${agent.tryIt}`),
     '',
-    'It covers:',
-    ...mapLines().map(line => `  ${line}`),
-    `  ${ALSO}`,
-    '',
     'Try asking:',
-    ...STARTERS.map(prompt => `  "${prompt}"`),
-    '',
-    'Explore by area:        conquistador tour',
-    'See what a task reads:  conquistador brief "TASK"',
-    'Add your own playbooks: conquistador playbooks add ~/path/to/playbooks',
+    ...STARTERS.slice(0, 3).map(prompt => `  "${prompt}"`),
   ];
 }
 
 async function nextSteps(agents) {
   console.log(`\n${bold('Next')}`);
   for (const line of await nextLines(agents)) console.log(line ? `  ${line}` : '');
+  console.log('\n  See everything it covers: conquistador tour');
 }
 
 export async function runAdd(args, { interactive = false } = {}) {
@@ -94,20 +88,22 @@ export async function runAdd(args, { interactive = false } = {}) {
   if (interactive) {
     const ui = await import('./vendor/clack.mjs');
     ui.intro(`Conquistador ${version}`);
-    ui.log.message('Marketing and growth playbooks for your AI agents: any platform, any service, and inside the product.\nInstalls as a plugin: 39 skills, a playbook MCP server, and hooks that make the agent read the playbooks.');
-    const options = detected.map(agent => ({ value: agent.id, label: agent.label, hint: agent.found ? agent.how : 'not found' }));
-    if (!detected.some(agent => agent.found)) {
-      ui.note('No supported agent found on this machine.\nSkills for any agent:   npx skills add https://github.com/forsvn-labs/conquistador/tree/private-alpha/skills\nMCP for any client:     conquistador mcp\nChat bots:              conquistador bot', 'Other ways');
+    const found = detected.filter(agent => agent.found);
+    if (!found.length) {
+      ui.note('No supported agent found. Install Claude Code, Codex, Cursor, Copilot CLI, or Grok CLI first.\nOther ways to install: see INSTALL.md.', 'Nothing to install into');
       ui.outro('Nothing installed.');
       return 1;
     }
-    const picked = await ui.multiselect({ message: 'Install into (space to toggle, enter to confirm)', options: options.filter(option => detected.find(agent => agent.id === option.value).found), initialValues: detected.filter(agent => agent.found).map(agent => agent.id), required: true });
-    if (ui.isCancel(picked)) { ui.cancel('Cancelled. Nothing changed.'); return 130; }
-    chosen = detected.filter(agent => picked.includes(agent.id));
-    const plan = [`Copy the plugin to ${pluginHome()}`, ...chosen.map(agent => `${agent.label}: ${agent.install(pluginHome()).map(item => item.copy ? `copy to ${item.copy()}` : `${item.command} ${item.args.join(' ')}`).join(' → ')}`)];
-    ui.note(plan.join('\n'), 'Plan');
-    const go = await ui.confirm({ message: 'Install now?' });
-    if (ui.isCancel(go) || !go) { ui.cancel('Cancelled. Nothing changed.'); return 130; }
+    // One question: with one agent, confirm it; with several, pick them (all preselected).
+    if (found.length === 1) {
+      const go = await ui.confirm({ message: `Install Conquistador into ${found[0].label}?`, initialValue: true });
+      if (ui.isCancel(go) || !go) { ui.cancel('Cancelled. Nothing changed.'); return 130; }
+      chosen = found;
+    } else {
+      const picked = await ui.multiselect({ message: 'Install Conquistador into (Enter to install)', options: found.map(agent => ({ value: agent.id, label: agent.label })), initialValues: found.map(agent => agent.id), required: true });
+      if (ui.isCancel(picked)) { ui.cancel('Cancelled. Nothing changed.'); return 130; }
+      chosen = found.filter(agent => picked.includes(agent.id));
+    }
     const spin = ui.spinner();
     spin.start('Installing');
     const source = stageSource({ dryRun });
@@ -124,7 +120,7 @@ export async function runAdd(args, { interactive = false } = {}) {
       ui.outro(`${failed} agent(s) failed. Fix the error above and run: conquistador add ${results.filter(item => !item.result.ok).map(item => item.agent.id).join(' ')}`);
       return 1;
     }
-    const tour = await ui.confirm({ message: 'Take the one-minute tour and try a task?', initialValue: true });
+    const tour = await ui.confirm({ message: 'See what it covers and try a task?', initialValue: true });
     if (ui.isCancel(tour) || !tour) { ui.outro('Installed. Run conquistador tour anytime.'); return 0; }
     return (await import('./tour.mjs')).interactiveTour({ intro: false });
   }
@@ -216,7 +212,7 @@ export async function runFrontDoor(args) {
     if (!(process.stdin.isTTY && process.stdout.isTTY)) { console.log(HELP); return 0; }
     return runAdd([], { interactive: true });
   }
-  if (command === '--help' || command === '-h' || command === 'help') { console.log(HELP); return 0; }
+  if (command === '--help' || command === '-h' || command === 'help') { console.log(rest.includes('--all') || args.includes('--all') ? HELP_ALL : HELP); return 0; }
   if (command === 'add') return runAdd(rest);
   // `update` keeps its per-project operator meaning until you install into an agent.
   if (command === 'update' && Object.keys(readState().agents ?? {}).length && !rest.some(arg => arg.startsWith('--project') || arg.startsWith('--path'))) return runUpdate(rest);

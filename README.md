@@ -26,35 +26,17 @@ Version 0.0.15 is a private-alpha candidate. See [what changed](CHANGELOG.md).
 
 ## Install
 
-You need Node 24 or later, and at least one supported agent.
+You need Node 24 or later and an AI coding agent: Claude Code, Codex, Cursor, Copilot CLI, or
+Grok CLI.
 
 ```sh
 npm install -g --ignore-scripts --install-links git+https://github.com/forsvn-labs/conquistador.git#v0.0.15
 conquistador
 ```
 
-The `conquistador` command finds the agents on your computer, asks which ones to use, and
-installs the Conquistador plugin with each agent's own plugin manager. Install once; it works in
-every project.
-
-Until the v0.0.15 tag is published, the latest verified private release is v0.0.14, which has
-the older per-project installer:
-`npm install -g --ignore-scripts --install-links git+https://github.com/forsvn-labs/conquistador.git#v0.0.14`.
-
-### Choose how to use it
-
-| You use | Install | You get |
-| --- | --- | --- |
-| Claude Code, Codex, Cursor, Copilot CLI, or Grok CLI | `conquistador` | Plugin: 39 skills, the playbook MCP server, and hooks |
-| Claude Code, from inside the app | `/plugin marketplace add forsvn-labs/conquistador`, then `/plugin install conquistador@conquistador` | Same plugin |
-| Any agent that reads `SKILL.md` skills | `npx skills add https://github.com/forsvn-labs/conquistador/tree/private-alpha/skills` | Skills only |
-| Any MCP client (Windsurf, Zed, VS Code, Claude Desktop) | Add a server that runs `conquistador mcp` | Playbook tools |
-| Muse, ChatGPT, or another app with MCP connectors | Host `conquistador mcp --http`, then add its URL | Playbook tools over HTTP |
-| ChatGPT GPTs, Claude Projects, Grok projects, Gemini Gems | `conquistador bot` | A system prompt and upload-ready knowledge files |
-| One project only, with the full operator contracts | `conquistador project` | Per-project copy in `.conquistador/` |
-
-The plugin is the recommended route. Only the plugin route includes the hooks that check that the
-agent read the playbooks. See [installation](INSTALL.md) for each route in detail.
+`conquistador` finds your agents, asks which ones to use, and installs. Install once; it works in
+every project. For skills only, MCP clients, chat bots, or a per-project copy, see
+[other ways to install](INSTALL.md).
 
 ## Start your first task
 
@@ -121,16 +103,13 @@ files appear in briefs, hooks, and MCP results, labeled "Your playbook".
 ## Commands
 
 ```sh
-conquistador                   # Find your agents and install
-conquistador tour [AREA]       # See what Conquistador covers and try a task
-conquistador agents            # Show detected agents and what is installed
-conquistador update            # Update every agent you installed into
-conquistador remove [AGENT]    # Remove from one agent, or from all of them
-conquistador brief "TASK"      # Show the playbooks for a task (--full prints them)
-conquistador playbooks add DIR # Add your own playbook folder
-conquistador mcp [--http]      # Run the playbook MCP server
-conquistador bot [--out DIR]   # Write a bot pack for chat apps
+conquistador           # Install into your AI agents
+conquistador tour      # See what it covers and try a task
+conquistador update    # Update to the latest version
+conquistador remove    # Uninstall
 ```
+
+`conquistador help --all` lists the other commands.
 
 To turn the hooks off, set `CONQUISTADOR_HOOKS=off` or put `{"hooks": false}` in
 `~/.conquistador/config.json`.

@@ -79,9 +79,14 @@ test('top-level help and route help load before runtime libraries', t => {
   const project = fixture(t);
   const help = invoke(project, ['--help']);
   assert.equal(help.status, 0, help.stderr);
-  assert.match(help.stdout, /conquistador --bot/);
-  assert.match(help.stdout, /--advanced/);
-  assert.match(help.stdout, /operator status/);
+  // Default help stays short; every other route is listed under --all.
+  assert.ok(help.stdout.trim().split('\n').length <= 12, help.stdout);
+  assert.doesNotMatch(help.stdout, /--advanced/);
+  const all = invoke(project, ['help', '--all']);
+  assert.equal(all.status, 0, all.stderr);
+  assert.match(all.stdout, /--bot/);
+  assert.match(all.stdout, /--advanced/);
+  assert.match(all.stdout, /operator status/);
   assert.equal(invoke(project, ['--skills', '--help']).status, 0);
   assert.match(invoke(project, ['--bot', '--help']).stdout, /hermes/);
   assert.match(invoke(project, ['--plugin', '--help']).stdout, /user-level/);
@@ -554,7 +559,7 @@ test('first installation prints one prompt and explicit --project remains the re
   mkdirSync(project);
   const result = invoke(invocation, ['--host', 'none', '--project', 'receiving', '--yes']);
   assert.equal(result.status, 0, result.stderr);
-  assert.equal(result.stdout.match(/Use Conquistador to draft a launch plan/g)?.length, 1);
+  assert.equal(result.stdout.match(/Use Conquistador to draft a marketing and growth plan/g)?.length, 1);
   assert.equal(existsSync(join(invocation, '.conquistador')), false);
   assert.ok(existsSync(join(project, '.conquistador/SKILL.md')));
   assert.equal(existsSync(join(project, 'package.json')), false);

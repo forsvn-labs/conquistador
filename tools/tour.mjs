@@ -154,7 +154,7 @@ export async function listText() {
     for (const example of area.examples) lines.push(`  • "${example.prompt}"`);
     lines.push('');
   }
-  lines.push(ALSO, '', 'See what a task will read:  conquistador brief "TASK"', 'Add your own playbooks:     conquistador playbooks add DIR');
+  lines.push(ALSO);
   return lines.join('\n');
 }
 
@@ -261,7 +261,7 @@ export async function interactiveTour({ intro = true } = {}) {
   const prompt = `${task.replace(/[.!?]*$/, '.')} Our product: <what it is, who it is for, the goal, any constraints>.`;
   const copied = await copy(prompt);
   ui.note(`${prompt}\n\nIn Claude Code you can also type: /conquistador ${task}`, copied ? 'Paste this into your agent (copied)' : 'Paste this into your agent');
-  ui.outro('Run conquistador tour anytime. See any task: conquistador brief "TASK"');
+  ui.outro('Run conquistador tour anytime.');
   return 0;
 }
 

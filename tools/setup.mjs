@@ -160,7 +160,7 @@ function report(options, result) {
     if (result.mode === 'plugin') console.log(pluginNextSteps(target, path, options.action));
     if (result.mode === 'mcp') {
       console.log('After update or repair, copy the new connector.json into the client and restart the entry.');
-      console.log(runtimeConnector ? 'First task: use a supported playbook against the configured runtime service. Do not pass human review or action tokens.' : 'First task: ask the client to list the available methods, read conquistador/SKILL.md, then draft a launch email from supplied product facts.');
+      console.log(runtimeConnector ? 'First task: use a supported playbook against the configured runtime service. Do not pass human review or action tokens.' : 'First task: ask the client to list the available methods, read conquistador/SKILL.md, then ask for one marketing or growth task from supplied product facts.');
     } else if (result.mode === 'single-agent') {
       console.log(`First task: Read ${join(path, parentEntry)} and follow it. Draft a launch email from my product facts. Keep it as a draft.`);
     } else if (['plugin', 'conquistador'].includes(result.mode)) {

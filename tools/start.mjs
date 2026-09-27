@@ -6,12 +6,12 @@ import { FIRST_TASKS } from './onboarding-parse.mjs';
 
 export function runStart(args, cwd = process.cwd(), list = false) {
   let project = cwd;
-  let task = 'launch-plan';
+  let task = 'growth-plan';
 
   for (let i = 0; i < args.length; i += 2) {
     if (args[i] === '--project' && args[i + 1]) project = resolve(cwd, args[i + 1]);
     else if (!list && args[i] === '--task' && Object.hasOwn(FIRST_TASKS, args[i + 1])) task = args[i + 1];
-    else throw Error('Usage: conquistador start [--project PATH] [--task launch-plan|diagnose-growth|review-results|write-copy]; conquistador skills [--project PATH]');
+    else throw Error('Usage: conquistador start [--project PATH] [--task growth-plan|launch-plan|diagnose-growth|review-results|write-copy]; conquistador skills [--project PATH]');
   }
   const current = join(project, '.conquistador');
   const path = existsSync(current) ? current : join(project, '.conquistador-operator');

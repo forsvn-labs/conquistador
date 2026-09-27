@@ -142,7 +142,7 @@ The prior `v0.0.11` fallback retains its original launch-plan handoff.
 The TUI lets you choose a first task before installation. For a scripted Codex install,
 `conquistador --host codex --task diagnose-growth --yes` prints the same task handoff.
 After installation, `conquistador start --task diagnose-growth` repeats it. The default
-task remains a launch plan. Both commands print the saved activation setting, local
+task is a marketing and growth plan (`--task growth-plan`); `--task launch-plan` still works. Both commands print the saved activation setting, local
 request-time hook state, method-read check, and recovery steps. They do not execute a
 model task. `conquistador route --prompt 'Growth stalled while visits stayed flat and
 signups fell'` previews local selection; it does not prove host delivery. Use

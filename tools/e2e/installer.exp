@@ -1,0 +1,44 @@
+#!/usr/bin/expect -f
+# Drive the bare `conquistador` installer in a real terminal, inside an isolated home, then remove.
+# Checks the one-question install, the short closing screen, and declining the tour.
+#   expect tools/e2e/installer.exp > dist/e2e/installer/transcript.raw
+set timeout 600
+set root [file dirname [file dirname [file dirname [file normalize [info script]]]]]
+set home [exec mktemp -d -t conquistador-e2e-installer]
+foreach {name value} [list HOME $home CLAUDE_CONFIG_DIR $home/.claude CODEX_HOME $home/.codex CONQUISTADOR_HOME $home/.conquistador CURSOR_HOME $home/.cursor TERM xterm-256color] { set env($name) $value }
+if {[info exists env(CONQUISTADOR_PLAYBOOKS)]} { unset env(CONQUISTADOR_PLAYBOOKS) }
+cd $home
+spawn node $root/runtime/bin/conquistador.js
+# A spawned pseudo-terminal starts with zero columns; give it a normal size.
+stty rows 50 columns 120 < $spawn_out(slave,name)
+set all ""
+proc step {pattern} {
+  global all
+  expect {
+    -re $pattern { append all $expect_out(buffer) }
+    timeout { puts "\nE2E FAIL: timed out waiting for $pattern"; exit 1 }
+    eof { puts "\nE2E FAIL: exited before $pattern"; exit 1 }
+  }
+}
+step {Install Conquistador into}
+send "\r"
+step {See what it covers and try a task\?}
+# Decline the tour: move the toggle to No, then confirm.
+send "\033\[C"; sleep 0.2; send "\r"
+expect {
+  eof { append all $expect_out(buffer) }
+  timeout { puts "\nE2E FAIL: installer did not exit"; exit 1 }
+}
+# Terminal colors can split words; check the plain text.
+regsub -all {\x1b\[[0-9;?]*[A-Za-z]} $all "" all
+foreach text {"Try asking" "Installed. Run conquistador tour anytime."} {
+  if {[string first $text $all] < 0} { puts "\nE2E FAIL: missing \"$text\""; exit 1 }
+}
+foreach text {"Plan" "conquistador brief" "playbooks add"} {
+  if {[string first $text $all] >= 0} { puts "\nE2E FAIL: closing screen still shows \"$text\""; exit 1 }
+}
+# Clean up with the real remove command in the same isolated home.
+set removal [exec node $root/runtime/bin/conquistador.js remove]
+puts "\n$removal"
+exec rm -rf $home
+puts "\nE2E PASS: one question, short closing screen, tour declined, removed"

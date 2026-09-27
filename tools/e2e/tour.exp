@@ -16,9 +16,10 @@ send "\r"
 # Collect everything to the end, then check the whole transcript.
 set all ""
 expect {
-  -re {.+} { append all $expect_out(buffer); exp_continue }
-  eof {}
+  eof { append all $expect_out(buffer) }
+  timeout { puts "\nE2E FAIL: tour did not exit"; exit 1 }
 }
+regsub -all {\x1b\[[0-9;?]*[A-Za-z]} $all "" all
 foreach text {"How Conquistador will work" "Specialists: Conversion" "Playbooks it reads first" "Paste this into your agent"} {
   if {[string first $text $all] < 0} { puts "\nE2E FAIL: missing \"$text\""; exit 1 }
 }

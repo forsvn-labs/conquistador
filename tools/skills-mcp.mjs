@@ -21,7 +21,7 @@ const TOOLS = [
   { name: 'conquistador_read', description: 'Read one bundled method or playbook by its skills-relative path, such as plan-campaign/references/channel-strategy.md, or a path returned by conquistador_brief or conquistador_search. No project files, credentials or runtime state are available.', inputSchema: schema({ path: { type: 'string', minLength: 1, maxLength: 400 } }) },
 ].map(tool => ({ ...tool, annotations: readOnly }));
 const PROMPTS = [
-  { name: 'launch', title: 'Plan a launch', description: 'Plan a product launch with the Conquistador playbooks.', text: 'Plan a launch for {{product}}. Use conquistador_brief first and follow its playbooks.' },
+  { name: 'growth-plan', title: 'Plan marketing and growth', description: 'Choose channels, campaigns, launches, and in-product moves with the Conquistador playbooks.', text: 'Plan marketing and growth for {{product}}. Use conquistador_brief first and follow its playbooks.' },
   { name: 'diagnose-growth', title: 'Diagnose a growth stall', description: 'Find why a growth metric changed.', text: 'Diagnose this growth change: {{product}}. Use conquistador_brief first and follow its playbooks.' },
   { name: 'write-copy', title: 'Write marketing copy', description: 'Write landing page, email, or ad copy.', text: 'Write marketing copy for {{product}}. Use conquistador_brief first and follow its playbooks.' },
   { name: 'review-results', title: 'Review campaign results', description: 'Decide what to keep, drop, and test next.', text: 'Review these results and tell me what to keep, drop, and test: {{product}}. Use conquistador_brief first and follow its playbooks.' },

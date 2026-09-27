@@ -85,8 +85,8 @@ function taskRoute(path, prompt) {
 }
 
 export function operatorNextSteps(path, hosts, cwd = process.cwd(), task = {
-  label: 'Plan a launch',
-  prompt: 'Use Conquistador to draft a launch plan from the product facts in this project. Mark missing facts. Keep it as a draft.',
+  label: 'Plan marketing and growth',
+  prompt: 'Use Conquistador to draft a marketing and growth plan from the product facts in this project. Mark missing facts. Keep it as a draft.',
 }) {
   const local = dirname(path) === cwd;
   const display = local ? basename(path) : path;
