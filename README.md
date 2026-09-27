@@ -1,9 +1,26 @@
 # Conquistador
 
-Conquistador gives your AI agent field-tested playbooks for growth, GTM, launches, marketing,
-and sales. Ask for an outcome, such as a launch plan, pricing tiers, or landing page copy. The
-agent reads the playbooks for that exact task, does the work, and shows which playbooks it
-applied.
+Conquistador gives your AI agent field-tested playbooks for marketing and growth: on any
+platform, in any service, and inside your product. Ask for an outcome, such as a cold email
+sequence, a paywall experiment, an SEO plan, or a TikTok series. The agent reads the playbooks for
+that exact task, does the work, and shows which playbooks it applied.
+
+## What it covers
+
+| Area | Covers |
+| --- | --- |
+| Strategy and research | Positioning, ICP, competitors, pricing, channel choice, budget, growth targets |
+| Launches and campaigns | Product Hunt, Hacker News, App Store, feature launches, seasonal campaigns, webinars, live events |
+| Social, community, and video | X, LinkedIn, Reddit, Instagram, Facebook, TikTok, YouTube, Threads, Bluesky, Discord, communities |
+| Search and AI answers | Google SEO, programmatic SEO, ChatGPT and Perplexity answers, App Store and Google Play listings |
+| Paid ads | Google, Meta, LinkedIn, TikTok, Reddit, and YouTube ads, UGC creators, creative briefs, results reviews |
+| Email, outreach, and PR | Cold email, sales follow-ups, LinkedIn DMs, welcome and win-back emails, newsletters, press, podcasts, partners |
+| Growth inside the product | Onboarding, activation, paywalls, trials, upgrade prompts, referral loops, checkout and page conversion |
+| Copy, content, and brand | Landing and product pages, blog posts, case studies, brand voice and identity, Vietnamese copy |
+| Measure and learn | Growth drops, results reviews, campaign and video evaluations, marketing audits, fact checks |
+
+It also covers product flows, UI specs, web and iOS builds, system architecture, and technical
+docs. Run `conquistador tour` to explore each area and try a task.
 
 Version 0.0.15 is a private-alpha candidate. See [what changed](CHANGELOG.md).
 
@@ -41,17 +58,28 @@ agent read the playbooks. See [installation](INSTALL.md) for each route in detai
 
 ## Start your first task
 
-Open a new session in your agent and ask:
+Run the tour. It shows the areas, lets you pick an example or describe your own task, and shows
+which specialists and playbooks Conquistador will use:
+
+```sh
+conquistador tour
+```
+
+Or open a new session in your agent and describe the job. For example:
 
 ```text
+Improve activation in our onboarding; only 20% of signups create a project.
+Write a 4-step cold email sequence to HR directors at mid-size companies.
+Get our product recommended by ChatGPT and Perplexity.
 Plan a Product Hunt launch for <product>. We launch in <date> and have <facts>.
 ```
 
-The answer ends with **Playbooks applied**, which lists each file the agent used and the rule it
-took from it. To see which playbooks a task needs before you ask, run:
+Type `/conquistador` with no task to see what it covers inside your agent. The answer ends with
+**Playbooks applied**, which lists each file the agent used and the rule it took from it. To see
+which playbooks a task needs before you ask, run:
 
 ```sh
-conquistador brief "plan a Product Hunt launch for a developer tool"
+conquistador brief "build a win-back email flow for churned subscribers"
 ```
 
 ## How Conquistador makes the agent use the playbooks
@@ -59,7 +87,8 @@ conquistador brief "plan a Product Hunt launch for a developer tool"
 Agents often skip reference files. Conquistador uses four layers so that it does not happen:
 
 1. **A briefing engine** picks the method and ranks the knowledge files for the task. A named
-   platform, such as Product Hunt or TikTok, always brings its platform pack and channel guide.
+   platform, such as TikTok, Google Ads, or the App Store, always brings its platform guide and
+   leaves other platforms' guides out.
 2. **The MCP tool `conquistador_brief`** returns those playbooks in full, in one call.
 3. **The prompt hook** adds the must-read list to relevant prompts only. Coding prompts get
    nothing.
@@ -73,6 +102,10 @@ In a before-and-after test with headless Claude Code (two tasks, nine valid runs
 plugin read 17% of the must-read playbooks and never cited them; for the pricing task it read
 none. With the new plugin, the agent read all of them and cited them in every run. The sample is
 small. Run `node tools/e2e/knowledge-use.mjs` to repeat the test.
+
+A second test checks breadth without an agent session: `node tools/e2e/routing-breadth.mjs` runs
+105 checks: 82 marketing tasks across nine areas (including every tour example), 20 coding
+prompts that must get nothing, and checks that the tour and its copies agree.
 
 ## Add your own playbooks
 
@@ -89,6 +122,7 @@ files appear in briefs, hooks, and MCP results, labeled "Your playbook".
 
 ```sh
 conquistador                   # Find your agents and install
+conquistador tour [AREA]       # See what Conquistador covers and try a task
 conquistador agents            # Show detected agents and what is installed
 conquistador update            # Update every agent you installed into
 conquistador remove [AGENT]    # Remove from one agent, or from all of them

@@ -14,7 +14,7 @@ const supportedNode = Number(process.versions.node.split('.')[0]) >= 24;
 const onboarding = args.length === 0 || args[0].startsWith('-') || args[0] === 'project';
 const preflight = helpOrVersion || supportedNode || !onboarding ? null : await (await import('../../tools/node-preflight.mjs')).nodePreflight();
 // The agent installer and playbook commands come first; older per-project routes follow.
-const frontDoor = preflight === null && (args.length === 0 || ['add', 'update', 'remove', 'agents', 'brief', 'playbooks', 'bot', 'help', '--help', '-h'].includes(args[0]))
+const frontDoor = preflight === null && (args.length === 0 || ['add', 'update', 'remove', 'agents', 'brief', 'playbooks', 'bot', 'tour', 'help', '--help', '-h'].includes(args[0]))
   ? await (await import('../../tools/front-door.mjs')).runFrontDoor(args) : null;
 if (preflight !== null) {
   process.exitCode = preflight;

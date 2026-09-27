@@ -140,6 +140,8 @@ export function buildRoutingContract(root = moduleRoot) {
       kind: spec.kind ?? 'create',
       explicitOnly: spec.explicitOnly === true || overlay.explicitOnly?.includes(name) === true,
       intents: [...(spec.intents ?? [])],
+      // Routing-only phrases: practitioner wording that selects the method but does not describe it.
+      aliases: [...(spec.aliases ?? [])],
       exclusions: [...(spec.exclusions ?? [])],
       requiredResources: required,
       conditionalResources: conditional.map(item => item.path),
@@ -230,7 +232,7 @@ export function buildRoutingContract(root = moduleRoot) {
     parentMethods,
     methods,
     unavailableMethods: expected.filter(name => !methods[name]).map(name => ({ name, kind: overlay.methods[name].kind,
-      intents: overlay.methods[name].intents, exclusions: overlay.methods[name].exclusions,
+      intents: overlay.methods[name].intents, aliases: overlay.methods[name].aliases ?? [], exclusions: overlay.methods[name].exclusions,
       explicitOnly: overlay.methods[name].explicitOnly === true || overlay.explicitOnly.includes(name) })),
     workflows,
     roles,
@@ -249,6 +251,7 @@ export function validateRoutingContract(value) {
     for (const field of ['requiredResources', 'conditionalResources', 'optionalResources', 'intents', 'exclusions']) {
       if (!Array.isArray(method[field])) fail(`Invalid ${field} for ${name}`);
     }
+    if (method.aliases !== undefined && !Array.isArray(method.aliases)) fail(`Invalid aliases for ${name}`);
   }
   return value;
 }

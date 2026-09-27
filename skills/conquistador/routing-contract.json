@@ -69,6 +69,7 @@
         "spend scenario",
         "channel floors"
       ],
+      "aliases": [],
       "exclusions": [
         "create ads",
         "evaluate actual paid"
@@ -137,6 +138,7 @@
         "inspect this video",
         "find the scene"
       ],
+      "aliases": [],
       "exclusions": [
         "create short-form",
         "script a video"
@@ -174,6 +176,7 @@
         "service boundaries",
         "architect the system"
       ],
+      "aliases": [],
       "exclusions": [
         "marketing architecture",
         "campaign architecture"
@@ -304,6 +307,7 @@
         "pre-ship marketing audit",
         "audit this marketing package"
       ],
+      "aliases": [],
       "exclusions": [
         "knowledge review",
         "code audit"
@@ -368,6 +372,7 @@
         "design brief",
         "brief the designer"
       ],
+      "aliases": [],
       "exclusions": [
         "write the copy",
         "finished ads"
@@ -539,6 +544,7 @@
         "in-product ui",
         "in product ui"
       ],
+      "aliases": [],
       "exclusions": [
         "marketing landing",
         "brand visual identity"
@@ -635,6 +641,7 @@
         "native ios",
         "ipados"
       ],
+      "aliases": [],
       "exclusions": [
         "web app",
         "marketing copy about an app"
@@ -720,6 +727,7 @@
         "web implementation",
         "responsive web app"
       ],
+      "aliases": [],
       "exclusions": [
         "marketing copy about an app",
         "landing page copy"
@@ -758,6 +766,7 @@
         "naming direction",
         "create a brand"
       ],
+      "aliases": [],
       "exclusions": [
         "write a landing page",
         "social posts"
@@ -845,7 +854,9 @@
         "google ads",
         "linkedin ads",
         "tiktok ads",
-        "paid-media",
+        "paid-media"
+      ],
+      "aliases": [
         "facebook ads",
         "instagram ads",
         "youtube ads",
@@ -976,7 +987,9 @@
         "cue sheet",
         "minute-by-minute",
         "event rundown",
-        "live event plan",
+        "live event plan"
+      ],
+      "aliases": [
         "webinar",
         "livestream",
         "live stream",
@@ -1041,7 +1054,9 @@
         "tiktok script",
         "reels script",
         "youtube shorts",
-        "ugc-style",
+        "ugc-style"
+      ],
+      "aliases": [
         "tiktok video",
         "tiktok videos",
         "reels",
@@ -1272,6 +1287,7 @@
         "resolve this decision",
         "debate agents"
       ],
+      "aliases": [],
       "exclusions": [
         "write copy",
         "campaign plan"
@@ -1366,20 +1382,25 @@
         "pricing and packaging",
         "value metric",
         "tier boundaries",
-        "what to charge",
+        "what to charge"
+      ],
+      "aliases": [
         "pricing tiers",
         "decide tiers",
         "pricing strategy",
         "pricing model",
         "pricing page",
         "paywall",
-        "free trial",
         "trial length",
         "freemium",
         "usage based pricing",
         "price increase",
         "discount strategy",
-        "monetization"
+        "monetization",
+        "design a free trial",
+        "free trial length",
+        "free trial offer",
+        "reverse trial"
       ],
       "exclusions": [
         "landing page copy"
@@ -1432,6 +1453,7 @@
         "weak activation",
         "growth diagnosis"
       ],
+      "aliases": [],
       "exclusions": [
         "write a campaign",
         "create ads"
@@ -1517,6 +1539,7 @@
         "reply quality",
         "outreach results"
       ],
+      "aliases": [],
       "exclusions": [
         "write outreach",
         "create a sequence"
@@ -1571,7 +1594,9 @@
         "paid campaign results",
         "actual paid",
         "what to pause",
-        "paid-media performance",
+        "paid-media performance"
+      ],
+      "aliases": [
         "campaign results",
         "ads results",
         "ad results",
@@ -1641,6 +1666,7 @@
         "published short-form",
         "short-form results"
       ],
+      "aliases": [],
       "exclusions": [
         "script short-form",
         "create short-form"
@@ -1790,6 +1816,7 @@
         "fresh eyes review",
         "second opinion on this artifact"
       ],
+      "aliases": [],
       "exclusions": [
         "write the first draft",
         "create the campaign"
@@ -1883,23 +1910,26 @@
         "improve conversion",
         "conversion experiment",
         "revise the landing",
-        "onboarding conversion",
-        "conversion rate",
+        "onboarding conversion"
+      ],
+      "aliases": [
         "increase conversion",
         "improve signups",
-        "signup rate",
-        "checkout conversion",
         "product page conversion",
         "cart abandonment",
-        "activation rate",
         "improve activation",
-        "trial to paid",
-        "upgrade rate",
         "paywall experiment",
         "cro",
         "improve onboarding",
         "onboarding drop off",
-        "onboarding completion"
+        "onboarding completion",
+        "improve trial to paid",
+        "increase trial to paid",
+        "improve conversion rate",
+        "increase conversion rate",
+        "improve signup rate",
+        "improve checkout",
+        "raise the upgrade rate"
       ],
       "exclusions": [
         "seo ranking",
@@ -2019,6 +2049,7 @@
         "authority and freshness",
         "factual-claim check"
       ],
+      "aliases": [],
       "exclusions": [
         "launch plan",
         "mark missing facts",
@@ -2066,6 +2097,7 @@
         "screen transitions",
         "recovery states"
       ],
+      "aliases": [],
       "exclusions": [
         "approved flow",
         "implement the app",
@@ -2161,6 +2193,7 @@
         "campaign measurement",
         "learn from results"
       ],
+      "aliases": [],
       "exclusions": [
         "write social posts",
         "create ads"
@@ -2283,6 +2316,7 @@
         "numeric funnel",
         "revenue funnel"
       ],
+      "aliases": [],
       "exclusions": [
         "write copy"
       ],
@@ -2374,7 +2408,9 @@
         "aeo",
         "aso",
         "search visibility",
-        "answer visibility",
+        "answer visibility"
+      ],
+      "aliases": [
         "organic traffic",
         "organic search",
         "google ranking",
@@ -2583,7 +2619,9 @@
         "gtm plan",
         "plan a launch",
         "launch strategy",
-        "launch campaign",
+        "launch campaign"
+      ],
+      "aliases": [
         "marketing plan",
         "marketing strategy",
         "growth plan",
@@ -2706,7 +2744,9 @@
         "viet lai",
         "chinh sua tieng viet",
         "draft vietnamese copy",
-        "write vietnamese copy",
+        "write vietnamese copy"
+      ],
+      "aliases": [
         "tieng viet",
         "into vietnamese",
         "in vietnamese",
@@ -2766,6 +2806,7 @@
         "force-rank",
         "proceed park stop"
       ],
+      "aliases": [],
       "exclusions": [
         "write copy"
       ],
@@ -2872,7 +2913,9 @@
         "research channel",
         "choose a channel",
         "channel research",
-        "platform fit",
+        "platform fit"
+      ],
+      "aliases": [
         "channel strategy",
         "which channel",
         "best channel",
@@ -2972,7 +3015,9 @@
         "content ideas",
         "editorial bets",
         "topic angles",
-        "content research",
+        "content research"
+      ],
+      "aliases": [
         "content plan",
         "content calendar",
         "content strategy",
@@ -3074,6 +3119,7 @@
         "market research",
         "who we should serve"
       ],
+      "aliases": [],
       "exclusions": [
         "write the campaign",
         "submit feedback"
@@ -3243,6 +3289,7 @@
         "bounded decision",
         "what should we do"
       ],
+      "aliases": [],
       "exclusions": [
         "write finished copy"
       ],
@@ -3333,6 +3380,7 @@
         "report a conquistador failure",
         "file a conquistador issue"
       ],
+      "aliases": [],
       "exclusions": [
         "launch plan",
         "draft a launch",
@@ -3366,7 +3414,9 @@
         "product page copy",
         "launch announcement copy",
         "landing copy",
-        "draft a headline",
+        "draft a headline"
+      ],
+      "aliases": [
         "welcome email",
         "onboarding email",
         "nurture email",
@@ -3496,7 +3546,9 @@
         "founder essay",
         "thought leadership",
         "write an article",
-        "write a guide",
+        "write a guide"
+      ],
+      "aliases": [
         "blog post",
         "newsletter issue",
         "case study",
@@ -3578,7 +3630,9 @@
         "cold email",
         "linkedin dm",
         "direct message sequence",
-        "sales sequence",
+        "sales sequence"
+      ],
+      "aliases": [
         "pitch journalists",
         "media pitch",
         "press pitch",
@@ -3698,7 +3752,9 @@
         "community post",
         "social post",
         "linkedin product announcement",
-        "linkedin update",
+        "linkedin update"
+      ],
+      "aliases": [
         "instagram caption",
         "instagram post",
         "facebook post",
@@ -3796,6 +3852,7 @@
         "readme and setup",
         "operator docs"
       ],
+      "aliases": [],
       "exclusions": [
         "marketing copy",
         "launch email"

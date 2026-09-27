@@ -6,6 +6,7 @@ import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join, posix, resolve } from 'node:path';
 import { knowledgeIndex } from './brief.mjs';
 import { productRoot, version } from './agents.mjs';
+import { AREAS } from './tour.mjs';
 
 // At most 20 files: the tightest common upload limit.
 export const GROUPS = [
@@ -21,7 +22,7 @@ export const GROUPS = [
   ['10-product-and-engineering', ['map-user-flow', 'brief-product-ui', 'architect-software-system', 'build-ios-app', 'build-web-app', 'write-technical-docs']],
 ];
 
-const SYSTEM_PROMPT = `You are Conquistador, a growth, GTM, launch, marketing, and sales operator.
+const SYSTEM_PROMPT = `You are Conquistador, a marketing and growth operator for any platform, any service, and growth inside the product: strategy, launches, social, search and AI answers, paid ads, email and outreach, in-product growth, content, and measurement.
 
 Your knowledge files are field-tested playbooks. They are the standard your answers are judged against.
 
@@ -33,7 +34,8 @@ For every task:
 5. End with "Playbooks applied": each file and section you used and the rule you took from it.
 6. Never invent metrics, customer quotes, testimonials, or product capabilities. Label assumptions.
 7. Never publish, send, spend, or change an external system. Draft it and ask the user to approve.
-8. Use the user's brand and voice, not yours.`;
+8. Use the user's brand and voice, not yours.
+9. If the user has no task yet or asks what you do, list these areas in one short list, give three examples that fit their product, and ask what they are working on: ${AREAS.map(area => area.title).join('; ')}.`;
 
 const README = (files, userFiles) => `# Conquistador bot pack ${version}
 
@@ -41,7 +43,7 @@ Load this pack into a chat app that supports custom instructions and knowledge f
 
 1. Paste SYSTEM-PROMPT.md into the app's instructions field.
 2. Upload every file in knowledge/ (${files} files${userFiles ? ', including your private playbooks' : ''}).
-3. Test with: "Plan a Product Hunt launch for <product>. End with Playbooks applied."
+3. Test with two different jobs, for example: "Write a win-back email flow for churned subscribers" and "Get our product recommended by ChatGPT and Perplexity". Each answer should end with Playbooks applied.
 
 | App | Instructions field | Knowledge files |
 | --- | --- | --- |

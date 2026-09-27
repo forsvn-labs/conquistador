@@ -259,7 +259,7 @@ function lexicalMethods(prompt, index, platforms, limit = 2) {
   const query = expand(terms(prompt)).filter(word => !GENERIC.has(word));
   if (!query.length) return [];
   const candidates = [
-    ...Object.values(index.contract.methods).map(method => ({ method, words: [method.name.replace(/-/g, ' '), method.label, method.description, ...method.intents] })),
+    ...Object.values(index.contract.methods).map(method => ({ method, words: [method.name.replace(/-/g, ' '), method.label, method.description, ...method.intents, ...(method.aliases ?? [])] })),
     // Workflows with their own sub-method folder behave like methods for knowledge purposes.
     ...(index.contract.workflows ?? []).filter(item => index.docs.some(doc => doc.key.startsWith(`conquistador/references/${item.name}/`)))
       .map(item => ({ method: { ...item, workflow: true }, words: [item.name.replace(/-/g, ' '), item.label, item.description] })),
@@ -378,6 +378,10 @@ export function createBrief(prompt, { root = moduleRoot, playbooks, force = fals
   // Shared parent files stay situational unless the user named their platform.
   for (const item of scored) if (must.length < Math.min(LIMITS.mustFiles, 6) && !['example', 'checklist'].includes(item.doc.kind) && selectedNames.has(item.owner)) take(item);
 
+  // Nothing matched: say so instead of returning an empty reading list.
+  if (!methods.length && !must.length) {
+    return { schema: BRIEF_SCHEMA, action: 'none', reason: 'no-relevant-capability', methods: [], must: [], situational: [], platforms, packageRoot };
+  }
   const seen = new Set(must.map(item => item.doc.digest));
   const situational = scored.filter(item => !seen.has(item.doc.digest) && seen.add(item.doc.digest)).slice(0, LIMITS.situationalFiles);
   const view = item => ({
@@ -444,7 +448,7 @@ function readText(path) {
 // Full form for MCP and the CLI: method bodies and must-read files inline.
 export function formatBriefPack(brief, { limit = LIMITS.packBytes } = {}) {
   if (brief.action !== 'brief') {
-    return 'No Conquistador method matches this task. For growth, GTM, marketing, sales, or product work, restate the outcome (for example "plan a Product Hunt launch") or call conquistador_search.';
+    return 'No Conquistador method matches this task. For growth, GTM, marketing, sales, or product work, restate the outcome and channel (for example "write a win-back email flow", "get recommended by ChatGPT", or "plan a TikTok series") or call conquistador_search.';
   }
   const parts = [
     '# Conquistador brief',

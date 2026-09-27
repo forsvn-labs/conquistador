@@ -43,7 +43,7 @@ export const AGENTS = [
     update: () => [step('claude', ['plugin', 'marketplace', 'update', MARKETPLACE]), step('claude', ['plugin', 'update', PLUGIN], { okIf: /latest|up to date|already/i })],
     remove: () => [step('claude', ['plugin', 'uninstall', PLUGIN], { okIf: /not (?:installed|found)/i }), step('claude', ['plugin', 'marketplace', 'remove', MARKETPLACE], { okIf: /not found|no marketplace/i })],
     installed: () => run('claude', ['plugin', 'list', '--json']).stdout.includes(`"${PLUGIN}"`),
-    tryIt: 'Open Claude Code in any project and ask: "Plan a launch for <your product>". Or type /conquistador.',
+    tryIt: 'Open Claude Code in any project and describe a marketing or growth job. Or type /conquistador to see what it covers.',
   },
   {
     id: 'codex', label: 'Codex', command: 'codex', how: 'plugin',
@@ -53,7 +53,7 @@ export const AGENTS = [
     update: src => [step('codex', ['plugin', 'marketplace', 'add', src], { okIf: /already added/i }), step('codex', ['plugin', 'add', PLUGIN])],
     remove: () => [step('codex', ['plugin', 'remove', PLUGIN], { okIf: /not installed|not found/i }), step('codex', ['plugin', 'marketplace', 'remove', MARKETPLACE], { okIf: /not found|no marketplace/i })],
     installed: () => run('codex', ['plugin', 'list']).stdout.includes(PLUGIN),
-    tryIt: 'Open Codex, trust the Conquistador hooks when asked (/hooks), then ask: "Plan a launch for <your product>".',
+    tryIt: 'Open Codex, trust the Conquistador hooks when asked (/hooks), then describe a marketing or growth job.',
   },
   {
     id: 'cursor', label: 'Cursor', command: 'cursor-agent', alsoDetect: ['cursor'], how: 'local plugin folder',
@@ -61,7 +61,7 @@ export const AGENTS = [
     update: () => [{ copy: cursorPlugins }],
     remove: () => [{ remove: cursorPlugins }],
     installed: () => existsSync(join(cursorPlugins(), '.cursor-plugin', 'plugin.json')),
-    tryIt: 'Reload the Cursor window (Developer: Reload Window), then ask the agent: "Plan a launch for <your product>".',
+    tryIt: 'Reload the Cursor window (Developer: Reload Window), then describe a marketing or growth job to the agent.',
   },
   {
     id: 'copilot', label: 'GitHub Copilot CLI', command: 'copilot', how: 'plugin',
@@ -69,7 +69,7 @@ export const AGENTS = [
     update: () => [step('copilot', ['plugin', 'update', PLUGIN], { okIf: /latest|up to date|live/i })],
     remove: () => [step('copilot', ['plugin', 'uninstall', PLUGIN], { okIf: /not installed|not found/i }), step('copilot', ['plugin', 'marketplace', 'remove', MARKETPLACE], { okIf: /not found/i })],
     installed: () => run('copilot', ['plugin', 'list']).stdout.includes(PLUGIN),
-    tryIt: 'Start copilot and ask: "Plan a launch for <your product>".',
+    tryIt: 'Start copilot and describe a marketing or growth job.',
   },
   {
     id: 'grok', label: 'Grok CLI', command: 'grok', how: 'plugin',
@@ -78,7 +78,7 @@ export const AGENTS = [
     update: () => [step('grok', ['plugin', 'update'])],
     remove: () => [step('grok', ['plugin', 'uninstall', 'conquistador'], { okIf: /not found/i })],
     installed: () => /\bconquistador\b/.test(run('grok', ['plugin', 'list']).stdout),
-    tryIt: 'Start grok and ask: "Plan a launch for <your product>".',
+    tryIt: 'Start grok and describe a marketing or growth job.',
   },
 ];
 

@@ -18,8 +18,13 @@ FORSVN context and operating decisions live in [FORSVN · Start here](https://li
   and `conquistador bot` all use it. `tools/front-door.mjs` and `tools/agents.mjs` own the agent installer.
 - After adding, renaming, or removing a knowledge file, run `node tools/knowledge-map.mjs` and
   `node tools/update-completeness.mjs`. `node tools/knowledge-map.mjs --check` must pass.
-- E2E: `node tools/e2e/install-lifecycle.mjs` (isolated home, all detected agents) and
-  `node tools/e2e/knowledge-use.mjs` (headless Claude Code; spends tokens). Reports go to `dist/e2e/`.
+- E2E: `node tools/e2e/routing-breadth.mjs` (offline; marketing breadth, coding silence, tour drift),
+  `expect tools/e2e/tour.exp` (interactive tour in a terminal), `node tools/e2e/install-lifecycle.mjs`
+  (isolated home, all detected agents), and `node tools/e2e/knowledge-use.mjs [--set breadth]`
+  (headless Claude Code; spends tokens). Reports go to `dist/e2e/`.
+- Router phrases: curated `intents` describe a method; practitioner wording that only selects it goes
+  in `aliases` in `skills/conquistador/routing-overlay.json`. Rebuild with `writeRoutingContract`.
+- `tools/tour.mjs` owns the capability areas. After editing it, run `node tools/tour.mjs --write`.
 - Keep methods original and retain applicable MIT license and notices. Never add private knowledge,
   customer transcripts, credentials, internal decisions, or private workspace history to this repo.
 - Select the relevant skill; do not load the whole library. Preserve explicit human authority for

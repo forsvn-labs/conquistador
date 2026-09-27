@@ -7,7 +7,7 @@ const bold = text => (process.stdout.isTTY ? `\x1b[1m${text}\x1b[22m` : text);
 const dim = text => (process.stdout.isTTY ? `\x1b[2m${text}\x1b[22m` : text);
 
 export const HELP = `Conquistador ${version}
-Growth, GTM, launch, and marketing playbooks for your AI agents.
+Marketing and growth playbooks for your AI agents: any platform, any service, and inside the product.
 
 Install
   conquistador                      Find your agents and install (recommended)
@@ -17,6 +17,7 @@ Install
   conquistador agents               Show detected agents and install state
 
 Use
+  conquistador tour [AREA]          See what Conquistador covers and try a task (--list prints all)
   conquistador brief "TASK"         Show which playbooks a task needs (--full prints them)
   conquistador playbooks add DIR    Add your own playbook folder; it ranks first
   conquistador mcp                  Run the playbook MCP server (stdio)
@@ -57,11 +58,28 @@ function report(results) {
   return failed;
 }
 
-function nextSteps(agents) {
+// What a new user sees after install: where to go, what it covers, and what to ask first.
+async function nextLines(agents) {
+  const { ALSO, STARTERS, mapLines } = await import('./tour.mjs');
+  return [
+    ...agents.map(agent => `${agent.label}: ${agent.tryIt}`),
+    '',
+    'It covers:',
+    ...mapLines().map(line => `  ${line}`),
+    `  ${ALSO}`,
+    '',
+    'Try asking:',
+    ...STARTERS.map(prompt => `  "${prompt}"`),
+    '',
+    'Explore by area:        conquistador tour',
+    'See what a task reads:  conquistador brief "TASK"',
+    'Add your own playbooks: conquistador playbooks add ~/path/to/playbooks',
+  ];
+}
+
+async function nextSteps(agents) {
   console.log(`\n${bold('Next')}`);
-  for (const agent of agents) console.log(`  ${agent.label}: ${agent.tryIt}`);
-  console.log(`\n  Your own playbooks: conquistador playbooks add ~/path/to/playbooks`);
-  console.log(`  Check a task first:  conquistador brief "plan a Product Hunt launch"`);
+  for (const line of await nextLines(agents)) console.log(line ? `  ${line}` : '');
 }
 
 export async function runAdd(args, { interactive = false } = {}) {
@@ -76,7 +94,7 @@ export async function runAdd(args, { interactive = false } = {}) {
   if (interactive) {
     const ui = await import('./vendor/clack.mjs');
     ui.intro(`Conquistador ${version}`);
-    ui.log.message('Growth, GTM, launch, and marketing playbooks for your AI agents.\nInstalls as a plugin: 39 skills, a playbook MCP server, and hooks that make the agent read the playbooks.');
+    ui.log.message('Marketing and growth playbooks for your AI agents: any platform, any service, and inside the product.\nInstalls as a plugin: 39 skills, a playbook MCP server, and hooks that make the agent read the playbooks.');
     const options = detected.map(agent => ({ value: agent.id, label: agent.label, hint: agent.found ? agent.how : 'not found' }));
     if (!detected.some(agent => agent.found)) {
       ui.note('No supported agent found on this machine.\nSkills for any agent:   npx skills add https://github.com/forsvn-labs/conquistador/tree/private-alpha/skills\nMCP for any client:     conquistador mcp\nChat bots:              conquistador bot', 'Other ways');
@@ -101,9 +119,14 @@ export async function runAdd(args, { interactive = false } = {}) {
       else { failed += 1; ui.log.error(`${agent.label}: ${result.error}`); }
     }
     const ready = chosen.filter((agent, index) => results[index].result.ok);
-    if (ready.length) ui.note([...ready.map(agent => `${agent.label}: ${agent.tryIt}`), '', 'Add your own playbooks:  conquistador playbooks add ~/path/to/playbooks', 'See what a task reads:   conquistador brief "plan a Product Hunt launch"'].join('\n'), 'Next');
-    ui.outro(failed ? `${failed} agent(s) failed. Fix the error above and run: conquistador add ${results.filter(item => !item.result.ok).map(item => item.agent.id).join(' ')}` : 'Installed.');
-    return failed ? 1 : 0;
+    if (ready.length) ui.note((await nextLines(ready)).join('\n'), 'Next');
+    if (failed) {
+      ui.outro(`${failed} agent(s) failed. Fix the error above and run: conquistador add ${results.filter(item => !item.result.ok).map(item => item.agent.id).join(' ')}`);
+      return 1;
+    }
+    const tour = await ui.confirm({ message: 'Take the one-minute tour and try a task?', initialValue: true });
+    if (ui.isCancel(tour) || !tour) { ui.outro('Installed. Run conquistador tour anytime.'); return 0; }
+    return (await import('./tour.mjs')).interactiveTour({ intro: false });
   }
   if (!chosen.length) { console.error('No supported agent found. Name one: conquistador add claude-code'); return 1; }
   if (!flag(args, '--yes') && !dryRun) {
@@ -114,7 +137,7 @@ export async function runAdd(args, { interactive = false } = {}) {
   const source = stageSource({ dryRun });
   const results = chosen.map(agent => ({ agent, result: applyAgent(agent, 'install', { source, dryRun, log: line => console.log(dim(`  $ ${line}`)) }) }));
   const failed = report(results);
-  if (!dryRun) nextSteps(chosen.filter((agent, index) => results[index].result.ok));
+  if (!dryRun) await nextSteps(chosen.filter((agent, index) => results[index].result.ok));
   return failed ? 1 : 0;
 }
 
@@ -160,7 +183,7 @@ export async function runBrief(args) {
   const brief = createBrief(task, { force: true });
   if (flag(args, '--json')) console.log(JSON.stringify(brief, null, 2));
   else if (flag(args, '--full')) console.log(formatBriefPack(brief));
-  else console.log(brief.action === 'brief' ? formatReadingList(brief) : 'No Conquistador method matches this task.');
+  else console.log(brief.action === 'brief' ? formatReadingList(brief) : 'No Conquistador method matches this task. Name the outcome and the channel, for example "write a win-back email flow for churned users". See every area: conquistador tour');
   return 0;
 }
 
@@ -201,6 +224,7 @@ export async function runFrontDoor(args) {
   if (command === 'agents') return runAgents(rest);
   if (command === 'brief') return runBrief(rest);
   if (command === 'playbooks') return runPlaybooks(rest);
+  if (command === 'tour') return (await import('./tour.mjs')).runTour(rest);
   if (command === 'bot') return (await import('./bot-pack.mjs')).runBotPack(rest);
   return null;
 }

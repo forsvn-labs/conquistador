@@ -40,10 +40,30 @@ export function judge(item, { playbooks = [] } = {}) {
   return { ...item, pass: problems.length === 0, problems, methods, must };
 }
 
+// The tour may only name real specialists, and the agent-facing welcome must match the tour.
+async function tourChecks() {
+  if (!existsSync(join(root, 'tools/tour.mjs'))) return [];
+  const { AREAS, SPECIALISTS, welcomeMarkdown, welcomePath } = await import('../tour.mjs');
+  const { loadRoutingContract } = await import('../routing-contract.mjs');
+  const contract = loadRoutingContract(root);
+  const known = new Set([...Object.keys(contract.methods), ...(contract.workflows ?? []).map(item => item.name)]);
+  const unknown = AREAS.flatMap(area => area.methods.filter(name => !known.has(name) || !SPECIALISTS[name]));
+  const fresh = existsSync(welcomePath()) && readFileSync(welcomePath(), 'utf8') === await welcomeMarkdown();
+  const readme = readFileSync(join(root, 'README.md'), 'utf8');
+  const missing = AREAS.filter(area => !readme.includes(`| ${area.title} | ${area.covers} |`)).map(area => area.title);
+  const row = (task, problems) => ({ area: 'tour', task, pass: !problems.length, problems, methods: [], must: [] });
+  return [
+    row('Tour names only real specialists', unknown.map(name => `unknown specialist ${name}`)),
+    row('welcome.md matches tools/tour.mjs', fresh ? [] : ['stale: run node tools/tour.mjs --write (O6)']),
+    row('README area table matches tools/tour.mjs', missing.map(title => `README row differs: ${title}`)),
+  ];
+}
+
 export async function run() {
   const cases = await loadCases();
   // Built-in knowledge only: a user's own playbooks must not change the verdict.
   const results = cases.map(item => judge(item));
+  results.push(...await tourChecks());
   const failed = results.filter(item => !item.pass);
   const areas = [...new Set(results.map(item => item.area))];
   const summary = areas.map(area => {

@@ -40,7 +40,7 @@ function matchingMethods(query, contract, { permitGrowthInference = true } = {})
   const matches = [];
   for (const method of [...Object.values(contract.methods), ...contract.unavailableMethods]) {
     if (method.explicitOnly && !feedbackOptIn.test(query)) continue;
-    const intents = [method.name, ...method.intents];
+    const intents = [method.name, ...method.intents, ...(method.aliases ?? [])];
 
     const hit = intents.flatMap((intent, index) => includesPhrase(text, intent)
       ? [{ phrase: intent, kind: index === 0 ? 'name' : 'intent', score: normalized(intent).length }]
@@ -215,7 +215,7 @@ export function selectRequestContext(prompt, { root = moduleRoot } = {}) {
   const parent = posix.join(contract.parentPath, contract.document);
   const methods = [...Object.values(contract.methods), ...contract.unavailableMethods];
 
-  const protectedPhrases = methods.flatMap(method => [method.name, ...method.intents])
+  const protectedPhrases = methods.flatMap(method => [method.name, ...method.intents, ...(method.aliases ?? [])])
     .filter(phrase => /\band\b/.test(normalized(phrase)));
 
   const clauses = requestClauses(prompt, { protectedPhrases });

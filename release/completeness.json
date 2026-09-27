@@ -3,7 +3,7 @@
   "parent": {
     "name": "conquistador",
     "version": "2.11.0",
-    "sha256": "9b810256688a4b39a9730649f07a7cef31afbd01580b4d2613cf8361ee9d43f9"
+    "sha256": "57a643e8caa9d31e62fbbebcc341522079cf460bb9a66fa552940dae9efe3f34"
   },
   "outcomes": [
     {
@@ -1584,11 +1584,11 @@
     },
     {
       "path": "conquistador/routing-contract.json",
-      "sha256": "cfea94106fbf1e72def80b753663b85922031579fddce70bd1373d0eb04620ca"
+      "sha256": "1dff74601b8505eeb5bd10527ce588ed287237afade9b62c955447dee87f108f"
     },
     {
       "path": "conquistador/routing-overlay.json",
-      "sha256": "f57496d732dc1cd2e14f28ee8fce06f00f3b8549a3f0e27b42a78acd034ce9d7"
+      "sha256": "2035f5d47fba94baf5142691e2ee3b32772e00758f3cbaeac29460f3f9cef776"
     },
     {
       "path": "conquistador/rubrics/composition.md",
@@ -1669,6 +1669,10 @@
     {
       "path": "conquistador/standards/vietnamese.md",
       "sha256": "8f18f59ad36e8ef22eeacfbb8d4622609cdf87f8ca02475ad12c05dfc9601649"
+    },
+    {
+      "path": "conquistador/welcome.md",
+      "sha256": "ed147784194b3276a19e83ccdfe776fe7aafa5d4d5b4854fdddb01ed84cbe55e"
     },
     {
       "path": "conquistador/workflows/answer-visibility-monitor.md",
@@ -4638,7 +4642,7 @@
     },
     {
       "path": "tools/routing-contract.mjs",
-      "sha256": "3668ff923cb891b319674641c337b855adf60747cea1e441e74a0a86c1568135"
+      "sha256": "3d9ee14f9459d5df93e15b07462fedfbfba5366cf132c92c52f85d00643d133e"
     },
     {
       "path": "tools/request-text.mjs",
@@ -4650,11 +4654,11 @@
     },
     {
       "path": "tools/brief.mjs",
-      "sha256": "edaa10271eeb64e7fea13421f03d7b27d6b25dfa67171c219ebb9fb08b556753"
+      "sha256": "e8f5477895a090f1725131fc0e1136d75400349a03d677b978a7ebdf283f8b31"
     },
     {
       "path": "tools/context-selection.mjs",
-      "sha256": "cbcb36c49907e38ad6cc06858095ace169b9f7a730070704ae26b88f25b3a72c"
+      "sha256": "3df19e1f6f2afc91a6f18fbefb8ee120de1462839620d0470da8dddc36edf0d3"
     },
     {
       "path": "agents/conquistador/agent.json",

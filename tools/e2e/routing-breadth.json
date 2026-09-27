@@ -533,6 +533,28 @@
       ]
     },
     {
+      "area": "measure",
+      "task": "Our B2B SaaS growth has stalled. Free-trial signups fell from 800 to 500; paid upgrades from 160 to 75. What is going on?",
+      "any": [
+        "diagnose-growth"
+      ],
+      "none": [
+        "design-pricing-and-packaging",
+        "improve-conversion"
+      ]
+    },
+    {
+      "area": "measure",
+      "task": "Why did trial-to-paid weaken?",
+      "any": [
+        "diagnose-growth"
+      ],
+      "none": [
+        "design-pricing-and-packaging",
+        "improve-conversion"
+      ]
+    },
+    {
       "area": "coding",
       "task": "Fix the failing test in src/auth.test.ts",
       "silent": true

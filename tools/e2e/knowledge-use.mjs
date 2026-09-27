@@ -4,7 +4,8 @@
 //   hooks   – this checkout as a plugin, hooks on,
 //   mcp     – this checkout as a plugin, hooks off (MCP server instructions only).
 // Uses your Claude Code login and spends real tokens. Nothing outside OUT_DIR is written.
-//   node tools/e2e/knowledge-use.mjs [--runs N] [--before REF] [--out DIR] [--only before,hooks,mcp]
+//   node tools/e2e/knowledge-use.mjs [--runs N] [--before REF] [--out DIR] [--only before,hooks,mcp] [--set launch|breadth]
+// --set breadth uses non-launch tasks: lifecycle email, AI answer visibility, and an in-product paywall.
 import { execFileSync, spawn } from 'node:child_process';
 import { mkdirSync, mkdtempSync, readFileSync, realpathSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
@@ -18,10 +19,15 @@ const runs = Number(option('--runs', 1));
 const beforeRef = option('--before', 'df97556');
 const out = resolve(option('--out', join(root, 'dist/e2e/knowledge-use')));
 const only = option('--only', 'before,hooks,mcp').split(',');
-const PROMPTS = [
+const SETS = { launch: [
   'Plan a Product Hunt launch for Tinyshot, a macOS screenshot tool for developers. We launch in 3 weeks, have 400 waitlist emails, and no budget. Keep the plan to one page.',
   'Design pricing tiers for Ledgerly, a bookkeeping SaaS for freelancers. We charge $12/month flat today and 30% of trials convert. Recommend a tier structure in under 400 words.',
-];
+], breadth: [
+  'Build a win-back email flow for churned subscribers of Brewbox, a $24/month coffee subscription. About 9% cancel each month, mostly after month three. Keep it to three emails with subject lines.',
+  'Get Ledgerly, a bookkeeping SaaS for freelancers, recommended by ChatGPT and Perplexity when people ask for freelancer bookkeeping tools. Give a one-page plan.',
+  'Plan a paywall and trial experiment for Stepwise, a habit-tracking iOS app with 40k monthly installs and a 2% install-to-paid rate. Keep it under 400 words.',
+] };
+const PROMPTS = SETS[option('--set', 'launch')] ?? SETS.launch;
 mkdirSync(join(out, 'transcripts'), { recursive: true });
 const work = realpathSync(mkdtempSync(join(tmpdir(), 'conquistador-e2e-knowledge-')));
 const before = join(work, 'before');
