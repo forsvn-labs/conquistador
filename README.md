@@ -1,146 +1,119 @@
-# Conquistador 0.0.14 private alpha
+# Conquistador
 
-Conquistador helps your coding agent do growth, marketing, sales, product and knowledge work.
-Give it an outcome and the relevant facts. It selects from 38 methods, names the specialists it
-uses, and returns a draft with review findings. Your coding agent supplies the model and tools.
+Conquistador gives your AI agent field-tested playbooks for growth, GTM, launches, marketing,
+and sales. Ask for an outcome, such as a launch plan, pricing tiers, or landing page copy. The
+agent reads the playbooks for that exact task, does the work, and shows which playbooks it
+applied.
 
-The latest verified private release is
-[v0.0.14](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.14),
-from source commit `cd34526e790e73042ed974dee27096dcb4e08538`.
-[v0.0.13](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.13) remains
-an earlier fallback. Verify the private release identity and checksums before installation;
-local assembly alone does not establish release or human acceptance.
-Private alpha and dogfood are the same `0.0.x` channel. Public alpha starts at `0.1.0`.
+Version 0.0.15 is a private-alpha candidate. See [what changed](CHANGELOG.md).
 
-## Install once, use in each project
+## Install
 
-Use Node 24, npm, Git, and a GitHub account with access to this private repository. The v0.0.14
-private tag and six assets are available to authorized accounts:
+You need Node 24 or later, and at least one supported agent.
 
 ```sh
-npm install -g --ignore-scripts --install-links git+https://github.com/forsvn-labs/conquistador.git#v0.0.14
-```
-
-If v0.0.14 is unavailable to your authorized account, use the prior
-[v0.0.13 release](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.13)
-with the same command ending in `#v0.0.13`. It lacks interactive edited-file recovery.
-
-Then run the installed command in the receiving project. Version 0.0.14 selects a project directory,
-including one outside the current directory, then a host, plan, apply, local doctor, and first-task
-handoff:
-
-```sh
+npm install -g --ignore-scripts --install-links git+https://github.com/forsvn-labs/conquistador.git#v0.0.15
 conquistador
 ```
 
-The first command downloads the CLI once. Later launches start from your installed copy, without
-asking GitHub or npm to resolve the package again. `--ignore-scripts` skips automatic npm hooks.
-`--install-links` makes npm copy the private Git checkout into its durable global location; without
-it, npm 11 can leave the executable linked to temporary acquisition files. No package is published
-to the npm registry. GitHub authentication must already work; use
-`gh auth setup-git` if your authorized Git client needs configuration.
+The `conquistador` command finds the agents on your computer, asks which ones to use, and
+installs the Conquistador plugin with each agent's own plugin manager. Install once; it works in
+every project.
 
-The planned public-alpha installation command is `npm i -g @forsvn/conquistador`. It does not work
-for the current private alpha because the registry package does not exist and publication remains
-blocked. It becomes the primary command only after the exact public package and clean registry
-lifecycle are verified.
+Until the v0.0.15 tag is published, the latest verified private release is v0.0.14, which has
+the older per-project installer:
+`npm install -g --ignore-scripts --install-links git+https://github.com/forsvn-labs/conquistador.git#v0.0.14`.
 
-In v0.0.14, plain `conquistador` installs one complete project operator. It chooses the
-package; you confirm.
-If it cannot tell which coding agent you are using, it asks for one host. The happy path is one
-confirmation. Architecture choices stay behind `conquistador --advanced` and explicit setup
-commands. The guide also lets you select an optional plugin, skills.sh copy, MCP connector, or bot route within the same session; each has its own plan and confirmation. If a selected integration fails or is interrupted, setup preserves completed copies and returns that failure instead of claiming success. A cancelled optional step after the operator install names the completed owned operator. Client registration, host trust, and native discovery remain manual. No optional surface is installed by default. No receiving-project package manifest, dependency or lockfile is added by the recommended operator path.
+### Choose how to use it
 
-```text
-.conquistador/
-  SKILL.md           Start here
-  README.md          Usage and lifecycle
-  library/           All 38 methods and their resources
-  agent/agent.json   Portable operator contract
-  hosts/             BB specialist adapter
-.agents/skills/conquistador/   Codex native skill, when that host is selected
-```
+| You use | Install | You get |
+| --- | --- | --- |
+| Claude Code, Codex, Cursor, Copilot CLI, or Grok CLI | `conquistador` | Plugin: 39 skills, the playbook MCP server, and hooks |
+| Claude Code, from inside the app | `/plugin marketplace add forsvn-labs/conquistador`, then `/plugin install conquistador@conquistador` | Same plugin |
+| Any agent that reads `SKILL.md` skills | `npx skills add https://github.com/forsvn-labs/conquistador/tree/private-alpha/skills` | Skills only |
+| Any MCP client (Windsurf, Zed, VS Code, Claude Desktop) | Add a server that runs `conquistador mcp` | Playbook tools |
+| Muse, ChatGPT, or another app with MCP connectors | Host `conquistador mcp --http`, then add its URL | Playbook tools over HTTP |
+| ChatGPT GPTs, Claude Projects, Grok projects, Gemini Gems | `conquistador bot` | A system prompt and upload-ready knowledge files |
+| One project only, with the full operator contracts | `conquistador project` | Per-project copy in `.conquistador/` |
 
-BB uses the complete operator and explicit team adapter. Setup does not register a BB plugin,
-provider skill or request router. Claude Code, Cursor and Copilot get their own project skill
-directory. Hermes Agent uses `conquistador --bot hermes` and a separate trust step. Each prepared
-folder exposes one Conquistador entry; the internal methods load after routing. Hosts that scan
-several compatible directories still need discovery checks. The full operator retains the profile,
-contracts, schemas and BB adapter.
-
-```sh
-conquistador --bot hermes
-conquistador --bot grok-bot
-conquistador --skills [--host HOST]
-conquistador --plugin [--host claude-code|codex|copilot|none]
-conquistador --mcp [--host HOST]
-conquistador --advanced
-```
-
-`install` keeps its documented Codex default. See [installation options](INSTALL.md).
+The plugin is the recommended route. Only the plugin route includes the hooks that check that the
+agent read the playbooks. See [installation](INSTALL.md) for each route in detail.
 
 ## Start your first task
 
-Open a fresh coding-agent session in that project. Select Conquistador from the skills menu, or ask:
+Open a new session in your agent and ask:
 
 ```text
-Use Conquistador to draft a launch plan from the product facts in this project.
-Mark missing facts. Keep it as a draft.
+Plan a Product Hunt launch for <product>. We launch in <date> and have <facts>.
 ```
 
-If the host has not refreshed its skill list, ask it to read `.conquistador/SKILL.md` and follow it.
-You do not need to navigate through adapter folders or install the specialists separately.
-
-For a growth diagnosis in this checkout, choose **Diagnose a growth stall** in the setup guide or run
-`conquistador start --task diagnose-growth` after installation. Give the agent a baseline,
-current figures, and known limits. Check its trace for reads of the complete
-`diagnose-growth` method and required resources before trusting the answer. The local doctor
-checks installed files and hook registration; it cannot verify those reads or the result.
+The answer ends with **Playbooks applied**, which lists each file the agent used and the rule it
+took from it. To see which playbooks a task needs before you ask, run:
 
 ```sh
-conquistador start              # Show the skill location and first task again
-conquistador start --task diagnose-growth  # Show a growth diagnosis task
-conquistador skills             # Browse the available capabilities
-conquistador doctor             # Check local files, routing, and hook registration
-conquistador route --prompt 'Growth stalled while visits stayed flat and trial signups fell'  # Preview a route
-conquistador update             # Update this project from the installed CLI
-conquistador uninstall          # Remove both unchanged owned copies
+conquistador brief "plan a Product Hunt launch for a developer tool"
 ```
 
-In v0.0.14, if your shell uses a Node version other than 24, an interactive run offers a verified local Node 24 executable when detected, or prints manager-aware selection steps. It asks before continuing under that executable; it does not change the parent shell or install Node. Terminating the launcher forwards the signal to its local setup process group and waits for its child; interrupted transactions may still need recovery. Without a terminal it prints Node 24 guidance and exits nonzero. `--help` and `--version` remain available. Install the CLI with Node 24 when possible; the preflight helps if your shell later changes versions.
+## How Conquistador makes the agent use the playbooks
 
-If you pass `--project PATH` from another directory, the setup and `start` handoffs print
-absolute skill paths and target-qualified management commands for that project. Run the first
-task in a fresh host session opened there. On a later interactive launch, choose a starter task
-or describe your own. Setup still cannot verify host discovery or the task result.
+Agents often skip reference files. Conquistador uses four layers so that it does not happen:
 
-To upgrade the CLI itself, install the next authorized version with npm, then update the project.
-Existing `.conquistador-operator` installations migrate through `conquistador operator update`.
-Modified files are preserved. A files-only operator can add its first native host through the interactive guide. `--host none` does not remove native hosts from an existing operator. When adding a host, the confirmation names any unchanged independent skill that will be adopted; future operator uninstall removes adopted copies. Keep drafts and runtime data outside the owned installation.
-In v0.0.14, a later interactive run with edited operator or recorded native skill
-files offers a named backup and re-setup. The backup keeps local additions inside those folders.
-The new installation retains the recorded hosts. Unowned files and unrelated project files are
-not replaced. See
-[installation options](INSTALL.md) for recovery details.
+1. **A briefing engine** picks the method and ranks the knowledge files for the task. A named
+   platform, such as Product Hunt or TikTok, always brings its platform pack and channel guide.
+2. **The MCP tool `conquistador_brief`** returns those playbooks in full, in one call.
+3. **The prompt hook** adds the must-read list to relevant prompts only. Coding prompts get
+   nothing.
+4. **The stop hook** checks the session transcript. If the agent answered without reading the
+   must-read files, the hook sends it back once to read them and revise.
 
-## What installation proves
+Each method also starts with a generated "Playbooks for this method" list, so skills-only installs
+still point the agent at the right files.
 
-The installed v0.0.13 bare command completed local setup from a login shell under Node 26
-by selecting a verified Node 24, then ran local doctor and printed the first-task handoff in a
-disposable project. Setup checks local completeness and places the skill in the selected host's
-discovery directory. Open a fresh session to check that the host discovers it. Native discovery and task quality
-still need an observed task in that host. Installation starts no watcher, hook or service and grants no external-action authority.
-Codex and Claude Code can opt into the project-local context hook in
-[proactive help](docs/PROACTIVE.md): it ranks the installed methods for each prompt and injects the
-relevant method, workflow, resource, and specialist paths. The BB adapter supports explicit
-specialist teams with exact-artifact review. Other automatic project routing requires a host
-integration. The setup guide shows the installed activation setting and hook registration state.
-Hook registration still requires host trust and an observed prompt to establish delivery. See
-[execution modes](docs/MASTER-AGENT.md).
+In a before-and-after test, the previous plugin read 2 knowledge files for a launch plan and
+skipped the Product Hunt pack. The new plugin read the method and 6 playbooks, including the
+Product Hunt pack, and cited them. Run `node tools/e2e/knowledge-use.mjs` to repeat the test.
 
-Work based on supplied facts needs no connected account. If a task needs live access, follow
-[connection setup](docs/INTEGRATIONS.md). Review drafts before use. Publication, spend, sends,
-external writes, saved memory and feedback disclosure retain their applicable human decisions.
+## Add your own playbooks
 
-The repository stays private and npm publication stays disabled. See [private-alpha acceptance](docs/PRIVATE-ALPHA.md),
-[version policy](VERSIONS.md), [release history](CHANGELOG.md), and [development](CONTRIBUTING.md).
+Your own notes can rank ahead of the built-in guidance:
+
+```sh
+conquistador playbooks add ~/notes/growth-playbooks
+```
+
+Conquistador reads Markdown files in place and never copies them into the product. Matching
+files appear in briefs, hooks, and MCP results, labeled "Your playbook".
+
+## Commands
+
+```sh
+conquistador                   # Find your agents and install
+conquistador agents            # Show detected agents and what is installed
+conquistador update            # Update every agent you installed into
+conquistador remove [AGENT]    # Remove from one agent, or from all of them
+conquistador brief "TASK"      # Show the playbooks for a task (--full prints them)
+conquistador playbooks add DIR # Add your own playbook folder
+conquistador mcp [--http]      # Run the playbook MCP server
+conquistador bot [--out DIR]   # Write a bot pack for chat apps
+```
+
+To turn the hooks off, set `CONQUISTADOR_HOOKS=off` or put `{"hooks": false}` in
+`~/.conquistador/config.json`.
+
+## What Conquistador does not do
+
+- It does not publish, send, spend, or change an external system. It drafts the work and asks
+  you to approve the action.
+- It does not invent metrics, customer quotes, or product capabilities.
+- The MCP server and hooks only read playbooks. They do not send your data anywhere.
+- Your agent supplies the model, tools, and permissions.
+
+## More information
+
+- [Installation](INSTALL.md)
+- [Surfaces and knowledge review, September 2026](docs/REVIEW-2026-09-SURFACES.md)
+- [Connection setup for live accounts](docs/INTEGRATIONS.md)
+- [Private-alpha acceptance](docs/PRIVATE-ALPHA.md), [version policy](VERSIONS.md), and
+  [development](CONTRIBUTING.md)
+
+The repository is private. npm publication stays disabled until the public alpha (0.1.0).

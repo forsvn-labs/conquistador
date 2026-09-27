@@ -49,7 +49,7 @@
     {
       "name": "create-brand",
       "version": "2.1.0",
-      "sha256": "5ed9b5f8426a74928b1fa08557374748207a16283ee119e0ab7a6d53e09a5ad3"
+      "sha256": "3ba557feaddcd55cad302b545b5286c565cc09f8131fd93bd9c9c07dd99db59f"
     },
     {
       "name": "create-paid-campaign",
@@ -4618,7 +4618,7 @@
     },
     {
       "path": "hosts/coding-agent/host.json",
-      "sha256": "a2ab8c91e740848f6fa2949e8a878c4551863f1894fbd6839ca6ef9c78f094f8"
+      "sha256": "2f09054fc0ce36a859da09c74196919fe458f1f2ab603e2f8088a371775aef17"
     },
     {
       "path": "hosts/coding-agent/README.md",
@@ -4650,7 +4650,7 @@
     },
     {
       "path": "tools/brief.mjs",
-      "sha256": "459e3ab17a10eb9742ce0fff9a24c7151bbed530a96e27c845ad9d45c79030c8"
+      "sha256": "e8f71e2a9ec05208265acb05100e64b5ea13d11cb20ad4bca23f18a8b1522a15"
     },
     {
       "path": "tools/context-selection.mjs",
@@ -4658,19 +4658,19 @@
     },
     {
       "path": "agents/conquistador/agent.json",
-      "sha256": "06d736c21bc73f8b2889d37f997cde3400f2dc2624aaf1a99dd1ce05c22e3ceb"
+      "sha256": "400c6d3c2874ee7ed918087901826afbdb3693e57ea1048119285891aa925d3e"
     },
     {
       "path": "agents/conquistador/compatibility/v1.json",
-      "sha256": "ea90fc0ae902af2f18c3bacb125309e0dbd989a2a410a05011779e3c2d9849c1"
+      "sha256": "8826773c77e87acd5c731c18d1311d2c1e91740b77f6d273edfcf8052b7a2dc4"
     },
     {
       "path": "agents/agent-package.schema.json",
-      "sha256": "7c6f9ae4b2b4fb4501bed87459757aaadc3a6a84366bfd507e5505cc10bc8170"
+      "sha256": "346301694b5e2f7a559795d067f5a115d38e14c7ff742dbd75b992d6a6174441"
     },
     {
       "path": "agents/agent-package-v2.schema.json",
-      "sha256": "0aefa61f9480d6fc086ac6eaa420c42f26287feead051107885d502c965126c6"
+      "sha256": "d61cf8252eb33a587c4d2c222439f6b2021c6b2568be77dbde7c70654c93f748"
     },
     {
       "path": "agents/operator-profile.schema.json",

@@ -10,7 +10,7 @@ import { mkdirSync, mkdtempSync, readFileSync, realpathSync, writeFileSync } fro
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { createBrief } from '../brief.mjs';
+import { createBrief, knowledgeIndex } from '../brief.mjs';
 
 const root = resolve(fileURLToPath(new URL('../../', import.meta.url)));
 const option = (name, fallback) => { const index = process.argv.indexOf(name); return index >= 0 ? process.argv[index + 1] : fallback; };
@@ -26,7 +26,7 @@ mkdirSync(join(out, 'transcripts'), { recursive: true });
 const work = realpathSync(mkdtempSync(join(tmpdir(), 'conquistador-e2e-knowledge-')));
 const before = join(work, 'before');
 mkdirSync(before);
-execFileSync('sh', ['-c', `git -C "${root}" archive ${beforeRef} | tar -x -C "${before}"`]);
+if (!process.argv.includes('--reanalyze')) execFileSync('sh', ['-c', `git -C "${root}" archive ${beforeRef} | tar -x -C "${before}"`]);
 const configs = { before: { plugin: before, env: {} }, hooks: { plugin: root, env: {} }, mcp: { plugin: root, env: { CONQUISTADOR_HOOKS: 'off' } } };
 
 function claude(prompt, config, transcript) {
@@ -40,8 +40,10 @@ function claude(prompt, config, transcript) {
   });
 }
 
+// Every knowledge file key ("plan-campaign/references/channel-strategy.md") in this checkout.
+const knownKeys = knowledgeIndex(root, { playbooks: [] }).docs.map(doc => doc.key);
 function analyze(text, must) {
-  const reads = new Set();
+  const tokens = new Set();
   let brief = false;
   let result = null;
   for (const line of text.split('\n')) {
@@ -52,23 +54,27 @@ function analyze(text, must) {
     for (const item of event.message?.content ?? []) {
       if (item.type !== 'tool_use') continue;
       if (/conquistador_brief/.test(item.name)) brief = true;
-      const input = JSON.stringify(item.input);
-      for (const match of input.matchAll(/(?:skills|library)\/[\w./-]+?\.md/g)) reads.add(match[0].replace(/^library\//, 'skills/'));
+      // Agents read with absolute paths, relative paths after cd, globs, and loops; keep every .md token.
+      for (const match of JSON.stringify(item.input).matchAll(/[\w./-]+\.md\b/g)) tokens.add(match[0]);
     }
   }
+  const reads = new Set();
+  for (const token of tokens) for (const key of knownKeys) if (token.endsWith(key) || (token.includes('/') && key.endsWith(token))) reads.add(key);
   const tail = path => path.split('/').slice(-3).join('/');
-  const covered = brief ? must.length : must.filter(path => [...reads].some(read => read.endsWith(tail(path)))).length;
+  const covered = brief ? must.length : must.filter(path => [...reads].some(read => read.endsWith(tail(path)) || tail(path).endsWith(read))).length;
   const answer = result?.result ?? '';
-  return { knowledgeFilesRead: [...reads].filter(path => !/SKILL\.md$/.test(path)).length, reads: [...reads].sort(), briefToolCalled: brief, mustRead: must.length, mustReadCovered: covered, citesPlaybooks: /playbooks applied/i.test(answer), turns: result?.num_turns ?? null, costUsd: result?.total_cost_usd ?? null, answerTail: answer.slice(-600) };
+  return { knowledgeFilesRead: reads.size, reads: [...reads].sort(), briefToolCalled: brief, mustRead: must.length, mustReadCovered: covered, citesPlaybooks: /playbooks applied/i.test(answer), turns: result?.num_turns ?? null, costUsd: result?.total_cost_usd ?? null, answerTail: answer.slice(-600) };
 }
 
 const rows = [];
+const reanalyze = process.argv.includes('--reanalyze');
 for (const [pi, prompt] of PROMPTS.entries()) {
   const must = createBrief(prompt, { root, playbooks: [] }).must.map(item => item.path);
   for (const name of only) for (let run = 1; run <= runs; run += 1) {
     const transcript = join(out, 'transcripts', `p${pi + 1}-${name}-${run}.jsonl`);
     process.stdout.write(`prompt ${pi + 1} · ${name} · run ${run} … `);
-    const { code, text } = await claude(prompt, configs[name], transcript);
+    // --reanalyze re-scores saved transcripts without calling the agent again.
+    const { code, text } = reanalyze ? { code: 0, text: readFileSync(transcript, 'utf8') } : await claude(prompt, configs[name], transcript);
     const row = { prompt: pi + 1, config: name, run, exit: code, ...analyze(text, must) };
     rows.push(row);
     console.log(`read ${row.knowledgeFilesRead} files, must-read ${row.mustReadCovered}/${row.mustRead}${row.briefToolCalled ? ' (brief)' : ''}, cites=${row.citesPlaybooks}`);

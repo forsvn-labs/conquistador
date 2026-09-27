@@ -219,7 +219,8 @@ function bm25(doc, query, index) {
     const idf = Math.log(1 + (index.total - (index.df.get(word) ?? 0) + 0.5) / ((index.df.get(word) ?? 0) + 0.5));
     score += idf * (frequency * 2.2) / (frequency + 1.2 * (0.25 + 0.75 * doc.length / index.averageLength));
   }
-  return score * sizeFactor;
+  // Round so that last-digit floating-point differences between Node versions cannot reorder ties.
+  return Math.round(score * sizeFactor * 1e4) / 1e4;
 }
 
 export function namedPlatforms(prompt) {

@@ -25,7 +25,7 @@ Use
 
 Other ways to install
   Claude Code     /plugin marketplace add forsvn-labs/conquistador
-  Skills only     npx skills add forsvn-labs/conquistador
+  Skills only     npx skills add https://github.com/forsvn-labs/conquistador/tree/private-alpha/skills
   Project copy    conquistador project        (per-project operator; see INSTALL.md)
 
 Advanced (per-project and legacy routes)
@@ -79,7 +79,7 @@ export async function runAdd(args, { interactive = false } = {}) {
     ui.log.message('Growth, GTM, launch, and marketing playbooks for your AI agents.\nInstalls as a plugin: 39 skills, a playbook MCP server, and hooks that make the agent read the playbooks.');
     const options = detected.map(agent => ({ value: agent.id, label: agent.label, hint: agent.found ? agent.how : 'not found' }));
     if (!detected.some(agent => agent.found)) {
-      ui.note('No supported agent found on this machine.\nSkills for any agent:   npx skills add forsvn-labs/conquistador\nMCP for any client:     conquistador mcp\nChat bots:              conquistador bot', 'Other ways');
+      ui.note('No supported agent found on this machine.\nSkills for any agent:   npx skills add https://github.com/forsvn-labs/conquistador/tree/private-alpha/skills\nMCP for any client:     conquistador mcp\nChat bots:              conquistador bot', 'Other ways');
       ui.outro('Nothing installed.');
       return 1;
     }
