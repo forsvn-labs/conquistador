@@ -73,9 +73,6 @@ Root causes, in order of impact:
    lists detected agents, preselects them, and installs with one confirmation.
 8. **Node 24 or later.** The upper bound is removed.
 
-## Status
-
-See the verification section at the end of this document after each phase lands.
 
 ## Failure modes (written before the code)
 
@@ -111,3 +108,56 @@ See the verification section at the end of this document after each phase lands.
 3. Reinstall or update duplicates the marketplace or plugin.
 4. No terminal (CI, piped): the installer waits for input forever.
 5. Node older than 24 gives a stack trace instead of a clear message.
+
+## Results
+
+### What changed
+
+| Area | Before | After |
+| --- | --- | --- |
+| First command | Node 24 gate, then a per-project guide with seven families | Finds your agents and installs the plugin with one confirmation |
+| Install scope | Once per project | Once per user; every project |
+| Plugin contents | Skills only | Skills, playbook MCP server, and hooks |
+| MCP tools | List and read files | `conquistador_brief` returns the playbooks for the task inline |
+| Bots | Guidance only | HTTP MCP server, Dockerfile, and a bot pack |
+| Knowledge selection | Anti-patterns and a fallback file; the rest "deferred" | Ranked must-read list with reasons; named platforms always included |
+| Enforcement | None | Prompt hook, stop hook, playbook map, and required citations |
+| User playbooks | A 20-handle JSON index | Any Markdown folder, ranked first |
+| Node | 24 only | 24 or later |
+
+### Failure modes: how each is handled
+
+| Failure mode | Handling | Checked by |
+| --- | --- | --- |
+| Brief 1, 2: no method, or platform pack missed | Lexical and platform fallbacks; named platform always brings pack and channel guide | Sample prompts; E2E |
+| Brief 3, 4: scaffolding or too many files | Process files excluded; at most 8 must-read files and 90 KB | Sample prompts |
+| Brief 5: response too large | Inline pack limited to 400 KB, below the 512 KB MCP frame limit | MCP tests |
+| Brief 6: coding prompt briefed | Router abstains, business-vocabulary gate, coding-vocabulary veto | Sample prompts; hook test |
+| Brief 7: bad user folder | Symlinks skipped, size and count limits, folder inside the product refused | Code review only |
+| Brief 8: path missing in an installed layout | Paths come from the routing contract, which rebases per layout | Installed plugin copy |
+| Brief 9: non-deterministic | Rounded scores, path tie-break | Map check on Node 24 and 26 |
+| Hooks 1: slow | Early exit before indexing; disk cache | Timing |
+| Hooks 2: unrelated prompts | Same gate as brief 6 | Hook test |
+| Hooks 3: loop | `stop_hook_active`, Cursor `loop_count`, one enforcement per brief | Synthetic transcripts |
+| Hooks 4, 5: missed or false reads | Tool calls only; absolute paths, stable tails, brief tool calls | Synthetic Claude and Codex transcripts |
+| Hooks 6: bad input | Every error exits 0 with no output | Garbage input |
+| Hooks 7: cannot disable | `CONQUISTADOR_HOOKS=off` or config | Synthetic run |
+| Hooks 8: state leak | Per-session files, 12-hour TTL | Code review only |
+| Installer 1: false success | Exit status and stderr checked; failures listed with the next command | Real Codex failure during E2E |
+| Installer 2: silent changes | Plan shown and confirmed; `--yes` required without a terminal | PTY run |
+| Installer 3: duplicates | Idempotent steps with "already" handling | Lifecycle E2E |
+| Installer 4: hangs without a terminal | Help or an explicit `--yes` error | CLI run |
+| Installer 5: old Node | Preflight message for Node below 24 | Unchanged preflight path |
+
+### Evidence
+
+See PROGRESS.md for the exact commands and numbers. Summary: 764 of 764 checks pass on Node 24
+and 26; the install lifecycle passes for five agents in an isolated home; in nine valid headless
+Claude Code runs, must-read coverage rose from 17% to 100% and citations from 0% to 100%.
+
+### Open decisions for Hung
+
+1. Merge and tag v0.0.15, and push the branch. Nothing has been pushed.
+2. Where to host the HTTP playbook server for Muse and other connector apps.
+3. Whether the stop hook should stay on by default. It sends the agent back once per task when it
+   skips the must-read files, which costs one extra turn.
