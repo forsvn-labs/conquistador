@@ -1,0 +1,636 @@
+{
+  "schema": "conquistador.routing-breadth/v1",
+  "note": "Written before the routing fix. Each case passes when the brief selects at least one method in `any`, none in `none`, every platform stem in `platforms`, and no must-read file whose name is in `mustNot`. Cases with `silent: true` must return no brief when hooks run (no force). Tour examples from tools/tour.mjs join this corpus at run time.",
+  "cases": [
+    {
+      "area": "strategy",
+      "task": "Figure out our positioning against Notion and Coda for a team wiki product",
+      "any": [
+        "research-positioning"
+      ]
+    },
+    {
+      "area": "strategy",
+      "task": "Define our ICP and top three customer segments",
+      "any": [
+        "research-positioning"
+      ]
+    },
+    {
+      "area": "strategy",
+      "task": "Decide pricing tiers for our B2B API product",
+      "any": [
+        "design-pricing-and-packaging"
+      ]
+    },
+    {
+      "area": "strategy",
+      "task": "We have ten growth ideas; rank them and tell me what to cut",
+      "any": [
+        "prioritize-opportunities"
+      ]
+    },
+    {
+      "area": "strategy",
+      "task": "Split a $20k monthly marketing budget across channels",
+      "any": [
+        "allocate-marketing-budget"
+      ]
+    },
+    {
+      "area": "strategy",
+      "task": "Model what it takes to hit $50k MRR by June",
+      "any": [
+        "model-growth-funnel"
+      ]
+    },
+    {
+      "area": "strategy",
+      "task": "Which channel should a B2B devtool start with?",
+      "any": [
+        "research-channel"
+      ]
+    },
+    {
+      "area": "strategy",
+      "task": "Build a brand identity and voice for a fintech app",
+      "any": [
+        "create-brand"
+      ]
+    },
+    {
+      "area": "launch",
+      "task": "Plan a Product Hunt launch for Tinyshot, a macOS screenshot tool",
+      "any": [
+        "plan-campaign",
+        "launch-product"
+      ],
+      "platforms": [
+        "producthunt"
+      ]
+    },
+    {
+      "area": "launch",
+      "task": "Launch on Hacker News with a Show HN post",
+      "any": [
+        "launch-product",
+        "write-social"
+      ],
+      "platforms": [
+        "showhn"
+      ]
+    },
+    {
+      "area": "launch",
+      "task": "Plan a holiday campaign for our DTC skincare brand",
+      "any": [
+        "plan-campaign"
+      ]
+    },
+    {
+      "area": "launch",
+      "task": "Run a webinar to generate B2B pipeline",
+      "any": [
+        "create-run-of-show",
+        "plan-campaign"
+      ]
+    },
+    {
+      "area": "launch",
+      "task": "Plan the run of show for our launch livestream",
+      "any": [
+        "create-run-of-show"
+      ]
+    },
+    {
+      "area": "launch",
+      "task": "Plan the App Store launch of our iOS habit tracker",
+      "any": [
+        "plan-campaign",
+        "launch-product",
+        "optimize-search"
+      ],
+      "none": [
+        "build-ios-app"
+      ]
+    },
+    {
+      "area": "social",
+      "task": "Write LinkedIn thought leadership posts for our CEO",
+      "any": [
+        "write-social"
+      ],
+      "platforms": [
+        "linkedin"
+      ]
+    },
+    {
+      "area": "social",
+      "task": "Write an X thread announcing our new feature",
+      "any": [
+        "write-social"
+      ],
+      "platforms": [
+        "x"
+      ]
+    },
+    {
+      "area": "social",
+      "task": "Write a Reddit post for r/SaaS about lessons from our first 1,000 users",
+      "any": [
+        "write-social"
+      ],
+      "platforms": [
+        "reddit"
+      ]
+    },
+    {
+      "area": "social",
+      "task": "Grow our Discord community from 500 to 5000 members",
+      "any": [
+        "research-channel",
+        "plan-campaign",
+        "write-social"
+      ],
+      "none": [
+        "create-run-of-show"
+      ]
+    },
+    {
+      "area": "social",
+      "task": "Write a Threads and Bluesky content plan",
+      "any": [
+        "research-content-ideas",
+        "write-social",
+        "plan-campaign"
+      ],
+      "none": [
+        "content-performance-review"
+      ]
+    },
+    {
+      "area": "social",
+      "task": "Create a Pinterest strategy for a home decor brand",
+      "any": [
+        "research-channel",
+        "plan-campaign"
+      ],
+      "none": [
+        "create-brand"
+      ]
+    },
+    {
+      "area": "social",
+      "task": "Find content ideas our audience actually wants",
+      "any": [
+        "research-content-ideas"
+      ]
+    },
+    {
+      "area": "social",
+      "task": "Script three TikTok videos for our budgeting app",
+      "any": [
+        "create-shortform"
+      ],
+      "platforms": [
+        "tiktok"
+      ]
+    },
+    {
+      "area": "social",
+      "task": "Plan a YouTube channel strategy for a B2B SaaS",
+      "any": [
+        "plan-campaign",
+        "research-channel",
+        "create-shortform"
+      ],
+      "platforms": [
+        "youtube"
+      ]
+    },
+    {
+      "area": "social",
+      "task": "Write an Instagram Reels script for our coffee brand",
+      "any": [
+        "create-shortform"
+      ],
+      "platforms": [
+        "reels"
+      ]
+    },
+    {
+      "area": "search",
+      "task": "Grow organic SEO traffic to our docs and blog",
+      "any": [
+        "optimize-search"
+      ]
+    },
+    {
+      "area": "search",
+      "task": "Get our product recommended by ChatGPT and Perplexity",
+      "any": [
+        "optimize-search",
+        "answer-visibility-monitor"
+      ]
+    },
+    {
+      "area": "search",
+      "task": "Optimize our App Store listing screenshots and keywords",
+      "any": [
+        "optimize-search",
+        "create-app-preview"
+      ]
+    },
+    {
+      "area": "search",
+      "task": "Improve our Google Play store listing",
+      "any": [
+        "optimize-search"
+      ]
+    },
+    {
+      "area": "search",
+      "task": "Build programmatic SEO pages for every integration we support",
+      "any": [
+        "optimize-search"
+      ]
+    },
+    {
+      "area": "paid",
+      "task": "Set up a Google Ads search campaign with a $3k monthly budget",
+      "any": [
+        "create-paid-campaign"
+      ],
+      "mustNot": [
+        "tiktok-ads",
+        "linkedin-ads"
+      ]
+    },
+    {
+      "area": "paid",
+      "task": "Create Meta ads for our DTC skincare brand",
+      "any": [
+        "create-paid-campaign"
+      ],
+      "mustNot": [
+        "linkedin-ads"
+      ]
+    },
+    {
+      "area": "paid",
+      "task": "Write LinkedIn ads for our HR software",
+      "any": [
+        "create-paid-campaign"
+      ],
+      "none": [
+        "write-social"
+      ]
+    },
+    {
+      "area": "paid",
+      "task": "Brief a UGC creator for a TikTok ad",
+      "any": [
+        "brief-creative",
+        "create-paid-campaign",
+        "create-shortform"
+      ]
+    },
+    {
+      "area": "paid",
+      "task": "Our Meta ads CPA doubled last week; evaluate the campaign results",
+      "any": [
+        "evaluate-paid-campaign"
+      ]
+    },
+    {
+      "area": "email-outreach",
+      "task": "Write a 4-step cold email sequence to HR directors at mid-size companies",
+      "any": [
+        "write-outreach"
+      ]
+    },
+    {
+      "area": "email-outreach",
+      "task": "Build a win-back email flow for churned subscribers",
+      "any": [
+        "lifecycle-campaign",
+        "write-copy",
+        "plan-campaign"
+      ],
+      "none": [
+        "map-user-flow",
+        "brief-product-ui"
+      ]
+    },
+    {
+      "area": "email-outreach",
+      "task": "Write a welcome email sequence for new trial users",
+      "any": [
+        "lifecycle-campaign",
+        "write-copy"
+      ],
+      "none": [
+        "map-user-flow",
+        "brief-product-ui"
+      ]
+    },
+    {
+      "area": "email-outreach",
+      "task": "Write an email newsletter on Substack to grow subscribers",
+      "any": [
+        "write-longform",
+        "plan-campaign",
+        "research-channel"
+      ],
+      "none": [
+        "create-shortform"
+      ]
+    },
+    {
+      "area": "email-outreach",
+      "task": "Get press coverage in TechCrunch for our Series A",
+      "any": [
+        "write-outreach",
+        "research-channel",
+        "research-positioning"
+      ]
+    },
+    {
+      "area": "email-outreach",
+      "task": "Pitch our founder as a guest on marketing podcasts",
+      "any": [
+        "write-outreach",
+        "research-channel"
+      ]
+    },
+    {
+      "area": "email-outreach",
+      "task": "Evaluate last week's outbound batch: 400 sent, 6 replies",
+      "any": [
+        "evaluate-outreach"
+      ]
+    },
+    {
+      "area": "email-outreach",
+      "task": "Set up a partner and affiliate program",
+      "any": [
+        "referral-loop",
+        "plan-campaign"
+      ]
+    },
+    {
+      "area": "email-outreach",
+      "task": "Get listed and reviewed on G2 and Capterra",
+      "any": [
+        "research-channel",
+        "plan-campaign",
+        "write-outreach"
+      ],
+      "none": [
+        "fresh-eyes-review"
+      ]
+    },
+    {
+      "area": "email-outreach",
+      "task": "Write a sales follow-up email after a demo call",
+      "any": [
+        "write-outreach"
+      ]
+    },
+    {
+      "area": "in-product",
+      "task": "Improve activation in our in-app onboarding; only 20% of signups create a project",
+      "any": [
+        "lifecycle-campaign",
+        "improve-conversion",
+        "map-user-flow"
+      ]
+    },
+    {
+      "area": "in-product",
+      "task": "Design a referral program inside the product",
+      "any": [
+        "referral-loop"
+      ]
+    },
+    {
+      "area": "in-product",
+      "task": "Plan a paywall and trial experiment for our mobile app",
+      "any": [
+        "design-pricing-and-packaging",
+        "improve-conversion"
+      ],
+      "none": [
+        "allocate-marketing-budget"
+      ]
+    },
+    {
+      "area": "in-product",
+      "task": "Improve conversion on our Shopify product page",
+      "any": [
+        "improve-conversion"
+      ]
+    },
+    {
+      "area": "in-product",
+      "task": "Rewrite our pricing page and decide tiers",
+      "any": [
+        "design-pricing-and-packaging",
+        "write-copy"
+      ],
+      "none": [
+        "optimize-search"
+      ]
+    },
+    {
+      "area": "in-product",
+      "task": "Map the signup to first-value flow in our app",
+      "any": [
+        "map-user-flow"
+      ]
+    },
+    {
+      "area": "in-product",
+      "task": "Write in-app upgrade prompts for free users who hit the limit",
+      "any": [
+        "write-copy",
+        "improve-conversion",
+        "design-pricing-and-packaging"
+      ]
+    },
+    {
+      "area": "in-product",
+      "task": "Reduce churn for our subscription app",
+      "any": [
+        "diagnose-growth",
+        "lifecycle-campaign",
+        "improve-conversion",
+        "plan-campaign"
+      ]
+    },
+    {
+      "area": "content",
+      "task": "Write landing page copy for our AI note-taking app",
+      "any": [
+        "write-copy",
+        "create-landing-page"
+      ]
+    },
+    {
+      "area": "content",
+      "task": "Write a long-form blog post on why spreadsheets fail finance teams",
+      "any": [
+        "write-longform"
+      ]
+    },
+    {
+      "area": "content",
+      "task": "Write a creative brief for our new homepage hero video",
+      "any": [
+        "brief-creative"
+      ]
+    },
+    {
+      "area": "content",
+      "task": "Translate and polish our landing page into Vietnamese",
+      "any": [
+        "polish-vietnamese"
+      ]
+    },
+    {
+      "area": "measure",
+      "task": "Our signups dropped 30% last month, find out why",
+      "any": [
+        "diagnose-growth"
+      ]
+    },
+    {
+      "area": "measure",
+      "task": "Review last quarter's growth results and decide what to keep",
+      "any": [
+        "measure-growth"
+      ]
+    },
+    {
+      "area": "measure",
+      "task": "Audit our marketing package before launch",
+      "any": [
+        "audit-marketing"
+      ]
+    },
+    {
+      "area": "measure",
+      "task": "Evaluate our TikTok videos from last month",
+      "any": [
+        "evaluate-shortform"
+      ]
+    },
+    {
+      "area": "measure",
+      "task": "Fact-check the claims on our comparison page",
+      "any": [
+        "knowledge-review"
+      ]
+    },
+    {
+      "area": "coding",
+      "task": "Fix the failing test in src/auth.test.ts",
+      "silent": true
+    },
+    {
+      "area": "coding",
+      "task": "Refactor the payment handler to use async/await",
+      "silent": true
+    },
+    {
+      "area": "coding",
+      "task": "Why does the build fail with a null pointer exception",
+      "silent": true
+    },
+    {
+      "area": "coding",
+      "task": "Write a function that parses CSV files",
+      "silent": true
+    },
+    {
+      "area": "coding",
+      "task": "Rename the onboarding component and update its tests",
+      "silent": true
+    },
+    {
+      "area": "coding",
+      "task": "Send a Slack notification when the CI build fails",
+      "silent": true
+    },
+    {
+      "area": "coding",
+      "task": "Call the ChatGPT API from our Node server",
+      "silent": true
+    },
+    {
+      "area": "coding",
+      "task": "Upload user images to Amazon S3",
+      "silent": true
+    },
+    {
+      "area": "coding",
+      "task": "Build a Discord bot command handler",
+      "silent": true
+    },
+    {
+      "area": "coding",
+      "task": "Fix the Shopify app webhook handler",
+      "silent": true
+    },
+    {
+      "area": "coding",
+      "task": "Add a medium font weight to the heading",
+      "silent": true
+    },
+    {
+      "area": "coding",
+      "task": "Compute the perplexity of our language model on the eval set",
+      "silent": true
+    },
+    {
+      "area": "coding",
+      "task": "Block outbound network requests in the sandbox",
+      "silent": true
+    },
+    {
+      "area": "coding",
+      "task": "Build a search engine over our internal docs",
+      "silent": true
+    },
+    {
+      "area": "coding",
+      "task": "Fix the onboarding flow crash on Android",
+      "silent": true
+    },
+    {
+      "area": "coding",
+      "task": "Fix the Google Play billing integration",
+      "silent": true
+    },
+    {
+      "area": "coding",
+      "task": "Render the newsletter signup form component",
+      "silent": true
+    },
+    {
+      "area": "coding",
+      "task": "Add a tweet button to the blog template",
+      "silent": true
+    },
+    {
+      "area": "coding",
+      "task": "Fix the email flow bug in the password reset handler",
+      "silent": true
+    },
+    {
+      "area": "coding",
+      "task": "Upload the build to App Store Connect",
+      "silent": true
+    }
+  ]
+}

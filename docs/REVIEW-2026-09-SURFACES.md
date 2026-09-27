@@ -161,3 +161,63 @@ Claude Code runs, must-read coverage rose from 17% to 100% and citations from 0%
 2. Where to host the HTTP playbook server for Muse and other connector apps.
 3. Whether the stop hook should stay on by default. It sends the agent back once per task when it
    skips the must-read files, which costs one extra turn.
+
+## Part 2: general-purpose scope (2026-09-28)
+
+Hung's question: did the hardening pass tie Conquistador to Product Hunt? The product must be a
+general marketing and growth operator: any platform, any service, and growth inside the product.
+
+### Findings
+
+1. **The engine is general. The first touch is not.** Every example a new user sees names a
+   launch: the README sample prompt, the installer "Next" box, the `tryIt` line for all five
+   agents, the bot-pack test prompt, the `brief` fallback message, `FIRST_PROMPT`, and the
+   knowledge-use E2E task. A user learns "this is a launch tool" in the first minute.
+2. **Routing fails outside launches.** A probe of 24 non-launch tasks found 10 misroutes or
+   empty briefs, although the library has content for every one of them:
+
+   | Task | Got | Should get |
+   | --- | --- | --- |
+   | Win-back email flow for churned subscribers | map-user-flow, brief-product-ui | lifecycle-campaign |
+   | Grow a Discord community | create-run-of-show | research-channel / write-social |
+   | Paywall and trial experiment | allocate-marketing-budget | design-pricing-and-packaging / improve-conversion |
+   | Press coverage in TechCrunch | nothing | earned-media-outreach |
+   | Get recommended by ChatGPT and Perplexity | nothing | answer-visibility-monitor / optimize-search |
+   | Threads and Bluesky content plan | content-performance-review | research-content-ideas / write-social |
+   | Pinterest strategy | create-brand | research-channel |
+   | Listed and reviewed on G2 and Capterra | fresh-eyes-review | research-channel |
+   | Substack newsletter | create-shortform | write-longform / plan-campaign |
+   | Google Ads search campaign | right method, but LinkedIn and TikTok ad guides as must-read | Google Ads guide only |
+
+3. **The before/after test measured only two tasks** (a Product Hunt launch and pricing). It could
+   not see breadth failures.
+4. **The platform list has 17 entries, all launch or social.** No entry for Google Ads, Meta ads,
+   Discord, Slack, G2, Substack, Pinterest, Threads, Bluesky, Google Play, Shopify, or
+   ChatGPT-style answer engines.
+
+### Failure modes (written before the code)
+
+Routing breadth:
+
+- R1. A clear marketing task gets no method (empty brief).
+- R2. A task gets a method from the wrong domain (product UI for an email flow).
+- R3. A shared word pulls a wrong method ("reviewed" → fresh-eyes-review, "flow" →
+  map-user-flow, "event" → run-of-show, "newsletter" → short-form).
+- R4. A named platform brings sibling platforms' guides as must-read (Google Ads → TikTok ads).
+- R5. A fix for one domain breaks another (new intent steals prompts from an older, correct route).
+- R6. A coding prompt starts to match after new vocabulary is added.
+- R7. The eval passes because expectations are loose (any method counts as right).
+
+Onboarding:
+
+- O1. A first-time user sees only launch examples and does not learn the breadth.
+- O2. The user does not know what to type first in their agent.
+- O3. The capability map is too long to read in a terminal (38 methods at once).
+- O4. The guided start needs an agent session or network to work.
+- O5. The guided start blocks scripts or CI (waits for input without a TTY).
+- O6. Examples drift from the router: an advertised example routes to the wrong method.
+- O7. Launch examples disappear completely; launches are still a core job.
+
+Eval design against R7: each case lists acceptable methods (any one must be selected) and
+forbidden methods (none may be selected). The onboarding examples are cases in the same eval, so
+O6 fails the eval.

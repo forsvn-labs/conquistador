@@ -40,16 +40,29 @@ export const PLATFORMS = Object.freeze({
   instagram: ['instagram', 'reels'],
   facebook: ['facebook'],
   newsletter: ['newsletter', 'email-newsletter'],
+  substack: ['newsletter', 'email-newsletter'],
   ugc: ['ugc'],
   'founder demo': ['founder-demo'],
   'app store': ['app-store', 'aso'],
+  'google play': ['aso'],
+  'play store': ['aso'],
+  // Ad platforms. The longer phrase wins, so "LinkedIn ads" does not also pull organic LinkedIn.
+  'google ads': ['google-ads'],
+  'search ads': ['google-ads'],
+  'meta ads': ['meta-cold-traffic', 'meta-retargeting'],
+  'facebook ads': ['meta-cold-traffic', 'meta-retargeting'],
+  'instagram ads': ['meta-cold-traffic', 'meta-retargeting'],
+  'linkedin ads': ['linkedin-ads'],
+  'tiktok ads': ['tiktok-ads'],
 });
+// Every stem a platform can bring. A named platform keeps its siblings out of the must-read list.
+const PLATFORM_STEMS = new Set(Object.values(PLATFORMS).flat());
 const STOP = new Set('a an and are as at be but by can do for from get give help how i if in into is it its let me my need of on or our please should so than that the their them then there these this to up us use using want we what when which who why will with would you your conquistador make draft create write plan new next our'.split(' '));
 const PROCESS = /(?:^|\/)fallbacks\/|(?:^|\/|-)(?:format-conventions|legibility-convention|why-this-works-convention|inputs-and-outputs)\.md$|\.ya?ml$/;
 const text = value => normalizeRequest(value);
 // Implicit prompts reach the lexical fallback only with business vocabulary and no coding vocabulary.
 const BUSINESS = /\b(?:launch|campaign|marketing|growth|gtm|go to market|pricing|price|positioning|brand|audience|icp|persona|copy|copywriting|headline|landing page|seo|aeo|ads?|advertis\w*|funnel|churn|retention|activation|emails?|drip|lifecycle|nurture|newsletter|referral|affiliate|influencer|creator|ugc|content|social|post|outreach|cold email|sales|pipeline|leads?|conversion|signups?|waitlist|press|pr|community|virality|viral|offer|messaging|competitor|market)\b/;
-const CODING = /\b(?:bug|test|tests|stack trace|exception|compile|refactor|lint|typecheck|function|class|endpoint|migration|schema migration|deploy|dockerfile|kubernetes|regex|null pointer|segfault|merge conflict|pull request|git)\b/;
+const CODING = /\b(?:bug|fix|crash|sdk|api|webhook|component|handler|bot|integration|upload|render|button|font|css|server|database|test|tests|stack trace|exception|compile|refactor|lint|typecheck|function|class|endpoint|migration|schema migration|deploy|dockerfile|kubernetes|regex|null pointer|segfault|merge conflict|pull request|git)\b/;
 const stem = word => word.length > 4 && word.endsWith('ies') ? `${word.slice(0, -3)}y`
   : word.length > 5 && word.endsWith('ing') ? word.slice(0, -3)
     : word.length > 3 && word.endsWith('s') && !word.endsWith('ss') ? word.slice(0, -1) : word;
@@ -224,9 +237,14 @@ function bm25(doc, query, index) {
 }
 
 export function namedPlatforms(prompt) {
-  const normalized = ` ${text(prompt)} `;
+  let normalized = ` ${text(prompt)} `;
   const found = new Set();
-  for (const [phrase, stems] of Object.entries(PLATFORMS)) if (normalized.includes(` ${phrase} `)) for (const item of stems) found.add(item);
+  // Longest phrase first; a matched phrase is consumed so its shorter parts do not match again.
+  for (const phrase of Object.keys(PLATFORMS).sort((a, b) => b.length - a.length)) {
+    if (!normalized.includes(` ${phrase} `)) continue;
+    for (const item of PLATFORMS[phrase]) found.add(item);
+    normalized = normalized.replaceAll(` ${phrase} `, ' \u0000 ');
+  }
   if (/(?:^|\s)(?:on|to|for) x(?:\s|$)|\bx (?:post|thread|launch)\b/.test(normalized)) { found.add('x'); found.add('x-launch'); }
   return [...found];
 }
@@ -236,7 +254,7 @@ export function namedPlatforms(prompt) {
 // Practitioner words mapped to the library's own vocabulary.
 const SYNONYMS = Object.freeze({ onboard: ['lifecycle', 'activation'], welcome: ['lifecycle'], drip: ['lifecycle'], nurture: ['lifecycle'], winback: ['lifecycle'], churn: ['retention'], refer: ['referral'], affiliate: ['referral'], seo: ['search'], aeo: ['search', 'answer'], geo: ['answer', 'visibility'], ad: ['paid'], cold: ['outreach'], dm: ['outreach'], hook: ['opening'], tagline: ['copy', 'headline'], gtm: ['launch', 'campaign'], pmf: ['positioning'] });
 export const expand = words => [...new Set(words.flatMap(word => [word, ...(SYNONYMS[word] ?? [])]))];
-const GENERIC = new Set(['app', 'product', 'tool', 'company', 'startup', 'business', 'team', 'user', 'customer', 'brand', 'new', 'good', 'best', 'idea', 'help', 'program']);
+const GENERIC = new Set(['marketing', 'app', 'product', 'tool', 'company', 'startup', 'business', 'team', 'user', 'customer', 'brand', 'new', 'good', 'best', 'idea', 'help', 'program']);
 function lexicalMethods(prompt, index, platforms, limit = 2) {
   const query = expand(terms(prompt)).filter(word => !GENERIC.has(word));
   if (!query.length) return [];
@@ -274,15 +292,18 @@ export function createBrief(prompt, { root = moduleRoot, playbooks, force = fals
   const routed = selectRequestContext(prompt, { root: packageRoot });
   const explicit = explicitInvocation(prompt);
   const platforms = namedPlatforms(prompt);
-  const business = BUSINESS.test(text(prompt)) && !CODING.test(text(prompt));
+  const coding = CODING.test(text(prompt));
+  const business = BUSINESS.test(text(prompt)) && !coding;
+  // A bare platform name engages the brief only outside coding work ("App Store Connect upload").
+  const platformNamed = platforms.length > 0 && !coding;
   // Skip the index for prompts that are clearly not Conquistador work; hooks run on every prompt.
-  if (routed.action !== 'route' && !explicit && !force && !platforms.length && !business) {
+  if (routed.action !== 'route' && !explicit && !force && !platformNamed && !business) {
     return { schema: BRIEF_SCHEMA, action: 'none', reason: routed.reason ?? 'no-relevant-capability', methods: [], must: [], situational: [], platforms: [], packageRoot };
   }
   const index = knowledgeIndex(packageRoot, playbooks ? { playbooks } : undefined);
   const { contract, libraryRoot } = index;
   let methods = routed.action === 'route' ? routed.selected.map(item => contract.methods[item.name]).filter(Boolean) : [];
-  if (!methods.length && (explicit || force || platforms.length || business)) methods = lexicalMethods(prompt, index, platforms);
+  if (!methods.length && (explicit || force || platformNamed || business)) methods = lexicalMethods(prompt, index, platforms);
   // A routed composition workflow brings its own sub-method folder.
   if (routed.action === 'route' && routed.workflow && !methods.some(item => item.name === routed.workflow.name)) {
     const workflow = (contract.workflows ?? []).find(item => item.name === routed.workflow.name);
@@ -301,6 +322,9 @@ export function createBrief(prompt, { root = moduleRoot, playbooks, force = fals
     const shared = doc.source === 'shared';
     const stemName = posix.basename(doc.key, posix.extname(doc.key));
     const platformHit = (doc.kind === 'platform' || doc.kind === 'channel') && platforms.includes(stemName);
+    // A guide for another platform in the same family: situational only when the user named one.
+    const sibling = platforms.length > 0 && PLATFORM_STEMS.has(stemName) && !platforms.includes(stemName);
+    const namedGuide = !sibling && platforms.includes(stemName);
     if (!inMethod && !shared && doc.source !== 'user' && !platformHit) return null;
     if (doc.kind === 'platform' && !platformHit) return null;
     if (doc.kind === 'channel' && !platformHit) return null;
@@ -309,19 +333,23 @@ export function createBrief(prompt, { root = moduleRoot, playbooks, force = fals
     if (inMethod) score += 2;
     if (required.has(doc.key)) score += 3;
     if (platformHit) score += inMethod || doc.kind === 'channel' ? 12 : 6;
+    else if (namedGuide && inMethod) score += 6;
     if (shared && !platformHit && !workflowDoc) score *= 0.55;
     if (doc.source === 'user' && score < 4) return null;
-    return { doc, score, lexical, owner: workflowDoc ? [...selectedNames].find(name => doc.key.startsWith(`conquistador/references/${name}/`) || doc.key === `conquistador/workflows/${name}.md`) : doc.method };
+    return { doc, score, lexical, sibling, owner: workflowDoc ? [...selectedNames].find(name => doc.key.startsWith(`conquistador/references/${name}/`) || doc.key === `conquistador/workflows/${name}.md`) : doc.method };
   }).filter(item => item && item.score > 0.5).sort((a, b) => b.score - a.score || a.doc.key.localeCompare(b.doc.key));
 
   const must = [];
   let bytes = 0;
   const take = (item, why) => {
-    if (must.some(entry => entry.doc.digest === item.doc.digest)) return;
+    if (item.sibling || must.some(entry => entry.doc.digest === item.doc.digest)) return;
     if (must.length >= LIMITS.mustFiles || (bytes + item.doc.bytes > LIMITS.mustBytes && must.length >= 3)) return;
     must.push({ ...item, why });
     bytes += item.doc.bytes;
   };
+  // 0. A routed composition workflow brings its composition contract.
+  const routedWorkflow = routed.action === 'route' && routed.workflow ? index.docs.find(doc => doc.key === `conquistador/workflows/${routed.workflow.name}.md`) : null;
+  if (routedWorkflow) take({ doc: routedWorkflow, score: 0, lexical: 0, owner: routed.workflow.name }, `Composition contract for ${routed.workflow.label}.`);
   // 1. Platform packs and channel guides the user named.
   for (const item of scored.filter(entry => entry.doc.kind === 'platform' || entry.doc.kind === 'channel')) {
     const inPrimary = item.doc.method === methods[0]?.name || item.doc.kind === 'channel';
