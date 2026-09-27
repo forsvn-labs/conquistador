@@ -69,6 +69,7 @@
         "spend scenario",
         "channel floors"
       ],
+      "aliases": [],
       "exclusions": [
         "create ads",
         "evaluate actual paid"
@@ -137,6 +138,7 @@
         "inspect this video",
         "find the scene"
       ],
+      "aliases": [],
       "exclusions": [
         "create short-form",
         "script a video"
@@ -174,6 +176,7 @@
         "service boundaries",
         "architect the system"
       ],
+      "aliases": [],
       "exclusions": [
         "marketing architecture",
         "campaign architecture"
@@ -304,6 +307,7 @@
         "pre-ship marketing audit",
         "audit this marketing package"
       ],
+      "aliases": [],
       "exclusions": [
         "knowledge review",
         "code audit"
@@ -368,6 +372,7 @@
         "design brief",
         "brief the designer"
       ],
+      "aliases": [],
       "exclusions": [
         "write the copy",
         "finished ads"
@@ -539,6 +544,7 @@
         "in-product ui",
         "in product ui"
       ],
+      "aliases": [],
       "exclusions": [
         "marketing landing",
         "brand visual identity"
@@ -635,6 +641,7 @@
         "native ios",
         "ipados"
       ],
+      "aliases": [],
       "exclusions": [
         "web app",
         "marketing copy about an app"
@@ -720,6 +727,7 @@
         "web implementation",
         "responsive web app"
       ],
+      "aliases": [],
       "exclusions": [
         "marketing copy about an app",
         "landing page copy"
@@ -758,6 +766,7 @@
         "naming direction",
         "create a brand"
       ],
+      "aliases": [],
       "exclusions": [
         "write a landing page",
         "social posts"
@@ -847,9 +856,29 @@
         "tiktok ads",
         "paid-media"
       ],
+      "aliases": [
+        "facebook ads",
+        "instagram ads",
+        "youtube ads",
+        "reddit ads",
+        "x ads",
+        "search ads",
+        "apple search ads",
+        "ppc",
+        "ad campaign",
+        "ads campaign",
+        "retargeting",
+        "paid social",
+        "paid acquisition"
+      ],
       "exclusions": [
         "evaluate actual paid",
-        "organic social posts"
+        "organic social posts",
+        "cpa",
+        "roas",
+        "ad performance",
+        "ads performance",
+        "campaign results"
       ],
       "requiredResources": [
         "skills/create-paid-campaign/references/rubric.md",
@@ -960,6 +989,16 @@
         "event rundown",
         "live event plan"
       ],
+      "aliases": [
+        "webinar",
+        "livestream",
+        "live stream",
+        "launch event",
+        "launch party",
+        "meetup",
+        "x space",
+        "twitter space"
+      ],
       "exclusions": [
         "campaign plan",
         "connect crm",
@@ -1016,6 +1055,17 @@
         "reels script",
         "youtube shorts",
         "ugc-style"
+      ],
+      "aliases": [
+        "tiktok video",
+        "tiktok videos",
+        "reels",
+        "instagram reels",
+        "shorts script",
+        "short video",
+        "video script",
+        "ugc video",
+        "youtube short"
       ],
       "exclusions": [
         "analyze a supplied video",
@@ -1237,6 +1287,7 @@
         "resolve this decision",
         "debate agents"
       ],
+      "aliases": [],
       "exclusions": [
         "write copy",
         "campaign plan"
@@ -1333,6 +1384,24 @@
         "tier boundaries",
         "what to charge"
       ],
+      "aliases": [
+        "pricing tiers",
+        "decide tiers",
+        "pricing strategy",
+        "pricing model",
+        "pricing page",
+        "paywall",
+        "trial length",
+        "freemium",
+        "usage based pricing",
+        "price increase",
+        "discount strategy",
+        "monetization",
+        "design a free trial",
+        "free trial length",
+        "free trial offer",
+        "reverse trial"
+      ],
       "exclusions": [
         "landing page copy"
       ],
@@ -1384,6 +1453,7 @@
         "weak activation",
         "growth diagnosis"
       ],
+      "aliases": [],
       "exclusions": [
         "write a campaign",
         "create ads"
@@ -1469,6 +1539,7 @@
         "reply quality",
         "outreach results"
       ],
+      "aliases": [],
       "exclusions": [
         "write outreach",
         "create a sequence"
@@ -1524,6 +1595,16 @@
         "actual paid",
         "what to pause",
         "paid-media performance"
+      ],
+      "aliases": [
+        "campaign results",
+        "ads results",
+        "ad results",
+        "ad performance",
+        "ads performance",
+        "cpa",
+        "roas",
+        "cost per acquisition"
       ],
       "exclusions": [
         "create ads",
@@ -1585,6 +1666,7 @@
         "published short-form",
         "short-form results"
       ],
+      "aliases": [],
       "exclusions": [
         "script short-form",
         "create short-form"
@@ -1734,6 +1816,7 @@
         "fresh eyes review",
         "second opinion on this artifact"
       ],
+      "aliases": [],
       "exclusions": [
         "write the first draft",
         "create the campaign"
@@ -1828,6 +1911,25 @@
         "conversion experiment",
         "revise the landing",
         "onboarding conversion"
+      ],
+      "aliases": [
+        "increase conversion",
+        "improve signups",
+        "product page conversion",
+        "cart abandonment",
+        "improve activation",
+        "paywall experiment",
+        "cro",
+        "improve onboarding",
+        "onboarding drop off",
+        "onboarding completion",
+        "improve trial to paid",
+        "increase trial to paid",
+        "improve conversion rate",
+        "increase conversion rate",
+        "improve signup rate",
+        "improve checkout",
+        "raise the upgrade rate"
       ],
       "exclusions": [
         "seo ranking",
@@ -1947,6 +2049,7 @@
         "authority and freshness",
         "factual-claim check"
       ],
+      "aliases": [],
       "exclusions": [
         "launch plan",
         "mark missing facts",
@@ -1994,9 +2097,15 @@
         "screen transitions",
         "recovery states"
       ],
+      "aliases": [],
       "exclusions": [
         "approved flow",
-        "implement the app"
+        "implement the app",
+        "email flow",
+        "win back",
+        "winback",
+        "nurture flow",
+        "drip flow"
       ],
       "requiredResources": [
         "skills/map-user-flow/references/flow-mapping-method.md",
@@ -2084,6 +2193,7 @@
         "campaign measurement",
         "learn from results"
       ],
+      "aliases": [],
       "exclusions": [
         "write social posts",
         "create ads"
@@ -2206,6 +2316,7 @@
         "numeric funnel",
         "revenue funnel"
       ],
+      "aliases": [],
       "exclusions": [
         "write copy"
       ],
@@ -2298,6 +2409,36 @@
         "aso",
         "search visibility",
         "answer visibility"
+      ],
+      "aliases": [
+        "organic traffic",
+        "organic search",
+        "google ranking",
+        "rank on google",
+        "rank higher on google",
+        "programmatic seo",
+        "app store listing",
+        "app store optimization",
+        "app store keywords",
+        "google play listing",
+        "play store listing",
+        "recommended by chatgpt",
+        "cited by chatgpt",
+        "show up in chatgpt",
+        "chatgpt search",
+        "ai overviews",
+        "ai search",
+        "answer engine",
+        "answer engines",
+        "llm visibility",
+        "ai visibility",
+        "generative engine optimization",
+        "chatgpt and perplexity",
+        "recommended by perplexity",
+        "cited by perplexity",
+        "show up in perplexity",
+        "search engine optimization",
+        "search engine ranking"
       ],
       "exclusions": [
         "paid search ads",
@@ -2480,6 +2621,35 @@
         "launch strategy",
         "launch campaign"
       ],
+      "aliases": [
+        "marketing plan",
+        "marketing strategy",
+        "growth plan",
+        "growth strategy",
+        "email campaign",
+        "lifecycle campaign",
+        "drip campaign",
+        "nurture campaign",
+        "retention campaign",
+        "win back campaign",
+        "win back flow",
+        "winback flow",
+        "holiday campaign",
+        "seasonal campaign",
+        "partner program",
+        "affiliate program",
+        "ambassador program",
+        "reduce churn",
+        "webinar",
+        "app store launch",
+        "product launch",
+        "feature launch",
+        "launch of our",
+        "marketing and growth",
+        "plan marketing",
+        "plan our marketing",
+        "plan our growth"
+      ],
       "exclusions": [
         "run of show",
         "submit feedback",
@@ -2580,6 +2750,14 @@
         "draft vietnamese copy",
         "write vietnamese copy"
       ],
+      "aliases": [
+        "tieng viet",
+        "into vietnamese",
+        "in vietnamese",
+        "translate to vietnamese",
+        "vietnamese version",
+        "vietnamese copy"
+      ],
       "exclusions": [],
       "requiredResources": [
         "skills/polish-vietnamese/references/absolute-prohibitions.md",
@@ -2632,6 +2810,7 @@
         "force-rank",
         "proceed park stop"
       ],
+      "aliases": [],
       "exclusions": [
         "write copy"
       ],
@@ -2740,6 +2919,42 @@
         "channel research",
         "platform fit"
       ],
+      "aliases": [
+        "channel strategy",
+        "which channel",
+        "best channel",
+        "distribution channel",
+        "channel mix",
+        "community growth",
+        "grow our community",
+        "grow the community",
+        "build a community",
+        "discord community",
+        "discord server",
+        "slack community",
+        "online community",
+        "pinterest",
+        "bluesky",
+        "mastodon",
+        "quora",
+        "twitch",
+        "snapchat",
+        "whatsapp channel",
+        "telegram channel",
+        "indie hackers",
+        "g2",
+        "capterra",
+        "review sites",
+        "review platforms",
+        "marketplace listing",
+        "app directories",
+        "press coverage",
+        "media coverage",
+        "earned media",
+        "podcast guest",
+        "podcast tour",
+        "substack"
+      ],
       "exclusions": [
         "write the posts",
         "create ads"
@@ -2805,6 +3020,18 @@
         "editorial bets",
         "topic angles",
         "content research"
+      ],
+      "aliases": [
+        "content plan",
+        "content calendar",
+        "content strategy",
+        "editorial calendar",
+        "what to post",
+        "post ideas",
+        "video ideas",
+        "topic ideas",
+        "blog ideas",
+        "newsletter ideas"
       ],
       "exclusions": [
         "write the posts",
@@ -2896,6 +3123,7 @@
         "market research",
         "who we should serve"
       ],
+      "aliases": [],
       "exclusions": [
         "write the campaign",
         "submit feedback"
@@ -3065,6 +3293,7 @@
         "bounded decision",
         "what should we do"
       ],
+      "aliases": [],
       "exclusions": [
         "write finished copy"
       ],
@@ -3155,6 +3384,7 @@
         "report a conquistador failure",
         "file a conquistador issue"
       ],
+      "aliases": [],
       "exclusions": [
         "launch plan",
         "draft a launch",
@@ -3190,12 +3420,40 @@
         "landing copy",
         "draft a headline"
       ],
+      "aliases": [
+        "welcome email",
+        "onboarding email",
+        "nurture email",
+        "win back email",
+        "winback email",
+        "re engagement email",
+        "lifecycle email",
+        "trial email",
+        "upgrade prompt",
+        "upgrade prompts",
+        "in app message",
+        "in app messages",
+        "in app copy",
+        "paywall copy",
+        "pricing page",
+        "product description",
+        "app store description",
+        "email copy",
+        "push notification copy",
+        "sms copy",
+        "microcopy",
+        "onboarding copy",
+        "homepage copy",
+        "tagline"
+      ],
       "exclusions": [
         "linkedin post",
         "linkedin announcement",
         "outreach sequence",
         "social posts",
-        "long-form article"
+        "long-form article",
+        "cold email",
+        "sales email"
       ],
       "requiredResources": [
         "skills/write-copy/references/sales-argument.md",
@@ -3294,6 +3552,20 @@
         "write an article",
         "write a guide"
       ],
+      "aliases": [
+        "blog post",
+        "newsletter issue",
+        "case study",
+        "white paper",
+        "whitepaper",
+        "ebook",
+        "guest post",
+        "op ed",
+        "write a newsletter",
+        "email newsletter",
+        "grow our newsletter",
+        "newsletter growth"
+      ],
       "exclusions": [
         "landing page copy",
         "social posts"
@@ -3363,6 +3635,28 @@
         "linkedin dm",
         "direct message sequence",
         "sales sequence"
+      ],
+      "aliases": [
+        "pitch journalists",
+        "media pitch",
+        "press pitch",
+        "pr pitch",
+        "podcast pitch",
+        "pitch our founder",
+        "pitch our ceo",
+        "follow up email",
+        "sales email",
+        "sales follow up",
+        "partnership email",
+        "prospecting",
+        "influencer outreach",
+        "creator outreach",
+        "press coverage",
+        "media coverage",
+        "outbound sequence",
+        "outbound campaign",
+        "outbound email",
+        "outbound sales"
       ],
       "exclusions": [
         "linkedin post",
@@ -3464,6 +3758,20 @@
         "linkedin product announcement",
         "linkedin update"
       ],
+      "aliases": [
+        "instagram caption",
+        "instagram post",
+        "facebook post",
+        "threads post",
+        "bluesky post",
+        "discord announcement",
+        "community announcement",
+        "show hn post",
+        "hacker news post",
+        "indie hackers post",
+        "write a tweet",
+        "tweet thread"
+      ],
       "exclusions": [
         "linkedin dm",
         "linkedin ads",
@@ -3548,6 +3856,7 @@
         "readme and setup",
         "operator docs"
       ],
+      "aliases": [],
       "exclusions": [
         "marketing copy",
         "launch email"

@@ -2,24 +2,15 @@
 
 ## Next private-alpha acceptance
 
-The [v0.0.13 private prerelease](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.13)
-shipped from exact merged source `653058ac2b9c5f0cefe926bb238879191caf8a9b`.
-The Node 24 build, 764 local checks, six downloaded assets, authenticated private-Git lifecycle,
-and 21 installed-package terminal scenarios passed. Both npm-owned CLI copies and the home operator
-plus four native skill copies report 0.0.13. A login-shell bare command under Node 26 reached
-verified Node 24 and completed local setup, doctor, and handoff in a disposable project.
-Codex and Cursor retain private edits, so their receipts are modified and the home operator
-doctor fails receipt integrity as expected. These are local installation checks, not native task
-or human acceptance.
-
-1. Observe fresh native host discovery on the exact released build, full method/resource reads,
-   a useful first task, and a correction. Seek the user's verdict on clarity, routing relevance,
-   and usefulness. The user's own host session remains unverified; local shell success cannot
-   establish it. Keep installed-route and other local diagnostics separate from model evidence.
-2. Verify the v0.0.14 edited-file recovery in the user's installed host. Preserve current Codex
-   and Cursor overlays until their project backups are inspected. Observe fresh host behavior
-   separately from clean receipts. A second native host and independent specialist contexts
-   remain unverified.
+1. Observe the plugin hooks in a real Codex session (after hook trust), Cursor, Copilot CLI, and
+   Grok CLI. Only Claude Code sessions have been observed.
+2. Repeat `node tools/e2e/knowledge-use.mjs` with more runs and more tasks after the plan limit
+   resets, across all nine tour areas (`--set breadth`), and add a quality comparison (blind review
+   of before and after answers), not only reads.
+3. Seek Hung's verdict on a real task in his own agent: playbook relevance, clarity, and usefulness.
+   Tune the briefing engine and the vault playbook threshold from those corrections.
+4. Decide where to host the HTTP playbook server for Muse and other connector apps, then deploy it
+   with a token and submit the Muse connector.
 
 ## Private-alpha follow-up
 
@@ -61,7 +52,9 @@ Public distribution, registry publication, marketplaces, visibility changes and 
 that later decision. The current private-alpha channel continues the earlier dogfood sequence.
 
 For the public-alpha release, publish the exact `@forsvn/conquistador` package to npm and make
-`npm i -g @forsvn/conquistador` the primary installation command. Before changing the publication
+`npm i -g @forsvn/conquistador` the primary installation command. List the same plugin in the
+Claude Code, Codex, Cursor, and Copilot marketplaces, the skills.sh directory, and the Muse
+connector platform. Before changing the publication
 guard, verify scope ownership, release authentication and provenance, package contents, license
 files, and registry tarball identity. From an empty npm cache and user-writable global prefix, run
 version, guided setup, doctor, start, update, and uninstall against the published version. Confirm

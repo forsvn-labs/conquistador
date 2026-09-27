@@ -1,6 +1,6 @@
 {
   "name": "@forsvn/conquistador",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "private": true,
   "description": "A project operator for growth, GTM, sales, marketing, product, and knowledge work.",
   "license": "MIT",
@@ -11,7 +11,7 @@
   },
   "type": "module",
   "engines": {
-    "node": ">=24.0.0 <25"
+    "node": ">=24"
   },
   "dependencies": {
     "jose": "6.2.8"
@@ -24,6 +24,10 @@
     ".agents",
     ".claude-plugin",
     ".codex-plugin",
+    "mcp",
+    "mcp.json",
+    "hooks",
+    ".cursor-plugin",
     ".github/workflows",
     "hosts",
     "agents",

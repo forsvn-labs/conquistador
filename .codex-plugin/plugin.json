@@ -1,7 +1,7 @@
 {
   "name": "conquistador",
-  "version": "0.0.14",
-  "description": "A project operator for growth, GTM, sales, marketing, product, and knowledge work.",
+  "version": "0.0.15",
+  "description": "Growth, GTM, launch, marketing, and sales playbooks for your agent: 39 skills, a playbook MCP server, and hooks that make the agent read them.",
   "author": {
     "name": "FORSVN",
     "url": "https://forsvn.com"
@@ -10,17 +10,21 @@
   "repository": "https://github.com/forsvn-labs/conquistador",
   "license": "MIT",
   "keywords": [
-    "product-marketing",
     "growth",
+    "gtm",
     "launch",
-    "campaign",
-    "conversion"
+    "marketing",
+    "sales",
+    "copywriting",
+    "seo",
+    "positioning",
+    "playbooks"
   ],
   "skills": "./skills/",
   "interface": {
     "displayName": "Conquistador",
     "shortDescription": "A master agent for growth, GTM, sales, marketing, and product",
-    "longDescription": "Describe the outcome. Conquistador assigns the needed specialist roles and methods, helps connect your toolstack, integrates and reviews the work, and preserves human authority for external actions.",
+    "longDescription": "Describe the outcome. Conquistador selects the method and the field-tested playbooks for the task, makes sure the agent reads them, and keeps publishing, spend, and sends behind your approval.",
     "developerName": "FORSVN",
     "category": "Productivity",
     "capabilities": [
@@ -37,5 +41,7 @@
     "brandColor": "#004700",
     "composerIcon": "./assets/conquistador-icon.png",
     "logo": "./assets/conquistador-icon.png"
-  }
+  },
+  "mcpServers": "./mcp.json",
+  "hooks": "./hooks/codex.json"
 }

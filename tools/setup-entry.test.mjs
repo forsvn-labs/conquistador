@@ -18,7 +18,7 @@ test('package acquisition has no automatic install or publication hooks', () => 
 
 test('the advertised persistent private-Git command copies out of npm acquisition storage', () => {
   // The advertised command must pin the latest verified private release.
-  const expected = 'npm install -g --ignore-scripts --install-links git+https://github.com/forsvn-labs/conquistador.git#v0.0.14';
+  const expected = 'npm install -g --ignore-scripts --install-links git+https://github.com/forsvn-labs/conquistador.git#v0.0.15';
   for (const file of ['README.md', 'INSTALL.md']) {
     const contents = readFileSync(join(root, file), 'utf8');
     assert.match(contents, new RegExp(expected.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
@@ -33,7 +33,7 @@ test('the installed setup command works before runtime libraries or dependencies
     for (const file of ['package.json', 'runtime/bin/conquistador.js', 'tools/setup.mjs', 'tools/operator-setup.mjs', 'tools/domain-package.mjs',
       'tools/install-paths.mjs', 'tools/setup-routes.mjs', 'tools/method-library.mjs', 'tools/stage-method-library.mjs', 'tools/setup-guide.mjs', 'tools/setup-mcp.mjs', 'tools/operator-package.mjs', 'tools/project-installation.mjs', 'tools/setup-surfaces.mjs', 'tools/operator-profile.mjs',
       'tools/conquistador-mode.mjs', 'tools/proactive.mjs', 'tools/context-selection.mjs', 'tools/routing-contract.mjs', 'tools/request-text.mjs', 'tools/plugin-contracts.mjs',
-      'tools/onboarding-safety.mjs', 'tools/onboarding-ui.mjs', 'tools/onboarding.mjs', 'tools/onboarding-recovery.mjs', 'tools/onboarding-parse.mjs', 'tools/onboarding-hosts.mjs', 'tools/onboarding-routes.mjs', 'tools/vendor/clack.mjs']) {
+      'tools/onboarding-safety.mjs', 'tools/onboarding-ui.mjs', 'tools/onboarding.mjs', 'tools/onboarding-recovery.mjs', 'tools/onboarding-parse.mjs', 'tools/onboarding-hosts.mjs', 'tools/onboarding-routes.mjs', 'tools/vendor/clack.mjs', 'tools/front-door.mjs', 'tools/agents.mjs']) {
       const target = join(source, file);
       mkdirSync(dirname(target), { recursive: true });
       copyFileSync(join(root, file), target);
@@ -43,8 +43,8 @@ test('the installed setup command works before runtime libraries or dependencies
     const run = (...args) => execFileSync(process.execPath, [join(source, 'runtime/bin/conquistador.js'), 'setup', ...args], { encoding: 'utf8' });
     assert.match(run('--help'), /status\|doctor\|update\|uninstall/);
     const cli = (...args) => execFileSync(process.execPath, [join(source, 'runtime/bin/conquistador.js'), ...args], { encoding: 'utf8' });
-    assert.match(cli('--help'), /conquistador --bot/);
-    assert.match(cli('--help'), /--advanced/);
+    assert.match(cli('help', '--all'), /--bot/);
+    assert.match(cli('help', '--all'), /--advanced/);
     assert.doesNotMatch(cli('--help'), /What would you like to set up/);
     for (const flag of ['--bot', '--skills', '--plugin', '--mcp', '--advanced']) assert.match(cli(flag, '--help'), /Usage:/);
     assert.match(cli('install', '--help'), /conquistador install/);

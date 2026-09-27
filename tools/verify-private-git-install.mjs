@@ -29,7 +29,7 @@ function filesBelow(root) {
 }
 
 export function verifyPrivateGitInstall({ spec, version, root }) {
-  if (Number(process.versions.node.split('.')[0]) !== 24) fail('Use Node 24.');
+  if (Number(process.versions.node.split('.')[0]) < 24) fail('Use Node 24 or later.');
   const workspace = root ? resolve(root) : realpathSync(mkdtempSync(join(tmpdir(), 'conquistador-private-git-')));
   if (root) {
     if (existsSync(workspace)) fail('--root must not exist.');

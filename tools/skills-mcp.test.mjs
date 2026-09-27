@@ -7,6 +7,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { PassThrough, Writable } from 'node:stream';
 import { createMethodAccess, runSkillsMcp, LIMITS } from './skills-mcp.mjs';
+import { briefFiles } from './operator-package.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const rpc = (id, method, params = {}) => ({ jsonrpc: '2.0', id, method, params });
@@ -19,7 +20,7 @@ function temporary(t) {
 }
 function cold(t) {
   const path = temporary(t);
-  for (const file of ['package.json', 'runtime/bin/conquistador.js', 'tools/skills-mcp.mjs']) {
+  for (const file of ['package.json', 'runtime/bin/conquistador.js', ...briefFiles]) {
     const target = join(path, file);
     mkdirSync(dirname(target), { recursive: true });
     copyFileSync(join(root, file), target);
@@ -50,8 +51,8 @@ test('cold spawned stdio lists methods and reads the parent, outcome, and routin
   assert.equal(result.code, 0);
   assert.equal(result.stderr, '');
   assert.equal(result.messages.length, 7);
-  assert.match(result.messages[0].result.instructions, /parent|conquistador\/SKILL.md/);
-  assert.deepEqual(result.messages[1].result.tools.map(tool => tool.name), ['conquistador_methods', 'conquistador_files', 'conquistador_read']);
+  assert.match(result.messages[0].result.instructions, /conquistador_brief/);
+  assert.deepEqual(result.messages[1].result.tools.map(tool => tool.name), ['conquistador_brief', 'conquistador_search', 'conquistador_methods', 'conquistador_files', 'conquistador_read']);
   const methods = JSON.parse(result.messages[2].result.content[0].text);
   assert.equal(methods.guide, 'conquistador/SKILL.md');
   assert.equal(methods.methods.length, 39);
@@ -195,7 +196,7 @@ test('initialization negotiates a supported version for older and unknown client
     assert.equal(result.code, 0);
     assert.equal(result.stderr, '');
     assert.equal(result.messages[0].result.protocolVersion, protocolVersion === '2099-01-01' ? '2025-11-25' : protocolVersion);
-    assert.equal(result.messages[1].result.tools.length, 3);
+    assert.equal(result.messages[1].result.tools.length, 5);
   }
 });
 

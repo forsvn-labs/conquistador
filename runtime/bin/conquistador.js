@@ -10,14 +10,19 @@ function shortcut(arg) {
 // Installation must work before runtime dependencies exist. Keep help and version
 // available even when the shell selected an unsupported Node.
 const helpOrVersion = args.includes('--help') || args.includes('-h') || args.includes('--version') || (args.length === 1 && args[0] === 'version');
-const supportedNode = Number(process.versions.node.split('.')[0]) === 24;
-const onboarding = args.length === 0 || args[0].startsWith('-');
+const supportedNode = Number(process.versions.node.split('.')[0]) >= 24;
+const onboarding = args.length === 0 || args[0].startsWith('-') || args[0] === 'project';
 const preflight = helpOrVersion || supportedNode || !onboarding ? null : await (await import('../../tools/node-preflight.mjs')).nodePreflight();
+// The agent installer and playbook commands come first; older per-project routes follow.
+const frontDoor = preflight === null && (args.length === 0 || ['add', 'update', 'remove', 'agents', 'brief', 'playbooks', 'bot', 'tour', 'help', '--help', '-h'].includes(args[0]))
+  ? await (await import('../../tools/front-door.mjs')).runFrontDoor(args) : null;
 if (preflight !== null) {
   process.exitCode = preflight;
-} else if (args.length === 0) {
+} else if (frontDoor !== null) {
+  process.exitCode = frontDoor;
+} else if (args[0] === 'project') {
   const { runOnboarding } = await import("../../tools/onboarding.mjs");
-  process.exitCode = await runOnboarding((process.stdin.isTTY && process.stdout.isTTY) ? [] : ["--help"]);
+  process.exitCode = await runOnboarding(args.length > 1 ? args.slice(1) : (process.stdin.isTTY && process.stdout.isTTY) ? [] : ["--help"]);
 } else if (args[0].startsWith("-")) {
   const { runOnboarding } = await import("../../tools/onboarding.mjs");
   process.exitCode = await runOnboarding(args);
@@ -67,9 +72,12 @@ if (preflight !== null) {
 } else if (args[0] === "integrations") {
   const { runIntegrationReleases } = await import("../../tools/integration-releases.mjs");
   process.exitCode = await runIntegrationReleases(args.slice(1));
+} else if (args[0] === "mcp" && args[1] === "--http") {
+  const { runMcpHttp } = await import("../../tools/mcp-http.mjs");
+  try { await runMcpHttp(args.slice(2)); } catch (error) { process.stderr.write(error.message + "\n"); process.exitCode = 2; }
 } else if (args[0] === "mcp" && !args.slice(1).some(arg => arg === "--url" || arg.startsWith("--url="))) {
   if (args.length !== 1) {
-    process.stderr.write("Usage: conquistador mcp [--url URL]\n");
+    process.stderr.write("Usage: conquistador mcp [--http [--port N] [--host H]] [--url URL]\n");
     process.exitCode = 2;
   } else {
     const { runSkillsMcp } = await import("../../tools/skills-mcp.mjs");

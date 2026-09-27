@@ -23,12 +23,16 @@ const VALUE_FLAGS = new Set(['host', 'project', 'path', 'url', 'runtime-path', '
 const BOOL_FLAGS = new Set(['skills', 'plugin', 'mcp', 'advanced', 'yes', 'dry-run', 'help', 'version']);
 const ALIASES = { h: 'help' };
 
-export const FIRST_PROMPT = 'Use Conquistador to draft a launch plan from the product facts in this project. Mark missing facts. Keep it as a draft.';
+export const FIRST_PROMPT = 'Use Conquistador to draft a marketing and growth plan from the product facts in this project. Mark missing facts. Keep it as a draft.';
 
 export const FIRST_TASKS = Object.freeze({
+  'growth-plan': {
+    label: 'Plan marketing and growth',
+    prompt: FIRST_PROMPT,
+  },
   'launch-plan': {
     label: 'Plan a launch',
-    prompt: FIRST_PROMPT,
+    prompt: 'Use Conquistador to draft a launch plan from the product facts in this project. Mark missing facts. Keep it as a draft.',
   },
   'diagnose-growth': {
     label: 'Diagnose a growth stall',
@@ -39,8 +43,8 @@ export const FIRST_TASKS = Object.freeze({
     prompt: 'Use Conquistador to review the latest growth results in this project. Name the sources and baseline, separate observed changes from assumptions, and recommend one keep, drop, or test decision. Mark missing data.',
   },
   'write-copy': {
-    label: 'Draft launch copy',
-    prompt: 'Use Conquistador to draft a launch email from the product and audience facts in this project. Mark missing facts and claims that need evidence. Keep it as a draft.',
+    label: 'Draft landing page copy',
+    prompt: 'Use Conquistador to draft landing page copy from the product and audience facts in this project. Mark missing facts and claims that need evidence. Keep it as a draft.',
   },
 });
 
@@ -68,7 +72,7 @@ Usage:
 Route help: conquistador --skills --help
 Detailed targets: conquistador setup list
 Shared controls: --host, --project, --path, --dry-run, --yes
-First task: --task launch-plan|diagnose-growth|review-results|write-copy
+First task: --task growth-plan|launch-plan|diagnose-growth|review-results|write-copy
 --path sets the staged source or connector folder for --skills, --plugin, and --mcp.
 Noninteractive shortcuts need a resolved plan and --yes or --dry-run.
 Without a terminal, conquistador prints this help and does not write files.

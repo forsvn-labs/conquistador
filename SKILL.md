@@ -6,7 +6,8 @@ license: MIT
 
 # Conquistador
 
-Read [the operating contract](skills/conquistador/SKILL.md) and follow it for this task.
+Read [the operating contract](skills/conquistador/SKILL.md) and follow its knowledge protocol for this task:
+get the playbook reading list, read every listed file in full, and end with **Playbooks applied**.
 The complete method library is under `skills/`. Load only the methods and specialist roles needed
 for the user's outcome. Users do not need to install or invoke them individually.
 

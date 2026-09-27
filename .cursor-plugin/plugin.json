@@ -1,0 +1,28 @@
+{
+  "name": "conquistador",
+  "displayName": "Conquistador",
+  "version": "0.0.15",
+  "description": "Growth, GTM, launch, marketing, and sales playbooks for your agent: 39 skills, a playbook MCP server, and hooks that make the agent read them.",
+  "author": {
+    "name": "FORSVN",
+    "url": "https://forsvn.com"
+  },
+  "homepage": "https://forsvn.com",
+  "repository": "https://github.com/forsvn-labs/conquistador",
+  "license": "MIT",
+  "keywords": [
+    "growth",
+    "gtm",
+    "launch",
+    "marketing",
+    "sales",
+    "copywriting",
+    "seo",
+    "positioning",
+    "playbooks"
+  ],
+  "logo": "assets/conquistador-icon.png",
+  "skills": "./skills/",
+  "mcpServers": "./mcp.json",
+  "hooks": "./hooks/cursor.json"
+}

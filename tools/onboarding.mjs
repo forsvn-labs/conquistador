@@ -84,7 +84,7 @@ function versionNotice(inspection) {
 
 function printStart(inspection, task, cwd) {
   const hosts = inspection.hosts?.length ? inspection.hosts : ['none'];
-  const firstTask = Object.hasOwn(FIRST_TASKS, task) ? FIRST_TASKS[task] : (task ?? FIRST_TASKS['launch-plan']);
+  const firstTask = Object.hasOwn(FIRST_TASKS, task) ? FIRST_TASKS[task] : (task ?? FIRST_TASKS['growth-plan']);
   console.log(`Installed: ${inspection.path}`);
   console.log(`Use with: ${hosts.map(host => hostLabels[host] ?? host).join(', ')}`);
   console.log(operatorNextSteps(inspection.path, hosts, cwd, firstTask));
@@ -188,7 +188,7 @@ async function optionalIntegrationsSelected(choice, ui, project, ctx) {
   if (code) throw Object.assign(Error('Optional integration did not complete. Preserve any staged files and use its setup status before retrying.'), { exitCode: code });
 }
 
-async function chooseFirstTask(ui, initial = 'launch-plan', project, ctx) {
+async function chooseFirstTask(ui, initial = 'growth-plan', project, ctx) {
   for (;;) {
     const id = await need(ui, await ui.select({
       message: 'What do you want to do first in your coding agent?',
@@ -277,7 +277,7 @@ async function recommended({ options, cwd, run, ui, env, tty: interactive, spawn
       if (choice === 'cancel') { ui.cancel('Cancelled. Existing files were preserved.'); return 0; }
       if (choice === 'use') {
         console.log('Using edited files as they are. Local integrity is unverified.');
-        const task = options.task ? FIRST_TASKS[options.task] : (await chooseFirstTask(ui, 'launch-plan', project, optionalContext)).task;
+        const task = options.task ? FIRST_TASKS[options.task] : (await chooseFirstTask(ui, 'growth-plan', project, optionalContext)).task;
         printStart(inspection, task, cwd);
         return 0;
       }
@@ -297,7 +297,7 @@ async function recommended({ options, cwd, run, ui, env, tty: interactive, spawn
         console.log('Local files verified. Host discovery and task execution remain unverified.');
         const after = inspectOperator(project);
         let task;
-        try { task = options.task ? FIRST_TASKS[options.task] : (await chooseFirstTask(ui, 'launch-plan', project, optionalContext)).task; }
+        try { task = options.task ? FIRST_TASKS[options.task] : (await chooseFirstTask(ui, 'growth-plan', project, optionalContext)).task; }
         catch (error) {
           if (error.cancelled) error.message = `Cancelled after setup. The new operator is installed. Your earlier files remain in ${backup}.`;
           throw error;
@@ -343,7 +343,7 @@ async function recommended({ options, cwd, run, ui, env, tty: interactive, spawn
     }
 
     const task = interactive && !options.task && !options.yes && !options['dry-run']
-      ? (await chooseFirstTask(ui, 'launch-plan', project, optionalContext)).task : options.task;
+      ? (await chooseFirstTask(ui, 'growth-plan', project, optionalContext)).task : options.task;
 
     printStart(inspection, task, cwd);
     return 0;
@@ -392,13 +392,13 @@ async function recommended({ options, cwd, run, ui, env, tty: interactive, spawn
     await preflight(host);
     const args = ['install', '--target', 'operator', '--project', project, '--host', host];
     if (options['dry-run']) {
-      console.log(planText(project, host, FIRST_TASKS[options.task ?? 'launch-plan']));
+      console.log(planText(project, host, FIRST_TASKS[options.task ?? 'growth-plan']));
       console.log(viewChanges(project, host, inspection));
       console.log('Dry run. No files changed.');
       return 0;
     }
     if (options.yes) {
-      console.log(planText(project, host, FIRST_TASKS[options.task ?? 'launch-plan']));
+      console.log(planText(project, host, FIRST_TASKS[options.task ?? 'growth-plan']));
       await runSetupAction(run, args);
       await runSetupAction(run, ['doctor', '--path', join(project, '.conquistador')]);
       finish(project, host, options.task);
@@ -416,7 +416,7 @@ async function recommended({ options, cwd, run, ui, env, tty: interactive, spawn
     ui.intro(`Conquistador ${version}`);
     ui.log.info('Other integrations: conquistador --help');
     let current = host;
-    let firstTask = { id: options.task ?? 'launch-plan', task: FIRST_TASKS[options.task ?? 'launch-plan'] };
+    let firstTask = { id: options.task ?? 'growth-plan', task: FIRST_TASKS[options.task ?? 'growth-plan'] };
     let optional = null;
     for (;;) {
       const action = await need(ui, await ui.select({

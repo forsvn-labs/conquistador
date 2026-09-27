@@ -1,0 +1,17 @@
+{
+  "name": "conquistador",
+  "owner": {
+    "name": "FORSVN",
+    "url": "https://forsvn.com"
+  },
+  "metadata": {
+    "description": "Conquistador growth and GTM playbooks for Cursor."
+  },
+  "plugins": [
+    {
+      "name": "conquistador",
+      "source": "./",
+      "description": "Growth, GTM, launch, marketing, and sales playbooks for your agent: 39 skills, a playbook MCP server, and hooks that make the agent read them."
+    }
+  ]
+}

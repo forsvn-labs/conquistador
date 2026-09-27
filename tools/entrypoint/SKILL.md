@@ -6,12 +6,17 @@ license: MIT
 
 # Conquistador
 
-Complete these reads before drafting or dispatching work:
+The playbooks in this library are the product. For a growth, GTM, marketing, sales, or product
+task, get the reading list first: call the `conquistador_brief` MCP tool when available, use a
+`<conquistador-brief>` block a hook supplied, or run `conquistador brief "TASK"`. Read every listed
+file in full, apply its rules, and end with **Playbooks applied**: each file and the rule you used.
+
+Otherwise, complete these reads before drafting or dispatching work:
 
 1. Read [the operating contract](library/conquistador/METHOD.md).
 2. Use the [capability catalog](library/conquistador/catalog.md) to select the smallest set of methods.
-3. Read the complete METHOD.md for each selected method. The catalog, specialist reference files,
-   and remembered instructions do not replace that method body.
+3. Read the complete METHOD.md for each selected method, then every Core file in its
+   "Playbooks for this method" list. The catalog and remembered instructions do not replace them.
 4. Read the parent [quality](library/conquistador/standards/quality.md),
    [safety](library/conquistador/standards/safety.md), and
    [context](library/conquistador/standards/context.md) standards, plus the selected method's required

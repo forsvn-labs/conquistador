@@ -141,13 +141,14 @@ function stage(mode, target, selection) {
   }
   if (['plugin', 'single-agent'].includes(mode)) {
     for (const file of operatorFiles) {
-      if (!['tools/domain-package.mjs', 'tools/method-library.mjs', 'tools/plugin-contracts.mjs', 'tools/routing-contract.mjs', 'tools/request-text.mjs'].includes(file)) copy(file);
+      if (!['tools/domain-package.mjs', 'tools/method-library.mjs', 'tools/plugin-contracts.mjs', 'tools/routing-contract.mjs', 'tools/request-text.mjs', 'tools/context-selection.mjs'].includes(file)) copy(file);
     }
   }
   if (mode === 'conquistador') {
     library('.');
   } else if (mode === 'plugin') {
-    for (const path of ['plugin.json', '.claude-plugin', '.codex-plugin', '.agents', 'assets']) copy(path);
+    // The plugin ships its playbook MCP server and hooks; both run bundled scripts only.
+    for (const path of ['plugin.json', 'mcp.json', '.claude-plugin', '.codex-plugin', '.cursor-plugin', '.agents', 'assets', 'hooks', 'mcp/server.mjs', 'tools/skills-mcp.mjs', 'tools/mcp-http.mjs', 'package.json']) copy(path);
     copy('agents/conquistador.md');
     library('skills/conquistador');
   } else if (mode.startsWith('skill:')) {

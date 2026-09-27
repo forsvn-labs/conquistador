@@ -5,7 +5,7 @@ import { spawn, spawnSync } from 'node:child_process';
 import { cancellableUi } from './onboarding-ui.mjs';
 import { shellCommand } from './install-paths.mjs';
 
-const supported = () => Number(process.versions.node.split('.')[0]) === 24;
+const supported = () => Number(process.versions.node.split('.')[0]) >= 24;
 const home = homedir();
 
 function candidates() {
@@ -50,7 +50,7 @@ function guidance() {
   const manager = nvm ? '. "$HOME/.nvm/nvm.sh"\nnvm install 24\nnvm use 24' : brew
     ? 'brew install node@24\n# Then select it in this terminal:\nexport PATH="$(brew --prefix node@24)/bin:$PATH"'
     : 'Install Node 24 from https://nodejs.org/en/download, then open a new terminal.';
-  return `Conquistador needs Node 24 (current: ${process.version}). No project files were changed.\n${manager}\nCheck: node --version  # must print v24.x\nThen rerun: ${shellCommand(['conquistador', ...process.argv.slice(2)])}\nThis command cannot switch your parent shell.`;
+  return `Conquistador needs Node 24 or later (current: ${process.version}). No project files were changed.\n${manager}\nCheck: node --version  # must print v24 or later\nThen rerun: ${shellCommand(['conquistador', ...process.argv.slice(2)])}\nThis command cannot switch your parent shell.`;
 }
 
 // null means the original command may continue. A number is this invocation's exit status.
@@ -65,7 +65,7 @@ export async function nodePreflight() {
   if (!interactive) { console.error(`[conquistador] ${message}`); return 1; }
   const found = candidates().find(verified);
   const ui = cancellableUi(await import('./vendor/clack.mjs'));
-  ui.intro('Conquistador requires Node 24');
+  ui.intro('Conquistador requires Node 24 or later');
   let choice;
   try {
     choice = await ui.select({

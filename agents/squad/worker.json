@@ -5,7 +5,7 @@
   "role": "worker",
   "displayName": "Conquistador worker",
   "productName": "conquistador",
-  "pluginVersion": "0.0.14",
+  "pluginVersion": "0.0.15",
   "canonicalSkill": "conquistador",
   "canonicalSkillRoot": "skills/conquistador",
   "installClass": "candidate-only",

@@ -5,7 +5,7 @@ skills and documentation; its host loads the skill contracts and does not run th
 commands.
 
 This is the editable product source, kept private for private-alpha delivery. Read README.md, CONTRIBUTING.md, INSTALL.md, and the
-relevant module README before changing behavior. Node 24 and npm are the supported local toolchain.
+relevant module README before changing behavior. Node 24 or later and npm are the supported local toolchain.
 FORSVN context and operating decisions live in [FORSVN · Start here](https://linear.app/hungv47/document/forsvn-start-here-cabfade69716); this repository owns product code and its release evidence.
 
 - Keep this repository private. Do not push, publish, change visibility or remove the npm private
@@ -13,6 +13,18 @@ FORSVN context and operating decisions live in [FORSVN · Start here](https://li
 - `skills/<outcome>/` owns an independently usable method. `skills/conquistador/` owns parent routing.
 - `runtime/`, `catalog/`, and `evals/` own runner, typed tools, and evidence contracts.
 - `hosts/` and `agents/` contain installation contracts; `tools/` contains local development helpers.
+- The repository root is the plugin (Claude Code, Codex, Cursor, Copilot, Agent Plugins). `tools/brief.mjs`
+  ranks the playbooks for a task; `mcp/server.mjs`, `hooks/conquistador-hook.mjs`, `conquistador brief`,
+  and `conquistador bot` all use it. `tools/front-door.mjs` and `tools/agents.mjs` own the agent installer.
+- After adding, renaming, or removing a knowledge file, run `node tools/knowledge-map.mjs` and
+  `node tools/update-completeness.mjs`. `node tools/knowledge-map.mjs --check` must pass.
+- E2E: `node tools/e2e/routing-breadth.mjs` (offline; marketing breadth, coding silence, tour drift),
+  `expect tools/e2e/tour.exp` (interactive tour in a terminal), `node tools/e2e/install-lifecycle.mjs`
+  (isolated home, all detected agents), and `node tools/e2e/knowledge-use.mjs [--set breadth]`
+  (headless Claude Code; spends tokens). Reports go to `dist/e2e/`.
+- Router phrases: curated `intents` describe a method; practitioner wording that only selects it goes
+  in `aliases` in `skills/conquistador/routing-overlay.json`. Rebuild with `writeRoutingContract`.
+- `tools/tour.mjs` owns the capability areas. After editing it, run `node tools/tour.mjs --write`.
 - Keep methods original and retain applicable MIT license and notices. Never add private knowledge,
   customer transcripts, credentials, internal decisions, or private workspace history to this repo.
 - Select the relevant skill; do not load the whole library. Preserve explicit human authority for
