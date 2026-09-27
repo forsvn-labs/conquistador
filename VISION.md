@@ -1,55 +1,44 @@
 # Product principles
 
-Conquistador helps users do growth, GTM, sales, marketing, and product knowledge work in
-their existing coding agent. Users ask for an outcome. The parent selects the necessary methods,
+Conquistador helps users do marketing and growth work in their existing coding agent: on any
+platform, in any service, and inside their product. Launches are one job among many; strategy,
+social, search and AI answers, paid ads, email and outreach, in-product growth, content, and
+measurement carry equal weight. Users ask for an outcome. The parent selects the necessary methods,
 assigns bounded specialist work when useful, and owns one integrated, reviewed deliverable.
 Research, creative work, engineering, and review support that mission.
 
 ## Make the first task easy
 
-Give the host one Conquistador entry by default. Keep the full specialist library available behind
-that parent, loaded only after routing. Show the relevant public capability and specialist labels
-as work proceeds. Users should not need to manage every method or spend global discovery context
-on the whole library. One named specialist remains an explicit choice.
+One command installs Conquistador into every agent the user already has. Bare `conquistador`
+finds the agents, asks one question, and installs the plugin with each agent's own plugin manager.
+The user learns four commands: install, tour, update, and remove. Every other route stays
+available behind `help --all` and INSTALL.md, because a long menu stops people from starting.
+The tour shows what Conquistador covers and turns a first task into a ready prompt. Install once per user; it works in every project. The same package
+also serves the other surfaces: skills only, a local or hosted MCP server, a bot pack for chat
+apps, and the per-project operator. Every route has a clear update and removal path, and none
+adds a dependency or lockfile to the user's project.
 
-Offer one package runner command that opens guided setup for the complete project operator.
-Default to the current project, explain the chosen form, and confirm the local installation once. Put prerequisites,
-installation traps, and recovery beside the command. It must not add a dependency or lockfile to
-the receiving project. Let the user choose a concrete first task and show the saved activation
-state, host trust step, method-read check, and recovery command. Follow it with a real task.
-Native plugins retain their host manager and trust boundary.
-Pinned private Git references lead acquisition; verified npm and Bun tarballs, source,
-and ZIP are transports for the same complete package. The runtime, typed catalog, Eval Lab, and
-durable jobs are optional. Every installation route needs a clear update and removal path.
-When setup targets another project, printed recovery commands must name that project's operator
-path so they work from the current directory.
-When an existing operator has local edits, the interactive command must let the user continue
-with those files or explicitly back up its owned folders before re-setup. A failed attempt must
-leave a named recovery path. Unowned files and other project files stay under their current owner.
+The playbooks are the product. An agent that answers from general knowledge while the right
+playbook sits unread is a product failure, not a style choice. So one briefing engine decides
+what each task must read; the MCP tool returns those playbooks inline; plugin hooks add the
+reading list to relevant prompts and send the agent back once when it skipped them; and every
+deliverable ends with the playbooks it applied. The user's own playbooks rank first, read in
+place. Coding prompts get nothing.
 
-Public alpha should publish `@forsvn/conquistador` to the npm registry and make
-`npm i -g @forsvn/conquistador` the primary acquisition command. Keep the private Git command for
-private `0.0.x` releases and as a source fallback. Do not advertise the registry command until the
-exact public package exists, registry ownership is verified, and a clean global lifecycle passes.
+Pinned private Git references lead acquisition during the private alpha. Public alpha should
+publish `@forsvn/conquistador` to the npm registry and list the same plugin in the agent
+marketplaces. Do not advertise the registry command until the exact public package exists,
+registry ownership is verified, and a clean global lifecycle passes.
 
-An installed library must contain the methods and resources its parent routes to. The transport
-must not change the package contents or managed digest. Check those files without loading the
-entire library into model context. Report local completeness, available build identity, host
-activation, and task success separately. A receipt cannot establish that a saved executable still
-exists or that the host can produce useful work. Label compact skills and MCP as reduced host
-integrations when they omit the adapter or execution path.
+An installed library must contain the methods and resources its parent routes to. Report local
+completeness, host activation, knowledge use, and task success separately. A passing install or
+a cited playbook does not prove that the answer is useful.
 
-The host supplies the model, context, tools, permissions, and worker contexts. Load only the
-methods relevant to the task. Use specialists within host limits; use a labeled same-context
-fallback when separate contexts are unavailable. Specialist roles compose the existing methods,
-not a second library. Compact copies must describe any adapter or runtime they omit.
-
-The recommended one-user experience is a project-installed operator package. Installed activation
-defaults to manual invocation. Host-integrated project routing of admitted product, marketing, growth, sales,
-research, creative, and product-engineering requests is an explicit setting. Installation starts
-no daemon, watcher, or schedule. Substantial runs present a compact engagement brief and finish
-with an execution receipt. Public labels stay visible; prompts, skill paths, routing scores, and
-chain-of-thought stay private.
+The host supplies the model, context, tools, permissions, and worker contexts. Use specialists
+within host limits; use a labeled same-context fallback when separate contexts are unavailable.
+Specialist roles compose the existing methods, not a second library. Installation starts no
+daemon, watcher, or schedule. Hooks are read-only, fast, never block unrelated work, and can be
+turned off. Public labels stay visible; prompts, routing scores, and chain-of-thought stay private.
 
 ## Connect only what the task needs
 

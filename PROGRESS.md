@@ -1,5 +1,94 @@
 # Product progress
 
+## 0.0.15 candidate: plugin-first surfaces and enforced playbook reads (unshipped)
+
+Branch `overhaul/surfaces-and-knowledge`, not pushed. Review record and failure modes:
+[docs/REVIEW-2026-09-SURFACES.md](docs/REVIEW-2026-09-SURFACES.md).
+
+- **Briefing engine** (`tools/brief.mjs`): selects the method with the existing router, with a
+  lexical fallback for platform-only and explicit prompts. Ranks every knowledge file with BM25,
+  file-name matches, and platform detection, and returns up to 8 must-read files with reasons.
+  Coding prompts return nothing and skip the index. The index is cached on disk by file size and
+  mtime (about 0.5 s per brief under heavy machine load). Scores are rounded so that Node 24 and
+  26 rank identically.
+- **User playbooks**: `conquistador playbooks add DIR`, `CONQUISTADOR_PLAYBOOKS`, or
+  `~/.conquistador/playbooks`. Read in place and ranked first when they match well. Checked with
+  the vault business library: paid-ads and TikTok/UGC tasks pull the matching vault notes.
+- **MCP server**: new `conquistador_brief` (playbooks inline, in one call) and
+  `conquistador_search` tools, four prompts, and server instructions that tell the agent to brief
+  first. New entry `mcp/server.mjs`; `--http` serves stateless JSON-RPC with optional bearer token
+  (`tools/mcp-http.mjs`, `mcp/Dockerfile`). Verified with curl from the exact image file set.
+- **Plugin**: the repository root is a plugin for Claude Code, Codex, Cursor, Copilot CLI, Grok
+  CLI, and the Agent Plugins format, with skills, the MCP server, and hooks. Claude Code
+  `plugin validate` passes; `plugin details` reports 39 skills, 1 agent, 2 hooks, 1 MCP server,
+  and about 3,300 always-on tokens.
+- **Hooks** (`hooks/conquistador-hook.mjs`): the prompt hook injects the must-read list for
+  relevant prompts; the stop hook blocks once when must-read files were not read (checked
+  against tool calls only, never injected text), with a loop guard, a 12-hour session state TTL,
+  and `CONQUISTADOR_HOOKS=off`. Cursor gets a session-start protocol and a stop follow-up.
+- **Playbook maps**: `tools/knowledge-map.mjs` writes a Core and By-step list at the top of all
+  38 methods; `npm test` fails when a map is stale. The routing contract ignores the generated
+  block; the served runtime strips it from method context.
+- **Parent skill**: a knowledge protocol at the top and a required **Playbooks applied** section.
+- **Installer**: bare `conquistador` detects agents, preselects them, shows the exact commands,
+  and installs with each agent's own manager from a stable copy in `~/.conquistador/plugin`.
+  `add`, `update`, `remove`, `agents`, `brief`, `playbooks`, and `bot` are new. The previous
+  per-project flow moves to `conquistador project`; its flags and lifecycle commands still work.
+- **Bot pack**: `conquistador bot` writes a system prompt and 12 knowledge files (3.2 MB).
+- **Node**: 24 or later everywhere; CI runs Node 24 and 26.
+- **Docs**: README and INSTALL rewritten around the route table; the per-project guide moves to
+  `docs/INSTALL-PROJECT.md`. Version 0.0.15 in all manifests and contracts.
+
+### General-purpose scope (2026-09-28)
+
+Review: part 2 of [docs/REVIEW-2026-09-SURFACES.md](docs/REVIEW-2026-09-SURFACES.md).
+
+- **Routing breadth**: 236 router aliases for channels (Discord, Pinterest, Bluesky, G2, Substack),
+  AI answers (ChatGPT, Perplexity), lifecycle email, press and podcasts, paywalls and trials,
+  in-app copy, and ad results. Aliases select a method but do not change its playbook map.
+- **Brief engine**: ad-platform names; the longest platform phrase wins; a named platform keeps
+  other platforms' guides out of must-read; a routed workflow brings its composition file; bare
+  platform names do not engage the brief on coding prompts; an empty match says so.
+- **Onboarding**: `conquistador tour` (interactive; prints the map without a TTY), an installer
+  closing screen with nine areas and four starter prompts from different areas, a generated
+  `skills/conquistador/welcome.md`, and a First contact rule in the parent skill. README, bot pack,
+  and agent try-it lines no longer default to a launch.
+- **Minimal CLI**: default help shows four commands (install, tour, update, remove); the rest moved
+  to `help --all`. The installer asks one question and closes with the agent step, three starter
+  prompts, and an offer to take the tour. The per-project flow and MCP prompt default to a
+  marketing and growth plan instead of a launch plan.
+- `node tools/e2e/routing-breadth.mjs`: 109 of 109 (before: 49 of 66 on the first corpus).
+- `expect tools/e2e/installer.exp`: bare install in an isolated home asks one question, shows the
+  short closing screen, declines the tour, and removes cleanly.
+- `expect tools/e2e/tour.exp`: the tour reaches specialists, playbooks, and a paste-ready prompt.
+- `npm test`: 764 of 764 on Node 26.9.0. `install-lifecycle`: pass for all five agents.
+- `knowledge-use --set breadth --only hooks`: three non-launch tasks, 100% must-read coverage and
+  100% citations (three runs, $0.59 mean).
+
+### Verification
+
+- `npm test`: 764 of 764 pass on Node 26.9.0 and on Node 24.21.0 (240 host/tooling, 294 runtime,
+  167 catalog, 63 evaluation). Before this work, 92 tool tests failed on Node 26 only because of
+  the version gate.
+- `node tools/e2e/install-lifecycle.mjs`: install, repeat install, update, and remove pass for
+  Claude Code, Codex, Cursor, Copilot CLI, and Grok CLI in an isolated home, each confirmed by the
+  agent's own listing. Report: `dist/e2e/install-lifecycle/report.json` (not committed).
+- Interactive installer driven in a PTY: selection, plan, confirmation, results, and next steps.
+- `node tools/e2e/knowledge-use.mjs --runs 2` with headless Claude Code 2.1.283 (nine valid runs;
+  three runs hit the plan limit and are excluded): before, 17% must-read coverage and 0% citations;
+  hooks on, 100% and 100% (3 runs); MCP only, 100% and 100% (2 runs, launch task only).
+  Report: `dist/e2e/knowledge-use/report.md` with transcripts (not committed).
+- `npx skills add …/tree/private-alpha/skills` finds 39 skills on the private repository and
+  installs 39 skills (8.7 MB) from a local checkout.
+
+### Not verified
+
+- Hook delivery in Codex (needs hook trust), Cursor, Copilot CLI, and Grok CLI sessions. Only
+  Claude Code sessions were observed.
+- Answer quality. The E2E measures reads and citations, not whether the plan is better.
+- The Docker image build (the daemon was not running), remote hosting, and any bot app screen.
+- Native Windows and Linux.
+
 ## Shipped 0.0.14 recovery, host acceptance pending
 
 The [v0.0.14 private prerelease](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.14)
