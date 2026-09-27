@@ -221,3 +221,49 @@ Onboarding:
 Eval design against R7: each case lists acceptable methods (any one must be selected) and
 forbidden methods (none may be selected). The onboarding examples are cases in the same eval, so
 O6 fails the eval.
+
+### Results (part 2)
+
+What changed:
+
+- **Router aliases** (`skills/conquistador/routing-overlay.json`): 236 practitioner phrases in a new
+  `aliases` field. Curated `intents` still describe each method, so the playbook maps did not move.
+- **Brief engine** (`tools/brief.mjs`): ad-platform names, longest-phrase platform matching, the
+  sibling-platform rule, the routed workflow's composition file, a coding guard for bare platform
+  names, and an honest "no match".
+- **Tour** (`tools/tour.mjs`): nine areas, short specialist names, tested examples. Feeds
+  `conquistador tour`, the installer's closing screen, `welcome.md`, and the bot-pack prompt.
+- **First contact** in the parent skill: `/conquistador` with no task shows the areas and asks
+  one question.
+
+How each failure mode is handled:
+
+| Mode | Handling | Evidence |
+| --- | --- | --- |
+| R1 empty brief | Aliases for press, AI answers, channels | Breadth cases pass |
+| R2 wrong domain | Aliases route before the lexical fallback | Win-back, paywall, Substack pass |
+| R3 shared word | Exclusions (`map-user-flow` × email flow) and job phrases instead of metric names | `none` lists pass; diagnosis prompts keep only `diagnose-growth` |
+| R4 sibling guides | Named platform keeps siblings out of must-read | Google Ads and Meta cases pass |
+| R5 old routes break | Full suite | 764 of 764; one regression ("Research the Vietnamese market") found and fixed |
+| R6 coding prompts | 20 coding guards; ambiguous words became phrases; bare platform names need non-coding text | 20 of 20 silent (11 regressions found and fixed, 2 older leaks fixed) |
+| R7 loose eval | `any` plus `none` plus `platforms` plus `mustNot` per case | Baseline failed 17 of 66 |
+| O1 launch-only first touch | Tour, installer screen, README table, try-it lines | Installer E2E output shows nine areas |
+| O2 what to type | Four starter prompts; tour gives a paste-ready prompt | `tour.exp` transcript |
+| O3 map too long | Nine one-line areas; detail per area on demand | `conquistador tour AREA` |
+| O4 needs agent or network | Tour is local and deterministic (0.9 s end to end) | `tour.exp` |
+| O5 blocks scripts | No TTY prints the map | `conquistador tour` piped |
+| O6 examples drift | Tour examples are eval cases; welcome.md and README table are checked | 3 drift checks pass |
+| O7 launches vanish | Launch is one of nine areas, with a Product Hunt example | Tour case passes |
+
+Evidence (reports in `dist/e2e/`, not committed):
+
+- `routing-breadth/report.md`: 107 of 107.
+- `tour/transcript.txt`: the interactive tour, "Growth inside the product", first example.
+- `install-lifecycle/report.json`: pass for five agents, with the new closing screen in the output.
+- `knowledge-use-breadth/report.md`: live headless Claude Code 2.1.283, hooks on, one run per task,
+  three non-launch tasks (win-back email, ChatGPT and Perplexity visibility, iOS paywall). Must-read
+  coverage 100% (6/6, 6/6, 5/5), citations 100%, mean cost $0.59 per run. Three runs is a small
+  sample.
+
+Not verified: answer quality on the new areas; the tour on Windows and Linux terminals; hook
+delivery outside Claude Code.
