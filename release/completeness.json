@@ -2,199 +2,199 @@
   "schemaVersion": "conquistador.install-completeness/v1",
   "parent": {
     "name": "conquistador",
-    "version": "2.10.0",
-    "sha256": "e0fe84b0cf2baa804fa1cdd651f55f32fb4f1cfd13eaf45b8eb53172f910a016"
+    "version": "2.11.0",
+    "sha256": "9b810256688a4b39a9730649f07a7cef31afbd01580b4d2613cf8361ee9d43f9"
   },
   "outcomes": [
     {
       "name": "allocate-marketing-budget",
       "version": "2.1.0",
-      "sha256": "3878826f3e2c3e0cb324aa4c6b7d10355f647c34d4515acf89fdd82959281dbb"
+      "sha256": "2894c4b4ac7d3a6a4e988f24543622db544269a7c012e8b2f0d701fa82e6c006"
     },
     {
       "name": "analyze-video",
       "version": "1.0.0",
-      "sha256": "01526f8a44539bde2f0d65cc7a6ed99a54febbe9bb40755674f1bbaf648d6893"
+      "sha256": "aaca9a2719c61f312be94745eb4c4746a28b279aff1f94bd2981f1a78e1ac1b7"
     },
     {
       "name": "architect-software-system",
       "version": "1.0.0",
-      "sha256": "9cc42d8f1c20be176601da9e87cd3b4f6c4903341d2a2d9b796307a1eefd665e"
+      "sha256": "8807bc9069a531f8bca3ae11faa1a105e9292c5345d81f267de489a0e757dfd8"
     },
     {
       "name": "audit-marketing",
       "version": "2.1.0",
-      "sha256": "41dec31986e3f7366544b777b51baa6900993fedc1c4b91e098a46dcc9536578"
+      "sha256": "43aa610b2df0aaf24a11f1b2ab78a3b62491e243c001d33924ddda401c3f87ab"
     },
     {
       "name": "brief-creative",
       "version": "2.1.0",
-      "sha256": "ebf9e97d60e69e988b5347404d8a17637e6ddd2ee271bcc9f2579167ca343054"
+      "sha256": "9c14195aee24190f8d33d8ba5aac4e4abfadc979ef5e7d64555cf05c5baaf8bf"
     },
     {
       "name": "brief-product-ui",
       "version": "2.1.0",
-      "sha256": "df182628c6af4e631756b038e7e16733c0a765a7938e70643fa99ecc37d389e9"
+      "sha256": "6b2387f3c83730af4f5524e630ca6fbee8ad9a93eed59b2bc58ffd806876e0de"
     },
     {
       "name": "build-ios-app",
       "version": "1.1.0",
-      "sha256": "1693136b1ed4cd387e441381c8811def1d27f2fed065d0639f3e7829f2243353"
+      "sha256": "e447b7a1bfec2d8649367bdf3f98d5f3e606281e601a7c5ff71440acb6e7df69"
     },
     {
       "name": "build-web-app",
       "version": "1.0.0",
-      "sha256": "bd428c31c9373e64f2c3469679e13238c4f0fa570f3343f6303645700de5bf8d"
+      "sha256": "5ab34e661c963914d6c5ede42a12043d7345a22f58df20071c384a0794bc4100"
     },
     {
       "name": "create-brand",
       "version": "2.1.0",
-      "sha256": "03c39ae57443bbbb3705286a766dd0ca51c9c50facd7818463b1a3863c437e5a"
+      "sha256": "5ed9b5f8426a74928b1fa08557374748207a16283ee119e0ab7a6d53e09a5ad3"
     },
     {
       "name": "create-paid-campaign",
       "version": "2.1.0",
-      "sha256": "84bf042b3809bbfb56a85479278f097b90982df1a7d859271a4e62412cf2af11"
+      "sha256": "3fc0564376931629d42847a3c92068504d256edf40e7f2de2b0dd524e94b6fa0"
     },
     {
       "name": "create-run-of-show",
       "version": "2.1.0",
-      "sha256": "560132b39a174d671398dc170159a77d9491ae27ece533f1b7de5b9bc9a9983b"
+      "sha256": "45efa206f3c339aa17a7c04aac9f4179058f0b5908005706db8dc5ab51e09057"
     },
     {
       "name": "create-shortform",
       "version": "2.1.0",
-      "sha256": "d2f7fb6723fa82381bf0f8cee0cb86c6614339819d95534687db4bd9f4e63186"
+      "sha256": "164f856f824a280cb504571c4a46932d5a35a6f722ed5d5d8b27c4ed02c73f46"
     },
     {
       "name": "decision-panel",
       "version": "1.1.0",
-      "sha256": "343dce05c30624ebb0da185ee2535cae87bea68bae7ce634a6b53a0d0fe81579"
+      "sha256": "94cd12cccfde92512c7e114f2cb0347ceaa8aeb470cf7d7117048d74849b6743"
     },
     {
       "name": "design-pricing-and-packaging",
       "version": "1.0.0",
-      "sha256": "24b161b3ac9ad5919c9696b30337023d33892c8188a8a0d89fe7a548ac85ea19"
+      "sha256": "f95a313e6d1c0cf51011968751f137505f27c89aec1ae731be54247e2d227efa"
     },
     {
       "name": "diagnose-growth",
       "version": "1.0.0",
-      "sha256": "6b6e7d9d9f71fbe32b99c6aba37eaa856855db0a6637938aeb8724f1d31c03ca"
+      "sha256": "9ab97d3485fd2ec9910660a532b343758d02bb864e1fe55e6a78c6b1dd97dde2"
     },
     {
       "name": "evaluate-outreach",
       "version": "1.0.0",
-      "sha256": "6b3fc76fe66a61671f16bf6373217d1c480896c4dffc2775ce6a034f9904b131"
+      "sha256": "6457760942c5505fed89768565ee6aef0eb9015fe1c214d51ed5cc21a855423a"
     },
     {
       "name": "evaluate-paid-campaign",
       "version": "1.0.0",
-      "sha256": "e3695b27ef9c9cf2b5ccec14ed3075d658ca3b96cdab643ee4534efd20528138"
+      "sha256": "093d148166d770f5eb49c2637c5859392acf1ce6ec6111bbce3c47ccc46ac9a2"
     },
     {
       "name": "evaluate-shortform",
       "version": "2.1.0",
-      "sha256": "a11cf7fd3ff4f86945fc5fe632c7070d34da72d673deb5bbfa32cfc49579d1ed"
+      "sha256": "93807797315769647abe7b001df6b3d07b2bc6c4512fba14ce4baa660430e229"
     },
     {
       "name": "fresh-eyes-review",
       "version": "1.1.0",
-      "sha256": "fe6a688ad031eb5d02da21f5dad397c20003bd2c9d12ec19b4387f0b17ca08f4"
+      "sha256": "b15a854dc22cce7ae0d79ec38052b006a8c23a412eb9a644d0283e5e371776e0"
     },
     {
       "name": "improve-conversion",
       "version": "2.1.0",
-      "sha256": "8a29e5426cf0ca7f55eb691a12f77ccc6de8dad37d4e099fcb4c51020608fdd9"
+      "sha256": "7d383a403f95841267580b76085c3d7d261b7367840a5ef7007b1b00bc126469"
     },
     {
       "name": "knowledge-review",
       "version": "1.2.0",
-      "sha256": "daea39964c2bae4ecd989f5382ee42839bc17085b5ef29d078e0c5a15d31aa1c"
+      "sha256": "fa1b1c59aabfffe0ca82ac63eddb6c8272466ad253b0c26bc3f47a03dc369fe5"
     },
     {
       "name": "map-user-flow",
       "version": "2.1.0",
-      "sha256": "402ae02c7eaabeec20820245b326ca67063152fd291734df2935f2365cdb9440"
+      "sha256": "732b9f2c151b2ce4c1d19cdd8a09332d9c578236475f7372fad6c39d337a0c44"
     },
     {
       "name": "measure-growth",
       "version": "2.1.0",
-      "sha256": "6233fe722022e2b90450534a76c65bcd9ac4d9ffa14647f347c2f3754fcfaef3"
+      "sha256": "aaa0b71b616c6ee749456cc0817df90e8a2f52f5261a08073ecadbff4e00b334"
     },
     {
       "name": "model-growth-funnel",
       "version": "2.1.0",
-      "sha256": "6a4370a6712cc50df21d7b9bdaec6c88fab4239ebabd34ab8384583fa478d7cd"
+      "sha256": "42763b5a183d799d0e516ba256a2b814c1c94626230afafbe338bd4e1a57a55c"
     },
     {
       "name": "optimize-search",
       "version": "2.1.0",
-      "sha256": "b689897d9dc6c6141493f4eafc32599a40d7417ef1ef271a935f5a1d3c65e678"
+      "sha256": "c897c065b7dae0c381a0788f40a6b3e030a1fb8cef6af3515f2da707134608fb"
     },
     {
       "name": "plan-campaign",
       "version": "2.1.0",
-      "sha256": "078e532bacd07607e9e4b4b6deea159249367c75fab7fd4264a0ee29ac64fac4"
+      "sha256": "0040b73f702effe36ce6a04a257ced5fc80c6a8b11327b9adc5a87932b6c828b"
     },
     {
       "name": "polish-vietnamese",
       "version": "2.1.0",
-      "sha256": "cd92f0979b8555f1bee7f566de5e92915c72fec173e90bf3750561ee75a2f92c"
+      "sha256": "f2aa8f697854af305c32c9363298fad1767aa95f0f63f77c66c54e57866a921f"
     },
     {
       "name": "prioritize-opportunities",
       "version": "1.1.0",
-      "sha256": "24b7429a80b25ec784f11238e0cd1bccdbbbdc2cd67f593d235ea7f489471263"
+      "sha256": "468c2ebe74e3f48c644ac655613cf8469d81d0010eca2069938a5abba2790912"
     },
     {
       "name": "research-channel",
       "version": "2.1.0",
-      "sha256": "524855e510a0e5ce931df2c7b0cdd969bf762571bf397f8facff2c347e5fb702"
+      "sha256": "a4b043715906a74286f01d1f01d224049e5b314dea145afdf23f01ef6064795b"
     },
     {
       "name": "research-content-ideas",
       "version": "2.1.0",
-      "sha256": "07310a7edb56d31d2ff8d8e789a85a7600a851c051399f5b769ad536e0562389"
+      "sha256": "597539ea8db2503b87bdca48c7a742347579bff0f29acafb13bb7f051d07344f"
     },
     {
       "name": "research-positioning",
       "version": "2.1.0",
-      "sha256": "c21ada61a1389dcc0b112faa837dadfb4f5fecd4fd06c3bca09c59cea6299b7b"
+      "sha256": "efb1ee12a4a4060c7ede7b713df40eaadbf21b565f67298f842a704c8a0dc49f"
     },
     {
       "name": "shape-initiative",
       "version": "1.0.0",
-      "sha256": "206bebc215f58eb8b2b0542a3b2212abd7b32d6b4c098a184305ea8c5206154d"
+      "sha256": "c3ebc79f0f964013e109a26f7d8ff650b9efcc28d523fbebb3acf4ecdb7bf678"
     },
     {
       "name": "submit-feedback",
       "version": "1.0.0",
-      "sha256": "c9dd9ffc5ad29911d5558debfe26e6bb80076448441d08db0c9200d73088d28f"
+      "sha256": "c2d61e6eba7a13a69f1656795997a17e0f867c836cd601ebebe9d393b2e39067"
     },
     {
       "name": "write-copy",
       "version": "2.1.1",
-      "sha256": "a56af1b1b23982f326b4f5b25e6d4db82d2a089dc0285ad3d014a15e932fa3bf"
+      "sha256": "cbc14c4b0f0822ddcbfe8d64093636b70def0205d84c3f9234b821753beeb79d"
     },
     {
       "name": "write-longform",
       "version": "2.1.0",
-      "sha256": "78f393db137349d5753522a8af5d9ae6cdd46252e0a54dae1bfb2e9f9476fe5e"
+      "sha256": "0dfb854682eb7c88849641b4ec466ac0e3d14062b47111bbf57564d34a591257"
     },
     {
       "name": "write-outreach",
       "version": "2.1.1",
-      "sha256": "9a5e292f1e3944fb6fcf17400feb282cda507b0b71c3ba96190fe02145c714c4"
+      "sha256": "dd298a4a6a5d5f92eda1d985ce058c4daea477425d98a157eb109deae0327b1c"
     },
     {
       "name": "write-social",
       "version": "2.1.0",
-      "sha256": "7b037d916050261b3ada4790e985cdca2bd985378b3f6cdce1c4e0b84d2b0d7c"
+      "sha256": "02fac349fc7cb0452cf6ac0263f48fd102d7ef800b7e24b70ddb6293d476b4ba"
     },
     {
       "name": "write-technical-docs",
       "version": "1.1.0",
-      "sha256": "af9cf02489634f916e6aa048e3002c533a804d072e8d1ee7becd9fde7e1d1938"
+      "sha256": "409557c0c5c9aaa33e5a24cb8380541a7ba4ad7f6763d3b56cc0b65d404a3d77"
     }
   ],
   "requiredResources": [
@@ -4630,7 +4630,7 @@
     },
     {
       "path": "tools/plugin-contracts.mjs",
-      "sha256": "7815f2b1364b23346dbac61c9ba166f00e9424e1d0117ccd2da6d20480f15669"
+      "sha256": "358f61f266a456674723fa1026a3f5b90a11c8f7c2c5c7896cf5009fec4418a1"
     },
     {
       "path": "tools/method-library.mjs",
@@ -4638,7 +4638,7 @@
     },
     {
       "path": "tools/routing-contract.mjs",
-      "sha256": "167ffbe20911a1072a50aa59181117ea0de32cda582f8192eaeb5c5a4beae13f"
+      "sha256": "3668ff923cb891b319674641c337b855adf60747cea1e441e74a0a86c1568135"
     },
     {
       "path": "tools/request-text.mjs",
@@ -4647,6 +4647,14 @@
     {
       "path": "tools/knowledge-index.mjs",
       "sha256": "3a5aeb60415bbefe9c2845a9d90c3a40e78bcb6e9df9fb732a8a76cd5a88860f"
+    },
+    {
+      "path": "tools/brief.mjs",
+      "sha256": "459e3ab17a10eb9742ce0fff9a24c7151bbed530a96e27c845ad9d45c79030c8"
+    },
+    {
+      "path": "tools/context-selection.mjs",
+      "sha256": "cbcb36c49907e38ad6cc06858095ace169b9f7a730070704ae26b88f25b3a72c"
     },
     {
       "path": "agents/conquistador/agent.json",

@@ -68,7 +68,7 @@ function frontmatter(raw) {
   return { body: source.slice(end + 4), meta };
 }
 
-function describe(source) {
+export function describe(source) {
   const { body, meta } = frontmatter(source);
   const headings = [...body.matchAll(/^#{1,3}\s+(.+)$/gm)].map(match => match[1].trim());
   const title = meta.title || headings[0] || '';
@@ -78,7 +78,7 @@ function describe(source) {
   return { title, headings, summary, body };
 }
 
-function classify(key) {
+export function classify(key) {
   if (PROCESS.test(key)) return 'process';
   if (/\/platform-intelligence\//.test(key)) return 'platform';
   if (/^conquistador\/channels\//.test(key)) return 'channel';

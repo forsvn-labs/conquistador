@@ -3,7 +3,7 @@ import { fileURLToPath } from 'node:url';
 import { resolve } from 'node:path';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
-if (Number(process.versions.node.split('.')[0]) !== 24) throw new Error('Use Node 24.');
+if (Number(process.versions.node.split('.')[0]) < 24) throw new Error('Use Node 24 or later.');
 const npm = process.platform === 'win32' ? 'npm.cmd' : 'npm';
 function run(command, args, cwd = root) {
   const result = spawnSync(command, args, { cwd, stdio: 'inherit', timeout: 600_000 });

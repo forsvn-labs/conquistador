@@ -25,8 +25,7 @@
     "conquistador": {
       "command": "node",
       "args": [
-        "${CLAUDE_PLUGIN_ROOT}/runtime/bin/conquistador.js",
-        "mcp"
+        "${CLAUDE_PLUGIN_ROOT}/mcp/server.mjs"
       ]
     }
   }

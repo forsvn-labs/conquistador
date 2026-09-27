@@ -50,7 +50,10 @@ export function skillMethodContext(assets: SkillAssets, maximumBytes = 24_000): 
     seen.add(path);
     const file = byPath.get(path);
     if (!file || file.content === null) continue;
-    const part = `<skill-method path=${JSON.stringify(path)}>\n${file.content}\n</skill-method>`;
+    // The generated playbook map tells tool-using hosts what to read. A served step has no file
+    // tools and receives only the files below, so the map would be a false instruction here.
+    const content = file.content.replace(/<!-- playbooks:start[\s\S]*?<!-- playbooks:end -->\n*/g, "");
+    const part = `<skill-method path=${JSON.stringify(path)}>\n${content}\n</skill-method>`;
     const size = Buffer.byteLength(part);
     if (bytes + size > maximumBytes) {
       if (path === "SKILL.md") throw new Error("skill front door exceeds method context budget");
@@ -58,7 +61,7 @@ export function skillMethodContext(assets: SkillAssets, maximumBytes = 24_000): 
     }
     parts.push(part);
     bytes += size;
-    for (const match of file.content.matchAll(/\[[^\]]*\]\(([^)#]+)(?:#[^)]*)?\)/g)) {
+    for (const match of content.matchAll(/\[[^\]]*\]\(([^)#]+)(?:#[^)]*)?\)/g)) {
       const link = match[1].trim();
       if (/^(?:[a-z]+:|\/)/i.test(link)) continue;
       const target = posix.normalize(posix.join(posix.dirname(path), link));

@@ -29,8 +29,12 @@ Other ways to install
   Project copy    conquistador project        (per-project operator; see INSTALL.md)
 
 Advanced (per-project and legacy routes)
-  conquistador project | --advanced | --skills | --plugin | --mcp | --bot [grok-bot|hermes]
+  conquistador project              Per-project operator guide
+  conquistador --advanced           Combine installation families in one folder
+  conquistador --skills | --plugin | --mcp [--host HOST]
+  conquistador --bot [grok-bot|hermes]
   conquistador status | doctor | route --prompt TEXT | hooks | runtime --help
+  conquistador operator status      Per-project operator lifecycle
 
 Flags: --yes (no questions), --dry-run (print commands only).
 Turn hooks off: CONQUISTADOR_HOOKS=off.`;

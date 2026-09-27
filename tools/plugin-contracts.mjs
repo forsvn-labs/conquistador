@@ -57,10 +57,47 @@ export function validatePluginContracts(root) {
   const codex = json(root, './.codex-plugin/plugin.json');
   for (const host of [claude, codex]) {
     for (const key of ['name', 'version', 'description']) assert.equal(host[key], portable[key], key);
-    // This package intentionally declares only metadata and skills, with no automatic execution.
-    keys(host, ['name', ...strings, 'author', 'keywords', 'displayName', 'skills', 'interface']);
+    // Skills, the read-only playbook MCP server, and the brief/read-check hooks.
+    keys(host, ['name', ...strings, 'author', 'keywords', 'displayName', 'skills', 'interface', 'hooks', 'mcpServers']);
     if ('skills' in host) containedPath(root, host.skills, 'directory');
+    if ('hooks' in host) validateHooks(root, host.hooks);
+    if (typeof host.mcpServers === 'string') validateMcp(json(root, host.mcpServers).mcpServers);
+    else if ('mcpServers' in host) validateMcp(host.mcpServers);
   }
+  validateMcp(json(root, './mcp.json').mcpServers);
+  try { statSync(resolve(root, '.cursor-plugin/plugin.json')); } catch { return finish(root, portable, codex); }
+  const cursor = json(root, './.cursor-plugin/plugin.json');
+  for (const key of ['name', 'version', 'description']) assert.equal(cursor[key], portable[key], key);
+  containedPath(root, cursor.skills, 'directory');
+  validateHooks(root, cursor.hooks);
+  return finish(root, portable, codex);
+}
+
+// Every hook and MCP command runs the bundled Node script; nothing is fetched or installed.
+function commands(value) {
+  if (Array.isArray(value)) return value.flatMap(commands);
+  if (!object(value)) return [];
+  return [...(typeof value.command === 'string' ? [value.command] : []), ...Object.values(value).flatMap(commands)];
+}
+function validateHooks(root, path) {
+  const hooks = json(root, path);
+  const list = commands(hooks.hooks);
+  assert.ok(list.length > 0, `No hook commands: ${path}`);
+  for (const command of list) {
+    const match = command.match(/^node "\$\{(?:CLAUDE_PLUGIN_ROOT|PLUGIN_ROOT|CURSOR_PLUGIN_ROOT)\}\/([^"]+)" [a-z]+ [a-z]+$/);
+    assert.ok(match, `Unexpected hook command: ${command}`);
+    containedPath(root, `./${match[1]}`, 'file');
+  }
+}
+function validateMcp(servers) {
+  assert.ok(object(servers) && Object.keys(servers).length === 1, 'Expected one MCP server');
+  for (const server of Object.values(servers)) {
+    assert.equal(server.command, 'node');
+    assert.ok(server.args.length === 1 && /^\$\{(?:CLAUDE_PLUGIN_ROOT|PLUGIN_ROOT|CURSOR_PLUGIN_ROOT)\}\/mcp\/server\.mjs$/.test(server.args[0]), 'MCP server must run the bundled read-only server');
+  }
+}
+
+function finish(root, portable, codex) {
   for (const key of ['composerIcon', 'logo']) containedPath(root, codex.interface[key], 'file');
   containedPath(root, './skills/conquistador/SKILL.md', 'file');
   const skills = containedPath(root, './skills/', 'directory');

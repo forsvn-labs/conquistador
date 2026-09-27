@@ -7,10 +7,10 @@ import { FIRST_PROMPT, PLUGIN_TARGETS, SKILLS_AGENTS, SKILLS_PIN, UsageError } f
 import { shellCommand, shellDirectory } from './install-paths.mjs';
 import { assertUnrestrictedProject, validateManagerPaths, npxInvocation, verifyManagerCopy } from './onboarding-safety.mjs';
 
-const NODE24 = 'Conquistador needs Node 24. Switch Node versions and rerun this command.';
+const NODE24 = 'Conquistador needs Node 24 or later. Switch Node versions and rerun this command.';
 
 export function assertNode24() {
-  if (Number(process.versions.node.split('.')[0]) !== 24) throw new Error(NODE24);
+  if (Number(process.versions.node.split('.')[0]) < 24) throw new Error(NODE24);
 }
 
 export function resolveProject(value, cwd) {

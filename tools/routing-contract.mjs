@@ -127,7 +127,9 @@ export function buildRoutingContract(root = moduleRoot) {
     const conditional = spec.conditionalResources.map(item => ({ path: resourcePath(item.path), when: item.when }));
     const optional = spec.optionalResources.map(resourcePath);
     const declared = [...required, ...conditional.map(item => item.path), ...optional];
-    for (const resource of linkedMarkdown(path, markdown)) {
+    // The generated playbook map lists every file on disk; it declares itself.
+    const authored = markdown.replace(/<!-- playbooks:start[\s\S]*?<!-- playbooks:end -->/g, '');
+    for (const resource of linkedMarkdown(path, authored)) {
       if (!declared.includes(resource)) fail(`Undeclared resource phase: ${resource}`);
     }
     methods[name] = {

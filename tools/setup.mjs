@@ -300,7 +300,7 @@ Targets: ${Object.keys(targets).join(', ')}, skill:NAME (one explicit specialist
 
 export async function runSetup(args) {
   try {
-    if (Number(process.versions.node.split('.')[0]) !== 24) fail('Conquistador needs Node 24. Switch Node versions and rerun this command.');
+    if (Number(process.versions.node.split('.')[0]) < 24) fail('Conquistador needs Node 24 or later. Switch Node versions and rerun this command.');
     const mixed = args.some(arg => {
       if (!arg.startsWith('--')) return false;
       const name = arg.slice(2).split('=')[0];

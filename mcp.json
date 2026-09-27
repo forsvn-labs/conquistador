@@ -5,8 +5,7 @@
       "type": "stdio",
       "command": "node",
       "args": [
-        "${PLUGIN_ROOT}/runtime/bin/conquistador.js",
-        "mcp"
+        "${PLUGIN_ROOT}/mcp/server.mjs"
       ]
     }
   }
