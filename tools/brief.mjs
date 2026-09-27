@@ -210,7 +210,7 @@ export function knowledgeIndex(root = moduleRoot, { playbooks = userPlaybookRoot
 
 function bm25(doc, query, index) {
   // A file named after the request ("hooks" → hook-archetypes.md) is a strong signal on its own.
-  let score = [...new Set(query)].filter(word => doc.nameTerms.has(word)).length * 3;
+  let score = [...new Set(query)].filter(word => !GENERIC.has(word) && !['dev', 'developer', 'saas', 'ios', 'mobile'].includes(word) && doc.nameTerms.has(word)).length * 3;
   // Long schemas and contracts crowd out playbooks; keep them available but lower.
   const sizeFactor = doc.bytes > 16_000 ? 0.6 : 1;
   for (const word of new Set(query)) {
@@ -328,7 +328,9 @@ export function createBrief(prompt, { root = moduleRoot, playbooks, force = fals
     if (must.length >= 3) break;
   }
   // 2. The user's own playbooks outrank generic method knowledge.
-  for (const item of scored.filter(entry => entry.doc.kind === 'user').slice(0, 3)) take(item);
+  // Keep only strong matches: within 60% of the best user playbook for this task.
+  const userHits = scored.filter(entry => entry.doc.kind === 'user');
+  for (const item of userHits.filter(entry => entry.score >= (userHits[0]?.score ?? 0) * 0.6).slice(0, 3)) take(item);
   // 3. Core playbooks of each selected method, primary first.
   methods.forEach((method, position) => {
     const quota = position === 0 ? 3 : 1;
