@@ -267,3 +267,174 @@ Evidence (reports in `dist/e2e/`, not committed):
 
 Not verified: answer quality on the new areas; the tour on Windows and Linux terminals; hook
 delivery outside Claude Code.
+
+## Part 3: agent-first start (proposal, 2026-09-28)
+
+Status: built as the 0.0.16 candidate (local, unshipped). Hung accepted the three recommendations; see
+the results below for the one change to decision 3.
+
+### Problem
+
+Version 0.0.15 still ends in instructions. After install, the user reads "Next", leaves the
+terminal, opens an agent, and types a prompt. The tour ends the same way: "Paste this into your
+agent", with a `<what it is, who it is for>` placeholder the user must fill in. Every one of those
+steps is a place to drop off. The agent can read the repository, so the user should not have to
+describe the product.
+
+### Target experience
+
+The user runs one command. It ends inside their agent, with the task already typed.
+
+```text
+$ npx conquistador
+┌  Conquistador
+◇  Installed into Claude Code and Codex          first run only
+◆  What should we work on?
+│  ● Plan marketing and growth for this project
+│  ○ Get more signups from our landing page
+│  ○ Write a cold email sequence
+│  ○ Something else…
+└  Opening Claude Code. Press Enter to start.
+
+❯ /conquistador Plan marketing and growth for this project. Learn the product from
+  this repository first. Ask me only for what you cannot find.
+  ⚠ Pre-filled prompt · review before pressing Enter
+```
+
+The user presses Enter, and Conquistador does the work.
+
+### Commands
+
+| Where | Command | What it does |
+| --- | --- | --- |
+| Terminal | `conquistador` | First run: install, then pick a task and open the agent. Later runs: pick a task and open the agent. |
+| Terminal | `conquistador "TASK"` | Open the agent with this task. No questions. |
+| Terminal | `conquistador update` | Update. |
+| Terminal | `conquistador remove` | Uninstall. |
+| Agent | `/conquistador [TASK]` | The same thing, from inside a session. |
+
+`tour` goes away as a separate command. The task picker is the tour. `add`, `agents`, `brief`,
+`playbooks`, `mcp`, and `bot` stay under `help --all`.
+
+### Patterns taken from the best CLI setups
+
+1. **Run without an install step.** `npx create-next-app` and `uvx` run with no global install.
+   Conquistador: `npx conquistador` (private alpha: `npx github:forsvn-labs/conquistador#TAG`).
+   This removes the `npm install -g --ignore-scripts --install-links` line.
+2. **Detect, do not ask.** `vercel` detects the framework; `shadcn init` detects the project.
+   Conquistador installs into every agent it finds and lists them in one line. `remove` undoes it.
+3. **The same bare command always does the next right thing.** `vercel` and `railway up` are
+   safe to run again. `conquistador` skips install when it is current and goes to the task.
+4. **End in the product, not in a "Next steps" list.** Conquistador replaces its terminal
+   process with the agent session (`exec`), so the user never switches windows.
+5. **Offer an agent-first path.** Some users live in an IDE. The landing page gets "Open in
+   Claude Code" and "Open in Cursor" buttons (deep links) and a "Copy prompt" button. The copied
+   prompt tells the agent to install Conquistador and start the task.
+
+Account sign-in (the `gh` and Stripe browser-code pattern) does not apply. Conquistador has no
+account.
+
+### How each agent opens
+
+Verified on this machine on 2026-09-28:
+
+| Agent | Launch | Behavior |
+| --- | --- | --- |
+| Claude Code 2.1.283 | `claude --prefill "PROMPT"` | Prompt is in the input box and not sent. Screen shows "Pre-filled prompt · review before pressing Enter". Tested in a pseudo-terminal. |
+| Claude Code (web page) | `claude-cli://open?q=…&cwd=…` | The binary registers this handler and decodes `q` into the pre-filled prompt. Not tested from a browser. |
+| Codex | `codex "PROMPT"` | Starts a session with the prompt. It runs at once. |
+| Cursor Agent | `cursor-agent "PROMPT"` | Same: runs at once. |
+| Copilot CLI | `copilot -i "PROMPT"` | Same: runs at once. |
+| Grok CLI | `grok "PROMPT"` | Same: runs at once. |
+
+Only Claude Code pre-fills without sending. For the others, the user already chose the task in
+the picker, so the task runs at once. `--prefill` is not in `claude --help`. If a later Claude Code
+version removes it, Conquistador falls back to `claude "PROMPT"`.
+
+### Which agent opens
+
+- One agent installed: open it.
+- Several: open the one used last. On the first run, ask once ("Open in") with Claude Code first.
+- `conquistador "TASK" --in codex` chooses one agent for one run.
+
+### The prompt
+
+The prompt names the task and tells the agent to learn the product from the working folder.
+It has no placeholders. Outside a project folder (for example, the home folder), the prompt tells
+the agent to ask for the product, audience, and goal first.
+
+### Failure modes (written before the code)
+
+| ID | Failure | Planned handling |
+| --- | --- | --- |
+| A1 | No agent installed | Say which agents work and how to install one. Exit 1. Do not open anything. |
+| A2 | Agent not signed in | The agent handles its own sign-in. Conquistador only opens it. |
+| A3 | Agent asks to trust the folder first | The pre-filled prompt must still be there after the trust screen. Verified for Claude Code. |
+| A4 | `--prefill` removed in a later Claude Code | Check `claude --help` and the version; fall back to `claude "PROMPT"`. |
+| A5 | Not a TTY (CI, pipe) | Print the command to run and the prompt. Never open an agent. |
+| A6 | Task text breaks the shell | Pass the prompt as one argument with `spawn` and no shell. |
+| A7 | Run in the home folder or an empty folder | Use the ask-first prompt. |
+| A8 | Hooks not trusted yet (Codex `/hooks`) | Say so in one line before opening Codex. |
+| A9 | User wanted install only | `conquistador --no-open` stops after install. Esc at the picker also stops. |
+| A10 | Update pending while the agent is open | Update does not open the agent. Say to start a new session. |
+| A11 | Windows | `exec` does not exist. Use `spawn` with `stdio: inherit` and exit with the child's code. |
+| A12 | Deep link on a machine without Claude Code | The page shows "Copy prompt" as the fallback next to each button. |
+
+### Verification plan
+
+One E2E test in a pseudo-terminal, with a separate test home folder: bare `conquistador` → install
+→ pick the first task → Claude Code opens with the prompt pre-filled. The test captures the screen
+to `dist/e2e/agent-first/transcript.txt`, checks for the task text and the pre-fill notice, then
+runs `conquistador remove`. The same test runs `conquistador "TASK" --in codex` and checks the
+argument list without calling a model.
+
+### Open decisions for Hung
+
+1. Install into every detected agent without asking? Recommended: yes, and list them.
+2. Remove `tour` as a command? Recommended: yes; the picker replaces it.
+3. Move the README to `npx`? Recommended: yes. Keep the global install in INSTALL.md.
+
+### Results (part 3)
+
+What changed:
+
+- `tools/launch.mjs` owns the start flow. Bare `conquistador` installs into every found agent, asks
+  "What should we work on?" (four tasks, **Browse all areas**, **Something else**), asks "Open in"
+  once, and spawns the agent with the prompt. The parent ignores Ctrl+C and Ctrl+\ while the agent
+  runs and exits with the agent's code.
+- Each agent in `tools/agents.mjs` has an `open` launch. Claude Code uses `--prefill` from 2.1.283.
+- `createBrief` strips the start flow's context sentences before routing (new finding below).
+- The interactive tour is gone; `conquistador tour [AREA]` prints the areas.
+
+Decision 3 changed. The README keeps the global install for the private alpha. The private Git
+`npx` line works, but it took 24 seconds cold and about 5 seconds warm, and it leaves no
+`conquistador` command, so every later run needs the long line again. INSTALL.md documents it as
+"Run once without a global install". The README moves to `npx conquistador` after an npm publish.
+
+New finding: the router reacts to filler words. With "Get more signups to become active users",
+adding "Ask me only for what you cannot find." selected the video method, and "Learn the product"
+selected the budget method. The routing-breadth E2E caught it with the new start cases. The fix
+for the start flow is in `createBrief`; the general fix is on the roadmap.
+
+| Mode | Handling | Evidence |
+| --- | --- | --- |
+| A1 no agent | Note with the supported agents, exit 1 | Code path; not run (every agent is on the test machine) |
+| A2 not signed in | The agent handles sign-in | Isolated Claude Code showed "Not logged in" with the prompt still pre-filled |
+| A3 trust screen | Pre-fill survives it | agent-first run 1 |
+| A4 `--prefill` removed | Version floor 2.1.283 and `CONQUISTADOR_PREFILL=off` | Code path |
+| A5 no terminal | Prints the command, opens nothing | agent-first run 4 |
+| A6 shell breakage | `spawn` without a shell on macOS and Linux | Codex process shows the prompt as one argument (run 3) |
+| A7 home or empty folder | Ask-first prompt | agent-first run 5 |
+| A8 Codex hooks | One warning line before Codex opens | agent-first run 3 |
+| A9 install only | `--no-open`; Esc at the picker | Code path; Esc used in run 5b |
+| A10 update | Unchanged: says to start a new session | install-lifecycle |
+| A11 Windows | `spawn` with a shell | Not run |
+| A12 deep link without Claude Code | Landing-page work, not built | Roadmap |
+
+Evidence (in `dist/e2e/`, not committed):
+
+- `agent-first/transcript.txt` and `report.json`: 14 of 14 checks, real Claude Code 2.1.283 and
+  Codex 0.157.1, isolated home, no model call.
+- `routing-breadth/report.md`: 119 of 119, including 10 start-prompt cases.
+- `install-lifecycle/report.json`: pass for five agents.
+- `npm test`: 764 of 764.

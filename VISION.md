@@ -9,11 +9,13 @@ Research, creative work, engineering, and review support that mission.
 
 ## Make the first task easy
 
-One command installs Conquistador into every agent the user already has. Bare `conquistador`
-finds the agents, asks one question, and installs the plugin with each agent's own plugin manager.
-The user learns four commands: install, tour, update, and remove. Every other route stays
-available behind `help --all` and INSTALL.md, because a long menu stops people from starting.
-The tour shows what Conquistador covers and turns a first task into a ready prompt. Install once per user; it works in every project. The same package
+Setup ends inside the user's agent, with the task already typed, not in a list of next steps.
+Bare `conquistador` installs into every agent it finds without asking, asks what to work on, and
+opens the agent with that task. The agent learns the product from the repository, so the user does
+not describe it first. The user learns four commands: `conquistador`, `conquistador "TASK"`,
+update, and remove, plus `/conquistador` inside the agent. Every other route stays available
+behind `help --all` and INSTALL.md, because a long menu stops people from starting. Install once
+per user; it works in every project. The same package
 also serves the other surfaces: skills only, a local or hosted MCP server, a bot pack for chat
 apps, and the per-project operator. Every route has a clear update and removal path, and none
 adds a dependency or lockfile to the user's project.

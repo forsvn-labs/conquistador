@@ -286,11 +286,23 @@ const reasonFor = (doc, platforms) => {
   return doc.summary || doc.title;
 };
 
-export function createBrief(prompt, { root = moduleRoot, playbooks, force = false } = {}) {
-  if (typeof prompt !== 'string' || !prompt.trim()) throw Error('Describe the task.');
+// The start flow's own instructions (tools/launch.mjs). They say how to work, not what the task
+// is, and their words ("cannot find", "learn the product") would pull routing off the task.
+export const START_CONTEXT = Object.freeze({
+  project: 'Learn the product from this folder first. Ask me only for what you cannot find.',
+  ask: 'First ask me what the product is, who it is for, and the goal.',
+});
+const START_LEAD = /^\s*Use Conquistador:\s*/i;
+export const taskOf = prompt => Object.values(START_CONTEXT).reduce((rest, sentence) => rest.split(sentence).join(' '), prompt).replace(START_LEAD, '').trim();
+
+export function createBrief(input, { root = moduleRoot, playbooks, force = false } = {}) {
+  if (typeof input !== 'string' || !input.trim()) throw Error('Describe the task.');
+  // "Use Conquistador:" asks for Conquistador by name, so it counts as an explicit invocation.
+  const invoked = START_LEAD.test(input);
+  const prompt = taskOf(input) || input;
   const packageRoot = realpathSync(resolve(root));
   const routed = selectRequestContext(prompt, { root: packageRoot });
-  const explicit = explicitInvocation(prompt);
+  const explicit = invoked || explicitInvocation(prompt);
   const platforms = namedPlatforms(prompt);
   const coding = CODING.test(text(prompt));
   const business = BUSINESS.test(text(prompt)) && !coding;

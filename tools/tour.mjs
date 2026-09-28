@@ -1,5 +1,5 @@
 // The capability tour: what Conquistador covers, by area, with example prompts.
-// One source for `conquistador tour`, the installer's closing note, and skills/conquistador/welcome.md.
+// One source for `conquistador tour`, the start picker's area list, the bot pack, and skills/conquistador/welcome.md.
 // Every example is also a routing-breadth case (tools/e2e/routing-breadth.mjs), so none can drift.
 import { writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
@@ -97,8 +97,6 @@ export const AREAS = Object.freeze([
 
 export const ALSO = 'Also: product flows, UI specs, web and iOS builds, system architecture, and technical docs.';
 
-// One example from each of four areas: the installer's first suggestions. Launch stays in the tour.
-export const STARTERS = ['product', 'email', 'search', 'social'].map(id => AREAS.find(area => area.id === id).examples[0].prompt);
 
 // Short names a user sees in the terminal. The routing-breadth E2E requires one per listed specialist.
 export const SPECIALISTS = Object.freeze({
@@ -207,61 +205,7 @@ export async function runTour(args = []) {
     console.log(`${area.title}\n\n${areaText(area)}`);
     return 0;
   }
-  if (args.includes('--list') || !(process.stdin.isTTY && process.stdout.isTTY)) { console.log(await listText()); return 0; }
-  return interactiveTour();
-}
-
-async function copy(value) {
-  if (process.platform !== 'darwin') return false;
-  const { spawnSync } = await import('node:child_process');
-  return spawnSync('pbcopy', { input: value }).status === 0;
-}
-
-export async function interactiveTour({ intro = true } = {}) {
-  const ui = await import('./vendor/clack.mjs');
-  const { counts, total } = await depth();
-  if (intro) ui.intro('Conquistador tour');
-  ui.note([...mapLines(), '', ALSO].join('\n'), `${total} playbooks and guides, ${AREAS.length} areas`);
-  const choice = await ui.select({
-    message: 'What are you working on?',
-    options: [...AREAS.map(area => ({ value: area.id, label: area.title, hint: `${counts[area.id]} playbooks` })), { value: 'own', label: 'Describe my own task' }],
-  });
-  if (ui.isCancel(choice)) { ui.cancel('Tour closed. Run conquistador tour anytime.'); return 130; }
-  let task;
-  if (choice !== 'own') {
-    const area = AREAS.find(item => item.id === choice);
-    ui.note(areaText(area), area.title);
-    const picked = await ui.select({
-      message: 'Pick an example, or describe your own',
-      options: [...area.examples.map(example => ({ value: example.prompt, label: example.prompt })), { value: '', label: 'Describe my own task' }],
-    });
-    if (ui.isCancel(picked)) { ui.cancel('Tour closed. Run conquistador tour anytime.'); return 130; }
-    task = picked;
-  }
-  if (!task) {
-    const typed = await ui.text({ message: 'Describe the task in one sentence', placeholder: 'Write a welcome email sequence for new trial users' });
-    if (ui.isCancel(typed) || !String(typed ?? '').trim()) { ui.cancel('Tour closed. Run conquistador tour anytime.'); return 130; }
-    task = String(typed).trim();
-  }
-  const { createBrief } = await import('./brief.mjs');
-  const brief = createBrief(task, { force: true });
-  if (brief.action !== 'brief' || !brief.methods.length) {
-    ui.note('No specialist matches this task yet. Name the outcome and the channel, for example:\n  "Write a win-back email flow for churned users"\n  "Plan a TikTok content series for our app"', 'No match');
-    ui.outro('Run conquistador tour again, or ask your agent directly.');
-    return 0;
-  }
-  const plan = [
-    `Specialists: ${brief.methods.map(method => label(method.name)).join(', ')}`,
-    '',
-    'Playbooks it reads first:',
-    ...brief.must.slice(0, 6).map(file => `  • ${file.title || file.path.split('/').pop()}`),
-  ];
-  if (brief.must.length > 6) plan.push(`  … and ${brief.must.length - 6} more`);
-  ui.note(plan.join('\n'), 'How Conquistador will work');
-  const prompt = `${task.replace(/[.!?]*$/, '.')} Our product: <what it is, who it is for, the goal, any constraints>.`;
-  const copied = await copy(prompt);
-  ui.note(`${prompt}\n\nIn Claude Code you can also type: /conquistador ${task}`, copied ? 'Paste this into your agent (copied)' : 'Paste this into your agent');
-  ui.outro('Run conquistador tour anytime.');
+  console.log(await listText());
   return 0;
 }
 

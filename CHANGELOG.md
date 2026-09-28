@@ -4,6 +4,20 @@ No public release is claimed. See [VERSIONS.md](VERSIONS.md) for independent pro
 versions. Verification establishes the stated local scope; native host behavior, useful model
 output, human acceptance and rights disposition require separate evidence.
 
+## Unreleased, 0.0.16 candidate
+
+- **Agent-first start.** Bare `conquistador` installs into every agent it finds (no question),
+  asks what to work on, and opens the agent with the task typed in. Claude Code gets the task in
+  its input box through `--prefill` (from 2.1.283; `CONQUISTADOR_PREFILL=off` sends it instead).
+  Codex, Cursor Agent, Copilot CLI, and Grok CLI start the task at once. With several agents it
+  asks once which to open and remembers the choice.
+- The prompt tells the agent to learn the product from the folder; outside a project it asks for
+  the product first. Routing ignores these sentences, so they cannot change the selected method.
+- `conquistador "TASK"`, `--in AGENT`, and `--no-open`. Without a terminal it prints the command.
+  `remove AGENT` keeps that agent out of later bare runs.
+- The picker replaces the interactive tour; `conquistador tour [AREA]` prints the areas.
+- `tools/e2e/agent-first.exp` replaces `tour.exp` and `installer.exp`.
+
 ## 2026-09-28, 0.0.15 private alpha
 
 - Fifteenth private prerelease at

@@ -13,18 +13,23 @@ that the agent read the playbooks.
 Install the command, then run it with no arguments:
 
 ```sh
-npm install -g --ignore-scripts --install-links git+https://github.com/forsvn-labs/conquistador.git#v0.0.15
+npm install -g --ignore-scripts --install-links git+https://github.com/forsvn-labs/conquistador.git#v0.0.16
 conquistador
 ```
 
 The command does these steps:
 
-1. It finds the supported agents on your computer.
-2. It asks one question: which agents to use. All found agents are preselected; press Enter to
-   install. With one agent, it asks you to confirm that agent. `--dry-run` prints the exact
-   commands instead.
-3. It copies the plugin to `~/.conquistador/plugin` and registers that folder with each agent's
+1. It finds the supported agents on your computer and installs into all of them. It does not ask.
+   An agent you removed by name (`conquistador remove grok`) stays removed until you add it again.
+2. It copies the plugin to `~/.conquistador/plugin` and registers that folder with each agent's
    own plugin manager.
+3. It asks what to work on, then opens your agent with the task typed in. With several agents, it
+   asks once which one to open and remembers the choice.
+
+Later runs skip step 1 and 2 unless the version changed or a new agent appeared.
+`conquistador --no-open` installs and stops. `conquistador "TASK" --in codex` opens one agent for
+one run. Without a terminal (a script or a pipe), `conquistador "TASK"` only prints the command
+it would run.
 
 The stable copy matters: with nvm or another Node version manager, the npm global folder changes
 when you switch Node versions. The agents point at `~/.conquistador/plugin`, not at npm.
@@ -32,15 +37,30 @@ when you switch Node versions. The agents point at `~/.conquistador/plugin`, not
 `--ignore-scripts` skips npm lifecycle scripts. `--install-links` makes npm copy the Git checkout
 instead of linking to temporary files.
 
+### Run once without a global install
+
+```sh
+npx -y --ignore-scripts --package=git+https://github.com/forsvn-labs/conquistador.git#v0.0.16 conquistador
+```
+
+This installs into your agents and opens one, like the global command. It leaves no `conquistador`
+command behind, so you use the same long line again for the next task, `update`, or `remove`. On
+the test machine the first run took 24 seconds and later runs about 5 seconds. Inside your agent,
+`/conquistador` works either way.
+
 ### Supported agents
 
-| Agent | How the installer adds the plugin | After installing |
+| Agent | How the installer adds the plugin | How `conquistador` opens it |
 | --- | --- | --- |
-| Claude Code | `claude plugin marketplace add` and `claude plugin install` | Start a new session |
-| Codex | `codex plugin marketplace add` and `codex plugin add` | Trust the plugin hooks when Codex asks (`/hooks`) |
-| Cursor | Copies the plugin to `~/.cursor/plugins/local/conquistador` | Run **Developer: Reload Window** |
-| GitHub Copilot CLI | `copilot plugin marketplace add` and `copilot plugin install` | Start a new session |
-| Grok CLI | `grok plugin install --trust` (only after you confirm) | Start a new session |
+| Claude Code | `claude plugin marketplace add` and `claude plugin install` | `claude --prefill "PROMPT"`: the task waits in the input box for Enter |
+| Codex | `codex plugin marketplace add` and `codex plugin add` | `codex "PROMPT"`: starts at once. Trust the plugin hooks when Codex asks (`/hooks`) |
+| Cursor | Copies the plugin to `~/.cursor/plugins/local/conquistador` | `cursor-agent "PROMPT"`. With the editor only, the prompt is copied for you to paste; run **Developer: Reload Window** first |
+| GitHub Copilot CLI | `copilot plugin marketplace add` and `copilot plugin install` | `copilot -i "PROMPT"`: starts at once |
+| Grok CLI | `grok plugin install --trust` (running `conquistador` is the consent) | `grok "PROMPT"`: starts at once |
+
+`--prefill` is not in `claude --help`. Conquistador uses it from Claude Code 2.1.283, where it was
+tested. With an older version, or with `CONQUISTADOR_PREFILL=off`, Claude Code starts the task at
+once instead.
 
 Without a terminal, or in scripts, use flags:
 

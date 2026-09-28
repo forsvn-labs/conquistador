@@ -20,41 +20,54 @@ that exact task, does the work, and shows which playbooks it applied.
 | Measure and learn | Growth drops, results reviews, campaign and video evaluations, marketing audits, fact checks |
 
 It also covers product flows, UI specs, web and iOS builds, system architecture, and technical
-docs. Run `conquistador tour` to explore each area and try a task.
+docs. Run `conquistador` and choose **Browse all areas** to see each one.
 
-Version 0.0.15 is a private-alpha candidate. See [what changed](CHANGELOG.md).
+Version 0.0.16 is a private-alpha candidate. See [what changed](CHANGELOG.md).
 
-## Install
+## Install and start
 
 You need Node 24 or later and an AI coding agent: Claude Code, Codex, Cursor, Copilot CLI, or
-Grok CLI.
+Grok CLI. Open a terminal in your product's folder and run:
 
 ```sh
-npm install -g --ignore-scripts --install-links git+https://github.com/forsvn-labs/conquistador.git#v0.0.15
+npm install -g --ignore-scripts --install-links git+https://github.com/forsvn-labs/conquistador.git#v0.0.16
 conquistador
 ```
 
-`conquistador` finds your agents, asks which ones to use, and installs. Install once; it works in
-every project. For skills only, MCP clients, chat bots, or a per-project copy, see
-[other ways to install](INSTALL.md).
-
-## Start your first task
-
-Run the tour. It shows the areas, lets you pick an example or describe your own task, and shows
-which specialists and playbooks Conquistador will use:
-
-```sh
-conquistador tour
-```
-
-Or open a new session in your agent and describe the job. For example:
+`conquistador` installs into every agent it finds, asks what to work on, and opens your agent
+with the task already typed:
 
 ```text
-Improve activation in our onboarding; only 20% of signups create a project.
-Write a 4-step cold email sequence to HR directors at mid-size companies.
-Get our product recommended by ChatGPT and Perplexity.
-Plan a Product Hunt launch for <product>. We launch in <date> and have <facts>.
+◇  Installed into Claude Code, Codex
+◆  What should we work on?
+│  ● Plan marketing and growth for this project
+│  ○ Get more signups to become active users
+│  ○ Write a cold email sequence for our best customers
+│  ○ Get our product recommended by ChatGPT and Perplexity
+│  ○ Browse all areas…
+│  ○ Something else…
+└  Opening Claude Code. Press Enter to start.
+
+❯ /conquistador Plan marketing and growth for this project. Learn the product from this folder
+  first. Ask me only for what you cannot find.
 ```
+
+Press Enter. The agent reads your repository to learn the product, then does the work. You do not
+have to describe the product first. Outside a project folder, the agent asks you for the product,
+audience, and goal.
+
+Claude Code shows the task in its input box so you can edit it before you press Enter. Codex,
+Cursor Agent, Copilot CLI, and Grok CLI start the task at once. With several agents, Conquistador
+asks once which one to open and remembers your choice.
+
+Run `conquistador` again for the next task. To skip the questions, name the task:
+
+```sh
+conquistador "Write a win-back email flow for churned subscribers"
+```
+
+For skills only, MCP clients, chat bots, or a per-project copy, see
+[other ways to install](INSTALL.md).
 
 Type `/conquistador` with no task to see what it covers inside your agent. The answer ends with
 **Playbooks applied**, which lists each file the agent used and the rule it took from it. To see
@@ -103,11 +116,13 @@ files appear in briefs, hooks, and MCP results, labeled "Your playbook".
 ## Commands
 
 ```sh
-conquistador           # Install into your AI agents
-conquistador tour      # See what it covers and try a task
+conquistador           # Pick a task and open your agent with it (installs on first run)
+conquistador "TASK"    # Open your agent with this task
 conquistador update    # Update to the latest version
 conquistador remove    # Uninstall
 ```
+
+Inside your agent, `/conquistador [TASK]` does the same.
 
 `conquistador help --all` lists the other commands.
 

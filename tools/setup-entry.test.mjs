@@ -18,7 +18,7 @@ test('package acquisition has no automatic install or publication hooks', () => 
 
 test('the advertised persistent private-Git command copies out of npm acquisition storage', () => {
   // The advertised command must pin the latest verified private release.
-  const expected = 'npm install -g --ignore-scripts --install-links git+https://github.com/forsvn-labs/conquistador.git#v0.0.15';
+  const expected = 'npm install -g --ignore-scripts --install-links git+https://github.com/forsvn-labs/conquistador.git#v0.0.16';
   for (const file of ['README.md', 'INSTALL.md']) {
     const contents = readFileSync(join(root, file), 'utf8');
     assert.match(contents, new RegExp(expected.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
