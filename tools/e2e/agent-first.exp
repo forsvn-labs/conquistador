@@ -1,0 +1,168 @@
+#!/usr/bin/expect -f
+# The agent-first start, end to end, with real agents in an isolated home. No model is called:
+# every agent session is closed before a prompt is sent.
+#   1. Bare `conquistador` installs into every agent it finds, asks for a task, asks which agent,
+#      and opens Claude Code with the task pre-filled. The pre-fill survives the trust screen (A3).
+#   2. Bare `conquistador` again skips install, remembers the agent, and takes a typed task.
+#   3. `conquistador "TASK" --in codex` opens Codex with the prompt as its argument (A8).
+#   4. Without a terminal it prints the command and never opens an agent (A5).
+#   5. Outside a project folder the prompt asks for the product first (A7).
+#   6. `conquistador remove grok` keeps Grok out of later bare runs; `conquistador remove` cleans up.
+#   expect tools/e2e/agent-first.exp   → dist/e2e/agent-first/transcript.txt and report.json
+set timeout 60
+set root [file dirname [file dirname [file dirname [file normalize [info script]]]]]
+set out $root/dist/e2e/agent-first
+file mkdir $out
+set home [exec mktemp -d -t conquistador-e2e-agent-first]
+foreach {name value} [list HOME $home CLAUDE_CONFIG_DIR $home/.claude CODEX_HOME $home/.codex CONQUISTADOR_HOME $home/.conquistador CURSOR_HOME $home/.cursor TERM xterm-256color] { set env($name) $value }
+foreach name {CONQUISTADOR_PLAYBOOKS CLAUDECODE CLAUDE_CODE_CHILD_SESSION CLAUDE_CODE_ENTRYPOINT} { if {[info exists env($name)]} { unset env($name) } }
+# A user who has used Claude Code before: onboarding done. The folder is not trusted yet.
+file mkdir $home/.claude
+set fh [open $home/.claude/.claude.json w]; puts $fh {{"hasCompletedOnboarding": true, "theme": "dark"}}; close $fh
+# A small product repository.
+set project $home/acme
+file mkdir $project
+set fh [open $project/README.md w]; puts $fh "# Acme Invoices\n\nInvoicing for freelance designers. Free plan and a \$12 Pro plan."; close $fh
+exec git -C $project init -q
+set cli [list node $root/runtime/bin/conquistador.js]
+
+set transcript ""
+set checks {}
+# Claude Code draws spaces as cursor-forward moves; turn them back into spaces first.
+proc plain {text} { regsub -all {\x1b\[[0-9]*C} $text " " text; regsub -all {\x1b\[[0-9;?]*[A-Za-z]} $text "" text; regsub -all {\x1b\][^\x07]*\x07} $text "" text; return $text }
+proc record {name ok detail} {
+  global checks
+  lappend checks [list $name $ok $detail]
+  puts "\n[expr {$ok ? {CHECK PASS} : {CHECK FAIL}}]: $name $detail"
+}
+proc fail {why} { global out transcript; set fh [open $out/transcript.txt w]; puts $fh [plain $transcript]; close $fh; puts "\nE2E FAIL: $why"; exit 1 }
+proc step {pattern} {
+  global transcript
+  expect {
+    -re $pattern { append transcript $expect_out(buffer) }
+    timeout { expect -timeout 1 -re {.+} { append transcript $expect_out(buffer) }; fail "timed out waiting for $pattern" }
+    eof { append transcript $expect_out(buffer); fail "exited before $pattern" }
+  }
+}
+proc finish {} {
+  global transcript
+  expect {
+    eof { append transcript $expect_out(buffer) }
+    timeout { fail "process did not exit" }
+  }
+  lassign [wait] pid spawnid os code
+  return $code
+}
+# Terminal redraws can drop or move spaces, so compare without whitespace.
+proc squash {text} { regsub -all {\s+} $text "" text; return $text }
+proc has {text} { global transcript; return [expr {[string first [squash $text] [squash [plain $transcript]]] >= 0}] }
+# Read what the screen drew after the last match.
+proc drain {} { global transcript; expect -timeout 2 -re {.+} { append transcript $expect_out(buffer); exp_continue } timeout {} eof {} }
+# Claude Code: Ctrl+C clears the input, then two more presses exit.
+proc quit_claude {} { for {set i 0} {$i < 3} {incr i} { send "\003"; sleep 0.5 } }
+
+# --- 1. First run ---------------------------------------------------------------------------
+cd $project
+set transcript ""
+eval spawn $cli
+stty rows 50 columns 140 < $spawn_out(slave,name)
+step {What should we work on\?}
+record "first run installs into every detected agent" [has "Installed into"] ""
+send "\r"
+# Several agents on this machine: one question, Claude Code first.
+step {Open in}
+send "\r"
+# Wait for the whole trust screen and its input handler before answering it.
+step {cancel}
+sleep 1.5
+send "\033\[B"; sleep 0.5; send "\r"
+step {Pre-filled}
+drain
+set first [plain $transcript]
+record "Claude Code opens with the task pre-filled" [has "/conquistador Plan marketing and growth for this project."] ""
+record "prompt tells the agent to learn from the folder" [has "Learn the product from this folder first."] ""
+record "task is not sent (no model call)" [has "review before pressing Enter"] ""
+# Keys typed now must reach the agent, not the waiting Conquistador process.
+send " KEYCHECK"
+drain
+quit_claude
+finish
+# Claude Code drew the typed text and answered Ctrl+C itself, so it owns the keyboard.
+record "typed keys reach the agent" [expr {[has "KEYCHECK"] && [has "Press Ctrl-C again to exit"]}] ""
+set run1 $transcript
+
+# --- 2. Second run: no install, remembered agent, typed task --------------------------------
+set transcript ""
+eval spawn $cli
+stty rows 50 columns 140 < $spawn_out(slave,name)
+step {What should we work on\?}
+record "second run skips install" [expr {![has "Installed into"]}] ""
+# "Something else" is the last option.
+send "\033\[A"; sleep 0.2; send "\r"
+step {Describe the task}
+send "Build a win-back email flow for churned subscribers\r"
+step {Pre-filled}
+drain
+record "second run does not ask which agent" [expr {![has "◆  Open in"] && ![has "◇  Open in"]}] ""
+record "typed task is pre-filled" [has "/conquistador Build a win-back email flow for churned subscribers."] ""
+quit_claude
+finish
+set run2 $transcript
+
+# --- 3. Direct task into Codex ---------------------------------------------------------------
+set transcript ""
+eval spawn $cli {"Write a cold email sequence to HR directors"} --in codex
+stty rows 50 columns 140 < $spawn_out(slave,name)
+step {Opening Codex}
+sleep 3
+set procs [exec ps -axo args]
+set codexArgs ""
+foreach line [split $procs "\n"] { if {[regexp {codex} $line] && [string first "Write a cold email sequence to HR directors" $line] >= 0 && ![regexp {conquistador\.js} $line]} { set codexArgs $line } }
+record "Codex runs with the prompt as its argument" [expr {$codexArgs ne ""}] $codexArgs
+record "Codex hook trust is mentioned first" [has "/hooks"] ""
+for {set i 0} {$i < 3} {incr i} { send "\003"; sleep 0.5 }
+expect { eof {} timeout { exec pkill -f "Write a cold email sequence to HR directors" } }
+catch { wait }
+set run3 $transcript
+
+# --- 4. No terminal ----------------------------------------------------------------------------
+set piped [exec sh -c "cd '$project' && node '$root/runtime/bin/conquistador.js' 'Plan a Product Hunt launch' < /dev/null | cat"]
+record "no terminal prints the command instead of opening" [expr {[string first "claude --prefill" $piped] >= 0 && [string first "Plan a Product Hunt launch" $piped] >= 0}] ""
+
+# --- 5. Home folder: ask for the product first -----------------------------------------------
+set homePrompt [exec sh -c "cd '$home' && node '$root/runtime/bin/conquistador.js' 'Plan a Product Hunt launch' < /dev/null | cat"]
+record "outside a project the prompt asks for the product" [expr {[string first "First ask me what the product is" $homePrompt] >= 0}] ""
+
+# --- 5b. An agent removed by name stays removed on a bare run ------------------------------
+exec {*}$cli remove grok
+cd $project
+set transcript ""
+eval spawn $cli
+stty rows 50 columns 140 < $spawn_out(slave,name)
+step {What should we work on\?}
+record "bare run does not reinstall an agent removed by name" [expr {![has "Installed into"] && ![has "Installing into"]}] ""
+send "\033"
+finish
+set run5b $transcript
+
+# --- 6. Remove ---------------------------------------------------------------------------------
+set removal [exec {*}$cli remove]
+record "remove cleans up the plugin copy" [expr {![file exists $home/.conquistador/plugin]}] ""
+
+# --- Artifacts ---------------------------------------------------------------------------------
+set fh [open $out/transcript.txt w]
+puts $fh "## Run 1: first run\n[plain $run1]\n\n## Run 2: second run\n[plain $run2]\n\n## Run 3: --in codex\n[plain $run3]\nCodex process: $codexArgs\n\n## Run 4: no terminal\n$piped\n\n## Run 5: home folder\n$homePrompt\n\n## Run 5b: after remove grok\n[plain $run5b]\n\n## Run 6: remove\n$removal"
+close $fh
+set failed 0
+set rows {}
+foreach c $checks {
+  lassign $c name ok detail
+  if {!$ok} { incr failed }
+  lappend rows "    {\"check\": \"$name\", \"pass\": [expr {$ok ? {true} : {false}}]}"
+}
+set fh [open $out/report.json w]
+puts $fh "{\n  \"test\": \"agent-first\",\n  \"claude\": \"[exec claude --version]\",\n  \"codex\": \"[exec codex --version]\",\n  \"passed\": [expr {[llength $checks] - $failed}],\n  \"failed\": $failed,\n  \"checks\": \[\n[join $rows ",\n"]\n  \]\n}"
+close $fh
+exec rm -rf $home
+if {$failed} { puts "\nE2E FAIL: $failed of [llength $checks] checks failed. See $out/transcript.txt"; exit 1 }
+puts "\nE2E PASS: [llength $checks] of [llength $checks] checks. Artifacts in $out"

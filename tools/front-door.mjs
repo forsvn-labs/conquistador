@@ -1,7 +1,7 @@
-// The one-command experience: `conquistador` finds your agents and installs the plugin into them.
+// The front door: `conquistador` installs where needed and opens your agent with a task (tools/launch.mjs).
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
-import { AGENTS, applyAgent, copyPayload, detectAgents, home, pluginHome, readState, removePayload, version } from './agents.mjs';
+import { AGENTS, applyAgent, copyPayload, detectAgents, home, pluginHome, readState, removePayload, version, writeState } from './agents.mjs';
 
 const bold = text => (process.stdout.isTTY ? `\x1b[1m${text}\x1b[22m` : text);
 const dim = text => (process.stdout.isTTY ? `\x1b[2m${text}\x1b[22m` : text);
@@ -10,24 +10,31 @@ const dim = text => (process.stdout.isTTY ? `\x1b[2m${text}\x1b[22m` : text);
 export const HELP = `Conquistador ${version}
 Marketing and growth playbooks for your AI agents.
 
-  conquistador           Install into your AI agents
-  conquistador tour      See what it covers and try a task
+  conquistador           Pick a task and open your agent with it (installs on first run)
+  conquistador "TASK"    Open your agent with this task
   conquistador update    Update to the latest version
   conquistador remove    Uninstall
+
+In your agent: /conquistador [TASK]
 
 All commands: conquistador help --all`;
 
 export const HELP_ALL = `Conquistador ${version}: all commands
 
+Start
+  conquistador                      Install where needed, pick a task, open your agent
+  conquistador "TASK"               Open your agent with this task
+    --in AGENT                      Open this agent for one run
+    --no-open                       Install only
+
 Install
-  conquistador                      Find your agents and install
   conquistador add [AGENT...]       Install into agents: ${AGENTS.map(agent => agent.id).join(', ')}
   conquistador update               Update every agent you installed into
   conquistador remove [AGENT...]    Remove from agents (all when none named)
   conquistador agents               Show detected agents and install state
 
 Use
-  conquistador tour [AREA]          See what Conquistador covers and try a task (--list prints all)
+  conquistador tour [AREA]          Print what Conquistador covers (all areas, or one)
   conquistador brief "TASK"         Show which playbooks a task needs (--full prints them)
   conquistador playbooks add DIR    Add your own playbook folder; it ranks first
   conquistador mcp [--http]         Run the playbook MCP server (stdio, or HTTP for remote apps)
@@ -39,7 +46,7 @@ Other routes (see INSTALL.md)
   conquistador status | doctor | route --prompt TEXT | hooks | runtime --help | operator status
 
 Flags: --yes (no questions), --dry-run (print commands only).
-Turn hooks off: CONQUISTADOR_HOOKS=off.`;
+Turn hooks off: CONQUISTADOR_HOOKS=off. Send instead of pre-fill in Claude Code: CONQUISTADOR_PREFILL=off.`;
 
 const flag = (args, name) => args.includes(name);
 const positional = args => args.filter(arg => !arg.startsWith('-'));
@@ -59,24 +66,7 @@ function report(results) {
   return failed;
 }
 
-// What a new user sees after install: where to go and what to ask first. The tour holds the rest.
-async function nextLines(agents) {
-  const { STARTERS } = await import('./tour.mjs');
-  return [
-    ...agents.map(agent => `${agent.label}: ${agent.tryIt}`),
-    '',
-    'Try asking:',
-    ...STARTERS.slice(0, 3).map(prompt => `  "${prompt}"`),
-  ];
-}
-
-async function nextSteps(agents) {
-  console.log(`\n${bold('Next')}`);
-  for (const line of await nextLines(agents)) console.log(line ? `  ${line}` : '');
-  console.log('\n  See everything it covers: conquistador tour');
-}
-
-export async function runAdd(args, { interactive = false } = {}) {
+export async function runAdd(args) {
   const dryRun = flag(args, '--dry-run');
   const names = positional(args);
   const unknown = names.filter(name => !AGENTS.some(agent => agent.id === name));
@@ -85,45 +75,6 @@ export async function runAdd(args, { interactive = false } = {}) {
   let chosen = names.length ? detected.filter(agent => names.includes(agent.id)) : detected.filter(agent => agent.found);
   const missing = chosen.filter(agent => !agent.found && agent.id !== 'cursor');
   if (missing.length) { console.error(`Not found on PATH: ${missing.map(agent => agent.command).join(', ')}. Install that agent first.`); return 1; }
-  if (interactive) {
-    const ui = await import('./vendor/clack.mjs');
-    ui.intro(`Conquistador ${version}`);
-    const found = detected.filter(agent => agent.found);
-    if (!found.length) {
-      ui.note('No supported agent found. Install Claude Code, Codex, Cursor, Copilot CLI, or Grok CLI first.\nOther ways to install: see INSTALL.md.', 'Nothing to install into');
-      ui.outro('Nothing installed.');
-      return 1;
-    }
-    // One question: with one agent, confirm it; with several, pick them (all preselected).
-    if (found.length === 1) {
-      const go = await ui.confirm({ message: `Install Conquistador into ${found[0].label}?`, initialValue: true });
-      if (ui.isCancel(go) || !go) { ui.cancel('Cancelled. Nothing changed.'); return 130; }
-      chosen = found;
-    } else {
-      const picked = await ui.multiselect({ message: 'Install Conquistador into (Enter to install)', options: found.map(agent => ({ value: agent.id, label: agent.label })), initialValues: found.map(agent => agent.id), required: true });
-      if (ui.isCancel(picked)) { ui.cancel('Cancelled. Nothing changed.'); return 130; }
-      chosen = found.filter(agent => picked.includes(agent.id));
-    }
-    const spin = ui.spinner();
-    spin.start('Installing');
-    const source = stageSource({ dryRun });
-    const results = chosen.map(agent => { spin.message(agent.label); return { agent, result: applyAgent(agent, 'install', { source, dryRun }) }; });
-    spin.stop('Installed');
-    let failed = 0;
-    for (const { agent, result } of results) {
-      if (result.ok) ui.log.success(agent.label);
-      else { failed += 1; ui.log.error(`${agent.label}: ${result.error}`); }
-    }
-    const ready = chosen.filter((agent, index) => results[index].result.ok);
-    if (ready.length) ui.note((await nextLines(ready)).join('\n'), 'Next');
-    if (failed) {
-      ui.outro(`${failed} agent(s) failed. Fix the error above and run: conquistador add ${results.filter(item => !item.result.ok).map(item => item.agent.id).join(' ')}`);
-      return 1;
-    }
-    const tour = await ui.confirm({ message: 'See what it covers and try a task?', initialValue: true });
-    if (ui.isCancel(tour) || !tour) { ui.outro('Installed. Run conquistador tour anytime.'); return 0; }
-    return (await import('./tour.mjs')).interactiveTour({ intro: false });
-  }
   if (!chosen.length) { console.error('No supported agent found. Name one: conquistador add claude-code'); return 1; }
   if (!flag(args, '--yes') && !dryRun) {
     console.error(`Would install into: ${chosen.map(agent => agent.label).join(', ')}.\nRe-run with --yes to install, or --dry-run to print the commands.`);
@@ -133,7 +84,12 @@ export async function runAdd(args, { interactive = false } = {}) {
   const source = stageSource({ dryRun });
   const results = chosen.map(agent => ({ agent, result: applyAgent(agent, 'install', { source, dryRun, log: line => console.log(dim(`  $ ${line}`)) }) }));
   const failed = report(results);
-  if (!dryRun) await nextSteps(chosen.filter((agent, index) => results[index].result.ok));
+  if (!dryRun) {
+    // Adding an agent by name undoes an earlier `remove AGENT`.
+    const state = readState();
+    writeState({ ...state, removed: (state.removed ?? []).filter(id => !chosen.some(agent => agent.id === id)) });
+    console.log(`\nStart a task: ${bold('conquistador')}`);
+  }
   return failed ? 1 : 0;
 }
 
@@ -158,6 +114,11 @@ export function runRemove(args) {
   if (!chosen.length) { console.log('Nothing to remove.'); return 0; }
   const results = chosen.map(agent => ({ agent, result: applyAgent(agent, 'remove', { dryRun, log: line => console.log(dim(`  $ ${line}`)) }) }));
   const failed = report(results);
+  if (!dryRun) {
+    // A bare `conquistador` must not reinstall an agent the user removed by name.
+    const state = readState();
+    writeState({ ...state, removed: names.length ? [...new Set([...(state.removed ?? []), ...chosen.map(agent => agent.id)])] : [] });
+  }
   if (!names.length && !failed && !dryRun) removePayload(pluginHome());
   return failed ? 1 : 0;
 }
@@ -206,12 +167,17 @@ export function runPlaybooks(args) {
   return 0;
 }
 
+// A task is any first argument with a space in it, or the start flags alone.
+export const isStart = args => args.length > 0 && (/\s/.test(args[0]) || ['--in', '--no-open'].includes(args[0]) || args[0].startsWith('--in='));
+
 export async function runFrontDoor(args) {
   const [command, ...rest] = args;
+  const start = async () => (await import('./launch.mjs')).runStart(args);
   if (!command) {
     if (!(process.stdin.isTTY && process.stdout.isTTY)) { console.log(HELP); return 0; }
-    return runAdd([], { interactive: true });
+    return start();
   }
+  if (isStart(args)) return start();
   if (command === '--help' || command === '-h' || command === 'help') { console.log(rest.includes('--all') || args.includes('--all') ? HELP_ALL : HELP); return 0; }
   if (command === 'add') return runAdd(rest);
   // `update` keeps its per-project operator meaning until you install into an agent.
@@ -220,7 +186,8 @@ export async function runFrontDoor(args) {
   if (command === 'agents') return runAgents(rest);
   if (command === 'brief') return runBrief(rest);
   if (command === 'playbooks') return runPlaybooks(rest);
-  if (command === 'tour') return (await import('./tour.mjs')).runTour(rest);
+  // The task picker replaced the interactive tour. `tour AREA` and piped `tour` still print.
+  if (command === 'tour') return rest.length || !(process.stdin.isTTY && process.stdout.isTTY) ? (await import('./tour.mjs')).runTour(rest.length ? rest : ['--list']) : (await import('./launch.mjs')).runStart([]);
   if (command === 'bot') return (await import('./bot-pack.mjs')).runBotPack(rest);
   return null;
 }

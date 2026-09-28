@@ -43,7 +43,10 @@ export const AGENTS = [
     update: () => [step('claude', ['plugin', 'marketplace', 'update', MARKETPLACE]), step('claude', ['plugin', 'update', PLUGIN], { okIf: /latest|up to date|already/i })],
     remove: () => [step('claude', ['plugin', 'uninstall', PLUGIN], { okIf: /not (?:installed|found)/i }), step('claude', ['plugin', 'marketplace', 'remove', MARKETPLACE], { okIf: /not found|no marketplace/i })],
     installed: () => run('claude', ['plugin', 'list', '--json']).stdout.includes(`"${PLUGIN}"`),
-    tryIt: 'Open Claude Code in any project and describe a marketing or growth job. Or type /conquistador to see what it covers.',
+    // Claude Code 2.1.283 puts --prefill text in the input box without sending it (verified 2026-09-28).
+    // The flag is not in --help, so older versions and CONQUISTADOR_PREFILL=off send the prompt instead.
+    open: prompt => (prefill() ? { command: 'claude', args: ['--prefill', prompt], sends: false } : { command: 'claude', args: [prompt], sends: true }),
+    slash: '/conquistador ',
   },
   {
     id: 'codex', label: 'Codex', command: 'codex', how: 'plugin',
@@ -53,7 +56,8 @@ export const AGENTS = [
     update: src => [step('codex', ['plugin', 'marketplace', 'add', src], { okIf: /already added/i }), step('codex', ['plugin', 'add', PLUGIN])],
     remove: () => [step('codex', ['plugin', 'remove', PLUGIN], { okIf: /not installed|not found/i }), step('codex', ['plugin', 'marketplace', 'remove', MARKETPLACE], { okIf: /not found|no marketplace/i })],
     installed: () => run('codex', ['plugin', 'list']).stdout.includes(PLUGIN),
-    tryIt: 'Open Codex, trust the Conquistador hooks when asked (/hooks), then describe a marketing or growth job.',
+    open: prompt => ({ command: 'codex', args: [prompt], sends: true }),
+    note: 'Codex asks once to trust the Conquistador hooks. Type /hooks to trust them.',
   },
   {
     id: 'cursor', label: 'Cursor', command: 'cursor-agent', alsoDetect: ['cursor'], how: 'local plugin folder',
@@ -61,7 +65,8 @@ export const AGENTS = [
     update: () => [{ copy: cursorPlugins }],
     remove: () => [{ remove: cursorPlugins }],
     installed: () => existsSync(join(cursorPlugins(), '.cursor-plugin', 'plugin.json')),
-    tryIt: 'Reload the Cursor window (Developer: Reload Window), then describe a marketing or growth job to the agent.',
+    // Cursor the editor has no terminal launch. Without cursor-agent, the prompt goes to the clipboard.
+    open: prompt => (onPath('cursor-agent') ? { command: 'cursor-agent', args: [prompt], sends: true } : null),
   },
   {
     id: 'copilot', label: 'GitHub Copilot CLI', command: 'copilot', how: 'plugin',
@@ -69,18 +74,29 @@ export const AGENTS = [
     update: () => [step('copilot', ['plugin', 'update', PLUGIN], { okIf: /latest|up to date|live/i })],
     remove: () => [step('copilot', ['plugin', 'uninstall', PLUGIN], { okIf: /not installed|not found/i }), step('copilot', ['plugin', 'marketplace', 'remove', MARKETPLACE], { okIf: /not found/i })],
     installed: () => run('copilot', ['plugin', 'list']).stdout.includes(PLUGIN),
-    tryIt: 'Start copilot and describe a marketing or growth job.',
+    open: prompt => ({ command: 'copilot', args: ['-i', prompt], sends: true }),
   },
   {
     id: 'grok', label: 'Grok CLI', command: 'grok', how: 'plugin',
-    // Grok asks for explicit trust. The installer passes --trust only after you confirm the plan.
+    // Grok asks for explicit trust. Running `conquistador` or `conquistador add grok` is that consent.
     install: src => [step('grok', ['plugin', 'install', src, '--trust'], { okIf: /already installed/i, then: step('grok', ['plugin', 'update']) })],
     update: () => [step('grok', ['plugin', 'update'])],
     remove: () => [step('grok', ['plugin', 'uninstall', 'conquistador'], { okIf: /not found/i })],
     installed: () => /\bconquistador\b/.test(run('grok', ['plugin', 'list']).stdout),
-    tryIt: 'Start grok and describe a marketing or growth job.',
+    open: prompt => ({ command: 'grok', args: [prompt], sends: true }),
   },
 ];
+
+// The first Claude Code version where --prefill was verified.
+const PREFILL_SINCE = [2, 1, 283];
+function prefill() {
+  if (process.env.CONQUISTADOR_PREFILL === 'off') return false;
+  const found = /(\d+)\.(\d+)\.(\d+)/.exec(run('claude', ['--version'], { timeout: 15_000 }).stdout);
+  if (!found) return false;
+  const parts = found.slice(1).map(Number);
+  for (let index = 0; index < 3; index += 1) if (parts[index] !== PREFILL_SINCE[index]) return parts[index] > PREFILL_SINCE[index];
+  return true;
+}
 
 export function run(command, args, { timeout = 120_000 } = {}) {
   const result = spawnSync(command, args, { encoding: 'utf8', timeout, stdio: ['ignore', 'pipe', 'pipe'], env: process.env });
@@ -122,7 +138,7 @@ export function removePayload(destination) {
 export function readState() {
   try { return JSON.parse(readFileSync(join(home(), 'installs.json'), 'utf8')); } catch { return { agents: {} }; }
 }
-function writeState(state) {
+export function writeState(state) {
   mkdirSync(home(), { recursive: true });
   writeFileSync(join(home(), 'installs.json'), `${JSON.stringify(state, null, 2)}\n`);
 }

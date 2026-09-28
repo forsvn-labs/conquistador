@@ -4654,7 +4654,7 @@
     },
     {
       "path": "tools/brief.mjs",
-      "sha256": "e8f5477895a090f1725131fc0e1136d75400349a03d677b978a7ebdf283f8b31"
+      "sha256": "a9d78eacd163f76d62f2768ef693b3361dce7a32d9631d1f8d8136177e3a904a"
     },
     {
       "path": "tools/context-selection.mjs",

@@ -15,11 +15,13 @@ FORSVN context and operating decisions live in [FORSVN · Start here](https://li
 - `hosts/` and `agents/` contain installation contracts; `tools/` contains local development helpers.
 - The repository root is the plugin (Claude Code, Codex, Cursor, Copilot, Agent Plugins). `tools/brief.mjs`
   ranks the playbooks for a task; `mcp/server.mjs`, `hooks/conquistador-hook.mjs`, `conquistador brief`,
-  and `conquistador bot` all use it. `tools/front-door.mjs` and `tools/agents.mjs` own the agent installer.
+  and `conquistador bot` all use it. `tools/front-door.mjs` and `tools/agents.mjs` own the agent installer;
+  `tools/launch.mjs` owns the start flow (task picker, agent launch).
 - After adding, renaming, or removing a knowledge file, run `node tools/knowledge-map.mjs` and
   `node tools/update-completeness.mjs`. `node tools/knowledge-map.mjs --check` must pass.
 - E2E: `node tools/e2e/routing-breadth.mjs` (offline; marketing breadth, coding silence, tour drift),
-  `expect tools/e2e/tour.exp` (interactive tour in a terminal), `node tools/e2e/install-lifecycle.mjs`
+  `expect tools/e2e/agent-first.exp` (bare `conquistador` to a pre-filled Claude Code and Codex, isolated
+  home, no model call), `node tools/e2e/install-lifecycle.mjs`
   (isolated home, all detected agents), and `node tools/e2e/knowledge-use.mjs [--set breadth]`
   (headless Claude Code; spends tokens). Reports go to `dist/e2e/`.
 - Router phrases: curated `intents` describe a method; practitioner wording that only selects it goes
