@@ -1,9 +1,9 @@
 # Versions
 
-Product, plugin, host, and portable-agent manifests identify the private-alpha `0.0.15`
+Product, plugin, host, and portable-agent manifests identify the private-alpha `0.0.16`
 release. The latest verified private prerelease is
-[`v0.0.15`](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.15),
-from exact merged source `07112aeb0e18b0b3995fce2a4680b5c2fa52f4a9`.
+[`v0.0.16`](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.16),
+from exact merged source `a833d92041a94497fce20c73466fd476bd1dcab5`.
 Its private tag and six published assets are available to authorized accounts. Check the tag,
 source commit, and `SHA256SUMS` before installation. The local `assembly.json` remains `UNBOUND`.
 No npm registry package was published, and package verification is not host or human acceptance.

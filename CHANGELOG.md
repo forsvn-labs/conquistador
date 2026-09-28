@@ -4,8 +4,13 @@ No public release is claimed. See [VERSIONS.md](VERSIONS.md) for independent pro
 versions. Verification establishes the stated local scope; native host behavior, useful model
 output, human acceptance and rights disposition require separate evidence.
 
-## Unreleased, 0.0.16 candidate
+## 2026-09-28, 0.0.16 private alpha
 
+- Sixteenth private prerelease at
+  [`v0.0.16`](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.16) from exact merged
+  `private-alpha` commit `a833d92041a94497fce20c73466fd476bd1dcab5` through
+  [#16](https://github.com/forsvn-labs/conquistador/pull/16). The repository remains private, and
+  no npm registry package was published.
 - **Agent-first start.** Bare `conquistador` installs into every agent it finds (no question),
   asks what to work on, and opens the agent with the task typed in. Claude Code gets the task in
   its input box through `--prefill` (from 2.1.283; `CONQUISTADOR_PREFILL=off` sends it instead).
@@ -17,6 +22,11 @@ output, human acceptance and rights disposition require separate evidence.
   `remove AGENT` keeps that agent out of later bare runs.
 - The picker replaces the interactive tour; `conquistador tour [AREA]` prints the areas.
 - `tools/e2e/agent-first.exp` replaces `tour.exp` and `installer.exp`.
+- Six assets: source ZIP, npm tarball, portable skill ZIP, portable plugin ZIP, `SHA256SUMS`, and
+  `assembly.json` (`UNBOUND`, no live execution or human verdict). Verified: `npm test` 764 of 764
+  and CI on Node 24 and 26, agent-first E2E 14 of 14 (real Claude Code 2.1.283 and Codex 0.157.1,
+  no model call), routing breadth 119 of 119, install lifecycle for five agents, package and
+  downloaded-asset checksums, and installs from the tarball and the Git tag reporting `0.0.16`.
 
 ## 2026-09-28, 0.0.15 private alpha
 
