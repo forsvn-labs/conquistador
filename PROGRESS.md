@@ -1,6 +1,10 @@
 # Product progress
 
-## 0.0.16 candidate: agent-first start (local, unshipped)
+## Shipped 0.0.16: agent-first start, host acceptance pending
+
+The [v0.0.16 private prerelease](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.16)
+shipped from merged source `a833d92041a94497fce20c73466fd476bd1dcab5` (#16) with six published assets. The downloaded
+assets match `SHA256SUMS`, and installs from the tarball and the Git tag report `0.0.16`.
 
 Bare `conquistador` now installs into every found agent without asking, asks for a task, and
 opens the agent with the task typed in. Claude Code gets `--prefill` (the task waits for Enter);
@@ -19,7 +23,7 @@ Not verified: Copilot CLI, Grok CLI, and Cursor Agent launches (same argument pa
 the Cursor editor clipboard fallback; Windows (`spawn` with a shell) and Linux terminals; any
 answer quality. `tour.exp` and `installer.exp` were retired; `agent-first.exp` covers both flows.
 
-## Shipped 0.0.15, host acceptance pending
+## Shipped 0.0.15
 
 The [v0.0.15 private prerelease](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.15)
 shipped from merged source `07112aeb0e18b0b3995fce2a4680b5c2fa52f4a9` (#14) with six published
