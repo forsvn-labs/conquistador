@@ -2,14 +2,21 @@
 
 ## Next private-alpha acceptance
 
-1. Observe the plugin hooks in a real Codex session (after hook trust), Cursor, Copilot CLI, and
+1. Publish the npm package so the start command becomes `npx conquistador`. The private Git
+   `npx` line is too long and slow (24 seconds cold) to lead the README.
+2. Add "Open in Claude Code" (`claude-cli://open?q=`) and "Open in Cursor" deep-link buttons with a
+   "Copy prompt" fallback to the landing page. Test both links in a browser first.
+3. Fix router sensitivity to filler words: "cannot find" and "ask me" select the video method, and
+   "learn the product" selects the budget method. The start flow strips its own sentences, but
+   users type such words too.
+4. Observe the plugin hooks in a real Codex session (after hook trust), Cursor, Copilot CLI, and
    Grok CLI. Only Claude Code sessions have been observed.
-2. Repeat `node tools/e2e/knowledge-use.mjs` with more runs and more tasks after the plan limit
-   resets, across all nine tour areas (`--set breadth`), and add a quality comparison (blind review
+5. Repeat `node tools/e2e/knowledge-use.mjs` with more runs and more tasks after the plan limit
+   resets, across all nine areas (`--set breadth`), and add a quality comparison (blind review
    of before and after answers), not only reads.
-3. Seek Hung's verdict on a real task in his own agent: playbook relevance, clarity, and usefulness.
+6. Seek Hung's verdict on a real task in his own agent: playbook relevance, clarity, and usefulness.
    Tune the briefing engine and the vault playbook threshold from those corrections.
-4. Decide where to host the HTTP playbook server for Muse and other connector apps, then deploy it
+7. Decide where to host the HTTP playbook server for Muse and other connector apps, then deploy it
    with a token and submit the Muse connector.
 
 ## Private-alpha follow-up

@@ -1,5 +1,24 @@
 # Product progress
 
+## 0.0.16 candidate: agent-first start (local, unshipped)
+
+Bare `conquistador` now installs into every found agent without asking, asks for a task, and
+opens the agent with the task typed in. Claude Code gets `--prefill` (the task waits for Enter);
+Codex, Cursor Agent, Copilot CLI, and Grok CLI start the task at once. See Part 3 of
+[docs/REVIEW-2026-09-SURFACES.md](docs/REVIEW-2026-09-SURFACES.md).
+
+Verified on macOS, 2026-09-28:
+
+- `expect tools/e2e/agent-first.exp`: 14 of 14 checks with real Claude Code 2.1.283 and Codex
+  0.157.1 in an isolated home, no model call. Artifacts: `dist/e2e/agent-first/transcript.txt`
+  and `report.json`.
+- `npm test` 764 of 764. Routing breadth 119 of 119 (adds 10 start-prompt cases). Install
+  lifecycle passes for five agents.
+
+Not verified: Copilot CLI, Grok CLI, and Cursor Agent launches (same argument pattern, not run);
+the Cursor editor clipboard fallback; Windows (`spawn` with a shell) and Linux terminals; any
+answer quality. `tour.exp` and `installer.exp` were retired; `agent-first.exp` covers both flows.
+
 ## Shipped 0.0.15, host acceptance pending
 
 The [v0.0.15 private prerelease](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.15)
@@ -13,7 +32,7 @@ Still unverified after the ship:
   Claude Code sessions were observed.
 - Answer quality. The E2E measures playbook reads and citations, not whether the work is better.
 - The Docker image build, remote hosting of the HTTP server, and any bot app screen.
-- Native Windows and Linux, including the tour in those terminals.
+- Native Windows and Linux, including the start flow in those terminals.
 - `tools/node-onboarding.e2e.py` was not rerun: it tests the old Node-version gate, which 0.0.15
   removed. Retire or rewrite it for the per-project flow.
 

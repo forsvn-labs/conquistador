@@ -270,7 +270,8 @@ delivery outside Claude Code.
 
 ## Part 3: agent-first start (proposal, 2026-09-28)
 
-Status: proposal. No code changed yet.
+Status: built as the 0.0.16 candidate (local, unshipped). Hung accepted the three recommendations; see
+the results below for the one change to decision 3.
 
 ### Problem
 
@@ -392,3 +393,48 @@ argument list without calling a model.
 1. Install into every detected agent without asking? Recommended: yes, and list them.
 2. Remove `tour` as a command? Recommended: yes; the picker replaces it.
 3. Move the README to `npx`? Recommended: yes. Keep the global install in INSTALL.md.
+
+### Results (part 3)
+
+What changed:
+
+- `tools/launch.mjs` owns the start flow. Bare `conquistador` installs into every found agent, asks
+  "What should we work on?" (four tasks, **Browse all areas**, **Something else**), asks "Open in"
+  once, and spawns the agent with the prompt. The parent ignores Ctrl+C and Ctrl+\ while the agent
+  runs and exits with the agent's code.
+- Each agent in `tools/agents.mjs` has an `open` launch. Claude Code uses `--prefill` from 2.1.283.
+- `createBrief` strips the start flow's context sentences before routing (new finding below).
+- The interactive tour is gone; `conquistador tour [AREA]` prints the areas.
+
+Decision 3 changed. The README keeps the global install for the private alpha. The private Git
+`npx` line works, but it took 24 seconds cold and about 5 seconds warm, and it leaves no
+`conquistador` command, so every later run needs the long line again. INSTALL.md documents it as
+"Run once without a global install". The README moves to `npx conquistador` after an npm publish.
+
+New finding: the router reacts to filler words. With "Get more signups to become active users",
+adding "Ask me only for what you cannot find." selected the video method, and "Learn the product"
+selected the budget method. The routing-breadth E2E caught it with the new start cases. The fix
+for the start flow is in `createBrief`; the general fix is on the roadmap.
+
+| Mode | Handling | Evidence |
+| --- | --- | --- |
+| A1 no agent | Note with the supported agents, exit 1 | Code path; not run (every agent is on the test machine) |
+| A2 not signed in | The agent handles sign-in | Isolated Claude Code showed "Not logged in" with the prompt still pre-filled |
+| A3 trust screen | Pre-fill survives it | agent-first run 1 |
+| A4 `--prefill` removed | Version floor 2.1.283 and `CONQUISTADOR_PREFILL=off` | Code path |
+| A5 no terminal | Prints the command, opens nothing | agent-first run 4 |
+| A6 shell breakage | `spawn` without a shell on macOS and Linux | Codex process shows the prompt as one argument (run 3) |
+| A7 home or empty folder | Ask-first prompt | agent-first run 5 |
+| A8 Codex hooks | One warning line before Codex opens | agent-first run 3 |
+| A9 install only | `--no-open`; Esc at the picker | Code path; Esc used in run 5b |
+| A10 update | Unchanged: says to start a new session | install-lifecycle |
+| A11 Windows | `spawn` with a shell | Not run |
+| A12 deep link without Claude Code | Landing-page work, not built | Roadmap |
+
+Evidence (in `dist/e2e/`, not committed):
+
+- `agent-first/transcript.txt` and `report.json`: 14 of 14 checks, real Claude Code 2.1.283 and
+  Codex 0.157.1, isolated home, no model call.
+- `routing-breadth/report.md`: 119 of 119, including 10 start-prompt cases.
+- `install-lifecycle/report.json`: pass for five agents.
+- `npm test`: 764 of 764.
