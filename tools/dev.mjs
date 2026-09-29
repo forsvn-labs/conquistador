@@ -6,7 +6,8 @@ const root = fileURLToPath(new URL('../', import.meta.url));
 if (Number(process.versions.node.split('.')[0]) < 24) throw new Error('Use Node 24 or later.');
 const npm = process.platform === 'win32' ? 'npm.cmd' : 'npm';
 function run(command, args, cwd = root) {
-  const result = spawnSync(command, args, { cwd, stdio: 'inherit', timeout: 600_000 });
+  // Node starts npm.cmd on Windows only through a shell. The arguments hold no spaces.
+  const result = spawnSync(command, args, { cwd, stdio: 'inherit', timeout: 600_000, shell: process.platform === 'win32' });
   if (result.error) throw result.error;
   if (result.status !== 0) process.exit(result.status || 1);
 }
