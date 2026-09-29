@@ -4,6 +4,7 @@
 // two versions packed from the Git commit: this version and a patch bump. Every detected agent's
 // real plugin manager runs inside isolated homes. Your own agent settings are never touched.
 //   node tools/e2e/update-latest.mjs [OUT_DIR]
+//   CONQUISTADOR_E2E_REF=b560488 node tools/e2e/update-latest.mjs dist/e2e/update-latest-before
 // Writes OUT_DIR/report.json. Exit 1 when any check fails. The case IDs (U1–U13) are in
 // docs/REVIEW-2026-09-SURFACES.md, Part 5.
 import { spawn, spawnSync } from 'node:child_process';
@@ -17,7 +18,8 @@ const root = resolve(fileURLToPath(new URL('../../', import.meta.url)));
 const out = resolve(process.argv[2] ?? join(root, 'dist/e2e/update-latest'));
 const v1 = JSON.parse(readFileSync(join(root, 'package.json'), 'utf8')).version;
 const v2 = v1.replace(/^(\d+)\.(\d+)\.(\d+).*$/, (_, major, minor, patch) => `${major}.${minor}.${Number(patch) + 1}`);
-const sha = spawnSync('git', ['-C', root, 'rev-parse', 'HEAD'], { encoding: 'utf8' }).stdout.trim();
+// CONQUISTADOR_E2E_REF packs another commit, for example a negative control from before the change.
+const sha = spawnSync('git', ['-C', root, 'rev-parse', `${process.env.CONQUISTADOR_E2E_REF || 'HEAD'}^{commit}`], { encoding: 'utf8' }).stdout.trim();
 const dirty = spawnSync('git', ['-C', root, 'status', '--porcelain'], { encoding: 'utf8' }).stdout.trim() !== '';
 const work = realpathSync(mkdtempSync(join(tmpdir(), 'conquistador-e2e-update-')));
 const which = command => spawnSync('/bin/sh', ['-c', `command -v ${command}`], { encoding: 'utf8' }).stdout.trim();
