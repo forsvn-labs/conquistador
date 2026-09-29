@@ -22,7 +22,7 @@ that exact task, does the work, and shows which playbooks it applied.
 It also covers product flows, UI specs, web and iOS builds, system architecture, and technical
 docs. Run `conquistador` and choose **Browse all areas** to see each one.
 
-Version 0.2.0 is the public alpha. See [what changed](CHANGELOG.md).
+Version 0.2.1 is the current public alpha. See [what changed](CHANGELOG.md).
 
 ## Install and start
 

@@ -4,7 +4,7 @@
   "hostKind": "eve-agent",
   "displayName": "Eve agent",
   "productName": "conquistador",
-  "pluginVersion": "0.2.0",
+  "pluginVersion": "0.2.1",
   "canonicalSkillsRoot": "skills",
   "skillMount": "agent/skills",
   "installClass": "candidate-only",

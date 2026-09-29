@@ -87,7 +87,7 @@ what happened in a live account. None alone establishes general provider support
 
 Local tests, synthetic fixtures, and package records do not prove native host activation, live
 provider operation, or business results. Portable Eve and official Grok Bot packages remain
-experimental; native import and delegation are unverified. See [implementation status](../PROGRESS.md)
+experimental; native import and delegation are unverified. See the [changelog](../CHANGELOG.md)
 for recorded checks and [private-alpha preparation](PRIVATE-ALPHA.md) for first-use guidance.
 
 Keep installed copies and private-alpha artifacts private. Store credentials, customer material, project
