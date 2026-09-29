@@ -69,7 +69,7 @@ Without a terminal, or in scripts, use flags:
 conquistador add claude-code codex --yes   # Install into named agents
 conquistador add --dry-run                 # Print the commands only
 conquistador agents                        # Show what is found and installed
-conquistador update                        # Reinstall this version into every agent you installed into
+conquistador update                        # Get the latest version and update every agent you installed into
 conquistador remove                        # Remove from every agent and delete ~/.conquistador/plugin
 ```
 

@@ -2,6 +2,7 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { AGENTS, applyAgent, copyPayload, detectAgents, home, pluginHome, readState, removePayload, self, tilde, version, writeState } from './agents.mjs';
+import { selfUpdate } from './self-update.mjs';
 
 const bold = text => (process.stdout.isTTY ? `\x1b[1m${text}\x1b[22m` : text);
 const dim = text => (process.stdout.isTTY ? `\x1b[2m${text}\x1b[22m` : text);
@@ -12,7 +13,7 @@ Marketing and growth playbooks for your AI agents.
 
   conquistador           Pick a task and open your agent with it (installs on first run)
   conquistador "TASK"    Open your agent with this task
-  conquistador update    Reinstall this version into your agents
+  conquistador update    Update to the latest version
   conquistador remove    Uninstall
 
 In your agent: /conquistador [TASK]
@@ -29,7 +30,7 @@ Start
 
 Install
   conquistador add [AGENT...]       Install into agents: ${AGENTS.map(agent => agent.id).join(', ')}
-  conquistador update               Update every agent you installed into
+  conquistador update               Get the latest version and update every agent
   conquistador remove [AGENT...]    Remove from agents (all when none named)
   conquistador agents               Show detected agents and install state
 
@@ -100,11 +101,16 @@ export function runUpdate(args) {
   const state = readState();
   const ids = Object.keys(state.agents ?? {});
   if (!ids.length) { console.log('Conquistador is not installed into any agent yet. Run: conquistador'); return 1; }
+  const log = line => console.log(dim(`  $ ${line}`));
+  // A newer registry version installs itself and registers with the agents; this copy stops here.
+  const handedOff = selfUpdate(args, { dryRun, log });
+  if (handedOff !== null) return handedOff;
   const source = stageSource({ dryRun });
   if (!source) return 1;
-  const results = AGENTS.filter(agent => ids.includes(agent.id)).map(agent => ({ agent, result: applyAgent(agent, 'update', { source, dryRun, log: line => console.log(dim(`  $ ${line}`)) }) }));
+  const results = AGENTS.filter(agent => ids.includes(agent.id)).map(agent => ({ agent, result: applyAgent(agent, 'update', { source, dryRun, log }) }));
   const failed = report(results);
-  console.log(failed ? '' : `Updated to ${version}. Start a new agent session to load it.`);
+  const from = process.env.CONQUISTADOR_UPDATED_FROM;
+  console.log(failed ? '' : `${from ? `Updated from ${from} to ${version}` : `Updated to ${version}`}. Start a new agent session to load it.`);
   return failed ? 1 : 0;
 }
 
