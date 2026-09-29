@@ -117,4 +117,4 @@ Optional host checks and the private daily release watch are described in the
 The schedule requires the workflow on the default branch and Actions permission. Before an upgrade,
 retain a state backup and verify the deployment's authorized account, approval, cancellation, and
 recovery paths. An older binary alone might not reverse a data migration. Keep upstream license
-notices and hosted-service terms. See [implementation status](../PROGRESS.md) for recorded evidence.
+notices and hosted-service terms. See the [changelog](../CHANGELOG.md) for recorded evidence.

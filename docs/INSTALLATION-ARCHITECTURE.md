@@ -2,7 +2,7 @@
 
 Conquistador separates package acquisition, owned file installation, host activation, and task
 execution. One successful step does not certify the next. This document specifies the installer;
-release and observed validation state belong in PROGRESS.md.
+unshipped validation belongs in PROGRESS.md, and shipped release evidence in CHANGELOG.md.
 
 ## Entry points
 

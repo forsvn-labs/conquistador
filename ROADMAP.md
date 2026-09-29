@@ -2,10 +2,9 @@
 
 ## Public alpha follow-up
 
-1. Done in 0.2.0: `@forsvn/conquistador` is on npm, and the repository is public.
-2. Publish later releases from CI with npm provenance, not from a local clone.
-3. Run `tools/e2e/package-install.mjs` on Linux and Windows before a release claims them.
-4. List the plugin in the agent marketplaces, then check each listing installs 0.2.x.
+1. Run `tools/e2e/package-install.mjs` on Linux and Windows before a release claims them.
+2. List the plugin in the agent marketplaces, then check each listing installs 0.2.x.
+3. Ship 0.2.1 through the release workflow: the first publish from CI with provenance.
 
 ## Next acceptance
 

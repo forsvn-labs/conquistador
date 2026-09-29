@@ -39,7 +39,7 @@ lifecycle scripts. `--install-links` makes npm copy the Git checkout instead of 
 temporary files.
 
 ```sh
-npm install -g --ignore-scripts --install-links git+https://github.com/forsvn-labs/conquistador.git#v0.2.0
+npm install -g --ignore-scripts --install-links git+https://github.com/forsvn-labs/conquistador.git#v0.2.1
 ```
 
 ### Run once without a global install

@@ -4,7 +4,9 @@ For a complete product checkout, use the instructions below. A portable-only plu
 skills and documentation; its host loads the skill contracts and does not run these development
 commands.
 
-This is the editable product source of the public npm package `@forsvn/conquistador`. Read README.md, CONTRIBUTING.md, INSTALL.md, and the
+This is the editable product source of the public npm package `@forsvn/conquistador`. First read
+INDEX.md and the four horsemen: VISION.md, ROADMAP.md, PROGRESS.md (unshipped work), and
+CHANGELOG.md (shipped work). Then read README.md, CONTRIBUTING.md, INSTALL.md, and the
 relevant module README before changing behavior. Node 24 or later and npm are the supported local toolchain.
 This repository owns product code and its release evidence.
 

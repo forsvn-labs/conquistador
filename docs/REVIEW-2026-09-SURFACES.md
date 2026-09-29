@@ -151,7 +151,7 @@ Root causes, in order of impact:
 
 ### Evidence
 
-See PROGRESS.md for the exact commands and numbers. Summary: 764 of 764 checks pass on Node 24
+See the 0.0.15 entry in CHANGELOG.md for the exact commands and numbers. Summary: 764 of 764 checks pass on Node 24
 and 26; the install lifecycle passes for five agents in an isolated home; in nine valid headless
 Claude Code runs, must-read coverage rose from 17% to 100% and citations from 0% to 100%.
 
@@ -634,3 +634,29 @@ clone with 154 commits, 13 branches, 17 pull-request refs, 21 tags, and 16 relea
   3. `AGENTS.md` links to a private Linear document, and its first rules say the repository is
      private. These lines change with the public release.
 - Commit author email: `levinhhungg@gmail.com` on all 137 local commits. It becomes public.
+
+## Appendix: unit-test prune audit (2026-09-25)
+
+Audited all 92 test files against the installed-project E2E
+(`tools/growth-diagnosis.e2e.test.mjs`), which covers Codex install, 38-method routing plus
+adversarial cases, first task, hook context, doctor, uninstall, and local MCP. Removed 0,
+retained 92: every file asserts at least one fail-closed, security-boundary, contract, or
+regression behavior the E2E does not exercise (served runtime/API/HTTP, durable runner and
+review gates, provider wire mapping and credential redaction, OIDC/human auth, lifecycle
+backup/restore/erase, corpus/registry/judgment sealing, catalog gateway and receipts, eval-lab
+release-claim and calibration, host orchestration, and installer edge cases such as symlinks,
+traversal, malformed input, and cross-platform paths). No package-script, CI, or doc changes
+were needed: every test file runs under `npm test`, a module `test:source` run, or the hosts
+integration workflow, and no file was dead or fully subsumed. Deliberately kept borderline
+cases: `runtime/tests/publication.test.ts` (protocol schema shape and no-live-claim README
+guards), `runtime/tests/routing-manifest.test.ts` (exact parent-job/outcome arrays as a
+cross-module contract), and the `test:source`-only private-authority suites (`candidate`,
+`self-hosted-conformance`, `inventory-preflight`, `promptfoo-live`, `historical-readiness`),
+which are maintainer interfaces per AGENTS.md, not public checkout prerequisites.
+
+Verification on this checkout under Node 24.21.0: `npm run bootstrap`, `npm run build`
+(clean, `runtime/lib` in sync), full `npm test` passed, and the growth-diagnosis E2E passed
+with a repeatable artifact (`CONQUISTADOR_E2E_ARTIFACT=dist/growth-diagnosis-e2e.json
+node --test tools/growth-diagnosis.e2e.test.mjs`, schema
+`conquistador.growth-diagnosis-e2e/v1`, 38 methods).
+

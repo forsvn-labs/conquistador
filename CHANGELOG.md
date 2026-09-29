@@ -4,8 +4,41 @@
 versions. Verification establishes the stated local scope; native host behavior, useful model
 output, human acceptance and rights disposition require separate evidence.
 
+## 2026-09-30, 0.2.1 public alpha
+
+- Released at [`v0.2.1`](https://github.com/forsvn-labs/conquistador/releases/tag/v0.2.1) and
+  published as [`@forsvn/conquistador@0.2.1`](https://www.npmjs.com/package/@forsvn/conquistador).
+- First release published to npm from CI: the release workflow published the tarball from the
+  GitHub release through trusted publishing, with provenance. The package now requires 2FA
+  and disallows tokens, so only `publish.yml` can publish it.
+- New `INDEX.md` maps the repository. `AGENTS.md` asks agents to read it and the four horsemen
+  first. `PROGRESS.md` now holds only unshipped work; shipped evidence is in this file.
+- The September unit-test prune audit moved to an appendix of
+  `docs/REVIEW-2026-09-SURFACES.md`.
+
+## 2026-09-30, release tooling: npm trusted publishing
+
+- `@forsvn/conquistador` now publishes from GitHub Actions through npm trusted publishing (OIDC),
+  with provenance. No npm token or 2FA prompt is needed.
+  [`.github/workflows/publish.yml`](.github/workflows/publish.yml) runs when a GitHub release is
+  published, or by hand with a tag. It publishes the exact release tarball, after it checks
+  `SHA256SUMS`, the package name, the version against the tag, the absence of a `private` flag,
+  and that `assembly.json` names the tagged commit. A prerelease goes to the `next` dist-tag.
+  Merged through [#21](https://github.com/forsvn-labs/conquistador/pull/21) at `32ce03e`.
+  npm trust configuration `1e104256` binds the package to `forsvn-labs/conquistador` and
+  `publish.yml`.
+- Verified by [run 36601983859](https://github.com/forsvn-labs/conquistador/actions/runs/36601983859)
+  against `v0.2.0`: the tarball checks passed, and the npm OIDC token exchange returned HTTP 201.
+  0.2.0 was already on npm, so nothing was published. The release steps are in CONTRIBUTING.
+
 ## 2026-09-29, 0.2.0 public alpha
 
+- Released at [`v0.2.0`](https://github.com/forsvn-labs/conquistador/releases/tag/v0.2.0) from
+  merged `private-alpha` commit `a60d5e28f2177e7bfa4c566c2bf94c6b4bc30eef` through
+  [#20](https://github.com/forsvn-labs/conquistador/pull/20), and published to npm as
+  [`@forsvn/conquistador@0.2.0`](https://www.npmjs.com/package/@forsvn/conquistador) (`latest`).
+  The registry shasum `60aafb4` matches the release tarball, whose SHA-256 matches `SHA256SUMS`.
+  A clean `npm install -g` and `npx @forsvn/conquistador@latest` both report `0.2.0`.
 - **Public npm package.** Install with `npm install -g @forsvn/conquistador`, or run once with
   `npx @forsvn/conquistador`. No Git access or install flags are needed.
 - The repository is public. The Claude Code marketplace route and the "report it" link in error
