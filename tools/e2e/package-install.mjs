@@ -126,7 +126,7 @@ const cli = windows ? join(prefix, 'conquistador.cmd') : join(prefix, 'bin', 'co
 const install = run('npm', ['install', '--global', '--ignore-scripts', '--install-links', '--prefix', prefix, '--cache', join(work, 'npm-cache-a'), `git+${pathToFileURL(root).href}#${sha}`], { env: a.env });
 // On failure, the npm debug log holds the underlying Git or file error.
 const npmLog = /A complete log of this run can be found in: (\S+\.log)/.exec(install.output)?.[1];
-const npmErrors = npmLog && existsSync(npmLog) ? readFileSync(npmLog, 'utf8').split('\n').filter(line => /error|fatal|warning: /i.test(line)).slice(-12).join(' | ') : '';
+const npmErrors = npmLog && existsSync(npmLog) ? readFileSync(npmLog, 'utf8').split('\n').slice(-30).join(' | ') : '';
 check('A0', `npm install -g from Git (${Math.round(install.ms / 1000)} s)`, install.status === 0 && existsSync(cli), `${install.output.trim().split('\n').slice(-3).join(' ')} ${npmErrors}`);
 const packageDir = join(prefix, ...(windows ? [] : ['lib']), 'node_modules', '@forsvn', 'conquistador');
 check('A0', 'the installed package lives under node_modules', /[\\/]node_modules[\\/]/.test(packageDir) && existsSync(join(packageDir, 'package.json')));
