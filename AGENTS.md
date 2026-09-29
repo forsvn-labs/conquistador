@@ -4,12 +4,12 @@ For a complete product checkout, use the instructions below. A portable-only plu
 skills and documentation; its host loads the skill contracts and does not run these development
 commands.
 
-This is the editable product source, kept private for private-alpha delivery. Read README.md, CONTRIBUTING.md, INSTALL.md, and the
+This is the editable product source of the public npm package `@forsvn/conquistador`. Read README.md, CONTRIBUTING.md, INSTALL.md, and the
 relevant module README before changing behavior. Node 24 or later and npm are the supported local toolchain.
-FORSVN context and operating decisions live in [FORSVN · Start here](https://linear.app/hungv47/document/forsvn-start-here-cabfade69716); this repository owns product code and its release evidence.
+This repository owns product code and its release evidence.
 
-- Keep this repository private. Do not push, publish, change visibility or remove the npm private
-  guard without the user's explicit authorization. Local commits and private packages are allowed.
+- The repository and the npm package are public. Do not push, tag, publish to npm, or merge
+  without the user's explicit authorization. Local commits and local packages are allowed.
 - `skills/<outcome>/` owns an independently usable method. `skills/conquistador/` owns parent routing.
 - `runtime/`, `catalog/`, and `evals/` own runner, typed tools, and evidence contracts.
 - `hosts/` and `agents/` contain installation contracts; `tools/` contains local development helpers.

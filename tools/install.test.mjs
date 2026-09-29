@@ -35,7 +35,7 @@ test('one entry point contains every method and upgrades without losing user cha
 test('portable master contains specialist contracts, declared outcomes and its canonical parent', () => temporary(target => {
   install('install', 'single-agent', target);
   const agent = JSON.parse(readFileSync(join(target, 'agent/agent.json')));
-  assert.equal(agent.pluginVersion, '0.0.17');
+  assert.equal(agent.pluginVersion, '0.2.0');
   assert.equal(agent.kind, 'master-agent');
   assert.equal(agent.role, 'orchestrator');
   assert.equal(agent.schemaVersion, 'conquistador.agent-package/v2');
@@ -77,7 +77,7 @@ test('host and squad declarations resolve inside each staged package', () => {
       }
     } else {
       const host = JSON.parse(readFileSync(join(target, 'host.json')));
-      assert.equal(host.pluginVersion, '0.0.17');
+      assert.equal(host.pluginVersion, '0.2.0');
       assert.deepEqual(readdirSync(join(target, host.canonicalSkillsRoot)).sort(), skills);
     }
     install('remove', mode, target);

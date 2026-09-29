@@ -1,7 +1,6 @@
 {
   "name": "@forsvn/conquistador",
-  "version": "0.0.17",
-  "private": true,
+  "version": "0.2.0",
   "description": "A project operator for growth, GTM, sales, marketing, product, and knowledge work.",
   "license": "MIT",
   "homepage": "https://forsvn.com",
@@ -15,6 +14,9 @@
   },
   "dependencies": {
     "jose": "6.2.8"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "bin": {
     "conquistador": "runtime/bin/conquistador.js"

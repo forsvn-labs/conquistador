@@ -1,8 +1,18 @@
 # Product progress
 
-## Unreleased: `conquistador update` gets the latest version
+## 0.2.0 public alpha: npm package and public repository
 
-Branch `feat/update-installs-latest`, on top of the 0.0.17 candidate. See Part 5 of
+`@forsvn/conquistador` 0.2.0 is on npm, tagged `v0.2.0`, and the repository is public. Before
+the visibility change, a mirror backup was taken and the old branches were deleted, so only
+`private-alpha` and release tags are public. The repository scan (Part 6 of
+[docs/REVIEW-2026-09-SURFACES.md](docs/REVIEW-2026-09-SURFACES.md)) found no secrets on the
+remaining refs. Commit author emails are public.
+
+0.2.0 includes `conquistador update` (below), so users now get new versions from npm.
+
+## `conquistador update` gets the latest version
+
+Merged through #19, released in 0.2.0. See Part 5 of
 [docs/REVIEW-2026-09-SURFACES.md](docs/REVIEW-2026-09-SURFACES.md).
 
 Verified on macOS, 2026-09-29, at `42466f0`:
@@ -15,10 +25,9 @@ Verified on macOS, 2026-09-29, at `42466f0`:
 - Negative control on `b560488`: 11 of 21, every new-behavior check fails.
 - `npm test` 764 of 764. `node tools/e2e/package-install.mjs` 28 of 28.
 
-Users get this only after `@forsvn/conquistador` is on npm. Today the registry answers 404, and
-`update` reinstalls the installed version (U3).
+Before 0.2.0 the registry answered 404, and `update` reinstalled the installed version (U3).
 
-## 0.0.17 candidate: npm installs fixed, not tagged
+## Shipped 0.0.17: npm installs fixed
 
 A user reported that the documented 0.0.16 install stopped with a Node stack trace. Every
 `npm install -g` and `npx` install copied an empty plugin, so no agent got Conquistador. The
@@ -34,9 +43,8 @@ Verified on macOS, 2026-09-29, at `20157b3`:
 - The same E2E on `v0.0.16` fails I1 for all five agents.
 - `npm test` 764 of 764. Routing breadth 119 of 119.
 
-Not done: the tag, the release assets, the push, and the merge. Those wait for your approval.
-Public beta needs a decision on npm publication and repository visibility (Part 4, "Public
-beta: open decisions").
+Released as [v0.0.17](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.17) from
+merged source `e013063` (#18). The downloaded assets match `SHA256SUMS`.
 
 ## Shipped 0.0.16: agent-first start, host acceptance pending
 

@@ -90,7 +90,7 @@ export function packageSource(root, outputRoot = join(root, 'dist')) {
   checkPackageBoundary(files);
   const manifest = JSON.parse(files['package.json']?.bytes.toString() || '{}');
   if (manifest.name !== '@forsvn/conquistador' || !/^\d+\.\d+\.\d+$/.test(manifest.version)) throw new Error('Expected public product identity');
-  if (manifest.private !== true) throw new Error('Keep the private publication guard enabled.');
+  if (manifest.private === true || manifest.publishConfig?.access !== 'public') throw new Error('The npm package must be public: no "private", and publishConfig.access "public".');
   for (const name of Object.keys(files)) {
     if (name.split('/').some(part => ['node_modules', '.conquistador', 'dist'].includes(part)) || /(?:^|\/)\.env(?:\.|$)/.test(name) && !name.endsWith('.env.example')) {
       throw new Error('Tracked dependency, local state, or credential file is not packageable');
