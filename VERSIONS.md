@@ -1,7 +1,7 @@
 # Versions
 
-Product, plugin, host, and portable-agent manifests identify the private-alpha `0.0.16`
-release. The latest verified private prerelease is
+Product, plugin, host, and portable-agent manifests identify the private-alpha `0.0.17`
+candidate, which is not tagged yet. The latest verified private prerelease is
 [`v0.0.16`](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.16),
 from exact merged source `a833d92041a94497fce20c73466fd476bd1dcab5`.
 Its private tag and six published assets are available to authorized accounts. Check the tag,

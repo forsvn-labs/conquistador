@@ -1,4 +1,27 @@
 #!/usr/bin/env node
+import { mkdirSync, writeFileSync } from 'node:fs';
+import { homedir } from 'node:os';
+import { join } from 'node:path';
+
+// An error that escapes gets one plain line, a log file, and a place to report it (I11).
+function crash(error) {
+  if (process.stdin.isTTY) try { process.stdin.setRawMode(false); } catch { /* Not in raw mode. */ }
+  const detail = error instanceof Error ? error.stack ?? error.message : String(error);
+  if (process.env.CONQUISTADOR_DEBUG === '1') process.stderr.write(`${detail}\n`);
+  let log = null;
+  try {
+    const folder = join(process.env.CONQUISTADOR_HOME || join(homedir(), '.conquistador'), 'logs');
+    mkdirSync(folder, { recursive: true });
+    log = join(folder, `error-${new Date().toISOString().replace(/[:.]/g, '-')}.log`);
+    writeFileSync(log, `conquistador ${process.argv.slice(2).join(' ')}\nnode ${process.version} ${process.platform} ${process.arch}\n\n${detail}\n`);
+  } catch { log = null; }
+  process.stderr.write(`\nConquistador stopped: ${error instanceof Error ? error.message : String(error)}\n`
+    + (log ? `Details: ${log}\n` : '')
+    + 'Report it at https://github.com/forsvn-labs/conquistador/issues with the details file.\n');
+  process.exit(1);
+}
+process.on('uncaughtException', crash);
+process.on('unhandledRejection', crash);
 
 const args = process.argv.slice(2);
 function shortcut(arg) {

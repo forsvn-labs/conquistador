@@ -24,7 +24,8 @@ set project $home/acme
 file mkdir $project
 set fh [open $project/README.md w]; puts $fh "# Acme Invoices\n\nInvoicing for freelance designers. Free plan and a \$12 Pro plan."; close $fh
 exec git -C $project init -q
-set cli [list node $root/runtime/bin/conquistador.js]
+# CONQUISTADOR_E2E_CLI runs the flow against an installed package instead of the checkout.
+if {[info exists env(CONQUISTADOR_E2E_CLI)]} { set cli [list $env(CONQUISTADOR_E2E_CLI)] } else { set cli [list node $root/runtime/bin/conquistador.js] }
 
 set transcript ""
 set checks {}

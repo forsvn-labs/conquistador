@@ -1,9 +1,17 @@
 # Product roadmap
 
+## Public beta
+
+1. Decide on npm publication and repository visibility (Part 4 of
+   [docs/REVIEW-2026-09-SURFACES.md](docs/REVIEW-2026-09-SURFACES.md)). Then publish
+   `@forsvn/conquistador` from CI from a clean clone, so the start command becomes
+   `npx @forsvn/conquistador`. `tools/e2e/package-install.mjs` route B already tests that shape.
+2. Make `conquistador update` get the newest published version, then register it.
+3. Run `tools/e2e/package-install.mjs` on Linux and Windows before a public beta claims them.
+
 ## Next private-alpha acceptance
 
-1. Publish the npm package so the start command becomes `npx conquistador`. The private Git
-   `npx` line is too long and slow (24 seconds cold) to lead the README.
+1. Tag and release 0.0.17 so that 0.0.16 users can install the fix.
 2. Add "Open in Claude Code" (`claude-cli://open?q=`) and "Open in Cursor" deep-link buttons with a
    "Copy prompt" fallback to the landing page. Test both links in a browser first.
 3. Fix router sensitivity to filler words: "cannot find" and "ask me" select the video method, and

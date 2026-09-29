@@ -438,3 +438,118 @@ Evidence (in `dist/e2e/`, not committed):
 - `routing-breadth/report.md`: 119 of 119, including 10 start-prompt cases.
 - `install-lifecycle/report.json`: pass for five agents.
 - `npm test`: 764 of 764.
+
+## Part 4: public-beta install review (2026-09-29)
+
+### Report
+
+A user ran the documented install on macOS with Node 24.20 and nvm:
+
+```sh
+npm install -g --ignore-scripts --install-links git+https://github.com/forsvn-labs/conquistador.git#v0.0.16
+conquistador
+```
+
+The command stopped with a raw Node stack trace:
+`ENOENT ... ~/.cursor/plugins/local/conquistador.tmp-94069/.conquistador-owned.json`.
+
+### Findings
+
+1. **P0: every npm install ships an empty plugin.** `copyPayload` skips paths that match
+   `/node_modules/`. It tests the absolute path, and a global npm package lives under
+   `…/lib/node_modules/@forsvn/conquistador`. So it skips every file. `~/.conquistador/plugin`
+   gets only the ownership marker and three empty folders. Each agent then registers an empty
+   plugin. Cursor fails first because its copy reads from that empty folder, never creates the
+   staging folder, and cannot write the marker. Reproduced in an isolated home and npm prefix.
+   The global npm route and the `npx` route are both broken in 0.0.16.
+2. **P0: one agent can stop the whole run.** `copyPayload` throws, and nothing catches the
+   error. The user sees a Node stack trace, the other agents do not install, and nothing says
+   what to do next.
+3. **P1: nothing checks the copy.** The installer registers the plugin copy with each agent
+   without a check that the copy is complete. The state file records "installed" by version
+   only, so a broken copy is never repaired while the version stays the same.
+4. **P1: the release tests never ran the shipped package.** `tools/e2e/install-lifecycle.mjs`
+   and `agent-first.exp` run `runtime/bin/conquistador.js` from the source checkout, which is not
+   under `node_modules`. `tools/verify-private-git-install.mjs` installs from Git, but tests only
+   the old per-project route. No test ran bare `conquistador` or `add` from an npm install.
+5. **P1: the install line is long and private.** It needs Git access to a private repository and
+   two npm flags that users do not understand. A public beta needs one short command, such as
+   `npx @forsvn/conquistador`. This needs a public npm package and a decision on repository
+   visibility.
+6. **P1: `conquistador update` does not update.** Help says "Update to the latest version". The
+   command only registers the version that is already installed again. It never gets a newer
+   release.
+7. **P2: a crash leaves folders behind.** A failed run leaves `conquistador.tmp-PID` next to the
+   agent's plugin folder. The next run uses a new PID and does not remove it.
+8. **P2: errors show internals.** Any error that escapes prints a Node stack trace, with no
+   cause in plain words, no log file, and no place to report it.
+
+### Failure modes (written before the code)
+
+The installer must handle each case. The E2E must cover each case marked E2E.
+
+| # | Case | Required behavior | Covered by |
+| --- | --- | --- | --- |
+| I1 | The package lives under `node_modules` (npm global, `npx` cache) | The plugin copy is complete | E2E |
+| I2 | The plugin copy is incomplete (a required manifest is missing) | Stop before any agent registers it. Keep the last good copy. Say which file is missing | E2E |
+| I3 | One agent fails or throws | Report that agent with a retry command. Install the other agents. Open a working agent | E2E |
+| I4 | A crashed run left `.tmp-PID` or `.old-PID` folders | The next run removes them | E2E |
+| I5 | The target folder exists and Conquistador did not create it | Leave it in place, say how to fix it, and continue with the other agents | E2E |
+| I6 | The state says "installed", but the plugin copy is missing or broken | The next bare `conquistador` repairs it | E2E |
+| I7 | An agent's plugin command fails (not signed in, old version) | Show the last lines of its output and the retry command | Existing |
+| I8 | No supported agent is found | Say so, list the agents, and exit 1 | Existing |
+| I9 | The user switches Node versions | Agents keep working from `~/.conquistador/plugin` | E2E |
+| I10 | No terminal (script or pipe) | Print the command only. Install nothing | Existing |
+| I11 | An unexpected error | One line with the cause, a log file path, and where to report it. No stack trace unless `CONQUISTADOR_DEBUG=1` | E2E |
+| I12 | The npm cache that ran `npx` is deleted | Agents keep working from the stable copy | E2E |
+
+### Decisions
+
+- Test the payload filter against the path inside each payload item, not the absolute path.
+- Check the staged copy for ten required files before it replaces the old copy. A bad package
+  never reaches an agent, and the last good copy stays.
+- `applyAgent` returns errors and never throws. One agent cannot stop the others.
+- A bare `conquistador` repairs a missing or damaged `~/.conquistador/plugin` and Cursor copy,
+  even when the version did not change.
+- Hints name the command that runs this copy again. After `npx`, the next step is
+  `/conquistador` in the agent, because `npx` leaves no `conquistador` command.
+- Retire `tools/e2e/install-lifecycle.mjs`. `tools/e2e/package-install.mjs` installs the package
+  as users do and covers the same lifecycle.
+- Bump to 0.0.17 so that every 0.0.16 user gets a full reinstall on the next run.
+
+### Results
+
+Verified on macOS, 2026-09-29, with real Claude Code 2.1.284, Codex 0.158.0, Cursor Agent
+2026.09.15, Copilot CLI 1.0.87, and Grok CLI 1.0.44 in isolated homes. No model was called.
+
+- `node tools/e2e/package-install.mjs`: 28 of 28 at `20157b3`. Route A installs from the Git commit
+  with the documented npm command. Route B installs through `npx` from a tarball packed from a
+  clean clone (1,689 files, 4.4 MB packed, 12.8 MB unpacked, no nested `node_modules`), then
+  deletes the `npx` cache. The run includes `agent-first.exp` against the installed binary, 14 of
+  14. Artifacts: `dist/e2e/package-install/report.json` and `commands.log`.
+- Negative control: `CONQUISTADOR_E2E_REF=v0.0.16 node tools/e2e/package-install.mjs` fails I1
+  for all five agents, with all ten required files missing. This is the reported bug.
+- `npm test`: 764 of 764. Routing breadth: 119 of 119.
+- Without `--install-links`, a global Git install links to a temporary clone and the command does
+  not exist. The Git route needs both flags. A registry package needs none.
+
+Not verified: Windows and Linux, the Cursor editor (the E2E uses Cursor Agent and the plugin
+folder), and a user's machine that already has a 0.0.16 crash. On such a machine, the leftover
+`conquistador.tmp-PID` folder is removed only when no running process has that PID.
+
+### Public beta: open decisions
+
+A short install line is the largest remaining improvement. It needs your authorization, because
+this repository must stay private and npm publication stays disabled until you decide:
+
+1. **Publish `@forsvn/conquistador` to npm as public.** The install becomes
+   `npx @forsvn/conquistador` (one run) or `npm install -g @forsvn/conquistador`, with no Git
+   access and no flags. Route B of the E2E already tests this package shape. It needs: remove
+   `"private": true`, choose the version (VERSIONS.md plans `0.1.0` for the first public release),
+   publish from CI from a clean clone, not from a working checkout.
+2. **Make the repository public, or keep it private.** A private repository blocks
+   `/plugin marketplace add forsvn-labs/conquistador` in Claude Code, `npx skills add`, and the
+   issue link in error messages. npm publication alone makes the CLI route work.
+3. **Make `conquistador update` fetch a new version.** Today it registers the installed version
+   again. After npm publication, it can run `npm install -g @forsvn/conquistador@latest` (or
+   print the `npx` line) and then register the new copy.

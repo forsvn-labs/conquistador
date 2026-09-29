@@ -21,9 +21,9 @@ FORSVN context and operating decisions live in [FORSVN · Start here](https://li
   `node tools/update-completeness.mjs`. `node tools/knowledge-map.mjs --check` must pass.
 - E2E: `node tools/e2e/routing-breadth.mjs` (offline; marketing breadth, coding silence, tour drift),
   `expect tools/e2e/agent-first.exp` (bare `conquistador` to a pre-filled Claude Code and Codex, isolated
-  home, no model call), `node tools/e2e/install-lifecycle.mjs`
-  (isolated home, all detected agents), and `node tools/e2e/knowledge-use.mjs [--set breadth]`
-  (headless Claude Code; spends tokens). Reports go to `dist/e2e/`.
+  home, no model call), `node tools/e2e/package-install.mjs` (installs the package from Git and `npx`
+  as users do, all detected agents, isolated homes; needs a real terminal for `script` and `expect`),
+  and `node tools/e2e/knowledge-use.mjs [--set breadth]` (headless Claude Code; spends tokens). Reports go to `dist/e2e/`.
 - Router phrases: curated `intents` describe a method; practitioner wording that only selects it goes
   in `aliases` in `skills/conquistador/routing-overlay.json`. Rebuild with `writeRoutingContract`.
 - `tools/tour.mjs` owns the capability areas. After editing it, run `node tools/tour.mjs --write`.
