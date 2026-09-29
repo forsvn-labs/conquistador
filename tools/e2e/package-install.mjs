@@ -127,7 +127,9 @@ const install = run('npm', ['install', '--global', '--ignore-scripts', '--instal
 // On failure, the npm debug log holds the underlying Git or file error.
 const npmLog = /A complete log of this run can be found in: (\S+\.log)/.exec(install.output)?.[1];
 const npmErrors = npmLog && existsSync(npmLog) ? readFileSync(npmLog, 'utf8').split('\n').slice(-30).join(' | ') : '';
-check('A0', `npm install -g from Git (${Math.round(install.ms / 1000)} s)`, install.status === 0 && existsSync(cli), `${install.output.trim().split('\n').slice(-3).join(' ')} ${npmErrors}`);
+// npm hides Git's own message, so run the same Git command again and keep its output.
+const gitProbe = install.status === 0 ? '' : run('git', ['--no-replace-objects', 'ls-remote', pathToFileURL(root).href], { env: a.env }).output.trim().slice(-600);
+check('A0', `npm install -g from Git (${Math.round(install.ms / 1000)} s)`, install.status === 0 && existsSync(cli), `${install.output.trim().split('\n').slice(-3).join(' ')} ${npmErrors} git: ${gitProbe}`);
 const packageDir = join(prefix, ...(windows ? [] : ['lib']), 'node_modules', '@forsvn', 'conquistador');
 check('A0', 'the installed package lives under node_modules', /[\\/]node_modules[\\/]/.test(packageDir) && existsSync(join(packageDir, 'package.json')));
 check('A0', `the installed CLI reports ${version}`, run(cli, ['--version'], { env: a.env }).output.trim() === version);
