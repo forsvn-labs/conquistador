@@ -6,7 +6,8 @@
    [docs/REVIEW-2026-09-SURFACES.md](docs/REVIEW-2026-09-SURFACES.md)). Then publish
    `@forsvn/conquistador` from CI from a clean clone, so the start command becomes
    `npx @forsvn/conquistador`. `tools/e2e/package-install.mjs` route B already tests that shape.
-2. Make `conquistador update` get the newest published version, then register it.
+2. Done on `feat/update-installs-latest`: `conquistador update` gets the newest published
+   version, then registers it (Part 5). It works for users after the first npm publication.
 3. Run `tools/e2e/package-install.mjs` on Linux and Windows before a public beta claims them.
 
 ## Next private-alpha acceptance

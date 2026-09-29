@@ -1,5 +1,23 @@
 # Product progress
 
+## Unreleased: `conquistador update` gets the latest version
+
+Branch `feat/update-installs-latest`, on top of the 0.0.17 candidate. See Part 5 of
+[docs/REVIEW-2026-09-SURFACES.md](docs/REVIEW-2026-09-SURFACES.md).
+
+Verified on macOS, 2026-09-29, at `42466f0`:
+
+- `node tools/e2e/update-latest.mjs`: 21 of 21. A local Verdaccio registry holds 0.0.17 and
+  0.0.18 packed from the commit. Five real agents in isolated homes, no model call. Covers the
+  global and `npx` routes, no package on the registry, no newer version, an unreachable
+  registry, a prefix npm cannot write, `--dry-run`, and a source checkout. Artifact:
+  `dist/e2e/update-latest/report.json`.
+- Negative control on `b560488`: 11 of 21, every new-behavior check fails.
+- `npm test` 764 of 764. `node tools/e2e/package-install.mjs` 28 of 28.
+
+Users get this only after `@forsvn/conquistador` is on npm. Today the registry answers 404, and
+`update` reinstalls the installed version (U3).
+
 ## 0.0.17 candidate: npm installs fixed, not tagged
 
 A user reported that the documented 0.0.16 install stopped with a Node stack trace. Every

@@ -553,3 +553,84 @@ this repository must stay private and npm publication stays disabled until you d
 3. **Make `conquistador update` fetch a new version.** Today it registers the installed version
    again. After npm publication, it can run `npm install -g @forsvn/conquistador@latest` (or
    print the `npx` line) and then register the new copy.
+
+## Part 5: `conquistador update` gets the latest version (2026-09-29)
+
+Hung approved all three public-beta decisions. This part covers decision 3. Today
+`conquistador update` registers the installed version again and never gets a newer release.
+
+### Target behavior
+
+`conquistador update` asks the npm registry for the `latest` version of `@forsvn/conquistador`.
+When that version is newer, it installs it the same way the running copy was installed, and the
+new version registers itself with every agent. When the registry has nothing newer, or cannot
+answer, it registers the installed version again, as before.
+
+| How the running copy was installed | What `update` runs |
+| --- | --- |
+| `npm install -g` (from the registry or from Git) | `npm install -g --prefix PREFIX @forsvn/conquistador@latest`, then the new `conquistador update` |
+| `npx` | `npx --yes @forsvn/conquistador@latest update` |
+| A source checkout or a project `node_modules` | Nothing. It prints the install command |
+
+### Failure modes (written before the code)
+
+The E2E must cover each case marked E2E.
+
+| # | Case | Required behavior | Covered by |
+| --- | --- | --- | --- |
+| U1 | A newer version is on the registry (global install) | Install it into the same npm prefix. The new version registers with every agent and reports its version | E2E |
+| U2 | The registry cannot be reached, or times out after 15 s | Say so in one line. Register the installed version again. Exit 0 | E2E |
+| U3 | The registry does not have the package (404, before the first publication) | Same as U2 | E2E |
+| U4 | The registry version is the same or older (a source checkout ahead of it) | Never downgrade. Say "already the latest". Register the installed version again | E2E |
+| U5 | Versions compare as numbers: `0.0.9 < 0.0.17 < 0.1.0`. A prerelease is older than its release | Correct order | E2E (U1 uses 0.0.x to 0.0.x+1) |
+| U6 | `npm install -g` fails (no write access to the prefix, network drop) | Keep the installed version and the agents unchanged. Show the npm error lines and the command to run. Exit 1 | E2E |
+| U7 | The new version runs `update` again | It does not ask the registry again. No loop | E2E |
+| U8 | The running copy came from `npx` | Do not create a global install the user did not choose. Run the new version through `npx` | E2E |
+| U9 | The running copy is a source checkout or a project dependency | Do not change the installation. Print the command that installs the latest version. Register this copy again | E2E |
+| U10 | `--dry-run` | Print the commands. Change nothing | E2E |
+| U11 | The new package is incomplete | The new version's own check (I2) stops before any agent. The last good plugin copy stays | Existing (I2) |
+| U12 | No agent is installed yet | Keep the current message. Do not ask the registry | Existing |
+| U13 | The user set a custom registry (`npm_config_registry`, `.npmrc`) | Use it, for both the version check and the install | E2E (the E2E uses a local registry) |
+
+### Results (part 5)
+
+Verified on macOS, 2026-09-29, at `42466f0`, with real Claude Code, Codex, Cursor Agent, Copilot
+CLI, and Grok CLI in isolated homes. No model was called.
+
+- `node tools/e2e/update-latest.mjs`: 21 of 21. The E2E starts Verdaccio 6 on `127.0.0.1` with
+  its own storage. Other packages come from npmjs.org through it. It packs this version and a
+  patch bump from a clean clone and publishes them in turn. Every case in the table above that is
+  marked E2E passes. Artifacts: `dist/e2e/update-latest/report.json`, `commands.log`, and
+  `registry.log`.
+- Negative control: `CONQUISTADOR_E2E_REF=b560488 node tools/e2e/update-latest.mjs` fails 10 of 21
+  checks. The old `update` prints "Updated to 0.0.17" in every case.
+- `npm test`: 764 of 764. `node tools/e2e/package-install.mjs`: 28 of 28.
+- The real registry answers 404 for `@forsvn/conquistador` today, so `update` reinstalls the
+  installed version (U3), as before.
+
+The E2E packs copies without `"private": true`, because npm refuses to publish a private
+package. The source keeps the guard until the first public publication.
+
+Not verified: Windows (`npm.cmd`, `%APPDATA%\npm` prefix) and Linux, and a user with a custom
+global prefix that needs `sudo`. On such a machine, U6 applies: npm's error and the retry
+command.
+
+## Part 6: public repository check (2026-09-29)
+
+Before the repository becomes public, I scanned everything that GitHub would show: a mirror
+clone with 154 commits, 13 branches, 17 pull-request refs, 21 tags, and 16 releases.
+
+- **Secrets:** `gitleaks` over all refs found one match, a false positive ("crawler access,
+  freshness" in `skills/optimize-search/references/anti-patterns.md`). No keys or tokens.
+- **Private terms:** no employer names, no local user paths other than examples such as
+  `/Users/YOU`, no customer transcripts.
+- **To decide before the change:**
+  1. `main` holds an old "UNRELEASED private snapshot" (`f768e1c`). Its test fixtures use the
+     real site `telyclaw.ai` and a project ID. Delete the stale branches (`main`, `dogfood/0.1.0`,
+     `fm/*`, `feat/operator-reliability`, `overhaul/surfaces-and-knowledge`,
+     `docs/release-0.0.15`) or keep them.
+  2. The tag `v0.1.0` and its release ("private dogfood", 2026-09-15) already exist. The public
+     alpha cannot reuse `v0.1.0` without moving that tag.
+  3. `AGENTS.md` links to a private Linear document, and its first rules say the repository is
+     private. These lines change with the public release.
+- Commit author email: `levinhhungg@gmail.com` on all 137 local commits. It becomes public.

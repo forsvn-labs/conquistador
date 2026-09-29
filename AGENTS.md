@@ -23,6 +23,7 @@ FORSVN context and operating decisions live in [FORSVN · Start here](https://li
   `expect tools/e2e/agent-first.exp` (bare `conquistador` to a pre-filled Claude Code and Codex, isolated
   home, no model call), `node tools/e2e/package-install.mjs` (installs the package from Git and `npx`
   as users do, all detected agents, isolated homes; needs a real terminal for `script` and `expect`),
+  `node tools/e2e/update-latest.mjs` (`conquistador update` against a local Verdaccio registry, all agents),
   and `node tools/e2e/knowledge-use.mjs [--set breadth]` (headless Claude Code; spends tokens). Reports go to `dist/e2e/`.
 - Router phrases: curated `intents` describe a method; practitioner wording that only selects it goes
   in `aliases` in `skills/conquistador/routing-overlay.json`. Rebuild with `writeRoutingContract`.
