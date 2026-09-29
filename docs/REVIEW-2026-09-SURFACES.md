@@ -614,3 +614,23 @@ package. The source keeps the guard until the first public publication.
 Not verified: Windows (`npm.cmd`, `%APPDATA%\npm` prefix) and Linux, and a user with a custom
 global prefix that needs `sudo`. On such a machine, U6 applies: npm's error and the retry
 command.
+
+## Part 6: public repository check (2026-09-29)
+
+Before the repository becomes public, I scanned everything that GitHub would show: a mirror
+clone with 154 commits, 13 branches, 17 pull-request refs, 21 tags, and 16 releases.
+
+- **Secrets:** `gitleaks` over all refs found one match, a false positive ("crawler access,
+  freshness" in `skills/optimize-search/references/anti-patterns.md`). No keys or tokens.
+- **Private terms:** no employer names, no local user paths other than examples such as
+  `/Users/YOU`, no customer transcripts.
+- **To decide before the change:**
+  1. `main` holds an old "UNRELEASED private snapshot" (`f768e1c`). Its test fixtures use the
+     real site `telyclaw.ai` and a project ID. Delete the stale branches (`main`, `dogfood/0.1.0`,
+     `fm/*`, `feat/operator-reliability`, `overhaul/surfaces-and-knowledge`,
+     `docs/release-0.0.15`) or keep them.
+  2. The tag `v0.1.0` and its release ("private dogfood", 2026-09-15) already exist. The public
+     alpha cannot reuse `v0.1.0` without moving that tag.
+  3. `AGENTS.md` links to a private Linear document, and its first rules say the repository is
+     private. These lines change with the public release.
+- Commit author email: `levinhhungg@gmail.com` on all 137 local commits. It becomes public.
