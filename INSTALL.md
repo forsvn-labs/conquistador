@@ -13,7 +13,7 @@ that the agent read the playbooks.
 Install the command, then run it with no arguments:
 
 ```sh
-npm install -g --ignore-scripts --install-links git+https://github.com/forsvn-labs/conquistador.git#v0.0.16
+npm install -g --ignore-scripts --install-links git+https://github.com/forsvn-labs/conquistador.git#v0.0.17
 conquistador
 ```
 
@@ -26,7 +26,8 @@ The command does these steps:
 3. It asks what to work on, then opens your agent with the task typed in. With several agents, it
    asks once which one to open and remembers the choice.
 
-Later runs skip step 1 and 2 unless the version changed or a new agent appeared.
+Later runs skip step 1 and 2 unless the version changed, a new agent appeared, or the plugin copy
+is missing or damaged. A damaged copy is repaired.
 `conquistador --no-open` installs and stops. `conquistador "TASK" --in codex` opens one agent for
 one run. Without a terminal (a script or a pipe), `conquistador "TASK"` only prints the command
 it would run.
@@ -40,7 +41,7 @@ instead of linking to temporary files.
 ### Run once without a global install
 
 ```sh
-npx -y --ignore-scripts --package=git+https://github.com/forsvn-labs/conquistador.git#v0.0.16 conquistador
+npx -y --ignore-scripts --package=git+https://github.com/forsvn-labs/conquistador.git#v0.0.17 conquistador
 ```
 
 This installs into your agents and opens one, like the global command. It leaves no `conquistador`
@@ -68,7 +69,7 @@ Without a terminal, or in scripts, use flags:
 conquistador add claude-code codex --yes   # Install into named agents
 conquistador add --dry-run                 # Print the commands only
 conquistador agents                        # Show what is found and installed
-conquistador update                        # Refresh every agent you installed into
+conquistador update                        # Reinstall this version into every agent you installed into
 conquistador remove                        # Remove from every agent and delete ~/.conquistador/plugin
 ```
 
@@ -183,6 +184,10 @@ operator contracts and the BB specialist adapter. The flags `--skills`, `--plugi
 
 | Symptom | Fix |
 | --- | --- |
+| 0.0.16 stops with `ENOENT … conquistador.tmp-NNNN/.conquistador-owned.json` | 0.0.16 copied an empty plugin from npm installs. Install 0.0.17 with the command above and run `conquistador` again. It removes the leftover folder and repairs every agent. |
+| `… exists and was not created by Conquistador` | A folder that you or another tool made is in the way. Move or delete it, then run `conquistador` again. The other agents install anyway. |
+| `The Conquistador package at … is incomplete` | The npm install is damaged. Install again with the command above. Your agents keep the last good copy. |
+| `Conquistador stopped: …` | Open the `Details:` file it prints, and send it with a report. `CONQUISTADOR_DEBUG=1` prints the full error. |
 | `Conquistador requires Node 24 or later` | Install Node 24 or later, open a new terminal, and run the command again. |
 | An agent shows `✗` after install | Run the printed command yourself to see the full error, then run `conquistador add AGENT --yes`. |
 | The agent does not list Conquistador | Start a new session. In Cursor, reload the window. In Codex, trust the hooks. |

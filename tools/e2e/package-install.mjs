@@ -5,6 +5,7 @@
 //   Route B: npx from a packed tarball (the public route), then delete the npx cache (I9, I12).
 //   Then agent-first.exp runs against the Route A binary.
 //   node tools/e2e/package-install.mjs [OUT_DIR]
+//   CONQUISTADOR_E2E_REF=v0.0.16 node tools/e2e/package-install.mjs dist/e2e/package-install-v0.0.16
 // Writes OUT_DIR/report.json. Exit 1 when any check fails. The case IDs are in
 // docs/REVIEW-2026-09-SURFACES.md, Part 4.
 import { spawnSync } from 'node:child_process';
@@ -17,7 +18,8 @@ import { requiredPayload } from '../agents.mjs';
 const root = resolve(fileURLToPath(new URL('../../', import.meta.url)));
 const out = resolve(process.argv[2] ?? join(root, 'dist/e2e/package-install'));
 const version = JSON.parse(readFileSync(join(root, 'package.json'), 'utf8')).version;
-const sha = spawnSync('git', ['-C', root, 'rev-parse', 'HEAD'], { encoding: 'utf8' }).stdout.trim();
+// CONQUISTADOR_E2E_REF tests another commit or tag, for example a negative control on a known-bad release.
+const sha = spawnSync('git', ['-C', root, 'rev-parse', `${process.env.CONQUISTADOR_E2E_REF || 'HEAD'}^{commit}`], { encoding: 'utf8' }).stdout.trim();
 const dirty = spawnSync('git', ['-C', root, 'status', '--porcelain'], { encoding: 'utf8' }).stdout.trim() !== '';
 const work = realpathSync(mkdtempSync(join(tmpdir(), 'conquistador-e2e-package-')));
 const which = command => spawnSync('/bin/sh', ['-c', `command -v ${command}`], { encoding: 'utf8' }).stdout.trim();
@@ -119,7 +121,7 @@ for (const folder of stale) { mkdirSync(folder, { recursive: true }); writeFileS
 result = run(cli, ['update'], { env: a.env });
 check('I4', 'update removes folders a crashed run left behind', result.status === 0 && stale.every(folder => !existsSync(folder)), stale.filter(existsSync).join(', '));
 
-rmSync(join(a.plugin, 'mcp', 'server.mjs'));
+rmSync(join(a.plugin, 'mcp', 'server.mjs'), { force: true });
 result = tty(cli, ['--no-open'], a);
 check('I6', 'bare conquistador repairs a broken plugin copy', result.status === 0 && missing(a.plugin).length === 0 && /Installed into/.test(result.output), result.output.trim().split('\n').slice(-4).join(' | '));
 
@@ -172,6 +174,7 @@ const npxCache = join(work, 'npx-cache');
 result = run('npx', ['--yes', '--cache', npxCache, '--package', tarball, '--', 'conquistador', 'add', '--yes'], { env: b.env });
 seen = observe(b, agents);
 check('B1', `npx from the tarball installs every agent (${Math.round(result.ms / 1000)} s)`, result.status === 0 && all(seen, true) && missing(b.plugin).length === 0, JSON.stringify(seen));
+check('B1', 'after npx, the next step is /conquistador in the agent, not a missing command', /type \/conquistador in your agent/.test(result.output) && !/Start a task: conquistador/.test(result.output), result.output.trim().split('\n').slice(-2).join(' | '));
 check('I12', 'no agent setting points into the npx cache', textBelow(b.home, npxCache) === null, textBelow(b.home, npxCache) ?? '');
 rmSync(npxCache, { recursive: true, force: true });
 seen = observe(b, agents);

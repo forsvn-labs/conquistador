@@ -22,7 +22,7 @@ that exact task, does the work, and shows which playbooks it applied.
 It also covers product flows, UI specs, web and iOS builds, system architecture, and technical
 docs. Run `conquistador` and choose **Browse all areas** to see each one.
 
-Version 0.0.16 is a private-alpha candidate. See [what changed](CHANGELOG.md).
+Version 0.0.17 is a private-alpha candidate. See [what changed](CHANGELOG.md).
 
 ## Install and start
 
@@ -30,7 +30,7 @@ You need Node 24 or later and an AI coding agent: Claude Code, Codex, Cursor, Co
 Grok CLI. Open a terminal in your product's folder and run:
 
 ```sh
-npm install -g --ignore-scripts --install-links git+https://github.com/forsvn-labs/conquistador.git#v0.0.16
+npm install -g --ignore-scripts --install-links git+https://github.com/forsvn-labs/conquistador.git#v0.0.17
 conquistador
 ```
 

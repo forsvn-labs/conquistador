@@ -5,7 +5,7 @@ import { existsSync, readdirSync } from 'node:fs';
 import { homedir } from 'node:os';
 import { resolve } from 'node:path';
 import { START_CONTEXT } from './brief.mjs';
-import { AGENTS, applyAgent, copyPayload, detectAgents, payloadCurrent, pluginHome, readState, version, writeState } from './agents.mjs';
+import { AGENTS, applyAgent, copyPayload, detectAgents, payloadCurrent, pluginHome, readState, self, version, writeState } from './agents.mjs';
 
 // Tasks that fit any product. The first one is the default.
 export const STARTS = Object.freeze([
@@ -58,8 +58,8 @@ async function ensureInstalled(ui) {
   const results = todo.map(agent => ({ agent, result: applyAgent(agent, state.agents?.[agent.id] ? 'update' : 'install', { source: pluginHome() }) }));
   const failed = results.filter(item => !item.result.ok);
   const done = results.filter(item => item.result.ok).map(item => item.agent);
-  spin.stop(done.length ? `Installed into ${done.map(agent => agent.label).join(', ')}` : 'Install failed', done.length ? 0 : 2);
-  for (const { agent, result } of failed) ui.log.error(`${agent.label}: ${result.error}\n  Retry: conquistador add ${agent.id}`);
+  spin.stop(done.length ? `Installed into ${done.map(agent => agent.label).join(', ')}` : `Could not install into ${failed.map(item => item.agent.label).join(', ')}`, done.length ? 0 : 2);
+  for (const { agent, result } of failed) ui.log.error(`${agent.label}: ${result.error}\n  Retry: ${self} add ${agent.id}`);
   const ids = new Set(failed.map(item => item.agent.id));
   return { ready: found.filter(agent => !ids.has(agent.id)), failed };
 }
@@ -116,7 +116,7 @@ function printOnly(task, wanted, cwd) {
   const prompt = promptFor(agent, task || startsFor(isProject(cwd))[0], cwd);
   const launch = agent.open(prompt);
   console.log(launch ? `Run this in a terminal to start in ${agent.label}:\n  ${commandLine(launch)}` : `Paste this into ${agent.label}:\n  ${prompt}`);
-  if (!Object.keys(state.agents ?? {}).length) console.log('Conquistador is not installed yet. Run conquistador in a terminal first.');
+  if (!Object.keys(state.agents ?? {}).length) console.log(`Conquistador is not installed yet. Run ${self} in a terminal first.`);
   return 0;
 }
 
@@ -158,16 +158,16 @@ export async function runStart(args = [], { cwd = process.cwd() } = {}) {
   const { ready, stopped } = await ensureInstalled(ui);
   if (stopped) { ui.outro('Nothing installed. Your agents are unchanged.'); return 1; }
   if (!ready.length) {
-    ui.note('Install one of these agents, then run conquistador again:\n  Claude Code, Codex, Cursor, GitHub Copilot CLI, Grok CLI\nOther ways to install: see INSTALL.md.', 'No agent found');
+    ui.note(`Install one of these agents, then run ${self} again:\n  Claude Code, Codex, Cursor, GitHub Copilot CLI, Grok CLI\nOther ways to use Conquistador: https://github.com/forsvn-labs/conquistador/blob/private-alpha/INSTALL.md`, 'No agent found');
     ui.outro('Nothing installed.');
     return 1;
   }
   if (wanted && !ready.some(agent => agent.id === wanted)) { ui.outro(`${AGENTS.find(agent => agent.id === wanted).label} is not installed or not found.`); return 1; }
-  if (args.includes('--no-open')) { ui.outro('Ready. Run conquistador to start a task.'); return 0; }
+  if (args.includes('--no-open')) { ui.outro(self === 'conquistador' ? 'Ready. Run conquistador to start a task, or type /conquistador in your agent.' : 'Ready. Type /conquistador in your agent to start a task.'); return 0; }
   const chosen = task || await pickTask(ui, cwd);
-  if (!chosen) { ui.cancel('Nothing opened. Run conquistador to start a task.'); return 130; }
+  if (!chosen) { ui.cancel(`Nothing opened. Run ${self} to start a task.`); return 130; }
   const agent = await pickAgent(ui, ready, wanted);
-  if (!agent) { ui.cancel('Nothing opened. Run conquistador to start a task.'); return 130; }
+  if (!agent) { ui.cancel(`Nothing opened. Run ${self} to start a task.`); return 130; }
   const prompt = promptFor(agent, chosen, cwd);
   const [{ createBrief }, { SPECIALISTS }] = await Promise.all([import('./brief.mjs'), import('./tour.mjs')]);
   const brief = createBrief(chosen, { force: true });

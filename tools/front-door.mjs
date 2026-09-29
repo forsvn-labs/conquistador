@@ -1,7 +1,7 @@
 // The front door: `conquistador` installs where needed and opens your agent with a task (tools/launch.mjs).
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
-import { AGENTS, applyAgent, copyPayload, detectAgents, home, pluginHome, readState, removePayload, version, writeState } from './agents.mjs';
+import { AGENTS, applyAgent, copyPayload, detectAgents, home, pluginHome, readState, removePayload, self, tilde, version, writeState } from './agents.mjs';
 
 const bold = text => (process.stdout.isTTY ? `\x1b[1m${text}\x1b[22m` : text);
 const dim = text => (process.stdout.isTTY ? `\x1b[2m${text}\x1b[22m` : text);
@@ -76,7 +76,7 @@ export async function runAdd(args) {
   let chosen = names.length ? detected.filter(agent => names.includes(agent.id)) : detected.filter(agent => agent.found);
   const missing = chosen.filter(agent => !agent.found && agent.id !== 'cursor');
   if (missing.length) { console.error(`Not found on PATH: ${missing.map(agent => agent.command).join(', ')}. Install that agent first.`); return 1; }
-  if (!chosen.length) { console.error('No supported agent found. Name one: conquistador add claude-code'); return 1; }
+  if (!chosen.length) { console.error(`No supported agent found. Name one: ${self} add claude-code`); return 1; }
   if (!flag(args, '--yes') && !dryRun) {
     console.error(`Would install into: ${chosen.map(agent => agent.label).join(', ')}.\nRe-run with --yes to install, or --dry-run to print the commands.`);
     return 2;
@@ -90,7 +90,7 @@ export async function runAdd(args) {
     // Adding an agent by name undoes an earlier `remove AGENT`.
     const state = readState();
     writeState({ ...state, removed: (state.removed ?? []).filter(id => !chosen.some(agent => agent.id === id)) });
-    console.log(`\nStart a task: ${bold('conquistador')}`);
+    console.log(self === 'conquistador' ? `\nStart a task: ${bold('conquistador')}, or type ${bold('/conquistador')} in your agent.` : `\nStart a task: type ${bold('/conquistador')} in your agent.`);
   }
   return failed ? 1 : 0;
 }
@@ -130,9 +130,9 @@ export function runAgents(args) {
   const state = readState();
   const rows = detectAgents().map(agent => ({ id: agent.id, agent: agent.label, found: agent.found, installed: Boolean(state.agents?.[agent.id]), version: state.agents?.[agent.id]?.version ?? null, how: agent.how }));
   if (flag(args, '--json')) { console.log(JSON.stringify({ version, pluginHome: pluginHome(), agents: rows }, null, 2)); return 0; }
-  console.log(`Conquistador ${version}  plugin copy: ${existsSync(pluginHome()) ? pluginHome() : 'not installed'}\n`);
+  console.log(`Conquistador ${version}  plugin copy: ${existsSync(pluginHome()) ? tilde(pluginHome()) : 'not installed'}\n`);
   for (const row of rows) console.log(`  ${row.installed ? '●' : row.found ? '○' : ' '} ${row.agent.padEnd(20)} ${row.installed ? `installed ${row.version}` : row.found ? 'found, not installed' : 'not found'}`);
-  console.log(`\n● installed  ○ available. Install with: conquistador add ${rows.filter(row => row.found && !row.installed).map(row => row.id).join(' ') || 'AGENT'}`);
+  console.log(`\n● installed  ○ available. Install with: ${self} add ${rows.filter(row => row.found && !row.installed).map(row => row.id).join(' ') || 'AGENT'}`);
   return 0;
 }
 

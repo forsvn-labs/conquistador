@@ -13,6 +13,13 @@ export const productRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..'
 export const version = JSON.parse(readFileSync(join(productRoot, 'package.json'), 'utf8')).version;
 export const home = () => process.env.CONQUISTADOR_HOME || join(homedir(), '.conquistador');
 export const pluginHome = () => join(home(), 'plugin');
+// Messages show paths under the home folder as ~/…
+export const tilde = path => (path.startsWith(`${homedir()}/`) ? `~${path.slice(homedir().length)}` : path);
+// The command that runs this copy again. `npx` leaves no `conquistador` command behind.
+const npxSpec = process.env.npm_config_package;
+export const self = /[\\/]_npx[\\/]/.test(productRoot)
+  ? (npxSpec && !/^@forsvn\/conquistador(?:@|$)/.test(npxSpec) ? `npx -y --package=${/^[\w./:@#+=-]+$/.test(npxSpec) ? npxSpec : `'${npxSpec}'`} conquistador` : 'npx @forsvn/conquistador')
+  : 'conquistador';
 const MARKETPLACE = 'conquistador';
 const PLUGIN = `conquistador@${MARKETPLACE}`;
 
@@ -141,7 +148,7 @@ function alive(pid) {
 // The old copy stays in place until the new one is complete.
 export function copyPayload(destination, { source = productRoot } = {}) {
   const marker = join(destination, '.conquistador-owned.json');
-  if (existsSync(destination) && !existsSync(marker)) throw Error(`${destination} exists and was not created by Conquistador. Move or delete it, then run conquistador again.`);
+  if (existsSync(destination) && !existsSync(marker)) throw Error(`${tilde(destination)} exists and was not created by Conquistador. Move or delete it, then run ${self} again.`);
   mkdirSync(dirname(destination), { recursive: true });
   removeStale(destination);
   const staging = `${destination}.tmp-${process.pid}`;
@@ -154,7 +161,7 @@ export function copyPayload(destination, { source = productRoot } = {}) {
       cpSync(from, join(staging, item), { recursive: true, dereference: false, filter: path => !skipped.test(relative(from, path)) });
     }
     const missing = missingPayload(staging);
-    if (missing.length) throw Error(`The Conquistador package at ${source} is incomplete (missing ${missing.join(', ')}). Reinstall it, then run conquistador again.`);
+    if (missing.length) throw Error(`The Conquistador package at ${tilde(source)} is incomplete (missing ${missing.join(', ')}). Reinstall it, then run ${self} again.`);
     writeFileSync(join(staging, '.conquistador-owned.json'), `${JSON.stringify({ version, source, copiedAt: new Date().toISOString() }, null, 2)}\n`);
   } catch (error) {
     rmSync(staging, { recursive: true, force: true });
@@ -201,7 +208,7 @@ function applySteps(agent, action, { source, dryRun = false, log = () => {} } = 
   for (const item of steps) {
     if (item.copy) {
       const target = item.copy();
-      log(`copy plugin → ${target}`);
+      log(`copy plugin → ${tilde(target)}`);
       if (!dryRun) copyPayload(target, { source });
       done.push(`copied to ${target}`);
       continue;
