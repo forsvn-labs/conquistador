@@ -54,7 +54,7 @@ jobs:
           else
             echo "published=false" >> "$GITHUB_OUTPUT"
           fi
-          echo "file=release/${file}" >> "$GITHUB_OUTPUT"
+          echo "file=./release/${file}" >> "$GITHUB_OUTPUT"
       - name: Publish with provenance
         if: steps.check.outputs.published == 'false'
         run: |
