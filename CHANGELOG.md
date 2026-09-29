@@ -6,8 +6,17 @@ output, human acceptance and rights disposition require separate evidence.
 
 ## 2026-09-30, 0.2.1 public alpha
 
-- Released at [`v0.2.1`](https://github.com/forsvn-labs/conquistador/releases/tag/v0.2.1) and
-  published as [`@forsvn/conquistador@0.2.1`](https://www.npmjs.com/package/@forsvn/conquistador).
+- Released at [`v0.2.1`](https://github.com/forsvn-labs/conquistador/releases/tag/v0.2.1) from
+  merged `private-alpha` commit `99d5b4360c30d99ffe64bfea097e51f56de568ec` through
+  [#22](https://github.com/forsvn-labs/conquistador/pull/22), and published as
+  [`@forsvn/conquistador@0.2.1`](https://www.npmjs.com/package/@forsvn/conquistador) (`latest`)
+  by [run 36605964414](https://github.com/forsvn-labs/conquistador/actions/runs/36605964414).
+  The registry shasum `3c56d17` matches the release tarball, and `npm audit signatures` verifies
+  its SLSA provenance attestation.
+- The first release run failed before any registry call: npm read `release/NAME.tgz` as a GitHub
+  `owner/repo` name. [#23](https://github.com/forsvn-labs/conquistador/pull/23) passes a `./` path.
+- Verified from the registry: a clean install reports `0.2.1`, and `conquistador update` moves a
+  0.2.0 install in an isolated home to 0.2.1 for all five agents.
 - First release published to npm from CI: the release workflow published the tarball from the
   GitHub release through trusted publishing, with provenance. The package now requires 2FA
   and disallows tokens, so only `publish.yml` can publish it.
