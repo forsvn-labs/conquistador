@@ -21,7 +21,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       TAG: ${{ github.event.release.tag_name || inputs.tag }}
-      PRERELEASE: ${{ github.event.release.prerelease || 'false' }}
       GH_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/checkout@v4
@@ -60,7 +59,7 @@ jobs:
         if: steps.check.outputs.published == 'false'
         run: |
           dist_tag=latest
-          if [ "$PRERELEASE" = "true" ]; then dist_tag=next; fi
+          if [ "$(gh release view "$TAG" --json isPrerelease --jq .isPrerelease)" = "true" ]; then dist_tag=next; fi
           npm publish "${{ steps.check.outputs.file }}" --access public --provenance --tag "$dist_tag"
       - name: Check trusted publishing when the version already exists
         if: steps.check.outputs.published == 'true'
