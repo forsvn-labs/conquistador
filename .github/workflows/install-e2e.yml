@@ -1,0 +1,66 @@
+name: Install E2E on Linux and Windows
+# Runs tools/e2e/package-install.mjs with the real agent CLIs, in isolated homes, with no model
+# calls. The report for each platform is uploaded as an artifact.
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - tools/agents.mjs
+      - tools/front-door.mjs
+      - tools/launch.mjs
+      - tools/self-update.mjs
+      - tools/e2e/package-install.mjs
+      - tools/e2e/agent-first.exp
+      - runtime/bin/**
+      - package.json
+      - .github/workflows/install-e2e.yml
+permissions:
+  contents: read
+jobs:
+  install-e2e:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Install the agent CLIs (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq expect
+          npm install -g @anthropic-ai/claude-code @openai/codex @github/copilot
+          curl -fsS https://cursor.com/install | bash
+          curl -fsSL https://x.ai/cli/install.sh | bash
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+          echo "$HOME/.grok/bin" >> "$GITHUB_PATH"
+      - name: Install the agent CLIs (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          npm install -g @anthropic-ai/claude-code @openai/codex @github/copilot
+          irm 'https://cursor.com/install?win32=true' | iex
+          irm https://x.ai/cli/install.ps1 | iex
+          Get-ChildItem -Path $env:USERPROFILE, $env:LOCALAPPDATA -Recurse -Depth 5 -Include grok.exe, grok.cmd, cursor-agent.exe, cursor-agent.cmd, cursor-agent.ps1 -ErrorAction SilentlyContinue |
+            ForEach-Object { $_.DirectoryName } | Sort-Object -Unique | Tee-Object -Variable found | Add-Content $env:GITHUB_PATH
+          "Added to PATH: $found"
+      - name: Show the agents
+        shell: bash
+        run: |
+          for c in claude codex cursor-agent copilot grok; do
+            echo "$c: $(command -v "$c" || echo missing) $("$c" --version 2>&1 | head -1)"
+          done
+      - run: npm run bootstrap
+      - name: Run the install E2E
+        shell: bash
+        run: node tools/e2e/package-install.mjs "dist/e2e/package-install-${{ runner.os }}"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: package-install-${{ runner.os }}
+          path: dist/e2e/package-install-${{ runner.os }}
