@@ -12,7 +12,7 @@ Marketing and growth playbooks for your AI agents.
 
   conquistador           Pick a task and open your agent with it (installs on first run)
   conquistador "TASK"    Open your agent with this task
-  conquistador update    Update to the latest version
+  conquistador update    Reinstall this version into your agents
   conquistador remove    Uninstall
 
 In your agent: /conquistador [TASK]
@@ -51,9 +51,10 @@ Turn hooks off: CONQUISTADOR_HOOKS=off. Send instead of pre-fill in Claude Code:
 const flag = (args, name) => args.includes(name);
 const positional = args => args.filter(arg => !arg.startsWith('-'));
 
+// Returns null after it reports the error: a bad copy must never reach an agent (I2).
 function stageSource({ dryRun }) {
   const target = pluginHome();
-  if (!dryRun) copyPayload(target);
+  try { if (!dryRun) copyPayload(target); } catch (error) { console.error(`${error.message}\nNothing installed. Your agents are unchanged.`); return null; }
   return target;
 }
 
@@ -82,6 +83,7 @@ export async function runAdd(args) {
   }
   console.log(`Installing Conquistador ${version}${dryRun ? ' (dry run)' : ''}`);
   const source = stageSource({ dryRun });
+  if (!source) return 1;
   const results = chosen.map(agent => ({ agent, result: applyAgent(agent, 'install', { source, dryRun, log: line => console.log(dim(`  $ ${line}`)) }) }));
   const failed = report(results);
   if (!dryRun) {
@@ -99,6 +101,7 @@ export function runUpdate(args) {
   const ids = Object.keys(state.agents ?? {});
   if (!ids.length) { console.log('Conquistador is not installed into any agent yet. Run: conquistador'); return 1; }
   const source = stageSource({ dryRun });
+  if (!source) return 1;
   const results = AGENTS.filter(agent => ids.includes(agent.id)).map(agent => ({ agent, result: applyAgent(agent, 'update', { source, dryRun, log: line => console.log(dim(`  $ ${line}`)) }) }));
   const failed = report(results);
   console.log(failed ? '' : `Updated to ${version}. Start a new agent session to load it.`);

@@ -5,7 +5,7 @@ import { existsSync, readdirSync } from 'node:fs';
 import { homedir } from 'node:os';
 import { resolve } from 'node:path';
 import { START_CONTEXT } from './brief.mjs';
-import { AGENTS, applyAgent, copyPayload, detectAgents, pluginHome, readState, version, writeState } from './agents.mjs';
+import { AGENTS, applyAgent, copyPayload, detectAgents, payloadCurrent, pluginHome, readState, version, writeState } from './agents.mjs';
 
 // Tasks that fit any product. The first one is the default.
 export const STARTS = Object.freeze([
@@ -35,10 +35,12 @@ const quote = value => (/^[\w./=:-]+$/.test(value) ? value : `'${value.replaceAl
 export const commandLine = launch => [launch.command, ...launch.args].map(quote).join(' ');
 
 // Found agents that do not have the current version yet, except ones the user removed by name.
+// A missing or broken plugin copy puts every found agent back on the list (I6).
 function pending(state) {
   const removed = state.removed ?? [];
   const found = detectAgents().filter(agent => agent.found && !removed.includes(agent.id));
-  return { found, todo: found.filter(agent => state.agents?.[agent.id]?.version !== version) };
+  const broken = !payloadCurrent(pluginHome());
+  return { found, todo: found.filter(agent => broken || state.agents?.[agent.id]?.version !== version || agent.healthy?.() === false) };
 }
 
 async function ensureInstalled(ui) {
@@ -48,11 +50,15 @@ async function ensureInstalled(ui) {
   if (!todo.length) return { ready: found, failed: [] };
   const spin = ui.spinner();
   spin.start(`Installing into ${todo.map(agent => agent.label).join(', ')}`);
-  copyPayload(pluginHome());
+  try { copyPayload(pluginHome()); } catch (error) {
+    spin.stop('Install failed', 2);
+    ui.log.error(error.message);
+    return { ready: [], failed: todo.map(agent => ({ agent, result: { ok: false, error: error.message } })), stopped: true };
+  }
   const results = todo.map(agent => ({ agent, result: applyAgent(agent, state.agents?.[agent.id] ? 'update' : 'install', { source: pluginHome() }) }));
   const failed = results.filter(item => !item.result.ok);
   const done = results.filter(item => item.result.ok).map(item => item.agent);
-  spin.stop(done.length ? `Installed into ${done.map(agent => agent.label).join(', ')}` : 'Install failed');
+  spin.stop(done.length ? `Installed into ${done.map(agent => agent.label).join(', ')}` : 'Install failed', done.length ? 0 : 2);
   for (const { agent, result } of failed) ui.log.error(`${agent.label}: ${result.error}\n  Retry: conquistador add ${agent.id}`);
   const ids = new Set(failed.map(item => item.agent.id));
   return { ready: found.filter(agent => !ids.has(agent.id)), failed };
@@ -149,7 +155,8 @@ export async function runStart(args = [], { cwd = process.cwd() } = {}) {
   if (!(process.stdin.isTTY && process.stdout.isTTY)) return printOnly(task, wanted, cwd);
   const ui = await import('./vendor/clack.mjs');
   ui.intro(`Conquistador ${version}`);
-  const { ready } = await ensureInstalled(ui);
+  const { ready, stopped } = await ensureInstalled(ui);
+  if (stopped) { ui.outro('Nothing installed. Your agents are unchanged.'); return 1; }
   if (!ready.length) {
     ui.note('Install one of these agents, then run conquistador again:\n  Claude Code, Codex, Cursor, GitHub Copilot CLI, Grok CLI\nOther ways to install: see INSTALL.md.', 'No agent found');
     ui.outro('Nothing installed.');

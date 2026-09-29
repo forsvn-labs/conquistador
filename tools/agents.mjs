@@ -3,9 +3,9 @@
 // (~/.conquistador/plugin). Nothing here edits an agent's settings files directly, except the
 // documented Cursor local-plugin folder, which is a plain copy.
 import { spawnSync } from 'node:child_process';
-import { cpSync, existsSync, lstatSync, mkdirSync, readFileSync, renameSync, rmSync, writeFileSync } from 'node:fs';
+import { cpSync, existsSync, lstatSync, mkdirSync, readdirSync, readFileSync, renameSync, rmSync, writeFileSync } from 'node:fs';
 import { homedir } from 'node:os';
-import { delimiter, dirname, join, resolve } from 'node:path';
+import { basename, delimiter, dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { briefFiles } from './operator-package.mjs';
 
@@ -65,6 +65,8 @@ export const AGENTS = [
     update: () => [{ copy: cursorPlugins }],
     remove: () => [{ remove: cursorPlugins }],
     installed: () => existsSync(join(cursorPlugins(), '.cursor-plugin', 'plugin.json')),
+    // Cursor reads its own copy, so that copy must be current too.
+    healthy: () => payloadCurrent(cursorPlugins()),
     // Cursor the editor has no terminal launch. Without cursor-agent, the prompt goes to the clipboard.
     open: prompt => (onPath('cursor-agent') ? { command: 'cursor-agent', args: [prompt], sends: true } : null),
   },
@@ -107,25 +109,68 @@ export function detectAgents() {
   return AGENTS.map(agent => ({ ...agent, found: [agent.command, ...(agent.alsoDetect ?? [])].some(onPath) || (agent.id === 'cursor' && existsSync(join(homedir(), '.cursor'))) }));
 }
 
+// Files every agent's plugin manager needs. A copy without them is never registered (I2).
+export const requiredPayload = [
+  '.claude-plugin/plugin.json', '.claude-plugin/marketplace.json', '.codex-plugin/plugin.json', '.cursor-plugin/plugin.json',
+  'plugin.json', 'mcp.json', 'mcp/server.mjs', 'hooks/conquistador-hook.mjs', 'skills/conquistador/SKILL.md', 'tools/brief.mjs',
+];
+export const missingPayload = folder => requiredPayload.filter(item => !existsSync(join(folder, item)));
+
+// Skip dependency and Git folders inside the payload. Test the path relative to the payload item:
+// the package itself lives under node_modules when npm or npx installs it (I1).
+const skipped = /(?:^|[\\/])(?:node_modules|\.git)(?:[\\/]|$)/;
+
+// Remove staging and backup folders that an earlier crashed run left next to the destination (I4).
+function removeStale(destination) {
+  const prefix = `${basename(destination)}.`;
+  let names = [];
+  try { names = readdirSync(dirname(destination)); } catch { return; }
+  for (const name of names) {
+    const pid = /^(?:tmp|old)-(\d+)$/.exec(name.startsWith(prefix) ? name.slice(prefix.length) : '')?.[1];
+    if (pid && !alive(Number(pid))) rmSync(join(dirname(destination), name), { recursive: true, force: true });
+  }
+}
+
+// Another run that is still working owns its folders.
+function alive(pid) {
+  if (pid === process.pid) return false;
+  try { process.kill(pid, 0); return true; } catch (error) { return error.code === 'EPERM'; }
+}
+
 // Copy the plugin payload to a folder atomically. The folder is owned by Conquistador.
+// The old copy stays in place until the new one is complete.
 export function copyPayload(destination, { source = productRoot } = {}) {
   const marker = join(destination, '.conquistador-owned.json');
-  if (existsSync(destination) && !existsSync(marker)) throw Error(`${destination} exists and was not created by Conquistador. Move it, then retry.`);
-  const staging = `${destination}.tmp-${process.pid}`;
-  rmSync(staging, { recursive: true, force: true });
-  for (const item of pluginPayload) {
-    const from = join(source, item);
-    if (!existsSync(from)) continue;
-    mkdirSync(dirname(join(staging, item)), { recursive: true });
-    cpSync(from, join(staging, item), { recursive: true, dereference: false, filter: path => !/(?:^|\/)(?:node_modules|\.git)(?:\/|$)/.test(path) });
-  }
-  writeFileSync(join(staging, '.conquistador-owned.json'), `${JSON.stringify({ version, source, copiedAt: new Date().toISOString() }, null, 2)}\n`);
-  const previous = `${destination}.old-${process.pid}`;
+  if (existsSync(destination) && !existsSync(marker)) throw Error(`${destination} exists and was not created by Conquistador. Move or delete it, then run conquistador again.`);
   mkdirSync(dirname(destination), { recursive: true });
+  removeStale(destination);
+  const staging = `${destination}.tmp-${process.pid}`;
+  mkdirSync(staging, { recursive: true });
+  try {
+    for (const item of pluginPayload) {
+      const from = join(source, item);
+      if (!existsSync(from)) continue;
+      mkdirSync(dirname(join(staging, item)), { recursive: true });
+      cpSync(from, join(staging, item), { recursive: true, dereference: false, filter: path => !skipped.test(relative(from, path)) });
+    }
+    const missing = missingPayload(staging);
+    if (missing.length) throw Error(`The Conquistador package at ${source} is incomplete (missing ${missing.join(', ')}). Reinstall it, then run conquistador again.`);
+    writeFileSync(join(staging, '.conquistador-owned.json'), `${JSON.stringify({ version, source, copiedAt: new Date().toISOString() }, null, 2)}\n`);
+  } catch (error) {
+    rmSync(staging, { recursive: true, force: true });
+    throw error;
+  }
+  const previous = `${destination}.old-${process.pid}`;
   if (existsSync(destination)) renameSync(destination, previous);
-  try { renameSync(staging, destination); } catch (error) { if (existsSync(previous)) renameSync(previous, destination); throw error; }
+  try { renameSync(staging, destination); } catch (error) { if (existsSync(previous)) renameSync(previous, destination); rmSync(staging, { recursive: true, force: true }); throw error; }
   rmSync(previous, { recursive: true, force: true });
   return destination;
+}
+
+// A copy is current when it is complete and was made from this version (I6).
+export function payloadCurrent(folder) {
+  if (missingPayload(folder).length) return false;
+  try { return JSON.parse(readFileSync(join(folder, '.conquistador-owned.json'), 'utf8')).version === version; } catch { return false; }
 }
 
 export function removePayload(destination) {
@@ -144,7 +189,12 @@ export function writeState(state) {
 }
 
 // Run one agent's steps. Every command is shown; nothing runs in dry-run mode.
-export function applyAgent(agent, action, { source, dryRun = false, log = () => {} } = {}) {
+// An error in one agent is returned, never thrown, so the other agents still install (I3).
+export function applyAgent(agent, action, options = {}) {
+  try { return applySteps(agent, action, options); } catch (error) { return { ok: false, error: error.message }; }
+}
+
+function applySteps(agent, action, { source, dryRun = false, log = () => {} } = {}) {
   const steps = agent[action](source);
   if (!dryRun && action !== 'remove') agent.prepare?.();
   const done = [];
