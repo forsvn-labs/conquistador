@@ -635,6 +635,44 @@ clone with 154 commits, 13 branches, 17 pull-request refs, 21 tags, and 16 relea
      private. These lines change with the public release.
 - Commit author email: `levinhhungg@gmail.com` on all 137 local commits. It becomes public.
 
+## Part 7: Linux and Windows install verification (2026-09-30)
+
+The install E2E (`tools/e2e/package-install.mjs`) has run only on macOS. This part runs it on
+Linux and Windows GitHub Actions runners with the real agent CLIs installed. I wrote this failure
+list before any code change.
+
+### How the product could fail
+
+| ID | Platform | Failure |
+| --- | --- | --- |
+| W1 | Windows | Agents installed through npm (Codex, Copilot CLI, maybe Claude Code) are `.cmd` shims. `spawnSync` without a shell cannot start them (Node refuses `.cmd` without a shell), so every plugin step fails although the agent is found. |
+| W2 | Windows | With a shell, an argument with a space (a user folder such as `C:\Users\Jane Doe`) splits into two, and `marketplace add` gets a wrong path. |
+| W3 | Windows | An agent's plugin manager rejects a local marketplace path such as `C:\...`, or reads it as a URL or `owner/repo`. |
+| W4 | Windows | `tilde()` looks for `homedir()` followed by `/`, so messages show full paths. Cosmetic. |
+| W5 | Windows | Replacing the plugin copy by rename fails with `EPERM` or `EBUSY` when a file in it is open (antivirus, a running MCP server). |
+| W6 | Windows | A Git install with `core.autocrlf=true` writes CRLF files. Their hashes then differ from `release/completeness.json`, and the doctor reports changed files. The npm package is not affected (fixed tarball bytes). |
+| W7 | Windows | Hook and MCP commands that hold a plugin path with spaces break in `cmd.exe` quoting. |
+| W8 | Windows | Cursor Agent or Grok CLI has no Windows build, so those agents cannot be covered there. |
+| L1 | Linux | A path or import whose letter case differs from the file name works on macOS (case-insensitive) and fails on Linux. |
+| L2 | Linux | The "copy prompt" fallback needs `xclip`, which is often missing. |
+| L3 | Linux | An agent keeps plugin state outside `HOME` or `XDG_CONFIG_HOME`, so test homes are not isolated. |
+
+### How the test itself could fail (not product bugs)
+
+| ID | Failure |
+| --- | --- |
+| H1 | It finds tools with `/bin/sh -c command -v`, which does not exist on Windows. |
+| H2 | It joins `PATH` with `:` and adds `/usr/bin` and `/bin`. Windows uses `;` and needs `SystemRoot`. |
+| H3 | It expects `prefix/bin/conquistador` and `prefix/lib/node_modules`. On Windows npm writes `prefix\conquistador.cmd` and `prefix\node_modules`. |
+| H4 | It isolates agents with `HOME`. On Windows, `os.homedir()` and most CLIs read `USERPROFILE`, `APPDATA`, and `LOCALAPPDATA`. |
+| H5 | `script -q /dev/null CMD` is the BSD form. util-linux needs `script -q -c CMD /dev/null`. Windows has no `script` or `expect`, so the terminal checks (I6, I3 start flow, S1) cannot run there. |
+| H6 | `git+file://${root}` with a Windows path is not a valid URL. |
+| H7 | It checks for `/node_modules/` with forward slashes. |
+| H8 | It starts `npm`, `npx`, and the agents without a shell (the same cause as W1). |
+
+A check that cannot run on a platform is reported as not run, with the reason. It never counts
+as passed.
+
 ## Appendix: unit-test prune audit (2026-09-25)
 
 Audited all 92 test files against the installed-project E2E
