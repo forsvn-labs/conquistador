@@ -4,7 +4,6 @@
 
 1. Run `tools/e2e/package-install.mjs` on Linux and Windows before a release claims them.
 2. List the plugin in the agent marketplaces, then check each listing installs 0.2.x.
-3. Ship 0.2.1 through the release workflow: the first publish from CI with provenance.
 
 ## Next acceptance
 
