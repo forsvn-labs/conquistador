@@ -591,3 +591,26 @@ The E2E must cover each case marked E2E.
 | U11 | The new package is incomplete | The new version's own check (I2) stops before any agent. The last good plugin copy stays | Existing (I2) |
 | U12 | No agent is installed yet | Keep the current message. Do not ask the registry | Existing |
 | U13 | The user set a custom registry (`npm_config_registry`, `.npmrc`) | Use it, for both the version check and the install | E2E (the E2E uses a local registry) |
+
+### Results (part 5)
+
+Verified on macOS, 2026-09-29, at `42466f0`, with real Claude Code, Codex, Cursor Agent, Copilot
+CLI, and Grok CLI in isolated homes. No model was called.
+
+- `node tools/e2e/update-latest.mjs`: 21 of 21. The E2E starts Verdaccio 6 on `127.0.0.1` with
+  its own storage. Other packages come from npmjs.org through it. It packs this version and a
+  patch bump from a clean clone and publishes them in turn. Every case in the table above that is
+  marked E2E passes. Artifacts: `dist/e2e/update-latest/report.json`, `commands.log`, and
+  `registry.log`.
+- Negative control: `CONQUISTADOR_E2E_REF=b560488 node tools/e2e/update-latest.mjs` fails 10 of 21
+  checks. The old `update` prints "Updated to 0.0.17" in every case.
+- `npm test`: 764 of 764. `node tools/e2e/package-install.mjs`: 28 of 28.
+- The real registry answers 404 for `@forsvn/conquistador` today, so `update` reinstalls the
+  installed version (U3), as before.
+
+The E2E packs copies without `"private": true`, because npm refuses to publish a private
+package. The source keeps the guard until the first public publication.
+
+Not verified: Windows (`npm.cmd`, `%APPDATA%\npm` prefix) and Linux, and a user with a custom
+global prefix that needs `sudo`. On such a machine, U6 applies: npm's error and the retry
+command.

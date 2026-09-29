@@ -4,6 +4,18 @@ No public release is claimed. See [VERSIONS.md](VERSIONS.md) for independent pro
 versions. Verification establishes the stated local scope; native host behavior, useful model
 output, human acceptance and rights disposition require separate evidence.
 
+## Unreleased
+
+- **`conquistador update` gets the latest version.** It asks the npm registry you use for
+  `@forsvn/conquistador@latest`. A newer version installs the same way as the running copy, into
+  the same npm prefix or through `npx`, and then registers itself with every agent. With no newer
+  version, no registry answer, or a source checkout, it registers the installed version again.
+  It never downgrades. When npm cannot install, it shows npm's error and the retry command, and
+  the installed version stays.
+- `tools/e2e/update-latest.mjs` tests this against a local Verdaccio registry with two packed
+  versions and five real agents: 21 of 21. The same E2E on `b560488` (before the change) fails
+  10 checks. `npm test` 764 of 764. `tools/e2e/package-install.mjs` 28 of 28.
+
 ## 2026-09-29, 0.0.17 private alpha candidate (not tagged)
 
 - **Fix: installs from npm gave every agent an empty plugin.** 0.0.16 skipped every file when the
