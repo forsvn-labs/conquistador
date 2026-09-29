@@ -13,7 +13,7 @@ set timeout 60
 set root [file dirname [file dirname [file dirname [file normalize [info script]]]]]
 set out $root/dist/e2e/agent-first
 file mkdir $out
-set home [exec mktemp -d -t conquistador-e2e-agent-first]
+set home [exec mktemp -d -t conquistador-e2e-agent-first.XXXXXX]
 foreach {name value} [list HOME $home CLAUDE_CONFIG_DIR $home/.claude CODEX_HOME $home/.codex CONQUISTADOR_HOME $home/.conquistador CURSOR_HOME $home/.cursor TERM xterm-256color] { set env($name) $value }
 foreach name {CONQUISTADOR_PLAYBOOKS CLAUDECODE CLAUDE_CODE_CHILD_SESSION CLAUDE_CODE_ENTRYPOINT} { if {[info exists env($name)]} { unset env($name) } }
 # A user who has used Claude Code before: onboarding done. The folder is not trusted yet.

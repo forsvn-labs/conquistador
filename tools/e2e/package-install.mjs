@@ -11,9 +11,9 @@
 import { spawnSync } from 'node:child_process';
 import { cpSync, existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, realpathSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { dirname, join, resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
-import { requiredPayload } from '../agents.mjs';
+import { delimiter, dirname, join, resolve } from 'node:path';
+import { fileURLToPath, pathToFileURL } from 'node:url';
+import { onPath, requiredPayload } from '../agents.mjs';
 
 const root = resolve(fileURLToPath(new URL('../../', import.meta.url)));
 const out = resolve(process.argv[2] ?? join(root, 'dist/e2e/package-install'));
@@ -22,7 +22,10 @@ const version = JSON.parse(readFileSync(join(root, 'package.json'), 'utf8')).ver
 const sha = spawnSync('git', ['-C', root, 'rev-parse', `${process.env.CONQUISTADOR_E2E_REF || 'HEAD'}^{commit}`], { encoding: 'utf8' }).stdout.trim();
 const dirty = spawnSync('git', ['-C', root, 'status', '--porcelain'], { encoding: 'utf8' }).stdout.trim() !== '';
 const work = realpathSync(mkdtempSync(join(tmpdir(), 'conquistador-e2e-package-')));
-const which = command => spawnSync('/bin/sh', ['-c', `command -v ${command}`], { encoding: 'utf8' }).stdout.trim();
+const windows = process.platform === 'win32';
+const which = command => onPath(command) ?? '';
+// System folders a test PATH keeps, so git, sh, and cmd still resolve.
+const systemDirs = windows ? [join(process.env.SystemRoot ?? 'C:\\Windows', 'System32'), process.env.SystemRoot ?? 'C:\\Windows'] : ['/usr/bin', '/bin'];
 const toolDirs = [...new Set(['claude', 'codex', 'cursor-agent', 'copilot', 'grok', 'git', 'npm', 'expect', 'script'].map(which).filter(Boolean).map(dirname))];
 
 const checks = [];
@@ -31,9 +34,17 @@ function check(id, name, ok, detail = '') {
   checks.push({ id, name, ok: Boolean(ok), detail });
   console.log(`${ok ? '✓' : '✗'} ${id} ${name}${detail && !ok ? `  ${detail}` : ''}`);
 }
+// A check this platform cannot run. It is reported and never counts as passed.
+function notRun(id, name, reason) {
+  checks.push({ id, name, ok: null, notRun: reason });
+  console.log(`- ${id} ${name}  (not run: ${reason})`);
+}
+// Windows starts .cmd shims (npm, npx, most agent CLIs) only through cmd.exe.
+const quote = value => (/^[\w.:\\/@=+-]+$/.test(value) ? value : `"${value.replace(/"/g, '""')}"`);
 function run(command, args, { env, cwd = work, timeout = 600_000 } = {}) {
   const started = Date.now();
-  const result = spawnSync(command, args, { env, cwd, encoding: 'utf8', timeout, stdio: ['ignore', 'pipe', 'pipe'] });
+  const shell = windows && command !== process.execPath;
+  const result = spawnSync(shell ? quote(command) : command, shell ? args.map(quote) : args, { env, cwd, encoding: 'utf8', timeout, stdio: ['ignore', 'pipe', 'pipe'], shell });
   const output = `${result.stdout ?? ''}${result.stderr ?? ''}`;
   log.push(`$ ${command} ${args.join(' ')}\n${output.trim()}\n[exit ${result.status}, ${Date.now() - started} ms]\n`);
   return { status: result.status, output, stdout: result.stdout ?? '', ms: Date.now() - started };
@@ -43,7 +54,12 @@ function isolated(name, prefixBin) {
   mkdirSync(join(home, '.cursor'), { recursive: true });
   mkdirSync(join(home, 'acme'), { recursive: true });
   writeFileSync(join(home, 'acme', 'README.md'), '# Acme Invoices\n\nInvoicing for freelance designers.\n');
-  const env = { ...process.env, HOME: home, XDG_CONFIG_HOME: join(home, '.config'), CLAUDE_CONFIG_DIR: join(home, '.claude'), CODEX_HOME: join(home, '.codex'), CONQUISTADOR_HOME: join(home, '.conquistador'), CURSOR_HOME: join(home, '.cursor'), TERM: 'xterm-256color', PATH: [prefixBin, ...toolDirs, dirname(process.execPath), '/usr/bin', '/bin'].filter(Boolean).join(':') };
+  const env = { ...process.env, HOME: home, XDG_CONFIG_HOME: join(home, '.config'), CLAUDE_CONFIG_DIR: join(home, '.claude'), CODEX_HOME: join(home, '.codex'), CONQUISTADOR_HOME: join(home, '.conquistador'), CURSOR_HOME: join(home, '.cursor'), TERM: 'xterm-256color', PATH: [prefixBin, ...toolDirs, dirname(process.execPath), ...systemDirs].filter(Boolean).join(delimiter) };
+  // Windows reads the home folder from USERPROFILE and app data from APPDATA and LOCALAPPDATA.
+  if (windows) Object.assign(env, { USERPROFILE: home, APPDATA: join(home, 'AppData', 'Roaming'), LOCALAPPDATA: join(home, 'AppData', 'Local') });
+  if (windows) for (const name of ['APPDATA', 'LOCALAPPDATA']) mkdirSync(env[name], { recursive: true });
+  // PATH may be spelled Path on Windows; keep one entry.
+  if (windows) for (const name of Object.keys(env)) if (name !== 'PATH' && name.toUpperCase() === 'PATH') delete env[name];
   for (const name of ['CONQUISTADOR_PLAYBOOKS', 'CONQUISTADOR_DEBUG', 'CLAUDECODE', 'CLAUDE_CODE_CHILD_SESSION', 'CLAUDE_CODE_ENTRYPOINT', 'npm_config_prefix']) delete env[name];
   const plugin = join(home, '.conquistador', 'plugin');
   const cursor = join(home, '.cursor', 'plugins', 'local', 'conquistador');
@@ -63,7 +79,11 @@ const all = (observed, value) => Object.values(observed).length > 0 && Object.va
 const deadPid = () => { for (let pid = 999_999; pid > 900_000; pid -= 1) { try { process.kill(pid, 0); } catch (error) { if (error.code === 'ESRCH') return pid; } } return 999_999; };
 const marker = folder => { try { return JSON.parse(readFileSync(join(folder, '.conquistador-owned.json'), 'utf8')); } catch { return null; } };
 // A pseudo-terminal, so the start flow runs its interactive path. `--no-open` asks no questions.
-const tty = (cli, args, box) => run('script', ['-q', '/dev/null', cli, ...args], { env: box.env, cwd: join(box.home, 'acme') });
+// macOS has BSD script, Linux has util-linux script, and Windows has neither.
+const tty = (cli, args, box) => (process.platform === 'darwin'
+  ? run('script', ['-q', '/dev/null', cli, ...args], { env: box.env, cwd: join(box.home, 'acme') })
+  : run('script', ['-q', '-e', '-c', [cli, ...args].map(value => `'${value.replace(/'/g, `'\\''`)}'`).join(' '), '/dev/null'], { env: box.env, cwd: join(box.home, 'acme') }));
+const hasTty = !windows && Boolean(which('script'));
 
 // Answers MCP initialize and tools/list from the stable plugin copy, with no npm package present.
 function mcpAnswers(plugin, env) {
@@ -95,12 +115,15 @@ console.log(`Conquistador ${version} at ${sha.slice(0, 7)}${dirty ? ' (uncommitt
 
 // Route A: the documented Git install into a durable npm prefix.
 const prefix = join(work, 'prefix');
-const a = isolated('home-a', join(prefix, 'bin'));
-const cli = join(prefix, 'bin', 'conquistador');
-const install = run('npm', ['install', '--global', '--ignore-scripts', '--install-links', '--prefix', prefix, '--cache', join(work, 'npm-cache-a'), `git+file://${root}#${sha}`], { env: a.env });
+// npm puts global commands in PREFIX/bin and packages in PREFIX/lib/node_modules, except on
+// Windows: PREFIX\\conquistador.cmd and PREFIX\\node_modules.
+const prefixBin = windows ? prefix : join(prefix, 'bin');
+const a = isolated('home-a', prefixBin);
+const cli = windows ? join(prefix, 'conquistador.cmd') : join(prefix, 'bin', 'conquistador');
+const install = run('npm', ['install', '--global', '--ignore-scripts', '--install-links', '--prefix', prefix, '--cache', join(work, 'npm-cache-a'), `git+${pathToFileURL(root).href}#${sha}`], { env: a.env });
 check('A0', `npm install -g from Git (${Math.round(install.ms / 1000)} s)`, install.status === 0 && existsSync(cli), install.output.trim().split('\n').slice(-3).join(' '));
-const packageDir = join(prefix, 'lib', 'node_modules', '@forsvn', 'conquistador');
-check('A0', 'the installed package lives under node_modules', packageDir.includes('/node_modules/') && existsSync(join(packageDir, 'package.json')));
+const packageDir = join(prefix, ...(windows ? [] : ['lib']), 'node_modules', '@forsvn', 'conquistador');
+check('A0', 'the installed package lives under node_modules', /[\\/]node_modules[\\/]/.test(packageDir) && existsSync(join(packageDir, 'package.json')));
 check('A0', `the installed CLI reports ${version}`, run(cli, ['--version'], { env: a.env }).output.trim() === version);
 const agents = JSON.parse(run(cli, ['agents', '--json'], { env: a.env }).stdout || '{"agents":[]}').agents.filter(agent => agent.found).map(agent => agent.id);
 check('A0', `agents found: ${agents.join(', ') || 'none'}`, agents.length > 0);
@@ -122,8 +145,13 @@ result = run(cli, ['update'], { env: a.env });
 check('I4', 'update removes folders a crashed run left behind', result.status === 0 && stale.every(folder => !existsSync(folder)), stale.filter(existsSync).join(', '));
 
 rmSync(join(a.plugin, 'mcp', 'server.mjs'), { force: true });
-result = tty(cli, ['--no-open'], a);
-check('I6', 'bare conquistador repairs a broken plugin copy', result.status === 0 && missing(a.plugin).length === 0 && /Installed into/.test(result.output), result.output.trim().split('\n').slice(-4).join(' | '));
+if (hasTty) {
+  result = tty(cli, ['--no-open'], a);
+  check('I6', 'bare conquistador repairs a broken plugin copy', result.status === 0 && missing(a.plugin).length === 0 && /Installed into/.test(result.output), result.output.trim().split('\n').slice(-4).join(' | '));
+} else {
+  notRun('I6', 'bare conquistador repairs a broken plugin copy', 'no pseudo-terminal on this platform');
+  run(cli, ['add', '--yes'], { env: a.env });
+}
 
 rmSync(a.cursor, { recursive: true, force: true });
 mkdirSync(a.cursor, { recursive: true });
@@ -132,8 +160,9 @@ result = run(cli, ['add', '--yes'], { env: a.env });
 seen = observe(a, agents.filter(id => id !== 'cursor'));
 check('I5', 'a folder Conquistador did not create is left in place', readFileSync(join(a.cursor, 'notes.txt'), 'utf8') === 'mine\n' && readdirSync(a.cursor).length === 1);
 check('I3', 'Cursor fails with a reason; the other agents still install', result.status === 1 && /✗ Cursor: .*not created by Conquistador/.test(result.output) && all(seen, true) && !stackTrace(result.output), result.output.trim().split('\n').slice(-3).join(' | '));
-result = tty(cli, ['--no-open'], a);
-check('I3', 'the start flow reports Cursor, offers a retry, and still finishes', result.status === 0 && /Cursor: .*not created by Conquistador/.test(result.output) && /conquistador add cursor/.test(result.output) && /Ready/.test(result.output) && !stackTrace(result.output), result.output.trim().split('\n').slice(-5).join(' | '));
+result = hasTty ? tty(cli, ['--no-open'], a) : null;
+if (!result) notRun('I3', 'the start flow reports Cursor, offers a retry, and still finishes', 'no pseudo-terminal on this platform');
+else check('I3', 'the start flow reports Cursor, offers a retry, and still finishes', result.status === 0 && /Cursor: .*not created by Conquistador/.test(result.output) && /conquistador add cursor/.test(result.output) && /Ready/.test(result.output) && !stackTrace(result.output), result.output.trim().split('\n').slice(-5).join(' | '));
 rmSync(a.cursor, { recursive: true, force: true });
 result = run(cli, ['add', 'cursor', '--yes'], { env: a.env });
 check('I3', 'add cursor --yes succeeds after the folder moves', result.status === 0 && missing(a.cursor).length === 0);
@@ -168,7 +197,7 @@ let packed = {};
 try { packed = JSON.parse(pack.stdout)[0] ?? {}; } catch { /* Checked below. */ }
 const tarball = packed.filename ? join(work, packed.filename) : '';
 check('B0', `npm pack: ${packed.entryCount ?? '?'} files, ${((packed.size ?? 0) / 1e6).toFixed(1)} MB packed, ${((packed.unpackedSize ?? 0) / 1e6).toFixed(1)} MB unpacked`, pack.status === 0 && existsSync(tarball));
-check('B0', 'the tarball has no nested node_modules', (packed.files ?? []).length > 0 && !(packed.files ?? []).some(file => file.path.includes('node_modules/')));
+check('B0', 'the tarball has no nested node_modules', (packed.files ?? []).length > 0 && !(packed.files ?? []).some(file => /node_modules[\\/]/.test(file.path)));
 const b = isolated('home-b', null);
 const npxCache = join(work, 'npx-cache');
 result = run('npx', ['--yes', '--cache', npxCache, '--package', tarball, '--', 'conquistador', 'add', '--yes'], { env: b.env });
@@ -185,15 +214,17 @@ seen = observe(b, agents);
 check('B2', 'npx remove cleans up', result.status === 0 && all(seen, false), JSON.stringify(seen));
 
 // The interactive start flow, against the installed binary instead of the checkout.
-if (which('expect')) {
-  result = run('expect', [join(root, 'tools/e2e/agent-first.exp')], { env: { ...process.env, CONQUISTADOR_E2E_CLI: cli, PATH: [join(prefix, 'bin'), ...toolDirs, dirname(process.execPath), '/usr/bin', '/bin'].join(':') }, cwd: root });
+if (windows) notRun('S1', 'agent-first.exp against the installed package', 'expect does not run on Windows');
+else if (which('expect')) {
+  result = run('expect', [join(root, 'tools/e2e/agent-first.exp')], { env: { ...process.env, CONQUISTADOR_E2E_CLI: cli, PATH: [prefixBin, ...toolDirs, dirname(process.execPath), ...systemDirs].join(delimiter) }, cwd: root });
   const passed = (result.output.match(/CHECK PASS/g) ?? []).length, failed = (result.output.match(/CHECK FAIL/g) ?? []).length;
   check('S1', `agent-first.exp against the installed package: ${passed} passed, ${failed} failed`, result.status === 0 && failed === 0 && passed > 0, result.output.trim().split('\n').slice(-3).join(' | '));
 } else check('S1', 'agent-first.exp (expect is not installed)', false);
 
-const report = { schema: 'conquistador.e2e.package-install/v1', at: new Date().toISOString(), version, sha, dirty, node: process.version, platform: `${process.platform}-${process.arch}`, agents, work, package: { files: packed.entryCount, packedBytes: packed.size, unpackedBytes: packed.unpackedSize }, checks, ok: checks.every(item => item.ok) };
+const report = { schema: 'conquistador.e2e.package-install/v1', at: new Date().toISOString(), version, sha, dirty, node: process.version, platform: `${process.platform}-${process.arch}`, agents, work, package: { files: packed.entryCount, packedBytes: packed.size, unpackedBytes: packed.unpackedSize }, checks, ok: checks.every(item => item.ok !== false) && checks.some(item => item.ok) };
 mkdirSync(out, { recursive: true });
 writeFileSync(join(out, 'report.json'), `${JSON.stringify(report, null, 2)}\n`);
 writeFileSync(join(out, 'commands.log'), log.join('\n'));
-console.log(`\n${report.ok ? 'PASS' : 'FAIL'} ${checks.filter(item => item.ok).length}/${checks.length}: ${join(out, 'report.json')}`);
+const skipped = checks.filter(item => item.ok === null).length;
+console.log(`\n${report.ok ? 'PASS' : 'FAIL'} ${checks.filter(item => item.ok).length}/${checks.length - skipped}${skipped ? ` (${skipped} not run)` : ''}: ${join(out, 'report.json')}`);
 process.exit(report.ok ? 0 : 1);
