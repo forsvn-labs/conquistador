@@ -4,6 +4,26 @@ No public release is claimed. See [VERSIONS.md](VERSIONS.md) for independent pro
 versions. Verification establishes the stated local scope; native host behavior, useful model
 output, human acceptance and rights disposition require separate evidence.
 
+## 2026-09-29, 0.0.17 private alpha candidate (not tagged)
+
+- **Fix: installs from npm gave every agent an empty plugin.** 0.0.16 skipped every file when the
+  package lived under `node_modules`, which is always true after `npm install -g` or `npx`. Cursor
+  then stopped the run with `ENOENT … conquistador.tmp-PID/.conquistador-owned.json`. The copy now
+  filters paths inside the package only.
+- The installer checks the new plugin copy for ten required files before any agent sees it, and
+  keeps the last good copy when the package is damaged.
+- One agent's failure no longer stops the others. The start flow reports it with a retry command
+  and still opens a working agent.
+- A bare `conquistador` repairs a missing or damaged plugin copy, and removes staging folders
+  that a crashed run left behind.
+- An unexpected error prints one line, a log file under `~/.conquistador/logs/`, and where to
+  report it. `CONQUISTADOR_DEBUG=1` prints the stack trace.
+- After `npx`, the next step is `/conquistador` in the agent. Paths in messages use `~/`.
+- `tools/e2e/package-install.mjs` replaces `install-lifecycle.mjs`. It installs the package from
+  Git with npm and from a tarball with `npx`, as users do, and runs `agent-first.exp` against the
+  installed binary. Verified: 28 of 28 with five real agents, `npm test` 764 of 764, routing
+  breadth 119 of 119. The same E2E fails on `v0.0.16`.
+
 ## 2026-09-28, 0.0.16 private alpha
 
 - Sixteenth private prerelease at

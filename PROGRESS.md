@@ -1,5 +1,25 @@
 # Product progress
 
+## 0.0.17 candidate: npm installs fixed, not tagged
+
+A user reported that the documented 0.0.16 install stopped with a Node stack trace. Every
+`npm install -g` and `npx` install copied an empty plugin, so no agent got Conquistador. The
+release tests ran from the source checkout and could not see it. See Part 4 of
+[docs/REVIEW-2026-09-SURFACES.md](docs/REVIEW-2026-09-SURFACES.md).
+
+Verified on macOS, 2026-09-29, at `20157b3`:
+
+- `node tools/e2e/package-install.mjs`: 28 of 28 with real Claude Code 2.1.284, Codex 0.158.0,
+  Cursor Agent, Copilot CLI 1.0.87, and Grok CLI 1.0.44 in isolated homes, no model call. It
+  installs from Git with npm and from a packed tarball with `npx`, and runs `agent-first.exp`
+  (14 of 14) against the installed binary. Artifact: `dist/e2e/package-install/report.json`.
+- The same E2E on `v0.0.16` fails I1 for all five agents.
+- `npm test` 764 of 764. Routing breadth 119 of 119.
+
+Not done: the tag, the release assets, the push, and the merge. Those wait for your approval.
+Public beta needs a decision on npm publication and repository visibility (Part 4, "Public
+beta: open decisions").
+
 ## Shipped 0.0.16: agent-first start, host acceptance pending
 
 The [v0.0.16 private prerelease](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.16)
