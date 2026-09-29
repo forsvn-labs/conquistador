@@ -40,7 +40,7 @@ function notRun(id, name, reason) {
   console.log(`- ${id} ${name}  (not run: ${reason})`);
 }
 // Windows starts .cmd shims (npm, npx, most agent CLIs) only through cmd.exe.
-const quote = value => (/^[\w.:\\/@=+-]+$/.test(value) ? value : `"${value.replace(/"/g, '""')}"`);
+const quote = value => (/^[\w.:~\\/@=+-]+$/.test(value) ? value : `"${value.replace(/"/g, '""')}"`);
 function run(command, args, { env, cwd = work, timeout = 600_000 } = {}) {
   const started = Date.now();
   const shell = windows && command !== process.execPath;
@@ -55,6 +55,9 @@ function isolated(name, prefixBin) {
   mkdirSync(join(home, 'acme'), { recursive: true });
   writeFileSync(join(home, 'acme', 'README.md'), '# Acme Invoices\n\nInvoicing for freelance designers.\n');
   const env = { ...process.env, HOME: home, XDG_CONFIG_HOME: join(home, '.config'), CLAUDE_CONFIG_DIR: join(home, '.claude'), CODEX_HOME: join(home, '.codex'), CONQUISTADOR_HOME: join(home, '.conquistador'), CURSOR_HOME: join(home, '.cursor'), TERM: 'xterm-256color', PATH: [prefixBin, ...toolDirs, dirname(process.execPath), ...systemDirs].filter(Boolean).join(delimiter) };
+  // The empty test home has no global Git config, so Git's folder-ownership check cannot see
+  // the runner's safe.directory entry for this checkout.
+  Object.assign(env, { GIT_CONFIG_COUNT: '1', GIT_CONFIG_KEY_0: 'safe.directory', GIT_CONFIG_VALUE_0: '*' });
   // Windows reads the home folder from USERPROFILE and app data from APPDATA and LOCALAPPDATA.
   if (windows) Object.assign(env, { USERPROFILE: home, APPDATA: join(home, 'AppData', 'Roaming'), LOCALAPPDATA: join(home, 'AppData', 'Local') });
   if (windows) for (const name of ['APPDATA', 'LOCALAPPDATA']) mkdirSync(env[name], { recursive: true });
@@ -168,7 +171,7 @@ result = run(cli, ['add', 'cursor', '--yes'], { env: a.env });
 check('I3', 'add cursor --yes succeeds after the folder moves', result.status === 0 && missing(a.cursor).length === 0);
 
 const broken = join(work, 'broken', 'node_modules', '@forsvn', 'conquistador');
-cpSync(packageDir, broken, { recursive: true });
+if (existsSync(packageDir)) cpSync(packageDir, broken, { recursive: true });
 rmSync(join(broken, '.codex-plugin', 'plugin.json'));
 const before = marker(a.plugin);
 result = run(process.execPath, [join(broken, 'runtime', 'bin', 'conquistador.js'), 'add', '--yes'], { env: a.env });
