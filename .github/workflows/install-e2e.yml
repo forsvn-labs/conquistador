@@ -55,6 +55,39 @@ jobs:
           for c in claude codex cursor-agent copilot grok; do
             echo "$c: $(command -v "$c" || echo missing) $("$c" --version 2>&1 | head -1)"
           done
+      - name: Diagnose Git in a test environment (temporary)
+        if: runner.os == 'Windows'
+        shell: bash
+        run: |
+          cat > "$RUNNER_TEMP/diag.mjs" <<'JS'
+          import { spawnSync } from 'node:child_process';
+          import { mkdtempSync, mkdirSync } from 'node:fs';
+          import { tmpdir } from 'node:os';
+          import { dirname, join, delimiter } from 'node:path';
+          import { pathToFileURL } from 'node:url';
+          const home = mkdtempSync(join(tmpdir(), 'diag-'));
+          for (const d of ['AppData/Roaming', 'AppData/Local']) mkdirSync(join(home, d), { recursive: true });
+          const git = spawnSync('where', ['git'], { encoding: 'utf8' }).stdout.split(/\r?\n/)[0];
+          const short = [dirname(git), dirname(process.execPath), join(process.env.SystemRoot, 'System32'), process.env.SystemRoot].join(delimiter);
+          const base = { ...process.env };
+          const variants = {
+            unchanged: {},
+            shortPath: { PATH: short },
+            home: { HOME: home },
+            userprofile: { USERPROFILE: home },
+            appdata: { APPDATA: join(home, 'AppData', 'Roaming') },
+            localappdata: { LOCALAPPDATA: join(home, 'AppData', 'Local') },
+            gitConfigCount: { GIT_CONFIG_COUNT: '1', GIT_CONFIG_KEY_0: 'safe.directory', GIT_CONFIG_VALUE_0: '*' },
+          };
+          console.log('git at', git);
+          for (const [name, change] of Object.entries(variants)) {
+            const env = { ...base, ...change };
+            if (change.PATH) for (const k of Object.keys(env)) if (k !== 'PATH' && k.toUpperCase() === 'PATH') delete env[k];
+            const r = spawnSync('git', ['--no-replace-objects', 'ls-remote', pathToFileURL(process.cwd()).href], { env, encoding: 'utf8', shell: true });
+            console.log(name.padEnd(16), 'exit', r.status, (r.stderr || '').trim().slice(0, 200));
+          }
+          JS
+          node "$RUNNER_TEMP/diag.mjs"
       - run: npm run bootstrap
       - name: Run the install E2E
         shell: bash
