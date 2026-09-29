@@ -1,0 +1,75 @@
+name: Publish to npm
+# Publishes the exact tarball attached to a GitHub release, after its checksum,
+# name, version, and source commit match the release tag. npm trusts this
+# workflow file through OIDC, so no npm token or 2FA prompt is needed.
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Release tag to publish, for example v0.2.1
+        required: true
+permissions:
+  contents: read
+  id-token: write
+concurrency:
+  group: npm-publish
+  cancel-in-progress: false
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    env:
+      TAG: ${{ github.event.release.tag_name || inputs.tag }}
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.TAG }}
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          registry-url: https://registry.npmjs.org
+      - name: Use npm 11.5.1 or later for trusted publishing
+        run: npm install -g npm@^11.5.1 && npm --version
+      - name: Download the release tarball and check it
+        id: check
+        run: |
+          set -euo pipefail
+          version="${TAG#v}"
+          file="forsvn-conquistador-${version}.tgz"
+          mkdir -p release
+          gh release download "$TAG" --dir release --pattern "$file" --pattern SHA256SUMS --pattern assembly.json
+          cd release
+          grep " ${file}\$" SHA256SUMS | sha256sum -c -
+          tar -xOzf "$file" package/package.json > package.json
+          test "$(node -p "require('./package.json').name")" = "@forsvn/conquistador"
+          test "$(node -p "require('./package.json').version")" = "$version"
+          test "$(node -p "require('./package.json').private ?? 'none'")" = "none"
+          commit="$(git rev-parse "${TAG}^{commit}")"
+          test "$(node -p "require('./assembly.json').sourceCommit")" = "$commit"
+          if npm view "@forsvn/conquistador@${version}" version >/dev/null 2>&1; then
+            echo "published=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "published=false" >> "$GITHUB_OUTPUT"
+          fi
+          echo "file=release/${file}" >> "$GITHUB_OUTPUT"
+      - name: Publish with provenance
+        if: steps.check.outputs.published == 'false'
+        run: |
+          dist_tag=latest
+          if [ "$(gh release view "$TAG" --json isPrerelease --jq .isPrerelease)" = "true" ]; then dist_tag=next; fi
+          npm publish "${{ steps.check.outputs.file }}" --access public --provenance --tag "$dist_tag"
+      - name: Check trusted publishing when the version already exists
+        if: steps.check.outputs.published == 'true'
+        run: |
+          set -euo pipefail
+          id_token="$(curl -fsS -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
+            "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=npm:registry.npmjs.org" | node -p "JSON.parse(require('fs').readFileSync(0)).value")"
+          echo "::add-mask::$id_token"
+          status="$(curl -sS -o /dev/null -w '%{http_code}' -X POST -H "Authorization: Bearer $id_token" \
+            https://registry.npmjs.org/-/npm/v1/oidc/token/exchange/package/@forsvn%2fconquistador)"
+          echo "OIDC token exchange: HTTP $status"
+          test "$status" = "201"
+          echo "${TAG#v} is already on npm. Trusted publishing works; nothing was published."

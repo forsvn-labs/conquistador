@@ -50,8 +50,8 @@ to check plugin paths and metadata. These checks do not start a host or validate
 ## Package a local commit
 
 `@forsvn/conquistador` is a public npm package. `package.json` keeps `publishConfig.access`
-`public` and no `private` flag; `npm run package` checks both. Publish to npm only with explicit approval,
-from a clean clone of the tagged commit.
+`public` and no `private` flag; `npm run package` checks both. Publish to npm only with explicit
+approval, through the release workflow below.
 
 
 Run bootstrap/build/test, review generated changes, and commit the source and maintained output.
@@ -75,6 +75,24 @@ human acceptance evidence and explicit operator authorization.
 
 CI runs the same local commands for pull requests and pushes to `main`, historical `dogfood/0.1.0`, or `private-alpha`,
 with read-only repository permissions. It never publishes.
+
+## Release to npm
+
+npm trusts `.github/workflows/publish.yml` in `forsvn-labs/conquistador` as the only publisher
+of `@forsvn/conquistador` (trusted publishing through OIDC). No npm token or 2FA prompt is needed.
+
+1. Merge the version bump into `private-alpha`, then tag the merge commit `vX.Y.Z` and push the tag.
+2. In a clean clone at the tag, run `npm run bootstrap` and `npm run package`.
+3. Create the GitHub release with the six assets from `dist/<commit>/`:
+   `gh release create vX.Y.Z --verify-tag --title "..." --notes-file NOTES.md dist/<commit>/*`.
+   Add `--prerelease` to publish under the npm `next` dist-tag instead of `latest`.
+4. The workflow downloads the release tarball and checks it against `SHA256SUMS`. It also checks
+   the package name, the version against the tag, that there is no `private` flag, and that
+   `assembly.json` names the tagged commit. Then it publishes those exact bytes with provenance.
+
+To retry, run the workflow by hand with the tag: `gh workflow run publish.yml -f tag=vX.Y.Z`.
+If the version is already on npm, the workflow publishes nothing and only checks that the npm
+OIDC token exchange works.
 Historical `test:source`, candidate, live-evidence and inventory-maintenance pipelines retain their
 own private authority requirements and are not part of `npm test` or the public setup path.
 
