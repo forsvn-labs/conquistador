@@ -553,3 +553,41 @@ this repository must stay private and npm publication stays disabled until you d
 3. **Make `conquistador update` fetch a new version.** Today it registers the installed version
    again. After npm publication, it can run `npm install -g @forsvn/conquistador@latest` (or
    print the `npx` line) and then register the new copy.
+
+## Part 5: `conquistador update` gets the latest version (2026-09-29)
+
+Hung approved all three public-beta decisions. This part covers decision 3. Today
+`conquistador update` registers the installed version again and never gets a newer release.
+
+### Target behavior
+
+`conquistador update` asks the npm registry for the `latest` version of `@forsvn/conquistador`.
+When that version is newer, it installs it the same way the running copy was installed, and the
+new version registers itself with every agent. When the registry has nothing newer, or cannot
+answer, it registers the installed version again, as before.
+
+| How the running copy was installed | What `update` runs |
+| --- | --- |
+| `npm install -g` (from the registry or from Git) | `npm install -g --prefix PREFIX @forsvn/conquistador@latest`, then the new `conquistador update` |
+| `npx` | `npx --yes @forsvn/conquistador@latest update` |
+| A source checkout or a project `node_modules` | Nothing. It prints the install command |
+
+### Failure modes (written before the code)
+
+The E2E must cover each case marked E2E.
+
+| # | Case | Required behavior | Covered by |
+| --- | --- | --- | --- |
+| U1 | A newer version is on the registry (global install) | Install it into the same npm prefix. The new version registers with every agent and reports its version | E2E |
+| U2 | The registry cannot be reached, or times out after 15 s | Say so in one line. Register the installed version again. Exit 0 | E2E |
+| U3 | The registry does not have the package (404, before the first publication) | Same as U2 | E2E |
+| U4 | The registry version is the same or older (a source checkout ahead of it) | Never downgrade. Say "already the latest". Register the installed version again | E2E |
+| U5 | Versions compare as numbers: `0.0.9 < 0.0.17 < 0.1.0`. A prerelease is older than its release | Correct order | E2E (U1 uses 0.0.x to 0.0.x+1) |
+| U6 | `npm install -g` fails (no write access to the prefix, network drop) | Keep the installed version and the agents unchanged. Show the npm error lines and the command to run. Exit 1 | E2E |
+| U7 | The new version runs `update` again | It does not ask the registry again. No loop | E2E |
+| U8 | The running copy came from `npx` | Do not create a global install the user did not choose. Run the new version through `npx` | E2E |
+| U9 | The running copy is a source checkout or a project dependency | Do not change the installation. Print the command that installs the latest version. Register this copy again | E2E |
+| U10 | `--dry-run` | Print the commands. Change nothing | E2E |
+| U11 | The new package is incomplete | The new version's own check (I2) stops before any agent. The last good plugin copy stays | Existing (I2) |
+| U12 | No agent is installed yet | Keep the current message. Do not ask the registry | Existing |
+| U13 | The user set a custom registry (`npm_config_registry`, `.npmrc`) | Use it, for both the version check and the install | E2E (the E2E uses a local registry) |
