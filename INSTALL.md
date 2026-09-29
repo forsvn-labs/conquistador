@@ -6,14 +6,13 @@ that the agent read the playbooks.
 ## Before you start
 
 - Node 24 or later: `node --version`.
-- Git access to the private repository. If Git asks for credentials, run `gh auth setup-git`.
 
 ## Plugin for coding agents (recommended)
 
 Install the command, then run it with no arguments:
 
 ```sh
-npm install -g --ignore-scripts --install-links git+https://github.com/forsvn-labs/conquistador.git#v0.0.17
+npm install -g @forsvn/conquistador
 conquistador
 ```
 
@@ -35,17 +34,22 @@ it would run.
 The stable copy matters: with nvm or another Node version manager, the npm global folder changes
 when you switch Node versions. The agents point at `~/.conquistador/plugin`, not at npm.
 
-`--ignore-scripts` skips npm lifecycle scripts. `--install-links` makes npm copy the Git checkout
-instead of linking to temporary files.
+To install an exact tag from Git instead of npm, use both flags. `--ignore-scripts` skips npm
+lifecycle scripts. `--install-links` makes npm copy the Git checkout instead of linking to
+temporary files.
+
+```sh
+npm install -g --ignore-scripts --install-links git+https://github.com/forsvn-labs/conquistador.git#v0.2.0
+```
 
 ### Run once without a global install
 
 ```sh
-npx -y --ignore-scripts --package=git+https://github.com/forsvn-labs/conquistador.git#v0.0.17 conquistador
+npx @forsvn/conquistador
 ```
 
 This installs into your agents and opens one, like the global command. It leaves no `conquistador`
-command behind, so you use the same long line again for the next task, `update`, or `remove`. On
+command behind, so you run `npx @forsvn/conquistador` again for the next task, `update`, or `remove`. On
 the test machine the first run took 24 seconds and later runs about 5 seconds. Inside your agent,
 `/conquistador` works either way.
 
@@ -79,8 +83,6 @@ conquistador remove                        # Remove from every agent and delete 
 /plugin marketplace add forsvn-labs/conquistador
 /plugin install conquistador@conquistador
 ```
-
-Claude Code must be able to read the private repository.
 
 ### What the plugin contains
 
@@ -184,7 +186,7 @@ operator contracts and the BB specialist adapter. The flags `--skills`, `--plugi
 
 | Symptom | Fix |
 | --- | --- |
-| 0.0.16 stops with `ENOENT … conquistador.tmp-NNNN/.conquistador-owned.json` | 0.0.16 copied an empty plugin from npm installs. Install 0.0.17 with the command above and run `conquistador` again. It removes the leftover folder and repairs every agent. |
+| 0.0.16 stops with `ENOENT … conquistador.tmp-NNNN/.conquistador-owned.json` | 0.0.16 copied an empty plugin from npm installs. Install 0.0.17 or later with the command above and run `conquistador` again. It removes the leftover folder and repairs every agent. |
 | `… exists and was not created by Conquistador` | A folder that you or another tool made is in the way. Move or delete it, then run `conquistador` again. The other agents install anyway. |
 | `The Conquistador package at … is incomplete` | The npm install is damaged. Install again with the command above. Your agents keep the last good copy. |
 | `Conquistador stopped: …` | Open the `Details:` file it prints, and send it with a report. `CONQUISTADOR_DEBUG=1` prints the full error. |

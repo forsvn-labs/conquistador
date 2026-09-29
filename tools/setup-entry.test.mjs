@@ -10,20 +10,22 @@ const root = fileURLToPath(new URL('../', import.meta.url));
 
 test('package acquisition has no automatic install or publication hooks', () => {
   const manifest = JSON.parse(readFileSync(join(root, 'package.json'), 'utf8'));
-  assert.equal(manifest.private, true);
+  assert.equal(manifest.private, undefined);
+  assert.equal(manifest.publishConfig.access, 'public');
   for (const hook of ['preinstall', 'install', 'postinstall', 'prepare', 'prepublish', 'prepublishOnly']) {
     assert.equal(manifest.scripts[hook], undefined, `${hook} would change acquisition behavior`);
   }
 });
 
-test('the advertised persistent private-Git command copies out of npm acquisition storage', () => {
-  // The advertised command must pin the latest verified private release.
-  const expected = 'npm install -g --ignore-scripts --install-links git+https://github.com/forsvn-labs/conquistador.git#v0.0.17';
+test('README and INSTALL advertise the npm package, and the Git route copies out of npm storage', () => {
+  const expected = 'npm install -g @forsvn/conquistador';
   for (const file of ['README.md', 'INSTALL.md']) {
     const contents = readFileSync(join(root, file), 'utf8');
     assert.match(contents, new RegExp(expected.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
     assert.doesNotMatch(contents, /npm install -g --ignore-scripts github:forsvn-labs\/conquistador/);
   }
+  const version = JSON.parse(readFileSync(join(root, 'package.json'), 'utf8')).version;
+  assert.match(readFileSync(join(root, 'INSTALL.md'), 'utf8'), new RegExp(`--install-links git\\+https://github\\.com/forsvn-labs/conquistador\\.git#v${version.replaceAll('.', '\\.')}`));
 });
 
 test('the installed setup command works before runtime libraries or dependencies are present', () => {

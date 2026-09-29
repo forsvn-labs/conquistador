@@ -1,20 +1,19 @@
 # Versions
 
-Product, plugin, host, and portable-agent manifests identify the private-alpha `0.0.17`
-candidate, which is not tagged yet. The latest verified private prerelease is
-[`v0.0.16`](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.16),
-from exact merged source `a833d92041a94497fce20c73466fd476bd1dcab5`.
-Its private tag and six published assets are available to authorized accounts. Check the tag,
-source commit, and `SHA256SUMS` before installation. The local `assembly.json` remains `UNBOUND`.
-No npm registry package was published, and package verification is not host or human acceptance.
-Private alpha and dogfood are the same private delivery channel. Future private releases increment the `0.0.x` version. The planned public alpha starts at `0.1.0`.
-The live private source branch is `private-alpha`. npm publication stays disabled.
+Product, plugin, host, and portable-agent manifests identify `0.2.0`, the first public alpha.
+It is published to npm as `@forsvn/conquistador` and tagged `v0.2.0`. Install it with
+`npm install -g @forsvn/conquistador` or run it with `npx @forsvn/conquistador`.
 
-The four older private releases retain their original tags and bytes: `v0.1.0`,
-`v0.1.0-dogfood.2`, `v0.1.0-dogfood.3`, and `v0.1.0-dogfood.4`.
-The historical private `v0.1.0` tag already exists at `dea03b3`. The eventual public alpha needs an
-explicit tag migration or a separate public release repository before it can reuse that exact
-Git tag. This private release does not move or delete any historical tag.
+The public alpha is `0.2.0`, not `0.1.0`, because the tag `v0.1.0` already names a private dogfood
+release from 2026-09-15 (`dea03b3`). No historical tag moves. Public releases continue from
+`0.2.x`. The source branch is `private-alpha`; the name is historical.
+
+The private prereleases keep their tags and assets: `v0.0.5` to
+[`v0.0.17`](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.17) (from merged source
+`e01306315e9c0f4656701bdcaf6b39468ab221b2`), and the older `v0.1.0`, `v0.1.0-dogfood.2`,
+`v0.1.0-dogfood.3`, and `v0.1.0-dogfood.4`. None of them was published to npm. Check the tag,
+source commit, and `SHA256SUMS` before you install from release assets. The local
+`assembly.json` stays `UNBOUND`, and package verification is not host or human acceptance.
 
 Each skill declares its own `metadata.version` in `skills/<name>/SKILL.md`. Internal module and
 schema versions are independent of the product version. A 1.x or 2.x internal method version does

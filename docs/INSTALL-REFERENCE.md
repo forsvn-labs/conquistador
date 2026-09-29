@@ -374,7 +374,7 @@ release records. A package or install receipt is not live-provider evidence or r
 
 | Symptom | Recovery |
 | --- | --- |
-| GitHub reports repository not found or access denied | Check the active account and private repository access; if `gh` works but HTTPS Git fails, run `gh auth setup-git` |
+| GitHub reports repository not found or access denied | Check the tag or commit name and your network; the repository is public, so no account access is needed |
 | The skill is in the wrong project or scope | Remove it through the original installer in that scope, then install from the intended project for the intended host |
 | Conquistador appears in the install summary but not in the host | Confirm the project and selected host, then start a fresh session; check the plugin namespace if applicable |
 | The parent cannot find a method | Use the [read-only completeness check](../INSTALL.md#read-only-completeness-check) from the complete CLI, preserve edits, and reinstall the root bundle; do not copy the nested parent alone |

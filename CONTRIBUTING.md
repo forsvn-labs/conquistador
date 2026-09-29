@@ -49,8 +49,9 @@ to check plugin paths and metadata. These checks do not start a host or validate
 
 ## Package a local commit
 
-This is a private-alpha release channel. Keep `package.json` marked `private: true`; local npm pack still
-works. Do not publish, remove that guard or change repository visibility without explicit approval.
+`@forsvn/conquistador` is a public npm package. `package.json` keeps `publishConfig.access`
+`public` and no `private` flag; `npm run package` checks both. Publish to npm only with explicit approval,
+from a clean clone of the tagged commit.
 
 
 Run bootstrap/build/test, review generated changes, and commit the source and maintained output.

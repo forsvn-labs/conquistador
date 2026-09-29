@@ -22,7 +22,7 @@ that exact task, does the work, and shows which playbooks it applied.
 It also covers product flows, UI specs, web and iOS builds, system architecture, and technical
 docs. Run `conquistador` and choose **Browse all areas** to see each one.
 
-Version 0.0.17 is a private-alpha candidate. See [what changed](CHANGELOG.md).
+Version 0.2.0 is the public alpha. See [what changed](CHANGELOG.md).
 
 ## Install and start
 
@@ -30,9 +30,11 @@ You need Node 24 or later and an AI coding agent: Claude Code, Codex, Cursor, Co
 Grok CLI. Open a terminal in your product's folder and run:
 
 ```sh
-npm install -g --ignore-scripts --install-links git+https://github.com/forsvn-labs/conquistador.git#v0.0.17
+npm install -g @forsvn/conquistador
 conquistador
 ```
+
+To run it once without a global install: `npx @forsvn/conquistador`.
 
 `conquistador` installs into every agent it finds, asks what to work on, and opens your agent
 with the task already typed:
@@ -142,7 +144,7 @@ To turn the hooks off, set `CONQUISTADOR_HOOKS=off` or put `{"hooks": false}` in
 - [Installation](INSTALL.md)
 - [Surfaces and knowledge review, September 2026](docs/REVIEW-2026-09-SURFACES.md)
 - [Connection setup for live accounts](docs/INTEGRATIONS.md)
-- [Private-alpha acceptance](docs/PRIVATE-ALPHA.md), [version policy](VERSIONS.md), and
+- [Alpha acceptance](docs/PRIVATE-ALPHA.md), [version policy](VERSIONS.md), and
   [development](CONTRIBUTING.md)
 
-The repository is private. npm publication stays disabled until the public alpha (0.1.0).
+Conquistador is open source under the MIT license. The npm package is `@forsvn/conquistador`.

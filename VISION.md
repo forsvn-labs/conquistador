@@ -27,10 +27,10 @@ reading list to relevant prompts and send the agent back once when it skipped th
 deliverable ends with the playbooks it applied. The user's own playbooks rank first, read in
 place. Coding prompts get nothing.
 
-Pinned private Git references lead acquisition during the private alpha. Public alpha should
-publish `@forsvn/conquistador` to the npm registry and list the same plugin in the agent
-marketplaces. Do not advertise the registry command until the exact public package exists,
-registry ownership is verified, and a clean global lifecycle passes.
+The public npm package `@forsvn/conquistador` leads acquisition: `npx @forsvn/conquistador` or a
+global install. Pinned Git tags stay available for exact versions. List the same plugin in the
+agent marketplaces. Advertise a version only after its exact package is on the registry and a
+clean global lifecycle passes.
 
 An installed library must contain the methods and resources its parent routes to. Report local
 completeness, host activation, knowledge use, and task success separately. A passing install or
@@ -71,9 +71,8 @@ applicable human decisions. Accepting a draft does not authorize memory or discl
 needs a redacted preview and exact-content consent. No automatic transcript collection, global
 learning, or background feedback upload is planned.
 
-## Stay private until a release decision
+## Public alpha, judged by real tasks
 
-Private distribution is the initial boundary. Judge it through real tasks and corrections. Keep the
-repository private and the npm publication guard enabled. Public distribution, marketplace listings,
-and landing work require an explicit later decision. Local package records do not grant release
-authority. See [ROADMAP.md](ROADMAP.md) and [PROGRESS.md](PROGRESS.md).
+The repository and the npm package are public from 0.2.0. Judge the product through real tasks and
+corrections, not install counts. Each release, marketplace listing, and landing change still needs
+an explicit decision. Local package records do not grant release authority. See [ROADMAP.md](ROADMAP.md) and [PROGRESS.md](PROGRESS.md).

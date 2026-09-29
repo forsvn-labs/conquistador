@@ -1,11 +1,16 @@
 # Changelog
 
-No public release is claimed. See [VERSIONS.md](VERSIONS.md) for independent product and method
+`0.2.0` is the first public alpha. See [VERSIONS.md](VERSIONS.md) for independent product and method
 versions. Verification establishes the stated local scope; native host behavior, useful model
 output, human acceptance and rights disposition require separate evidence.
 
-## Unreleased
+## 2026-09-29, 0.2.0 public alpha
 
+- **Public npm package.** Install with `npm install -g @forsvn/conquistador`, or run once with
+  `npx @forsvn/conquistador`. No Git access or install flags are needed.
+- The repository is public. The Claude Code marketplace route and the "report it" link in error
+  messages now work for everyone. Old branches were deleted first; `private-alpha` stays.
+- Version 0.2.0, not 0.1.0: the tag `v0.1.0` already names a private dogfood release.
 - **`conquistador update` gets the latest version.** It asks the npm registry you use for
   `@forsvn/conquistador@latest`. A newer version installs the same way as the running copy, into
   the same npm prefix or through `npx`, and then registers itself with every agent. With no newer
@@ -16,7 +21,13 @@ output, human acceptance and rights disposition require separate evidence.
   versions and five real agents: 21 of 21. The same E2E on `b560488` (before the change) fails
   10 checks. `npm test` 764 of 764. `tools/e2e/package-install.mjs` 28 of 28.
 
-## 2026-09-29, 0.0.17 private alpha candidate (not tagged)
+## 2026-09-29, 0.0.17 private alpha
+
+- Seventeenth private prerelease at
+  [`v0.0.17`](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.17) from merged
+  `private-alpha` commit `e01306315e9c0f4656701bdcaf6b39468ab221b2` through
+  [#18](https://github.com/forsvn-labs/conquistador/pull/18). The downloaded assets match
+  `SHA256SUMS`.
 
 - **Fix: installs from npm gave every agent an empty plugin.** 0.0.16 skipped every file when the
   package lived under `node_modules`, which is always true after `npm install -g` or `npx`. Cursor

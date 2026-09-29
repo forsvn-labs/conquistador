@@ -1,31 +1,27 @@
 # Product roadmap
 
-## Public beta
+## Public alpha follow-up
 
-1. Decide on npm publication and repository visibility (Part 4 of
-   [docs/REVIEW-2026-09-SURFACES.md](docs/REVIEW-2026-09-SURFACES.md)). Then publish
-   `@forsvn/conquistador` from CI from a clean clone, so the start command becomes
-   `npx @forsvn/conquistador`. `tools/e2e/package-install.mjs` route B already tests that shape.
-2. Done on `feat/update-installs-latest`: `conquistador update` gets the newest published
-   version, then registers it (Part 5). It works for users after the first npm publication.
-3. Run `tools/e2e/package-install.mjs` on Linux and Windows before a public beta claims them.
+1. Done in 0.2.0: `@forsvn/conquistador` is on npm, and the repository is public.
+2. Publish later releases from CI with npm provenance, not from a local clone.
+3. Run `tools/e2e/package-install.mjs` on Linux and Windows before a release claims them.
+4. List the plugin in the agent marketplaces, then check each listing installs 0.2.x.
 
-## Next private-alpha acceptance
+## Next acceptance
 
-1. Tag and release 0.0.17 so that 0.0.16 users can install the fix.
-2. Add "Open in Claude Code" (`claude-cli://open?q=`) and "Open in Cursor" deep-link buttons with a
+1. Add "Open in Claude Code" (`claude-cli://open?q=`) and "Open in Cursor" deep-link buttons with a
    "Copy prompt" fallback to the landing page. Test both links in a browser first.
-3. Fix router sensitivity to filler words: "cannot find" and "ask me" select the video method, and
+2. Fix router sensitivity to filler words: "cannot find" and "ask me" select the video method, and
    "learn the product" selects the budget method. The start flow strips its own sentences, but
    users type such words too.
-4. Observe the plugin hooks in a real Codex session (after hook trust), Cursor, Copilot CLI, and
+3. Observe the plugin hooks in a real Codex session (after hook trust), Cursor, Copilot CLI, and
    Grok CLI. Only Claude Code sessions have been observed.
-5. Repeat `node tools/e2e/knowledge-use.mjs` with more runs and more tasks after the plan limit
+4. Repeat `node tools/e2e/knowledge-use.mjs` with more runs and more tasks after the plan limit
    resets, across all nine areas (`--set breadth`), and add a quality comparison (blind review
    of before and after answers), not only reads.
-6. Seek Hung's verdict on a real task in his own agent: playbook relevance, clarity, and usefulness.
+5. Seek Hung's verdict on a real task in his own agent: playbook relevance, clarity, and usefulness.
    Tune the briefing engine and the vault playbook threshold from those corrections.
-7. Decide where to host the HTTP playbook server for Muse and other connector apps, then deploy it
+6. Decide where to host the HTTP playbook server for Muse and other connector apps, then deploy it
    with a token and submit the Muse connector.
 
 ## Private-alpha follow-up
