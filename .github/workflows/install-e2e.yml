@@ -47,7 +47,10 @@ jobs:
           irm 'https://cursor.com/install?win32=true' | iex
           irm https://x.ai/cli/install.ps1 | iex
           Get-ChildItem -Path $env:USERPROFILE, $env:LOCALAPPDATA -Recurse -Depth 5 -Include grok.exe, grok.cmd, cursor-agent.exe, cursor-agent.cmd, cursor-agent.ps1 -ErrorAction SilentlyContinue |
-            ForEach-Object { $_.DirectoryName } | Sort-Object -Unique | Tee-Object -Variable found | Add-Content $env:GITHUB_PATH
+            ForEach-Object { $_.DirectoryName } | Sort-Object -Unique |
+            Where-Object { -not (Test-Path (Join-Path $_ 'node.exe')) } |
+            Tee-Object -Variable found | Add-Content $env:GITHUB_PATH
+          # Cursor ships its own node.exe; a folder that holds one must not replace the runner's Node.
           "Added to PATH: $found"
       - name: Show the agents
         shell: bash
@@ -55,12 +58,6 @@ jobs:
           for c in claude codex cursor-agent copilot grok; do
             echo "$c: $(command -v "$c" || echo missing) $("$c" --version 2>&1 | head -1)"
           done
-      - name: Diagnose the Claude Code shim (temporary)
-        if: runner.os == 'Windows'
-        shell: bash
-        run: |
-          shim="$(dirname "$(command -v claude)")/claude.cmd"; echo "shim: $shim"; cat "$shim" | tail -5
-          node -e "import('./tools/spawn.mjs').then(m => { const c = m.spawnCommand('claude', ['--version']); console.log(JSON.stringify(c)); const r = require('node:child_process').spawnSync(c.file, c.args, { encoding: 'utf8', ...c.options }); console.log('exit', r.status, (r.stdout + r.stderr).slice(0, 1500)); })"
       - run: npm run bootstrap
       - name: Run the install E2E
         shell: bash

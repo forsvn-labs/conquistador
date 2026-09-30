@@ -22,14 +22,16 @@ function find(command, env) {
   return command;
 }
 
-// npm's cmd-shim ends with: "%_prog%"  "%dp0%\node_modules\PACKAGE\cli.js" %*
-function shimScript(path) {
+// npm's cmd-shim ends with the file it runs and %*: a JavaScript file after "%_prog%" (Node), or
+// a native program such as "%dp0%\node_modules\PACKAGE\bin\claude.exe".
+function shimTarget(path) {
   let text = '';
   try { text = readFileSync(path, 'utf8'); } catch { return null; }
-  if (!/node(?:\.exe)?/i.test(text)) return null;
   const match = /"%~?dp0%?\\([^"]+)"\s+%\*/i.exec(text);
-  const script = match ? resolve(dirname(path), match[1]) : null;
-  return script && isFile(script) ? script : null;
+  const target = match ? resolve(dirname(path), match[1]) : null;
+  if (!target || !isFile(target)) return null;
+  if (/\.(?:exe|com)$/i.test(target)) return { file: target, node: false };
+  return /\.[mc]?js$/i.test(target) ? { file: target, node: true } : null;
 }
 
 // Escaping for cmd.exe /d /s /c, as in cross-spawn: quote for the C runtime, then escape cmd.exe
@@ -45,8 +47,8 @@ export function spawnCommand(command, args = [], env = process.env) {
   const name = /^(npm|npx)\.cmd$/i.exec(path.split(/[\\/]/).pop())?.[1]?.toLowerCase();
   const cli = name && join(dirname(path), 'node_modules', 'npm', 'bin', `${name}-cli.js`);
   if (cli && existsSync(cli)) return { file: process.execPath, args: [cli, ...args], options: {} };
-  const script = shimScript(path);
-  if (script) return { file: process.execPath, args: [script, ...args], options: {} };
+  const target = shimTarget(path);
+  if (target) return target.node ? { file: process.execPath, args: [target.file, ...args], options: {} } : { file: target.file, args, options: {} };
   const line = [path.replace(meta, '^$1'), ...args.map(escapeArgument)].join(' ');
   return { file: env.ComSpec ?? process.env.ComSpec ?? 'cmd.exe', args: ['/d', '/s', '/c', `"${line}"`], options: { windowsVerbatimArguments: true } };
 }
