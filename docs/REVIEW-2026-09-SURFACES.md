@@ -675,7 +675,7 @@ as passed.
 
 ### Results
 
-`install-e2e.yml` run [36664487941](https://github.com/forsvn-labs/conquistador/actions/runs/36664487941), with
+`install-e2e.yml` run [36666136670](https://github.com/forsvn-labs/conquistador/actions/runs/36666136670), with
 real Claude Code, Codex, Cursor Agent, Copilot CLI, and Grok CLI, no model calls:
 
 | Platform | Result | Not run |
