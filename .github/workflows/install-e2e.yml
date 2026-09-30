@@ -55,6 +55,12 @@ jobs:
           for c in claude codex cursor-agent copilot grok; do
             echo "$c: $(command -v "$c" || echo missing) $("$c" --version 2>&1 | head -1)"
           done
+      - name: Diagnose the Claude Code shim (temporary)
+        if: runner.os == 'Windows'
+        shell: bash
+        run: |
+          shim="$(dirname "$(command -v claude)")/claude.cmd"; echo "shim: $shim"; cat "$shim" | tail -5
+          node -e "import('./tools/spawn.mjs').then(m => { const c = m.spawnCommand('claude', ['--version']); console.log(JSON.stringify(c)); const r = require('node:child_process').spawnSync(c.file, c.args, { encoding: 'utf8', ...c.options }); console.log('exit', r.status, (r.stdout + r.stderr).slice(0, 1500)); })"
       - run: npm run bootstrap
       - name: Run the install E2E
         shell: bash
