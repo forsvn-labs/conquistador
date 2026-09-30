@@ -24,8 +24,10 @@ const dirty = spawnSync('git', ['-C', root, 'status', '--porcelain'], { encoding
 const work = realpathSync(mkdtempSync(join(tmpdir(), 'conquistador-e2e-package-')));
 const windows = process.platform === 'win32';
 const which = command => onPath(command) ?? '';
-// System folders a test PATH keeps, so git, sh, and cmd still resolve.
-const systemDirs = windows ? [join(process.env.SystemRoot ?? 'C:\\Windows', 'System32'), process.env.SystemRoot ?? 'C:\\Windows'] : ['/usr/bin', '/bin'];
+// System folders a test PATH keeps, so git, sh, and cmd still resolve. Git for Windows crashes
+// (0xC0000005) when only its mingw64\\bin folder is on PATH, so keep all of its folders.
+const gitDirs = windows ? (process.env.PATH ?? '').split(delimiter).filter(folder => /[\\/]Git[\\/]/i.test(folder)) : [];
+const systemDirs = windows ? [join(process.env.SystemRoot ?? 'C:\\Windows', 'System32'), process.env.SystemRoot ?? 'C:\\Windows', ...gitDirs] : ['/usr/bin', '/bin'];
 const toolDirs = [...new Set(['claude', 'codex', 'cursor-agent', 'copilot', 'grok', 'git', 'npm', 'expect', 'script'].map(which).filter(Boolean).map(dirname))];
 
 const checks = [];
