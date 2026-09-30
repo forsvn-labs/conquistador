@@ -3,6 +3,10 @@ name: Install E2E on Linux and Windows
 # calls. The report for each platform is uploaded as an artifact.
 on:
   workflow_dispatch:
+    inputs:
+      ref:
+        description: Commit or tag to install, for example v0.2.1 as a negative control. Empty means the checked-out commit.
+        required: false
   pull_request:
     paths:
       - tools/agents.mjs
@@ -61,6 +65,8 @@ jobs:
       - run: npm run bootstrap
       - name: Run the install E2E
         shell: bash
+        env:
+          CONQUISTADOR_E2E_REF: ${{ inputs.ref }}
         run: node tools/e2e/package-install.mjs "dist/e2e/package-install-${{ runner.os }}"
       - uses: actions/upload-artifact@v4
         if: always()
