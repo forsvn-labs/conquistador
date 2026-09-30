@@ -19,6 +19,8 @@ output, human acceptance and rights disposition require separate evidence.
   the same way.
 - A broken link on PATH no longer counts as an installed agent.
 - `npm run bootstrap` works on Windows.
+- The optional Eve runtime (`hosts/eve/runtime`) overrides `undici` to 8.11.2 for two high-severity
+  advisories (GHSA-rfgv-xxqx-mfg5, GHSA-w293-vg96-wgc3). `eve` 0.68.0 still pins 8.9.0.
 - **Linux and Windows are verified.** `.github/workflows/install-e2e.yml` runs
   `tools/e2e/package-install.mjs` with real Claude Code, Codex, Cursor Agent, Copilot CLI, and
   Grok CLI: Linux 28 of 28 and Windows 25 of 25 in
