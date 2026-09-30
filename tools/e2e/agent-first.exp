@@ -13,7 +13,7 @@ set timeout 60
 set root [file dirname [file dirname [file dirname [file normalize [info script]]]]]
 set out $root/dist/e2e/agent-first
 file mkdir $out
-set home [exec mktemp -d -t conquistador-e2e-agent-first]
+set home [exec mktemp -d -t conquistador-e2e-agent-first.XXXXXX]
 foreach {name value} [list HOME $home CLAUDE_CONFIG_DIR $home/.claude CODEX_HOME $home/.codex CONQUISTADOR_HOME $home/.conquistador CURSOR_HOME $home/.cursor TERM xterm-256color] { set env($name) $value }
 foreach name {CONQUISTADOR_PLAYBOOKS CLAUDECODE CLAUDE_CODE_CHILD_SESSION CLAUDE_CODE_ENTRYPOINT} { if {[info exists env($name)]} { unset env($name) } }
 # A user who has used Claude Code before: onboarding done. The folder is not trusted yet.
@@ -161,8 +161,13 @@ foreach c $checks {
   if {!$ok} { incr failed }
   lappend rows "    {\"check\": \"$name\", \"pass\": [expr {$ok ? {true} : {false}}]}"
 }
+# The first line of `--version`. Codex also writes warnings to stderr, which exec treats as an error.
+proc agentVersion {command} {
+  if {[catch {exec -ignorestderr $command --version} text]} { return unknown }
+  return [lindex [split [string trim $text] "\n"] 0]
+}
 set fh [open $out/report.json w]
-puts $fh "{\n  \"test\": \"agent-first\",\n  \"claude\": \"[exec claude --version]\",\n  \"codex\": \"[exec codex --version]\",\n  \"passed\": [expr {[llength $checks] - $failed}],\n  \"failed\": $failed,\n  \"checks\": \[\n[join $rows ",\n"]\n  \]\n}"
+puts $fh "{\n  \"test\": \"agent-first\",\n  \"claude\": \"[agentVersion claude]\",\n  \"codex\": \"[agentVersion codex]\",\n  \"passed\": [expr {[llength $checks] - $failed}],\n  \"failed\": $failed,\n  \"checks\": \[\n[join $rows ",\n"]\n  \]\n}"
 close $fh
 exec rm -rf $home
 if {$failed} { puts "\nE2E FAIL: $failed of [llength $checks] checks failed. See $out/transcript.txt"; exit 1 }

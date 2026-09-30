@@ -3,11 +3,12 @@
 // (~/.conquistador/plugin). Nothing here edits an agent's settings files directly, except the
 // documented Cursor local-plugin folder, which is a plain copy.
 import { spawnSync } from 'node:child_process';
-import { cpSync, existsSync, lstatSync, mkdirSync, readdirSync, readFileSync, renameSync, rmSync, writeFileSync } from 'node:fs';
+import { cpSync, existsSync, mkdirSync, readdirSync, readFileSync, renameSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import { homedir } from 'node:os';
 import { basename, delimiter, dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { briefFiles } from './operator-package.mjs';
+import { spawnCommand } from './spawn.mjs';
 
 export const productRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 export const version = JSON.parse(readFileSync(join(productRoot, 'package.json'), 'utf8')).version;
@@ -34,7 +35,8 @@ export function onPath(command) {
   for (const folder of (process.env.PATH ?? '').split(delimiter)) {
     if (!folder) continue;
     for (const suffix of process.platform === 'win32' ? ['.exe', '.cmd', ''] : ['']) {
-      try { if (lstatSync(join(folder, command + suffix)).isFile() || lstatSync(join(folder, command + suffix)).isSymbolicLink()) return join(folder, command + suffix); } catch { /* Next. */ }
+      // statSync follows links, so a link whose target is gone does not count.
+      try { if (statSync(join(folder, command + suffix)).isFile()) return join(folder, command + suffix); } catch { /* Next. */ }
     }
   }
   return null;
@@ -108,7 +110,8 @@ function prefill() {
 }
 
 export function run(command, args, { timeout = 120_000 } = {}) {
-  const result = spawnSync(command, args, { encoding: 'utf8', timeout, stdio: ['ignore', 'pipe', 'pipe'], env: process.env });
+  const { file, args: fileArgs, options } = spawnCommand(command, args);
+  const result = spawnSync(file, fileArgs, { encoding: 'utf8', timeout, stdio: ['ignore', 'pipe', 'pipe'], env: process.env, ...options });
   return { status: result.error ? 127 : result.status, stdout: result.stdout ?? '', stderr: result.stderr ?? '', error: result.error };
 }
 

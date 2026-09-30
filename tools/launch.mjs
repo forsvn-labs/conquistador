@@ -1,6 +1,7 @@
 // The agent-first start: `conquistador` ends inside the user's agent with the task typed in.
 // Install when needed, pick a task, pick the agent, then hand the terminal to the agent.
 import { spawn, spawnSync } from 'node:child_process';
+import { spawnCommand } from './spawn.mjs';
 import { existsSync, readdirSync } from 'node:fs';
 import { homedir } from 'node:os';
 import { resolve } from 'node:path';
@@ -129,7 +130,9 @@ export function openAgent(launch) {
     const ignore = () => {};
     process.on('SIGINT', ignore);
     process.on('SIGQUIT', ignore);
-    const child = spawn(launch.command, launch.args, { stdio: 'inherit', shell: process.platform === 'win32' });
+    // No shell: on Windows it would split the task at spaces and run & or | in it as commands.
+    const { file, args, options } = spawnCommand(launch.command, launch.args);
+    const child = spawn(file, args, { stdio: 'inherit', ...options });
     process.on('SIGTERM', () => child.kill('SIGTERM'));
     child.on('error', error => { console.error(`Could not start ${launch.command}: ${error.message}`); done(1); });
     child.on('exit', (code, signal) => done(code ?? (signal ? 1 : 0)));

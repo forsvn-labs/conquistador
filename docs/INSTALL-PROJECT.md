@@ -3,8 +3,9 @@
 The current release is the 0.2.1 public alpha, published to npm as `@forsvn/conquistador` and
 tagged [v0.2.1](https://github.com/forsvn-labs/conquistador/releases/tag/v0.2.1). See
 [VERSIONS.md](../VERSIONS.md) for older private prereleases.
-The observed installation platform is macOS with Node 24. Windows/Linux commands below are
-portability guidance; native execution and native host registration still need their own checks.
+The npm install and agent registration are tested on macOS, Linux, and Windows with Node 24: see
+[Part 7 of the surfaces review](REVIEW-2026-09-SURFACES.md). On Windows, the interactive start
+flow is not tested yet.
 
 ## Project operator and native skill, recommended
 
