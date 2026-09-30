@@ -6,9 +6,14 @@ output, human acceptance and rights disposition require separate evidence.
 
 ## 2026-09-30, 0.2.2 public alpha
 
-- Released at [`v0.2.2`](https://github.com/forsvn-labs/conquistador/releases/tag/v0.2.2) and
-  published as [`@forsvn/conquistador@0.2.2`](https://www.npmjs.com/package/@forsvn/conquistador)
-  through the release workflow.
+- Released at [`v0.2.2`](https://github.com/forsvn-labs/conquistador/releases/tag/v0.2.2) from
+  merged `private-alpha` commit `b7ecaae0941f5645878062d6ffc88f27d3eacfc0` through
+  [#27](https://github.com/forsvn-labs/conquistador/pull/27), and published as
+  [`@forsvn/conquistador@0.2.2`](https://www.npmjs.com/package/@forsvn/conquistador) (`latest`)
+  by [run 36670150227](https://github.com/forsvn-labs/conquistador/actions/runs/36670150227). The
+  registry shasum `80f5524` matches the release tarball, and `npm audit signatures` verifies its
+  signature and provenance attestation. From the registry, `conquistador update` moved a 0.2.1
+  install in an isolated home to 0.2.2 for all five agents.
 - **Windows: installs into Claude Code, Codex, and Copilot CLI work.** Before, `add` failed with
   `spawnSync claude ENOENT` for every agent installed through npm, because Node does not start
   `.cmd` files without a shell. The new `tools/spawn.mjs` starts them with exact arguments. It
