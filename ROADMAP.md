@@ -2,8 +2,9 @@
 
 ## Public alpha follow-up
 
-1. Run `tools/e2e/package-install.mjs` on Linux and Windows before a release claims them.
-2. List the plugin in the agent marketplaces, then check each listing installs 0.2.x.
+1. List the plugin in the agent marketplaces, then check each listing installs 0.2.x.
+2. Test the interactive start flow on Windows (a pseudo-terminal harness), and Linux and Windows
+   on ARM.
 
 ## Next acceptance
 

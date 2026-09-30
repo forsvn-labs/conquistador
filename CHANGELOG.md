@@ -4,6 +4,29 @@
 versions. Verification establishes the stated local scope; native host behavior, useful model
 output, human acceptance and rights disposition require separate evidence.
 
+## 2026-09-30, 0.2.2 public alpha
+
+- Released at [`v0.2.2`](https://github.com/forsvn-labs/conquistador/releases/tag/v0.2.2) and
+  published as [`@forsvn/conquistador@0.2.2`](https://www.npmjs.com/package/@forsvn/conquistador)
+  through the release workflow.
+- **Windows: installs into Claude Code, Codex, and Copilot CLI work.** Before, `add` failed with
+  `spawnSync claude ENOENT` for every agent installed through npm, because Node does not start
+  `.cmd` files without a shell. The new `tools/spawn.mjs` starts them with exact arguments. It
+  runs an npm shim's JavaScript file with Node and a shim's native `.exe` directly. It runs npm and
+  npx through their CLI files, and escapes for `cmd.exe` only as the last resort.
+- **Windows: the agent launch no longer uses an unquoted shell.** A task with spaces was split
+  into words, and `&` or `|` in it ran as a command. `conquistador update` passed its npm prefix
+  the same way.
+- A broken link on PATH no longer counts as an installed agent.
+- `npm run bootstrap` works on Windows.
+- **Linux and Windows are verified.** `.github/workflows/install-e2e.yml` runs
+  `tools/e2e/package-install.mjs` with real Claude Code, Codex, Cursor Agent, Copilot CLI, and
+  Grok CLI: Linux 28 of 28 and Windows 25 of 25 in
+  [run 36666136670](https://github.com/forsvn-labs/conquistador/actions/runs/36666136670), merged
+  through [#26](https://github.com/forsvn-labs/conquistador/pull/26). On Windows, the three
+  terminal checks (the interactive start flow) are not run. See Part 7 of
+  `docs/REVIEW-2026-09-SURFACES.md`.
+
 ## 2026-09-30, 0.2.1 public alpha
 
 - Released at [`v0.2.1`](https://github.com/forsvn-labs/conquistador/releases/tag/v0.2.1) from
