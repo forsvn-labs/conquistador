@@ -673,6 +673,43 @@ list before any code change.
 A check that cannot run on a platform is reported as not run, with the reason. It never counts
 as passed.
 
+### Results
+
+`install-e2e.yml` run [36664487941](https://github.com/forsvn-labs/conquistador/actions/runs/36664487941), with
+real Claude Code, Codex, Cursor Agent, Copilot CLI, and Grok CLI, no model calls:
+
+| Platform | Result | Not run |
+| --- | --- | --- |
+| Linux x64 (Ubuntu) | 28 of 28 | none |
+| Windows x64 | 25 of 25 | I6, I3 start flow, S1: no pseudo-terminal or `expect` |
+| macOS arm64 (local) | 28 of 28 | none |
+
+Reports: the `package-install-Linux` and `package-install-Windows` artifacts of that run.
+
+What the runs found, in order:
+
+- **W1, confirmed.** On Windows, `add` failed for Claude Code, Codex, and Copilot CLI with
+  `spawnSync claude ENOENT`. Node does not look for `.cmd` files without a shell. The new
+  `tools/spawn.mjs` resolves the command with `PATHEXT`. It runs an npm shim's JavaScript file with
+  this Node and a shim's native `.exe` (Claude Code's `bin\claude.exe`) directly. It runs npm and npx
+  through their CLI files, and escapes for `cmd.exe` only as the last resort. The installer, the
+  agent launch, and `conquistador update` use it.
+- **W2, fixed without a Windows test.** The agent launch used an unquoted shell on Windows, so a
+  task with spaces split into words, and `&` or `|` in it ran as a command. `update` passed its npm
+  prefix the same way. Both now use `spawnCommand`. The launch path needs a terminal, so Windows CI
+  does not cover it.
+- **A broken link counted as an agent (macOS).** `onPath` accepted a symlink whose target was gone.
+  An old `~/.local/bin/codex` link made Codex "found" and then fail. It now follows links.
+- **Contributor tooling.** `npm run bootstrap` failed on Windows (`spawnSync npm.cmd EINVAL`).
+- **Test harness only.** H1 to H8 as listed. Also: Git for Windows crashes (`0xC0000005`) when
+  only its `mingw64\bin` folder is on PATH, and the test home hides the runner's `safe.directory`
+  entry. Codex writes warnings to stderr, which Tcl `exec` treats as an error.
+- **Not seen:** W3 (local marketplace paths work), W5, W6 (the Git route passed with the runner's
+  line-ending settings), W7, W8 (all five agents have Windows builds), L1, L3.
+
+Not covered yet: the interactive start flow on Windows, Windows on ARM, Linux on ARM, and a
+negative control of this workflow on `v0.2.1`.
+
 ## Appendix: unit-test prune audit (2026-09-25)
 
 Audited all 92 test files against the installed-project E2E

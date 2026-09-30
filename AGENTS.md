@@ -24,7 +24,8 @@ This repository owns product code and its release evidence.
 - E2E: `node tools/e2e/routing-breadth.mjs` (offline; marketing breadth, coding silence, tour drift),
   `expect tools/e2e/agent-first.exp` (bare `conquistador` to a pre-filled Claude Code and Codex, isolated
   home, no model call), `node tools/e2e/package-install.mjs` (installs the package from Git and `npx`
-  as users do, all detected agents, isolated homes; needs a real terminal for `script` and `expect`),
+  as users do, all detected agents, isolated homes; needs `script` and `expect`, which Windows lacks, so
+  those checks report "not run" there; CI runs it on Linux and Windows through `install-e2e.yml`),
   `node tools/e2e/update-latest.mjs` (`conquistador update` against a local Verdaccio registry, all agents),
   and `node tools/e2e/knowledge-use.mjs [--set breadth]` (headless Claude Code; spends tokens). Reports go to `dist/e2e/`.
 - Router phrases: curated `intents` describe a method; practitioner wording that only selects it goes
@@ -35,6 +36,8 @@ This repository owns product code and its release evidence.
 - Select the relevant skill; do not load the whole library. Preserve explicit human authority for
   publication, spend, external actions, and feedback disclosure. Use Executor for authorized live calls.
 - Do not turn synthetic fixtures, passing tests, or local package records into live/provider/human proof.
+- Start other programs through `spawnCommand` in `tools/spawn.mjs`, not `spawn` or a shell, so
+  Windows `.cmd` agents and npm start with exact arguments.
 - Run `npm run build` and `npm test` after code changes. Use focused module tests while iterating.
   Keep maintained runtime/lib output in sync with source and commit it when source changes.
 - `npm run package` creates local unbound artifacts from a clean exact Git commit. It does not

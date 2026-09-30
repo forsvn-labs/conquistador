@@ -96,8 +96,9 @@ OIDC token exchange works.
 Historical `test:source`, candidate, live-evidence and inventory-maintenance pipelines retain their
 own private authority requirements and are not part of `npm test` or the public setup path.
 
-The commands have been exercised on macOS with Node 24 and are suitable for the included Linux CI
-job. Other operating systems and CPU architectures still require their own observed verification.
+The commands have been exercised on macOS with Node 24 and run in the included Linux CI job.
+`.github/workflows/install-e2e.yml` runs `tools/e2e/package-install.mjs` on Linux and Windows with the
+real agent CLIs. Other CPU architectures still require their own observed verification.
 
 ## Setup changes
 
