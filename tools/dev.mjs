@@ -1,13 +1,14 @@
 import { spawnSync } from 'node:child_process';
+import { spawnCommand } from './spawn.mjs';
 import { fileURLToPath } from 'node:url';
 import { resolve } from 'node:path';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 if (Number(process.versions.node.split('.')[0]) < 24) throw new Error('Use Node 24 or later.');
-const npm = process.platform === 'win32' ? 'npm.cmd' : 'npm';
+const npm = 'npm';
 function run(command, args, cwd = root) {
-  // Node starts npm.cmd on Windows only through a shell. The arguments hold no spaces.
-  const result = spawnSync(command, args, { cwd, stdio: 'inherit', timeout: 600_000, shell: process.platform === 'win32' });
+  const { file, args: fileArgs, options } = spawnCommand(command, args);
+  const result = spawnSync(file, fileArgs, { cwd, stdio: 'inherit', timeout: 600_000, ...options });
   if (result.error) throw result.error;
   if (result.status !== 0) process.exit(result.status || 1);
 }

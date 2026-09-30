@@ -22,16 +22,19 @@ function find(command, env) {
   return command;
 }
 
-// npm's cmd-shim ends with the file it runs and %*: a JavaScript file after "%_prog%" (Node), or
-// a native program such as "%dp0%\node_modules\PACKAGE\bin\claude.exe".
+// npm's cmd-shim ends with the file it runs and %*: a JavaScript file right after "%_prog%"
+// (Node), or a native program such as "%dp0%\node_modules\PACKAGE\bin\claude.exe" at the start
+// of a line. A shim that adds interpreter arguments or sets other variables goes through cmd.exe.
+const shimVariables = /^(?:dp0|_prog|PATHEXT)$/i;
 function shimTarget(path) {
   let text = '';
   try { text = readFileSync(path, 'utf8'); } catch { return null; }
-  const match = /"%~?dp0%?\\([^"]+)"\s+%\*/i.exec(text);
-  const target = match ? resolve(dirname(path), match[1]) : null;
-  if (!target || !isFile(target)) return null;
-  if (/\.(?:exe|com)$/i.test(target)) return { file: target, node: false };
-  return /\.[mc]?js$/i.test(target) ? { file: target, node: true } : null;
+  if ([...text.matchAll(/\bSET\s+"?([^="\s]+)=/gi)].some(match => !shimVariables.test(match[1]))) return null;
+  const script = /"%_prog%"\s+"%~?dp0%?\\([^"]+\.[mc]?js)"\s+%\*/i.exec(text);
+  const program = /^\s*@?"%~?dp0%?\\([^"]+\.(?:exe|com))"\s+%\*\s*$/im.exec(text);
+  const target = script ?? program;
+  const file = target ? resolve(dirname(path), ...target[1].split(/[\\/]/)) : null;
+  return file && isFile(file) ? { file, node: Boolean(script) } : null;
 }
 
 // Escaping for cmd.exe /d /s /c, as in cross-spawn: quote for the C runtime, then escape cmd.exe

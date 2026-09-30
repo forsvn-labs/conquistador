@@ -13,6 +13,8 @@ on:
       - tools/front-door.mjs
       - tools/launch.mjs
       - tools/self-update.mjs
+      - tools/spawn.mjs
+      - tools/dev.mjs
       - tools/e2e/package-install.mjs
       - tools/e2e/agent-first.exp
       - runtime/bin/**
