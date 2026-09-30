@@ -1,14 +1,15 @@
 // `conquistador update` gets the newest registry version first, then that version registers itself
 // with every agent. Case IDs (U1–U13) are in docs/REVIEW-2026-09-SURFACES.md, Part 5.
 import { spawnSync } from 'node:child_process';
+import { spawnCommand } from './spawn.mjs';
 import { existsSync } from 'node:fs';
 import { basename, dirname, join } from 'node:path';
 import { productRoot, tilde, version } from './agents.mjs';
 
 export const PACKAGE = '@forsvn/conquistador';
 const windows = process.platform === 'win32';
-const npm = windows ? 'npm.cmd' : 'npm';
-const npx = windows ? 'npx.cmd' : 'npx';
+const npm = 'npm';
+const npx = 'npx';
 
 // Semver order: 0.0.9 < 0.0.17 < 0.1.0-beta.1 < 0.1.0 (U5). Returns true when a is newer than b.
 export function newer(a, b) {
@@ -45,8 +46,14 @@ export function channel(root = productRoot) {
 }
 
 // Asks the registry the user configured (npm_config_registry, .npmrc) for `latest` (U13).
+// spawnSync with exact arguments on every platform (npm is npm.cmd on Windows).
+function exec(command, args, options) {
+  const { file, args: fileArgs, options: extra } = spawnCommand(command, args, options.env ?? process.env);
+  return spawnSync(file, fileArgs, { ...options, ...extra });
+}
+
 export function latest() {
-  const result = spawnSync(npm, ['view', `${PACKAGE}@latest`, 'version', '--json'], { encoding: 'utf8', timeout: 15_000, stdio: ['ignore', 'pipe', 'pipe'], shell: windows });
+  const result = exec(npm, ['view', `${PACKAGE}@latest`, 'version', '--json'], { encoding: 'utf8', timeout: 15_000, stdio: ['ignore', 'pipe', 'pipe'] });
   if (result.error?.code === 'ETIMEDOUT' || result.signal) return { error: 'the npm registry did not answer in 15 s' };
   if (result.error) return { error: `npm did not run (${result.error.code ?? result.error.message})` };
   const code = /npm (?:error|ERR!) code (\w+)/.exec(result.stderr ?? '')?.[1];
@@ -83,7 +90,7 @@ export function selfUpdate(args, { dryRun = false, log = console.log } = {}) {
   if (how.kind === 'global') {
     const [command, commandArgs] = steps.shift();
     log(shown([command, commandArgs]));
-    const result = spawnSync(command, commandArgs, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], shell: windows, timeout: 600_000 });
+    const result = exec(command, commandArgs, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], timeout: 600_000 });
     if (result.status !== 0) {
       const lines = `${result.stdout ?? ''}${result.stderr ?? ''}`.trim().split('\n').filter(line => /error|EACCES|EPERM/i.test(line)).slice(-4);
       // The installed version and the agents stay as they were (U6).
@@ -92,6 +99,6 @@ export function selfUpdate(args, { dryRun = false, log = console.log } = {}) {
     }
   }
   const [command, commandArgs] = steps[0];
-  const result = spawnSync(command, commandArgs, { env, stdio: 'inherit', shell: windows && command === npx });
+  const result = exec(command, commandArgs, { env, stdio: 'inherit' });
   return result.status ?? 1;
 }

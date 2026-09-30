@@ -8,6 +8,7 @@ import { homedir } from 'node:os';
 import { basename, delimiter, dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { briefFiles } from './operator-package.mjs';
+import { spawnCommand } from './spawn.mjs';
 
 export const productRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 export const version = JSON.parse(readFileSync(join(productRoot, 'package.json'), 'utf8')).version;
@@ -109,7 +110,8 @@ function prefill() {
 }
 
 export function run(command, args, { timeout = 120_000 } = {}) {
-  const result = spawnSync(command, args, { encoding: 'utf8', timeout, stdio: ['ignore', 'pipe', 'pipe'], env: process.env });
+  const { file, args: fileArgs, options } = spawnCommand(command, args);
+  const result = spawnSync(file, fileArgs, { encoding: 'utf8', timeout, stdio: ['ignore', 'pipe', 'pipe'], env: process.env, ...options });
   return { status: result.error ? 127 : result.status, stdout: result.stdout ?? '', stderr: result.stderr ?? '', error: result.error };
 }
 

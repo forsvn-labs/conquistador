@@ -14,6 +14,7 @@ import { tmpdir } from 'node:os';
 import { delimiter, dirname, join, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { onPath, requiredPayload } from '../agents.mjs';
+import { spawnCommand } from '../spawn.mjs';
 
 const root = resolve(fileURLToPath(new URL('../../', import.meta.url)));
 const out = resolve(process.argv[2] ?? join(root, 'dist/e2e/package-install'));
@@ -41,12 +42,11 @@ function notRun(id, name, reason) {
   checks.push({ id, name, ok: null, notRun: reason });
   console.log(`- ${id} ${name}  (not run: ${reason})`);
 }
-// Windows starts .cmd shims (npm, npx, most agent CLIs) only through cmd.exe.
-const quote = value => (/^[\w.:~\\/@=+-]+$/.test(value) ? value : `"${value.replace(/"/g, '""')}"`);
+
 function run(command, args, { env, cwd = work, timeout = 600_000 } = {}) {
   const started = Date.now();
-  const shell = windows && command !== process.execPath;
-  const result = spawnSync(shell ? quote(command) : command, shell ? args.map(quote) : args, { env, cwd, encoding: 'utf8', timeout, stdio: ['ignore', 'pipe', 'pipe'], shell });
+  const { file, args: fileArgs, options } = spawnCommand(command, args, env ?? process.env);
+  const result = spawnSync(file, fileArgs, { env, cwd, encoding: 'utf8', timeout, stdio: ['ignore', 'pipe', 'pipe'], ...options });
   const output = `${result.stdout ?? ''}${result.stderr ?? ''}`;
   log.push(`$ ${command} ${args.join(' ')}\n${output.trim()}\n[exit ${result.status}, ${Date.now() - started} ms]\n`);
   return { status: result.status, output, stdout: result.stdout ?? '', ms: Date.now() - started };
