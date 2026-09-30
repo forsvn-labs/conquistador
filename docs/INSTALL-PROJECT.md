@@ -1,7 +1,7 @@
 # Per-project operator installation (conquistador project)
 
-The current release is the 0.2.1 public alpha, published to npm as `@forsvn/conquistador` and
-tagged [v0.2.1](https://github.com/forsvn-labs/conquistador/releases/tag/v0.2.1). See
+The current release is the 0.2.2 public alpha, published to npm as `@forsvn/conquistador` and
+tagged [v0.2.2](https://github.com/forsvn-labs/conquistador/releases/tag/v0.2.2). See
 [VERSIONS.md](../VERSIONS.md) for older private prereleases.
 The npm install and agent registration are tested on macOS, Linux, and Windows with Node 24: see
 [Part 7 of the surfaces review](REVIEW-2026-09-SURFACES.md). On Windows, the interactive start
@@ -91,7 +91,7 @@ npx @forsvn/conquistador
 ```
 
 To install an exact Git tag instead of the registry package, add `--ignore-scripts` and
-`--install-links`: `npm install -g --ignore-scripts --install-links git+https://github.com/forsvn-labs/conquistador.git#v0.2.1`.
+`--install-links`: `npm install -g --ignore-scripts --install-links git+https://github.com/forsvn-labs/conquistador.git#v0.2.2`.
 `--ignore-scripts` skips npm's automatic lifecycle hooks. `--install-links` is required for the Git route. It prevents npm 11 from keeping
 a global executable linked to its temporary Git checkout. Tarball installations already copy files
 and do not need that flag. Check acquisition immediately with `conquistador version`.
@@ -99,7 +99,7 @@ and do not need that flag. Check acquisition immediately with `conquistador vers
 For a supplied release tarball, use the same persistent installation:
 
 ```sh
-npm install -g --ignore-scripts /absolute/path/forsvn-conquistador-0.2.1.tgz
+npm install -g --ignore-scripts /absolute/path/forsvn-conquistador-0.2.2.tgz
 conquistador
 ```
 
@@ -115,9 +115,9 @@ authenticate that sender. Keep the tag, full source commit, and checksum togethe
 
 | System | Calculate SHA-256 |
 | --- | --- |
-| macOS | `shasum -a 256 /absolute/path/forsvn-conquistador-0.2.1.tgz` |
-| Linux | `sha256sum /absolute/path/forsvn-conquistador-0.2.1.tgz` |
-| Windows PowerShell | `Get-FileHash -Algorithm SHA256 "C:\Downloads\forsvn-conquistador-0.2.1.tgz"` |
+| macOS | `shasum -a 256 /absolute/path/forsvn-conquistador-0.2.2.tgz` |
+| Linux | `sha256sum /absolute/path/forsvn-conquistador-0.2.2.tgz` |
+| Windows PowerShell | `Get-FileHash -Algorithm SHA256 "C:\Downloads\forsvn-conquistador-0.2.2.tgz"` |
 
 Node/npm must work before the guide can start. A supplied tarball does not require GitHub sign-in
 or Git, but npm may need registry access for package dependencies. No provider account is needed
@@ -334,8 +334,8 @@ listing nor a passing doctor proves activation or output quality. Record observa
 
 | Transport | Command or procedure |
 | --- | --- |
-| Optional persistent CLI | `npm install --global --ignore-scripts /absolute/path/forsvn-conquistador-0.2.1.tgz`, then `conquistador setup` in the receiving project |
-| Bun tarball | `bunx --package /absolute/path/forsvn-conquistador-0.2.1.tgz conquistador setup`; Node 24 remains required by the shebang |
+| Optional persistent CLI | `npm install --global --ignore-scripts /absolute/path/forsvn-conquistador-0.2.2.tgz`, then `conquistador setup` in the receiving project |
+| Bun tarball | `bunx --package /absolute/path/forsvn-conquistador-0.2.2.tgz conquistador setup`; Node 24 remains required by the shebang |
 | Source or ZIP | `node /absolute/path/conquistador-source/runtime/bin/conquistador.js setup` in the receiving project |
 | Exact Git commit | `npx -y --ignore-scripts --package=git+https://github.com/forsvn-labs/conquistador.git#COMMIT conquistador setup`; replace `COMMIT` with the full commit from the release assembly record. For a persistent global copy add `--install-links` to `npm install -g`. |
 

@@ -41,7 +41,7 @@
     "role": { "type": "string", "enum": ["advisor", "worker"] },
     "displayName": { "type": "string", "minLength": 1 },
     "productName": { "const": "conquistador" },
-    "pluginVersion": { "const": "0.2.1" },
+    "pluginVersion": { "const": "0.2.2" },
     "canonicalSkill": { "const": "conquistador" },
     "canonicalSkillRoot": { "enum": ["skills/conquistador", "agent/skills/conquistador", "advisor/skills/conquistador", "worker/skills/conquistador"] },
     "installClass": { "const": "candidate-only" },

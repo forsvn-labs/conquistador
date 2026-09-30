@@ -3,7 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "engines": { "node": ">=24" },
+  "engines": {
+    "node": ">=24"
+  },
   "scripts": {
     "build": "eve build",
     "check": "tsc --noEmit",
@@ -11,6 +13,16 @@
     "dev": "eve dev --host 127.0.0.1 --no-ui",
     "jobs": "node client.mjs"
   },
-  "dependencies": { "eve": "0.55.0", "ai": "7.0.102", "just-bash": "3.4.2" },
-  "devDependencies": { "typescript": "5.9.3", "@types/node": "24.10.1" }
+  "dependencies": {
+    "eve": "0.55.0",
+    "ai": "7.0.102",
+    "just-bash": "3.4.2"
+  },
+  "devDependencies": {
+    "typescript": "5.9.3",
+    "@types/node": "24.10.1"
+  },
+  "overrides": {
+    "undici": "8.11.2"
+  }
 }
