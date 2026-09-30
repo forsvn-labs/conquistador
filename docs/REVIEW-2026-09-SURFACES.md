@@ -707,8 +707,12 @@ What the runs found, in order:
 - **Not seen:** W3 (local marketplace paths work), W5, W6 (the Git route passed with the runner's
   line-ending settings), W7, W8 (all five agents have Windows builds), L1, L3.
 
-Not covered yet: the interactive start flow on Windows, Windows on ARM, Linux on ARM, and a
-negative control of this workflow on `v0.2.1`.
+Negative control: `gh workflow run install-e2e.yml -f ref=v0.2.1`
+([run 36668315408](https://github.com/forsvn-labs/conquistador/actions/runs/36668315408)). Windows: 20 of 25.
+I1, A1, I3, B1, and I12 fail, because Claude Code, Codex, and Copilot CLI are not installed.
+Linux: 28 of 28, as expected for a Windows-only bug.
+
+Not covered yet: the interactive start flow on Windows, Windows on ARM, and Linux on ARM.
 
 ## Appendix: unit-test prune audit (2026-09-25)
 

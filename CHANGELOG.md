@@ -26,6 +26,9 @@ output, human acceptance and rights disposition require separate evidence.
   through [#26](https://github.com/forsvn-labs/conquistador/pull/26). On Windows, the three
   terminal checks (the interactive start flow) are not run. See Part 7 of
   `docs/REVIEW-2026-09-SURFACES.md`.
+- Negative control: the same workflow on `v0.2.1`
+  ([run 36668315408](https://github.com/forsvn-labs/conquistador/actions/runs/36668315408)) fails 5 checks on
+  Windows (Claude Code, Codex, and Copilot CLI are not installed) and passes 28 of 28 on Linux.
 
 ## 2026-09-30, 0.2.1 public alpha
 
