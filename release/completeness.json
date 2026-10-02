@@ -839,6 +839,10 @@
       "sha256": "7945e09e0623af3fdc1eef2452ab91ea81228236e50113e59e2bc78978df006f"
     },
     {
+      "path": "conquistador/commands/connect/COMMAND.md",
+      "sha256": "ade0d731caf84f351a8b83771d9dc1d6b1e972ca9256a655448a979fc8fd94c3"
+    },
+    {
       "path": "conquistador/examples/content-improvement.md",
       "sha256": "7804a6c5d5d38090763a23136df2536f1111659c13e455d123e4ed87c0cc440f"
     },
@@ -880,7 +884,7 @@
     },
     {
       "path": "conquistador/methods/connect-accounts.md",
-      "sha256": "85393853f54e9becfa77c3725739f90c00465a7c6659199c64e6224590dbbf9c"
+      "sha256": "d35c06b90e79873543f1441cf87b1e528d0cbdc78b41c5a065ef13291d08bd4a"
     },
     {
       "path": "conquistador/methods/editorial-polish.md",
@@ -900,7 +904,7 @@
     },
     {
       "path": "conquistador/methods/stack-setup.md",
-      "sha256": "9ae624d49d77c25af8d45636de2b2315b5f50793cf4233eba25fb639d93f976f"
+      "sha256": "17b37ed20d36a2cfdd59719137a93a05c3a1e7931c847a3b3d7b2cb3056cf786"
     },
     {
       "path": "conquistador/methods/video-production.md",
@@ -1664,7 +1668,7 @@
     },
     {
       "path": "conquistador/standards/setup.md",
-      "sha256": "2b0b60d4e6225b87ea1cab062fc2eaf7fd00b4b531876f6953b5aae546f926e7"
+      "sha256": "c1af92fb916cfd68f68e7e924992e03327f54d84b65eebb23f95cf4c0f4cf0ef"
     },
     {
       "path": "conquistador/standards/vietnamese.md",
