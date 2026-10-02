@@ -4,7 +4,7 @@ Use when the host cannot run conversion-diagnosis and landing-eval specialists a
 
 Keep the same method. Change only the machinery.
 
-Choose the mode from the front-door SKILL.md. Do not blend a pre-revision diagnosis with a
+Choose the mode from the front-door COMMAND.md. Do not blend a pre-revision diagnosis with a
 post-launch ledger readout into one vague scorecard.
 
 ## Conversion diagnosis lens (find the break, then revise)
@@ -26,7 +26,7 @@ record the baseline and instrumentation needed before activation.
    [`../agents/conversion-external-check-agent.md`](../agents/conversion-external-check-agent.md).
 3. Form testable hypotheses with predictions, proposed mechanisms and alternatives with
    [`../agents/conversion-hypothesis-agent.md`](../agents/conversion-hypothesis-agent.md) and
-   [`../references/hypothesis-framework.md`](../references/hypothesis-framework.md).
+   [`../references/hypothesis-framework.md`](../../diagnose/references/hypothesis-framework.md).
 4. Map deciding data with
    [`../agents/conversion-data-mapper-agent.md`](../agents/conversion-data-mapper-agent.md), then
    verdict with [`../agents/conversion-verdict-agent.md`](../agents/conversion-verdict-agent.md).

@@ -61,7 +61,7 @@ After Pre-Dispatch, generate or update `product-context.md` (`id: product-contex
 
 | Artifact | Source | Benefit |
 |----------|--------|---------|
-| `diagnose.md` | supplied diagnosis or `diagnose-growth` output | Problem context sharpens audience research |
+| `diagnose.md` | supplied diagnosis or `diagnose` output | Problem context sharpens audience research |
 
 ---
 
@@ -83,7 +83,7 @@ This is the cross-stack contract consumed by campaign-plan, brand-system, copywr
 
 ```markdown
 ---
-skill: research-positioning
+skill: position
 version: 1
 date: [today's date]
 status: done | done_with_concerns | blocked | needs_context
@@ -164,7 +164,7 @@ decision_state: pending
 - [Skews you couldn't mitigate — explicit caveats for downstream skills]
 
 ## Next Step
-Run `plan-campaign` to turn these insights into a communication plan.
+Run `campaign` to turn these insights into a communication plan.
 
 > On re-run: overwrite `ICP.md` in place and increment the integer `version:`. Prior versions live in git history — no `.v[N].md` siblings under `canonical/`.
 ```
@@ -213,7 +213,7 @@ This makes the limitation visible to downstream skills (campaign-plan in particu
 
 The `version: 1` field in the frontmatter is the **artifact version**, not the skill version. Increment on re-run; overwrite `ICP.md` in place with the incremented version (prior versions live in git history — no `.v[N].md` siblings under `canonical/`). The Note at the bottom of the Artifact Template documents this.
 
-The `skill: research-positioning` frontmatter field is fixed (matches the skill slug per `SKILL.md`).
+The `skill: research-positioning` frontmatter field is fixed (matches the skill slug per `COMMAND.md`).
 
 ---
 

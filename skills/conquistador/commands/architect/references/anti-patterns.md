@@ -2,7 +2,7 @@
 title: System-Architecture — Anti-Patterns
 lifecycle: canonical
 status: stable
-produced_by: architect-software-system
+produced_by: architect
 load_class: ANTI-PATTERN
 ---
 

@@ -2,7 +2,7 @@
 title: VN-Tone — Anti-Patterns Catalog
 lifecycle: canonical
 status: stable
-produced_by: polish-vietnamese
+produced_by: vietnamese
 load_class: ANTI-PATTERN
 ---
 
@@ -96,7 +96,7 @@ These patterns apply across the marketing stack — vn-tone, as the polish-chain
 
 **Problem:** `market = VN` resolved in an upstream skill's Pre-Dispatch but the polish chain bypasses vn-tone and ships the artifact with raw model VN. Spoken-line section reads as Vietnamese-by-Google-Translate — particles missing, pronoun drift, idioms calqued from English.
 
-**INSTEAD:** Upstream skills that produce Vietnamese copy should invoke `polish-vietnamese` as a terminal pass. This skill cannot detect when it wasn't called. If discovered post-hoc, surface it as a process bug on the caller.
+**INSTEAD:** Upstream skills that produce Vietnamese copy should invoke `vietnamese` as a terminal pass. This skill cannot detect when it wasn't called. If discovered post-hoc, surface it as a process bug on the caller.
 
 ### Calling skill drops vn-tone output schema
 
@@ -106,7 +106,7 @@ These patterns apply across the marketing stack — vn-tone, as the polish-chain
 
 ### Cross-stack contract drift (Artifact Template schema)
 
-**Problem:** A maintainer adds a new frontmatter field or body section to the vn-tone artifact without checking calling-skill consumers (`create-shortform`, `write-social`, etc. that read `polish_chain_applied` from polish-vietnamese output). Schema drifts; downstream parsers (if any are added) break.
+**Problem:** A maintainer adds a new frontmatter field or body section to the vn-tone artifact without checking calling-skill consumers (`video`, `social`, etc. that read `polish_chain_applied` from `vietnamese` output). Schema drifts; downstream parsers (if any are added) break.
 
 **INSTEAD:** Artifact Template (8-field frontmatter + 4 body sections per `format-conventions.md`) is the contract. Schema changes require atomic update of `format-conventions.md` § "Frontmatter field order" + § "Body section headers (verbatim)" so the convention IS the contract. Flag to operator before changing. Currently no automated downstream consumer; the contract still matters for the day one gets built.
 

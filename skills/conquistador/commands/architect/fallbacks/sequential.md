@@ -6,7 +6,7 @@ and critic as separate agents.
 Keep the same method. Change only the machinery. Label this single-context. Do not call it
 independent corroboration.
 
-1. Establish mode and constraints per `SKILL.md` (greenfield / brownfield / migration). Gather product
+1. Establish mode and constraints per `COMMAND.md` (greenfield / brownfield / migration). Gather product
    flow, near-term load, team, budget, latency, availability, privacy, compliance, and deployment
    facts. Separate facts, estimates, assumptions, and unresolved choices. Use
    [`../references/intake-prompts.md`](../references/intake-prompts.md) when answers are missing.

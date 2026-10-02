@@ -2,13 +2,13 @@
 title: Outreach Eval — End-to-End Cycle Walkthrough (email / founders, deliverability-gated watch)
 lifecycle: canonical
 status: stable
-produced_by: evaluate-outreach
+produced_by: results
 load_class: EXAMPLE
 ---
 
 # Outreach Eval — End-to-End Cycle Walkthrough
 
-**Load when:** an operator (human or agent) wants a complete trace of one evaluate-outreach
+**Load when:** an operator (human or agent) wants a complete trace of one `results`
 cycle — Pre-Dispatch hard-blocks → Layer 1 parallel (Metric Ingest + Diagnosis) → Layer 2
 (Recommendation) → Layer 3 (Critic) → side effects. This run shows the case the skill exists
 for: **reply quality looks fine, but the deliverability/compliance gate caps the verdict at
@@ -38,11 +38,11 @@ background, Leaf `#74B36B` accent on the "ready"/keep cue — never Signal Lime.
 
 ## Step 0 — Pre-Dispatch (hard-blocks first, then warm-start)
 
-Hard-blocks checked BEFORE Cold Start (SKILL.md "Pre-Dispatch"):
+Hard-blocks checked BEFORE Cold Start (COMMAND.md "Pre-Dispatch"):
 
 1. `program.md` + `context.md` present → not `NEEDS_CONTEXT`.
-2. Sequence shipped + reply data exists → not a draft, so not routed to `write-outreach`.
-3. Source write-outreach artifact readable → not `BLOCKED`.
+2. Sequence shipped + reply data exists → not a draft, so not routed to `outreach`.
+3. Source `outreach` artifact readable → not `BLOCKED`.
 4. Channel+segment tag supplied (`email / founders`) → not `BLOCKED`.
 5. Deliverability/compliance evidence supplied (bounce, spam-complaint, opt-out) → not `BLOCKED`.
 
@@ -102,8 +102,8 @@ Recommendation consumes Layer 1, applies the Decision Rules + the deliverability
 - Reply quality alone would support `keep` (positive-reply 1.1% vs 0.7%, 6 meetings).
 - **But** bounce 6.4% (> 3% guardrail) + spam 0.34% (> 0.1% guardrail) + reputation degrading is a
   deliverability red flag → the gate **caps the verdict at `watch`** (cannot be `keep` — Hard Fail #12).
-- Routing: the defect is the **list**, not the copy. Route next work to `research-positioning` (replace the
-  purchased list with a verified, opted-in source), NOT to `write-outreach` (the opener is working).
+- Routing: the defect is the **list**, not the copy. Route next work to `position` (replace the
+  purchased list with a verified, opted-in source), NOT to `outreach` (the opener is working).
 - Confidence: **medium** — strong reply signal, but the list confounder + mid-warmup domain mean the
   positive-reply lift is not yet cleanly attributable to the sequence.
 
@@ -115,7 +115,7 @@ Saved to `.forsvn/loops/forsvn-cold-email-2026q2/evals/2026-06-03-cycle-2.md`:
 
 ```markdown
 ---
-skill: evaluate-outreach
+skill: results
 version: 1
 date: 2026-06-03
 status: done_with_concerns
@@ -125,9 +125,9 @@ lifecycle: evaluation
 use_when: "Deciding whether to keep, discard, watch, or block the current outreach cycle"
 do_not_use_when: "Authoring next-cycle sequence copy without reading the latest loop context and results"
 upstream: ".forsvn/loops/forsvn-cold-email-2026q2/program.md, context.md, .forsvn/artifacts/mkt/write-outreach/email-2026-05-18-founders-close-loop.md, reply-data source"
-downstream: "results.tsv, learnings.md, write-outreach next-cycle sequence"
+downstream: "results.tsv, learnings.md, outreach next-cycle sequence"
 provenance:
-  skill: evaluate-outreach
+  skill: results
   run_date: 2026-06-03
   input_artifacts:
     - .forsvn/artifacts/mkt/write-outreach/email-2026-05-18-founders-close-loop.md
@@ -161,7 +161,7 @@ provenance:
 
 ## What Changed This Cycle
 
-- Source write-outreach artifact: `.forsvn/artifacts/mkt/write-outreach/email-2026-05-18-founders-close-loop.md`
+- Source outreach artifact: `.forsvn/artifacts/mkt/write-outreach/email-2026-05-18-founders-close-loop.md`
 - Subject/opener/value-prop/CTA/step delta from prior cycle: opener rewritten to name the
   prospect's recent fundraise (was a generic "saw your launch"); CTA unchanged (1-line interest
   question); step 3 break-up email added. List source switched from the prior warm referral list
@@ -175,7 +175,7 @@ provenance:
 - vanity_signals: open rate ~41%, auto-replies 22, raw reply count 53 — not counted toward the verdict
 - meaningful_to_vanity_read: strong — the verdict rests on 6 booked meetings, not opens
 - objection_patterns: 3 replies cited "we already built this in-house" — a positioning signal for
-  write-outreach, not a deliverability issue
+  outreach, not a deliverability issue
 
 ### Deliverability & Compliance
 
@@ -200,13 +200,13 @@ provenance:
 - Keep: the fundraise-naming opener (it earned the meeting lift — preserve it verbatim).
 - Discard: the purchased list — it is the root cause of the deliverability red flag.
 - Watch: positive-reply rate on the SAME opener once a clean list is in place (isolate the variable).
-- Route next work to: research-positioning (verified, opted-in founder list) — NOT write-outreach (copy is fine).
+- Route next work to: position (verified, opted-in founder list) — NOT outreach (copy is fine).
 
 ## Results Row
 
 ```tsv
 cycle	date	artifact	primary_metric	value	baseline	status	description
-2	2026-06-03	evals/2026-06-03-cycle-2.md	positive-reply rate	1.1%	0.7%	watch	email / founders — 1.1% positive-reply, 6 meetings, but bounce 6.4% + spam 0.34% burning domain; fix list via research-positioning before scaling
+2	2026-06-03	evals/2026-06-03-cycle-2.md	positive-reply rate	1.1%	0.7%	watch	email / founders — 1.1% positive-reply, 6 meetings, but bounce 6.4% + spam 0.34% burning domain; fix list via `position` before scaling
 ```
 
 ## Learning Promotion
@@ -229,7 +229,7 @@ aggregate ≥ 49/70 AND every per-dim ≥ 6.
 - loop_fit: 9 — program.md + context.md + results.tsv read; cycle 2 scoped to email / founders; no drift
 - metric_integrity: 9 — positive-reply rate + baseline + window + 1,180 sends; full categorized reply breakdown
 - attribution_honesty: 8 — sends stated; purchased-list + warmup + warm-intro-skew confounders all named; confidence medium (calibrated)
-- decision_discipline: 9 — verdict respects the deliverability gate (watch, not keep); routing to research-positioning (list fix), not write-outreach
+- decision_discipline: 9 — verdict respects the deliverability gate (watch, not keep); routing to position (list fix), not outreach
 - reply_quality_discrimination: 9 — meaningful-vs-vanity read computed; verdict rests on 6 meetings, opens excluded
 - deliverability_and_compliance: 9 — bounce 6.4% + spam 0.34% thresholded against guardrails, named as red flags, capped the verdict; opt-out honored
 - ledger_correctness: 10 — one 8-col row by hand; status=watch; description carries "email / founders"
@@ -269,7 +269,7 @@ Critic cycle 1:
 
 A single per-dim < 6 is a FAIL regardless of aggregate (shared rubric §2, the < 6 asymmetry); the
 Hard Fail forces FAIL outright. **Revise once:** Recommendation re-scopes the verdict to `watch`,
-moves the deliverability red flag into the gate, and routes the list fix to `research-positioning`. Critic
+moves the deliverability red flag into the gate, and routes the list fix to `position`. Critic
 cycle 2 re-scores → PASS (the Step-4 scorecard). If it had still failed after the one revision, the
 orchestrator writes **no ledger row** and returns `BLOCKED` (all side effects are all-or-nothing).
 

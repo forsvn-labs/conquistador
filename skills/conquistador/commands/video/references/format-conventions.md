@@ -2,7 +2,7 @@
 title: Create Shortform — Format Conventions
 lifecycle: canonical
 status: stable
-produced_by: create-shortform
+produced_by: video
 load_class: PROCEDURE
 ---
 
@@ -99,10 +99,10 @@ Each variant starts with a table of element, primary choice, variant choice, ret
 
 ## Frontmatter field order
 
-Per the Output Artifact Structure block in SKILL.md body. Required fields (in this order):
+Per the Output Artifact Structure block in COMMAND.md body. Required fields (in this order):
 
 ```yaml
-type: create-shortform
+type: video
 role: hero | variant
 status: done | done_with_concerns | blocked | needs_context
 stack: marketing
@@ -126,7 +126,7 @@ campaign_tie_in: <slug or null>
 frame_direction: present | absent   # whether brand/FRAME.md grounded the frame composition
 critic_passes: [hook, production, algorithm-fit, brand-fit]
 critic_loop_count: 1 | 2
-polish_chain_applied: polish-vietnamese | operator-named-tool | none
+polish_chain_applied: vietnamese | operator-named-tool | none
 pack_verified:               # YYYY-MM-DD | none — applicable platform check date; `none` when unverified or absent
 applied_tactics: []          # specific §1/§2 tactics narrated in Format Specification; may be nonempty for a method-only pack
 ```
@@ -137,7 +137,7 @@ The `decision_state` / `review_tool` / `reviewed_at` / `reviewer` fields are the
 
 ## Body section headers (verbatim)
 
-The 15 hero body sections appear in this order with these exact headers (downstream consumers — currently human producers; potentially `evaluate-shortform` if it expands — match on H2):
+The 15 hero body sections appear in this order with these exact headers (downstream consumers — currently human producers; potentially `results` if it expands — match on H2):
 
 1. `## TL;DR for the Producer`
 2. `## What This Brief Bets On`
@@ -172,7 +172,7 @@ from the channel-fit Legibility block in Format Specification): the one core wag
 load-bearing creative choices each traced to a real source — the ICP pain / VoC phrase
 (`research/icp-research.md`), the brand voice/positioning (`BRAND.md` / `CREATIVE-DIRECTION.md`), or
 the campaign tie-in. The bet must be **falsifiable** (what would make this video flop), so
-`evaluate-shortform` can test it next cycle. No foundation → the convention's Absent state (general
+`results` can test it next cycle. No foundation → the convention's Absent state (general
 principles only; never a fabricated pain or VoC quote). It stays short — it must not bury the brief.
 
 ## Review Gate block (hero only)

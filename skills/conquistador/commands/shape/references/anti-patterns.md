@@ -2,7 +2,7 @@
 title: Shape-initiative — Anti-Patterns + Edge Cases
 lifecycle: canonical
 status: stable
-produced_by: shape-initiative
+produced_by: shape
 load_class: ANTI-PATTERN
 ---
 
@@ -31,12 +31,12 @@ load_class: ANTI-PATTERN
 
 | Anti-Pattern | Problem | Instead |
 |---|---|---|
-| Silent exit on operator override | Operator says "ship it" and shape-initiative skips the resolution-exit check — the audit trail of skipped branches disappears | Operator override is ALLOWED; silent exit is NOT. Log skipped branches under `Open branches (operator-overridden):` (conversation) + `## Open Branches (operator-overridden)` (spec); set `status: done_with_concerns` if saved. |
+| Silent exit on operator override | Operator says "ship it" and `shape` skips the resolution-exit check — the audit trail of skipped branches disappears | Operator override is ALLOWED; silent exit is NOT. Log skipped branches under `Open branches (operator-overridden):` (conversation) + `## Open Branches (operator-overridden)` (spec); set `status: done_with_concerns` if saved. |
 | False resolution | Calling the session "done" when load-bearing branches weren't recommended-and-cited | The 3-clause resolution-exit condition is the gate (Step 6). If you can't name what this session changed, you didn't grill — you transcribed. |
 | Two verdicts | Stating one verdict in conversation and a different one in the saved spec | Single verdict, two surfaces. The conversation Verdict and spec `## Verdict` are one decision rendered in two places. |
-| Verdict-skipping | Ending the session without an explicit verdict ("ready to build?" without naming `VALIDATED` / `BUILD_AS_PROPOSED` / etc.) | Verdict is not optional — operator-grade shape-initiative ends on a clear decisional output. If you cannot pick one, the conversation isn't done; surface what's missing and continue. |
+| Verdict-skipping | Ending the session without an explicit verdict ("ready to build?" without naming `VALIDATED` / `BUILD_AS_PROPOSED` / etc.) | Verdict is not optional — operator-grade `shape` ends on a clear decisional output. If you cannot pick one, the conversation isn't done; surface what's missing and continue. |
 | Mode-mixing | Treating an idea-stage session as plan-review (skipping idea-critic) OR a plan-review session as idea-stage (running idea-critic on a scope question) | Step 2.5 detection is one-shot but correctable. If ambiguous, ask the one-line detection question and lock the mode before opening coverage zones. |
-| Plan-review-mode drift | User picks SCOPE EXPANSION at Step 2.5 but the alternatives quietly drift toward conservative cuts | Locked for the session. If user wants to switch, they say so and shape-initiative re-anchors. |
+| Plan-review-mode drift | User picks SCOPE EXPANSION at Step 2.5 but the alternatives quietly drift toward conservative cuts | Locked for the session. If user wants to switch, they say so and `shape` re-anchors. |
 | Padding | Restating what the user said as if it's insight | Take a position. If you can't recommend, you don't understand the question well enough to ask it. |
 
 ## Output anti-patterns

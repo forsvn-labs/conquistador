@@ -1,4 +1,4 @@
-> **Not shipped.** This file documents a historical cloud signing-service HTTP surface that accompanied the excluded `ios-cli` binary. That binary and service are **not** part of `build-ios-app`. Prefer host Xcode / `xcodebuild` and App Store Connect workflows described in [SKILL.md](../SKILL.md). Keep the capability and auth *concepts* below only as background; do not call Chorus/Vibecode endpoints or claim cloud build/sign readiness from this reference alone.
+> **Not shipped.** This file documents a historical cloud signing-service HTTP surface that accompanied the excluded `ios-cli` binary. That binary and service are **not** part of `build`. Prefer host Xcode / `xcodebuild` and App Store Connect workflows described in [COMMAND.md](../../ios.md). Keep the capability and auth *concepts* below only as background; do not call Chorus/Vibecode endpoints or claim cloud build/sign readiness from this reference alone.
 
 # Historical signing-service API reference (not shipped)
 
@@ -460,7 +460,7 @@ ride-share, navigation, and similar apps that declare
 content-validates the GeoJSON shape: reject reasons surface as
 `assetDeliveryState.errors[].code` (commonly `TRANSIT_APP_FILE_INVALID_JSON`).
 The build's pbxproj must declare `INFOPLIST_KEY_MKDirectionsApplicationSupportedModes`
-for Apple to accept the upload — see [native distribution boundary](../SKILL.md#finish-at-the-release-boundary).
+for Apple to accept the upload — see [native distribution boundary](../../ios.md#finish-at-the-release-boundary).
 Apple-side `assetDeliveryState: COMPLETE` additionally requires the bundle id
 to be registered at https://mapsconnect.apple.com — outside pipeline scope.
 Cap: 10 MiB.

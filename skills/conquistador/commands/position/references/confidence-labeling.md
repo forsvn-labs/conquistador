@@ -5,7 +5,7 @@ title: Confidence Labeling — H/M/L epistemic tagging for research findings
 lifecycle: canonical
 status: stable
 load_class: PROCEDURE
-consumers: research-positioning · research-positioning · research-shortform
+consumers: `position` · `position` · research-shortform
 provenance:
   extracted_from: skills/research/research-positioning/references/confidence-and-bias.md § 1 (universal core)
   extracted_at: 2026-05-21
@@ -16,7 +16,7 @@ provenance:
 
 **One epistemic vocabulary for every research skill: tag each finding with how sure you are, scored by independent corroboration. Turns "here's what we found" into "here's what we found and how sure we are."**
 
-> Why this is shared: research-positioning, research-positioning, and research-shortform all produce findings that downstream skills act on. A claim backed by one anecdote and a claim backed by twenty independent sources read identically unless certainty is marked. This file is the canonical label, rubric, and discipline; each research skill applies it to its own artifact and calibrates the rubric to its evidence type — see § 7.
+> Why this is shared: `position`, `position`, and research-shortform all produce findings that downstream skills act on. A claim backed by one anecdote and a claim backed by twenty independent sources read identically unless certainty is marked. This file is the canonical label, rubric, and discipline; each research skill applies it to its own artifact and calibrates the rubric to its evidence type — see § 7.
 
 ---
 
@@ -40,7 +40,7 @@ A skill whose evidence basis is not source-count (e.g. market sizing, which tria
 | **Medium (M)** | 2–3 | All from similar source types (e.g. all Reddit, all analyst reports) | Mostly aligned; minor differences in emphasis |
 | **Low (L)** | 1 | Single thread / review / interview / report | Cannot be triangulated — single voice |
 
-This is the **default** rubric. A skill MAY calibrate the thresholds to its evidence type — a market trend backed by two independent, methodologically-strong analyst reports can legitimately be High — but it must state the calibration in its own reference, and the three columns (count, source diversity, cross-source agreement) always apply. research-positioning uses this default unchanged.
+This is the **default** rubric. A skill MAY calibrate the thresholds to its evidence type — a market trend backed by two independent, methodologically-strong analyst reports can legitimately be High — but it must state the calibration in its own reference, and the three columns (count, source diversity, cross-source agreement) always apply. `position` uses this default unchanged.
 
 ## 3. Source independence
 
@@ -89,6 +89,6 @@ Downstream skills weight findings by label — High drives primary strategy, Med
 
 Each research skill applies this label to its own artifact and keeps its domain-specific extensions:
 
-- **research-positioning** — labels every pain, bias, objection, trust/distrust signal, and emotional driver; uses the § 2 default rubric unchanged; adds the ≥5-independent-sources-per-persona floor and the Sample Bias section. See `confidence-and-bias.md` (the ICP application of this reference).
-- **research-positioning** — labels findings in the Limitations & Confidence section and market trends, using the § 2 default for qualitative findings. Market *sizing* estimates use a separate top-down/bottom-up triangulation calibration — see `market-sizing-guide.md` — a distinct mechanism, not this source-count rubric.
+- **`position`** — labels every pain, bias, objection, trust/distrust signal, and emotional driver; uses the § 2 default rubric unchanged; adds the ≥5-independent-sources-per-persona floor and the Sample Bias section. See `confidence-and-bias.md` (the ICP application of this reference).
+- **`position`** — labels findings in the Limitations & Confidence section and market trends, using the § 2 default for qualitative findings. Market *sizing* estimates use a separate top-down/bottom-up triangulation calibration — see `market-sizing-guide.md` — a distinct mechanism, not this source-count rubric.
 - **research-shortform** — labels per-platform pattern findings and trending-audio freshness. The label is the *claim-level* certainty tag; the section-level Sample-Size Flags (OK / LOW_SAMPLE / INSUFFICIENT_DATA) and the rule-of-3 Pattern Threshold in `scoring-rubrics.md` are orthogonal *sample-adequacy* gates that govern whether a pattern may be claimed at all.

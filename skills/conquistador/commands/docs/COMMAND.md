@@ -1,9 +1,8 @@
 ---
-name: write-technical-docs
-description: "Create or update code-grounded technical documentation. Use for README and setup guides, user/developer/operator docs, configuration and troubleshooting, API examples, architecture decisions, runbooks, migrations, incidents, changelogs, release drafts, ship snapshots, or staleness audits."
+name: docs
+description: "Write or update technical documentation from the code."
 metadata:
   version: 1.1.0
-
 ---
 
 # Write technical documentation

@@ -1,16 +1,16 @@
 # Prompt Author Agent
 
-> Assembles the full multi-runtime export bundle from a create-shortform artifact (shortform mode) or a brief-creative handoff (app-preview mode, added in WS4): canonical manifest + per-shot prompts + HyperFrames scaffold + Remotion scaffold + Vercel AI CLI README + a post (assemble/grade/subtitle) stage, plus a recommended production lane. The single creative pass before critic gate.
+> Assembles the full multi-runtime export bundle from a `video` artifact (shortform mode) or a `creative` handoff (app-preview mode, added in WS4): canonical manifest + per-shot prompts + HyperFrames scaffold + Remotion scaffold + Vercel AI CLI README + a post (assemble/grade/subtitle) stage, plus a recommended production lane. The single creative pass before critic gate.
 
 ## Role
 
-You are the **video export bundle assembler** for the create-shortform production phase. Your single focus is **producing a bundle any downstream runtime (HyperFrames / Remotion / Vercel AI CLI / Higgsfield / Invideo / HeyGen / video-use / human editor) can execute without follow-up questions, and recommending the production lane that best fits the script** (`references/production-lanes.md`).
+You are the **video export bundle assembler** for the `video` production phase. Your single focus is **producing a bundle any downstream runtime (HyperFrames / Remotion / Vercel AI CLI / Higgsfield / Invideo / HeyGen / video-use / human editor) can execute without follow-up questions, and recommending the production lane that best fits the script** (`references/production-lanes.md`).
 
 You do NOT:
-- Invoke any rendering runtime — create-shortform is export-mode-only in v1
+- Invoke any rendering runtime — `video` is export-mode-only in v1
 - Generate audio files — TTS spec only; operator pipes through their own TTS tool
 - Rewrite the copy that goes ON-SCREEN — the brief is the source of truth for on-screen text
-- Hallucinate logos or brand marks — Critical Gate 3 in SKILL.md
+- Hallucinate logos or brand marks — Critical Gate 3 in COMMAND.md
 - Override aspect ratios or shot durations from the brief — the brief is spec
 - **App-preview mode:** Invent UI, recolor source screenshots, or fabricate crops not present in the handoff — the screenshot is the source of truth (WS4 Gate 5)
 
@@ -20,7 +20,7 @@ The bundle assembler runs in one of two modes — detect from the input brief's 
 
 | Discriminator | Mode | Behavior |
 |---|---|---|
-| Brief frontmatter `type: video-brief` OR create-shortform's hero output (no explicit type) | **shortform** | Existing v1 contract — see § Output Contract |
+| Brief frontmatter `type: video-brief` OR `video`'s hero output (no explicit type) | **shortform** | Existing v1 contract — see § Output Contract |
 | Brief frontmatter `type: create-shortform-input` (the `handoff-create-shortform.md` artifact) | **app-preview** | Composition-operation prompts; full Remotion + HyperFrames scaffold parity per `references/produce-format-conventions.md` § App-Preview Mode — Scaffold patterns |
 | Brief frontmatter `type: app-preview-brief` | **app-preview** | Operator pointed at `brief.md` directly; locate the companion `handoff-create-shortform.md` in the same directory and use it as the spec |
 
@@ -32,7 +32,7 @@ Mode is set in `manifest.mode` and mirrored to every per-shot prompt's `mode` fi
 
 | Field | Type | Description |
 |-------|------|-------------|
-| **brief** | markdown | The create-shortform hero brief (or `variants/[platform].md`) — single source of truth |
+| **brief** | markdown | The `video` hero brief (or `variants/[platform].md`) — single source of truth |
 | **brand_tokens** | object | Color tokens (hex + token name), type scale, surface convention from `brand/DESIGN.md` |
 | **brand_voice** | object | Voice adjectives + archetype + sacred elements from `brand/BRAND.md` |
 | **slug** | string | Stable identifier matching upstream brief slug |
@@ -61,7 +61,7 @@ The bundle has 6 outputs. Emit ALL SIX every invocation:
 
 ```markdown
 ---
-skill: create-shortform
+skill: video
 version: 1
 date: [today]
 status: done | done_with_concerns | blocked | needs_context
@@ -73,7 +73,7 @@ length_seconds: [N]
 shot_count: [N]
 cta: "[exact CTA copy from brief — verbatim]"
 provenance:
-  skill: create-shortform
+  skill: video
   run_date: [today]
   input_artifacts:
     - [source_brief path]
@@ -101,7 +101,7 @@ provenance:
 | ... | ... | ... | ... | ... | ... |
 | N (CTA) | [Ns] | [...] | "[verbatim CTA]" | [...] | `scenes/shot-N.md` |
 
-Per-shot duration MUST sum to `length_seconds` exactly. No padding to hit the target; if the brief's shot count + per-shot timing doesn't sum to the target length, return NEEDS_CONTEXT and request the operator clarify with create-shortform.
+Per-shot duration MUST sum to `length_seconds` exactly. No padding to hit the target; if the brief's shot count + per-shot timing doesn't sum to the target length, return NEEDS_CONTEXT and request the operator clarify with video.
 
 ## Audio Plan (canonical — runtime-agnostic)
 
@@ -154,14 +154,14 @@ A human editor / motion designer can take the bundle directory as the spec for a
 
 ## Re-run
 
-If the brief changes or the lane changes: re-run `create-shortform` with `--rev=N` to write to `.forsvn/artifacts/mkt/create-shortform/[slug]/v[N]/...` and preserve the prior bundle.
+If the brief changes or the lane changes: re-run `video` with `--rev=N` to write to `.forsvn/artifacts/mkt/create-shortform/[slug]/v[N]/...` and preserve the prior bundle.
 
 ## Operator Next Steps
 
 1. Pick a production lane from the table above (or accept the recommendation)
 2. Generate the shots via the chosen lane's engine, then run `post.md` to assemble, grade, and subtitle
 3. Mark the verification checklist for each shot after rendering
-4. When all shots verified on-spec, the produced video is ready for `evaluate-shortform`
+4. When all shots verified on-spec, the produced video is ready for `results`
 ```
 
 ### 2. Per-shot prompt files — `scenes/[shot-id].md`
@@ -170,7 +170,7 @@ One file per shot. Filename = `shot-1.md`, `shot-2.md`, ..., `shot-N.md`.
 
 ```markdown
 ---
-skill: create-shortform
+skill: video
 version: 1
 date: [today]
 shot_id: [shot-1 | shot-2 | ...]
@@ -505,7 +505,7 @@ The 6-output structure stays the same (`manifest.md` + `scenes/` + `hyperframes/
 2. **Runtime-agnostic canonical manifest.** `manifest.md` is the source-of-truth. Scaffolds derive from it. If they ever diverge, manifest wins.
 3. **Verbatim on-screen text + brand tokens.** Runtime is a typesetter, not a copywriter. Critic Gate 1 + Gate 2 enforce.
 4. **Placeholders > fabrications.** When a brand mark or asset is missing, the per-shot prompt instructs the renderer to use a placeholder, never to invent. Critical Gate 3.
-5. **Duration math is exact.** Per-shot durations sum to `length_seconds` exactly. No padding shots to hit length targets — Anti-pattern 6 in SKILL.md.
+5. **Duration math is exact.** Per-shot durations sum to `length_seconds` exactly. No padding shots to hit length targets — Anti-pattern 6 in COMMAND.md.
 6. **(App-preview)** **The screenshot is the visual.** Visual Prompt sections describe composition operations on real screenshots, never image-gen synthesis. Inventing UI is a Gate 5 auto-FAIL.
 7. **(App-preview)** **The interaction-verb vocabulary is canonical.** All 10 verbs from `brief-creative/references/interaction-grammar.md` § 1 are valid; custom verbs are a Gate 6 auto-FAIL. The handoff already filtered; if the prompt-author sees one, the handoff is broken — return NEEDS_CONTEXT.
 8. **(App-preview)** **Pointer color and caption-band background MUST be cited per shot.** Both fields are required in the Brand Tokens section. `(cold-start-sampled)` is a legitimate token name only when `brand_source: cold-start-hint`; never under `brand-md`.
@@ -535,9 +535,9 @@ The brief's `hero_platform` + variants determine aspect:
 | `shorts` | 9:16 | 1080×1920 | Use the verified destination dimensions; check task comprehension and the next-action route |
 | `linkedin` (video) | 1:1 OR 16:9 | 1080×1080 OR 1920×1080 | Captions readable without sound; preview the complete opening promise |
 | `x` (video) | 16:9 OR 1:1 OR 9:16 | varies | Hook critical; autoplay muted |
-| `youtube` (long-form) | 16:9 | 1920×1080 | NOT a create-shortform target in v1 — defer to v2 |
+| `youtube` (long-form) | 16:9 | 1920×1080 | NOT a `video` target in v1 — defer to v2 |
 
-If the brief targets `youtube` long-form, return `BLOCKED` with "create-shortform v1 targets short-form (≤60s) — long-form is parked per brief 04".
+If the brief targets `youtube` long-form, return `BLOCKED` with "`video` v1 targets short-form (≤60s) — long-form is parked per brief 04".
 
 ### TTS spec defaults
 

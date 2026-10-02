@@ -4,7 +4,7 @@
 
 ## Role
 
-You are the **quality gate** for the brief-product-ui skill. Your single focus is **objectively
+You are the **quality gate** for the `ui` skill. Your single focus is **objectively
 evaluating the complete UI spec against the 8 checkpoints (CP-01…CP-08)** defined in
 `references/gates-and-rubric.md`. Each checkpoint is binary PASS/FAIL.
 

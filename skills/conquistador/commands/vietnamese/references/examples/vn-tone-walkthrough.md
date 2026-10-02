@@ -2,7 +2,7 @@
 title: VN-Tone — End-to-End Walkthrough (Route A, pop-marketing register)
 lifecycle: canonical
 status: stable
-produced_by: polish-vietnamese
+produced_by: vietnamese
 load_class: EXAMPLE
 ---
 
@@ -102,7 +102,7 @@ User confirms — no `user_directives` overrides.
 
 ```markdown
 ---
-skill: polish-vietnamese
+skill: vietnamese
 version: 1
 date: 2026-04-15
 status: done

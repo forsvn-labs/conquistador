@@ -1,6 +1,6 @@
 ---
 type: rubric
-skill: write-social
+skill: social
 version: "0.2"
 method_updated: 2026-09-15
 last_verified: null

@@ -1,6 +1,6 @@
 # Anti-Patterns — market-research
 
-> 11 named anti-patterns that kill market-research validity. Each includes detection, why it fails, the fix, and the agent responsible for catching it (verified against `agents/market-critic-agent.md` Rewrite Routing Table). Critic-load reference — re-read before any output ships. The first 8 are the canonical body anti-patterns from the original SKILL.md, expanded with detection + bad/good examples + ownership; the remaining 3 are cross-cutting failures caught at the orchestrator or operator level.
+> 11 named anti-patterns that kill market-research validity. Each includes detection, why it fails, the fix, and the agent responsible for catching it (verified against `agents/market-critic-agent.md` Rewrite Routing Table). Critic-load reference — re-read before any output ships. The first 8 are the canonical body anti-patterns from the original COMMAND.md, expanded with detection + bad/good examples + ownership; the remaining 3 are cross-cutting failures caught at the orchestrator or operator level.
 
 ---
 

@@ -44,7 +44,7 @@ The parent resolves conflicts against the user's outcome, accepted product facts
 decision spine. It does not combine incompatible promises, audiences, measurement windows, or
 authority assumptions.
 
-Use `fresh-eyes-review`, `knowledge-review`, or `decision-panel` when the result needs a separate
+Use `critique`, `factcheck`, or `decide` when the result needs a separate
 review judgment. Claim independent review only when another isolated context reviewed the exact
 artifact. Keep publication, spend, credentials, deployment, sends, and other external writes behind
 the applicable human decision. If review returns `revise`, apply at most one targeted integration
@@ -65,7 +65,7 @@ The complete distribution and plugin/harness installs include `hosts/coding-agen
 and a BB adapter in `hosts/coding-agent/bb.mjs`. Use them when the host exposes BB and an existing
 project/environment. The BB adapter creates visible child threads with public roster titles, emits
 the validated engagement brief before the first dispatch, then executes a parent integration
-assignment and an isolated `fresh-eyes-review` assignment. After a `revise` verdict it may run one
+assignment and an isolated `critique` assignment. After a `revise` verdict it may run one
 targeted correction and one exact-digest re-review. It passes only the selected method files, their
 contained outcome agents and references, named workflow, allowed knowledge snippets, and required
 predecessor results.

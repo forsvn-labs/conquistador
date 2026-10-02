@@ -2,10 +2,10 @@
 
 > **FICTIONAL SUPERSEDED TRACES.** Every run below is an invented teaching fixture. No real
 > operator, brand, artifact, render, or approval exists behind it. The traces pre-date the
-> design-create → brief-creative re-scope and depict a retired model in which this skill rendered
+> design-create → `creative` re-scope and depict a retired model in which this skill rendered
 > assets via Pencil / Paper MCP tool calls, ticked asset inventories, and ended in `DONE`.
 >
-> **Current authority is different:** brief-creative emits briefs and render-ready handoffs only.
+> **Current authority is different:** `creative` emits briefs and render-ready handoffs only.
 > It never calls a render engine, never mutates an asset inventory, and an internal critic PASS is
 > a quality gate — not completion, not human acceptance, and never permission to publish. A trace
 > that ends `DONE`, auto-ticks `ASSETS.md`, or shows the skill itself rendering describes behavior

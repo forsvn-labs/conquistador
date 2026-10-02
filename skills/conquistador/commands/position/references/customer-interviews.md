@@ -6,7 +6,7 @@ Complements public VoC collection (Reddit, G2, forums) with direct interview met
 
 ## When to Use Direct Research
 
-Public VoC (Step 2 in SKILL.md) reveals what people say openly. Direct research reveals what they won't post publicly:
+Public VoC (Step 2 in COMMAND.md) reveals what people say openly. Direct research reveals what they won't post publicly:
 
 | Method | Reveals | When to Use |
 |--------|---------|------------|
@@ -85,7 +85,7 @@ Support tickets are unfiltered VoC — customers write them when something matte
 | **Repeated confusion** | Onboarding gap — your mental model doesn't match theirs |
 | **Feature requests** | Unmet needs — potential positioning angles |
 | **Angry tickets** | High-pain moments — use the language in marketing (shows you understand) |
-| **"Cancel because..." tickets** | Churn drivers — feed to `diagnose-growth` when diagnosing retention issues |
+| **"Cancel because..." tickets** | Churn drivers — feed to `diagnose` when diagnosing retention issues |
 | **Praise / thank you tickets** | Success moments — testimonial candidates |
 
 ### Emotional Intensity Scoring

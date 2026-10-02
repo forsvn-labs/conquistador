@@ -9,7 +9,7 @@ recovery. Use the accepted UI specification."
 
 ## Expected behavior
 
-- Load `map-user-flow` through the parent. Reuse the accepted UI specification.
+- Load `flow` through the parent. Reuse the accepted UI specification.
 - Do not add UI design, architecture, implementation, or deployment to this request.
 - Load further references only as needed. Return the requested flow and its verification limits.
 
@@ -17,7 +17,7 @@ recovery. Use the accepted UI specification."
 
 "Map the onboarding user flow and specify the product UI, including error recovery."
 
-The parent may compose `map-user-flow` and `brief-product-ui` using `specify-product-experience`.
+The parent may compose `flow` and `ui` using `spec`.
 The composition remains prose. It does not establish that a runner executed a playbook.
 
 ## Near miss

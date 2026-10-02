@@ -2,7 +2,7 @@
 title: Flow-Mapping Method
 lifecycle: canonical
 status: stable
-produced_by: map-user-flow
+produced_by: flow
 load_class: METHOD
 ---
 
@@ -43,7 +43,7 @@ The output is `pipeline` lifecycle (per-flow regenerated on re-run; versioned vi
 - **Visual brand identity** — use `/create-brand`.
 - **Technical API design** — use `/architect-software-system`.
 - **Task decomposition from an existing flow** — use `task decomposition outside this skill`.
-- **Scoping unclear requirements** — use `shape-initiative` first; come back when the feature is bounded.
+- **Scoping unclear requirements** — use `shape` first; come back when the feature is bounded.
 - **Landing-page architecture** (single-page surfaces, not multi-step product flows) — use `/improve-conversion`.
 
 ## Further reading

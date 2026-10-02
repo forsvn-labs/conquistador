@@ -10,11 +10,11 @@ Multi-platform = re-invoke with a different `platform` argument. Each platform a
 
 ## 2. Single-market per artifact
 
-Multi-market campaigns re-run per market. Vietnamese-market copy auto-routes through `polish-vietnamese` via `--polish-chain polish-vietnamese`. The polish chain is **terminal**, never inline — copywriter generates in the source language; polish step transforms in place.
+Multi-market campaigns re-run per market. Vietnamese-market copy auto-routes through `vietnamese` via `--polish-chain polish-vietnamese`. The polish chain is **terminal**, never inline — copywriter generates in the source language; polish step transforms in place.
 
 ## 3. Brand mode required (`founder` OR `company`)
 
-Either `brand/BRAND.md` declares the mode (look for `mode:` field or explicit "founder voice" / "company voice" language) OR the operator answers Cold Start Q3. **No silent default** — defaulting silently triggers Anti-Pattern #5 (Brand-Voice Ignored) at critic time. If Pre-Dispatch cannot resolve the mode and Cold Start is skipped (`--fast` mis-applied), the dispatch BLOCKS with a `NEEDS_CONTEXT` status pointing to `create-brand`.
+Either `brand/BRAND.md` declares the mode (look for `mode:` field or explicit "founder voice" / "company voice" language) OR the operator answers Cold Start Q3. **No silent default** — defaulting silently triggers Anti-Pattern #5 (Brand-Voice Ignored) at critic time. If Pre-Dispatch cannot resolve the mode and Cold Start is skipped (`--fast` mis-applied), the dispatch BLOCKS with a `NEEDS_CONTEXT` status pointing to `brand`.
 
 ## 4. Max 1 format-check revision loop (baseline)
 

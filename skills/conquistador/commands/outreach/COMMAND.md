@@ -1,9 +1,8 @@
 ---
-name: write-outreach
-description: "Create signal-led outreach sequences and reply handling. Use for cold email, founder outreach, partnership or sales messages, LinkedIn DMs, other direct messages, proposals, follow-ups, inbound reply handling, deliverability, compliance, or planning how future qualified conversations will be judged."
+name: outreach
+description: "Write signal-led outreach sequences, follow-ups, and reply handling."
 metadata:
   version: 2.1.1
-
 ---
 
 # Write trustworthy outreach
@@ -87,7 +86,7 @@ unsubscribe, and ambiguous responses. Never request sensitive material through a
 State the applicable identity, opt-out, suppression, lawful-basis, and platform-policy requirements.
 Predefine monitoring for delivered volume, bounce, complaint, unsubscribe, reply quality, and sender
 reputation. Stop when deliverability or compliance crosses the predeclared boundary. Actual post-send
-interpretation belongs to `evaluate-outreach`; planned metrics are not results.
+interpretation belongs to `results`; planned metrics are not results.
 
 ## Deliver
 
@@ -150,4 +149,4 @@ Before delivery, load the method and its review contracts:
 If the host cannot run those as separate agents, use [sequential fallback](fallbacks/sequential.md).
 Write artifacts under `.forsvn/artifacts/mkt/write-outreach/` when that store exists — when it does
 not, return them inline and skip persistence. Post-send diagnosis belongs to
-`evaluate-outreach`.
+`results`.

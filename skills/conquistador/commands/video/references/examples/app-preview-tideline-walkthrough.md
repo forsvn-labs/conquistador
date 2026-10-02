@@ -5,8 +5,8 @@
 > quality gate on the *bundle*, not completion: rendering, verification against real output, and
 > human acceptance all remain outstanding after it.
 
-> Worked end-to-end Route B run shape. Consumes a `brief-creative` app-preview handoff
-> (`handoff-create-shortform.md`) — see the brief-creative examples for the upstream side.
+> Worked end-to-end Route B run shape. Consumes a `creative` app-preview handoff
+> (`handoff-create-shortform.md`) — see the `creative` examples for the upstream side.
 > Demonstrates the brief→production seam, Remotion + HyperFrames scaffold parity, and a critic PASS
 > on all 7 gates in cycle 1. A FAIL-handling cycle-2 variant follows the main run.
 
@@ -15,10 +15,10 @@
 ## Operator Invocation
 
 ```
-create-shortform tideline-surge-mode-app-store-ios
+video tideline-surge-mode-app-store-ios
 ```
 
-The slug resolves to the brief-creative output directory:
+The slug resolves to the `creative` output directory:
 
 ```
 .forsvn/artifacts/mkt/create-shortform/app-preview-brief/tideline-surge-mode-app-store-ios/
@@ -71,7 +71,7 @@ Pre-dispatch PROCEED.
 
 ```markdown
 ---
-skill: create-shortform
+skill: video
 version: 1
 date: 2026-05-23
 status: done
@@ -85,7 +85,7 @@ shot_count: 5
 cta: "Save what you did"
 brand_source: brand-md
 provenance:
-  skill: create-shortform
+  skill: video
   run_date: 2026-05-23
   input_artifacts:
     - .forsvn/artifacts/mkt/create-shortform/app-preview-brief/tideline-surge-mode-app-store-ios/handoff-create-shortform.md
@@ -179,14 +179,14 @@ If the handoff changes or the runtime choice changes: re-run `create-shortform t
 2. Run the chosen scaffold, then `post.md` to assemble + burn the caption band
 3. Operator-supplied audio assets: drop `audio-whoosh.mp3` and `audio-confirm.mp3` under `rendered/audio/` if available; otherwise renders fall back to silence on shots 3 and 5
 4. Mark the verification checklist for each shot after rendering
-5. When all shots verified on-spec, the produced video is ready for `evaluate-shortform`
+5. When all shots verified on-spec, the produced video is ready for `results`
 ```
 
 ### `scenes/shot-1.md` (representative — others follow same pattern)
 
 ```markdown
 ---
-skill: create-shortform
+skill: video
 version: 1
 date: 2026-05-23
 mode: app-preview
@@ -760,7 +760,7 @@ Cycle 2 critic re-runs Gates 5, 6, 7 (and Gate 1 because the per-shot file chang
 
 This walkthrough exercises the full WS3 → WS4 seam:
 
-1. **Brief layer** — `brief-creative` emits `handoff-create-shortform.md` with the per-shot specification + frontmatter discriminator (`type: create-shortform-input`).
+1. **Brief layer** — `creative` emits `handoff-create-shortform.md` with the per-shot specification + frontmatter discriminator (`type: create-shortform-input`).
 2. **Schema layer** — `create-shortform/references/video-brief-schema.md` § App-Preview Mode Extension defines the field map; pre-dispatch validates against rules A-K.
 3. **Production layer** — `prompt-author-agent` assembles the bundle in app-preview mode: 6 outputs with mode-specific shape (composition-operation per-shot prompts, scaffold parity, collapsed vercel-ai-cli, post collapsed to assembly + caption burn-in).
 4. **Critic layer** — `critic-agent` evaluates Gates 1-7 with mode-aware behavior; Gates 5-7 are app-preview-only hard FAILs.

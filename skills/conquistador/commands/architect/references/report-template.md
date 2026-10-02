@@ -2,7 +2,7 @@
 title: System-Architecture — Report Template
 lifecycle: canonical
 status: stable
-produced_by: architect-software-system
+produced_by: architect
 load_class: PROCEDURE
 ---
 
@@ -20,7 +20,7 @@ Step 7.5 additions (manifest-sync conformance; backfilled going forward): `lifec
 
 ```yaml
 ---
-skill: architect-software-system
+skill: architect
 version: {N}
 date: YYYY-MM-DD
 status: done | done_with_concerns | blocked | needs_context
@@ -32,9 +32,9 @@ reviewed_at:               # YYYY-MM-DD — empty until reviewed
 reviewer:                  # who recorded the review — empty until reviewed
 # Step 7.5 fields (artifact-graph hardening; backfilled going forward):
 lifecycle: canonical
-produced_by: architect-software-system
+produced_by: architect
 provenance:
-  skill: architect-software-system
+  skill: architect
   run_date: YYYY-MM-DD
   input_artifacts:
     - <path to spec.md>
@@ -131,4 +131,4 @@ On re-run with the same project:
 - Subsequent re-runs: rename to `.v2.md`, `.v3.md`, etc.
 - Always increment the `version: N` frontmatter field on the new active file.
 
-The active artifact is always at `.forsvn/artifacts/product/architect-software-system/system-architecture.md` (no version suffix); versioned files are the historical trail. Downstream consumers (task decomposition, `fresh-eyes-review`, and code-readability cleanup outside this skill) read only the active file.
+The active artifact is always at `.forsvn/artifacts/product/architect-software-system/system-architecture.md` (no version suffix); versioned files are the historical trail. Downstream consumers (task decomposition, `critique`, and code-readability cleanup outside this skill) read only the active file.

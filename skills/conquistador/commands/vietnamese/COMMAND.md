@@ -1,9 +1,8 @@
 ---
-name: polish-vietnamese
-description: "Create, rewrite, translate, or edit Vietnamese marketing and product language so it sounds natural, precise, and appropriate to the audience. Use for Vietnamese copy, localization, tone and pronoun consistency, removing English calques, regional register, founder or company voice, and preserving factual claims while improving rhythm."
+name: vietnamese
+description: "Write, translate, or polish Vietnamese marketing and product language."
 metadata:
   version: 2.1.0
-
 ---
 
 # Polish Vietnamese language

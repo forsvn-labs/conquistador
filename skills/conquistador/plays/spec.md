@@ -1,22 +1,29 @@
-# Specify-product-experience workflow
+---
+command: spec
+label: Specify a product experience
+intents: ["product spec","specify the product experience","product experience spec","feature spec","screens and flows spec"]
+chain:
+  - { command: flow }
+  - { command: ui, when: "the structural flow is accepted" }
+  - { method: implementation-planning }
+  - { method: service-extraction, when: "the experience needs a service boundary" }
+legacy: specify-product-experience
+---
+# Specify a product experience
 
-This workflow is parent-routed skill composition, not an executable playbook. Load it only when the
-requested product specification needs multiple outcomes. A narrow flow or UI request can use its
-primary outcome alone.
-
-Use it only when the user explicitly asks for this engineering outcome and a product result spans
+Use only when the user explicitly asks for this engineering outcome and a product result spans
 screens, states, decisions, native surfaces, and a buildable interface specification.
 
-1. Use `map-user-flow` to enumerate known platforms and surfaces, ground every transition in the job,
+1. Use `flow` to enumerate known platforms and surfaces, ground every transition in the job,
    cover happy path and failure/recovery states, and define validation cases. When the user requests a
    portable specification and the platform is genuinely undecided, use its bounded
    `platform-unresolved` mode: specify only platform-neutral logic, label platform/native behavior as
    an open decision, and keep implementation blocked until a target is supplied.
-2. After the structural flow is accepted, use `brief-product-ui` to trace screens and components to
+2. After the structural flow is accepted, use `ui` to trace screens and components to
    flow nodes, apply semantic design tokens, and specify interaction, responsive, accessibility, and
    recovery behavior.
-3. Use the `implementation-planning` method to order work, dependencies, tests, rollout, and review.
-4. Use the `service-extraction` method only when the accepted experience truly requires a service or
+3. Use the [implementation-planning](../methods/implementation-planning.md) method to order work, dependencies, tests, rollout, and review.
+4. Use the [service-extraction](../methods/service-extraction.md) method only when the accepted experience truly requires a service or
    integration boundary.
 
 Challenge a happy path longer than seven user actions. Do not invent screens, raw style values,

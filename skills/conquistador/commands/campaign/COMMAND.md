@@ -1,9 +1,8 @@
 ---
-name: plan-campaign
-description: "Plan an executable product launch or growth campaign. Use for go-to-market plans, Product Hunt or community launches, positioning-to-launch sequencing, channel mix at plan level, campaign pillars and angles, growth experiment design, or turning a product goal into one focused launch sequence with owners and timing. Budget math, run-of-show detail, individual asset writing, and performance readouts belong to their dedicated skills."
+name: campaign
+description: "Plan a launch or growth campaign: outcome, channels, sequence, assets, and signal."
 metadata:
   version: 2.1.0
-
 ---
 
 # Plan an executable campaign
@@ -24,13 +23,13 @@ Core:
 
 By step: [3d-angle-framework](references/3d-angle-framework.md), [clipping-and-live](references/distribution-models/clipping-and-live.md), [hook-archetypes](references/hook-archetypes.md), [platform-channels](references/platform-channels.md).
 
-Platform packs (read the one for each platform in the task): [facebook](references/platform-intelligence/facebook.md), [founder-demo](references/platform-intelligence/founder-demo.md), [linkedin-launch](references/platform-intelligence/linkedin-launch.md), [linkedin](references/platform-intelligence/linkedin.md), [motion-background](references/platform-intelligence/motion-background.md), [newsletter](references/platform-intelligence/newsletter.md), [producthunt](references/platform-intelligence/producthunt.md), [reddit](references/platform-intelligence/reddit.md), [reels](references/platform-intelligence/reels.md), [shorts](references/platform-intelligence/shorts.md), [showhn](references/platform-intelligence/showhn.md), [tiktok](references/platform-intelligence/tiktok.md), [ugc](references/platform-intelligence/ugc.md), [x-launch](references/platform-intelligence/x-launch.md), [x](references/platform-intelligence/x.md), [youtube](references/platform-intelligence/youtube.md).
+Platform packs (read the one for each platform in the task): [facebook](../social/references/platform-intelligence/facebook.md), [founder-demo](../social/references/platform-intelligence/founder-demo.md), [linkedin-launch](../social/references/platform-intelligence/linkedin-launch.md), [linkedin](../social/references/platform-intelligence/linkedin.md), [motion-background](../social/references/platform-intelligence/motion-background.md), [newsletter](../social/references/platform-intelligence/newsletter.md), [producthunt](../social/references/platform-intelligence/producthunt.md), [reddit](../social/references/platform-intelligence/reddit.md), [reels](../social/references/platform-intelligence/reels.md), [shorts](../social/references/platform-intelligence/shorts.md), [showhn](../social/references/platform-intelligence/showhn.md), [tiktok](../social/references/platform-intelligence/tiktok.md), [ugc](../social/references/platform-intelligence/ugc.md), [x-launch](../social/references/platform-intelligence/x-launch.md), [x](../social/references/platform-intelligence/x.md), [youtube](../social/references/platform-intelligence/youtube.md).
 
 Specialist roles: [angle-agent](agents/angle-agent.md), [channel-agent](agents/channel-agent.md), [critic-agent](agents/critic-agent.md), [launch-sequencing-agent](agents/launch-sequencing-agent.md), [pillar-agent](agents/pillar-agent.md), [timeline-agent](agents/timeline-agent.md).
 
 Worked examples: [campaign-walkthrough](references/examples/campaign-walkthrough.md), [examples](references/examples.md).
 
-Output formats and fallbacks: [sequential](fallbacks/sequential.md), [format-conventions](references/format-conventions.md), [legibility-convention](references/legibility-convention.md), [why-this-works-convention](references/why-this-works-convention.md).
+Output formats and fallbacks: [sequential](fallbacks/sequential.md), [format-conventions](references/format-conventions.md), [legibility-convention](../video/references/legibility-convention.md), [why-this-works-convention](references/why-this-works-convention.md).
 
 <!-- playbooks:end -->
 
@@ -41,7 +40,7 @@ label absent execution inputs and keep activation behind approval.
 
 ## Scope and handoffs
 
-This skill owns the integrated plan only.
+This command owns the integrated plan only.
 
 Include:
 
@@ -53,12 +52,12 @@ Include:
 
 Exclude — route instead:
 
-- budget allocation math and spend scenarios → `allocate-marketing-budget`;
-- event minute-by-minute run-of-show → `create-run-of-show`;
+- budget allocation math and spend scenarios → `budget`;
+- event minute-by-minute run-of-show → `event`;
 - writing individual ads, social posts, or creative assets →
-  `create-paid-campaign`, `write-social`, or `brief-creative`;
-- measuring results of a running campaign → `measure-growth`;
-- a deep single-channel strategy → `research-channel`.
+  `ads`, `social`, or `creative`;
+- measuring results of a running campaign → `measure`;
+- a deep single-channel strategy → `channels`.
 
 ## Write the campaign spine
 
@@ -147,7 +146,7 @@ If the host cannot run those as separate agents, use [sequential fallback](fallb
 Declare growth motion before selecting channels. When the request supplies a closed candidate set,
 compare only those candidates; otherwise scan the nine channel families in the method.
 Keep the smallest set that covers the job. Social and launch briefs load the matching
-[platform intelligence](references/platform-intelligence/) pack.
+[platform intelligence](../social/references/platform-intelligence/) pack.
 
 Separate must-have launch work from optional follow-up. Keep publishing, spend, credentials, and
 external writes behind explicit approval.

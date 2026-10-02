@@ -1,9 +1,8 @@
 ---
-name: create-paid-campaign
-description: "Create a focused paid-media test. Use for Meta, Google, LinkedIn, TikTok, or another ad network when the user needs audience and offer strategy, finished ads, creative direction, landing-page congruence, budget logic, policy awareness, and a measurement plan before launch."
+name: ads
+description: "Create a paid-media test: audience, offer, finished ads, budget, and measurement."
 metadata:
   version: 2.1.0
-
 ---
 
 # Create a paid campaign
@@ -24,7 +23,7 @@ Core:
 - [policy-floor](references/policy-floor.md): Claim, permission, and platform review. This document defines artifact review requirements. It does not…
 - [rubric](references/rubric.md): Paid creation review rubric. Score each dimension from 0 to 10 for each variant. These scores assess…
 
-By step: [creative-cadence](references/ad-intelligence/creative-cadence.md), [google-ads](references/ad-intelligence/google-ads.md), [meta-cold-traffic](references/ad-intelligence/meta-cold-traffic.md), [meta-retargeting](references/ad-intelligence/meta-retargeting.md), [tiktok-ads](references/ad-intelligence/tiktok-ads.md), [earn-the-impression](references/earn-the-impression.md), [message-transmutation](references/message-transmutation.md), [realized-surface-grounding](references/realized-surface-grounding.md), [research-workflow](references/research-workflow.md).
+By step: [creative-cadence](references/ad-intelligence/creative-cadence.md), [google-ads](references/ad-intelligence/google-ads.md), [meta-cold-traffic](references/ad-intelligence/meta-cold-traffic.md), [meta-retargeting](references/ad-intelligence/meta-retargeting.md), [tiktok-ads](references/ad-intelligence/tiktok-ads.md), [earn-the-impression](references/earn-the-impression.md), [message-transmutation](references/message-transmutation.md), [realized-surface-grounding](../creative/references/realized-surface-grounding.md), [research-workflow](references/research-workflow.md).
 
 Specialist roles: [composer](agents/composer.md), [critic](agents/critic.md), [format-checker](agents/format-checker.md), [strategist](agents/strategist.md), [voice-auditor](agents/voice-auditor.md).
 
@@ -85,8 +84,8 @@ Specify:
 Plan evaluation for one network/segment at a time. A future high click-through rate cannot override
 poor qualified conversion or a safety/compliance failure.
 
-This skill creates the test and its evaluation contract. Real post-launch evidence belongs to
-`evaluate-paid-campaign`; do not imply that planned metrics are observed results.
+This command creates the test and its evaluation contract. Real post-launch evidence belongs to
+`results`; do not imply that planned metrics are observed results.
 
 ## Deliver
 
@@ -119,5 +118,5 @@ isolate one variable. Label exploratory concepts and their causal limits explici
 Never launch, spend, upload audiences, or change a live account without explicit approval for that
 action. A critic PASS and any optional language-polish pass are internal quality gates only; they do
 not complete the job, authorize launch or spend, or substitute for the human acceptance boundary.
-For Vietnamese copy, the public `polish-vietnamese` skill may be named as an optional helper when
+For Vietnamese copy, the public `vietnamese` skill may be named as an optional helper when
 installed; no polish pass overrides `protected_tokens` including the destination URL.

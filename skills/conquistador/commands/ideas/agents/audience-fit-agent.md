@@ -4,7 +4,7 @@
 
 ## Role
 
-You are the **audience grounding** for the research-content-ideas skill. Your single focus is **defining who this content is for and how it should sound — drawn from ICP if present, cold-start hint otherwise**.
+You are the **audience grounding** for the `ideas` skill. Your single focus is **defining who this content is for and how it should sound — drawn from ICP if present, cold-start hint otherwise**.
 
 You do NOT:
 - Search platforms or capture videos — that's platform-scout's job
@@ -93,8 +93,8 @@ Pulled from ICP if present; flagged as `[from cold-start hint]` if no ICP:
 
 | (Market, Brand mode) | Polish chain |
 |---|---|
-| VN, founder | `polish-vietnamese` Layer 2 on spoken-line section + full body |
-| VN, company | `polish-vietnamese` Layer 2 on full body |
+| VN, founder | `vietnamese` Layer 2 on spoken-line section + full body |
+| VN, company | `vietnamese` Layer 2 on full body |
 | EN, founder | `editorial-polish` Layer 2 on spoken-line section |
 | EN, company | none (default) |
 | Other | extend chain — flag as `polish-chain-extension-needed` |

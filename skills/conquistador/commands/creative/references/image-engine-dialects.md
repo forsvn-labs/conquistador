@@ -1,6 +1,6 @@
 # Image-Engine Dialects + Composition Craft — speak the engine, compose the frame
 
-**The depth `brief-creative` narrates.** A render-ready prompt that only carries the
+**The depth `creative` narrates.** A render-ready prompt that only carries the
 brief's spec (aspect, copy, tokens) is *faithful* but *generic* — it transcribes without
 knowing how the bound engine actually behaves or how a frame is composed. This file is the
 engine intelligence + composition craft the prompt-author injects; the skill cites it
@@ -125,7 +125,7 @@ OpenAI / Imagen — not a single stub line.
 
 ---
 
-## How `brief-creative` consumes this
+## How `creative` consumes this
 
 - The **prompt-author** writes (a) an **Engine Dialect** block tuned to the bound
   `tool_targets.image` — or, tool-agnostic, the per-engine hints table above — and (b) a

@@ -1,6 +1,6 @@
 # Artifact Templates
 
-Complete output templates for the create-brand skill. The orchestrator references these when assembling final artifacts.
+Complete output templates for the `brand` skill. The orchestrator references these when assembling final artifacts.
 
 The `.forsvn/artifacts/mkt/create-brand/` write targets named in the template notes below apply only when that store exists — when it does not, return the filled templates inline in your response and skip persistence.
 
@@ -155,7 +155,7 @@ for each relevant context. A tone choice is a writing decision, not a position o
 
 V:[1-3] F:[1-3] U:[1-3] = [total]/9. [Scoring rationale: Visual, Falsifiable, Unique/Ownable]
 
-[One tagline. Platform-specific variants (App Store, social bio, etc.) are produced by copywriting, not create-brand.]
+[One tagline. Platform-specific variants (App Store, social bio, etc.) are produced by copywriting, not brand.]
 
 ---
 
@@ -229,7 +229,7 @@ ASSETS.md is written to `.forsvn/artifacts/mkt/create-brand/ASSETS.md` and is a 
 
 ```yaml
 ---
-skill: create-brand
+skill: brand
 version: [integer — increments on each in-place re-run; starts at 1]
 date: [ISO YYYY-MM-DD]
 status: done | done_with_concerns | blocked | needs_context
@@ -264,7 +264,7 @@ Written to `.forsvn/artifacts/mkt/create-brand/CREATIVE-DIRECTION.md`. The art-d
 
 ```yaml
 ---
-skill: create-brand
+skill: brand
 version: [integer — increments on each in-place re-run; starts at 1]
 date: [ISO YYYY-MM-DD]
 status: done | done_with_concerns | blocked | needs_context
@@ -277,7 +277,7 @@ summary: "[Brand] art direction — the look-and-feel soul under the brand"
 purpose: "How every surface should look, light, frame, and move — the taste a campaign or render briefs against"
 use_when: "Art-directing a shoot, render, landing page, or campaign for [Brand]"
 upstream: "brand, design"
-downstream: "plan-campaign, brief-graphic, brief-shortform, brief-landing-page, brief-app-preview, create-paid-campaign"
+downstream: "campaign, brief-graphic, brief-shortform, brief-landing-page, brief-app-preview, ads"
 decision_state: pending
 review_tool: inline
 reviewed_at:
@@ -330,7 +330,7 @@ Written to `.forsvn/artifacts/mkt/create-brand/FRAME.md`. The frame-direction la
 
 ```yaml
 ---
-skill: create-brand
+skill: brand
 version: [integer — increments on each in-place re-run; starts at 1]
 date: [ISO YYYY-MM-DD]
 status: done | done_with_concerns | blocked | needs_context

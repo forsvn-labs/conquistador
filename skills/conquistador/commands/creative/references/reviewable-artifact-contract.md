@@ -216,7 +216,7 @@ review fields index normally. Legacy artifacts that still carry the old
 
 ## How skills cite this
 
-In a SKILL.md Artifact Contract section:
+In a COMMAND.md Artifact Contract section:
 
 ```
 This artifact is review-gated. Write a plain Markdown artifact with review
@@ -230,7 +230,7 @@ the forsvn-preview review module (`/forsvn:review`, or directly
 no HTML.
 ```
 
-Do not restate the field semantics in the SKILL.md — cite this file.
+Do not restate the field semantics in the COMMAND.md — cite this file.
 
 ---
 

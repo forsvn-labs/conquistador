@@ -1,7 +1,7 @@
 # Polish Chain
 
 Language polish routing matrix. Applied as an optional Layer 2 post-critic step — runs
-`polish-vietnamese` (public, when installed) on the spoken-line section for Vietnamese work. There is
+`vietnamese` (public, when installed) on the spoken-line section for Vietnamese work. There is
 no required private polish tool; when no polish skill applies, the chain ships unpolished and the
 limitation is flagged.
 
@@ -11,9 +11,9 @@ limitation is flagged.
 
 | Market | Brand mode | Polish chain | Scope |
 |---|---|---|---|
-| VN | founder | `polish-vietnamese` (when installed) | spoken-line section + full body |
-| VN | company | `polish-vietnamese` (when installed) | full body |
-| EN | founder | none built-in — apply a read-aloud self-check per SKILL.md, or any polish tool the operator names | spoken-line section |
+| VN | founder | `vietnamese` (when installed) | spoken-line section + full body |
+| VN | company | `vietnamese` (when installed) | full body |
+| EN | founder | none built-in — apply a read-aloud self-check per COMMAND.md, or any polish tool the operator names | spoken-line section |
 | EN | company | none | n/a — default brand voice |
 | Other | any | flag `polish-chain-extension-needed` | n/a |
 
@@ -36,7 +36,7 @@ The polish chain applies to text that will be heard or read aloud:
 After critic-agent PASSes the brief:
 
 1. Orchestrator extracts the spoken-line section content
-2. Invokes the available polish helper (`polish-vietnamese` when installed; otherwise no automated pass) on that content
+2. Invokes the available polish helper (`vietnamese` when installed; otherwise no automated pass) on that content
 3. Replaces the spoken-line section in the brief with the polished version
 4. Brief is delivered with `polish_chain_applied: [polish-vietnamese | operator-named-tool | none]` in frontmatter
 
@@ -68,7 +68,7 @@ VN polish is more invasive because direct EN→VN translation produces:
 - Passive-voice calques ("được" overused)
 - Corporate translationese
 
-`polish-vietnamese` polishes for the target register specified in `voc-extraction-agent`'s output: `casual / pro / bro / báo chí / semi-casual / pop-marketing`.
+`vietnamese` polishes for the target register specified in `voc-extraction-agent`'s output: `casual / pro / bro / báo chí / semi-casual / pop-marketing`.
 
 For VN founder mode, the entire body often benefits from polish (hook + storyboard spoken lines + caption). For VN company mode, the body suffices (caption + on-screen text).
 

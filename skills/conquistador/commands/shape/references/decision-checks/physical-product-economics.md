@@ -1,7 +1,7 @@
 ---
 title: Check physical product commitments
 load_class: METHOD
-produced_by: shape-initiative
+produced_by: shape
 ---
 
 # Check physical product commitments

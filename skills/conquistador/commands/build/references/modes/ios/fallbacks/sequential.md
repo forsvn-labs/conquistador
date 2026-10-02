@@ -12,7 +12,7 @@ nested repository without explicit consent and never claims a build that did not
    Refresh the official Apple authority map
    ([apple platform authority](../references/apple-platform-authority.md)) before any volatile
    platform or distribution claim, recording source and check date. Never require or invoke an
-   [opaque executable](../SKILL.md) such as the excluded historical `ios-cli`.
+   [opaque executable](../../ios.md) such as the excluded historical `ios-cli`.
 2. **Plan one vertical slice** with a stable ID, the flow it implements, affected surfaces, test
    plan, rollback, and human-owned prerequisites (certificates, devices, accounts).
 3. **Implement the slice** in the project's established framework and architecture, covering states,

@@ -117,9 +117,9 @@ When an evaluator repeatedly finds an upstream construction issue, preserve the 
 1. **One loop only:** keep it in that loop's `learnings.md`.
 2. **Reusable audience/offer/product truth:** promote to `.forsvn/experience/`.
 3. **Rubric gap shared across skills:** update or create a shared rubric in `fallbacks/sequential.md` (shared critic rubrics left in Git as generated support; apply claim/protected-token/mechanism checks inline).
-4. **Skill-specific construction flaw:** propose a targeted SKILL.md or agent edit for the producing skill; do not silently mutate the skill during an eval run.
+4. **Skill-specific construction flaw:** propose a targeted COMMAND.md or agent edit for the producing skill; do not silently mutate the skill during an eval run.
 
-Example: if `improve-conversion` repeatedly finds that `write-copy` produces weak proof placement, log the pattern in the loop, promote the reusable proof rule to experience if evidence is strong, and open a skill-improvement note for `write-copy` rather than burying the issue in the evaluator output.
+Example: if `convert` repeatedly finds that `copy` produces weak proof placement, log the pattern in the loop, promote the reusable proof rule to experience if evidence is strong, and open a skill-improvement note for `copy` rather than burying the issue in the evaluator output.
 
 ## Post-fix Regression Check
 
@@ -203,7 +203,7 @@ The learned-rules file is for active behavioral corrections, not an append-only 
 When a review or eval loop touches learned rules:
 
 1. Mark whether the rule is `active`, `absorbed`, `stale`, or `duplicate`.
-2. If a rule has been absorbed into a SKILL.md, agent file, or shared reference, mark it `absorbed` and cite the destination path.
+2. If a rule has been absorbed into a COMMAND.md, agent file, or shared reference, mark it `absorbed` and cite the destination path.
 3. If two rules say the same thing, keep the more specific one and mark the other `duplicate`.
 4. If a rule has not applied in 90 days and no longer matches current repo structure, mark it `stale`.
 5. Keep high-priority safety and routing rules even if old.

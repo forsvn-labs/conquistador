@@ -1,26 +1,26 @@
 ---
-title: Video Brief Schema — create-shortform input contract
+title: Video Brief Schema — video input contract
 lifecycle: canonical
 status: stable
-produced_by: create-shortform
-consumers: create-shortform SKILL.md + agents/prompt-author-agent.md + agents/critic-agent.md
+produced_by: video
+consumers: video COMMAND.md + agents/prompt-author-agent.md + agents/critic-agent.md
 load_class: PROCEDURE
 ---
 
-# Video Brief Schema — create-shortform input contract
+# Video Brief Schema — `video` input contract
 
-> The canonical input contract for create-shortform. Two modes:
+> The canonical input contract for `video`. Two modes:
 >
-> - **shortform mode** — the primary path. Producer: `create-shortform`. The create-shortform hero output is a superset of this schema (its 14-section body carries every field plus create-shortform-specific extras we ignore). Operators may also hand-write a brief matching this schema directly when bypassing create-shortform.
-> - **app-preview mode** — added in WS4. Producer: `brief-creative`. The input is the brief's `handoff-create-shortform.md` artifact (the per-shot table is the spec; `brief.md` is human context). See § App-Preview Mode Extension below.
+> - **shortform mode** — the primary path. Producer: `video`. The `video` hero output is a superset of this schema (its 14-section body carries every field plus create-shortform-specific extras we ignore). Operators may also hand-write a brief matching this schema directly when bypassing `video`.
+> - **app-preview mode** — added in WS4. Producer: `creative`. The input is the brief's `handoff-create-shortform.md` artifact (the per-shot table is the spec; `brief.md` is human context). See § App-Preview Mode Extension below.
 >
-> The mode is discriminated by the input brief's `type` frontmatter field: `type: video-brief` OR create-shortform's output → shortform mode; `type: create-shortform-input` (the handoff file) OR `type: app-preview-brief` → app-preview mode. Pre-dispatch reads the discriminator and applies the matching field map + validation rules.
+> The mode is discriminated by the input brief's `type` frontmatter field: `type: video-brief` OR `video`'s output → shortform mode; `type: create-shortform-input` (the handoff file) OR `type: app-preview-brief` → app-preview mode. Pre-dispatch reads the discriminator and applies the matching field map + validation rules.
 
 ## Required fields
 
-The brief MUST carry every field below or create-shortform returns `NEEDS_CONTEXT` at pre-dispatch.
+The brief MUST carry every field below or `video` returns `NEEDS_CONTEXT` at pre-dispatch.
 
-| Field | Type | Source (in create-shortform output) | Notes |
+| Field | Type | Source (in `video` output) | Notes |
 |---|---|---|---|
 | `slug` | kebab-case string | frontmatter `slug` | Stable identifier; matches bundle path |
 | `angle` | free text | frontmatter `angle` + body § "What This Brief Bets On" | One-line video premise |
@@ -38,11 +38,11 @@ The brief MUST carry every field below or create-shortform returns `NEEDS_CONTEX
 
 | Field | Type | Source | Notes |
 |---|---|---|---|
-| `variants[]` | list | frontmatter `variants` | Other platforms — create-shortform can target one variant per invocation if `--platforms` overrides |
+| `variants[]` | list | frontmatter `variants` | Other platforms — `video` can target one variant per invocation if `--platforms` overrides |
 | `audio_plan` | object | body § "Audio Plan" | Music track name + start/end + ducking; defaults to "operator-supplied" if absent |
 | `narration_lines[]` | per-shot list | body § "Audio Plan" or per-shot in Storyboard | TTS narration text per shot; absent = silent video |
 | `production_notes` | free text | body § "Production Notes" | Renderer hints (e.g., "shot 3 needs animated text reveal") |
-| `success_criteria` | free text | body § "Success Criteria" | Read by future evaluate-shortform; not used by create-shortform itself |
+| `success_criteria` | free text | body § "Success Criteria" | Read by future `results`; not used by `video` itself |
 
 ## Brand frame inputs (soft-required, not brief fields)
 
@@ -50,8 +50,8 @@ Beyond the brief, shortform mode reads brand artifacts by **logical slot** (reso
 
 | Slot | Required? | What it provides | On absence |
 |---|---|---|---|
-| `brand/BRAND.md` | required | Voice, archetype, sacred elements | `NEEDS_CONTEXT` → `create-brand` |
-| `brand/DESIGN.md` | required | Color tokens (hex + name), type scale, motion permissions | `NEEDS_CONTEXT` → `create-brand` |
+| `brand/BRAND.md` | required | Voice, archetype, sacred elements | `NEEDS_CONTEXT` → `brand` |
+| `brand/DESIGN.md` | required | Color tokens (hex + name), type scale, motion permissions | `NEEDS_CONTEXT` → `brand` |
 | `brand/FRAME.md` | **soft-required** | Frame direction — delivery-surface safe areas (title-safe / action-safe % insets), type-at-distance floors, on-screen pacing / hold times, bumper + lower-third layout. Matched by **canonical path + section headings** (per `create-brand/references/frame-direction.md` § Cross-stack note), NOT by parsing frontmatter. | Record `frame_direction: absent` in manifest provenance; fall back to `brand/DESIGN.md` + `brand/CREATIVE-DIRECTION.md` tokens. Never silent — same degradation mechanics as `realized-surface-grounding.md`. |
 
 This is additive — it adds no required brief field and changes no per-shot shape, so no schema consumer's contract is affected. The frame inputs feed per-shot prompt composition (safe-area placement, type sizing, hold timing), not field validation.
@@ -72,9 +72,9 @@ Each shot in the brief's Storyboard MUST yield this shape:
 
 ## Create-shortform field map
 
-How create-shortform's hero brief sections map to schema fields:
+How `video`'s hero brief sections map to schema fields:
 
-| create-shortform body section | Schema fields filled |
+| `video` body section | Schema fields filled |
 |---|---|
 | § TL;DR for the Producer | (skipped — meta) |
 | § What This Brief Bets On | `angle` (combined with frontmatter) |
@@ -93,7 +93,7 @@ How create-shortform's hero brief sections map to schema fields:
 
 ## Hand-written brief minimum
 
-If an operator bypasses create-shortform and hand-writes a brief, the minimum viable shape is:
+If an operator bypasses `video` and hand-writes a brief, the minimum viable shape is:
 
 ```markdown
 ---
@@ -136,7 +136,7 @@ The hand-written form is validated against the same field requirements as the cr
 
 ## App-Preview Mode Extension
 
-App-preview mode replaces the narrative shot list with a screenshot-driven beat list — each beat is a crop of a real UI screenshot plus an interaction overlay. The input is **`brief-creative`'s `handoff-create-shortform.md`** artifact at `.forsvn/artifacts/mkt/create-shortform/app-preview-brief/[slug]/handoff-create-shortform.md`. The companion `brief.md` is human context only — `handoff-create-shortform.md` is the create-shortform spec.
+App-preview mode replaces the narrative shot list with a screenshot-driven beat list — each beat is a crop of a real UI screenshot plus an interaction overlay. The input is **`creative`'s `handoff-create-shortform.md`** artifact at `.forsvn/artifacts/mkt/create-shortform/app-preview-brief/[slug]/handoff-create-shortform.md`. The companion `brief.md` is human context only — `handoff-create-shortform.md` is the `video` spec.
 
 ### App-preview required fields
 
@@ -149,7 +149,7 @@ The handoff frontmatter MUST carry:
 | `surface` | enum | frontmatter `surface` | One of: `app-store` / `onboarding` / `website` / `social` |
 | `aspect` | string | frontmatter `aspect` | One of: `9:16` / `1:1` / `16:9` / `4:5` / `2:3` |
 | `total_length_seconds` | number | frontmatter `total_length_seconds` | Total video length; sums of per-shot `duration_s` must equal this |
-| `audio_default` | enum | frontmatter `audio_default` | `on` or `off` — surface-driven default; create-shortform respects it |
+| `audio_default` | enum | frontmatter `audio_default` | `on` or `off` — surface-driven default; `video` respects it |
 | `shot_count` | integer | frontmatter `shot_count` | Count of rows in the per-shot table |
 | `brand_source` | enum | frontmatter `brand_source` | `brand-md` (canonical brand artifacts present) or `cold-start-hint` (brief proceeded with warn-flag) |
 
@@ -184,7 +184,7 @@ How the handoff artifact maps to the schema's canonical per-shot shape:
 | `caption_text` + `caption_band` | `on_screen_text[]` | One entry: `{ text, position: <caption_band.position>, entry_s: <beat start>, exit_s: <beat end> }`. Caption-less beats (`—`) yield empty `on_screen_text[]` |
 | `pointer` | (new field) `pointer_spec` | App-preview-only — see § App-preview-only fields below |
 | (handoff frontmatter) `surface` | (new field) `surface` | App-preview-only — drives platform compliance |
-| (handoff frontmatter) `audio_default` | `audio_plan.default_state` | `on` / `off`; create-shortform renders silence on beats where no audio asset is supplied |
+| (handoff frontmatter) `audio_default` | `audio_plan.default_state` | `on` / `off`; `video` renders silence on beats where no audio asset is supplied |
 | (handoff frontmatter) `brand_source` | (new field) `brand_source` | `brand-md` / `cold-start-hint`; surfaces in the manifest concerns block when `cold-start-hint` |
 | (no CTA field in handoff) | `cta` | App-preview briefs do not carry a CTA copy by default. Set to `(none)` in manifest unless operator supplied a final-shot CTA caption via `caption_text` on the closing beat. See § App-preview CTA semantics below |
 | (no `narration` in handoff per default) | `narration` | App-preview defaults to silent narration; if the brief supplies narration in companion `brief.md` § Pointer + Audio Plan, prompt-author lifts it |
@@ -208,7 +208,7 @@ The schema's existing `audio_plan`, `production_notes`, `success_criteria`, and 
 
 ### App-preview CTA semantics
 
-`brief-creative` does NOT require a CTA copy — app-preview briefs prove a feature; "what to do next" is the App Store / surface chrome, not the video's on-screen text. Mapping:
+`creative` does NOT require a CTA copy — app-preview briefs prove a feature; "what to do next" is the App Store / surface chrome, not the video's on-screen text. Mapping:
 
 - If the closing beat (highest `shot_id`) has a `caption_text` that reads like a CTA (e.g., "Save what you did"), use that string verbatim as `manifest.cta` and Gate 1's CTA-verbatim check applies to the closing beat's `on_screen_text`.
 - If the closing beat has no caption OR a caption that isn't a CTA, set `manifest.cta` to `(none)` and Gate 1's CTA-verbatim check is **skipped for app-preview mode** (the check is not applicable, not violated).
@@ -216,7 +216,7 @@ The schema's existing `audio_plan`, `production_notes`, `success_criteria`, and 
 
 ### App-preview validation rules (added to general rules below)
 
-At pre-dispatch, in addition to general rules 1-3 below, create-shortform MUST verify for app-preview mode:
+At pre-dispatch, in addition to general rules 1-3 below, `video` MUST verify for app-preview mode:
 
 A. **`type == create-shortform-input`** in handoff frontmatter. Otherwise the input is misrouted — return `NEEDS_CONTEXT` and ask the operator to point at the handoff file, not `brief.md`.
 
@@ -232,47 +232,47 @@ F. **Per-shot `duration_s` non-empty AND ∑duration_s == total_length_seconds.*
 
 G. **Every `source_id` in the per-shot table resolves to an `assets.md` row** with a valid screenshot path; every path must exist on disk. Missing path → `NEEDS_CONTEXT` (do NOT fabricate; the screenshot is the source of truth).
 
-H. **Every `interaction_verb` is in the canonical 10-verb set.** Custom verbs → `NEEDS_CONTEXT` and defer to `brief-creative` (the brief should have caught this at its Gate 3).
+H. **Every `interaction_verb` is in the canonical 10-verb set.** Custom verbs → `NEEDS_CONTEXT` and defer to `creative` (the brief should have caught this at its Gate 3).
 
 I. **Every `mask_transform` is in the canonical transform set.** Custom transforms (e.g., "swoop", "glitch") → `NEEDS_CONTEXT`.
 
 J. **Every pointer `color_hex` and color token cited in `pointer_spec` exists in `brand/DESIGN.md`.** Same brand-mark fidelity rule as shortform Gate 2; no synthetic neon, no invented hex.
 
-K. **`brand_source` matches the project state.** If `brand_source: brand-md` but `brand/BRAND.md` or `brand/DESIGN.md` is missing on disk → `NEEDS_CONTEXT` (the upstream brief lied about brand state). If `brand_source: cold-start-hint`, create-shortform proceeds with `done_with_concerns` and pins the cold-start posture in the manifest's `## Concerns` block.
+K. **`brand_source` matches the project state.** If `brand_source: brand-md` but `brand/BRAND.md` or `brand/DESIGN.md` is missing on disk → `NEEDS_CONTEXT` (the upstream brief lied about brand state). If `brand_source: cold-start-hint`, `video` proceeds with `done_with_concerns` and pins the cold-start posture in the manifest's `## Concerns` block.
 
 ### App-preview brand-token fallback
 
-Shortform mode hard-fails (Gate 2) on missing brand tokens. App-preview mode has a softer floor because `brand_source: cold-start-hint` is a legitimate state — `brief-creative` warned-and-proceeded upstream. The fallback:
+Shortform mode hard-fails (Gate 2) on missing brand tokens. App-preview mode has a softer floor because `brand_source: cold-start-hint` is a legitimate state — `creative` warned-and-proceeded upstream. The fallback:
 
 - `brand_source: brand-md` → standard Gate 2 hard-FAIL on fabricated hex / token names.
-- `brand_source: cold-start-hint` → Gate 2 still hard-FAILs on fabricated hex (you cannot make up colors), but allows the per-shot prompts to cite `source-sampled` hex with the literal token name `(cold-start-sampled)` and a note in the manifest's `## Concerns` block: "Brand artifacts absent at brief time; pointer/caption colors sampled from source screenshots. Reconcile by running create-brand and re-running the brief."
+- `brand_source: cold-start-hint` → Gate 2 still hard-FAILs on fabricated hex (you cannot make up colors), but allows the per-shot prompts to cite `source-sampled` hex with the literal token name `(cold-start-sampled)` and a note in the manifest's `## Concerns` block: "Brand artifacts absent at brief time; pointer/caption colors sampled from source screenshots. Reconcile by running `brand` and re-running the brief."
 
 ---
 
 ## Validation rules
 
-At pre-dispatch, create-shortform MUST verify (rules 1-3 are mode-agnostic; rules 4-7 apply to shortform mode; app-preview adds rules A-K above):
+At pre-dispatch, `video` MUST verify (rules 1-3 are mode-agnostic; rules 4-7 apply to shortform mode; app-preview adds rules A-K above):
 
 1. **All required fields present for the discriminated mode.** Missing → `NEEDS_CONTEXT` with the specific missing field.
-2. **`aspect` is one of the supported values for the mode.** `youtube` long-form aspect (16:9 at >60s length) → `BLOCKED` per SKILL.md (long-form is parked).
+2. **`aspect` is one of the supported values for the mode.** `youtube` long-form aspect (16:9 at >60s length) → `BLOCKED` per COMMAND.md (long-form is parked).
 3. **`length_seconds` (shortform) or `total_length_seconds` (app-preview) ≤ 90.** v1 targets short-form. Long-form is parked.
 4. **(shortform)** `shots[]` non-empty AND ∑duration_seconds == length_seconds. Exact equality. Off-by-one → `NEEDS_CONTEXT`.
-5. **(shortform)** `cta` non-empty. Empty CTA → `NEEDS_CONTEXT` (defer to create-shortform to fill). **App-preview exception:** see § App-preview CTA semantics — `cta` may be `(none)` and Gate 1's CTA check is skipped.
+5. **(shortform)** `cta` non-empty. Empty CTA → `NEEDS_CONTEXT` (defer to `video` to fill). **App-preview exception:** see § App-preview CTA semantics — `cta` may be `(none)` and Gate 1's CTA check is skipped.
 6. **(shortform)** Final shot's `role` is `cta` OR final shot's `on_screen_text` contains the `cta` string. Otherwise → `NEEDS_CONTEXT`. **App-preview exception:** soft close test — final beat is `settle` or `transition`.
 7. **`brand_mode` (shortform) or `brand_source` (app-preview) resolved.** Required for TTS defaults (shortform) or concern-block emission (app-preview).
 
 ## Cross-stack contract
 
 Schema changes here REQUIRE atomic update of:
-- `create-shortform/SKILL.md` Inputs section (both modes)
+- `commands/video/COMMAND.md` Inputs section (both modes)
 - `create-shortform/agents/prompt-author-agent.md` Input Contract
 - `create-shortform/agents/critic-agent.md` Gate 1 checks + mode-aware gate behaviour
 - `create-shortform/references/produce-format-conventions.md` Manifest schema + app-preview scaffold patterns
 - `create-shortform/references/produce-anti-patterns.md` if a new anti-pattern emerges
 - **App-preview mode only:** `brief-creative/references/produce-format-conventions.md` § Cross-stack contract checkpoint #3 (handoff column set) MUST be updated atomically when this file's app-preview field map changes.
 
-If create-shortform's output ever drifts from this schema's shortform required fields, OR if brief-creative's `handoff-create-shortform.md` schema drifts, the field map(s) in this file MUST be updated in the same commit to keep the bridge consistent.
+If `video`'s output ever drifts from this schema's shortform required fields, OR if `creative`'s `handoff-create-shortform.md` schema drifts, the field map(s) in this file MUST be updated in the same commit to keep the bridge consistent.
 
 ## Promotion path (deferred)
 
-This schema lives inside create-shortform. When a second consumer (future `evaluate-video` skill) lands, promote to top-level `references/video-brief-schema.md` and link from all consumers. Until then, the schema stays skill-local per D14 sub-decision #3. The app-preview extension lives in the same file rather than a sibling ref per the WS4 single-unified-schema decision (2026-05-23).
+This schema lives inside `video`. When a second consumer (future `evaluate-video` skill) lands, promote to top-level `references/video-brief-schema.md` and link from all consumers. Until then, the schema stays skill-local per D14 sub-decision #3. The app-preview extension lives in the same file rather than a sibling ref per the WS4 single-unified-schema decision (2026-05-23).

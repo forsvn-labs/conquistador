@@ -2,14 +2,14 @@
 title: Audit-Marketing — category → fixer routing
 lifecycle: canonical
 status: stable
-produced_by: audit-marketing
+produced_by: audit
 load_class: PROCEDURE
 ---
 
 # Fix routing — which fixer repairs which antipattern family
 
 Routing is by finding family, restricted to fixers that actually exist in the current install. The
-public skills named here (`polish-vietnamese`, `write-copy`) route when installed. Families whose
+public skills named here (`vietnamese`, `copy`) route when installed. Families whose
 default fixer is not installed stay **Deferred with a proposed correction** — they never route to an
 unqualified pass, and no routing decision grants release authority.
 
@@ -20,13 +20,13 @@ unqualified pass, and no routing decision grants release authority.
 | structure & scannability | operator-named language tool, else Deferred | re-shape for the surface |
 | channel-fit | operator-named language tool, else Deferred | adapt to the platform's format |
 | model-identity tells | operator-named language tool, else Deferred | strip the provider tell, keep the message |
-| hook / lede | `write-copy` | regenerate the weak unit, not a synonym swap |
-| claim quality | `write-copy` | re-ground the claim in proof |
-| CTA | `write-copy` | pair the action with a payoff |
-| persuasion structure | `write-copy` | identify the unsupported premise or missing decision answer; repair it with evidence and clear scope |
+| hook / lede | `copy` | regenerate the weak unit, not a synonym swap |
+| claim quality | `copy` | re-ground the claim in proof |
+| CTA | `copy` | pair the action with a payoff |
+| persuasion structure | `copy` | identify the unsupported premise or missing decision answer; repair it with evidence and clear scope |
 
 **VN override.** A finding tagged Vietnamese-register / translation-artifact routes to
-`polish-vietnamese` (when installed) regardless of family default — Vietnamese tone is its own fixer
+`vietnamese` (when installed) regardless of family default — Vietnamese tone is its own fixer
 of record.
 
 ## Cross-artifact / structural-only → human-review (never a confident auto-fix)

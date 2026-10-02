@@ -2,7 +2,7 @@
 title: Worked Example — Seasonal Teams Packaging
 lifecycle: canonical
 status: stable
-produced_by: design-pricing-and-packaging
+produced_by: pricing
 load_class: EXAMPLE
 ---
 

@@ -8,7 +8,7 @@ load_class: PROCEDURE
 
 # Asset-Eval Format Conventions
 
-> Format rules for the evaluate-asset cycle artifact + results.tsv row + learnings.md promotion. Cited from SKILL.md "Artifact Contract" section. Schema changes require atomic update across `_shared/eval-loop-spec.md` + the eval-loop owner + downstream callers (brief-graphic / produce-asset, which produce the source brief + re-ingested asset).
+> Format rules for the evaluate-asset cycle artifact + results.tsv row + learnings.md promotion. Cited from the play file "Artifact Contract" section. Schema changes require atomic update across `_shared/eval-loop-spec.md` + the eval-loop owner + downstream callers (brief-graphic / produce-asset, which produce the source brief + re-ingested asset).
 
 Aligned with the eval siblings (`evaluate-content`, `evaluate-ad`) where cross-eval consistency matters (frontmatter schema, Results Row 8-column schema, Evidence 6-column schema, side-effect order). Asset-specific extensions are clearly marked.
 
@@ -148,7 +148,7 @@ provenance:
 - Keep: [component-level, not "the asset"]
 - Discard:
 - Watch:
-- Route next work to: produce-asset | brief-graphic | create-brand | run-pipeline | none
+- Route next work to: produce-asset | brief-graphic | brand | run-pipeline | none
 
 ## Results Row
 

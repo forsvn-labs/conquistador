@@ -62,4 +62,4 @@ The critic rejects a claim that the interface release caused the decline merely 
 
 The critic accepts the arithmetic when reproducible and correctly scoped. The report remains Inconclusive on routing and preserves its next observation. No review pass or live result is claimed for this hypothetical example.
 
-`prioritize-opportunities` may use supported findings with their limits. This diagnosis does not authorize an interface change, tracking change, experiment, spend or user contact.
+`prioritize` may use supported findings with their limits. This diagnosis does not authorize an interface change, tracking change, experiment, spend or user contact.

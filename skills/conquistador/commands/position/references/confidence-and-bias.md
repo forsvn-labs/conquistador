@@ -1,9 +1,9 @@
 ---
-title: Confidence Labels, Sample Bias, and the ≥5 Rule — research-positioning rigor protocol
+title: Confidence Labels, Sample Bias, and the ≥5 Rule — position rigor protocol
 lifecycle: canonical
 status: stable
-produced_by: research-positioning
-consumers: research-positioning SKILL.md + critic-agent (gates 8/9/10) + voc-collector-agent + synthesis-agent
+produced_by: position
+consumers: position COMMAND.md + critic-agent (gates 8/9/10) + voc-collector-agent + synthesis-agent
 load_class: PROCEDURE
 ---
 
@@ -11,7 +11,7 @@ load_class: PROCEDURE
 
 **Three guards that turn research from "here's what we found" into "here's what we found and how sure we are." Confidence labels, sample-bias acknowledgment, and the ≥5-sources floor. Applied at synthesis; enforced at critic gates 8/9/10.**
 
-> Why this exists: research-positioning feeds 13+ downstream skills. Without epistemic rigor on the source artifact, every downstream skill inherits the same unmarked assumptions. A persona with one anecdotal quote and a persona with twenty independent sources read identically to consumers. Confidence labels + bias acknowledgment + sample floor make the difference visible.
+> Why this exists: `position` feeds 13+ downstream skills. Without epistemic rigor on the source artifact, every downstream skill inherits the same unmarked assumptions. A persona with one anecdotal quote and a persona with twenty independent sources read identically to consumers. Confidence labels + bias acknowledgment + sample floor make the difference visible.
 >
 > Companion to [`references/habitat-mapping.md`](habitat-mapping.md) (Digital Watering Hole methodology, channel-density scoring). Channel density measures audience concentration in a channel; finding confidence measures epistemic certainty of a claim. **Orthogonal — do not conflate.**
 
@@ -19,7 +19,7 @@ load_class: PROCEDURE
 
 ## 1. Confidence labels — every finding tagged
 
-The label, scoring rubric, source-independence rules, and the L-resolution rule are canonical in [`references/confidence-labeling.md`](confidence-labeling.md) [PROCEDURE]. research-positioning uses that default rubric **unchanged** — this section is the ICP-specific application.
+The label, scoring rubric, source-independence rules, and the L-resolution rule are canonical in [`references/confidence-labeling.md`](confidence-labeling.md) [PROCEDURE]. `position` uses that default rubric **unchanged** — this section is the ICP-specific application.
 
 ### What gets a confidence label
 
@@ -36,7 +36,7 @@ Format (inline at end of finding bullet):
 [Confidence: <H | M | L> | sources: <N>]
 ```
 
-`<N>` is the count of **independent sources** that triangulate the finding — not the count of quotes. The H/M/L scoring rubric and the source-independence rules (what counts as an independent source, what does not) are canonical in [`references/confidence-labeling.md`](confidence-labeling.md) § 2–§ 3; research-positioning uses them unchanged. Load-bearing here: multiple quotes from one Reddit thread is N=1, not N=3.
+`<N>` is the count of **independent sources** that triangulate the finding — not the count of quotes. The H/M/L scoring rubric and the source-independence rules (what counts as an independent source, what does not) are canonical in [`references/confidence-labeling.md`](confidence-labeling.md) § 2–§ 3; `position` uses them unchanged. Load-bearing here: multiple quotes from one Reddit thread is N=1, not N=3.
 
 ### Resolving Low-confidence findings
 

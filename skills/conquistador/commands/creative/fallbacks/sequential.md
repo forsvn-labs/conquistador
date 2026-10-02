@@ -23,7 +23,7 @@ and stop at the advisory brief. The three-candidate and brand-file gates below a
 file/production mode.
 
 1. Anchor audience, viewing context, communication job, mechanism, proof, destination, format, and
-   constraints from `SKILL.md`.
+   constraints from `COMMAND.md`.
 2. Load brand grounding with `agents/brand-anchor-agent.md` and
    `references/realized-surface-grounding.md`.
 3. Generate three distinct concepts with `agents/concept-agent.md` + `references/asset-types.md` /
@@ -64,9 +64,9 @@ file/production mode.
 
 ## Shared rules
 
-- Prefer `create-brand` for brand-system tokens; name `create-shortform` for short-form video briefs
+- Prefer `brand` for brand-system tokens; name `video` for short-form video briefs
   without linking into that skill directory.
-- Vietnamese copy cleanup may be delegated to the public `polish-vietnamese` skill when installed;
+- Vietnamese copy cleanup may be delegated to the public `vietnamese` skill when installed;
   it is optional and grants no publish or acceptance authority.
 - An internal critic PASS is a quality gate, not completion. The job ends only at explicit human
   acceptance of the brief/handoff; a standing critic failure stops the run for the human instead of

@@ -1,15 +1,15 @@
 ---
-title: Noise Filter — actionable-only finding triage for audit-marketing
+title: Noise Filter — actionable-only finding triage for audit
 lifecycle: canonical
 status: stable
-produced_by: audit-marketing
-consumers: audit-marketing SKILL.md + references/audit-flow.md + references/report-template.md
+produced_by: audit
+consumers: audit COMMAND.md + references/audit-flow.md + references/report-template.md
 load_class: PROCEDURE
 ---
 
 # Noise Filter — Actionable-Only Triage
 
-**The second filter on top of signal-vs-noise verification. After `SKILL.md` seven-dimension judgment + Layer-1 FP guards in `audit-flow.md` sorts real-vs-fake, this filter sorts actionable-vs-not. Three-category output: Accepted / Rejected / Deferred. The point is to surface decisions the operator can act on, not to drown them in chatter.**
+**The second filter on top of signal-vs-noise verification. After `COMMAND.md` seven-dimension judgment + Layer-1 FP guards in `audit-flow.md` sorts real-vs-fake, this filter sorts actionable-vs-not. Three-category output: Accepted / Rejected / Deferred. The point is to surface decisions the operator can act on, not to drown them in chatter.**
 
 > Why this exists: brief 06 § Review Workflow names noise filtering "the highest-leverage part" of the review closeout. Without it, reviewers either (a) report every nit and train the operator to skim, or (b) suppress findings they should have surfaced. The 3-category model gives operators a scan-friendly report where Accepted = "fix is done, here's what changed," Rejected = "I considered this and discarded as not real / not worth surfacing," Deferred = "real issue, but not for this pass — log a follow-up."
 
@@ -21,7 +21,7 @@ load_class: PROCEDURE
 Reviewer surfaces a candidate finding.
    │
    ▼
-Layer 1: real-vs-fake (SKILL.md seven dimensions + audit-flow.md FP guards)
+Layer 1: real-vs-fake (COMMAND.md seven dimensions + audit-flow.md FP guards)
    │   ─ Already handled elsewhere? → drop (fake)
    │   ─ Already implemented under another name/location? → drop (fake)
    │   ─ Code path equivalent to current? → drop (fake)
@@ -224,7 +224,7 @@ Empty subsections are allowed — if no findings deferred, the section reads "_N
 
 ## Related refs
 
-- [SKILL.md](../SKILL.md) — Layer 1 judgment; noise-filter layers on top
+- [COMMAND.md](../COMMAND.md) — Layer 1 judgment; noise-filter layers on top
 - [polish-flow.md](polish-flow.md) — applies Accepted fixes pending human review
 - [report-template.md](report-template.md) — body-template carries the 3-section structure
 - Anti-patterns in this file — overlaps with rows on "padding with nits" and "running >2 loops"

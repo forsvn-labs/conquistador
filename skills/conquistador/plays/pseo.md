@@ -1,12 +1,22 @@
-# Build-programmatic-search workflow
+---
+command: pseo
+label: Build programmatic search pages
+intents: ["programmatic seo","pseo","programmatic pages","comparison pages at scale","location pages","template pages for seo"]
+chain:
+  - { command: seo }
+  - { command: copy, for: "a page template with page-specific content" }
+  - { method: artifact-hygiene, for: "pilot inventory and regeneration path" }
+legacy: build-programmatic-search
+---
+# Build programmatic search pages
 
-Use privately for programmatic SEO, comparison pages, location/category templates, or other scaled
+Use for programmatic SEO, comparison pages, location/category templates, or other scaled
 search inventory.
 
-1. Use `optimize-search` to verify demand and intent, crawl/index foundations, unique page-level
+1. Use `seo` to verify demand and intent, crawl/index foundations, unique page-level
    inventory, internal linking, canonical rules, retrieval/answer suitability, and measurement.
-2. Use `write-copy` to define a template whose decision-bearing content remains specific to each page.
-3. Use the `artifact-hygiene` method to prove the pilot inventory, source provenance, generated-output
+2. Use `copy` to define a template whose decision-bearing content remains specific to each page.
+3. Use the [artifact-hygiene](../methods/artifact-hygiene.md) method to prove the pilot inventory, source provenance, generated-output
    boundary, and safe regeneration path.
 
 Run a small manually reviewed pilot before scaling. Missing page-level evidence blocks a page. Stop

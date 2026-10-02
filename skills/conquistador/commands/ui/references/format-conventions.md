@@ -1,6 +1,6 @@
 # Artifact Format Conventions — Full Detail
 
-Source of truth for the brief-product-ui artifact schema. Cited by `SKILL.md` "Artifact Contract."
+Source of truth for the `ui` artifact schema. Cited by `COMMAND.md` "Artifact Contract."
 
 This schema applies only when a persistent file artifact is requested. Bounded inline delivery uses
 the front-door nine-content contract without frontmatter, a private path, review-plugin metadata, or
@@ -16,7 +16,7 @@ name in kebab-case (matches the source flow's slug where possible). Re-runs incr
 
 ```yaml
 ---
-skill: brief-product-ui
+skill: ui
 version: 1                      # integer artifact schema version; increments on re-run
 date: <YYYY-MM-DD>
 status: done | done_with_concerns | blocked | needs_context
@@ -26,12 +26,12 @@ id: brief-product-ui-<slug>
 keywords: [ui, <feature>, <surfaces…>]
 review_surface: html           # FIRE preview via forsvn-preview while pending
 decision_state: pending        # pending → approved/denied (human-owned)
-source_flow: <path to the map-user-flow artifact this consumes>
+source_flow: <path to the flow artifact this consumes>
 brand_source: house | <brand name> | cold-start-hint
 lifecycle: pipeline
-produced_by: brief-product-ui
+produced_by: ui
 provenance:
-  skill: brief-product-ui
+  skill: ui
   run_date: <YYYY-MM-DD>
   input_artifacts: [<flow path>, brand/DESIGN.md, brand/BRAND.md]
   config_sources: []

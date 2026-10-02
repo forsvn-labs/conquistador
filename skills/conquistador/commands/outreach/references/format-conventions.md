@@ -19,7 +19,7 @@ reply handling, channel/compliance checks, planned qualified-conversation defini
 batch size, cadence, suppression, and stop conditions. These are plans, not observed results.
 
 ```yaml
-skill: write-outreach
+skill: outreach
 version: 1
 date: YYYY-MM-DD
 status: done # done_with_concerns | blocked | needs_context

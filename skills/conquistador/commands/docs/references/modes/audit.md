@@ -2,7 +2,7 @@
 title: Docs-Writing — Audit Mode
 lifecycle: canonical
 status: stable
-produced_by: write-technical-docs
+produced_by: docs
 load_class: PROCEDURE
 ---
 

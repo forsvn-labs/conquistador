@@ -1,6 +1,6 @@
 # Vietnamese Tone Corpus — Register Reference
 
-> Annotated corpus of Vietnamese writing registers, compiled from live samples scraped from representative publications and forums. Used by `polish-vietnamese` agents to diagnose input register, set target register, and rewrite translated text so it reads naturally.
+> Annotated corpus of Vietnamese writing registers, compiled from live samples scraped from representative publications and forums. Used by `vietnamese` agents to diagnose input register, set target register, and rewrite translated text so it reads naturally.
 
 **Core principle:** Vietnamese register is carried almost entirely by **pronouns, sentence-final particles, vocabulary choice (Sino-Vietnamese vs. native), and sentence rhythm**. A single wrong pronoun ruins the whole register. A missing particle makes the sentence sound translated-from-English.
 

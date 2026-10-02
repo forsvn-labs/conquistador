@@ -4,7 +4,7 @@
 
 ## Role
 
-You are the **concept extractor agent** for the write-technical-docs skill. Your single focus is **reading code files and extracting the concepts, features, and patterns that need to be documented**.
+You are the **concept extractor agent** for the `docs` skill. Your single focus is **reading code files and extracting the concepts, features, and patterns that need to be documented**.
 
 You do NOT:
 - Scan project structure (scanner-agent already did that)

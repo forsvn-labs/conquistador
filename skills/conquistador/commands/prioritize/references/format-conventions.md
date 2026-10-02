@@ -1,4 +1,4 @@
-# Format Conventions — prioritize-opportunities Artifact
+# Format Conventions — `prioritize` Artifact
 
 > Load when writing the output artifact. Encodes the canonical artifact template (frontmatter + Phase 1 initiative format + Phase 2 ranking/scoring/decisions + Next Step), the ICE Scoring table column schema (cross-stack contract), the Decisions table column schema, and the Out-of-Scope file format.
 
@@ -16,7 +16,7 @@ On re-run: rename existing artifact to `prioritize-opportunities.v[N].md` (incre
 
 ```yaml
 ---
-skill: prioritize-opportunities
+skill: prioritize
 version: [N]                          # increment on re-run
 date: [YYYY-MM-DD]
 status: done | done_with_concerns | blocked | needs_context
@@ -26,7 +26,7 @@ status: done | done_with_concerns | blocked | needs_context
 **Field semantics:**
 - `version`: integer, 1 on first run, increment on every subsequent run for the same root cause.
 - `date`: artifact creation date, ISO-8601. Drives the 30-day staleness check on downstream consumers (funnel-planner reads `date` to decide whether to re-run upstream).
-- `status`: per the Completion Status block in SKILL.md.
+- `status`: per the Completion Status block in COMMAND.md.
 
 ---
 
@@ -39,7 +39,7 @@ The artifact opens with a header (`# Solution Design` + `**Root Cause:**`) then 
 ```markdown
 # Solution Design
 
-**Root Cause:** [from diagnose-growth.md — verbatim, including gap percentages if multi-cause]
+**Root Cause:** [from diagnose.md — verbatim, including gap percentages if multi-cause]
 ```
 
 ### Phase 1: Initiatives
@@ -144,11 +144,11 @@ One line per initiative, ranked 1-through-N. The #1 entry must include a reason;
 ```markdown
 ## Next Step
 
-Run `model-growth-funnel` to set numeric targets for the proceeding initiatives.
-If any "Proceed" initiative requires a technical build, also run `architect-software-system` (from the `forsvn-dev` package) with these initiatives as context.
+Run `funnel` to set numeric targets for the proceeding initiatives.
+If any "Proceed" initiative requires a technical build, also run `architect` (from the `forsvn-dev` package) with these initiatives as context.
 ```
 
-This block is **verbatim** — downstream `forsvn` and `model-growth-funnel` grep these phrases to detect chain handoff.
+This block is **verbatim** — downstream `forsvn` and `funnel` grep these phrases to detect chain handoff.
 
 ---
 
@@ -175,7 +175,7 @@ This block is **verbatim** — downstream `forsvn` and `model-growth-funnel` gre
 ```markdown
 ## Change Log
 
-- [YYYY-MM-DD] [What changed and why — e.g., "Re-ran after diagnose-growth updated root cause from 'targeting quality' to 'landing-page-message mismatch'. 3 prior Proceeds re-evaluated; 1 moved to Park."]
+- [YYYY-MM-DD] [What changed and why — e.g., "Re-ran after diagnose updated root cause from 'targeting quality' to 'landing-page-message mismatch'. 3 prior Proceeds re-evaluated; 1 moved to Park."]
 ```
 
 ---
@@ -226,5 +226,5 @@ Cite source where possible: Wayback Machine for historical evidence, vendor case
 - **Missing Anti-generic check on any initiative.** Critical Gate 3 fails the artifact.
 - **Decimals in ICE scores.** Integers only; "7.5" is not a valid score.
 - **Kill rows without Reason: prefix in Kill Criteria column.** Out-of-Scope file write parses the Reason; missing it breaks the persistence.
-- **Verbatim Next Step block paraphrased.** Downstream chain detection greps the literal "Run `model-growth-funnel`" phrase.
+- **Verbatim Next Step block paraphrased.** Downstream chain detection greps the literal "Run `funnel`" phrase.
 - **Skipping Out-of-Scope file writes for Kills.** The Decisions table marks the decision; the per-Kill file IS the long-lived record. Both are required.

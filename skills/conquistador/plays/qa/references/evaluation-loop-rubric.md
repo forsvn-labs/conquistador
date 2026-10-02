@@ -5,7 +5,7 @@ title: Evaluation-Loop Rubric — shared frame for the evaluate-* eval-loop crit
 lifecycle: canonical
 status: stable
 load_class: PROCEDURE
-consumers: evaluate-ad · measure-growth · evaluate-content
+consumers: evaluate-ad · `measure` · evaluate-content
 provenance:
   extracted_from: the common frame of evaluate-{ad,campaign,content}/references/campaign-rubric.md
   extracted_at: 2026-05-21
@@ -15,7 +15,7 @@ provenance:
 # Evaluation-Loop Rubric — Shared Frame
 
 <!-- lint:reference-ok per-skill instrument; each eval skill owns its own references/campaign-rubric.md -->
-**The common contract behind every eval-loop critic rubric: the scoring scale, the pass gate, the five shared dimensions, the universal Hard Fails, the revision-trigger mechanism, and the falsifiability discipline. `evaluate-ad`, `measure-growth`, and `evaluate-content` each own a `references/campaign-rubric.md` that scores 7 dimensions — 5 defined here, 2 domain-specific — and inherits this frame.**
+**The common contract behind every eval-loop critic rubric: the scoring scale, the pass gate, the five shared dimensions, the universal Hard Fails, the revision-trigger mechanism, and the falsifiability discipline. `evaluate-ad`, `measure`, and `evaluate-content` each own a `references/campaign-rubric.md` that scores 7 dimensions — 5 defined here, 2 domain-specific — and inherits this frame.**
 
 > Why this is shared: the three eval-loop critics gate post-launch cycle artifacts before a `results.tsv` row is written. The *contract* — what a passing score is, what a Hard Fail is, what makes a score falsifiable — must be identical and must change in lockstep. The *band tables* are domain-specialized (audience-temp, channel-mix, engagement-quality) and revise independently per domain; they stay in each skill's `campaign-rubric.md`. This file is the frame; `campaign-rubric.md` is the domain instrument.
 

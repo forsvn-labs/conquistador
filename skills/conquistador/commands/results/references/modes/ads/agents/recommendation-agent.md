@@ -17,8 +17,8 @@ view rate, favorable Quality Score, or low raw CPL cannot override the declared
 qualified outcome. No platform-specific default spend floor determines confidence.
 
 Return the precise action, scope, reason, reversal evidence, next review condition,
-and next controlled change. Route creative work to create-paid-campaign, destination
-work to write-copy or improve-conversion, and channel strategy to plan-campaign.
+and next controlled change. Route creative work to `ads`, destination
+work to `copy` or `convert`, and channel strategy to `campaign`.
 Do not perform those tasks inside this evaluation.
 
 Prepare the artifact, compatible eight-column ledger row, and proposed learning.

@@ -2,7 +2,7 @@
 title: Docs-Writing — Report Template
 lifecycle: canonical
 status: stable
-produced_by: write-technical-docs
+produced_by: docs
 load_class: PROCEDURE
 ---
 
@@ -19,7 +19,7 @@ Step 7.5 additions (manifest-sync conformance; backfilled going forward): `lifec
 
 ```yaml
 ---
-skill: write-technical-docs
+skill: docs
 version: 1
 date: YYYY-MM-DD
 status: done | done_with_concerns | blocked | needs_context
@@ -27,9 +27,9 @@ audience: [end-user | developer | operator | mixed]
 doc-type: [readme | user-guide | api-reference | config-guide | tutorial | ship-log]
 # Step 7.5 fields (artifact-graph hardening; backfilled going forward):
 lifecycle: canonical  # README → canonical; user-guide → pipeline; per-type varies — see below
-produced_by: write-technical-docs
+produced_by: docs
 provenance:
-  skill: write-technical-docs
+  skill: docs
   run_date: YYYY-MM-DD
   input_artifacts: []  # e.g., .forsvn/artifacts/product/write-technical-docs/product-context.md if read
 ---
@@ -92,6 +92,6 @@ The actual section list depends on doc-type; writer-agent follows `references/do
 
 Downstream consumers:
 - Code readability cleanup outside this skill (when refactoring) — may read docs to verify nothing in the codebase contradicts documented behavior.
-- `fresh-eyes-review` (post-implementation) — reads docs to verify implementation matches documented contract.
-- `architect-software-system` — reads README + architecture docs to detect drift from `architecture/system-architecture.md`.
-- artifact cleanup outside this skill — scans `.forsvn/artifacts/product/write-technical-docs/records/` for staleness; write-technical-docs snapshot artifacts (Release Notes) are part of that scan.
+- `critique` (post-implementation) — reads docs to verify implementation matches documented contract.
+- `architect` — reads README + architecture docs to detect drift from `architecture/system-architecture.md`.
+- artifact cleanup outside this skill — scans `.forsvn/artifacts/product/write-technical-docs/records/` for staleness; `docs` snapshot artifacts (Release Notes) are part of that scan.

@@ -2,7 +2,7 @@
 title: Audit-Marketing — POLISH flow
 lifecycle: canonical
 status: stable
-produced_by: audit-marketing
+produced_by: audit
 load_class: PROCEDURE
 ---
 
@@ -11,7 +11,7 @@ load_class: PROCEDURE
 Runs only when the operator asks for proposed fixes. Runs AUDIT, then for each Accepted finding
 dispatches an available fixer and passes a conservative re-verify gate. **Lands every edit as
 `decision_state: pending` — never approved.** There is no agent-side accept tool; the human approves
-in their own review step. When no qualified fixer exists for a finding (no `polish-vietnamese` for
+in their own review step. When no qualified fixer exists for a finding (no `vietnamese` for
 VN register, no operator-named tool for voice/slop work), the finding stays Deferred with a proposed
 correction — it is never routed to an unqualified pass.
 

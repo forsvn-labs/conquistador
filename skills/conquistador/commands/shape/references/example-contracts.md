@@ -1,6 +1,6 @@
 # Example Contracts
 
-Reference examples for writing contracts with the shape-initiative skill's contract output format. Use these as templates when the user asks to "write a contract" or "spec this out."
+Reference examples for writing contracts with the `shape` skill's contract output format. Use these as templates when the user asks to "write a contract" or "spec this out."
 
 ---
 

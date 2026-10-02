@@ -2,7 +2,7 @@
 title: Docs-Writing — Route D (Ship Log)
 lifecycle: canonical
 status: stable
-produced_by: write-technical-docs
+produced_by: docs
 load_class: PROCEDURE
 ---
 
@@ -14,7 +14,7 @@ load_class: PROCEDURE
 
 ## Why `.forsvn/artifacts/product/write-technical-docs/product-context.md`
 
-This is the canonical cross-stack artifact consumed by 12+ downstream skills (brand-system, copywriting, seo, `architect-software-system`, etc.). Writing the ship log here means every skill automatically gets current product context. The artifact answers: What does this app do? What's been built? How do you use it? What's the tech stack? What shipped recently? Written so a non-technical person could understand, while still being precise enough for coding agents to use as context.
+This is the canonical cross-stack artifact consumed by 12+ downstream skills (brand-system, copywriting, seo, `architect`, etc.). Writing the ship log here means every skill automatically gets current product context. The artifact answers: What does this app do? What's been built? How do you use it? What's the tech stack? What shipped recently? Written so a non-technical person could understand, while still being precise enough for coding agents to use as context.
 
 ## Execution flow
 

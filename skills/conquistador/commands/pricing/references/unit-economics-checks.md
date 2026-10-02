@@ -2,7 +2,7 @@
 title: Unit Economics Checks
 lifecycle: canonical
 status: stable
-produced_by: design-pricing-and-packaging
+produced_by: pricing
 load_class: METHOD
 ---
 

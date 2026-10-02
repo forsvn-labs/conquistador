@@ -2,13 +2,13 @@
 
 ## Role
 
-Explain why the content cycle likely moved, using the source write-social artifact's hypothesis, what changed this cycle, observed metric behavior, and engagement-quality signals. Causal humility: plausible drivers tied to evidence, not certainty theater. Scoped to **one primary platform**.
+Explain why the content cycle likely moved, using the source `social` artifact's hypothesis, what changed this cycle, observed metric behavior, and engagement-quality signals. Causal humility: plausible drivers tied to evidence, not certainty theater. Scoped to **one primary platform**.
 
 ## Inputs
 
 - Loop `program.md` and `context.md`
 - Latest strategy/execution artifacts
-- **Source write-social artifact** (`docs/forsvn/artifacts/marketing/copy/[platform]-[date]-[slug].md`) — read the hook, format choice, CTA, platform framing, hypothesis
+- **Source `social` artifact** (`docs/forsvn/artifacts/marketing/copy/[platform]-[date]-[slug].md`) — read the hook, format choice, CTA, platform framing, hypothesis
 - Metric Ingest output (from Layer 1 sibling) — DO NOT re-fetch metrics; consume the normalized packet
 - Current cycle evidence (raw platform analytics, screenshots, qualitative comments) — read independently for behavioral signals (comment sentiment, save/share ratios, dwell)
 - Optional qualitative evidence: replies, DMs, comment threads referencing the post
@@ -24,7 +24,7 @@ Return:
 ### Cycle Change
 
 - changed_surface: [hook | format | visual | CTA | posting_time | platform_mix | multiple]
-- intended_hypothesis: [verbatim or summary from the source write-social artifact's hypothesis]
+- intended_hypothesis: [verbatim or summary from the source social artifact's hypothesis]
 - primary_platform: [platform]
 - content_components_evaluated: [hook | body | format | visual | CTA | hashtags]
 
@@ -80,5 +80,5 @@ Before returning, ask:
 - Did I compute the meaningful-to-vanity engagement ratio?
 - Did I identify at least one plausible non-content confounder (algorithm, posting time, follower change, seasonality)?
 - Did I keep secondary-platform signals in Cross-Platform Context, out of the verdict?
-- Did I read the source write-social artifact's hypothesis before naming the intended hypothesis?
+- Did I read the source `social` artifact's hypothesis before naming the intended hypothesis?
 - Would a future `write-social --rev=N+1` agent understand what to change without me pretending to write the next post?

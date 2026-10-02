@@ -2,7 +2,7 @@
 title: Shape-initiative — Communication Discipline
 lifecycle: canonical
 status: stable
-produced_by: shape-initiative
+produced_by: shape
 load_class: PROCEDURE
 ---
 

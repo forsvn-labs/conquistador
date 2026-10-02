@@ -2,7 +2,7 @@
 title: Independent Review Method
 lifecycle: canonical
 status: stable
-produced_by: fresh-eyes-review
+produced_by: critique
 load_class: REFERENCE
 ---
 
@@ -40,8 +40,8 @@ The cost of NOT running fresh-eyes is silent: bugs ship, get noticed weeks later
 
 ## When NOT to use this skill
 
-- **Code refactoring** → `fresh-eyes-review`. fresh-eyes verifies quality; code-cleanup changes structure. Different shapes.
-- **Decision analysis with multiple perspectives** → `decision-panel`. fresh-eyes runs ONE reviewer (or 3 specialists in --thorough mode); decision-panel runs N agents debating.
+- **Code refactoring** → `critique`. fresh-eyes verifies quality; code-cleanup changes structure. Different shapes.
+- **Decision analysis with multiple perspectives** → `decide`. fresh-eyes runs ONE reviewer (or 3 specialists in --thorough mode); `decide` runs N agents debating.
 - **Trivial changes** (typo fixes, log lines, config tweaks) — fresh-eyes overhead exceeds the benefit. Auto-trigger explicitly skips these.
 - **Read-only operations** — nothing to break, nothing to review.
 - **"Just do it quick"** — operator explicit signal to skip; honor it.

@@ -38,10 +38,10 @@ use pack_verified: none when only the method was loaded.
 ## Scope and handoff
 
 Return the integrated plan with owners, constraints, evidence gaps, acceptance,
-and one next decision. Individual copy or ads go to write-copy, write-social,
-write-outreach, or create-paid-campaign; creative production goes to brief-creative
-or create-shortform. Budget calculations go to allocate-marketing-budget or
-model-growth-funnel as appropriate. Actual results go to measure-growth.
+and one next decision. Individual copy or ads go to `copy`, `social`,
+`outreach`, or `ads`; creative production goes to `creative`
+or `video`. Budget calculations go to `budget` or
+`funnel` as appropriate. Actual results go to `measure`.
 
 Optional distribution ideas must earn a place through task fit, permissions,
 economics, and measurable outcomes. A demographic label or a prescribed content

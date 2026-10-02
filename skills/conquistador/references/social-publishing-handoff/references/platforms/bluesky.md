@@ -50,9 +50,9 @@ Bluesky's feed is algorithmically minimal (chronological by default; custom feed
 
 ## Formatter Implementation Notes
 
-- 300-char hard cap is tight; flag if write-social body exceeds.
+- 300-char hard cap is tight; flag if `social` body exceeds.
 - Alt text required for images — flag if produce-asset manifest doesn't provide alt text.
-- No native thread; if write-social body is thread-structured, emit each thread post as a separate Bluesky post with reply-to-self link (operator manually chains).
+- No native thread; if `social` body is thread-structured, emit each thread post as a separate Bluesky post with reply-to-self link (operator manually chains).
 - Custom-feed targeting NOT in scope for v1.
 
 ## Scheduler Compatibility

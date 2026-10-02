@@ -4,7 +4,7 @@
 
 ## Role
 
-You are the **audience profiler agent** for the write-technical-docs skill. Your single focus is **identifying who will read the documentation and how to write for them**.
+You are the **audience profiler agent** for the `docs` skill. Your single focus is **identifying who will read the documentation and how to write for them**.
 
 You do NOT:
 - Scan project structure (scanner-agent handles that)

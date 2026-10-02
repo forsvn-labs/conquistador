@@ -1,8 +1,8 @@
 ---
-title: Anti-Patterns — brief-creative
+title: Anti-Patterns — creative
 lifecycle: canonical
 status: stable
-produced_by: brief-creative
+produced_by: creative
 load_class: ANTI-PATTERN
 ---
 
@@ -18,11 +18,11 @@ The shared production-skill anti-pattern catalog — the orchestrator-level set 
 
 ### 1. Skipping the brief read
 
-**Pattern:** Generating prompts from operator chat-context instead of the brief-creative artifact. Common when the operator describes the asset verbally and the orchestrator skips the file-read.
+**Pattern:** Generating prompts from operator chat-context instead of the `creative` artifact. Common when the operator describes the asset verbally and the orchestrator skips the file-read.
 
 **Why it fails:** Brief-graphic encodes aspect, safe zones, copy, brand tokens, anti-patterns as a CONTRACT. Skipping it means the prompt may pass critic Gate 4 (copy verbatim from chat-context) while violating the actual brief.
 
-**Fix:** Critical Gate "Inputs" in SKILL.md. If `source_brief` cannot be located on disk, return `NEEDS_CONTEXT` and defer to `brief-creative`. Never reconstruct the brief from chat.
+**Fix:** Critical Gate "Inputs" in COMMAND.md. If `source_brief` cannot be located on disk, return `NEEDS_CONTEXT` and defer to `creative`. Never reconstruct the brief from chat.
 
 ---
 
@@ -58,9 +58,9 @@ The shared production-skill anti-pattern catalog — the orchestrator-level set 
 
 ### 5. Render-mode misroute
 
-**Pattern:** Operator passes `--publish` or `--api-render` to brief-creative v1; orchestrator silently falls through to export-mode without flagging the deferred behavior.
+**Pattern:** Operator passes `--publish` or `--api-render` to `creative` v1; orchestrator silently falls through to export-mode without flagging the deferred behavior.
 
-**Why it fails:** v1 export-mode is explicit per Critical Gate 1 in SKILL.md. Silent fall-through means the operator thinks they invoked a publish step and may not run the prompt through their chosen renderer.
+**Why it fails:** v1 export-mode is explicit per Critical Gate 1 in COMMAND.md. Silent fall-through means the operator thinks they invoked a publish step and may not run the prompt through their chosen renderer.
 
 **Fix:** Return `BLOCKED` with a one-line "publish / api-render modes deferred to v2; v1 is export-mode only — run the emitted prompts through your chosen renderer manually." No silent fall-throughs.
 
@@ -70,11 +70,11 @@ The shared production-skill anti-pattern catalog — the orchestrator-level set 
 
 ### Cross-stack contract drift
 
-**Pattern:** brief-creative's manifest or per-slot prompt schema diverges from what downstream consumers (future evaluate-content / evaluate-ad) expect. Common when a single skill is refactored in isolation without ripple coordination.
+**Pattern:** `creative`'s manifest or per-slot prompt schema diverges from what downstream consumers (future evaluate-content / evaluate-ad) expect. Common when a single skill is refactored in isolation without ripple coordination.
 
-**Why it fails:** Future eval skills will read brief-creative frontmatter (`provenance.input_artifacts`, slot list) to ground scoring. Schema drift means the eval can't find its inputs.
+**Why it fails:** Future eval skills will read `creative` frontmatter (`provenance.input_artifacts`, slot list) to ground scoring. Schema drift means the eval can't find its inputs.
 
-**Fix:** Schema changes to `references/format-conventions.md` require atomic update of any downstream consumer that reads brief-creative artifacts. Until evaluate-content / evaluate-ad exist, this risk is theoretical — but the contract discipline should be in place now per `fallbacks/sequential.md`.
+**Fix:** Schema changes to `references/format-conventions.md` require atomic update of any downstream consumer that reads `creative` artifacts. Until evaluate-content / evaluate-ad exist, this risk is theoretical — but the contract discipline should be in place now per `fallbacks/sequential.md`.
 
 ---
 
@@ -84,24 +84,24 @@ The shared production-skill anti-pattern catalog — the orchestrator-level set 
 
 **Why it fails:** Fabricated tokens look authoritative in the prompt but don't match the project's real brand. Renderer produces off-brand output.
 
-**Fix:** Critical Gate "Inputs" in SKILL.md. Brand files are REQUIRED; missing → `NEEDS_CONTEXT` and defer to `create-brand`. Never proceed with fabricated tokens.
+**Fix:** Critical Gate "Inputs" in COMMAND.md. Brand files are REQUIRED; missing → `NEEDS_CONTEXT` and defer to `brand`. Never proceed with fabricated tokens.
 
 ---
 
 ### Skill-deference miss (no upstream brief)
 
-**Pattern:** Operator invokes brief-creative directly without ever running brief-creative. brief-creative tries to generate a prompt from chat-context.
+**Pattern:** Operator invokes `creative` directly without ever running `creative`. `creative` tries to generate a prompt from chat-context.
 
 **Why it fails:** Without the brief, there's no spec to honor. Anti-pattern 1 (skipping brief read) is the symptom; this is the upstream cause.
 
-**Fix:** `defers-to: brief-creative` in frontmatter. SKILL.md Inputs section flags the brief as REQUIRED. If missing → `NEEDS_CONTEXT`, defer.
+**Fix:** `defers-to: brief-creative` in frontmatter. COMMAND.md Inputs section flags the brief as REQUIRED. If missing → `NEEDS_CONTEXT`, defer.
 
 ---
 
 ### Artifact schema drift
 
-**Pattern:** SKILL.md says one frontmatter shape, `references/format-conventions.md` says another, prompt-author-agent emits a third. Three sources of truth, all subtly different.
+**Pattern:** COMMAND.md says one frontmatter shape, `references/format-conventions.md` says another, prompt-author-agent emits a third. Three sources of truth, all subtly different.
 
 **Why it fails:** `manifest-sync.ts` indexes from frontmatter; drift breaks the index. Critic gates check schema; drift means critic FAILs on technically-correct prompts.
 
-**Fix:** `references/format-conventions.md` is the single source of truth for schema. SKILL.md cites it; prompt-author-agent reads it; critic-agent validates against it. Schema changes happen in format-conventions.md FIRST, then propagate to citing files in the same commit.
+**Fix:** `references/format-conventions.md` is the single source of truth for schema. COMMAND.md cites it; prompt-author-agent reads it; critic-agent validates against it. Schema changes happen in format-conventions.md FIRST, then propagate to citing files in the same commit.

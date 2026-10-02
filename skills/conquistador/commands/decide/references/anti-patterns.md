@@ -2,7 +2,7 @@
 title: Agents-Panel — Anti-Patterns
 lifecycle: canonical
 status: stable
-produced_by: decision-panel
+produced_by: decide
 load_class: ANTI-PATTERN
 ---
 
@@ -31,13 +31,13 @@ load_class: ANTI-PATTERN
 | Performative agreement in agent prompts | Without explicit anti-sycophancy instructions, agents default to "Great point, building on that…" → synthesis-grade slop | Per-round prompts in [`debate-rounds.md`](debate-rounds.md) explicitly ban performative agreement, hedging, and praise-then-disagree. Don't remove that language. |
 | Averaging away poll variance | 5 agents scored option X at 9/10 and 5 scored it at 2/10 → mean 5.5 means nothing. Mean hides the truth | Report mean AND std-dev. Flag high-variance options (std-dev > 2) explicitly — those are the judgment calls. |
 | Treating "unanimous round 1" as suspicious | Sometimes the answer IS obvious; early convergence at round 1 is valid and cheap | Report unanimous early convergence as DONE; note the confidence; don't manufacture follow-up rounds to "be thorough." |
-| Sub-routine writes to disk by default | Pollutes the decisions/ audit trail with sub-routine results the operator never explicitly committed to | When invoked as sub-routine (by discover, prioritize-opportunities, system-architecture, etc.), return synthesis inline. Skip disk write unless the operator explicitly asks. |
+| Sub-routine writes to disk by default | Pollutes the decisions/ audit trail with sub-routine results the operator never explicitly committed to | When invoked as sub-routine (by discover, `prioritize`, system-architecture, etc.), return synthesis inline. Skip disk write unless the operator explicitly asks. |
 | Treating "agent went off-topic" as fatal | One bad agent in a 5-agent debate doesn't invalidate the other 4 | Exclude the off-topic agent from synthesis; note effective N in the report (e.g., "5 agents spawned, 4 contributed signal"). |
 
 ## Sub-routine anti-patterns (callers' responsibility, but the skill should flag if it sees them)
 
 | Anti-Pattern | Problem | INSTEAD |
 |---|---|---|
-| Invoking decision-panel without a specific decision framed | The calling skill is supposed to do the problem-framing before invoking — if it shipped a fuzzy prompt, decision-panel can't fix it | Skill returns NEEDS_CONTEXT to the caller with the message "problem statement not specific enough to spawn" |
-| Caller asks decision-panel to "decide for them" | decision-panel synthesizes; the caller's skill (discover, prioritize-opportunities, etc.) decides what to do with the synthesis | Return the synthesis cleanly; let the caller integrate. Don't suggest follow-up actions; that's the caller's job. |
-| Caller skipping the integration step | Calling decision-panel, getting a synthesis, and dropping it on the floor wastes the call | Caller is responsible for using the synthesis in its next prompt to the user. If it won't, don't invoke. |
+| Invoking `decide` without a specific decision framed | The calling skill is supposed to do the problem-framing before invoking — if it shipped a fuzzy prompt, `decide` can't fix it | Skill returns NEEDS_CONTEXT to the caller with the message "problem statement not specific enough to spawn" |
+| Caller asks `decide` to "decide for them" | `decide` synthesizes; the caller's skill (discover, `prioritize`, etc.) decides what to do with the synthesis | Return the synthesis cleanly; let the caller integrate. Don't suggest follow-up actions; that's the caller's job. |
+| Caller skipping the integration step | Calling `decide`, getting a synthesis, and dropping it on the floor wastes the call | Caller is responsible for using the synthesis in its next prompt to the user. If it won't, don't invoke. |

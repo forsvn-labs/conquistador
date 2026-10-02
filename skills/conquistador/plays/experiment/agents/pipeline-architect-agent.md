@@ -16,7 +16,7 @@ human, and where the loop currently stands.
 | stage | leaf skill family | gate |
 |---|---|---|
 | research | `research-icp` / `research-market` / `research-platform` / `research-shortform` | — |
-| brief | `brief-landing-page` / `brief-shortform` / `brief-graphic` / `write-social` / `write-ad` | review gate |
+| brief | `brief-landing-page` / `brief-shortform` / `brief-graphic` / `social` / `write-ad` | review gate |
 | execute | the **fork** — Brief-only \| Assisted \| Direct (registry-gated, §4) | fork + review gate |
 | ingest | `forsvn-preview attach` (return-leg §6) | — |
 | evaluate | the matching `evaluate-*` sibling | — |
@@ -24,8 +24,8 @@ human, and where the loop currently stands.
 
 Pick the leaf skill per stage from the asset **category**: `image` → `brief-graphic` +
 `produce-asset` + `evaluate-asset`; `video` → `brief-shortform` + `produce-video` +
-`evaluate-shortform`; `design` (landing page) → `brief-landing-page` + coding-agent/Figma
-+ `evaluate-landing-page`; `publish` (social/ad) → `write-social`/`write-ad` +
+`results`; `design` (landing page) → `brief-landing-page` + coding-agent/Figma
++ `evaluate-landing-page`; `publish` (social/ad) → `social`/`write-ad` +
 `publish-social`/Meta Ads + `evaluate-content`/`evaluate-ad`.
 
 ## Rules

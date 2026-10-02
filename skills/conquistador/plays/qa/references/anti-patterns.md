@@ -31,9 +31,9 @@ load_class: ANTI-PATTERN
 **Why it fails:** Eval scope is render diagnosis + next-cycle routing, not art-direction maximalism. Maximalist recommendations always include the actual fix among 6 unrelated changes — unfalsifiable.
 **Fix:** Routing must be to the smallest correct next skill (produce-asset re-render with a tightened prompt, not "redo everything"). Decision Discipline dim catches this.
 
-### 5. Lane drift into evaluate-shortform / evaluate-landing-page / evaluate-content territory
+### 5. Lane drift into `results` / evaluate-landing-page / evaluate-content territory
 **Pattern:** The asset under evaluation is a video cut, a full landing page, or a live post; evaluate-asset scores it anyway.
-**Why it fails:** Video needs the short-form lens (`evaluate-shortform`); a landing page needs conversion discipline (`evaluate-landing-page`); a live post's engagement needs analytics (`evaluate-content` / `evaluate-ad`). Scoring them here applies the wrong rubric.
+**Why it fails:** Video needs the short-form lens (`results`); a landing page needs conversion discipline (`evaluate-landing-page`); a live post's engagement needs analytics (`evaluate-content` / `evaluate-ad`). Scoring them here applies the wrong rubric.
 **Fix:** Critical Gate 4 + Critic Hard Fail #4. Metric Ingest's lane check STOPs on video / landing page / live-post-engagement and routes to the sibling skill.
 
 ### 6. Fabricated visual detail
@@ -71,7 +71,7 @@ load_class: ANTI-PATTERN
 ### Sibling-skill confusion with the eval lanes
 **Pattern:** A produced-assets bundle contained a static graphic AND a video cut; one evaluate-asset cycle tries to score both.
 **Why it fails:** Two asset lanes in one cycle artifact = polluted ledger row, polluted learnings, wrong rubric on the video.
-**Fix:** evaluate-asset's cycle covers one static render only. The video is a separate `evaluate-shortform` cycle. Critical Gate 4 enforces.
+**Fix:** evaluate-asset's cycle covers one static render only. The video is a separate `results` cycle. Critical Gate 4 enforces.
 
 ### Upstream context skipped — no loop scaffolded
 **Pattern:** Operator runs `/evaluate-asset` without a loop ever created.

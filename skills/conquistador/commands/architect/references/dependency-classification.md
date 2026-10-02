@@ -2,13 +2,13 @@
 title: System-Architecture — Dependency Classification
 lifecycle: canonical
 status: stable
-produced_by: architect-software-system
+produced_by: architect
 load_class: PROCEDURE
 ---
 
 # Dependency Classification
 
-**Load when:** designing integrations and service boundaries (integration-agent dispatch in Layer 2). Every external dependency the architecture introduces must be classified into one of four categories. The classification drives downstream testing strategy in task decomposition outside this skill and `fresh-eyes-review`.
+**Load when:** designing integrations and service boundaries (integration-agent dispatch in Layer 2). Every external dependency the architecture introduces must be classified into one of four categories. The classification drives downstream testing strategy in task decomposition outside this skill and `critique`.
 
 ---
 
@@ -51,7 +51,7 @@ When the category is ambiguous:
 The classification table in §7 of the artifact is consumed by:
 
 - task decomposition outside this skill — generates per-dependency test tasks based on category.
-- `fresh-eyes-review` — checks that implementation matches the classification (e.g., flags when a `true-external` dependency is being tested without a boundary mock).
+- `critique` — checks that implementation matches the classification (e.g., flags when a `true-external` dependency is being tested without a boundary mock).
 - code readability cleanup outside this skill — preserves the boundary; does NOT collapse Remote but owned into In-process for "simplification."
 
 Update the table whenever a new dependency is added in a downstream feature build. Stale classifications cause silent testing-strategy drift.

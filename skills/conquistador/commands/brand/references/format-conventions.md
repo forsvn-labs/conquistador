@@ -2,13 +2,13 @@
 title: Brand-System Format Conventions
 lifecycle: canonical
 status: stable
-produced_by: create-brand
+produced_by: brand
 load_class: PROCEDURE
 ---
 
 # Brand-System Format Conventions
 
-> Format rules for the three artifacts create-brand produces. Cited from SKILL.md "Artifact Contract" block + Step 8.5 + Artifact Templates. Full per-section templates live in [`artifact-templates.md`](artifact-templates.md) (BRAND.md + DESIGN.md) and [`assets-inventory.md`](assets-inventory.md) (ASSETS.md).
+> Format rules for the three artifacts `brand` produces. Cited from COMMAND.md "Artifact Contract" block + Step 8.5 + Artifact Templates. Full per-section templates live in [`artifact-templates.md`](artifact-templates.md) (BRAND.md + DESIGN.md) and [`assets-inventory.md`](assets-inventory.md) (ASSETS.md).
 
 ## Output location
 
@@ -38,7 +38,7 @@ Required fields on every file:
 
 ```yaml
 ---
-skill: create-brand
+skill: brand
 version: [integer, increments on re-run; ASSETS.md increments on each in-place re-run]
 date: [ISO YYYY-MM-DD]
 status: done | done_with_concerns | blocked | needs_context
@@ -289,17 +289,17 @@ Quality-bar reference:
 
 This skill is the canonical producer of `.forsvn/artifacts/mkt/create-brand/{BRAND,DESIGN,ASSETS,CREATIVE-DIRECTION}.md` (ids `brand`, `design`, `assets`, `creative-direction`). These artifacts are consumed by:
 
-- `write-copy` — voice DNA + lexicon block
-- `create-paid-campaign` — voice DNA + brand mark for visual creative briefs
-- `write-outreach` — voice DNA for sender voice calibration
+- `copy` — voice DNA + lexicon block
+- `ads` — voice DNA + brand mark for visual creative briefs
+- `outreach` — voice DNA for sender voice calibration
 - `brief-landing-page` — full brand context for landing-page architecture
 - `brief-graphic` — DESIGN.md for per-asset specs + brand mark + visual atmosphere
-- `plan-campaign` — positioning + character for channel-strategy alignment
+- `campaign` — positioning + character for channel-strategy alignment
 - `editorial-polish` — voice adjectives for soul-injection
-- `polish-vietnamese` — voice DNA for register selection
+- `vietnamese` — voice DNA for register selection
 - `brief-shortform` — brand mark + voice + visual atmosphere
-- `map-user-flow` — DESIGN.md design tokens + component context
+- `flow` — DESIGN.md design tokens + component context
 
-`CREATIVE-DIRECTION.md` (id `creative-direction`) is additionally consumed as the **house** art-direction layer by `plan-campaign` (inherited into per-campaign creative direction) and by every `brief-*` / `create-paid-campaign` visual brief (art direction the brief designs against, alongside DESIGN.md tokens). Absent → those skills degrade to tokens-only and say so; they never fabricate art direction.
+`CREATIVE-DIRECTION.md` (id `creative-direction`) is additionally consumed as the **house** art-direction layer by `campaign` (inherited into per-campaign creative direction) and by every `brief-*` / `ads` visual brief (art direction the brief designs against, alongside DESIGN.md tokens). Absent → those skills degrade to tokens-only and say so; they never fabricate art direction.
 
 Schema changes (frontmatter fields, section headings, table column structure) require atomic update across affected upstream callers — never silently drift.

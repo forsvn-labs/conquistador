@@ -2,7 +2,7 @@
 title: Docs-Writing — intake Prompts
 lifecycle: canonical
 status: stable
-produced_by: write-technical-docs
+produced_by: docs
 load_class: PROCEDURE
 ---
 
@@ -33,7 +33,7 @@ If operator confirms or types nothing → dispatch with inferred values. Overrid
 Fires when invocation is vague ("document this", `/write-technical-docs` with no args).
 
 ```
-write-technical-docs produces audience-appropriate documentation. The output shape
+docs produces audience-appropriate documentation. The output shape
 depends heavily on who reads it and what they need from it:
 
 1. **Audience** — end-user (people using the product), developer (people

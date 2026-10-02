@@ -1,9 +1,8 @@
 ---
-name: research-channel
-description: "Research and choose a marketing channel using owned performance, current public evidence, platform mechanics, audience habitat, native format, proof requirements, operator capacity, benchmarks, and freshness. Use when channel choice needs evidence rather than generic best practices. Not for budget math, campaign planning, or performance readouts — hand those off (see Route elsewhere)."
+name: channels
+description: "Choose the marketing channel to test next, with current evidence for it."
 metadata:
   version: 2.1.0
-
 ---
 
 # Research a channel decision
@@ -74,16 +73,16 @@ owned results, platform change, capacity, or destination readiness—not merely 
 
 ## Route elsewhere
 
-This skill chooses channels from evidence; it does not own the downstream work. Include it when the
+This command chooses channels from evidence; it does not own the downstream work. Include it when the
 ask is which channel(s) to operate and with what role, format, and first test. Hand off when the ask
 moves past the choice:
 
-- Budget math across chosen channels → allocate-marketing-budget.
-- Turning a channel choice into a dated campaign plan → plan-campaign.
-- Reading performance after launch → measure-growth.
+- Budget math across chosen channels → `budget`.
+- Turning a channel choice into a dated campaign plan → `campaign`.
+- Reading performance after launch → `measure`.
 
-Measuring owned accounts is this skill's job; discovering what works in the wild belongs to
-research-content-ideas, and positioning questions belong to research-positioning.
+Measuring owned accounts is this command's job; discovering what works in the wild belongs to
+`ideas`, and positioning questions belong to `position`.
 
 ## Deliver
 

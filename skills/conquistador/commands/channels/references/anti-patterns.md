@@ -2,7 +2,7 @@
 title: Platform Evidence Research — Anti-Patterns
 lifecycle: canonical
 status: stable
-produced_by: research-channel
+produced_by: channels
 load_class: ANTI-PATTERN
 ---
 
@@ -28,5 +28,5 @@ load_class: ANTI-PATTERN
 | Re-judging a datum in synthesis | synthesis-agent changing a confidence label or source-type because it "seems" stronger or weaker than intake said. | Tags are set once, at intake, and carried forward verbatim. Synthesis assembles; it does not re-judge. Only the critic can route a tag back for correction. |
 | Looping the critic past 2 cycles | Chasing a PASS forever when the evidence is genuinely thin (PARTIAL everywhere, exports the operator cannot produce). Burns spend for a result that will not improve. | Hard cap at 2 cycles. After cycle 2, stop for the human; record `done_with_concerns` as the internal grade with failed rubrics pinned — it never ships. The transparency IS the value. |
 | Treating NO_EVIDENCE as failure | Padding a NO_EVIDENCE platform with benchmark numbers and guesses so the artifact does not "look empty". | A NO_EVIDENCE flag is the skill working correctly. It tells a consumer what is unknown and tells the operator what to export. Honesty beats coverage. |
-| Cross-stack contract drift | Adding a frontmatter field or body section without updating the consumers (`write-social`, `optimize-search`, `research-content-ideas`, `measure-growth`, `evaluate-shortform`, `operator-owned publishing`). Silent schema drift breaks downstream parsers. | The frontmatter schema + 8 body sections + source-type tags + coverage flags + recommendation attribution are the cross-stack contract. Schema changes require atomic update of consumers — flag to the operator before changing. |
-| Confusing this skill with research-content-ideas | Mining public viral patterns and calling it platform evidence — or measuring owned accounts and calling it trend research. | `research-channel` measures the operator's own accounts; `research-content-ideas` discovers what's working in the wild. Different evidence, different question. See `channel-evidence-method.md` § Distinction. |
+| Cross-stack contract drift | Adding a frontmatter field or body section without updating the consumers (`social`, `seo`, `ideas`, `measure`, `results`, `operator-owned publishing`). Silent schema drift breaks downstream parsers. | The frontmatter schema + 8 body sections + source-type tags + coverage flags + recommendation attribution are the cross-stack contract. Schema changes require atomic update of consumers — flag to the operator before changing. |
+| Confusing this skill with `ideas` | Mining public viral patterns and calling it platform evidence — or measuring owned accounts and calling it trend research. | `channels` measures the operator's own accounts; `ideas` discovers what's working in the wild. Different evidence, different question. See `channel-evidence-method.md` § Distinction. |

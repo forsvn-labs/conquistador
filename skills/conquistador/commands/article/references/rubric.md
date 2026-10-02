@@ -33,7 +33,7 @@
 | 6-7 | A non-obvious claim / proprietary frame / original data / defended contrarian take, load-bearing in the prose; clearly beats the research agent's named Consensus baseline |
 | 5 | A real original element present and developed, modestly beyond consensus — clears the floor |
 | 4 | Gestures at originality but the prose mostly restates consensus — **below floor, FAIL** |
-| 0-3 | Pure consensus-restatement; could appear on any competitor's blog — the write-copy collapse |
+| 0-3 | Pure consensus-restatement; could appear on any competitor's blog — the `copy` collapse |
 
 ### 5. Reader-fit (/7)
 | Band | Description |
@@ -59,4 +59,4 @@
 
 ## Scoring order (critic must follow)
 
-Score **Originality FIRST, against the research agent's named Consensus baseline.** This prevents the most dangerous failure: a polished, on-brand, beautifully-structured piece that is pure consensus — where high marks on the other six dimensions disguise a fundamental collapse into write-copy. Originality <5 is an automatic FAIL no matter the total.
+Score **Originality FIRST, against the research agent's named Consensus baseline.** This prevents the most dangerous failure: a polished, on-brand, beautifully-structured piece that is pure consensus — where high marks on the other six dimensions disguise a fundamental collapse into `copy`. Originality <5 is an automatic FAIL no matter the total.

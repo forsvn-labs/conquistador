@@ -1,6 +1,6 @@
 # Render Engines — what actually turns a prompt/brief into pixels
 
-**The stack does not render.** Brief skills emit briefs; `brief-creative` / `create-shortform`
+**The stack does not render.** Brief skills emit briefs; `creative` / `video`
 emit **render-ready prompts + a manifest**. Pixels come from an engine *you* connect, via
 the `execution-fork.md` Assisted/Direct path. **There is no `/produce-graphic` verb** — do
 not look for one, do not promise one. This file names the engines that exist, what each
@@ -52,13 +52,13 @@ fallback. The pre-flight probes these as a batch; never assume one is live.
 
 ---
 
-## Video engines (the `video` category — what `create-shortform` routes to)
+## Video engines (the `video` category — what `video` routes to)
 
 Same contract as the image engines: each names what it needs, the cheap liveness probe, and
-the named fallback. `create-shortform` is tool-agnostic — it emits the bundle (manifest +
+the named fallback. `video` is tool-agnostic — it emits the bundle (manifest +
 per-shot prompts + scaffolds + a post-production stage) and **routes** a script to whichever
 of these is connected via the `execution-fork.md` Assisted/Direct path. It never holds a key.
-Lane-selection logic lives in the `create-shortform` skill (its `production-lanes` reference).
+Lane-selection logic lives in the `video` skill (its `production-lanes` reference).
 
 **The video floor is the code-render lane.** Remotion / HyperFrames need only Node — no
 cloud key, deterministic, brand-tokenizable. When even that isn't wanted, the bundle
@@ -84,7 +84,7 @@ degrades to **Brief-only** (the always-runnable handoff). No dead ends.
 #### Manim (`manim-video` skill / `manim`) — explainer **(deferred lane)**
 - **Needs:** Python + `pip install manim` + a LaTeX install (~4GB, for `MathTex`) + ffmpeg. Heavy; install-gated. No API key.
 - **Verify:** `command -v manim latex ffmpeg`.
-- **Down →** not installed → Brief-only. Only stand this up when an actual math/diagram/algorithm explainer brief appears (see the `create-shortform` DEFER disposition) — do not pre-install for a speculative need.
+- **Down →** not installed → Brief-only. Only stand this up when an actual math/diagram/algorithm explainer brief appears (see the `video` DEFER disposition) — do not pre-install for a speculative need.
 
 ### Operator-connected lanes — stochastic, own key/account (OS-keychain only, never brokered)
 
@@ -146,7 +146,7 @@ output does not get committed.
 
 ## What does NOT exist (so nobody waits on it)
 
-- **No `/produce-graphic` verb.** `brief-creative` is the closest skill and it is
+- **No `/produce-graphic` verb.** `creative` is the closest skill and it is
   **tool-agnostic by design** — it emits prompts + a manifest and holds no API keys. It
   does not render.
 - **No in-stack render service / credential broker.** Engines run via the operator's own

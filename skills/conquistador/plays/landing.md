@@ -1,17 +1,29 @@
-# Create-landing-page workflow
+---
+command: landing
+label: Create a landing page
+intents: ["create a landing page","build a landing page","new landing page","landing page from scratch","design a landing page","landing page and build brief"]
+chain:
+  - { command: position, when: "audience, promise, proof, or alternatives are unresolved" }
+  - { command: copy, for: "section argument and final copy" }
+  - { command: creative, for: "build brief, asset slots, states" }
+  - { command: convert, for: "decision path and one test" }
+  - { method: share-card-verification, when: "the page must render correctly when shared" }
+legacy: create-landing-page
+---
+# Create a landing page
 
-Use privately when the user needs a complete page argument and implementation-ready handoff.
+Use when the user needs a complete page argument and implementation-ready handoff.
 
-1. Use `research-positioning` when audience, costly moment, promise, mechanism, proof, objection, or
+1. Use `position` when audience, costly moment, promise, mechanism, proof, objection, or
    alternatives remain unresolved.
-2. Use `write-copy` for the complete section argument and final copy.
-3. Use `brief-creative` for hierarchy, real or labeled-representative asset slots, responsive behavior,
+2. Use `copy` for the complete section argument and final copy.
+3. Use `creative` for hierarchy, real or labeled-representative asset slots, responsive behavior,
    states, accessibility, and build acceptance.
-4. Use `improve-conversion` to verify the decision path and define one discriminating test.
-5. Use the `share-card-verification` method when the live or staged page must render correctly when
+4. Use `convert` to verify the decision path and define one discriminating test.
+5. Use the [share-card-verification](../methods/share-card-verification.md) method when the live or staged page must render correctly when
    shared.
 
-Load the landing method under `conquistador/references/create-landing-page/` (architecture,
+Load the landing method under [landing/](landing/) (architecture,
 hypothesis, section spec, conversion critic, visitor decisions) and its versioned review contract.
 
 Match the method to the requested delivery mode. A bounded inline request may return the

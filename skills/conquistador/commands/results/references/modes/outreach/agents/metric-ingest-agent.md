@@ -13,7 +13,7 @@ contract ingests operator-supplied evidence (exports, screenshots, pasted number
 - Loop `context.md` when present, especially baseline and list assumptions; standalone: operator-declared baseline or none (never a guessed one)
 - Prior `results.tsv` when a loop exists; standalone: prior cycle numbers the operator supplies
 - Channel + segment tag for the current cycle — operator-supplied; gates Critical Gate 4
-- Source write-outreach artifact (`.forsvn/artifacts/mkt/write-outreach/[channel]-[date]-[slug].md`) when that store exists — the sequence being scored; standalone: an operator-supplied copy of the sequence
+- Source `outreach` artifact (`.forsvn/artifacts/mkt/write-outreach/[channel]-[date]-[slug].md`) when that store exists — the sequence being scored; standalone: an operator-supplied copy of the sequence
 - Current evidence: outreach tool data (Instantly / Smartlead / Apollo / lemlist / CRM export), reply categories, bounce + spam-complaint data, opt-out log
 - Optional: secondary-channel headline metrics (for Cross-Channel Context — they do NOT enter the verdict)
 
@@ -60,13 +60,13 @@ Return:
 
 ## Blockers
 
-- [only if primary value, source, window, channel+segment tag, OR source write-outreach artifact (or operator-supplied sequence in a standalone run) is missing — OR the outreach is a draft (route to write-outreach) — OR no deliverability/compliance evidence supplied]
+- [only if primary value, source, window, channel+segment tag, OR source outreach artifact (or operator-supplied sequence in a standalone run) is missing — OR the outreach is a draft (route to outreach) — OR no deliverability/compliance evidence supplied]
 ```
 
 ## Rules
 
 - Do not invent missing values. Reply categories and meetings must trace to a named tool/export.
-- **Sent + measured only.** If the sequence is a draft (no sends, no reply data), STOP — set a blocker routing to `write-outreach`. This skill scores what shipped.
+- **Sent + measured only.** If the sequence is a draft (no sends, no reply data), STOP — set a blocker routing to `outreach`. This skill scores what shipped.
 - **Reply-quality split is mandatory.** Always break replies into meaningful (positive / meeting-booked / qualified-lead) vs vanity (opens, clicks, raw reply count, auto-replies, "not interested"). A raw reply count or open rate alone is not enough — the downstream agents need the categorized breakdown.
 - **Deliverability + compliance are mandatory evidence, not optional.** Bounce rate, spam-complaint rate, sender reputation, and opt-out/regime status must be in the packet. If absent, return a blocker — a cycle that ignores deliverability can be silently burning the sending domain.
 - **Cross-channel metrics are context, never verdict input.** Record secondary-channel headline numbers in the Cross-Channel Context block; do NOT blend them into `current_value`.
@@ -81,5 +81,5 @@ Before returning, verify:
 - Replies are the categorized breakdown, not a single blended reply count.
 - Deliverability (bounce, spam complaints, reputation) AND compliance (opt-out, regime) are present — missing → blocker.
 - Confidence reflects actual evidence quality and send volume, not how good the reply quotes read.
-- The source write-outreach artifact was confirmed readable (or an operator-supplied sequence accepted in a standalone run); neither present → blocker.
+- The source `outreach` artifact was confirmed readable (or an operator-supplied sequence accepted in a standalone run); neither present → blocker.
 - The outreach was actually sent — not a draft.

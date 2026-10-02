@@ -1,9 +1,8 @@
 ---
-name: brief-product-ui
-description: "Turn an approved product flow into an implementation-ready UI brief. Use for screen inventory, reusable components, design-token application, interaction and system states, accessibility, and build handoff. Not for marketing landing pages or brand identity."
+name: ui
+description: "Turn an approved flow into an implementation-ready UI brief."
 metadata:
   version: 2.1.0
-
 ---
 
 # Brief a product interface
@@ -19,9 +18,9 @@ Read the core files in full before you draft; read the others when their step or
 Core:
 
 - [anti-patterns](references/anti-patterns.md): Anti-Patterns — Brief-Product-UI. 10-pattern catalog. Re-read before ship. The first 6 are skill-specific…
-- [gates-and-rubric](references/gates-and-rubric.md): Critical Gates + Critic Rubric — Full Detail. Cited by SKILL.md "Critical Gates" and "Quality Gate".…
+- [gates-and-rubric](references/gates-and-rubric.md): Critical Gates + Critic Rubric — Full Detail. Cited by COMMAND.md "Critical Gates" and "Quality Gate".…
 - [layout-conventions](references/layout-conventions.md): Layout Conventions — Grid, Density, State & Accessibility. Domain reference for the layout-state-agent…
-- [ui-brief-method](references/ui-brief-method.md): Product UI Playbook. After map-user-flow produces a validated flow artifact, there is no skill that…
+- [ui-brief-method](references/ui-brief-method.md): Product UI Playbook. After `flow` produces a validated flow artifact, there is no skill that…
 
 By step: [component-patterns](references/component-patterns.md), [house-token-bindings](references/house-token-bindings.md), [token-application-patterns](references/token-application-patterns.md).
 
@@ -36,7 +35,7 @@ Output formats and fallbacks: [sequential](fallbacks/sequential.md), [format-con
 ## Prove the source flow
 
 Identify the flow, platforms, surfaces, nodes, decisions, and states this brief implements. If no
-usable flow exists, perform a compact flow validation inside this skill: state the job, entry, success,
+usable flow exists, perform a compact flow validation inside this command: state the job, entry, success,
 stable nodes, transitions, branches, failure/recovery, and unresolved decisions. Do not hard-depend on
 a sibling skill or silently invent behavior.
 

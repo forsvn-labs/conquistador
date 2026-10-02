@@ -23,7 +23,7 @@ Return:
 - confidence: high | medium | low | blocked
 - campaign: [campaign name / tag]
 - decision_sentence: [one sentence, no tabs, includes the campaign tag]
-- next_route: plan-campaign | create-paid-campaign | write-social | run-pipeline | none
+- next_route: campaign | ads | social | run-pipeline | none
 - next_action_summary: [one sentence — what the next route should produce, if any]
 
 ## Keep / Discard / Watch
@@ -59,13 +59,13 @@ cycle	date	artifact	primary_metric	value	baseline	status	description
 - `keep`: the primary metric improved against a comparable baseline (comparable campaign type + channel mix + window), guardrails did not fail, attribution confidence is medium or high, AND the improvement is carried by genuine `driver` channels — not borrowed from `rider` channels. A campaign whose headline rests on a rider channel's borrowed credit never earns `keep`.
 - `discard`: the primary metric worsened OR a defined guardrail failed OR the whole campaign's unit economics are underwater (CAC exceeds the payback target with no plausible path to fix) — AND the result is plausibly connected to the cycle.
 - `watch`: signal is positive or mixed but underpowered (low spend / low sample), the baseline is weak (non-comparable campaign type or channel mix, or no prior comparable cycle), confounders are material (concurrent campaign, seasonality, organic drift), OR the channel-mix read is mixed and one more cycle would disambiguate which channels are drivers.
-- `blocked`: missing primary metric, missing source/window, contradictory data, an incomplete channel rollup, OR no proof the campaign actually launched (no source plan-campaign artifact, no run-time confirmation).
+- `blocked`: missing primary metric, missing source/window, contradictory data, an incomplete channel rollup, OR no proof the campaign actually launched (no source `campaign` artifact, no run-time confirmation).
 
 ## Routing Rules
 
-- Route to `plan-campaign` when the next action is a revised campaign plan — a budget reallocation across channels, cutting a rider/underwater channel, a new channel-mix, revised sequencing. Include `--rev=N+1` semantic in next_action_summary. Scope the route tightly (a budget-reallocation, not "re-plan everything").
-- Route to `create-paid-campaign` when the diagnosis points specifically at paid-ad creative inside a channel that is otherwise worth keeping (the channel is a driver but its creative fatigued).
-- Route to `write-social` when the diagnosis points specifically at organic-content copy inside a channel worth keeping.
+- Route to `campaign` when the next action is a revised campaign plan — a budget reallocation across channels, cutting a rider/underwater channel, a new channel-mix, revised sequencing. Include `--rev=N+1` semantic in next_action_summary. Scope the route tightly (a budget-reallocation, not "re-plan everything").
+- Route to `ads` when the diagnosis points specifically at paid-ad creative inside a channel that is otherwise worth keeping (the channel is a driver but its creative fatigued).
+- Route to `social` when the diagnosis points specifically at organic-content copy inside a channel worth keeping.
 - Route to `run-pipeline` when the metric contract, baseline, guardrails, or channel set need redefinition.
 - Route to `none` when the campaign should continue unchanged until the next measurement window (typically `watch` status with insufficient sample confidence).
 

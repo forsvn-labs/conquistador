@@ -2,13 +2,13 @@
 title: Brand-System Walkthrough — Route A + Route B
 lifecycle: canonical
 status: stable
-produced_by: create-brand
+produced_by: brand
 load_class: EXAMPLE
 ---
 
 # Brand-System Walkthrough
 
-> Two condensed end-to-end examples — Route B (FinLit, full Route B pipeline producing BRAND.md + DESIGN.md + ASSETS.md) and Route A (TaskFlow, Quick Brand for MVP producing BRAND.md only). Extracted from SKILL.md "Worked Example" sections to keep the body lean while preserving the canonical examples for reference.
+> Two condensed end-to-end examples — Route B (FinLit, full Route B pipeline producing BRAND.md + DESIGN.md + ASSETS.md) and Route A (TaskFlow, Quick Brand for MVP producing BRAND.md only). Extracted from COMMAND.md "Worked Example" sections to keep the body lean while preserving the canonical examples for reference.
 >
 > The `.forsvn/artifacts/mkt/create-brand/` paths below assume that store exists. When it does not, the same artifacts are returned inline instead of saved — the trace is otherwise identical.
 
@@ -130,7 +130,7 @@ Checks strategy-to-visual coherence only. PASS.
 
 Quick Brand artifact saved as single `.forsvn/artifacts/mkt/create-brand/BRAND.md` with note:
 
-> Run full create-brand (Route B) when ready to produce DESIGN.md + ASSETS.md.
+> Run full `brand` (Route B) when ready to produce DESIGN.md + ASSETS.md.
 
 **Quick Brand produces BRAND.md only.** DESIGN.md requires the full Route B pipeline (token architect, component tokens, accessibility audit). ASSETS.md requires DESIGN.md.
 

@@ -1,14 +1,13 @@
 ---
-name: submit-feedback
-description: "Prepare an opt-in, redacted GitHub issue about the user's experience with Conquistador and submit only after approval of the exact public payload and destination. Use when the user asks to share feedback, report a Conquistador failure, or contribute a session excerpt. Do not use for ordinary copy revision, private journaling, or feedback about another product."
-license: MIT
+name: feedback
+description: "Draft a redacted public issue about Conquistador, only when the user opts in."
 metadata:
   version: 1.0.0
 ---
 
 # Submit feedback
 
-Turn a user-selected experience into a useful, privacy-reviewed product issue. This skill works
+Turn a user-selected experience into a useful, privacy-reviewed product issue. This command works
 independently of the Conquistador runtime. No telemetry, background collection, automatic sending,
 or recurring reminders. A session is not a dataset until the user chooses what to share.
 

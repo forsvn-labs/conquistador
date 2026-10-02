@@ -1,9 +1,9 @@
 ---
-name: evaluate-shortform
+command: results
+mode: video
 description: "Evaluate an actual published or rendered short-form video against its brief, platform reality, audience response, and business signal, then produce a bounded next brief. Use after real output or performance evidence exists. Not for scripting a new video from scratch or authorizing publication."
 metadata:
   version: 2.1.0
-
 ---
 
 # Evaluate short-form output
@@ -17,18 +17,18 @@ Read the core files in full before you draft; read the others when their step or
 
 Core:
 
-- [anti-patterns](references/anti-patterns.md): Short-Form Eval — Anti-Patterns. Load when: critic agent fires (4-rubric gate) OR re-dispatch heuristic…
-- [hook-archetypes](references/hook-archetypes.md): Opening choices for a useful short-form artifact. Start with the viewer's task and the evidence available…
-- [rubric](references/rubric.md): Short-Form Eval Rubric — v0.1 (Provisional). Provisional rubric. Mandatory revision after cycle 2-3. The…
-- [shortform-eval-method](references/shortform-eval-method.md): Short-Form Eval Playbook. The short-form pipeline produces hypotheses (briefs) and ships them as posts.…
+- [anti-patterns](video/references/anti-patterns.md): Short-Form Eval — Anti-Patterns. Load when: critic agent fires (4-rubric gate) OR re-dispatch heuristic…
+- [hook-archetypes](../../../video/references/hook-archetypes.md): Opening choices for a useful short-form artifact. Start with the viewer's task and the evidence available…
+- [rubric](video/references/rubric.md): Short-Form Eval Rubric — v0.1 (Provisional). Provisional rubric. Mandatory revision after cycle 2-3. The…
+- [shortform-eval-method](video/references/shortform-eval-method.md): Short-Form Eval Playbook. The short-form pipeline produces hypotheses (briefs) and ships them as posts.…
 
-Platform packs (read the one for each platform in the task): [CONTRACT](references/platform-intelligence/CONTRACT.md), [facebook](references/platform-intelligence/facebook.md), [founder-demo](references/platform-intelligence/founder-demo.md), [linkedin-launch](references/platform-intelligence/linkedin-launch.md), [linkedin](references/platform-intelligence/linkedin.md), [motion-background](references/platform-intelligence/motion-background.md), [newsletter](references/platform-intelligence/newsletter.md), [producthunt](references/platform-intelligence/producthunt.md), [reddit](references/platform-intelligence/reddit.md), [reels](references/platform-intelligence/reels.md), [shorts](references/platform-intelligence/shorts.md), [showhn](references/platform-intelligence/showhn.md), [tiktok](references/platform-intelligence/tiktok.md), [ugc](references/platform-intelligence/ugc.md), [x-launch](references/platform-intelligence/x-launch.md), [x](references/platform-intelligence/x.md), [youtube](references/platform-intelligence/youtube.md).
+Platform packs (read the one for each platform in the task): [CONTRACT](video/references/platform-intelligence/CONTRACT.md), [facebook](../../../measure/references/platform-intelligence/facebook.md), [founder-demo](../../../measure/references/platform-intelligence/founder-demo.md), [linkedin-launch](../../../measure/references/platform-intelligence/linkedin-launch.md), [linkedin](../../../measure/references/platform-intelligence/linkedin.md), [motion-background](../../../measure/references/platform-intelligence/motion-background.md), [newsletter](../../../measure/references/platform-intelligence/newsletter.md), [producthunt](../../../measure/references/platform-intelligence/producthunt.md), [reddit](../../../measure/references/platform-intelligence/reddit.md), [reels](../../../measure/references/platform-intelligence/reels.md), [shorts](../../../measure/references/platform-intelligence/shorts.md), [showhn](../../../measure/references/platform-intelligence/showhn.md), [tiktok](../../../measure/references/platform-intelligence/tiktok.md), [ugc](../../../measure/references/platform-intelligence/ugc.md), [x-launch](../../../measure/references/platform-intelligence/x-launch.md), [x](../../../measure/references/platform-intelligence/x.md), [youtube](../../../measure/references/platform-intelligence/youtube.md).
 
-Specialist roles: [critic-agent](agents/critic-agent.md), [eval-runner-agent](agents/eval-runner-agent.md), [hook-strength-agent](agents/hook-strength-agent.md), [pattern-extractor-agent](agents/pattern-extractor-agent.md).
+Specialist roles: [critic-agent](video/agents/critic-agent.md), [eval-runner-agent](video/agents/eval-runner-agent.md), [hook-strength-agent](video/agents/hook-strength-agent.md), [pattern-extractor-agent](video/agents/pattern-extractor-agent.md).
 
-Worked examples: [shortform-eval-cycle-walkthrough](references/examples/shortform-eval-cycle-walkthrough.md).
+Worked examples: [shortform-eval-cycle-walkthrough](video/references/examples/shortform-eval-cycle-walkthrough.md).
 
-Output formats and fallbacks: [sequential](fallbacks/sequential.md), [format-conventions](references/format-conventions.md).
+Output formats and fallbacks: [sequential](video/fallbacks/sequential.md), [format-conventions](video/references/format-conventions.md).
 
 <!-- playbooks:end -->
 
@@ -74,35 +74,35 @@ behind explicit human review.
 
 Before delivery, load the recovered method instead of paraphrasing it:
 
-- [hook-strength](agents/hook-strength-agent.md) and [eval-runner](agents/eval-runner-agent.md) in
+- [hook-strength](video/agents/hook-strength-agent.md) and [eval-runner](video/agents/eval-runner-agent.md) in
   parallel against the brief, the observed opening, and the matching platform pack by exact file
-  from [platform intelligence](references/platform-intelligence/CONTRACT.md):
-  [facebook](references/platform-intelligence/facebook.md),
-  [founder-demo](references/platform-intelligence/founder-demo.md),
-  [linkedin](references/platform-intelligence/linkedin.md),
-  [linkedin-launch](references/platform-intelligence/linkedin-launch.md),
-  [motion-background](references/platform-intelligence/motion-background.md),
-  [newsletter](references/platform-intelligence/newsletter.md),
-  [producthunt](references/platform-intelligence/producthunt.md),
-  [reddit](references/platform-intelligence/reddit.md),
-  [reels](references/platform-intelligence/reels.md),
-  [shorts](references/platform-intelligence/shorts.md),
-  [showhn](references/platform-intelligence/showhn.md),
-  [tiktok](references/platform-intelligence/tiktok.md),
-  [ugc](references/platform-intelligence/ugc.md),
-  [x](references/platform-intelligence/x.md),
-  [x-launch](references/platform-intelligence/x-launch.md),
-  [youtube](references/platform-intelligence/youtube.md);
-- [pattern-extractor](agents/pattern-extractor-agent.md) for one atomic pattern-log entry;
-- [critic](agents/critic-agent.md) against [rubric](references/rubric.md) and
-  [anti-patterns](references/anti-patterns.md);
-- [hook archetypes](references/hook-archetypes.md),
-  [format conventions](references/format-conventions.md), and
-  [shortform eval method](references/shortform-eval-method.md).
+  from [platform intelligence](video/references/platform-intelligence/CONTRACT.md):
+  [facebook](../../../measure/references/platform-intelligence/facebook.md),
+  [founder-demo](../../../measure/references/platform-intelligence/founder-demo.md),
+  [linkedin](../../../measure/references/platform-intelligence/linkedin.md),
+  [linkedin-launch](../../../measure/references/platform-intelligence/linkedin-launch.md),
+  [motion-background](../../../measure/references/platform-intelligence/motion-background.md),
+  [newsletter](../../../measure/references/platform-intelligence/newsletter.md),
+  [producthunt](../../../measure/references/platform-intelligence/producthunt.md),
+  [reddit](../../../measure/references/platform-intelligence/reddit.md),
+  [reels](../../../measure/references/platform-intelligence/reels.md),
+  [shorts](../../../measure/references/platform-intelligence/shorts.md),
+  [showhn](../../../measure/references/platform-intelligence/showhn.md),
+  [tiktok](../../../measure/references/platform-intelligence/tiktok.md),
+  [ugc](../../../measure/references/platform-intelligence/ugc.md),
+  [x](../../../measure/references/platform-intelligence/x.md),
+  [x-launch](../../../measure/references/platform-intelligence/x-launch.md),
+  [youtube](../../../measure/references/platform-intelligence/youtube.md);
+- [pattern-extractor](video/agents/pattern-extractor-agent.md) for one atomic pattern-log entry;
+- [critic](video/agents/critic-agent.md) against [rubric](video/references/rubric.md) and
+  [anti-patterns](video/references/anti-patterns.md);
+- [hook archetypes](../../../video/references/hook-archetypes.md),
+  [format conventions](video/references/format-conventions.md), and
+  [shortform eval method](video/references/shortform-eval-method.md).
 
-If the host cannot run those as separate agents, use [sequential fallback](fallbacks/sequential.md).
+If the host cannot run those as separate agents, use [sequential fallback](video/fallbacks/sequential.md).
 The critic PASS is an internal quality gate on the evaluation itself; it is not a human verdict on
 the video and never authorizes publication or live edits.
 
-Composition, storyboard, and production briefs belong to `create-shortform`. This skill
+Composition, storyboard, and production briefs belong to `video`. This mode
 scores what already shipped.

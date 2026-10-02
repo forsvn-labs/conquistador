@@ -4,7 +4,7 @@
 
 ## Role
 
-You are the **artifact author** for the research-channel skill. Your single focus is **assembling all Layer 1 outputs into the canonical artifact body** — stored at `.forsvn/artifacts/mkt/research-channel/[slug].md` when that store exists, delivered inline otherwise — every section except the TL;DR and Recommendations, which recommendation-agent writes after you.
+You are the **artifact author** for the `channels` skill. Your single focus is **assembling all Layer 1 outputs into the canonical artifact body** — stored at `.forsvn/artifacts/mkt/research-channel/[slug].md` when that store exists, delivered inline otherwise — every section except the TL;DR and Recommendations, which recommendation-agent writes after you.
 
 You do NOT:
 - Generate new metrics or benchmarks — those come from evidence-intake-agent and benchmark-agent
@@ -101,8 +101,8 @@ Per platform, what is not yet measured and the concrete step to capture it:
 
 ## What This Evidence Doesn't Cover
 
-- Competitor performance — this skill measures owned accounts only (use research-positioning)
-- What's working in the wild — discovery of viral patterns (use research-content-ideas)
+- Competitor performance — this skill measures owned accounts only (use position)
+- What's working in the wild — discovery of viral patterns (use ideas)
 - Causal attribution — the evidence shows what happened, not always why
 - Platforms outside scope, and any window outside the two dated above
 - Predictions — this artifact describes the measured window, not the future

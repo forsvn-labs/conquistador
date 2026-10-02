@@ -10,11 +10,11 @@ revision_status: provisional v0.1
 
 7-dimension rubric for post-publish organic-content evaluation. Used by `agents/critic-agent.md` to gate the cycle artifact before it writes a ledger row. **Provisional v0.1 — mandatory revision after cycles 2-3 per brief 05 § Rubrics.**
 
-**Pass gate, scoring scale, the < 6 asymmetry, PASS_WITH_CONCERNS, and the universal Hard Fails** are canonical in [`_shared/evaluation-loop-rubric.md`](evaluation-loop-rubric.md) [PROCEDURE] § 1–§ 3. This file is the domain instrument — the 7 dimensions below (5 shared + 2 content-specific) with their domain-specialized band tables and the content-specific Hard Fails.
+**Pass gate, scoring scale, the < 6 asymmetry, PASS_WITH_CONCERNS, and the universal Hard Fails** are canonical in [`_shared/evaluation-loop-rubric.md`](../../../commands/measure/references/evaluation-loop-rubric.md) [PROCEDURE] § 1–§ 3. This file is the domain instrument — the 7 dimensions below (5 shared + 2 content-specific) with their domain-specialized band tables and the content-specific Hard Fails.
 
 ## Revision Triggers (brief 05 § Rubric revision trigger)
 
-The universal revision triggers and the mandatory-revision-after-cycles-2-3 rule are in [`_shared/evaluation-loop-rubric.md`](evaluation-loop-rubric.md) § 5. Domain-specific triggers for the content-eval rubric:
+The universal revision triggers and the mandatory-revision-after-cycles-2-3 rule are in [`_shared/evaluation-loop-rubric.md`](../../../commands/measure/references/evaluation-loop-rubric.md) § 5. Domain-specific triggers for the content-eval rubric:
 
 - Platform behavior changes what is measurable (e.g., a platform deprecates save-count visibility, changes the engagement-rate denominator, removes reach)
 - A new content surface appears (e.g., a platform adds a long-form text format with new native metrics)
@@ -85,7 +85,7 @@ Does the keep/discard/watch/blocked verdict follow Recommendation's Decision Rul
 | Band | Description |
 |------|-------------|
 | 9-10 | Verdict matches the metric packet + engagement-quality read; routing is to the smallest correct next skill at the right granularity (component, not "the content plan"); decision sentence is one sentence and includes the primary platform |
-| 7-8 | Verdict matches packet; routing is correct but slightly over-broad (recommended a full write-social rewrite when only the hook needed a revision) |
+| 7-8 | Verdict matches packet; routing is correct but slightly over-broad (recommended a full `social` rewrite when only the hook needed a revision) |
 | 5-6 | Verdict matches packet but decision sentence is multi-sentence or omits the primary platform; routing is correct domain but wrong specificity |
 | 3-4 | Verdict drifts from packet (Diagnosis story compelling → claimed `keep` despite a `not_comparable` baseline) OR routing is to a non-existent / inappropriate skill |
 | 0-2 | Verdict invents data (claimed `keep` with no improvement signal) OR routing is to "everything" (redo-the-whole-content-plan maximalism) |
@@ -159,12 +159,12 @@ Score the proposed row before any append. A passing score does not authorize a w
 
 ## Falsifiability summary
 
-A dim score is only valid if the evaluator can name **what evidence would have moved the score one band** — the discipline is canonical in [`_shared/evaluation-loop-rubric.md`](evaluation-loop-rubric.md) § 6. Per-dimension examples for this rubric:
+A dim score is only valid if the evaluator can name **what evidence would have moved the score one band** — the discipline is canonical in [`_shared/evaluation-loop-rubric.md`](../../../commands/measure/references/evaluation-loop-rubric.md) § 6. Per-dimension examples for this rubric:
 
 - Loop Fit 8 → 9: surface latest learnings.md in the read-order log.
 - Metric Integrity 7 → 9: add the engagement 4-way breakdown.
 - Attribution Honesty 6 → 8: flag the algorithm-change confounder explicitly.
-- Decision Discipline 6 → 8: tighten routing from "write-social rewrite" to "write-social hook-only revision".
+- Decision Discipline 6 → 8: tighten routing from "`social` rewrite" to "`social` hook-only revision".
 - Engagement-Quality 7 → 9: compute the meaningful-to-vanity ratio and rest the verdict on it explicitly.
 - Platform-Fit 6 → 8: state the platform-specific benchmark the metric is read against.
 - Ledger Correctness 8 → 10: include the primary-platform tag verbatim in the description.
@@ -173,13 +173,13 @@ If you can't name the next-band evidence, you're scoring vibes, not the rubric.
 
 ## Score justification format
 
-For each per-dim score in the Critic Verdict, include 1 sentence of rationale tied to the artifact's actual content (the requirement + the "scoreless verdict = Hard Fail" rule are canonical in [`_shared/evaluation-loop-rubric.md`](evaluation-loop-rubric.md) § 7). Example:
+For each per-dim score in the Critic Verdict, include 1 sentence of rationale tied to the artifact's actual content (the requirement + the "scoreless verdict = Hard Fail" rule are canonical in [`_shared/evaluation-loop-rubric.md`](../../../commands/measure/references/evaluation-loop-rubric.md) § 7). Example:
 
 ```
 - loop_fit: 9 — program.md + context.md + results.tsv all read; cycle scoped to linkedin matching program.md
 - metric_integrity: 8 — primary metric + baseline + window + reach present; engagement 4-way breakdown present
 - attribution_honesty: 8 — algorithm-change confounder named; one minor confounder (follower jump) not surfaced
-- decision_discipline: 9 — verdict matches packet; routing to write-social hook-only revision is correctly narrow
+- decision_discipline: 9 — verdict matches packet; routing to social hook-only revision is correctly narrow
 - engagement_quality_discrimination: 9 — meaningful-to-vanity ratio computed; keep rests on save+share rate, not likes
 - platform_fit: 8 — engagement rate read against a LinkedIn-specific benchmark; carousel format assessed as native
 - ledger_correctness: 10 — one row appended; description includes "linkedin"; 8 columns clean

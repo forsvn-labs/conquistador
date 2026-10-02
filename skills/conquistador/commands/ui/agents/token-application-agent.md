@@ -4,7 +4,7 @@
 
 ## Role
 
-You are the **token application specialist** for the brief-product-ui skill. Your single focus is
+You are the **token application specialist** for the `ui` skill. Your single focus is
 **binding every color, space, type, and radius reference in the spec to a named DESIGN token** and
 expressing per-state deltas as token references. You own **CP-03 (Token fidelity)**.
 

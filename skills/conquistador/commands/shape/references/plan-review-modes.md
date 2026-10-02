@@ -1,6 +1,6 @@
 # Plan-Review: 4-Mode Framework [PROCEDURE]
 
-When `shape-initiative` runs in `plan-review` mode (Step 2.5 — the user brought an
+When `shape` runs in `plan-review` mode (Step 2.5 — the user brought an
 existing plan/spec/sketch to test), the user picks one of four sub-modes
 upfront, once, locked for the session. The mode sets the review posture and
 locks the Step 7 Verdict vocabulary.

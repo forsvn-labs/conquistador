@@ -5,19 +5,19 @@ tool, or hidden state machine. Every named outcome is present in the installed C
 
 ## Chain
 
-1. **Position** — use `research-positioning` only when the audience, costly moment, promise,
+1. **Position** — use `position` only when the audience, costly moment, promise,
    mechanism, or proof remains unresolved.
-2. **Plan** — use `plan-campaign` for the launch bet, named channel roles, readiness, sequence,
+2. **Plan** — use `campaign` for the launch bet, named channel roles, readiness, sequence,
    asset inventory, owners, contingencies, budget boundary, and decision signal.
-3. **Create** — use `write-social` for channel-native posts and listings, `write-copy` for page or
-   announcement blocks, and `brief-creative` for truthful gallery, image, or video requirements.
-4. **Reach** — use `write-outreach` only when named recipients or a bounded supporter list is part of
+3. **Create** — use `social` for channel-native posts and listings, `copy` for page or
+   announcement blocks, and `creative` for truthful gallery, image, or video requirements.
+4. **Reach** — use `outreach` only when named recipients or a bounded supporter list is part of
    the request. Never invent recipients, enrichment, affiliation, or send authority.
-5. **Coordinate** — use `create-run-of-show` only when timed people, rooms, live demos, or other
+5. **Coordinate** — use `event` only when timed people, rooms, live demos, or other
    operational dependencies make minute-level coordination useful.
 6. **Release boundary** — assemble the ready-to-use package and stop. Publishing, credentials,
    account changes, spend, and external writes require explicit approval for the exact payload.
-7. **Learn** — use `measure-growth` to define the observation record and later make a
+7. **Learn** — use `measure` to define the observation record and later make a
    keep/revise/stop decision from observed results.
 
 Skip inapplicable steps. A small launch should not acquire ceremony merely to fill the chain.

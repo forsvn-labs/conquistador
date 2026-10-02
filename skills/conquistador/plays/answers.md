@@ -1,16 +1,25 @@
-# Answer-visibility-monitor workflow
+---
+command: answers
+label: Check visibility in AI answers
+intents: ["ai answer visibility","answer visibility","chatgpt mentions","cited by chatgpt","perplexity citations","aeo audit","llm visibility","ai search visibility"]
+chain:
+  - { command: seo, for: "query set, eligibility, extractability" }
+  - { command: factcheck, for: "source authority and uncertainty" }
+  - { command: measure, for: "dated comparison" }
+legacy: answer-visibility-monitor
+---
+# Check visibility in AI answers
 
-Use privately for an on-demand, dated audit of whether a product or source appears or is cited in AI
+Use for an on-demand, dated audit of whether a product or source appears or is cited in AI
 answer systems.
 
-1. Use `optimize-search` to define a fixed query set, inspect source eligibility and extractability,
+1. Use `seo` to define a fixed query set, inspect source eligibility and extractability,
    and diagnose organic versus answer-surface evidence separately.
-2. Use `knowledge-review` to record source authority, contradictions, provider limits, and uncertainty.
-3. Use `measure-growth` to compare dated observations, confounders, and keep/revise decisions.
+2. Use `factcheck` to record source authority, contradictions, provider limits, and uncertainty.
+3. Use `measure` to compare dated observations, confounders, and keep/revise decisions.
 
-Load recovered AEO method under `conquistador/references/answer-visibility-monitor/` (query set,
-provider readiness, citation/geo/traffic monitors, report, provider matrix) instead of paraphrasing
-it.
+Read the AEO playbooks in [answers/](answers/) (query set,
+provider readiness, citation/geo/traffic monitors, report, provider matrix). Do not paraphrase them.
 
 Record exact query, date, locale/personalization context when knowable, provider/model, answer,
 citation, and source URL. Repeat the same ritual across snapshots; record what changed and what remains

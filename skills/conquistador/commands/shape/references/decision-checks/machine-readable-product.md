@@ -1,7 +1,7 @@
 ---
 title: Check machine-readable product facts
 load_class: METHOD
-produced_by: shape-initiative
+produced_by: shape
 ---
 
 # Check machine-readable product facts

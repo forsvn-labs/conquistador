@@ -1,13 +1,13 @@
 ---
-title: Format Conventions — create-shortform bundle schemas
+title: Format Conventions — video bundle schemas
 lifecycle: canonical
 status: stable
-produced_by: create-shortform
-consumers: create-shortform SKILL.md + 2 agents (prompt-author / critic) + downstream runtimes (HyperFrames / Remotion / text-to-lottie / Manim / Vercel AI CLI / Higgsfield / Invideo / HeyGen / video-use / human editors)
+produced_by: video
+consumers: video COMMAND.md + 2 agents (prompt-author / critic) + downstream runtimes (HyperFrames / Remotion / text-to-lottie / Manim / Vercel AI CLI / Higgsfield / Invideo / HeyGen / video-use / human editors)
 load_class: PROCEDURE
 ---
 
-# Format Conventions — create-shortform
+# Format Conventions — `video`
 
 > Schemas in this file are cross-stack contracts. Renaming a section, reordering fields, or changing a frontmatter key requires atomic update of downstream consumers (runtimes + future evaluate-shortform/-content skills that score produced videos against the brief's hypothesis).
 
@@ -29,7 +29,7 @@ load_class: PROCEDURE
     └── post.md
 ```
 
-`[slug]` matches the upstream create-shortform slug (or the hand-written video-brief's slug). Per-runtime subdirs isolate runtime-specific supporting files if either runtime grows them later. The canonical `manifest.md` and `scenes/` stay at top level — every runtime references back to them. `post.md` is the terminal assemble → grade → subtitle stage (the post lane, routed to `video-use` / ffmpeg); production-lane selection logic is the skill reference `production-lanes.md`.
+`[slug]` matches the upstream `video` slug (or the hand-written video-brief's slug). Per-runtime subdirs isolate runtime-specific supporting files if either runtime grows them later. The canonical `manifest.md` and `scenes/` stay at top level — every runtime references back to them. `post.md` is the terminal assemble → grade → subtitle stage (the post lane, routed to `video-use` / ffmpeg); production-lane selection logic is the skill reference `production-lanes.md`.
 
 ---
 
@@ -39,7 +39,7 @@ The manifest carries 12 frontmatter fields in shortform mode + 3 added fields in
 
 ```markdown
 ---
-skill: create-shortform
+skill: video
 version: 1
 date: [today]
 status: done | done_with_concerns | blocked | needs_context
@@ -54,7 +54,7 @@ shot_count: [N]
 cta: "[exact CTA copy from brief — verbatim]"             # shortform required; app-preview may be "(none)"
 brand_source: brand-md | cold-start-hint                  # app-preview mode only — omit in shortform
 provenance:
-  skill: create-shortform
+  skill: video
   run_date: [today]
   input_artifacts:
     - [source_brief path]
@@ -75,7 +75,7 @@ provenance:
 **Status:** [done | done_with_concerns | blocked | needs_context]
 
 **Why this works** (opening framing — the bet carried through from the brief's `## What This Brief Bets On`; product-fit per `why-this-works-convention.md`. Rides the header, NOT a new H2 — preserves the reorder-sensitive section spine.)
-- The bet: [the one core wager this video makes — the hook / arc / lane choice that must land; falsifiable, so `evaluate-shortform` can test it next cycle]
+- The bet: [the one core wager this video makes — the hook / arc / lane choice that must land; falsifiable, so `results` can test it next cycle]
 - For this product: [a load-bearing shot or structure choice → the ICP pain / VoC phrase / positioning it serves — name the source: the brief's bet, `ICP.md`, `PRODUCT-CONTEXT.md`]
 - For this product: [a second load-bearing choice → its product-specific reason]
 - The differentiator: [why this script wouldn't work verbatim for a competitor — the Competitor-Swap angle]
@@ -144,14 +144,14 @@ A human editor / motion designer can take the bundle directory as the spec for a
 
 ## Re-run
 
-If the brief changes or the runtime choice changes: re-run `create-shortform` with `--rev=N` to write to `.forsvn/artifacts/mkt/create-shortform/[slug]/v[N]/...` and preserve the prior bundle.
+If the brief changes or the runtime choice changes: re-run `video` with `--rev=N` to write to `.forsvn/artifacts/mkt/create-shortform/[slug]/v[N]/...` and preserve the prior bundle.
 
 ## Operator Next Steps
 
 1. Pick a runtime from the table above
 2. Run the chosen scaffold (or pipe scenes through your image-gen CLI)
 3. Mark the verification checklist for each shot after rendering
-4. When all shots verified on-spec, the produced video is ready for `evaluate-shortform`
+4. When all shots verified on-spec, the produced video is ready for `results`
 ```
 
 ---
@@ -162,7 +162,7 @@ Frontmatter carries the same 7 fields in both modes; app-preview adds 5 mode-spe
 
 ```markdown
 ---
-skill: create-shortform
+skill: video
 version: 1
 date: [today]
 mode: shortform | app-preview              # WS4 — mirrors manifest.mode
@@ -494,13 +494,13 @@ Then a **Self-verify** checklist (re-ingest the rendered cut and score *that* �
 
 | Field | Type | Mode | Notes |
 |---|---|---|---|
-| `skill` | kebab-case | both | Always `create-shortform` |
+| `skill` | kebab-case | both | Always `video` |
 | `version` | integer | both | Artifact version (increment on `--rev=N` re-run) |
 | `date` | ISO YYYY-MM-DD | both | Original creation date; do not update on edits in place |
 | `status` | enum | both | `done` / `done_with_concerns` / `blocked` / `needs_context` per Completion Status Protocol |
 | `mode` | enum | both | `shortform` or `app-preview`; required from WS4 onward |
 | `slug` | kebab-case | both | Matches upstream brief slug |
-| `source_brief` | project-relative path | both | The create-shortform hero/variant; OR hand-written video-brief; OR app-preview's `handoff-create-shortform.md` |
+| `source_brief` | project-relative path | both | The `video` hero/variant; OR hand-written video-brief; OR app-preview's `handoff-create-shortform.md` |
 | `target_platforms` | list of strings | shortform | Subset of platforms the brief defined |
 | `surface` | enum | app-preview | One of `app-store` / `onboarding` / `website` / `social`; replaces `target_platforms` |
 | `aspect` | string | both | One of `9:16` / `1:1` / `16:9` / `4:5` / `custom-WxH`; app-preview also accepts `2:3` |
@@ -514,7 +514,7 @@ Then a **Self-verify** checklist (re-ingest the rendered cut and score *that* �
 
 | Field | Type | Mode | Notes |
 |---|---|---|---|
-| `skill` | kebab-case | both | Always `create-shortform` |
+| `skill` | kebab-case | both | Always `video` |
 | `version` | integer | both | Mirrors manifest version |
 | `date` | ISO YYYY-MM-DD | both | Same as manifest |
 | `mode` | enum | both | Mirrors manifest.mode |
@@ -537,7 +537,7 @@ In order. Renaming or reordering breaks downstream consumers + critic. Both mode
 
 ### Manifest
 
-1. **Header block** (Source brief / Mode / Target platforms or Surface / Aspect / Length / Shot count / CTA / Status / Brand source [app-preview]) **+ a `**Why this works**` opening framing** per [`why-this-works-convention.md`](why-this-works-convention.md): the bet (falsifiable) + 2-4 load-bearing script choices traced to a product-fit source (the brief's `## What This Brief Bets On`, `ICP.md`, `PRODUCT-CONTEXT.md`) — Competitor-Swap-clean, carried through from create-shortform, never fabricated. Placed in the opening (the convention's brief-style exception) so the rationale layer rides section 1 and the reorder-sensitive 9-section spine is unchanged — not a new H2.
+1. **Header block** (Source brief / Mode / Target platforms or Surface / Aspect / Length / Shot count / CTA / Status / Brand source [app-preview]) **+ a `**Why this works**` opening framing** per [`why-this-works-convention.md`](why-this-works-convention.md): the bet (falsifiable) + 2-4 load-bearing script choices traced to a product-fit source (the brief's `## What This Brief Bets On`, `ICP.md`, `PRODUCT-CONTEXT.md`) — Competitor-Swap-clean, carried through from `video`, never fabricated. Placed in the opening (the convention's brief-style exception) so the rationale layer rides section 1 and the reorder-sensitive 9-section spine is unchanged — not a new H2.
 2. **Concerns** (always pinned at top when `brand_source: cold-start-hint`; otherwise only when status is done_with_concerns)
 3. **Shot List** — shortform: 6 columns (Shot / Duration / Visual / On-Screen Text / Voice / Asset Prompt File). App-preview: 10 columns (Shot / Duration / Visual / On-Screen Text / Voice / Asset Prompt File / Source Screenshot / Crop Rect / Mask Transform / Interaction Verb)
 4. **Audio Plan** — Music + TTS spec block (shortform); per-beat audio table (app-preview, TTS optional)

@@ -2,13 +2,13 @@
 title: Improve-conversion Format Conventions
 lifecycle: canonical
 status: stable
-produced_by: improve-conversion
+produced_by: convert
 load_class: PROCEDURE
 ---
 
 # Improve-conversion Format Conventions
 
-> Format rules for the improve-conversion cycle artifact + results.tsv row + learnings.md promotion. Cited from SKILL.md "Artifact Contract" + "Evaluation Artifact Template" + "Results Row Discipline" sections. Schema changes require atomic update across `references/landing-format-conventions.md` + lp-brief skill (which produces strategy/ artifacts read by improve-conversion) + eval-loop owner.
+> Format rules for the `convert` cycle artifact + results.tsv row + learnings.md promotion. Cited from COMMAND.md "Artifact Contract" + "Evaluation Artifact Template" + "Results Row Discipline" sections. Schema changes require atomic update across `references/landing-format-conventions.md` + lp-brief skill (which produces strategy/ artifacts read by `convert`) + eval-loop owner.
 
 ## Output locations
 
@@ -31,7 +31,7 @@ files and return artifacts inline using the same schema.
 
 ```yaml
 ---
-skill: improve-conversion
+skill: convert
 version: 1
 date: YYYY-MM-DD
 status: done | done_with_concerns | blocked | needs_context
@@ -64,7 +64,7 @@ Save to `.forsvn/artifacts/mkt/improve-conversion/evals/YYYY-MM-DD-cycle-N.md`:
 
 ```markdown
 ---
-skill: improve-conversion
+skill: convert
 version: 1
 date: YYYY-MM-DD
 status: done | done_with_concerns | blocked | needs_context
@@ -204,10 +204,10 @@ If critic FAIL after revision: skip all 4 side effects. Return BLOCKED with miss
 ## Cross-stack contract
 
 This skill produces:
-- `evals/[date]-cycle-N.md` — consumed by future improve-conversion cycles (read prior cycles for trend), by lp-brief (`--rev=N+1` reads latest eval for hypothesis seeding), and by humans reviewing loop progress
+- `evals/[date]-cycle-N.md` — consumed by future `convert` cycles (read prior cycles for trend), by lp-brief (`--rev=N+1` reads latest eval for hypothesis seeding), and by humans reviewing loop progress
 - `results.tsv` row — appended to the loop's ledger; consumed by any skill reading the loop's status (dashboard skills, ledger-summary skills, downstream campaign-plan retrospectives)
 - `learnings.md` update — high-confidence lessons reusable beyond this page state; consumed by future lp-brief / campaign-plan cycles + by humans
 
-This skill does NOT directly consume lp-brief output. lp-brief MIGHT be the strategy artifact for the eval-loop cycle (copied into `strategy/` directory); improve-conversion reads loop-local strategy/execution artifacts, not lp-brief artifacts directly. The coordination contract between lp-brief and improve-conversion is at the eval-loop boundary, not at the artifact-schema boundary.
+This skill does NOT directly consume lp-brief output. lp-brief MIGHT be the strategy artifact for the eval-loop cycle (copied into `strategy/` directory); `convert` reads loop-local strategy/execution artifacts, not lp-brief artifacts directly. The coordination contract between lp-brief and `convert` is at the eval-loop boundary, not at the artifact-schema boundary.
 
 Schema changes (frontmatter fields, body section structure, Evidence table columns, Results Row columns, learnings.md format) require atomic update of `format-conventions.md` + `references/landing-format-conventions.md` + downstream callers — never silently drift.

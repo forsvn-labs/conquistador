@@ -1,9 +1,8 @@
 ---
-name: architect-software-system
-description: "Design an implementation-ready software architecture for an explicit build, migration, or technical-product decision. Use for greenfield or brownfield systems, service boundaries, schemas, APIs, integrations, reliability, security, rollout, and technical tradeoffs—not routine marketing work."
+name: architect
+description: "Design a software architecture for an explicit build or migration."
 metadata:
   version: 1.0.0
-
 ---
 
 # Architect a software system
@@ -103,4 +102,4 @@ Before delivery, load the recovered method instead of paraphrasing it:
 If the host cannot run those as separate agents, use [sequential fallback](fallbacks/sequential.md).
 Return the architecture inline by default. If the host supplies a durable artifact location and the
 operator asks for persistence, write it there; no project-specific store is required.
-Fuzzy requirements belong to `shape-initiative`; task decomposition stays outside this skill.
+Fuzzy requirements belong to `shape`; task decomposition stays outside this command.

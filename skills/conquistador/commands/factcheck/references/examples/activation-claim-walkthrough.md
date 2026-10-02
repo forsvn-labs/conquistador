@@ -2,7 +2,7 @@
 title: Worked Example — Activation Claim Audit
 lifecycle: canonical
 status: stable
-produced_by: knowledge-review
+produced_by: factcheck
 load_class: EXAMPLE
 ---
 

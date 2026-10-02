@@ -2,7 +2,7 @@
 title: Docs-Writing — Route E (Release Notes)
 lifecycle: canonical
 status: stable
-produced_by: write-technical-docs
+produced_by: docs
 load_class: PROCEDURE
 ---
 

@@ -105,6 +105,6 @@ A clean structural review does not supply missing source or execution evidence. 
 
 ## Production and evaluation handoff
 
-`create-shortform` receives the selected decision, source context, sample flags, rights limits and test contract. It writes original production language. It previews the artifact and confirms the destination before publication is authorized.
+`video` receives the selected decision, source context, sample flags, rights limits and test contract. It writes original production language. It previews the artifact and confirms the destination before publication is authorized.
 
-`evaluate-shortform` compares the resulting artifact with the viewer task and agreed outcome measure. It preserves missing metrics and confounding conditions. It does not grade the result against an inherited reach multiplier or treat the research catalog as proof that a tactic should perform.
+`results` compares the resulting artifact with the viewer task and agreed outcome measure. It preserves missing metrics and confounding conditions. It does not grade the result against an inherited reach multiplier or treat the research catalog as proof that a tactic should perform.

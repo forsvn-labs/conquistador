@@ -2,7 +2,7 @@
 title: Audit-Marketing — re-verify exit gate
 lifecycle: canonical
 status: stable
-produced_by: audit-marketing
+produced_by: audit
 load_class: PROCEDURE
 ---
 

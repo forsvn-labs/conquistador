@@ -1,9 +1,8 @@
 ---
-name: create-brand
-description: "Create or refine a practical brand foundation. Use for brand strategy, point of view, voice, messaging architecture, naming direction, verbal identity, visual creative direction, founder-versus-company voice, or a compact brand system that operators and creators can apply consistently."
+name: brand
+description: "Define the brand foundation: point of view, voice, messaging, and visual direction."
 metadata:
   version: 2.1.0
-
 ---
 
 # Create a practical brand foundation
@@ -19,7 +18,7 @@ Read the core files in full before you draft; read the others when their step or
 Core:
 
 - [anti-patterns](references/anti-patterns.md): Brand-System Anti-Patterns. Re-read before any artifact ships. 21 patterns total — organized as: 13…
-- [brand-system-method](references/brand-system-method.md): Brand-System Method. create-brand produces three complementary files — BRAND.md (narrative brand book),…
+- [brand-system-method](references/brand-system-method.md): Brand-System Method. `brand` produces three complementary files — BRAND.md (narrative brand book),…
 - [narrative-tension](references/narrative-tension.md): Brand Narrative Tension. Checks that protect a BRAND.md from collapsing into either sterile corporate…
 - [visual-identity](references/visual-identity.md): Visual Identity System. Rules for logo systems, imagery direction, iconography, graphic elements, and…
 

@@ -2,7 +2,7 @@
 title: Docs Writing Method
 lifecycle: canonical
 status: stable
-produced_by: write-technical-docs
+produced_by: docs
 load_class: REFERENCE
 ---
 
@@ -75,10 +75,10 @@ The scanner-agent ranks files by documentation value. Read top-ranked first for 
 
 ## When NOT to use this skill
 
-- **Specifying what to build** → `shape-initiative`. Documenting hallucinated requirements is worse than no docs.
+- **Specifying what to build** → `shape`. Documenting hallucinated requirements is worse than no docs.
 - **Restructuring code for readability** → code readability cleanup outside this skill. Documentation can't fix a confusing codebase; cleanup it first.
 - **Visual brand identity for the docs site** → `/create-brand`.
-- **Single-page conversion surface** (landing page) → `improve-conversion`.
+- **Single-page conversion surface** (landing page) → `convert`.
 
 ## Further reading
 

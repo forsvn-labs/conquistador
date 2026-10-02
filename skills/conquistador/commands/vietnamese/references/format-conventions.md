@@ -2,7 +2,7 @@
 title: VN-Tone — Format Conventions
 lifecycle: canonical
 status: stable
-produced_by: polish-vietnamese
+produced_by: vietnamese
 load_class: PROCEDURE
 ---
 
@@ -75,10 +75,10 @@ Block quotes (offset paragraphs) follow markdown `>` convention; no smart-quote 
 
 ## Frontmatter field order (Artifact Template)
 
-Per the Artifact Template block in SKILL.md body. Required fields in this order:
+Per the Artifact Template block in COMMAND.md body. Required fields in this order:
 
 ```yaml
-skill: polish-vietnamese
+skill: vietnamese
 version: 1
 date: YYYY-MM-DD
 status: done | done_with_concerns | blocked | needs_context

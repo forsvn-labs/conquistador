@@ -43,7 +43,7 @@ Each is a spine — adapt it; don't fill it as a template.
 
 ## Search/AEO structure (SEO-anchored pieces only)
 
-- **H2/H3 hierarchy maps to real sub-intents** (from the optimize-search topic map if present), not a keyword list.
+- **H2/H3 hierarchy maps to real sub-intents** (from the `seo` topic map if present), not a keyword list.
 - **Answer-up-front block** for AEO: the direct answer to the page's core question in the first ~40–60 words, so answer engines can lift it. The argument still owns the rest.
 - **Question headings** where they match how people search — but only when they also serve the argument's structure.
 - **Never keyword-stuff.** Structure serves the reader and the answer engine simultaneously; if a heading exists only for a keyword, cut it.

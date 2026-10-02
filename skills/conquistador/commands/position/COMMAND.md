@@ -1,9 +1,8 @@
 ---
-name: research-positioning
-description: "Research a product's market, ideal customer, alternatives, demand, offer, and positioning. Use for ICP research, market or competitor analysis, customer-language synthesis, segmentation, category framing, positioning, messaging foundations, or deciding who a product should serve and why it should win."
+name: position
+description: "Find the audience, promise, and proof that make the product the clear choice."
 metadata:
   version: 2.1.0
-
 ---
 
 # Research and position a product

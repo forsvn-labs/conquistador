@@ -1,4 +1,4 @@
-# Rubric — measure-growth (5 dimensions, 0–10 each)
+# Rubric — `measure` (5 dimensions, 0–10 each)
 
 Pass = total **≥35/50** AND **no dimension scores 0**. The critic applies this every cycle and runs the Discrimination Test before passing.
 

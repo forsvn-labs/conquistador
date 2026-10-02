@@ -2,13 +2,13 @@
 title: Campaign-Eval Format Conventions
 lifecycle: canonical
 status: stable
-produced_by: measure-growth
+produced_by: measure
 load_class: PROCEDURE
 ---
 
 # Campaign-Eval Format Conventions
 
-> Format rules for the measure-growth cycle artifact + results.tsv row + learnings.md promotion. Cited from SKILL.md "Artifact Contract" + "Evaluation Artifact Template" + "Results Row Discipline" sections. Schema changes require atomic update across `fallbacks/sequential.md` + plan-campaign (which produces the source artifact read by measure-growth) + eval-loop owner.
+> Format rules for the `measure` cycle artifact + results.tsv row + learnings.md promotion. Cited from COMMAND.md "Artifact Contract" + "Evaluation Artifact Template" + "Results Row Discipline" sections. Schema changes require atomic update across `fallbacks/sequential.md` + `campaign` (which produces the source artifact read by `measure`) + eval-loop owner.
 
 Aligned byte-for-byte with `evaluate-content/references/campaign-format-conventions.md` and `evaluate-ad/references/campaign-format-conventions.md` where cross-eval consistency matters (frontmatter schema, Results Row 8-column schema, Evidence 6-column schema, side-effect order). Campaign-specific extensions (the per-channel breakdown table, the Unit-Economics Signals subsection) are clearly marked.
 
@@ -33,7 +33,7 @@ These paths assume the optional local-first loop store under `.forsvn/loops/`. W
 
 ```yaml
 ---
-skill: measure-growth
+skill: measure
 version: 1
 date: YYYY-MM-DD
 status: done | done_with_concerns | blocked | needs_context
@@ -43,9 +43,9 @@ lifecycle: evaluation
 use_when: "Deciding whether to keep, discard, watch, or block the current campaign cycle"
 do_not_use_when: "Re-planning next-cycle campaign strategy without reading the latest loop context and results"
 upstream: ".forsvn/loops/[slug]/program.md, context.md, strategy/, execution/, artifacts/campaign-plan.md, metric source"
-downstream: "results.tsv, learnings.md, plan-campaign next-cycle plan"
+downstream: "results.tsv, learnings.md, campaign next-cycle plan"
 provenance:
-  skill: measure-growth
+  skill: measure
   run_date: YYYY-MM-DD
   input_artifacts:
     - artifacts/campaign-plan.md
@@ -55,14 +55,14 @@ provenance:
 ---
 ```
 
-Date format: ISO `YYYY-MM-DD`. `lifecycle: evaluation` is required (eval-loop spec — see `fallbacks/sequential.md`). `provenance` block is the D8 generation-provenance contract — see `SKILL.md` § Generation provenance.
+Date format: ISO `YYYY-MM-DD`. `lifecycle: evaluation` is required (eval-loop spec — see `fallbacks/sequential.md`). `provenance` block is the D8 generation-provenance contract — see `COMMAND.md` § Generation provenance.
 
 ## Body section structure (8 sections, in order)
 
 1. **Title** — H1 `# [Campaign] Cycle N Evaluation`
 2. **Verdict** — 5 bullets: Status / Confidence / Campaign / Primary metric / Decision (one sentence)
 3. **Evidence** — table (Signal / Current / Baseline / Window / Source / Caveat columns) — campaign-level aggregate signals (primary metric, reach, leads, conversions, revenue, blended CAC, paid CAC, total spend) populated as rows
-4. **What Changed This Cycle** — source plan-campaign artifact link + objective/channel-mix/budget-split/sequencing changes since prior cycle
+4. **What Changed This Cycle** — source `campaign` artifact link + objective/channel-mix/budget-split/sequencing changes since prior cycle
 5. **Diagnosis** — Likely Drivers + Channel-Mix Signals (per-channel breakdown table) + Unit-Economics Signals + Confounders (4 H3 subsections)
 6. **Next Cycle Recommendation** — Keep / Discard / Watch / Route-next-work-to lines (channel/budget granularity, not "the whole campaign")
 7. **Results Row** — fenced TSV block with the 8-column row (cycle / date / artifact / primary_metric / value / baseline / status / description) — description includes the campaign tag
@@ -74,7 +74,7 @@ Save to `.forsvn/loops/[slug]/evals/YYYY-MM-DD-cycle-N.md`:
 
 ```markdown
 ---
-skill: measure-growth
+skill: measure
 version: 1
 date: YYYY-MM-DD
 status: done | done_with_concerns | blocked | needs_context
@@ -84,9 +84,9 @@ lifecycle: evaluation
 use_when: "Deciding whether to keep, discard, watch, or block the current campaign cycle"
 do_not_use_when: "Re-planning next-cycle campaign strategy without reading the latest loop context and results"
 upstream: ".forsvn/loops/[slug]/program.md, context.md, strategy/, execution/, artifacts/campaign-plan.md, metric source"
-downstream: "results.tsv, learnings.md, plan-campaign next-cycle plan"
+downstream: "results.tsv, learnings.md, campaign next-cycle plan"
 provenance:
-  skill: measure-growth
+  skill: measure
   run_date: YYYY-MM-DD
   input_artifacts:
     - artifacts/campaign-plan.md
@@ -120,7 +120,7 @@ provenance:
 
 ## What Changed This Cycle
 
-- Source plan-campaign artifact: `artifacts/campaign-plan.md`
+- Source campaign artifact: `artifacts/campaign-plan.md`
 - Objective/channel-mix/budget-split/sequencing delta from prior cycle:
 
 ## Diagnosis
@@ -157,7 +157,7 @@ provenance:
 - Keep: [channel-level or budget-level, not "the campaign"]
 - Discard:
 - Watch:
-- Route next work to: plan-campaign | create-paid-campaign | write-social | run-pipeline | none
+- Route next work to: campaign | ads | social | run-pipeline | none
 
 ## Results Row
 
@@ -270,10 +270,10 @@ If critic FAIL after revision: skip all 4 side effects. Return BLOCKED with miss
 
 This skill produces:
 
-- `evals/[date]-cycle-N.md` — consumed by future measure-growth cycles (read prior cycles for trend), by `plan-campaign --rev=N+1` (latest eval seeds the next campaign's hypothesis), and by humans reviewing loop progress
+- `evals/[date]-cycle-N.md` — consumed by future `measure` cycles (read prior cycles for trend), by `plan-campaign --rev=N+1` (latest eval seeds the next campaign's hypothesis), and by humans reviewing loop progress
 - `results.tsv` row — appended to the loop's ledger; consumed by any skill reading the loop's status (dashboard skills, ledger-summary skills)
-- `learnings.md` update — high-confidence campaign-type/channel-mix-scoped lessons reusable beyond this campaign state; consumed by future plan-campaign cycles + by humans
+- `learnings.md` update — high-confidence campaign-type/channel-mix-scoped lessons reusable beyond this campaign state; consumed by future `campaign` cycles + by humans
 
-This skill does NOT directly consume plan-campaign output via cross-skill import. plan-campaign MIGHT be the strategy artifact for the eval-loop cycle (its `artifacts/campaign-plan.md` copied or linked into the loop's `strategy/` directory); measure-growth reads loop-local strategy/execution artifacts AND the source plan-campaign artifact path stored in provenance. The coordination contract between plan-campaign and measure-growth is at the eval-loop boundary + the provenance.input_artifacts pointer, not at a shared-schema boundary.
+This skill does NOT directly consume `campaign` output via cross-skill import. `campaign` MIGHT be the strategy artifact for the eval-loop cycle (its `artifacts/campaign-plan.md` copied or linked into the loop's `strategy/` directory); `measure` reads loop-local strategy/execution artifacts AND the source `campaign` artifact path stored in provenance. The coordination contract between `campaign` and `measure` is at the eval-loop boundary + the provenance.input_artifacts pointer, not at a shared-schema boundary.
 
 Schema changes (frontmatter fields, body section structure, Evidence table columns, Channel Breakdown table columns, Results Row columns, learnings.md format) require atomic update of `campaign-format-conventions.md` + `fallbacks/sequential.md` + downstream callers — never silently drift.

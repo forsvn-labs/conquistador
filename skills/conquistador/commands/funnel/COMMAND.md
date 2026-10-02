@@ -1,9 +1,8 @@
 ---
-name: model-growth-funnel
-description: "Build a decision-grade growth or revenue funnel backward from a business target. Use for numeric funnel plans, baseline assumptions, conversion targets, capacity checks, unit economics, sensitivity analysis, or deciding whether a growth goal is feasible."
+name: funnel
+description: "Model the growth funnel backward from a target: rates, capacity, and unit economics."
 metadata:
   version: 2.1.0
-
 ---
 
 # Model a growth funnel

@@ -2,7 +2,7 @@
 title: Agents-Panel — Debate Walkthrough
 lifecycle: canonical
 status: stable
-produced_by: decision-panel
+produced_by: decide
 load_class: EXAMPLE
 ---
 

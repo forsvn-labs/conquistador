@@ -2,7 +2,7 @@
 
 > These modules provide production checklists. Confirm platform-dependent values against current primary documentation or the target upload interface before delivery.
 >
-> This file holds per-platform brief checklists. Every brief brief-creative writes pulls a checklist from here for the asset's platform — aspect ratio, safe zones, mobile readability floor, contrast for thumb-stop, file format, file-size cap, color mode, and platform-specific anti-patterns. It is the **deep instrument**; `references/asset-types.md` is the **quick fallback table**.
+> This file holds per-platform brief checklists. Every brief `creative` writes pulls a checklist from here for the asset's platform — aspect ratio, safe zones, mobile readability floor, contrast for thumb-stop, file format, file-size cap, color mode, and platform-specific anti-patterns. It is the **deep instrument**; `references/asset-types.md` is the **quick fallback table**.
 >
 > **Consistency rule (anti-drift):** dimension / aspect / safe-zone values here MUST match `references/asset-types.md` for the same surface. `platform-modules.md` *extends* asset-types with the depth fields asset-types lacks (mobile readability floor in px, thumb-stop WCAG ratio, color mode, paid safe-zone, per-platform anti-patterns). If you change a dimension in one file, change it in both in the same commit.
 >
@@ -179,7 +179,7 @@ Cover title ≥ 72px (it must read as a thumbnail in the grid AND full-screen); 
 ≥ 7:1 — the cover competes in the reels feed and the profile grid simultaneously.
 
 ### File format & size
-PNG/JPG, sRGB, ≤ 1MB. (The cover is a still; the reel video itself is out of scope for brief-creative — route to a video brief.)
+PNG/JPG, sRGB, ≤ 1MB. (The cover is a still; the reel video itself is out of scope for `creative` — route to a video brief.)
 
 ### Color mode
 sRGB.

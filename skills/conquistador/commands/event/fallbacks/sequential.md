@@ -4,7 +4,7 @@ Use when the host cannot run segment-planner, logistics-director, and critic as 
 
 Keep the same method. Change only the machinery.
 
-1. Establish the event contract from `SKILL.md`: type, date/time zone, duration, attendee outcome,
+1. Establish the event contract from `COMMAND.md`: type, date/time zone, duration, attendee outcome,
    qualified next action, format, audience, cast, venue/platform, recording/consent, decision owner.
 2. Plan timed segments with `agents/segment-planner-agent.md` (budget backwards from the ask; protect
    the payoff; park 5–10% buffer).

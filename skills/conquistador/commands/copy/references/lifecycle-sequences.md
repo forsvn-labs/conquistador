@@ -2,7 +2,7 @@
 
 Copy patterns for post-action lifecycle sequences — abandoned cart, post-purchase, win-back, and re-engagement. Each sequence is a coordinated set of messages, not a single piece of copy. The composition rule is **one psychological job per message**; stacking jobs in a single touch dilutes every one of them.
 
-This file covers the *copy* layer. Timing windows, segmentation, and channel mix (email vs SMS vs in-app) are handled by `plan-campaign` and the operator's lifecycle tool. Where a sequence ties into a landing page, use the private `create-landing-page` workflow after this copy layer.
+This file covers the *copy* layer. Timing windows, segmentation, and channel mix (email vs SMS vs in-app) are handled by `campaign` and the operator's lifecycle tool. Where a sequence ties into a landing page, use the private `landing` workflow after this copy layer.
 
 ---
 
@@ -106,5 +106,5 @@ Again — one job per touch. Detailed copy patterns deferred to a future expansi
 
 - Review every lifecycle subject line and CTA against the supplied facts, offer terms, and actual destination. Use [copy review](copy-review.md).
 - CTA copy follows the formula in `agents/cta-agent.md` — "Return to checkout" and "Use my 10% off" both score, "Submit order" does not.
-- Timing windows and segmentation logic are NOT in this file; consult `plan-campaign` for the campaign-level lifecycle planning.
+- Timing windows and segmentation logic are NOT in this file; consult `campaign` for the campaign-level lifecycle planning.
 - For lead-magnet sequences (post-opt-in nurture, not post-purchase), see `lead-magnet-stack.md` § DM-Capture Mechanics for the 24h follow-up rule.

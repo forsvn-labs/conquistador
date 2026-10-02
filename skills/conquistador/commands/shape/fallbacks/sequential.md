@@ -6,7 +6,7 @@ separate contexts.
 Keep the same method. Change only the machinery. Label this **single-context shaping**, not
 independent corroboration.
 
-1. Frame the real decision from `SKILL.md`: requested solution, underlying decision, premise, evidence
+1. Frame the real decision from `COMMAND.md`: requested solution, underlying decision, premise, evidence
    vs inference vs assumption. Ask at most one bundled question when the answer would change the
    decision.
 2. Gather silent context with
@@ -25,10 +25,10 @@ independent corroboration.
    [`../references/interview-techniques.md`](../references/interview-techniques.md) and
    [`../references/communication-discipline.md`](../references/communication-discipline.md). Probe via
    [`../references/question-bank.md`](../references/question-bank.md). For expensive reversible forks,
-   hand off to `decision-panel` rather than fake multi-perspective debate in-process.
+   hand off to `decide` rather than fake multi-perspective debate in-process.
 7. Plan-review mode: lock verdict vocabulary with
    [`../references/plan-review-modes.md`](../references/plan-review-modes.md).
-8. Deliver the decision contract per `SKILL.md` and
+8. Deliver the decision contract per `COMMAND.md` and
    [`../references/output-formats.md`](../references/output-formats.md). Check
    [`../references/anti-patterns.md`](../references/anti-patterns.md) before ship. Method context:
    [`../references/initiative-shaping-method.md`](../references/initiative-shaping-method.md).

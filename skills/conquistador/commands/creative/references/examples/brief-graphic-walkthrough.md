@@ -39,7 +39,7 @@ Hard gate passes. Proceed to Warm Start.
 Hard gate passed: brand/BRAND.md + brand/DESIGN.md present.
 Found:
 - asset spec → "OG image for launch blog post" (matched campaign-plan Pillar 1)
-- copy → "Stop managing chaos, start leading progress." (from write-copy artifact)
+- copy → "Stop managing chaos, start leading progress." (from copy artifact)
 - ASSETS.md row → matched og-images/blog-async-launch.png
 
 Auto-detecting downstream route from asset type. Override or proceed?
@@ -270,7 +270,7 @@ If critic had returned FAIL (AI-aesthetic 17/27 — render leaned heavily into d
 2. prompt-craft returns revised prompt.
 3. Re-dispatch critic.
 4. Cycle 2 PASS (AI-aesthetic 5/27) → proceed to Approval Gate 2.
-5. If cycle 2 FAIL → deliver as DONE_WITH_CONCERNS with critic notes in artifact frontmatter; user can manually iterate or invoke `create-brand` to enrich DESIGN.md with explicit photography-style guidance.
+5. If cycle 2 FAIL → deliver as DONE_WITH_CONCERNS with critic notes in artifact frontmatter; user can manually iterate or invoke `brand` to enrich DESIGN.md with explicit photography-style guidance.
 
 ---
 

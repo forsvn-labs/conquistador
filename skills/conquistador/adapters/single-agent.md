@@ -14,7 +14,7 @@ host session. Off disables the admission function, not direct file access.
   body or fetch it. Use available parent methods for work they support and state any capability gap.
 - Load more outcomes or references only when needed for the requested result. A marketing request
   about an app does not authorize an engineering task.
-- Workflow Markdown, including `content-intelligence-loop`, is skill composition. Do not claim an
+- Workflow Markdown, including `content`, is skill composition. Do not claim an
   executable playbook ran without a real runner trace.
 - Follow the specialist team contract when more than one role is needed. If the host cannot create
   isolated contexts, run the assignments in sequence and do not claim independent review.

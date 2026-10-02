@@ -7,7 +7,7 @@ Keep the same method. Change only the machinery.
 
 1. Apply [critical gates](../references/critical-gates.md): one platform, one market, explicit
    founder/company brand mode, max one format-check revision at baseline.
-2. Load the matching pack from [platform-intelligence](../references/platform-intelligence/) plus
+2. Load the matching pack from [platform-intelligence](../../video/references/platform-intelligence/) plus
    [hook-archetypes](../references/hook-archetypes.md). Core surfaces are tiktok, reels, shorts, x,
    and linkedin. Product Hunt, Reddit, Show HN, Facebook, YouTube, newsletter, and the format packs
    (ugc, founder-demo, motion-background, launch variants) use the same sequence against their pack.
@@ -37,5 +37,5 @@ or polish it as ready; the post decision stays with a human.
 `--fast` sets the format-check loop to 0. `--deep` allows two format-check cycles. Neither skips
 Cold Start, critical gates, or the discrimination test.
 
-Polish (`editorial-polish` or `polish-vietnamese`) is terminal and only after pass or
+Polish (`editorial-polish` or `vietnamese`) is terminal and only after pass or
 done_with_concerns. Never polish a FORMAT_FAIL or critic fail.

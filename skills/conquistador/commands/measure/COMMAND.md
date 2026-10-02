@@ -1,9 +1,8 @@
 ---
-name: measure-growth
-description: "Design growth measurement or learn from marketing results. Use for analytics and tracking plans, KPI trees, campaign measurement, attribution boundaries, experiment readouts, performance reviews, launch retrospectives, cohort or funnel analysis, deciding what to keep or stop, or converting observed results into bounded reusable learning."
+name: measure
+description: "Plan measurement or read results into a keep, change, or stop decision."
 metadata:
   version: 2.1.0
-
 ---
 
 # Measure growth outcomes
@@ -20,15 +19,15 @@ Core:
 - [anti-patterns](references/anti-patterns.md): Campaign-Eval Anti-Patterns. Re-read before any cycle artifact ships. Each row names the pattern, why it…
 - [campaign-anti-patterns](references/campaign-anti-patterns.md): Campaign-Eval Anti-Patterns. Re-read before any cycle artifact ships. Each row names the pattern, why it…
 - [campaign-rubric](references/campaign-rubric.md): Campaign-Eval Rubric (v0.1). 7-dimension rubric for post-launch multi-channel campaign evaluation. Used by…
-- [evaluation-loop-rubric](references/evaluation-loop-rubric.md): Evaluation-Loop Rubric — shared frame for the evaluate-* eval-loop critics. Why this is shared: the three…
-- [measure-anti-patterns](references/measure-anti-patterns.md): Anti-Patterns — measure-growth. 8 patterns. The critic checks every one before the write-back commits.
-- [measure-rubric](references/measure-rubric.md): Rubric — measure-growth (5 dimensions, 0–10 each). Pass = total ≥35/50 AND no dimension scores 0. The…
+- [evaluation-loop-rubric](../../plays/report/references/evaluation-loop-rubric.md): Evaluation-Loop Rubric — shared frame for the evaluate-* eval-loop critics. Why this is shared: the three…
+- [measure-anti-patterns](references/measure-anti-patterns.md): Anti-Patterns — `measure`. 8 patterns. The critic checks every one before the write-back commits.
+- [measure-rubric](references/measure-rubric.md): Rubric — `measure` (5 dimensions, 0–10 each). Pass = total ≥35/50 AND no dimension scores 0. The…
 - [measurement-design-contract](references/measurement-design-contract.md): Measurement design contract. Use before observations exist. This is a planned decision system, not a…
 - [performance-data](references/performance-data.md): Performance Data — Store, Ledger, and Read Contract. The optional, local-first per-channel performance…
 
 By step: [anti-sycophancy](references/anti-sycophancy.md), [rubric](references/rubric.md).
 
-Platform packs (read the one for each platform in the task): [CONTRACT](references/platform-intelligence/CONTRACT.md), [facebook](references/platform-intelligence/facebook.md), [founder-demo](references/platform-intelligence/founder-demo.md), [linkedin-launch](references/platform-intelligence/linkedin-launch.md), [linkedin](references/platform-intelligence/linkedin.md), [motion-background](references/platform-intelligence/motion-background.md), [newsletter](references/platform-intelligence/newsletter.md), [producthunt](references/platform-intelligence/producthunt.md), [reddit](references/platform-intelligence/reddit.md), [reels](references/platform-intelligence/reels.md), [shorts](references/platform-intelligence/shorts.md), [showhn](references/platform-intelligence/showhn.md), [tiktok](references/platform-intelligence/tiktok.md), [ugc](references/platform-intelligence/ugc.md), [x-launch](references/platform-intelligence/x-launch.md), [x](references/platform-intelligence/x.md), [youtube](references/platform-intelligence/youtube.md).
+Platform packs (read the one for each platform in the task): [CONTRACT](../video/references/platform-intelligence/CONTRACT.md), [facebook](../results/references/modes/video/references/platform-intelligence/facebook.md), [founder-demo](../results/references/modes/video/references/platform-intelligence/founder-demo.md), [linkedin-launch](../results/references/modes/video/references/platform-intelligence/linkedin-launch.md), [linkedin](../results/references/modes/video/references/platform-intelligence/linkedin.md), [motion-background](../results/references/modes/video/references/platform-intelligence/motion-background.md), [newsletter](../results/references/modes/video/references/platform-intelligence/newsletter.md), [producthunt](../results/references/modes/video/references/platform-intelligence/producthunt.md), [reddit](../results/references/modes/video/references/platform-intelligence/reddit.md), [reels](../results/references/modes/video/references/platform-intelligence/reels.md), [shorts](../results/references/modes/video/references/platform-intelligence/shorts.md), [showhn](../results/references/modes/video/references/platform-intelligence/showhn.md), [tiktok](../results/references/modes/video/references/platform-intelligence/tiktok.md), [ugc](../results/references/modes/video/references/platform-intelligence/ugc.md), [x-launch](../results/references/modes/video/references/platform-intelligence/x-launch.md), [x](../results/references/modes/video/references/platform-intelligence/x.md), [youtube](../results/references/modes/video/references/platform-intelligence/youtube.md).
 
 Specialist roles: [campaign-critic-agent](agents/campaign-critic-agent.md), [campaign-diagnosis-agent](agents/campaign-diagnosis-agent.md), [campaign-metric-ingest-agent](agents/campaign-metric-ingest-agent.md), [campaign-recommendation-agent](agents/campaign-recommendation-agent.md), [measure-critic-agent](agents/measure-critic-agent.md), [measure-diagnosis-agent](agents/measure-diagnosis-agent.md), [measure-metric-ingest-agent](agents/measure-metric-ingest-agent.md), [pack-feedback-agent](agents/pack-feedback-agent.md).
 
@@ -125,7 +124,7 @@ campaign evaluation as distinct lenses.
   [recommendation](agents/campaign-recommendation-agent.md),
   [campaign critic](agents/campaign-critic-agent.md);
 - [campaign rubric](references/campaign-rubric.md) and
-  [evaluation-loop frame](references/evaluation-loop-rubric.md) (7 dimensions, pass ≥49/70, no
+  [evaluation-loop frame](../../plays/report/references/evaluation-loop-rubric.md) (7 dimensions, pass ≥49/70, no
   dimension below 6);
 - worked examples: [measure walkthrough](references/examples/measure-walkthrough.md) for the channel
   lens and [campaign evaluation walkthrough](references/examples/campaign-eval-cycle-walkthrough.md)

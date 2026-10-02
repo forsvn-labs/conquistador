@@ -85,7 +85,7 @@ Does the keep/discard/watch/blocked verdict follow Recommendation's Decision Rul
 
 | Band | Description |
 |------|-------------|
-| 9-10 | Verdict matches the visibility read + lag/volatility gate; routing is to the smallest correct next skill (optimize-seo on-page target vs write-copy depth vs monitor-aeo) at the right granularity; decision sentence is one sentence with the cluster + surface + window |
+| 9-10 | Verdict matches the visibility read + lag/volatility gate; routing is to the smallest correct next skill (optimize-seo on-page target vs `copy` depth vs monitor-aeo) at the right granularity; decision sentence is one sentence with the cluster + surface + window |
 | 7-8 | Verdict matches; routing correct but slightly over-broad |
 | 5-6 | Verdict matches but decision sentence multi-sentence or omits cluster/surface; routing right domain, wrong specificity |
 | 3-4 | Verdict drifts from the read (compelling ranking story → `keep` despite a sub-lag-floor window) OR routing to a non-existent / inappropriate skill |

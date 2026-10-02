@@ -2,7 +2,7 @@
 title: Improve-conversion Anti-Patterns
 lifecycle: canonical
 status: stable
-produced_by: improve-conversion
+produced_by: convert
 load_class: ANTI-PATTERN
 ---
 
@@ -14,11 +14,11 @@ load_class: ANTI-PATTERN
 
 ### 1. Generic heuristic audit dressed up as post-launch CRO
 
-**Pattern:** improve-conversion is invoked without measurement evidence. Output is a best-practice teardown of the launched page ("hero needs message-match, CTA is buried, no objection handling") presented as a cycle verdict.
+**Pattern:** `convert` is invoked without measurement evidence. Output is a best-practice teardown of the launched page ("hero needs message-match, CTA is buried, no objection handling") presented as a cycle verdict.
 
 **Why it fails:** Heuristic teardowns are construction-time priors, not post-launch posteriors. They can confidently recommend the wrong direction — the data might show the "conversion best practice" is actively hurting THIS audience. Generic heuristic audits as evidence is Hard Fail #4.
 
-**Instead:** Hard-block when measurement evidence is missing. Return BLOCKED (or NEEDS_CONTEXT if loop is missing entirely). Recommend gathering measurement evidence first. If a pure heuristic LP audit is genuinely needed, that's `lp-brief --rev=N+1` with current-page-state evidence — NOT improve-conversion.
+**Instead:** Hard-block when measurement evidence is missing. Return BLOCKED (or NEEDS_CONTEXT if loop is missing entirely). Recommend gathering measurement evidence first. If a pure heuristic LP audit is genuinely needed, that's `lp-brief --rev=N+1` with current-page-state evidence — NOT `convert`.
 
 **Owned by:** Critical Gate 2 (measurement evidence required) + Critic dimension "Metric Integrity" + Critic Hard Fail #4 (generic heuristic audit presented as evidence).
 
@@ -38,11 +38,11 @@ load_class: ANTI-PATTERN
 
 ### 3. Scoring without an existing eval-loop
 
-**Pattern:** User invokes improve-conversion on a slug that has no eval-loop `program.md` (checked at `.forsvn/artifacts/mkt/improve-conversion/program.md` when that store exists, against operator-supplied files otherwise). improve-conversion tries to score anyway.
+**Pattern:** User invokes `convert` on a slug that has no eval-loop `program.md` (checked at `.forsvn/artifacts/mkt/improve-conversion/program.md` when that store exists, against operator-supplied files otherwise). `convert` tries to score anyway.
 
-**Why it fails:** Without `program.md`, the primary metric is undefined. Without `context.md`, the baseline + measurement window assumptions are missing. Without `results.tsv`, the cycle number can't be resolved. improve-conversion that proceeds without the loop scaffolding produces a verdict that's structurally meaningless.
+**Why it fails:** Without `program.md`, the primary metric is undefined. Without `context.md`, the baseline + measurement window assumptions are missing. Without `results.tsv`, the cycle number can't be resolved. `convert` that proceeds without the loop scaffolding produces a verdict that's structurally meaningless.
 
-**Instead:** Critical Gate 1 fires BEFORE any other work — if `program.md` and `context.md` do not exist, return NEEDS_CONTEXT immediately and recommend `loop scaffolding outside this skill`. improve-conversion does NOT scaffold loops.
+**Instead:** Critical Gate 1 fires BEFORE any other work — if `program.md` and `context.md` do not exist, return NEEDS_CONTEXT immediately and recommend `loop scaffolding outside this skill`. `convert` does NOT scaffold loops.
 
 **Owned by:** Critical Gate 1 (existing eval loop required) + Critic Hard Fail #1 (no existing loop `program.md` — store path or operator-supplied equivalent).
 
@@ -62,11 +62,11 @@ load_class: ANTI-PATTERN
 
 ### 5. Scope drift — evaluation becomes redesign
 
-**Pattern:** improve-conversion recommends specific copy changes ("change hero headline to 'Pricing without the runaround'"), specific layout changes ("move social proof above the fold"), or specific asset replacements ("replace founder photo with team shot"). The eval artifact reads like a brief.
+**Pattern:** `convert` recommends specific copy changes ("change hero headline to 'Pricing without the runaround'"), specific layout changes ("move social proof above the fold"), or specific asset replacements ("replace founder photo with team shot"). The eval artifact reads like a brief.
 
-**Why it fails:** improve-conversion recommends; lp-brief redesigns. Confusing the two produces unmeasured changes that break the loop's measurement chain — the next cycle can't isolate which recommendation drove the delta because they were bundled into the eval rather than scoped through lp-brief's hypothesis gate. Boundary Control matters for compounding learning.
+**Why it fails:** `convert` recommends; lp-brief redesigns. Confusing the two produces unmeasured changes that break the loop's measurement chain — the next cycle can't isolate which recommendation drove the delta because they were bundled into the eval rather than scoped through lp-brief's hypothesis gate. Boundary Control matters for compounding learning.
 
-**Instead:** improve-conversion's "Next Cycle Recommendation" uses scoped lines (Keep: / Discard: / Watch: / Route next work to:). "Route next work to: lp-brief --rev=N+1 with hypothesis: ['headline message-match to direct-traffic source']" routes the work without doing the work. Critical Gate 6 (Evaluation does not redesign) + Critic dimension "Boundary Control" enforce.
+**Instead:** `convert`'s "Next Cycle Recommendation" uses scoped lines (Keep: / Discard: / Watch: / Route next work to:). "Route next work to: lp-brief --rev=N+1 with hypothesis: ['headline message-match to direct-traffic source']" routes the work without doing the work. Critical Gate 6 (Evaluation does not redesign) + Critic dimension "Boundary Control" enforce.
 
 **Owned by:** Critical Gate 6 (evaluation does not redesign) + Critic dimension "Boundary Control" + Responsibility Split (improve-conversion owns post-launch evidence; lp-brief owns new + redesign briefs).
 
@@ -136,11 +136,11 @@ load_class: ANTI-PATTERN
 
 ### 11. Upstream context skipped — no loop scaffolded
 
-**Pattern:** User invokes improve-conversion directly without running `loop scaffolding outside this skill` first. Loop directory doesn't exist or is empty.
+**Pattern:** User invokes `convert` directly without running `loop scaffolding outside this skill` first. Loop directory doesn't exist or is empty.
 
-**Why it fails:** Without `program.md` defining the primary metric + `context.md` defining baseline assumptions + `results.tsv` for cycle resolution, improve-conversion has no structural foundation. Critical Gate 1 catches this hard.
+**Why it fails:** Without `program.md` defining the primary metric + `context.md` defining baseline assumptions + `results.tsv` for cycle resolution, `convert` has no structural foundation. Critical Gate 1 catches this hard.
 
-**Instead:** improve-conversion returns NEEDS_CONTEXT immediately, recommends `loop scaffolding outside this skill`. The eval-loop skill owns loop scaffolding; improve-conversion owns post-launch evidence inside an existing loop.
+**Instead:** `convert` returns NEEDS_CONTEXT immediately, recommends `loop scaffolding outside this skill`. The eval-loop skill owns loop scaffolding; `convert` owns post-launch evidence inside an existing loop.
 
 **Owned by:** Orchestrator (Pre-Dispatch hard gate — fires BEFORE Cold Start questioning) + Critical Gate 1 + Critic Hard Fail #1 + Responsibility Split (`loop scaffolding outside this skill` owns loop setup).
 
@@ -148,13 +148,13 @@ load_class: ANTI-PATTERN
 
 ### 12. Cross-stack contract drift
 
-**Pattern:** eval-loop skill updates the `results.tsv` schema (e.g., adds a `confidence` column) without updating improve-conversion's the Markdown ledger row on the evaluation artifact invocation or `format-conventions.md` § "Results Row format". Two versions of "what a row contains" exist.
+**Pattern:** eval-loop skill updates the `results.tsv` schema (e.g., adds a `confidence` column) without updating `convert`'s the Markdown ledger row on the evaluation artifact invocation or `format-conventions.md` § "Results Row format". Two versions of "what a row contains" exist.
 
-**Why it fails:** Schema drift produces silent breakage — improve-conversion's helper invocation errors on the new column, OR appends rows without the new column (corrupting downstream consumers expecting it). Symptoms appear when a downstream dashboard skill or trend-analysis tool reads `results.tsv` and finds inconsistent row shapes.
+**Why it fails:** Schema drift produces silent breakage — `convert`'s helper invocation errors on the new column, OR appends rows without the new column (corrupting downstream consumers expecting it). Symptoms appear when a downstream dashboard skill or trend-analysis tool reads `results.tsv` and finds inconsistent row shapes.
 
-**Instead:** Schema changes require atomic update of `references/landing-format-conventions.md` + improve-conversion `format-conventions.md` + the Markdown ledger row on the evaluation artifact helper + every other consumer of `results.tsv`. Bump improve-conversion `version` when the schema changes (currently v0.1.0 — provisional-rubric signal, expected to bump after cycles of real use).
+**Instead:** Schema changes require atomic update of `references/landing-format-conventions.md` + `convert` `format-conventions.md` + the Markdown ledger row on the evaluation artifact helper + every other consumer of `results.tsv`. Bump `convert` `version` when the schema changes (currently v0.1.0 — provisional-rubric signal, expected to bump after cycles of real use).
 
-**Owned by:** Operator (during refactor + new-feature work) + eval-loop owner (canonical schema in `references/landing-format-conventions.md`) + improve-conversion landing-eval-method § "Cross-stack contract".
+**Owned by:** Operator (during refactor + new-feature work) + eval-loop owner (canonical schema in `references/landing-format-conventions.md`) + `convert` landing-eval-method § "Cross-stack contract".
 
 ---
 
@@ -162,23 +162,23 @@ load_class: ANTI-PATTERN
 
 **Pattern:** User invokes `editorial-polish` or `polish-vn` on the eval artifact ("make the diagnosis sound less robotic"). Polish chain runs on what is supposed to be a structured operational document.
 
-**Why it fails:** improve-conversion OUTPUT is an evidence snapshot + ledger row + learning promotion proposal — structured operational data consumed by downstream cycles. Running editorial-polish on it recursively redefines what "evaluation" means — verdicts become prose paragraphs, Evidence tables get prose-ified, etc. Downstream skills (future improve-conversion cycles, lp-brief --rev=N+1, dashboard tools) can no longer parse it.
+**Why it fails:** `convert` OUTPUT is an evidence snapshot + ledger row + learning promotion proposal — structured operational data consumed by downstream cycles. Running editorial-polish on it recursively redefines what "evaluation" means — verdicts become prose paragraphs, Evidence tables get prose-ified, etc. Downstream skills (future `convert` cycles, lp-brief --rev=N+1, dashboard tools) can no longer parse it.
 
 **Instead:** editorial-polish and vn-tone run on USER-FACING copy (blog posts, ad copy, cold-outreach emails). They do NOT run on operational artifacts like cycle evaluations. If the eval artifact reads "robotic," that's correct register — operational documents prioritize parseability over style.
 
-**Owned by:** Orchestrator (chain position note in playbook — improve-conversion is operational; editorial-polish/vn-tone are for user-facing copy) + chain-position discipline.
+**Owned by:** Orchestrator (chain position note in playbook — `convert` is operational; editorial-polish/vn-tone are for user-facing copy) + chain-position discipline.
 
 ---
 
 ### 14. Sibling-skill confusion with lp-brief
 
-**Pattern:** User wants to redesign a launched page → invokes improve-conversion expecting it to produce a brief. Or wants a post-launch evidence snapshot → invokes lp-brief expecting it to score analytics. Or assumes "they're both LP skills, one will figure out what I want."
+**Pattern:** User wants to redesign a launched page → invokes `convert` expecting it to produce a brief. Or wants a post-launch evidence snapshot → invokes lp-brief expecting it to score analytics. Or assumes "they're both LP skills, one will figure out what I want."
 
-**Why it fails:** improve-conversion (post-launch scoring inside an eval-loop) and lp-brief (construction-time architecture for new or redesigned pages) are sibling skills with non-overlapping scope. Conflating them produces wrong output for both intents — improve-conversion treating a brief request as a scoring failure (NEEDS_CONTEXT for missing metric); lp-brief treating an analytics request as a hypothesis generation prompt (asking 4 cold-start questions when the user wanted a verdict).
+**Why it fails:** `convert` (post-launch scoring inside an eval-loop) and lp-brief (construction-time architecture for new or redesigned pages) are sibling skills with non-overlapping scope. Conflating them produces wrong output for both intents — `convert` treating a brief request as a scoring failure (NEEDS_CONTEXT for missing metric); lp-brief treating an analytics request as a hypothesis generation prompt (asking 4 cold-start questions when the user wanted a verdict).
 
-**Instead:** Skill Deference in both skills routes correctly. improve-conversion defers to lp-brief when the user wants a new brief/redesign. lp-brief defers to improve-conversion when the user wants post-launch CRO from real evidence inside an eval-loop. Both skills' descriptions explicitly carve out the other's scope ("Not for post-launch CRO" / "Not for the next page brief/redesign").
+**Instead:** Skill Deference in both skills routes correctly. `convert` defers to lp-brief when the user wants a new brief/redesign. lp-brief defers to `convert` when the user wants post-launch CRO from real evidence inside an eval-loop. Both skills' descriptions explicitly carve out the other's scope ("Not for post-launch CRO" / "Not for the next page brief/redesign").
 
-**Owned by:** improve-conversion Skill Deference block (defers to lp-brief / eval-loop / campaign-plan) + lp-brief Skill Deference block (defers to improve-conversion / design-brief / brand-system / copywriting) + orchestrate-marketing routing rules.
+**Owned by:** `convert` Skill Deference block (defers to lp-brief / eval-loop / campaign-plan) + lp-brief Skill Deference block (defers to `convert` / design-brief / brand-system / copywriting) + orchestrate-marketing routing rules.
 
 ---
 

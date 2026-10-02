@@ -6,7 +6,7 @@ Canonical surface catalog for the platforms a brand can ship on. **Single source
 - `strategy-agent` — pulls the **Brand expression surfaces** table per declared platform into `BRAND.md → Digital Touchpoints → Platform-Specific Surfaces`
 - `visual-agent` — pulls the **Icon specifications** block per declared platform into `DESIGN.md → Platform Icon Specifications`
 
-## Declared-platform canonical list (matches SKILL.md Step 0)
+## Declared-platform canonical list (matches COMMAND.md Step 0)
 
 Web / PWA · iOS/iPadOS · Android · macOS · Windows · Linux desktop · watchOS · Wear OS · tvOS · CarPlay / Android Auto · Browser extension · CLI / terminal · Email (BIMI) · Embedded app (Slack / Notion / Discord / Microsoft Teams / Linear / GitHub)
 

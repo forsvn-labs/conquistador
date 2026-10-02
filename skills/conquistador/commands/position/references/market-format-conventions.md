@@ -40,7 +40,7 @@ On re-run: overwrite `MARKET.md` in place and increment the integer `version:` (
 
 ```markdown
 ---
-skill: research-positioning
+skill: position
 version: 1
 date: {{today}}
 status: done | done_with_concerns | blocked | needs_context
@@ -129,7 +129,7 @@ keywords: [market-research, competitive-landscape, market-sizing, tam-sam-som, w
 
 ## Next Step
 
-Run `prioritize-opportunities` to turn top opportunities into prioritized initiatives, or `research-positioning` to build personas for identified underserved segments.
+Run `prioritize` to turn top opportunities into prioritized initiatives, or `position` to build personas for identified underserved segments.
 ```
 
 ---
@@ -193,7 +193,7 @@ In order. Renaming or reordering breaks 4+ downstream consumers.
 
 The `version: 1` field in the frontmatter is the **artifact version**, not the skill version. Increment on re-run; overwrite `MARKET.md` in place (prior versions live in git history; never create a `.v[N].md` sibling under `canonical/`). The Note at the top of the Artifact Template documents this.
 
-The `skill: research-positioning` frontmatter field is fixed (matches the skill slug per `SKILL.md`).
+The `skill: research-positioning` frontmatter field is fixed (matches the skill slug per `COMMAND.md`).
 
 ---
 

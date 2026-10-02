@@ -90,7 +90,7 @@ The "what would change my mind" half is non-negotiable — it's how the user kno
 
 ## How skills cite this ref
 
-**In SKILL.md body** (for any skill with a critic, debate, or interrogation step):
+**In COMMAND.md body** (for any skill with a critic, debate, or interrogation step):
 
 ```
 [See `references/anti-sycophancy.md` for the stance contract every agent in this skill follows.]

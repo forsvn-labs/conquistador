@@ -8,7 +8,7 @@
 
 > **"What's the highest-impact thing we can do about this?"**
 
-Prioritize is Strategy Step 2 of 4. It sits between `diagnose-growth` (the validated root cause) and `model-growth-funnel` (the numeric targets). Its single job: generate initiatives anchored to the root cause, rank them with evidence-backed ICE scoring, and draw a defensible cut line so the team can ship ≤3 things instead of debating 10.
+Prioritize is Strategy Step 2 of 4. It sits between `diagnose` (the validated root cause) and `funnel` (the numeric targets). Its single job: generate initiatives anchored to the root cause, rank them with evidence-backed ICE scoring, and draw a defensible cut line so the team can ship ≤3 things instead of debating 10.
 
 ---
 
@@ -39,12 +39,12 @@ Scores without one-sentence evidence in the **Key Evidence** column are politica
 
 ## When NOT to use this skill
 
-- **No validated root cause.** Run `diagnose-growth` first. Hard gate enforced — skill returns NEEDS_CONTEXT. Initiative ranking against an unvalidated hypothesis is theatre.
+- **No validated root cause.** Run `diagnose` first. Hard gate enforced — skill returns NEEDS_CONTEXT. Initiative ranking against an unvalidated hypothesis is theatre.
 - **HOW to build, not WHAT to pursue.** That's `discover`. Prioritize chooses *which* initiative; discover scopes *how* to deliver it.
-- **Technical architecture for a chosen initiative.** That's `architect-software-system` (product-skills). Prioritize doesn't design the build.
-- **Numeric target-setting on prioritized initiatives.** That's `model-growth-funnel`. Prioritize is upstream — it produces the ranked list that funnel-planner sets targets against.
+- **Technical architecture for a chosen initiative.** That's `architect` (product-skills). Prioritize doesn't design the build.
+- **Numeric target-setting on prioritized initiatives.** That's `funnel`. Prioritize is upstream — it produces the ranked list that funnel-planner sets targets against.
 - **"Help me decide between two options."** Use inline judgment + the ICE rubric. Don't dispatch the full orchestration for a 2-option decision.
-- **Backlog grooming.** Backlog management is `shape-initiative` territory. Prioritize is for strategy-level option selection, not engineering ticket triage.
+- **Backlog grooming.** Backlog management is `shape` territory. Prioritize is for strategy-level option selection, not engineering ticket triage.
 
 ---
 
@@ -114,11 +114,11 @@ This prevents future sessions from re-debating settled decisions. `discover` and
 
 | Situation | Defer to |
 |---|---|
-| diagnose-growth-*.md missing | `diagnose-growth` (hard gate) |
+| diagnose-growth-*.md missing | `diagnose` (hard gate) |
 | User wants HOW to build a chosen initiative | `discover` |
-| User wants technical architecture for a Proceed initiative | `architect-software-system` (product-skills) |
-| User wants numeric targets on Proceed initiatives | `model-growth-funnel` (Next Step in artifact) |
-| User wants execution task list | `shape-initiative` |
+| User wants technical architecture for a Proceed initiative | `architect` (product-skills) |
+| User wants numeric targets on Proceed initiatives | `funnel` (Next Step in artifact) |
+| User wants execution task list | `shape` |
 
 ---
 

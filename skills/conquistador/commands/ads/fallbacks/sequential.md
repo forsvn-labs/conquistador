@@ -25,7 +25,7 @@ independent review contexts. A fast request can shorten commentary, not omit gat
    boundary. Launching, spending, audience uploads, and account changes each require
    explicit authority for the exact action.
 
-If called by plan-campaign, retain its offer, eligibility, budget authority, and
+If called by `campaign`, retain its offer, eligibility, budget authority, and
 campaign ID as inputs. Return scoped artifacts and test limits to the caller.
-Actual post-launch performance belongs to evaluate-paid-campaign. Planned figures
+Actual post-launch performance belongs to `results`. Planned figures
 must not enter that handoff as observed results.

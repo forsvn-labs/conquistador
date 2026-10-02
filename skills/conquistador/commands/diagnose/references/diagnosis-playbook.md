@@ -21,4 +21,4 @@ Carry a material unresolved alternative into the next-step recommendation. Decid
 
 Return the evidence boundary, comparison, diagnostic map, hypotheses, verdict table, external factors and one discriminating next check. Use existing context instead of repeating a cold-start interview. The sequential fallback uses the same evidence requirements when separate agents are unavailable.
 
-An internal review pass certifies that the stated checks were met. It does not grant permission for tracking changes, experiments, spending or contact. No live action follows automatically from the diagnosis. Preserve uncertainty when routing to `prioritize-opportunities` or requesting new data.
+An internal review pass certifies that the stated checks were met. It does not grant permission for tracking changes, experiments, spending or contact. No live action follows automatically from the diagnosis. Preserve uncertainty when routing to `prioritize` or requesting new data.

@@ -14,7 +14,7 @@ when that store is unavailable.
 Use the existing frontmatter keys:
 
 ```yaml
-skill: create-paid-campaign
+skill: ads
 version: 1
 date: YYYY-MM-DD
 status: done_with_concerns

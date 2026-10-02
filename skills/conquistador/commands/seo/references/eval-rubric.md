@@ -85,7 +85,7 @@ Does the keep/discard/watch/blocked verdict follow Recommendation's Decision Rul
 
 | Band | Description |
 |------|-------------|
-| 9-10 | Verdict matches the visibility read + lag/volatility gate; routing is to the smallest correct next skill (optimize-search on-page target vs write-copy depth vs optimize-search) at the right granularity; decision sentence is one sentence with the cluster + surface + window |
+| 9-10 | Verdict matches the visibility read + lag/volatility gate; routing is to the smallest correct next skill (optimize-search on-page target vs `copy` depth vs `seo`) at the right granularity; decision sentence is one sentence with the cluster + surface + window |
 | 7-8 | Verdict matches; routing correct but slightly over-broad |
 | 5-6 | Verdict matches but decision sentence multi-sentence or omits cluster/surface; routing right domain, wrong specificity |
 | 3-4 | Verdict drifts from the read (compelling ranking story → `keep` despite a sub-lag-floor window) OR routing to a non-existent / inappropriate skill |
@@ -160,7 +160,7 @@ A dim score is only valid if the evaluator can name **what evidence would have m
 - Loop Fit 8 → 9: surface latest learnings.md in the read-order log.
 - Metric Integrity 7 → 9: add the meaningful-vs-vanity visibility breakdown + the lag-floor check.
 - Attribution Honesty 6 → 8: flag the core-update overlap explicitly with dates.
-- Decision Discipline 6 → 8: tighten routing from "redo the SEO" to "optimize-search: add FAQ schema to the cluster page".
+- Decision Discipline 6 → 8: tighten routing from "redo the SEO" to "`seo`: add FAQ schema to the cluster page".
 - Visibility-Signal 7 → 9: compute the position/click read and rest the verdict on it, not impressions.
 - Lag & Volatility 6 → 8: state the window vs the 28-day floor and cap a sub-floor move at watch.
 - Ledger Correctness 8 → 10: include the cluster + surface + window verbatim in the description.
@@ -175,7 +175,7 @@ For each per-dim score in the Critic Verdict, include 1 sentence of rationale ti
 - loop_fit: 9 — program.md + context.md + results.tsv read; cycle scoped to "ai coding agent" cluster / organic-serp
 - metric_integrity: 8 — avg position + baseline + 30-day window (≥28 floor); meaningful-vs-vanity breakdown present
 - attribution_honesty: 8 — March core update flagged as overlapping; cannibalization checked; GSC lag noted
-- decision_discipline: 9 — verdict matches visibility read + lag gate; routing to optimize-search internal-links is narrow
+- decision_discipline: 9 — verdict matches visibility read + lag gate; routing to seo internal-links is narrow
 - visibility_signal_discrimination: 9 — position +4 with clicks +22%; impression spike named as vanity, excluded
 - lag_and_volatility_discipline: 8 — 30-day window meets floor; core-update overlap acknowledged, move predates it
 - ledger_correctness: 10 — one row; description includes "ai-coding-agent / organic-serp / 30d"; 8 columns clean

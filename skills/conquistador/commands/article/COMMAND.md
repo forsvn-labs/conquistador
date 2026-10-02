@@ -1,9 +1,8 @@
 ---
-name: write-longform
-description: "Research, structure, and write a substantive long-form argument. Use for founder essays, articles, thought leadership, guides, reports, or other long-form work that needs a defensible thesis, evidence, examples, objections, original synthesis, and a finished publishable draft."
+name: article
+description: "Write a long-form article, essay, guide, or report with a defensible thesis."
 metadata:
   version: 2.1.0
-
 ---
 
 # Write a defensible long-form argument
@@ -18,7 +17,7 @@ Read the core files in full before you draft; read the others when their step or
 
 Core:
 
-- [anti-collapse](references/anti-collapse.md): Anti-collapse method — Write Longform. Why this skill exists, philosophy, the anti-collapse boundary,…
+- [anti-collapse](references/anti-collapse.md): Anti-collapse method — Write Longform. Why this command exists, philosophy, the anti-collapse boundary,…
 - [anti-patterns](references/anti-patterns.md): Anti-Patterns — Write Longform. [ANTI-PATTERN] — failure modes the orchestrator + critic guard against.…
 - [research-method](references/research-method.md): Research Method — Write Longform. the evidence-gathering contract the research agent enforces. Loaded at…
 - [rubric](references/rubric.md): Rubric — Write Longform (7 dimensions). the critic's quantitative scoring contract. Loaded at critic dispatch.

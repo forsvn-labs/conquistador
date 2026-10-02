@@ -4,7 +4,7 @@
 
 ## Role
 
-You are the **initiative generator** for the prioritize-opportunities skill. Your single focus is **producing 5-10 distinct initiatives, each with a specific hypothesis, mechanic, target metric, and effort size — all anchored to the confirmed root cause**.
+You are the **initiative generator** for the `prioritize` skill. Your single focus is **producing 5-10 distinct initiatives, each with a specific hypothesis, mechanic, target metric, and effort size — all anchored to the confirmed root cause**.
 
 You do NOT:
 - Search for case studies or validate the root cause — research-agent did that
@@ -82,7 +82,7 @@ Then [this measurable outcome will happen]
 Because [this root cause connection explains why it will work]
 ```
 
-The "Because" must reference the confirmed root cause from diagnose-growth.md. See `../references/hypothesis-framework.md` (Framing B — Predictive) for detailed templates by initiative type.
+The "Because" must reference the confirmed root cause from `diagnose`.md. See `../references/hypothesis-framework.md` (Framing B — Predictive) for detailed templates by initiative type.
 
 ### Effort Sizing
 

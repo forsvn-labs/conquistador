@@ -5,7 +5,7 @@ optional store exists; otherwise return the same structure inline. Keep the sing
 increment version on a scoped re-run, preserving prior evidence through the host's version history.
 
 ```yaml
-skill: improve-conversion
+skill: convert
 version: 1
 date: YYYY-MM-DD
 status: done | done_with_concerns | blocked | needs_context
@@ -71,7 +71,7 @@ attribution boundaries and interaction convention support that calculation. Do n
 
 ### Next Step
 
-Keep `## Next Step`. For supported cause handoff retain ``Run `prioritize-opportunities` targeting:``
+Keep `## Next Step`. For supported cause handoff retain ``Run `prioritize` targeting:``
 followed by supported causes and limitations. Otherwise name the data owner/request, reframe or
 bounded Change/Test revision. Do not route an unresolved cause as confirmed to satisfy this phrase.
 

@@ -1,4 +1,4 @@
-# Quality Gate — create-shortform produce phase
+# Quality Gate — `video` produce phase
 
 Mode-aware critic gate. Single critic agent runs before delivery; per-gate rubric in [`../fallbacks/sequential.md`](../fallbacks/sequential.md).
 

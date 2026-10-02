@@ -7,8 +7,8 @@ Keep the same method. Change only the machinery.
 
 ## Audit (detect only)
 
-1. Freeze scope from `SKILL.md`: exact artifacts, audience, channel, claims, missing context.
-2. Detect findings with the seven dimensions in `SKILL.md`, judged **in context** (no word or
+1. Freeze scope from `COMMAND.md`: exact artifacts, audience, channel, claims, missing context.
+2. Detect findings with the seven dimensions in `COMMAND.md`, judged **in context** (no word or
    cadence is defective merely because an AI system often uses it). If the host happens to ship a
    deterministic scanner, its output is a *candidate-findings aid only* — every scanner finding
    still passes Layer-1 contextual review in `references/noise-filter.md` before it reaches the
@@ -26,8 +26,8 @@ Only when the operator asks for proposed fixes:
 
 1. Run the audit sequence above.
 2. Route Accepted findings with `references/fix-routing.md`. Route to whatever fixer the operator
-   actually has: Vietnamese register → the public `polish-vietnamese`; claim/proof/hook/CTA →
-   `write-copy`; anything else → the operator's named tool, or no fixer at all. When no qualified
+   actually has: Vietnamese register → the public `vietnamese`; claim/proof/hook/CTA →
+   `copy`; anything else → the operator's named tool, or no fixer at all. When no qualified
    fixer exists, findings stay Deferred with proposed corrections — they are not forced through an
    unqualified pass.
 3. Apply fixes per `references/polish-flow.md`. Land `decision_state: pending` — never `approved`.

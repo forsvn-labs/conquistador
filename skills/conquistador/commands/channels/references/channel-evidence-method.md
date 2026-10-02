@@ -2,7 +2,7 @@
 title: Channel Evidence Method
 lifecycle: canonical
 status: stable
-produced_by: research-channel
+produced_by: channels
 load_class: PLAYBOOK
 ---
 
@@ -12,7 +12,7 @@ load_class: PLAYBOOK
 
 Social, SEO, short-form, and evaluation skills make recommendations about platforms — what to post, when, in what format, how to read a result. Too often those recommendations rest on intuition, last quarter's gut feel, or a benchmark borrowed from the wrong cohort. The operator's own accounts are usually instrumented — X Analytics, YouTube Studio, LinkedIn page analytics, TikTok and Instagram insights all produce real numbers — but that evidence sits in screenshots and exports nobody folds back into the work.
 
-`research-channel` is the skill that folds it back in. It takes the evidence the operator actually has — owned analytics, public metrics, manual exports, qualitative observations, prior eval outcomes — and turns it into a sourced, tagged, per-platform evidence base. Every metric carries where it came from and when it was measured. Every recommendation names the platform, the evidence source, the freshness window, and the confidence behind it. The artifact replaces "I think our LinkedIn does better on Tuesdays" with "engagement_rate by weekday, owned_analytics, measured 2026-05-10, confidence H."
+`channels` is the skill that folds it back in. It takes the evidence the operator actually has — owned analytics, public metrics, manual exports, qualitative observations, prior eval outcomes — and turns it into a sourced, tagged, per-platform evidence base. Every metric carries where it came from and when it was measured. Every recommendation names the platform, the evidence source, the freshness window, and the confidence behind it. The artifact replaces "I think our LinkedIn does better on Tuesdays" with "engagement_rate by weekday, owned_analytics, measured 2026-05-10, confidence H."
 
 The output is not a survey of the platform. It is a **measured base for decisions** — the thing a downstream skill reads so its recommendation is grounded in what happened on the operator's accounts, not in what tends to happen on accounts in general.
 
@@ -51,21 +51,21 @@ This posture is deliberate. A credential-holding integration is a larger, fragil
 
 ## When NOT to use this skill
 
-- **Discovering what's working in the wild** — viral hook archetypes, trending formats, what other creators do. Use `research-content-ideas`; it looks outward at public performers. `research-channel` looks at the operator's *own* measured performance. The two are complements: `research-content-ideas` can consume this artifact to ground its discovery against the operator's real numbers.
-- **Competitive or market analysis** — competitor positioning, TAM/SAM/SOM, whitespace. Use `research-positioning`.
-- **Audience research** — who the customer is, what they feel. Use `research-positioning`.
-- **Scoring a specific published post or campaign against its brief** — use `measure-growth` or `evaluate-shortform`. Their cycle outputs can feed *into* this skill as a `prior_eval` evidence source, but the scoring itself is theirs.
+- **Discovering what's working in the wild** — viral hook archetypes, trending formats, what other creators do. Use `ideas`; it looks outward at public performers. `channels` looks at the operator's *own* measured performance. The two are complements: `ideas` can consume this artifact to ground its discovery against the operator's real numbers.
+- **Competitive or market analysis** — competitor positioning, TAM/SAM/SOM, whitespace. Use `position`.
+- **Audience research** — who the customer is, what they feel. Use `position`.
+- **Scoring a specific published post or campaign against its brief** — use `measure` or `results`. Their cycle outputs can feed *into* this skill as a `prior_eval` evidence source, but the scoring itself is theirs.
 - **When the operator has, and can supply, no evidence at all, for any platform** — the skill will return `NEEDS_CONTEXT` and tell the operator what to export. That is the correct outcome, but it means a run now is premature.
 
-## Distinction from research-content-ideas — at a glance
+## Distinction from `ideas` — at a glance
 
-| | `research-content-ideas` | `research-channel` |
+| | `ideas` | `channels` |
 |---|---|---|
 | Looks at | Public performers, in the wild | The operator's own accounts |
 | Evidence | Observable public videos + platform docs | Owned analytics, exports, public metrics, prior evals |
 | Answers | "What hook/format is working right now?" | "What does our measured performance say?" |
 | Output | Catalog of bets to brief from | Evidence base to ground decisions in |
-| Relationship | Can consume `platform-evidence` to ground discovery | Lists `research-content-ideas` as a consumer |
+| Relationship | Can consume `platform-evidence` to ground discovery | Lists `ideas` as a consumer |
 
 ## History / origin
 

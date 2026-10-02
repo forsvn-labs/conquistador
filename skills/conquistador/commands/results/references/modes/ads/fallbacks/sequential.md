@@ -22,5 +22,5 @@ parallel or independent review. A supplied evidence packet works without a loop.
 Record generation provenance with actual input_artifacts and output_eval. Do not
 list nonexistent files as inputs. A critic override requires a visible operator
 note; it cannot cure missing data or grant spend authority. Route new creative to
-create-paid-campaign with the exact hypothesis and controls. Do not launch,
+`ads` with the exact hypothesis and controls. Do not launch,
 publish, alter budgets, or modify accounts as part of evaluation.

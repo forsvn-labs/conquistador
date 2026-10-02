@@ -83,7 +83,7 @@ Does the keep/discard/watch/blocked verdict follow Recommendation's Decision Rul
 
 | Band | Description |
 |------|-------------|
-| 9-10 | Verdict matches the reply-quality read + deliverability/compliance gate; routing is to the smallest correct next skill (write-outreach subject-only vs research-positioning list fix) at the right granularity; decision sentence is one sentence with the channel + segment |
+| 9-10 | Verdict matches the reply-quality read + deliverability/compliance gate; routing is to the smallest correct next skill (write-outreach subject-only vs `position` list fix) at the right granularity; decision sentence is one sentence with the channel + segment |
 | 7-8 | Verdict matches; routing correct but slightly over-broad |
 | 5-6 | Verdict matches but decision sentence multi-sentence or omits channel+segment; routing right domain, wrong specificity |
 | 3-4 | Verdict drifts from the read (compelling reply quotes → `keep` despite a deliverability red flag) OR routing to a non-existent / inappropriate skill |
@@ -160,7 +160,7 @@ A dim score is only valid if the evaluator can name **what evidence would have m
 - Loop Fit 8 → 9: surface latest learnings.md in the read-order log.
 - Metric Integrity 7 → 9: add the categorized reply breakdown.
 - Attribution Honesty 6 → 8: flag the sender-warmup confounder explicitly.
-- Decision Discipline 6 → 8: tighten routing from "rewrite the sequence" to "write-outreach subject-only revision".
+- Decision Discipline 6 → 8: tighten routing from "rewrite the sequence" to "`outreach` subject-only revision".
 - Reply-Quality 7 → 9: compute the meaningful-vs-vanity read and rest the verdict on meetings booked.
 - Deliverability & Compliance 6 → 8: state the bounce rate against a safe threshold and confirm opt-out was honored.
 - Ledger Correctness 8 → 10: include the channel + segment tag verbatim in the description.
@@ -175,7 +175,7 @@ For each per-dim score in the Critic Verdict, include 1 sentence of rationale ti
 - loop_fit: 9 — program.md + context.md + results.tsv read; cycle scoped to email / founders-segment
 - metric_integrity: 8 — positive-reply rate + baseline + window + 1,200 sends; reply breakdown present
 - attribution_honesty: 8 — sends stated; list-freshness confounder named; warmup not surfaced
-- decision_discipline: 9 — verdict matches reply-quality + deliverability gate; routing to write-outreach opener-only revision is narrow
+- decision_discipline: 9 — verdict matches reply-quality + deliverability gate; routing to outreach opener-only revision is narrow
 - reply_quality_discrimination: 9 — meaningful-vs-vanity read computed; keep rests on 11 booked meetings, not opens
 - deliverability_and_compliance: 8 — bounce 1.8% under threshold; opt-out honored; reputation healthy
 - ledger_correctness: 10 — one row; description includes "email / founders"; 8 columns clean

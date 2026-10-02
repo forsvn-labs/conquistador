@@ -2,7 +2,7 @@
 title: Willingness-to-Pay Evidence
 lifecycle: canonical
 status: stable
-produced_by: design-pricing-and-packaging
+produced_by: pricing
 load_class: METHOD
 ---
 

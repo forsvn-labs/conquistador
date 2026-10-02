@@ -1,13 +1,24 @@
-# Earned-media-outreach workflow
+---
+command: press
+label: Earn press and media coverage
+intents: ["press","press coverage","pr campaign","pitch journalists","podcast outreach","earned media","media pitch","pitch reporters"]
+chain:
+  - { command: channels, for: "outlets and people who reach the audience" }
+  - { command: position, for: "the newsworthy story" }
+  - { command: outreach, for: "signal-led pitches" }
+  - { command: results, mode: outreach, when: "real placement or response evidence exists" }
+legacy: earned-media-outreach
+---
+# Earn press and media coverage
 
-Use privately for press, podcast, newsletter, analyst, creator, or other earned-media opportunities.
+Use for press, podcast, newsletter, analyst, creator, or other earned-media opportunities.
 
-1. Use `research-channel` to identify the communities, outlets, and people who actually reach the
+1. Use `channels` to identify the communities, outlets, and people who actually reach the
    intended audience.
-2. Use `research-positioning` for the newsworthy story, audience, proof, angle, and alternative
+2. Use `position` for the newsworthy story, audience, proof, angle, and alternative
    boundary.
-3. Use `write-outreach` for concise signal-led pitches and reply handling.
-4. Use `evaluate-outreach` or `measure-growth` only after real placement or response evidence exists.
+3. Use `outreach` for concise signal-led pitches and reply handling.
+4. Use `results` or `measure` only after real placement or response evidence exists.
 
 Require an observed relevance signal—something the person or outlet has actually covered—before
 pitching. Do not invent coverage, fabricate quotes, mass-personalize a list, or offer undisclosed

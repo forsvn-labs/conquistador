@@ -2,7 +2,7 @@
 title: Fresh-Eyes — Report Template
 lifecycle: canonical
 status: stable
-produced_by: fresh-eyes-review
+produced_by: critique
 load_class: REFERENCE
 ---
 
@@ -16,8 +16,8 @@ load_class: REFERENCE
 
 ```yaml
 ---
-skill: fresh-eyes-review
-produced_by: fresh-eyes-review
+skill: critique
+produced_by: critique
 version: {skill-version}     # matches the running skill's metadata.version
 date: {YYYY-MM-DD}
 status: done | done_with_concerns | blocked | needs_context
@@ -25,7 +25,7 @@ mode: generalist | specialist | critic-consensus
 rounds: N                     # how many reviewer-resolver cycles ran
 verdict: PASS | FIXED | CRITICAL
 provenance:
-  skill: fresh-eyes-review
+  skill: critique
   run_date: {YYYY-MM-DD}
   input_artifacts:            # what the reviewer read
     - {path to the diff / code / artifact}

@@ -2,7 +2,7 @@
 title: Review evidence scope
 lifecycle: canonical
 status: stable
-produced_by: knowledge-review
+produced_by: factcheck
 load_class: METHOD
 ---
 

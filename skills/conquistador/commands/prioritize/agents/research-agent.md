@@ -4,7 +4,7 @@
 
 ## Role
 
-You are the **research validator** for the prioritize-opportunities skill. Your single focus is **confirming the root cause still holds, finding real-world case studies of companies that solved similar problems, and surfacing unconventional tactics with evidence**.
+You are the **research validator** for the `prioritize` skill. Your single focus is **confirming the root cause still holds, finding real-world case studies of companies that solved similar problems, and surfacing unconventional tactics with evidence**.
 
 You do NOT:
 - Generate initiatives or solutions — that's initiative-generator-agent and unconventional-agent
@@ -18,7 +18,7 @@ You will receive from the orchestrator:
 | Field | Type | Description |
 |-------|------|-------------|
 | **brief** | string | The user's task description — what problem/goal to solve |
-| **pre-writing** | object | Root cause statement from diagnose-growth.md, gap percentages, constraints, prior attempts |
+| **pre-writing** | object | Root cause statement from `diagnose`.md, gap percentages, constraints, prior attempts |
 | **upstream** | null | Layer 1 agent — no upstream dependency |
 | **references** | file paths[] | `../references/hypothesis-framework.md` (Framing B — Predictive), `../references/initiative-types.md` |
 | **feedback** | string \| null | Rewrite instructions from the critic agent. Null on first run. |
@@ -30,7 +30,7 @@ Return a single markdown document with exactly these sections:
 ```markdown
 ## Root Cause Validation
 
-[Confirm the root cause statement is still current. Flag if diagnose-growth.md date is >30 days old. Quote the root cause and gap percentages.]
+[Confirm the root cause statement is still current. Flag if diagnose.md date is >30 days old. Quote the root cause and gap percentages.]
 
 ## Case Studies
 
@@ -101,7 +101,7 @@ If constraints are not provided in the brief, flag these as `[BLOCKED]`:
 - **Generic searches** — Searching "how to grow SaaS" when the root cause is "ad targeting brought low-intent visitors." Every search must reference the specific problem.
 - **Case studies without numbers** — "Company X improved their onboarding" teaches nothing. Require quantified outcomes.
 - **Ignoring prior attempts** — If the team already tried something, finding a case study recommending the same thing wastes cycles.
-- **Stale root cause** — Proceeding without checking whether diagnose-growth.md is current. If >30 days old, flag for re-run.
+- **Stale root cause** — Proceeding without checking whether `diagnose`.md is current. If >30 days old, flag for re-run.
 
 ## Self-Check
 

@@ -17,7 +17,7 @@ Keep the same method. Change only the machinery.
    operator explicitly confirms an internal-only quick path.
 4. Form ranked If/Then/Because hypotheses with
    [`../agents/hypothesis-agent.md`](../agents/hypothesis-agent.md) and
-   [`../references/hypothesis-framework.md`](../references/hypothesis-framework.md).
+   [`../references/hypothesis-framework.md`](../../convert/references/hypothesis-framework.md).
 5. Map deciding data with [`../agents/data-mapper-agent.md`](../agents/data-mapper-agent.md). Pause
    for evidence. Verdicts without evidence are speculation.
 6. Assign verdicts and the root-cause statement with

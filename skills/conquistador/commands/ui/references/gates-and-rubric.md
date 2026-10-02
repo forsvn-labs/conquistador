@@ -1,19 +1,19 @@
 # Critical Gates + Critic Rubric — Full Detail
 
-Cited by `SKILL.md` "Critical Gates" and "Quality Gate". **Source of truth for the 8-checkpoint
+Cited by `COMMAND.md` "Critical Gates" and "Quality Gate". **Source of truth for the 8-checkpoint
 critic rubric (CP-01…CP-08).** Read before any Layer 1 dispatch — gates fire on every run; `--fast`
 does **not** bypass them (see `../fallbacks/sequential.md` § safety-gates-supersede).
 
 ## Why the intake gate precedes "Before Starting"
 
-The flow is the contract. Prefer a validated `map-user-flow` artifact; if absent, use the compact flow validation produced inside this skill. Without either there is no screen list to
+The flow is the contract. Prefer a validated `flow` artifact; if absent, use the compact flow validation produced inside this skill. Without either there is no screen list to
 design against, so the intake gate (Gate 1) must fire before any Pre-Dispatch question — exactly as
 `brief-app-preview` gates on supplied screenshots. A skill that designs screens the flow never
 declared is inventing product, not specifying it.
 
 ## The 5 Critical Gates
 
-1. **No design before a validated flow.** Prefer a parseable `map-user-flow` artifact. Absent →
+1. **No design before a validated flow.** Prefer a parseable `flow` artifact. Absent →
    run compact flow validation inside this skill (do not hard-depend on the sibling). Never invent screens from an unvalidated prose feature description.
 2. **No invented screens.** Every screen, state, and surface in the spec traces to a flow
    screen / state / edge. Flow gaps are reported back, not silently filled.
@@ -33,7 +33,7 @@ declared is inventing product, not specifying it.
 The critic (`agents/critic-agent.md`) evaluates each checkpoint **binary PASS/FAIL**. Any FAIL fails
 the gate and re-dispatches the named agent. All 8 must PASS to ship.
 
-1. **CP-01 Flow grounding** — every screen traces to a `map-user-flow` screen/state or the compact in-skill flow validation; zero invented
+1. **CP-01 Flow grounding** — every screen traces to a `flow` screen/state or the compact in-skill flow validation; zero invented
    screens; every flow edge / empty / loading / error state has a visual treatment. *(→ screen-inventory-agent)*
 2. **CP-02 Component reuse & hierarchy** — components named and reused across screens (no per-screen
    one-offs); composition hierarchy explicit; primitive count bounded and listed. *(→ component-system-agent)*

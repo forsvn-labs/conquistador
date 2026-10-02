@@ -82,7 +82,7 @@ must never be added to make 100%. An accounting explanation is separate from a c
 ## Close with a bounded handoff
 
 State supported causes, unresolved alternatives, overlap limits and what the evidence permits.
-Pass the diagnosis to the ready-to-use Change/Test revision or prioritize-opportunities only with
+Pass the diagnosis to the ready-to-use Change/Test revision or `prioritize` only with
 its limitations intact. If unresolved evidence could change a consequential decision, name the
 owner and deciding data; do not silently authorize the intervention. Prelaunch work has no observed
 causal verdict: return the message-path concern, proposed revision and measurement plan instead.

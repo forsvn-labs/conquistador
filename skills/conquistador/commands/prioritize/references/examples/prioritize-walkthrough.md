@@ -1,4 +1,4 @@
-# Example — prioritize-opportunities Walkthrough
+# Example — `prioritize` Walkthrough
 
 > Worked example showing the full Route A flow on a 2-root-cause acquisition + activation case. Use to calibrate when in doubt about initiative generation, force-ranking discipline, ICE scoring evidence, cut-line drawing, or the Out-of-Scope file format. The artifact at the end is the canonical shape per `format-conventions.md`.
 
@@ -8,7 +8,7 @@
 
 **Hard gate:** `id:diagnose-growth-growth` resolves (diagnosis artifact present) → PASS, dispatch proceeds.
 
-**Root cause from diagnose-growth:**
+**Root cause from `diagnose`:**
 - (1) Ad targeting brought low-intent visitors after Q1 targeting change (~55% of gap)
 - (2) Homepage redesign lost trust signals (~35% of gap)
 - Residual (~10%): seasonal noise + minor copy regressions
@@ -136,7 +136,7 @@ Validates owners + target metrics + kill criteria for each Proceed.
 
 ```markdown
 ---
-skill: prioritize-opportunities
+skill: prioritize
 version: 1
 date: 2026-05-18
 status: done
@@ -202,8 +202,8 @@ status: done
 
 ## Next Step
 
-Run `model-growth-funnel` to set numeric targets for the proceeding initiatives.
-If any "Proceed" initiative requires a technical build, also run `architect-software-system` (from the `forsvn-dev` package) with these initiatives as context.
+Run `funnel` to set numeric targets for the proceeding initiatives.
+If any "Proceed" initiative requires a technical build, also run `architect` (from the `forsvn-dev` package) with these initiatives as context.
 ```
 
 ---
@@ -247,7 +247,7 @@ If any "Proceed" initiative requires a technical build, also run `architect-soft
 1. **Out-of-Scope persistence:** 3 files written per above. `discover` and `forsvn` will see these on their next run.
 2. **Prior artifact rename:** none this run (version 1, no prior `prioritize-opportunities-*.md`). On a re-run, the prior file would be renamed to `prioritize-opportunities.v1.md`.
 
-**No experience write-back.** Original SKILL.md is explicit: prioritize-opportunities doesn't seed dimensions to experience/ — initiatives are project-specific tactics, not stable user-profile state. Constraint Interview answers feed dispatch as in-context input only.
+**No experience write-back.** Original COMMAND.md is explicit: `prioritize` doesn't seed dimensions to experience/ — initiatives are project-specific tactics, not stable user-profile state. Constraint Interview answers feed dispatch as in-context input only.
 
 ---
 
@@ -267,5 +267,5 @@ If any "Proceed" initiative requires a technical build, also run `architect-soft
 
 - **Route B (Quick Design):** see `../fallbacks/sequential.md`. The flow is: skip unconventional-agent, skip Layer 1.5 user feedback gate, otherwise identical.
 - **Critic FAIL loop:** see `../fallbacks/sequential.md` Critic Gate section. Max 2 cycles, then stop for the human with internal grade `done_with_concerns`; Known Issues section pinned.
-- **Churn root cause:** when diagnose-growth identifies churn, initiative-generator-agent loads `references/churn-playbook.md` and selects retention options relevant to the diagnosed problem. See `references/churn-playbook.md` for evidence requirements and comparisons; no fixed initiative quota applies.
-- **Revisiting an Out-of-Scope kill:** if a future prioritize-opportunities run reconsiders Pixel Sharing because a partner becomes available, the out-of-scope file gets a `**Revisited:** [date]` line appended; the new prioritize-opportunities-*.md has a "Revisited Out-of-Scope" section per `format-conventions.md`.
+- **Churn root cause:** when `diagnose` identifies churn, initiative-generator-agent loads `references/churn-playbook.md` and selects retention options relevant to the diagnosed problem. See `references/churn-playbook.md` for evidence requirements and comparisons; no fixed initiative quota applies.
+- **Revisiting an Out-of-Scope kill:** if a future `prioritize` run reconsiders Pixel Sharing because a partner becomes available, the out-of-scope file gets a `**Revisited:** [date]` line appended; the new prioritize-opportunities-*.md has a "Revisited Out-of-Scope" section per `format-conventions.md`.

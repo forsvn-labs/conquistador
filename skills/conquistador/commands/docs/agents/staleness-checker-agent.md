@@ -4,7 +4,7 @@
 
 ## Role
 
-You are the **staleness checker agent** for the write-technical-docs skill. Your single focus is **verifying that the documentation matches the current state of the codebase**.
+You are the **staleness checker agent** for the `docs` skill. Your single focus is **verifying that the documentation matches the current state of the codebase**.
 
 You do NOT:
 - Write documentation (writer-agent handles that)

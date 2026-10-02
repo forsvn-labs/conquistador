@@ -1,4 +1,4 @@
-# Anti-Patterns — prioritize-opportunities
+# Anti-Patterns — `prioritize`
 
 > 8 named anti-patterns that kill initiative quality + ranking validity. Each includes detection, why it fails, the fix, and the agent responsible for catching it. Critic-load reference — re-read before any output ships.
 
@@ -13,7 +13,7 @@
 - The initiative would help ANY company, not specifically yours.
 - The "because" clause is missing or doesn't name the root cause.
 
-**Why it fails:** Generic initiatives can't be executed — they require a second round of "OK, but what specifically?" which the prioritize-opportunities ICE rigor was supposed to have already done.
+**Why it fails:** Generic initiatives can't be executed — they require a second round of "OK, but what specifically?" which the `prioritize` ICE rigor was supposed to have already done.
 
 **Fix:** Every initiative must describe a specific mechanic tied to a specific root cause. Run the **anti-generic test:** delete the root cause reference from the hypothesis — does the initiative still make sense for any company? If yes, rewrite.
 
@@ -27,7 +27,7 @@
 
 **Detection:**
 - Hypothesis "because" clause omits the root cause reference.
-- The initiative addresses a different metric than the one diagnose-growth flagged.
+- The initiative addresses a different metric than the one `diagnose` flagged.
 - The initiative is a generic best practice that would be true regardless of root cause.
 
 **Bad example:**

@@ -30,7 +30,7 @@ The **Because** is the most important and most often skipped clause. Without it,
 
 The structure is the same. The **meaning** of each clause depends on whether you're diagnosing a cause or predicting an intervention.
 
-### Framing A — Diagnostic (used by `diagnose-growth`)
+### Framing A — Diagnostic (used by `diagnose`)
 
 You're trying to identify what's *causing* an observed problem.
 
@@ -62,7 +62,7 @@ Revenue:      If [pricing/packaging] is misaligned
               Because [willingness-to-pay shifted: market, perception, alternatives]
 ```
 
-### Framing B — Predictive (used by `prioritize-opportunities`, validated post-execution against `model-growth-funnel` baselines)
+### Framing B — Predictive (used by `prioritize`, validated post-execution against `funnel` baselines)
 
 You're predicting what will happen if you take a specific action.
 

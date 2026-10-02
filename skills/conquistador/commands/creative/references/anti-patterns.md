@@ -52,7 +52,7 @@
 
 **Why it fails:** DESIGN.md is the source of truth for what the brand looks like. Inventing tokens — even when they're tasteful — fragments the visual identity and shows up as drift the next time the same asset type renders against actual DESIGN.md tokens. Multiple briefs inventing different "complementary" colors produce a brand that doesn't visually cohere.
 
-**Fix:** Every visual decision traces to DESIGN.md. If DESIGN.md is incomplete for this asset's needs (e.g., illustration style, motion easing for an animated banner), flag it in the brief and ask the user — either expand DESIGN.md (re-run `create-brand` Route B) or accept the limitation. Do not silently fill the gap.
+**Fix:** Every visual decision traces to DESIGN.md. If DESIGN.md is incomplete for this asset's needs (e.g., illustration style, motion easing for an animated banner), flag it in the brief and ask the user — either expand DESIGN.md (re-run `brand` Route B) or accept the limitation. Do not silently fill the gap.
 
 **Owned by:** brand-anchor-agent (token pull from DESIGN.md only) + brief-synth-agent (token check) + critic-agent (Brand fidelity rubric dimension — score 1 means tokens trace; lower scores cite the invention).
 
@@ -102,9 +102,9 @@
 
 **Why it fails:** Claude Design generates aesthetic exploration — it produces visually interesting outputs but they're not anchored to the brand's strategic positioning, audience, or competitive landscape. Using them as brand-system input inverts the dependency chain (brand-system should anchor design exploration, not the other way around) and silently encodes whatever defaults Claude Design produced as if they were brand commitments.
 
-**Fix:** Claude Design output is downstream of brief-creative, not upstream of brand-system. Sequence: brand-system → brief-creative (with brand anchors) → Claude Design (executing the brief). If the user wants exploration before brand commitment, that's brand-system Route A territory (positioning + voice + archetype + sacred elements) — design exploration follows the strategy.
+**Fix:** Claude Design output is downstream of `creative`, not upstream of brand-system. Sequence: brand-system → `creative` (with brand anchors) → Claude Design (executing the brief). If the user wants exploration before brand commitment, that's brand-system Route A territory (positioning + voice + archetype + sacred elements) — design exploration follows the strategy.
 
-**Owned by:** orchestrator (Hard Gate enforces brand artifacts present BEFORE any concept generation) + brief-creative Critical Gate "Do NOT invent tokens".
+**Owned by:** orchestrator (Hard Gate enforces brand artifacts present BEFORE any concept generation) + `creative` Critical Gate "Do NOT invent tokens".
 
 ---
 
@@ -139,13 +139,13 @@ implementation/publication gate. `--fast` never weakens truth, consent, or exter
 
 ### 11. Wrong skill for intent — render request
 
-**Symptom:** User asks "make me an IG post about pricing" → orchestrator dispatches brief-creative, produces a brief, hands user the brief, user is confused ("I asked for the post, not a brief for the post").
+**Symptom:** User asks "make me an IG post about pricing" → orchestrator dispatches `creative`, produces a brief, hands user the brief, user is confused ("I asked for the post, not a brief for the post").
 
-**Why it fails:** brief-creative is brief-only by design — rendering happens downstream. Users expecting a render get the wrong artifact. The brief is correct work; it just doesn't answer what the user actually wanted.
+**Why it fails:** `creative` is brief-only by design — rendering happens downstream. Users expecting a render get the wrong artifact. The brief is correct work; it just doesn't answer what the user actually wanted.
 
-**Fix:** Pre-Dispatch detects "make / create / render / generate" verb + asset noun → emits "brief-creative produces the BRIEF for the asset; the BRIEF then feeds Claude Design / Midjourney / Imagen / DALL·E / Pencil / Figma / a human designer who actually renders it. Proceed with brief, or are you looking for direct rendering (route to an image-gen tool yourself)?" Same intent classification for "redesign this page" → route to `brief-landing-page`; "design our brand identity" → route to `create-brand`.
+**Fix:** Pre-Dispatch detects "make / create / render / generate" verb + asset noun → emits "`creative` produces the BRIEF for the asset; the BRIEF then feeds Claude Design / Midjourney / Imagen / DALL·E / Pencil / Figma / a human designer who actually renders it. Proceed with brief, or are you looking for direct rendering (route to an image-gen tool yourself)?" Same intent classification for "redesign this page" → route to `brief-landing-page`; "design our brand identity" → route to `brand`.
 
-**Owned by:** orchestrator (Pre-Dispatch intent classification) + Skill Deference list in SKILL.md.
+**Owned by:** orchestrator (Pre-Dispatch intent classification) + Skill Deference list in COMMAND.md.
 
 ---
 

@@ -6,7 +6,7 @@ cycle or overwrite an existing result without explicit correction history.
 
 Use ISO dates and the next unused cycle number. Preserve frontmatter keys skill,
 version, date, status, summary, purpose, lifecycle, use_when, do_not_use_when,
-upstream, downstream, and provenance. Set skill to evaluate-paid-campaign and
+upstream, downstream, and provenance. Set skill to `results` and
 lifecycle to evaluation. provenance includes skill, run_date, input_artifacts,
 and output_eval. List actual inputs only; missing brand or research files must
 not appear as consumed sources. Artifact status is done, done_with_concerns,

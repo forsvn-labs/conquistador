@@ -2,13 +2,13 @@
 
 ## Role
 
-Explain why the campaign cycle likely moved, using the source plan-campaign artifact's hypothesis, what changed this cycle, observed metric behavior, channel-mix causation signals, and unit-economics signals. Causal humility: plausible drivers tied to evidence, not certainty theater. Scoped to **the whole campaign across all channels**.
+Explain why the campaign cycle likely moved, using the source `campaign` artifact's hypothesis, what changed this cycle, observed metric behavior, channel-mix causation signals, and unit-economics signals. Causal humility: plausible drivers tied to evidence, not certainty theater. Scoped to **the whole campaign across all channels**.
 
 ## Inputs
 
 - Loop `program.md` and `context.md`
 - Latest strategy/execution artifacts
-- **Source plan-campaign artifact** (`artifacts/campaign-plan.md`) — read the objective, channel mix, budget split, sequencing, hypothesis
+- **Source `campaign` artifact** (`artifacts/campaign-plan.md`) — read the objective, channel mix, budget split, sequencing, hypothesis
 - Metric Ingest output (from Layer 1 sibling) — DO NOT re-fetch metrics; consume the normalized packet + the channel rollup
 - Current cycle evidence (raw CRM / ad-platform / analytics data) — read independently for behavioral signals (which channel's curve moved when, organic baseline behavior)
 - Per-asset eval artifacts in the loop, if any — context only; you may cite their conclusions but never re-score them or fold them into the verdict
@@ -24,7 +24,7 @@ Return:
 ### Cycle Change
 
 - changed_surface: [objective | channel_mix | budget_split | sequencing | offer | creative_direction | multiple]
-- intended_hypothesis: [verbatim or summary from the source plan-campaign artifact's hypothesis]
+- intended_hypothesis: [verbatim or summary from the source campaign artifact's hypothesis]
 - campaign: [campaign name / tag]
 - channels_evaluated: [list every channel the campaign ran on]
 
@@ -69,7 +69,7 @@ Return:
 - Separate campaign-strategy issues from channel-mix issues from unit-economics issues from attribution-confounder issues.
 - Do not recommend a new campaign plan here. Name the diagnosed friction or success pattern; the recommendation agent decides next actions.
 - **Channel-mix discrimination is your job.** Classify every channel `driver` / `rider` / `mixed`. A `driver` channel drove net-new results the campaign created. A `rider` channel converted demand that already existed — warm existing-list email, retargeting of pre-campaign site visitors, branded search the campaign did not generate. A rider's conversions LOOK like campaign wins but are not; say so explicitly and exclude them from the campaign-driven net-new count. Correlation in the same window is not causation.
-- **Unit-economics honesty.** Always report blended CAC and paid CAC as two distinct numbers. A healthy blended CAC ($22) can hide an underwater paid channel ($61 paid CAC against a $19/mo price). Name the underwater channel. Compute payback against the product's actual price/margin from `research/product-context.md` or the plan-campaign artifact.
+- **Unit-economics honesty.** Always report blended CAC and paid CAC as two distinct numbers. A healthy blended CAC ($22) can hide an underwater paid channel ($61 paid CAC against a $19/mo price). Name the underwater channel. Compute payback against the product's actual price/margin from `research/product-context.md` or the `campaign` artifact.
 - **Revenue attribution honesty.** Subtract what an organic baseline would have produced anyway before attributing revenue to the campaign. If the organic baseline is unknown, say the attributed revenue is an upper bound.
 - **Per-asset evals stay context.** You may cite an `evaluate-ad` cycle's conclusion ("the paid creative fatigued mid-window") as supporting evidence for a channel's behavior — but you do NOT re-score the asset and you do NOT let its score drive the campaign verdict. The campaign verdict is scored on campaign-level aggregates + the channel-mix + unit-economics read.
 - **The breakdown must be complete.** If a channel that received spend or effort is missing from Metric Ingest's rollup, flag it loudly in `breakdown_completeness` — the campaign cannot be honestly scored with a channel omitted.
@@ -84,5 +84,5 @@ Before returning, ask:
 - Did I report blended CAC and paid CAC as two distinct numbers, and name any underwater paid channel?
 - Did I identify at least one plausible non-campaign confounder (seasonality, concurrent campaign, organic drift)?
 - Did I keep per-asset eval artifacts as context, out of the verdict?
-- Did I read the source plan-campaign artifact's hypothesis before naming the intended hypothesis?
+- Did I read the source `campaign` artifact's hypothesis before naming the intended hypothesis?
 - Would a future `plan-campaign --rev=N+1` agent understand what channel-mix or budget change to make without me pretending to write the next plan?

@@ -1,9 +1,9 @@
 ---
-name: evaluate-outreach
+command: results
+mode: outreach
 description: "Evaluate an actually sent outreach batch or sequence using delivery, reply quality, compliance, and segment-level evidence. Use after cold email, founder outreach, partnership outreach, or DMs have results. Not for writing the sequence or authorizing another send."
 metadata:
   version: 1.0.0
-
 ---
 
 # Evaluate outreach results
@@ -18,16 +18,16 @@ Read the core files in full before you draft; read the others when their step or
 
 Core:
 
-- [anti-patterns](references/anti-patterns.md): Outreach-Eval Anti-Patterns. Re-read before any cycle artifact ships. Each row names the pattern, why it…
-- [evaluation-loop-rubric](references/evaluation-loop-rubric.md): Evaluation-Loop Rubric — shared frame for the evaluate-* eval-loop critics. Why this is shared: the three…
-- [method](references/method.md): Evaluate Outreach Method. Why this skill exists, philosophy, methodology, when NOT to use, history. Cited…
-- [rubric](references/rubric.md): Outreach-Eval Rubric (v0.1). 7-dimension rubric for post-send outreach evaluation. Used by…
+- [anti-patterns](outreach/references/anti-patterns.md): Outreach-Eval Anti-Patterns. Re-read before any cycle artifact ships. Each row names the pattern, why it…
+- [evaluation-loop-rubric](outreach/references/evaluation-loop-rubric.md): Evaluation-Loop Rubric — shared frame for the evaluate-* eval-loop critics. Why this is shared: the three…
+- [method](outreach/references/method.md): Evaluate Outreach Method. Why this mode exists, philosophy, methodology, when NOT to use, history. Cited…
+- [rubric](outreach/references/rubric.md): Outreach-Eval Rubric (v0.1). 7-dimension rubric for post-send outreach evaluation. Used by…
 
-Specialist roles: [critic-agent](agents/critic-agent.md), [diagnosis-agent](agents/diagnosis-agent.md), [metric-ingest-agent](agents/metric-ingest-agent.md), [recommendation-agent](agents/recommendation-agent.md).
+Specialist roles: [critic-agent](outreach/agents/critic-agent.md), [diagnosis-agent](outreach/agents/diagnosis-agent.md), [metric-ingest-agent](outreach/agents/metric-ingest-agent.md), [recommendation-agent](outreach/agents/recommendation-agent.md).
 
-Worked examples: [outreach-eval-cycle-walkthrough](references/examples/outreach-eval-cycle-walkthrough.md).
+Worked examples: [outreach-eval-cycle-walkthrough](outreach/references/examples/outreach-eval-cycle-walkthrough.md).
 
-Output formats and fallbacks: [sequential](fallbacks/sequential.md), [format-conventions](references/format-conventions.md).
+Output formats and fallbacks: [sequential](outreach/fallbacks/sequential.md), [format-conventions](outreach/references/format-conventions.md).
 
 <!-- playbooks:end -->
 
@@ -80,15 +80,15 @@ send, schedule, suppress, or alter a list without explicit human authority.
 
 Before delivery, load the recovered method instead of paraphrasing it:
 
-- [metric-ingest](agents/metric-ingest-agent.md), [diagnosis](agents/diagnosis-agent.md),
-  [recommendation](agents/recommendation-agent.md), [critic](agents/critic-agent.md);
-- [rubric](references/rubric.md), [evaluation-loop rubric](references/evaluation-loop-rubric.md),
-  [anti-patterns](references/anti-patterns.md).
+- [metric-ingest](outreach/agents/metric-ingest-agent.md), [diagnosis](outreach/agents/diagnosis-agent.md),
+  [recommendation](outreach/agents/recommendation-agent.md), [critic](outreach/agents/critic-agent.md);
+- [rubric](outreach/references/rubric.md), [evaluation-loop rubric](outreach/references/evaluation-loop-rubric.md),
+  [anti-patterns](outreach/references/anti-patterns.md).
 
-If the host cannot run those as separate agents, use [sequential fallback](fallbacks/sequential.md).
+If the host cannot run those as separate agents, use [sequential fallback](outreach/fallbacks/sequential.md).
 A loop is optional: write into `.forsvn/loops/[slug]/evals/` when present, otherwise
 `.forsvn/artifacts/mkt/evaluate-outreach/` — and when neither store exists, return the evaluation
-inline. This skill runs standalone: it ingests operator-supplied exports, screenshots, and pasted
+inline. This mode runs standalone: it ingests operator-supplied exports, screenshots, and pasted
 numbers instead of reading private runtime state as a requirement. Sequence authorship stays on
-`write-outreach`. Signal separation holds either way: opens alone support no success claim, and no
+`outreach`. Signal separation holds either way: opens alone support no success claim, and no
 new send is ever authorized by this evaluation.

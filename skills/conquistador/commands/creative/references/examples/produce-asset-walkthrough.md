@@ -20,7 +20,7 @@ Brief resolved at `.forsvn/artifacts/mkt/brief-creative/launch-og.md` (2 slots: 
 
 ```markdown
 ---
-skill: brief-creative
+skill: creative
 version: 1
 date: 2026-06-18
 slot_id: og-main

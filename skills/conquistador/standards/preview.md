@@ -35,4 +35,4 @@ externally without authorization for the exact content and destination. If the h
 an accessible, private preview, return the artifact and use chat for review.
 
 For durable changes, follow [learning.md](learning.md). Public disclosure is a separate opt-in
-`submit-feedback` task. No annotation, result or memory entry is submitted automatically.
+`feedback` task. No annotation, result or memory entry is submitted automatically.

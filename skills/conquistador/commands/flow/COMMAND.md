@@ -1,9 +1,8 @@
 ---
-name: map-user-flow
-description: "Map an in-product flow across screens, decisions, transitions, native platform surfaces, and recovery states. Use for a feature or user journey that spans multiple screens or states, before visual UI design or technical architecture."
+name: flow
+description: "Map a product flow across screens, decisions, and recovery states."
 metadata:
   version: 2.1.0
-
 ---
 
 # Map a product flow
@@ -20,7 +19,7 @@ Core:
 
 - [anti-patterns](references/anti-patterns.md): Map User Flow — Anti-Patterns. Load when: critic-agent fires (Step 2 of Layer 2b), or any moment the…
 - [flow-mapping-method](references/flow-mapping-method.md): Flow-Mapping Method. A feature isn't designed until you can walk a user through it on every surface it…
-- [gates-and-rubric](references/gates-and-rubric.md): Critical Gates + Quality Rubric — Full Detail. Cited by SKILL.md "Critical Gates" and "Quality Gate"…
+- [gates-and-rubric](references/gates-and-rubric.md): Critical Gates + Quality Rubric — Full Detail. Cited by COMMAND.md "Critical Gates" and "Quality Gate"…
 - [report-template](references/report-template.md): Map User Flow — Report Template. Load when: Layer 2b critic PASS → Assembly. Save the per-flow artifact to…
 - [research-checklist](references/research-checklist.md): Pre-Design Research Checklist. Foundational research elements to gather before creating user flows.
 

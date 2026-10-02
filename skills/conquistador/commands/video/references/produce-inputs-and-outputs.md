@@ -1,6 +1,6 @@
-# Inputs & Outputs — create-shortform produce phase
+# Inputs & Outputs — `video` produce phase
 
-Detailed input contracts (per mode) and output bundle structure for `create-shortform`. Loaded at pre-dispatch (mode detection) and at output-template assembly.
+Detailed input contracts (per mode) and output bundle structure for `video`. Loaded at pre-dispatch (mode detection) and at output-template assembly.
 
 ## Mode Detection
 
@@ -20,8 +20,8 @@ Mode auto-detected from the input brief's frontmatter `type` field at pre-dispat
 | Target platforms | optional | Defaults to brief's `hero_platform` + `variants`; can be overridden |
 
 **NEEDS_CONTEXT triggers:**
-- Missing `brand/BRAND.md` or `brand/DESIGN.md` → defer to `create-brand`.
-- No create-shortform artifact AND no schema-compliant video-brief → defer to `create-shortform`.
+- Missing `brand/BRAND.md` or `brand/DESIGN.md` → defer to `brand`.
+- No `video` artifact AND no schema-compliant video-brief → defer to `video`.
 
 ## Inputs — App-Preview Mode
 
@@ -36,8 +36,8 @@ Mode auto-detected from the input brief's frontmatter `type` field at pre-dispat
 | `brand/DESIGN.md` | **soft-required** | Used when `brand_source: brand-md`; cold-start samples colors from source screenshots and cites `(cold-start-sampled)` |
 
 **NEEDS_CONTEXT triggers:**
-- Handoff says `brand_source: brand-md` but brand files absent → upstream lied about brand state; defer to `create-brand` or re-run `brief-creative` with `brand_source: cold-start-hint`.
-- `source_id` doesn't resolve to a file → defer to `brief-creative`.
+- Handoff says `brand_source: brand-md` but brand files absent → upstream lied about brand state; defer to `brand` or re-run `creative` with `brand_source: cold-start-hint`.
+- `source_id` doesn't resolve to a file → defer to `creative`.
 
 ## Output — Bundle Structure
 
@@ -59,6 +59,6 @@ All 6 outputs always emitted (vercel-ai-cli.md collapses in app-preview mode; po
 
 ## Chain Position
 
-- **Previous:** `create-shortform` (shortform mode) OR `brief-creative` (app-preview mode); `create-brand` (required for `brand_source: brand-md`; skipped when cold-start); `research-positioning` (recommended — VoC for narration tone, shortform mode).
-- **Next:** operator runs the chosen scaffold through their runtime; rendered video feeds future `evaluate-shortform` cycles.
+- **Previous:** `video` (shortform mode) OR `creative` (app-preview mode); `brand` (required for `brand_source: brand-md`; skipped when cold-start); `position` (recommended — VoC for narration tone, shortform mode).
+- **Next:** operator runs the chosen scaffold through their runtime; rendered video feeds future `results` cycles.
 - **Re-run triggers:** upstream brief re-emitted; `brand/DESIGN.md` tokens updated; target platforms/surface changed; operator wants different runtime emphasis (re-run with `--rev=N` to preserve prior bundle).

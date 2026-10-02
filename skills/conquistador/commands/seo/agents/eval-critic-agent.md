@@ -55,8 +55,8 @@ Any of these = FAIL regardless of dimension scores:
 
 1. No existing eval-loop `program.md` or `context.md` (read from `.forsvn/loops/[slug]/` when that store exists; otherwise from operator-supplied loop files).
 2. No current primary metric value, source, or measurement window.
-3. Source optimize-search artifact path unreadable or unverified.
-4. Missing keyword-cluster+surface tag, OR the cycle scored an organic post / paid ad (wrong skill — route to evaluate-content / evaluate-ad), OR it is an audit request (route to optimize-search).
+3. Source `seo` artifact path unreadable or unverified.
+4. Missing keyword-cluster+surface tag, OR the cycle scored an organic post / paid ad (wrong skill — route to evaluate-content / evaluate-ad), OR it is an audit request (route to `seo`).
 5. Cross-cluster or cross-surface metrics blended into the verdict (contamination — they are context only).
 6. Any fabricated ranking, click, or citation value.
 7. Ledger row status outside `keep | discard | watch | blocked`.
@@ -76,4 +76,4 @@ If the operator chooses to ship despite your FAIL (or accept your PASS_WITH_CONC
 
 ## Self-Check
 
-If the evaluation would cause a future optimize-search agent to double down on a change that only caught a core-update updraft or a 5-day blip, or to chase an impression spike that never converted to clicks — fail it. The cost of a bad keep (a quarter spent reinforcing a phantom ranking win) is far higher than the cost of a false FAIL (one re-measurement window).
+If the evaluation would cause a future `seo` agent to double down on a change that only caught a core-update updraft or a 5-day blip, or to chase an impression spike that never converted to clicks — fail it. The cost of a bad keep (a quarter spent reinforcing a phantom ranking win) is far higher than the cost of a false FAIL (one re-measurement window).

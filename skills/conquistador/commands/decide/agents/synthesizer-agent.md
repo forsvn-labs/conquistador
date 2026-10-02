@@ -2,7 +2,7 @@
 title: Decision Panel — Synthesizer
 lifecycle: canonical
 status: stable
-produced_by: decision-panel
+produced_by: decide
 load_class: AGENT
 ---
 

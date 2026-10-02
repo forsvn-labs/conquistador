@@ -1,12 +1,12 @@
 # Example — SEO-Eval Cycle Walkthrough (apparent bump → `watch`)
 
-> One worked end-to-end run of `optimize-search`: operator invocation, pre-dispatch validation, the 4-agent flow, the produced cycle artifact in full, the `results.tsv` row, and the Critic verdict. The signature move is the **lag-and-volatility gate**: an apparent ranking bump on a short window is downgraded from `keep` to `watch`. All numbers are **illustrative / synthetic** — they show shape, not real FORSVN data. Loop paths assume a host with a `.forsvn/loops/` store; without one, substitute operator-supplied loop files and return artifacts inline.
+> One worked end-to-end run of `seo`: operator invocation, pre-dispatch validation, the 4-agent flow, the produced cycle artifact in full, the `results.tsv` row, and the Critic verdict. The signature move is the **lag-and-volatility gate**: an apparent ranking bump on a short window is downgraded from `keep` to `watch`. All numbers are **illustrative / synthetic** — they show shape, not real FORSVN data. Loop paths assume a host with a `.forsvn/loops/` store; without one, substitute operator-supplied loop files and return artifacts inline.
 
 ---
 
 ## Scenario
 
-FORSVN's eval loop `forsvn-org-serp` tracks the landing site's organic SERP. Two weeks ago `optimize-search` shipped an on-page change to the `ai work capture` cluster page (added an H2 answering "what is agentic work capture" + an internal link from the homepage). The operator now wants to score it.
+FORSVN's eval loop `forsvn-org-serp` tracks the landing site's organic SERP. Two weeks ago `seo` shipped an on-page change to the `ai work capture` cluster page (added an H2 answering "what is agentic work capture" + an internal link from the homepage). The operator now wants to score it.
 
 > /optimize-search forsvn-org-serp "ai work capture / organic-serp" "target-keyword avg position"
 
@@ -53,7 +53,7 @@ caveats: ["13d < 28d floor", "GSC ~2-3 day data lag", "daily position variance ~
 
 **Layer 1 — Diagnosis** ties the packet to the source change's hypothesis: the H2 + internal link plausibly lifted position, but clicks are flat (+3, inside noise) and CTR *fell* — the apparent rank gain has not converted to traffic. Position is volatile (5.2–8.9 daily), so the 6.1 average rests on a handful of good days inside a churning window.
 
-**Layer 2 — Recommendation** applies the lag/volatility gate: the window (13d) is below the 28-day floor AND position is volatile AND clicks are flat — so the move is **noise, not a validated win**. Proposes `watch`, re-measure after the window reaches the floor; route the next on-page target (CTR, not position) to `optimize-search`; no learning promotion.
+**Layer 2 — Recommendation** applies the lag/volatility gate: the window (13d) is below the 28-day floor AND position is volatile AND clicks are flat — so the move is **noise, not a validated win**. Proposes `watch`, re-measure after the window reaches the floor; route the next on-page target (CTR, not position) to `seo`; no learning promotion.
 
 **Layer 3 — Critic** scores the 7-dim rubric (below).
 
@@ -65,7 +65,7 @@ Written to `.forsvn/loops/forsvn-org-serp/evals/2026-06-13-cycle-3.md`:
 
 ```markdown
 ---
-skill: optimize-search
+skill: seo
 version: 1
 date: 2026-06-13
 status: done_with_concerns
@@ -75,9 +75,9 @@ lifecycle: evaluation
 use_when: "Deciding whether to keep, discard, watch, or block the current SEO/AEO cycle"
 do_not_use_when: "Applying on-page fixes or authoring content without reading the latest loop context and results"
 upstream: ".forsvn/loops/forsvn-org-serp/program.md, context.md, artifacts/optimize-search/2026-05-30-ai-work-capture.md, GSC"
-downstream: "results.tsv, learnings.md, optimize-search next-cycle target"
+downstream: "results.tsv, learnings.md, seo next-cycle target"
 provenance:
-  skill: optimize-search
+  skill: seo
   run_date: 2026-06-13
   input_artifacts:
     - artifacts/optimize-search/2026-05-30-ai-work-capture.md
@@ -139,7 +139,7 @@ provenance:
 - Keep: nothing yet — the gain is unconfirmed
 - Discard: nothing — do not revert; the change is plausibly directionally right
 - Watch: hold the change; re-measure the same cluster+surface at the 28-day floor (≈2026-06-27)
-- Route next work to: optimize-search — the live problem is CTR (1.9%, down), so target the title/meta description for the cluster page, not another position play
+- Route next work to: seo — the live problem is CTR (1.9%, down), so target the title/meta description for the cluster page, not another position play
 
 ## Results Row
 
@@ -183,7 +183,7 @@ VERDICT: PASS  (aggregate 60/70, all per-dim ≥ 6)
 - loop_fit: 9 — program.md + context.md + results.tsv read; cycle 3 scoped to "ai work capture" / organic-serp; no drift
 - metric_integrity: 9 — avg position + baseline + 13-day window checked vs the 28-day floor; meaningful-vs-vanity breakdown present; GSC source + pull date named
 - attribution_honesty: 8 — no core update in window; GSC lag + daily variance flagged; confidence: low matches the evidence
-- decision_discipline: 9 — verdict follows the read + lag gate; routing to optimize-search targets CTR (the real problem), one sentence, cluster+surface+window present
+- decision_discipline: 9 — verdict follows the read + lag gate; routing to seo targets CTR (the real problem), one sentence, cluster+surface+window present
 - visibility_signal_discrimination: 9 — +46% impressions named as vanity and excluded; verdict rests on flat clicks + falling CTR, not the impression rise
 - lag_and_volatility_discipline: 8 — 13d < 28d floor stated; volatile SERP (5.2–8.9) read; the gate capped the verdict at watch (Hard Fail #12 would have fired on a keep)
 - ledger_correctness: 8 — one ledger row on the measurement artifact; 8 columns clean; description carries the cluster+surface+window tag

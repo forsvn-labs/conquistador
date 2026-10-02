@@ -1,4 +1,4 @@
-> **Tooling note.** The historical `ios-cli` opaque binary is **not shipped** with this skill. Do not require Vibecode, Chorus, or `./ios-cli`. Use host Xcode, `xcodebuild`, Simulator, Devices and Simulators, and App Store Connect / Transporter / approved source-inspectable tooling per [SKILL.md](../SKILL.md). Capability, gotcha, publishing, and screenshot guidance below remains useful; command examples that once called `./ios-cli` are reframed to host tools.
+> **Tooling note.** The historical `ios-cli` opaque binary is **not shipped** with this skill. Do not require Vibecode, Chorus, or `./ios-cli`. Use host Xcode, `xcodebuild`, Simulator, Devices and Simulators, and App Store Connect / Transporter / approved source-inspectable tooling per [COMMAND.md](../../ios.md). Capability, gotcha, publishing, and screenshot guidance below remains useful; command examples that once called `./ios-cli` are reframed to host tools.
 
 # Common Gotchas
 

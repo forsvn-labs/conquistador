@@ -1,9 +1,8 @@
 ---
-name: prioritize-opportunities
-description: "Force-rank cross-functional opportunities into proceed, park, and stop decisions. Use when product, growth, sales, operational, or unconventional bets compete for limited time, money, attention, or sequencing."
+name: prioritize
+description: "Rank competing opportunities into proceed, park, and stop."
 metadata:
   version: 1.1.0
-
 ---
 
 # Prioritize opportunities
@@ -17,7 +16,7 @@ Read the core files in full before you draft; read the others when their step or
 
 Core:
 
-- [anti-patterns](references/anti-patterns.md): Anti-Patterns — prioritize-opportunities. 8 named anti-patterns that kill initiative quality + ranking…
+- [anti-patterns](references/anti-patterns.md): Anti-Patterns — `prioritize`. 8 named anti-patterns that kill initiative quality + ranking…
 - [force-rank-method](references/force-rank-method.md): Force-Rank Method — Why Prioritize Opportunities Exists. Load this when you want to teach the skill to a…
 - [ice-scoring-rubric](references/ice-scoring-rubric.md): ICE Scoring Rubric. Calibration guide for scoring initiatives on Impact, Confidence, and Ease.
 - [idea-ranking-core](references/idea-ranking-core.md): Idea-Ranking Core. Portable ranking invariants for any skill that scores or ranks a candidate set —…

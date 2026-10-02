@@ -23,7 +23,7 @@ Return:
 - confidence: high | medium | low | blocked
 - primary_platform: [platform]
 - decision_sentence: [one sentence, no tabs, includes the primary platform]
-- next_route: write-social | publish-social | produce-asset | run-pipeline | none
+- next_route: social | publish-social | produce-asset | run-pipeline | none
 - next_action_summary: [one sentence — what the next route should produce, if any]
 
 ## Keep / Discard / Watch
@@ -53,12 +53,12 @@ cycle	date	artifact	primary_metric	value	baseline	status	description
 - `keep`: primary metric improved against a comparable baseline (same platform, same content type, comparable window), guardrails did not fail, attribution confidence is medium or high, AND the engagement-quality read is `strong` or `mixed` (not `vanity-heavy`). A vanity-heavy spike never earns `keep`.
 - `discard`: primary metric worsened OR a defined guardrail failed OR the engagement-quality read is `vanity-heavy` while meaningful engagement collapsed — AND the change is plausibly connected to the cycle.
 - `watch`: signal is positive or mixed but underpowered (low reach / low sample), baseline is weak (different platform or content type, or no prior comparable cycle), confounders are material (algorithm change mid-window, posting-time shift), OR engagement-quality is mixed and one more cycle would disambiguate.
-- `blocked`: missing primary metric, missing source/window, contradictory data, OR no proof the evaluated content actually published (no source write-social artifact, no run-time confirmation).
+- `blocked`: missing primary metric, missing source/window, contradictory data, OR no proof the evaluated content actually published (no source `social` artifact, no run-time confirmation).
 
 ## Routing Rules
 
-- Route to `write-social` when the next action is new copy authorship for the same platform (revised hook, reformatted body, new CTA). Include `--rev=N+1` semantic in next_action_summary.
-- Route to `write-social` for a **different platform** when the cycle reveals the content was mis-framed for the primary platform (e.g., "this reads as an X post — write a true LinkedIn variant for next cycle").
+- Route to `social` when the next action is new copy authorship for the same platform (revised hook, reformatted body, new CTA). Include `--rev=N+1` semantic in next_action_summary.
+- Route to `social` for a **different platform** when the cycle reveals the content was mis-framed for the primary platform (e.g., "this reads as an X post — write a true LinkedIn variant for next cycle").
 - Route to `produce-asset` when the diagnosis points at the visual (a carousel that underperformed because of weak slide design, not weak copy).
 - Route to `publish-social` when the issue is distribution — posting time, platform mix, or scheduler handoff — not the content itself.
 - Route to `run-pipeline` when the metric contract, baseline, guardrails, or platform scope need redefinition.

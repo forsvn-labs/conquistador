@@ -2,11 +2,11 @@
 
 # Idea-Ranking Core
 
-> Portable ranking invariants for any skill that scores or ranks a candidate set — prioritize-opportunities (owner of the deep implementation), discover's divergence handoff, decision-panel' poll schemas.
+> Portable ranking invariants for any skill that scores or ranks a candidate set — `prioritize` (owner of the deep implementation), discover's divergence handoff, `decide`' poll schemas.
 
 ## Purpose
 
-Several skills rank candidate sets: `prioritize-opportunities` (ICE-scored initiatives), `discover` (divergence shortlists), `decision-panel` (Ranking/Scoring poll schemas). The deep implementation — agents, rubrics, route graphs — lives in `prioritize-opportunities`. This file is the **citable contract**: the invariants any ranking pass must hold so scores mean something across the stack. Cite it; do not re-implement it.
+Several skills rank candidate sets: `prioritize` (ICE-scored initiatives), `discover` (divergence shortlists), `decide` (Ranking/Scoring poll schemas). The deep implementation — agents, rubrics, route graphs — lives in `prioritize`. This file is the **citable contract**: the invariants any ranking pass must hold so scores mean something across the stack. Cite it; do not re-implement it.
 
 ## Invariants
 
@@ -49,4 +49,4 @@ A ranking is incomplete without a cut line. **≤3 candidates above the line** �
 
 ## Ownership
 
-The full machinery — ranking criteria weights, ICE rubric tables, cut-line capacity rules, critic gates — is owned by `prioritize-opportunities` (`skills/research/prioritize-opportunities/`). This contract changes only when those invariants change, and versions with the skills that cite it (no standalone version field).
+The full machinery — ranking criteria weights, ICE rubric tables, cut-line capacity rules, critic gates — is owned by `prioritize` (`skills/research/prioritize-opportunities/`). This contract changes only when those invariants change, and versions with the skills that cite it (no standalone version field).

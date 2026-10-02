@@ -1,6 +1,6 @@
 # Anti-Patterns — icp-research
 
-> 12 named anti-patterns that kill audience-research validity. Each includes detection, why it fails, the fix, and the agent responsible for catching it (verified against `agents/critic-agent.md` Rewrite Routing Table). Critic-load reference — re-read before any output ships. The first 7 are the canonical body anti-patterns from the original SKILL.md, expanded with detection + bad/good examples + ownership; the remaining 5 are cross-cutting failures caught at the orchestrator or operator level.
+> 12 named anti-patterns that kill audience-research validity. Each includes detection, why it fails, the fix, and the agent responsible for catching it (verified against `agents/critic-agent.md` Rewrite Routing Table). Critic-load reference — re-read before any output ships. The first 7 are the canonical body anti-patterns from the original COMMAND.md, expanded with detection + bad/good examples + ownership; the remaining 5 are cross-cutting failures caught at the orchestrator or operator level.
 
 ---
 
@@ -167,7 +167,7 @@
 - `experience/audience.md` has a `Route — last selected` or similar key.
 - Subsequent skill invocations pre-fill route from experience without asking.
 
-**Why it fails:** Route is per-invocation choice. The user may want Full ICP this run and Quick ICP next run depending on time pressure and depth needed. Persisting it pollutes experience with routing state that should reset each invocation. The original SKILL.md is explicit: Q5 is `(routing only, not persisted)`.
+**Why it fails:** Route is per-invocation choice. The user may want Full ICP this run and Quick ICP next run depending on time pressure and depth needed. Persisting it pollutes experience with routing state that should reset each invocation. The original COMMAND.md is explicit: Q5 is `(routing only, not persisted)`.
 
 **Fix:** Write-back map in the skill front door and sequential fallback (retired host dispatch ceremony is not loaded) writes Q1-Q4 to experience; Q5 is omitted. Adding Q5 would be net-new behavior.
 

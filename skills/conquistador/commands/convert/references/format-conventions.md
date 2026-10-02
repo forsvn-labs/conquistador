@@ -8,7 +8,7 @@ load_class: PROCEDURE
 
 # LP-Eval Format Conventions
 
-> Format rules for the lp-eval cycle artifact + results.tsv row + learnings.md promotion. Cited from SKILL.md "Artifact Contract" + "Evaluation Artifact Template" + "Results Row Discipline" sections. Schema changes require atomic update across `_shared/eval-loop-spec.md` + lp-brief skill (which produces strategy/ artifacts read by lp-eval) + eval-loop owner.
+> Format rules for the lp-eval cycle artifact + results.tsv row + learnings.md promotion. Cited from COMMAND.md "Artifact Contract" + "Evaluation Artifact Template" + "Results Row Discipline" sections. Schema changes require atomic update across `_shared/eval-loop-spec.md` + lp-brief skill (which produces strategy/ artifacts read by lp-eval) + eval-loop owner.
 
 ## Output locations
 

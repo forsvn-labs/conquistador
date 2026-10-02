@@ -2,7 +2,7 @@
 title: Map User Flow — Anti-Patterns
 lifecycle: canonical
 status: stable
-produced_by: map-user-flow
+produced_by: flow
 load_class: ANTI-PATTERN
 ---
 
@@ -42,7 +42,7 @@ load_class: ANTI-PATTERN
 
 ## When to defer instead of mapping a flow
 
-- **Requirements are fuzzy** — defer to `shape-initiative`. A flow against unclear requirements maps a hallucination.
+- **Requirements are fuzzy** — defer to `shape`. A flow against unclear requirements maps a hallucination.
 - **Visual brand identity needed** — defer to `/create-brand`. user-flow is layout + interaction, not visual tokens.
 - **Technical API design needed** — defer to `/architect-software-system`. Wireframe regions don't define endpoint contracts.
 - **Single-page conversion surface** (landing page, ad LP) — defer to `/improve-conversion`. user-flow rubrics are for multi-step product flows, not single-screen persuasion architectures.

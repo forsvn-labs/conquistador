@@ -26,9 +26,9 @@ The two blocks are **adjacent, never overlapping**:
 | **Legibility — applied expertise** ([`why-this-works-convention.md`](why-this-works-convention.md)) | **channel-fit** | the platform pack (algorithm signals, format, §5 Playbook) | pack-consuming skills only |
 | **Why this works** (this file) | **product-fit** | the ICP / VoC / brand / positioning artifacts | every producing skill |
 
-A pack-consumer (e.g. `write-social`) emits **both**, in order: artifact → Legibility (why it fits the
+A pack-consumer (e.g. `social`) emits **both**, in order: artifact → Legibility (why it fits the
 *channel*) → Why this works (why it wins for *this product*) → critic verdict. A non-pack producer
-(e.g. `write-ad`, `brief-creative`, `create-shortform`) emits **Why this works** only. Never restate a
+(e.g. `write-ad`, `creative`, `video`) emits **Why this works** only. Never restate a
 legibility tactic here; this block answers a different question.
 
 ## Placement (required)
@@ -39,7 +39,7 @@ one-paragraph "here's why this plate works for you," not the kitchen's inspectio
 last/appendix).
 
 Exception for brief-style deliverables that already open with a short **"the bet" / "TL;DR"** framing
-(e.g. `create-shortform`'s `## What This Brief Bets On`): carry the product-fit reasoning **in that
+(e.g. `video`'s `## What This Brief Bets On`): carry the product-fit reasoning **in that
 opening section** instead of repeating it lower down — provided the opening stays short (it must not
 bury the artifact) and the scorecard still comes last. One block per deliverable, never two.
 

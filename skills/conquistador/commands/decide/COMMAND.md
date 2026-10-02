@@ -1,9 +1,8 @@
 ---
-name: decision-panel
-description: "Resolve a consequential decision through independent positions, dissent, uncertainty, and explicit resolver criteria. Use for requests historically called debate-agents or agents-panel, and for stochastic multi-agent discussion only as an optional deep mode. Works through a sequential single-context fallback when separate contexts are unavailable."
+name: decide
+description: "Resolve a hard decision with independent positions and explicit criteria."
 metadata:
   version: 1.1.0
-
 ---
 
 # Resolve a consequential decision

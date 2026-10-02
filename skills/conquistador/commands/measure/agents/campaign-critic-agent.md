@@ -55,14 +55,14 @@ Any of these = FAIL regardless of dimension scores:
 
 1. No loop definition: no `.forsvn/loops/[slug]/program.md` + `context.md` when the local loop store exists, AND no operator-supplied equivalents (a missing `.forsvn` store alone is not a fail — the loop scope may come from the operator).
 2. No current primary metric value, source, or measurement window.
-3. The cycle scored a single ad / post / page / video instead of the campaign aggregate, OR the campaign tag is missing (wrong scope — route a single-asset request to evaluate-ad / evaluate-content / evaluate-landing-page / evaluate-shortform).
+3. The cycle scored a single ad / post / page / video instead of the campaign aggregate, OR the campaign tag is missing (wrong scope — route a single-asset request to evaluate-ad / evaluate-content / evaluate-landing-page / `results`).
 4. A rider channel's contribution counted as a campaign-driven result without a causation check (channel-mix contamination).
 5. Claimed improvement without baseline OR baseline from a non-comparable campaign type / channel mix.
 6. Any fabricated number, conversion count, or revenue figure.
 7. Ledger row status outside `keep | discard | watch | blocked`.
 8. Ledger description missing the campaign tag.
 9. Learning promoted from low-confidence, blocked, OR rider-channel-spike / seasonal-spike evidence.
-10. Source plan-campaign artifact path unreadable or unverified.
+10. Source `campaign` artifact path unreadable or unverified.
 11. A `keep` verdict resting on blended CAC while paid CAC alone is underwater vs the product's price/payback target (unit-economics laundering).
 12. Total spend or sample below the loop's confidence floor AND status = `keep` (low-sample keep claims are unfalsifiable).
 
@@ -76,4 +76,4 @@ If the operator chooses to ship despite your FAIL (or accept your PASS_WITH_CONC
 
 ## Self-Check
 
-If the evaluation would cause a future plan-campaign agent to keep funding an underwater paid channel, fund a rider channel as if it were a driver, or re-plan a campaign based on a rider channel's borrowed credit — fail it. The cost of a bad keep (a wasted budget cycle on a channel that never drove net-new) is higher than the cost of a false FAIL (one re-dispatch cycle).
+If the evaluation would cause a future `campaign` agent to keep funding an underwater paid channel, fund a rider channel as if it were a driver, or re-plan a campaign based on a rider channel's borrowed credit — fail it. The cost of a bad keep (a wasted budget cycle on a channel that never drove net-new) is higher than the cost of a false FAIL (one re-dispatch cycle).

@@ -1,9 +1,9 @@
 ---
-name: build-web-app
+command: build
+mode: web
 description: "Implement and verify an explicit web-product outcome in an existing or approved project. Use for end-to-end vertical slices, responsive accessible UI, client/server state, data, validation, auth, security, recovery, tests, browser checks, migrations, and bounded deployment handoffs."
 metadata:
   version: 1.0.0
-
 ---
 
 # Build a web app outcome
@@ -18,12 +18,12 @@ Read the core files in full before you draft; read the others when their step or
 
 Core:
 
-- [test-contract](references/test-contract.md): Web Test Contract. The test contract states, before implementation, which checks must run for a slice's…
-- [web-engineering-method](references/web-engineering-method.md): Web Engineering Method. Implement one complete vertical slice with verified behavior, in the project's…
+- [test-contract](web/references/test-contract.md): Web Test Contract. The test contract states, before implementation, which checks must run for a slice's…
+- [web-engineering-method](web/references/web-engineering-method.md): Web Engineering Method. Implement one complete vertical slice with verified behavior, in the project's…
 
-Worked examples: [settings-slice-walkthrough](references/examples/settings-slice-walkthrough.md).
+Worked examples: [settings-slice-walkthrough](web/references/examples/settings-slice-walkthrough.md).
 
-Output formats and fallbacks: [sequential](fallbacks/sequential.md).
+Output formats and fallbacks: [sequential](web/fallbacks/sequential.md).
 
 <!-- playbooks:end -->
 
@@ -37,7 +37,7 @@ database, scaffold, builder, or cloud.
 
 Validate the minimum user flow, interface states, data and trust boundaries, acceptance criteria, and
 non-goals needed to implement safely. Expose unresolved product decisions rather than encoding guesses.
-The full procedure lives in [web engineering method](references/web-engineering-method.md).
+The full procedure lives in [web engineering method](web/references/web-engineering-method.md).
 
 ## Implement complete vertical slices
 
@@ -55,14 +55,14 @@ rollback.
 ## Verify against the test contract
 
 Classify each slice's risk (read-only UI, stateful, trust boundary, infrastructure) and run the checks
-the [test contract](references/test-contract.md) requires: proportionate type, lint, unit, integration,
+the [test contract](web/references/test-contract.md) requires: proportionate type, lint, unit, integration,
 end-to-end, browser, responsive, accessibility, security, migration, and build checks. Inspect the
 actual rendered behavior when tools allow. Report commands, environment, results, artifacts, and named
 untested cells; do not claim a browser, deployment, or production result that did not run, and never
 describe an unexecuted check as passing.
 
 A worked (fictional) example of the delivered artifact shape:
-[authenticated settings slice walkthrough](references/examples/settings-slice-walkthrough.md).
+[authenticated settings slice walkthrough](web/references/examples/settings-slice-walkthrough.md).
 
 If the host, dependency, service, browser, or environment is unavailable, return a bounded handoff with
 exact changes, files, commands, fixtures, expected evidence, blockers, and the human-owned next step.
@@ -70,7 +70,7 @@ exact changes, files, commands, fixtures, expected evidence, blockers, and the h
 ## Run the method in one context when needed
 
 When separate implementer, reviewer, and browser contexts are unavailable, use
-[sequential fallback](fallbacks/sequential.md): inspect → validate intent → classify risk → implement
+[sequential fallback](web/fallbacks/sequential.md): inspect → validate intent → classify risk → implement
 one slice → hostile self-review pass → execute the available contract checks → deliver or hand off.
 Label single-context results as such; unavailable checks stay untested cells, never simulated passes.
 

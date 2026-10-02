@@ -3,7 +3,7 @@
 This is a newly authored hypothetical production example. It contains no customer evidence, observed performance or platform verification. Timings below are draft production choices for review, not platform targets. Exact upload settings, asset permissions and account controls remain pending.
 
 ```yaml
-type: create-shortform
+type: video
 role: hero
 status: done_with_concerns
 hero_platform: shorts

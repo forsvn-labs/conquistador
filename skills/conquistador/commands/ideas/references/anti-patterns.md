@@ -2,7 +2,7 @@
 title: Short-Form Research — Anti-Patterns
 lifecycle: canonical
 status: stable
-produced_by: research-content-ideas
+produced_by: ideas
 load_class: ANTI-PATTERN
 ---
 
@@ -24,7 +24,7 @@ load_class: ANTI-PATTERN
 | Looping the critic past 2 cycles | Trying for PASS forever when the underlying data is genuinely thin (LOW_SAMPLE everywhere, no doc URLs available). Burns tokens for a result that won't improve. | Hard cap at 2 cycles. After cycle 2, stop for the human; internal grade `done_with_concerns` with failed rubrics pinned at top of artifact. The transparency IS the value. |
 | Adding net-new platforms beyond the 5-cap | Adding YouTube Long, Snapchat Spotlight, etc. mid-run because operator asked. Each platform doubles research time + cost. | Hard cap is 5. If operator wants a 6th, refuse and surface the cap. Research depth per platform > breadth across platforms. |
 | Re-pulling for the same topic+market inside the freshness window | Wasting cost on a re-run when warm-start would have caught it. | Warm-start scan in Pre-Dispatch is mandatory. If an artifact exists for (topic, market) and `trend_signals_date` is <14d AND `platform_mechanics_date` is <90d, default to mode (a) "use existing." |
-| Cross-stack contract drift | Adding new frontmatter fields or body sections without updating `create-shortform` (consumer) + `evaluate-shortform` (cycle scorer). Silent schema drift breaks downstream parsers. | Output Artifact Structure is the cross-stack contract. Schema changes require atomic update of both consumers — never ship a one-sided schema change. Flag to operator before changing. |
+| Cross-stack contract drift | Adding new frontmatter fields or body sections without updating `video` (consumer) + `results` (cycle scorer). Silent schema drift breaks downstream parsers. | Output Artifact Structure is the cross-stack contract. Schema changes require atomic update of both consumers — never ship a one-sided schema change. Flag to operator before changing. |
 | Treating critic rubric as scoring noise | Critic FAIL → ignore and ship anyway. Defeats the entire 5-rubric gate. | Critic FAIL → re-dispatch named source agent with feedback. If FAIL persists past cycle 2, stop for the human; internal grade `done_with_concerns` with failed rubrics pinned. The gate is load-bearing — never silently bypassed. |
 | Recommendations that cannot be evaluated | An attention claim without a comparison does not guide a test. | State the viewer task, uncertain decision, change, comparison and observable outcome. Cite supporting observations and preserve their limits. |
 | Skipping competitor seeds when offered | Operator provided 5 competitor handles in Cold Start Q5, scout ignores them and pulls top performers from default search. Wastes a high-value signal. | Scout protocol: seed list is the priority cohort. Default search supplements only after seed cohort is exhausted. See `scout-protocol.md`. |

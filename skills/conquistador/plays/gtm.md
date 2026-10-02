@@ -1,14 +1,25 @@
-# Position-to-campaign workflow
+---
+command: gtm
+label: Position a product and run its first campaign
+intents: ["go to market","go to market plan","gtm plan","gtm strategy","position and campaign","position to campaign","positioning and first campaign"]
+chain:
+  - { command: position }
+  - { command: campaign }
+  - { command: copy, for: "the finished primary asset" }
+  - { command: measure, for: "the first qualified signal and reversal condition" }
+legacy: position-to-campaign
+---
+# Position a product and run its first campaign
 
-Use privately when the product needs an evidenced audience and position carried through to one first
+Use when the product needs an evidenced audience and position carried through to one first
 campaign, rather than isolated copy.
 
-1. Use `research-positioning` to settle the audience, costly moment, alternatives, promise, mechanism,
+1. Use `position` to settle the audience, costly moment, alternatives, promise, mechanism,
    proof, objection, and assumption boundary.
-2. Use `plan-campaign` to choose one observable outcome, channel role, sequence, asset inventory,
+2. Use `campaign` to choose one observable outcome, channel role, sequence, asset inventory,
    budget boundary, and stop rule.
-3. Use `write-copy` or the channel-native creation outcome for the finished primary asset.
-4. Use `measure-growth` to define the first qualified signal and reversal condition.
+3. Use `copy` or the channel-native creation outcome for the finished primary asset.
+4. Use `measure` to define the first qualified signal and reversal condition.
 
 Keep one decision spine across the position and every asset. Do not manufacture customer language,
 proof, market size, or outcome claims; when evidence is thin, make the campaign a learning test.

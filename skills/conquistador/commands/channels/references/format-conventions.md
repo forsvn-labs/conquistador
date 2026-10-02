@@ -2,7 +2,7 @@
 title: Platform Evidence Research — Format Conventions
 lifecycle: canonical
 status: stable
-produced_by: research-channel
+produced_by: channels
 load_class: PROCEDURE
 ---
 

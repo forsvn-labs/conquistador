@@ -1,9 +1,8 @@
 ---
-name: design-pricing-and-packaging
-description: "Design evidence-bounded pricing, packaging, value metrics, tier boundaries, and migration tests. Use when deciding what to charge, what belongs in each package, how customers upgrade, or how to test a price change safely."
+name: pricing
+description: "Design pricing, packages, and upgrade paths, and test a price change safely."
 metadata:
   version: 1.0.0
-
 ---
 
 # Design pricing and packaging

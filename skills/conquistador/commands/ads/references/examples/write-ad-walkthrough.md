@@ -42,7 +42,7 @@ draft with explicit pending launch checks. No publication or spending occurs.
 
 ## Evaluation handoff
 
-A later evaluate-paid-campaign invocation needs actual delivery and qualified
+A later `results` invocation needs actual delivery and qualified
 outcome evidence with scope and denominators. The 120-unit planning ceiling cannot
 be entered as actual spend. If no results arrive, evaluation returns a measurement
 plan. If the budget ends before sufficient evidence, close as inconclusive rather

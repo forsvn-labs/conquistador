@@ -1,6 +1,6 @@
 # Worked Example — Pillar Piece (Route A)
 
-> End-to-end write-longform walkthrough — Pre-Dispatch → Layer 1 (research) → Layer 2 (outline) → Layer 3 (draft) → critic gate (with a cycle-0 Originality FAIL the critic caught) → artifact. Includes the explicit side-by-side proving this is NOT write-copy.
+> End-to-end `article` walkthrough — Pre-Dispatch → Layer 1 (research) → Layer 2 (outline) → Layer 3 (draft) → critic gate (with a cycle-0 Originality FAIL the critic caught) → artifact. Includes the explicit side-by-side proving this is NOT `copy`.
 
 [EXAMPLE] — the premium-bar artifact: a research-grounded, structurally-disciplined pillar with a load-bearing proprietary frame that clears the 7-dimension critic at Originality ≥5. The closing side-by-side is the anti-collapse proof the K5 spec requires.
 
@@ -119,8 +119,8 @@ Hard gates: Originality ≥5 ✓ · every claim cited/tagged, zero invented stat
 
 ---
 
-## The anti-collapse proof — this is NOT write-copy
+## The anti-collapse proof — this is NOT `copy`
 
-Asked "write a blog post about async vs sync standups", `write-copy` (or a base model) produces a clean, on-brand piece whose body is the three consensus bullets in nice prose: "standups are fine if short; async saves time for distributed teams; it depends on your team." Polished. On-voice. **Zero delta over the first page of search.** It would have scored well on prose and thesis and FAILED Originality at 3 — and `write-copy` has no Originality gate to catch it.
+Asked "write a blog post about async vs sync standups", `copy` (or a base model) produces a clean, on-brand piece whose body is the three consensus bullets in nice prose: "standups are fine if short; async saves time for distributed teams; it depends on your team." Polished. On-voice. **Zero delta over the first page of search.** It would have scored well on prose and thesis and FAILED Originality at 3 — and `copy` has no Originality gate to catch it.
 
-`write-longform` instead: ran a **research stage first** that named the consensus baseline and stress-tested the thesis against its strongest counter; committed an **argument spine** where each section earns the next and the counter has its own bounded section; and gated on an **Originality floor** that FAILed the cycle-0 draft precisely because it had collapsed into consensus prose. The "coordination tax" frame + the real per-team cost calc are what a base model wouldn't volunteer — and the critic's first-scored dimension is the one that guarantees the piece carries them. That sequence (research → outline → draft → originality-gated critic) is the structural difference write-copy cannot replicate, which is exactly why this is a separate discipline and not write-copy plus a pack.
+`article` instead: ran a **research stage first** that named the consensus baseline and stress-tested the thesis against its strongest counter; committed an **argument spine** where each section earns the next and the counter has its own bounded section; and gated on an **Originality floor** that FAILed the cycle-0 draft precisely because it had collapsed into consensus prose. The "coordination tax" frame + the real per-team cost calc are what a base model wouldn't volunteer — and the critic's first-scored dimension is the one that guarantees the piece carries them. That sequence (research → outline → draft → originality-gated critic) is the structural difference `copy` cannot replicate, which is exactly why this is a separate discipline and not `copy` plus a pack.

@@ -169,7 +169,7 @@ These apply across all marketing-skills, not just seo. Same detection/fix shape;
 **Detection:** Cold Start Q4 (geo + language scope) declared a Vietnamese market and the artifact ships without a vn-tone polish pass on user-facing copy (Findings narrative, Priority Actions, Next Step).
 
 **Bad:** Vietnamese-market SEO audit delivered in English-syntax-direct-translated Vietnamese (passive-voice calques, missing particles).
-**Good:** Generate findings in English (agents are English-only), then route the artifact through `polish-vietnamese` for the user-facing prose pass. Frontmatter `status: done_with_concerns` if vn-tone not run; recommend the polish step in Next Step.
+**Good:** Generate findings in English (agents are English-only), then route the artifact through `vietnamese` for the user-facing prose pass. Frontmatter `status: done_with_concerns` if vn-tone not run; recommend the polish step in Next Step.
 
 **Owned by:** orchestrator (Step 8 deliver). Operator may override per scope.
 
@@ -182,6 +182,6 @@ These apply across all marketing-skills, not just seo. Same detection/fix shape;
 **Bad:** Artifact with `mode: technical-audit` (not enum value), missing Dependencies section.
 **Good:** `mode: audit` (enum), all 7 H2 sections present even if some are "(none for this mode)".
 
-**Why it matters:** the artifact frontmatter contract reads frontmatter to index; `write-copy` reads body sections by name. Drift breaks downstream tools silently.
+**Why it matters:** the artifact frontmatter contract reads frontmatter to index; `copy` reads body sections by name. Drift breaks downstream tools silently.
 
 **Owned by:** orchestrator (Step 5 merge into artifact template). Critic gate 1 catches missing fields per finding but doesn't validate frontmatter — operator + sync-script catch frontmatter drift.

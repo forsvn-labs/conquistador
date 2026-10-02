@@ -2,13 +2,13 @@
 title: SEO/AEO-Eval Format Conventions
 lifecycle: canonical
 status: stable
-produced_by: optimize-search
+produced_by: seo
 load_class: PROCEDURE
 ---
 
 # SEO/AEO-Eval Format Conventions
 
-> Format rules for the optimize-search cycle artifact + results.tsv row + learnings.md promotion. Cited from SKILL.md "Artifact Contract" section. Schema changes require atomic update across `fallbacks/sequential.md` + the eval-loop owner + optimize-search (which produce the source change read by optimize-search).
+> Format rules for the `seo` cycle artifact + results.tsv row + learnings.md promotion. Cited from COMMAND.md "Artifact Contract" section. Schema changes require atomic update across `fallbacks/sequential.md` + the eval-loop owner + `seo` (which produce the source change read by `seo`).
 
 Aligned with the eval siblings (`evaluate-content`, `evaluate-ad`) where cross-eval consistency matters (frontmatter schema, Results Row 8-column schema, Evidence 6-column schema, side-effect order). SEO-specific extensions are clearly marked.
 
@@ -33,7 +33,7 @@ files and return the artifact inline using the same schema.
 
 ```yaml
 ---
-skill: optimize-search
+skill: seo
 version: 1
 date: YYYY-MM-DD
 status: done | done_with_concerns | blocked | needs_context
@@ -43,9 +43,9 @@ lifecycle: evaluation
 use_when: "Deciding whether to keep, discard, watch, or block the current SEO/AEO cycle"
 do_not_use_when: "Applying on-page fixes or authoring content without reading the latest loop context and results"
 upstream: ".forsvn/loops/[slug]/program.md, context.md, artifacts/optimize-search/[date]-<slug>.md or optimize-search/[date]-[slug].md, ranking-data source"
-downstream: "results.tsv, learnings.md, optimize-search next-cycle target"
+downstream: "results.tsv, learnings.md, seo next-cycle target"
 provenance:
-  skill: optimize-search
+  skill: seo
   run_date: YYYY-MM-DD
   input_artifacts:
     - artifacts/optimize-search/[date]-<slug>.md
@@ -54,7 +54,7 @@ provenance:
 ---
 ```
 
-Date format: ISO `YYYY-MM-DD`. `lifecycle: evaluation` is required (eval-loop spec — see `fallbacks/sequential.md`). `provenance` is the generation-provenance contract — see `SKILL.md` § Generation provenance. For an `ai-answers` cycle, the `input_artifacts` source is the `optimize-search/[date]-[slug].md` artifact instead.
+Date format: ISO `YYYY-MM-DD`. `lifecycle: evaluation` is required (eval-loop spec — see `fallbacks/sequential.md`). `provenance` is the generation-provenance contract — see `COMMAND.md` § Generation provenance. For an `ai-answers` cycle, the `input_artifacts` source is the `optimize-search/[date]-[slug].md` artifact instead.
 
 ## Body section structure (8 sections, in order)
 
@@ -73,7 +73,7 @@ Save to `.forsvn/loops/[slug]/evals/YYYY-MM-DD-cycle-N.md`:
 
 ```markdown
 ---
-skill: optimize-search
+skill: seo
 version: 1
 date: YYYY-MM-DD
 status: done | done_with_concerns | blocked | needs_context
@@ -83,9 +83,9 @@ lifecycle: evaluation
 use_when: "Deciding whether to keep, discard, watch, or block the current SEO/AEO cycle"
 do_not_use_when: "Applying on-page fixes or authoring content without reading the latest loop context and results"
 upstream: ".forsvn/loops/[slug]/program.md, context.md, artifacts/optimize-search/[date]-<slug>.md or optimize-search/[date]-[slug].md, ranking-data source"
-downstream: "results.tsv, learnings.md, optimize-search next-cycle target"
+downstream: "results.tsv, learnings.md, seo next-cycle target"
 provenance:
-  skill: optimize-search
+  skill: seo
   run_date: YYYY-MM-DD
   input_artifacts:
     - artifacts/optimize-search/[date]-<slug>.md
@@ -148,7 +148,7 @@ provenance:
 - Keep: [target-level, not "the SEO"]
 - Discard:
 - Watch:
-- Route next work to: optimize-search | optimize-search | write-copy | run-pipeline | none
+- Route next work to: seo | seo | copy | run-pipeline | none
 
 ## Results Row
 
@@ -247,10 +247,10 @@ If critic FAIL after revision: skip all 4 side effects. Return BLOCKED with the 
 
 This skill produces:
 
-- `evals/[date]-cycle-N.md` — consumed by future SEO-eval cycles (trend), by `optimize-search` / `optimize-search` (latest eval seeds the next target), and by humans reviewing loop progress
+- `evals/[date]-cycle-N.md` — consumed by future SEO-eval cycles (trend), by `seo` / `seo` (latest eval seeds the next target), and by humans reviewing loop progress
 - `results.tsv` row — appended to the loop's ledger; consumed by any skill reading the loop's status
 - `learnings.md` update — high-confidence keyword/surface-scoped lessons reusable beyond this keyword, with a next-core-update expiry
 
-This skill reads the source optimize-search artifact (stored in provenance.input_artifacts) + the ranking/visibility data. The coordination contract is at the eval-loop boundary + the provenance pointer, not at a shared-schema boundary.
+This skill reads the source `seo` artifact (stored in provenance.input_artifacts) + the ranking/visibility data. The coordination contract is at the eval-loop boundary + the provenance pointer, not at a shared-schema boundary.
 
 Schema changes (frontmatter fields, body section structure, Evidence table columns, Results Row columns, learnings.md format) require atomic update of `eval-format-conventions.md` + `fallbacks/sequential.md` + downstream callers — never silently drift.

@@ -1,6 +1,6 @@
 # Critical Gates + Quality Rubric — Full Detail
 
-Cited by `SKILL.md` "Critical Gates" and "Quality Gate" sections. Read in full before any Layer 1 dispatch — gates fire on every run regardless of mode (`--fast` does **not** bypass them; see `../fallbacks/sequential.md` § safety-gates-supersede).
+Cited by `COMMAND.md` "Critical Gates" and "Quality Gate" sections. Read in full before any Layer 1 dispatch — gates fire on every run regardless of mode (`--fast` does **not** bypass them; see `../fallbacks/sequential.md` § safety-gates-supersede).
 
 ## Why this block precedes "Before Starting"
 
@@ -20,7 +20,7 @@ to satisfy wireframe sizing.
 4. **No skipping edge cases.** Error / empty / loading / permission / offline + per-surface edge states for every screen and surface.
 5. **Challenge >7 happy-path steps.** Miller's threshold. Every step must justify itself.
 6. **One flow = one file.** No pooling. Each run writes `.forsvn/artifacts/product/map-user-flow/map-user-flow-<YYYY-MM-DD>-<slug>.md`.
-7. **Stale product context (>30 days) misaligns flows.** Recommend re-running `research-positioning` before proceeding.
+7. **Stale product context (>30 days) misaligns flows.** Recommend re-running `position` before proceeding.
 
 ## Quality Gate — Critic Rubric (PASS checks)
 

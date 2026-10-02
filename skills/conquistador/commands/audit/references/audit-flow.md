@@ -2,7 +2,7 @@
 title: Audit-Marketing — AUDIT flow
 lifecycle: canonical
 status: stable
-produced_by: audit-marketing
+produced_by: audit
 load_class: PROCEDURE
 ---
 
@@ -17,7 +17,7 @@ artifact.**
 1. **Resolve target.** A named artifact path, or — empty arg — the whole operator-supplied package (or `.forsvn/artifacts/**/*.md` when scanning a tree). `scan.ts` accepts a file, a directory, or a glob.
 
 2. **Detect findings.** The primary detector is contextual judgment: apply the seven dimensions in
-   `SKILL.md` to each unit **in context** — no word or cadence is defective merely because an AI
+   `COMMAND.md` to each unit **in context** — no word or cadence is defective merely because an AI
    system often uses it. Rank each finding `block / warn / nit` (mapped to blocking / material /
    minor on the front door). Name the dimension + location; do not invent registry rule ids.
 

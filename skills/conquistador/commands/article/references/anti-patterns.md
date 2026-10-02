@@ -7,7 +7,7 @@
 ## 1. Consensus-restatement (the collapse-into-write-copy tell)
 
 **Symptom:** The piece is polished, on-brand, and says exactly what the first page of search already says.
-**Why it fails:** The entire value of a pillar is its delta over the consensus. A piece with no delta is `write-copy` stretched to 2000 words — the exact failure this skill exists to prevent.
+**Why it fails:** The entire value of a pillar is its delta over the consensus. A piece with no delta is `copy` stretched to 2000 words — the exact failure this skill exists to prevent.
 **Detection:** Originality scored against the research agent's Consensus baseline comes back <5; the prose could appear on any competitor's blog.
 **Owned by:** draft + research + critic (Originality floor — hard gate, automatic FAIL).
 

@@ -32,7 +32,7 @@ churn: high
 
 ## Thread Conventions
 
-If write-social body exceeds 280 chars OR uses thread-marker syntax:
+If `social` body exceeds 280 chars OR uses thread-marker syntax:
 
 1. Split body into ≤280-char chunks at natural break points (sentence boundaries; never mid-word).
 2. Number each chunk: `1/N`, `2/N`, ... `N/N` where N = total chunks.

@@ -28,7 +28,7 @@ Every artifact starts with:
 
 ```yaml
 ---
-skill: brief-creative
+skill: creative
 version: 1
 date: YYYY-MM-DD
 status: done | done_with_concerns | blocked | needs_context
@@ -53,7 +53,7 @@ sacred_respected: [list of sacred elements honored]
 
 | Field | Rule |
 |---|---|
-| `skill` | Always `brief-creative` |
+| `skill` | Always `creative` |
 | `version` | Integer; increment on re-run with same slug (preserves history via `[slug].v[N].md` rename) |
 | `date` | ISO `YYYY-MM-DD`; the date the brief was approved at Gate 2, not the date rendering completes |
 | `status` | One of the four values; **never** omit, never invent new values |
@@ -160,7 +160,7 @@ Every brief ends with a `## Review Gate` block — the final body section, after
 Comments and suggested edits use Proof or inline CriticMarkup, depending on `review_tool`.
 ```
 
-This is the human-review layer per [`reviewable-artifact-contract`](reviewable-artifact-contract.md); [`roughdraft-review-protocol`](roughdraft-review-protocol.md) is only the optional Markdown UI fallback. brief-creative produces a `pipeline` artifact, so the frontmatter `decision_state` defaults to `not_required` — most briefs are regenerable drafts. The block and the four review frontmatter fields ship in the template so the operator (or a loop) can opt a run into review by setting `decision_state: pending`. The operator checks exactly one box; the agent reads it to set `decision_state`. The block and fields are additive and orthogonal — downstream consumers jump to sections by heading match, so a new trailing heading does not affect them.
+This is the human-review layer per [`reviewable-artifact-contract`](reviewable-artifact-contract.md); [`roughdraft-review-protocol`](roughdraft-review-protocol.md) is only the optional Markdown UI fallback. `creative` produces a `pipeline` artifact, so the frontmatter `decision_state` defaults to `not_required` — most briefs are regenerable drafts. The block and the four review frontmatter fields ship in the template so the operator (or a loop) can opt a run into review by setting `decision_state: pending`. The operator checks exactly one box; the agent reads it to set `decision_state`. The block and fields are additive and orthogonal — downstream consumers jump to sections by heading match, so a new trailing heading does not affect them.
 
 ## Re-run convention
 
@@ -176,7 +176,7 @@ On status DONE:
 
 1. **Literal path match only.** If the brief's asset path (the resolved output path the brief targets, NOT the brief's own artifact path) is a literal string match for a `brand/ASSETS.md` row's `path` field → flip `[ ]` → `[x]` and append a date stamp.
 2. **Never auto-tick on slug, asset-type, or platform heuristic.** Heuristic ticking causes false positives (e.g., two carousels with different paths ticking the same row).
-3. **No match → skip silently.** brief-creative does NOT own ASSETS.md row CREATION — that's brand-system's job. brief-creative only ticks existing rows.
+3. **No match → skip silently.** `creative` does NOT own ASSETS.md row CREATION — that's brand-system's job. `creative` only ticks existing rows.
 4. **Multi-format briefs (template-pack):** tick all rows that match literal paths. Each per-format variant may match a different ASSETS.md row.
 
 ## Anti-drift checks

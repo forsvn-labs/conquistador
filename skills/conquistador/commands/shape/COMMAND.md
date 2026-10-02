@@ -1,9 +1,8 @@
 ---
-name: shape-initiative
-description: "Turn an ambiguous initiative into one bounded decision and immediate next move. Use when a request is vague, over-broad, solution-first, or missing a success boundary, owner, constraint, or reversible starting point."
+name: shape
+description: "Turn a vague initiative into one bounded decision and a first move."
 metadata:
   version: 1.0.0
-
 ---
 
 # Shape an initiative
@@ -20,7 +19,7 @@ Core:
 - [anti-patterns](references/anti-patterns.md): Shape-initiative — Anti-Patterns + Edge Cases. Load when: the orchestrator is about to ask a question that…
 - [decision-record](references/decision-checks/decision-record.md): Define the decision. Use this check when the request leaves several plausible actions open. Start with the…
 - [initiative-shaping-method](references/initiative-shaping-method.md): Shape a decision into an actionable scope. Start with the change the user wants and the decision that…
-- [orchestration-steps](references/orchestration-steps.md): Shape-initiative — Orchestration Steps (full detail). Full step-by-step procedure for shape-initiative.…
+- [orchestration-steps](references/orchestration-steps.md): Shape-initiative — Orchestration Steps (full detail). Full step-by-step procedure for `shape`.…
 
 By step: [communication-discipline](references/communication-discipline.md), [configuration](references/configuration.md), [context-gathering](references/context-gathering.md), [business-workflow](references/decision-checks/business-workflow.md), [commitment-plan](references/decision-checks/commitment-plan.md), [consumer-adoption](references/decision-checks/consumer-adoption.md), [demand-evidence](references/decision-checks/demand-evidence.md), [machine-readable-product](references/decision-checks/machine-readable-product.md), [physical-product-economics](references/decision-checks/physical-product-economics.md), [pricing-test](references/decision-checks/pricing-test.md), [prior-attempt-review](references/decision-checks/prior-attempt-review.md), [divergence-pass](references/divergence-pass.md), [example-contracts](references/example-contracts.md), [idea-ranking-core](references/idea-ranking-core.md), [interview-techniques](references/interview-techniques.md), [output-formats](references/output-formats.md), [plan-review-modes](references/plan-review-modes.md), [question-bank](references/question-bank.md).
 

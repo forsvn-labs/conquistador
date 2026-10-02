@@ -1,9 +1,8 @@
 ---
-name: research-content-ideas
-description: "Research, select, and brief a small set of evidence-backed content ideas. Use when choosing topics, angles, hooks, formats, or editorial bets for a defined audience and channel without drafting or publishing the content itself."
+name: ideas
+description: "Find and rank content ideas from current audience signals."
 metadata:
   version: 2.1.0
-
 ---
 
 # Research content ideas
@@ -79,7 +78,7 @@ Lead with the ranked selection, then provide:
 
 Return the catalog in-thread by default. If durable storage exists and the operator wants it, write
 the catalog under `.forsvn/artifacts/mkt/research-content-ideas/`; that location is optional and
-never required to finish this skill. Do not fabricate demand,
+never required to finish this command. Do not fabricate demand,
 schedule content, publish, or write to an external system without explicit approval.
 
 Worked example of the full arc, including provenance labeling:
@@ -90,7 +89,7 @@ Worked example of the full arc, including provenance labeling:
 Fail closed and say which stop fired:
 
 - **Missing input:** no audience or product context (no ICP and no cold-start hint) → return
-  NEEDS_CONTEXT toward `research-positioning`; do not guess an audience.
+  NEEDS_CONTEXT toward `position`; do not guess an audience.
 - **Factual uncertainty:** a load-bearing volatile claim cannot be verified → reject the dependent
   angle or label it unverified; never present it as observed.
 - **Credential stop:** a platform requires authenticated access you do not have → record the gap as
@@ -117,5 +116,5 @@ Before delivery, load the recovered method instead of paraphrasing it:
 
 If the host cannot run those as separate agents, use [sequential fallback](fallbacks/sequential.md).
 
-Per-asset storyboard, shot list, and production composition belong to `create-shortform` (later
-wave). This skill stops at ranked, evidence-backed angles.
+Per-asset storyboard, shot list, and production composition belong to `video` (later
+wave). This command stops at ranked, evidence-backed angles.

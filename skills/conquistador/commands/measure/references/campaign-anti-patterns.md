@@ -37,7 +37,7 @@ load_class: ANTI-PATTERN
 **Fix:** Routing must be to the smallest correct next skill (plan-campaign with a budget-reallocation scope, not "re-plan everything"). Decision Discipline rubric dim catches this.
 
 ### 6. Lane drift into asset-level eval territory
-**Pattern:** The operator wants a single Meta ad scored; measure-growth scores it anyway by treating one ad as a one-channel "campaign."
+**Pattern:** The operator wants a single Meta ad scored; `measure` scores it anyway by treating one ad as a one-channel "campaign."
 **Why it fails:** A single ad needs paid-attribution discipline and audience-temp scoring (`evaluate-ad`). A single post needs engagement-quality discrimination (`evaluate-content`). Scoring them through the campaign-aggregate rubric applies the wrong lens.
 **Fix:** Critical Gate 2 + Critic Hard Fail #3. Metric Ingest's scope check STOPs on a single-asset request and routes to the asset-level sibling.
 
@@ -56,7 +56,7 @@ load_class: ANTI-PATTERN
 **Why it fails:** A blended campaign number hides which channels drove the result and which dragged. The verdict cannot discriminate; the next budget decision is blind.
 **Fix:** The per-channel breakdown table in Diagnosis § Channel-Mix Signals is mandatory. Channel-Mix Discrimination rubric dim drops to 0-2 on a breakdown-free artifact.
 
-### 10. Source plan-campaign artifact unverified
+### 10. Source `campaign` artifact unverified
 **Pattern:** The cycle artifact's provenance lists `input_artifacts: artifacts/campaign-plan.md` — but the file doesn't exist or is a different campaign's plan.
 **Why it fails:** Without the source artifact, the eval scores against an imagined hypothesis. Future `plan-campaign --rev=N+1` runs read provenance and can't follow the chain.
 **Fix:** Metric Ingest's Blockers section catches unreadable source paths. Critic Hard Fail #10 enforces.
@@ -69,14 +69,14 @@ load_class: ANTI-PATTERN
 ## Cross-cutting marketing-stack rows
 
 ### Cross-stack contract drift
-**Pattern:** Frontmatter schema, body section list, the Channel Breakdown table columns, or Results Row columns diverged silently between measure-growth's campaign-format-conventions.md and `fallbacks/sequential.md`.
-**Why it fails:** Downstream consumers (dashboard, plan-campaign --rev=N+1, ledger-summary skills) break or silently miss fields.
-**Fix:** Schema changes require atomic update across format-conventions + `fallbacks/sequential.md` + plan-campaign's awareness of the contract.
+**Pattern:** Frontmatter schema, body section list, the Channel Breakdown table columns, or Results Row columns diverged silently between `measure`'s campaign-format-conventions.md and `fallbacks/sequential.md`.
+**Why it fails:** Downstream consumers (dashboard, `campaign` --rev=N+1, ledger-summary skills) break or silently miss fields.
+**Fix:** Schema changes require atomic update across format-conventions + `fallbacks/sequential.md` + `campaign`'s awareness of the contract.
 
 ### Sibling-skill confusion with the asset-level eval skills
 **Pattern:** A campaign loop's eval cycle tries to re-score every ad, post, and landing page the campaign used inside one campaign-eval artifact.
-**Why it fails:** measure-growth is aggregate-only. Re-scoring assets duplicates evaluate-ad / evaluate-content / evaluate-landing-page work, applies the wrong rubric, and bloats the cycle artifact.
-**Fix:** measure-growth cites per-asset eval artifacts as context only. The assets are scored in their own loops/cycles by the asset-level skills. Critical Gate 2 enforces.
+**Why it fails:** `measure` is aggregate-only. Re-scoring assets duplicates evaluate-ad / evaluate-content / evaluate-landing-page work, applies the wrong rubric, and bloats the cycle artifact.
+**Fix:** `measure` cites per-asset eval artifacts as context only. The assets are scored in their own loops/cycles by the asset-level skills. Critical Gate 2 enforces.
 
 ### Upstream context skipped — no loop scaffolded
 **Pattern:** Operator runs `/measure-growth` without a loop ever created.
@@ -84,6 +84,6 @@ load_class: ANTI-PATTERN
 **Fix:** Critical Gate 1 blocks. Skill returns NEEDS_CONTEXT and recommends `/run-pipeline` to scaffold first.
 
 ### Polish-chain misroute
-**Pattern:** Eval artifact is sent to humanmaxxing or polish-vietnamese after writing.
+**Pattern:** Eval artifact is sent to humanmaxxing or `vietnamese` after writing.
 **Why it fails:** Eval artifacts are evidence + decisions, not customer-facing copy. Humanmaxxing would smooth attribution caveats into more confident-sounding prose — exactly the opposite of what attribution discipline requires.
 **Fix:** Eval artifacts skip the humanmaxxing/polish-vietnamese polish chain. They ship as-is from critic PASS.

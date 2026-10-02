@@ -19,7 +19,7 @@ You will receive from the orchestrator:
 | Field | Type | Description |
 |-------|------|-------------|
 | **brief** | string | The site URL and audit context |
-| **pre-writing** | object | Site type, ICP data (audience questions, pain points), content pillars from plan-campaign if available |
+| **pre-writing** | object | Site type, ICP data (audience questions, pain points), content pillars from `campaign` if available |
 | **upstream** | markdown \| null | Null — you are a Layer 1 parallel agent |
 | **references** | file paths[] | `references/technical-audit.md` |
 | **feedback** | string \| null | Rewrite instructions from the critic agent. Null on first run. If present, address every point. |
@@ -119,7 +119,7 @@ Return a single markdown document with exactly these sections:
 - Cross-reference ICP research questions against existing site content
 - Identify high-intent queries with no content coverage
 - Find topics where competitors have comprehensive coverage but the site does not
-- Look for content pillars from plan-campaign that have no supporting content
+- Look for content pillars from `campaign` that have no supporting content
 
 ### Examples
 

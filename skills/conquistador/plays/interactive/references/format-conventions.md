@@ -3,7 +3,7 @@
 ## Artifact frontmatter (11 fields — v3 contract)
 
 ```yaml
-skill: interactive-campaign
+skill: interactive
 version: 1
 date: YYYY-MM-DD
 stack: marketing

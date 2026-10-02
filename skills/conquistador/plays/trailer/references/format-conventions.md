@@ -1,6 +1,6 @@
 # Format Conventions
 
-> Loaded by the orchestrator and every craft agent to write artifacts in the canonical structure. Schema changes here require atomic update of `produce-video`'s `video-brief-schema.md` extension (WS4) and the cross-stack contract note in `SKILL.md` § Artifact Contract.
+> Loaded by the orchestrator and every craft agent to write artifacts in the canonical structure. Schema changes here require atomic update of `produce-video`'s `video-brief-schema.md` extension (WS4) and the cross-stack contract note in the play file § Artifact Contract.
 
 ---
 
@@ -271,7 +271,7 @@ Screenshots must be labeled with one of these. Custom labels are allowed if they
 
 Schema changes that require atomic edits across files:
 
-1. **Frontmatter field order or set in `brief.md`** → also update `produce-video`'s `video-brief-schema.md` extension (WS4) and the cross-stack note in `SKILL.md` § Artifact Contract.
+1. **Frontmatter field order or set in `brief.md`** → also update `produce-video`'s `video-brief-schema.md` extension (WS4) and the cross-stack note in the play file § Artifact Contract.
 2. **Body section headers in `brief.md`** → produce-video consumers may match sections by heading; never silently rename or reorder.
 3. **Handoff column set in `handoff-produce-video.md`** → produce-video's prompt-author-agent parses these columns; column rename / removal breaks the consumer.
 4. **Interaction-verb canonical set (§6)** → interaction-grammar.md and Gate 3 in critic-agent.md both cite this set; update in sync.

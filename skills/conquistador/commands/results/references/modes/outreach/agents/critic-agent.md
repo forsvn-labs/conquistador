@@ -55,8 +55,8 @@ Any of these = FAIL regardless of dimension scores:
 
 1. Neither loop state (`.forsvn/loops/[slug]/program.md` + `context.md`, when that store exists) NOR an operator-declared scope for a standalone evaluation (primary metric, guardrails, channel + segment, window). Loop state is preferred when present; its absence alone is not a failure.
 2. The cycle scored a draft — no sent outreach with reply/bounce data.
-3. Source write-outreach artifact path unreadable or unverified — in a standalone run, an operator-supplied copy of the sequence satisfies this when the `.forsvn` store does not exist.
-4. Missing channel+segment tag, OR the cycle scored an organic post / paid ad (wrong skill — route to measure-growth / evaluate-paid-campaign).
+3. Source `outreach` artifact path unreadable or unverified — in a standalone run, an operator-supplied copy of the sequence satisfies this when the `.forsvn` store does not exist.
+4. Missing channel+segment tag, OR the cycle scored an organic post / paid ad (wrong skill — route to `measure` / `results`).
 5. Cross-channel or cross-segment metrics blended into the verdict (contamination — they are context only).
 6. Any fabricated reply count, meeting, bounce, or compliance claim.
 7. Ledger row status outside `keep | discard | watch | blocked`.
@@ -76,4 +76,4 @@ If the operator chooses to ship despite your FAIL (or accept your PASS_WITH_CONC
 
 ## Self-Check
 
-If the evaluation would cause a future write-outreach agent to scale a sequence that is burning the sending domain, breaking opt-out, or winning only vanity opens — fail it. The cost of a bad keep (a blacklisted domain or a compliance breach) is far higher than the cost of a false FAIL (one re-dispatch cycle).
+If the evaluation would cause a future `outreach` agent to scale a sequence that is burning the sending domain, breaking opt-out, or winning only vanity opens — fail it. The cost of a bad keep (a blacklisted domain or a compliance breach) is far higher than the cost of a false FAIL (one re-dispatch cycle).

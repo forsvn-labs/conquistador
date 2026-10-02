@@ -1,7 +1,7 @@
 ---
 title: Bound the next commitment
 load_class: METHOD
-produced_by: shape-initiative
+produced_by: shape
 ---
 
 # Bound the next commitment

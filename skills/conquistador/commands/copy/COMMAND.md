@@ -1,9 +1,8 @@
 ---
-name: write-copy
-description: "Write or rewrite finished product-marketing copy blocks: landing pages, product pages, headlines, calls to action, messaging variants, and launch announcement copy. Use when the deliverable is paste-ready copy that is specific, credible, on-brand, and ready to publish. Route multi-touch outreach sequences to write-outreach, channel-native social posts to write-social, long-form articles to write-longform, and full paid-campaign buildouts to create-paid-campaign."
+name: copy
+description: "Write paste-ready copy for pages, headlines, calls to action, emails, and launches."
 metadata:
   version: 2.1.1
-
 ---
 
 # Write product-marketing copy
@@ -59,7 +58,7 @@ situation, evidence, offer terms, and requested action. The method is self-conta
 
 ## Scope and handoffs
 
-This skill owns the copy block itself.
+This command owns the copy block itself.
 
 Include:
 
@@ -67,15 +66,15 @@ Include:
 - headlines, CTAs, and messaging variants;
 - launch announcement copy;
 - single behavior-triggered lifecycle emails, and the copy layer of a lifecycle sequence
-  (one psychological job per touch; campaign design stays with `lifecycle-campaign`).
+  (one psychological job per touch; campaign design stays with `lifecycle`).
 
 Exclude — route instead:
 
-- multi-touch outreach sequences → `write-outreach`;
-- channel-native social posts → `write-social`;
-- long-form articles → `write-longform`;
-- a full paid campaign buildout (ad sets per network from a plan) → `create-paid-campaign`;
-- measuring copy performance after launch → `measure-growth`.
+- multi-touch outreach sequences → `outreach`;
+- channel-native social posts → `social`;
+- long-form articles → `article`;
+- a full paid campaign buildout (ad sets per network from a plan) → `ads`;
+- measuring copy performance after launch → `measure`.
 
 ## Write from the product outward
 
@@ -99,10 +98,10 @@ Apply the surface:
 - **Landing page:** audience, costly moment, promise, mechanism, proof, objections, and next step in a
   scan-friendly sequence.
 - **Lifecycle email (single send):** trigger from real behavior, give one useful next step; multi-touch
-  sequence design routes to `write-outreach`.
+  sequence design routes to `outreach`.
 - **Launch:** explain what changed, who it serves, why now, how it works, and how to try it.
 
-Ad copy inside a paid campaign belongs to `create-paid-campaign`; this skill supplies headlines and
+Ad copy inside a paid campaign belongs to `ads`; this command supplies headlines and
 CTA units only when asked for standalone blocks.
 
 ## Deliver

@@ -15,7 +15,7 @@ stack mechanism (critic / schema / mode-resolver / re-run trigger) rather than a
 | 7 | **Sycophancy** — declaring the spec done without running the critic gate | The 8-CP rubric is the quality contract; skipping it ships unverified work | full critic pass required |
 | 8 | **Artifact-contract drift** — sections/frontmatter not matching `format-conventions.md` | Breaks downstream consumers (architect-software-system, forsvn preview) and validate-artifacts | `format-conventions.md` schema |
 | 9 | **Mode misuse** — letting `--fast` skip the intake gate or the critic | Safety gates supersede `--fast`; a fast run still grounds in the flow and passes the critic | `../fallbacks/sequential.md` |
-| 10 | **Stale upstream** — designing against an outdated/superseded `map-user-flow` | The spec drifts from the real flow; re-run on flow changes | re-run trigger (Chain Position) |
+| 10 | **Stale upstream** — designing against an outdated/superseded `flow` | The spec drifts from the real flow; re-run on flow changes | re-run trigger (Chain Position) |
 
 ## When the critic FAILs
 

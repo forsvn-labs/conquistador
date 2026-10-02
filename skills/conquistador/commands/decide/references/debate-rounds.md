@@ -2,7 +2,7 @@
 title: Decision Panel — Debate Rounds
 lifecycle: canonical
 status: stable
-produced_by: decision-panel
+produced_by: decide
 load_class: REFERENCE
 ---
 

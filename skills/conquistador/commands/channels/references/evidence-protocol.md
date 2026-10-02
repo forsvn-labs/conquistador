@@ -2,7 +2,7 @@
 title: Platform Evidence Research — Evidence Protocol
 lifecycle: canonical
 status: stable
-produced_by: research-channel
+produced_by: channels
 load_class: PROCEDURE
 ---
 

@@ -1,4 +1,4 @@
-# Method: write-social
+# Method: `social`
 
 Turn one brief into a complete social or community artifact for one platform and market.
 The reader should recognize the task, receive the promised answer and have a usable next action.
@@ -32,8 +32,8 @@ mode-specific limits. No critic rewrite loop is implied.
 ## Scope and handoff
 
 Use one artifact per platform and market so its audience, account constraints, preview and
-production dependencies stay explicit. Paid ads route to create-paid-campaign; on-site copy to
-write-copy; one-to-one outreach to write-outreach; complete video production to create-shortform.
+production dependencies stay explicit. Paid ads route to `ads`; on-site copy to
+`copy`; one-to-one outreach to `outreach`; complete video production to `video`.
 This skill owns social captions and launch media instructions, not the finished video.
 
 The local artifact path is `.forsvn/artifacts/mkt/social/[platform]-[date]-[slug].md` when that
@@ -41,7 +41,7 @@ store exists; deliver inline otherwise. Keep the frontmatter and ordered body co
 format-conventions.md. Legibility identifies the loaded method and unknowns. Why this works
 identifies supplied product foundations or uses Absent. Neither block belongs in native copy.
 
-Optional terminal editorial-polish or polish-vietnamese follows pass/done_with_concerns only.
+Optional terminal editorial-polish or `vietnamese` follows pass/done_with_concerns only.
 Preserve variants and baseline critic scores; record Body/CTA changes and recheck affected
 constraints before publication. Vietnamese-market work retains the existing register handoff.
 A missing optional sibling never justifies claiming that a separate polish pass ran.

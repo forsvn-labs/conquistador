@@ -10,7 +10,7 @@ Convert the metric packet and diagnosis into an operational decision: keep, disc
 - Diagnosis output (Reply-Quality Signals + Deliverability & Compliance + Cross-Channel Context)
 - Loop `program.md`, especially promotion rule, guardrails, and `channel + segment` scope
 - Prior `results.tsv` — read at least the last 2 rows of the same channel + segment for trend context
-- Source write-outreach artifact
+- Source `outreach` artifact
 
 ## Output Contract
 
@@ -23,7 +23,7 @@ Return:
 - confidence: high | medium | low | blocked
 - channel: [channel] · segment: [segment]
 - decision_sentence: [one sentence, no tabs, includes the channel + segment]
-- next_route: write-outreach | research-positioning | none
+- next_route: outreach | position | none
 - next_action_summary: [one sentence — what the next route should produce, if any]
 
 ## Keep / Discard / Watch
@@ -59,12 +59,12 @@ cycle	date	artifact	primary_metric	value	baseline	status	description
 - `keep`: primary metric (positive-reply / meeting-booked / qualified-lead rate) improved against a comparable baseline (same channel + segment, comparable window), guardrails did not fail, attribution confidence is medium or high, the reply-quality read is `strong` or `mixed` (not `vanity-heavy`), AND the deliverability/compliance gate is PASS. A vanity reply spike or a deliverability red flag never earns `keep`.
 - `discard`: primary metric worsened OR a guardrail failed OR the reply-quality read is `vanity-heavy` while meaningful replies collapsed — AND the change is plausibly connected to the cycle.
 - `watch`: signal is positive or mixed but underpowered (low sends), baseline is weak, confounders are material (warmup, list freshness), OR reply-quality is mixed and one more cycle would disambiguate.
-- `blocked`: missing primary metric, missing source/window, contradictory data, no deliverability/compliance evidence, OR no proof the sequence actually sent (no source write-outreach artifact).
+- `blocked`: missing primary metric, missing source/window, contradictory data, no deliverability/compliance evidence, OR no proof the sequence actually sent (no source `outreach` artifact).
 
 ## Routing Rules
 
-- Route to `write-outreach` when the next action is new copy/sequence authorship for the same channel + segment (revised subject, new opener, reordered steps). Include `--rev=N+1` in next_action_summary.
-- Route to `research-positioning` when the diagnosis points at the LIST/TARGETING (the copy was fine but the segment was wrong, or list quality/freshness drove bounces) — fix the list before re-sending.
+- Route to `outreach` when the next action is new copy/sequence authorship for the same channel + segment (revised subject, new opener, reordered steps). Include `--rev=N+1` in next_action_summary.
+- Route to `position` when the diagnosis points at the LIST/TARGETING (the copy was fine but the segment was wrong, or list quality/freshness drove bounces) — fix the list before re-sending.
 - Stop with NEEDS_CONTEXT when the metric contract, baseline, guardrails, or channel/segment scope need operator redefinition. Do not scaffold a loop.
 - Route to `none` when the cycle should continue unchanged until the next window (typically `watch`).
 
@@ -86,4 +86,4 @@ Before returning, verify:
 - The channel + segment tag matches Metric Ingest's fields — never silently switch.
 - The ledger description is one sentence, has no tab characters, AND includes the channel + segment.
 - The promoted lesson is durable, evidence-backed, and channel/segment/offer-scoped (be conservative).
-- Routing is to the smallest correct next skill (write-outreach subject-only revision, or research-positioning for a list fix).
+- Routing is to the smallest correct next skill (write-outreach subject-only revision, or `position` for a list fix).

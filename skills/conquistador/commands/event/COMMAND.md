@@ -1,9 +1,8 @@
 ---
-name: create-run-of-show
-description: "Create an owner-ready, minute-by-minute run of show for a live, virtual, community, partner, or in-person event. Use when hosts, speakers, producers, technical operators, cues, contingencies, consent, and follow-up must work as one executable plan."
+name: event
+description: "Write a minute-by-minute run of show for a live or virtual event."
 metadata:
   version: 2.1.0
-
 ---
 
 # Create a run of show
@@ -17,7 +16,7 @@ Read the core files in full before you draft; read the others when their step or
 
 Core:
 
-- [anti-patterns](references/anti-patterns.md): Anti-Patterns — create-run-of-show. 7 patterns. The critic checks each before ship.
+- [anti-patterns](references/anti-patterns.md): Anti-Patterns — `event`. 7 patterns. The critic checks each before ship.
 
 Specialist roles: [critic-agent](agents/critic-agent.md), [logistics-director-agent](agents/logistics-director-agent.md), [segment-planner-agent](agents/segment-planner-agent.md).
 

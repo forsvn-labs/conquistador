@@ -2,7 +2,7 @@
 title: Audit-Marketing — Report Template
 lifecycle: canonical
 status: stable
-produced_by: audit-marketing
+produced_by: audit
 load_class: PROCEDURE
 ---
 
@@ -20,8 +20,8 @@ The report is itself a meta-stack artifact and must pass `validate-artifacts --s
 
 ```yaml
 ---
-skill: audit-marketing
-produced_by: audit-marketing
+skill: audit
+produced_by: audit
 id: audit-marketing-{YYYY-MM-DD}-{slug}     # == filename stem; v3 instruction core
 type: record                                 # meta-stack records layer
 keywords: [slop-audit, antipattern, {target-slug}]
@@ -37,7 +37,7 @@ score_after: N                                # == score_before for a pure audit
 verdict: clean | findings | blocked           # clean = 0 findings; blocked = unresolved denylist hit
 advisory_tier_run: false                      # true only once the S6 LLM-critic exists and ran
 provenance:
-  skill: audit-marketing
+  skill: audit
   run_date: {YYYY-MM-DD}
   input_artifacts:                            # what was scanned
     - {path to the audited artifact, or the operator-supplied package / `.forsvn/artifacts/**/*.md` tree}
@@ -65,7 +65,7 @@ Findings are grouped **blocking → material → minor**. Each line: severity ·
 
 ### Accepted   {/audit: the real findings; /polish: the ones it attempted to fix}
 - `[block] slop-not-just-x` · hero:L3 · "It's not just a tool, it's a movement." · → operator-named language tool
-- `[warn] cta-weak-verb` · cta:L12 · "Learn more" (no value clause) · → `write-copy`
+- `[warn] cta-weak-verb` · cta:L12 · "Learn more" (no value clause) · → `copy`
 
 ### Rejected   {Layer-1 false positives + collapsed nit-padding — say WHY each cleared}
 - `[minor] rule-of-three` · L8 · triad inside a quoted testimonial — exempt (FP guard).
@@ -85,5 +85,5 @@ Findings are grouped **blocking → material → minor**. Each line: severity ·
 {Imperative + FP-judgment clause + the rolled-up command.}
 Handle the BLOCK findings before this ships. A finding is not automatically a defect — a quoted testimonial, a legal disclaimer, an intentional bad-example block, or a user-confirmed choice can be valid as-is; use judgment, and don't silence a real one.
 
-**Next**: ask for the audit-marketing POLISH flow on {target} to apply + re-verify Accepted fixes (lands `decision_state: pending` for your review) — using available fixers only: {operator-named language tool, `write-copy`, `polish-vietnamese`}. No fixer grants release authority.
+**Next**: ask for the audit POLISH flow on {target} to apply + re-verify Accepted fixes (lands `decision_state: pending` for your review) — using available fixers only: {operator-named language tool, `copy`, `vietnamese`}. No fixer grants release authority.
 ```

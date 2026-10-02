@@ -1,9 +1,9 @@
-# Format Conventions — measure-growth
+# Format Conventions — `measure`
 
 ## Artifact frontmatter (12 fields, verbatim — v3 artifact contract)
 
 ```yaml
-skill: measure-growth
+skill: measure
 version: 1                      # artifact-schema version (integer)
 date: YYYY-MM-DD
 stack: marketing
@@ -17,7 +17,7 @@ applied_tactics: [<tactic>, ...]      # tactics the read attributed against (emp
 keywords: [measure, <channel>, launch, loop]
 ```
 
-Conforms to `SKILL.md`. `validate-artifacts --strict` enforces it.
+Conforms to `COMMAND.md`. `validate-artifacts --strict` enforces it.
 
 ## Body sections (in order)
 
@@ -27,7 +27,7 @@ Conforms to `SKILL.md`. `validate-artifacts --strict` enforces it.
 4. **`## Keep / Drop / Test`** — concrete next-launch actions; Test items phrased as hypotheses.
 5. **`## Hypothesis Verdicts`** — each launch hypothesis: confirmed / refuted / inconclusive against the original bounded decision rule + number and limitation.
 6. **`## Pack Write-Back`** — proposed dated changelog rows, evidence status and owner decision; report an actual authorized append separately.
-7. **`## Legibility`** — the `**Legibility — applied expertise**` block per [`legibility-convention.md`](legibility-convention.md): the method loaded + its `method_updated` and null `last_verified` + the **specific** §3/§5 signals the diagnosis read the numbers through (concrete, §-cited — never a bare "measured against the pack" label), or the transparent-degrade Absent shape when no pack covered the channel. Authored by the diagnosis agent; its facts mirror into the `pack_verified` + `applied_tactics` frontmatter fields. **Legibility only — measure-growth produces a measurement, not a marketing artifact, so it carries no `## Why this works` block.**
+7. **`## Legibility`** — the `**Legibility — applied expertise**` block per [`legibility-convention.md`](legibility-convention.md): the method loaded + its `method_updated` and null `last_verified` + the **specific** §3/§5 signals the diagnosis read the numbers through (concrete, §-cited — never a bare "measured against the pack" label), or the transparent-degrade Absent shape when no pack covered the channel. Authored by the diagnosis agent; its facts mirror into the `pack_verified` + `applied_tactics` frontmatter fields. **Legibility only — `measure` produces a measurement, not a marketing artifact, so it carries no `## Why this works` block.**
 8. **`## Critic Verdict`** — 6-row table (5 dims + total).
 
 The `## Legibility` block and the `pack_verified` / `applied_tactics` frontmatter must agree: `pack_verified` = `none` for null `last_verified` or Absent, and `applied_tactics` = the §3/§5 signals the block narrates (empty list in the Absent state). Use the block state to distinguish a loaded draft from Absent; a loaded draft has `pack_verified: none` and can have nonempty `applied_tactics`.

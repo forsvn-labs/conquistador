@@ -8,11 +8,11 @@ Keep the same method. Change only the machinery.
 1. Bound the evidence: platform, post or render URL, original brief path, matching platform pack by
    exact file from the
    [pack contract](../references/platform-intelligence/CONTRACT.md) (e.g.
-   [linkedin](../references/platform-intelligence/linkedin.md)), observation window, and
+   [linkedin](../../../../../measure/references/platform-intelligence/linkedin.md)), observation window, and
    known confounders. Missing brief or missing pack → BLOCKED, not vibes scoring.
 2. Honor cycle weighting: cycle 1 is 70% observation / 30% scoring. Later cycles balance. Rubric in
    [rubric](../references/rubric.md) stays provisional until real variance forces a dated revision.
-3. Run [hook-strength](../agents/hook-strength-agent.md): compare the observed opening and payoff to the brief using [hook-archetypes](../references/hook-archetypes.md).
+3. Run [hook-strength](../agents/hook-strength-agent.md): compare the observed opening and payoff to the brief using [hook-archetypes](../../../../../video/references/hook-archetypes.md).
 4. Run [eval-runner](../agents/eval-runner-agent.md): score the four primary dimensions plus
    author-discretion with falsifiable one-sentence justifications. Do not invent metrics.
 5. Run [pattern-extractor](../agents/pattern-extractor-agent.md): one atomic pattern-log entry in

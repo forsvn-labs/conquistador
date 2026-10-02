@@ -1,9 +1,9 @@
-# Format Conventions — create-run-of-show
+# Format Conventions — `event`
 
 ## Artifact frontmatter (10 fields — v3 contract)
 
 ```yaml
-skill: create-run-of-show
+skill: event
 version: 1
 date: YYYY-MM-DD
 stack: mkt

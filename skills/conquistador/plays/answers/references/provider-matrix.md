@@ -128,4 +128,4 @@ When the operator targets a provider not listed here:
 3. Add the user-agent to the crawler readiness list.
 4. Update `query-set-agent`'s default mapping for the relevant intent class.
 
-These extensions live in this file (not in agent SKILL.md bodies). Agents always read this file at dispatch.
+These extensions live in this file (not in agent the play file bodies). Agents always read this file at dispatch.

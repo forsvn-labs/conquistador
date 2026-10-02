@@ -84,7 +84,7 @@ Does the keep/discard/watch/blocked verdict follow Recommendation's Decision Rul
 
 | Band | Description |
 |------|-------------|
-| 9-10 | Verdict matches the hard-constraint check + brand-fit read; routing is to the smallest correct next skill (produce-asset re-render vs brief-graphic spec-fix vs create-brand token-fix) at the right granularity; decision sentence is one sentence with the asset id + engine |
+| 9-10 | Verdict matches the hard-constraint check + brand-fit read; routing is to the smallest correct next skill (produce-asset re-render vs brief-graphic spec-fix vs `brand` token-fix) at the right granularity; decision sentence is one sentence with the asset id + engine |
 | 7-8 | Verdict matches; routing correct but slightly over-broad (recommended a brief rewrite when a re-render would do) |
 | 5-6 | Verdict matches but decision sentence multi-sentence or omits the asset id; routing right domain, wrong specificity |
 | 3-4 | Verdict drifts from the check (render was striking → `keep` despite a missed hard constraint) OR routing to a non-existent / inappropriate skill |

@@ -2,7 +2,7 @@
 title: Web Test Contract
 lifecycle: canonical
 status: stable
-produced_by: build-web-app
+produced_by: build
 load_class: METHOD
 ---
 

@@ -1,8 +1,8 @@
 ---
-title: Improve-conversion Cycle Walkthrough (section-level bottleneck → route to improve-conversion)
+title: Improve-conversion Cycle Walkthrough (section-level bottleneck → route to convert)
 lifecycle: canonical
 status: stable
-produced_by: improve-conversion
+produced_by: convert
 load_class: EXAMPLE
 ---
 
@@ -84,13 +84,13 @@ Proceeding to evaluate cycle 3.
 - causal_confidence: medium
 ```
 
-**Layer 2 — Recommendation** turns packet + diagnosis into a decision. Primary metric **dropped** against a comparable baseline and the change is plausibly connected → `discard`. Routes the fix to `improve-conversion` (it does **not** redesign here):
+**Layer 2 — Recommendation** turns packet + diagnosis into a decision. Primary metric **dropped** against a comparable baseline and the change is plausibly connected → `discard`. Routes the fix to `convert` (it does **not** redesign here):
 
 ```
 - status: discard
 - confidence: medium
 - decision_sentence: The hero reveal cut CTA CTR 1.3pt by pushing the "how it works" section below an attention cliff.
-- next_route: improve-conversion
+- next_route: convert
 ```
 
 **Layer 3 — Critic** scores the assembled artifact.
@@ -101,7 +101,7 @@ Written to `.forsvn/loops/forsvn-home-cro/evals/2026-06-12-cycle-3.md`:
 
 ```markdown
 ---
-skill: improve-conversion
+skill: convert
 version: 1
 date: 2026-06-12
 status: done
@@ -196,7 +196,7 @@ bun a Markdown ledger row on the evaluation artifact (no TypeScript helper) "for
   - Confidence is medium (scroll map 30%-sampled); surfaced in Verdict + Caveat. PASS, not PASS_WITH_CONCERNS, because the primary-metric drop is sourced, comparable, and unambiguous.
 ```
 
-Dimension check (each ≥ 7): Loop Fit 9 (writes inside `forsvn-home-cro`, evaluates its surface) · Metric Integrity 9 (value/baseline/window/source/units explicit) · Attribution Honesty 8 (sample, comparability, sampling caveat stated, no overclaim) · Decision Discipline 9 (`discard` follows the metric drop, not the diagnosis story) · **Boundary Control 9 — the domain gate: the recommendation isolates the bottleneck section and routes the fix to `improve-conversion`; it never specifies the replacement copy/layout.** · Ledger Correctness 8 (one valid row, no tabs, relative path). No Hard Fail tripped: real loop, real metric source-window, baseline present, evidence not a heuristic audit, no fabricated numbers, valid status, low-confidence learning correctly **not** promoted.
+Dimension check (each ≥ 7): Loop Fit 9 (writes inside `forsvn-home-cro`, evaluates its surface) · Metric Integrity 9 (value/baseline/window/source/units explicit) · Attribution Honesty 8 (sample, comparability, sampling caveat stated, no overclaim) · Decision Discipline 9 (`discard` follows the metric drop, not the diagnosis story) · **Boundary Control 9 — the domain gate: the recommendation isolates the bottleneck section and routes the fix to `convert`; it never specifies the replacement copy/layout.** · Ledger Correctness 8 (one valid row, no tabs, relative path). No Hard Fail tripped: real loop, real metric source-window, baseline present, evidence not a heuristic audit, no fabricated numbers, valid status, low-confidence learning correctly **not** promoted.
 
 PASS → side effects fire in order: write artifact → append row → (no learning promotion — correctly gated) → `bun manual manifest note if needed (no TypeScript helper)`.
 
@@ -216,7 +216,7 @@ Suppose the first Recommendation pass had set `status: keep` arguing "bounce imp
   - none
 ```
 
-Per the revision cycle, re-dispatch **recommendation-agent** (named in `required_fixes`) with the critic feedback appended. It corrects `keep → discard`, drops the aesthetic justification, and re-routes to `improve-conversion`. The re-scored artifact is the one shown in §4 → PASS. (Had it FAILed again, the rule is BLOCKED: **no** ledger row, **no** learning promotion, **no** manifest sync — all-or-nothing.)
+Per the revision cycle, re-dispatch **recommendation-agent** (named in `required_fixes`) with the critic feedback appended. It corrects `keep → discard`, drops the aesthetic justification, and re-routes to `convert`. The re-scored artifact is the one shown in §4 → PASS. (Had it FAILed again, the rule is BLOCKED: **no** ledger row, **no** learning promotion, **no** manifest sync — all-or-nothing.)
 
 ## 8. Completion status
 
@@ -226,5 +226,5 @@ Per the revision cycle, re-dispatch **recommendation-agent** (named in `required
 
 - The **verdict is driven by conversion evidence** (CTR drop), never by how the page looks — a `keep` argued on "premium feel" is a Critic FAIL.
 - Diagnosis **isolates the bottleneck section** ("how it works", 79%→38% cliff) instead of grading the whole page.
-- The evaluator **routes the fix to `improve-conversion`** and never writes the replacement design — Boundary Control is the domain gate.
+- The evaluator **routes the fix to `convert`** and never writes the replacement design — Boundary Control is the domain gate.
 - Low-confidence + page-specific lessons stay in the cycle artifact; they are **not** promoted to `learnings.md`.

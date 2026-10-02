@@ -61,7 +61,7 @@ After Pre-Dispatch, generate or update `docs/forsvn/canonical/product/PRODUCT-CO
 
 | Artifact | Source | Benefit |
 |----------|--------|---------|
-| `diagnose.md` | supplied diagnosis or `diagnose-growth` output | Problem context sharpens audience research |
+| `diagnose.md` | supplied diagnosis or `diagnose` output | Problem context sharpens audience research |
 
 ---
 
@@ -164,7 +164,7 @@ decision_state: pending
 - [Skews you couldn't mitigate — explicit caveats for downstream skills]
 
 ## Next Step
-Run `plan-campaign` to turn these insights into a communication plan.
+Run `campaign` to turn these insights into a communication plan.
 
 > On re-run: overwrite `docs/forsvn/canonical/research/ICP.md` in place and increment the integer `version:`. Prior versions live in git history — no `.v[N].md` siblings under `canonical/`.
 ```

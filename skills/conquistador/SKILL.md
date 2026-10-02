@@ -100,57 +100,57 @@ omit a quality check. Language alone never implies a Vietnamese editing request.
 
 Read [capabilities.md](capabilities.md) for broad, ambiguous, or multi-stage requests. When the goal
 matches a file in [workflows/](workflows/), load that compact outcome contract privately. The flagship
-composition is [content-intelligence-loop](workflows/content-intelligence-loop.md): it is
+composition is [content-intelligence-loop](plays/content.md): it is
 composition-only prose. Its separate executable graph in the optional runtime is locally
 implemented and verified with synthetic fixtures. Live execution, provider behavior and human
 acceptance remain unverified. This prose grants no execution authority. Its one social branch composes
-`research-content-ideas` → `write-social` → `fresh-eyes-review` → human verdict boundary → optional
-action handoff → `measure-growth`. For a narrow request, load the directly relevant sibling skill:
+`ideas` → `social` → `critique` → human verdict boundary → optional
+action handoff → `measure`. For a narrow request, load the directly relevant sibling skill:
 
-- [research-positioning](../research-positioning/SKILL.md) for market, ICP, competitor, offer, or
+- [research-positioning](commands/position/COMMAND.md) for market, ICP, competitor, offer, or
   positioning work;
-- [create-brand](../create-brand/SKILL.md) for brand foundation, voice, or identity direction;
-- [plan-campaign](../plan-campaign/SKILL.md) for campaigns, launches, channel plans, lifecycle,
+- [create-brand](commands/brand/COMMAND.md) for brand foundation, voice, or identity direction;
+- [plan-campaign](commands/campaign/COMMAND.md) for campaigns, launches, channel plans, lifecycle,
   referral, experiments, or budget;
-- [brief-creative](../brief-creative/SKILL.md) for landing pages, graphics, video, previews, or other
+- [brief-creative](commands/creative/COMMAND.md) for landing pages, graphics, video, previews, or other
   creative production briefs;
-- [analyze-video](../analyze-video/SKILL.md) when the user supplies a local video to inspect with timestamped evidence;
-- [write-copy](../write-copy/SKILL.md) for pages, ads, email, outreach, launches, and long-form copy;
-- [write-social](../write-social/SKILL.md) for X, LinkedIn, Reddit, Instagram, Facebook, Threads, Product Hunt,
+- [analyze-video](commands/watch/COMMAND.md) when the user supplies a local video to inspect with timestamped evidence;
+- [write-copy](commands/copy/COMMAND.md) for pages, ads, email, outreach, launches, and long-form copy;
+- [write-social](commands/social/COMMAND.md) for X, LinkedIn, Reddit, Instagram, Facebook, Threads, Product Hunt,
   Hacker News, Discord, and other community work;
-- [optimize-search](../optimize-search/SKILL.md) for SEO, AI answers (ChatGPT, Perplexity), app store
+- [optimize-search](commands/seo/COMMAND.md) for SEO, AI answers (ChatGPT, Perplexity), app store
   listings, retrieval, and citations;
-- [improve-conversion](../improve-conversion/SKILL.md) for page, checkout, onboarding, activation, and
+- [improve-conversion](commands/convert/COMMAND.md) for page, checkout, onboarding, activation, and
   paywall conversion: audits, diagnosis, prioritization, and experiments;
-- [measure-growth](../measure-growth/SKILL.md) for measurement plans, performance review, and durable
+- [measure-growth](commands/measure/COMMAND.md) for measurement plans, performance review, and durable
   learning;
-- [polish-vietnamese](../polish-vietnamese/SKILL.md) for Vietnamese creation or revision.
-- [model-growth-funnel](../model-growth-funnel/SKILL.md) for numeric growth models, sensitivity,
+- [polish-vietnamese](commands/vietnamese/COMMAND.md) for Vietnamese creation or revision.
+- [model-growth-funnel](commands/funnel/COMMAND.md) for numeric growth models, sensitivity,
   capacity, and unit economics;
-- [create-paid-campaign](../create-paid-campaign/SKILL.md) for paid-media strategy, finished ads,
+- [create-paid-campaign](commands/ads/COMMAND.md) for paid-media strategy, finished ads,
   creative, budget, and evaluation;
-- [write-outreach](../write-outreach/SKILL.md) for signal-led outreach, reply handling,
+- [write-outreach](commands/outreach/COMMAND.md) for signal-led outreach, reply handling,
   deliverability, and compliance;
-- [write-longform](../write-longform/SKILL.md) for substantive essays, articles, guides, and reports.
-- [create-shortform](../create-shortform/SKILL.md) for short-form research, scripts, storyboards,
+- [write-longform](commands/article/COMMAND.md) for substantive essays, articles, guides, and reports.
+- [create-shortform](commands/video/COMMAND.md) for short-form research, scripts, storyboards,
   recuts, production, and learning;
-- [research-channel](../research-channel/SKILL.md) for evidence-backed channel selection and current
+- [research-channel](commands/channels/COMMAND.md) for evidence-backed channel selection and current
   platform intelligence.
-- [decision-panel](../decision-panel/SKILL.md) for structuring independent positions on a consequential
+- [decision-panel](commands/decide/COMMAND.md) for structuring independent positions on a consequential
   decision and resolving it with explicit criteria;
-- [submit-feedback](../submit-feedback/SKILL.md) when the user opts to share a Conquistador experience as a redacted public issue;
-- [knowledge-review](../knowledge-review/SKILL.md) for auditing the authority, freshness, and
+- [submit-feedback](commands/feedback/COMMAND.md) when the user opts to share a Conquistador experience as a redacted public issue;
+- [knowledge-review](commands/factcheck/COMMAND.md) for auditing the authority, freshness, and
   uncertainty of sources behind a claim or decision.
 
 All 38 outcome skills are reachable through this parent. Use the capability map for outcomes not
 listed above. The user does not need to invoke a sibling separately. For engineering requests, load:
 
-- [map-user-flow](../map-user-flow/SKILL.md) for product journeys, screens, transitions, and recovery;
-- [brief-product-ui](../brief-product-ui/SKILL.md) for interface specifications and component states;
-- [architect-software-system](../architect-software-system/SKILL.md) for requested system architecture;
-- [build-ios-app](../build-ios-app/SKILL.md) for requested iOS implementation;
-- [build-web-app](../build-web-app/SKILL.md) for requested web implementation;
-- [write-technical-docs](../write-technical-docs/SKILL.md) for technical documentation.
+- [map-user-flow](commands/flow/COMMAND.md) for product journeys, screens, transitions, and recovery;
+- [brief-product-ui](commands/ui/COMMAND.md) for interface specifications and component states;
+- [architect-software-system](commands/architect/COMMAND.md) for requested system architecture;
+- [build-ios-app](commands/build/references/modes/ios.md) for requested iOS implementation;
+- [build-web-app](commands/build/references/modes/web.md) for requested web implementation;
+- [write-technical-docs](commands/docs/COMMAND.md) for technical documentation.
 
 Preserve the requested scope. Marketing copy about an app does not request implementation. A flow
 or UI specification does not authorize a build. Add another outcome only when the requested result
@@ -250,7 +250,7 @@ label the assumption, and name the smallest fact that would change it.
 After a concrete failure, useful correction, or session wrap-up, you may offer once to draft a
 redacted public issue for review. Do not collect or send anything because an invitation was shown.
 Silence is not consent; honor a decline for the session and continue the user's work. Load
-`submit-feedback` only after the user opts in. Default to minimal relevant excerpts; a full
+`feedback` only after the user opts in. Default to minimal relevant excerpts; a full
 transcript needs explicit scope selection and a complete redacted preview. Any public submission
 needs consent to the exact destination and final payload through a verified Executor connection.
 If the sibling is absent, offer a local draft only; do not invent its submission capability.

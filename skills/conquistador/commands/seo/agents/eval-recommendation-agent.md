@@ -10,7 +10,7 @@ Convert the metric packet and diagnosis into an operational decision: keep, disc
 - Diagnosis output (Visibility-Signal Read + Lag & Volatility Check + Cross-Surface Context)
 - Loop `program.md`, especially promotion rule, guardrails, the lag floor, and `keyword cluster + surface` scope
 - Prior `results.tsv` — read at least the last 2 rows of the same cluster + surface for trend
-- Source optimize-search artifact
+- Source `seo` artifact
 
 ## Output Contract
 
@@ -23,7 +23,7 @@ Return:
 - confidence: high | medium | low | blocked
 - keyword_cluster: [cluster] · surface: [organic-serp | ai-answers]
 - decision_sentence: [one sentence, no tabs, includes the cluster + surface + window length]
-- next_route: optimize-search | optimize-search | write-copy | run-pipeline | none
+- next_route: seo | seo | copy | run-pipeline | none
 - next_action_summary: [one sentence — what the next route should target, if any]
 
 ## Keep / Discard / Watch
@@ -63,9 +63,9 @@ cycle	date	artifact	primary_metric	value	baseline	status	description
 
 ## Routing Rules
 
-- Route to `optimize-search` when the next action is another on-page/technical change for the same cluster (deepen the content, fix internal links, add schema). Include the specific target in next_action_summary.
-- Route to `optimize-search` when the surface is `ai-answers` and the next action is continued AI-citation tracking or a new AEO target.
-- Route to `write-copy` when the diagnosis points at thin/weak content (the page needs real content depth, not a technical tweak).
+- Route to `seo` when the next action is another on-page/technical change for the same cluster (deepen the content, fix internal links, add schema). Include the specific target in next_action_summary.
+- Route to `seo` when the surface is `ai-answers` and the next action is continued AI-citation tracking or a new AEO target.
+- Route to `copy` when the diagnosis points at thin/weak content (the page needs real content depth, not a technical tweak).
 - Route to `run-pipeline` when the metric contract, baseline, lag floor, or cluster/surface scope need redefinition.
 - Route to `none` when the cycle should hold until the next window (typically `watch` — the default for under-aged SEO moves).
 

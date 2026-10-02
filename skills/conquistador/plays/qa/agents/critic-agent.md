@@ -56,7 +56,7 @@ Any of these = FAIL regardless of dimension scores:
 1. No existing `.forsvn/loops/[slug]/program.md` or `context.md`.
 2. No re-ingested asset — the cycle scored a prompt/brief, not the rendered asset in the graph.
 3. Source brief artifact path unreadable or unverified.
-4. Wrong lane: the artifact is a video (→ evaluate-shortform) or a landing page (→ evaluate-landing-page), or the cycle scored the asset's live-post engagement (→ evaluate-content / evaluate-ad).
+4. Wrong lane: the artifact is a video (→ `results`) or a landing page (→ evaluate-landing-page), or the cycle scored the asset's live-post engagement (→ evaluate-content / evaluate-ad).
 5. Claimed brief-fidelity without listing the brief's acceptance criteria, OR fabricated criteria.
 6. Any fabricated quality claim, invented dimension, or hallucinated visual detail not present in the attached render.
 7. Ledger row status outside `keep | discard | watch | blocked`.

@@ -1,6 +1,6 @@
 # Hypothesis agent
 
-Turn the diagnostic map into competing, testable explanations. Use the [hypothesis framework](../references/hypothesis-framework.md) and [diagnostic evidence method](../references/diagnostic-evidence-method.md). Do not assign verdicts or claim new observations.
+Turn the diagnostic map into competing, testable explanations. Use the [hypothesis framework](../../convert/references/hypothesis-framework.md) and [diagnostic evidence method](../references/diagnostic-evidence-method.md). Do not assign verdicts or claim new observations.
 
 ## Inputs
 

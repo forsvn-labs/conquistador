@@ -7,7 +7,7 @@
 > Under the current brief-only contract this run ends at an approved brief + render-ready handoff
 > plus an explicit human acceptance step; no asset is rendered by this skill.
 
-> End-to-end brief-creative walkthrough shape — Pre-Dispatch (hard gate + Cold Start) → Step 0.5 Route Detection → Layer 1 parallel → Layer 1.5 brief-synth → Approval Gate 1 → Layer 2 prompt-craft → Layer 3 critic → Approval Gate 2 → artifact.
+> End-to-end `creative` walkthrough shape — Pre-Dispatch (hard gate + Cold Start) → Step 0.5 Route Detection → Layer 1 parallel → Layer 1.5 brief-synth → Approval Gate 1 → Layer 2 prompt-craft → Layer 3 critic → Approval Gate 2 → artifact.
 
 [EXAMPLE] — load on first-time skill-author orientation or when reviewer needs to ground-check a dispatch decision.
 
@@ -46,7 +46,7 @@ Hard gate passes. Proceed to Warm Start.
 Hard gate passed: brand/BRAND.md + brand/DESIGN.md present.
 Found:
 - asset spec → "OG image for launch blog post" (matched campaign-plan Pillar 1)
-- copy → "Stop managing chaos, start leading progress." (from write-copy artifact)
+- copy → "Stop managing chaos, start leading progress." (from copy artifact)
 - ASSETS.md row → matched og-images/blog-async-launch.png
 
 Auto-detecting downstream route from asset type. Override or proceed?
@@ -276,7 +276,7 @@ If critic had returned FAIL (AI-aesthetic 17/27 — render leaned heavily into d
 2. prompt-craft returns revised prompt.
 3. Re-dispatch critic.
 4. Cycle 2 PASS (AI-aesthetic 5/27) → proceed to Approval Gate 2.
-5. If cycle 2 FAIL → **stop and surface to the human.** The unresolved critic failure is not shippable; there is no `DONE_WITH_CONCERNS` delivery past a standing quality-gate failure. Present best draft + failing dimensions + options (manual iteration, or invoke `create-brand` to enrich DESIGN.md with explicit photography-style guidance) and wait for a human decision.
+5. If cycle 2 FAIL → **stop and surface to the human.** The unresolved critic failure is not shippable; there is no `DONE_WITH_CONCERNS` delivery past a standing quality-gate failure. Present best draft + failing dimensions + options (manual iteration, or invoke `brand` to enrich DESIGN.md with explicit photography-style guidance) and wait for a human decision.
 
 ---
 
@@ -299,14 +299,14 @@ Skill ends with: "Ran in --fast mode; rerun without the flag for 3-concept varie
 
 ---
 
-## Route C snippet — brief-creative called by lp-brief
+## Route C snippet — `creative` called by lp-brief
 
 When `brief-landing-page` is producing a landing-page brief and needs a per-asset brief for the hero slot:
 
-1. lp-brief invokes brief-creative with: "Need brief for hero asset slot, image-gen route preferred, slot spec at `.forsvn/artifacts/mkt/lp-brief/async-launch-lp/asset-slots/hero.md`."
+1. lp-brief invokes `creative` with: "Need brief for hero asset slot, image-gen route preferred, slot spec at `.forsvn/artifacts/mkt/lp-brief/async-launch-lp/asset-slots/hero.md`."
 2. Orchestrator reads slot spec → extracts asset type + dimensions + copy placement + brand-anchor pre-fills.
-3. Hard gate passes (brand artifacts already loaded by lp-brief, but brief-creative verifies independently).
+3. Hard gate passes (brand artifacts already loaded by lp-brief, but `creative` verifies independently).
 4. Warm Start: 4 of 5 dimensions resolved from slot spec; only constraint Q remains (asks lp-brief's orchestrator inline).
 5. Layer 1 + 1.5 + Gate 1 + Layer 2 + Layer 3 + Gate 2 all run as standard.
 6. Artifact written at `.forsvn/artifacts/mkt/brief-creative/lp-async-launch-hero-2026-05-18.md` with `consumed: [.forsvn/artifacts/mkt/lp-brief/async-launch-lp/asset-slots/hero.md]` in frontmatter.
-7. lp-brief consumes the brief-creative artifact path back at its own Approval Gate.
+7. lp-brief consumes the `creative` artifact path back at its own Approval Gate.

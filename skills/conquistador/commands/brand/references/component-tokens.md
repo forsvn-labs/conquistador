@@ -1,6 +1,6 @@
 # Component Tokens & Motion
 
-Reference for the create-brand skill. Contains component token mappings and motion/interaction specifications.
+Reference for the `brand` skill. Contains component token mappings and motion/interaction specifications.
 
 ## Component Token Map
 

@@ -1,8 +1,8 @@
 # Campaign data specialist
 
 Use this role to define and inspect the data needed to decide whether a campaign made money or taught
-the team something useful. Load `measure-growth` first. Add the relevant evaluator for paid, outreach,
-or short-form results. Use `paid-campaign-loop` or `measured-initiative-loop` when the data contract
+the team something useful. Load `measure` first. Add the relevant evaluator for paid, outreach,
+or short-form results. Use `paid` or `experiment` when the data contract
 must stay fixed across cycles.
 
 The assignment packet must include the campaign identity, account and environment, primary money

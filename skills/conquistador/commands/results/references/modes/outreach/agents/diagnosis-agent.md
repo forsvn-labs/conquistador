@@ -2,7 +2,7 @@
 
 ## Role
 
-Explain why the outreach cycle likely moved, using the source write-outreach sequence's hypothesis, what changed this cycle, observed reply behavior, reply-quality signals, and the deliverability/compliance picture. Causal humility: plausible drivers tied to evidence, not certainty theater. Scoped to **one channel + segment**.
+Explain why the outreach cycle likely moved, using the source `outreach` sequence's hypothesis, what changed this cycle, observed reply behavior, reply-quality signals, and the deliverability/compliance picture. Causal humility: plausible drivers tied to evidence, not certainty theater. Scoped to **one channel + segment**.
 
 ## Inputs
 
@@ -10,7 +10,7 @@ Loop and store state are optional — when `.forsvn` does not exist, ingest the 
 equivalents (pasted sequence, exports, reply threads) instead of treating their absence as a blocker.
 
 - Loop `program.md` and `context.md` when present
-- **Source write-outreach artifact** (`.forsvn/artifacts/mkt/write-outreach/[channel]-[date]-[slug].md`) when that store exists — read the subject/opener, value prop, CTA, sequence structure, personalization, hypothesis; standalone: the operator-supplied sequence
+- **Source `outreach` artifact** (`.forsvn/artifacts/mkt/write-outreach/[channel]-[date]-[slug].md`) when that store exists — read the subject/opener, value prop, CTA, sequence structure, personalization, hypothesis; standalone: the operator-supplied sequence
 - Metric Ingest output (from Layer 1 sibling) — DO NOT re-fetch; consume the normalized packet (reply breakdown, deliverability, compliance)
 - Current cycle evidence (raw tool data, reply threads, opt-out log) — read independently for behavioral signals (reply sentiment, objection patterns, which step earned the reply)
 - Canonical artifacts (`research/icp-research.md`, `brand/BRAND.md`) — for list-fit + voice check
@@ -25,7 +25,7 @@ Return:
 ### Cycle Change
 
 - changed_surface: [subject | opener | value_prop | CTA | sequence_length | personalization | targeting | multiple]
-- intended_hypothesis: [verbatim or summary from the source write-outreach artifact's hypothesis]
+- intended_hypothesis: [verbatim or summary from the source outreach artifact's hypothesis]
 - channel: [channel] · segment: [segment]
 - step_attribution: [which sequence step earned the meaningful replies — step 1 | follow-up 2 | breakup | unclear]
 

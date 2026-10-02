@@ -25,12 +25,12 @@ Use the agent sequence in `../fallbacks/sequential.md` for a host without subage
 
 Use `format-conventions.md` for the complete artifact fields and body sections. Include the source and permission for actual quotes; proposed copy is not a testimonial. Provide exact asset paths, timing, text, rights, preview results, owner and unresolved checks. For rendered work, carry the still or poster and accessible output requirements from the production contract.
 
-Use `success-criteria-templates.md` to define account-local measurements, a baseline or baseline-collection plan, resource limits and interpretation limits. A draft pass does not prove a performance result. Use `evaluate-shortform` when actual artifacts and measurements are available.
+Use `success-criteria-templates.md` to define account-local measurements, a baseline or baseline-collection plan, resource limits and interpretation limits. A draft pass does not prove a performance result. Use `results` when actual artifacts and measurements are available.
 
 Allow at most two critic rewrite cycles. A standing failure remains visible with an internal `done_with_concerns` grade and requires an operator decision. Publishing, sending or spending requires separate exact authorization.
 
 ## Boundaries
 
-Use `brief-creative` for a static visual brief, `create-paid-campaign` for paid-ad policy and offer review, and `plan-campaign` for channel allocation. Research supplied to this skill may suggest a test; it does not authorize borrowing a practitioner's expression, manufacturing evidence or treating another account's results as a default.
+Use `creative` for a static visual brief, `ads` for paid-ad policy and offer review, and `campaign` for channel allocation. Research supplied to this skill may suggest a test; it does not authorize borrowing a practitioner's expression, manufacturing evidence or treating another account's results as a default.
 
 The method preserves truthful UGC, asset rights, production specificity and a complete human handoff. It does not depend on an external person's framework or an alleged platform performance formula.

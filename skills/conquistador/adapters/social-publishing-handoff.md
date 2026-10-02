@@ -3,7 +3,7 @@
 Use privately when ready-to-post social work must become an operator-ready export, scheduler draft, or
 approved live action.
 
-1. Use `write-social` for final channel-native copy, disclosure, reply plan, and media references.
+1. Use `social` for final channel-native copy, disclosure, reply plan, and media references.
 2. Validate current platform limits and required fields. Preserve exact copy and UTF-8 text; never
    silently truncate.
 3. Default to a plain per-platform bundle. Emit scheduler-specific JSON or CSV only when its current

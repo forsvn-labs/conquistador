@@ -54,4 +54,4 @@ Before returning, ask:
 
 - Did I distinguish evidence from hypothesis?
 - Did I identify at least one plausible non-page confounder?
-- Would a future `improve-conversion` agent understand what to change without me pretending to redesign the page?
+- Would a future `convert` agent understand what to change without me pretending to redesign the page?

@@ -2,7 +2,7 @@
 title: Agents-Panel — Report Template
 lifecycle: canonical
 status: stable
-produced_by: decision-panel
+produced_by: decide
 load_class: REFERENCE
 ---
 
@@ -18,8 +18,8 @@ When invoked as a sub-routine by another skill: return the synthesis inline (Con
 
 ```yaml
 ---
-skill: decision-panel
-produced_by: decision-panel
+skill: decide
+produced_by: decide
 version: {skill-version}     # matches the running skill's metadata.version
 date: {YYYY-MM-DD}
 status: done | done_with_concerns | blocked | needs_context
@@ -33,9 +33,9 @@ mode: debate | poll
 agents: N
 rounds: R                     # debate only
 provenance:
-  skill: decision-panel
+  skill: decide
   run_date: {YYYY-MM-DD}
-  input_artifacts: []         # decision-panel doesn't consume upstream artifacts in v1
+  input_artifacts: []         # decide doesn't consume upstream artifacts in v1
   config_sources: []
   output_eval: null           # no downstream eval skill
 ---

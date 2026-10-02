@@ -1,9 +1,8 @@
 ---
-name: improve-conversion
-description: "Diagnose and revise one conversion surface — landing page, funnel step, offer, message, or acquisition handoff — and return a ready-to-use revision plus exactly one discriminating test. Use when the outcome changes the surface itself. Route paid-media performance readouts to evaluate-paid-campaign, full SEO work to optimize-search, and brand or messaging foundations to create-brand."
+name: convert
+description: "Fix one conversion surface and return one test that settles it."
 metadata:
   version: 2.1.0
-
 ---
 
 # Improve conversion performance
@@ -22,10 +21,10 @@ Core:
 - [conversion-diagnosis-method](references/conversion-diagnosis-method.md): Conversion diagnosis workflow. Use diagnostic-evidence-method.md to distinguish a conversion observation…
 - [diagnostic-evidence-method](references/diagnostic-evidence-method.md): Diagnostic evidence method. Start with the decision the conversion owner needs to make and the evidence…
 - [landing-anti-patterns](references/landing-anti-patterns.md): Improve-conversion Anti-Patterns. Re-read before any cycle artifact ships. The first 10 patterns are…
-- [landing-eval-method](references/landing-eval-method.md): Improve-conversion Playbook. improve-conversion converts a launched landing-page's measurement evidence…
+- [landing-eval-method](references/landing-eval-method.md): Improve-conversion Playbook. `convert` converts a launched landing-page's measurement evidence…
 - [landing-eval-rubric](references/landing-eval-rubric.md): Review an artifact against its contract. Use this compact review when a bounded artifact can be assessed…
 
-By step: [anti-sycophancy](references/anti-sycophancy.md), [hypothesis-framework](references/hypothesis-framework.md), [logic-tree-examples](references/logic-tree-examples.md).
+By step: [anti-sycophancy](references/anti-sycophancy.md), [hypothesis-framework](../diagnose/references/hypothesis-framework.md), [logic-tree-examples](references/logic-tree-examples.md).
 
 Specialist roles: [conversion-critic-agent](agents/conversion-critic-agent.md), [conversion-data-mapper-agent](agents/conversion-data-mapper-agent.md), [conversion-external-check-agent](agents/conversion-external-check-agent.md), [conversion-hypothesis-agent](agents/conversion-hypothesis-agent.md), [conversion-tree-builder-agent](agents/conversion-tree-builder-agent.md), [conversion-verdict-agent](agents/conversion-verdict-agent.md), [landing-critic-agent](agents/landing-critic-agent.md), [landing-diagnosis-agent](agents/landing-diagnosis-agent.md), [landing-metric-ingest-agent](agents/landing-metric-ingest-agent.md), [landing-recommendation-agent](agents/landing-recommendation-agent.md).
 
@@ -35,9 +34,9 @@ Output formats and fallbacks: [sequential](fallbacks/sequential.md), [conversion
 
 <!-- playbooks:end -->
 
-This outcome changes the conversion surface. Use `evaluate-paid-campaign`, `evaluate-outreach`, or
-`evaluate-shortform` when the requested result is an evidence-only performance readout, and use
-`audit-marketing` for a bounded pre-ship audit. Do not collapse their verdicts into a conversion
+This outcome changes the conversion surface. Use `results`, `results`, or
+`results` when the requested result is an evidence-only performance readout, and use
+`audit` for a bounded pre-ship audit. Do not collapse their verdicts into a conversion
 rewrite.
 
 ## Scope and handoffs
@@ -58,11 +57,11 @@ Include:
 
 Exclude — route instead:
 
-- paid-media performance readouts → `evaluate-paid-campaign`;
-- full SEO audits or ranking diagnosis → `optimize-search`;
-- brand systems or messaging foundations → `create-brand`;
-- evidence-only outreach or short-form readouts → `evaluate-outreach` or `evaluate-shortform`;
-- a bounded pre-ship audit without revision → `audit-marketing`.
+- paid-media performance readouts → `results`;
+- full SEO audits or ranking diagnosis → `seo`;
+- brand systems or messaging foundations → `brand`;
+- evidence-only outreach or short-form readouts → `results` or `results`;
+- a bounded pre-ship audit without revision → `audit`.
 
 ## Establish the intended path
 
@@ -137,7 +136,7 @@ front-door Reach→Value logic, supplied evidence, explicit assumptions, and the
   [conversion critic](agents/conversion-critic-agent.md);
 - [conversion diagnosis method](references/conversion-diagnosis-method.md),
   [diagnostic evidence method](references/diagnostic-evidence-method.md),
-  [hypothesis framework](references/hypothesis-framework.md),
+  [hypothesis framework](../diagnose/references/hypothesis-framework.md),
   [diagnostic examples](references/logic-tree-examples.md).
 
 **Landing eval lens** (launched surface evidence → keep / discard / watch / blocked):

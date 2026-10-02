@@ -6,7 +6,7 @@ Keep the same method. Change only the machinery.
 
 1. Resolve topic, target reader (role + awareness), and one ownable thesis. Ask at most one bundled
    question when those are missing. If there is no non-obvious claim to defend, stop and recommend
-   `write-copy` for a how-to.
+   `copy` for a how-to.
 2. Run [research](../agents/research.md) against [research-method](../references/research-method.md):
    stress-test the thesis, build the evidence ledger, name the consensus baseline, find the
    proprietary angle. Do not draft yet.

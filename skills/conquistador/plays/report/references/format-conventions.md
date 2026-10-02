@@ -8,7 +8,7 @@ load_class: PROCEDURE
 
 # Content-Eval Format Conventions
 
-> Format rules for the evaluate-content cycle artifact + results.tsv row + learnings.md promotion. Cited from SKILL.md "Artifact Contract" + "Evaluation Artifact Template" + "Results Row Discipline" sections. Schema changes require atomic update across `_shared/eval-loop-spec.md` + write-social (which produces the source artifact read by evaluate-content) + eval-loop owner.
+> Format rules for the evaluate-content cycle artifact + results.tsv row + learnings.md promotion. Cited from the play file "Artifact Contract" + "Evaluation Artifact Template" + "Results Row Discipline" sections. Schema changes require atomic update across `_shared/eval-loop-spec.md` + `social` (which produces the source artifact read by evaluate-content) + eval-loop owner.
 
 Uses the shared evaluation conventions for frontmatter, the 8-column Results Row and the 6-column
 Evidence table. Persistence follows the parent learning standard below.
@@ -56,7 +56,7 @@ lifecycle: evaluation
 use_when: "Deciding whether to keep, discard, watch, or block the current content cycle"
 do_not_use_when: "Authoring next-cycle copy without reading the latest loop context and results"
 upstream: ".forsvn/loops/[slug]/program.md, context.md, strategy/, execution/, docs/forsvn/artifacts/marketing/copy/[platform]-[date]-[slug].md, metric source"
-downstream: "results.tsv, learnings.md, write-social next-cycle brief"
+downstream: "results.tsv, learnings.md, social next-cycle brief"
 provenance:
   skill: evaluate-content
   run_date: YYYY-MM-DD
@@ -75,7 +75,7 @@ Date format: ISO `YYYY-MM-DD`. `lifecycle: evaluation` is required (eval-loop sp
 1. **Title** — H1 `# [Content or Primary-Platform] Cycle N Evaluation`
 2. **Verdict** — 5 bullets: Status / Confidence / Primary-Platform / Primary metric / Decision (one sentence)
 3. **Evidence** — table (Signal / Current / Baseline / Window / Source / Caveat columns) — scoped to the primary platform; content signals (engagement rate, saves, shares, comments, click-through, conversions, reach) populated as rows
-4. **What Changed This Cycle** — source write-social artifact link + hook/format/visual/CTA/posting changes since prior cycle
+4. **What Changed This Cycle** — source `social` artifact link + hook/format/visual/CTA/posting changes since prior cycle
 5. **Diagnosis** — Likely Drivers + Engagement-Quality Signals + Cross-Platform Context + Confounders (4 H3 subsections)
 6. **Next Cycle Recommendation** — Keep / Discard / Watch / Route-next-work-to lines (component granularity, not "the content plan")
 7. **Results Row** — fenced TSV block with the 8-column row (cycle / date / artifact / primary_metric / value / baseline / status / description) — description includes the primary platform
@@ -97,7 +97,7 @@ lifecycle: evaluation
 use_when: "Deciding whether to keep, discard, watch, or block the current content cycle"
 do_not_use_when: "Authoring next-cycle copy without reading the latest loop context and results"
 upstream: ".forsvn/loops/[slug]/program.md, context.md, strategy/, execution/, docs/forsvn/artifacts/marketing/copy/[platform]-[date]-[slug].md, metric source"
-downstream: "results.tsv, learnings.md, write-social next-cycle brief"
+downstream: "results.tsv, learnings.md, social next-cycle brief"
 provenance:
   skill: evaluate-content
   run_date: YYYY-MM-DD
@@ -133,7 +133,7 @@ provenance:
 
 ## What Changed This Cycle
 
-- Source write-social artifact: `docs/forsvn/artifacts/marketing/copy/[platform]-[date]-[slug].md`
+- Source social artifact: `docs/forsvn/artifacts/marketing/copy/[platform]-[date]-[slug].md`
 - Hook/format/visual/CTA/posting delta from prior cycle:
 
 ## Diagnosis
@@ -163,7 +163,7 @@ provenance:
 - Keep: [component-level, not "the content"]
 - Discard:
 - Watch:
-- Route next work to: write-social | publish-social | produce-asset | run-pipeline | none
+- Route next work to: social | publish-social | produce-asset | run-pipeline | none
 
 ## Results Row
 
@@ -274,8 +274,8 @@ This skill proposes the following outputs. Save only the approved content at app
 
 - `evals/[date]-cycle-N.md` — consumed by future evaluate-content cycles (read prior cycles for trend), by `write-social --rev=N+1` (latest eval seeds the next content's hypothesis), and by humans reviewing loop progress
 - `results.tsv` row — after approval, appended to the loop's ledger; consumed by any skill reading the loop's status (dashboard skills, ledger-summary skills, downstream campaign retrospectives)
-- `learnings.md` update — only eligible, separately approved high-confidence platform/format-scoped lessons; consumed by future write-social cycles + by humans
+- `learnings.md` update — only eligible, separately approved high-confidence platform/format-scoped lessons; consumed by future `social` cycles + by humans
 
-This skill does NOT directly consume write-social output via cross-skill import. write-social MIGHT be the strategy/execution artifact for the eval-loop cycle (its `docs/forsvn/artifacts/marketing/copy/[platform]-[date]-[slug].md` copied or linked into the loop's `execution/` directory); evaluate-content reads loop-local strategy/execution artifacts AND the source write-social artifact path stored in provenance. The coordination contract between write-social and evaluate-content is at the eval-loop boundary + the provenance.input_artifacts pointer, not at a shared-schema boundary.
+This skill does NOT directly consume `social` output via cross-skill import. `social` MIGHT be the strategy/execution artifact for the eval-loop cycle (its `docs/forsvn/artifacts/marketing/copy/[platform]-[date]-[slug].md` copied or linked into the loop's `execution/` directory); evaluate-content reads loop-local strategy/execution artifacts AND the source `social` artifact path stored in provenance. The coordination contract between `social` and evaluate-content is at the eval-loop boundary + the provenance.input_artifacts pointer, not at a shared-schema boundary.
 
 Schema changes (frontmatter fields, body section structure, Evidence table columns, Results Row columns, learnings.md format) require atomic update of `format-conventions.md` + `_shared/eval-loop-spec.md` + downstream callers — never silently drift.

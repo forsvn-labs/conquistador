@@ -44,7 +44,7 @@ support. A claim needs evidence even when the opening sounds specific.
 
 ## 11. Polish Chain Routed on FORMAT_FAIL or FAIL Artifact
 
-**Definition:** Orchestrator invokes the optional `editorial-polish` or `polish-vietnamese` sibling skill as a terminal pass on an artifact that critic returned as `fail` OR that format-checker returned as FORMAT_FAIL. Polish skills don't fix critic-fail issues (generic hook, format mismatch) or format-fail issues (hard-cap violation that copywriter couldn't resolve in one revision cycle).
+**Definition:** Orchestrator invokes the optional `editorial-polish` or `vietnamese` sibling skill as a terminal pass on an artifact that critic returned as `fail` OR that format-checker returned as FORMAT_FAIL. Polish skills don't fix critic-fail issues (generic hook, format mismatch) or format-fail issues (hard-cap violation that copywriter couldn't resolve in one revision cycle).
 
 **Detection rule:** If `polish_chain_applied != none` in frontmatter AND (`critic_verdict == fail` OR `status == blocked` from FORMAT_FAIL) = TRIGGERED.
 
@@ -56,7 +56,7 @@ support. A claim needs evidence even when the opening sounds specific.
 
 ## 12. Multi-Platform in One Invocation
 
-**Definition:** Operator requests write-social for multiple platforms in a single run (e.g., `/write-social "fire the agency" tiktok+linkedin --variants 2`) or orchestrator silently generates copy for >1 platform.
+**Definition:** Operator requests `social` for multiple platforms in a single run (e.g., `/write-social "fire the agency" tiktok+linkedin --variants 2`) or orchestrator silently generates copy for >1 platform.
 
 **Detection rule:** If `platform` frontmatter contains a `+` or `,` or list value (anything other than a single value from `tiktok | reels | shorts | x | linkedin`) = TRIGGERED.
 
@@ -66,25 +66,25 @@ support. A claim needs evidence even when the opening sounds specific.
 
 ---
 
-## 13. Vietnamese-Market Copy Without polish-vietnamese Polish
+## 13. Vietnamese-Market Copy Without `vietnamese` Polish
 
-**Definition:** Brief or topic explicitly targets the Vietnamese market (Vietnamese-language copy required) but `polish_chain_applied: none` in frontmatter — polish-vietnamese terminal pass was skipped.
+**Definition:** Brief or topic explicitly targets the Vietnamese market (Vietnamese-language copy required) but `polish_chain_applied: none` in frontmatter — `vietnamese` terminal pass was skipped.
 
 **Detection rule:** If brief / topic mentions Vietnam, Vietnamese, VN, or supplies Vietnamese-language source text AND `polish_chain_applied != polish-vietnamese` = TRIGGERED.
 
 **Owned by:** Sequential fallback / Cold Start ([critical gates](critical-gates.md) should default `--polish-chain polish-vietnamese` when market signal is Vietnamese). Orchestrator confirms at Cold Start / Warm Start.
 
-**Why it fails:** Vietnamese register polish requires native-register awareness (báo chí for news/professional, semi-casual for B2B SaaS founder voice, bro for indie/casual, pop-marketing for consumer brands). Copywriter-agent generates English-pattern Vietnamese that reads as translated AI output — pronoun drift, missing particles, literal idioms, passive-voice calques. polish-vietnamese is the terminal fix.
+**Why it fails:** Vietnamese register polish requires native-register awareness (báo chí for news/professional, semi-casual for B2B SaaS founder voice, bro for indie/casual, pop-marketing for consumer brands). Copywriter-agent generates English-pattern Vietnamese that reads as translated AI output — pronoun drift, missing particles, literal idioms, passive-voice calques. `vietnamese` is the terminal fix.
 
 ---
 
 ## 14. Cross-Stack Contract Drift
 
-**Definition:** Refactor or schema change to the artifact frontmatter or required body sections (Hook variants A/B + Body + CTA + Format spec + Critic verdict + Anti-patterns triggered) ships without atomic update of downstream consumers (editorial-polish / polish-vietnamese / eval-loop / operator publish workflow).
+**Definition:** Refactor or schema change to the artifact frontmatter or required body sections (Hook variants A/B + Body + CTA + Format spec + Critic verdict + Anti-patterns triggered) ships without atomic update of downstream consumers (editorial-polish / `vietnamese` / eval-loop / operator publish workflow).
 
 **Detection rule:** If a code review or diff modifies `format-conventions.md` § "Frontmatter schema" OR § "Required body sections" OR § "Critic verdict table" without a paired update to:
 - optional `editorial-polish` sibling's body-section reader, when installed (reads `## Body` + `## CTA`)
-- optional `polish-vietnamese` skill's body-section reader + register hook check, when installed
+- optional `vietnamese` skill's body-section reader + register hook check, when installed
 - optional eval-loop artifact-type classifier, when the local store exists (if `type` field changes; not shipped in this skill)
 - optional eval-loop results.tsv ingestion, when the local store exists (if `critic_score` or `critic_verdict` field semantics change)
 

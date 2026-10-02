@@ -2,15 +2,15 @@
 title: Outreach-Eval Format Conventions
 lifecycle: canonical
 status: stable
-produced_by: evaluate-outreach
+produced_by: results
 load_class: PROCEDURE
 ---
 
 # Outreach-Eval Format Conventions
 
-> Format rules for the evaluate-outreach cycle artifact + results.tsv row + learnings.md promotion. Cited from SKILL.md "Artifact Contract" section. Schema changes require atomic update across `fallbacks/sequential.md` + the eval-loop owner + write-outreach (which produces the source sequence read by evaluate-outreach).
+> Format rules for the `results` cycle artifact + results.tsv row + learnings.md promotion. Cited from COMMAND.md "Artifact Contract" section. Schema changes require atomic update across `fallbacks/sequential.md` + the eval-loop owner + `outreach` (which produces the source sequence read by `results`).
 
-Aligned with the eval siblings (`measure-growth`, `evaluate-paid-campaign`) where cross-eval consistency matters (frontmatter schema, Results Row 8-column schema, Evidence 6-column schema, side-effect order). Outreach-specific extensions are clearly marked.
+Aligned with the eval siblings (`measure`, `results`) where cross-eval consistency matters (frontmatter schema, Results Row 8-column schema, Evidence 6-column schema, side-effect order). Outreach-specific extensions are clearly marked.
 
 ## Output locations
 
@@ -35,7 +35,7 @@ unchanged.
 
 ```yaml
 ---
-skill: evaluate-outreach
+skill: results
 version: 1
 date: YYYY-MM-DD
 status: done | done_with_concerns | blocked | needs_context
@@ -45,9 +45,9 @@ lifecycle: evaluation
 use_when: "Deciding whether to keep, discard, watch, or block the current outreach cycle"
 do_not_use_when: "Authoring next-cycle sequence copy without reading the latest loop context and results"
 upstream: ".forsvn/loops/[slug]/program.md, context.md, .forsvn/artifacts/mkt/write-outreach/[channel]-[date]-[slug].md, reply-data source"
-downstream: "results.tsv, learnings.md, write-outreach next-cycle sequence"
+downstream: "results.tsv, learnings.md, outreach next-cycle sequence"
 provenance:
-  skill: evaluate-outreach
+  skill: results
   run_date: YYYY-MM-DD
   input_artifacts:
     - .forsvn/artifacts/mkt/write-outreach/[channel]-[date]-[slug].md
@@ -64,7 +64,7 @@ Date format: ISO `YYYY-MM-DD`. `lifecycle: evaluation` is required (eval-loop sp
 1. **Title** — H1 `# [Channel-Segment] Cycle N Evaluation`
 2. **Verdict** — 5 bullets: Status / Confidence / Channel+Segment / Primary metric / Decision (one sentence)
 3. **Evidence** — table (Signal / Current / Baseline / Window / Source / Caveat columns) — scoped to the channel; signals include primary metric, positive-reply rate, meetings booked, bounce rate, spam-complaint rate, opt-out, sends
-4. **What Changed This Cycle** — source write-outreach link + subject/opener/CTA/step changes since prior cycle
+4. **What Changed This Cycle** — source `outreach` link + subject/opener/CTA/step changes since prior cycle
 5. **Diagnosis** — Reply-Quality Signals + Deliverability & Compliance + Cross-Channel Context + Confounders (4 H3 subsections)
 6. **Next Cycle Recommendation** — Keep / Discard / Watch / Route-next-work-to lines (component granularity, not "the outreach")
 7. **Results Row** — fenced TSV block with the 8-column row — description includes the channel + segment
@@ -76,7 +76,7 @@ Save to `.forsvn/loops/[slug]/evals/YYYY-MM-DD-cycle-N.md`:
 
 ```markdown
 ---
-skill: evaluate-outreach
+skill: results
 version: 1
 date: YYYY-MM-DD
 status: done | done_with_concerns | blocked | needs_context
@@ -86,9 +86,9 @@ lifecycle: evaluation
 use_when: "Deciding whether to keep, discard, watch, or block the current outreach cycle"
 do_not_use_when: "Authoring next-cycle sequence copy without reading the latest loop context and results"
 upstream: ".forsvn/loops/[slug]/program.md, context.md, .forsvn/artifacts/mkt/write-outreach/[channel]-[date]-[slug].md, reply-data source"
-downstream: "results.tsv, learnings.md, write-outreach next-cycle sequence"
+downstream: "results.tsv, learnings.md, outreach next-cycle sequence"
 provenance:
-  skill: evaluate-outreach
+  skill: results
   run_date: YYYY-MM-DD
   input_artifacts:
     - .forsvn/artifacts/mkt/write-outreach/[channel]-[date]-[slug].md
@@ -122,7 +122,7 @@ provenance:
 
 ## What Changed This Cycle
 
-- Source write-outreach artifact: `.forsvn/artifacts/mkt/write-outreach/[channel]-[date]-[slug].md`
+- Source outreach artifact: `.forsvn/artifacts/mkt/write-outreach/[channel]-[date]-[slug].md`
 - Subject/opener/value-prop/CTA/step delta from prior cycle:
 
 ## Diagnosis
@@ -154,7 +154,7 @@ provenance:
 - Keep: [component-level, not "the outreach"]
 - Discard:
 - Watch:
-- Route next work to: write-outreach | research-positioning | none
+- Route next work to: outreach | position | none
 
 ## Results Row
 
@@ -247,6 +247,6 @@ This skill produces:
 - `results.tsv` row — appended to the loop's ledger; consumed by any skill reading the loop's status
 - `learnings.md` update — high-confidence channel/segment/offer-scoped lessons reusable beyond this sequence
 
-This skill reads the source write-outreach artifact (stored in provenance.input_artifacts) + the reply/deliverability data. The coordination contract is at the eval-loop boundary + the provenance pointer, not at a shared-schema boundary.
+This skill reads the source `outreach` artifact (stored in provenance.input_artifacts) + the reply/deliverability data. The coordination contract is at the eval-loop boundary + the provenance pointer, not at a shared-schema boundary.
 
 Schema changes (frontmatter fields, body section structure, Evidence table columns, Results Row columns, learnings.md format) require atomic update of `format-conventions.md` + `fallbacks/sequential.md` + downstream callers — never silently drift.

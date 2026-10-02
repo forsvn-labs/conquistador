@@ -99,7 +99,7 @@ provenance:
 Date format: ISO `YYYY-MM-DD`. `target_handoff` accepts a single value, list, or `null`. Null skips all
 companion handoffs. An implementation prompt is emitted only when requested.
 
-The four `decision_state` / `review_tool` / `reviewed_at` / `reviewer` fields are the human-review layer per [`reviewable-artifact-contract`](../../../../brief-creative/references/reviewable-artifact-contract.md). This is a `pipeline` artifact, so `decision_state` defaults to `not_required` — most briefs are regenerable drafts. The fields and the `## Review Gate` body block ship in the template so the operator (or an eval loop) can opt a run into review by setting `decision_state: pending`; the procedure for running that review is [`roughdraft-review-protocol`](../../../../brief-creative/references/roughdraft-review-protocol.md). Review fields apply to the main `brief.md` artifact only — not the `handoff-*.md` companions or `asset-slots/*.prompt.md` files. They are flat by design (the `manifest-sync` parser reads flat YAML) and additive/orthogonal to the existing schema — adding them does not change how downstream consumers read the brief.
+The four `decision_state` / `review_tool` / `reviewed_at` / `reviewer` fields are the human-review layer per [`reviewable-artifact-contract`](../../../commands/creative/references/reviewable-artifact-contract.md). This is a `pipeline` artifact, so `decision_state` defaults to `not_required` — most briefs are regenerable drafts. The fields and the `## Review Gate` body block ship in the template so the operator (or an eval loop) can opt a run into review by setting `decision_state: pending`; the procedure for running that review is [`roughdraft-review-protocol`](../../../commands/creative/references/roughdraft-review-protocol.md). Review fields apply to the main `brief.md` artifact only — not the `handoff-*.md` companions or `asset-slots/*.prompt.md` files. They are flat by design (the `manifest-sync` parser reads flat YAML) and additive/orthogonal to the existing schema — adding them does not change how downstream consumers read the brief.
 
 ## Body section structure (15 sections, in order)
 
@@ -334,7 +334,7 @@ and repeats DESIGN.md visual values verbatim, per references/design-handoff-prom
 **If project does not:** generate a per-page chain inline — list the downstream skills/prompts in execution order, each with one-line scope:
 
 1. `brief-graphic` — spec hero asset (slot: `hero-image`), then run image-gen against the produced prompt at `asset-slots/hero-image.prompt.md`
-2. `write-copy` — review finished headline for evidence, clarity, and supplied voice
+2. `copy` — review finished headline for evidence, clarity, and supplied voice
 3. [implementation step — Claude Design / Figma / designer]
 4. `humanmaxxing` — final pass on any AI-generated body copy
 5. [post-launch] collect analytics/recordings/experiment notes → run `evaluate-landing-page` inside the page's eval loop, then feed the resulting eval into next `lp-brief --rev=N`
@@ -351,7 +351,7 @@ Page-scoped only. No project-level default is created.
 
 ## Why This Works (sanity check)
 
-This is the why-this-works block per [`_shared/why-this-works-convention.md`](../../../../write-social/references/why-this-works-convention.md) — placed correctly (after the artifact spec, before the Review Gate). **Product-fit, not generic** (2–4 lines): the bet (the hypothesis, stated so it can fail), then the load-bearing arguments — why *this* hero / architecture / CTA hierarchy lands the hypothesis for *this* product — each traced to a source (`ICP.md` pain/VoC, `BRAND.md`/`CREATIVE-DIRECTION.md`, the campaign plan). Each line must explain why this change addresses the supplied task; uniqueness is not required. No ICP/brand foundation → the convention's Absent state (general principles only; never a fabricated pain or positioning claim).
+This is the why-this-works block per [`_shared/why-this-works-convention.md`](../../../commands/social/references/why-this-works-convention.md) — placed correctly (after the artifact spec, before the Review Gate). **Product-fit, not generic** (2–4 lines): the bet (the hypothesis, stated so it can fail), then the load-bearing arguments — why *this* hero / architecture / CTA hierarchy lands the hypothesis for *this* product — each traced to a source (`ICP.md` pain/VoC, `BRAND.md`/`CREATIVE-DIRECTION.md`, the campaign plan). Each line must explain why this change addresses the supplied task; uniqueness is not required. No ICP/brand foundation → the convention's Absent state (general principles only; never a fabricated pain or positioning claim).
 
 ## Review Gate
 

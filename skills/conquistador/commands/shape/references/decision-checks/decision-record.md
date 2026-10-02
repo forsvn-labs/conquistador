@@ -1,7 +1,7 @@
 ---
 title: Define the decision
 load_class: METHOD
-produced_by: shape-initiative
+produced_by: shape
 ---
 
 # Define the decision

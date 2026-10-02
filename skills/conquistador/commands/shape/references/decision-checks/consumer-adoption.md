@@ -1,7 +1,7 @@
 ---
 title: Check consumer adoption
 load_class: METHOD
-produced_by: shape-initiative
+produced_by: shape
 ---
 
 # Check consumer adoption

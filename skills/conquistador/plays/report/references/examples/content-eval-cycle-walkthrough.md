@@ -21,7 +21,7 @@ Cross-eval consistency: this walkthrough mirrors `evaluate-ad`'s 4-agent / 7-dim
 Inputs the operator supplied in conversation (all illustrative):
 
 - **Loop:** `forsvn-launch-organic` — primary metric `save rate`, confidence floor `reach ≥ 1,500` (from `program.md`).
-- **Source write-social artifact:** `docs/forsvn/artifacts/marketing/copy/linkedin-2026-06-05-agent-first-capture.md` — a text post promoting FORSVN: *"Your coding agent already did the work. You just can't see it."* Hypothesis: name the reader's exact pain (invisible agent output) in line 1; CTA = soft ("what does your team lose to invisible work?").
+- **Source `social` artifact:** `docs/forsvn/artifacts/marketing/copy/linkedin-2026-06-05-agent-first-capture.md` — a text post promoting FORSVN: *"Your coding agent already did the work. You just can't see it."* Hypothesis: name the reader's exact pain (invisible agent output) in line 1; CTA = soft ("what does your team lose to invisible work?").
 - **Window:** 2026-06-05 → 2026-06-12 (7 days).
 - **Native LinkedIn analytics (operator-supplied screenshot summary):** reach 4,180; likes 196; saves 131; shares 38; comments 27 (3 are the operator's own replies); click-through 54.
 - **Baseline:** cycle-1, same loop, same platform, same content-type (LinkedIn text post) — save rate 1.9%.
@@ -34,7 +34,7 @@ Inputs the operator supplied in conversation (all illustrative):
 Orchestrator runs the hard-block checks BEFORE Cold Start (`_shared/pre-dispatch-protocol.md`):
 
 - `.forsvn/loops/forsvn-launch-organic/program.md` + `context.md` — **present.** (Else → `NEEDS_CONTEXT`, route to `/run-pipeline`.)
-- Content type — **text post.** Not short-form video, not a paid ad. (Else → `NEEDS_CONTEXT`, route to `evaluate-shortform` / `evaluate-ad`.)
+- Content type — **text post.** Not short-form video, not a paid ad. (Else → `NEEDS_CONTEXT`, route to `results` / `evaluate-ad`.)
 - Primary-platform tag — **`linkedin`** supplied. Measurement evidence present. (Else → `BLOCKED`.)
 - `results.tsv` — standard 8-column schema. Last row is cycle 1 → **this cycle = 2.**
 
@@ -81,7 +81,7 @@ Resolution: all six Cold Start slots filled from the invocation + scan. Dispatch
 - none
 ```
 
-### Diagnosis agent (reads the packet + the source write-social hypothesis)
+### Diagnosis agent (reads the packet + the source `social` hypothesis)
 
 - **Likely Drivers** — save rate +1.2pp over a comparable baseline. The line-1 pain-naming hook ("you just can't see it") is the most plausible driver: saves cluster on posts people want to act on later, and the hypothesis explicitly bet on naming invisible-work pain. Shares (38) reinforce — the post was forwarded, not just liked.
 - **Engagement-Quality Signals** — meaningful (saves 131 + shares 38 + comments 24 + click-through 54 = 247) vs vanity (likes 196). Meaningful-to-vanity ≈ 1.26 — the result is engagement-QUALITY-led, not a like spike.
@@ -119,7 +119,7 @@ lifecycle: evaluation
 use_when: "Deciding whether to keep, discard, watch, or block the current content cycle"
 do_not_use_when: "Authoring next-cycle copy without reading the latest loop context and results"
 upstream: ".forsvn/loops/forsvn-launch-organic/program.md, context.md, strategy/, execution/, docs/forsvn/artifacts/marketing/copy/linkedin-2026-06-05-agent-first-capture.md, metric source"
-downstream: "results.tsv, learnings.md, write-social next-cycle brief"
+downstream: "results.tsv, learnings.md, social next-cycle brief"
 provenance:
   skill: evaluate-content
   run_date: 2026-06-12
@@ -155,7 +155,7 @@ provenance:
 
 ## What Changed This Cycle
 
-- Source write-social artifact: `docs/forsvn/artifacts/marketing/copy/linkedin-2026-06-05-agent-first-capture.md`
+- Source social artifact: `docs/forsvn/artifacts/marketing/copy/linkedin-2026-06-05-agent-first-capture.md`
 - Hook/format/visual/CTA/posting delta from prior cycle: cycle-1 led with a stat ("agents write 60% of our code"); cycle-2 leads by naming the reader's pain ("you just can't see it"). Format, posting time, and soft CTA unchanged.
 
 ## Diagnosis
@@ -185,7 +185,7 @@ provenance:
 - Keep: line-1 pain-naming hook; LinkedIn text-post format.
 - Discard: none.
 - Watch: click-through (1.3% — soft CTA under-converting saves into clicks).
-- Route next work to: write-social --rev=3 (hook held constant; CTA sharpened soft-question → concrete next step).
+- Route next work to: social --rev=3 (hook held constant; CTA sharpened soft-question → concrete next step).
 
 ## Results Row
 
@@ -231,7 +231,7 @@ seeking approval for this exact row and destination.
   - loop_fit: 9 — program.md + context.md + results.tsv read; cycle-2 scoped to linkedin matching program.md; cycle number = last + 1.
   - metric_integrity: 8 — save rate + baseline + window + reach present; engagement 4-way breakdown present; source is a screenshot (not live export) → not a 9.
   - attribution_honesty: 8 — reach above floor; comparability explicit (same platform + type); confounders enumerated; confidence held at medium for the screenshot source.
-  - decision_discipline: 9 — verdict matches the packet; routing to write-social CTA-only revision is correctly narrow, not "redo the content plan".
+  - decision_discipline: 9 — verdict matches the packet; routing to social CTA-only revision is correctly narrow, not "redo the content plan".
   - engagement_quality_discrimination: 9 — 4-way breakdown + meaningful-to-vanity ratio (1.26) computed; keep rests on saves+shares+comments+CTR, not likes.
   - platform_fit: 8 — 3.1% save rate read against a LinkedIn-specific benchmark; text-post format assessed as native; X kept in Cross-Platform Context only.
   - ledger_correctness: 7 — one proposed row; 8 columns; status valid; description carries "linkedin"; slightly verbose. No write has occurred.

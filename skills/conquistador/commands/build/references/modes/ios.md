@@ -1,9 +1,9 @@
 ---
-name: build-ios-app
+command: build
+mode: ios
 description: "Implement and verify an explicit native iOS or iPadOS product outcome in an existing or approved project. Use for Swift or SwiftUI vertical slices, state, persistence, networking, permissions, capabilities, accessibility, testing, simulator/device readiness, and bounded distribution handoffs."
 metadata:
   version: 1.1.0
-
 ---
 
 # Build an iOS app outcome
@@ -18,13 +18,13 @@ Read the core files in full before you draft; read the others when their step or
 
 Core:
 
-- [capabilities](references/capabilities.md): iOS Capabilities & Entitlements Reference. Tooling note. The historical ios-cli opaque binary is not…
-- [device-registration](references/device-registration.md): Device Registration. Tooling note. The historical ios-cli opaque binary is not shipped with this skill. Do…
-- [gotchas](references/gotchas.md): Common Gotchas. Tooling note. The historical ios-cli opaque binary is not shipped with this skill. Do not…
+- [capabilities](ios/references/capabilities.md): iOS Capabilities & Entitlements Reference. Tooling note. The historical ios-cli opaque binary is not…
+- [device-registration](ios/references/device-registration.md): Device Registration. Tooling note. The historical ios-cli opaque binary is not shipped with this mode. Do…
+- [gotchas](ios/references/gotchas.md): Common Gotchas. Tooling note. The historical ios-cli opaque binary is not shipped with this mode. Do not…
 
-By step: [api-reference](references/api-reference.md), [apple-platform-authority](references/apple-platform-authority.md), [publishing-gotchas](references/publishing-gotchas.md), [publishing-production](references/publishing-production.md), [publishing-readiness](references/publishing-readiness.md), [publishing-testflight](references/publishing-testflight.md), [publishing](references/publishing.md), [screenshots](references/screenshots.md).
+By step: [api-reference](ios/references/api-reference.md), [apple-platform-authority](ios/references/apple-platform-authority.md), [publishing-gotchas](ios/references/publishing-gotchas.md), [publishing-production](ios/references/publishing-production.md), [publishing-readiness](ios/references/publishing-readiness.md), [publishing-testflight](ios/references/publishing-testflight.md), [publishing](ios/references/publishing.md), [screenshots](ios/references/screenshots.md).
 
-Output formats and fallbacks: [sequential](fallbacks/sequential.md).
+Output formats and fallbacks: [sequential](ios/fallbacks/sequential.md).
 
 <!-- playbooks:end -->
 
@@ -36,7 +36,7 @@ existing stack and conventions unless evidence requires a change. Do not require
 MCP, router, Vibecode, Chorus, or an opaque executable such as the excluded historical `ios-cli`.
 
 Use host-appropriate Xcode and source-inspectable tools. Before consequential platform or distribution
-advice, refresh the [official Apple authority map](references/apple-platform-authority.md); record the
+advice, refresh the [official Apple authority map](ios/references/apple-platform-authority.md); record the
 source and check date for volatile rules.
 
 ## Implement one complete vertical slice
@@ -76,20 +76,20 @@ approval for the exact account and payload.
 Before consequential native or distribution work, load the recovered references instead of
 paraphrasing them:
 
-- [Apple platform authority](references/apple-platform-authority.md) for volatile platform rules;
-- [capabilities](references/capabilities.md) and [gotchas](references/gotchas.md) for entitlements,
+- [Apple platform authority](ios/references/apple-platform-authority.md) for volatile platform rules;
+- [capabilities](ios/references/capabilities.md) and [gotchas](ios/references/gotchas.md) for entitlements,
   Info.plist, and common build failures;
-- [publishing](references/publishing.md), [readiness](references/publishing-readiness.md),
-  [production](references/publishing-production.md), [TestFlight](references/publishing-testflight.md),
-  and [publishing gotchas](references/publishing-gotchas.md) for distribution handoffs;
-- [device registration](references/device-registration.md) and [screenshots](references/screenshots.md)
+- [publishing](ios/references/publishing.md), [readiness](ios/references/publishing-readiness.md),
+  [production](ios/references/publishing-production.md), [TestFlight](ios/references/publishing-testflight.md),
+  and [publishing gotchas](ios/references/publishing-gotchas.md) for distribution handoffs;
+- [device registration](ios/references/device-registration.md) and [screenshots](ios/references/screenshots.md)
   when preparing device or listing evidence;
-- [config schema](references/config-schema.json) for optional local config shape;
-- [historical signing API notes](references/api-reference.md) as background only — the `ios-cli`
+- [config schema](ios/references/config-schema.json) for optional local config shape;
+- [historical signing API notes](ios/references/api-reference.md) as background only — the `ios-cli`
   binary is not shipped.
 
-Bootstrap a greenfield SwiftUI skeleton with [`scripts/bootstrap.sh`](scripts/bootstrap.sh) from
-[`template/`](template/) only when the operator explicitly requests a new project and no existing
+Bootstrap a greenfield SwiftUI skeleton with [`scripts/bootstrap.sh`](ios/scripts/bootstrap.sh) from
+[`template/`](ios/template/) only when the operator explicitly requests a new project and no existing
 workspace should be disturbed. The script is gated:
 
 - **dry run:** run with `--dry-run` first; it prints the plan and writes nothing;
@@ -104,7 +104,7 @@ workspace should be disturbed. The script is gated:
 ## Sequential fallback
 
 When separate implementer, reviewer, and runner contexts are unavailable, use
-[sequential fallback](fallbacks/sequential.md): inspect project and authority → plan one slice →
+[sequential fallback](ios/fallbacks/sequential.md): inspect project and authority → plan one slice →
 implement → hostile self-review → verify what actually ran → deliver at the release boundary. Label
 single-context results as such; anything that could not run stays an untested cell.
 

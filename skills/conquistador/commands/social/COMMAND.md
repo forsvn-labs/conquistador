@@ -1,9 +1,8 @@
 ---
-name: write-social
-description: "Create channel-native social and community marketing. Use for Product Hunt listings, Reddit posts or community launches, X posts and threads, LinkedIn posts, founder or company social content, reply banks, launch sequences, community participation, or rewriting social work so it delivers value in-platform without deceptive engagement tactics. Not for ad copy, landing copy, or outreach DMs — hand those off (see Route elsewhere)."
+name: social
+description: "Write channel-native posts for X, LinkedIn, Reddit, Product Hunt, and communities."
 metadata:
   version: 2.1.0
-
 ---
 
 # Write social and community marketing
@@ -20,12 +19,12 @@ Core:
 
 - [anti-patterns](references/anti-patterns.md): Social copy anti-patterns. These are original artifact checks. They do not claim measured platform penalties.
 - [critical-gates](references/critical-gates.md): Procedure — Critical Gates (write-social). Load before Pre-Dispatch. These four gates are non-negotiable;…
-- [method](references/method.md): Method: write-social. Turn one brief into a complete social or community artifact for one platform and…
+- [method](references/method.md): Method: `social`. Turn one brief into a complete social or community artifact for one platform and…
 - [rubric](references/rubric.md): Social copy critic rubric. Score five dimensions from 0 to 10. Scores are local review conventions, not…
 
 By step: [hook-archetypes](references/hook-archetypes.md).
 
-Platform packs (read the one for each platform in the task): [facebook](references/platform-intelligence/facebook.md), [founder-demo](references/platform-intelligence/founder-demo.md), [linkedin-launch](references/platform-intelligence/linkedin-launch.md), [linkedin](references/platform-intelligence/linkedin.md), [motion-background](references/platform-intelligence/motion-background.md), [newsletter](references/platform-intelligence/newsletter.md), [producthunt](references/platform-intelligence/producthunt.md), [reddit](references/platform-intelligence/reddit.md), [reels](references/platform-intelligence/reels.md), [shorts](references/platform-intelligence/shorts.md), [showhn](references/platform-intelligence/showhn.md), [tiktok](references/platform-intelligence/tiktok.md), [ugc](references/platform-intelligence/ugc.md), [x-launch](references/platform-intelligence/x-launch.md), [x](references/platform-intelligence/x.md), [youtube](references/platform-intelligence/youtube.md).
+Platform packs (read the one for each platform in the task): [facebook](../video/references/platform-intelligence/facebook.md), [founder-demo](../video/references/platform-intelligence/founder-demo.md), [linkedin-launch](../video/references/platform-intelligence/linkedin-launch.md), [linkedin](../video/references/platform-intelligence/linkedin.md), [motion-background](../video/references/platform-intelligence/motion-background.md), [newsletter](../video/references/platform-intelligence/newsletter.md), [producthunt](../video/references/platform-intelligence/producthunt.md), [reddit](../video/references/platform-intelligence/reddit.md), [reels](../video/references/platform-intelligence/reels.md), [shorts](../video/references/platform-intelligence/shorts.md), [showhn](../video/references/platform-intelligence/showhn.md), [tiktok](../video/references/platform-intelligence/tiktok.md), [ugc](../video/references/platform-intelligence/ugc.md), [x-launch](../video/references/platform-intelligence/x-launch.md), [x](../video/references/platform-intelligence/x.md), [youtube](../video/references/platform-intelligence/youtube.md).
 
 Specialist roles: [copywriter-agent](agents/copywriter-agent.md), [critic-agent](agents/critic-agent.md), [format-checker-agent](agents/format-checker-agent.md), [guard-checker-agent](agents/guard-checker-agent.md), [launch-copywriter-agent](agents/launch-copywriter-agent.md).
 
@@ -82,14 +81,14 @@ voice for conviction and learning; company voice for product truth and proof.
 
 ## Route elsewhere
 
-write-social produces channel-native social and community posts only. Include it when the deliverable
+`social` produces channel-native social and community posts only. Include it when the deliverable
 is a post, listing, thread, reply bank, or launch sequence an account publishes itself. Hand off when
 the surface is paid, on-site, or one-to-one:
 
-- Paid ad copy for Meta, Google, or LinkedIn → create-paid-campaign.
-- Landing-page copy, headlines, taglines, on-site sections → write-copy.
-- Outreach DMs and one-to-one sequences → write-outreach.
-- Full video briefs with shot lists and audio plans → create-shortform; this skill owns only the
+- Paid ad copy for Meta, Google, or LinkedIn → `ads`.
+- Landing-page copy, headlines, taglines, on-site sections → `copy`.
+- Outreach DMs and one-to-one sequences → `outreach`.
+- Full video briefs with shot lists and audio plans → `video`; this command owns only the
   caption layer.
 
 ## Deliver
@@ -119,7 +118,7 @@ Before delivery, load the recovered method instead of paraphrasing it:
 - [method](references/method.md), the
   [copywriter](agents/copywriter-agent.md), [format checker](agents/format-checker-agent.md), and
   [critic](agents/critic-agent.md);
-- the matching [platform intelligence](references/platform-intelligence/) pack, plus
+- the matching [platform intelligence](../video/references/platform-intelligence/) pack, plus
   [hook archetypes](references/hook-archetypes.md), [rubric](references/rubric.md), and
   [anti-patterns](references/anti-patterns.md);
 - [critical gates](references/critical-gates.md), [legibility](references/legibility-convention.md),

@@ -3,7 +3,7 @@
 ## Artifact frontmatter (11 fields — v3 contract)
 
 ```yaml
-skill: brief-creative
+skill: creative
 lens: out-of-home
 version: 1
 date: YYYY-MM-DD

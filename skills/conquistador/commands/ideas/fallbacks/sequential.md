@@ -16,7 +16,7 @@ Keep the same method. Change only the machinery.
    [platforms](../references/platforms/). Capture URLs, observable metrics, inspected opening context, audio, caption and CTA. The legacy opening field is an observation segment, not a retention deadline.
 3. Run [audience-fit](../agents/audience-fit-agent.md): ICP / product context / cold-start hint →
    register, language polish, sensitivity flags. No ICP and empty hint → NEEDS_CONTEXT toward
-   `research-positioning`.
+   `position`.
 4. Run [pattern-extractor](../agents/pattern-extractor-agent.md): recurring hook archetypes with
    SAMPLE OK / LOW_SAMPLE / INSUFFICIENT_DATA honesty per
    [scoring rubrics](../references/scoring-rubrics.md).
@@ -29,10 +29,10 @@ Keep the same method. Change only the machinery.
    Five binary PASS required. Max two rewrite cycles; then stop for the human with internal grade `done_with_concerns` and concerns pinned.
 
 Label this single-context. Do not call it independent corroboration. Do not invent metrics, mix
-markets, or schedule / publish. Production briefs stay with `create-shortform`. Nothing here
+markets, or schedule / publish. Production briefs stay with `video`. Nothing here
 requires `.forsvn` storage, a private sibling skill, or a hidden runtime; return everything in-thread.
 
-Fail-closed stops: no ICP and empty cold-start hint → NEEDS_CONTEXT toward `research-positioning`;
+Fail-closed stops: no ICP and empty cold-start hint → NEEDS_CONTEXT toward `position`;
 a load-bearing volatile claim you cannot verify → reject or label the angle unverified; no
 authenticated platform access → record the gap as unknown, never simulate platform data;
 critic FAIL after two rewrite cycles → stop for the human with internal grade `done_with_concerns`; selection stays

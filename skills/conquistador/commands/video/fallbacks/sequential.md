@@ -10,8 +10,8 @@ do not blend them into one mushy pass.
 1. Soft-load current platform or trend evidence when it matters. Prefer a
    operator-supplied content catalog; if missing, proceed with a visible evidence-gap flag and the matching
    platform pack by exact file from the
-   [pack contract](../references/platform-intelligence/CONTRACT.md) (e.g.
-   [tiktok](../references/platform-intelligence/tiktok.md)). Do not invent VoC.
+   [pack contract](../../measure/references/platform-intelligence/CONTRACT.md) (e.g.
+   [tiktok](../../campaign/references/platform-intelligence/tiktok.md)). Do not invent VoC.
 2. Lock `brand_mode` to `founder` or `company` (no hybrid). Soft default: 1 hero + up to 2
    true-recut variants.
 3. Run Layer 1 in order: [format](../agents/format-agent.md) →
@@ -19,7 +19,7 @@ do not blend them into one mushy pass.
    [production-mode](../agents/production-mode-agent.md). Load
    [production-modes](../references/production-modes.md) and the matching platform pack.
 4. Run Layer 1.5 craft: [hook](../agents/hook-agent.md) (3 alternatives, promise and evidence checked using
-   [hook-archetypes](../references/hook-archetypes.md)) →
+   [hook-archetypes](../../results/references/modes/video/references/hook-archetypes.md)) →
    [storyboard](../agents/storyboard-agent.md) against
    [storyboard-grammar](../references/storyboard-grammar.md) →
    [audio](../agents/audio-agent.md) →
@@ -32,15 +32,15 @@ do not blend them into one mushy pass.
    [format-conventions](../references/format-conventions.md). Four binary sub-critics
    (hook / production / algorithm-fit / brand-fit) must PASS. Max two rewrite cycles; a standing
    FAIL stops for the human — deliver the best draft with critic concerns pinned for a human
-   decision, never as a completed ship. Apply [legibility](../references/legibility-convention.md) and
+   decision, never as a completed ship. Apply [legibility](../../campaign/references/legibility-convention.md) and
    [why this works](../references/why-this-works-convention.md).
 7. Optional terminal polish per [polish-chain](../references/polish-chain.md): for Vietnamese copy,
-   the public `polish-vietnamese` skill when installed; otherwise none. Only after an internal gate
+   the public `vietnamese` skill when installed; otherwise none. Only after an internal gate
    PASS or an accepted-with-concerns grade. Skipping polish is normal, not a defect.
 
 ## Phase B — Produce / export bundle
 
-8. Detect mode from the brief (`create-shortform` shortform vs app-preview handoff). Load
+8. Detect mode from the brief (`video` shortform vs app-preview handoff). Load
    [video-brief-schema](../references/video-brief-schema.md),
    [produce-inputs-and-outputs](../references/produce-inputs-and-outputs.md), and
    [production-pattern](../references/production-pattern.md).

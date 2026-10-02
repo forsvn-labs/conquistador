@@ -81,7 +81,7 @@ Confirmation gate must have run before any automation. critic-agent dim 7 verifi
 |---|---|---|
 | Buggy formatter creates 8 garbage drafts | Drafts land in platforms; operator has to clean up | Operator reviews 80-char preview; declines if obviously wrong |
 | Cookies stale; flow hangs and operator doesn't notice | Multiple drafts attempted, all fail, log noise | Operator sees state in preview; declines or aborts |
-| Operator accidentally invokes publish-social on wrong write-social slug | Drafts go to platforms with wrong copy | Preview shows wrong copy; operator declines |
+| Operator accidentally invokes publish-social on wrong `social` slug | Drafts go to platforms with wrong copy | Preview shows wrong copy; operator declines |
 | Drafts ready but operator wants to wait a day | Has to abort mid-run | Declines gate; bundle ships export-only; runs automation when ready |
 
 ## What if Operator Wants to Skip the Gate

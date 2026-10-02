@@ -2,17 +2,17 @@
 title: Polish Vietnamese Method
 lifecycle: canonical
 status: stable
-produced_by: polish-vietnamese
+produced_by: vietnamese
 load_class: METHOD
 ---
 
-# Method — Why polish-vietnamese exists
+# Method — Why `vietnamese` exists
 
 ## Why this skill exists
 
 Machine-translated and non-native Vietnamese fails in four predictable ways that no amount of "more context" can fix without targeted work: wrong pronoun pair for the register, missing sentence-final particles that carry casual warmth, literal idiom calques that land as nonsense, and corporate translationese that stacks abstract nouns the way English does. These are not creative-writing problems — they're register-mechanics problems. The polisher's job is to operate on form, never on content, and to do it inside a register the user has explicitly named (or is willing to confirm).
 
-This skill is the polish-chain endpoint for Vietnamese output across the marketing stack. Upstream skills that produce VN prose (`create-shortform`, `write-social`, `write-copy`, `create-paid-campaign`, `write-outreach`, `optimize-search`, `create-brand`, `plan-campaign`) should invoke `polish-vietnamese` whenever `market = VN`. This skill does not route back — it is the terminus.
+This skill is the polish-chain endpoint for Vietnamese output across the marketing stack. Upstream skills that produce VN prose (`video`, `social`, `copy`, `ads`, `outreach`, `seo`, `brand`, `campaign`) should invoke `vietnamese` whenever `market = VN`. This skill does not route back — it is the terminus.
 
 ## Why this skill exists at all
 
@@ -56,14 +56,14 @@ Register is pair-locked. The polisher picks one pronoun pair (self ↔ reader) a
 - **Subvariants are non-interchangeable.** `bro-otofun` (Hanoi cụ-mợ, "em + cụ") and `bro-voz` (Voz ae-thím, "mình + ae") are distinct speech communities. Mixing them in one piece = critic auto-FAIL.
 - **Polish is form-only.** Touching facts, numbers, or named examples to "improve flow" is auto-FAIL on Meaning Preservation. Preserve every factual anchor; flag rather than cut.
 - **Loanwords calibrate by register.** `API`, `webhook`, `gaming`, `router` are fine in semi-casual tech. Drop in báo chí; keep in semi-casual/pop where natural. No blanket overscrubbing.
-- **The artifact IS the contract.** Frontmatter (8 fields) + body sections (Polish Summary table + Change Log table + Polished Text + Status block) follow a fixed schema. Schema changes require atomic update of any consumer that reads polish-vietnamese output.
+- **The artifact IS the contract.** Frontmatter (8 fields) + body sections (Polish Summary table + Change Log table + Polished Text + Status block) follow a fixed schema. Schema changes require atomic update of any consumer that reads `vietnamese` output.
 
 ## When NOT to use this skill
 
 The live front door may create, rewrite, or translate into Vietnamese. The recovered diagnostic / polisher / critic still operate on Vietnamese. If the source is not Vietnamese, translate the communication job first (not English word order), then run the recovered register pipeline on the Vietnamese result.
 
 - **English-only tone work with no Vietnamese target.** Out of scope here: say so and stop rather than naming a tool this install may not have.
-- **A/B variants of already-polished text.** Use `write-copy` for variant generation; this skill is a register pass, not a multi-variant generator.
+- **A/B variants of already-polished text.** Use `copy` for variant generation; this skill is a register pass, not a multi-variant generator.
 - **Mixed-language text (Vinglish, code-switching).** Flag to the operator. Default: polish VN portions, preserve EN loanwords unless the operator asked to convert them.
 
 ## Further reading

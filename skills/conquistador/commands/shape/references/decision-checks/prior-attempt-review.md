@@ -1,7 +1,7 @@
 ---
 title: Use evidence from prior attempts
 load_class: METHOD
-produced_by: shape-initiative
+produced_by: shape
 ---
 
 # Use evidence from prior attempts

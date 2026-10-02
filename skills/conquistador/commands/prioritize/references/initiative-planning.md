@@ -19,7 +19,7 @@ Skip when:
 
 ## Phase 1: Foundation
 
-- Problem restatement (from diagnose-growth root cause)
+- Problem restatement (from `diagnose` root cause)
 - Success definition: primary metric, baseline, target, timeline
 - Scope: what's IN, what's explicitly OUT
 - Key assumptions (list — they become risk items)
@@ -89,7 +89,7 @@ Any section scoring 1 = proposal needs rework before execution.
 
 ## Phase 1: Foundation
 
-**Root Cause:** [from diagnose-growth]
+**Root Cause:** [from diagnose]
 **Primary Metric:** [metric] — Baseline: [current] → Target: [goal] by [date]
 **Scope IN:** [what's included]
 **Scope OUT:** [what's explicitly excluded]

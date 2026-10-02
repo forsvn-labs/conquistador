@@ -1,9 +1,8 @@
 ---
-name: diagnose-growth
-description: "Diagnose a growth, funnel, revenue, retention, or campaign performance problem before prescribing tactics. Use when a metric moved, a target is missed, a funnel is weak, or competing explanations need one discriminating test."
+name: diagnose
+description: "Find why growth, revenue, or a funnel stalled before you prescribe tactics."
 metadata:
   version: 1.0.0
-
 ---
 
 # Diagnose growth
@@ -18,11 +17,11 @@ Read the core files in full before you draft; read the others when their step or
 Core:
 
 - [anti-patterns](references/anti-patterns.md): Diagnostic review failures. Use these checks with the critic. Correct the inference or missing evidence…
-- [diagnosis-playbook](references/diagnosis-playbook.md): Growth diagnosis playbook. Use this skill when a measured outcome misses a target or changes and the next…
+- [diagnosis-playbook](references/diagnosis-playbook.md): Growth diagnosis playbook. Use this command when a measured outcome misses a target or changes and the next…
 - [diagnostic-evidence-method](references/diagnostic-evidence-method.md): Diagnostic evidence method. An original Conquistador procedure for deciding what a metric change permits…
 - [logic-tree-examples](references/logic-tree-examples.md): Diagnostic map examples. The examples below are invented to demonstrate calculations and decisions. They…
 
-By step: [hypothesis-framework](references/hypothesis-framework.md).
+By step: [hypothesis-framework](../convert/references/hypothesis-framework.md).
 
 Specialist roles: [critic-agent](agents/critic-agent.md), [data-mapper-agent](agents/data-mapper-agent.md), [external-check-agent](agents/external-check-agent.md), [hypothesis-agent](agents/hypothesis-agent.md), [tree-builder-agent](agents/tree-builder-agent.md), [verdict-agent](agents/verdict-agent.md).
 
@@ -76,7 +75,7 @@ Before delivery, apply the diagnostic evidence method and its handoff checks:
 - [critic](agents/critic-agent.md) against the 10-point gate;
 - [diagnosis playbook](references/diagnosis-playbook.md),
   [diagnostic evidence method](references/diagnostic-evidence-method.md),
-  [hypothesis framework](references/hypothesis-framework.md),
+  [hypothesis framework](../convert/references/hypothesis-framework.md),
   [logic-tree examples](references/logic-tree-examples.md), and
   [format conventions](references/format-conventions.md).
 

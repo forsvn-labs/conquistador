@@ -90,4 +90,4 @@ Prefer `.forsvn/artifacts/mkt/prioritize-opportunities/churn-prevention.md` when
 - Priority Actions: evidence, incremental value range, cost, dependencies and proceed/park/stop recommendation.
 - Next Step: one bounded observation or proposal, with owner and existing execution boundary.
 
-Use [cancel and payment message drafts](churn-cancel-flow-templates.md) and the [risk assessment guide](churn-health-score-guide.md) only where needed. Pass supported scenarios to `model-growth-funnel`. Do not ship interventions automatically from this plan.
+Use [cancel and payment message drafts](churn-cancel-flow-templates.md) and the [risk assessment guide](churn-health-score-guide.md) only where needed. Pass supported scenarios to `funnel`. Do not ship interventions automatically from this plan.

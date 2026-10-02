@@ -1,6 +1,6 @@
 ---
-name: analyze-video
-description: "Analyze a local video file with Gemini for timestamped summaries, spoken content, visual explanation, critique, and finding specific moments. Use when the user supplies a video path or asks you to inspect footage on their machine. Requires a Gemini API key in the agent environment; never paste keys into chat or skill files."
+name: watch
+description: "Analyze a local video file with timestamped evidence."
 metadata:
   version: 1.0.0
 ---
@@ -25,7 +25,7 @@ Specialist roles: [critic-agent](agents/critic-agent.md).
 ## Setup
 
 - Agent must be able to read local files and run code (Codex, Claude Code, Cursor agent, GrokBot, etc.). If it cannot, say so — do not claim to have watched the video.
-- Read `GEMINI_API_KEY` or `GOOGLE_API_KEY` from the environment. If missing, tell the user how to set it privately. **Never** ask them to paste the key into chat, write it into this skill, print it in logs, or pass it on a command line.
+- Read `GEMINI_API_KEY` or `GOOGLE_API_KEY` from the environment. If missing, tell the user how to set it privately. **Never** ask them to paste the key into chat, write it into this command, print it in logs, or pass it on a command line.
 - Prefer Google's official `google-genai` Python SDK in a project-local venv when needed. Use `ffprobe` to inspect; use `ffmpeg` only for conversion or segmentation.
 - Re-check current limits and model names before choosing one: https://ai.google.dev/gemini-api/docs/video-understanding
 
@@ -74,4 +74,4 @@ the checks in the current context and describe them as a self-review, not indepe
 ## Out of scope
 
 - Publishing, spend, or credential actions (still require explicit human approval via Conquistador norms).
-- Claiming live provider proof for Conquistador release gates. This skill is local tooling, not G4 evidence.
+- Claiming live provider proof for Conquistador release gates. This command is local tooling, not G4 evidence.

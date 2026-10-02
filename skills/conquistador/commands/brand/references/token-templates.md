@@ -1,6 +1,6 @@
 # Token Templates — Primitive & Semantic Tokens
 
-Reference for the create-brand skill. Contains full token scale templates for primitive and semantic layers.
+Reference for the `brand` skill. Contains full token scale templates for primitive and semantic layers.
 
 ## Primitive Tokens
 

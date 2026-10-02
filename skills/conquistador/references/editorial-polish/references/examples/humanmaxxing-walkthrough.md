@@ -229,7 +229,7 @@ Same scenario, operator invokes `/humanmaxxing --fast`:
 
 Same scenario, but `/write-outreach` produces an EN cold email draft and auto-routes through humanmaxxing before delivery:
 
-- Pre-Dispatch trusts cold-outreach's pre-resolved: voice ("blunt, specific, dry" from write-outreach's brief), content_type `short-outbound`, compression `0-10%` (per Content Type Calibration short-outbound row), `protected_tokens: ["Acme Corp", "$2.3M ARR", "https://acme.com/case-study"]`, `detector_mode: proxy`
+- Pre-Dispatch trusts cold-outreach's pre-resolved: voice ("blunt, specific, dry" from `outreach`'s brief), content_type `short-outbound`, compression `0-10%` (per Content Type Calibration short-outbound row), `protected_tokens: ["Acme Corp", "$2.3M ARR", "https://acme.com/case-study"]`, `detector_mode: proxy`
 - No Cold Start (calling skill passed everything)
 - Layer 1: pattern-scanner only (voice-extractor skipped — cold-outreach already extracted)
 - Layer 2: strip → compression (light, 0-10% per short-outbound calibration) → critic → Detector-Resistance Verification (proxy mode + protected-token regression)

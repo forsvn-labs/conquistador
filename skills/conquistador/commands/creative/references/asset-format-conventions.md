@@ -1,9 +1,9 @@
 ---
-title: Format Conventions — brief-creative manifest + per-slot prompt schema
+title: Format Conventions — creative manifest + per-slot prompt schema
 lifecycle: canonical
 status: stable
-produced_by: brief-creative
-consumers: brief-creative SKILL.md + 2 agents (prompt-author / critic) + downstream rendering tools (Midjourney / DALL·E / Imagen / Claude Design / Figma / human designer)
+produced_by: creative
+consumers: creative COMMAND.md + 2 agents (prompt-author / critic) + downstream rendering tools (Midjourney / DALL·E / Imagen / Claude Design / Figma / human designer)
 load_class: PROCEDURE
 ---
 
@@ -23,7 +23,7 @@ load_class: PROCEDURE
         └── ...
 ```
 
-`[slug]` matches the upstream brief-creative slug (or the lp-brief asset-slot parent slug if invoked from inside a landing-page brief). Per-slot prompt filenames use the slot ID from the brief.
+`[slug]` matches the upstream `creative` slug (or the lp-brief asset-slot parent slug if invoked from inside a landing-page brief). Per-slot prompt filenames use the slot ID from the brief.
 
 ---
 
@@ -31,7 +31,7 @@ load_class: PROCEDURE
 
 ```markdown
 ---
-skill: brief-creative
+skill: creative
 lens: asset-production
 version: 1
 date: [today]
@@ -41,7 +41,7 @@ source_brief: [.forsvn/artifacts/mkt/brief-creative/[slug].md OR lp-brief asset-
 target_platforms: [list, e.g., instagram-carousel, linkedin-doc, og-card]
 slot_count: [N]
 provenance:
-  skill: brief-creative
+  skill: creative
 lens: asset-production
   run_date: [today]
   input_artifacts:
@@ -90,7 +90,7 @@ For each slot, mark each spec gate after the rendered asset is reviewed:
 
 ## Re-run
 
-If the brief changes or a slot needs a sharpened prompt: re-run `brief-creative` with `--rev=N` to write to `.forsvn/artifacts/mkt/brief-creative/[slug]/v[N]/...` and preserve prior versions.
+If the brief changes or a slot needs a sharpened prompt: re-run `creative` with `--rev=N` to write to `.forsvn/artifacts/mkt/brief-creative/[slug]/v[N]/...` and preserve prior versions.
 ```
 
 ---
@@ -99,7 +99,7 @@ If the brief changes or a slot needs a sharpened prompt: re-run `brief-creative`
 
 ```markdown
 ---
-skill: brief-creative
+skill: creative
 lens: asset-production
 version: 1
 date: [today]
@@ -169,7 +169,7 @@ DO NOT:
 
 | Field | Type | Notes |
 |---|---|---|
-| `skill` | kebab-case | Always `brief-creative` |
+| `skill` | kebab-case | Always `creative` |
 | `version` | integer | Artifact version (increment on `--rev=N` re-run) |
 | `date` | ISO YYYY-MM-DD | Original creation date; do not update on edits in place |
 | `status` | enum | `done` / `done_with_concerns` / `blocked` / `needs_context` per Completion Status Protocol |
@@ -183,7 +183,7 @@ DO NOT:
 
 | Field | Type | Notes |
 |---|---|---|
-| `skill` | kebab-case | Always `brief-creative` |
+| `skill` | kebab-case | Always `creative` |
 | `version` | integer | Mirrors manifest version |
 | `date` | ISO YYYY-MM-DD | Same as manifest |
 | `slot_id` | kebab-case | Stable identifier (e.g., `ig-carousel-slide-1`, `linkedin-doc-cover`) |
@@ -221,7 +221,7 @@ In order. Renaming or reordering breaks downstream consumers + critic.
 
 - Slugs must be kebab-case, `^[a-z0-9][a-z0-9-]{0,79}$`.
 - Slot IDs must be kebab-case, same regex.
-- No path traversal in any field. Manifest's `Rendered File` column accepts operator-supplied paths but the brief-creative skill (asset-production lens) never reads them (operator-managed).
+- No path traversal in any field. Manifest's `Rendered File` column accepts operator-supplied paths but the `creative` skill (asset-production lens) never reads them (operator-managed).
 
 ## Date / Resolution conventions
 

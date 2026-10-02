@@ -2,13 +2,13 @@
 title: Brand-System Anti-Patterns
 lifecycle: canonical
 status: stable
-produced_by: create-brand
+produced_by: brand
 load_class: ANTI-PATTERN
 ---
 
 # Brand-System Anti-Patterns
 
-> Re-read before any artifact ships. 21 patterns total — organized as: 13 create-brand pipeline patterns (Section 1), 4 cross-cutting marketing-stack patterns (Section 2), 2 narrative-tension patterns (Section 3), and 2 brand-kit board patterns (Section 4). Ownership column cites which agent's checklist catches it (named criteria from `agents/critic-agent.md` — no integer "Gate N" references because the critic uses criterion names, not numbers).
+> Re-read before any artifact ships. 21 patterns total — organized as: 13 `brand` pipeline patterns (Section 1), 4 cross-cutting marketing-stack patterns (Section 2), 2 narrative-tension patterns (Section 3), and 2 brand-kit board patterns (Section 4). Ownership column cites which agent's checklist catches it (named criteria from `agents/critic-agent.md` — no integer "Gate N" references because the critic uses criterion names, not numbers).
 
 ## Section 1 — Brand-system pipeline patterns (13)
 
@@ -133,7 +133,7 @@ record which takes priority in context. Do not invent a percentage blend to reso
 
 ### 11. Overwriting human `[~]` or `[!]` markers in ASSETS.md
 
-**Pattern:** Re-running create-brand, and the auto-scan resets in-progress + blocked rows to `[ ]` (because no file exists yet). Human-owned status erased.
+**Pattern:** Re-running `brand`, and the auto-scan resets in-progress + blocked rows to `[ ]` (because no file exists yet). Human-owned status erased.
 
 **Why it fails:** `[~]` (in progress) and `[!]` (blocked) markers are how the team tracks WORK STATE — that someone is actively producing this asset, or that it's waiting on an external dependency. Erasing them on re-run loses real coordination data.
 
@@ -161,7 +161,7 @@ record which takes priority in context. Do not invent a percentage blend to reso
 
 **Why it fails:** Claude Design output is **derivative presentation**, not source of truth. It re-renders from the source spec on each visit. Saving renderings INTO the source means: (a) spec now contains both spec content + presentation content (mixed registers); (b) next re-render produces stale output because Claude Design re-reads the corrupted source; (c) versioning breaks because spec changes are interleaved with rendering changes.
 
-**Instead:** Claude Design exports go to a separate location (`presentations/`, a Claude Design folder, a Canva account). To update the spec, re-run create-brand. Claude Design re-renders from the updated source on the next session.
+**Instead:** Claude Design exports go to a separate location (`presentations/`, a Claude Design folder, a Canva account). To update the spec, re-run `brand`. Claude Design re-renders from the updated source on the next session.
 
 **Owned by:** Orchestrator (Step 9b handoff message explicitly warns + Step 9 framing — "The spec is canonical. Renderings are derivative.").
 
@@ -171,37 +171,37 @@ record which takes priority in context. Do not invent a percentage blend to reso
 
 ### 14. Upstream context skipped — generic character output
 
-**Pattern:** User invokes create-brand directly without running `research-positioning` first. No audience data exists. Strategy-agent defaults to generic character + values + voice ("we serve customers who value quality and innovation").
+**Pattern:** User invokes `brand` directly without running `position` first. No audience data exists. Strategy-agent defaults to generic character + values + voice ("we serve customers who value quality and innovation").
 
 **Why it fails:** Brand without audience research → generic character priorities. The output looks brand-shaped but says nothing specific because nothing specific was input. Six months later the team realizes the brand doesn't differentiate, and every downstream skill (copywriting, ad-copy, design-brief) inherits the genericness.
 
-**Instead:** Pre-Dispatch flags missing `research/product-context.md` + missing `research/icp-research.md` and STRONGLY recommends running `research-positioning` first. If user proceeds anyway (e.g., greenfield with no customers yet), the Pre-Dispatch Cold Start gathers product + audience + competitive data inline; critic still scores against the same rubric.
+**Instead:** Pre-Dispatch flags missing `research/product-context.md` + missing `research/icp-research.md` and STRONGLY recommends running `position` first. If user proceeds anyway (e.g., greenfield with no customers yet), the Pre-Dispatch Cold Start gathers product + audience + competitive data inline; critic still scores against the same rubric.
 
-**Owned by:** Orchestrator (Pre-Dispatch hard-recommendation when both research artifacts absent) + Critical Gate 4 (stale upstream data >30 days → recommend re-running `research-positioning`).
+**Owned by:** Orchestrator (Pre-Dispatch hard-recommendation when both research artifacts absent) + Critical Gate 4 (stale upstream data >30 days → recommend re-running `position`).
 
 ---
 
 ### 15. Cross-stack contract drift
 
-**Pattern:** Downstream skill (copywriting, ad-copy, design-brief) updates its expected BRAND.md / DESIGN.md schema in isolation without updating create-brand's frontmatter or section structure. Two versions of "what BRAND.md contains" exist in the codebase.
+**Pattern:** Downstream skill (copywriting, ad-copy, design-brief) updates its expected BRAND.md / DESIGN.md schema in isolation without updating `brand`'s frontmatter or section structure. Two versions of "what BRAND.md contains" exist in the codebase.
 
 **Why it fails:** Schema drift produces silent breakage — downstream skill consumes a field that no longer exists, or misses a field that was renamed. Symptoms appear weeks later when "the voice in this campaign doesn't match the brand book" or "the design-brief is producing components that don't exist in DESIGN.md."
 
-**Instead:** Schema changes require atomic update of `format-conventions.md` + create-brand SKILL.md Artifact Templates + every downstream caller that reads the changed field. create-brand brand-system-method lists current downstream callers (10 skills). Bump create-brand `version` major when the schema changes.
+**Instead:** Schema changes require atomic update of `format-conventions.md` + `brand` COMMAND.md Artifact Templates + every downstream caller that reads the changed field. `brand` brand-system-method lists current downstream callers (10 skills). Bump `brand` `version` major when the schema changes.
 
-**Owned by:** Operator (during refactor + new-feature work) + create-brand brand-system-method §"Cross-stack contract" listing.
+**Owned by:** Operator (during refactor + new-feature work) + `brand` brand-system-method §"Cross-stack contract" listing.
 
 ---
 
 ### 16. Polish-chain misroute
 
-**Pattern:** User invokes `editorial-polish` or `polish-vietnamese` on BRAND.md output ("make the voice section sound less AI-written"). Polish chain runs on what is supposed to be the canonical voice definition.
+**Pattern:** User invokes `editorial-polish` or `vietnamese` on BRAND.md output ("make the voice section sound less AI-written"). Polish chain runs on what is supposed to be the canonical voice definition.
 
-**Why it fails:** create-brand OUTPUT defines voice; editorial-polish/polish-vietnamese INPUT consumes voice. Running editorial-polish on the voice definition itself recursively redefines what "voice" means. The downstream caller (copywriting) then reads a polished version of "what should be unpolished spec."
+**Why it fails:** `brand` OUTPUT defines voice; editorial-polish/polish-vietnamese INPUT consumes voice. Running editorial-polish on the voice definition itself recursively redefines what "voice" means. The downstream caller (copywriting) then reads a polished version of "what should be unpolished spec."
 
-**Instead:** editorial-polish and polish-vietnamese run on **content** that REFERENCES create-brand voice (blog posts, ad copy, cold-outreach emails). They do NOT run on BRAND.md itself. If BRAND.md voice section reads "AI-written," re-dispatch voice-agent with feedback in cycle 2 of the critic gate — don't post-process the spec.
+**Instead:** editorial-polish and `vietnamese` run on **content** that REFERENCES `brand` voice (blog posts, ad copy, cold-outreach emails). They do NOT run on BRAND.md itself. If BRAND.md voice section reads "AI-written," re-dispatch voice-agent with feedback in cycle 2 of the critic gate — don't post-process the spec.
 
-**Owned by:** Orchestrator (chain position note — create-brand is upstream of editorial-polish/polish-vietnamese, not a peer) + critic-agent ("No copywriting scope creep" criterion catches blog-post-style prose in BRAND.md).
+**Owned by:** Orchestrator (chain position note — `brand` is upstream of editorial-polish/polish-vietnamese, not a peer) + critic-agent ("No copywriting scope creep" criterion catches blog-post-style prose in BRAND.md).
 
 ---
 
@@ -251,7 +251,7 @@ record which takes priority in context. Do not invent a percentage blend to reso
 
 **Pattern:** Visual-agent producing a Step 9d brand-kit board introduces a *new* color, font, accent, or logo variant that doesn't exist in `brand/DESIGN.md` or `brand/BRAND.md` because "it looks better on the board." The board becomes a parallel source of truth; downstream renders use board-only values that won't appear in production.
 
-**Why it fails:** Brand-kit boards are derivative artifacts (see anti-pattern #13 for the related Claude Design version). When a board introduces brand decisions, the spec stops being canonical — re-running create-brand regenerates DESIGN.md without the board-only choices, then the next board contradicts the previous one. The team ends up with two divergent palettes / type stacks, and nobody is sure which is real.
+**Why it fails:** Brand-kit boards are derivative artifacts (see anti-pattern #13 for the related Claude Design version). When a board introduces brand decisions, the spec stops being canonical — re-running `brand` regenerates DESIGN.md without the board-only choices, then the next board contradicts the previous one. The team ends up with two divergent palettes / type stacks, and nobody is sure which is real.
 
 **Instead:** Every color, font, and logo treatment in the board traces to an existing BRAND.md / DESIGN.md section. If a panel needs a value that's not in DESIGN.md, route the gap *back* to visual-agent's primary Layer-1 output — update DESIGN.md FIRST, then re-spec the board against the updated source. Boards live under `brand/artboards/`, never inside `brand/BRAND.md` or `brand/DESIGN.md`.
 

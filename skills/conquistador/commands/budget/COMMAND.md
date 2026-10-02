@@ -1,9 +1,8 @@
 ---
-name: allocate-marketing-budget
-description: "Allocate a bounded marketing budget across channels, experiments, and reserves using owned evidence or an explicit learning-budget mode. Use for spend scenarios, channel floors, marginal-return choices, concentration limits, and reallocation rules."
+name: budget
+description: "Split a marketing budget across channels, tests, and reserves, with reallocation rules."
 metadata:
   version: 2.1.0
-
 ---
 
 # Allocate a marketing budget
@@ -83,5 +82,5 @@ Before delivery, load the relevant allocation and review contracts:
 If the host cannot run those as separate agents, use [sequential fallback](fallbacks/sequential.md).
 When the optional local store exists, prefer `.forsvn/artifacts/mkt/allocate-marketing-budget/` for
 the allocation artifact; without it, return the artifact inline (same schema). Never invent
-a CAC or LTV. Channel selection belongs to `plan-campaign`; scoring results belongs to
-`measure-growth`.
+a CAC or LTV. Channel selection belongs to `campaign`; scoring results belongs to
+`measure`.

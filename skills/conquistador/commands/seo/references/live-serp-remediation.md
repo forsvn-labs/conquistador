@@ -47,7 +47,7 @@ If the only available benchmark report is qualitative ("competitor seems to cove
 
 ### Step 1 — Baseline scan
 
-Capture the input report and any handoff evidence (e.g., `optimize-search`'s `handoff-optimize-search.md`). Record:
+Capture the input report and any handoff evidence (e.g., `seo`'s `handoff-optimize-search.md`). Record:
 
 - **Source name** (the tool / report type), version or date stamp, access date
 - **Query × persona × geo × language** scope
@@ -79,7 +79,7 @@ Recommendations are **sentence-level** and **section-bounded**. Whole-page rewri
 - Name each required answer location before editing; add a heading only when navigation needs it
 - Add a supported entity/fact only when the stated question needs it
 - Move an answer only when the local context-preservation check passes
-- 0 paragraph rewrites — if a paragraph needs rewriting, that's a separate `write-copy` request, not a remediation edit
+- 0 paragraph rewrites — if a paragraph needs rewriting, that's a separate `copy` request, not a remediation edit
 - 0 deletions of human-written content — the loop is append-only
 
 Recommendations carry the same per-finding fields as retrieval-layer findings (Query / Target page / Extraction unit / Source/corroboration gap / Exact rewrite location / Measurement query / Expected citation behavior / Evidence class) — see `retrieval-layer-seo.md` § Audit output schema.
@@ -94,7 +94,7 @@ Recommendations carry the same per-finding fields as retrieval-layer findings (Q
 
 ### Step 4 — Apply
 
-The operator (or a downstream `write-copy` invocation) applies the edits. The remediation skill does not edit the page itself. The manifest records what was applied vs skipped vs deferred.
+The operator (or a downstream `copy` invocation) applies the edits. The remediation skill does not edit the page itself. The manifest records what was applied vs skipped vs deferred.
 
 ### Step 5 — Verify with rescan
 
@@ -118,7 +118,7 @@ If the rescan shows the coverage score still lags competitors meaningfully, the 
 2. **The remaining gap is usually a structural/authority issue** (the competitor has 200 backlinks to that page from industry publications and you have 12), not a content gap. More content won't close that.
 3. **Honest reporting beats forced edits.** A "blocker" entry naming the root cause (authority gap, third-party corroboration gap, retrieval surface gating) is more useful than a content edit that doesn't move the underlying metric.
 
-When the loop stops with a remaining gap, the manifest's `final_state` field records the blocker explicitly: which page, which finding, what the rescan showed, what the recommended escalation is (`research-positioning` for audience repositioning, `authority-agent` rerun for backlink strategy, `optimize-search` rerun for fresh measurement, etc.).
+When the loop stops with a remaining gap, the manifest's `final_state` field records the blocker explicitly: which page, which finding, what the rescan showed, what the recommended escalation is (`position` for audience repositioning, `authority-agent` rerun for backlink strategy, `seo` rerun for fresh measurement, etc.).
 
 ---
 
@@ -132,7 +132,7 @@ For multi-page or sitewide work, the loop produces a manifest. The manifest is t
 
 ```yaml
 ---
-skill: optimize-search
+skill: seo
 mode: ai
 subject: [domain or page-set slug]
 report_source: [tool name + version + access date — vendor-agnostic; record what was used]
@@ -158,7 +158,7 @@ evidence-classes: { observed-test: N, single-run: N, unavailable: N, practitione
 | `skipped_reason` | Free text when status is `skipped-*` or `deferred-*` |
 | `baseline_score` | Coverage / entity score before the edit (report's native units) |
 | `rescan_score` | Same field after Step 5; null until rescan ran |
-| `retrieval_measurement_query` | The AI-surface query rerun in Step 5 (often the persona-prefixed `optimize-search` query, not the SERP report query) |
+| `retrieval_measurement_query` | The AI-surface query rerun in Step 5 (often the persona-prefixed `seo` query, not the SERP report query) |
 | `retrieval_delta` | `cited-now` / `still-not-cited` / `was-cited-now-not` / `inconclusive` / `not-rerun` |
 | `evidence_class` | Per `references/evidence-classes.md` |
 
@@ -181,7 +181,7 @@ Skip the loop and recommend an upstream skill instead when:
 
 - No report exists → request supplied evidence or return a bounded collection plan; do not imply authorization to run it
 - The target pages are auto-generated programmatic content → recommend `programmatic-quality-agent`'s quality gates instead
-- The brand voice is the actual problem ("our content reads like marketing fluff") → recommend `write-copy` or `humanmaxxing`, not the remediation loop
+- The brand voice is the actual problem ("our content reads like marketing fluff") → recommend `copy` or `humanmaxxing`, not the remediation loop
 - The site has relevant crawl/index blockers → route them to technical review; offline content proposals retain delivery dependencies
 - The operator wants to chase a vendor score as the success metric → reframe; the loop's success metric is observed retrieval/citation behavior change
 

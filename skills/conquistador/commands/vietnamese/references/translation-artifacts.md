@@ -310,6 +310,6 @@ A1, A2, A3, A4, A5, B1, B2, B3, C1–C7, D1, D2, D3, D4, D5, D6, D7, E3, F1, F2,
 **Soft tells (fix if register demands):**
 E1, E2, E4, I1, I2, I3, I4, J1, J2, J3, F4
 
-**Note on E3:** E3 (dead corporate intensifiers — `giải pháp toàn diện`, `trải nghiệm đột phá`, `tối ưu hóa`, `chuyển đổi số`, `hành trình`) is promoted to Hard because stacking two or more of these in the same paragraph is an Absolute Prohibition in `SKILL.md`. Treat single instances as Soft (context-dependent) but any stack of 2+ as Hard.
+**Note on E3:** E3 (dead corporate intensifiers — `giải pháp toàn diện`, `trải nghiệm đột phá`, `tối ưu hóa`, `chuyển đổi số`, `hành trình`) is promoted to Hard because stacking two or more of these in the same paragraph is an Absolute Prohibition in `COMMAND.md`. Treat single instances as Soft (context-dependent) but any stack of 2+ as Hard.
 
 A polished piece has **zero Hard tells** and at most **two Soft tells** per 200 words.

@@ -1,6 +1,6 @@
 # Implementation Rules — Accessibility, Dark Mode & Applications
 
-Reference for the create-brand skill. Contains accessibility baseline, dark mode rules, and brand application guidelines.
+Reference for the `brand` skill. Contains accessibility baseline, dark mode rules, and brand application guidelines.
 
 ## Accessibility Baseline
 

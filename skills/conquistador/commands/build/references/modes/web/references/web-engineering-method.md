@@ -2,7 +2,7 @@
 title: Web Engineering Method
 lifecycle: canonical
 status: stable
-produced_by: build-web-app
+produced_by: build
 load_class: METHOD
 ---
 

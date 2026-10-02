@@ -2,7 +2,7 @@
 title: Docs-Writing — Worked Example
 lifecycle: canonical
 status: stable
-produced_by: write-technical-docs
+produced_by: docs
 load_class: EXAMPLE
 ---
 
@@ -99,6 +99,6 @@ writer-agent updates the stale Node 16 reference to Node 18.
 
 - **Why audience-profiler-agent ran in Layer 1 (parallel), not Layer 2:** vocabulary calibration depends on audience, and the writer needs that input. Running audience-profiler after the writer would require a rewrite when the calibration changed.
 - **Why staleness-checker-agent caught SMTP_PORT but humans wouldn't:** it cross-references every documented env var against `.env.example` AND code-level config reads (`process.env.X`). The Nodemailer config read `process.env.SMTP_PORT` was the source; staleness check on the env var inventory caught the gap.
-- **Why "see code for details" was avoided:** the operator chose write-technical-docs because they don't want to read source code. Saying "see code" is a refusal to do the job. concept-extractor extracted the relevant detail (24 endpoints with auth + parameter shapes) so the docs are self-contained.
+- **Why "see code for details" was avoided:** the operator chose `docs` because they don't want to read source code. Saying "see code" is a refusal to do the job. concept-extractor extracted the relevant detail (24 endpoints with auth + parameter shapes) so the docs are self-contained.
 - **Why the stale README was renamed not overwritten:** `README.v1.md` is the audit trail. If the new docs introduce a regression (operator catches "you removed the troubleshooting section I wrote by hand"), the v1 file is the recovery point.
 - **Why Configuration is a table, not prose:** users scan, not read. A table with default + valid values is parseable in 5 seconds; a paragraph with the same info is parseable in 30 seconds. Same data, 6× faster comprehension.

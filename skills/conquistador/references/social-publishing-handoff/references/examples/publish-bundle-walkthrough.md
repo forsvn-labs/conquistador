@@ -6,7 +6,7 @@ produced_by: publish-social
 load_class: EXAMPLE
 ---
 
-# Worked Example — write-social copy → publishing bundle → export ledger rows
+# Worked Example — `social` copy → publishing bundle → export ledger rows
 
 A faithful end-to-end run of the **default mode** (auto-detect → export — no live posting). All copy and paths are **illustrative synthetic data** promoting FORSVN — not a real account. The point is the exact shape: pre-dispatch validation, the formatter→critic flow, the produced bundle (manifest + per-platform drafts + the four scheduler-import files), the `exported` ledger rows, and the completion status. The `--mode=publish` two-stage gate is noted at the end without posting anything live.
 
@@ -18,25 +18,25 @@ A faithful end-to-end run of the **default mode** (auto-detect → export — no
 
 Inputs it consumes (all illustrative):
 
-- **Source write-social artifact:** `docs/forsvn/artifacts/marketing/write-social/local-first-capture-2026-06-10-quiet-capture.md` — frontmatter `id: write-social-local-first-capture`; carries per-platform bodies, hook ("Your best work happens before you remember to log it"), CTA ("14-day local trial — no account, no cloud"), hashtag sets, and a media ref.
+- **Source `social` artifact:** `docs/forsvn/artifacts/marketing/write-social/local-first-capture-2026-06-10-quiet-capture.md` — frontmatter `id: write-social-local-first-capture`; carries per-platform bodies, hook ("Your best work happens before you remember to log it"), CTA ("14-day local trial — no account, no cloud"), hashtag sets, and a media ref.
 - **`brand/BRAND.md`** — voice (calm, technical, anti-hype), sacred elements (Forest Shadow `#0A120D` canvas, Leaf `#74B36B` accent; Signal Lime retired — never reintroduced).
 - **produce-asset manifest:** `docs/forsvn/artifacts/marketing/produce-asset/local-first-capture-2026-06-10-hero.md` — one 1:1 hero slot (`slots/hero-1x1.png`, 1200×1200).
 - **Credentials state:** none configured (`.forsvn/credentials/platforms.json` absent).
-- **Target platforms:** inherited from write-social → `x`, `linkedin`, `instagram` (a 3-platform subset of the 9 supported).
+- **Target platforms:** inherited from `social` → `x`, `linkedin`, `instagram` (a 3-platform subset of the 9 supported).
 
 ## 2. Pre-dispatch validation
 
 Hard-blocks run before formatting (this recovered tree's format-conventions + Critical Gates):
 
-- write-social artifact present + readable → **pass** (else `NEEDS_CONTEXT` → `/write-social`).
+- `social` artifact present + readable → **pass** (else `NEEDS_CONTEXT` → `/write-social`).
 - `brand/BRAND.md` present → **pass** (else `NEEDS_CONTEXT` → `/create-brand`).
-- `target_platforms` derivable from write-social → **pass** (x, linkedin, instagram).
+- `target_platforms` derivable from `social` → **pass** (x, linkedin, instagram).
 - Credential probe is **binary** (Gate 3) — `typefully: false`, no values logged. Dim-6 grep for `_KEY`/`_TOKEN`/`_SECRET` over the bundle later confirms no secret leaked.
 - Mode resolution: no credentials + no `--mode` flag → **Route A** (export-all). Auto-detect never picks publish (Gate 1).
 
-## 3. The flow — write-social copy → bundle
+## 3. The flow — `social` copy → bundle
 
-**formatter-agent** reads each `references/platforms/[platform].md` and converts the write-social body to platform-native shape:
+**formatter-agent** reads each `references/platforms/[platform].md` and converts the `social` body to platform-native shape:
 
 - **X** — body > 280 chars → split into a 3-post thread at sentence boundaries; hook in post 1 (lands inside 140 chars); CTA in the final post; 2 hashtags max.
 - **LinkedIn** — preserve double-newline paragraph breaks; CTA pulled inside the ~210-char "see more" cutoff; hashtag stack (3-5) moved to end-of-post; X thread markup stripped.
@@ -250,14 +250,14 @@ Curious how a local-first capture loop changes your week?
 
 ## Notes
 
-LinkedIn renders line breaks literally — double-newline = paragraph break, preserved from the write-social body. No external link in the body (reach penalty); put the trial link in the first comment.
+LinkedIn renders line breaks literally — double-newline = paragraph break, preserved from the social body. No external link in the body (reach penalty); put the trial link in the first comment.
 See product-fit rationale: `docs/forsvn/artifacts/marketing/write-social/local-first-capture-2026-06-10-quiet-capture.md` § Why this works (carried forward — not re-authored here).
 
 ## Legibility
 
 **Legibility — applied expertise**
 - Pack: `linkedin` · verified 2026-06-18 · status reviewed
-- Tactics applied: preserved the write-social double-newline paragraphing (LinkedIn renders breaks literally) · pulled the reply-bait CTA inside the ~210-char "see more" fold · moved the 4-tag hashtag stack to end-of-post · routed the trial link to the first comment
+- Tactics applied: preserved the social double-newline paragraphing (LinkedIn renders breaks literally) · pulled the reply-bait CTA inside the ~210-char "see more" fold · moved the 4-tag hashtag stack to end-of-post · routed the trial link to the first comment
 - Why these: LinkedIn ranks on dwell + comments (pack §3), so the value lands above the fold and the CTA is a question not a link; a body link is a documented reach penalty (pack §4), so it goes to the first comment.
 ```
 
@@ -363,7 +363,7 @@ linkedin-2026-06-13-local-first-capture	write-social-local-first-capture	linkedi
 instagram-2026-06-13-local-first-capture	write-social-local-first-capture	instagram	exported	2026-06-13		image	organic	caption-bottom hashtags; export bundle local-first-capture
 ```
 
-Column order is exactly `ledger_id · artifact_id · platform · status · event_date · post_url · format · placement · notes`. `artifact_id` is the **source write-social** frontmatter `id` (not the bundle path) — that's the join key metric-ingest later uses to attribute measured engagement back to the producing artifact. Lifecycle continues `exported → live → measured`, advanced by metric-ingest on import.
+Column order is exactly `ledger_id · artifact_id · platform · status · event_date · post_url · format · placement · notes`. `artifact_id` is the **source `social`** frontmatter `id` (not the bundle path) — that's the join key metric-ingest later uses to attribute measured engagement back to the producing artifact. Lifecycle continues `exported → live → measured`, advanced by metric-ingest on import.
 
 ## 6. Critic verdict — PASS
 
@@ -376,7 +376,7 @@ Aggregate ≥ 56/80 AND every dim ≥ 6 → **PASS** (export/draft critic runs a
 - d4 CTA + hook placement: 8 — hooks land early; CTAs inside each platform's truncation point
 - d5 scheduler-format validity: 9 — typefully.json parses; buffer.csv 6 cols; hootsuite.csv 7 cols; generic.csv 6 cols; UTF-8 no BOM
 - d6 credential safety: 10 — grep clean (no _KEY/_TOKEN/_SECRET); credentials_detected booleans only
-- d7 narration & browser-automation safety: 10 — narration sub-check: all 3 drafts carry a `## Legibility` block placed last; X + LinkedIn are Packed (`pack_verified 2026-06-18`, tactics named, frontmatter mirrors); Instagram is correctly Absent (`pack_verified: none`, empty `applied_tactics` — no IG depth pack exists, so no fabricated pack); zero `## Why this works` blocks in the bundle (product-fit carried forward via each `## Notes` pointer to the upstream write-social artifact). Automation sub-check: Route A export, no automation ran (sub-check trivially passes)
+- d7 narration & browser-automation safety: 10 — narration sub-check: all 3 drafts carry a `## Legibility` block placed last; X + LinkedIn are Packed (`pack_verified 2026-06-18`, tactics named, frontmatter mirrors); Instagram is correctly Absent (`pack_verified: none`, empty `applied_tactics` — no IG depth pack exists, so no fabricated pack); zero `## Why this works` blocks in the bundle (product-fit carried forward via each `## Notes` pointer to the upstream social artifact). Automation sub-check: Route A export, no automation ran (sub-check trivially passes)
 ```
 
 No FAIL → no re-dispatch cycle. (A persistent export FAIL after 2 formatter cycles would return `BLOCKED` and write **no bundle**; the ledger rows are written at export only on a passing bundle.)
@@ -395,6 +395,6 @@ The default above never posts. `--mode=publish` is explicit opt-in and **cannot*
 - The produced bundle is the exact 9-file shape: manifest (16-field frontmatter + 5 sections) + one per-platform draft each (12-field frontmatter + Body/Hashtags/CTA/Media/Notes/**Legibility**) + all four scheduler-import files + README.
 - Each platform draft is platform-native, not a cross-paste: X threaded, LinkedIn paragraphed with a comment-bait close, IG caption-bottom stack with a bio-link CTA.
 - **Per-platform Legibility is authored here, every draft** — the channel-fit narration of the actual formatting tactics applied (thread-split, fold-safe CTA, hashtag placement), pack-cited with a `pack_verified` date and mirrored into the `pack_verified`/`applied_tactics` frontmatter. X + LinkedIn are Packed; **Instagram is the Absent state** (`pack_verified: none`, empty `applied_tactics`) because no IG depth pack exists — the transparent degrade, never a fabricated pack.
-- **Why-this-works is carried forward, not duplicated** — publish-social makes no copy decisions, so the product-fit rationale stays on the upstream write-social artifact; each draft's `## Notes` points to it (`§ Why this works`) rather than re-authoring a second block. The critic's dim 7 (Narration & Browser-Automation Safety) enforces both: a missing/invalid/un-mirrored `## Legibility` block, or a duplicated `## Why this works`, is a structural FAIL.
-- One `exported` ledger row per platform is written at export, keyed by the **source write-social `id`** — the anchor metric-ingest uses to attribute real engagement back to the producing artifact.
+- **Why-this-works is carried forward, not duplicated** — publish-social makes no copy decisions, so the product-fit rationale stays on the upstream `social` artifact; each draft's `## Notes` points to it (`§ Why this works`) rather than re-authoring a second block. The critic's dim 7 (Narration & Browser-Automation Safety) enforces both: a missing/invalid/un-mirrored `## Legibility` block, or a duplicated `## Why this works`, is a structural FAIL.
+- One `exported` ledger row per platform is written at export, keyed by the **source `social` `id`** — the anchor metric-ingest uses to attribute real engagement back to the producing artifact.
 - Credentials are probed binary-only; no secret ever lands in the bundle (dim 6 grep + booleans-only `credentials_detected`).

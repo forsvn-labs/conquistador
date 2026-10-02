@@ -1,12 +1,12 @@
-# Production Lanes — create-shortform
+# Production Lanes — `video`
 
-How create-shortform routes a validated script to a **production path**. Loaded at pre-dispatch
+How `video` routes a validated script to a **production path**. Loaded at pre-dispatch
 (after mode detection) and surfaced in the manifest's `## Runtime Choices` section + the
 Execution fork. The operator always chooses; this file is how the skill *recommends*.
 
 ## What a lane is
 
-A **lane** is a family of engines that turn the script into pixels. create-shortform stays
+A **lane** is a family of engines that turn the script into pixels. `video` stays
 tool-agnostic — it emits the runtime-agnostic bundle and recommends a lane; the engines run
 via the operator's own connected MCP / keys (`execution-fork.md` Assisted/Direct). Engines
 and their prerequisites are catalogued in `render-engines.md` § Video engines. Lanes are a
@@ -24,7 +24,7 @@ and their prerequisites are catalogued in `render-engines.md` § Video engines. 
 
 ## Selection logic (recommend, don't decide)
 
-create-shortform derives a recommendation from the brief, then the operator confirms at the
+`video` derives a recommendation from the brief, then the operator confirms at the
 Execution fork:
 
 1. **Start from `production_mode`** (the brief's content nature):
@@ -50,6 +50,6 @@ differently — the prompt-author tunes the per-shot **Renderer Hints** block
 
 ## Non-negotiables (inherited)
 
-- **Tool-agnostic / no keys.** create-shortform recommends + scaffolds + emits prompts; it never holds a key or invokes an engine. Stochastic-lane output is operator-rendered via their own connected MCP/keys (OS keychain), per `execution-fork.md`.
+- **Tool-agnostic / no keys.** `video` recommends + scaffolds + emits prompts; it never holds a key or invokes an engine. Stochastic-lane output is operator-rendered via their own connected MCP/keys (OS keychain), per `execution-fork.md`.
 - **On-screen text is verbatim and burned in post.** Never let a generative/avatar engine author copy — it paraphrases. The post lane burns the brief's exact strings (Gate 1 still applies).
-- **Return-leg for stochastic lanes.** A generative/avatar render is not "done" until it is scored against the brief + realized surface (`execution-fork.md` return-leg → `evaluate-shortform`). House-lane output is deterministic and proceeds straight to the per-shot verification checklist.
+- **Return-leg for stochastic lanes.** A generative/avatar render is not "done" until it is scored against the brief + realized surface (`execution-fork.md` return-leg → `results`). House-lane output is deterministic and proceeds straight to the per-shot verification checklist.

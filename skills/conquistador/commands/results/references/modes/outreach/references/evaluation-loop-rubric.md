@@ -5,7 +5,7 @@ title: Evaluation-Loop Rubric — shared frame for the evaluate-* eval-loop crit
 lifecycle: canonical
 status: stable
 load_class: PROCEDURE
-consumers: evaluate-paid-campaign · evaluate-campaign · measure-growth
+consumers: `results` · evaluate-campaign · `measure`
 provenance:
   extracted_from: the common frame of evaluate-{ad,campaign,content}/references/rubric.md
   extracted_at: 2026-05-21
@@ -15,7 +15,7 @@ provenance:
 # Evaluation-Loop Rubric — Shared Frame
 
 <!-- lint:reference-ok per-skill instrument; each eval skill owns its own references/rubric.md -->
-**The common contract behind every eval-loop critic rubric: the scoring scale, the pass gate, the five shared dimensions, the universal Hard Fails, the revision-trigger mechanism, and the falsifiability discipline. `evaluate-paid-campaign`, `evaluate-campaign`, and `measure-growth` each own a `references/rubric.md` that scores 7 dimensions — 5 defined here, 2 domain-specific — and inherits this frame.**
+**The common contract behind every eval-loop critic rubric: the scoring scale, the pass gate, the five shared dimensions, the universal Hard Fails, the revision-trigger mechanism, and the falsifiability discipline. `results`, `evaluate-campaign`, and `measure` each own a `references/rubric.md` that scores 7 dimensions — 5 defined here, 2 domain-specific — and inherits this frame.**
 
 > Why this is shared: the three eval-loop critics gate post-launch cycle artifacts before a `results.tsv` row is written. The *contract* — what a passing score is, what a Hard Fail is, what makes a score falsifiable — must be identical and must change in lockstep. The *band tables* are domain-specialized (audience-temp, channel-mix, engagement-quality) and revise independently per domain; they stay in each skill's `rubric.md`. This file is the frame; `rubric.md` is the domain instrument.
 
@@ -57,7 +57,7 @@ Every eval-loop `rubric.md` includes these five, in these positions, each with a
 | 4 | **Decision Discipline** | Does the keep/discard/watch/blocked verdict follow the Recommendation Decision Rules — driven by the metric packet, not the diagnosis story? Is routing to the smallest correct next skill at the right granularity? |
 | 7 | **Ledger Correctness** | Exactly one schema-compliant `results.tsv` row — 8 columns, valid status, a one-sentence tab-free description carrying the scope tag, artifact path relative to the loop folder? |
 
-Positions 5 and 6 are the domain-specific dimensions (e.g. Audience-Temp Fidelity + Creative-Fatigue Awareness for `evaluate-paid-campaign`). Each skill's `rubric.md` carries the full 5-band table for all 7 dimensions — these five are the contract the band tables must implement.
+Positions 5 and 6 are the domain-specific dimensions (e.g. Audience-Temp Fidelity + Creative-Fatigue Awareness for `results`). Each skill's `rubric.md` carries the full 5-band table for all 7 dimensions — these five are the contract the band tables must implement.
 
 ## 5. Revision triggers
 

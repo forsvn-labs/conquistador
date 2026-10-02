@@ -1,9 +1,9 @@
 ---
-name: evaluate-paid-campaign
+command: results
+mode: ads
 description: "Evaluate actual paid-media performance by network, audience, creative, and time period. Use after a campaign has delivery or outcome evidence to diagnose attribution limits, fatigue, and qualified results and recommend a bounded keep, revise, pause, or stop decision. Not for creating ads or granting spend authority."
 metadata:
   version: 1.0.0
-
 ---
 
 # Evaluate a paid campaign
@@ -18,20 +18,20 @@ Read the core files in full before you draft; read the others when their step or
 
 Core:
 
-- [linkedin-ads-metrics](references/ad-intelligence/linkedin-ads-metrics.md): Evaluate LinkedIn Ads outcome quality. This is a campaign decision procedure. It supplies no performance…
-- [tiktok-ads-metrics](references/ad-intelligence/tiktok-ads-metrics.md): Evaluate TikTok Ads delivery and outcomes. This is a campaign decision procedure. It supplies no…
-- [anti-patterns](references/anti-patterns.md): Paid evaluation failure checks. A spending limit protects the account; a statistical evidence requirement…
-- [evaluation-loop-rubric](references/evaluation-loop-rubric.md): Review the full evaluation cycle. Apply this frame after the paid-specific rubric. Confirm that the input…
-- [measurement-over-heuristics](references/measurement-over-heuristics.md): Decide from a scoped evidence record. Read the source campaign hypothesis and agreed outcome, loss…
-- [rubric](references/rubric.md): Paid evaluation review rubric. Score each dimension 0-10. A missing or contradicted contract receives 0; a…
+- [linkedin-ads-metrics](ads/references/ad-intelligence/linkedin-ads-metrics.md): Evaluate LinkedIn Ads outcome quality. This is a campaign decision procedure. It supplies no performance…
+- [tiktok-ads-metrics](ads/references/ad-intelligence/tiktok-ads-metrics.md): Evaluate TikTok Ads delivery and outcomes. This is a campaign decision procedure. It supplies no…
+- [anti-patterns](ads/references/anti-patterns.md): Paid evaluation failure checks. A spending limit protects the account; a statistical evidence requirement…
+- [evaluation-loop-rubric](ads/references/evaluation-loop-rubric.md): Review the full evaluation cycle. Apply this frame after the paid-specific rubric. Confirm that the input…
+- [measurement-over-heuristics](ads/references/measurement-over-heuristics.md): Decide from a scoped evidence record. Read the source campaign hypothesis and agreed outcome, loss…
+- [rubric](ads/references/rubric.md): Paid evaluation review rubric. Score each dimension 0-10. A missing or contradicted contract receives 0; a…
 
-By step: [google-ads-metrics](references/ad-intelligence/google-ads-metrics.md).
+By step: [google-ads-metrics](ads/references/ad-intelligence/google-ads-metrics.md).
 
-Specialist roles: [critic-agent](agents/critic-agent.md), [diagnosis-agent](agents/diagnosis-agent.md), [metric-ingest-agent](agents/metric-ingest-agent.md), [recommendation-agent](agents/recommendation-agent.md).
+Specialist roles: [critic-agent](ads/agents/critic-agent.md), [diagnosis-agent](ads/agents/diagnosis-agent.md), [metric-ingest-agent](ads/agents/metric-ingest-agent.md), [recommendation-agent](ads/agents/recommendation-agent.md).
 
-Worked examples: [ad-eval-cycle-walkthrough](references/examples/ad-eval-cycle-walkthrough.md).
+Worked examples: [ad-eval-cycle-walkthrough](ads/references/examples/ad-eval-cycle-walkthrough.md).
 
-Output formats and fallbacks: [sequential](fallbacks/sequential.md), [format-conventions](references/format-conventions.md).
+Output formats and fallbacks: [sequential](ads/fallbacks/sequential.md), [format-conventions](ads/references/format-conventions.md).
 
 <!-- playbooks:end -->
 
@@ -90,23 +90,23 @@ Return:
 
 Before delivery, load the method instead of paraphrasing it:
 
-- [metric ingest](agents/metric-ingest-agent.md),
-  [diagnosis](agents/diagnosis-agent.md),
-  [recommendation](agents/recommendation-agent.md),
-  [critic](agents/critic-agent.md);
-- [rubric](references/rubric.md),
-  [evaluation-loop frame](references/evaluation-loop-rubric.md), and the matching
-  [ad-intelligence metrics](references/ad-intelligence/) pack;
-- [measurement over heuristics](references/measurement-over-heuristics.md) and
-  [anti-patterns](references/anti-patterns.md) before ship.
+- [metric ingest](ads/agents/metric-ingest-agent.md),
+  [diagnosis](ads/agents/diagnosis-agent.md),
+  [recommendation](ads/agents/recommendation-agent.md),
+  [critic](ads/agents/critic-agent.md);
+- [rubric](ads/references/rubric.md),
+  [evaluation-loop frame](ads/references/evaluation-loop-rubric.md), and the matching
+  [ad-intelligence metrics](ads/references/ad-intelligence/) pack;
+- [measurement over heuristics](ads/references/measurement-over-heuristics.md) and
+  [anti-patterns](ads/references/anti-patterns.md) before ship.
 
-If the host cannot run those as separate agents, use [sequential fallback](fallbacks/sequential.md).
+If the host cannot run those as separate agents, use [sequential fallback](ads/fallbacks/sequential.md).
 One network and one comparable audience scope or network framing axis per cycle. Missing data
 is missing, never zero. The
-existing ledger uses keep / discard / watch / blocked; translate to this skill's keep / revise /
+existing ledger uses keep / discard / watch / blocked; translate to this mode's keep / revise /
 pause / stop when delivering.
 
-This skill runs standalone: it ingests operator-supplied exports, screenshots, and pasted numbers.
+This mode runs standalone: it ingests operator-supplied exports, screenshots, and pasted numbers.
 Loop state under `.forsvn/loops/[slug]/` is the preferred source when that store exists — when it
 does not, work from the operator's declared scope and evidence and return results inline. Signal
 separation holds either way: opens and clicks alone support no success claim, and no new spend or

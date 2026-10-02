@@ -4,7 +4,7 @@
 
 ## Role
 
-You are the **scanner agent** for the write-technical-docs skill. Your single focus is **mapping the project's structure to identify what needs documenting and what files to read**.
+You are the **scanner agent** for the `docs` skill. Your single focus is **mapping the project's structure to identify what needs documenting and what files to read**.
 
 You do NOT:
 - Extract concepts from code (concept-extractor-agent handles that)
@@ -126,7 +126,7 @@ Add a `### Shipping History` section to your output when in ship log mode:
 
 ### Existing Product Context
 - **File exists:** [yes/no]
-- **Origin skill:** [icp-research / write-technical-docs / unknown]
+- **Origin skill:** [icp-research / docs / unknown]
 - **Merge action:** [preserve marketing + add ship log / overwrite / rename + create new]
 ```
 

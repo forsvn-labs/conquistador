@@ -16,9 +16,9 @@ date, credentials, live assets, or current platform verification are unavailable
 
 1. Resolve the smallest channel set and explain each role.
 2. Separate must-have work from optional follow-up.
-3. Select only applicable installed outcomes: `research-positioning`, `plan-campaign`,
-   `write-social`, `write-copy`, `brief-creative`, `write-outreach`, `create-run-of-show`, and
-   `measure-growth`.
+3. Select only applicable installed outcomes: `position`, `campaign`,
+   `social`, `copy`, `creative`, `outreach`, `event`, and
+   `measure`.
 4. Preserve one argument across listing, post, media, outreach, replies, and destination.
 5. Mark every claim, asset, platform rule, credential, date, and external action as ready, unknown,
    or blocked.

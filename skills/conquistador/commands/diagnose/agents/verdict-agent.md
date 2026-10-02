@@ -57,4 +57,4 @@ When segment rates are unchanged but weights differ, describe the measured mix c
 
 Prioritize unresolved questions according to whether they change the proposed action, the cost of checking and the consequence of being wrong. Do not automatically discard a small gap or block on a universal percentage. Stop when no available observation can resolve the uncertainty; explain the limitation rather than weakening the verdict criteria.
 
-A supported cause can inform `prioritize-opportunities`. It does not authorize an experiment, tracking change, spend or user contact. Retain the evidence boundary in every handoff.
+A supported cause can inform `prioritize`. It does not authorize an experiment, tracking change, spend or user contact. Retain the evidence boundary in every handoff.

@@ -1,6 +1,6 @@
 # Worked Example — Platform Evidence Walkthrough
 
-A full `research-channel` run on a realistic account scope, traced from Pre-Dispatch through the critic gate. Shows mixed coverage flags (MEASURED / PARTIAL / NO_EVIDENCE) and a critic FAIL caught and fixed. Fictional — the account, store contents, and metrics are constructed for the example.
+A full `channels` run on a realistic account scope, traced from Pre-Dispatch through the critic gate. Shows mixed coverage flags (MEASURED / PARTIAL / NO_EVIDENCE) and a critic FAIL caught and fixed. Fictional — the account, store contents, and metrics are constructed for the example.
 
 ---
 
@@ -22,7 +22,7 @@ No prior `platform-evidence` artifact found → Cold Start. The operator answers
 4. Niche hint: B2B, AI agent tooling, developer audience
 5. Prior eval loops: none
 
-An optional warm-start scan of the local store (skipped entirely on a standalone host with no `.forsvn`) also found `.forsvn/loops/q2-launch/evals/2026-04-30-cycle-1.md` — an `measure-growth` cycle holding a published-post outcome for X. The orchestrator flags it as a `prior_eval` source the operator did not mention. Without the store, the operator could simply paste that figure in as prior evidence instead.
+An optional warm-start scan of the local store (skipped entirely on a standalone host with no `.forsvn`) also found `.forsvn/loops/q2-launch/evals/2026-04-30-cycle-1.md` — an `measure` cycle holding a published-post outcome for X. The orchestrator flags it as a `prior_eval` source the operator did not mention. Without the store, the operator could simply paste that figure in as prior evidence instead.
 
 Windows set: `metrics_window_date: 2026-05-18`, `algorithm_context_date: 2026-05-22`.
 

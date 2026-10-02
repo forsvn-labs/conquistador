@@ -1,6 +1,6 @@
 # Visual Artboard Generation — Paper MCP
 
-Reference for the create-brand skill. Contains artboard specifications and workflow for rendering brand guidelines in Paper MCP.
+Reference for the `brand` skill. Contains artboard specifications and workflow for rendering brand guidelines in Paper MCP.
 
 ## Prerequisites
 

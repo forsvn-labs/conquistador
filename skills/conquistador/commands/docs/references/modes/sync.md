@@ -2,7 +2,7 @@
 title: Docs-Writing — Route C (Post-Change Sync)
 lifecycle: canonical
 status: stable
-produced_by: write-technical-docs
+produced_by: docs
 load_class: PROCEDURE
 ---
 
@@ -54,7 +54,7 @@ scanner-agent ──────────────── inventory existin
 
 ## Critic focus when reviewing sync output
 
-Route C inherits the 6 default critical gates from SKILL.md unchanged. The critic-agent's attention shifts to sync-specific concerns when reviewing the writer's output (these are review heuristics, not new FAIL gates):
+Route C inherits the 6 default critical gates from COMMAND.md unchanged. The critic-agent's attention shifts to sync-specific concerns when reviewing the writer's output (these are review heuristics, not new FAIL gates):
 
 - Every updated section should trace to a specific commit in the resolved diff range.
 - No section unaffected by the diff should have been modified (write-amplification check).

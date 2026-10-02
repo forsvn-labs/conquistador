@@ -46,7 +46,7 @@ load_class: ANTI-PATTERN
 **Why it fails:** Cross-cluster, cross-surface comparison invents a fictitious decline. Different clusters and surfaces are not comparable.
 **Fix:** Attribution Honesty dim requires same cluster AND same surface for a baseline. Critic Hard Fail #10 enforces.
 
-### 8. Source optimize-search artifact unverified
+### 8. Source `seo` artifact unverified
 **Pattern:** The cycle's provenance lists `input_artifacts: optimize-search/2026-05-01-pricing.md` — but the file doesn't exist, so "what changed" is invented.
 **Why it fails:** Without the source change, the eval scores against an imagined intervention; the verdict is unfalsifiable.
 **Fix:** Metric Ingest's Blockers section catches unreadable source paths. Critic Hard Fail #3 enforces.
@@ -58,20 +58,20 @@ load_class: ANTI-PATTERN
 
 ### 10. Audit dressed up as an eval
 **Pattern:** The operator runs `/optimize-search` but supplies no measurement data — just "the page should rank better, here's what to fix."
-**Why it fails:** That is `optimize-search`'s job. An eval without ranking data is a heuristic audit, not an evaluation.
-**Fix:** Critical Gate 2 + Critic Hard Fail #2. Missing measurement evidence → BLOCKED with a route to `optimize-search` for the audit.
+**Why it fails:** That is `seo`'s job. An eval without ranking data is a heuristic audit, not an evaluation.
+**Fix:** Critical Gate 2 + Critic Hard Fail #2. Missing measurement evidence → BLOCKED with a route to `seo` for the audit.
 
 ## Cross-cutting marketing-stack rows
 
 ### Cross-stack contract drift
-**Pattern:** Frontmatter schema, body section list, or Results Row columns diverged silently between optimize-search's eval-format-conventions.md and `fallbacks/sequential.md`.
-**Why it fails:** Downstream consumers (dashboard, optimize-search next-target, ledger-summary skills) break or silently miss fields.
+**Pattern:** Frontmatter schema, body section list, or Results Row columns diverged silently between `seo`'s eval-format-conventions.md and `fallbacks/sequential.md`.
+**Why it fails:** Downstream consumers (dashboard, `seo` next-target, ledger-summary skills) break or silently miss fields.
 **Fix:** Schema changes require atomic update across format-conventions + `fallbacks/sequential.md` + downstream callers.
 
 ### Sibling-skill confusion with the eval lanes
-**Pattern:** A growth bundle mixed organic SERP ranking AND organic-post engagement; one optimize-search cycle tries to score both.
+**Pattern:** A growth bundle mixed organic SERP ranking AND organic-post engagement; one `seo` cycle tries to score both.
 **Why it fails:** Two lanes in one cycle artifact = polluted ledger row, polluted learnings, wrong rubric on the post.
-**Fix:** optimize-search's cycle covers SEO/AEO visibility only. The posts are a separate `evaluate-content` cycle. Critical Gate 4 enforces.
+**Fix:** `seo`'s cycle covers SEO/AEO visibility only. The posts are a separate `evaluate-content` cycle. Critical Gate 4 enforces.
 
 ### Upstream context skipped — no loop scaffolded
 **Pattern:** Operator runs `/optimize-search` without a loop ever created.
@@ -79,6 +79,6 @@ load_class: ANTI-PATTERN
 **Fix:** Critical Gate 1 blocks. Skill returns NEEDS_CONTEXT and recommends `/run-pipeline` to scaffold first.
 
 ### Polish-chain misroute
-**Pattern:** Eval artifact is sent to humanmaxxing or polish-vietnamese after writing.
+**Pattern:** Eval artifact is sent to humanmaxxing or `vietnamese` after writing.
 **Why it fails:** Eval artifacts are evidence + decisions, not customer-facing copy. Humanmaxxing would smooth attribution + lag caveats into more confident-sounding prose — the opposite of attribution discipline.
 **Fix:** Eval artifacts skip the humanmaxxing/polish-vietnamese polish chain. They ship as-is from critic PASS.

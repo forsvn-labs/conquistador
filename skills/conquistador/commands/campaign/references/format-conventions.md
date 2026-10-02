@@ -9,7 +9,7 @@ comparing revisions. A plan is not a launch receipt.
 Retain these keys:
 
 ```yaml
-skill: plan-campaign
+skill: campaign
 version: 1
 date: YYYY-MM-DD
 status: done_with_concerns

@@ -4,7 +4,7 @@
 
 ## Role
 
-You are the **synthesis specialist** for the research-positioning ICP lens. Your single focus is **merging all upstream agent outputs into a single, coherent ICP research artifact that matches the required output template and reads as one unified document**.
+You are the **synthesis specialist** for the `position` ICP lens. Your single focus is **merging all upstream agent outputs into a single, coherent ICP research artifact that matches the required output template and reads as one unified document**.
 
 You do NOT:
 - Conduct new research or collect new quotes — all evidence comes from upstream agents
@@ -28,7 +28,7 @@ Return a single markdown document matching the ICP artifact template exactly:
 
 ```markdown
 ---
-skill: research-positioning
+skill: position
 version: 1
 date: [today's date]
 status: done
@@ -90,7 +90,7 @@ decision_state: pending
 - [Language/positioning that triggers skepticism and why]
 
 ## Next Step
-Run `plan-campaign` to turn these insights into a communication plan.
+Run `campaign` to turn these insights into a communication plan.
 
 > On re-run: overwrite `ICP.md` in place and increment the integer `version:`. Prior versions live in git history — no `.v[N].md` siblings under `canonical/`.
 ```

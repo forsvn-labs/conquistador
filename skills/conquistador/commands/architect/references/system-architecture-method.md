@@ -2,7 +2,7 @@
 title: System architecture method
 lifecycle: canonical
 status: stable
-produced_by: architect-software-system
+produced_by: architect
 load_class: METHOD
 ---
 
@@ -30,7 +30,7 @@ host-provided location when persistence is requested.
 **Critic-gate before assembly.** All eight quality gates are verified before delivery. FAIL means
 rework the specific weak section, not “the architecture didn't work.”
 
-**Every dependency classified.** In-process / local-substitutable / remote-owned / true-external. This classification drives testing strategy in task decomposition and `fresh-eyes-review` downstream. An unclassified dependency is an untested dependency.
+**Every dependency classified.** In-process / local-substitutable / remote-owned / true-external. This classification drives testing strategy in task decomposition and `critique` downstream. An unclassified dependency is an untested dependency.
 
 **Scale to evidence.** Use measured near-term load and explicit evolution thresholds. Do not impose
 10× or 100× machinery when history and operating constraints are unknown.
@@ -55,10 +55,10 @@ rework the specific weak section, not “the architecture didn't work.”
 | Artifact | Source | Benefit |
 |----------|--------|---------|
 | `research/product-context.md` | supplied product and audience research | Industry context, user personas, and constraints |
-| `.forsvn/artifacts/product/shape-initiative/specs/*.md` | shape-initiative | Scoped spec — the WHAT being architected |
+| `.forsvn/artifacts/product/shape-initiative/specs/*.md` | `shape` | Scoped spec — the WHAT being architected |
 | `.forsvn/artifacts/product/task-decomposition/tasks.md` | task-breakdown (meta-skills) | Feature list already decomposed into buildable units — informs feature-scoping in §9 |
-| `.forsvn/artifacts/product/map-user-flow/*.md` | map-user-flow | Per-flow user flow diagrams + platform-surface matrix; read every file. Feeds API endpoint design and feature scoping. |
-| `.forsvn/artifacts/mkt/prioritize-opportunities/prioritize-*.md` | prioritize-opportunities | Business initiatives — informs build-vs-skip on optional capabilities |
+| `.forsvn/artifacts/product/map-user-flow/*.md` | `flow` | Per-flow user flow diagrams + platform-surface matrix; read every file. Feeds API endpoint design and feature scoping. |
+| `.forsvn/artifacts/mkt/prioritize-opportunities/prioritize-*.md` | `prioritize` | Business initiatives — informs build-vs-skip on optional capabilities |
 | Existing `.forsvn/artifacts/product/architect-software-system/system-architecture.md` | self (prior run) | Re-run mode: rename existing to `.forsvn/artifacts/product/architect-software-system/system-architecture.v[N].md` and write new version |
 
 None are hard-required — this skill can run standalone via the Architecture Interview (see [`intake-prompts.md`](intake-prompts.md) [PROCEDURE]) — but every present artifact sharpens the output.

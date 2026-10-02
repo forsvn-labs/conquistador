@@ -1,9 +1,8 @@
 ---
-name: create-shortform
-description: "Research, brief, and script production-ready short-form video. Use for TikTok, Instagram Reels, YouTube Shorts, founder demos, UGC-style concepts, hooks, storyboards, recuts, production specifications, or planning how future watch and qualified-response data will be judged."
+name: video
+description: "Script short-form video: hooks, storyboards, recuts, and production specs."
 metadata:
   version: 2.1.0
-
 ---
 
 # Create a short-form video package
@@ -18,20 +17,20 @@ Read the core files in full before you draft; read the others when their step or
 Core:
 
 - [anti-patterns](references/anti-patterns.md): Short-form failure checks. Use these checks while drafting and during the four-part critic review. Name…
-- [produce-anti-patterns](references/produce-anti-patterns.md): Anti-Patterns — create-shortform. Re-read before any bundle ships. The 6 orchestrator-level patterns + 3…
+- [produce-anti-patterns](references/produce-anti-patterns.md): Anti-Patterns — `video`. Re-read before any bundle ships. The 6 orchestrator-level patterns + 3…
 - [production-modes](references/production-modes.md): Production Modes. Live-action vs. motion-graphic templates. Production-mode-agent picks the resolved mode…
 - [shortform-brief-method](references/shortform-brief-method.md): Short-form brief method. Turn a supported campaign angle into an executable production brief and a bounded…
 - [success-criteria-templates](references/success-criteria-templates.md): Short-form success and measurement plan. Define success for the user's outcome before production. Separate…
 
-By step: [caption-cta-rules](references/caption-cta-rules.md), [hook-archetypes](references/hook-archetypes.md), [polish-chain](references/polish-chain.md), [produce-quality-gate](references/produce-quality-gate.md), [production-lanes](references/production-lanes.md), [production-pattern](references/production-pattern.md), [realized-surface-grounding](references/realized-surface-grounding.md), [render-engines](references/render-engines.md), [storyboard-grammar](references/storyboard-grammar.md), [video-brief-schema](references/video-brief-schema.md).
+By step: [caption-cta-rules](references/caption-cta-rules.md), [hook-archetypes](../results/references/modes/video/references/hook-archetypes.md), [polish-chain](references/polish-chain.md), [produce-quality-gate](references/produce-quality-gate.md), [production-lanes](references/production-lanes.md), [production-pattern](references/production-pattern.md), [realized-surface-grounding](references/realized-surface-grounding.md), [render-engines](references/render-engines.md), [storyboard-grammar](references/storyboard-grammar.md), [video-brief-schema](references/video-brief-schema.md).
 
-Platform packs (read the one for each platform in the task): [CONTRACT](references/platform-intelligence/CONTRACT.md), [facebook](references/platform-intelligence/facebook.md), [founder-demo](references/platform-intelligence/founder-demo.md), [linkedin-launch](references/platform-intelligence/linkedin-launch.md), [linkedin](references/platform-intelligence/linkedin.md), [motion-background](references/platform-intelligence/motion-background.md), [newsletter](references/platform-intelligence/newsletter.md), [producthunt](references/platform-intelligence/producthunt.md), [reddit](references/platform-intelligence/reddit.md), [reels](references/platform-intelligence/reels.md), [shorts](references/platform-intelligence/shorts.md), [showhn](references/platform-intelligence/showhn.md), [tiktok](references/platform-intelligence/tiktok.md), [ugc](references/platform-intelligence/ugc.md), [x-launch](references/platform-intelligence/x-launch.md), [x](references/platform-intelligence/x.md), [youtube](references/platform-intelligence/youtube.md).
+Platform packs (read the one for each platform in the task): [CONTRACT](../measure/references/platform-intelligence/CONTRACT.md), [facebook](../campaign/references/platform-intelligence/facebook.md), [founder-demo](../campaign/references/platform-intelligence/founder-demo.md), [linkedin-launch](../campaign/references/platform-intelligence/linkedin-launch.md), [linkedin](../campaign/references/platform-intelligence/linkedin.md), [motion-background](../campaign/references/platform-intelligence/motion-background.md), [newsletter](../campaign/references/platform-intelligence/newsletter.md), [producthunt](../campaign/references/platform-intelligence/producthunt.md), [reddit](../campaign/references/platform-intelligence/reddit.md), [reels](../campaign/references/platform-intelligence/reels.md), [shorts](../campaign/references/platform-intelligence/shorts.md), [showhn](../campaign/references/platform-intelligence/showhn.md), [tiktok](../campaign/references/platform-intelligence/tiktok.md), [ugc](../campaign/references/platform-intelligence/ugc.md), [x-launch](../campaign/references/platform-intelligence/x-launch.md), [x](../campaign/references/platform-intelligence/x.md), [youtube](../campaign/references/platform-intelligence/youtube.md).
 
 Specialist roles: [audio-agent](agents/audio-agent.md), [copy-pack-agent](agents/copy-pack-agent.md), [critic-agent](agents/critic-agent.md), [format-agent](agents/format-agent.md), [hook-agent](agents/hook-agent.md), [platform-tailor-agent](agents/platform-tailor-agent.md), [produce-critic-agent](agents/produce-critic-agent.md), [production-mode-agent](agents/production-mode-agent.md), [prompt-author-agent](agents/prompt-author-agent.md), [storyboard-agent](agents/storyboard-agent.md), [voc-extraction-agent](agents/voc-extraction-agent.md).
 
 Worked examples: [app-preview-tideline-walkthrough](references/examples/app-preview-tideline-walkthrough.md), [brief-shortform-walkthrough](references/examples/brief-shortform-walkthrough.md), [example-1-vn-founder-tiktok](references/examples/example-1-vn-founder-tiktok.md), [example-2-us-company-reels-shorts](references/examples/example-2-us-company-reels-shorts.md), [example-3-b2b-founder-shorts-slowburn](references/examples/example-3-b2b-founder-shorts-slowburn.md), [shortform-brief-walkthrough](references/examples/shortform-brief-walkthrough.md).
 
-Output formats and fallbacks: [sequential](fallbacks/sequential.md), [format-conventions](references/format-conventions.md), [legibility-convention](references/legibility-convention.md), [produce-format-conventions](references/produce-format-conventions.md), [produce-inputs-and-outputs](references/produce-inputs-and-outputs.md), [why-this-works-convention](references/why-this-works-convention.md).
+Output formats and fallbacks: [sequential](fallbacks/sequential.md), [format-conventions](references/format-conventions.md), [legibility-convention](../campaign/references/legibility-convention.md), [produce-format-conventions](references/produce-format-conventions.md), [produce-inputs-and-outputs](references/produce-inputs-and-outputs.md), [why-this-works-convention](references/why-this-works-convention.md).
 
 <!-- playbooks:end -->
 
@@ -93,7 +92,7 @@ sample/window, hook hold, retention/completion, qualified response, baseline com
 confounders. Do not let future views override a failed business or audience signal.
 
 Pre-register keep/drop/change, one next hypothesis, and what the next brief should do differently.
-Actual post-launch interpretation belongs to `evaluate-shortform`; planned signals are not results.
+Actual post-launch interpretation belongs to `results`; planned signals are not results.
 
 ## Deliver
 
@@ -116,26 +115,26 @@ separate phases.
   [storyboard-grammar](references/storyboard-grammar.md),
   [caption-cta-rules](references/caption-cta-rules.md),
   [production-modes](references/production-modes.md),
-  [hook-archetypes](references/hook-archetypes.md),
+  [hook-archetypes](../results/references/modes/video/references/hook-archetypes.md),
   [anti-patterns](references/anti-patterns.md),
   plus the matching platform pack by exact file from
-  [platform intelligence](references/platform-intelligence/CONTRACT.md):
-  [facebook](references/platform-intelligence/facebook.md),
-  [founder-demo](references/platform-intelligence/founder-demo.md),
-  [linkedin](references/platform-intelligence/linkedin.md),
-  [linkedin-launch](references/platform-intelligence/linkedin-launch.md),
-  [motion-background](references/platform-intelligence/motion-background.md),
-  [newsletter](references/platform-intelligence/newsletter.md),
-  [producthunt](references/platform-intelligence/producthunt.md),
-  [reddit](references/platform-intelligence/reddit.md),
-  [reels](references/platform-intelligence/reels.md),
-  [shorts](references/platform-intelligence/shorts.md),
-  [showhn](references/platform-intelligence/showhn.md),
-  [tiktok](references/platform-intelligence/tiktok.md),
-  [ugc](references/platform-intelligence/ugc.md),
-  [x](references/platform-intelligence/x.md),
-  [x-launch](references/platform-intelligence/x-launch.md),
-  [youtube](references/platform-intelligence/youtube.md).
+  [platform intelligence](../measure/references/platform-intelligence/CONTRACT.md):
+  [facebook](../campaign/references/platform-intelligence/facebook.md),
+  [founder-demo](../campaign/references/platform-intelligence/founder-demo.md),
+  [linkedin](../campaign/references/platform-intelligence/linkedin.md),
+  [linkedin-launch](../campaign/references/platform-intelligence/linkedin-launch.md),
+  [motion-background](../campaign/references/platform-intelligence/motion-background.md),
+  [newsletter](../campaign/references/platform-intelligence/newsletter.md),
+  [producthunt](../campaign/references/platform-intelligence/producthunt.md),
+  [reddit](../campaign/references/platform-intelligence/reddit.md),
+  [reels](../campaign/references/platform-intelligence/reels.md),
+  [shorts](../campaign/references/platform-intelligence/shorts.md),
+  [showhn](../campaign/references/platform-intelligence/showhn.md),
+  [tiktok](../campaign/references/platform-intelligence/tiktok.md),
+  [ugc](../campaign/references/platform-intelligence/ugc.md),
+  [x](../campaign/references/platform-intelligence/x.md),
+  [x-launch](../campaign/references/platform-intelligence/x-launch.md),
+  [youtube](../campaign/references/platform-intelligence/youtube.md).
 
 **Produce / export**
 

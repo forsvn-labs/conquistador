@@ -42,14 +42,14 @@ Return:
 
 ## Blockers
 
-- [only if the asset is not re-ingested (only a prompt), the source brief is missing/unreadable, the asset id is missing, OR the asset is video / a landing page (route to evaluate-shortform / evaluate-landing-page)]
+- [only if the asset is not re-ingested (only a prompt), the source brief is missing/unreadable, the asset id is missing, OR the asset is video / a landing page (route to results / evaluate-landing-page)]
 ```
 
 ## Rules
 
 - Do not invent missing values. Do not describe visual detail you cannot see in the attached render.
 - **The render must be attached.** If only a prompt/brief exists and nothing is re-ingested, STOP — set a blocker routing to `produce-asset` + re-ingest (`forsvn-preview attach`). Scoring a prompt is the canonical failure this skill exists to prevent.
-- **Lane check.** Video → route to `evaluate-shortform`. Landing page → `evaluate-landing-page`. The asset's live-post engagement → `evaluate-content` / `evaluate-ad`. This skill's lane is the static render vs its brief.
+- **Lane check.** Video → route to `results`. Landing page → `evaluate-landing-page`. The asset's live-post engagement → `evaluate-content` / `evaluate-ad`. This skill's lane is the static render vs its brief.
 - **Pull the acceptance criteria from the brief, not from imagination.** List each criterion and tag it `hard` (aspect ratio, required copy slot, on-brand palette, dimensions) or `soft` (mood, exact crop, stylistic preference). The downstream agents need the hard/soft split.
 - **Variant discipline.** When a variant set exists, identify the picked variant (`asset_picked`). Score only that one; never blend a 6-variant set into one packet.
 - Keep dimensions/format factual from the file or manifest metadata; if unknown, say unknown — do not guess pixel counts.

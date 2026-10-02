@@ -2,7 +2,7 @@
 title: Map User Flow — Report Template
 lifecycle: canonical
 status: stable
-produced_by: map-user-flow
+produced_by: flow
 load_class: PROCEDURE
 ---
 
@@ -19,7 +19,7 @@ Step 7.5 additions (manifest-sync conformance; backfilled going forward): `lifec
 
 ```markdown
 ---
-skill: map-user-flow
+skill: flow
 version: 1
 date: {{today}}
 status: done | done_with_concerns | blocked | needs_context
@@ -27,9 +27,9 @@ flow_name: [slug, matches filename]
 platforms: [macOS, iOS, web-desktop, ...]
 # Step 7.5 fields (artifact-graph hardening; backfilled going forward):
 lifecycle: pipeline
-produced_by: map-user-flow
+produced_by: flow
 provenance:
-  skill: map-user-flow
+  skill: flow
   run_date: {{today}}
   input_artifacts:
     - .forsvn/artifacts/product/research-positioning/product-context.md
@@ -82,7 +82,7 @@ One row per platform × surface from the matrix above.
 
 ## Screen Wireframes
 
-*Low-fidelity ASCII layouts — one per core screen. Shows regions and hierarchy, not brand design. Pair with `create-brand` for visual tokens.*
+*Low-fidelity ASCII layouts — one per core screen. Shows regions and hierarchy, not brand design. Pair with `brand` for visual tokens.*
 
 ### Screen 1: [Name]
 
@@ -172,14 +172,14 @@ Surface-specific failure modes that generic error/empty/loading don't capture. P
 
 ## Next Step
 
-Hand off to implementation. Pair with `create-brand` for visual design tokens if not already created.
+Hand off to implementation. Pair with `brand` for visual design tokens if not already created.
 ```
 
 ## `index.md` (auto-generated when ≥2 flow files exist)
 
 ```markdown
 ---
-skill: map-user-flow
+skill: flow
 type: index
 date: {{today}}
 ---
@@ -216,7 +216,7 @@ Generated from the files in this directory. Update whenever a flow file is added
 ## Cross-skill propagation
 
 Downstream consumers:
-- `architect-software-system` — reads every flow file in the directory; flows inform API endpoint design and feature decomposition.
+- `architect` — reads every flow file in the directory; flows inform API endpoint design and feature decomposition.
 - task decomposition outside this skill — reads flows to scope decomposition (one task per screen × surface combination as a baseline).
 - `forsvn` — reads `index.md` for state detection ("flows mapped" signal).
-- `fresh-eyes-review` (post-implementation) — reads flows to verify implementation matches the designed flow + edge states.
+- `critique` (post-implementation) — reads flows to verify implementation matches the designed flow + edge states.

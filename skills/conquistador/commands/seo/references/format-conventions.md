@@ -1,6 +1,6 @@
 # Format Conventions — SEO Artifacts
 
-> Load this when writing or reading `artifacts/seo-[mode].md`. Conventions are contract-level — schema changes break downstream `write-copy` consumption and operator action plans.
+> Load this when writing or reading `artifacts/seo-[mode].md`. Conventions are contract-level — schema changes break downstream `copy` consumption and operator action plans.
 
 ---
 
@@ -22,7 +22,7 @@ Full SEO (Route E, Technical + AI combined) writes to `seo-audit.md` AND `seo-ai
 
 ```yaml
 ---
-skill: optimize-search
+skill: seo
 mode: audit | ai | programmatic | competitor | aso
 version: [integer; starts at 1; increment on re-run]
 date: YYYY-MM-DD
@@ -129,7 +129,7 @@ When the finding is a retrieval-layer recommendation (Route B or E, produced by 
 - Target page: [exact URL of the page that will own the answer chunk]
 - Extraction unit: [first paragraph under H2 'X' / FAQ entry titled 'Y' / comparison-table row 'Z']
 - Source/corroboration gap: [missing supporting fact/source, or none with explanation; identify ownership]
-- Measurement query: [exact query to re-test post-fix; often the optimize-search persona-prefixed query]
+- Measurement query: [exact query to re-test post-fix; often the seo persona-prefixed query]
 - Expected citation behavior: [proposed observation to test, with interface/settings; unconfirmed until captured]
 - Evidence class: [observed-test | single-run | unavailable | public-doc | practitioner-inference | hypothesis] (per `references/evidence-classes.md`)
 ```
@@ -179,7 +179,7 @@ Operators may add custom metrics. Agents recommend frequency: monthly for AI SEO
 - **done** — selected mode executed end-to-end, recommendations specific and prioritized, critic PASS within 2 cycles
 - **done_with_concerns** — internal grade for analysis returned with data gaps (rank tracker unavailable, GSC not connected, competitor data scraped at low confidence); recommendations annotated with `[CONFIDENCE: low]` tags; the grade authorizes no write or external action
 - **blocked** — site/property inaccessible (auth wall, robots block, no URL provided); cannot scan. State exactly what's blocked + what unblocks it.
-- **needs_context** — audience or product context missing for relevance scoring; recommend running `research-positioning` OR proceed with explicit scope reduction (e.g., "Technical Audit only — no audience-relevance scoring")
+- **needs_context** — audience or product context missing for relevance scoring; recommend running `position` OR proceed with explicit scope reduction (e.g., "Technical Audit only — no audience-relevance scoring")
 
 ---
 
@@ -190,7 +190,7 @@ Agents read mode-specific reference files (passed at dispatch, not read by orche
 - `references/technical-audit.md` — Strategic audit template + CWV thresholds + URL structure + internal linking + architecture deliverables (Technical Audit mode)
 - `references/technical-crawler-checklist.md` — Per-URL 12-check technical ledger + vendor-agnostic crawler-tool adapter (Technical Audit + Full modes)
 - `references/ai-seo.md` — Original answer audit, observation and analytics/source handling, optional discovery files (AI SEO mode)
-- `references/retrieval-layer-seo.md` — Task-specific answer checks + per-finding schema extension + `optimize-search` handoff consumption (AI SEO + Full modes)
+- `references/retrieval-layer-seo.md` — Task-specific answer checks + per-finding schema extension + `seo` handoff consumption (AI SEO + Full modes)
 - `references/live-serp-remediation.md` — Vendor-agnostic remediation loop + resumable manifest spec (AI SEO + Full modes when a benchmark report is supplied)
 - `references/evidence-classes.md` — Local evidence taxonomy; every retrieval/citation claim carries a tag
 - `references/programmatic-seo.md` — pSEO template patterns + implementation (Programmatic mode)

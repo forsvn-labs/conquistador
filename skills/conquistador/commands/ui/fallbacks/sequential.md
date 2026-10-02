@@ -6,7 +6,7 @@ token-application, layout-state, handoff, and critic as separate agents.
 Keep the same method. Change only the machinery. Label this single-context. Do not call it
 independent corroboration.
 
-1. Prove the source flow per `SKILL.md`. Prefer an existing `map-user-flow` artifact; if none exists,
+1. Prove the source flow per `COMMAND.md`. Prefer an existing `flow` artifact; if none exists,
    run compact flow validation inside this skill (job, entry, success, stable nodes, transitions,
    branches, failure/recovery, unresolved decisions). Do not invent product behavior.
 2. Apply the recovered lenses in this order, using each matching file as a sequential pass:

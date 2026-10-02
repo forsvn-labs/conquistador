@@ -2,7 +2,7 @@
 
 Single source of truth for the **production-ready asset manifest** emitted as `.forsvn/artifacts/mkt/create-brand/ASSETS.md` when that store exists — when it does not, emit the same manifest inline and skip persistence (stamps `id: assets`). Projects declared platforms + universal brand surfaces into a checkable inventory. **Derived, not researched** — every row here maps to an upstream spec in `platform-surfaces.md`, DESIGN.md Platform Icon Specifications, or Visual Agent's logo/imagery output.
 
-**Read by:** orchestrator only. Used in SKILL.md Step 8.5 (Assets Inventory projection).
+**Read by:** orchestrator only. Used in COMMAND.md Step 8.5 (Assets Inventory projection).
 
 ## Emission rules
 
@@ -19,7 +19,7 @@ Single source of truth for the **production-ready asset manifest** emitted as `.
 
 ## Status scan protocol (always-on, every run)
 
-On every create-brand run (fresh or re-run):
+On every `brand` run (fresh or re-run):
 
 1. Read existing `.forsvn/artifacts/mkt/create-brand/ASSETS.md` if present (skip this merge step entirely when the store does not exist — there is no prior state to preserve). Extract rows with status `[~]` or `[!]` — preserve them verbatim.
 2. Regenerate the full inventory from current BRAND.md + DESIGN.md + declared platforms.
@@ -269,7 +269,7 @@ The artifact MUST open with the required frontmatter core (full schema in [`form
 
 ```markdown
 ---
-skill: create-brand
+skill: brand
 version: [integer — increments on each in-place re-run]
 date: [ISO YYYY-MM-DD]
 status: done | done_with_concerns | blocked | needs_context
@@ -287,7 +287,7 @@ last_scan: [ISO timestamp — when auto-scan last ran]
 
 # ASSETS.md — {Brand Name}
 
-*Production inventory for {Brand Name}. Auto-generated from BRAND.md + DESIGN.md + declared platforms. Statuses auto-scan on every create-brand run; `[~]` in-progress and `[!]` blocked markers are preserved across runs.*
+*Production inventory for {Brand Name}. Auto-generated from BRAND.md + DESIGN.md + declared platforms. Statuses auto-scan on every brand run; `[~]` in-progress and `[!]` blocked markers are preserved across runs.*
 
 - **Declared platforms:** {list}
 - **Last scan:** {ISO-8601 timestamp}
@@ -334,7 +334,7 @@ last_scan: [ISO timestamp — when auto-scan last ran]
 
 **Duplicating spec** — Pasting pixel sizes and safe zones into ASSETS.md. INSTEAD: uses the spec location; keep ASSETS.md checkable, not definitional.
 
-**Silent deletion on platform drop** — If the user re-runs create-brand and drops Android, silently removing the Android block erases their tracking state. INSTEAD: move to `## Orphaned` and flag for human review.
+**Silent deletion on platform drop** — If the user re-runs `brand` and drops Android, silently removing the Android block erases their tracking state. INSTEAD: move to `## Orphaned` and flag for human review.
 
 **Auto-overwriting human markers** — The scan re-computes `[x]` vs `[ ]` only. `[~]` and `[!]` are human-owned — never touch them.
 

@@ -2,7 +2,7 @@
 title: System-Architecture — Pre-Dispatch Prompts
 lifecycle: canonical
 status: stable
-produced_by: architect-software-system
+produced_by: architect
 load_class: PROCEDURE
 ---
 
@@ -32,12 +32,12 @@ If operator confirms or types nothing → dispatch with detected values + missin
 Fires when no spec, greenfield, conversation only.
 
 ```
-architect-software-system produces a full technical blueprint — stack, schema,
+architect produces a full technical blueprint — stack, schema,
 APIs, infra, scaling. Without specifics, defaults will be generic and
 likely wrong for your scale or constraints.
 
 1. **Spec/PRD reference** — file path, paste, or 2-3 paragraph description
-   of what this system does. (Defer to `shape-initiative` first if requirements
+   of what this system does. (Defer to `shape` first if requirements
    are still fuzzy.)
 2. **Scale targets** — users, requests/second, data volume. (E.g., "10k MAU,
    peak 50 RPS, ~100GB data".)

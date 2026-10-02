@@ -14,7 +14,7 @@
 
 ```yaml
 ---
-skill: write-longform
+skill: article
 version: 1
 date: YYYY-MM-DD
 status: done | done_with_concerns | blocked | needs_context
@@ -35,7 +35,7 @@ originality_score:            # integer /7 — the anti-collapse floor result (m
 ---
 ```
 
-The four base required + the two v2 mandatories (`stack`, `review_surface`) + the v3 instruction core (`id`, `type`, `keywords`). `piece_type`, `thesis`, `word_count`, `critic_total`, `originality_score` are skill-specific selection fields `measure-growth` / `optimize-search` read.
+The four base required + the two v2 mandatories (`stack`, `review_surface`) + the v3 instruction core (`id`, `type`, `keywords`). `piece_type`, `thesis`, `word_count`, `critic_total`, `originality_score` are skill-specific selection fields `measure` / `seo` read.
 
 ## Body section order
 
@@ -46,7 +46,7 @@ The four base required + the two v2 mandatories (`stack`, `review_surface`) + th
 5. `## Critic Scorecard` — 7-dim table + total + the Originality-floor result + hard-gate checklist.
 6. `## Rationale` — assembly notes + any DONE_WITH_CONCERNS flags + the editorial-polish handoff note.
 
-## Source-ledger schema (load-bearing — measure-growth + the cited-or-marked gate read it)
+## Source-ledger schema (load-bearing — `measure` + the cited-or-marked gate read it)
 
 The `## Source Ledger` table:
 
@@ -62,4 +62,4 @@ A claim in the Piece with no ledger # and no inline `[tag]` is a contract violat
 
 ## Cross-stack contract
 
-Schema changes require an atomic update of this file's "Source-ledger schema" + "Frontmatter" sections AND the `measure-growth` consumer (it reads `thesis`, `critic_total`, `originality_score`, and the Source Ledger to score the published piece).
+Schema changes require an atomic update of this file's "Source-ledger schema" + "Frontmatter" sections AND the `measure` consumer (it reads `thesis`, `critic_total`, `originality_score`, and the Source Ledger to score the published piece).

@@ -1,9 +1,8 @@
 ---
-name: fresh-eyes-review
-description: "Independently review a consequential finished artifact against its intended outcome, evidence, actual output, risk, and release boundary. Use for a fresh-eyes second opinion before a human ship decision. Claims independence only when a separate context actually reviewed it."
+name: critique
+description: "Give a finished artifact a fresh-eyes review before a human ship decision."
 metadata:
   version: 1.1.0
-
 ---
 
 # Review with fresh eyes
@@ -85,8 +84,8 @@ Before delivery, load the recovered method instead of paraphrasing it:
 - worked example: [review cycle walkthrough](references/examples/review-cycle-walkthrough.md);
 - [quality feedback](references/quality-feedback-protocol.md) when overrides or repeated misses appear.
 
-This skill is fresh-eyes readiness review. Source-authority and contradiction audits belong to
-`knowledge-review` — do not fold that outcome in here.
+This command is fresh-eyes readiness review. Source-authority and contradiction audits belong to
+`factcheck` — do not fold that outcome in here.
 
 ## Return the review
 
@@ -101,7 +100,7 @@ Provide:
 7. unresolved dissent or uncertainty.
 
 Prefer `.forsvn/artifacts/mkt/fresh-eyes-review/` for durable review artifacts when such storage
-exists; it is optional and never required to finish this skill. Never publish,
+exists; it is optional and never required to finish this command. Never publish,
 release, approve spend, delete work, or claim human approval. The operator decides whether and how to
 act on the review.
 

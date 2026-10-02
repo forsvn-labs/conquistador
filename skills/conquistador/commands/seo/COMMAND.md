@@ -1,9 +1,8 @@
 ---
-name: optimize-search
-description: "Diagnose and improve search and answer visibility for a named surface. One entry covering five modes — technical/content SEO, answer-engine (AEO) visibility, app-store ASO, programmatic page systems, competitor comparison pages — with the mode selected by in-body rules. Use when the finished outcome is a diagnosis of why a page, listing, or page system is not ranking, appearing, or being cited, plus prioritized corrections. Route paid-media performance readouts to evaluate-paid-campaign and landing conversion rewrites to improve-conversion."
+name: seo
+description: "Improve visibility in search, AI answers, and app stores."
 metadata:
   version: 2.1.0
-
 ---
 
 # Optimize search and answer visibility
@@ -63,10 +62,10 @@ primary sources when they affect the recommendation.
 
 Routes out:
 
-- paid-media performance readouts (spend, CTR, CPL by network) → `evaluate-paid-campaign`;
-- rewriting a landing surface for conversion → `improve-conversion`.
+- paid-media performance readouts (spend, CTR, CPL by network) → `results`;
+- rewriting a landing surface for conversion → `convert`.
 
-This skill changes search visibility, not paid results or conversion architecture.
+This command changes search visibility, not paid results or conversion architecture.
 
 ## Use the correct order
 

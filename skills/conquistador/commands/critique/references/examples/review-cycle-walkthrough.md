@@ -1,16 +1,16 @@
 # Worked Example — Fresh-Eyes Review Cycle (standard mode, auth diff → CRITICAL → FIXED)
 
-> Illustrative end-to-end run. Synthetic diff and findings. Shows the full fresh-eyes-review loop: auto-trigger → reviewer (no implementation context) → Layer 1 real-vs-fake → Layer 2 noise-filter → the **severity rubric + quantitative verdict gate** (`references/noise-filter.md`) → resolver fix-then-rerun → report. The point is that the verdict is *computed from severity counts*, not from prose impression.
+> Illustrative end-to-end run. Synthetic diff and findings. Shows the full `critique` loop: auto-trigger → reviewer (no implementation context) → Layer 1 real-vs-fake → Layer 2 noise-filter → the **severity rubric + quantitative verdict gate** (`references/noise-filter.md`) → resolver fix-then-rerun → report. The point is that the verdict is *computed from severity counts*, not from prose impression.
 
 ---
 
 ## Operator invocation
 
 ```
-fresh-eyes-review "session-cookie refactor on feat/session-hardening (3 files, ~140 lines)"
+critique "session-cookie refactor on feat/session-hardening (3 files, ~140 lines)"
 ```
 
-Auto-trigger note: the diff touches `auth/session.ts` (session + cookie handling) → fresh-eyes-review **auto-escalates to `deep`-eligible** per Critical Gate 4, but the diff is < 500 lines and single-domain, so it resolves to **`standard`** (generalist reviewer + resolver loop). Security risk is material → the reviewer is told the scope is "security + correctness," not "general closeout."
+Auto-trigger note: the diff touches `auth/session.ts` (session + cookie handling) → `critique` **auto-escalates to `deep`-eligible** per Critical Gate 4, but the diff is < 500 lines and single-domain, so it resolves to **`standard`** (generalist reviewer + resolver loop). Security risk is material → the reviewer is told the scope is "security + correctness," not "general closeout."
 
 ## Inputs the reviewer receives (NO implementation reasoning)
 
@@ -80,7 +80,7 @@ Not fired — the resolver's changes stayed within the stated security+correctne
 
 ```markdown
 ---
-skill: fresh-eyes-review
+skill: critique
 produced_by: fresh-eyes-review-review
 version: 1
 date: 2026-06-13

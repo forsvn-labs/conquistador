@@ -2,7 +2,7 @@
 title: Short-Form Research — Format Conventions
 lifecycle: canonical
 status: stable
-produced_by: research-content-ideas
+produced_by: ideas
 load_class: PROCEDURE
 ---
 
@@ -69,11 +69,11 @@ Always in this order (skip absent platforms; never reorder):
 4. X video (opt-in)
 5. LinkedIn video (opt-in)
 
-Downstream parsers (`create-shortform`, `evaluate-shortform`) read sections positionally — reordering breaks them.
+Downstream parsers (`video`, `results`) read sections positionally — reordering breaks them.
 
 ## Frontmatter field order
 
-Per the Output Artifact Structure block in SKILL.md body. Required fields:
+Per the Output Artifact Structure block in COMMAND.md body. Required fields:
 
 ```yaml
 type: short-form-research

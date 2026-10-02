@@ -36,7 +36,7 @@ Reading order per `fallbacks/sequential.md`:
 - `research/product-context.md` → exists. Resolves category.
 - Q1 mode → "audit" (from diagnosis)
 - Q2 site → "https://example.com" (from user)
-- Q3 audience → resolved from research-positioning
+- Q3 audience → resolved from `position`
 - Q4 geo+language → check `experience/audience.md`. Found: "US-en primary, secondary Tier 1 EU." → resolved.
 
 **All four dimensions resolved. Warm Start, no Cold Start needed.** Orchestrator announces:
@@ -168,7 +168,7 @@ Artifact written to `artifacts/seo-audit.md`. Frontmatter:
 
 ```yaml
 ---
-skill: optimize-search
+skill: seo
 mode: audit
 version: 1
 date: 2026-05-18

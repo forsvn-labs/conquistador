@@ -1,8 +1,8 @@
 ---
-title: decision-panel — Decision Tree (debate path + poll path)
+title: decide — Decision Tree (debate path + poll path)
 lifecycle: canonical
 status: stable
-produced_by: decision-panel
+produced_by: decide
 load_class: REFERENCE
 ---
 

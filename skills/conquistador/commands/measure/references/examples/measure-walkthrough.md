@@ -58,7 +58,7 @@ The exercise's verdict is done_with_concerns because essential comparison eviden
 ## 5. Artifact and handoff
 
 ```yaml
-skill: measure-growth
+skill: measure
 version: 1
 date: 2026-09-15
 stack: marketing

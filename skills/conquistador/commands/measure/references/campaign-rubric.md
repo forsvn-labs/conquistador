@@ -10,11 +10,11 @@ revision_status: provisional v0.1
 
 7-dimension rubric for post-launch multi-channel campaign evaluation. Used by `agents/campaign-critic-agent.md` to gate the cycle artifact before it writes a ledger row. **Provisional v0.1 — mandatory revision after cycles 2-3 per brief 05 § Rubrics.**
 
-**Pass gate, scoring scale, the < 6 asymmetry, PASS_WITH_CONCERNS, and the universal Hard Fails** are canonical in [`evaluation-loop-rubric.md`](evaluation-loop-rubric.md) [PROCEDURE] § 1–§ 3. This file is the domain instrument — the 7 dimensions below (5 shared + 2 campaign-specific) with their domain-specialized band tables and the campaign-specific Hard Fails.
+**Pass gate, scoring scale, the < 6 asymmetry, PASS_WITH_CONCERNS, and the universal Hard Fails** are canonical in [`evaluation-loop-rubric.md`](../../../plays/report/references/evaluation-loop-rubric.md) [PROCEDURE] § 1–§ 3. This file is the domain instrument — the 7 dimensions below (5 shared + 2 campaign-specific) with their domain-specialized band tables and the campaign-specific Hard Fails.
 
 ## Revision Triggers (brief 05 § Rubric revision trigger)
 
-The universal revision triggers and the mandatory-revision-after-cycles-2-3 rule are in [`evaluation-loop-rubric.md`](evaluation-loop-rubric.md) § 5. Domain-specific triggers for the campaign-eval rubric:
+The universal revision triggers and the mandatory-revision-after-cycles-2-3 rule are in [`evaluation-loop-rubric.md`](../../../plays/report/references/evaluation-loop-rubric.md) § 5. Domain-specific triggers for the campaign-eval rubric:
 
 - Platform behavior changes what is measurable (e.g., an ad platform deprecates a conversion signal, a privacy change breaks cross-channel attribution)
 - A new channel type appears in the campaign mix with metrics the rubric does not anticipate
@@ -85,7 +85,7 @@ Does the keep/discard/watch/blocked verdict follow Recommendation's Decision Rul
 | Band | Description |
 |------|-------------|
 | 9-10 | Verdict matches the metric packet + channel-mix + unit-economics read; routing is to the smallest correct next skill at the right granularity (a budget reallocation, not "re-plan the whole campaign"); decision sentence is one sentence and names the campaign |
-| 7-8 | Verdict matches packet; routing is correct but slightly over-broad (recommended a full plan-campaign rebuild when only one channel needed cutting) |
+| 7-8 | Verdict matches packet; routing is correct but slightly over-broad (recommended a full `campaign` rebuild when only one channel needed cutting) |
 | 5-6 | Verdict matches packet but decision sentence is multi-sentence or omits the campaign tag; routing is correct domain but wrong specificity |
 | 3-4 | Verdict drifts from packet (Diagnosis story compelling → claimed `keep` despite a `not_comparable` baseline) OR routing is to a non-existent / inappropriate skill |
 | 0-2 | Verdict invents data (claimed `keep` with no improvement signal) OR routing is to "everything" (re-do-the-whole-campaign maximalism) |
@@ -156,12 +156,12 @@ Exactly one valid `results.tsv` row, schema-compliant, campaign-tagged?
 
 ## Falsifiability summary
 
-A dim score is only valid if the evaluator can name **what evidence would have moved the score one band** — the discipline is canonical in [`evaluation-loop-rubric.md`](evaluation-loop-rubric.md) § 6. Per-dimension examples for this rubric:
+A dim score is only valid if the evaluator can name **what evidence would have moved the score one band** — the discipline is canonical in [`evaluation-loop-rubric.md`](../../../plays/report/references/evaluation-loop-rubric.md) § 6. Per-dimension examples for this rubric:
 
 - Loop Fit 8 → 9: surface latest learnings.md in the read-order log.
 - Metric Integrity 7 → 9: complete the missing channel's row in the rollup table.
 - Attribution Honesty 6 → 8: name the attribution model and flag its last-click bias.
-- Decision Discipline 6 → 8: tighten routing from "re-plan the campaign" to "plan-campaign budget-reallocation only".
+- Decision Discipline 6 → 8: tighten routing from "re-plan the campaign" to "`campaign` budget-reallocation only".
 - Channel-Mix Discrimination 7 → 9: classify the email channel as a rider and remove its conversions from the campaign-driven count.
 - Unit-Economics Discipline 6 → 8: split the one blended CAC number into blended CAC and paid-only CAC.
 - Ledger Correctness 8 → 10: include the campaign tag verbatim in the description.
@@ -170,13 +170,13 @@ If you can't name the next-band evidence, you're scoring vibes, not the rubric.
 
 ## Score justification format
 
-For each per-dim score in the Critic Verdict, include 1 sentence of rationale tied to the artifact's actual content (the requirement + the "scoreless verdict = Hard Fail" rule are canonical in [`evaluation-loop-rubric.md`](evaluation-loop-rubric.md) § 7). Example:
+For each per-dim score in the Critic Verdict, include 1 sentence of rationale tied to the artifact's actual content (the requirement + the "scoreless verdict = Hard Fail" rule are canonical in [`evaluation-loop-rubric.md`](../../../plays/report/references/evaluation-loop-rubric.md) § 7). Example:
 
 ```
 - loop_fit: 9 — program.md + context.md + results.tsv all read; cycle scoped to the whole campaign across 4 channels
 - metric_integrity: 8 — primary metric + baseline + window + total spend present; per-channel rollup complete for all 4 channels
 - attribution_honesty: 8 — last-click model named and its bias flagged; one minor confounder (concurrent brand campaign) noted
-- decision_discipline: 9 — verdict matches the packet; routing to plan-campaign budget-reallocation is correctly narrow
+- decision_discipline: 9 — verdict matches the packet; routing to campaign budget-reallocation is correctly narrow
 - channel_mix_discrimination: 9 — all 4 channels in the breakdown; email classified as a rider and its conversions excluded from net-new
 - unit_economics_discipline: 8 — blended CAC and paid CAC reported as distinct numbers; payback period stated against the $19/mo price
 - ledger_correctness: 10 — one row appended; description includes the campaign tag; 8 columns clean

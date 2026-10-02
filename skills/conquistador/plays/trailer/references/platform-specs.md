@@ -1,6 +1,6 @@
 # Platform Specs
 
-> Loaded by `platform-format-agent` and `interaction-storyboard-agent`. Canonical hard rules per surface. When a surface's published rules change, update here and bump the `version` field in `SKILL.md` metadata.
+> Loaded by `platform-format-agent` and `interaction-storyboard-agent`. Canonical hard rules per surface. When a surface's published rules change, update here and bump the `version` field in the play file metadata.
 
 ---
 

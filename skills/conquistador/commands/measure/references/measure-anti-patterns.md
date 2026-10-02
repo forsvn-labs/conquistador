@@ -1,4 +1,4 @@
-# Anti-Patterns — measure-growth
+# Anti-Patterns — `measure`
 
 8 patterns. The critic checks every one before the write-back commits.
 

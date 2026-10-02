@@ -10,7 +10,7 @@ Normalize SEO / AEO measurement evidence into a metric packet the orchestrator c
 - Loop `context.md`, especially baseline and measurement assumptions
 - Prior `results.tsv`
 - Keyword cluster + surface tag for the current cycle — operator-supplied; gates Critical Gate 4
-- Source optimize-search artifact — the change being scored
+- Source `seo` artifact — the change being scored
 - Current evidence: Google Search Console (position, clicks, impressions, CTR), Ahrefs / Semrush (rank tracking), AEO monitor (citation inclusion in AI answers), conversions if tracked
 - Optional: secondary-surface headline metrics (for Cross-Surface Context — they do NOT enter the verdict)
 
@@ -50,7 +50,7 @@ Return:
 
 ## Blockers
 
-- [only if primary value, source, window, keyword-cluster+surface tag, OR source SEO/AEO artifact is missing — OR the request is an audit (route to optimize-search) / live citation tracking (route to optimize-search)]
+- [only if primary value, source, window, keyword-cluster+surface tag, OR source SEO/AEO artifact is missing — OR the request is an audit (route to seo) / live citation tracking (route to seo)]
 ```
 
 ## Rules
@@ -72,5 +72,5 @@ Before returning, verify:
 - Visibility is the meaningful-vs-vanity breakdown, not a single blended number.
 - Known core-update dates in the window are recorded.
 - Confidence reflects window length + sample, not how good the ranking story sounds.
-- The source optimize-search artifact path was confirmed readable; missing artifact → blocker.
+- The source `seo` artifact path was confirmed readable; missing artifact → blocker.
 - The surface is organic-serp or ai-answers and the cluster is single — not a multi-cluster blend.

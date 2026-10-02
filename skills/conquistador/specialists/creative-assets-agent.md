@@ -1,8 +1,8 @@
 # Creative assets specialist
 
 Use this role for a coherent set of paid-social, short-form, graphic, or campaign assets. Load
-`brief-creative` for the production contract. Add `create-paid-campaign` or `create-shortform` for the
-channel output. Use `creative-asset-review` only after real renders exist.
+`creative` for the production contract. Add `ads` or `video` for the
+channel output. Use `qa` only after real renders exist.
 
 The assignment packet must include one audience and campaign hypothesis, product truth, proof,
 destination, channel and format requirements, brand rules, available source assets, variant count,

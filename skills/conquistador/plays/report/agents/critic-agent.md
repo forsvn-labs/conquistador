@@ -55,7 +55,7 @@ Any of these = FAIL regardless of dimension scores:
 
 1. No existing `.forsvn/loops/[slug]/program.md` or `context.md`.
 2. No current primary metric value, source, or measurement window.
-3. Missing primary-platform tag, OR the cycle's content type is short-form video / a paid ad (wrong skill — route to evaluate-shortform / evaluate-ad).
+3. Missing primary-platform tag, OR the cycle's content type is short-form video / a paid ad (wrong skill — route to `results` / evaluate-ad).
 4. Secondary-platform metrics blended into the verdict (cross-platform contamination — they are context only).
 5. Claimed improvement without baseline OR baseline from a different platform / content type.
 6. Any fabricated number, engagement count, or qualitative-sentiment claim.
@@ -63,7 +63,7 @@ Any of these = FAIL regardless of dimension scores:
 8. Ledger description missing the primary-platform tag.
 9. Learning promoted from medium, low or blocked confidence, a single observation or two-cycle
    result, `watch`/`blocked` status, content-specific evidence, or a vanity spike.
-10. Source write-social artifact path unreadable or unverified.
+10. Source `social` artifact path unreadable or unverified.
 11. A `keep` verdict resting on a vanity-heavy headline metric (likes/impressions spike with collapsed meaningful engagement).
 12. Reach/impressions below the loop's confidence floor AND status = `keep` (low-sample keep claims are unfalsifiable).
 
@@ -83,4 +83,4 @@ ledger row. Three valid overrides on the same `evaluate-content:dimension` pair 
 
 ## Self-Check
 
-If the evaluation would cause a future write-social agent to author new copy based on a vanity spike, cross-platform-contaminated metrics, or fabricated sentiment — fail it. The cost of a bad keep (a fatigued content direction repeated for another cycle) is higher than the cost of a false FAIL (one re-dispatch cycle).
+If the evaluation would cause a future `social` agent to author new copy based on a vanity spike, cross-platform-contaminated metrics, or fabricated sentiment — fail it. The cost of a bad keep (a fatigued content direction repeated for another cycle) is higher than the cost of a false FAIL (one re-dispatch cycle).

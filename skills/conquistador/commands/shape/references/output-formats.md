@@ -2,7 +2,7 @@
 title: Shape-initiative — Output Formats (Spec + Contract)
 lifecycle: canonical
 status: stable
-produced_by: shape-initiative
+produced_by: shape
 load_class: PROCEDURE
 ---
 
@@ -10,7 +10,7 @@ load_class: PROCEDURE
 
 **Load when:** Step 7 Output — operator asks to save, session is ending and decisions would be lost, output is needed by someone outside this conversation, OR a natural milestone is reached and user confirms saving.
 
-**Default: conversation context.** Most sessions end without writing anything. Decisions live in chat. The next skill (`architect-software-system`, task decomposition outside this skill, or direct implementation) reads everything discussed.
+**Default: conversation context.** Most sessions end without writing anything. Decisions live in chat. The next skill (`architect`, task decomposition outside this skill, or direct implementation) reads everything discussed.
 
 ---
 
@@ -33,7 +33,7 @@ load_class: PROCEDURE
 
 ```markdown
 ---
-skill: shape-initiative
+skill: shape
 version: 1
 date: {{today}}
 status: done | done_with_concerns | blocked | needs_context
@@ -144,7 +144,7 @@ Step 6 gate state at wrap. Each of the six core requirement dimensions is `concr
 
 Only present when the session exited via operator override on the resolution-exit condition (Step 6). Each entry is a load-bearing decision-tree branch the operator chose to skip — separate from Open Questions (general unresolved items). If this section is non-empty, frontmatter `status` MUST be `done_with_concerns`.
 
-**Branch vs. question** (routing rule): a *branch* is a decision-tree node where shape-initiative offered a recommended answer and the operator chose not to ratify it. A *question* is an unresolved item where no recommendation was made (insufficient context, deferred to a future session, scope-out-of-bounds). When in doubt: did shape-initiative offer a recommendation this session? Yes → branch. No → question.
+**Branch vs. question** (routing rule): a *branch* is a decision-tree node where shape offered a recommended answer and the operator chose not to ratify it. A *question* is an unresolved item where no recommendation was made (insufficient context, deferred to a future session, scope-out-of-bounds). When in doubt: did shape offer a recommendation this session? Yes → branch. No → question.
 
 - [Branch description] — [what would have resolved it: more evidence, a follow-up session, a decision the operator deferred]
 
@@ -187,7 +187,7 @@ Light scoping (Adaptive Depth row 1: clear task, well-defined scope, existing co
 
 ```markdown
 ---
-skill: shape-initiative
+skill: shape
 version: 1
 date: {{today}}
 status: done | done_with_concerns | blocked | needs_context
@@ -295,9 +295,9 @@ NOT IN SCOPE:
 
 ## Handoff plan format (fresh-agent transfer)
 
-**When:** the session converged and the next consumer is a *different* agent or a *future* session — **not** the operator continuing in this conversation (decisions live in chat), and **not** a downstream in-context skill (`architect-software-system` / task decomposition outside this skill read the conversation directly). Triggered by "hand this off" / "write a handoff" / "prep this for another agent" — or a session ending with work a fresh agent will resume. The discriminator is *who picks this up next*: a context that wasn't in this conversation.
+**When:** the session converged and the next consumer is a *different* agent or a *future* session — **not** the operator continuing in this conversation (decisions live in chat), and **not** a downstream in-context skill (`architect` / task decomposition outside this skill read the conversation directly). Triggered by "hand this off" / "write a handoff" / "prep this for another agent" — or a session ending with work a fresh agent will resume. The discriminator is *who picks this up next*: a context that wasn't in this conversation.
 
-**Not the operator-grade spec; not task decomposition outside this skill.** The spec is a *descriptive audit-trail* of a converged decision (premise / dream-state / alternatives), written for the operator. task decomposition outside this skill is a *sized eng-task graph* (acceptance criteria, dependencies, risk-order → `tasks.md`) for execution. A handoff plan is a *forward-looking, path-free work-transfer packet*: where we are, what's locked, the next concrete actions, and the minimal context a fresh agent needs to not re-ask or redo. Its next-actions are **coarse — skill/decision-level** ("run `architect-software-system` in a fresh session on the data model", "validate pricing with 3 customers"), not sized tasks. The receiving agent runs task decomposition outside this skill when it needs an execution graph.
+**Not the operator-grade spec; not task decomposition outside this skill.** The spec is a *descriptive audit-trail* of a converged decision (premise / dream-state / alternatives), written for the operator. task decomposition outside this skill is a *sized eng-task graph* (acceptance criteria, dependencies, risk-order → `tasks.md`) for execution. A handoff plan is a *forward-looking, path-free work-transfer packet*: where we are, what's locked, the next concrete actions, and the minimal context a fresh agent needs to not re-ask or redo. Its next-actions are **coarse — skill/decision-level** ("run `architect` in a fresh session on the data model", "validate pricing with 3 customers"), not sized tasks. The receiving agent runs task decomposition outside this skill when it needs an execution graph.
 
 **Path-free + clipboard-ready.** Write it so it can be pasted into a fresh session with no filesystem assumptions. Reference prior decisions and artifacts by *content*, not only by path — if a path is load-bearing, state what it contains so the handoff stands alone. **Emitted inline by default** (like Contract); persist into the spec's Implementation Notes or a saved file only if the operator asks.
 

@@ -1,4 +1,4 @@
-# write-technical-docs — Artifact paths by route
+# `docs` — Artifact paths by route
 
 Full template + filename + version-increment rule: [`report-template.md`](report-template.md).
 
@@ -26,4 +26,4 @@ See [`report-template.md`](report-template.md) "Lifecycle by doc-type":
 
 ## Consumed by
 
-Ship Log / product-context under `.forsvn/artifacts/product/write-technical-docs/` may feed `create-brand`, `write-copy`, `optimize-search`, `architect-software-system`, and related skills. Release Notes still target project `CHANGELOG.md`. `fresh-eyes-review` and `architect-software-system` may read shipped docs for drift detection. Code readability cleanup outside this skill is not a consumer of these artifacts.
+Ship Log / product-context under `.forsvn/artifacts/product/write-technical-docs/` may feed `brand`, `copy`, `seo`, `architect`, and related skills. Release Notes still target project `CHANGELOG.md`. `critique` and `architect` may read shipped docs for drift detection. Code readability cleanup outside this skill is not a consumer of these artifacts.

@@ -25,7 +25,7 @@ Resolve before any lens runs:
 1. Account scope — whose accounts (company, founder personal, etc.).
 2. Platforms in scope — subset of X / LinkedIn / TikTok / YouTube / Instagram.
 3. Supplied evidence per platform — exports, screenshots-as-text, figures, or honest "none".
-4. Niche / audience hint — or point at existing `research-positioning` output.
+4. Niche / audience hint — or point at existing `position` output.
 5. Optional prior-eval pointer under `.forsvn/loops/`, when that store exists. No store → skip and
    rely on operator-supplied prior evidence.
 
@@ -69,7 +69,7 @@ store exists. Do not persist per-run pasted exports.
 
 ## Deliverable
 
-Return the channel decision package required by the live SKILL.md front door: decision boundary,
+Return the channel decision package required by the live COMMAND.md front door: decision boundary,
 owned-evidence readout, public evidence with freshness, focused comparison, recommended channel /
 role / format / first test, deferred channels, next evidence, reversal evidence, and revisit trigger.
 

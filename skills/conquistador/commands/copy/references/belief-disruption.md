@@ -10,4 +10,4 @@ Return the proposed copy and its evidence note. Remove a claim that depends on s
 
 For example, in a synthetic scheduling brief, users may assume that a shared calendar prevents all overlaps. Explain which calendars the product can check and which it cannot. A concrete compatibility example is more useful than accusing users of planning badly.
 
-Apply [copy review](copy-review.md). Social distribution belongs to write-social; this reference supports an accurate argument inside the requested copy block.
+Apply [copy review](copy-review.md). Social distribution belongs to `social`; this reference supports an accurate argument inside the requested copy block.

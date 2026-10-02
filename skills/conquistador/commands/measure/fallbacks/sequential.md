@@ -5,7 +5,7 @@ as separate agents.
 
 Keep the same method. Change only the machinery.
 
-Choose the mode from the front-door SKILL.md: design (instrumentation before results) or readout
+Choose the mode from the front-door COMMAND.md: design (instrumentation before results) or readout
 (results against the original decision rule). Then choose the lens: one channel, or a whole
 campaign. Do not blend them.
 

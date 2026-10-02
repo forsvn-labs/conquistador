@@ -1,8 +1,8 @@
 ---
-title: brief-product-ui — Worked Example
+title: ui — Worked Example
 lifecycle: canonical
 status: stable
-produced_by: brief-product-ui
+produced_by: ui
 load_class: EXAMPLE
 ---
 
@@ -12,7 +12,7 @@ ignore every token name and raw value below and preserve the supplied names verb
 
 # Worked Example: Team Billing Dashboard
 
-**Load when:** the operator wants to see what a full brief-product-ui run looks like —
+**Load when:** the operator wants to see what a full `ui` run looks like —
 intake through critic, all 9 artifact sections illustrated, including a realistic FAIL→fix cycle.
 Triangulate from this, don't copy — these specific choices are for the billing-dashboard feature.
 
@@ -27,7 +27,7 @@ Triangulate from this, don't copy — these specific choices are for the billing
 
 ## Step 0 — Intake
 
-Skill finds `map-user-flow` artifact at
+Skill finds `flow` artifact at
 `.forsvn/artifacts/product/map-user-flow/team-billing-dashboard-2026-06-01.md`.
 Parseable: 4 screens declared (Billing Overview, Manage Plan, Payment Methods, Invoices).
 Brand source: FORSVN house tokens (dark default; Leaf `#74B36B` state-cue only; matte).
@@ -135,7 +135,7 @@ No design-tool session — spec is portable as-is.
 
 Build prompt delivered:
 
-> Using the brief-product-ui artifact at
+> Using the `ui` artifact at
 > `.forsvn/artifacts/product/brief-product-ui/brief-product-ui-2026-06-07-team-billing-dashboard.md`,
 > implement the Team Billing Dashboard. Reference §Screen Inventory for the 4 screens,
 > §Component System for the 13 components (8 primitives + 5 composites), §Token Application Map

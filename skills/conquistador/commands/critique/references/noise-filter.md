@@ -1,9 +1,9 @@
 ---
-title: Noise Filter — actionable-only finding triage for fresh-eyes-review
+title: Noise Filter — actionable-only finding triage for critique
 lifecycle: canonical
 status: stable
-produced_by: fresh-eyes-review
-consumers: fresh-eyes-review SKILL.md + agents/reviewer-agent.md + references/report-template.md
+produced_by: critique
+consumers: critique COMMAND.md + agents/reviewer-agent.md + references/report-template.md
 load_class: REFERENCE
 ---
 
@@ -129,7 +129,7 @@ If the same finding appears 5 times across a diff (e.g., 5 instances of the same
 
 ### Findings against the reviewer's own confidence floor
 
-Findings the reviewer flagged with <5/10 confidence are Rejected by default per the existing reviewer rule. If the operator wants to see suppressed-low-confidence findings, they can run fresh-eyes-review with `--show-low-confidence` and the report includes them in the Rejected subsection with the confidence score visible.
+Findings the reviewer flagged with <5/10 confidence are Rejected by default per the existing reviewer rule. If the operator wants to see suppressed-low-confidence findings, they can run `critique` with `--show-low-confidence` and the report includes them in the Rejected subsection with the confidence score visible.
 
 ---
 
@@ -150,7 +150,7 @@ For every Accepted finding, the loop is:
    b. Operator decides to ship the regression knowingly (rare); critic override log per record the critic override on the artifact captures the decision.
 ```
 
-The fix-then-rerun loop is NOT optional for Accepted findings. The whole point of fresh-eyes-review is "fix is verified by the rerun, not by the reviewer's intuition that the fix works." Brief 06 § Review Workflow: "fix accepted findings, rerun relevant checks."
+The fix-then-rerun loop is NOT optional for Accepted findings. The whole point of `critique` is "fix is verified by the rerun, not by the reviewer's intuition that the fix works." Brief 06 § Review Workflow: "fix accepted findings, rerun relevant checks."
 
 ---
 

@@ -62,7 +62,7 @@ Cross-reference `references/_shared/platform-intelligence/linkedin.md`. Summary:
 
 ## Formatter Implementation Notes
 
-- Preserve double-newline paragraph breaks from write-social body.
+- Preserve double-newline paragraph breaks from `social` body.
 - If body has X-thread markup, strip it (LinkedIn doesn't thread).
 - If body has hashtags inline, move them to end-of-post hashtag stack.
 - Cross-check CTA position vs 210-char truncation; flag if CTA past truncation.

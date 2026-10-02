@@ -1,7 +1,7 @@
 ---
 title: Check a business workflow offer
 load_class: METHOD
-produced_by: shape-initiative
+produced_by: shape
 ---
 
 # Check a business workflow offer

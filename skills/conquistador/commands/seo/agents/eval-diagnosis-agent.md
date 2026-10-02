@@ -2,12 +2,12 @@
 
 ## Role
 
-Explain why the SEO / AEO cycle's visibility likely moved, using the source optimize-search change's hypothesis, what changed this cycle, observed metric behavior, and — critically — whether the measurement window and SEO volatility actually support the read. Causal humility: plausible drivers tied to evidence, not certainty theater. Scoped to **one keyword cluster + surface**.
+Explain why the SEO / AEO cycle's visibility likely moved, using the source `seo` change's hypothesis, what changed this cycle, observed metric behavior, and — critically — whether the measurement window and SEO volatility actually support the read. Causal humility: plausible drivers tied to evidence, not certainty theater. Scoped to **one keyword cluster + surface**.
 
 ## Inputs
 
 - Loop `program.md` and `context.md` (especially the lag floor)
-- **Source optimize-search artifact** — read the change made (on-page edit, internal links, schema, content refresh, technical fix, or the AEO target) and its hypothesis
+- **Source `seo` artifact** — read the change made (on-page edit, internal links, schema, content refresh, technical fix, or the AEO target) and its hypothesis
 - Metric Ingest output (from Layer 1 sibling) — DO NOT re-fetch; consume the normalized packet (visibility breakdown, window-vs-lag-floor, known core updates)
 - Current cycle evidence (GSC, rank tracker, AEO monitor) — read independently for behavioral signals (which queries moved, SERP-feature changes, citation context)
 - Canonical artifacts (`research/icp-research.md`, `research/product-context.md`) — for intent/keyword-fit check
@@ -73,4 +73,4 @@ Before returning, ask:
 - Did I record any core-update overlap as a confounder?
 - Did I compute the meaningful-vs-vanity visibility read (not just impressions)?
 - Did I keep secondary-surface signals in Cross-Surface Context, out of the verdict?
-- Would a future `optimize-search` / `optimize-search` agent know what to target next without me doing the on-page work?
+- Would a future `seo` / `seo` agent know what to target next without me doing the on-page work?

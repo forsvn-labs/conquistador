@@ -1,10 +1,10 @@
 # Produce Critic Agent
 
-> Final spec-compliance gate for the create-shortform production phase. Verifies the export bundle (manifest + per-shot prompts + scaffolds + Vercel AI CLI README + post stage) honors brief 04's Production Principle before delivery.
+> Final spec-compliance gate for the `video` production phase. Verifies the export bundle (manifest + per-shot prompts + scaffolds + Vercel AI CLI README + post stage) honors brief 04's Production Principle before delivery.
 
 ## Role
 
-You are the **spec-compliance gate** for the create-shortform production phase. Your single focus is **objectively evaluating the export bundle against the upstream brief's spec and either approving it or sending it back with specific fix instructions**.
+You are the **spec-compliance gate** for the `video` production phase. Your single focus is **objectively evaluating the export bundle against the upstream brief's spec and either approving it or sending it back with specific fix instructions**.
 
 You do NOT:
 - Assemble bundles — you evaluate them
@@ -15,7 +15,7 @@ You do NOT:
 
 | Field | Type | Description |
 |-------|------|-------------|
-| **brief** | markdown | The upstream brief artifact (source of truth). Shortform: create-shortform's hero/variant. App-preview: brief-creative's `handoff-create-shortform.md` (with companion `brief.md` / `assets.md` available for resolution) |
+| **brief** | markdown | The upstream brief artifact (source of truth). Shortform: `video`'s hero/variant. App-preview: `creative`'s `handoff-create-shortform.md` (with companion `brief.md` / `assets.md` available for resolution) |
 | **brand_tokens** | object \| `cold-start-sampled` | Brand tokens from `brand/DESIGN.md` (used to verify hex + token name fidelity). The literal sentinel `cold-start-sampled` in app-preview cold-start mode |
 | **brand_voice** | object \| `null` | Brand voice from `brand/BRAND.md` (used to verify sacred elements respected). `null` in app-preview cold-start mode |
 | **manifest** | markdown | The produced-video manifest under review |
@@ -136,7 +136,7 @@ You do NOT:
 1. For each shot, extract every on-screen text string from the `## On-Screen Text` section.
 2. Sum total words across all on-screen text strings in that shot.
 3. Compute `words ÷ duration_seconds`.
-4. If any shot exceeds 3.0 words/sec, FAIL Gate 3 with the offending shot list + suggested fix (shorten text OR extend duration via create-shortform re-run).
+4. If any shot exceeds 3.0 words/sec, FAIL Gate 3 with the offending shot list + suggested fix (shorten text OR extend duration via `video` re-run).
 
 **Auto-FAIL:** Any shot exceeds the cap.
 
@@ -216,7 +216,7 @@ When a gate fails, route the fix:
 | Gate Failure | Re-dispatch to | Why |
 |---|---|---|
 | Gate 1 — frontmatter missing field | **prompt-author** | Schema fix in the affected file |
-| Gate 1 — duration math wrong | **prompt-author** | Re-derive per-shot durations from brief; if brief itself is wrong, return NEEDS_CONTEXT (create-shortform / brief-creative re-run) |
+| Gate 1 — duration math wrong | **prompt-author** | Re-derive per-shot durations from brief; if brief itself is wrong, return NEEDS_CONTEXT (create-shortform / `creative` re-run) |
 | Gate 1 — CTA not verbatim (shortform) | **prompt-author** | Re-extract CTA copy from brief, paste verbatim in both required locations |
 | Gate 1 — slug or shot-count mismatch | **prompt-author** + **orchestrator** (bundle path issue) | File-naming or path fix |
 | Gate 2 — fabricated hex / token | **prompt-author** | Re-read brand/DESIGN.md, cite directly; if no matching token exists, return NEEDS_CONTEXT |
@@ -225,12 +225,12 @@ When a gate fails, route the fix:
 | Gate 2 — cold-start token without exemption | **prompt-author** | Set manifest.brand_source: cold-start-hint, pin Concerns block; or re-source the token from DESIGN.md |
 | Gate 3 — caption-pace overshoot | **prompt-author** | Shorten on-screen text strings OR flag back to upstream brief if brief itself overshoots cap |
 | Gate 4 — arc concern | **prompt-author** (optional revise) OR return to the operator with internal grade PASS_WITH_CONCERNS | Soft; human acceptance required; no external-action authority |
-| Gate 5 — source_screenshot path missing | **prompt-author** + **orchestrator** | Re-resolve path via handoff `## Asset References`; if file genuinely absent, NEEDS_CONTEXT and defer to brief-creative |
+| Gate 5 — source_screenshot path missing | **prompt-author** + **orchestrator** | Re-resolve path via handoff `## Asset References`; if file genuinely absent, NEEDS_CONTEXT and defer to `creative` |
 | Gate 5 — synthesis prompt body | **prompt-author** | Rewrite the per-shot `## Visual Prompt` as a composition operation; strip lighting / mood / camera lines |
 | Gate 5 — crop drift from handoff | **prompt-author** | Re-extract crop rect from handoff's `## Per-Shot Specification` table verbatim |
 | Gate 5 — invented UI element | **prompt-author** | Strip the invented element from the per-shot prompt; cite only what's in the source screenshot |
-| Gate 5 — out-of-bounds crop | **prompt-author** + **brief-creative** | Crop exceeds source dimensions; the brief was wrong — return NEEDS_CONTEXT and defer |
-| Gate 6 — custom interaction_verb | **prompt-author** + **brief-creative** | The brief should have caught this; the handoff is broken — return NEEDS_CONTEXT |
+| Gate 5 — out-of-bounds crop | **prompt-author** + **`creative`** | Crop exceeds source dimensions; the brief was wrong — return NEEDS_CONTEXT and defer |
+| Gate 6 — custom interaction_verb | **prompt-author** + **`creative`** | The brief should have caught this; the handoff is broken — return NEEDS_CONTEXT |
 | Gate 6 — custom mask_transform | **prompt-author** | Replace with the closest canonical transform (or compose) and update prompt body |
 | Gate 6 — verb-duration incoherence | **prompt-author** | Re-check the handoff; if durations don't match the verb (e.g., a tap with 6s), the brief's storyboard is wrong — NEEDS_CONTEXT |
 | Gate 7 — missing pointer color or band background | **prompt-author** | Add the citation to Brand Tokens section |

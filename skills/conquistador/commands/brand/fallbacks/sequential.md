@@ -18,13 +18,13 @@ Stop before drafting when:
   platform-set equivalence still holds against this assumed set; a later confirmed declaration
   replaces it.
 - the product described is not owned by the operator (this skill builds identity for owned products;
-  competitor teardowns belong to `research-positioning`).
+  competitor teardowns belong to `position`).
 
-Strongly recommend `research-positioning` first when both product-context and ICP research are
+Strongly recommend `position` first when both product-context and ICP research are
 absent. If the operator insists, continue and label character output as provisional.
 
 Warn (do not block) when upstream research artifacts are older than 30 days; recommend a fresh
-`research-positioning` run.
+`position` run.
 
 `--fast` collapses to Route A only. It does **not** skip Cold Start, hard blocks, or the critic.
 
@@ -84,7 +84,7 @@ Brand System) otherwise.
 1. No colors/fonts before strategy grounding.
 2. No Layer 2 before Layer 1 completes.
 3. Critic cross-element coherence is mandatory.
-4. Stale upstream (>30 days) → recommend `research-positioning`.
+4. Stale upstream (>30 days) → recommend `position`.
 5. BRAND.md is prose; DESIGN.md is specification — never mix registers.
 
 ## Deliverable
@@ -98,7 +98,7 @@ operator asks for persistence, write the same artifacts there:
 
 Follow `references/format-conventions.md` and `references/brand-system-method.md`. Run the application
 acceptance check on homepage hero, product description, and social introduction from the live
-SKILL.md front door.
+COMMAND.md front door.
 
 Label this single-context. Do not call it independent corroboration. Do not invent product claims,
 customer evidence, or endorsements. No sibling outcome or canonical project tree is required.

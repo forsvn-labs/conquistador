@@ -56,7 +56,7 @@ load_class: ANTI-PATTERN
 **Why it fails:** A blended campaign number hides which channels drove the result and which dragged. The verdict cannot discriminate; the next budget decision is blind.
 **Fix:** The per-channel breakdown table in Diagnosis § Channel-Mix Signals is mandatory. Channel-Mix Discrimination rubric dim drops to 0-2 on a breakdown-free artifact.
 
-### 10. Source plan-campaign artifact unverified
+### 10. Source `campaign` artifact unverified
 **Pattern:** The cycle artifact's provenance lists `input_artifacts: docs/forsvn/artifacts/marketing/campaign-plan.md` — but the file doesn't exist or is a different campaign's plan.
 **Why it fails:** Without the source artifact, the eval scores against an imagined hypothesis. Future `plan-campaign --rev=N+1` runs read provenance and can't follow the chain.
 **Fix:** Metric Ingest's Blockers section catches unreadable source paths. Critic Hard Fail #10 enforces.
@@ -70,8 +70,8 @@ load_class: ANTI-PATTERN
 
 ### Cross-stack contract drift
 **Pattern:** Frontmatter schema, body section list, the Channel Breakdown table columns, or Results Row columns diverged silently between evaluate-campaign's format-conventions.md and `_shared/eval-loop-spec.md`.
-**Why it fails:** Downstream consumers (dashboard, plan-campaign --rev=N+1, ledger-summary skills) break or silently miss fields.
-**Fix:** Schema changes require atomic update across format-conventions + `_shared/eval-loop-spec.md` + plan-campaign's awareness of the contract.
+**Why it fails:** Downstream consumers (dashboard, `campaign` --rev=N+1, ledger-summary skills) break or silently miss fields.
+**Fix:** Schema changes require atomic update across format-conventions + `_shared/eval-loop-spec.md` + `campaign`'s awareness of the contract.
 
 ### Sibling-skill confusion with the asset-level eval skills
 **Pattern:** A campaign loop's eval cycle tries to re-score every ad, post, and landing page the campaign used inside one campaign-eval artifact.

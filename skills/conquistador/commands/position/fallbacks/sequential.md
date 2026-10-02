@@ -51,7 +51,7 @@ real missing dimension, or when validated market research is requested.
    source. Sources older than 18 months are historical, not current. Sizing without method is a
    guess.
 
-Then make the seven positioning decisions from the front-door SKILL.md. For a validated ICP
+Then make the seven positioning decisions from the front-door COMMAND.md. For a validated ICP
 artifact, load `references/icp-anti-patterns.md` before returning it. For a validated market
 artifact, load `references/market-anti-patterns.md` before returning it. Hypothesis mode loads
 neither anti-pattern reference.

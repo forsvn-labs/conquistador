@@ -2,7 +2,7 @@
 title: Short-Form Eval — Format Conventions
 lifecycle: canonical
 status: stable
-produced_by: evaluate-shortform
+produced_by: results
 load_class: PROCEDURE
 ---
 
@@ -90,7 +90,7 @@ The three must agree. Mismatch → critic FAIL → re-dispatch.
 
 ## Frontmatter field order
 
-Per the Output Artifact Structure block in SKILL.md body. Required fields (in order):
+Per the Output Artifact Structure block in COMMAND.md body. Required fields (in order):
 
 ```yaml
 type: short-form-eval

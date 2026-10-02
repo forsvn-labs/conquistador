@@ -126,7 +126,7 @@ implement a public marketing site.]
 
 - 0 FAILs → **PASS** (NOTEs go in Notes Summary; advisory only)
 - ≥1 FAIL on cycle 1 → **FAIL** — orchestrator re-dispatches per the agent named in each FAIL's fix direction
-- ≥1 FAIL on cycle 2 → **FAIL** — orchestrator pins all FAIL notes at top of brief.md per SKILL.md verdict logic
+- ≥1 FAIL on cycle 2 → **FAIL** — orchestrator pins all FAIL notes at top of brief.md per the play file verdict logic
 
 ## Change Log
 

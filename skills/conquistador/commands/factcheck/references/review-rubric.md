@@ -2,7 +2,7 @@
 title: Knowledge Review Rubric
 lifecycle: canonical
 status: stable
-produced_by: knowledge-review
+produced_by: factcheck
 load_class: RUBRIC
 ---
 

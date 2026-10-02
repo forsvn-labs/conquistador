@@ -2,7 +2,7 @@
 title: Product UI Playbook
 lifecycle: canonical
 status: stable
-produced_by: brief-product-ui
+produced_by: ui
 load_class: METHOD
 ---
 
@@ -10,13 +10,13 @@ load_class: METHOD
 
 ## Why this skill exists
 
-After `map-user-flow` produces a validated flow artifact, there is no skill that converts that flow into a screen-level, brand-tokened, component-specified interface spec. The gap is specific:
+After `flow` produces a validated flow artifact, there is no skill that converts that flow into a screen-level, brand-tokened, component-specified interface spec. The gap is specific:
 
-- **`map-user-flow`** stops at flow logic and low-fidelity wireframes — it explicitly is "not for visual brand design."
-- **`architect-software-system`** is tech-only: schemas, APIs, file structure, deployment topology.
-- **`improve-conversion` (landing-page conversion brief)** is conversion-locked to single-page marketing surfaces.
+- **`flow`** stops at flow logic and low-fidelity wireframes — it explicitly is "not for visual brand design."
+- **`architect`** is tech-only: schemas, APIs, file structure, deployment topology.
+- **`convert` (landing-page conversion brief)** is conversion-locked to single-page marketing surfaces.
 
-Nothing takes _(validated flow + DESIGN/BRAND tokens)_ → _(screen inventory, component system, token-applied layout/state spec)_ → _(buildable handoff)_. `brief-product-ui` fills exactly that slot in the product stack: the bridge from "what the user does" to "what the interface looks and behaves like, completely specified."
+Nothing takes _(validated flow + DESIGN/BRAND tokens)_ → _(screen inventory, component system, token-applied layout/state spec)_ → _(buildable handoff)_. `ui` fills exactly that slot in the product stack: the bridge from "what the user does" to "what the interface looks and behaves like, completely specified."
 
 ## The SPEC-not-renderer principle
 
@@ -31,11 +31,11 @@ The no-render gate is not a limitation. It is the identity.
 - Reviewability means the artifact exposes its decisions and gaps. It does not require a private store
   or a human verdict before the bounded spec can be returned.
 
-The distinction matters. Many tools collapse spec and render into one step, which ties the output to a specific renderer and makes the spec unreviewed. `brief-product-ui` separates them.
+The distinction matters. Many tools collapse spec and render into one step, which ties the output to a specific renderer and makes the spec unreviewed. `ui` separates them.
 
 ## Methodology
 
-**Flow is the contract.** Prefer a `map-user-flow` artifact; if none exists, run compact flow validation inside this skill. The validated flow source defines every screen in scope. This skill enumerates from it — no screen is invented. If the flow doesn't include a screen, the spec doesn't include a screen.
+**Flow is the contract.** Prefer a `flow` artifact; if none exists, run compact flow validation inside this skill. The validated flow source defines every screen in scope. This skill enumerates from it — no screen is invented. If the flow doesn't include a screen, the spec doesn't include a screen.
 
 **Pipeline shape: intake → L1 parallel → merge → layout/state → handoff → critic.**
 
@@ -50,7 +50,7 @@ Full artifact structure (9 required sections) is defined in [`format-conventions
 
 ## Core principles
 
-**Flow-grounded.** Every screen in the spec must trace to a node in the validated flow source (`map-user-flow` artifact or compact in-skill flow validation). No invented screens, no scope expansion inside this skill. If the flow source is incomplete and cannot be validated here, return `NEEDS_CONTEXT` and name what's missing.
+**Flow-grounded.** Every screen in the spec must trace to a node in the validated flow source (`flow` artifact or compact in-skill flow validation). No invented screens, no scope expansion inside this skill. If the flow source is incomplete and cannot be validated here, return `NEEDS_CONTEXT` and name what's missing.
 
 **Systematic.** Components are extracted once and reused across screens — not defined per-screen. A component defined for Screen 3 that also appears on Screen 7 is the same component, not two independent descriptions. Repetition is a failure mode, not thoroughness.
 
@@ -62,16 +62,16 @@ brand rules apply only to that source; recovered house examples never override c
 
 ## When NOT to use this skill
 
-- **Flow does not exist yet** — run compact flow validation inside this skill (or optionally `map-user-flow` for a full sibling pass). Do not invent screens without a validated flow source.
-- **Visual brand identity from scratch** — use `create-brand`.
-- **Marketing / conversion-surface design** — use `improve-conversion` (landing-page conversion brief).
-- **Technical API, schema, or file structure** — use `architect-software-system`.
+- **Flow does not exist yet** — run compact flow validation inside this skill (or optionally `flow` for a full sibling pass). Do not invent screens without a validated flow source.
+- **Visual brand identity from scratch** — use `brand`.
+- **Marketing / conversion-surface design** — use `convert` (landing-page conversion brief).
+- **Technical API, schema, or file structure** — use `architect`.
 - **Rendering or generating actual UI assets** — use `impeccable`, `hallmark`, `ce-frontend-design`, or a design tool directly after receiving this spec.
 - **Task decomposition from the spec** — use task decomposition outside this skill downstream.
 
 ## History
 
-- **Created 2026-06-07** — new deep-tier product skill. Fills the upstream tool-redirect: `map-user-flow` and `architect-software-system` previously had no downstream spec skill for the (flow + tokens) → interface-spec pipeline. `brief-product-ui` is the product-stack home for that redirect, registered in the product capability registry (`id: product-ui`), consuming `map-user-flow`'s `id: user-flow` artifact and sitting `map-user-flow → brief-product-ui → architect-software-system` in the chain.
+- **Created 2026-06-07** — new deep-tier product skill. Fills the upstream tool-redirect: `flow` and `architect` previously had no downstream spec skill for the (flow + tokens) → interface-spec pipeline. `ui` is the product-stack home for that redirect, registered in the product capability registry (`id: product-ui`), consuming `flow`'s `id: user-flow` artifact and sitting `map-user-flow → brief-product-ui → architect-software-system` in the chain.
 
 ## Further reading
 

@@ -2,13 +2,13 @@
 title: Campaign-Eval — End-to-End Cycle Walkthrough (3-channel launch, blended-CAC laundering caught)
 lifecycle: canonical
 status: stable
-produced_by: measure-growth
+produced_by: measure
 load_class: EXAMPLE
 ---
 
 # Campaign-Eval — End-to-End Cycle Walkthrough
 
-**Load when:** an operator (human or agent) wants a complete trace of one measure-growth cycle — Pre-Dispatch hard-block check → Layer 1 parallel (Metric Ingest + Diagnosis) → Layer 2 Recommendation → Layer 3 Critic → the produced eval artifact in full → the `results.tsv` row → the Critic Verdict (PASS) → a FAIL→fix variant → completion status.
+**Load when:** an operator (human or agent) wants a complete trace of one `measure` cycle — Pre-Dispatch hard-block check → Layer 1 parallel (Metric Ingest + Diagnosis) → Layer 2 Recommendation → Layer 3 Critic → the produced eval artifact in full → the `results.tsv` row → the Critic Verdict (PASS) → a FAIL→fix variant → completion status.
 
 All numbers below are **illustrative synthetic data** for a fictional FORSVN launch campaign. They are plausible, not real. The point is the shape of the artifact and the discipline of the gates, not the figures.
 
@@ -42,10 +42,10 @@ Orchestrator runs the hard-block table from `fallbacks/sequential.md` BEFORE any
 - Measurement evidence supplied (primary metric value + window + source) → not `BLOCKED`. ✓
 - Per-channel rollup complete for all 3 channels → not `BLOCKED`. ✓
 - Campaign tag `forsvn-launch-q3` declared → not `BLOCKED` (Hard Fail #3 avoided). ✓
-- Source plan-campaign artifact path readable → not `BLOCKED` (Hard Fail #10 avoided). ✓
+- Source `campaign` artifact path readable → not `BLOCKED` (Hard Fail #10 avoided). ✓
 - `results.tsv` is the standard 8-column schema → standard helper usable. ✓
 
-Read order: `program.md` → `context.md` → `results.tsv` (last cycle = cycle 0 baseline, so this is **cycle 1**) → latest `strategy/` + `execution/` files → source plan-campaign artifact → no per-asset eval artifacts in the loop yet → `brand/BRAND.md` + `research/icp-research.md`.
+Read order: `program.md` → `context.md` → `results.tsv` (last cycle = cycle 0 baseline, so this is **cycle 1**) → latest `strategy/` + `execution/` files → source `campaign` artifact → no per-asset eval artifacts in the loop yet → `brand/BRAND.md` + `research/icp-research.md`.
 
 Warm-start summary emitted:
 
@@ -55,7 +55,7 @@ Found:
 - campaign: forsvn-launch-q3
 - primary metric: net-new trial signups
 - baseline/prior result: 168 trials (cycle 0, organic-only 21-day baseline)
-- source plan-campaign artifact: artifacts/campaign-plan.md
+- source campaign artifact: artifacts/campaign-plan.md
 - current evidence window: 2026-07-01..2026-07-21 (21d), source: Convex analytics + Meta dashboard + CRM
 - channels in rollup: paid-social, organic-shortform, lifecycle-email
 - total spend (fully loaded): $3,500
@@ -63,7 +63,7 @@ Found:
 Proceeding to evaluate cycle 1 (campaign: forsvn-launch-q3).
 ```
 
-**Write-back: none.** measure-growth never writes to `experience/`; loop state lives in the loop dir.
+**Write-back: none.** `measure` never writes to `experience/`; loop state lives in the loop dir.
 
 ---
 
@@ -109,7 +109,7 @@ confidence: medium (21-day single-cycle window; one concurrent confounder; basel
 keep: organic-shortform (driver, zero media, best CAC); paid-social at current budget (mixed, at payback edge — watch, do not scale yet)
 discard: none
 watch: paid-social payback — re-check at cycle 2 before scaling budget
-route_next_work_to: plan-campaign --rev=2 (budget-reallocation scope only — shift +$500 to organic, hold paid flat; NOT a full re-plan)
+route_next_work_to: campaign --rev=2 (budget-reallocation scope only — shift +$500 to organic, hold paid flat; NOT a full re-plan)
 learning_promotion: yes — "for the $19/mo subscription ICP, an existing-list email send is a rider, not a campaign driver; exclude its conversions from net-new" (generalizes beyond this campaign)
 ```
 
@@ -121,7 +121,7 @@ Saved to `.forsvn/loops/forsvn-launch/evals/2026-07-22-cycle-1.md`:
 
 ```markdown
 ---
-skill: measure-growth
+skill: measure
 version: 1
 date: 2026-07-22
 status: done_with_concerns
@@ -131,9 +131,9 @@ lifecycle: evaluation
 use_when: "Deciding whether to keep, discard, watch, or block the current campaign cycle"
 do_not_use_when: "Re-planning next-cycle campaign strategy without reading the latest loop context and results"
 upstream: ".forsvn/loops/forsvn-launch/program.md, context.md, strategy/, execution/, artifacts/campaign-plan.md, metric source"
-downstream: "results.tsv, learnings.md, plan-campaign next-cycle plan"
+downstream: "results.tsv, learnings.md, campaign next-cycle plan"
 provenance:
-  skill: measure-growth
+  skill: measure
   run_date: 2026-07-22
   input_artifacts:
     - artifacts/campaign-plan.md
@@ -150,7 +150,7 @@ provenance:
 - Confidence: medium
 - Campaign: forsvn-launch-q3
 - Primary metric: net-new trial signups = 372 (276 campaign-driven after rider exclusion) vs 168 baseline
-- Decision: Keep forsvn-launch-q3 — organic-shortform drove net-new at zero media and paid-social cleared baseline; route a budget-reallocation (not a re-plan) to plan-campaign --rev=2.
+- Decision: Keep forsvn-launch-q3 — organic-shortform drove net-new at zero media and paid-social cleared baseline; route a budget-reallocation (not a re-plan) to campaign --rev=2.
 
 ## Evidence
 
@@ -167,7 +167,7 @@ provenance:
 
 ## What Changed This Cycle
 
-- Source plan-campaign artifact: `artifacts/campaign-plan.md`
+- Source campaign artifact: `artifacts/campaign-plan.md`
 - Objective/channel-mix/budget-split/sequencing delta from prior cycle: cycle 0 was an organic-only baseline; cycle 1 added paid-social ($3,000 fully loaded) + a lifecycle-email send to the existing trial-finisher list. Budget split paid-heavy. Landing-page refresh shipped mid-window (confounder).
 
 ## Diagnosis
@@ -209,7 +209,7 @@ provenance:
 - Keep: organic-shortform (driver, lowest CAC); paid-social at current budget
 - Discard: none
 - Watch: paid-social payback — re-measure at cycle 2 before any budget scale-up
-- Route next work to: plan-campaign --rev=2 (budget-reallocation scope: +$500 to organic, hold paid flat)
+- Route next work to: campaign --rev=2 (budget-reallocation scope: +$500 to organic, hold paid flat)
 
 ## Results Row
 
@@ -254,7 +254,7 @@ The Critic (`agents/campaign-critic-agent.md`) scores the 7-dim rubric. Aggregat
   - loop_fit: 9 — program.md + context.md + results.tsv read; cycle scoped to the whole campaign across all 3 channels; cycle number = last cycle + 1
   - metric_integrity: 8 — primary metric + baseline + window + total fully-loaded spend present; per-channel rollup complete for all 3 channels
   - attribution_honesty: 8 — last-click model named and its bias flagged; concurrent landing-page refresh + non-fully-comparable baseline both surfaced
-  - decision_discipline: 9 — keep matches the packet; routing to plan-campaign --rev=2 is a narrow budget-reallocation, not a re-plan
+  - decision_discipline: 9 — keep matches the packet; routing to campaign --rev=2 is a narrow budget-reallocation, not a re-plan
   - channel_mix_discrimination: 9 — all 3 channels in the breakdown; email classified rider and its 96 conversions excluded from the 276 net-new
   - unit_economics_discipline: 8 — blended $12.68 and paid $35.71 reported distinct; payback stated against the $19/mo price; no laundering
   - ledger_correctness: 7 — one 8-col row appended via the helper; campaign tag present; description slightly verbose

@@ -2,7 +2,7 @@
 title: Brand-Kit Rendering — Derivative Board Spec
 lifecycle: canonical
 status: stable
-produced_by: create-brand
+produced_by: brand
 load_class: REFERENCE
 ---
 

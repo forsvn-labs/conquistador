@@ -1,4 +1,4 @@
-# Format Conventions — diagnose-growth Artifact
+# Format Conventions — `diagnose` Artifact
 
 > Load when writing the output artifact. Encodes the canonical artifact template (frontmatter + 3-phase body + Next Step), the Logic Tree code-fence convention, the External Factor Scan 6-row table, the hypothesis format (If/Then/Because + Deciding data / Source / Owner / Confirming / Rejecting / Potential gap explained), the Verdict Table column schema (cross-stack contract), and the Root Cause Statement format.
 
@@ -16,13 +16,13 @@ Canonical singleton — the current diagnosis of record. On re-run: overwrite `D
 
 ```yaml
 ---
-skill: diagnose-growth
+skill: diagnose
 version: [N]                          # increment on re-run
 date: [YYYY-MM-DD]
 status: done | done_with_concerns | blocked | needs_context
 stack: mkt
 review_surface: none
-id: diagnose-growth
+id: diagnose
 type: canonical
 keywords: [diagnose-growth, root-cause, hypothesis-tree, metric-decline, if-then-because]
 ---
@@ -31,14 +31,14 @@ keywords: [diagnose-growth, root-cause, hypothesis-tree, metric-decline, if-then
 **Field semantics:**
 - `version`: integer, 1 on first run, increment on every subsequent run (overwrite in place — the singleton holds the latest diagnosis only).
 - `date`: artifact creation date, ISO-8601. Drives the 30-day staleness check on downstream consumers (prioritize reads `date` to decide whether to recommend re-diagnosis).
-- `status`: per the Completion Status block in SKILL.md.
-- `id`: stable `diagnose-growth` — consumers resolve it via `find-artifacts --resolve diagnose-growth`; never changes.
+- `status`: per the Completion Status block in COMMAND.md.
+- `id`: stable `diagnose` — consumers resolve it via `find-artifacts --resolve diagnose-growth`; never changes.
 
 ---
 
 ## Body structure (in order — cross-stack contract)
 
-The artifact opens with a header (`# Problem Analysis`) then has three top-level phases plus a Next Step. Downstream consumers (prioritize, model-growth-funnel, campaign-plan, system-architecture) parse by phase header — renaming or reordering breaks the contract.
+The artifact opens with a header (`# Problem Analysis`) then has three top-level phases plus a Next Step. Downstream consumers (prioritize, `funnel`, campaign-plan, system-architecture) parse by phase header — renaming or reordering breaks the contract.
 
 ### Header block
 
@@ -196,12 +196,12 @@ Started: [when]. Inflection point: [if known].
 ```markdown
 ## Next Step
 
-Run `prioritize-opportunities` targeting:
+Run `prioritize` targeting:
 1. [Root cause 1 — specific aspect to solve]
 2. [Root cause 2 — specific aspect to solve]
 ```
 
-This block is **verbatim** — downstream `forsvn` and `prioritize-opportunities` grep the literal `"Run "` + backtick + `"prioritize-opportunities"` + backtick + `" targeting:"` phrase for chain handoff detection.
+This block is **verbatim** — downstream `forsvn` and `prioritize` grep the literal `"Run "` + backtick + `"prioritize-opportunities"` + backtick + `" targeting:"` phrase for chain handoff detection.
 
 ---
 

@@ -27,7 +27,7 @@ Name what the first page of search already says — the obvious takes. This is m
 
 ## 4. Find the Proprietary Angle
 
-The reason this author can write a pillar a base model can't: a frame they own (a model, a coined term), original data (their own metrics, a survey, hard-won numbers), a contrarian-but-defended position, or specific experience. This is the seed of the Originality dimension. If the topic genuinely has no proprietary angle for this author, flag it — the honest output may be "this topic won't support a pillar; write a how-to (`write-copy`) instead."
+The reason this author can write a pillar a base model can't: a frame they own (a model, a coined term), original data (their own metrics, a survey, hard-won numbers), a contrarian-but-defended position, or specific experience. This is the seed of the Originality dimension. If the topic genuinely has no proprietary angle for this author, flag it — the honest output may be "this topic won't support a pillar; write a how-to (`copy`) instead."
 
 ## Source hygiene
 

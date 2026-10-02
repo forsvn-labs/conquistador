@@ -2,7 +2,7 @@
 title: System-Architecture — Worked Example
 lifecycle: canonical
 status: stable
-produced_by: architect-software-system
+produced_by: architect
 load_class: EXAMPLE
 ---
 

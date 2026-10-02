@@ -28,8 +28,8 @@ load_class: ANTI-PATTERN
 
 ### 4. Scoring a draft
 **Pattern:** The operator runs `/evaluate-outreach` on a sequence that has not been sent — there is no reply or bounce data.
-**Why it fails:** Eval requires sent + measured evidence. Scoring a draft is a best-practice audit, not an evaluation — that is write-outreach's job.
-**Fix:** Critical Gate 2 + Critic Hard Fail #2. Metric Ingest STOPs on a not-sent sequence and routes to `write-outreach`.
+**Why it fails:** Eval requires sent + measured evidence. Scoring a draft is a best-practice audit, not an evaluation — that is `outreach`'s job.
+**Fix:** Critical Gate 2 + Critic Hard Fail #2. Metric Ingest STOPs on a not-sent sequence and routes to `outreach`.
 
 ### 5. Cross-channel contamination of the verdict
 **Pattern:** The offer ran via cold email AND LinkedIn DM; the artifact averages reply rates across both and scores the verdict on the blend.
@@ -44,14 +44,14 @@ load_class: ANTI-PATTERN
 ### 7. Scope drift to "rewrite the whole program"
 **Pattern:** Positive-reply rate dipped; recommendation suggests "new subject + new opener + new value prop + new sequence length + new channel + new list."
 **Why it fails:** Eval scope is sequence diagnosis + next-cycle routing, not outreach-strategy maximalism. Maximalist recommendations always hide the actual fix among 6 unrelated changes.
-**Fix:** Routing must be to the smallest correct next skill (write-outreach subject-only revision, or research-positioning for a list fix). Decision Discipline dim catches this.
+**Fix:** Routing must be to the smallest correct next skill (write-outreach subject-only revision, or `position` for a list fix). Decision Discipline dim catches this.
 
 ### 8. Killing a cycle without same-channel+segment baseline
 **Pattern:** Cycle 2 (LinkedIn DM to ops) positive-reply 0.4%. Baseline = cycle 1 (cold email to founders) 0.9%. Recommendation: `discard`.
 **Why it fails:** Cross-channel, cross-segment comparison invents a fictitious decline. LinkedIn DM and cold email have different benchmarks; ops and founders respond differently.
 **Fix:** Attribution Honesty dim requires same channel AND same segment for a baseline. Critic Hard Fail #10 enforces.
 
-### 9. Source write-outreach artifact unverified
+### 9. Source `outreach` artifact unverified
 **Pattern:** The cycle's provenance lists `input_artifacts: write-outreach/email-2026-05-01-founders.md` — but the file doesn't exist.
 **Why it fails:** Without the source sequence, the eval scores against an imagined hypothesis; future `write-outreach --rev=N+1` runs can't follow the chain.
 **Fix:** Metric Ingest's Blockers section catches unreadable source paths. Critic Hard Fail #3 enforces.
@@ -64,14 +64,14 @@ load_class: ANTI-PATTERN
 ## Cross-cutting marketing-stack rows
 
 ### Cross-stack contract drift
-**Pattern:** Frontmatter schema, body section list, or Results Row columns diverged silently between evaluate-outreach's format-conventions.md and `fallbacks/sequential.md`.
-**Why it fails:** Downstream consumers (dashboard, write-outreach --rev=N+1, ledger-summary skills) break or silently miss fields.
+**Pattern:** Frontmatter schema, body section list, or Results Row columns diverged silently between `results`'s format-conventions.md and `fallbacks/sequential.md`.
+**Why it fails:** Downstream consumers (dashboard, `outreach` --rev=N+1, ledger-summary skills) break or silently miss fields.
 **Fix:** Schema changes require atomic update across format-conventions + `fallbacks/sequential.md` + downstream callers.
 
 ### Sibling-skill confusion with the eval lanes
-**Pattern:** A campaign bundle contained cold emails AND organic posts; one evaluate-outreach cycle tries to score both.
+**Pattern:** A campaign bundle contained cold emails AND organic posts; one `results` cycle tries to score both.
 **Why it fails:** Two lanes in one cycle artifact = polluted ledger row, polluted learnings, wrong rubric on the post.
-**Fix:** evaluate-outreach's cycle covers sent outreach only. The posts are a separate `measure-growth` cycle. Critical Gate 4 enforces.
+**Fix:** `results`'s cycle covers sent outreach only. The posts are a separate `measure` cycle. Critical Gate 4 enforces.
 
 ### Upstream context skipped — no loop scaffolded
 **Pattern:** Operator runs `/evaluate-outreach` without a loop ever created.
@@ -79,6 +79,6 @@ load_class: ANTI-PATTERN
 **Fix:** Critical Gate 1 blocks. Skill returns NEEDS_CONTEXT and recommends the later eval-loop runner (optional; this skill still produces a standalone evaluation artifact) to scaffold first.
 
 ### Polish-chain misroute
-**Pattern:** Eval artifact is sent to editorial-polish or polish-vietnamese after writing.
+**Pattern:** Eval artifact is sent to editorial-polish or `vietnamese` after writing.
 **Why it fails:** Eval artifacts are evidence + decisions, not customer-facing copy. editorial-polish would smooth attribution + deliverability caveats into more confident-sounding prose — the opposite of attribution discipline.
 **Fix:** Eval artifacts skip the editorial-polish/polish-vietnamese polish chain. They ship as-is from critic PASS.

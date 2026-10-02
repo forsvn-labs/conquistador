@@ -1,7 +1,7 @@
 ---
 title: Test the need for the proposed change
 load_class: METHOD
-produced_by: shape-initiative
+produced_by: shape
 ---
 
 # Test the need for the proposed change

@@ -1,9 +1,8 @@
 ---
-name: audit-marketing
-description: "Audit a bounded marketing package before ship for unsupported claims, specificity, argument, voice, channel fit, action clarity, and internal consistency. Use for a pre-ship marketing audit or AI-tell concern. Returns severity-ranked findings and a verdict; never infers cleanup or release authority."
+name: audit
+description: "Audit a marketing package before it ships and rank the findings."
 metadata:
   version: 2.1.0
-
 ---
 
 # Audit marketing before ship
@@ -85,6 +84,6 @@ Before delivery, load the recovered method instead of paraphrasing it:
 
 Write durable audit artifacts to `.forsvn/artifacts/mkt/audit-marketing/` when the host has one;
 otherwise return them inline. If the host cannot run a multi-step polish loop, use [sequential
-fallback](fallbacks/sequential.md). Detect ≠ fix. Available public fixers (`polish-vietnamese`,
-`write-copy`) or an operator-named tool may be routed fixes; none of them — and no critic score —
+fallback](fallbacks/sequential.md). Detect ≠ fix. Available public fixers (`vietnamese`,
+`copy`) or an operator-named tool may be routed fixes; none of them — and no critic score —
 grants release authority.

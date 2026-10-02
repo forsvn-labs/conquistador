@@ -2,7 +2,7 @@
 title: Docs-Writing — Anti-Patterns
 lifecycle: canonical
 status: stable
-produced_by: write-technical-docs
+produced_by: docs
 load_class: ANTI-PATTERN
 ---
 
@@ -60,6 +60,6 @@ Never silently bypass a critic FAIL — the 6 standard gates (or route-specific 
 
 ## When to defer instead of documenting
 
-- **Requirements are fuzzy** (operator can't articulate what the app does) → defer to `shape-initiative`. Documenting hallucinated requirements is worse than no docs.
+- **Requirements are fuzzy** (operator can't articulate what the app does) → defer to `shape`. Documenting hallucinated requirements is worse than no docs.
 - **Codebase is structurally broken** (confusing module boundaries, dead code piled up) → defer to code readability cleanup outside this skill. Documentation can't fix structural mess.
-- **Single-page conversion surface** (landing page) → defer to `improve-conversion`.
+- **Single-page conversion surface** (landing page) → defer to `convert`.

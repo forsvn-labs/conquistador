@@ -2,7 +2,7 @@
 title: Shape-initiative — Divergence Pass (generative ideation)
 lifecycle: canonical
 status: stable
-produced_by: shape-initiative
+produced_by: shape
 load_class: PROCEDURE
 ---
 
@@ -14,7 +14,7 @@ build", "what are my options", "brainstorm this"). Also load when the operator f
 generative pass in an otherwise convergent skill: produce *breadth of candidate directions* before
 narrowing to one to clarify.
 
-**Default is OFF.** shape-initiative is convergent by design. Divergence is the exception, gated below — most
+**Default is OFF.** `shape` is convergent by design. Divergence is the exception, gated below — most
 sessions skip it and go Premise Check → idea-critic → zones as usual.
 
 ---
@@ -36,7 +36,7 @@ skip), so the wrap-up shows divergence was considered, not silently passed over.
 
 ---
 
-## Not Premise Check, not idea-critic, not decision-panel
+## Not Premise Check, not idea-critic, not `decide`
 
 The three adjacent moves divergence is most often confused with — keep them distinct:
 
@@ -45,8 +45,8 @@ The three adjacent moves divergence is most often confused with — keep them di
 - **Idea-critic (Step 2.7)** is *evaluative* — scores demand-side validation of the chosen direction
   (PROCEED / PUSH_BACK). Divergence is *generative* — breadth, judgment suspended. **Order:** diverge →
   converge to a direction → idea-critic scores *that* direction. Divergence runs *before* 2.7.
-- **decision-panel (Step 5)** *pressure-tests between known* options. Divergence *produces* the options.
-  Divergence **feeds** decision-panel: generate many → shortlist → invoke Step 5 only when the shortlist
+- **`decide` (Step 5)** *pressure-tests between known* options. Divergence *produces* the options.
+  Divergence **feeds** `decide`: generate many → shortlist → invoke Step 5 only when the shortlist
   has non-obvious tradeoffs and the choice is expensive to reverse.
 
 ---
@@ -96,10 +96,10 @@ Once the user picks (or ratifies the recommended shortlist down to one direction
 
 - The **chosen direction** becomes the idea-statement that flows into **Step 2.7 idea-critic** and
   **Step 3 coverage zones** — divergence rejoins the convergent pipeline; it does not replace it.
-- A still-live 2-3 way shortlist with real tradeoffs → optionally invoke **Step 5 decision-panel** to
+- A still-live 2-3 way shortlist with real tradeoffs → optionally invoke **Step 5 `decide`** to
   narrow.
 - The shortlist needs a **scored ranking**, or the operator asks "rank these" → hand off to
-  **`prioritize-opportunities` (ideation mode)**: the chosen goal becomes the ranking anchor, and the candidates get
+  **`prioritize` (ideation mode)**: the chosen goal becomes the ranking anchor, and the candidates get
   force-ranked + evidence-scored per [`idea-ranking-core.md`](idea-ranking-core.md).
   The inline blunt-peer shortlist above remains the right call for light cases — hand off only when the
   set warrants real scoring.

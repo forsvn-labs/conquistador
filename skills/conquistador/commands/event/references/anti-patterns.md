@@ -1,4 +1,4 @@
-# Anti-Patterns — create-run-of-show
+# Anti-Patterns — `event`
 
 7 patterns. The critic checks each before ship.
 

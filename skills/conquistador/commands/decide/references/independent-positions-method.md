@@ -2,7 +2,7 @@
 title: Independent Positions Method
 lifecycle: canonical
 status: stable
-produced_by: decision-panel
+produced_by: decide
 load_class: REFERENCE
 ---
 
@@ -31,17 +31,17 @@ The alternative — operator gathers perspectives manually from teammates / Slac
 
 - **Specific problems only.** N agents on a fuzzy prompt wastes tokens and produces fuzzy synthesis. If the problem isn't specific enough that 3+ experts could disagree productively, kick it back to the operator (Cold Start path) before spawning.
 - **Structured output is mandatory.** Agents must return parseable structure (POSITION/REASONING/PROPOSAL/CONCERNS for debate; ranking or score schema for poll). Free-form prose can't be aggregated.
-- **Sub-routine invocations skip disk write.** When decision-panel is called by another skill (discover, prioritize-opportunities, system-architecture), the value is the inline synthesis. Writing a decisions/ file for every sub-call would pollute the audit trail with decisions the operator never committed to.
+- **Sub-routine invocations skip disk write.** When `decide` is called by another skill (discover, `prioritize`, system-architecture), the value is the inline synthesis. Writing a decisions/ file for every sub-call would pollute the audit trail with decisions the operator never committed to.
 - **Don't force consensus.** If 7 agents debate for 4 rounds and 4-3 split remains, the right output is "no consensus; here are the two camps and what would resolve them" — not a manufactured tiebreaker. Forced consensus IS the failure mode, not a workaround for it.
 - Estimate cost from the selected host, model, token budget, number of roles, and rounds. Record the configured deadline and cost ceiling; do not promise a fixed price or provider multiplier.
 - **Early convergence saves cost.** Detect "all agents agree, confidence 8+, proposals aligned" after each round and stop early. The synthesis is the same; the bill is cheaper.
 
 ## When NOT to use this skill
 
-- **Implementation work** → `architect-software-system` (design) or direct task execution. Agents-panel debates; it doesn't build.
-- **Verifying existing code/output** → `/fresh-eyes-review`. Different shape — fresh-eyes runs ONE reviewer against an output; decision-panel runs N agents against a question.
-- **Clarifying scope or requirements** → `/discover`. discover is multi-round interview; decision-panel is multi-agent debate. Use discover before you have a specific question.
-- **Decomposing work after a decision is made** → `/shape-initiative`. decision-panel makes the decision; task-breakdown plans the execution.
+- **Implementation work** → `architect` (design) or direct task execution. Agents-panel debates; it doesn't build.
+- **Verifying existing code/output** → `/fresh-eyes-review`. Different shape — fresh-eyes runs ONE reviewer against an output; `decide` runs N agents against a question.
+- **Clarifying scope or requirements** → `/discover`. discover is multi-round interview; `decide` is multi-agent debate. Use discover before you have a specific question.
+- **Decomposing work after a decision is made** → `/shape-initiative`. `decide` makes the decision; task-breakdown plans the execution.
 - **"What do I think about X?"** — that's introspection, not multi-perspective analysis. Agents-panel won't add value over a single thoughtful pass.
 
 ## Further reading

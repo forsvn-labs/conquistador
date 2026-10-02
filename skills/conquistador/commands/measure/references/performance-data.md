@@ -4,7 +4,7 @@
 
 > The **optional**, local-first per-channel performance layer under `.forsvn/performance/`. Operator-fed snapshots of real post results, a publish ledger anchoring post↔artifact attribution, and the three-state read contract producing skills consume at generation time. Cite this file; do not re-implement the rules.
 
-**Optional integration — not a requirement of this skill.** This layer serves operators who run the local `.forsvn` state root. A standalone operator with no `.forsvn/` directory can run every measure-growth procedure end-to-end: the standalone contract is **operator-supplied evidence** (pasted analytics, exported rows or dashboards, each labeled with source + window). Treat an absent store exactly like the `empty` state in the Read Contract below. The schema and rules here govern reads and writes only when that store exists.
+**Optional integration — not a requirement of this skill.** This layer serves operators who run the local `.forsvn` state root. A standalone operator with no `.forsvn/` directory can run every `measure` procedure end-to-end: the standalone contract is **operator-supplied evidence** (pasted analytics, exported rows or dashboards, each labeled with source + window). Treat an absent store exactly like the `empty` state in the Read Contract below. The schema and rules here govern reads and writes only when that store exists.
 
 All example rows in this file are **synthetic** — invented platforms-shaped data for illustration, never real account metrics.
 

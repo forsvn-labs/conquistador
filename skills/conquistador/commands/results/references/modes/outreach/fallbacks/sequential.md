@@ -9,11 +9,11 @@ Label this single-context. Do not call it independent corroboration.
 
 ## Hard blocks (before any scoring)
 
-- Draft, not sent, or no reply/bounce data → NEEDS_CONTEXT; route to `write-outreach`. Do not score copy as a completed cycle.
+- Draft, not sent, or no reply/bounce data → NEEDS_CONTEXT; route to `outreach`. Do not score copy as a completed cycle.
 - No reply evidence for the cycle → BLOCKED. List what is missing. Unknown stays unknown, never zero.
 - No deliverability/compliance evidence (bounce, spam complaints, opt-out status) → BLOCKED. A reply-winning sequence that burns the domain cannot `keep`.
 - Channel + segment tag missing → BLOCKED. One channel + one segment per cycle. Secondary channels are context only.
-- Organic post → `measure-growth`. Paid ad → `evaluate-paid-campaign`.
+- Organic post → `measure`. Paid ad → `results`.
 - `--fast` still enforces these blocks. It only skips the critic revision cycle and learning promotion.
 
 A loop (`program.md` / `context.md`) is optional. When present, write into
@@ -28,8 +28,8 @@ estimates for missing evidence.
 
 1. Record channel, segment, selection rule, batch size, send dates, delivery evidence, reply classifications, downstream outcomes, opt-outs/complaints, and instrumentation changes.
 2. Run [metric-ingest](../agents/metric-ingest-agent.md). Categorize replies: qualified / positive-unqualified / objection / referral / explicit no or opt-out / automated or ambiguous.
-3. Run [diagnosis](../agents/diagnosis-agent.md) against the source write-outreach artifact when available. Separate selection, delivery, message, offer, timing, and follow-up. Name confounders.
-4. Run [recommendation](../agents/recommendation-agent.md). Apply the deliverability/compliance gate before any `keep`. Next route is `write-outreach`, `research-positioning`, or none.
+3. Run [diagnosis](../agents/diagnosis-agent.md) against the source `outreach` artifact when available. Separate selection, delivery, message, offer, timing, and follow-up. Name confounders.
+4. Run [recommendation](../agents/recommendation-agent.md). Apply the deliverability/compliance gate before any `keep`. Next route is `outreach`, `position`, or none.
 5. Run [critic](../agents/critic-agent.md) against [rubric](../references/rubric.md) and [evaluation-loop-rubric](../references/evaluation-loop-rubric.md). Pass ≥49/70 and every dim ≥6. FAIL → revise once; still FAIL → BLOCKED, no ledger row.
 6. Operator override of a critic FAIL never promotes `keep` and never relaxes the deliverability/compliance gate. Record the override in the artifact Status section.
 

@@ -2,7 +2,7 @@
 title: Fresh-Eyes — Resolver Agent Procedure
 lifecycle: canonical
 status: stable
-produced_by: fresh-eyes-review
+produced_by: critique
 load_class: REFERENCE
 ---
 

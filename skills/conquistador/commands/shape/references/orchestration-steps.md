@@ -7,7 +7,7 @@ load_class: PROCEDURE
 
 # Orchestration Steps
 
-Full step-by-step procedure for `shape-initiative`. The SKILL.md body carries one-line summaries; this file carries the load-bearing detail. Load when the operator's depth resolves to Medium or Deep, or when running the Step 6 concreteness / resolution-exit gate (the gate runs at every depth, Light included).
+Full step-by-step procedure for `shape`. The COMMAND.md body carries one-line summaries; this file carries the load-bearing detail. Load when the operator's depth resolves to Medium or Deep, or when running the Step 6 concreteness / resolution-exit gate (the gate runs at every depth, Light included).
 
 ---
 
@@ -98,9 +98,9 @@ These six are NOT the Step 3 coverage zones. Zones adapt per-problem and shape t
 1. **Resolve it** — keep interviewing. Questions stay Socratic, one or two at a time per Step 4 discipline: the gate governs WHEN wrap is allowed, never question style or batch size.
 2. **Per-dimension operator sign-off** — the operator explicitly signs off on that specific, named dimension. A blanket "good enough, just wrap it" is NOT a sign-off: respond by listing the open dimensions and asking for sign-off on each by name ("Constraints and anti-goals are still open — sign off on each, or keep going?"). Each signed-off dimension is recorded `open — signed off`; the session exits with `status: done_with_concerns` (same status semantics as operator-overridden branches).
 
-**No handoff while the gate fails.** shape-initiative does not hand off to `architect-software-system`, task decomposition outside this skill, or direct implementation with a dimension that is `open` and not signed off — there is no "mostly concrete" handoff. In-context handoff requires the gate passed in conversation; cross-session handoff requires a saved spec whose `## Concreteness Checklist` shows every dimension `concrete` or `open — signed off` ([`output-formats.md`](output-formats.md)). This is a hard block, not advice.
+**No handoff while the gate fails.** `shape` does not hand off to `architect`, task decomposition outside this skill, or direct implementation with a dimension that is `open` and not signed off — there is no "mostly concrete" handoff. In-context handoff requires the gate passed in conversation; cross-session handoff requires a saved spec whose `## Concreteness Checklist` shows every dimension `concrete` or `open — signed off` ([`output-formats.md`](output-formats.md)). This is a hard block, not advice.
 
-**No artificial grilling.** The gate measures state, not effort. A brief that arrives with all six dimensions already concrete passes on round one — confirm the checklist in the Step 6 summary and wrap. Depth interacts with the gate per SKILL.md § Adaptive Depth: Deep runs multi-round until the gate passes (not question-count-bounded); Light/Medium keep their question ceilings — hitting a ceiling with open dimensions triggers the per-dimension sign-off ask, then wraps `done_with_concerns`.
+**No artificial grilling.** The gate measures state, not effort. A brief that arrives with all six dimensions already concrete passes on round one — confirm the checklist in the Step 6 summary and wrap. Depth interacts with the gate per COMMAND.md § Adaptive Depth: Deep runs multi-round until the gate passes (not question-count-bounded); Light/Medium keep their question ceilings — hitting a ceiling with open dimensions triggers the per-dimension sign-off ask, then wraps `done_with_concerns`.
 
 ### Resolution-exit condition (quality floor under the gate)
 

@@ -31,9 +31,9 @@ load_class: ANTI-PATTERN
 **Why it fails:** Eval scope is content diagnosis + next-cycle routing, not content-strategy maximalism. Maximalist recommendations are unfalsifiable — they always include the actual fix among 6 unrelated changes.
 **Fix:** Routing must be to the smallest correct next skill (write-social with a hook-only revision, not "redo everything"). Decision Discipline rubric dim catches this.
 
-### 5. Lane drift into evaluate-shortform / evaluate-ad territory
+### 5. Lane drift into `results` / evaluate-ad territory
 **Pattern:** The content under evaluation is a Reel or a boosted post; evaluate-content scores it anyway.
-**Why it fails:** Short-form video needs the short-form-research platform-intelligence lens (`evaluate-shortform`). Paid placements need paid-attribution discipline (`evaluate-ad`). Scoring them here applies the wrong rubric.
+**Why it fails:** Short-form video needs the short-form-research platform-intelligence lens (`results`). Paid placements need paid-attribution discipline (`evaluate-ad`). Scoring them here applies the wrong rubric.
 **Fix:** Critical Gate 2 + Critic Hard Fail #3. Metric Ingest's content-type check STOPs on video/paid and routes to the sibling skill.
 
 ### 6. Learning promotion from an algorithm-spike window
@@ -51,7 +51,7 @@ load_class: ANTI-PATTERN
 **Why it fails:** A blended engagement number hides whether the 4.1% is saves+shares (meaningful) or likes (vanity). The verdict cannot discriminate.
 **Fix:** Metric Ingest always reports the 4-way breakdown (likes / saves / shares / comments). Metric Integrity rubric dim drops to 0-2 on a blended-only number.
 
-### 9. Source write-social artifact unverified
+### 9. Source `social` artifact unverified
 **Pattern:** The cycle artifact's provenance lists `input_artifacts: docs/forsvn/artifacts/marketing/copy/linkedin-2026-05-01-launch.md` — but the file doesn't exist.
 **Why it fails:** Without the source artifact, the eval scores against an imagined hypothesis. Future `write-social --rev=N+1` runs read provenance and can't follow the chain.
 **Fix:** Metric Ingest's Blockers section catches unreadable source paths. Critic Hard Fail #10 enforces.
@@ -65,13 +65,13 @@ load_class: ANTI-PATTERN
 
 ### Cross-stack contract drift
 **Pattern:** Frontmatter schema, body section list, or Results Row columns diverged silently between evaluate-content's format-conventions.md and `_shared/eval-loop-spec.md`.
-**Why it fails:** Downstream consumers (dashboard, write-social --rev=N+1, ledger-summary skills) break or silently miss fields.
-**Fix:** Schema changes require atomic update across format-conventions + `_shared/eval-loop-spec.md` + write-social's awareness of the contract.
+**Why it fails:** Downstream consumers (dashboard, `social` --rev=N+1, ledger-summary skills) break or silently miss fields.
+**Fix:** Schema changes require atomic update across format-conventions + `_shared/eval-loop-spec.md` + `social`'s awareness of the contract.
 
-### Sibling-skill confusion with evaluate-shortform / evaluate-ad
+### Sibling-skill confusion with `results` / evaluate-ad
 **Pattern:** A publish-social bundle contained text posts AND Reels; one evaluate-content cycle tries to score both.
 **Why it fails:** Two content lanes in one cycle artifact = polluted ledger row, polluted learnings, wrong rubric on the video.
-**Fix:** evaluate-content's cycle covers organic text/image/carousel only. The Reels are a separate `evaluate-shortform` cycle. Critical Gate 2 enforces.
+**Fix:** evaluate-content's cycle covers organic text/image/carousel only. The Reels are a separate `results` cycle. Critical Gate 2 enforces.
 
 ### Upstream context skipped — no loop scaffolded
 **Pattern:** Operator runs `/evaluate-content` without a loop ever created.

@@ -2,7 +2,7 @@
 title: Worked Example — Authenticated Settings Slice
 lifecycle: canonical
 status: stable
-produced_by: build-web-app
+produced_by: build
 load_class: EXAMPLE
 ---
 

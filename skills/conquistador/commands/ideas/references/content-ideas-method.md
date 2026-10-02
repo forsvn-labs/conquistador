@@ -2,19 +2,19 @@
 title: Short-Form Research Playbook
 lifecycle: canonical
 status: stable
-produced_by: research-content-ideas
+produced_by: ideas
 load_class: PLAYBOOK
 ---
 
 # Short-Form Research Playbook
 
-**Worked example:** [`examples/shortform-research-walkthrough.md`](examples/shortform-research-walkthrough.md) — a full sourced per-platform catalog run end to end, with the create-shortform handoff.
+**Worked example:** [`examples/shortform-research-walkthrough.md`](examples/shortform-research-walkthrough.md) — a full sourced per-platform catalog run end to end, with the `video` handoff.
 
 ## Why this skill exists
 
 Short-form video platforms (TikTok, Reels, Shorts, plus X video and LinkedIn video by opt-in) move algorithmically — what worked 60 days ago may not work today. Briefs written from stale intuition produce content that misses the platform's current rewarded behaviors (hook archetype, opening-second pacing, sound trends, CTA placement). This skill replaces "intuition + last-year's-best-practice doc" with a per-platform, per-market, per-topic catalog of what's actually working *right now* — sourced from observable performers with citations, not made up by the model.
 
-The catalog isn't a survey. It's a **catalog of bets**. The downstream consumer (`create-shortform`) reads this artifact to choose specific recommendations per asset ("TikTok hook should be credential-flash archetype in 0–1.5s — 8/12 in this sample"), not generic advice ("strong hooks matter"). Specificity is the contract.
+The catalog isn't a survey. It's a **catalog of bets**. The downstream consumer (`video`) reads this artifact to choose specific recommendations per asset ("TikTok hook should be credential-flash archetype in 0–1.5s — 8/12 in this sample"), not generic advice ("strong hooks matter"). Specificity is the contract.
 
 Two windows decay at different rates:
 - **Trend signals** decay fast — 14-day windows are deliberate. A trending sound from 30 days ago is already a tired echo.
@@ -41,16 +41,16 @@ The two-window split prevents the "fresh date, stale truth" failure mode where o
 - **ICP is soft-required.** Research without ICP underperforms — the audience-fit-agent flags `NEEDS_CONTEXT` and the brief skill downstream sees the flag. Operator can override (cold-start hint) but the warning persists.
 - **Critic gate is 5 rubrics, 2-cycle cap.** PASS = record `done`. FAIL → re-dispatch named agents with feedback. After 2 cycles, stop for the human with internal grade `done_with_concerns`; failed rubrics pinned at top of artifact. Don't loop forever.
 - **Conditional dispatch for audio.** `audio-trend-agent` runs only if TikTok or Reels is in scope. YouTube Shorts uses original audio more often; X/LinkedIn rarely use audio trends. Running it for non-applicable platforms wastes tokens and produces empty sections.
-- **The artifact IS the contract.** Output artifact frontmatter + body section order are consumed downstream by `create-shortform` (per-asset) and `evaluate-shortform` (cycle-N scoring against the catalog). Contract changes require atomic updates to both consumers — never silently drift the schema.
+- **The artifact IS the contract.** Output artifact frontmatter + body section order are consumed downstream by `video` (per-asset) and `results` (cycle-N scoring against the catalog). Contract changes require atomic updates to both consumers — never silently drift the schema.
 
 ## When NOT to use this skill
 
 - **Long-form video** (15+ min YouTube, podcasts, full courses) — different platforms, different mechanics, different decay rates. Parked.
-- **Static visual** (images, carousels, infographics) — use `brief-creative` when installed, or
+- **Static visual** (images, carousels, infographics) — use `creative` when installed, or
   return the production brief inline.
-- **Per-asset brief** (specific hook, shot list, captions for one piece) — use `create-shortform` (marketing-stack); it consumes this catalog as input.
-- **Audience research** (who buys, why) — use `research-positioning`. This skill assumes audience is known or will run with a cold-start hint.
-- **Competitive landscape mapping** (TAM/SAM/SOM, competitor positioning) — use `research-positioning`. This skill mines patterns within platform feeds, not market dynamics.
+- **Per-asset brief** (specific hook, shot list, captions for one piece) — use `video` (marketing-stack); it consumes this catalog as input.
+- **Audience research** (who buys, why) — use `position`. This skill assumes audience is known or will run with a cold-start hint.
+- **Competitive landscape mapping** (TAM/SAM/SOM, competitor positioning) — use `position`. This skill mines patterns within platform feeds, not market dynamics.
 
 ## Further reading
 

@@ -8,7 +8,7 @@ Use this structure when generating a ship log (product context snapshot). The sh
 
 ```markdown
 ---
-skill: write-technical-docs
+skill: docs
 mode: ship-log
 version: 1
 date: {{today}}
@@ -138,7 +138,7 @@ status: current
 
 ## Merge Strategy
 
-The orchestrator (SKILL.md Route D) owns the merge decision and passes a `merge-mode` to the writer-agent. The writer-agent does NOT decide the strategy — it follows what it receives:
+The orchestrator (COMMAND.md Route D) owns the merge decision and passes a `merge-mode` to the writer-agent. The writer-agent does NOT decide the strategy — it follows what it receives:
 
 - `preserve-marketing` → keep existing icp-research sections under `## Market Context`, add ship log sections below
 - `overwrite` → write full ship log from scratch (orchestrator already renamed old file)

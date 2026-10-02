@@ -1,8 +1,8 @@
-# Format Conventions — write-social
+# Format Conventions — `social`
 
 > Load when the orchestrator assembles the final artifact OR when format-checker-agent validates structural compliance. Encodes the artifact path convention, the 13-field frontmatter schema, the body sectioned schema, the format-check rules, and date/number/citation conventions.
 
-The schemas in this file are **cross-stack contracts**. The frontmatter `critic_score` + `critic_verdict` fields feed the optional `editorial-polish` / `polish-vietnamese` polish-chain consumers (when installed) and optional ledger ingestion (when the local store exists). Renaming a field or reordering body sections requires atomic update of downstream consumers per `anti-patterns.md` row "Cross-stack contract drift."
+The schemas in this file are **cross-stack contracts**. The frontmatter `critic_score` + `critic_verdict` fields feed the optional `editorial-polish` / `vietnamese` polish-chain consumers (when installed) and optional ledger ingestion (when the local store exists). Renaming a field or reordering body sections requires atomic update of downstream consumers per `anti-patterns.md` row "Cross-stack contract drift."
 
 ---
 
@@ -40,7 +40,7 @@ applied_tactics: [<tactic>, ...]      # legibility: specific tactics narrated (e
 critic_score: <numeric, 0-50 across 5 dimensions × 0-10>
 critic_verdict: pass | done_with_concerns | fail
 status: done | done_with_concerns | blocked | needs_context
-polish_chain_applied: polish-vietnamese | editorial-polish | none
+polish_chain_applied: vietnamese | editorial-polish | none
 ```
 
 **Field semantics:**
@@ -56,8 +56,8 @@ polish_chain_applied: polish-vietnamese | editorial-polish | none
 - `platform_intel_version` — `method_updated` date from the loaded pack, or `none`. This records method revision, not verification.
 - `critic_score` — integer 0–50 (sum of 5 dimensions × 0–10).
 - `critic_verdict` — apply `references/rubric.md` in order; hard failures override totals, and material gaps require concerns.
-- `status` — Completion Status from SKILL.md. Typically matches `critic_verdict` unless BLOCKED / NEEDS_CONTEXT.
-- `polish_chain_applied` — `none` (default), optional `editorial-polish`, or `polish-vietnamese`. Set by the polish-chain runner; copywriter-agent leaves it `none`.
+- `status` — Completion Status from COMMAND.md. Typically matches `critic_verdict` unless BLOCKED / NEEDS_CONTEXT.
+- `polish_chain_applied` — `none` (default), optional `editorial-polish`, or `vietnamese`. Set by the polish-chain runner; copywriter-agent leaves it `none`.
 
 ---
 
@@ -112,13 +112,13 @@ polish_chain_applied: polish-vietnamese | editorial-polish | none
 
 ## Required body sections (cross-stack contract)
 
-In order. Renaming or reordering breaks polish-chain readers (editorial-polish / polish-vietnamese) and eval-loop ingestion.
+In order. Renaming or reordering breaks polish-chain readers (editorial-polish / `vietnamese`) and eval-loop ingestion.
 
 1. **Hook variants** — one `### Variant [A|B|C]` block per variant (count = frontmatter `variant_count`). Each block has hook text + `**Char count:**` + `**Observable measure targeted:**`.
 2. **Body** — single block with body text + `**Char count:**`.
 3. **CTA** — single block with CTA text + `**Placement:**`.
 4. **Format spec** — bullet list: surface type + aspect ratio (if media-coupled) + reading-continuity notes.
-5. **Legibility** — the channel-fit block per [`legibility-convention.md`](legibility-convention.md): pack loaded + `pack_verified` + the specific tactics narrated (`applied_tactics`), or the transparent-degrade statement when no pack covers the platform. Placed just before Why this works (matches the SKILL.md body order).
+5. **Legibility** — the channel-fit block per [`legibility-convention.md`](legibility-convention.md): pack loaded + `pack_verified` + the specific tactics narrated (`applied_tactics`), or the transparent-degrade statement when no pack covers the platform. Placed just before Why this works (matches the COMMAND.md body order).
 6. **Why this works** — the product-fit rationale block per [`why-this-works-convention.md`](why-this-works-convention.md): the bet (falsifiable) + 2-4 load-bearing choices traced to ICP pain/VoC/positioning, Competitor-Swap-clean. Distinct from the channel-fit Legibility block just above. No ICP/brand foundation → the convention's Absent state (general principles only).
 7. **Critic verdict** — 6-row markdown table (5 dimensions + Total). Total row formatted `**Total** | / 50 | pass ≥ 35; done_with_concerns 25-34; fail < 25`.
 8. **Anti-patterns triggered (if any)** — bullet list of detected anti-patterns from `anti-patterns.md` by name. If none triggered, section header still present with `- None` bullet (explicit empty is the contract).
@@ -179,9 +179,9 @@ The explicit `- None` line is the contract — silent omission breaks downstream
 
 When `--polish-chain editorial-polish` or `--polish-chain polish-vietnamese` runs as a terminal pass:
 
-1. Polish skill reads the write-social artifact at the path above.
+1. Polish skill reads the `social` artifact at the path above.
 2. Polish skill rewrites the `## Body` and `## CTA` sections in place. Hook variants are NOT rewritten (preserves A/B comparability for downstream variant testing).
-3. Polish skill updates frontmatter: sets `polish_chain_applied: editorial-polish` (or `polish-vietnamese`). Does NOT change `critic_score` or `critic_verdict` (those are the pre-polish baseline; polish-pass scoring would require re-running the critic, which is out of polish-chain scope).
+3. Polish skill updates frontmatter: sets `polish_chain_applied: editorial-polish` (or `vietnamese`). Does NOT change `critic_score` or `critic_verdict` (those are the pre-polish baseline; polish-pass scoring would require re-running the critic, which is out of polish-chain scope).
 4. Polish skill appends a `## Polish chain notes` section at the bottom of the artifact summarizing what changed and why (transparency for downstream eval-loop ingestion).
 
 Polish chain runs ONLY after critic verdict (`pass` or `done_with_concerns`). FORMAT_FAIL artifacts do NOT auto-route — operator must resolve format-fail manually before invoking polish.
@@ -195,7 +195,7 @@ For context — downstream skills + infra that depend on this format:
 | Consumer | What it reads |
 |---|---|
 | editorial-polish | `## Body` + `## CTA` (rewrites in place); frontmatter (`polish_chain_applied` update) |
-| polish-vietnamese | Same as editorial-polish, plus `## Hook variants` for register check (4 registers: báo chí / semi-casual / bro / pop-marketing) |
+| `vietnamese` | Same as editorial-polish, plus `## Hook variants` for register check (4 registers: báo chí / semi-casual / bro / pop-marketing) |
 | eval-loop | Frontmatter `critic_score` + `critic_verdict` + `goal` + `platform`; pipes into `results.tsv` for keep/discard/watch/blocked decisions |
 | operator publish workflow | Hook variants A/B (publish picks one per test), Body, CTA, Format spec, Anti-patterns triggered |
 | short-form-brief (when re-running) | `## Hook variants` for variant comparison; frontmatter `brief_source` for provenance |
