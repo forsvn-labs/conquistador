@@ -389,6 +389,12 @@ export async function runStart(args = [], { cwd = process.cwd(), tty = process.s
   const ready = detectAgents().filter(agent => agent.found && here.agents.some(item => item.id === agent.id) && (!(state.removed ?? []).includes(agent.id) || agent.id === wanted));
 
   if (noOpen) {
+    const named = ready.find(agent => agent.id === wanted);
+    if (!install && named && !await repair(ui, named, root, { yes })) {
+      ui.outro(`Installation needs attention. Run ${self} doctor.`);
+
+      return 1;
+    }
     ui.outro(`Installed. Start a new agent session and type ${needsInit(cwd) ? '/conquistador init' : '/conquistador'}.`);
 
     return 0;

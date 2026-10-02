@@ -54,15 +54,21 @@ else if (args[0]==='plugin' && args[1]!=='marketplace') {
   return { directory, env: { ...process.env }, calls: () => existsSync(env.TEST_HOST_LOG) ? readFileSync(env.TEST_HOST_LOG, 'utf8').trim().split('\n').filter(Boolean).map(JSON.parse) : [] };
 }
 
-function ui({ selected = 'codex', consent = true, task = 'Draft one welcome email' } = {}) {
+function ui({ selected = 'codex', mode = 'keep', scope = 'global', ids = ['codex'], consent = true, task = 'Draft one welcome email' } = {}) {
   const messages = [], questions = [];
+  const answers = { 'Open in': selected, 'Install for': mode, 'Install location': scope };
 
   return { messages, questions, intro() {}, outro: value => messages.push(value), cancel: value => messages.push(value),
     note: value => messages.push(value), isCancel: value => value === cancel,
     select: async options => {
       questions.push(options.message);
 
-      return options.message === 'Open in' ? selected : task;
+      return options.message in answers ? answers[options.message] : task;
+    },
+    multiselect: async options => {
+      questions.push(options.message);
+
+      return ids;
     },
     confirm: async options => {
       questions.push(options.message);
@@ -120,7 +126,7 @@ test('CLI one-word task and invalid start options have no side effects', t => {
   const f = fixture(t);
   assert.equal(invoke(f, ['task', 'onboarding', '--in', 'codex', '--dry-run']).status, 0);
 
-  for (const args of [['--in'], ['Write a welcome email', '--in='], ['Write a welcome email', '--unknown']]) assert.equal(invoke(f, args).status, 2);
+  for (const args of [['--in'], ['Write a welcome email', '--in='], ['Write a welcome email', '--unknown'], ['--providers=nope'], ['--scope=team'], ['--providers']]) assert.equal(invoke(f, args).status, 2);
   assert.deepEqual(f.calls(), []);
   assert.deepEqual(readdirSync(f.directory), ['bin']);
 });
@@ -141,29 +147,58 @@ test('brief rejects unsupported options before creating a knowledge cache or hom
   assert.deepEqual(readdirSync(f.directory), ['bin']);
 });
 
-test('choose the target before installing; cancellation at either choice leaves hosts unchanged', async t => {
+test('cancellation at any install question leaves hosts unchanged', async t => {
   const f = fixture(t);
 
-  for (const options of [{ selected: cancel }, { consent: false }, { consent: cancel }]) {
+  for (const options of [{ mode: cancel }, { mode: 'customize', ids: cancel }, { scope: cancel }, { consent: false }, { consent: cancel }]) {
     assert.equal(await runStart([], { cwd: f.directory, tty: true, ui: ui(options) }), 130);
     assert.deepEqual(f.calls(), []);
     assert.deepEqual(readdirSync(f.directory), ['bin']);
   }
 });
 
-test('one selected host installs, healthy repeat skips writes, host-side uninstall is repaired', async t => {
+test('keep detected hosts installs globally; a healthy repeat skips writes; host-side uninstall is repaired', async t => {
   const f = fixture(t), firstUi = ui();
   assert.equal(await runStart(['--no-open'], { cwd: f.directory, tty: true, ui: firstUi }), 0);
-  assert.deepEqual(Object.keys(readState().agents), ['codex']);
-  assert.ok(f.calls().every(call => call.host === 'codex'));
-  assert.deepEqual(firstUi.questions, ['Open in', 'Install Conquistador into Codex?']);
+  assert.deepEqual(Object.keys(readState().agents).sort(), ['claude-code', 'codex']);
+  assert.deepEqual(firstUi.questions, ['Install for', 'Install location', 'Install now?']);
   const before = readFileSync(join(pluginHome(), '.conquistador-owned.json'), 'utf8');
-  assert.equal(await runStart(['--in=codex', '--no-open'], { cwd: f.directory, tty: true, ui: ui() }), 0);
+  const repeat = ui();
+  assert.equal(await runStart(['--in=codex', '--no-open'], { cwd: f.directory, tty: true, ui: repeat }), 0);
+  assert.deepEqual(repeat.questions, []);
   assert.equal(readFileSync(join(pluginHome(), '.conquistador-owned.json'), 'utf8'), before);
   rmSync(join(f.directory, 'codex.registered'));
   assert.equal(await runStart(['--in=codex', '--no-open', '--yes'], { cwd: f.directory, tty: true, ui: ui() }), 0);
   assert.ok(existsSync(join(f.directory, 'codex.registered')));
-  assert.equal(existsSync(join(f.directory, 'claude.registered')), false);
+});
+
+test('customize selects named hosts; project scope copies one skill per folder and runs no host command', async t => {
+  const f = fixture(t), screen = ui({ mode: 'customize', ids: ['claude-code', 'pi', 'opencode'], scope: 'project' });
+  mkdirSync(join(f.directory, '.git'));
+  assert.equal(await runStart(['--no-open'], { cwd: f.directory, tty: true, ui: screen }), 0);
+  assert.deepEqual(screen.questions, ['Install for', 'Select agents (space to toggle)', 'Install location', 'Install now?']);
+  assert.deepEqual(f.calls(), []);
+  assert.deepEqual(readState().agents ?? {}, {});
+  for (const folder of ['.claude/skills/conquistador', '.agents/skills/conquistador']) assert.ok(existsSync(join(f.directory, folder, 'SKILL.md')), folder);
+  assert.equal(existsSync(pluginHome()), false);
+});
+
+test('a project without GROWTH.md opens the agent with /conquistador init', async t => {
+  const f = fixture(t), project = join(f.directory, 'product');
+  mkdirSync(join(project, '.git'), { recursive: true });
+  assert.equal(await runStart(['--providers=claude', '--scope=project', '--yes'], { cwd: project, tty: true, ui: ui() }), 0);
+  assert.ok(existsSync(join(project, '.claude/skills/conquistador/SKILL.md')));
+  assert.deepEqual(f.calls().filter(call => call.args[0] !== '--version'), [{ host: 'claude', args: ['--prefill', '/conquistador init'] }]);
+});
+
+test('failed selected host prints an executable retry; a successful retry preserves unrelated hosts', async t => {
+  const f = fixture(t), screen = ui(); process.env.TEST_FAIL_HOST = 'codex';
+  assert.equal(await runStart(['--providers=codex', '--scope=global', '--no-open', '--yes'], { cwd: f.directory, tty: true, ui: screen }), 1);
+  assert.match(screen.messages.join('\n'), /Retry: conquistador --providers=codex --scope=global -y/);
+  delete process.env.TEST_FAIL_HOST;
+  assert.equal(await runAdd(['codex', '--yes']), 0);
+  assert.deepEqual(Object.keys(readState().agents), ['codex']);
+  assert.ok(f.calls().every(call => call.host === 'codex'));
 });
 
 test('invalid/ambiguous add and remove do not mutate; --all is explicit', async t => {
@@ -178,16 +213,6 @@ test('invalid/ambiguous add and remove do not mutate; --all is explicit', async 
   assert.deepEqual(readdirSync(f.directory), ['bin']);
   assert.equal(await runAdd(['--all', '--yes']), 0);
   assert.deepEqual(Object.keys(readState().agents).sort(), ['claude-code', 'codex']);
-});
-
-test('failed selected host prints executable retry; successful retry preserves unrelated hosts', async t => {
-  const f = fixture(t), screen = ui(); process.env.TEST_FAIL_HOST = 'codex';
-  assert.equal(await runStart(['--in', 'codex', '--no-open', '--yes'], { cwd: f.directory, tty: true, ui: screen }), 1);
-  assert.match(screen.messages.join('\n'), /Retry: conquistador add codex --yes/);
-  delete process.env.TEST_FAIL_HOST;
-  assert.equal(await runAdd(['codex', '--yes']), 0);
-  assert.deepEqual(Object.keys(readState().agents), ['codex']);
-  assert.ok(f.calls().every(call => call.host === 'codex'));
 });
 
 test('update and remove previews execute nothing and lifecycle preserves user artifacts', async t => {
