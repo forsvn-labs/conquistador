@@ -10,7 +10,7 @@ import { shellCommand } from './install-paths.mjs';
 import { assertNoDiscoveryConflict } from './onboarding-safety.mjs';
 import { preserveForReset, recoveryPlan } from './onboarding-recovery.mjs';
 import { cancellableUi } from './onboarding-ui.mjs';
-import { assertNode24, need, runBotRoute, runMcpRoute, runPluginRoute, runSetupAction, runSkillsRoute, resolveProject } from './onboarding-routes.mjs';
+import { assertNodeFloor, need, runBotRoute, runMcpRoute, runPluginRoute, runSetupAction, runSkillsRoute, resolveProject } from './onboarding-routes.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const version = JSON.parse(readFileSync(join(root, 'package.json'), 'utf8')).version;
@@ -493,7 +493,7 @@ export async function runOnboarding(args, extra = {}) {
       console.log(version);
       return 0;
     }
-    assertNode24();
+    assertNodeFloor();
     requireNoninteractivePlan(options, interactive);
     if ((options.route === 'default' && !options.yes && !options['dry-run']) || options.route === 'advanced' || (options.route === 'bot' && options.bot === null)) {
       if (!interactive) throw new Error('Interactive setup requires a terminal. Use conquistador --host HOST --yes, or conquistador --help.');
