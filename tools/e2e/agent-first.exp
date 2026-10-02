@@ -129,7 +129,7 @@ set run3 $transcript
 
 # --- 4. No terminal ----------------------------------------------------------------------------
 set piped [exec sh -c "cd '$project' && node '$root/runtime/bin/conquistador.js' 'Plan a Product Hunt launch' < /dev/null | cat"]
-record "no terminal prints the command instead of opening" [expr {[string first "claude --prefill" $piped] >= 0 && [string first "Plan a Product Hunt launch" $piped] >= 0}] ""
+record "no terminal prints the command instead of opening" [expr {[regexp {(claude|codex|cursor-agent|copilot|grok) } $piped] && [string first "Plan a Product Hunt launch" $piped] >= 0}] ""
 
 # --- 5. Home folder: ask for the product first -----------------------------------------------
 set homePrompt [exec sh -c "cd '$home' && node '$root/runtime/bin/conquistador.js' 'Plan a Product Hunt launch' < /dev/null | cat"]

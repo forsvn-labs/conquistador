@@ -1,3 +1,14 @@
+# Progress
+
+## 2026-10-02: Mac first-use continuation (local, unshipped)
+
+- Recovered the reviewed implementation at c8a131d from its checksum-verified bundle on macOS.
+- Adapted the PTY dry-run test to macOS Expect; corrected the native harness to accept the remembered host in its non-terminal preview.
+- Focused first-use/export/hook checks: 53/53. Offline routing: 117/117. Build/typechecks, plugin contracts and knowledge-map check pass.
+- Native isolated-home agent-first harness: 14/14 with Claude Code 2.1.286 and Codex 0.159.3. This covers installation, prefill, remembered target, no-terminal preview, cancellation and removal, not completed model tasks or answer quality.
+- Separate landing worktree aligns current claims with public 0.2.2; desktop/mobile browser checks: 90/90. Not deployed.
+- Remote writes remain paused pending GitHub integration permission repair; no draft PR has been created. Exact additional evidence remains in the local task workspace.
+
 # Product progress
 
 ## Unshipped: bounded first use and release-state consistency

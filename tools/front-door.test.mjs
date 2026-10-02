@@ -97,7 +97,7 @@ test('TTY dry-run never installs, launches, probes versions, copies clipboard, o
 });
 
 test('real pseudo-terminal task dry-run stays read-only', t => {
-  if (process.platform === 'win32' || !existsSync('/usr/bin/script')) {
+  if (process.platform === 'win32' || !existsSync(process.platform === 'darwin' ? '/usr/bin/expect' : '/usr/bin/script')) {
     t.skip('PTY harness unavailable; injected TTY path covered separately');
 
     return;
@@ -106,7 +106,10 @@ test('real pseudo-terminal task dry-run stays read-only', t => {
   const f = fixture(t);
   const quote = value => `'${value.replaceAll("'", "'\\''")}'`;
   const command = [process.execPath, cli, 'Write welcome emails', '--in', 'codex', '--dry-run'].map(quote).join(' ');
-  const result = spawnSync('/usr/bin/script', ['-q', '-e', '-c', command, '/dev/null'], { cwd: f.directory, env: f.env, encoding: 'utf8', timeout: 30000 });
+  const options = { cwd: f.directory, env: f.env, encoding: 'utf8', timeout: 30000 };
+  const result = process.platform === 'darwin'
+    ? spawnSync('/usr/bin/expect', ['-c', `set timeout 20; spawn -noecho {${process.execPath}} {${cli}} {Write welcome emails} --in codex --dry-run; expect { eof { lassign [wait] pid sid err code; exit $code } timeout { exit 124 } }`], options)
+    : spawnSync('/usr/bin/script', ['-q', '-e', '-c', command, '/dev/null'], options);
   assert.equal(result.status, 0, result.stdout + result.stderr);
   assert.match(result.stdout, /Dry run/);
   assert.deepEqual(f.calls(), []);
