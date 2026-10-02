@@ -13,7 +13,7 @@ import { fileURLToPath } from 'node:url';
 import { spawnCommand } from './spawn.mjs';
 
 export const PROOF_REPOSITORY = 'https://github.com/forsvn-labs/proof.git';
-export const PROOF_COMMIT = 'e5753a2485a3baa6267399ed30212c2f4234e9ca';
+export const PROOF_COMMIT = '10c2563dd4e530d9807172a158080bf838868ff7';
 // SHA-256 of the unmodified upstream MIT LICENSE (Every, 2026).
 const PROOF_LICENSE_SHA256 = '4648b2d84d492d891c68c4ff906ffd600438b7c7cd2ade0f904abbb404657829';
 export const LAVISH_PACKAGE = 'lavish-axi@0.1.80';
@@ -319,8 +319,9 @@ async function openProof(project, file, noOpen) {
     if (!noOpen) openBrowser(session.url);
     return 0;
   }
+  // This owner id marks a review session: the fork hides Proof's Share and agent buttons.
   const created = await proofJson(server.baseUrl, 'POST', '/documents', {
-    body: { markdown: source, title: frontMatter(source).title || basename(file, extname(file)), role: 'editor', ownerId: 'human:reviewer' },
+    body: { markdown: source, title: frontMatter(source).title || basename(file, extname(file)), role: 'editor', ownerId: 'conquistador:review' },
   });
   const url = `${server.baseUrl}/d/${encodeURIComponent(created.slug)}?token=${encodeURIComponent(created.ownerSecret)}&format=html`;
   session = {

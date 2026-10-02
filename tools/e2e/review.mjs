@@ -176,7 +176,7 @@ if (binary && session) {
 let approvedSha = '';
 if (!browser) {
   const reason = !binary ? 'no Chrome or Chromium found; set CHROME_PATH' : !session ? 'no review session' : `the browser did not start (${browserError})`;
-  for (const [id, name] of [['R5a', 'the Proof editor shows the document text'], ['R5b', 'front matter shows as one metadata line and its YAML block is hidden'], ['R5c', 'no Proof toast covers the Review panel'], ['R5', 'the review page shows the LinkedIn channel preview, folded at 150 characters'], ['R6', 'the Playbooks applied panel lists the final section'], ['R7', 'the reviewer approves in the browser'], ['R8', 'the stamp hash equals the SHA-256 of the exact document text']]) notRun(id, name, reason);
+  for (const [id, name] of [['R5a', 'the Proof editor shows the document text'], ['R5b', 'front matter shows as one metadata line and its YAML block is hidden'], ['R5c', 'no Proof toast covers the Review panel'], ['R5d', 'the review session shows no Share or Add agent button'], ['R5', 'the review page shows the LinkedIn channel preview, folded at 150 characters, with an exact count'], ['R6', 'the Playbooks applied panel lists the final section'], ['R7', 'the reviewer approves in the browser'], ['R8', 'the stamp hash equals the SHA-256 of the exact document text']]) notRun(id, name, reason);
 } else {
   // The test reviewer's display name, so Proof's first-visit name dialog does not cover the page.
   await browser.go(new URL('/', url).href);
@@ -193,9 +193,17 @@ if (!browser) {
     return [...document.querySelectorAll('.proof-external-change-toast')].filter(node => { const box = node.getBoundingClientRect();
       return getComputedStyle(node).display !== 'none' && box.width > 0 && box.left < panel.right && box.right > panel.left && box.top < panel.bottom && box.bottom > panel.top; }).length; })()`);
   check('R5c', 'no Proof toast covers the Review panel', covered === 0, `${covered} overlapping`);
+  const toolbar = await browser.evaluate(`[...document.querySelectorAll('.share-pill-share-btn, .share-pill-agent-trigger, .share-pill-agent-overflow, button')]
+    .filter(node => node.offsetParent !== null && (node.matches('.share-pill-share-btn, .share-pill-agent-trigger, .share-pill-agent-overflow') || /^(Share|Add agent)/.test(node.textContent.trim())))
+    .map(node => node.textContent.trim().slice(0, 20))`);
+  check('R5d', 'the review session shows no Share or Add agent button', toolbar.length === 0, toolbar.join(', '));
   const panel = await browser.until("document.querySelector('.cq-li-text') !== null");
   const preview = panel ? await browser.evaluate("document.querySelector('.cq-li-text').textContent") : '';
-  check('R5', 'the review page shows the LinkedIn channel preview, folded at 150 characters', panel && preview.startsWith('Launch day') && preview.endsWith('…') && Array.from(preview).length === 150, preview);
+  // The counter counts the post text only: no front matter, playbooks section, or comment anchor markup.
+  const paragraph = /^Freelance designers.*$/m.exec(markdown)[0];
+  const expectedCount = `${Array.from(`Launch day\n\n${paragraph}`).length} / 3000`;
+  const counted = panel ? await browser.evaluate("document.querySelector('.cq-li .cq-count').textContent") : '';
+  check('R5', 'the review page shows the LinkedIn channel preview, folded at 150 characters, with an exact count', panel && preview.startsWith('Launch day') && preview.endsWith('…') && Array.from(preview).length === 150 && counted === expectedCount, `${counted} (expected ${expectedCount}) ${preview}`);
   await browser.shot('1-proof-linkedin-preview.png');
   await browser.evaluate("document.querySelector('[data-tab=playbooks]').click()");
   const listed = await browser.until("document.querySelectorAll('.cq-playbooks li').length === 2");
