@@ -358,3 +358,34 @@ function applySteps(agent, action, { source, dryRun = false, log = () => {}, sco
   }
   return { ok: true };
 }
+
+const SCOPES = { project: 'project', local: 'project', repo: 'project', global: 'global', user: 'global', home: 'global' };
+export const normalizeScope = value => SCOPES[String(value ?? '').trim().toLowerCase()] ?? null;
+
+export function setHooks(on) {
+  const file = join(home(), 'config.json');
+  let config = {};
+  try { config = JSON.parse(readFileSync(file, 'utf8')); } catch { /* New config. */ }
+  if (on && config.hooks !== false) return;
+  config.hooks = on;
+  mkdirSync(home(), { recursive: true });
+  writeFileSync(file, `${JSON.stringify(config, null, 2)}\n`);
+}
+
+// Install the chosen hosts in one scope. Returns the hosts that succeeded.
+export function installTargets(targets, { scope, root, hooks = true, log = () => {} }) {
+  const results = [];
+  if (scope === 'global' && targets.some(agent => agent.how !== 'skill')) {
+    try { copyPayload(pluginHome()); } catch (error) { return { results: targets.map(agent => ({ agent, result: { ok: false, error: error.message } })), staged: false }; }
+  }
+  if (!hooks) setHooks(false);
+  const done = new Set();
+  for (const agent of targets) {
+    const state = readState();
+    const action = scope === 'global' && state.agents?.[agent.id] && agent.installed() ? 'update' : 'install';
+    results.push({ agent, result: applyAgent(agent, action, { source: pluginHome(), scope, root, done, log }) });
+  }
+  const updated = readState();
+  writeState({ ...updated, removed: (updated.removed ?? []).filter(id => !results.some(item => item.result.ok && item.agent.id === id)) });
+  return { results, staged: true };
+}

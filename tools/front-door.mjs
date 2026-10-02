@@ -1,8 +1,7 @@
 // The front door: `conquistador` installs where needed and opens your agent with a task (tools/launch.mjs).
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
-import { AGENTS, OWNED, agentId, applyAgent, copyPayload, detectAgents, home, payloadCurrent, pluginHome, projectFolders, projectRoot, readState, removePayload, self, skillCurrent, tilde, version, writeState } from './agents.mjs';
-import { installTargets, normalizeScope, setHooks } from './launch.mjs';
+import { AGENTS, OWNED, agentId, applyAgent, copyPayload, detectAgents, home, installTargets, normalizeScope, payloadCurrent, pluginHome, projectFolders, projectRoot, readState, removePayload, self, setHooks, skillCurrent, tilde, version, writeState } from './agents.mjs';
 import { selfUpdate } from './self-update.mjs';
 
 const bold = text => (process.stdout.isTTY ? `\x1b[1m${text}\x1b[22m` : text);

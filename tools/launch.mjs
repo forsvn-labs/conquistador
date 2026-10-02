@@ -2,11 +2,13 @@
 // Detect agents, keep or customize them, choose a scope, install, then start one task.
 import { spawn, spawnSync } from 'node:child_process';
 import { spawnCommand } from './spawn.mjs';
-import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, readdirSync } from 'node:fs';
 import { homedir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { START_CONTEXT } from './brief.mjs';
-import { AGENTS, OWNED, agentId, applyAgent, copyPayload, detectAgents, home, payloadCurrent, pluginHome, projectFolders, projectRoot, readState, self, skillCurrent, tilde, version, writeState } from './agents.mjs';
+import { AGENTS, OWNED, agentId, detectAgents, installTargets, normalizeScope, payloadCurrent, pluginHome, projectFolders, projectRoot, readState, self, skillCurrent, tilde, version, writeState } from './agents.mjs';
+
+export { normalizeScope } from './agents.mjs';
 
 // Tasks that fit any product. The first one is the default.
 export const STARTS = Object.freeze([
@@ -42,9 +44,6 @@ function needsInstall(agent, state) {
     || agent.healthy?.() === false || !agent.installed();
 }
 
-const SCOPES = { project: 'project', local: 'project', repo: 'project', global: 'global', user: 'global', home: 'global' };
-export const normalizeScope = value => SCOPES[String(value ?? '').trim().toLowerCase()] ?? null;
-
 export function parseProviders(value) {
   const names = String(value ?? '').split(',').map(item => item.trim()).filter(Boolean);
   const invalid = names.filter(name => !agentId(name));
@@ -79,34 +78,6 @@ function missingHosts(targets, scope) {
   // A plugin host needs its own CLI for a global install. Skill folders need nothing.
   const found = new Set(detectAgents().filter(agent => agent.found).map(agent => agent.id));
   return scope === 'global' ? targets.filter(agent => agent.how !== 'skill' && agent.id !== 'cursor' && !found.has(agent.id)) : [];
-}
-
-export function setHooks(on) {
-  const file = join(home(), 'config.json');
-  let config = {};
-  try { config = JSON.parse(readFileSync(file, 'utf8')); } catch { /* New config. */ }
-  if (on && config.hooks !== false) return;
-  config.hooks = on;
-  mkdirSync(home(), { recursive: true });
-  writeFileSync(file, `${JSON.stringify(config, null, 2)}\n`);
-}
-
-// Install the chosen hosts in one scope. Returns the hosts that succeeded.
-export function installTargets(targets, { scope, root, hooks = true, log = () => {} }) {
-  const results = [];
-  if (scope === 'global' && targets.some(agent => agent.how !== 'skill')) {
-    try { copyPayload(pluginHome()); } catch (error) { return { results: targets.map(agent => ({ agent, result: { ok: false, error: error.message } })), staged: false }; }
-  }
-  if (!hooks) setHooks(false);
-  const done = new Set();
-  for (const agent of targets) {
-    const state = readState();
-    const action = scope === 'global' && state.agents?.[agent.id] && agent.installed() ? 'update' : 'install';
-    results.push({ agent, result: applyAgent(agent, action, { source: pluginHome(), scope, root, done, log }) });
-  }
-  const updated = readState();
-  writeState({ ...updated, removed: (updated.removed ?? []).filter(id => !results.some(item => item.result.ok && item.agent.id === id)) });
-  return { results, staged: true };
 }
 
 async function chooseTargets(ui, options) {
