@@ -433,6 +433,7 @@ export async function runStart(args = [], { cwd = process.cwd(), tty = process.s
     const brief = createBrief(chosen, { force: true });
     if (brief.action === 'brief' && brief.methods.length) ui.log.info(`${brief.methods.map(method => SPECIALISTS[method.name] ?? method.label).join(', ')}. Requests ${brief.must.length} playbooks first.`);
   }
+  if (agent.note && readState().agents?.[agent.id]) ui.log.warn(agent.note);
   const launch = agent.open(prompt);
   if (!launch) {
     const copied = await copy(prompt);
