@@ -1,12 +1,12 @@
 // The agent-first start: `conquistador` ends inside the user's agent with the task typed in.
-// Pick one agent, preview and confirm its installation, then start one bounded task.
+// Detect agents, keep or customize them, choose a scope, install, then start one task.
 import { spawn, spawnSync } from 'node:child_process';
 import { spawnCommand } from './spawn.mjs';
-import { readdirSync } from 'node:fs';
+import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { homedir } from 'node:os';
-import { resolve } from 'node:path';
+import { join, resolve } from 'node:path';
 import { START_CONTEXT } from './brief.mjs';
-import { AGENTS, applyAgent, copyPayload, detectAgents, payloadCurrent, pluginHome, readState, self, tilde, version, writeState } from './agents.mjs';
+import { AGENTS, OWNED, agentId, applyAgent, copyPayload, detectAgents, home, payloadCurrent, pluginHome, projectFolders, projectRoot, readState, self, skillCurrent, tilde, version, writeState } from './agents.mjs';
 
 // Tasks that fit any product. The first one is the default.
 export const STARTS = Object.freeze([
@@ -42,44 +42,145 @@ function needsInstall(agent, state) {
     || agent.healthy?.() === false || !agent.installed();
 }
 
-async function ensureInstalled(ui, agent, { yes = false } = {}) {
+const SCOPES = { project: 'project', local: 'project', repo: 'project', global: 'global', user: 'global', home: 'global' };
+export const normalizeScope = value => SCOPES[String(value ?? '').trim().toLowerCase()] ?? null;
+
+export function parseProviders(value) {
+  const names = String(value ?? '').split(',').map(item => item.trim()).filter(Boolean);
+  const invalid = names.filter(name => !agentId(name));
+  if (!names.length) throw Error('--providers needs agent names. Example: --providers=claude,codex');
+  if (invalid.length) throw Error(`Unknown agent: ${invalid.join(', ')}. Choose from: ${AGENTS.map(agent => agent.id).join(', ')}.`);
+  return [...new Set(names.map(agentId))];
+}
+
+// Where Conquistador is installed for this folder: tracked global installs and project skill copies.
+export function installsHere(root) {
   const state = readState();
+  const global = AGENTS.filter(agent => state.agents?.[agent.id]);
+  const project = projectFolders(root).filter(folder => existsSync(join(folder.path, OWNED)));
+  return { global, project, agents: AGENTS.filter(agent => global.includes(agent) || project.some(folder => folder.agents.includes(agent))) };
+}
 
-  if (!needsInstall(agent, state)) return { ready: true };
-  ui.note(`Shared plugin copy: ${tilde(pluginHome())}\nRegister or repair only ${agent.label}. Already registered hosts also use this shared copy.\nNo project files, accounts, or model calls are part of installation.\nRemove later: ${self} remove ${agent.id}`
-    + (agent.id === 'grok' ? '\nGrok installation explicitly trusts the bundled plugin scripts (--trust).' : '')
-    + (agent.note ? `\n${agent.note}` : ''), 'Installation scope');
+// The scope a plain Enter selects: global gives hooks and the MCP server; a project that already
+// has a project copy keeps project scope.
+export const defaultScope = root => (installsHere(root).project.length ? 'project' : 'global');
 
-  if (!yes) {
-    const consent = await ui.confirm({ message: `Install Conquistador into ${agent.label}?`, initialValue: true });
-
-    if (ui.isCancel(consent) || !consent) return { ready: false, cancelled: true };
+// The steps a plan runs, for the confirmation and the dry run.
+function describePlan(targets, scope, root) {
+  if (scope === 'project') {
+    return projectFolders(root, targets).map(folder => `${folder.agents.map(agent => agent.label).join(', ')}: copy the conquistador skill → ${tilde(folder.path)}`);
   }
+  return targets.map(agent => (agent.how === 'skill'
+    ? `${agent.label}: copy the conquistador skill → ${tilde(join(agent.global(), 'conquistador'))}`
+    : `${agent.label}: ${agent.install(tilde(pluginHome())).map(item => (item.copy ? `copy plugin → ${tilde(item.copy())}` : `${item.command} ${item.args.join(' ')}`)).join('; ')}`));
+}
 
-  const spin = ui.spinner();
-  spin.start(`Installing into ${agent.label}`);
-  try { copyPayload(pluginHome()); } catch (error) {
-    spin.stop('Install failed', 2);
-    ui.log.error(error.message);
+function missingHosts(targets, scope) {
+  // A plugin host needs its own CLI for a global install. Skill folders need nothing.
+  const found = new Set(detectAgents().filter(agent => agent.found).map(agent => agent.id));
+  return scope === 'global' ? targets.filter(agent => agent.how !== 'skill' && agent.id !== 'cursor' && !found.has(agent.id)) : [];
+}
 
-    return { ready: false };
+export function setHooks(on) {
+  const file = join(home(), 'config.json');
+  let config = {};
+  try { config = JSON.parse(readFileSync(file, 'utf8')); } catch { /* New config. */ }
+  if (on && config.hooks !== false) return;
+  config.hooks = on;
+  mkdirSync(home(), { recursive: true });
+  writeFileSync(file, `${JSON.stringify(config, null, 2)}\n`);
+}
+
+// Install the chosen hosts in one scope. Returns the hosts that succeeded.
+export function installTargets(targets, { scope, root, hooks = true, log = () => {} }) {
+  const results = [];
+  if (scope === 'global' && targets.some(agent => agent.how !== 'skill')) {
+    try { copyPayload(pluginHome()); } catch (error) { return { results: targets.map(agent => ({ agent, result: { ok: false, error: error.message } })), staged: false }; }
   }
-
-  // Reinstall restores a registration removed through the host's own plugin manager.
-  const action = state.agents?.[agent.id] && agent.installed() ? 'update' : 'install';
-  const result = applyAgent(agent, action, { source: pluginHome() });
-  spin.stop(result.ok ? `Installed into ${agent.label}` : `Could not install into ${agent.label}`, result.ok ? 0 : 2);
-
-  if (!result.ok) {
-    ui.log.error(`${agent.label}: ${result.error}\n  Retry: ${self} add ${agent.id} --yes`);
-
-    return { ready: false };
+  if (!hooks) setHooks(false);
+  const done = new Set();
+  for (const agent of targets) {
+    const state = readState();
+    const action = scope === 'global' && state.agents?.[agent.id] && agent.installed() ? 'update' : 'install';
+    results.push({ agent, result: applyAgent(agent, action, { source: pluginHome(), scope, root, done, log }) });
   }
-
   const updated = readState();
-  writeState({ ...updated, removed: (updated.removed ?? []).filter(id => id !== agent.id) });
+  writeState({ ...updated, removed: (updated.removed ?? []).filter(id => !results.some(item => item.result.ok && item.agent.id === id)) });
+  return { results, staged: true };
+}
 
-  return { ready: true };
+async function chooseTargets(ui, options) {
+  if (options.providers) return AGENTS.filter(agent => options.providers.includes(agent.id));
+  const state = readState();
+  const found = detectAgents().filter(agent => agent.found && !(state.removed ?? []).includes(agent.id));
+  if (options.yes) return found;
+  ui.note(found.length ? found.map(agent => `${agent.label.padEnd(20)} ${tilde(agent.foundAt)}`).join('\n') : 'No supported agent found on PATH or in your home folder.', 'Detected agents');
+  if (found.length) {
+    const mode = await ui.select({ message: 'Install for', options: [{ value: 'keep', label: 'Keep these', hint: found.map(agent => agent.id).join(', ') }, { value: 'customize', label: 'Customize…' }] });
+    if (ui.isCancel(mode)) return null;
+    if (mode === 'keep') return found;
+  }
+  const ids = await ui.multiselect({ message: 'Select agents (space to toggle)', options: AGENTS.map(agent => ({ value: agent.id, label: agent.label, hint: agent.how === 'skill' ? 'skill' : 'plugin' })), initialValues: found.map(agent => agent.id), required: true });
+  if (ui.isCancel(ids)) return null;
+  return AGENTS.filter(agent => ids.includes(agent.id));
+}
+
+// Detect, keep or customize, choose a scope, confirm, then install. Returns null when cancelled.
+async function setup(ui, options, root) {
+  const targets = await chooseTargets(ui, options);
+  if (targets === null) return null;
+  if (!targets.length) {
+    ui.note(`Install an agent, then run ${self} again. Or name one: ${self} --providers=claude`, 'No agent selected');
+    return { agents: [] };
+  }
+  let scope = options.scope ?? (options.yes ? defaultScope(root) : null);
+  if (!scope) {
+    scope = await ui.select({ message: 'Install location', initialValue: defaultScope(root), options: [
+      { value: 'global', label: 'Global', hint: `${tilde(homedir())}; adds hooks and the MCP server where the agent supports them` },
+      { value: 'project', label: 'Project', hint: `${tilde(root)}; one skill folder you can commit` },
+    ] });
+    if (ui.isCancel(scope)) return null;
+  }
+  const missing = missingHosts(targets, scope);
+  if (missing.length) {
+    ui.note(`Not found on PATH: ${missing.map(agent => agent.command).join(', ')}. Install that agent first, or use --scope=project.`, 'Agent not found');
+    return { agents: [] };
+  }
+  const plan = describePlan(targets, scope, root);
+  ui.note([...plan, '', options.hooks ? 'Hooks: on for plugin installs (turn off with --no-hooks).' : 'Hooks: off.', `Remove later: ${self} remove`,
+    ...(targets.some(agent => agent.id === 'grok') && scope === 'global' ? ['Grok installation trusts the bundled plugin scripts (--trust).'] : [])].join('\n'), `Install Conquistador ${version} (${scope})`);
+  if (!options.yes) {
+    const consent = await ui.confirm({ message: 'Install now?', initialValue: true });
+    if (ui.isCancel(consent) || !consent) return null;
+  }
+  const spin = ui.spinner();
+  spin.start('Installing');
+  const { results } = installTargets(targets, { scope, root, hooks: options.hooks });
+  const failed = results.filter(item => !item.result.ok);
+  spin.stop(failed.length ? 'Installed with problems' : 'Installed', failed.length ? 2 : 0);
+  for (const { agent, result } of results) {
+    if (result.ok) ui.log.info(`✓ ${agent.label}`);
+    else ui.log.error(`${agent.label}: ${result.error}\n  Retry: ${self} --providers=${agent.id} --scope=${scope} -y`);
+  }
+  for (const agent of results.filter(item => item.result.ok).map(item => item.agent)) if (agent.note && scope === 'global') ui.log.warn(agent.note);
+  return { agents: results.filter(item => item.result.ok).map(item => item.agent), scope, failed: failed.length };
+}
+
+// Repair the selected host when its install drifted. Returns false when the user declines or repair fails.
+async function repair(ui, agent, root, { yes = false } = {}) {
+  const state = readState();
+  const folder = projectFolders(root, [agent])[0].path;
+  const scope = state.agents?.[agent.id] ? 'global' : 'project';
+  const stale = scope === 'global' ? needsInstall(agent, state) : !skillCurrent(folder);
+  if (!stale) return true;
+  ui.note(`${agent.label} needs a repair (${scope} install). Run ${self} doctor for details.`, 'Repair');
+  if (!yes) {
+    const consent = await ui.confirm({ message: `Repair Conquistador for ${agent.label}?`, initialValue: true });
+    if (ui.isCancel(consent) || !consent) return false;
+  }
+  const { results } = installTargets([agent], { scope, root });
+  if (!results[0].result.ok) { ui.log.error(`${agent.label}: ${results[0].result.error}\n  Retry: ${self} --providers=${agent.id} --scope=${scope} -y`); return false; }
+  return true;
 }
 
 async function pickTask(ui, cwd) {
@@ -123,33 +224,55 @@ async function pickAgent(ui, ready, wanted) {
   return agent;
 }
 
+// A project without GROWTH.md starts with `/conquistador init`.
+export const needsInit = cwd => isProject(cwd) && !existsSync(join(projectRoot(cwd), 'GROWTH.md'));
+export const initPrompt = agent => (agent.slash ? `${agent.slash}init` : 'Use Conquistador: run init to record PRODUCT.md and GROWTH.md for this project.');
+
 // A5: non-TTY and explicit dry-run are read-only, even when a terminal is present.
 // Do not probe host versions/registration or copy to the clipboard in a preview.
-function printOnly(task, wanted, cwd, { dryRun = false, noOpen = false } = {}) {
+function printOnly(options, cwd) {
+  const { task, wanted, dryRun = false, noOpen = false } = options;
+  const root = projectRoot(cwd);
   const state = readState();
-  const found = detectAgents().filter(agent => agent.found && (!(state.removed ?? []).includes(agent.id) || agent.id === wanted));
-  const agent = AGENTS.find(item => item.id === wanted)
-    ?? found.find(item => item.id === state.lastAgent)
-    ?? (found.length === 1 ? found[0] : null);
-
-  if (!agent) {
-    console.log(`Choose a target with --in AGENT (${(found.length ? found : AGENTS).map(item => item.id).join(', ')}). No files changed or agent opened.`);
-
+  const detected = detectAgents().filter(agent => agent.found);
+  const found = detected.filter(agent => !(state.removed ?? []).includes(agent.id) || agent.id === wanted);
+  const targets = options.providers ? AGENTS.filter(agent => options.providers.includes(agent.id)) : wanted ? AGENTS.filter(agent => agent.id === wanted) : found;
+  const scope = options.scope ?? defaultScope(root);
+  console.log(`${dryRun ? 'Dry run. ' : ''}Conquistador ${version}\nDetected: ${detected.length ? detected.map(agent => `${agent.label} (${tilde(agent.foundAt)})`).join(', ') : 'none'}`);
+  if (!targets.length) {
+    console.log(`Choose agents with --providers=NAME[,NAME] (${AGENTS.map(item => item.id).join(', ')}). No files changed or agent opened.`);
     return 0;
   }
-
-  console.log(`${dryRun ? 'Dry run. ' : ''}Target: ${agent.label}. Shared plugin: ${tilde(pluginHome())}.\nHost registration and hook trust are not checked in this preview.\nInstall or repair explicitly: ${self} add ${agent.id} --yes\nRemove: ${self} remove ${agent.id}`);
-
+  console.log(`Scope: ${scope}${options.scope ? '' : ' (default)'}\nPlan:\n${describePlan(targets, scope, root).map(line => `  ${line}`).join('\n')}\nHooks: ${options.hooks ? 'on' : 'off'}`);
+  const agent = AGENTS.find(item => item.id === wanted) ?? targets.find(item => item.id === state.lastAgent) ?? targets[0];
   if (!noOpen) {
-    const prompt = promptFor(agent, task || startsFor()[0], cwd);
+    const prompt = task ? promptFor(agent, task, cwd) : needsInit(cwd) ? initPrompt(agent) : promptFor(agent, startsFor()[0], cwd);
     const launch = agent.open(prompt, { preview: true });
     console.log(launch ? `Planned launch (after installation):\n  ${commandLine(launch)}` : `Paste this into ${agent.label}:\n  ${prompt}`);
-
     if (agent.id === 'claude-code' && process.env.CONQUISTADOR_PREFILL !== 'off') console.log('Claude preview assumes --prefill support; actual launch checks the installed version.');
   }
-
+  console.log(dryRun || !options.yes ? `To install: ${self} --providers=${targets.map(item => item.id).join(',')} --scope=${scope} -y` : '');
   console.log('No files changed, commands executed, or agent opened.');
   return 0;
+}
+
+// Non-interactive install: -y without a terminal installs and stops before opening an agent.
+function installOnly(options, cwd) {
+  const root = projectRoot(cwd);
+  const state = readState();
+  const targets = options.providers ? AGENTS.filter(agent => options.providers.includes(agent.id))
+    : detectAgents().filter(agent => agent.found && !(state.removed ?? []).includes(agent.id));
+  if (!targets.length) { console.error(`No supported agent found. Name one: ${self} --providers=claude -y`); return 1; }
+  const scope = options.scope ?? defaultScope(root);
+  const missing = missingHosts(targets, scope);
+  if (missing.length) { console.error(`Not found on PATH: ${missing.map(agent => agent.command).join(', ')}. Install that agent first, or use --scope=project.`); return 1; }
+  console.log(`Installing Conquistador ${version} (${scope}) for ${targets.map(agent => agent.label).join(', ')}.`);
+  const { results } = installTargets(targets, { scope, root, hooks: options.hooks, log: line => console.log(`  $ ${line}`) });
+  for (const { agent, result } of results) console.log(result.ok ? `  ✓ ${agent.label}` : `  ✗ ${agent.label}: ${result.error}`);
+  const ok = results.filter(item => item.result.ok).map(item => item.agent);
+  const next = ok.find(agent => agent.slash) ?? ok[0];
+  if (next) console.log(`\nNext: start ${next.label} and ${next.slash ? 'type' : 'say'}: ${needsInit(cwd) ? initPrompt(next) : next.slash ? next.slash.trim() : 'Use Conquistador.'}`);
+  return results.some(item => !item.result.ok) ? 1 : 0;
 }
 
 // Hand the terminal to the agent and exit with its code. Node has no exec(), so the parent waits
@@ -183,8 +306,9 @@ async function copy(value) {
 // Validate before detecting hosts, opening a UI, or writing state. `--` quotes task words
 // that begin with a dash; `task` supplies an unambiguous route for one-word tasks.
 export function parseStart(args) {
-  const options = { wanted: null, dryRun: false, noOpen: false, yes: false, task: '' };
+  const options = { wanted: null, dryRun: false, noOpen: false, yes: false, task: '', providers: null, scope: null, hooks: true };
   const words = [];
+  const value = (arg, name, index) => (arg === name ? args[index + 1] : arg.slice(name.length + 1));
 
   for (let index = 0; index < args.length; index += 1) {
     const arg = args[index];
@@ -193,15 +317,26 @@ export function parseStart(args) {
 
     if (arg === '--in' || arg.startsWith('--in=')) {
       if (options.wanted !== null) throw Error('Use --in only once.');
-      const value = arg === '--in' ? args[++index] : arg.slice('--in='.length);
+      const name = value(arg, '--in', index);
+      if (arg === '--in') index += 1;
 
-      if (!value || value.startsWith('-')) throw Error('--in requires an agent name. Example: --in codex');
+      if (!name || name.startsWith('-')) throw Error('--in requires an agent name. Example: --in codex');
 
-      if (!AGENTS.some(agent => agent.id === value)) throw Error(`Unknown agent: ${value}. Choose from: ${AGENTS.map(agent => agent.id).join(', ')}.`);
-      options.wanted = value;
+      if (!agentId(name)) throw Error(`Unknown agent: ${name}. Choose from: ${AGENTS.map(agent => agent.id).join(', ')}.`);
+      options.wanted = agentId(name);
+    } else if (arg === '--providers' || arg.startsWith('--providers=')) {
+      if (options.providers !== null) throw Error('Use --providers only once.');
+      options.providers = parseProviders(value(arg, '--providers', index));
+      if (arg === '--providers') index += 1;
+    } else if (arg === '--scope' || arg.startsWith('--scope=')) {
+      const scope = value(arg, '--scope', index);
+      if (arg === '--scope') index += 1;
+      options.scope = normalizeScope(scope);
+      if (!options.scope) throw Error(`Unknown scope: ${scope ?? ''}. Use --scope=project or --scope=global.`);
     } else if (arg === '--dry-run') options.dryRun = true;
     else if (arg === '--no-open') options.noOpen = true;
-    else if (arg === '--yes') options.yes = true;
+    else if (arg === '--no-hooks') options.hooks = false;
+    else if (arg === '--yes' || arg === '-y') options.yes = true;
     else if (arg.startsWith('-')) throw Error(`Unknown start option: ${arg}. Use conquistador help --all.`);
     else words.push(arg);
   }
@@ -224,64 +359,79 @@ export async function runStart(args = [], { cwd = process.cwd(), tty = process.s
 
   const { wanted, task, dryRun, noOpen, yes } = options;
 
-  if (dryRun || !tty) return printOnly(task, wanted, cwd, options);
+  if (dryRun || (!tty && !yes)) return printOnly(options, cwd);
+  if (!tty) return installOnly(options, cwd);
   const ui = suppliedUi ?? await import('./vendor/clack.mjs');
   ui.intro(`Conquistador ${version}`);
-  const state = readState();
-  const found = detectAgents().filter(agent => agent.found && (!(state.removed ?? []).includes(agent.id) || agent.id === wanted));
+  const root = projectRoot(cwd);
+  let here = installsHere(root);
+  // Flags, a first run, or an agent that is not installed here start the installer.
+  const install = options.providers || options.scope || !options.hooks || !here.agents.length || (wanted && !here.agents.some(agent => agent.id === wanted));
 
-  if (!found.length || wanted && !found.some(agent => agent.id === wanted)) {
-    ui.note(wanted ? `${AGENTS.find(agent => agent.id === wanted).label} was not found. Install that agent first, then retry with --in ${wanted}.`
-      : `Install an agent, then run ${self} again: Claude Code, Codex, Cursor, GitHub Copilot CLI, or Grok CLI.\nOther routes: https://github.com/forsvn-labs/conquistador/blob/private-alpha/INSTALL.md`, 'No selected agent found');
-    ui.outro('Nothing installed.');
-    return 1;
-  }
+  if (install) {
+    const result = await setup(ui, wanted && !options.providers ? { ...options, providers: [wanted] } : options, root);
 
-  const agent = await pickAgent(ui, found, wanted);
-
-  if (!agent) {
-    ui.cancel('Nothing installed or opened.');
-
-    return 130;
-  }
-
-  const installed = await ensureInstalled(ui, agent, { yes });
-
-  if (!installed.ready) {
-    if (installed.cancelled) {
+    if (result === null) {
       ui.cancel('Nothing installed or opened.');
 
       return 130;
     }
 
-    ui.outro('Installation needs attention. No agent opened.');
+    if (!result.agents.length) {
+      ui.outro('Nothing installed. No agent opened.');
 
-    return 1;
+      return 1;
+    }
+    here = installsHere(root);
   }
 
-  ui.log.info(`Local files checked for ${agent.label}. Host loading, hook trust, and task quality still need a session check.`);
+  const state = readState();
+  const ready = detectAgents().filter(agent => agent.found && here.agents.some(item => item.id === agent.id) && (!(state.removed ?? []).includes(agent.id) || agent.id === wanted));
 
   if (noOpen) {
-    ui.outro(`Installed for ${agent.label}. Start a new session and use /conquistador.`);
+    ui.outro(`Installed. Start a new agent session and type ${needsInit(cwd) ? '/conquistador init' : '/conquistador'}.`);
 
     return 0;
   }
 
-  const chosen = task || await pickTask(ui, cwd);
+  if (!ready.length) {
+    ui.outro(`Installed. Start your agent and type ${needsInit(cwd) ? '/conquistador init' : '/conquistador'}.`);
+
+    return 0;
+  }
+
+  const agent = await pickAgent(ui, ready, wanted);
+
+  if (!agent) {
+    ui.cancel('Nothing opened.');
+
+    return 130;
+  }
+
+  if (!install && !await repair(ui, agent, root, { yes })) {
+    ui.outro(`Installation needs attention. No agent opened. Run ${self} doctor.`);
+
+    return 1;
+  }
+
+  const init = !task && needsInit(cwd);
+  const chosen = task || (init ? 'init' : await pickTask(ui, cwd));
   if (!chosen) { ui.cancel(`Nothing opened. Run ${self} to start a task.`); return 130; }
 
   writeState({ ...readState(), lastAgent: agent.id });
-  const prompt = promptFor(agent, chosen, cwd);
-  const [{ createBrief }, { SPECIALISTS }] = await Promise.all([import('./brief.mjs'), import('./tour.mjs')]);
-  const brief = createBrief(chosen, { force: true });
+  const prompt = init ? initPrompt(agent) : promptFor(agent, chosen, cwd);
 
-  if (brief.action === 'brief' && brief.methods.length) ui.log.info(`${brief.methods.map(method => SPECIALISTS[method.name] ?? method.label).join(', ')}. Requests ${brief.must.length} playbooks first.`);
-  if (agent.note) ui.log.warn(agent.note);
+  if (init) ui.log.info('No GROWTH.md here yet. Init records your product and growth context first.');
+  else {
+    const [{ createBrief }, { SPECIALISTS }] = await Promise.all([import('./brief.mjs'), import('./tour.mjs')]);
+    const brief = createBrief(chosen, { force: true });
+    if (brief.action === 'brief' && brief.methods.length) ui.log.info(`${brief.methods.map(method => SPECIALISTS[method.name] ?? method.label).join(', ')}. Requests ${brief.must.length} playbooks first.`);
+  }
   const launch = agent.open(prompt);
   if (!launch) {
     const copied = await copy(prompt);
-    ui.note(prompt, copied ? `Paste this into the ${agent.label} agent chat (copied)` : `Paste this into the ${agent.label} agent chat`);
-    ui.outro('Install cursor-agent to open Cursor from here next time.');
+    ui.note(prompt, copied ? `Paste this into ${agent.label} (copied)` : `Paste this into ${agent.label}`);
+    ui.outro(`Start ${agent.label}, then paste.`);
     return 0;
   }
   ui.outro(launch.sends ? `Opening ${agent.label}. It starts right away.` : `Opening ${agent.label}. Press Enter to start.`);
