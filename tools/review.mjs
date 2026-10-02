@@ -458,7 +458,8 @@ function lavishCommand(args) {
   return ['npm', ['exec', '--yes', '--ignore-scripts', `--package=${LAVISH_PACKAGE}`, '--', 'lavish-axi', ...args]];
 }
 function runLavish(session, args, { inherit = false } = {}) {
-  const env = { ...process.env, LAVISH_AXI_TELEMETRY: '0', LAVISH_AXI_STATE_DIR: session.stateDir, LAVISH_AXI_PORT: String(session.port) };
+  // Lavish also binds a Tailscale address when Tailscale runs; an explicit host keeps it on loopback.
+  const env = { ...process.env, LAVISH_AXI_TELEMETRY: '0', LAVISH_AXI_HOST: '127.0.0.1', LAVISH_AXI_STATE_DIR: session.stateDir, LAVISH_AXI_PORT: String(session.port) };
   const [command, commandArgs] = lavishCommand(args);
   // A tool directory outside the project keeps a project executable from shadowing the pinned CLI.
   const cwd = join(home(), 'lavish');

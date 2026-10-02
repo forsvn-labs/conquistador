@@ -132,7 +132,7 @@ headline: Invoicing for freelance designers
 
 # Launch day
 
-Freelance designers spend their Fridays chasing invoices. Today we ship automatic reminders that go out on the due date, so you can get back to design work. Try it free.
+Freelance designers spend their Fridays chasing invoices. Today we ship automatic reminders that go out on the due date, so you can get back to design work. Reminders stop the moment a client pays, and every reminder uses your own words. Try it free.
 
 ## Playbooks applied
 

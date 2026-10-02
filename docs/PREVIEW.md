@@ -36,7 +36,8 @@ stay in `.conquistador/review/`.
 ## HTML in Lavish
 
 Review runs `lavish-axi@0.1.80` through `bunx`, or `npm exec` when Bun is absent. It sets
-`LAVISH_AXI_TELEMETRY=0` and gives each session its own state directory and free port. Nothing is
+`LAVISH_AXI_TELEMETRY=0` and `LAVISH_AXI_HOST=127.0.0.1` (Lavish otherwise also binds a Tailscale
+address), and gives each session its own state directory and free port. Nothing is
 installed globally. `review poll` is Lavish's long poll; keep it running in the foreground.
 
 The artifact kit has templates for an ad set, social posts, an email, a landing
