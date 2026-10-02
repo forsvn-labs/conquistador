@@ -126,7 +126,8 @@ async function proofHealthy(baseUrl) {
   } catch { return false; }
 }
 
-// One Proof server per project, detached, on two free loopback ports. Only local settings pass in.
+// One Proof server per project, detached, on a free loopback port. Only local settings pass in.
+// Proof serves collaboration on /ws of the same port.
 async function ensureServer(project) {
   const folder = join(stateDir(project), 'proof');
   const recordPath = join(folder, 'server.json');
@@ -134,14 +135,13 @@ async function ensureServer(project) {
   if (record && await proofHealthy(record.baseUrl)) return record;
   const dir = installProof();
   mkdirSync(join(folder, 'snapshots'), { recursive: true });
-  const [port, collabPort] = [await freePort(), await freePort()];
-  if (port === collabPort) throw new Error('Could not get two free loopback ports.');
+  const port = await freePort();
   const baseUrl = `http://127.0.0.1:${port}`;
   const pass = ['PATH', 'Path', 'HOME', 'USERPROFILE', 'SystemRoot', 'TMPDIR', 'TEMP', 'TMP', 'LANG'];
   const env = Object.fromEntries(pass.filter(key => process.env[key] !== undefined).map(key => [key, process.env[key]]));
   Object.assign(env, {
-    NODE_ENV: 'production', PORT: String(port), COLLAB_PORT: String(collabPort), COLLAB_HOST: '127.0.0.1',
-    COLLAB_PUBLIC_BASE_URL: `ws://127.0.0.1:${collabPort}`, DATABASE_PATH: join(folder, 'proof.db'),
+    NODE_ENV: 'production', PORT: String(port), COLLAB_HOST: '127.0.0.1',
+    COLLAB_PUBLIC_BASE_URL: `ws://127.0.0.1:${port}/ws`, DATABASE_PATH: join(folder, 'proof.db'),
     SNAPSHOT_DIR: join(folder, 'snapshots'), PROOF_BUILD_SHA: PROOF_COMMIT, PROOF_ENV: 'local', PROOF_PUBLIC_ORIGIN: baseUrl,
     PROOF_CORS_ALLOW_ORIGINS: baseUrl, PROOF_SHARE_MARKDOWN_AUTH_MODE: 'none', PROOF_LEGACY_CREATE_MODE: 'allow',
     COLLAB_PROJECTION_REPAIR_WORKER_ENABLED: 'true', COLLAB_ON_DEMAND_PROJECTION_REPAIR_ENABLED: 'true',
@@ -155,7 +155,7 @@ async function ensureServer(project) {
   const deadline = Date.now() + 60_000;
   while (Date.now() < deadline) {
     if (await proofHealthy(baseUrl)) {
-      const started = { pid: child.pid, baseUrl, port, collabPort, commit: PROOF_COMMIT, startedAt: new Date().toISOString() };
+      const started = { pid: child.pid, baseUrl, port, commit: PROOF_COMMIT, startedAt: new Date().toISOString() };
       writePrivate(recordPath, started);
       return started;
     }

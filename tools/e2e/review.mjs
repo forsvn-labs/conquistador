@@ -176,9 +176,14 @@ if (binary && session) {
 let approvedSha = '';
 if (!browser) {
   const reason = !binary ? 'no Chrome or Chromium found; set CHROME_PATH' : !session ? 'no review session' : `the browser did not start (${browserError})`;
-  for (const [id, name] of [['R5', 'the review page shows the LinkedIn channel preview'], ['R6', 'the Playbooks applied panel lists the final section'], ['R7', 'the reviewer approves in the browser'], ['R8', 'the stamp hash equals the SHA-256 of the exact document text']]) notRun(id, name, reason);
+  for (const [id, name] of [['R5a', 'the Proof editor shows the document text'], ['R5', 'the review page shows the LinkedIn channel preview'], ['R6', 'the Playbooks applied panel lists the final section'], ['R7', 'the reviewer approves in the browser'], ['R8', 'the stamp hash equals the SHA-256 of the exact document text']]) notRun(id, name, reason);
 } else {
+  // The test reviewer's display name, so Proof's first-visit name dialog does not cover the page.
+  await browser.go(new URL('/', url).href);
+  await browser.evaluate("localStorage.setItem('proof-share-viewer-name', 'E2E Reviewer'); true");
   await browser.go(url);
+  const shown = await browser.until("(document.querySelector('#editor .ProseMirror')?.innerText ?? '').includes('Freelance designers')", 45_000);
+  check('R5a', 'the Proof editor shows the document text', shown, await browser.evaluate("(document.querySelector('#editor')?.innerText ?? '').slice(0, 200) + ' | status: ' + (document.body.innerText.match(/Connect\\w*|Offline|Live/)?.[0] ?? '')").catch(error => error.message));
   const panel = await browser.until("document.querySelector('.cq-li-text') !== null");
   const preview = panel ? await browser.evaluate("document.querySelector('.cq-li-text').textContent") : '';
   check('R5', 'the review page shows the LinkedIn channel preview', panel && preview.startsWith('Launch day') && preview.endsWith('…'), preview);
@@ -219,6 +224,7 @@ if (approvedSha) {
   check('R10', 'review sync of an edit clears the approval stamp', synced.status === 0 && afterSync.approval?.state === 'cleared' && afterSync.approval.cleared_reason === 'document changed' && afterSync.approval.current_sha256 !== approvedSha, synced.stdout + synced.stderr + JSON.stringify(afterSync.approval));
   if (browser) {
     await browser.go(url);
+    await browser.until("(document.querySelector('#editor .ProseMirror')?.innerText ?? '').includes('14-day trial')", 30_000);
     await browser.until("document.querySelector('.cq-panel') !== null");
     await browser.evaluate("document.querySelector('[data-tab=approval]').click()");
     await browser.until("document.querySelector('.cq-stamp.cq-warn') !== null", 10_000);
