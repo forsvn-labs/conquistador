@@ -76,6 +76,9 @@ if (preflight !== null) {
 } else if (args[0] === "runtime") {
   const { runCli } = await import("../lib/main.js");
   process.exitCode = await runCli(args.slice(1));
+} else if (args[0] === "check") {
+  const { runCheck } = await import("../../tools/check/index.mjs");
+  process.exitCode = await runCheck(args.slice(1));
 } else if (args[0] === "hooks") {
   try {
     const { runHooks } = await import("../../tools/hooks-cli.mjs");
