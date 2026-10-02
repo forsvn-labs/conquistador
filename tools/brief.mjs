@@ -265,7 +265,8 @@ function lexicalMethods(prompt, index, platforms, limit = 2) {
   if (!query.length) return [];
   // Commands and plays compete on the same words; a play keeps its own playbook folder.
   const candidates = [
-    ...Object.values(index.contract.methods).map(method => ({ method, words: [method.label, method.description, ...method.intents, ...(method.aliases ?? [])] })),
+    // Meta commands (init, check, connect, ...) run only when invoked by name, never by word overlap.
+    ...Object.values(index.contract.methods).filter(method => !method.explicitOnly).map(method => ({ method, words: [method.label, method.description, ...method.intents, ...(method.aliases ?? [])] })),
     ...(index.contract.plays ?? []).map(play => ({ method: { ...play, play: true }, words: [play.label, play.description, ...play.intents] })),
   ];
   const scoredMethods = candidates.map(({ method, words: source }) => {

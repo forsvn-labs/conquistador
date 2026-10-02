@@ -66,12 +66,14 @@ async function tourChecks() {
   const unknown = AREAS.flatMap(area => area.methods.filter(name => !known.has(name) || !SPECIALISTS[name]));
   const fresh = existsSync(welcomePath()) && readFileSync(welcomePath(), 'utf8') === await welcomeMarkdown();
   const readme = readFileSync(join(root, 'README.md'), 'utf8');
-  const missing = AREAS.filter(area => !readme.includes(`| ${area.title} | ${area.covers} |`)).map(area => area.title);
+  // The README's Commands and Plays tables list exactly the commands and plays that route.
+  const listed = new Set([...readme.matchAll(/`([a-z]+)`/g)].map(match => match[1]));
+  const missing = [...known].filter(name => !listed.has(name)).map(name => `README does not list ${name}`);
   const row = (task, problems) => ({ area: 'tour', task, pass: !problems.length, problems, methods: [], must: [] });
   return [
     row('Tour names only real commands and plays', unknown.map(name => `unknown command ${name}`)),
     row('welcome.md matches tools/tour.mjs', fresh ? [] : ['stale: run node tools/tour.mjs --write (O6)']),
-    row('README area table matches tools/tour.mjs', missing.map(title => `README row differs: ${title}`)),
+    row('README lists every command and play', missing),
   ];
 }
 

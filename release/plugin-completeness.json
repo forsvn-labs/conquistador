@@ -4780,7 +4780,7 @@
     },
     {
       "path": "tools/brief.mjs",
-      "sha256": "8714cb09dea92f32b7b1c8a318996f6de06dc20d85b9ce1f3e773b6d631b8cb0"
+      "sha256": "78d24026d069f6910289e4f846d320a594ee7b494bdcd6788aee5d653a80a311"
     },
     {
       "path": "tools/check/channels.mjs",
