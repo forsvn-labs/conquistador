@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Landing section: [page]</title>
+<style>
+  :root {
+    --brand-primary: #1f5f4a; --brand-on-primary: #ffffff; --brand-ink: #1c1f1d; --brand-muted: #5f6661;
+    --brand-canvas: #f4f3ee; --brand-surface: #ffffff; --brand-line: #dedcd3;
+    --brand-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; --brand-heading-font: var(--brand-font);
+    --brand-radius: 12px;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--brand-canvas); color: var(--brand-ink); font: 16px/1.5 var(--brand-font); }
+  main { max-width: 1280px; margin: 0 auto; padding: 32px 24px 48px; }
+  .label { font: 600 13px/1.3 var(--brand-font); text-transform: uppercase; letter-spacing: .04em; color: var(--brand-muted); margin: 0 0 8px; }
+  .views { display: grid; grid-template-columns: minmax(0, 1fr) 390px; gap: 32px; align-items: start; }
+  .device { background: var(--brand-surface); border: 1px solid var(--brand-line); border-radius: var(--brand-radius); overflow: hidden; }
+  .mobile { max-width: 390px; }
+  .hero { padding: 56px 48px; display: grid; gap: 16px; }
+  .mobile .hero { padding: 32px 20px; }
+  .eyebrow { color: var(--brand-primary); font-weight: 600; margin: 0; }
+  .hero h1 { font: 700 44px/1.1 var(--brand-heading-font); margin: 0; max-width: 18ch; }
+  .mobile .hero h1 { font-size: 30px; }
+  .sub { color: var(--brand-muted); font-size: 18px; margin: 0; max-width: 52ch; }
+  .actions { display: flex; flex-wrap: wrap; gap: 12px; }
+  .button { padding: 12px 20px; border-radius: 8px; background: var(--brand-primary); color: var(--brand-on-primary); font-weight: 600; }
+  .ghost { background: transparent; color: var(--brand-ink); border: 1px solid var(--brand-line); }
+  .proof { display: flex; flex-wrap: wrap; gap: 12px; color: var(--brand-muted); font-size: 14px; }
+  .proof span { padding: 6px 10px; border: 1px dashed var(--brand-line); border-radius: 6px; }
+  .benefits { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; padding: 0 48px 48px; }
+  .mobile .benefits { grid-template-columns: minmax(0, 1fr); padding: 0 20px 32px; }
+  .benefits div { padding: 16px; border: 1px solid var(--brand-line); border-radius: 10px; overflow-wrap: anywhere; }
+  .benefits b { display: block; margin-bottom: 4px; }
+  @media (max-width: 1000px) { .views { grid-template-columns: minmax(0, 1fr); } }
+</style>
+</head>
+<body>
+<main>
+  <div class="views">
+    <section>
+      <p class="label">Desktop · 1280</p>
+      <div class="device">
+        <div class="hero">
+          <p class="eyebrow">[Audience or category]</p>
+          <h1>[Outcome the reader gets, in their words]</h1>
+          <p class="sub">[How the product delivers it, and for whom. One sentence.]</p>
+          <div class="actions"><span class="button">[Primary call to action]</span><span class="button ghost">[Secondary action]</span></div>
+          <div class="proof"><span>[Customer logo]</span><span>[Customer logo]</span><span>[Proof point with source]</span></div>
+        </div>
+        <div class="benefits">
+          <div><b>[Benefit 1]</b>[What changes for the reader.]</div>
+          <div><b>[Benefit 2]</b>[What changes for the reader.]</div>
+          <div><b>[Benefit 3]</b>[What changes for the reader.]</div>
+        </div>
+      </div>
+    </section>
+    <section>
+      <p class="label">Mobile · 390</p>
+      <div class="device mobile">
+        <div class="hero">
+          <p class="eyebrow">[Audience or category]</p>
+          <h1>[Outcome the reader gets, in their words]</h1>
+          <p class="sub">[How the product delivers it, and for whom.]</p>
+          <div class="actions"><span class="button">[Primary call to action]</span></div>
+          <div class="proof"><span>[Proof point with source]</span></div>
+        </div>
+        <div class="benefits">
+          <div><b>[Benefit 1]</b>[What changes for the reader.]</div>
+          <div><b>[Benefit 2]</b>[What changes for the reader.]</div>
+          <div><b>[Benefit 3]</b>[What changes for the reader.]</div>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>
+</body>
+</html>

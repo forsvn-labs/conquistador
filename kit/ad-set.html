@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ad set: [campaign name]</title>
+<style>
+  :root {
+    --brand-primary: #1f5f4a; --brand-on-primary: #ffffff; --brand-ink: #1c1f1d; --brand-muted: #5f6661;
+    --brand-canvas: #f4f3ee; --brand-surface: #ffffff; --brand-line: #dedcd3;
+    --brand-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; --brand-heading-font: var(--brand-font);
+    --brand-radius: 12px;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--brand-canvas); color: var(--brand-ink); font: 15px/1.45 var(--brand-font); }
+  main { max-width: 1200px; margin: 0 auto; padding: 32px 24px 48px; }
+  h1 { font: 700 28px/1.2 var(--brand-heading-font); margin: 0 0 4px; }
+  .lede { color: var(--brand-muted); margin: 0 0 24px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr)); gap: 24px; align-items: start; }
+  .variant { min-width: 0; }
+  .variant h2 { font: 600 14px/1.3 var(--brand-font); text-transform: uppercase; letter-spacing: .04em; color: var(--brand-muted); margin: 0 0 8px; }
+  .ad { background: var(--brand-surface); border: 1px solid var(--brand-line); border-radius: var(--brand-radius); overflow: hidden; }
+  .ad-head { display: flex; gap: 10px; align-items: center; padding: 12px; }
+  .logo { width: 36px; height: 36px; border-radius: 50%; background: var(--brand-primary); flex: none; }
+  .ad-head b { display: block; }
+  .ad-head small { color: var(--brand-muted); }
+  .primary { padding: 0 12px 12px; overflow-wrap: anywhere; }
+  .media { display: grid; place-items: center; background: color-mix(in srgb, var(--brand-primary) 14%, var(--brand-surface)); color: var(--brand-muted); text-align: center; padding: 16px; }
+  .square { aspect-ratio: 1 / 1; } .story { aspect-ratio: 9 / 16; max-height: 560px; } .landscape { aspect-ratio: 1.91 / 1; }
+  .foot { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 12px; border-top: 1px solid var(--brand-line); }
+  .foot b, .foot small { display: block; overflow-wrap: anywhere; }
+  .foot small { color: var(--brand-muted); }
+  .cta { flex: none; padding: 8px 14px; border-radius: 8px; background: var(--brand-primary); color: var(--brand-on-primary); font-weight: 600; }
+  .specs { margin: 8px 0 0; padding: 0; list-style: none; color: var(--brand-muted); font-size: 13px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>[Campaign name]: ad set</h1>
+  <p class="lede">[Audience] · [Objective] · [Placement]. Review each variant; annotate any element.</p>
+  <section class="grid">
+    <article class="variant">
+      <h2>Variant A · Feed 1:1</h2>
+      <div class="ad">
+        <div class="ad-head"><span class="logo"></span><div><b>[Brand]</b><small>Sponsored</small></div></div>
+        <p class="primary">[Primary text. Keep the hook in the first 125 characters.]</p>
+        <div class="media square">[Image or video, 1080 × 1080]</div>
+        <div class="foot"><div><b>[Headline, 40 characters]</b><small>[Description, 30 characters]</small></div><span class="cta">[Learn more]</span></div>
+      </div>
+      <ul class="specs"><li>Angle: [angle]</li><li>Proof: [source in GROWTH.md]</li></ul>
+    </article>
+    <article class="variant">
+      <h2>Variant B · Story 9:16</h2>
+      <div class="ad">
+        <div class="ad-head"><span class="logo"></span><div><b>[Brand]</b><small>Sponsored</small></div></div>
+        <div class="media story">[Vertical video or image, 1080 × 1920. Keep text out of the top and bottom 14%.]</div>
+        <div class="foot"><div><b>[Headline]</b></div><span class="cta">[Sign up]</span></div>
+      </div>
+      <ul class="specs"><li>Angle: [angle]</li><li>Proof: [source in GROWTH.md]</li></ul>
+    </article>
+    <article class="variant">
+      <h2>Variant C · Landscape 1.91:1</h2>
+      <div class="ad">
+        <div class="ad-head"><span class="logo"></span><div><b>[Brand]</b><small>Sponsored</small></div></div>
+        <p class="primary">[Primary text]</p>
+        <div class="media landscape">[Image, 1200 × 628]</div>
+        <div class="foot"><div><b>[Headline]</b><small>[Display URL]</small></div><span class="cta">[Get started]</span></div>
+      </div>
+      <ul class="specs"><li>Angle: [angle]</li><li>Proof: [source in GROWTH.md]</li></ul>
+    </article>
+  </section>
+</main>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Social posts: [topic]</title>
+<style>
+  :root {
+    --brand-primary: #1f5f4a; --brand-on-primary: #ffffff; --brand-ink: #1c1f1d; --brand-muted: #5f6661;
+    --brand-canvas: #f4f3ee; --brand-surface: #ffffff; --brand-line: #dedcd3;
+    --brand-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; --brand-heading-font: var(--brand-font);
+    --brand-radius: 12px;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--brand-canvas); color: var(--brand-ink); font: 15px/1.45 var(--brand-font); }
+  main { max-width: 1200px; margin: 0 auto; padding: 32px 24px 48px; }
+  h1 { font: 700 28px/1.2 var(--brand-heading-font); margin: 0 0 24px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 360px), 1fr)); gap: 24px; align-items: start; }
+  .frame { min-width: 0; }
+  .frame h2 { font: 600 14px/1.3 var(--brand-font); text-transform: uppercase; letter-spacing: .04em; color: var(--brand-muted); margin: 0 0 8px; }
+  .post { background: var(--brand-surface); border: 1px solid var(--brand-line); border-radius: var(--brand-radius); padding: 14px; }
+  .who { display: flex; gap: 10px; align-items: center; margin-bottom: 8px; }
+  .avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--brand-primary); flex: none; }
+  .who b { display: block; } .who small { color: var(--brand-muted); }
+  .text { white-space: pre-line; overflow-wrap: anywhere; margin: 0; }
+  .fold { color: var(--brand-muted); }
+  .media { margin-top: 10px; display: grid; place-items: center; aspect-ratio: 16 / 9; border-radius: 10px; background: color-mix(in srgb, var(--brand-primary) 14%, var(--brand-surface)); color: var(--brand-muted); text-align: center; padding: 12px; }
+  .media.square { aspect-ratio: 1 / 1; border-radius: 0; margin: 0 -14px; }
+  .thread { display: flex; flex-direction: column; gap: 10px; }
+  .meta { margin-top: 8px; color: var(--brand-muted); font-size: 13px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>[Topic]: social posts</h1>
+  <section class="grid">
+    <article class="frame">
+      <h2>X · thread</h2>
+      <div class="thread">
+        <div class="post">
+          <div class="who"><span class="avatar"></span><div><b>[Brand]</b><small>[@handle] · now</small></div></div>
+          <p class="text">[Post 1. The hook. 280 characters or fewer; a link counts as 23.]</p>
+          <p class="meta">1/2</p>
+        </div>
+        <div class="post">
+          <div class="who"><span class="avatar"></span><div><b>[Brand]</b><small>[@handle] · now</small></div></div>
+          <p class="text">[Post 2. The proof and the link.]</p>
+          <p class="meta">2/2</p>
+        </div>
+      </div>
+    </article>
+    <article class="frame">
+      <h2>LinkedIn · post</h2>
+      <div class="post">
+        <div class="who"><span class="avatar"></span><div><b>[Author name]</b><small>[Headline] · now</small></div></div>
+        <p class="text">[First 210 characters show before "see more". Put the hook and the reason to keep reading here.]<span class="fold"> …see more</span></p>
+        <div class="media">[Document, image, or video]</div>
+      </div>
+    </article>
+    <article class="frame">
+      <h2>Instagram · feed</h2>
+      <div class="post">
+        <div class="who"><span class="avatar"></span><div><b>[handle]</b><small>[Location or audio]</small></div></div>
+        <div class="media square">[Image or carousel slide 1, 1080 × 1350]</div>
+        <p class="text" style="margin-top:10px"><b>[handle]</b> [Caption. The first 125 characters show before "more".]</p>
+      </div>
+    </article>
+  </section>
+</main>
+</body>
+</html>
