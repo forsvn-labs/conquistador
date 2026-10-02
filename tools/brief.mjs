@@ -8,6 +8,7 @@ import { homedir, tmpdir } from 'node:os';
 import { delimiter, dirname, extname, isAbsolute, join, posix, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { selectRequestContext } from './context-selection.mjs';
+import { contextFiles } from './context-files.mjs';
 import { explicitInvocation, normalizeRequest } from './request-text.mjs';
 import { loadRoutingContract } from './routing-contract.mjs';
 import { methodOwner } from './method-library.mjs';
@@ -298,7 +299,7 @@ export const START_CONTEXT = Object.freeze({
 const START_LEAD = /^\s*Use Conquistador:\s*/i;
 export const taskOf = prompt => Object.values(START_CONTEXT).reduce((rest, sentence) => rest.split(sentence).join(' '), prompt).replace(START_LEAD, '').trim();
 
-export function createBrief(input, { root = moduleRoot, playbooks, force = false } = {}) {
+export function createBrief(input, { root = moduleRoot, playbooks, force = false, cwd = process.cwd() } = {}) {
   if (typeof input !== 'string' || !input.trim()) throw Error('Describe the task.');
   // "Use Conquistador:" asks for Conquistador by name, so it counts as an explicit invocation.
   const invoked = START_LEAD.test(input);
@@ -445,6 +446,8 @@ export function createBrief(input, { root = moduleRoot, playbooks, force = false
     must: must.map(view),
     situational: situational.map(view),
     standards: ['quality.md', 'safety.md'].map(name => `${contract.parentPath}/standards/${name}`).map(path => ({ path, absolute: join(packageRoot, path) })),
+    // The project's PRODUCT.md and GROWTH.md come before any playbook (standards/context.md).
+    context: contextFiles(cwd).map(({ kind, path }) => ({ kind, path })),
   };
 }
 
@@ -467,6 +470,7 @@ export function formatReadingList(brief, { absolute = true, limit = 9000 } = {})
     lines.push('');
   }
   lines.push('READ IN FULL BEFORE YOU DRAFT (use your file-read tool; do not skim or guess their content):');
+  for (const item of brief.context ?? []) lines.push(`- ${item.path}  — project ${item.kind} context; your message, then GROWTH.md, then PRODUCT.md`);
   if (brief.play) lines.push(`- ${location(brief.play, absolute)}  — play: ${brief.play.label}`);
   for (const item of brief.methods) lines.push(`- ${location(item, absolute)}  — command: ${item.label}`);
   brief.must.forEach(item => lines.push(`- ${location(item, absolute)}  — ${clip(item.why)}`));
@@ -537,6 +541,7 @@ export function formatBriefPack(brief, { limit = LIMITS.packBytes } = {}) {
     brief.play ? `Play: ${brief.play.label} [${brief.play.name}]` : '',
     brief.play ? brief.play.steps.map(step => `${step.step}. ${step.command ?? step.method}${step.mode ? ` (mode ${step.mode})` : ''}${step.when ? ` — when ${step.when}` : ''}${step.for ? ` — for ${step.for}` : ''}${step.now ? ' ← start here' : ''}`).join('\n') : '',
     `Commands: ${brief.methods.map(item => `${item.label} [${item.name}]`).join(', ') || 'none; platform guidance only'}`,
+    brief.context?.length ? `Project context: read ${brief.context.map(item => item.path).join(' and ')} first; your message, then GROWTH.md, then PRODUCT.md.` : '',
     brief.platforms.length ? `Platforms named: ${brief.platforms.join(', ')}` : '',
     '',
     'Rules for this task:',
