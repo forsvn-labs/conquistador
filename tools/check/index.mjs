@@ -3,6 +3,7 @@
 // Human output goes to stderr; `--json` prints the findings array to stdout.
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { extname, join, relative, resolve, sep } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { channels, detectChannel, normalizeChannel } from './channels.mjs';
 import { extractDocument, scannableExtensions } from './extract.mjs';
 import { families, ruleById, rules } from './rules.mjs';
@@ -270,3 +271,6 @@ export async function runCheck(args, io = { stdout: process.stdout, stderr: proc
 }
 
 export { channels, families, rules, ruleById };
+
+// Plugin installs ship tools/check without the npm CLI: `node tools/check/index.mjs --json <target>`.
+if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) process.exitCode = await runCheck(process.argv.slice(2));

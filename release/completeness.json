@@ -839,6 +839,10 @@
       "sha256": "7945e09e0623af3fdc1eef2452ab91ea81228236e50113e59e2bc78978df006f"
     },
     {
+      "path": "conquistador/commands/check/COMMAND.md",
+      "sha256": "158059f40bce564b0934a75c37709d8b2783524b32d6a181d4e1f02215969bbe"
+    },
+    {
       "path": "conquistador/examples/content-improvement.md",
       "sha256": "7804a6c5d5d38090763a23136df2536f1111659c13e455d123e4ed87c0cc440f"
     },

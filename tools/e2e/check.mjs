@@ -231,6 +231,15 @@ try {
   rmSync(state, { recursive: true, force: true });
 }
 
+// 7. The catalog documents every rule.
+{
+  const catalog = readFileSync(join(root, 'docs/CHECK.md'), 'utf8');
+  const listed = JSON.parse(check(['--rules', '--json']).stdout).map(rule => rule.id);
+  const undocumented = listed.filter(id => !catalog.includes(`\`${id}\``));
+
+  record('docs/CHECK.md lists every rule', !undocumented.length, undocumented.length ? `missing: ${undocumented.join(', ')}` : `${listed.length} rules`);
+}
+
 // Report.
 const report = {
   createdAt: new Date().toISOString(),
