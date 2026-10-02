@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { mkdirSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import { homedir } from 'node:os';
 import { join } from 'node:path';
 
@@ -33,14 +33,15 @@ function shortcut(arg) {
 // Installation must work before runtime dependencies exist. Keep help and version
 // available even when the shell selected an unsupported Node.
 const helpOrVersion = args.includes('--help') || args.includes('-h') || args.includes('--version') || (args.length === 1 && args[0] === 'version');
-const supportedNode = Number(process.versions.node.split('.')[0]) >= 24;
+const [major, minor] = process.versions.node.split('.').map(Number);
+const supportedNode = major > 22 || (major === 22 && minor >= 18);
 const onboarding = args.length === 0 || args[0].startsWith('-') || args[0] === 'project';
 const preflight = helpOrVersion || supportedNode || !onboarding ? null : await (await import('../../tools/node-preflight.mjs')).nodePreflight();
 
 // The start flow, installer, and playbook commands come first; older per-project routes follow.
 // A first argument with a space is a task: `conquistador "plan our launch"` (same rule as front-door isStart).
-const task = args.length > 0 && (/\s/.test(args[0]) || ['task', '--in', '--no-open'].includes(args[0]) || args[0].startsWith('--in='));
-const frontDoor = preflight === null && (args.length === 0 || task || ['add', 'update', 'remove', 'agents', 'brief', 'playbooks', 'bot', 'tour', 'help', '--help', '-h'].includes(args[0]))
+const task = args.length > 0 && (/\s/.test(args[0]) || ['task', '--in', '--no-open', '--providers', '--scope', '-y', '--yes', '--no-hooks', '--dry-run'].includes(args[0]) || /^--(?:in|providers|scope)=/.test(args[0]));
+const frontDoor = preflight === null && (args.length === 0 || task || ['add', 'update', 'remove', 'agents', 'doctor', 'brief', 'playbooks', 'bot', 'tour', 'help', '--help', '-h'].includes(args[0]))
   ? await (await import('../../tools/front-door.mjs')).runFrontDoor(args) : null;
 if (preflight !== null) {
   process.exitCode = preflight;
@@ -92,6 +93,9 @@ if (preflight !== null) {
 } else if (args[0] === "connections") {
   const { run } = await import("../../hosts/executor/cli.mjs");
   process.exitCode = await run(args.slice(1));
+} else if (args[0] === "jobs" && !existsSync(new URL("../../hosts/eve/jobs.mjs", import.meta.url))) {
+  process.stderr.write("conquistador jobs needs a repository checkout: the npm package leaves the Eve runtime out.\nhttps://github.com/forsvn-labs/conquistador/tree/private-alpha/hosts/eve\n");
+  process.exitCode = 2;
 } else if (args[0] === "jobs") {
   const { run } = await import("../../hosts/eve/jobs.mjs");
   process.exitCode = await run(args.slice(1));

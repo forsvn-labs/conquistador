@@ -1,9 +1,11 @@
 #!/usr/bin/expect -f
 # The agent-first start, end to end, with real agents in an isolated home. No model is called:
 # every agent session is closed before a prompt is sent.
-#   1. Bare `conquistador` asks for one target, confirms installation, then asks for a task,
-#      and opens Claude Code with the task pre-filled. The pre-fill survives the trust screen (A3).
-#   2. Bare `conquistador` again skips install, remembers the agent, and takes a typed task.
+#   1. Bare `conquistador` shows the detected agents, keeps them, asks the scope, installs, and
+#      opens Claude Code with `/conquistador init` pre-filled (no GROWTH.md yet). The pre-fill
+#      survives the trust screen (A3).
+#   2. With GROWTH.md, bare `conquistador` skips install, remembers the agent, and takes a typed task.
+#   2b. `conquistador --scope=project` in a second project: customize, then one skill copy per folder.
 #   3. `conquistador "TASK" --in codex` opens Codex with the prompt as its argument (A8).
 #   4. Without a terminal it prints the command and never opens an agent (A5).
 #   5. Outside a project folder the prompt asks for the product first (A7).
@@ -62,28 +64,33 @@ proc drain {} { global transcript; expect -timeout 2 -re {.+} { append transcrip
 # Claude Code: Ctrl+C clears the input, then two more presses exit.
 proc quit_claude {} { for {set i 0} {$i < 3} {incr i} { send "\003"; sleep 0.5 } }
 
-# --- 1. First run ---------------------------------------------------------------------------
+# Claude Code asks once per folder whether to trust it. Wait for the whole screen, then accept.
+proc trust {} { step {cancel}; sleep 1.5; send "\033\[B"; sleep 0.5; send "\r" }
+
+# --- 1. First run: keep the detected agents, global scope ------------------------------------
 cd $project
 set transcript ""
 eval spawn $cli
 stty rows 50 columns 140 < $spawn_out(slave,name)
+step {Install for}
+record "first run shows the detected agents with their paths" [expr {[has "Detected agents"] && [has "Claude Code"]}] ""
+send "\r"
+step {Install location}
+send "\r"
+step {Install now\?}
+send "\r"
+# Every detected plugin manager runs now; that can take a few minutes.
+set timeout 600
 step {Open in}
+set timeout 60
+record "first run installs every kept agent" [expr {[has "✓ Claude Code"] && [has "✓ Codex"]}] ""
 send "\r"
-step {Install Conquistador into Claude Code\?}
-send "\r"
-step {What should we work on\?}
-record "first run installs only the selected agent" [has "Installed into Claude Code"] ""
-send "\r"
-# Wait for the whole trust screen and its input handler before answering it.
-step {cancel}
-sleep 1.5
-send "\033\[B"; sleep 0.5; send "\r"
+trust
 step {Pre-filled}
 drain
 set first [plain $transcript]
-record "Claude Code opens with the task pre-filled" [has "/conquistador Draft one welcome email for new trial users; do not send it."] ""
-record "prompt tells the agent to learn from the folder" [has "Learn the product from this folder first."] ""
-record "task is not sent (no model call)" [has "review before pressing Enter"] ""
+record "a project without GROWTH.md opens with /conquistador init pre-filled" [has "/conquistador init"] ""
+record "init is not sent (no model call)" [has "review before pressing Enter"] ""
 # Keys typed now must reach the agent, not the waiting Conquistador process.
 send " KEYCHECK"
 drain
@@ -93,12 +100,13 @@ finish
 record "typed keys reach the agent" [expr {[has "KEYCHECK"] && [has "Press Ctrl-C again to exit"]}] ""
 set run1 $transcript
 
-# --- 2. Second run: no install, remembered agent, typed task --------------------------------
+# --- 2. Second run: GROWTH.md exists, no install, remembered agent, typed task ---------------
+set fh [open $project/GROWTH.md w]; puts $fh "# Growth\n\n## Goals and metrics\n\nReach 200 paying designers."; close $fh
 set transcript ""
 eval spawn $cli
 stty rows 50 columns 140 < $spawn_out(slave,name)
 step {What should we work on\?}
-record "second run skips install" [expr {![has "Installed into"]}] ""
+record "second run skips install" [expr {![has "Install now"]}] ""
 # "Something else" is the last option.
 send "\033\[A"; sleep 0.2; send "\r"
 step {Describe the task}
@@ -107,9 +115,36 @@ step {Pre-filled}
 drain
 record "second run does not ask which agent" [expr {![has "◆  Open in"] && ![has "◇  Open in"]}] ""
 record "typed task is pre-filled" [has "/conquistador Build a win-back email flow for churned subscribers."] ""
+record "prompt tells the agent to learn from the folder" [has "Learn the product from this folder first."] ""
 quit_claude
 finish
 set run2 $transcript
+
+# --- 2b. Project scope in a second project: customize, keep the preselected agents -----------
+set project2 $home/studio
+file mkdir $project2
+set fh [open $project2/README.md w]; puts $fh "# Studio\n\nA booking tool for photo studios."; close $fh
+exec git -C $project2 init -q
+cd $project2
+set transcript ""
+eval spawn $cli --scope=project
+stty rows 50 columns 140 < $spawn_out(slave,name)
+step {Install for}
+send "\033\[B"; sleep 0.3; send "\r"
+step {Select agents}
+send "\r"
+step {Install now\?}
+record "customize offers every agent, and --scope skips the location question" [expr {![has "Install location"]}] ""
+send "\r"
+trust
+step {Pre-filled}
+drain
+record "project scope copies one skill into .claude/skills and .agents/skills" [expr {[file exists $project2/.claude/skills/conquistador/SKILL.md] && [file exists $project2/.agents/skills/conquistador/SKILL.md]}] ""
+record "the second project opens with /conquistador init" [has "/conquistador init"] ""
+quit_claude
+finish
+set run2b $transcript
+cd $project
 
 # --- 3. Direct task into Codex ---------------------------------------------------------------
 set transcript ""
@@ -142,7 +177,7 @@ set transcript ""
 eval spawn $cli
 stty rows 50 columns 140 < $spawn_out(slave,name)
 step {What should we work on\?}
-record "bare run does not reinstall an agent removed by name" [expr {![has "Installed into"] && ![has "Installing into"]}] ""
+record "bare run does not reinstall an agent removed by name" [expr {![has "Install now"] && ![has "Installing"]}] ""
 send "\033"
 finish
 set run5b $transcript
@@ -150,10 +185,13 @@ set run5b $transcript
 # --- 6. Remove ---------------------------------------------------------------------------------
 set removal [exec {*}$cli remove]
 record "remove cleans up the plugin copy" [expr {![file exists $home/.conquistador/plugin]}] ""
+cd $project2
+append removal "\n" [exec {*}$cli remove --scope=project]
+record "remove --scope=project deletes the project copies" [expr {![file exists $project2/.claude/skills/conquistador] && ![file exists $project2/.agents/skills/conquistador]}] ""
 
 # --- Artifacts ---------------------------------------------------------------------------------
 set fh [open $out/transcript.txt w]
-puts $fh "## Run 1: first run\n[plain $run1]\n\n## Run 2: second run\n[plain $run2]\n\n## Run 3: --in codex\n[plain $run3]\nCodex process: $codexArgs\n\n## Run 4: no terminal\n$piped\n\n## Run 5: home folder\n$homePrompt\n\n## Run 5b: after remove grok\n[plain $run5b]\n\n## Run 6: remove\n$removal"
+puts $fh "## Run 1: first run\n[plain $run1]\n\n## Run 2: second run\n[plain $run2]\n\n## Run 2b: project scope\n[plain $run2b]\n\n## Run 3: --in codex\n[plain $run3]\nCodex process: $codexArgs\n\n## Run 4: no terminal\n$piped\n\n## Run 5: home folder\n$homePrompt\n\n## Run 5b: after remove grok\n[plain $run5b]\n\n## Run 6: remove\n$removal"
 close $fh
 set failed 0
 set rows {}

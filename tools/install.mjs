@@ -220,6 +220,8 @@ try {
     if (manager) fail(`skills.sh owns this copy (${manager}). Use that manager to update or remove it.`);
     const owner = projectSkillOwner(target);
     if (owner) fail(`This skill is owned by ${owner}. Use its operator update or uninstall command.`);
+    // The npm package leaves the Eve runtime out; its export needs a repository checkout.
+    if (mode === 'eve' && command !== 'remove' && !existsSync(join(root, 'hosts/eve/host.json'))) fail('The Eve export needs a repository checkout: https://github.com/forsvn-labs/conquistador/tree/private-alpha/hosts/eve');
     if (domainPath && !['conquistador', 'plugin', 'single-agent'].includes(mode)) fail('Domain packages apply to conquistador, plugin, and single-agent installs.');
     if (command === 'remove') {
       owned(target, mode);

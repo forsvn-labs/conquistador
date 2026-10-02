@@ -3,6 +3,9 @@
 // plugin manager inside isolated homes. Your own agent settings are never touched.
 //   Route A: npm install -g from the Git commit (the documented install), then I1–I7, I11, remove.
 //   Route B: npx from a packed tarball (the public route), then delete the npx cache (I9, I12).
+//   Route A also covers project scope, skill-format hosts, --dry-run, --no-hooks, and doctor (D8).
+//   Route C: every CLI command from the packed tarball, on this Node and on Node 22.18 when
+//   CONQUISTADOR_E2E_NODE22 names that executable.
 //   Then agent-first.exp runs against the Route A binary.
 //   node tools/e2e/package-install.mjs [OUT_DIR]
 //   CONQUISTADOR_E2E_REF=v0.0.16 node tools/e2e/package-install.mjs dist/e2e/package-install-v0.0.16
@@ -29,7 +32,7 @@ const which = command => onPath(command) ?? '';
 // (0xC0000005) when only its mingw64\\bin folder is on PATH, so keep all of its folders.
 const gitDirs = windows ? (process.env.PATH ?? '').split(delimiter).filter(folder => /[\\/]Git[\\/]/i.test(folder)) : [];
 const systemDirs = windows ? [join(process.env.SystemRoot ?? 'C:\\Windows', 'System32'), process.env.SystemRoot ?? 'C:\\Windows', ...gitDirs] : ['/usr/bin', '/bin'];
-const toolDirs = [...new Set(['claude', 'codex', 'cursor-agent', 'copilot', 'grok', 'git', 'npm', 'expect', 'script'].map(which).filter(Boolean).map(dirname))];
+const toolDirs = [...new Set(['claude', 'codex', 'cursor-agent', 'copilot', 'grok', 'gemini', 'opencode', 'pi', 'hermes', 'agy', 'kiro-cli', 'vibe', 'git', 'npm', 'expect', 'script'].map(which).filter(Boolean).map(dirname))];
 
 const checks = [];
 const log = [];
@@ -65,7 +68,7 @@ function isolated(name, prefixBin) {
   if (windows) for (const name of ['APPDATA', 'LOCALAPPDATA']) mkdirSync(env[name], { recursive: true });
   // PATH may be spelled Path on Windows; keep one entry.
   if (windows) for (const name of Object.keys(env)) if (name !== 'PATH' && name.toUpperCase() === 'PATH') delete env[name];
-  for (const name of ['CONQUISTADOR_PLAYBOOKS', 'CONQUISTADOR_DEBUG', 'CLAUDECODE', 'CLAUDE_CODE_CHILD_SESSION', 'CLAUDE_CODE_ENTRYPOINT', 'npm_config_prefix']) delete env[name];
+  for (const name of ['CONQUISTADOR_PLAYBOOKS', 'CONQUISTADOR_DEBUG', 'CLAUDECODE', 'CLAUDE_CODE_CHILD_SESSION', 'CLAUDE_CODE_ENTRYPOINT', 'npm_config_prefix', 'OPENCODE_CONFIG_DIR', 'HERMES_HOME']) delete env[name];
   const plugin = join(home, '.conquistador', 'plugin');
   const cursor = join(home, '.cursor', 'plugins', 'local', 'conquistador');
   const listed = {
@@ -74,6 +77,10 @@ function isolated(name, prefixBin) {
     copilot: () => run('copilot', ['plugin', 'list'], { env }).stdout.includes('conquistador@conquistador'),
     grok: () => /\bconquistador\b/.test(run('grok', ['plugin', 'list'], { env }).stdout),
     cursor: () => existsSync(join(cursor, '.cursor-plugin', 'plugin.json')),
+    // Skill-format hosts have no plugin manager: the owned skill copy is the registration.
+    ...Object.fromEntries(Object.entries({ gemini: '.gemini/skills', opencode: '.config/opencode/skills', pi: '.agents/skills', hermes: '.hermes/skills',
+      antigravity: '.gemini/antigravity-cli/skills', kiro: '.kiro/skills', vibe: '.vibe/skills' })
+      .map(([id, folder]) => [id, () => existsSync(join(home, folder, 'conquistador', '.conquistador-owned.json'))])),
   };
   return { home, env, plugin, cursor, listed };
 }
@@ -160,7 +167,7 @@ check('I4', 'update removes folders a crashed run left behind', result.status ==
 rmSync(join(a.plugin, 'mcp', 'server.mjs'), { force: true });
 if (hasTty) {
   result = tty(cli, ['--in', 'cursor', '--no-open', '--yes'], a);
-  check('I6', 'bare conquistador repairs a broken plugin copy', result.status === 0 && missing(a.plugin).length === 0 && /Installed into/.test(result.output), result.output.trim().split('\n').slice(-4).join(' | '));
+  check('I6', 'bare conquistador repairs a broken plugin copy', result.status === 0 && missing(a.plugin).length === 0 && /Installed\./.test(result.output), result.output.trim().split('\n').slice(-4).join(' | '));
 } else {
   notRun('I6', 'bare conquistador repairs a broken plugin copy', 'no pseudo-terminal on this platform');
   run(cli, ['add', '--all', '--yes'], { env: a.env });
@@ -177,7 +184,7 @@ check('I3', 'Cursor fails with a reason; the other agents still install', result
 
 result = hasTty ? tty(cli, ['--in', 'cursor', '--no-open', '--yes'], a) : null;
 if (!result) notRun('I3', 'the start flow reports Cursor, offers a retry, and still finishes', 'no pseudo-terminal on this platform');
-else check('I3', 'the selected-host start reports Cursor failure and offers a retry', result.status === 1 && /Cursor: .*not created by Conquistador/.test(result.output) && /conquistador add cursor/.test(result.output) && /No agent opened/.test(result.output) && !stackTrace(result.output), result.output.trim().split('\n').slice(-5).join(' | '));
+else check('I3', 'the selected-host start reports Cursor failure and offers a retry', result.status === 1 && /Cursor: .*not created by Conquistador/.test(result.output) && /conquistador --providers=cursor --scope=global -y/.test(result.output) && /needs attention/.test(result.output) && !stackTrace(result.output), result.output.trim().split('\n').slice(-5).join(' | '));
 rmSync(a.cursor, { recursive: true, force: true });
 result = run(cli, ['add', 'cursor', '--yes'], { env: a.env });
 check('I3', 'add cursor --yes succeeds after the folder moves', result.status === 0 && missing(a.cursor).length === 0);
@@ -203,6 +210,57 @@ rmSync(config, { recursive: true, force: true });
 result = run(cli, ['remove'], { env: a.env });
 seen = observe(a, agents);
 check('A2', 'remove uninstalls from every agent and deletes both copies', result.status === 0 && all(seen, false) && !existsSync(a.plugin) && !existsSync(a.cursor), JSON.stringify(seen));
+
+// Project scope, skill-format hosts, dry run, hooks, and doctor (D8). Without a terminal, -y installs
+// and opens no agent.
+const acme = join(a.home, 'acme');
+const files = folder => { const found = []; const walk = dir => { let entries = []; try { entries = readdirSync(dir, { withFileTypes: true }); } catch { return; } for (const entry of entries) { const path = join(dir, entry.name); if (entry.isDirectory()) walk(path); else found.push(path); } }; walk(folder); return found.sort(); };
+const skillFiles = folder => files(folder).filter(path => path.endsWith(`${'/'}SKILL.md`) || path.endsWith('\\SKILL.md'));
+let snapshot = files(a.home).join('\n');
+result = run(cli, ['--dry-run', '--providers=claude,codex,pi,hermes', '--scope=project'], { env: a.env, cwd: acme });
+check('D1', '--dry-run prints the plan and the launch, and writes nothing', result.status === 0 && /Plan:/.test(result.output) && /\/conquistador init/.test(result.output) && files(a.home).join('\n') === snapshot, result.output.trim().split('\n').slice(-3).join(' | '));
+snapshot = files(a.home).join('\n');
+result = run(cli, ['--providers=claude,codex,pi,hermes', '--scope=project'], { env: a.env, cwd: acme });
+check('D1', 'without a terminal and without -y, the installer changes nothing', result.status === 0 && files(a.home).join('\n') === snapshot);
+result = run(cli, ['--providers=claude,codex,pi,hermes', '--scope=project', '-y'], { env: a.env, cwd: acme });
+const projectCopies = ['.claude/skills/conquistador', '.agents/skills/conquistador', '.hermes/skills/conquistador'].map(folder => join(acme, folder));
+check('P1', 'project scope copies the skill into each host folder, one copy per shared folder', result.status === 0 && projectCopies.every(folder => existsSync(join(folder, 'SKILL.md')) && marker(folder)?.version === version), result.output.trim().split('\n').slice(-4).join(' | '));
+check('P1', 'a project copy holds exactly one SKILL.md, so hosts register one skill', projectCopies.every(folder => skillFiles(folder).length === 1), projectCopies.map(folder => skillFiles(folder).length).join(','));
+seen = observe(a, agents.filter(id => ['claude-code', 'codex'].includes(id)));
+check('P1', 'project scope runs no plugin manager and writes no plugin copy', all(seen, false) && !existsSync(a.plugin), JSON.stringify(seen));
+check('P1', 'the next step names /conquistador init for a project without GROWTH.md', /\/conquistador init/.test(result.output), result.output.trim().split('\n').slice(-1)[0]);
+let doctor = run(cli, ['doctor', '--json'], { env: a.env, cwd: acme });
+let report = (() => { try { return JSON.parse(doctor.stdout); } catch { return { checks: [] }; } })();
+check('H1', 'doctor finds no install or hook problem after a project install', doctor.status === 0 && report.checks.filter(item => item.area !== 'project').every(item => item.status === 'ok') && report.checks.some(item => /GROWTH\.md is missing/.test(item.detail)), doctor.stdout.slice(0, 300));
+writeFileSync(join(projectCopies[1], 'SKILL.md'), `${readFileSync(join(projectCopies[1], 'SKILL.md'), 'utf8')}\nchanged by hand\n`);
+doctor = run(cli, ['doctor'], { env: a.env, cwd: acme });
+check('H1', 'doctor reports a changed project copy and names the repair', doctor.status === 1 && /\.agents\/skills\/conquistador is damaged/.test(doctor.output) && /doctor --fix/.test(doctor.output), doctor.output.trim().split('\n').slice(-3).join(' | '));
+doctor = run(cli, ['doctor', '--fix'], { env: a.env, cwd: acme });
+check('H1', 'doctor --fix repairs it', doctor.status === 0 && /Repaired/.test(doctor.output) && !readFileSync(join(projectCopies[1], 'SKILL.md'), 'utf8').includes('changed by hand'), doctor.output.trim().split('\n').slice(-3).join(' | '));
+writeFileSync(join(acme, 'GROWTH.md'), '# Growth\n\n## Goals and metrics\n## Channels\n## Proof and assets\n## Voice\n## Budget and compliance\n## Connected stack\n');
+writeFileSync(join(acme, 'PRODUCT.md'), '# Product\n');
+mkdirSync(join(acme, '.conquistador'), { recursive: true });
+doctor = run(cli, ['doctor', '--json'], { env: a.env, cwd: acme });
+report = (() => { try { return JSON.parse(doctor.stdout); } catch { return { checks: [] }; } })();
+check('H1', 'doctor reports a .conquistador/ folder that .gitignore does not cover', report.checks.some(item => /\.gitignore has no entry/.test(item.detail)), doctor.stdout.slice(0, 300));
+writeFileSync(join(acme, '.gitignore'), '.conquistador/cache/\n');
+doctor = run(cli, ['doctor', '--json'], { env: a.env, cwd: acme });
+report = (() => { try { return JSON.parse(doctor.stdout); } catch { return { checks: [] }; } })();
+check('H1', 'with PRODUCT.md, a complete GROWTH.md, and a .gitignore entry, doctor is clean', doctor.status === 0 && report.checks.every(item => item.status === 'ok'), JSON.stringify(report.checks.filter(item => item.status !== 'ok')));
+result = run(cli, ['update', '--dry-run'], { env: a.env, cwd: acme });
+check('P2', 'update --dry-run lists the project copies and changes nothing', result.status === 0 && /\.claude\/skills\/conquistador \(project\)/.test(result.output), result.output.trim().split('\n').slice(-3).join(' | '));
+result = run(cli, ['remove', '--scope=project'], { env: a.env, cwd: acme });
+check('P2', 'remove --scope=project deletes the copies and keeps PRODUCT.md and GROWTH.md', result.status === 0 && projectCopies.every(folder => !existsSync(folder)) && existsSync(join(acme, 'GROWTH.md')) && existsSync(join(acme, 'PRODUCT.md')), result.output.trim().split('\n').slice(-3).join(' | '));
+
+const skillHosts = { gemini: '.gemini/skills', opencode: '.config/opencode/skills', pi: '.agents/skills', hermes: '.hermes/skills', antigravity: '.gemini/antigravity-cli/skills', kiro: '.kiro/skills', vibe: '.vibe/skills' };
+result = run(cli, [`--providers=${Object.keys(skillHosts).join(',')}`, '--scope=global', '-y', '--no-hooks'], { env: a.env, cwd: acme });
+const globalCopies = Object.values(skillHosts).map(folder => join(a.home, folder, 'conquistador'));
+check('G1', 'global scope copies the skill into each skill-format host folder', result.status === 0 && globalCopies.every(folder => existsSync(join(folder, 'SKILL.md')) && skillFiles(folder).length === 1), globalCopies.filter(folder => !existsSync(folder)).join(', ') || result.output.trim().split('\n').slice(-3).join(' | '));
+const listing = JSON.parse(run(cli, ['agents', '--json'], { env: a.env, cwd: acme }).stdout || '{"agents":[]}').agents;
+check('G1', 'agents --json reports each skill-format host as installed and healthy', Object.keys(skillHosts).every(id => listing.find(item => item.id === id)?.installed && listing.find(item => item.id === id)?.payloadHealthy), JSON.stringify(listing.filter(item => skillHosts[item.id]).map(item => [item.id, item.installed, item.payloadHealthy])));
+check('G1', '--no-hooks turns the hooks off in config.json, and doctor reports it', (() => { try { return JSON.parse(readFileSync(join(a.home, '.conquistador', 'config.json'), 'utf8')).hooks === false; } catch { return false; } })() && /Prompt hooks: off/.test(run(cli, ['doctor'], { env: a.env, cwd: acme }).output));
+result = run(cli, ['remove'], { env: a.env, cwd: acme });
+check('G1', 'remove deletes every global skill copy', result.status === 0 && globalCopies.every(folder => !existsSync(folder)), globalCopies.filter(existsSync).join(', '));
 
 // Route B: npx from a tarball packed from a clean clone, the way npm publish would build it.
 const clone = join(work, 'clone');
@@ -230,6 +288,54 @@ result = run('npx', ['--yes', '--cache', npxCache, '--package', tarball, '--', '
 seen = observe(b, agents);
 check('B2', 'npx remove cleans up', result.status === 0 && all(seen, false), JSON.stringify(seen));
 
+// Route C: every CLI command from the packed tarball, without the repository. Expected exit codes and
+// output are what a user gets; a stack trace always fails.
+const prefixC = join(work, 'prefix-c');
+const c = isolated('home-c', join(prefixC, 'bin'));
+const installC = run('npm', ['install', '--global', '--ignore-scripts', '--no-audit', '--no-fund', '--prefix', prefixC, '--cache', join(work, 'npm-cache-c'), tarball], { env: c.env });
+const packedRoot = join(prefixC, ...(windows ? [] : ['lib']), 'node_modules', '@forsvn', 'conquistador');
+check('C0', 'npm install -g from the tarball', installC.status === 0 && existsSync(join(packedRoot, 'package.json')), installC.output.trim().split('\n').slice(-2).join(' | '));
+const leftOut = ['evals', 'catalog', 'hosts/eve', 'Dockerfile', '.github', 'tools/e2e', 'docs/REVIEW-2026-09-SURFACES.md', 'CONTRIBUTING.md'].filter(path => existsSync(join(packedRoot, path)));
+check('C0', 'the package leaves out evals, catalog, Eve, Docker, CI, E2E, and maintainer docs', leftOut.length === 0, leftOut.join(', '));
+// Every relative link in the skill tree, and every docs/*.md file it names, must exist in the package.
+const unresolved = [];
+for (const file of files(join(packedRoot, 'skills')).filter(path => path.endsWith('.md'))) {
+  const text = readFileSync(file, 'utf8').replace(/```[\s\S]*?```/g, '');
+  for (const [, target] of text.matchAll(/\]\(([^)\s]+)(?:\s+"[^"]*")?\)/g)) {
+    if (/^(?:[a-z][a-z0-9+.-]*:|#|\/)/i.test(target)) continue;
+    const path = resolve(dirname(file), decodeURIComponent(target.split('#')[0]));
+    if (!path.startsWith(packedRoot) || !existsSync(path)) unresolved.push(`${file.slice(packedRoot.length + 1)} → ${target}`);
+  }
+  // Conquistador's own docs have uppercase names; lowercase names are sample files in worked examples.
+  for (const [, doc] of text.matchAll(/`(docs\/[A-Z][\w.-]*\.md)`/g)) if (!existsSync(join(packedRoot, doc))) unresolved.push(`${file.slice(packedRoot.length + 1)} names ${doc}`);
+}
+check('C0', 'every relative link and docs/ file named in the skill tree exists in the package', unresolved.length === 0, unresolved.slice(0, 10).join(' || '));
+const bins = Object.values(JSON.parse(readFileSync(join(packedRoot, 'package.json'), 'utf8')).bin ?? {});
+check('C0', 'every bin path exists in the package', bins.length > 0 && bins.every(path => existsSync(join(packedRoot, path))), bins.join(', '));
+const MATRIX = [
+  [['--version'], 0, /^\d+\.\d+\.\d+/], [['version'], 0, /^\d+\.\d+\.\d+/], [['help'], 0, /\/conquistador init/], [['help', '--all'], 0, /--providers/],
+  [['agents', '--json'], 0, /"agents"/], [['doctor', '--json'], 0, /"checks"/], [['brief', 'write a launch email for our invoicing app'], 0, /conquistador-brief/],
+  [['tour'], 0, /Conquistador covers/], [['playbooks', 'list'], 0, /playbook/i], [['bot', '--out', join(c.home, 'bot'), '--no-private'], 0, /SYSTEM-PROMPT|bot/i],
+  [['--dry-run', '--providers=claude,pi', '--scope=project'], 0, /Plan:/], [['task', 'onboarding', '--dry-run'], 0, /Dry run/], [['remove', '--dry-run'], 0, /No tracked registrations/],
+  [['setup', '--help'], 0, /Usage/], [['project', '--help'], 0, /Conquistador/], [['--skills', '--help'], 0, /Usage/], [['--plugin', '--help'], 0, /Usage/],
+  [['--mcp', '--help'], 0, /Usage/], [['--bot', '--help'], 0, /Usage/], [['--advanced', '--help'], 0, /Usage/], [['install', '--help'], 0, /Usage/],
+  [['operator', '--help'], 0, /Usage/], [['status', '--help'], 0, /Usage/], [['route', '--prompt', 'write a launch email'], 1, /routing contract/],
+  [['hooks', '--help'], 1, /--project/], [['runtime', '--help'], 0, /Conquistador/], [['connections', '--help'], 0, /Executor/], [['integrations', '--help'], 0, /Usage/],
+  [['jobs', '--help'], 2, /repository checkout/], [['--providers=nope'], 2, /Unknown agent/], [['--scope=team'], 2, /Unknown scope/],
+];
+const node22 = process.env.CONQUISTADOR_E2E_NODE22;
+for (const [label, node] of [[`Node ${process.versions.node}`, process.execPath], ...(node22 ? [[`Node ${spawnSync(node22, ['--version'], { encoding: 'utf8' }).stdout.trim()}`, node22]] : [])]) {
+  const failures = [];
+  for (const [args, status, pattern] of MATRIX) {
+    const step = run(node, [join(packedRoot, 'runtime', 'bin', 'conquistador.js'), ...args], { env: c.env, cwd: join(c.home, 'acme') });
+    if (step.status !== status || !pattern.test(step.output) || stackTrace(step.output)) failures.push(`${args.join(' ')} → exit ${step.status}: ${step.output.trim().split('\n')[0]}`);
+  }
+  const mcp = spawnSync(node, [join(packedRoot, 'runtime', 'bin', 'conquistador.js'), 'mcp'], { env: c.env, encoding: 'utf8', timeout: 30_000, input: `${[{ jsonrpc: '2.0', id: 1, method: 'initialize', params: { protocolVersion: '2025-06-18', capabilities: {}, clientInfo: { name: 'e2e', version: '1' } } }, { jsonrpc: '2.0', method: 'notifications/initialized' }, { jsonrpc: '2.0', id: 2, method: 'tools/list' }].map(item => JSON.stringify(item)).join('\n')}\n` });
+  if (!(mcp.stdout ?? '').includes('conquistador_brief')) failures.push('mcp: tools/list has no conquistador_brief');
+  check('C1', `${label}: all ${MATRIX.length + 1} CLI commands from the tarball behave as documented`, failures.length === 0, failures.join(' || '));
+}
+if (!node22) notRun('C1', 'Node 22.18: the CLI commands from the tarball', 'set CONQUISTADOR_E2E_NODE22 to a Node 22.18 executable');
+
 // The interactive start flow, against the installed binary instead of the checkout.
 if (windows) notRun('S1', 'agent-first.exp against the installed package', 'expect does not run on Windows');
 else if (which('expect')) {
@@ -238,7 +344,7 @@ else if (which('expect')) {
   check('S1', `agent-first.exp against the installed package: ${passed} passed, ${failed} failed`, result.status === 0 && failed === 0 && passed > 0, result.output.trim().split('\n').slice(-3).join(' | '));
 } else check('S1', 'agent-first.exp (expect is not installed)', false);
 
-const report = { schema: 'conquistador.e2e.package-install/v1', at: new Date().toISOString(), version, sha, dirty, node: process.version, platform: `${process.platform}-${process.arch}`, agents, work, package: { files: packed.entryCount, packedBytes: packed.size, unpackedBytes: packed.unpackedSize }, checks, ok: checks.every(item => item.ok !== false) && checks.some(item => item.ok) };
+report = { schema: 'conquistador.e2e.package-install/v1', at: new Date().toISOString(), version, sha, dirty, node: process.version, platform: `${process.platform}-${process.arch}`, agents, work, package: { files: packed.entryCount, packedBytes: packed.size, unpackedBytes: packed.unpackedSize }, checks, ok: checks.every(item => item.ok !== false) && checks.some(item => item.ok) };
 mkdirSync(out, { recursive: true });
 writeFileSync(join(out, 'report.json'), `${JSON.stringify(report, null, 2)}\n`);
 writeFileSync(join(out, 'commands.log'), log.join('\n'));
