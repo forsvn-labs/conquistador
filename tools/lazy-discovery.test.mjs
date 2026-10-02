@@ -7,7 +7,7 @@ import { copyFileSync, existsSync, mkdirSync, mkdtempSync, readFileSync, realpat
 import { tmpdir } from 'node:os';
 import { dirname, join, posix } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { canonicalText, internalPath, methodLibrary, regularFiles, skillDiscovery } from './method-library.mjs';
+import { canonicalText, commandNames, internalPath, methodLibrary, regularFiles, skillDiscovery } from './method-library.mjs';
 import { shouldStageSkillPath, resolveDomainSelection } from './domain-package.mjs';
 import { loadOperatorProfile } from '../hosts/coding-agent/operator.mjs';
 
@@ -70,7 +70,7 @@ test('every native skill target exposes one concise parent and preserves all met
     assert.ok(discovery.metadataCharacters < 512, JSON.stringify(discovery));
     checkFullParity(join(path, 'library'));
     const report = JSON.parse(invoke(project, 'setup', 'doctor', '--path', path, '--json'));
-    assert.equal(report.library.available, 38);
+    assert.equal(report.library.available, commandNames(join(root, 'skills')).length);
     assert.equal(report.discovery.count, 1);
     assert.equal(report.bbAdapterPresent, false);
     const before = report.receipt.digest;
@@ -93,14 +93,14 @@ test('plugin and operator packages expose one parent while retaining the complet
     checkFullParity(join(path, library.layout));
     assert.equal(loadOperatorProfile(path).activation, 'manual');
     const report = JSON.parse(invoke(project, 'setup', 'doctor', '--path', path, '--json'));
-    assert.equal(report.library.available, 38);
+    assert.equal(report.library.available, commandNames(join(root, 'skills')).length);
     assert.equal(report.bbAdapterPresent, true);
     assert.equal(report.hostActivationVerified, false);
     const load = await installedLoader(path);
     for (const [task, expected] of [
       [assignment('parent'), 'conquistador/METHOD.md'],
       [assignment('copy'), 'conquistador/specialists/copy-agent.md'],
-      [assignment('outcome', { skills: ['copy'] }), 'conquistador/commands/copy/METHOD.md'],
+      [assignment('outcome', { skills: ['copy'] }), 'conquistador/commands/copy/COMMAND.md'],
       [assignment('parent', { workflows: ['launch'] }), 'conquistador/plays/launch.md'],
     ]) {
       const loaded = await load(path, task);
@@ -161,8 +161,8 @@ test('one explicitly selected specialist remains canonical and has its own owned
   assert.equal(existsSync(path), false);
   invoke(project, 'setup', 'install', '--target', 'skill:copy', '--path', path);
   assert.deepEqual(skillDiscovery(path).entries.map(entry => entry.name), ['copy']);
-  const files = regularFiles(join(root, 'skills/copy'));
-  for (const file of files) assert.deepEqual(readFileSync(join(path, 'skills/copy', file)), readFileSync(join(root, 'skills/copy', file)));
+  const files = regularFiles(join(root, 'skills/conquistador/commands/copy'));
+  for (const file of files) assert.deepEqual(readFileSync(join(path, 'skills/copy', file === 'COMMAND.md' ? 'SKILL.md' : file)), readFileSync(join(root, 'skills/conquistador/commands/copy', file)));
   assert.equal(existsSync(join(path, 'skills/conquistador')), false);
   invoke(project, 'setup', 'update', '--path', path);
   invoke(project, 'setup', 'uninstall', '--path', path);
@@ -218,7 +218,7 @@ test('workflow domains and each isolated squad member retain only their declared
     const member = join(path, role), library = join(member, 'skills/conquistador/library');
     const manifest = JSON.parse(readFileSync(join(member, 'agent.json')));
     assert.equal(skillDiscovery(member).count, 1);
-    const names = regularFiles(library).filter(file => /^[^/]+\/METHOD\.md$/.test(file)).map(file => file.split('/')[0]);
+    const names = regularFiles(library).flatMap(file => file === 'conquistador/METHOD.md' ? ['conquistador'] : /^conquistador\/commands\/([^/]+)\/COMMAND\.md$/.exec(file)?.slice(1) ?? []);
     assert.deepEqual(names.sort(), ['conquistador', ...manifest.mayLoadSkills].sort());
     checkLinks(library);
   }
@@ -232,7 +232,8 @@ test('doctor rejects stale SKILL links or an added specialist entry even without
   rmSync(join(path, '.conquistador-install.json'));
   const parent = join(path, 'library/conquistador/METHOD.md');
   const original = readFileSync(parent, 'utf8');
-  writeFileSync(parent, original.replace('../copy/METHOD.md', '../conquistador/commands/copy/COMMAND.md'));
+  assert.ok(original.includes('](commands/copy/COMMAND.md)'));
+  writeFileSync(parent, original.replace('](commands/copy/COMMAND.md)', '](commands/copy/SKILL.md)'));
   const doctor = () => spawnSync(process.execPath, [cli, 'setup', 'doctor', '--path', path, '--json'], { encoding: 'utf8' });
   assert.equal(doctor().status, 1);
   writeFileSync(parent, original);

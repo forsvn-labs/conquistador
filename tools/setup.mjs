@@ -234,7 +234,7 @@ function run(options, reminderShown = false, dryRun = false) {
     }
   } else if (result.state !== 'unchanged') fail(`Refusing ${options.action}: ${result.state}; unowned or modified files are preserved.`);
   const ownedMode = mode ?? result.mode;
-  if (ownedMode?.startsWith('skill:') && !stat(join(root, 'skills', ownedMode.slice(6), 'SKILL.md'))?.isFile()) fail('Unknown specialist method. Choose a method from the installed catalog.');
+  if (ownedMode?.startsWith('skill:') && (ownedMode === 'skill:conquistador' || !stat(join(root, 'skills/conquistador/commands', ownedMode.slice(6), 'COMMAND.md'))?.isFile())) fail('Unknown specialist method. Choose a method from the installed catalog.');
   const owner = projectSkillOwner(options.path);
   if (owner) fail(`This skill is owned by ${owner}. Use its operator lifecycle; do not update or remove it independently.`);
   if (options['runtime-path'] && ownedMode !== 'mcp') fail('--runtime-path requires MCP install/update.');

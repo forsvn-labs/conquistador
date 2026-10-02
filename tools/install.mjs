@@ -114,6 +114,8 @@ function stage(mode, target, selection) {
     if (selection && !selection.skills.includes(name)) return;
     if (!/^[a-z][a-z0-9-]*$/.test(name) || !existsSync(join(root, 'skills', methodPath(name)))) fail(`Unknown skill: ${name}`);
     copy(`skills/${methodDirectory(name)}`, `${into}/${name}`);
+    // A standalone command is its own host skill, so its document takes the discoverable name.
+    renameSync(join(target, into, name, 'COMMAND.md'), join(target, into, name, 'SKILL.md'));
   };
   const template = readFileSync(join(root, 'tools/entrypoint/SKILL.md'), 'utf8');
   const library = (entry, names) => stageMethodLibrary(join(root, 'skills'), join(target, entry), {

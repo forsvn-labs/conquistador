@@ -101,12 +101,14 @@ export function classify(key) {
   if (/(?:^|\/)examples?(?:\/|\.md$)/.test(key)) return 'example';
   if (/\/agents\//.test(key)) return 'specialist';
   if (/^conquistador\/plays\/[^/]+\.md$/.test(key)) return 'play';
+  // Provider recipes for `connect`: reference data, not playbooks.
+  if (/^conquistador\/integrations\//.test(key)) return 'integration';
   if (/^conquistador\/standards\//.test(key)) return 'standard';
   if (/anti-patterns\.md$/.test(key)) return 'checklist';
   return 'playbook';
 }
 
-const priorWeight = { playbook: 1.25, checklist: 1, platform: 1.1, channel: 1.1, specialist: 0.7, example: 0.8, play: 0.9, standard: 0.4, process: 0, user: 1.6 };
+const priorWeight = { playbook: 1.25, checklist: 1, platform: 1.1, channel: 1.1, specialist: 0.7, example: 0.8, play: 0.9, integration: 1, standard: 0.4, process: 0, user: 1.6 };
 
 function walkMarkdown(root, { limitFiles, limitBytes, depth, followRoot = false }) {
   const found = [];
@@ -338,6 +340,8 @@ export function createBrief(input, { root = moduleRoot, playbooks, force = false
   const ownerOf = doc => (doc.source === 'method' && selectedNames.has(doc.method)) || (doc.source === 'play' && doc.method === play?.name) ? doc.method : null;
   const scoreDoc = (doc, owned) => {
     if (doc.kind === 'process') return null;
+    // Integration recipes join the brief only for the connect command.
+    if (doc.kind === 'integration') { if (!selectedNames.has('connect')) return null; owned = 'connect'; }
     const shared = doc.source === 'shared';
     const stemName = posix.basename(doc.key, posix.extname(doc.key));
     const platformHit = (doc.kind === 'platform' || doc.kind === 'channel') && platforms.includes(stemName);

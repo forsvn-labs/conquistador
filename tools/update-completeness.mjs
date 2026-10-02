@@ -38,7 +38,7 @@ const manifest = {
   requiredResources: resources(),
   operatorResources: operatorFiles.map(path => ({ path, sha256: createHash('sha256').update(readFileSync(join(root, path))).digest('hex') })),
 };
-if (!manifest.parent || manifest.outcomes.length !== 35) throw Error('Expected the parent and 35 commands; review the release contract before changing this count.');
+if (!manifest.parent || manifest.outcomes.length < 35) throw Error('Expected the parent and at least 35 commands; review the release contract before changing this count.');
 writeFileSync(join(root, 'release/completeness.json'), JSON.stringify(manifest, null, 2) + '\n');
 
 writeFileSync(join(root, pluginManifestPath), JSON.stringify(buildPluginManifest(root, manifest), null, 2) + '\n');

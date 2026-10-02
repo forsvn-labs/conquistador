@@ -68,7 +68,7 @@
         "id": "search",
         "kind": "skill",
         "uses": {
-          "skillId": "create-paid-campaign"
+          "skillId": "ads"
         },
         "dependsOn": [
           "load-context"
@@ -91,7 +91,7 @@
         "id": "dr-landing",
         "kind": "skill",
         "uses": {
-          "skillId": "write-copy"
+          "skillId": "copy"
         },
         "dependsOn": [
           "search"
@@ -115,7 +115,7 @@
         "id": "saas-landing",
         "kind": "skill",
         "uses": {
-          "skillId": "write-copy"
+          "skillId": "copy"
         },
         "dependsOn": [
           "search"
@@ -139,7 +139,7 @@
         "id": "integrate",
         "kind": "skill",
         "uses": {
-          "skillId": "create-paid-campaign"
+          "skillId": "ads"
         },
         "dependsOn": [
           "dr-landing",
@@ -165,7 +165,7 @@
         "id": "review",
         "kind": "skill",
         "uses": {
-          "skillId": "fresh-eyes-review"
+          "skillId": "critique"
         },
         "dependsOn": [
           "integrate"

@@ -90,7 +90,7 @@
         "id": "contract",
         "kind": "skill",
         "uses": {
-          "skillId": "measure-growth"
+          "skillId": "measure"
         },
         "dependsOn": [
           "read-events"
@@ -114,7 +114,7 @@
         "id": "diagnose",
         "kind": "skill",
         "uses": {
-          "skillId": "diagnose-growth"
+          "skillId": "diagnose"
         },
         "dependsOn": [
           "contract"
@@ -138,7 +138,7 @@
         "id": "integrate",
         "kind": "skill",
         "uses": {
-          "skillId": "evaluate-paid-campaign"
+          "skillId": "results"
         },
         "dependsOn": [
           "diagnose"
@@ -163,7 +163,7 @@
         "id": "review",
         "kind": "skill",
         "uses": {
-          "skillId": "fresh-eyes-review"
+          "skillId": "critique"
         },
         "dependsOn": [
           "integrate"

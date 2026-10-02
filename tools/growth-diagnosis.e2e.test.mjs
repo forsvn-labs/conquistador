@@ -1,3 +1,4 @@
+import { commandNames } from './method-library.mjs';
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
@@ -7,6 +8,8 @@ import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
+// Commands in this checkout, including meta commands other slices add.
+const N = commandNames(join(root, 'skills')).length;
 
 const prompt = 'Our B2B SaaS growth has stalled. Weekly unique visitors held at 10,000 in both 8-week periods. Free-trial signups fell from 800 to 500; paid upgrades from 160 to 75. We have no analytics access beyond these totals. What is going on and what should we do next? Do not make changes.';
 
@@ -48,7 +51,7 @@ test('installed growth route, first task, hook context, and removal work togethe
   mkdirSync(project);
   writeFileSync(join(project, 'keep.txt'), 'Keep this project file.\n');
 
-  const setup = checked(run(cli, project, '--host', 'codex', '--task', 'diagnose', '--yes'), 'setup');
+  const setup = checked(run(cli, project, '--host', 'codex', '--task', 'diagnose-growth', '--yes'), 'setup');
   assert.match(setup, /Use with: Codex/);
   assert.match(setup, /First task: Diagnose a growth stall/);
   assert.match(setup, /Activation: manual/);
@@ -121,21 +124,21 @@ test('installed growth route, first task, hook context, and removal work togethe
   assert.match(invalidStart.stdout, /Activation: invalid profile;/);
 
   const before = JSON.parse(checked(run(cli, project, 'operator', 'doctor', '--json'), 'doctor before hook'));
-  assert.equal(before.library.available, 38);
+  assert.equal(before.library.available, N);
   assert.equal(before.operatorActivation, 'manual');
   assert.equal(before.hooks.find(item => item.host === 'codex').routingAvailable, false);
   assert.equal(before.taskExecutionVerified, false);
   const installedContract = JSON.parse(readFileSync(join(project, '.conquistador/library/conquistador/routing-contract.json'), 'utf8'));
 
   const methodRoutes = Object.entries(installedContract.methods).map(([name, method]) => {
-    const text = `Use Conquistador to ${method.intents[0]}.`;
+    const text = method.intents.length ? `Use Conquistador to ${method.intents[0]}.` : `/conquistador ${name}`;
     const route = JSON.parse(checked(run(cli, project, 'route', '--prompt', text), `method route: ${name}`));
     assert.deepEqual(route.selected, [name], `${name}: ${JSON.stringify(route)}`);
 
     return { name, prompt: text, selected: route.selected };
   });
 
-  assert.equal(methodRoutes.length, 38);
+  assert.equal(methodRoutes.length, N);
 
   const routes = [prompt, ...paraphrases].map(text => {
     const route = JSON.parse(checked(run(cli, project, 'route', '--prompt', text), `route: ${text}`));
@@ -158,19 +161,19 @@ test('installed growth route, first task, hook context, and removal work togethe
   assert.deepEqual(initiativeRoute.selected, ['diagnose', 'shape']);
 
   const namedMethods = JSON.parse(checked(run(cli, project, 'route', '--prompt',
-    'Use shape and campaign to decide a launch approach.'), 'named methods'));
+    'Use shape-initiative and plan-campaign to decide a launch approach.'), 'named methods'));
 
   assert.deepEqual(namedMethods.selected, ['shape', 'campaign']);
 
   const adversarialRoutes = [
-    ['Use shape, then diagnose.', ['shape', 'diagnose']],
-    ['Use Conquistador to campaign and do not shape.', ['campaign']],
-    ['Use Conquistador to campaign. "Use shape" is only a quoted example.', ['campaign']],
+    ['Use shape-initiative, then diagnose-growth.', ['shape', 'diagnose']],
+    ['Use Conquistador to plan-campaign and do not shape-initiative.', ['campaign']],
+    ['Use Conquistador to plan-campaign. "Use shape-initiative" is only a quoted example.', ['campaign']],
     ['Use Conquistador for authority and freshness.', ['factcheck']],
     ['Use Conquistador to review knowledge freshness for this project.', ['factcheck']],
-    ['Use Conquistador to pricing and do not copy.', ['pricing']],
-    ['Use Conquistador to review authority and freshness and do not copy.', ['factcheck']],
-    ['Use Conquistador to write readme and setup and do not copy.', ['docs']],
+    ['Use Conquistador to design-pricing-and-packaging and do not write-copy.', ['pricing']],
+    ['Use Conquistador to review authority and freshness and do not write-copy.', ['factcheck']],
+    ['Use Conquistador to write readme and setup and do not write-copy.', ['docs']],
     ['Use Conquistador for readme and setup.', ['docs']],
     ['Why did signups drop after our campaign?', ['diagnose']],
   ].map(([text, expected]) => {
@@ -208,18 +211,18 @@ test('installed growth route, first task, hook context, and removal work togethe
   assert.ok(explicitBusinessDiagnosis.selected.includes('diagnose'));
 
   const whollyNegated = JSON.parse(checked(run(cli, project, 'route', '--prompt',
-    'Use Conquistador to do not pricing.'), 'wholly negated compound method'));
+    'Use Conquistador to do not design-pricing-and-packaging.'), 'wholly negated compound method'));
 
   assert.equal(whollyNegated.action, 'abstain');
 
-  const literalMarker = 'Do not pricing. CQPHRASE0TOKEN';
+  const literalMarker = 'Do not design-pricing-and-packaging. CQPHRASE0TOKEN';
   const markerRoute = JSON.parse(checked(run(cli, project, 'route', '--prompt', literalMarker), 'literal marker after negation'));
 
   assert.equal(markerRoute.action, 'abstain', JSON.stringify(markerRoute));
 
   const explicitReviewNames = [
-    ['Use Conquistador to audit campaign performance with creative.', 'creative'],
-    ['Use Conquistador to evaluate landing-page performance with convert.', 'convert'],
+    ['Use Conquistador to audit campaign performance with brief-creative.', 'creative'],
+    ['Use Conquistador to evaluate landing-page performance with improve-conversion.', 'convert'],
   ];
 
   for (const [text, expected] of explicitReviewNames) {
@@ -243,15 +246,15 @@ test('installed growth route, first task, hook context, and removal work togethe
   assert.ok(pricing.selected.includes('pricing'));
 
   const namedPricing = JSON.parse(checked(run(cli, project, 'route', '--prompt',
-    'Use pricing for this offer.'), 'named pricing method'));
+    'Use design-pricing-and-packaging for this offer.'), 'named pricing method'));
 
   assert.ok(namedPricing.selected.includes('pricing'));
   const launch = JSON.parse(checked(run(cli, project, 'route', '--prompt', 'Use Conquistador to draft a launch plan from product facts.'), 'launch route'));
   assert.deepEqual(launch.selected, ['campaign']);
   const runtimeRoute = checked(run(cli, project, 'runtime', 'route', '--intent', 'content intelligence loop'), 'runtime route');
-  assert.match(runtimeRoute, /content/);
+  assert.match(runtimeRoute, /content-intelligence-loop/);
 
-  const start = checked(run(cli, project, 'start', '--task', 'diagnose'), 'start');
+  const start = checked(run(cli, project, 'start', '--task', 'diagnose-growth'), 'start');
   assert.match(start, /First task: Diagnose a growth stall/);
   assert.match(start, /Local route preview: diagnose/);
   assert.match(start, /Activation: manual/);
@@ -292,12 +295,12 @@ test('installed growth route, first task, hook context, and removal work togethe
 
   const reviewContext = JSON.parse(checked(reviewHandled, 'review growth hook')).hookSpecificOutput.additionalContext;
   assert.match(reviewContext, /Learn from aggregate growth results \[measure\]/);
-  assert.match(reviewContext, /Full method: library\/measure\/METHOD.md/);
+  assert.match(reviewContext, /Full method: library\/conquistador\/commands\/measure\/COMMAND.md/);
 
   const namedHandled = spawnSync(process.execPath, [handler, '--handle', '--host', 'codex', '--event', 'prompt-submitted',
     '--config', config], {
     cwd: project, encoding: 'utf8', input: JSON.stringify({ hook_event_name: 'UserPromptSubmit',
-      prompt: 'Use shape and campaign to decide a launch approach.' }),
+      prompt: 'Use shape-initiative and plan-campaign to decide a launch approach.' }),
   });
 
   const namedContext = JSON.parse(checked(namedHandled, 'named methods hook')).hookSpecificOutput.additionalContext;
@@ -312,7 +315,7 @@ test('installed growth route, first task, hook context, and removal work togethe
 
   assert.deepEqual(JSON.parse(checked(ciHandled, 'CI pipeline hook')), {});
 
-  for (const { prompt: text, selected } of adversarialRoutes.filter(item => item.prompt.includes('do not copy'))) {
+  for (const { prompt: text, selected } of adversarialRoutes.filter(item => item.prompt.includes('do not write-copy'))) {
     const response = spawnSync(process.execPath, [handler, '--handle', '--host', 'codex', '--event', 'prompt-submitted',
       '--config', config], { cwd: project, encoding: 'utf8', input: JSON.stringify({ hook_event_name: 'UserPromptSubmit', prompt: text }) });
 
@@ -382,7 +385,7 @@ test('installed growth route, first task, hook context, and removal work togethe
   const mcpFiles = JSON.parse(mcpMessages[1].result.content[0].text).files;
   assert.ok(mcpFiles.includes('conquistador/routing-contract.json'));
   const mcpContractText = mcpMessages[2].result.content[0].text;
-  assert.equal(Object.keys(JSON.parse(mcpContractText).methods).length, 38);
+  assert.equal(Object.keys(JSON.parse(mcpContractText).methods).length, N);
   checked(run(cli, project, 'setup', 'uninstall', '--target', 'mcp', '--path', mcpPath), 'local MCP uninstall');
   assert.equal(existsSync(mcpPath), false);
   assert.equal(readFileSync(join(project, 'keep.txt'), 'utf8'), 'Keep this project file.\n');
@@ -415,7 +418,7 @@ test('installed growth route, first task, hook context, and removal work togethe
       reviewHookContextSha256: digest(reviewContext),
       namedHookContextSha256: digest(namedContext),
       ciHookAbstained: true,
-      mcp: { listedRoutingContract: true, readRoutingContractSha256: digest(mcpContractText), methods: 38,
+      mcp: { listedRoutingContract: true, readRoutingContractSha256: digest(mcpContractText), methods: N,
         removed: true },
       launch: launch.selected,
       sourceReads,

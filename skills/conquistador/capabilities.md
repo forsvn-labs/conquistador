@@ -92,6 +92,17 @@ promise, mechanism, proof, objection, action, primary signal, and decision date.
 | Specify a product experience | [`spec`](plays/spec.md) | flow → ui → implementation-planning → service-extraction |
 | Create an app preview video | [`trailer`](plays/trailer.md) | flow → creative → video-production → audit |
 
+## Setup and review commands
+
+| User outcome | Command | Required finish |
+|---|---|---|
+| Record product and growth truth | `init` | PRODUCT.md and GROWTH.md with the accepted facts |
+| Connect a capability a task needs | `connect` | Readiness table and one verified read |
+| Repair install and context drift | `doctor` | Drift report and repaired files |
+| Make a shortcut for one command | `pin` | A standalone skill; `unpin` removes it |
+| Check marketing text by rules | `check` | Findings with file, rule, and fix |
+| Open a deliverable for human review | `review` | Review link; approval stays with the human |
+
 ## Opt-in product feedback
 
 | User outcome | Command | Required finish |

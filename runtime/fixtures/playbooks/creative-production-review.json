@@ -68,7 +68,7 @@
         "id": "brief",
         "kind": "skill",
         "uses": {
-          "skillId": "brief-creative"
+          "skillId": "creative"
         },
         "dependsOn": [
           "load-context"
@@ -91,7 +91,7 @@
         "id": "produce",
         "kind": "skill",
         "uses": {
-          "skillId": "create-shortform"
+          "skillId": "video"
         },
         "dependsOn": [
           "brief"
@@ -137,7 +137,7 @@
         "id": "integrate",
         "kind": "skill",
         "uses": {
-          "skillId": "brief-creative"
+          "skillId": "creative"
         },
         "dependsOn": [
           "vision"
@@ -162,7 +162,7 @@
         "id": "review",
         "kind": "skill",
         "uses": {
-          "skillId": "fresh-eyes-review"
+          "skillId": "critique"
         },
         "dependsOn": [
           "integrate"

@@ -303,17 +303,17 @@ const SHA_PATTERN = /^sha256:[a-f0-9]{64}$/;
 const ISO = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{3})?Z$/;
 
 const PURPOSE_BY_SKILL: Record<string, JudgmentPurpose> = {
-  "research-content-ideas": "research",
-  "write-social": "creation",
-  "write-longform": "creation",
-  "create-shortform": "creation",
-  "write-copy": "creation",
-  "fresh-eyes-review": "quality-review",
-  "measure-growth": "measurement",
-  "brief-creative": "creation",
-  "create-paid-campaign": "creation",
-  "diagnose-growth": "measurement",
-  "evaluate-paid-campaign": "measurement",
+  "ideas": "research",
+  "social": "creation",
+  "article": "creation",
+  "video": "creation",
+  "copy": "creation",
+  "critique": "quality-review",
+  "measure": "measurement",
+  "creative": "creation",
+  "ads": "creation",
+  "diagnose": "measurement",
+  "results": "measurement",
 };
 
 export function purposeOfSkill(skillId: string): JudgmentPurpose {
@@ -328,7 +328,7 @@ export function purposeOfSkill(skillId: string): JudgmentPurpose {
 }
 
 export function pinnedSkillVersion(skillId: string): string {
-  const source = loadSkillAssets(skillId).files.find((file) => file.path === "SKILL.md")?.content;
+  const source = loadSkillAssets(skillId).files.find((file) => file.path === "COMMAND.md")?.content;
   const version = source?.match(/^  version: ([0-9]+\.[0-9]+\.[0-9]+)\s*$/m)?.[1];
   if (!version) {
     throw new JudgmentValidationError(

@@ -99,8 +99,10 @@ Plays chain commands for a multi-step outcome. Each [play](plays/) lists its ste
 - **No argument:** read [references/menu.md](references/menu.md) and show its menu. Never auto-run a command.
 - **Explicit command or play:** load its COMMAND.md or play file and follow it. Old IDs (`write-copy`,
   `launch-product`) still work; the routing contract lists each as a legacy name.
-- **Otherwise:** route through the brief. Run a play's steps in order, skip a step whose `when`
-  condition is false, and return one integrated deliverable. Ask once when two commands fit equally.
+- **Otherwise:** route through the brief. Each request is one job:
+  launch or grow this; create or improve marketing work; learn from these results.
+  Run a play's steps in order, skip a step whose `when` condition is false, and return one
+  integrated deliverable. Ask once when two commands fit.
 - Marketing about an app does not request code. A flow or UI brief does not authorize a build.
 
 ## Approvals

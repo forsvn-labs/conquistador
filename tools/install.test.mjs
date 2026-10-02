@@ -1,3 +1,4 @@
+import { methodPath } from './method-library.mjs';
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
@@ -20,7 +21,7 @@ test('one entry point contains every method and upgrades without losing user cha
   install('install', 'conquistador', target);
   assert.match(readFileSync(join(target, 'SKILL.md'), 'utf8'), /library\/conquistador\/METHOD.md/);
   assert.deepEqual(readdirSync(join(target, 'library')).sort(), skills);
-  for (const name of skills) assert.deepEqual(canonicalText(readFileSync(join(target, 'library', name, 'METHOD.md'), 'utf8')), readFileSync(join(root, 'skills', name, 'SKILL.md'), 'utf8'));
+  for (const name of skills) assert.deepEqual(canonicalText(readFileSync(join(target, 'library', methodPath(name, { internal: true })), 'utf8')), readFileSync(join(root, 'skills', methodPath(name)), 'utf8'));
   assert.ok(existsSync(join(target, 'tools/proactive.mjs')));
   assert.ok(existsSync(join(target, 'docs/PROACTIVE.md')));
   assert.deepEqual(readFileSync(join(target, 'docs/PREVIEW.md')), readFileSync(join(root, 'docs/PREVIEW.md')));
@@ -46,7 +47,7 @@ test('portable master contains specialist contracts, declared outcomes and its c
     assert.ok(existsSync(join(target, agent.canonicalSkillRoot, 'library/conquistador/specialists', `${name}-agent.md`)));
   }
   assert.deepEqual(readdirSync(join(target, 'library')).sort(), skills);
-  for (const name of agent.mayLoadSkills) assert.ok(existsSync(join(target, 'library', name, 'METHOD.md')));
+  for (const name of agent.mayLoadSkills) assert.ok(existsSync(join(target, 'library', methodPath(name, { internal: true }))));
   install('remove', 'single-agent', target);
   assert.equal(existsSync(target), false);
 }));
@@ -71,9 +72,9 @@ test('host and squad declarations resolve inside each staged package', () => {
         assert.ok(existsSync(join(target, agent.canonicalSkillRoot, 'SKILL.md')));
         if (role === 'advisor') {
           assert.deepEqual(agent.mayLoadWorkflows, []);
-          assert.deepEqual([...agent.mayLoadSkills].sort(), ['decide', 'critique', 'factcheck']);
+          assert.deepEqual([...agent.mayLoadSkills].sort(), ['critique', 'decide', 'factcheck']);
         }
-        for (const name of agent.mayLoadSkills) assert.ok(existsSync(join(target, role, 'skills/conquistador/library', name, 'METHOD.md')));
+        for (const name of agent.mayLoadSkills) assert.ok(existsSync(join(target, role, 'skills/conquistador/library', methodPath(name, { internal: true }))));
       }
     } else {
       const host = JSON.parse(readFileSync(join(target, 'host.json')));

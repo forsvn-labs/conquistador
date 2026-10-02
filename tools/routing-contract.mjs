@@ -130,8 +130,10 @@ export function buildRoutingContract(root = moduleRoot) {
     const markdown = readContained(root, path);
     const metadata = frontmatter(markdown);
     if (metadata.name !== name || !metadata.description) fail(`Invalid method metadata: ${name}`);
-    const spec = overlay.methods?.[name];
-    if (!spec) fail(`Missing routing declaration: ${name}`);
+    // A command without a routing declaration is a meta command (init, pin, check, ...): it runs
+    // only when named, declares no resources, and its links are its own business.
+    const meta = !overlay.methods?.[name];
+    const spec = overlay.methods?.[name] ?? { kind: 'meta', explicitOnly: true, intents: [], aliases: [], exclusions: [], requiredResources: [], conditionalResources: [], optionalResources: [] };
     const resourcePath = value => {
       if (typeof value !== 'string' || value.startsWith('/') || value.split('/').some(part => !part || part === '..' || part === '.')) fail(`Invalid resource declaration: ${name}`);
       const target = posix.join(posix.dirname(path), value);
@@ -144,7 +146,7 @@ export function buildRoutingContract(root = moduleRoot) {
     const declared = [...required, ...conditional.map(item => item.path), ...optional];
     // The generated playbook map lists every file on disk; it declares itself.
     const authored = markdown.replace(/<!-- playbooks:start[\s\S]*?<!-- playbooks:end -->/g, '');
-    for (const resource of linkedMarkdown(path, authored)) {
+    for (const resource of meta ? [] : linkedMarkdown(path, authored)) {
       if (!declared.includes(resource)) fail(`Undeclared resource phase: ${resource}`);
     }
     methods[name] = {
@@ -173,7 +175,7 @@ export function buildRoutingContract(root = moduleRoot) {
     for (const name of expected) {
       if (!methods[name]) fail(`Routing overlay names missing method: ${name}`);
     }
-    const extra = Object.keys(methods).filter(name => !expected.includes(name));
+    const extra = Object.keys(methods).filter(name => !expected.includes(name) && methods[name].kind !== 'meta');
     if (extra.length) fail(`Routing overlay omitted methods: ${extra.join(', ')}`);
   }
 

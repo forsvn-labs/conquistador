@@ -71,7 +71,7 @@
       {
         "id": "rank-opportunities",
         "kind": "skill",
-        "uses": { "skillId": "research-content-ideas" },
+        "uses": { "skillId": "ideas" },
         "dependsOn": ["normalize-data"],
         "inputArtifacts": ["approved-context", "normalized-signals"],
         "outputArtifacts": ["opportunity-briefs"],
@@ -100,10 +100,10 @@
           "branch": {
             "on": "hypothesis.nativeFormat",
             "cases": [
-              { "when": "social", "skillId": "write-social" },
-              { "when": "longform", "skillId": "write-longform" },
-              { "when": "shortform", "skillId": "create-shortform" },
-              { "when": "copy", "skillId": "write-copy" }
+              { "when": "social", "skillId": "social" },
+              { "when": "longform", "skillId": "article" },
+              { "when": "shortform", "skillId": "video" },
+              { "when": "copy", "skillId": "copy" }
             ]
           }
         },
@@ -119,7 +119,7 @@
       {
         "id": "specialist-review",
         "kind": "skill",
-        "uses": { "skillId": "fresh-eyes-review" },
+        "uses": { "skillId": "critique" },
         "dependsOn": ["create-artifact"],
         "inputArtifacts": ["created-artifact", "hypothesis"],
         "outputArtifacts": ["review-packet"],
@@ -164,7 +164,7 @@
       {
         "id": "measure-and-decide",
         "kind": "skill",
-        "uses": { "skillId": "measure-growth" },
+        "uses": { "skillId": "measure" },
         "dependsOn": ["observe-results"],
         "inputArtifacts": ["observation-record", "hypothesis"],
         "outputArtifacts": ["measurement-verdict"],

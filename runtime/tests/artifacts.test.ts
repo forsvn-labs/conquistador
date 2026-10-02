@@ -211,7 +211,7 @@ describe("Artifact envelope", () => {
     expect(created.identity.artifactId).toBe("created-artifact");
     expect(created.provenance.playbookId).toBe("content-intelligence-loop");
     expect(created.provenance.playbookVersion).toBe(playbook().version);
-    expect(created.provenance.skillId).toBe("write-social");
+    expect(created.provenance.skillId).toBe("social");
     expect(created.provenance.skillVersion).toBe("2.1.0");
     expect(created.provenance.skillPackageDigest).toMatch(/^sha256:[a-f0-9]{64}$/);
     expect(created.provenance.skillInterfaceDigest).toMatch(/^sha256:[a-f0-9]{64}$/);
@@ -265,7 +265,7 @@ describe("Artifact envelope", () => {
     expect(() =>
       assertAttribution({
         ...created,
-        provenance: { ...created.provenance, skillId: "write-copy" },
+        provenance: { ...created.provenance, skillId: "copy" },
       }, context)
     ).toThrow(/skill id was not used by the producing step/);
 
@@ -281,7 +281,7 @@ describe("Artifact envelope", () => {
     expect(() =>
       assertAttribution({
         ...contextEnvelope,
-        provenance: { ...contextEnvelope.provenance, skillId: "write-social" },
+        provenance: { ...contextEnvelope.provenance, skillId: "social" },
       }, context)
     ).toThrow(/skill id was not used by the producing step/);
   });

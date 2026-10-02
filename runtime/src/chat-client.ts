@@ -59,7 +59,7 @@ export async function runChat(options: ChatOptions, host: ChatHost): Promise<num
       if (field === "intent") {
         const route = routeIntent(input.intent);
         if (route.outcome === "skill") {
-          print(`This outcome uses a standalone skill, not a served playbook. Open ${resolve(DEFAULT_SKILLS_ROOT, route.targetId, "SKILL.md")} in your agent host. From the distribution root: node tools/install.mjs install skill:${route.targetId} ABS_DEST`);
+          print(`This outcome uses a standalone skill, not a served playbook. Open ${resolve(DEFAULT_SKILLS_ROOT, "conquistador/commands", route.targetId, "COMMAND.md")} in your agent host. From the distribution root: node tools/install.mjs install skill:${route.targetId} ABS_DEST`);
           return 2;
         }
         if (route.outcome === "abstain") {

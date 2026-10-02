@@ -40,8 +40,8 @@ const branchStep: PlaybookStep = {
     branch: {
       on: "hypothesis.nativeFormat",
       cases: [
-        { when: "social", skillId: "write-social" },
-        { when: "copy", skillId: "write-copy" },
+        { when: "social", skillId: "social" },
+        { when: "copy", skillId: "copy" },
       ],
     },
   },
@@ -95,10 +95,10 @@ describe("deterministic declared steps", () => {
   it("resolves direct and branch skill identities", () => {
     expect(resolveSkillId(branchStep, ctx(branchStep, {
       values: { hypothesis: { nativeFormat: "copy" } },
-    }))).toBe("write-copy");
+    }))).toBe("copy");
     expect(resolveSkillId(branchStep, ctx(branchStep, {
       values: { hypothesis: { nativeFormat: "social" } },
-    }))).toBe("write-social");
+    }))).toBe("social");
     expect(() =>
       resolveSkillId(
         { ...branchStep, uses: {} },
@@ -113,7 +113,7 @@ describe("deterministic declared steps", () => {
   it("fails skill steps that try to bypass the judgment seam", () => {
     const direct: PlaybookStep = {
       ...branchStep,
-      uses: { skillId: "write-social" },
+      uses: { skillId: "social" },
     };
     expect(() => executeDeclaredStep(ctx(direct))).toThrow(
       /only through the durable judgment seam/,

@@ -55,7 +55,7 @@ describe("Conquistador-owned protocol and authored corpus", () => {
       "learn-from-results",
     ]);
     expect(corpus.skillIds).toContain("conquistador");
-    expect(corpus.skillIds).toContain("research-positioning");
+    expect(corpus.skillIds).toContain("position");
     expect(corpus.digest).toMatch(/^sha256:[0-9a-f]{64}$/);
     const runtimeCorpus = loadRuntimeCorpus(skillsRoot);
     expect(runtimeCorpus.descriptor).toEqual(corpus);
@@ -64,26 +64,26 @@ describe("Conquistador-owned protocol and authored corpus", () => {
       "conquistador/SKILL.md",
       "conquistador/standards/quality.md",
       "conquistador/standards/safety.md",
-      "conquistador/workflows/launch-product.md",
+      "conquistador/plays/launch.md",
       "conquistador/channels/product-hunt.md",
     ]));
     expect(selection.systemInstructions).toContain(readFileSync(resolve(skillsRoot, "conquistador/SKILL.md"), "utf8"));
-    expect(selection.fileIds.filter((fileId) => fileId.endsWith("/SKILL.md")).length)
+    expect(selection.fileIds.filter((fileId) => fileId === "conquistador/SKILL.md" || fileId.endsWith("/COMMAND.md")).length)
       .toBeLessThan(runtimeCorpus.descriptor.skillIds.length);
 
     for (const [prompt, outcome] of [
-      ["Map the onboarding user flow", "map-user-flow"],
-      ["Specify the product UI", "brief-product-ui"],
-      ["Architect the software system", "architect-software-system"],
-      ["Build an iOS app", "build-ios-app"],
-      ["Build a web app", "build-web-app"],
-      ["Write the technical documentation", "write-technical-docs"],
+      ["Map the onboarding user flow", "flow"],
+      ["Specify the product UI", "ui"],
+      ["Architect the software system", "architect"],
+      ["Build an iOS app", "build"],
+      ["Build a web app", "build"],
+      ["Write the technical documentation", "docs"],
     ]) {
       const engineering = runtimeCorpus.resolve(prompt);
       expect(engineering.job, prompt).toBe("create-or-improve");
-      expect(engineering.fileIds, prompt).not.toContain("conquistador/workflows/specify-product-experience.md");
-      expect(engineering.fileIds.filter((fileId) => fileId.endsWith("/SKILL.md")), prompt)
-        .toEqual(["conquistador/SKILL.md", `${outcome}/SKILL.md`].sort());
+      expect(engineering.fileIds, prompt).not.toContain("conquistador/plays/spec.md");
+      expect(engineering.fileIds.filter((fileId) => fileId === "conquistador/SKILL.md" || fileId.endsWith("/COMMAND.md")), prompt)
+        .toEqual([`conquistador/commands/${outcome}/COMMAND.md`, "conquistador/SKILL.md"]);
     }
   });
 

@@ -41,10 +41,12 @@ function matchingMethods(query, contract, { permitGrowthInference = true } = {})
   for (const method of [...Object.values(contract.methods), ...contract.unavailableMethods]) {
     if (method.explicitOnly && !feedbackOptIn.test(query)) continue;
     // A one-word command name selects only through explicit invocation (see resolveCommand).
-    const intents = [...method.intents, ...(method.aliases ?? [])];
+    // An old method ID (write-copy) still names its command anywhere in the request.
+    const legacy = new Set(method.legacy ?? []);
+    const intents = [...(method.legacy ?? []), ...method.intents, ...(method.aliases ?? []).filter(alias => !legacy.has(alias))];
 
     const hit = intents.flatMap(intent => includesPhrase(text, intent)
-      ? [{ phrase: intent, kind: 'intent', score: normalized(intent).length }]
+      ? [{ phrase: intent, kind: legacy.has(intent) ? 'name' : 'intent', score: normalized(intent).length }]
       : [])
       .sort((a, b) => (b.kind === 'name') - (a.kind === 'name') || b.score - a.score)[0];
 
