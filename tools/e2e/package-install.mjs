@@ -293,6 +293,18 @@ const packedRoot = join(prefixC, ...(windows ? [] : ['lib']), 'node_modules', '@
 check('C0', 'npm install -g from the tarball', installC.status === 0 && existsSync(join(packedRoot, 'package.json')), installC.output.trim().split('\n').slice(-2).join(' | '));
 const leftOut = ['evals', 'catalog', 'hosts/eve', 'Dockerfile', '.github', 'tools/e2e', 'docs/REVIEW-2026-09-SURFACES.md', 'CONTRIBUTING.md'].filter(path => existsSync(join(packedRoot, path)));
 check('C0', 'the package leaves out evals, catalog, Eve, Docker, CI, E2E, and maintainer docs', leftOut.length === 0, leftOut.join(', '));
+// Every relative link in the skill tree, and every docs/*.md file it names, must exist in the package.
+const unresolved = [];
+for (const file of files(join(packedRoot, 'skills')).filter(path => path.endsWith('.md'))) {
+  const text = readFileSync(file, 'utf8').replace(/```[\s\S]*?```/g, '');
+  for (const [, target] of text.matchAll(/\]\(([^)\s]+)(?:\s+"[^"]*")?\)/g)) {
+    if (/^(?:[a-z][a-z0-9+.-]*:|#|\/)/i.test(target)) continue;
+    const path = resolve(dirname(file), decodeURIComponent(target.split('#')[0]));
+    if (!path.startsWith(packedRoot) || !existsSync(path)) unresolved.push(`${file.slice(packedRoot.length + 1)} → ${target}`);
+  }
+  for (const [, doc] of text.matchAll(/`(docs\/[\w.-]+\.md)`/g)) if (!existsSync(join(packedRoot, doc))) unresolved.push(`${file.slice(packedRoot.length + 1)} names ${doc}`);
+}
+check('C0', 'every relative link and docs/ file named in the skill tree exists in the package', unresolved.length === 0, unresolved.slice(0, 10).join(' || '));
 const bins = Object.values(JSON.parse(readFileSync(join(packedRoot, 'package.json'), 'utf8')).bin ?? {});
 check('C0', 'every bin path exists in the package', bins.length > 0 && bins.every(path => existsSync(join(packedRoot, path))), bins.join(', '));
 const MATRIX = [
