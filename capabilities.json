@@ -1,0 +1,181 @@
+{
+  "schema": "conquistador.capabilities/v1",
+  "about": "Capabilities that Conquistador commands can use through Executor. Conquistador names the capability; the user's own integration supplies the tool. Read-class tools run within host policy. Write-class tools need the user's explicit approval each time, after the agent shows the exact payload.",
+  "capabilities": {
+    "analytics.read": {
+      "class": "read",
+      "description": "Read web and marketing analytics: traffic, sources, campaigns, conversions, landing pages.",
+      "search": ["run analytics report", "website traffic sessions by source", "conversion events report"]
+    },
+    "product-analytics.read": {
+      "class": "read",
+      "description": "Read product usage: events, funnels, retention, cohorts, feature adoption.",
+      "search": ["query product events", "funnel conversion retention cohort", "insights trends query"]
+    },
+    "crm.read": {
+      "class": "read",
+      "description": "Read contacts, companies, deals, pipeline stages, and activity history.",
+      "search": ["search crm contacts", "list deals pipeline", "get company record"]
+    },
+    "crm.write": {
+      "class": "write",
+      "description": "Create or update contacts, companies, deals, notes, and tasks in the CRM.",
+      "search": ["create crm contact", "update deal stage", "add note to contact"]
+    },
+    "email.read": {
+      "class": "read",
+      "description": "Read inbox threads, campaign and broadcast results, lists, and audience segments.",
+      "search": ["search email messages", "list email campaigns", "email campaign report opens clicks"]
+    },
+    "email.send": {
+      "class": "write",
+      "description": "Send or schedule an email, broadcast, or sequence step.",
+      "search": ["send email", "send broadcast campaign", "schedule email"]
+    },
+    "ads.read": {
+      "class": "read",
+      "description": "Read ad accounts, campaigns, ad sets, creatives, spend, and results.",
+      "search": ["ads campaign insights spend", "list ad campaigns", "ad performance report"]
+    },
+    "ads.write": {
+      "class": "write",
+      "description": "Create, change, pause, or fund ad campaigns, ad sets, ads, and budgets.",
+      "search": ["create ad campaign", "update ad budget", "pause ad set"]
+    },
+    "search.read": {
+      "class": "read",
+      "description": "Search the web and read pages for research, competitors, and fact checks.",
+      "search": ["web search", "search the web for pages", "fetch web page content"]
+    },
+    "seo.read": {
+      "class": "read",
+      "description": "Read search performance: queries, rankings, impressions, backlinks, keyword data.",
+      "search": ["search analytics query performance", "keyword rankings", "backlinks domain overview"]
+    },
+    "social.read": {
+      "class": "read",
+      "description": "Read social posts, profiles, comments, mentions, and post metrics.",
+      "search": ["list social posts", "post engagement metrics", "search posts mentions"]
+    },
+    "social.publish": {
+      "class": "write",
+      "description": "Publish, schedule, or delete a social post or reply.",
+      "search": ["create social post", "schedule post", "publish tweet"]
+    },
+    "payments.read": {
+      "class": "read",
+      "description": "Read revenue, subscriptions, customers, plans, refunds, and churn.",
+      "search": ["list subscriptions", "revenue charges report", "list customers payments"]
+    },
+    "docs.read": {
+      "class": "read",
+      "description": "Read documents, pages, and files from the team's docs and drives.",
+      "search": ["search documents", "get page content", "list files in drive"]
+    },
+    "docs.write": {
+      "class": "write",
+      "description": "Create or update documents, pages, and files.",
+      "search": ["create document page", "update page content", "upload file"]
+    },
+    "warehouse.read": {
+      "class": "read",
+      "description": "Run read-only SQL against the data warehouse or database.",
+      "search": ["run sql query", "execute query warehouse", "list tables schema"]
+    },
+    "support.read": {
+      "class": "read",
+      "description": "Read support tickets, conversations, and customer feedback.",
+      "search": ["list support tickets", "search conversations", "customer feedback"]
+    },
+    "calendar.read": {
+      "class": "read",
+      "description": "Read calendar events and availability.",
+      "search": ["list calendar events", "free busy availability", "get event"]
+    },
+    "chat.read": {
+      "class": "read",
+      "description": "Read team chat channels, threads, and messages.",
+      "search": ["search messages", "channel history", "list channels"]
+    },
+    "chat.send": {
+      "class": "write",
+      "description": "Post a message to a team chat channel or thread.",
+      "search": ["post message to channel", "send chat message", "reply in thread"]
+    },
+    "issues.read": {
+      "class": "read",
+      "description": "Read issues, projects, cycles, and roadmaps from the issue tracker.",
+      "search": ["list issues", "search issues", "get project"]
+    },
+    "issues.write": {
+      "class": "write",
+      "description": "Create or update issues, comments, and project items.",
+      "search": ["create issue", "update issue", "add comment to issue"]
+    }
+  },
+  "commands": {
+    "position": { "kind": "skill", "uses": ["crm.read", "support.read", "search.read", "docs.read", "analytics.read"] },
+    "brand": { "kind": "skill", "uses": ["docs.read", "social.read"] },
+    "pricing": { "kind": "skill", "uses": ["payments.read", "product-analytics.read", "crm.read", "search.read"] },
+    "channels": { "kind": "skill", "uses": ["analytics.read", "search.read", "seo.read", "social.read", "ads.read"] },
+    "budget": { "kind": "skill", "uses": ["ads.read", "analytics.read", "payments.read", "crm.read"] },
+    "funnel": { "kind": "skill", "uses": ["analytics.read", "product-analytics.read", "payments.read", "crm.read", "warehouse.read"] },
+    "diagnose": { "kind": "skill", "uses": ["analytics.read", "product-analytics.read", "ads.read", "crm.read", "payments.read", "seo.read", "warehouse.read"] },
+    "prioritize": { "kind": "skill", "uses": ["analytics.read", "product-analytics.read", "issues.read", "docs.read"] },
+    "shape": { "kind": "skill", "uses": ["docs.read", "issues.read", "product-analytics.read", "issues.write"] },
+    "decide": { "kind": "skill", "uses": ["docs.read"] },
+    "campaign": { "kind": "skill", "uses": ["analytics.read", "crm.read", "calendar.read", "docs.read", "docs.write", "issues.write"] },
+    "event": { "kind": "skill", "uses": ["calendar.read", "crm.read", "docs.read", "docs.write"] },
+    "copy": { "kind": "skill", "uses": ["docs.read", "analytics.read"] },
+    "social": { "kind": "skill", "uses": ["social.read", "analytics.read", "social.publish"] },
+    "outreach": { "kind": "skill", "uses": ["crm.read", "email.read", "crm.write", "email.send"] },
+    "article": { "kind": "skill", "uses": ["seo.read", "search.read", "docs.read", "docs.write"] },
+    "video": { "kind": "skill", "uses": ["social.read", "social.publish"] },
+    "ads": { "kind": "skill", "uses": ["ads.read", "analytics.read", "ads.write"] },
+    "creative": { "kind": "skill", "uses": ["docs.read", "ads.read"] },
+    "ideas": { "kind": "skill", "uses": ["search.read", "seo.read", "social.read", "support.read"] },
+    "vietnamese": { "kind": "skill", "uses": [] },
+    "seo": { "kind": "skill", "uses": ["seo.read", "analytics.read", "search.read"] },
+    "convert": { "kind": "skill", "uses": ["analytics.read", "product-analytics.read"] },
+    "audit": { "kind": "skill", "uses": ["analytics.read", "seo.read", "ads.read", "social.read", "email.read"] },
+    "critique": { "kind": "skill", "uses": [] },
+    "factcheck": { "kind": "skill", "uses": ["search.read", "docs.read"] },
+    "measure": { "kind": "skill", "uses": ["analytics.read", "product-analytics.read", "warehouse.read", "payments.read", "ads.read", "crm.read"] },
+    "results": { "kind": "skill", "uses": ["ads.read", "crm.read", "email.read", "social.read", "analytics.read"] },
+    "watch": { "kind": "skill", "uses": ["social.read"] },
+    "flow": { "kind": "skill", "uses": ["product-analytics.read", "docs.read"] },
+    "ui": { "kind": "skill", "uses": ["docs.read", "product-analytics.read"] },
+    "architect": { "kind": "skill", "uses": ["docs.read", "issues.read"] },
+    "build": { "kind": "skill", "uses": ["issues.read", "issues.write"] },
+    "docs": { "kind": "skill", "uses": ["docs.read", "docs.write"] },
+    "feedback": { "kind": "skill", "uses": ["issues.write"] },
+    "launch": { "kind": "play", "uses": ["analytics.read", "crm.read", "calendar.read", "social.publish", "email.send", "docs.write"] },
+    "gtm": { "kind": "play", "uses": ["crm.read", "analytics.read", "ads.read", "search.read"] },
+    "plan": { "kind": "play", "uses": ["analytics.read", "product-analytics.read", "crm.read", "payments.read"] },
+    "landing": { "kind": "play", "uses": ["analytics.read", "product-analytics.read", "seo.read"] },
+    "lifecycle": { "kind": "play", "uses": ["email.read", "crm.read", "product-analytics.read", "email.send"] },
+    "referral": { "kind": "play", "uses": ["product-analytics.read", "payments.read", "email.send"] },
+    "outbound": { "kind": "play", "uses": ["crm.read", "email.read", "crm.write", "email.send"] },
+    "press": { "kind": "play", "uses": ["search.read", "crm.read", "email.send"] },
+    "content": { "kind": "play", "uses": ["seo.read", "search.read", "social.read", "analytics.read", "docs.write"] },
+    "series": { "kind": "play", "uses": ["social.read", "social.publish"] },
+    "paid": { "kind": "play", "uses": ["ads.read", "analytics.read", "ads.write"] },
+    "expand": { "kind": "play", "uses": ["analytics.read", "social.read", "ads.read"] },
+    "answers": { "kind": "play", "uses": ["search.read", "seo.read"] },
+    "pseo": { "kind": "play", "uses": ["seo.read", "search.read", "warehouse.read"] },
+    "report": { "kind": "play", "uses": ["analytics.read", "seo.read", "social.read", "email.read", "docs.write"] },
+    "trailer": { "kind": "play", "uses": [] },
+    "appstore": { "kind": "play", "uses": ["search.read", "payments.read"] },
+    "qa": { "kind": "play", "uses": [] },
+    "interactive": { "kind": "play", "uses": ["analytics.read", "social.publish"] },
+    "experiment": { "kind": "play", "uses": ["product-analytics.read", "analytics.read", "warehouse.read", "issues.write"] },
+    "spec": { "kind": "play", "uses": ["docs.read", "docs.write", "issues.write"] },
+    "init": { "kind": "meta", "uses": ["analytics.read", "crm.read", "payments.read", "docs.read"] },
+    "pin": { "kind": "meta", "uses": [] },
+    "unpin": { "kind": "meta", "uses": [] },
+    "check": { "kind": "meta", "uses": [] },
+    "connect": { "kind": "meta", "uses": [] },
+    "review": { "kind": "meta", "uses": [] },
+    "doctor": { "kind": "meta", "uses": [] }
+  }
+}
