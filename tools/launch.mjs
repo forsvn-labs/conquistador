@@ -126,7 +126,12 @@ async function setup(ui, options, root) {
   }
   const spin = ui.spinner();
   spin.start('Installing');
-  const { results } = installTargets(targets, { scope, root, hooks: options.hooks });
+  const { results, staged, error } = installTargets(targets, { scope, root, hooks: options.hooks });
+  if (!staged) {
+    spin.stop('Install failed', 2);
+    ui.log.error(`${error}\nNothing installed. Your agents are unchanged.`);
+    return { agents: [] };
+  }
   const failed = results.filter(item => !item.result.ok);
   spin.stop(failed.length ? 'Installed with problems' : 'Installed', failed.length ? 2 : 0);
   for (const { agent, result } of results) {
@@ -238,7 +243,8 @@ function installOnly(options, cwd) {
   const missing = missingHosts(targets, scope);
   if (missing.length) { console.error(`Not found on PATH: ${missing.map(agent => agent.command).join(', ')}. Install that agent first, or use --scope=project.`); return 1; }
   console.log(`Installing Conquistador ${version} (${scope}) for ${targets.map(agent => agent.label).join(', ')}.`);
-  const { results } = installTargets(targets, { scope, root, hooks: options.hooks, log: line => console.log(`  $ ${line}`) });
+  const { results, staged, error } = installTargets(targets, { scope, root, hooks: options.hooks, log: line => console.log(`  $ ${line}`) });
+  if (!staged) { console.error(`${error}\nNothing installed. Your agents are unchanged.`); return 1; }
   for (const { agent, result } of results) console.log(result.ok ? `  ✓ ${agent.label}` : `  ✗ ${agent.label}: ${result.error}`);
   const ok = results.filter(item => item.result.ok).map(item => item.agent);
   const next = ok.find(agent => agent.slash) ?? ok[0];

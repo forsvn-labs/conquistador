@@ -306,7 +306,8 @@ for (const file of files(join(packedRoot, 'skills')).filter(path => path.endsWit
     const path = resolve(dirname(file), decodeURIComponent(target.split('#')[0]));
     if (!path.startsWith(packedRoot) || !existsSync(path)) unresolved.push(`${file.slice(packedRoot.length + 1)} → ${target}`);
   }
-  for (const [, doc] of text.matchAll(/`(docs\/[\w.-]+\.md)`/g)) if (!existsSync(join(packedRoot, doc))) unresolved.push(`${file.slice(packedRoot.length + 1)} names ${doc}`);
+  // Conquistador's own docs have uppercase names; lowercase names are sample files in worked examples.
+  for (const [, doc] of text.matchAll(/`(docs\/[A-Z][\w.-]*\.md)`/g)) if (!existsSync(join(packedRoot, doc))) unresolved.push(`${file.slice(packedRoot.length + 1)} names ${doc}`);
 }
 check('C0', 'every relative link and docs/ file named in the skill tree exists in the package', unresolved.length === 0, unresolved.slice(0, 10).join(' || '));
 const bins = Object.values(JSON.parse(readFileSync(join(packedRoot, 'package.json'), 'utf8')).bin ?? {});

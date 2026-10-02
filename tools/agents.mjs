@@ -375,9 +375,13 @@ export function setHooks(on) {
 // Install the chosen hosts in one scope. Returns the hosts that succeeded.
 export function installTargets(targets, { scope, root, hooks = true, log = () => {} }) {
   const results = [];
-  if (scope === 'global' && targets.some(agent => agent.how !== 'skill')) {
-    try { copyPayload(pluginHome()); } catch (error) { return { results: targets.map(agent => ({ agent, result: { ok: false, error: error.message } })), staged: false }; }
-  }
+  // A damaged package must reach no agent, not even as a skill copy (I2).
+  const fail = error => ({ results: targets.map(agent => ({ agent, result: { ok: false, error: error.message } })), staged: false, error: error.message });
+  try {
+    const problems = invalidPayload(productRoot, expectedFiles());
+    if (problems.length) throw incompletePayload(productRoot, problems);
+    if (scope === 'global' && targets.some(agent => agent.how !== 'skill')) copyPayload(pluginHome());
+  } catch (error) { return fail(error); }
   if (!hooks) setHooks(false);
   const done = new Set();
   for (const agent of targets) {

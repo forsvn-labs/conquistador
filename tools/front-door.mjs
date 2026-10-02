@@ -134,7 +134,8 @@ export async function runAdd(args) {
   if (chosen.some(agent => agent.id === 'grok')) console.log('Grok installation trusts the bundled plugin scripts (--trust).');
   const log = line => console.log(dim(`  $ ${line}`));
   if (dryRun) { report(chosen.map(agent => ({ agent, result: applyAgent(agent, 'install', { source: pluginHome(), dryRun, log }) }))); return 0; }
-  const { results } = installTargets(chosen, { scope: 'global', root: projectRoot(), log });
+  const { results, staged, error } = installTargets(chosen, { scope: 'global', root: projectRoot(), log });
+  if (!staged) { console.error(`${error}\nNothing installed. Your agents are unchanged.`); return 1; }
   const failed = report(results);
   console.log(self === 'conquistador' ? `\nStart a task: ${bold('conquistador')}, or type ${bold('/conquistador')} in your agent.` : `\nStart a task: type ${bold('/conquistador')} in your agent.`);
   return failed ? 1 : 0;
