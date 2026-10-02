@@ -1,117 +1,49 @@
 # Set up the working stack
 
-Use this method when the requested outcome needs data, a provider, or a local tool that the current
-host cannot yet reach. Set up only what the current task needs, then continue the task.
+Use this method when the outcome needs data, a provider, or a local tool that the host cannot
+reach yet. Set up only what this task needs, then continue the task.
 
-## Inventory what already exists
+## Inventory first
 
-Inspect the repository, host tools, configured connectors, and available commands before asking the
-user. Build a short internal map with these fields:
+Check the repository, host tools, configured MCP servers, and `conquistador connect --json`
+before you ask the user. For each system the task needs, note:
 
-| Field | Record |
+| Field | Note |
 | --- | --- |
-| System | The existing source or destination, such as Databricks, Confluence, HubSpot, or GitHub |
-| Job | The exact read, query, draft, or write needed for this task |
-| Interface | Existing host connector, MCP server, official CLI, or operator-supplied Executor route |
-| Identity | Account, workspace, environment, and permission scope, without secret values |
-| Data boundary | Data that may enter the agent context and data that must stay in the system |
-| Cost boundary | Free, metered, or unknown, with the task limit |
-| Write boundary | Draft, sandbox, paused object, or live mutation, plus the required human decision |
-| Proof | The check that shows the interface can do the declared job |
+| Capability | The capability id from [`capabilities.json`](../capabilities.json), for example `crm.read` |
+| Job | The exact read or write this task needs |
+| Route | Existing host tool, Executor integration, or the provider's official CLI |
+| Scope | Account, workspace, and environment, without secret values |
+| Write boundary | Draft, paused object, or live change, and the approval it needs |
 
-If a material item remains unknown, ask one bundled question about the systems the user already uses,
-the target account or environment, and the allowed action. Do not ask the user to choose between
-technical transports when one existing route clearly fits.
+If a material item stays unknown, ask one bundled question: which service the user uses, which
+account, and which action is allowed.
 
-## Choose the access route
+## Choose the route
 
-Prefer routes in this order:
+1. Reuse a working host tool or MCP server.
+2. Use the user's Executor integration for the capability. Follow
+   [connect accounts](connect-accounts.md) when it is missing.
+3. Use the provider's official CLI when host policy allows it and Executor has no integration.
+4. If no route works, finish with supplied context and name the missing capability.
 
-1. Reuse a verified connector or MCP server already available in the host.
-2. Guide missing account access through the operator's Executor connection manager. Reuse an
-   existing Executor MCP, API, or GraphQL route when available. Keep the provider, operation,
-   account, environment, and payload explicit.
-3. If host policy permits it, use the provider's maintained CLI through the project's package
-   manager or a pinned auxiliary package cache. Add a project dependency only when the product
-   itself needs that dependency.
-4. If no safe route exists, finish the local work and return the exact missing connection or human
-   action.
+For recurring reports, read from the warehouse (`warehouse.read`) when the data lands there.
+Call the live provider for writes and for data that only the provider has.
 
-Read recurring analytics from an owned warehouse or durable export when available. Use a live
-provider API for writes and provider-only reads. Do not poll live ad, CRM, or product APIs when the
-same reporting data already lands in the warehouse.
+## Check before use
 
-## Prepare and verify
+- Executor: `conquistador connect verify` with one bounded read for the capability.
+- CLI: the executable, its version, and the target account.
+- Data: a small sample that keeps units, dates, and the source.
+- Write: a draft, a sandbox, or a dry run, with the final payload shown before approval.
 
-Use the host's credential flow. Never request a secret in chat or write it to commands, logs, project
-files, or specialist assignments. Authentication, new accounts, paid plans, administrator changes,
-and production permissions remain human-owned.
-
-In a complete distribution, `conquistador connections setup` inspects whether Executor is installed
-and prints official next steps. `status` reports detection only. Those commands do not themselves
-run `npm install` or start the service. The parent skill does that through the host when helping
-a new user get going; see [connect accounts](connect-accounts.md). `prepare`, `login`, and `probe`
-then configure an operator-owned gateway. None of these prove a provider operation. The coding
-host's access to Executor and Executor's access to a provider are separate grants. Reuse an
-existing grant only within its account and operation scope. Never extract provider credentials
-from the host or put them into generated scripts. Connection approval does not grant publication
-or write authority.
-
-Verify the narrow route before use:
-
-- CLI: resolve the executable, version, help output, and target environment;
-- MCP: confirm server discovery and the exact tool or resource needed;
-- Executor: confirm the named connection, operation, account, and read or write class;
-- data: run a bounded metadata or sample query that preserves units, dates, and source identity;
-- write: prefer a draft, sandbox, dry run, or paused object and show the final payload before approval.
-
-Do not treat installation, a successful login, tool discovery, or a fixture as proof that a business
-operation succeeded.
+Never ask for secrets in chat or write them to commands, logs, or files. Account creation, paid
+plans, and admin changes stay with the user.
 
 ## Continue the work
 
-Give specialists the verified interface and its limits in their assignment packets. Record the setup
-result only when the user wants a durable stack note. Keep that note outside installed Conquistador
-files and omit credentials.
+Give each specialist the verified route and its limits in the assignment. If setup fails, name
+the failed check, use the best supplied evidence, and finish the deliverable.
 
-If setup succeeds, complete the requested task. If it fails, name the failed check and use the best
-available local evidence. Do not stop with a generic tool checklist.
-
-## Executable setup in a complete distribution
-
-Use `createStackSession` from `catalog/src/stack.ts` with the host's actual discovered routes.
-Each route binds an existing extension manifest, exact adapter and connection reference. Declare
-required operation, principal, environment, data classes, and finite unit and cost limits. The
-selection distinguishes ready, verification-only, unsupported, missing connection, denied policy,
-and human-action-required states. A ready selection still passes through Gateway at dispatch.
-
-The setup API runs bounded reads only. If the host requires Executor, its route policy rejects CLI,
-MCP and warehouse dispatch that bypasses Executor. The first supplied mapping implements only
-GitHub repository metadata and an exact host-owned repository allowlist. Other systems need an
-explicit audited extension and connection; naming a vendor does not make it supported. Do not
-invent a generic HTTP, shell, or MCP invocation to fill a missing operation.
-
-The optional Executor package supplies a host-only callback for the GitHub mapping. It requires an
-operator-reviewed exact tool schema and connection binding. It does not make other integrations
-available through this catalog.
-
-Return the setup receipt's operation, route, state and digests. Keep credentials, account details,
-customer rows and resolved knowledge paths out of that receipt. A candidate verification read can
-produce observed evidence without promoting the operation to supported. Missing vision, warehouse,
-CRM, wiki or provider operations remain bounded handoffs.
-
-## Explicit durable work
-
-When the user needs work to continue outside this coding-agent session, inspect
-`conquistador jobs --help` in the complete distribution. Prepare the optional Eve app with the
-canonical methods, a named owner, and a selected model. Installation, model access, service start,
-and submission are separate explicit steps. Agree on cost and access limits before execution.
-Do not enable schedules or move an interactive job to Eve implicitly.
-
-Use one coordinating parent per job. Keep provider credentials in Executor and job state outside
-the installed methods. Inspect an existing session after an uncertain submission before retrying.
-If this host lacks the job commands, finish the interactive work and identify the needed host.
-
-Use `conquistador integrations status` for installed source pins and `check-updates` for a read-only
-upstream version report. A new release requires review and compatibility checks. It must not change
-an existing account grant or enable additional operations automatically.
+Durable jobs outside this session (Eve) and the typed catalog are maintainer paths. See
+`docs/INTEGRATIONS.md` in the Conquistador repository.

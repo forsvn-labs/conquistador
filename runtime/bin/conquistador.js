@@ -93,6 +93,9 @@ if (preflight !== null) {
 } else if (args[0] === "setup") {
   const { runSetup } = await import("../../tools/setup.mjs");
   process.exitCode = await runSetup(args.slice(1));
+} else if (args[0] === "connect") {
+  const { runConnect } = await import("../../tools/connect.mjs");
+  process.exitCode = await runConnect(args.slice(1));
 } else if (args[0] === "connections") {
   const { run } = await import("../../hosts/executor/cli.mjs");
   process.exitCode = await run(args.slice(1));
