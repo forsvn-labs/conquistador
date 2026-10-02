@@ -39,12 +39,16 @@
       "sha256": "f0df2d2bae1e887b5763016853e567e297f1590ed5aca9699196309b87c4c3f4"
     },
     {
+      "path": "hooks/check-hook.mjs",
+      "sha256": "081de1ae231ad166b85f39038415fb6880d604ecff0679f1f9816c9db14b4c22"
+    },
+    {
       "path": "hooks/claude.json",
-      "sha256": "dd3bde77dd58f90cfc91e0ef775bf5b79b69c753c10fc88b098accaffb41ae7d"
+      "sha256": "5acc4a1a9e44206ca436850ef2b23032b240b4f4bd75a8c00c872fd8f970ede0"
     },
     {
       "path": "hooks/codex.json",
-      "sha256": "d4c45e94c088aa70100e0e8585325370547990dffb01e70077b8baceac2f0bf8"
+      "sha256": "e0faa1bb6ca01e36ddd5c20dfecd8a06986ade7a6b508803e137ea730e6671e3"
     },
     {
       "path": "hooks/conquistador-hook.mjs",
@@ -52,7 +56,7 @@
     },
     {
       "path": "hooks/cursor.json",
-      "sha256": "dd7b9538ee36519930dd8c3b44b52368e2b3bb8497766fb8b9a3fc8c27ec3c73"
+      "sha256": "fe5a101d197da431165105d04a1a6dde6bc86c6ff36aafe800ea2e9d327164e1"
     },
     {
       "path": "hooks/README.md",
@@ -4645,6 +4649,22 @@
     {
       "path": "tools/brief.mjs",
       "sha256": "0cfc8a55a7e2d6607c1efaf286d4720b2ac4babdda1fd75a7ca779d49036d2e1"
+    },
+    {
+      "path": "tools/check/channels.mjs",
+      "sha256": "1bfb7b8e0563a437df15ebb1ca192ae71fa82118f6e9a3ea8a08d84558ded436"
+    },
+    {
+      "path": "tools/check/extract.mjs",
+      "sha256": "869cdb816890091560cf16c82650d80ac03f38ad49d7a203a17334e357c665cd"
+    },
+    {
+      "path": "tools/check/index.mjs",
+      "sha256": "7cba3fa4ad476da928c380f06bb41bc98c96a5132ba8dac866611df66fe0065e"
+    },
+    {
+      "path": "tools/check/rules.mjs",
+      "sha256": "26f2921d1bd1e5c4330384ca4be3543c7196bd55e8a8af5615336de93af0f876"
     },
     {
       "path": "tools/context-selection.mjs",
