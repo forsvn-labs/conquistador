@@ -55,14 +55,15 @@ test('cold spawned stdio lists methods and reads the parent, outcome, and routin
   assert.deepEqual(result.messages[1].result.tools.map(tool => tool.name), ['conquistador_brief', 'conquistador_search', 'conquistador_methods', 'conquistador_files', 'conquistador_read']);
   const methods = JSON.parse(result.messages[2].result.content[0].text);
   assert.equal(methods.guide, 'conquistador/SKILL.md');
-  assert.equal(methods.methods.length, 35);
+  // 35 method commands plus 6 meta commands (init, pin, check, connect, review, doctor).
+  assert.equal(methods.methods.length, 41);
   assert.equal(methods.plays.length, 21);
   assert.ok(JSON.parse(result.messages[3].result.content[0].text).files.includes('conquistador/standards/safety.md'));
   assert.match(result.messages[4].result.content[0].text, /^name: conquistador$/m);
   assert.match(result.messages[5].result.content[0].text, /name: copy/);
   const routing = JSON.parse(result.messages[6].result.content[0].text);
   assert.equal(routing.schemaVersion, 'conquistador.routing-contract/v1');
-  assert.equal(Object.keys(routing.methods).length, 35);
+  assert.equal(Object.keys(routing.methods).length, 41);
 });
 
 test('contained reads refuse traversal, symlinks, hidden files, binary and oversized resources', t => {

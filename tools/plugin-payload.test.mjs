@@ -34,7 +34,8 @@ test('generated plugin manifest includes every release method/resource and only 
 
   for (const item of completeness.requiredResources) assert.equal(entries.get(`skills/${item.path}`), item.sha256);
   assert.deepEqual([...entries.keys()].filter(path => /(^|\/)SKILL\.md$/.test(path) && path.startsWith('skills/')), ['skills/conquistador/SKILL.md']);
-  assert.equal([...entries.keys()].filter(path => /^skills\/conquistador\/commands\/[^/]+\/COMMAND\.md$/.test(path)).length, 35);
+  // 35 method commands plus 6 meta commands (init, pin, check, connect, review, doctor).
+  assert.equal([...entries.keys()].filter(path => /^skills\/conquistador\/commands\/[^/]+\/COMMAND\.md$/.test(path)).length, 41);
   assert.equal(entries.has('hosts/coding-agent/operator.mjs'), false);
   assert.equal(entries.has('runtime/bin/conquistador.js'), false);
   assert.equal(entries.has('release/completeness.json'), false);
