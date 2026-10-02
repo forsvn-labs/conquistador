@@ -763,6 +763,14 @@
       "sha256": "7945e09e0623af3fdc1eef2452ab91ea81228236e50113e59e2bc78978df006f"
     },
     {
+      "path": "skills/conquistador/commands/init/COMMAND.md",
+      "sha256": "9f6e205abdc6e47f86926f4ac1dc153f0c292e7de7fe9a619bc8bd4033adcc13"
+    },
+    {
+      "path": "skills/conquistador/commands/pin/COMMAND.md",
+      "sha256": "3251cc326330d25e362ff44406ae494d0326c47a1560047773ded4971ee4fe24"
+    },
+    {
       "path": "skills/conquistador/examples/content-improvement.md",
       "sha256": "7804a6c5d5d38090763a23136df2536f1111659c13e455d123e4ed87c0cc440f"
     },
@@ -1315,6 +1323,10 @@
       "sha256": "9dd7792cfef13a463e923a5cc9af2a5745e980552ff814dd1781482ffca90db5"
     },
     {
+      "path": "skills/conquistador/references/menu.md",
+      "sha256": "e24fe1b787fe989eb8e9105626f9e4075bf9d31038fdd12715d2bdb8694638cb"
+    },
+    {
       "path": "skills/conquistador/references/playbook.md",
       "sha256": "921fddc69e7a01996b948855fee9590f640c7d1324d513d12f1589aafb452217"
     },
@@ -1564,7 +1576,7 @@
     },
     {
       "path": "skills/conquistador/standards/context.md",
-      "sha256": "191174a55c0c1ebe05eda1166e4494e2acdcafbd521f2f81db7c21cdfae4b235"
+      "sha256": "90fa45c2fd46438102ae71a6e65a17ddda2c93bb8598311b3f871848d0e55f52"
     },
     {
       "path": "skills/conquistador/standards/engineering.md",
@@ -4644,7 +4656,7 @@
     },
     {
       "path": "tools/brief.mjs",
-      "sha256": "0cfc8a55a7e2d6607c1efaf286d4720b2ac4babdda1fd75a7ca779d49036d2e1"
+      "sha256": "58a6872fb113bf0e674609a5f9510a5270fa1d03eb4f72674e5a462c26cc344f"
     },
     {
       "path": "tools/context-selection.mjs",
