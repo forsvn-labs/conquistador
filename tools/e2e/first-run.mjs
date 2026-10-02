@@ -4,6 +4,7 @@
 //   node tools/e2e/first-run.mjs [--out DIR] [--json] [--live]
 import { spawnSync } from 'node:child_process';
 import { existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { createServer } from 'node:net';
 import { homedir, tmpdir } from 'node:os';
 import { dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -31,7 +32,13 @@ function run(command, commandArgs, { cwd, env = {} } = {}) {
   const result = spawnSync(file, fileArgs, { cwd, encoding: 'utf8', timeout: 60_000, env: { ...process.env, ...env }, ...options });
   return { status: result.status, stdout: result.stdout ?? '', stderr: result.stderr ?? '' };
 }
-const isolated = { HOME: home, USERPROFILE: home, CONQUISTADOR_HOME: join(home, '.conquistador'), CLAUDE_CONFIG_DIR: '', CODEX_HOME: '', CURSOR_HOME: '', COPILOT_HOME: '', GROK_HOME: '', GEMINI_CLI_HOME: '', EXECUTOR_DATA_DIR: '' };
+// A free loopback port with nothing on it, so the isolated cases never see this machine's Executor.
+const noExecutor = await new Promise((done, fail) => {
+  const server = createServer();
+  server.on('error', fail);
+  server.listen(0, '127.0.0.1', () => { const { port } = server.address(); server.close(() => done(`http://127.0.0.1:${port}`)); });
+});
+const isolated = { CONQUISTADOR_EXECUTOR_URL: noExecutor, HOME: home, USERPROFILE: home, CONQUISTADOR_HOME: join(home, '.conquistador'), CLAUDE_CONFIG_DIR: '', CODEX_HOME: '', CURSOR_HOME: '', COPILOT_HOME: '', GROK_HOME: '', GEMINI_CLI_HOME: '', EXECUTOR_DATA_DIR: '' };
 const conquistador = (commandArgs, cwd, env = {}) => run(process.execPath, [cli, ...commandArgs], { cwd, env: { ...isolated, ...env } });
 const git = (gitArgs, cwd) => run('git', ['-c', 'user.name=E2E', '-c', 'user.email=e2e@example.invalid', '-c', 'commit.gpgsign=false', '-c', 'tag.gpgsign=false', ...gitArgs], { cwd });
 
