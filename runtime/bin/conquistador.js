@@ -73,6 +73,9 @@ if (preflight !== null) {
 } else if (["status", "doctor", "update", "uninstall"].includes(args[0])) {
   const { runOperatorSetup } = await import("../../tools/operator-setup.mjs");
   process.exitCode = await runOperatorSetup(args);
+} else if (["signals", "context", "pin", "unpin"].includes(args[0])) {
+  const run = { signals: async () => (await import("../../tools/signals.mjs")).runSignals(args.slice(1)), context: async () => (await import("../../tools/context-files.mjs")).runContext(args.slice(1)), pin: async () => (await import("../../tools/pin.mjs")).runPin("pin", args.slice(1)), unpin: async () => (await import("../../tools/pin.mjs")).runPin("unpin", args.slice(1)) };
+  process.exitCode = await run[args[0]]();
 } else if (args[0] === "runtime") {
   const { runCli } = await import("../lib/main.js");
   process.exitCode = await runCli(args.slice(1));
