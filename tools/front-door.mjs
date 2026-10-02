@@ -324,8 +324,9 @@ export async function runFrontDoor(args) {
   if (command === 'update' && installed() && !rest.some(arg => arg.startsWith('--project') || arg.startsWith('--path'))) return runUpdate(rest);
   if (command === 'remove') return runRemove(rest);
   if (command === 'agents') return runAgents(rest);
-  // `doctor --project`, `--path`, and `--config` keep their operator and runtime meanings.
-  if (command === 'doctor' && !rest.some(arg => /^--(?:project|path|config)(?:=|$)/.test(arg))) return (await import('./doctor.mjs')).runDoctor(rest);
+  // `doctor --project`, `--path`, `--config`, and a folder with a per-project operator keep the operator and runtime meanings.
+  const operator = ['.conquistador', '.conquistador-operator'].some(folder => existsSync(join(process.cwd(), folder, '.conquistador-install.json')));
+  if (command === 'doctor' && !operator && !rest.some(arg => /^--(?:project|path|config)(?:=|$)/.test(arg))) return (await import('./doctor.mjs')).runDoctor(rest);
   if (command === 'brief') return runBrief(rest);
   if (command === 'playbooks') return runPlaybooks(rest);
   // The task picker replaced the interactive tour. `tour AREA` and piped `tour` still print.
