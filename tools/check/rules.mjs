@@ -13,13 +13,14 @@ export const families = {
 };
 
 // A sentence with one of these markers carries its own source.
-const sourceMarker = /\[\^?[\w-]+\]|\[\d+\]|<sup>|†|‡|\(source|\bsources?:|according to|\bper (?:a |the )?[A-Z0-9]|\b(?:survey|study|report|audit|benchmark|analysis|data) (?:by|from|of)\b|\bdata from\b|\bas of (?:\w+ )?\d{4}\b|\bin (?:a|our) \d{4} (?:survey|study|report)|\bG2\b|\bGartner\b|\bForrester\b|\bIDC\b|\bNielsen\b|\bmeasured (?:by|on|across)\b|\*$/i;
+const sourceMarker = /\[\^?[\w-]+\]|\[\d+\]|<sup>|†|‡|\(source|\bsources?:|according to|\bper (?:a |the )?[A-Z0-9]|\b(?:survey|study|report|audit|benchmark|analysis|data) (?:by|from|of)\b|\bdata from\b|\bas of (?:\w+ )?\d{4}\b|\bin (?:a|our) \d{4} (?:survey|study|report)|\bG2\b|\bGartner\b|\bForrester\b|\bIDC\b|\bNielsen\b|\bmeasured (?:by|on|across)\b|\b(?:test|experiment|trial|survey|study|sample) (?:with|of|across) |\bn ?= ?\d+|\*$/i;
 
 const concreteTime = /\b(?:jan|feb|mar|apr|may|jun|jul|aug|sep|sept|oct|nov|dec)[a-z]*\.? \d{1,2}\b|\b\d{1,2} (?:jan|feb|mar|apr|may|jun|jul|aug|sep|sept|oct|nov|dec)[a-z]*\b|\b\d{1,2}\/\d{1,2}\b|\b\d{4}-\d{2}-\d{2}\b|\b\d{1,2}(?::\d{2})?\s?(?:am|pm)\b|\bmidnight\b|\b(?:mon|tues|wednes|thurs|fri|satur|sun)day\b|\b\d+ (?:hours?|days?)\b/i;
 
 const sentences = text => text.split(/(?<=[.!?…])\s+(?=[A-Z0-9"“'‘(*])/).filter(Boolean);
 
-const cited = (sentence, line) => sourceMarker.test(sentence) || line.links.some(link => /^https?:/.test(link.href) && !/[?&]utm_/.test(link.href) && sentence.includes(link.text));
+// The previous sentence counts too: "In a 2026 survey of 400 buyers (link)... 62% said ...".
+const cited = (sentence, line, previous = '') => sourceMarker.test(sentence) || sourceMarker.test(previous) || line.links.some(link => /^https?:/.test(link.href) && !/[?&]utm_/.test(link.href) && sentence.includes(link.text));
 
 const clip = text => (text.length > 120 ? `${text.slice(0, 117)}...` : text);
 
@@ -31,11 +32,14 @@ function phrase(meta, pattern, unless = () => false) {
     check(context) {
       const found = [];
 
+      let previous = '';
+
       for (const line of context.document.lines) {
         for (const sentence of sentences(line.text)) {
           const match = pattern.exec(sentence);
 
-          if (match && !unless(sentence, line, context)) found.push({ line: line.n, snippet: clip(sentence), match: match[0] });
+          if (match && !unless(sentence, line, previous)) found.push({ line: line.n, snippet: clip(sentence), match: match[0] });
+          previous = sentence;
         }
       }
 
@@ -85,7 +89,7 @@ export const rules = [
     message: 'Performance number, percentage, or customer count with no source marker.',
     fix: 'Add the source (study, dataset, date, sample) next to the number, or remove the number.' },
   /\b\d+(?:\.\d+)?\s?%(?! off\b| discount\b| of (?:the )?(?:proceeds|profits)\b)|\b\d+(?:\.\d+)?x (?:faster|more|better|cheaper|higher|growth|roi|return|increase|the)\b|\b\d+(?:\.\d+)? times (?:faster|more|better|cheaper|higher)\b|\b\d{1,3}(?:,\d{3})+\+?\s+(?:users|customers|teams|companies|businesses|downloads|subscribers|marketers|people|developers|brands|creators|members|installs)\b|\b\d+(?:\.\d+)?\s?[km]\+?\s+(?:users|customers|teams|companies|businesses|downloads|subscribers|marketers|people|developers|brands|creators|members|installs)\b|\bsaves? (?:you )?(?:up to )?\d+\s?(?:hours?|days?|minutes?)\b/i,
-  (sentence, line) => cited(sentence, line) || /^\s*(?:save|get|take|enjoy|extra|up to)\b[^.]*%/i.test(sentence) && /% off|off\b|discount|coupon|code\b/i.test(sentence)),
+  (sentence, line, previous) => cited(sentence, line, previous) || /^\s*(?:save|get|take|enjoy|extra|up to)\b[^.]*%/i.test(sentence) && /% off|off\b|discount|coupon|code\b/i.test(sentence)),
   phrase({ id: 'claim-proven', family: 'claims', severity: 'warning', name: 'Proof claim without a citation',
     message: '"Proven" or "studies show" claim with no citation.',
     fix: 'Link the study or dataset, or describe what you observed and where.' },
