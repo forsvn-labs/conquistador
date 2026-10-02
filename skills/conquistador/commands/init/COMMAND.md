@@ -1,6 +1,8 @@
 ---
 name: init
 description: "Record durable product and growth truth in PRODUCT.md and GROWTH.md, so every later command starts from it"
+metadata:
+  version: 1.0.0
 ---
 
 # init

@@ -1,6 +1,8 @@
 ---
 name: pin
 description: "Make a standalone shortcut, such as /outreach, for one Conquistador command"
+metadata:
+  version: 1.0.0
 ---
 
 # pin and unpin

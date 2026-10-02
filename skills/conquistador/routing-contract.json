@@ -1035,6 +1035,44 @@
       "roles": [],
       "knowledgeHandles": []
     },
+    "check": {
+      "name": "check",
+      "label": "Check marketing text by rules",
+      "description": "Run the rule-based marketing checker on a file, folder, or URL and fix what it finds.",
+      "path": "skills/conquistador/commands/check/COMMAND.md",
+      "kind": "meta",
+      "explicitOnly": true,
+      "intents": [],
+      "legacy": [],
+      "aliases": [],
+      "exclusions": [],
+      "requiredResources": [],
+      "conditionalResources": [],
+      "resourceConditions": [],
+      "optionalResources": [],
+      "plays": [],
+      "roles": [],
+      "knowledgeHandles": []
+    },
+    "connect": {
+      "name": "connect",
+      "label": "Connect a capability a task needs",
+      "description": "Show which of the user's services Conquistador can use through Executor, and connect what the task needs.",
+      "path": "skills/conquistador/commands/connect/COMMAND.md",
+      "kind": "meta",
+      "explicitOnly": true,
+      "intents": [],
+      "legacy": [],
+      "aliases": [],
+      "exclusions": [],
+      "requiredResources": [],
+      "conditionalResources": [],
+      "resourceConditions": [],
+      "optionalResources": [],
+      "plays": [],
+      "roles": [],
+      "knowledgeHandles": []
+    },
     "convert": {
       "name": "convert",
       "label": "Improve a conversion surface",
@@ -1879,6 +1917,25 @@
       "roles": [],
       "knowledgeHandles": []
     },
+    "doctor": {
+      "name": "doctor",
+      "label": "Repair install and context drift",
+      "description": "Find and repair drift between the Conquistador install, its hook manifests, and this project's PRODUCT.md, GROWTH.md, and .conquistador/ files.",
+      "path": "skills/conquistador/commands/doctor/COMMAND.md",
+      "kind": "meta",
+      "explicitOnly": true,
+      "intents": [],
+      "legacy": [],
+      "aliases": [],
+      "exclusions": [],
+      "requiredResources": [],
+      "conditionalResources": [],
+      "resourceConditions": [],
+      "optionalResources": [],
+      "plays": [],
+      "roles": [],
+      "knowledgeHandles": []
+    },
     "event": {
       "name": "event",
       "label": "Create a run of show",
@@ -2342,6 +2399,25 @@
       "roles": [],
       "knowledgeHandles": []
     },
+    "init": {
+      "name": "init",
+      "label": "Record product and growth truth",
+      "description": "Record durable product and growth truth in PRODUCT.md and GROWTH.md, so every later command starts from it",
+      "path": "skills/conquistador/commands/init/COMMAND.md",
+      "kind": "meta",
+      "explicitOnly": true,
+      "intents": [],
+      "legacy": [],
+      "aliases": [],
+      "exclusions": [],
+      "requiredResources": [],
+      "conditionalResources": [],
+      "resourceConditions": [],
+      "optionalResources": [],
+      "plays": [],
+      "roles": [],
+      "knowledgeHandles": []
+    },
     "measure": {
       "name": "measure",
       "label": "Learn from aggregate growth results",
@@ -2587,6 +2663,25 @@
       "roles": [
         "copy"
       ],
+      "knowledgeHandles": []
+    },
+    "pin": {
+      "name": "pin",
+      "label": "Make a shortcut for one command",
+      "description": "Make a standalone shortcut, such as /outreach, for one Conquistador command",
+      "path": "skills/conquistador/commands/pin/COMMAND.md",
+      "kind": "meta",
+      "explicitOnly": true,
+      "intents": [],
+      "legacy": [],
+      "aliases": [],
+      "exclusions": [],
+      "requiredResources": [],
+      "conditionalResources": [],
+      "resourceConditions": [],
+      "optionalResources": [],
+      "plays": [],
+      "roles": [],
       "knowledgeHandles": []
     },
     "position": {
@@ -3245,6 +3340,25 @@
       "roles": [
         "ads"
       ],
+      "knowledgeHandles": []
+    },
+    "review": {
+      "name": "review",
+      "label": "Open a deliverable for human review",
+      "description": "Open a deliverable for human review: Proof for Markdown, Lavish for HTML. Apply the feedback and report the approval state.",
+      "path": "skills/conquistador/commands/review/COMMAND.md",
+      "kind": "meta",
+      "explicitOnly": true,
+      "intents": [],
+      "legacy": [],
+      "aliases": [],
+      "exclusions": [],
+      "requiredResources": [],
+      "conditionalResources": [],
+      "resourceConditions": [],
+      "optionalResources": [],
+      "plays": [],
+      "roles": [],
       "knowledgeHandles": []
     },
     "seo": {
