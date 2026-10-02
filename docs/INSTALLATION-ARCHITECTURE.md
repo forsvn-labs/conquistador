@@ -53,7 +53,8 @@ use full-library MCP to bypass a host's domain access boundary.
 
 ## Parent-first discovery and lazy methods
 
-Canonical authoring sources remain `skills/<method>/SKILL.md`. The managed installer transforms
+Canonical authoring sources are `skills/conquistador/SKILL.md` and
+`skills/conquistador/commands/<command>/COMMAND.md`. The managed installer transforms
 copies with `stage-method-library.mjs`; it never edits those sources. A compact host skill has:
 
 ```text
@@ -62,9 +63,9 @@ agents/openai.yaml
 library/conquistador/METHOD.md
 library/conquistador/catalog.md
 library/conquistador/operator-profile.json
-library/<outcome>/METHOD.md
-library/<outcome>/references/...
-library/<outcome>/scripts/...
+library/conquistador/commands/<command>/COMMAND.md
+library/conquistador/commands/<command>/references/...
+library/conquistador/plays/<play>.md
 ```
 
 The entry description starts with the product's task triggers and stays below 180 characters.

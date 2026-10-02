@@ -800,7 +800,7 @@
     },
     {
       "path": "skills/conquistador/commands/build/references/modes/web.md",
-      "sha256": "e59ff8592ceed876354be0bf008ef1eb00f21958dc37f74e82a9f9f1874dc09a"
+      "sha256": "0d9b610c29a8bbed539e05b835faa3199ec8d0aa43845f7a6bb7eb5d5423868d"
     },
     {
       "path": "skills/conquistador/commands/build/references/modes/web/agents/openai.yaml",
@@ -1208,7 +1208,7 @@
     },
     {
       "path": "skills/conquistador/commands/copy/COMMAND.md",
-      "sha256": "c8ede04650b6fbf93036e2fc6483a3d628c8bc2c281b544b1c6dcc6b9c241566"
+      "sha256": "66840a9398f33405290e7c0aa260044895a6ab6c71b32285f9fe5b62e8dabeee"
     },
     {
       "path": "skills/conquistador/commands/copy/fallbacks/sequential.md",
@@ -3720,7 +3720,7 @@
     },
     {
       "path": "skills/conquistador/commands/watch/COMMAND.md",
-      "sha256": "5d97326bbb21d5fc075fa33239ff15ef0f2fdaf7a640dab3e03332b844bc7efb"
+      "sha256": "967473d7a7620a57f22308cdff820d41aeff9ee26789b5d45dc380cc812cc102"
     },
     {
       "path": "skills/conquistador/commands/watch/references/gemini-recipe.md",

@@ -55,7 +55,7 @@ through mechanism, proof, objection, and proportionate action.
 ## Build the argument
 
 Use [sales argument](references/sales-argument.md) to connect the supplied product facts, buyer's
-situation, evidence, offer terms, and requested action. The method is self-contained.
+situation, evidence, offer terms, and requested action.
 
 ## Scope and handoffs
 

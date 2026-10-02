@@ -39,7 +39,7 @@ Specialist roles: [critic-agent](agents/critic-agent.md).
 ## Send the video to Gemini
 
 Load the [one-shot recipe](references/gemini-recipe.md) for exact SDK calls, polling bounds,
-request storage, cleanup, and failure handling. Its official-doc check is not live provider proof.
+request storage, cleanup, and failure handling.
 
 1. Prefer the Files API. Upload with `client.files.upload(file=path)`, then poll `client.files.get` until `ACTIVE` (or stop on `FAILED`). Bound the wait; never poll forever.
 2. Create an interaction with a current video-capable model. Pass a video input (`type=video`, `uri`, `mime_type`) plus the user's question as text. Read `output_text` only from a completed response. Use `store=False` for this one-shot analysis; deleting the uploaded file does not delete a separately stored interaction.
@@ -73,5 +73,4 @@ the checks in the current context and describe them as a self-review, not indepe
 
 ## Out of scope
 
-- Publishing, spend, or credential actions (still require explicit human approval via Conquistador norms).
-- Claiming live provider proof for Conquistador release gates. This command is local tooling, not G4 evidence.
+- Publishing, spend, or credential actions; they need explicit human approval.
