@@ -13,7 +13,7 @@ import { fileURLToPath } from 'node:url';
 import { spawnCommand } from './spawn.mjs';
 
 export const PROOF_REPOSITORY = 'https://github.com/forsvn-labs/proof.git';
-export const PROOF_COMMIT = 'e49848ed6f37dc49ff4c07bde8c549d4a382c781';
+export const PROOF_COMMIT = '7e2a457d78ac81eacf94156c810740894e951ab9';
 // SHA-256 of the unmodified upstream MIT LICENSE (Every, 2026).
 const PROOF_LICENSE_SHA256 = '4648b2d84d492d891c68c4ff906ffd600438b7c7cd2ade0f904abbb404657829';
 export const LAVISH_PACKAGE = 'lavish-axi@0.1.80';
@@ -261,13 +261,13 @@ async function postFindings(session, sourceText) {
 
 async function readProof(session) {
   const path = `/documents/${encodeURIComponent(session.slug)}`;
-  const [state, review, text] = await Promise.all([
+  const [state, review] = await Promise.all([
     proofJson(session.baseUrl, 'GET', `${path}/state`, { token: session.accessToken }),
     proofJson(session.baseUrl, 'GET', `${path}/conquistador/review`, { token: session.accessToken }),
-    proof(session.baseUrl, 'GET', `/d/${encodeURIComponent(session.slug)}?token=${encodeURIComponent(session.accessToken)}`, { accept: 'text/markdown' }),
   ]);
-  if (!text.ok) throw new Error(`Proof could not return the document text (${text.status}).`);
-  return { marks: state.marks ?? {}, revision: Number.isInteger(state.revision) ? state.revision : 1, review, text: text.text };
+  if (typeof review.markdown !== 'string') throw new Error('Proof did not return the document text.');
+  // review.markdown is the text without comment and suggestion anchors; the approval hash covers it.
+  return { marks: state.marks ?? {}, revision: Number.isInteger(state.revision) ? state.revision : 1, review, text: review.markdown };
 }
 
 // Reports new or changed marks since the last poll, in reading order.

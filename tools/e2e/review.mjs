@@ -199,12 +199,14 @@ if (!browser) {
   const approved = await browser.until("document.querySelector('.cq-badge')?.textContent === 'Approved'");
   await browser.shot('3-proof-approved.png');
   const afterApprove = JSON.parse(review(['poll', source, '--json']).stdout || '{}');
-  const exported = await (await fetch(`${session.baseUrl}/d/${session.slug}?token=${session.accessToken}`, { headers: { accept: 'text/markdown' } })).text();
+  // The exact text: Proof's stored Markdown without its comment and suggestion anchor spans.
+  const exported = (await (await fetch(`${session.baseUrl}/d/${session.slug}?token=${session.accessToken}`, { headers: { accept: 'text/markdown' } })).text())
+    .replace(/<span data-proof="[^"]*"[^>]*>|<\/span>/g, '');
   approvedSha = afterApprove.approval?.sha256 ?? '';
   check('R7', 'the reviewer approves in the browser; poll reports approver and time', approved && afterApprove.approval?.state === 'approved' && afterApprove.approval.approver === 'E2E Reviewer' && Boolean(afterApprove.approval.approved_at), JSON.stringify(afterApprove.approval));
   const approvedFile = afterApprove.approval?.approved_file;
-  check('R8', 'the stamp hash equals the SHA-256 of the exact document text and of the approved copy',
-    approvedSha === digest(exported) && approvedSha === afterApprove.approval.current_sha256 && approvedFile && digest(readFileSync(approvedFile, 'utf8')) === approvedSha,
+  check('R8', 'the stamp hash equals the SHA-256 of the exact document text and of the approved copy, with no review markup',
+    !/data-proof/.test(readFileSync(approvedFile ?? source, 'utf8')) && approvedSha === digest(exported) && approvedSha === afterApprove.approval.current_sha256 && approvedFile && digest(readFileSync(approvedFile, 'utf8')) === approvedSha,
     `stamp ${approvedSha} text ${digest(exported)}`);
 }
 
