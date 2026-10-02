@@ -1,13 +1,53 @@
 # Product progress
 
-## 2026-10-02: Mac first-use continuation (local, unshipped)
+## Unshipped: October 2026 overhaul (one skill, commands, plays)
 
-- Recovered the reviewed implementation at c8a131d from its checksum-verified bundle on macOS.
-- Adapted the PTY dry-run test to macOS Expect; corrected the native harness to accept the remembered host in its non-terminal preview.
-- Focused first-use/export/hook checks: 53/53. Offline routing: 117/117. Build/typechecks, plugin contracts and knowledge-map check pass.
-- Native isolated-home agent-first harness: 14/14 with Claude Code 2.1.286 and Codex 0.159.3. This covers installation, prefill, remembered target, no-terminal preview, cancellation and removal, not completed model tasks or answer quality.
-- Separate landing worktree aligns current claims with public 0.2.2; desktop/mobile browser checks: 90/90. Not deployed.
-- Remote writes remain paused pending GitHub integration permission repair; no draft PR has been created. Exact additional evidence remains in the local task workspace.
+The published public alpha remains **0.2.2**. This work is on `overhaul/2026-10` and waits for
+Hung's merge decision. Spec: [docs/OVERHAUL-2026-10.md](docs/OVERHAUL-2026-10.md).
+
+- **One skill, one vocabulary.** Hosts register one skill, `/conquistador`. The 38 methods are 35
+  one-word commands (`position`, `outreach`, `seo`, ...), and `results` and `build` have modes. The
+  21 hidden workflows are plays (`launch`, `gtm`, `outbound`, ...) with declared chains. Plays that
+  ship finished assets end with `audit`. `MIGRATION.md` maps every old name; old names still route.
+- **Router.** The brief scores plays and commands together and returns a play's steps with the
+  playbooks to read at each step. Filler words ("cannot find", "ask me", "learn the product") no
+  longer select `video` or `budget`. Meta commands run only when invoked by name.
+- **First run.** `/conquistador init` writes `PRODUCT.md` (Impeccable-compatible) and `GROWTH.md`,
+  and every brief lists them first. `conquistador signals` reports what the project already has;
+  the no-argument menu leads with two or three commands from those signals. `pin` and `unpin`
+  make standalone shortcuts in six agents.
+- **Checker.** `conquistador check` runs 51 rules with no model: unsupported claims, AI-writing
+  tells, vague calls to action, channel limits, email compliance, and link hygiene. JSON output
+  and exit codes 0, 1, 2. A hook checks marketing files after edits in Claude Code, Codex, and
+  Cursor. One marketing-file rule serves the hook and `signals`.
+- **Connect.** `conquistador connect` reports 22 provider-agnostic capabilities as missing,
+  connected, or verified through Executor, installs Executor after confirmation, and verifies one
+  read. Recipes in `skills/conquistador/integrations/` are Markdown. Nothing in Conquistador
+  starts an Executor daemon by accident.
+- **Review.** `conquistador review` opens Markdown in the FORSVN Proof fork (channel previews,
+  check findings as comments, Playbooks applied, a human-only approval stamp bound to the SHA-256
+  of the exact text) and HTML in Lavish 0.1.80 (was 0.1.50), both on loopback. A six-template
+  artifact kit ships for ad sets, social posts, email, landing sections, funnels, and calendars.
+- **Install and CLI.** The installer detects 12 agents (adds Gemini CLI, OpenCode, Pi, Hermes,
+  Antigravity, Kiro, Mistral Vibe), offers "keep or customize", asks global or project scope, and
+  opens the agent with `/conquistador init` on a new project. `doctor --fix` repairs drift. Node
+  22.18 is enough. The package is 3.61 MB packed (was 4.46 MB) with 1,306 files (was 1,704).
+- **Docs.** README and INSTALL follow Impeccable's shape. The parent skill is 126 lines; the
+  evidence prose moved to `docs/MASTER-AGENT.md`.
+
+### Integration verification (3 October 2026, macOS arm64, Node 26.9.0)
+
+- `npm run build`: pass. `npm test`: **833/833** (309 tooling, 294 runtime, 167 catalog, 63 evals).
+- E2E: routing breadth **142/142**; check **44/44**; first run **13/13** (3 Executor cases not run);
+  connect **4/4** (2 live cases not run); review **18/18** against the real Proof fork, headless
+  Chrome, and Lavish 0.1.80; package install **51/51** from the packed tarball on Node 26.9.0 and
+  22.18.0 with the real agent CLIs; agent-first **19/19** with Claude Code and Codex.
+- Integration fixes: one marketing-file rule (site pages such as `index.html` now count);
+  `signals` uses the connect probe and does not count integrations on a folder-scoped daemon;
+  meta commands stay out of word-overlap routing; the README drift check now verifies that every
+  command and play is listed.
+- Not run: live Executor cases (Executor needs a restart), live hook observation outside Claude
+  Code, model task quality, and human verdicts.
 
 ## Unshipped: bounded first use and release-state consistency
 

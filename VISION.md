@@ -3,32 +3,42 @@
 Conquistador helps users do marketing and growth work in their existing coding agent: on any
 platform, in any service, and inside their product. Launches are one job among many; strategy,
 social, search and AI answers, paid ads, email and outreach, in-product growth, content, and
-measurement carry equal weight. Users ask for an outcome. The parent selects the necessary methods,
-assigns bounded specialist work when useful, and owns one integrated, reviewed deliverable.
+measurement carry equal weight. Users ask for an outcome. One skill, `/conquistador`, routes it to a
+command (one method) or a play (a declared chain of commands), assigns bounded specialist work when
+useful, and owns one integrated, reviewed deliverable.
 Research, creative work, engineering, and review support that mission.
 
 ## Make the first task easy
 
-Setup makes its scope visible before it changes a host, then ends inside the selected agent
-with one bounded task. Choose one target before installation; a single detected host may be
-selected automatically with its scope shown. `--in AGENT` selects that target, and adding all
-hosts requires an explicit all-host choice. Show the shared plugin location, host changes, and
-exact undo command. A remembered launch choice never authorizes adding other hosts.
-The agent learns from a repository when one is available, or from a supplied brief when it is
-not. A repository and connected marketing accounts are not prerequisites for a first draft. The user learns four commands: `conquistador`, `conquistador "TASK"`,
-update, and remove, plus `/conquistador` inside the agent. Every other route stays available
-behind `help --all` and INSTALL.md, because a long menu stops people from starting. Install once
-per user; it works in every project. The same package
-also serves the other surfaces: skills only, a local or hosted MCP server, a bot pack for chat
-apps, and the per-project operator. Every route has a clear update and removal path, and none
-adds a dependency or lockfile to the user's project.
+`npx @forsvn/conquistador` detects the user's agents, shows that set with "keep or customize",
+asks for global or project scope, installs one skill, and opens the agent. A project without
+`GROWTH.md` opens with `/conquistador init`; otherwise the task picker opens. Choose the target
+before any change, show the scope and the exact undo command, and never add hosts that the user
+did not choose. Support every agent whose skill path the agent's own documentation confirms.
+
+Copy Impeccable's interaction model for growth work. Users learn a small vocabulary: one-word
+commands such as `position`, `outreach`, `launch`, and `audit`, typed after `/conquistador`, or a
+plain request that the router sends to the right command or play. Hosts register exactly one
+skill. `/conquistador` with no argument shows a menu that leads with two or three commands that
+fit this project. `/conquistador pin outreach` makes a standalone shortcut. Old skill names keep
+working as aliases. On the CLI, the user needs `conquistador`, `conquistador "TASK"`, update,
+doctor, and remove; every other route stays behind `help --all` and INSTALL.md.
+
+`/conquistador init` records durable product truth in `PRODUCT.md` (shared with Impeccable) and
+growth truth in `GROWTH.md`. Every command reads both through the brief, so the agent does not
+learn the product again on each task. Init asks only about real gaps and never overwrites a file
+that another tool wrote. A repository and connected accounts are not prerequisites for a first
+draft.
 
 The playbooks are the product. An agent that answers from general knowledge while the right
 playbook sits unread is a product failure, not a style choice. So one briefing engine decides
 what each task must read; the MCP tool returns those playbooks inline; plugin hooks add the
 reading list to relevant prompts and send the agent back once when it skipped them; and every
-deliverable ends with the playbooks it applied. The user's own playbooks rank first, read in
-place. Coding prompts get nothing.
+deliverable ends with the playbooks it applied. A play returns its steps and the playbooks to
+read at each step. The user's own playbooks rank first, read in place. Coding prompts get nothing.
+`conquistador check` and its edit hook check marketing text against fixed rules with no model:
+unsupported claims, AI-writing tells, vague calls to action, channel limits, email compliance,
+and link hygiene. A clean check is evidence, not proof of quality.
 
 The public npm package `@forsvn/conquistador` leads acquisition: `npx @forsvn/conquistador` or a
 global install. Pinned Git tags stay available for exact versions. List the same plugin in the
@@ -53,10 +63,18 @@ turned off. Public labels stay visible; prompts, routing scores, and chain-of-th
 
 ## Connect only what the task needs
 
-Start with supplied context and permitted connections. When missing live access blocks the task,
-help the user set up Executor, connect the host, sign in through the service UI, verify the required
-operation, and resume. A new user should not need to know Executor beforehand. Existing connections
-remain subject to host policy. Credentials stay with the host or connection manager.
+Conquistador is provider-agnostic. It names capabilities (`analytics.read`, `crm.read`,
+`email.send`, `ads.read`), not providers. The user connects the services they already use in
+Executor; at task time the agent finds the tool with Executor's search, reads its schema, and
+calls it. `conquistador connect` shows each capability as missing, connected, or verified,
+installs Executor after confirmation, and opens the Executor UI to add a source. Adding a provider
+is a Markdown recipe, not code. Start with supplied context; connect only what the task needs.
+
+Reads run within host policy. Every send, publish, spend, or other write shows its exact payload
+and needs the user's approval each time. Credentials stay in Executor, never in chat. Conquistador
+never starts an Executor server as a side effect: Executor's CLI starts a folder-scoped daemon
+when none answers, and that daemon hides the user's integrations. Only an explicit, confirmed
+`connect` step may start Executor.
 
 Eve is for explicitly requested jobs that outlast the coding session. Each job has one coordinating
 parent and a named owner. Keep exact dependency pins and review upgrades against the deployed
@@ -70,8 +88,11 @@ knowledge, customer records, credentials, and workspace history out of product s
 required licenses and notices. Distinguish synthetic tests, observed results, operator attestations,
 and human acceptance. Passing tests cannot establish model quality or general provider support.
 
-Use Lavish AXI through the host for optional previews and annotations; keep source artifacts
-canonical. Host-event advice is opt-in, must reject invalid input, and must not block completion.
+Review happens where the work is. `conquistador review` opens Markdown in the FORSVN Proof fork
+(channel previews, check findings as comments, the playbooks applied, and a human-only approval
+stamp bound to the SHA-256 of the exact text) and HTML in Lavish, both on loopback with no hosted
+sharing. Source files stay canonical. An annotation is a revision request. An approval stamp
+records one human decision for one exact text; it never authorizes a send, publication, or spend. Host-event advice is opt-in, must reject invalid input, and must not block completion.
 The callable coordinator enforces domain restrictions; other consuming hosts must enforce their
 own access boundaries.
 
