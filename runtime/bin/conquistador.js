@@ -108,6 +108,9 @@ if (preflight !== null) {
 } else if (args[0] === "jobs") {
   const { run } = await import("../../hosts/eve/jobs.mjs");
   process.exitCode = await run(args.slice(1));
+} else if (args[0] === "review") {
+  const { runReview } = await import("../../tools/review.mjs");
+  process.exitCode = await runReview(args.slice(1));
 } else if (args[0] === "integrations") {
   const { runIntegrationReleases } = await import("../../tools/integration-releases.mjs");
   process.exitCode = await runIntegrationReleases(args.slice(1));

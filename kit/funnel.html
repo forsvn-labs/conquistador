@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Funnel: [product]</title>
+<style>
+  :root {
+    --brand-primary: #1f5f4a; --brand-on-primary: #ffffff; --brand-ink: #1c1f1d; --brand-muted: #5f6661;
+    --brand-canvas: #f4f3ee; --brand-surface: #ffffff; --brand-line: #dedcd3;
+    --brand-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; --brand-heading-font: var(--brand-font);
+    --brand-radius: 12px;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--brand-canvas); color: var(--brand-ink); font: 15px/1.5 var(--brand-font); }
+  main { max-width: 1100px; margin: 0 auto; padding: 32px 24px 48px; display: grid; gap: 24px; }
+  h1 { font: 700 28px/1.2 var(--brand-heading-font); margin: 0; }
+  .lede { color: var(--brand-muted); margin: 4px 0 0; }
+  .card { background: var(--brand-surface); border: 1px solid var(--brand-line); border-radius: var(--brand-radius); padding: 20px; overflow-x: auto; }
+  .mermaid { min-width: 0; text-align: center; }
+  table { width: 100%; border-collapse: collapse; }
+  th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--brand-line); vertical-align: top; }
+  th { color: var(--brand-muted); font-weight: 600; font-size: 13px; }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>[Product]: growth funnel</h1>
+    <p class="lede">[Period] · [Data source]. Rates come from [source]; a blank rate means no data yet.</p>
+  </header>
+  <section class="card" aria-label="Funnel diagram">
+    <pre class="mermaid">
+flowchart LR
+  A["[Stage 1: Visit]"] -->|"[rate]"| B["[Stage 2: Sign up]"]
+  B -->|"[rate]"| C["[Stage 3: Activate]"]
+  C -->|"[rate]"| D["[Stage 4: Pay]"]
+  D -->|"[rate]"| E["[Stage 5: Refer or expand]"]
+    </pre>
+  </section>
+  <section class="card" aria-label="Stage definitions">
+    <table>
+      <thead><tr><th>Stage</th><th>Definition (event)</th><th>Rate</th><th>Biggest drop-off reason</th><th>Next experiment</th></tr></thead>
+      <tbody>
+        <tr><td>[Visit]</td><td>[Event name]</td><td>[rate or blank]</td><td>[reason with evidence]</td><td>[experiment]</td></tr>
+        <tr><td>[Sign up]</td><td>[Event name]</td><td>[rate or blank]</td><td>[reason with evidence]</td><td>[experiment]</td></tr>
+        <tr><td>[Activate]</td><td>[Event name]</td><td>[rate or blank]</td><td>[reason with evidence]</td><td>[experiment]</td></tr>
+        <tr><td>[Pay]</td><td>[Event name]</td><td>[rate or blank]</td><td>[reason with evidence]</td><td>[experiment]</td></tr>
+      </tbody>
+    </table>
+  </section>
+</main>
+<script type="module">
+  import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.15.0/dist/mermaid.esm.min.mjs";
+  mermaid.initialize({ startOnLoad: false, theme: "default", securityLevel: "strict" });
+  await mermaid.run({ querySelector: ".mermaid" });
+</script>
+</body>
+</html>
