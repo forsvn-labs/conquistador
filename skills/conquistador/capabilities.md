@@ -1,12 +1,11 @@
-# Compact capability map
+# Capability map
 
-Use this map privately. Select the smallest outcome or composition that produces the requested result.
-All 38 outcomes below are available through /conquistador when installed. Skip a step when accepted
-context already supplies its decision; never narrate this map.
+Select the smallest command or play that produces the requested result. Skip a step when accepted
+context already supplies its decision. Do not narrate this map.
 
 ## Launch or grow this
 
-| User outcome | Primary outcome | Add only when needed | Required finish |
+| User outcome | Command | Add only when needed | Required finish |
 |---|---|---|---|
 | Shape an ambiguous initiative | `shape` | `decide` for consequential contested options | Bounded decision, exclusions, smallest reversible next move |
 | Understand a market, customer, offer, or position | `position` | `factcheck` for conflicting sources; `brand` for durable identity | Evidence-backed position and decision implications |
@@ -24,7 +23,7 @@ context already supplies its decision; never narrate this map.
 
 ## Create or improve marketing work
 
-| User outcome | Primary outcome | Add only when needed | Required finish |
+| User outcome | Command | Add only when needed | Required finish |
 |---|---|---|---|
 | Establish a brand foundation | `brand` | `position` for missing market evidence | Usable identity, voice, visual direction, applications |
 | Create a production brief | `creative` | Relevant format/method note | Implementation-ready concept, assets, states, acceptance |
@@ -41,44 +40,61 @@ context already supplies its decision; never narrate this map.
 
 Route these outcomes through the parent when the user requests the corresponding work. An incidental
 mention of an app, interface, or system in a marketing brief is not an engineering request. Keep
-specification, implementation, and external deployment within the user's scope. Use the existing
-`create-or-improve` runtime job for these requests; no fourth protocol job is required.
+specification, implementation, and external deployment within the user's scope.
 
-| User outcome | Primary outcome | Add only when needed | Required finish |
+| User outcome | Command | Add only when needed | Required finish |
 |---|---|---|---|
 | Map a product journey | `flow` | `position` for unresolved user evidence | Screens, transitions, states, recovery, validation |
 | Specify an interface | `ui` | `flow` when the accepted flow is absent | Traceable components, tokens, states, accessibility, handoff |
 | Architect a demanded system | `architect` | Private service-extraction method when justified | Bounded architecture, interfaces, risk, acceptance |
-| Build an iOS experience | `build` | `flow` and `ui` for product truth | Native implementation with simulator proof and release boundary |
-| Build a web experience | `build` | `flow` and `ui` for product truth | Responsive accessible implementation and browser proof |
+| Build a web or iOS app | `build` | `flow` and `ui` for product truth | Mode `web`: responsive accessible build with browser proof. Mode `ios`: native build with simulator proof |
 | Write technical documentation | `docs` | Architecture/implementation evidence | Accurate reader-tested documentation with verification |
 
 ## Learn from these results
 
-| User outcome | Primary outcome | Add only when needed | Required finish |
+| User outcome | Command | Add only when needed | Required finish |
 |---|---|---|---|
 | Learn from aggregate growth results | `measure` | `diagnose` for the first break | Keep/drop/test decision and bounded learning proposal |
-| Evaluate actual paid results | `results` | `measure` for business-level synthesis | Cell diagnosis, attribution limits, bounded decision |
-| Evaluate a sent outreach cycle | `results` | `outreach` after the next-batch decision | Delivery/qualified-reply diagnosis, compliant next batch |
-| Evaluate actual short-form output | `results` | `video` after learning is accepted | Actual-output review, confounders, bounded next brief |
+| Evaluate real results | `results` | `measure` for business-level synthesis | Mode `ads`: cell diagnosis and attribution limits. Mode `outreach`: delivery and qualified replies. Mode `video`: actual-output review and next brief |
 | Audit a marketing package | `audit` | Relevant outcome only for accepted fixes | Severity findings, preserved work, human-review readiness |
 | Review a consequential artifact | `critique` | Domain outcome for criteria, never as sole producer/reviewer | Honest independence status, sparse defects, recheck boundary |
 | Audit the facts behind a claim | `factcheck` | `decide` when credible positions still conflict | Authority/freshness/uncertainty matrix and recheck trigger |
 | Resolve a consequential decision | `decide` | `factcheck` for source conflicts | Chosen position, dissent, uncertainty, criteria, reversal evidence |
 
-For a multi-stage request, load the exact file in `workflows/` only when two or more outcomes must
-compose. Those files are prose-composition sources, not playbooks. The first compounding playbook is
-`content`: composition-only / release-required-unimplemented until an authorized
-judgment response and runner trace exist. Its one social branch is
-`ideas` → `social` → `critique` → human verdict boundary → optional
-action handoff → `measure`, composed from the exact files named in
-[workflows/content-intelligence-loop.md](plays/content.md). Preserve one
-decision spine across audience, costly moment, promise, mechanism, proof, objection, action, primary
-signal, and decision date. Return one coherent terminal Review Packet, not separate skill reports.
+## Plays
+
+A play chains commands for a multi-step outcome. Each file in [plays/](plays/) declares its steps in
+front matter. Run the steps in order, skip a step whose `when` condition is false, and return one
+Review Packet, not one report per step. Keep one decision spine across audience, costly moment,
+promise, mechanism, proof, objection, action, primary signal, and decision date.
+
+| Play | Command | Chain |
+|---|---|---|
+| Check visibility in AI answers | [`answers`](plays/answers.md) | seo → factcheck → measure |
+| Optimize an app store listing | [`appstore`](plays/appstore.md) | seo → copy → creative → convert → audit |
+| Run a content learning loop | [`content`](plays/content.md) | ideas → social → critique → measure |
+| Open a new channel | [`expand`](plays/expand.md) | channels → campaign → social |
+| Run a measured growth experiment | [`experiment`](plays/experiment.md) | campaign → outreach → measure |
+| Position a product and run its first campaign | [`gtm`](plays/gtm.md) | position → campaign → copy → audit → measure |
+| Create an interactive campaign | [`interactive`](plays/interactive.md) | campaign → creative → flow → audit → measure |
+| Create a landing page | [`landing`](plays/landing.md) | position → copy → creative → convert → share-card-verification → audit |
+| Launch a product or feature | [`launch`](plays/launch.md) | position → campaign → social → copy → creative → event → audit → measure |
+| Run a lifecycle campaign | [`lifecycle`](plays/lifecycle.md) | campaign → copy → audit → measure |
+| Run an outbound sequence | [`outbound`](plays/outbound.md) | position → outreach → audit → results → measure |
+| Run and evaluate a paid campaign | [`paid`](plays/paid.md) | position → ads → budget → creative → audit → results |
+| Turn a growth target into a plan | [`plan`](plays/plan.md) | funnel → prioritize → budget → campaign |
+| Earn press and media coverage | [`press`](plays/press.md) | channels → position → outreach → audit → results |
+| Build programmatic search pages | [`pseo`](plays/pseo.md) | seo → copy → artifact-hygiene → audit |
+| Review a rendered creative asset | [`qa`](plays/qa.md) | creative → convert → artifact-hygiene |
+| Build a referral loop | [`referral`](plays/referral.md) | audit → measure → campaign → copy |
+| Review content performance | [`report`](plays/report.md) | measure → convert → results |
+| Run a short-form video series | [`series`](plays/series.md) | ideas → video → video-production → audit → results |
+| Specify a product experience | [`spec`](plays/spec.md) | flow → ui → implementation-planning → service-extraction |
+| Create an app preview video | [`trailer`](plays/trailer.md) | flow → creative → video-production → audit |
 
 ## Opt-in product feedback
 
-| User outcome | Primary outcome | Required finish |
+| User outcome | Command | Required finish |
 |---|---|---|
 | Share a Conquistador experience or report a product failure | `feedback` | Minimal redacted draft; exact public payload consent before any verified Executor submission, otherwise honest manual fallback |
 

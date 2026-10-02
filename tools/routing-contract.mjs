@@ -2,7 +2,7 @@ import { existsSync, lstatSync, readFileSync, readdirSync, writeFileSync } from 
 import { dirname, join, posix, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { containedPath } from './plugin-contracts.mjs';
-import { methodDocument, methodLibrary } from './method-library.mjs';
+import { commandNames, methodDocument, methodLibrary, methodPath, playPath } from './method-library.mjs';
 import { assertLoadAllowed, loadRestriction } from './domain-package.mjs';
 
 export const ROUTING_CONTRACT_SCHEMA = 'conquistador.routing-contract/v1';
@@ -53,6 +53,22 @@ function frontmatter(markdown) {
     return value.replace(/^'|'$/g, '');
   };
   return { name: decode(field('name')), description: decode(field('description')) };
+}
+
+// Play front matter: scalar fields, a JSON intents array, and one flow mapping per chain step.
+export function playFrontmatter(markdown) {
+  const body = /^---\n([\s\S]*?)\n---/.exec(markdown)?.[1] ?? '';
+  const scalar = name => new RegExp(`^${name}:\\s*(.+)$`, 'm').exec(body)?.[1]?.trim() ?? '';
+  const value = raw => raw.startsWith('"') ? JSON.parse(raw) : raw;
+  const chain = [];
+  for (const match of body.matchAll(/^\s+- \{(.*)\}\s*$/gm)) {
+    const step = {};
+    for (const pair of match[1].matchAll(/([a-z]+):\s*("(?:[^"\\]|\\.)*"|[a-z][a-z0-9-]*)/g)) step[pair[1]] = value(pair[2]);
+    chain.push(step);
+  }
+  let intents = [];
+  try { intents = JSON.parse(scalar('intents') || '[]'); } catch { fail('Invalid play intents.'); }
+  return { command: scalar('command'), label: scalar('label'), intents, chain, legacy: scalar('legacy') };
 }
 
 function labelsFromMap(markdown) {
@@ -108,10 +124,9 @@ export function buildRoutingContract(root = moduleRoot) {
   const capabilities = readContained(root, posix.join(parentPath, 'capabilities.md'));
   const labels = labelsFromMap(capabilities);
   const methods = {};
-  for (const name of readdirSync(join(root, library.layout)).sort()) {
-    if (name === 'conquistador' || !NAME.test(name)) continue;
-    const path = posix.join(library.layout, name, document);
-    if (!existsSync(join(root, path))) continue;
+  for (const name of commandNames(join(root, library.layout))) {
+    if (!NAME.test(name)) continue;
+    const path = posix.join(library.layout, methodPath(name));
     const markdown = readContained(root, path);
     const metadata = frontmatter(markdown);
     if (metadata.name !== name || !metadata.description) fail(`Invalid method metadata: ${name}`);
@@ -140,6 +155,7 @@ export function buildRoutingContract(root = moduleRoot) {
       kind: spec.kind ?? 'create',
       explicitOnly: spec.explicitOnly === true || overlay.explicitOnly?.includes(name) === true,
       intents: [...(spec.intents ?? [])],
+      legacy: [...(spec.legacy ?? [])],
       // Routing-only phrases: practitioner wording that selects the method but does not describe it.
       aliases: [...(spec.aliases ?? [])],
       exclusions: [...(spec.exclusions ?? [])],
@@ -147,13 +163,13 @@ export function buildRoutingContract(root = moduleRoot) {
       conditionalResources: conditional.map(item => item.path),
       resourceConditions: conditional,
       optionalResources: optional,
-      workflows: [],
+      plays: [],
       roles: [],
       knowledgeHandles: [...(spec.knowledgeHandles ?? [])],
     };
   }
   const expected = Object.keys(overlay.methods ?? {});
-  if (Object.keys(methods).length === 38) {
+  if (Object.keys(methods).length === expected.length || Object.keys(methods).length === 35) {
     for (const name of expected) {
       if (!methods[name]) fail(`Routing overlay names missing method: ${name}`);
     }
@@ -161,28 +177,37 @@ export function buildRoutingContract(root = moduleRoot) {
     if (extra.length) fail(`Routing overlay omitted methods: ${extra.join(', ')}`);
   }
 
-  const workflows = [];
-  const workflowDir = posix.join(parentPath, 'workflows');
-  if (existsSync(join(root, workflowDir))) {
-    for (const file of readdirSync(join(root, workflowDir)).sort()) {
+  const plays = [];
+  const playDir = posix.join(parentPath, 'plays');
+  if (existsSync(join(root, playDir))) {
+    for (const file of readdirSync(join(root, playDir)).sort()) {
       if (!file.endsWith('.md')) continue;
       const name = file.slice(0, -3);
       if (!NAME.test(name)) continue;
-      const path = posix.join(workflowDir, file);
+      const path = posix.join(library.layout, playPath(name));
       const markdown = readContained(root, path);
-      const dependencies = [...markdown.matchAll(/`([a-z][a-z0-9-]+)`/g)].map(match => match[1])
-        .filter((value, index, all) => overlay.methods[value] && all.indexOf(value) === index);
+      const meta = playFrontmatter(markdown);
+      if (meta.command !== name || !meta.label || !meta.chain.length) fail(`Invalid play metadata: ${name}`);
+      const dependencies = [...new Set(meta.chain.map(step => step.command).filter(Boolean))];
+      if (dependencies.some(value => !overlay.methods[value])) fail(`Play ${name} chains an unknown command.`);
       if (dependencies.some(value => !methods[value])) continue;
-      workflows.push({
+      const steps = meta.chain.map(step => step.command
+        ? { command: step.command, path: methods[step.command].path, ...(step.mode ? { mode: step.mode } : {}), ...(step.when ? { when: step.when } : {}), ...(step.for ? { for: step.for } : {}) }
+        : { method: step.method, path: posix.join(parentPath, 'methods', `${step.method}.md`), ...(step.when ? { when: step.when } : {}), ...(step.for ? { for: step.for } : {}) });
+      for (const step of steps) if (step.method) readContained(root, step.path);
+      plays.push({
         name,
-        label: name.replaceAll('-', ' '),
-        description: firstPurpose(markdown),
+        label: meta.label,
+        description: firstPurpose(markdown.replace(/^---\n[\s\S]*?\n---\n/, '')),
         path,
+        intents: meta.intents,
+        legacy: meta.legacy ? [meta.legacy] : [],
+        chain: steps,
         dependencies,
         executableGraph: false,
       });
       for (const dependency of dependencies) {
-        if (!methods[dependency].workflows.includes(name)) methods[dependency].workflows.push(name);
+        if (!methods[dependency].plays.includes(name)) methods[dependency].plays.push(name);
       }
     }
   }
@@ -234,7 +259,7 @@ export function buildRoutingContract(root = moduleRoot) {
     unavailableMethods: expected.filter(name => !methods[name]).map(name => ({ name, kind: overlay.methods[name].kind,
       intents: overlay.methods[name].intents, aliases: overlay.methods[name].aliases ?? [], exclusions: overlay.methods[name].exclusions,
       explicitOnly: overlay.methods[name].explicitOnly === true || overlay.explicitOnly.includes(name) })),
-    workflows,
+    plays,
     roles,
   };
 }
@@ -383,16 +408,16 @@ export function validateContractAgainstInstall(root, restriction) {
       if (!resourceExists(root, path)) issues.push(`Missing required resource for ${method.name}: ${path}`);
     }
   }
-  for (const workflow of contract.workflows ?? []) {
+  for (const play of contract.plays ?? []) {
     if (restriction) {
-      try { assertLoadAllowed(restriction, { kind: 'workflow', name: workflow.name }); }
+      try { assertLoadAllowed(restriction, { kind: 'workflow', name: play.name }); }
       catch { continue; }
     }
-    if (!resourceExists(root, workflow.path)) issues.push(`Missing workflow: ${workflow.path}`);
-    for (const name of workflow.dependencies) {
+    if (!resourceExists(root, play.path)) issues.push(`Missing play: ${play.path}`);
+    for (const name of play.dependencies) {
       if (restriction) {
         try { assertLoadAllowed(restriction, { kind: 'skill', name }); }
-        catch { issues.push(`Workflow ${workflow.name} depends on omitted method ${name}`); }
+        catch { issues.push(`Play ${play.name} depends on omitted method ${name}`); }
       }
     }
   }

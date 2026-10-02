@@ -7,6 +7,7 @@ chain:
   - { command: ads }
   - { command: budget, when: "allocation goes beyond the campaign test budget" }
   - { command: creative, when: "a separate visual or video brief is needed" }
+  - { command: audit, for: "pre-ship review of the finished package" }
   - { command: results, mode: ads, when: "delivery evidence exists" }
 legacy: paid-campaign-loop
 ---
@@ -26,6 +27,8 @@ Use when paid-media creation and actual-result evaluation must share one decisio
 
 Verify current network policy, format, auction, and pricing evidence. Never invent targeting precision,
 performance, or incrementality, and never spend, upload an audience, or change a live account.
+
+Run `audit` on the finished package before the Review Packet.
 
 End with one terminal Review Packet for final human review: hypothesis, ready campaign, budget and
 authority boundary, evidence plan or actual readout, and one next action.

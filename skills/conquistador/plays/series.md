@@ -6,6 +6,7 @@ chain:
   - { command: ideas, when: "the audience signal or angle is unresolved" }
   - { command: video }
   - { method: video-production, for: "verify the actual capture and exports" }
+  - { command: audit, for: "pre-ship review of the finished package" }
   - { command: results, mode: video, when: "a real render or published result exists" }
 legacy: shortform-campaign
 ---
@@ -23,6 +24,8 @@ Use for TikTok, Reels, Shorts, founder demos, UGC-style video, and measured recu
 Load only the relevant channel and format notes. Do not claim trends from memory, invent UI, voice of
 customer, or results, or call a crop a recut. Posting, amplification, and external production remain
 human-owned.
+
+Run `audit` on the finished package before the Review Packet.
 
 End with one terminal Review Packet for final human review: campaign bet, hero and true recuts,
 production acceptance, observation rule, and one next action.

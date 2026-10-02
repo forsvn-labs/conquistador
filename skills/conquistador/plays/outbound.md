@@ -5,6 +5,7 @@ intents: ["outbound","outbound campaign","outreach sequence","cold outreach camp
 chain:
   - { command: position, when: "segment, proof, or offer is unresolved" }
   - { command: outreach }
+  - { command: audit, for: "pre-ship review of the finished package" }
   - { command: results, mode: outreach, when: "a real send has happened" }
   - { command: measure, when: "outcomes span cohorts or campaigns" }
 legacy: outreach-sequence
@@ -22,6 +23,8 @@ Use for founder, sales, partnership, or other direct outreach from creation thro
 Prospect from observed demand or relevance signals, not title lists. Keep the ask proportionate, proof
 honest, opt-out clear, and sensitive material out of unsafe channels. Sending, enrichment, scheduling,
 suppression, list, and CRM writes remain behind exact human authority.
+
+Run `audit` on the finished package before the Review Packet.
 
 End with one terminal Review Packet for final human review: signal and segment, ready sequence or
 actual readout, compliance boundary, next-batch rule, and one next action.

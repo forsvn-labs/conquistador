@@ -2,7 +2,7 @@ import { existsSync, lstatSync, readFileSync } from 'node:fs';
 import { dirname, join, posix, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { assertLoadAllowed, loadRestriction } from './domain-package.mjs';
-import { explicitInvocation, requestClauses, normalizeRequest as normalized, includesPhrase } from './request-text.mjs';
+import { explicitInvocation, invokedCommand, requestClauses, normalizeRequest as normalized, includesPhrase } from './request-text.mjs';
 import { loadRoutingContract } from './routing-contract.mjs';
 
 export const REQUEST_CONTEXT_SCHEMA_VERSION = 'conquistador.request-context/v1';
@@ -40,26 +40,30 @@ function matchingMethods(query, contract, { permitGrowthInference = true } = {})
   const matches = [];
   for (const method of [...Object.values(contract.methods), ...contract.unavailableMethods]) {
     if (method.explicitOnly && !feedbackOptIn.test(query)) continue;
-    const intents = [method.name, ...method.intents, ...(method.aliases ?? [])];
+    // A one-word command name selects only through explicit invocation (see resolveCommand).
+    const intents = [...method.intents, ...(method.aliases ?? [])];
 
-    const hit = intents.flatMap((intent, index) => includesPhrase(text, intent)
-      ? [{ phrase: intent, kind: index === 0 ? 'name' : 'intent', score: normalized(intent).length }]
+    const hit = intents.flatMap(intent => includesPhrase(text, intent)
+      ? [{ phrase: intent, kind: 'intent', score: normalized(intent).length }]
       : [])
       .sort((a, b) => (b.kind === 'name') - (a.kind === 'name') || b.score - a.score)[0];
 
     if (!hit || method.exclusions.some(phrase => includesPhrase(text, phrase))) continue;
-
     if (inspect && method.kind === 'create' && hit.kind !== 'name' && !/\b(?:write|create|draft)\b/i.test(query)) continue;
     matches.push({ ...method, score: hit.score, matchKind: hit.kind, matchPhrase: hit.phrase });
   }
+  return finishMatches(query, text, matches, contract, { permitGrowthInference, inspect });
+}
+
+function finishMatches(query, text, matches, contract, { permitGrowthInference, inspect }) {
 
   const growthMetric = /\b(?:growth|revenue|signups?|upgrades?|conversion|activation|retention|funnel|churn|trials?|leads?|orders?|sales|trial to paid|(?:sales|deal|revenue|lead) pipeline)\b/.test(text);
   const adverseChange = /\b(?:stall(?:ed|ing)?|flat|flattened|fall(?:ing)?|fell|drop(?:ped|ping)?|declin(?:e|ed|ing)|down|weak(?:en|ened|ening)?|slowed|missed target)\b/.test(text);
   const creationRequest = /\b(?:write|draft|create|publish|post)\b/.test(text);
   const asksForDiagnosis = /\b(?:diagnos(?:e|is)|investigat(?:e|ion)|analy[sz]e|explain|why)\b/.test(text);
 
-  if (permitGrowthInference && growthMetric && adverseChange && (!creationRequest || asksForDiagnosis) && !matches.some(item => item.name === 'diagnose-growth')) {
-    const method = contract.methods['diagnose-growth'] ?? contract.unavailableMethods.find(item => item.name === 'diagnose-growth');
+  if (permitGrowthInference && growthMetric && adverseChange && (!creationRequest || asksForDiagnosis) && !matches.some(item => item.name === 'diagnose')) {
+    const method = contract.methods['diagnose'] ?? contract.unavailableMethods.find(item => item.name === 'diagnose');
 
     if (method && !method.exclusions.some(phrase => includesPhrase(text, phrase))) matches.push({ ...method, score: 30, matchKind: 'inferred-growth' });
   }
@@ -67,8 +71,8 @@ function matchingMethods(query, contract, { permitGrowthInference = true } = {})
   const growthResults = /\bgrowth\b(?:\s+\w+){0,3}\s+\b(?:results|performance)\b/.test(text);
   const resultsReview = /\b(?:review|evaluate|assess|analy[sz]e|learn from)\b/.test(text);
 
-  if (growthResults && resultsReview && !matches.some(item => item.name === 'measure-growth')) {
-    const method = contract.methods['measure-growth'] ?? contract.unavailableMethods.find(item => item.name === 'measure-growth');
+  if (growthResults && resultsReview && !matches.some(item => item.name === 'measure')) {
+    const method = contract.methods['measure'] ?? contract.unavailableMethods.find(item => item.name === 'measure');
 
     if (method && !method.exclusions.some(phrase => includesPhrase(text, phrase))) matches.push({ ...method, score: 30, matchKind: 'inferred-results' });
   }
@@ -78,9 +82,9 @@ function matchingMethods(query, contract, { permitGrowthInference = true } = {})
     const hit = Object.entries(modes).find(([mode]) => includesPhrase(text, mode));
     if (!hit) continue;
     const record = contract.methods[hit[1]];
-    if (record && !inspect && ['write-social', 'write-outreach', 'write-copy', 'create-paid-campaign'].includes(record.name)) {
+    if (record && !inspect && ['social', 'outreach', 'copy', 'ads'].includes(record.name)) {
       for (let i = matches.length - 1; i >= 0; i--) {
-        if (['write-social', 'write-outreach', 'write-copy', 'create-paid-campaign'].includes(matches[i].name) && matches[i].name !== record.name) matches.splice(i, 1);
+        if (['social', 'outreach', 'copy', 'ads'].includes(matches[i].name) && matches[i].name !== record.name) matches.splice(i, 1);
       }
 
       if (!matches.some(item => item.name === record.name)) matches.push({ ...record, score: 30, matchKind: 'channel-lock' });
@@ -89,15 +93,38 @@ function matchingMethods(query, contract, { permitGrowthInference = true } = {})
   return matches.sort((a, b) => b.score - a.score || a.name.localeCompare(b.name));
 }
 
-function selectWorkflow(_query, selected, contract, restriction) {
-  if (selected.length < 2) return null;
-  const selectedNames = new Set(selected.map(item => item.name));
-  const ranked = (contract.workflows ?? []).map(workflow => {
-    if (!allowedKind(restriction, 'workflow', workflow.name)) return null;
-    const hit = workflow.dependencies.filter(name => selectedNames.has(name)).length;
-    return hit >= 2 ? { ...workflow, hit } : null;
-  }).filter(Boolean).sort((a, b) => b.hit - a.hit || a.name.localeCompare(b.name));
-  return ranked[0] ? { name: ranked[0].name, label: ranked[0].label, path: ranked[0].path, executableGraph: false } : null;
+// A play wins over single commands when the request names the play, matches one of its intents at
+// least as specifically as the best command phrase, or selects two or more commands it chains
+// (and at least half of its unconditional commands).
+export function selectPlay(query, selected, contract, restriction, invoked = null) {
+  const text = normalized(query);
+  const names = new Set(selected.map(item => item.name));
+  const best = Math.max(0, ...selected.filter(item => item.matchKind === 'intent').map(item => item.score));
+  const ranked = (contract.plays ?? []).map(play => {
+    if (!allowedKind(restriction, 'workflow', play.name)) return null;
+    if (invoked === play.name) return { play, named: 1, intent: 0, hits: 0, coverage: 0 };
+    const intent = [...play.intents, ...(play.legacy ?? [])].filter(phrase => includesPhrase(text, phrase))
+      .reduce((longest, phrase) => Math.max(longest, normalized(phrase).length), 0);
+    const hits = play.dependencies.filter(name => names.has(name)).length;
+    const core = new Set(play.chain.filter(step => step.command && !step.when).map(step => step.command));
+    const coreHits = [...core].filter(name => names.has(name)).length;
+    const byIntent = intent > 0 && intent >= best;
+    const byChain = hits >= 2 && coreHits * 2 >= core.size;
+    if (!byIntent && !byChain) return null;
+    return { play, named: 0, intent: byIntent ? intent : 0, hits, coverage: hits / play.dependencies.length };
+  }).filter(Boolean).sort((a, b) => b.named - a.named || b.intent - a.intent || b.hits - a.hits || b.coverage - a.coverage || a.play.name.localeCompare(b.play.name));
+  if (!ranked[0]) return null;
+  const { play } = ranked[0];
+  return { name: play.name, label: play.label, path: play.path, chain: play.chain, executableGraph: false };
+}
+
+// Resolve an invoked word to a command or play by name or legacy ID.
+export function resolveCommand(word, contract) {
+  if (!word) return null;
+  const method = contract.methods[word] ?? Object.values(contract.methods).find(item => (item.legacy ?? []).includes(word));
+  if (method) return { kind: 'command', name: method.name };
+  const play = (contract.plays ?? []).find(item => item.name === word || (item.legacy ?? []).includes(word));
+  return play ? { kind: 'play', name: play.name } : null;
 }
 
 function selectRole(_query, selected, contract, restriction) {
@@ -111,7 +138,7 @@ function selectRole(_query, selected, contract, restriction) {
   return ranked[0] ? { name: ranked[0].name, label: ranked[0].label, path: ranked[0].path } : null;
 }
 
-function formatContext({ root, parent, selected, deferred, excluded, unavailable, workflow, role, parentMethod }) {
+function formatContext({ root, parent, selected, deferred, excluded, unavailable, play, role, parentMethod }) {
   const lines = [
     '<conquistador-request-context>',
     'This request matches Conquistador. Follow the original user request and use the installed parent contract and selected methods below.',
@@ -141,8 +168,9 @@ function formatContext({ root, parent, selected, deferred, excluded, unavailable
     lines.push('', 'Excluded:');
     for (const item of excluded) lines.push(`- ${item.name}: ${item.reason}`);
   }
-  if (workflow) {
-    lines.push('', `Composition workflow: ${workflow.label} (${workflow.path})`, 'This workflow is composition prose, not an executable graph.');
+  if (play) {
+    lines.push('', `Play: ${play.label} [${play.name}] (${play.path})`, 'Run these steps in order; skip a step whose condition is false:');
+    play.chain.forEach((step, index) => lines.push(`${index + 1}. ${step.command ?? step.method}${step.mode ? ` (mode ${step.mode})` : ''}${step.when ? ` — when ${step.when}` : ''}${step.for ? ` — for ${step.for}` : ''}`));
   }
   if (role) lines.push('', `Suggested specialist role: ${role.label} (${role.path})`);
   lines.push(
@@ -166,7 +194,7 @@ function abstain(reason) {
     deferred: [],
     excluded: [],
     unavailable: [],
-    workflow: null,
+    play: null,
     role: null,
     parentMethod: null,
     context: '',
@@ -193,7 +221,7 @@ export function explainRoute(result) {
     excluded: (result.excluded ?? []).map(item => item.name ?? item),
     unavailable: result.unavailable ?? [],
     parentMethod: result.parentMethod?.name ?? null,
-    workflow: result.workflow?.name ?? null,
+    play: result.play?.name ?? null,
     role: result.role?.name ?? null,
   };
 }
@@ -255,12 +283,21 @@ export function selectRequestContext(prompt, { root = moduleRoot } = {}) {
     for (const item of matchingMethods(clause, contract, { permitGrowthInference: !codingAction || (businessDiagnosisRequested && !technicalStage) })) consider(item);
   }
 
+  const invoked = resolveCommand(invokedCommand(prompt), contract);
+  if (invoked?.kind === 'command') consider({ ...contract.methods[invoked.name], score: 100, matchKind: 'name', matchPhrase: invoked.name });
+
   if (selectedAll.length > 1) {
-    const broadPlanning = selectedAll.findIndex(item => item.name === 'shape-initiative' && item.matchKind === 'intent' && item.matchPhrase === 'what should we do');
+    const broadPlanning = selectedAll.findIndex(item => item.name === 'shape' && item.matchKind === 'intent' && item.matchPhrase === 'what should we do');
 
     if (broadPlanning !== -1) selectedAll.splice(broadPlanning, 1);
   }
-  if (!clauses.some(clause => feedbackOptIn.test(clause))) excluded.push({ name: 'submit-feedback', reason: 'explicit-only' });
+  if (!clauses.some(clause => feedbackOptIn.test(clause))) excluded.push({ name: 'feedback', reason: 'explicit-only' });
+  // An explicit command stays a command. Otherwise a matching play brings its first step.
+  const play = invoked?.kind === 'command' ? null : selectPlay(query, selectedAll, contract, restriction, invoked?.name);
+  const first = play?.chain.find(step => step.command && !step.when) ?? play?.chain.find(step => step.command);
+  if (first && contract.methods[first.command] && !selectedAll.some(item => item.name === first.command)) {
+    selectedAll.unshift({ ...contract.methods[first.command], score: 0, matchKind: 'play-step', matchPhrase: play.name });
+  }
   if (!selectedAll.length && !parentMethod) {
     const result = abstain(explicitInvocation(prompt) ? 'parent-selection-required' : 'no-relevant-capability');
     result.unavailable = [...new Set(unavailable)];
@@ -280,7 +317,7 @@ export function selectRequestContext(prompt, { root = moduleRoot } = {}) {
         deferred: leftover,
         excluded,
         unavailable,
-        workflow: selectWorkflow(query, candidate, contract, restriction),
+        play,
         role: selectRole(query, candidate, contract, restriction),
         parentMethod,
       });
@@ -290,10 +327,9 @@ export function selectRequestContext(prompt, { root = moduleRoot } = {}) {
     }
   }
   const selected = expanded.map(attachResources);
-  const workflow = selectWorkflow(query, selected, contract, restriction);
   const role = selectRole(query, selected, contract, restriction);
   context = formatContext({
-    root: packageRoot, parent, selected, deferred, excluded, unavailable, workflow, role, parentMethod,
+    root: packageRoot, parent, selected, deferred, excluded, unavailable, play, role, parentMethod,
   });
   return {
     schemaVersion: REQUEST_CONTEXT_SCHEMA_VERSION,
@@ -303,7 +339,7 @@ export function selectRequestContext(prompt, { root = moduleRoot } = {}) {
     deferred: deferred.map(({ name, label, path }) => ({ name, label, path })),
     excluded,
     unavailable,
-    workflow,
+    play,
     role,
     parentMethod: parentMethod ? { name: parentMethod.name, label: parentMethod.label, path: parentMethod.path } : null,
     context,

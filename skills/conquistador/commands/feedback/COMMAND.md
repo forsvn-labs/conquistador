@@ -18,11 +18,11 @@ Read the core files in full before you draft; read the others when their step or
 
 Core:
 
-- [LICENSE](LICENSE.md): MIT License
+- [NOTICE](NOTICE.md): Notice. Copyright (c) 2026 forsvn. Original Conquistador feedback method and local draft helper, licensed…
 - [method](references/method.md): Method and host boundary. 1. Name the job the user was trying to complete. Prefer one reproducible failure…
 - [output-contract](references/output-contract.md): Feedback output contract. Return a public draft and a separate local handoff. Do not upload the local handoff.
 
-By step: [NOTICE](NOTICE.md).
+By step: [LICENSE](LICENSE.md).
 
 <!-- playbooks:end -->
 

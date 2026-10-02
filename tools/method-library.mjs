@@ -2,6 +2,23 @@ import { existsSync, lstatSync, readFileSync, readdirSync } from 'node:fs';
 import { join, posix } from 'node:path';
 
 export const methodDocument = 'METHOD.md';
+export const commandDocument = 'COMMAND.md';
+export const parentName = 'conquistador';
+// Library-relative locations. The parent is the only skill; each command lives under it.
+export const methodDirectory = name => name === parentName ? parentName : `${parentName}/commands/${name}`;
+export const methodPath = (name, { internal = false } = {}) => name === parentName
+  ? `${parentName}/${internal ? methodDocument : 'SKILL.md'}` : `${methodDirectory(name)}/${commandDocument}`;
+export const playPath = name => `${parentName}/plays/${name}.md`;
+// The method that owns a library-relative path, or null for shared parent files.
+export function methodOwner(key) {
+  const match = /^conquistador\/(?:commands|plays)\/([a-z][a-z0-9-]*)(?:\/|\.md$)/.exec(key);
+  return match ? match[1] : null;
+}
+export function commandNames(libraryRoot) {
+  const directory = join(libraryRoot, parentName, 'commands');
+  if (!existsSync(directory)) return [];
+  return readdirSync(directory).sort().filter(name => /^[a-z][a-z0-9-]*$/.test(name) && existsSync(join(directory, name, commandDocument)));
+}
 export const internalPath = path => path.replace(/(^|\/)SKILL\.md$/, `$1${methodDocument}`);
 
 // Keep directory structure and all method metadata. Only the internal document name changes.
@@ -41,7 +58,7 @@ export function capabilityCatalog(source, names) {
   const labels = new Map(Object.values(contract.methods).map(method => [method.name, method.label]));
   const rows = names.filter(name => name !== 'conquistador').sort().map(name => {
     if (!labels.has(name)) throw Error(`Missing public capability label: ${name}`);
-    return `| ${labels.get(name)} | [${name}](../${name}/${methodDocument}) |`;
+    return `| ${labels.get(name)} | [${name}](commands/${name}/${commandDocument}) |`;
   });
   return '# Available capabilities\n\nSelect only the methods needed for this request. Show the relevant public capability and specialist\nlabels during work. Load a method and its resources only after routing. This catalog lists only the\nmethods included in this package; it grants no permission beyond its domain restriction or host.\n\n| Public capability | Internal method |\n| --- | --- |\n' + rows.join('\n') + '\n';
 }

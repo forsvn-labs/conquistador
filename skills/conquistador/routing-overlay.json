@@ -1,7 +1,7 @@
 {
   "schemaVersion": "conquistador.routing-overlay/v1",
   "explicitOnly": [
-    "submit-feedback"
+    "feedback"
   ],
   "parentMethods": {
     "connect-accounts": {
@@ -30,37 +30,61 @@
   },
   "channelLocks": {
     "linkedin": {
-      "ads": "create-paid-campaign",
-      "dm": "write-outreach",
-      "message": "write-outreach",
-      "sequence": "write-outreach",
-      "post": "write-social",
-      "announcement": "write-social",
-      "update": "write-social",
-      "article": "write-social",
-      "thread": "write-social"
+      "ads": "ads",
+      "dm": "outreach",
+      "message": "outreach",
+      "sequence": "outreach",
+      "post": "social",
+      "announcement": "social",
+      "update": "social",
+      "article": "social",
+      "thread": "social"
     },
     "reddit": {
-      "post": "write-social",
-      "ads": "create-paid-campaign"
+      "post": "social",
+      "ads": "ads"
     },
     "product hunt": {
-      "listing": "write-social",
-      "launch": "plan-campaign"
+      "listing": "social",
+      "launch": "campaign"
     }
   },
   "methods": {
-    "allocate-marketing-budget": {
-      "kind": "plan",
+    "ads": {
+      "kind": "create",
       "intents": [
-        "allocate marketing budget",
-        "budget allocation",
-        "spend scenario",
-        "channel floors"
+        "paid campaign",
+        "create ads",
+        "meta ads",
+        "google ads",
+        "linkedin ads",
+        "tiktok ads",
+        "paid-media"
+      ],
+      "aliases": [
+        "create-paid-campaign",
+        "facebook ads",
+        "instagram ads",
+        "youtube ads",
+        "reddit ads",
+        "x ads",
+        "search ads",
+        "apple search ads",
+        "ppc",
+        "ad campaign",
+        "ads campaign",
+        "retargeting",
+        "paid social",
+        "paid acquisition"
       ],
       "exclusions": [
-        "create ads",
-        "evaluate actual paid"
+        "evaluate actual paid",
+        "organic social posts",
+        "cpa",
+        "roas",
+        "ad performance",
+        "ads performance",
+        "campaign results"
       ],
       "requiredResources": [
         "references/rubric.md",
@@ -69,11 +93,23 @@
       ],
       "conditionalResources": [
         {
-          "path": "agents/allocator.md",
+          "path": "references/earn-the-impression.md",
           "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
         },
         {
-          "path": "agents/constraint-checker.md",
+          "path": "agents/strategist.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/composer.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/format-checker.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/voice-auditor.md",
           "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
         },
         {
@@ -81,54 +117,57 @@
           "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
         },
         {
-          "path": "references/marginal-return-model.md",
+          "path": "references/ad-intelligence/meta-cold-traffic.md",
           "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
         },
         {
-          "path": "references/next-dollar-earns-most.md",
+          "path": "references/ad-intelligence/meta-retargeting.md",
           "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
         },
         {
-          "path": "references/format-conventions.md",
+          "path": "references/ad-intelligence/google-ads.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/ad-intelligence/linkedin-ads.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/ad-intelligence/tiktok-ads.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/ad-intelligence/creative-cadence.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/format-spec.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/policy-floor.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/message-transmutation.md",
           "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
         }
       ],
-      "optionalResources": [
-        "references/examples/allocate-marketing-budget-walkthrough.md"
+      "optionalResources": [],
+      "legacy": [
+        "create-paid-campaign"
       ]
     },
-    "analyze-video": {
-      "kind": "research",
-      "intents": [
-        "analyze video",
-        "timestamped summary",
-        "inspect this video",
-        "find the scene"
-      ],
-      "exclusions": [
-        "create short-form",
-        "script a video"
-      ],
-      "requiredResources": [],
-      "conditionalResources": [
-        {
-          "path": "references/gemini-recipe.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/critic-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        }
-      ],
-      "optionalResources": []
-    },
-    "architect-software-system": {
+    "architect": {
       "kind": "build",
       "intents": [
         "software architecture",
         "system architecture",
         "service boundaries",
         "architect the system"
+      ],
+      "aliases": [
+        "architect-software-system"
       ],
       "exclusions": [
         "marketing architecture",
@@ -221,14 +260,89 @@
           "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
         }
       ],
-      "optionalResources": []
+      "optionalResources": [],
+      "legacy": [
+        "architect-software-system"
+      ]
     },
-    "audit-marketing": {
+    "article": {
+      "kind": "create",
+      "intents": [
+        "long-form",
+        "founder essay",
+        "thought leadership",
+        "write an article",
+        "write a guide"
+      ],
+      "aliases": [
+        "write-longform",
+        "blog post",
+        "newsletter issue",
+        "case study",
+        "white paper",
+        "whitepaper",
+        "ebook",
+        "guest post",
+        "op ed",
+        "write a newsletter",
+        "email newsletter",
+        "grow our newsletter",
+        "newsletter growth"
+      ],
+      "exclusions": [
+        "landing page copy",
+        "social posts"
+      ],
+      "requiredResources": [
+        "references/research-method.md",
+        "references/rubric.md",
+        "references/anti-patterns.md",
+        "fallbacks/sequential.md"
+      ],
+      "conditionalResources": [
+        {
+          "path": "agents/research.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/outline.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/draft.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/critic.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/structure-patterns.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/anti-collapse.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/format-conventions.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        }
+      ],
+      "optionalResources": [],
+      "legacy": [
+        "write-longform"
+      ]
+    },
+    "audit": {
       "kind": "evaluate",
       "intents": [
         "audit marketing",
         "pre-ship marketing audit",
         "audit this marketing package"
+      ],
+      "aliases": [
+        "audit-marketing"
       ],
       "exclusions": [
         "knowledge review",
@@ -267,15 +381,648 @@
           "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
         }
       ],
-      "optionalResources": []
+      "optionalResources": [],
+      "legacy": [
+        "audit-marketing"
+      ]
     },
-    "brief-creative": {
+    "brand": {
+      "kind": "create",
+      "intents": [
+        "brand foundation",
+        "brand voice",
+        "visual identity",
+        "naming direction",
+        "create a brand"
+      ],
+      "aliases": [
+        "create-brand"
+      ],
+      "exclusions": [
+        "write a landing page",
+        "social posts"
+      ],
+      "requiredResources": [
+        "references/brand-system-method.md",
+        "references/anti-patterns.md",
+        "fallbacks/sequential.md"
+      ],
+      "conditionalResources": [
+        {
+          "path": "references/narrative-tension.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/strategy-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/personality-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/voice-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/visual-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/token-architect-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/component-token-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/accessibility-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/critic-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/format-conventions.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/platform-surfaces.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        }
+      ],
+      "optionalResources": [],
+      "legacy": [
+        "create-brand"
+      ]
+    },
+    "budget": {
+      "kind": "plan",
+      "intents": [
+        "allocate marketing budget",
+        "budget allocation",
+        "spend scenario",
+        "channel floors"
+      ],
+      "aliases": [
+        "allocate-marketing-budget"
+      ],
+      "exclusions": [
+        "create ads",
+        "evaluate actual paid"
+      ],
+      "requiredResources": [
+        "references/rubric.md",
+        "references/anti-patterns.md",
+        "fallbacks/sequential.md"
+      ],
+      "conditionalResources": [
+        {
+          "path": "agents/allocator.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/constraint-checker.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/critic.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/marginal-return-model.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/next-dollar-earns-most.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/format-conventions.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        }
+      ],
+      "optionalResources": [
+        "references/examples/allocate-marketing-budget-walkthrough.md"
+      ],
+      "legacy": [
+        "allocate-marketing-budget"
+      ]
+    },
+    "build": {
+      "kind": "build",
+      "intents": [
+        "build ios",
+        "swiftui",
+        "native ios",
+        "ipados",
+        "build web app",
+        "implement a web",
+        "responsive web app",
+        "web implementation"
+      ],
+      "aliases": [
+        "build-ios-app",
+        "build-web-app"
+      ],
+      "exclusions": [
+        "web app",
+        "marketing copy about an app",
+        "landing page copy"
+      ],
+      "requiredResources": [],
+      "conditionalResources": [
+        {
+          "path": "references/modes/ios.md",
+          "when": "Mode ios: read the mode file in full before the work."
+        },
+        {
+          "path": "references/modes/web.md",
+          "when": "Mode web: read the mode file in full before the work."
+        },
+        {
+          "path": "references/modes/ios/fallbacks/sequential.md",
+          "when": "Mode ios: required for that mode."
+        },
+        {
+          "path": "references/modes/web/references/web-engineering-method.md",
+          "when": "Mode web: required for that mode."
+        },
+        {
+          "path": "references/modes/web/fallbacks/sequential.md",
+          "when": "Mode web: required for that mode."
+        },
+        {
+          "path": "references/modes/ios/references/apple-platform-authority.md",
+          "when": "Mode ios. Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/modes/ios/references/capabilities.md",
+          "when": "Mode ios. Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/modes/ios/references/gotchas.md",
+          "when": "Mode ios. Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/modes/ios/references/publishing.md",
+          "when": "Mode ios. Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/modes/ios/references/publishing-readiness.md",
+          "when": "Mode ios. Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/modes/ios/references/publishing-production.md",
+          "when": "Mode ios. Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/modes/ios/references/publishing-testflight.md",
+          "when": "Mode ios. Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/modes/ios/references/publishing-gotchas.md",
+          "when": "Mode ios. Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/modes/ios/references/device-registration.md",
+          "when": "Mode ios. Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/modes/ios/references/screenshots.md",
+          "when": "Mode ios. Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/modes/ios/references/api-reference.md",
+          "when": "Mode ios. Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/modes/web/references/test-contract.md",
+          "when": "Mode web. Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        }
+      ],
+      "optionalResources": [
+        "references/modes/web/references/examples/settings-slice-walkthrough.md"
+      ],
+      "legacy": [
+        "build-ios-app",
+        "build-web-app"
+      ]
+    },
+    "campaign": {
+      "kind": "plan",
+      "intents": [
+        "launch plan",
+        "campaign plan",
+        "go-to-market",
+        "product hunt launch",
+        "growth campaign",
+        "gtm plan",
+        "plan a launch",
+        "launch strategy",
+        "launch campaign"
+      ],
+      "aliases": [
+        "plan-campaign",
+        "marketing plan",
+        "marketing strategy",
+        "growth plan",
+        "growth strategy",
+        "email campaign",
+        "lifecycle campaign",
+        "drip campaign",
+        "nurture campaign",
+        "retention campaign",
+        "win back campaign",
+        "win back flow",
+        "winback flow",
+        "holiday campaign",
+        "seasonal campaign",
+        "partner program",
+        "affiliate program",
+        "ambassador program",
+        "reduce churn",
+        "webinar",
+        "app store launch",
+        "product launch",
+        "feature launch",
+        "launch of our",
+        "marketing and growth",
+        "plan marketing",
+        "plan our marketing",
+        "plan our growth"
+      ],
+      "exclusions": [
+        "run of show",
+        "submit feedback",
+        "knowledge review",
+        "write social only"
+      ],
+      "requiredResources": [
+        "references/anti-patterns.md",
+        "fallbacks/sequential.md"
+      ],
+      "conditionalResources": [
+        {
+          "path": "agents/pillar-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/angle-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/channel-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/timeline-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/launch-sequencing-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/critic-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/3d-angle-framework.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/channel-strategy.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/platform-channels.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/growth-play-patterns.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/pillars-before-angles.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        }
+      ],
+      "optionalResources": [],
+      "legacy": [
+        "plan-campaign"
+      ]
+    },
+    "channels": {
+      "kind": "research",
+      "intents": [
+        "research channel",
+        "choose a channel",
+        "channel research",
+        "platform fit"
+      ],
+      "aliases": [
+        "research-channel",
+        "channel strategy",
+        "which channel",
+        "best channel",
+        "distribution channel",
+        "channel mix",
+        "community growth",
+        "grow our community",
+        "grow the community",
+        "build a community",
+        "discord community",
+        "discord server",
+        "slack community",
+        "online community",
+        "pinterest",
+        "bluesky",
+        "mastodon",
+        "quora",
+        "twitch",
+        "snapchat",
+        "whatsapp channel",
+        "telegram channel",
+        "indie hackers",
+        "g2",
+        "capterra",
+        "review sites",
+        "review platforms",
+        "marketplace listing",
+        "app directories",
+        "press coverage",
+        "media coverage",
+        "earned media",
+        "podcast guest",
+        "podcast tour",
+        "substack"
+      ],
+      "exclusions": [
+        "write the posts",
+        "create ads"
+      ],
+      "requiredResources": [
+        "references/evidence-protocol.md",
+        "references/confidence-labeling.md",
+        "references/anti-patterns.md",
+        "fallbacks/sequential.md"
+      ],
+      "conditionalResources": [
+        {
+          "path": "agents/evidence-intake-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/benchmark-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/synthesis-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/recommendation-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/critic-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/scoring-rubrics.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        }
+      ],
+      "optionalResources": [],
+      "legacy": [
+        "research-channel"
+      ]
+    },
+    "convert": {
+      "kind": "create",
+      "intents": [
+        "improve conversion",
+        "conversion experiment",
+        "revise the landing",
+        "onboarding conversion"
+      ],
+      "aliases": [
+        "improve-conversion",
+        "increase conversion",
+        "improve signups",
+        "product page conversion",
+        "cart abandonment",
+        "improve activation",
+        "paywall experiment",
+        "cro",
+        "improve onboarding",
+        "onboarding drop off",
+        "onboarding completion",
+        "improve trial to paid",
+        "increase trial to paid",
+        "improve conversion rate",
+        "increase conversion rate",
+        "improve signup rate",
+        "improve checkout",
+        "raise the upgrade rate"
+      ],
+      "exclusions": [
+        "seo ranking",
+        "paid results"
+      ],
+      "requiredResources": [
+        "references/conversion-diagnosis-method.md",
+        "references/diagnostic-evidence-method.md",
+        "references/landing-eval-method.md",
+        "references/landing-eval-rubric.md",
+        "fallbacks/sequential.md"
+      ],
+      "conditionalResources": [
+        {
+          "path": "agents/conversion-tree-builder-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/conversion-external-check-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/conversion-hypothesis-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/conversion-data-mapper-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/conversion-verdict-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/conversion-critic-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/hypothesis-framework.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/logic-tree-examples.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/landing-metric-ingest-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/landing-diagnosis-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/landing-recommendation-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/landing-critic-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/anti-sycophancy.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/conversion-diagnosis-anti-patterns.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/landing-anti-patterns.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        }
+      ],
+      "optionalResources": [],
+      "legacy": [
+        "improve-conversion"
+      ]
+    },
+    "copy": {
+      "kind": "create",
+      "intents": [
+        "landing page copy",
+        "landing page",
+        "launch email",
+        "headline",
+        "call to action",
+        "product page copy",
+        "launch announcement copy",
+        "landing copy",
+        "draft a headline"
+      ],
+      "aliases": [
+        "write-copy",
+        "welcome email",
+        "onboarding email",
+        "nurture email",
+        "win back email",
+        "winback email",
+        "re engagement email",
+        "lifecycle email",
+        "trial email",
+        "upgrade prompt",
+        "upgrade prompts",
+        "in app message",
+        "in app messages",
+        "in app copy",
+        "paywall copy",
+        "pricing page",
+        "product description",
+        "app store description",
+        "email copy",
+        "push notification copy",
+        "sms copy",
+        "microcopy",
+        "onboarding copy",
+        "homepage copy",
+        "tagline"
+      ],
+      "exclusions": [
+        "linkedin post",
+        "linkedin announcement",
+        "outreach sequence",
+        "social posts",
+        "long-form article",
+        "cold email",
+        "sales email"
+      ],
+      "requiredResources": [
+        "references/sales-argument.md",
+        "references/copy-review.md",
+        "references/anti-patterns.md",
+        "fallbacks/sequential.md"
+      ],
+      "conditionalResources": [
+        {
+          "path": "agents/hook-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/body-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/cta-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/social-proof-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/variant-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/voice-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/psychology-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/zero-risk-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/critic-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/discovery-story.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/lifecycle-sequences.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        }
+      ],
+      "optionalResources": [],
+      "legacy": [
+        "write-copy"
+      ]
+    },
+    "creative": {
       "kind": "create",
       "intents": [
         "creative brief",
         "production brief",
         "design brief",
         "brief the designer"
+      ],
+      "aliases": [
+        "brief-creative"
       ],
       "exclusions": [
         "write the copy",
@@ -389,9 +1136,1683 @@
           "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
         }
       ],
-      "optionalResources": []
+      "optionalResources": [],
+      "legacy": [
+        "brief-creative"
+      ]
     },
-    "brief-product-ui": {
+    "critique": {
+      "kind": "review",
+      "intents": [
+        "fresh-eyes",
+        "fresh eyes review",
+        "second opinion on this artifact"
+      ],
+      "aliases": [
+        "fresh-eyes-review"
+      ],
+      "exclusions": [
+        "write the first draft",
+        "create the campaign"
+      ],
+      "requiredResources": [
+        "fallbacks/sequential.md",
+        "references/independent-review-method.md",
+        "references/anti-patterns.md"
+      ],
+      "conditionalResources": [
+        {
+          "path": "references/review-target-and-closeout.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/reviewer-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/security-reviewer-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/performance-reviewer-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/correctness-reviewer-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/specialist-lenses.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/critic-consensus.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/noise-filter.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/scope-drift.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/resolver-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/report-template.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/quality-feedback-protocol.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        }
+      ],
+      "optionalResources": [
+        "references/examples/review-cycle-walkthrough.md"
+      ],
+      "legacy": [
+        "fresh-eyes-review"
+      ]
+    },
+    "decide": {
+      "kind": "review",
+      "intents": [
+        "decision panel",
+        "independent positions",
+        "resolve this decision",
+        "debate agents"
+      ],
+      "aliases": [
+        "decision-panel"
+      ],
+      "exclusions": [
+        "write copy",
+        "campaign plan"
+      ],
+      "requiredResources": [
+        "fallbacks/sequential.md",
+        "references/independent-positions-method.md",
+        "references/anti-patterns.md"
+      ],
+      "conditionalResources": [
+        {
+          "path": "references/decision-tree.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/optimist-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/skeptic-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/synthesizer-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/architect-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/pragmatist-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/critic-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/debate-rounds.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/anti-sycophancy.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/poll-protocol.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/idea-ranking-core.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/resolver-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/report-template.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        }
+      ],
+      "optionalResources": [],
+      "legacy": [
+        "decision-panel"
+      ]
+    },
+    "diagnose": {
+      "kind": "diagnose",
+      "intents": [
+        "diagnose growth",
+        "funnel is weak",
+        "metric moved",
+        "activation is weak",
+        "growth problem",
+        "weak activation funnel",
+        "weak activation",
+        "growth diagnosis"
+      ],
+      "aliases": [
+        "diagnose-growth"
+      ],
+      "exclusions": [
+        "write a campaign",
+        "create ads"
+      ],
+      "requiredResources": [
+        "references/diagnostic-evidence-method.md",
+        "fallbacks/sequential.md",
+        "references/anti-patterns.md"
+      ],
+      "conditionalResources": [
+        {
+          "path": "agents/tree-builder-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/external-check-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/hypothesis-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/data-mapper-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/verdict-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/critic-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/diagnosis-playbook.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/hypothesis-framework.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/logic-tree-examples.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/format-conventions.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        }
+      ],
+      "optionalResources": [
+        "references/examples/diagnose-walkthrough.md"
+      ],
+      "legacy": [
+        "diagnose-growth"
+      ]
+    },
+    "docs": {
+      "kind": "build",
+      "intents": [
+        "technical documentation",
+        "api docs",
+        "readme and setup",
+        "operator docs"
+      ],
+      "aliases": [
+        "write-technical-docs"
+      ],
+      "exclusions": [
+        "marketing copy",
+        "launch email"
+      ],
+      "requiredResources": [
+        "references/docs-writing-method.md",
+        "references/anti-patterns.md",
+        "fallbacks/sequential.md"
+      ],
+      "conditionalResources": [
+        {
+          "path": "agents/scanner-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/audience-profiler-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/concept-extractor-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/writer-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/doc-template.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/staleness-checker-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/critic-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/intake-prompts.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/artifact-paths.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/report-template.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/ship-log-template.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        }
+      ],
+      "optionalResources": [
+        "references/examples/api-readme-walkthrough.md"
+      ],
+      "legacy": [
+        "write-technical-docs"
+      ]
+    },
+    "event": {
+      "kind": "create",
+      "intents": [
+        "run of show",
+        "cue sheet",
+        "minute-by-minute",
+        "event rundown",
+        "live event plan"
+      ],
+      "aliases": [
+        "create-run-of-show",
+        "webinar",
+        "livestream",
+        "live stream",
+        "launch event",
+        "launch party",
+        "meetup",
+        "x space",
+        "twitter space"
+      ],
+      "exclusions": [
+        "campaign plan",
+        "connect crm",
+        "executor",
+        "content ideas"
+      ],
+      "requiredResources": [
+        "references/anti-patterns.md",
+        "fallbacks/sequential.md"
+      ],
+      "conditionalResources": [
+        {
+          "path": "agents/segment-planner-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/logistics-director-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/critic-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/format-conventions.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        }
+      ],
+      "optionalResources": [
+        "references/examples/runofshow-walkthrough.md"
+      ],
+      "legacy": [
+        "create-run-of-show"
+      ]
+    },
+    "factcheck": {
+      "kind": "review",
+      "intents": [
+        "knowledge review",
+        "review knowledge freshness",
+        "source audit",
+        "conflicting evidence",
+        "authority and freshness",
+        "factual-claim check"
+      ],
+      "aliases": [
+        "knowledge-review"
+      ],
+      "exclusions": [
+        "launch plan",
+        "mark missing facts",
+        "keep it as a draft",
+        "code review"
+      ],
+      "requiredResources": [
+        "references/knowledge-review-method.md",
+        "fallbacks/sequential.md",
+        "references/review-rubric.md"
+      ],
+      "conditionalResources": [
+        {
+          "path": "references/provenance.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/contradiction-protocol.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        }
+      ],
+      "optionalResources": [
+        "references/examples/activation-claim-walkthrough.md"
+      ],
+      "legacy": [
+        "knowledge-review"
+      ]
+    },
+    "feedback": {
+      "kind": "review",
+      "intents": [
+        "submit feedback",
+        "share feedback",
+        "report a conquistador failure",
+        "file a conquistador issue"
+      ],
+      "aliases": [
+        "submit-feedback"
+      ],
+      "exclusions": [
+        "launch plan",
+        "draft a launch",
+        "product facts",
+        "keep it as a draft"
+      ],
+      "requiredResources": [
+        "references/method.md",
+        "references/output-contract.md"
+      ],
+      "conditionalResources": [],
+      "optionalResources": [],
+      "legacy": [
+        "submit-feedback"
+      ],
+      "explicitOnly": true
+    },
+    "flow": {
+      "kind": "build",
+      "intents": [
+        "user flow",
+        "map the journey",
+        "screen transitions",
+        "recovery states"
+      ],
+      "aliases": [
+        "map-user-flow"
+      ],
+      "exclusions": [
+        "approved flow",
+        "implement the app",
+        "email flow",
+        "win back",
+        "winback",
+        "nurture flow",
+        "drip flow"
+      ],
+      "requiredResources": [
+        "references/flow-mapping-method.md",
+        "references/gates-and-rubric.md",
+        "references/anti-patterns.md",
+        "fallbacks/sequential.md"
+      ],
+      "conditionalResources": [
+        {
+          "path": "references/platform-touchpoints.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/intake-prompts.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/structure-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/edge-case-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/diagram-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/wireframe-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/validation-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/critic-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/research-checklist.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/report-template.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        }
+      ],
+      "optionalResources": [
+        "references/examples/checkout-walkthrough.md"
+      ],
+      "legacy": [
+        "map-user-flow"
+      ]
+    },
+    "funnel": {
+      "kind": "plan",
+      "intents": [
+        "growth funnel model",
+        "unit economics",
+        "numeric funnel",
+        "revenue funnel"
+      ],
+      "aliases": [
+        "model-growth-funnel"
+      ],
+      "exclusions": [
+        "write copy"
+      ],
+      "requiredResources": [
+        "references/funnel-model-method.md",
+        "fallbacks/sequential.md",
+        "references/anti-patterns.md"
+      ],
+      "conditionalResources": [
+        {
+          "path": "agents/model-selection-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/baseline-collector-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/target-setter-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/sanity-check-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/stress-test-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/critic-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/funnel-models.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/benchmarks.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/unit-economics.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/stress-tests.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/format-conventions.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        }
+      ],
+      "optionalResources": [
+        "references/examples/funnel-planner-walkthrough.md"
+      ],
+      "legacy": [
+        "model-growth-funnel"
+      ]
+    },
+    "ideas": {
+      "kind": "research",
+      "intents": [
+        "content ideas",
+        "editorial bets",
+        "topic angles",
+        "content research"
+      ],
+      "aliases": [
+        "research-content-ideas",
+        "content plan",
+        "content calendar",
+        "content strategy",
+        "editorial calendar",
+        "what to post",
+        "post ideas",
+        "video ideas",
+        "topic ideas",
+        "blog ideas",
+        "newsletter ideas"
+      ],
+      "exclusions": [
+        "write the posts",
+        "connect crm",
+        "executor",
+        "run of show"
+      ],
+      "requiredResources": [
+        "references/anti-patterns.md",
+        "references/confidence-labeling.md",
+        "references/content-ideas-method.md",
+        "fallbacks/sequential.md"
+      ],
+      "conditionalResources": [
+        {
+          "path": "agents/platform-scout-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/scout-protocol.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/audience-fit-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/pattern-extractor-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/audio-trend-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/synthesis-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/critic-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/scoring-rubrics.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/format-conventions.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/clipping-and-live.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        }
+      ],
+      "optionalResources": [
+        "references/examples/shortform-research-walkthrough.md"
+      ],
+      "legacy": [
+        "research-content-ideas"
+      ]
+    },
+    "measure": {
+      "kind": "evaluate",
+      "intents": [
+        "measurement plan",
+        "measure growth",
+        "measurement",
+        "kpi tree",
+        "campaign measurement",
+        "learn from results"
+      ],
+      "aliases": [
+        "measure-growth"
+      ],
+      "exclusions": [
+        "write social posts",
+        "create ads"
+      ],
+      "requiredResources": [
+        "references/measure-rubric.md",
+        "references/campaign-rubric.md",
+        "references/evaluation-loop-rubric.md",
+        "fallbacks/sequential.md"
+      ],
+      "conditionalResources": [
+        {
+          "path": "references/measurement-design-contract.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/measure-metric-ingest-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/measure-diagnosis-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/pack-feedback-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/measure-critic-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/anti-sycophancy.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/legibility-convention.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/performance-data.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/campaign-metric-ingest-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/campaign-diagnosis-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/campaign-recommendation-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/campaign-critic-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/measure-anti-patterns.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/campaign-anti-patterns.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        }
+      ],
+      "optionalResources": [
+        "references/examples/measure-walkthrough.md",
+        "references/examples/campaign-eval-cycle-walkthrough.md"
+      ],
+      "legacy": [
+        "measure-growth"
+      ]
+    },
+    "outreach": {
+      "kind": "create",
+      "intents": [
+        "outreach sequence",
+        "cold email",
+        "linkedin dm",
+        "direct message sequence",
+        "sales sequence"
+      ],
+      "aliases": [
+        "write-outreach",
+        "pitch journalists",
+        "media pitch",
+        "press pitch",
+        "pr pitch",
+        "podcast pitch",
+        "pitch our founder",
+        "pitch our ceo",
+        "follow up email",
+        "sales email",
+        "sales follow up",
+        "partnership email",
+        "prospecting",
+        "influencer outreach",
+        "creator outreach",
+        "press coverage",
+        "media coverage",
+        "outbound sequence",
+        "outbound campaign",
+        "outbound email",
+        "outbound sales"
+      ],
+      "exclusions": [
+        "linkedin post",
+        "linkedin announcement",
+        "landing page copy"
+      ],
+      "requiredResources": [
+        "references/copy-validation-rubric.md",
+        "references/anti-patterns.md",
+        "fallbacks/sequential.md"
+      ],
+      "conditionalResources": [
+        {
+          "path": "references/frameworks/outreach-decisions.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/modes/no-pitch-research.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/signal-analyst.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/strategist.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/proof-selector.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/composer.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/voice-auditor.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/critic.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/reply-classifier.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/reply-composer.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/proof-types.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        }
+      ],
+      "optionalResources": [],
+      "legacy": [
+        "write-outreach"
+      ]
+    },
+    "position": {
+      "kind": "research",
+      "intents": [
+        "positioning",
+        "icp research",
+        "competitor analysis",
+        "market research",
+        "who we should serve"
+      ],
+      "aliases": [
+        "research-positioning"
+      ],
+      "exclusions": [
+        "write the campaign",
+        "submit feedback"
+      ],
+      "requiredResources": [
+        "fallbacks/sequential.md"
+      ],
+      "conditionalResources": [
+        {
+          "path": "references/confidence-labeling.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/voc-collector-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/persona-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/pain-analysis-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/habitat-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/decision-psychology-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/synthesis-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/icp-critic-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/voice-of-customer.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/customer-interviews.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/habitat-mapping.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/confidence-and-bias.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/icp-format-conventions.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/icp-anti-patterns.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/trends-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/sizing-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/competitor-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/consumer-landscape-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/cross-analysis-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/opportunity-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/market-critic-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/competitor-analysis-framework.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/market-sizing-guide.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/gap-analysis-template.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/market-format-conventions.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/market-anti-patterns.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        }
+      ],
+      "optionalResources": [],
+      "legacy": [
+        "research-positioning"
+      ]
+    },
+    "pricing": {
+      "kind": "plan",
+      "intents": [
+        "pricing and packaging",
+        "value metric",
+        "tier boundaries",
+        "what to charge"
+      ],
+      "aliases": [
+        "design-pricing-and-packaging",
+        "pricing tiers",
+        "decide tiers",
+        "pricing strategy",
+        "pricing model",
+        "pricing page",
+        "paywall",
+        "trial length",
+        "freemium",
+        "usage based pricing",
+        "price increase",
+        "discount strategy",
+        "monetization",
+        "design a free trial",
+        "free trial length",
+        "free trial offer",
+        "reverse trial"
+      ],
+      "exclusions": [
+        "landing page copy"
+      ],
+      "requiredResources": [
+        "references/pricing-method.md",
+        "references/pricing-rubric.md",
+        "fallbacks/sequential.md"
+      ],
+      "conditionalResources": [
+        {
+          "path": "references/wtp-evidence.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/package-fences.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/unit-economics-checks.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        }
+      ],
+      "optionalResources": [
+        "references/examples/seasonal-teams-walkthrough.md"
+      ],
+      "legacy": [
+        "design-pricing-and-packaging"
+      ]
+    },
+    "prioritize": {
+      "kind": "plan",
+      "intents": [
+        "prioritize opportunities",
+        "force-rank",
+        "proceed park stop"
+      ],
+      "aliases": [
+        "prioritize-opportunities"
+      ],
+      "exclusions": [
+        "write copy"
+      ],
+      "requiredResources": [
+        "references/force-rank-method.md",
+        "references/ice-scoring-rubric.md",
+        "references/anti-patterns.md",
+        "fallbacks/sequential.md"
+      ],
+      "conditionalResources": [
+        {
+          "path": "agents/research-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/initiative-generator-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/unconventional-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/ranking-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/ice-scoring-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/cut-line-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/critic-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/hypothesis-framework.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/idea-ranking-core.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/initiative-types.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/initiative-planning.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/format-conventions.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/churn-playbook.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/churn-cancel-flow-templates.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/churn-health-score-guide.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        }
+      ],
+      "optionalResources": [],
+      "legacy": [
+        "prioritize-opportunities"
+      ]
+    },
+    "results": {
+      "kind": "evaluate",
+      "intents": [
+        "evaluate outreach",
+        "sent outreach",
+        "reply quality",
+        "outreach results",
+        "evaluate paid",
+        "paid campaign results",
+        "actual paid",
+        "what to pause",
+        "paid-media performance",
+        "evaluate short-form",
+        "published short-form",
+        "short-form results"
+      ],
+      "aliases": [
+        "evaluate-outreach",
+        "evaluate-paid-campaign",
+        "campaign results",
+        "ads results",
+        "ad results",
+        "ad performance",
+        "ads performance",
+        "cpa",
+        "roas",
+        "cost per acquisition",
+        "evaluate-shortform"
+      ],
+      "exclusions": [
+        "write outreach",
+        "create a sequence",
+        "create ads",
+        "organic posts",
+        "script short-form",
+        "create short-form"
+      ],
+      "requiredResources": [],
+      "conditionalResources": [
+        {
+          "path": "references/modes/outreach.md",
+          "when": "Mode outreach: read the mode file in full before the work."
+        },
+        {
+          "path": "references/modes/ads.md",
+          "when": "Mode ads: read the mode file in full before the work."
+        },
+        {
+          "path": "references/modes/video.md",
+          "when": "Mode video: read the mode file in full before the work."
+        },
+        {
+          "path": "references/modes/outreach/references/rubric.md",
+          "when": "Mode outreach: required for that mode."
+        },
+        {
+          "path": "references/modes/outreach/references/evaluation-loop-rubric.md",
+          "when": "Mode outreach: required for that mode."
+        },
+        {
+          "path": "references/modes/outreach/references/anti-patterns.md",
+          "when": "Mode outreach: required for that mode."
+        },
+        {
+          "path": "references/modes/outreach/fallbacks/sequential.md",
+          "when": "Mode outreach: required for that mode."
+        },
+        {
+          "path": "references/modes/ads/references/rubric.md",
+          "when": "Mode ads: required for that mode."
+        },
+        {
+          "path": "references/modes/ads/references/evaluation-loop-rubric.md",
+          "when": "Mode ads: required for that mode."
+        },
+        {
+          "path": "references/modes/ads/references/anti-patterns.md",
+          "when": "Mode ads: required for that mode."
+        },
+        {
+          "path": "references/modes/ads/fallbacks/sequential.md",
+          "when": "Mode ads: required for that mode."
+        },
+        {
+          "path": "references/modes/video/references/rubric.md",
+          "when": "Mode video: required for that mode."
+        },
+        {
+          "path": "references/modes/video/references/anti-patterns.md",
+          "when": "Mode video: required for that mode."
+        },
+        {
+          "path": "references/modes/video/references/shortform-eval-method.md",
+          "when": "Mode video: required for that mode."
+        },
+        {
+          "path": "references/modes/video/fallbacks/sequential.md",
+          "when": "Mode video: required for that mode."
+        },
+        {
+          "path": "references/modes/outreach/agents/metric-ingest-agent.md",
+          "when": "Mode outreach. Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/modes/outreach/agents/diagnosis-agent.md",
+          "when": "Mode outreach. Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/modes/outreach/agents/recommendation-agent.md",
+          "when": "Mode outreach. Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/modes/outreach/agents/critic-agent.md",
+          "when": "Mode outreach. Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/modes/ads/agents/metric-ingest-agent.md",
+          "when": "Mode ads. Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/modes/ads/agents/diagnosis-agent.md",
+          "when": "Mode ads. Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/modes/ads/agents/recommendation-agent.md",
+          "when": "Mode ads. Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/modes/ads/agents/critic-agent.md",
+          "when": "Mode ads. Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/modes/ads/references/measurement-over-heuristics.md",
+          "when": "Mode ads. Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/modes/video/agents/hook-strength-agent.md",
+          "when": "Mode video. Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/modes/video/agents/eval-runner-agent.md",
+          "when": "Mode video. Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/modes/video/references/platform-intelligence/CONTRACT.md",
+          "when": "Mode video. Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/modes/video/references/platform-intelligence/facebook.md",
+          "when": "Mode video. Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/modes/video/references/platform-intelligence/founder-demo.md",
+          "when": "Mode video. Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/modes/video/references/platform-intelligence/linkedin.md",
+          "when": "Mode video. Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/modes/video/references/platform-intelligence/linkedin-launch.md",
+          "when": "Mode video. Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/modes/video/references/platform-intelligence/motion-background.md",
+          "when": "Mode video. Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/modes/video/references/platform-intelligence/newsletter.md",
+          "when": "Mode video. Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/modes/video/references/platform-intelligence/producthunt.md",
+          "when": "Mode video. Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/modes/video/references/platform-intelligence/reddit.md",
+          "when": "Mode video. Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/modes/video/references/platform-intelligence/reels.md",
+          "when": "Mode video. Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/modes/video/references/platform-intelligence/shorts.md",
+          "when": "Mode video. Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/modes/video/references/platform-intelligence/showhn.md",
+          "when": "Mode video. Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/modes/video/references/platform-intelligence/tiktok.md",
+          "when": "Mode video. Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/modes/video/references/platform-intelligence/ugc.md",
+          "when": "Mode video. Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/modes/video/references/platform-intelligence/x.md",
+          "when": "Mode video. Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/modes/video/references/platform-intelligence/x-launch.md",
+          "when": "Mode video. Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/modes/video/references/platform-intelligence/youtube.md",
+          "when": "Mode video. Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/modes/video/agents/pattern-extractor-agent.md",
+          "when": "Mode video. Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/modes/video/agents/critic-agent.md",
+          "when": "Mode video. Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/modes/video/references/hook-archetypes.md",
+          "when": "Mode video. Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/modes/video/references/format-conventions.md",
+          "when": "Mode video. Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        }
+      ],
+      "optionalResources": [],
+      "legacy": [
+        "evaluate-outreach",
+        "evaluate-paid-campaign",
+        "evaluate-shortform"
+      ]
+    },
+    "seo": {
+      "kind": "diagnose",
+      "intents": [
+        "optimize search",
+        "seo",
+        "aeo",
+        "aso",
+        "search visibility",
+        "answer visibility"
+      ],
+      "aliases": [
+        "optimize-search",
+        "organic traffic",
+        "organic search",
+        "google ranking",
+        "rank on google",
+        "rank higher on google",
+        "programmatic seo",
+        "app store listing",
+        "app store optimization",
+        "app store keywords",
+        "google play listing",
+        "play store listing",
+        "recommended by chatgpt",
+        "cited by chatgpt",
+        "show up in chatgpt",
+        "chatgpt search",
+        "ai overviews",
+        "ai search",
+        "answer engine",
+        "answer engines",
+        "llm visibility",
+        "ai visibility",
+        "generative engine optimization",
+        "chatgpt and perplexity",
+        "recommended by perplexity",
+        "cited by perplexity",
+        "show up in perplexity",
+        "search engine optimization",
+        "search engine ranking"
+      ],
+      "exclusions": [
+        "paid search ads",
+        "landing conversion rewrite"
+      ],
+      "requiredResources": [
+        "references/eval-rubric.md",
+        "references/evaluation-loop-rubric.md",
+        "fallbacks/sequential.md",
+        "references/anti-patterns.md"
+      ],
+      "conditionalResources": [
+        {
+          "path": "references/retrieval-layer-seo.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/crawl-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/foundations-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/content-quality-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/authority-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/ai-structure-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/ai-presence-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/platform-intelligence/bing-readiness.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/geo-citation-readiness-checklist.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/programmatic-template-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/programmatic-quality-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/comparison-page-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/aso-keyword-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/aso-listing-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/aso-reviews-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/aso-competitive-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/prioritization-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/critic-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/technical-audit.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/technical-crawler-checklist.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/ai-seo.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/schema-reference.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/aso.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/evidence-classes.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/eval-metric-ingest-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/eval-diagnosis-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/eval-recommendation-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/eval-critic-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        }
+      ],
+      "optionalResources": [],
+      "legacy": [
+        "optimize-search"
+      ]
+    },
+    "shape": {
+      "kind": "plan",
+      "intents": [
+        "shape this initiative",
+        "ambiguous initiative",
+        "bounded decision",
+        "what should we do"
+      ],
+      "aliases": [
+        "shape-initiative"
+      ],
+      "exclusions": [
+        "write finished copy"
+      ],
+      "requiredResources": [
+        "references/initiative-shaping-method.md",
+        "references/anti-patterns.md",
+        "fallbacks/sequential.md"
+      ],
+      "conditionalResources": [
+        {
+          "path": "references/orchestration-steps.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/context-gathering.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/interview-techniques.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/communication-discipline.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/divergence-pass.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/idea-ranking-core.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/idea-critic-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/output-formats.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/plan-review-modes.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/question-bank.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/configuration.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/example-contracts.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        }
+      ],
+      "optionalResources": [],
+      "legacy": [
+        "shape-initiative"
+      ]
+    },
+    "social": {
+      "kind": "create",
+      "intents": [
+        "linkedin post",
+        "linkedin announcement",
+        "social posts",
+        "reddit post",
+        "product hunt listing",
+        "x thread",
+        "community post",
+        "social post",
+        "linkedin product announcement",
+        "linkedin update"
+      ],
+      "aliases": [
+        "write-social",
+        "instagram caption",
+        "instagram post",
+        "facebook post",
+        "threads post",
+        "bluesky post",
+        "discord announcement",
+        "community announcement",
+        "show hn post",
+        "hacker news post",
+        "indie hackers post",
+        "write a tweet",
+        "tweet thread"
+      ],
+      "exclusions": [
+        "linkedin dm",
+        "linkedin ads",
+        "landing page copy",
+        "outreach sequence"
+      ],
+      "requiredResources": [
+        "references/rubric.md",
+        "references/method.md",
+        "references/anti-patterns.md",
+        "references/critical-gates.md",
+        "fallbacks/sequential.md"
+      ],
+      "conditionalResources": [
+        {
+          "path": "agents/launch-copywriter-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/guard-checker-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/copywriter-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/format-checker-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "agents/critic-agent.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/hook-archetypes.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/legibility-convention.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/why-this-works-convention.md",
+          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        }
+      ],
+      "optionalResources": [
+        "references/examples/social-walkthrough.md",
+        "references/examples/launch-walkthrough.md"
+      ],
+      "legacy": [
+        "write-social"
+      ]
+    },
+    "ui": {
       "kind": "build",
       "intents": [
         "ui brief",
@@ -400,6 +2821,9 @@
         "component states",
         "in-product ui",
         "in product ui"
+      ],
+      "aliases": [
+        "brief-product-ui"
       ],
       "exclusions": [
         "marketing landing",
@@ -463,320 +2887,12 @@
       ],
       "optionalResources": [
         "references/examples/semantic-token-walkthrough.md"
+      ],
+      "legacy": [
+        "brief-product-ui"
       ]
     },
-    "build-ios-app": {
-      "kind": "build",
-      "intents": [
-        "build ios",
-        "swiftui",
-        "native ios",
-        "ipados"
-      ],
-      "exclusions": [
-        "web app",
-        "marketing copy about an app"
-      ],
-      "requiredResources": [
-        "fallbacks/sequential.md"
-      ],
-      "conditionalResources": [
-        {
-          "path": "references/apple-platform-authority.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/capabilities.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/gotchas.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/publishing.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/publishing-readiness.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/publishing-production.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/publishing-testflight.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/publishing-gotchas.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/device-registration.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/screenshots.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/api-reference.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        }
-      ],
-      "optionalResources": []
-    },
-    "build-web-app": {
-      "kind": "build",
-      "intents": [
-        "build web app",
-        "implement a web",
-        "responsive web app",
-        "web implementation",
-        "responsive web app"
-      ],
-      "exclusions": [
-        "marketing copy about an app",
-        "landing page copy"
-      ],
-      "requiredResources": [
-        "references/web-engineering-method.md",
-        "fallbacks/sequential.md"
-      ],
-      "conditionalResources": [
-        {
-          "path": "references/test-contract.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        }
-      ],
-      "optionalResources": [
-        "references/examples/settings-slice-walkthrough.md"
-      ]
-    },
-    "create-brand": {
-      "kind": "create",
-      "intents": [
-        "brand foundation",
-        "brand voice",
-        "visual identity",
-        "naming direction",
-        "create a brand"
-      ],
-      "exclusions": [
-        "write a landing page",
-        "social posts"
-      ],
-      "requiredResources": [
-        "references/brand-system-method.md",
-        "references/anti-patterns.md",
-        "fallbacks/sequential.md"
-      ],
-      "conditionalResources": [
-        {
-          "path": "references/narrative-tension.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/strategy-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/personality-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/voice-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/visual-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/token-architect-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/component-token-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/accessibility-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/critic-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/format-conventions.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/platform-surfaces.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        }
-      ],
-      "optionalResources": []
-    },
-    "create-paid-campaign": {
-      "kind": "create",
-      "intents": [
-        "paid campaign",
-        "create ads",
-        "meta ads",
-        "google ads",
-        "linkedin ads",
-        "tiktok ads",
-        "paid-media"
-      ],
-      "aliases": [
-        "facebook ads",
-        "instagram ads",
-        "youtube ads",
-        "reddit ads",
-        "x ads",
-        "search ads",
-        "apple search ads",
-        "ppc",
-        "ad campaign",
-        "ads campaign",
-        "retargeting",
-        "paid social",
-        "paid acquisition"
-      ],
-      "exclusions": [
-        "evaluate actual paid",
-        "organic social posts",
-        "cpa",
-        "roas",
-        "ad performance",
-        "ads performance",
-        "campaign results"
-      ],
-      "requiredResources": [
-        "references/rubric.md",
-        "references/anti-patterns.md",
-        "fallbacks/sequential.md"
-      ],
-      "conditionalResources": [
-        {
-          "path": "references/earn-the-impression.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/strategist.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/composer.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/format-checker.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/voice-auditor.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/critic.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/ad-intelligence/meta-cold-traffic.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/ad-intelligence/meta-retargeting.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/ad-intelligence/google-ads.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/ad-intelligence/linkedin-ads.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/ad-intelligence/tiktok-ads.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/ad-intelligence/creative-cadence.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/format-spec.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/policy-floor.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/message-transmutation.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        }
-      ],
-      "optionalResources": []
-    },
-    "create-run-of-show": {
-      "kind": "create",
-      "intents": [
-        "run of show",
-        "cue sheet",
-        "minute-by-minute",
-        "event rundown",
-        "live event plan"
-      ],
-      "aliases": [
-        "webinar",
-        "livestream",
-        "live stream",
-        "launch event",
-        "launch party",
-        "meetup",
-        "x space",
-        "twitter space"
-      ],
-      "exclusions": [
-        "campaign plan",
-        "connect crm",
-        "executor",
-        "content ideas"
-      ],
-      "requiredResources": [
-        "references/anti-patterns.md",
-        "fallbacks/sequential.md"
-      ],
-      "conditionalResources": [
-        {
-          "path": "agents/segment-planner-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/logistics-director-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/critic-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/format-conventions.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        }
-      ],
-      "optionalResources": [
-        "references/examples/runofshow-walkthrough.md"
-      ]
-    },
-    "create-shortform": {
+    "video": {
       "kind": "create",
       "intents": [
         "short-form video",
@@ -786,6 +2902,7 @@
         "ugc-style"
       ],
       "aliases": [
+        "create-shortform",
         "tiktok video",
         "tiktok videos",
         "reels",
@@ -955,1096 +3072,12 @@
           "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
         }
       ],
-      "optionalResources": []
-    },
-    "decision-panel": {
-      "kind": "review",
-      "intents": [
-        "decision panel",
-        "independent positions",
-        "resolve this decision",
-        "debate agents"
-      ],
-      "exclusions": [
-        "write copy",
-        "campaign plan"
-      ],
-      "requiredResources": [
-        "fallbacks/sequential.md",
-        "references/independent-positions-method.md",
-        "references/anti-patterns.md"
-      ],
-      "conditionalResources": [
-        {
-          "path": "references/decision-tree.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/optimist-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/skeptic-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/synthesizer-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/architect-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/pragmatist-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/critic-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/debate-rounds.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/anti-sycophancy.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/poll-protocol.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/idea-ranking-core.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/resolver-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/report-template.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        }
-      ],
-      "optionalResources": []
-    },
-    "design-pricing-and-packaging": {
-      "kind": "plan",
-      "intents": [
-        "pricing and packaging",
-        "value metric",
-        "tier boundaries",
-        "what to charge"
-      ],
-      "aliases": [
-        "pricing tiers",
-        "decide tiers",
-        "pricing strategy",
-        "pricing model",
-        "pricing page",
-        "paywall",
-        "trial length",
-        "freemium",
-        "usage based pricing",
-        "price increase",
-        "discount strategy",
-        "monetization",
-        "design a free trial",
-        "free trial length",
-        "free trial offer",
-        "reverse trial"
-      ],
-      "exclusions": [
-        "landing page copy"
-      ],
-      "requiredResources": [
-        "references/pricing-method.md",
-        "references/pricing-rubric.md",
-        "fallbacks/sequential.md"
-      ],
-      "conditionalResources": [
-        {
-          "path": "references/wtp-evidence.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/package-fences.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/unit-economics-checks.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        }
-      ],
-      "optionalResources": [
-        "references/examples/seasonal-teams-walkthrough.md"
+      "optionalResources": [],
+      "legacy": [
+        "create-shortform"
       ]
     },
-    "diagnose-growth": {
-      "kind": "diagnose",
-      "intents": [
-        "diagnose growth",
-        "funnel is weak",
-        "metric moved",
-        "activation is weak",
-        "growth problem",
-        "weak activation funnel",
-        "weak activation",
-        "growth diagnosis"
-      ],
-      "exclusions": [
-        "write a campaign",
-        "create ads"
-      ],
-      "requiredResources": [
-        "references/diagnostic-evidence-method.md",
-        "fallbacks/sequential.md",
-        "references/anti-patterns.md"
-      ],
-      "conditionalResources": [
-        {
-          "path": "agents/tree-builder-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/external-check-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/hypothesis-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/data-mapper-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/verdict-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/critic-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/diagnosis-playbook.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/hypothesis-framework.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/logic-tree-examples.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/format-conventions.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        }
-      ],
-      "optionalResources": [
-        "references/examples/diagnose-walkthrough.md"
-      ]
-    },
-    "evaluate-outreach": {
-      "kind": "evaluate",
-      "intents": [
-        "evaluate outreach",
-        "sent outreach",
-        "reply quality",
-        "outreach results"
-      ],
-      "exclusions": [
-        "write outreach",
-        "create a sequence"
-      ],
-      "requiredResources": [
-        "references/rubric.md",
-        "references/evaluation-loop-rubric.md",
-        "references/anti-patterns.md",
-        "fallbacks/sequential.md"
-      ],
-      "conditionalResources": [
-        {
-          "path": "agents/metric-ingest-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/diagnosis-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/recommendation-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/critic-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        }
-      ],
-      "optionalResources": []
-    },
-    "evaluate-paid-campaign": {
-      "kind": "evaluate",
-      "intents": [
-        "evaluate paid",
-        "paid campaign results",
-        "actual paid",
-        "what to pause",
-        "paid-media performance"
-      ],
-      "aliases": [
-        "campaign results",
-        "ads results",
-        "ad results",
-        "ad performance",
-        "ads performance",
-        "cpa",
-        "roas",
-        "cost per acquisition"
-      ],
-      "exclusions": [
-        "create ads",
-        "organic posts"
-      ],
-      "requiredResources": [
-        "references/rubric.md",
-        "references/evaluation-loop-rubric.md",
-        "references/anti-patterns.md",
-        "fallbacks/sequential.md"
-      ],
-      "conditionalResources": [
-        {
-          "path": "agents/metric-ingest-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/diagnosis-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/recommendation-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/critic-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/measurement-over-heuristics.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        }
-      ],
-      "optionalResources": []
-    },
-    "evaluate-shortform": {
-      "kind": "evaluate",
-      "intents": [
-        "evaluate short-form",
-        "published short-form",
-        "short-form results"
-      ],
-      "exclusions": [
-        "script short-form",
-        "create short-form"
-      ],
-      "requiredResources": [
-        "references/rubric.md",
-        "references/anti-patterns.md",
-        "references/shortform-eval-method.md",
-        "fallbacks/sequential.md"
-      ],
-      "conditionalResources": [
-        {
-          "path": "agents/hook-strength-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/eval-runner-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/platform-intelligence/CONTRACT.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/platform-intelligence/facebook.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/platform-intelligence/founder-demo.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/platform-intelligence/linkedin.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/platform-intelligence/linkedin-launch.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/platform-intelligence/motion-background.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/platform-intelligence/newsletter.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/platform-intelligence/producthunt.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/platform-intelligence/reddit.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/platform-intelligence/reels.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/platform-intelligence/shorts.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/platform-intelligence/showhn.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/platform-intelligence/tiktok.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/platform-intelligence/ugc.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/platform-intelligence/x.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/platform-intelligence/x-launch.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/platform-intelligence/youtube.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/pattern-extractor-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/critic-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/hook-archetypes.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/format-conventions.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        }
-      ],
-      "optionalResources": []
-    },
-    "fresh-eyes-review": {
-      "kind": "review",
-      "intents": [
-        "fresh-eyes",
-        "fresh eyes review",
-        "second opinion on this artifact"
-      ],
-      "exclusions": [
-        "write the first draft",
-        "create the campaign"
-      ],
-      "requiredResources": [
-        "fallbacks/sequential.md",
-        "references/independent-review-method.md",
-        "references/anti-patterns.md"
-      ],
-      "conditionalResources": [
-        {
-          "path": "references/review-target-and-closeout.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/reviewer-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/security-reviewer-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/performance-reviewer-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/correctness-reviewer-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/specialist-lenses.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/critic-consensus.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/noise-filter.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/scope-drift.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/resolver-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/report-template.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/quality-feedback-protocol.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        }
-      ],
-      "optionalResources": [
-        "references/examples/review-cycle-walkthrough.md"
-      ]
-    },
-    "improve-conversion": {
-      "kind": "create",
-      "intents": [
-        "improve conversion",
-        "conversion experiment",
-        "revise the landing",
-        "onboarding conversion"
-      ],
-      "aliases": [
-        "increase conversion",
-        "improve signups",
-        "product page conversion",
-        "cart abandonment",
-        "improve activation",
-        "paywall experiment",
-        "cro",
-        "improve onboarding",
-        "onboarding drop off",
-        "onboarding completion",
-        "improve trial to paid",
-        "increase trial to paid",
-        "improve conversion rate",
-        "increase conversion rate",
-        "improve signup rate",
-        "improve checkout",
-        "raise the upgrade rate"
-      ],
-      "exclusions": [
-        "seo ranking",
-        "paid results"
-      ],
-      "requiredResources": [
-        "references/conversion-diagnosis-method.md",
-        "references/diagnostic-evidence-method.md",
-        "references/landing-eval-method.md",
-        "references/landing-eval-rubric.md",
-        "fallbacks/sequential.md"
-      ],
-      "conditionalResources": [
-        {
-          "path": "agents/conversion-tree-builder-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/conversion-external-check-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/conversion-hypothesis-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/conversion-data-mapper-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/conversion-verdict-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/conversion-critic-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/hypothesis-framework.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/logic-tree-examples.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/landing-metric-ingest-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/landing-diagnosis-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/landing-recommendation-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/landing-critic-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/anti-sycophancy.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/conversion-diagnosis-anti-patterns.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/landing-anti-patterns.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        }
-      ],
-      "optionalResources": []
-    },
-    "knowledge-review": {
-      "kind": "review",
-      "intents": [
-        "knowledge review",
-        "review knowledge freshness",
-        "source audit",
-        "conflicting evidence",
-        "authority and freshness",
-        "factual-claim check"
-      ],
-      "exclusions": [
-        "launch plan",
-        "mark missing facts",
-        "keep it as a draft",
-        "code review"
-      ],
-      "requiredResources": [
-        "references/knowledge-review-method.md",
-        "fallbacks/sequential.md",
-        "references/review-rubric.md"
-      ],
-      "conditionalResources": [
-        {
-          "path": "references/provenance.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/contradiction-protocol.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        }
-      ],
-      "optionalResources": [
-        "references/examples/activation-claim-walkthrough.md"
-      ]
-    },
-    "map-user-flow": {
-      "kind": "build",
-      "intents": [
-        "user flow",
-        "map the journey",
-        "screen transitions",
-        "recovery states"
-      ],
-      "exclusions": [
-        "approved flow",
-        "implement the app",
-        "email flow",
-        "win back",
-        "winback",
-        "nurture flow",
-        "drip flow"
-      ],
-      "requiredResources": [
-        "references/flow-mapping-method.md",
-        "references/gates-and-rubric.md",
-        "references/anti-patterns.md",
-        "fallbacks/sequential.md"
-      ],
-      "conditionalResources": [
-        {
-          "path": "references/platform-touchpoints.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/intake-prompts.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/structure-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/edge-case-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/diagram-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/wireframe-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/validation-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/critic-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/research-checklist.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/report-template.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        }
-      ],
-      "optionalResources": [
-        "references/examples/checkout-walkthrough.md"
-      ]
-    },
-    "measure-growth": {
-      "kind": "evaluate",
-      "intents": [
-        "measurement plan",
-        "measure growth",
-        "measurement",
-        "kpi tree",
-        "campaign measurement",
-        "learn from results"
-      ],
-      "exclusions": [
-        "write social posts",
-        "create ads"
-      ],
-      "requiredResources": [
-        "references/measure-rubric.md",
-        "references/campaign-rubric.md",
-        "references/evaluation-loop-rubric.md",
-        "fallbacks/sequential.md"
-      ],
-      "conditionalResources": [
-        {
-          "path": "references/measurement-design-contract.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/measure-metric-ingest-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/measure-diagnosis-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/pack-feedback-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/measure-critic-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/anti-sycophancy.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/legibility-convention.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/performance-data.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/campaign-metric-ingest-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/campaign-diagnosis-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/campaign-recommendation-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/campaign-critic-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/measure-anti-patterns.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/campaign-anti-patterns.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        }
-      ],
-      "optionalResources": [
-        "references/examples/measure-walkthrough.md",
-        "references/examples/campaign-eval-cycle-walkthrough.md"
-      ]
-    },
-    "model-growth-funnel": {
-      "kind": "plan",
-      "intents": [
-        "growth funnel model",
-        "unit economics",
-        "numeric funnel",
-        "revenue funnel"
-      ],
-      "exclusions": [
-        "write copy"
-      ],
-      "requiredResources": [
-        "references/funnel-model-method.md",
-        "fallbacks/sequential.md",
-        "references/anti-patterns.md"
-      ],
-      "conditionalResources": [
-        {
-          "path": "agents/model-selection-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/baseline-collector-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/target-setter-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/sanity-check-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/stress-test-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/critic-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/funnel-models.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/benchmarks.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/unit-economics.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/stress-tests.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/format-conventions.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        }
-      ],
-      "optionalResources": [
-        "references/examples/funnel-planner-walkthrough.md"
-      ]
-    },
-    "optimize-search": {
-      "kind": "diagnose",
-      "intents": [
-        "optimize search",
-        "seo",
-        "aeo",
-        "aso",
-        "search visibility",
-        "answer visibility"
-      ],
-      "aliases": [
-        "organic traffic",
-        "organic search",
-        "google ranking",
-        "rank on google",
-        "rank higher on google",
-        "programmatic seo",
-        "app store listing",
-        "app store optimization",
-        "app store keywords",
-        "google play listing",
-        "play store listing",
-        "recommended by chatgpt",
-        "cited by chatgpt",
-        "show up in chatgpt",
-        "chatgpt search",
-        "ai overviews",
-        "ai search",
-        "answer engine",
-        "answer engines",
-        "llm visibility",
-        "ai visibility",
-        "generative engine optimization",
-        "chatgpt and perplexity",
-        "recommended by perplexity",
-        "cited by perplexity",
-        "show up in perplexity",
-        "search engine optimization",
-        "search engine ranking"
-      ],
-      "exclusions": [
-        "paid search ads",
-        "landing conversion rewrite"
-      ],
-      "requiredResources": [
-        "references/eval-rubric.md",
-        "references/evaluation-loop-rubric.md",
-        "fallbacks/sequential.md",
-        "references/anti-patterns.md"
-      ],
-      "conditionalResources": [
-        {
-          "path": "references/retrieval-layer-seo.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/crawl-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/foundations-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/content-quality-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/authority-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/ai-structure-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/ai-presence-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/platform-intelligence/bing-readiness.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/geo-citation-readiness-checklist.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/programmatic-template-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/programmatic-quality-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/comparison-page-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/aso-keyword-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/aso-listing-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/aso-reviews-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/aso-competitive-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/prioritization-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/critic-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/technical-audit.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/technical-crawler-checklist.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/ai-seo.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/schema-reference.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/aso.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/evidence-classes.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/eval-metric-ingest-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/eval-diagnosis-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/eval-recommendation-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/eval-critic-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        }
-      ],
-      "optionalResources": []
-    },
-    "plan-campaign": {
-      "kind": "plan",
-      "intents": [
-        "launch plan",
-        "campaign plan",
-        "go-to-market",
-        "product hunt launch",
-        "growth campaign",
-        "gtm plan",
-        "plan a launch",
-        "launch strategy",
-        "launch campaign"
-      ],
-      "aliases": [
-        "marketing plan",
-        "marketing strategy",
-        "growth plan",
-        "growth strategy",
-        "email campaign",
-        "lifecycle campaign",
-        "drip campaign",
-        "nurture campaign",
-        "retention campaign",
-        "win back campaign",
-        "win back flow",
-        "winback flow",
-        "holiday campaign",
-        "seasonal campaign",
-        "partner program",
-        "affiliate program",
-        "ambassador program",
-        "reduce churn",
-        "webinar",
-        "app store launch",
-        "product launch",
-        "feature launch",
-        "launch of our",
-        "marketing and growth",
-        "plan marketing",
-        "plan our marketing",
-        "plan our growth"
-      ],
-      "exclusions": [
-        "run of show",
-        "submit feedback",
-        "knowledge review",
-        "write social only"
-      ],
-      "requiredResources": [
-        "references/anti-patterns.md",
-        "fallbacks/sequential.md"
-      ],
-      "conditionalResources": [
-        {
-          "path": "agents/pillar-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/angle-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/channel-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/timeline-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/launch-sequencing-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/critic-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/3d-angle-framework.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/channel-strategy.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/platform-channels.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/growth-play-patterns.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/pillars-before-angles.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        }
-      ],
-      "optionalResources": []
-    },
-    "polish-vietnamese": {
+    "vietnamese": {
       "kind": "language",
       "intents": [
         "localize to vietnamese",
@@ -2057,6 +3090,7 @@
         "write vietnamese copy"
       ],
       "aliases": [
+        "polish-vietnamese",
         "tieng viet",
         "into vietnamese",
         "in vietnamese",
@@ -2092,863 +3126,40 @@
           "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
         }
       ],
-      "optionalResources": []
-    },
-    "prioritize-opportunities": {
-      "kind": "plan",
-      "intents": [
-        "prioritize opportunities",
-        "force-rank",
-        "proceed park stop"
-      ],
-      "exclusions": [
-        "write copy"
-      ],
-      "requiredResources": [
-        "references/force-rank-method.md",
-        "references/ice-scoring-rubric.md",
-        "references/anti-patterns.md",
-        "fallbacks/sequential.md"
-      ],
-      "conditionalResources": [
-        {
-          "path": "agents/research-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/initiative-generator-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/unconventional-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/ranking-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/ice-scoring-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/cut-line-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/critic-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/hypothesis-framework.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/idea-ranking-core.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/initiative-types.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/initiative-planning.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/format-conventions.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/churn-playbook.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/churn-cancel-flow-templates.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/churn-health-score-guide.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        }
-      ],
-      "optionalResources": []
-    },
-    "research-channel": {
-      "kind": "research",
-      "intents": [
-        "research channel",
-        "choose a channel",
-        "channel research",
-        "platform fit"
-      ],
-      "aliases": [
-        "channel strategy",
-        "which channel",
-        "best channel",
-        "distribution channel",
-        "channel mix",
-        "community growth",
-        "grow our community",
-        "grow the community",
-        "build a community",
-        "discord community",
-        "discord server",
-        "slack community",
-        "online community",
-        "pinterest",
-        "bluesky",
-        "mastodon",
-        "quora",
-        "twitch",
-        "snapchat",
-        "whatsapp channel",
-        "telegram channel",
-        "indie hackers",
-        "g2",
-        "capterra",
-        "review sites",
-        "review platforms",
-        "marketplace listing",
-        "app directories",
-        "press coverage",
-        "media coverage",
-        "earned media",
-        "podcast guest",
-        "podcast tour",
-        "substack"
-      ],
-      "exclusions": [
-        "write the posts",
-        "create ads"
-      ],
-      "requiredResources": [
-        "references/evidence-protocol.md",
-        "references/confidence-labeling.md",
-        "references/anti-patterns.md",
-        "fallbacks/sequential.md"
-      ],
-      "conditionalResources": [
-        {
-          "path": "agents/evidence-intake-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/benchmark-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/synthesis-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/recommendation-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/critic-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/scoring-rubrics.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        }
-      ],
-      "optionalResources": []
-    },
-    "research-content-ideas": {
-      "kind": "research",
-      "intents": [
-        "content ideas",
-        "editorial bets",
-        "topic angles",
-        "content research"
-      ],
-      "aliases": [
-        "content plan",
-        "content calendar",
-        "content strategy",
-        "editorial calendar",
-        "what to post",
-        "post ideas",
-        "video ideas",
-        "topic ideas",
-        "blog ideas",
-        "newsletter ideas"
-      ],
-      "exclusions": [
-        "write the posts",
-        "connect crm",
-        "executor",
-        "run of show"
-      ],
-      "requiredResources": [
-        "references/anti-patterns.md",
-        "references/confidence-labeling.md",
-        "references/content-ideas-method.md",
-        "fallbacks/sequential.md"
-      ],
-      "conditionalResources": [
-        {
-          "path": "agents/platform-scout-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/scout-protocol.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/audience-fit-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/pattern-extractor-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/audio-trend-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/synthesis-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/critic-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/scoring-rubrics.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/format-conventions.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/clipping-and-live.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        }
-      ],
-      "optionalResources": [
-        "references/examples/shortform-research-walkthrough.md"
+      "optionalResources": [],
+      "legacy": [
+        "polish-vietnamese"
       ]
     },
-    "research-positioning": {
+    "watch": {
       "kind": "research",
       "intents": [
-        "positioning",
-        "icp research",
-        "competitor analysis",
-        "market research",
-        "who we should serve"
-      ],
-      "exclusions": [
-        "write the campaign",
-        "submit feedback"
-      ],
-      "requiredResources": [
-        "fallbacks/sequential.md"
-      ],
-      "conditionalResources": [
-        {
-          "path": "references/confidence-labeling.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/voc-collector-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/persona-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/pain-analysis-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/habitat-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/decision-psychology-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/synthesis-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/icp-critic-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/voice-of-customer.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/customer-interviews.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/habitat-mapping.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/confidence-and-bias.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/icp-format-conventions.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/icp-anti-patterns.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/trends-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/sizing-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/competitor-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/consumer-landscape-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/cross-analysis-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/opportunity-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/market-critic-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/competitor-analysis-framework.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/market-sizing-guide.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/gap-analysis-template.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/market-format-conventions.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/market-anti-patterns.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        }
-      ],
-      "optionalResources": []
-    },
-    "shape-initiative": {
-      "kind": "plan",
-      "intents": [
-        "shape this initiative",
-        "ambiguous initiative",
-        "bounded decision",
-        "what should we do"
-      ],
-      "exclusions": [
-        "write finished copy"
-      ],
-      "requiredResources": [
-        "references/initiative-shaping-method.md",
-        "references/anti-patterns.md",
-        "fallbacks/sequential.md"
-      ],
-      "conditionalResources": [
-        {
-          "path": "references/orchestration-steps.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/context-gathering.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/interview-techniques.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/communication-discipline.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/divergence-pass.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/idea-ranking-core.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/idea-critic-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/output-formats.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/plan-review-modes.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/question-bank.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/configuration.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/example-contracts.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        }
-      ],
-      "optionalResources": []
-    },
-    "submit-feedback": {
-      "kind": "review",
-      "explicitOnly": true,
-      "intents": [
-        "submit feedback",
-        "share feedback",
-        "report a conquistador failure",
-        "file a conquistador issue"
-      ],
-      "exclusions": [
-        "launch plan",
-        "draft a launch",
-        "product facts",
-        "keep it as a draft"
-      ],
-      "requiredResources": [
-        "references/method.md",
-        "references/output-contract.md"
-      ],
-      "conditionalResources": [],
-      "optionalResources": []
-    },
-    "write-copy": {
-      "kind": "create",
-      "intents": [
-        "landing page copy",
-        "landing page",
-        "launch email",
-        "headline",
-        "call to action",
-        "product page copy",
-        "launch announcement copy",
-        "landing copy",
-        "draft a headline"
+        "analyze video",
+        "timestamped summary",
+        "inspect this video",
+        "find the scene"
       ],
       "aliases": [
-        "welcome email",
-        "onboarding email",
-        "nurture email",
-        "win back email",
-        "winback email",
-        "re engagement email",
-        "lifecycle email",
-        "trial email",
-        "upgrade prompt",
-        "upgrade prompts",
-        "in app message",
-        "in app messages",
-        "in app copy",
-        "paywall copy",
-        "pricing page",
-        "product description",
-        "app store description",
-        "email copy",
-        "push notification copy",
-        "sms copy",
-        "microcopy",
-        "onboarding copy",
-        "homepage copy",
-        "tagline"
+        "analyze-video"
       ],
       "exclusions": [
-        "linkedin post",
-        "linkedin announcement",
-        "outreach sequence",
-        "social posts",
-        "long-form article",
-        "cold email",
-        "sales email"
+        "create short-form",
+        "script a video"
       ],
-      "requiredResources": [
-        "references/sales-argument.md",
-        "references/copy-review.md",
-        "references/anti-patterns.md",
-        "fallbacks/sequential.md"
-      ],
+      "requiredResources": [],
       "conditionalResources": [
         {
-          "path": "agents/hook-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/body-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/cta-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/social-proof-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/variant-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/voice-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/psychology-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/zero-risk-agent.md",
+          "path": "references/gemini-recipe.md",
           "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
         },
         {
           "path": "agents/critic-agent.md",
           "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/discovery-story.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/lifecycle-sequences.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
         }
       ],
-      "optionalResources": []
-    },
-    "write-longform": {
-      "kind": "create",
-      "intents": [
-        "long-form",
-        "founder essay",
-        "thought leadership",
-        "write an article",
-        "write a guide"
-      ],
-      "aliases": [
-        "blog post",
-        "newsletter issue",
-        "case study",
-        "white paper",
-        "whitepaper",
-        "ebook",
-        "guest post",
-        "op ed",
-        "write a newsletter",
-        "email newsletter",
-        "grow our newsletter",
-        "newsletter growth"
-      ],
-      "exclusions": [
-        "landing page copy",
-        "social posts"
-      ],
-      "requiredResources": [
-        "references/research-method.md",
-        "references/rubric.md",
-        "references/anti-patterns.md",
-        "fallbacks/sequential.md"
-      ],
-      "conditionalResources": [
-        {
-          "path": "agents/research.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/outline.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/draft.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/critic.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/structure-patterns.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/anti-collapse.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/format-conventions.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        }
-      ],
-      "optionalResources": []
-    },
-    "write-outreach": {
-      "kind": "create",
-      "intents": [
-        "outreach sequence",
-        "cold email",
-        "linkedin dm",
-        "direct message sequence",
-        "sales sequence"
-      ],
-      "aliases": [
-        "pitch journalists",
-        "media pitch",
-        "press pitch",
-        "pr pitch",
-        "podcast pitch",
-        "pitch our founder",
-        "pitch our ceo",
-        "follow up email",
-        "sales email",
-        "sales follow up",
-        "partnership email",
-        "prospecting",
-        "influencer outreach",
-        "creator outreach",
-        "press coverage",
-        "media coverage",
-        "outbound sequence",
-        "outbound campaign",
-        "outbound email",
-        "outbound sales"
-      ],
-      "exclusions": [
-        "linkedin post",
-        "linkedin announcement",
-        "landing page copy"
-      ],
-      "requiredResources": [
-        "references/copy-validation-rubric.md",
-        "references/anti-patterns.md",
-        "fallbacks/sequential.md"
-      ],
-      "conditionalResources": [
-        {
-          "path": "references/frameworks/outreach-decisions.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/modes/no-pitch-research.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/signal-analyst.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/strategist.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/proof-selector.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/composer.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/voice-auditor.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/critic.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/reply-classifier.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/reply-composer.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/proof-types.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        }
-      ],
-      "optionalResources": []
-    },
-    "write-social": {
-      "kind": "create",
-      "intents": [
-        "linkedin post",
-        "linkedin announcement",
-        "social posts",
-        "reddit post",
-        "product hunt listing",
-        "x thread",
-        "community post",
-        "social post",
-        "linkedin product announcement",
-        "linkedin update"
-      ],
-      "aliases": [
-        "instagram caption",
-        "instagram post",
-        "facebook post",
-        "threads post",
-        "bluesky post",
-        "discord announcement",
-        "community announcement",
-        "show hn post",
-        "hacker news post",
-        "indie hackers post",
-        "write a tweet",
-        "tweet thread"
-      ],
-      "exclusions": [
-        "linkedin dm",
-        "linkedin ads",
-        "landing page copy",
-        "outreach sequence"
-      ],
-      "requiredResources": [
-        "references/rubric.md",
-        "references/method.md",
-        "references/anti-patterns.md",
-        "references/critical-gates.md",
-        "fallbacks/sequential.md"
-      ],
-      "conditionalResources": [
-        {
-          "path": "agents/launch-copywriter-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/guard-checker-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/copywriter-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/format-checker-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/critic-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/hook-archetypes.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/legibility-convention.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/why-this-works-convention.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        }
-      ],
-      "optionalResources": [
-        "references/examples/social-walkthrough.md",
-        "references/examples/launch-walkthrough.md"
-      ]
-    },
-    "write-technical-docs": {
-      "kind": "build",
-      "intents": [
-        "technical documentation",
-        "api docs",
-        "readme and setup",
-        "operator docs"
-      ],
-      "exclusions": [
-        "marketing copy",
-        "launch email"
-      ],
-      "requiredResources": [
-        "references/docs-writing-method.md",
-        "references/anti-patterns.md",
-        "fallbacks/sequential.md"
-      ],
-      "conditionalResources": [
-        {
-          "path": "agents/scanner-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/audience-profiler-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/concept-extractor-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/writer-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/doc-template.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/staleness-checker-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/critic-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/intake-prompts.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/artifact-paths.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/report-template.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/ship-log-template.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        }
-      ],
-      "optionalResources": [
-        "references/examples/api-readme-walkthrough.md"
+      "optionalResources": [],
+      "legacy": [
+        "analyze-video"
       ]
     }
   }

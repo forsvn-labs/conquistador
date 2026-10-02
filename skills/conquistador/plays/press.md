@@ -6,6 +6,7 @@ chain:
   - { command: channels, for: "outlets and people who reach the audience" }
   - { command: position, for: "the newsworthy story" }
   - { command: outreach, for: "signal-led pitches" }
+  - { command: audit, for: "pre-ship review of the finished package" }
   - { command: results, mode: outreach, when: "real placement or response evidence exists" }
 legacy: earned-media-outreach
 ---
@@ -23,6 +24,8 @@ Use for press, podcast, newsletter, analyst, creator, or other earned-media oppo
 Require an observed relevance signal—something the person or outlet has actually covered—before
 pitching. Do not invent coverage, fabricate quotes, mass-personalize a list, or offer undisclosed
 incentives. Publishing, seeding, sending, and placed-content agreements remain human-owned.
+
+Run `audit` on the finished package before the Review Packet.
 
 End with one terminal Review Packet for final human review: opportunity set, selected angle, ready
 pitches, source and disclosure boundary, and one next action.

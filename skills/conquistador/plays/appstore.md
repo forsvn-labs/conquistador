@@ -7,6 +7,7 @@ chain:
   - { command: copy, for: "name, subtitle, description" }
   - { command: creative, for: "screenshot story" }
   - { command: convert, for: "one listing test" }
+  - { command: audit, for: "pre-ship review of the finished package" }
 legacy: optimize-app-store-listing
 ---
 # Optimize an app store listing
@@ -22,6 +23,8 @@ Use for App Store or marketplace listing search, conversion, and review intellig
 Do not invent keyword volume, rank, conversion, product behavior, compatibility, awards, or reviews.
 Keep metadata, media, product page, and activation promise congruent. Verify current store constraints
 when they affect the work.
+
+Run `audit` on the finished package before the Review Packet.
 
 End with one terminal Review Packet for final human review: search diagnosis, finished metadata copy,
 media story, claim and platform boundary, test rule, and one next action.
