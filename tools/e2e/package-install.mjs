@@ -77,6 +77,10 @@ function isolated(name, prefixBin) {
     copilot: () => run('copilot', ['plugin', 'list'], { env }).stdout.includes('conquistador@conquistador'),
     grok: () => /\bconquistador\b/.test(run('grok', ['plugin', 'list'], { env }).stdout),
     cursor: () => existsSync(join(cursor, '.cursor-plugin', 'plugin.json')),
+    // Skill-format hosts have no plugin manager: the owned skill copy is the registration.
+    ...Object.fromEntries(Object.entries({ gemini: '.gemini/skills', opencode: '.config/opencode/skills', pi: '.agents/skills', hermes: '.hermes/skills',
+      antigravity: '.gemini/antigravity-cli/skills', kiro: '.kiro/skills', vibe: '.vibe/skills' })
+      .map(([id, folder]) => [id, () => existsSync(join(home, folder, 'conquistador', '.conquistador-owned.json'))])),
   };
   return { home, env, plugin, cursor, listed };
 }
