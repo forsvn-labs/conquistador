@@ -4659,6 +4659,10 @@
       "sha256": "58a6872fb113bf0e674609a5f9510a5270fa1d03eb4f72674e5a462c26cc344f"
     },
     {
+      "path": "tools/context-files.mjs",
+      "sha256": "7cef2a726d2fb1ccf414daaf2b995138d15c4080819c6d8b066082259103ff56"
+    },
+    {
       "path": "tools/context-selection.mjs",
       "sha256": "3df19e1f6f2afc91a6f18fbefb8ee120de1462839620d0470da8dddc36edf0d3"
     },
