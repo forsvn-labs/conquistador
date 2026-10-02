@@ -4925,11 +4925,6 @@
       ],
       "chain": [
         {
-          "command": "audit",
-          "path": "skills/conquistador/commands/audit/COMMAND.md",
-          "for": "pre-ship review of the finished package"
-        },
-        {
           "command": "measure",
           "path": "skills/conquistador/commands/measure/COMMAND.md",
           "for": "retention gate before any incentive"
@@ -4943,13 +4938,18 @@
           "command": "copy",
           "path": "skills/conquistador/commands/copy/COMMAND.md",
           "for": "invite and recovery messages"
+        },
+        {
+          "command": "audit",
+          "path": "skills/conquistador/commands/audit/COMMAND.md",
+          "for": "pre-ship review of the finished package"
         }
       ],
       "dependencies": [
-        "audit",
         "measure",
         "campaign",
-        "copy"
+        "copy",
+        "audit"
       ],
       "executableGraph": false
     },

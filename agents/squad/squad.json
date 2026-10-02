@@ -8,12 +8,18 @@
   "publicListing": false,
   "cleanHostProof": false,
   "zeroRuntime": true,
-  "members": ["agent:advisor", "agent:worker"],
+  "members": [
+    "agent:advisor",
+    "agent:worker"
+  ],
   "fallback": "sequential-in-context",
   "fallbackIsIndependentContext": false,
   "delegation": {
     "maxHandoffsPerRun": 1,
-    "order": ["worker", "advisor"],
+    "order": [
+      "worker",
+      "advisor"
+    ],
     "advisorCannotExecuteWorkerSkills": true,
     "workerCannotSelfApprove": true,
     "contextBudget": "assigned-skill-plus-named-workflow-plus-current-artifact"

@@ -4,6 +4,7 @@ import { createHash } from 'node:crypto';
 import { lstatSync, readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { briefFiles } from './operator-package.mjs';
+import { methodPath } from './method-library.mjs';
 
 export const pluginManifestPath = 'release/plugin-completeness.json';
 
@@ -43,7 +44,7 @@ export function payloadBytes(root, path) {
 // overlapping operator hashes; do not require runtime/operator files omitted by plugins.
 export function buildPluginManifest(root, completeness) {
   const expected = new Map([
-    ...[completeness.parent, ...completeness.outcomes].map(item => [`skills/${item.name}/SKILL.md`, item.sha256]),
+    ...[completeness.parent, ...completeness.outcomes].map(item => [`skills/${methodPath(item.name)}`, item.sha256]),
     ...completeness.requiredResources.map(item => [`skills/${item.path}`, item.sha256]),
     ...completeness.operatorResources.filter(item => included(item.path)).map(item => [item.path, item.sha256]),
   ]);

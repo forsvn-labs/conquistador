@@ -7,18 +7,18 @@ import {
 
 const digestPattern = /^sha256:[a-f0-9]{64}$/;
 const capabilityMethods = Object.freeze({
-  positioning: ['research-positioning'],
-  'launch-planning': ['plan-campaign', 'create-run-of-show'],
-  'conversion-copy': ['write-copy', 'write-longform', 'write-social', 'polish-vietnamese', 'improve-conversion', 'optimize-search'],
-  measurement: ['measure-growth', 'model-growth-funnel'],
-  'paid-media': ['create-paid-campaign', 'evaluate-paid-campaign', 'allocate-marketing-budget'],
-  outreach: ['write-outreach', 'evaluate-outreach'],
-  'creative-production': ['brief-creative', 'create-shortform', 'evaluate-shortform', 'analyze-video'],
-  'growth-diagnosis': ['diagnose-growth', 'audit-marketing'],
-  'product-strategy': ['design-pricing-and-packaging', 'prioritize-opportunities', 'shape-initiative'],
-  'product-engineering': ['brief-product-ui', 'map-user-flow', 'architect-software-system', 'build-ios-app', 'build-web-app', 'write-technical-docs'],
-  research: ['research-channel', 'research-content-ideas', 'knowledge-review'],
-  brand: ['create-brand'],
+  positioning: ['position'],
+  'launch-planning': ['campaign', 'event'],
+  'conversion-copy': ['copy', 'article', 'social', 'vietnamese', 'convert', 'seo'],
+  measurement: ['measure', 'funnel'],
+  'paid-media': ['ads', 'results', 'budget'],
+  outreach: ['outreach', 'results'],
+  'creative-production': ['creative', 'video', 'results', 'watch'],
+  'growth-diagnosis': ['diagnose', 'audit'],
+  'product-strategy': ['pricing', 'prioritize', 'shape'],
+  'product-engineering': ['ui', 'flow', 'architect', 'build', 'build', 'docs'],
+  research: ['channels', 'ideas', 'factcheck'],
+  brand: ['brand'],
 });
 
 function capabilitiesFor(assignments) {

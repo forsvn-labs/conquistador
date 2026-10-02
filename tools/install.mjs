@@ -8,6 +8,7 @@ import { DOMAIN_SCHEMA_VERSION, PARENT_SKILL, RESTRICTION_NAME, REVIEW_SKILL, pa
 import { operatorFiles } from './operator-package.mjs';
 import { containsPath } from './install-paths.mjs';
 import { stageMethodLibrary } from './stage-method-library.mjs';
+import { methodDirectory, methodOwner, methodPath } from './method-library.mjs';
 import { projectSkillOwner, skillsManagerOwner } from './project-installation.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
@@ -111,13 +112,13 @@ function stage(mode, target, selection) {
   };
   const skill = (name, into = 'skills') => {
     if (selection && !selection.skills.includes(name)) return;
-    if (!/^[a-z][a-z0-9-]*$/.test(name) || !existsSync(join(root, 'skills', name, 'SKILL.md'))) fail(`Unknown skill: ${name}`);
-    copy(`skills/${name}`, `${into}/${name}`);
+    if (!/^[a-z][a-z0-9-]*$/.test(name) || !existsSync(join(root, 'skills', methodPath(name)))) fail(`Unknown skill: ${name}`);
+    copy(`skills/${methodDirectory(name)}`, `${into}/${name}`);
   };
   const template = readFileSync(join(root, 'tools/entrypoint/SKILL.md'), 'utf8');
   const library = (entry, names) => stageMethodLibrary(join(root, 'skills'), join(target, entry), {
     template, subset: Boolean(selection) || Boolean(names),
-    include: key => (!names || names.has(key.split('/')[0])) && shouldStageSkillPath(`skills/${key}`, selection),
+    include: key => (!names || names.has(methodOwner(key) && key.startsWith('conquistador/commands/') ? methodOwner(key) : 'conquistador')) && shouldStageSkillPath(`skills/${key}`, selection),
   });
   const role = (source, into) => {
     const agent = readJson(join(root, source));

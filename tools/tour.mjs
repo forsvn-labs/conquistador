@@ -7,114 +7,101 @@ import { fileURLToPath } from 'node:url';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 
-// `methods` lists the specialists a user meets in this area: method or workflow names.
+// `methods` lists the commands a user meets in this area: command or play names.
 export const AREAS = Object.freeze([
   {
     id: 'strategy', title: 'Strategy and research',
     covers: 'Positioning, ICP, competitors, pricing, channel choice, budget, growth targets',
-    methods: ['research-positioning', 'research-channel', 'design-pricing-and-packaging', 'prioritize-opportunities', 'model-growth-funnel', 'allocate-marketing-budget', 'shape-initiative', 'decision-panel'],
+    methods: ['position', 'channels', 'pricing', 'prioritize', 'funnel', 'budget', 'shape', 'decide'],
     examples: [
-      { prompt: 'Figure out our positioning against the two biggest competitors, with evidence', any: ['research-positioning'] },
-      { prompt: 'Model what it takes to hit $50k MRR by June', any: ['model-growth-funnel'] },
+      { prompt: 'Figure out our positioning against the two biggest competitors, with evidence', any: ['position'] },
+      { prompt: 'Model what it takes to hit $50k MRR by June', any: ['funnel'] },
     ],
   },
   {
     id: 'launch', title: 'Launches and campaigns',
     covers: 'Product Hunt, Hacker News, App Store, feature launches, seasonal campaigns, webinars, live events',
-    methods: ['plan-campaign', 'launch-product', 'create-run-of-show'],
+    methods: ['campaign', 'launch', 'event'],
     examples: [
-      { prompt: 'Plan a Product Hunt launch for our app in three weeks with no budget', any: ['plan-campaign', 'launch-product'], platforms: ['producthunt'] },
-      { prompt: 'Run a webinar to generate B2B pipeline', any: ['create-run-of-show', 'plan-campaign'] },
+      { prompt: 'Plan a Product Hunt launch for our app in three weeks with no budget', any: ['campaign', 'launch'], platforms: ['producthunt'] },
+      { prompt: 'Run a webinar to generate B2B pipeline', any: ['event', 'campaign'] },
     ],
   },
   {
     id: 'social', title: 'Social, community, and video',
     covers: 'X, LinkedIn, Reddit, Instagram, Facebook, TikTok, YouTube, Threads, Bluesky, Discord, communities',
-    methods: ['write-social', 'research-content-ideas', 'create-shortform', 'analyze-video'],
+    methods: ['social', 'ideas', 'video', 'watch'],
     examples: [
-      { prompt: 'Write LinkedIn thought leadership posts for our CEO', any: ['write-social'], platforms: ['linkedin'] },
-      { prompt: 'Script three TikTok videos for our budgeting app', any: ['create-shortform'], platforms: ['tiktok'] },
-      { prompt: 'Grow our Discord community from 500 to 5000 members', any: ['research-channel', 'plan-campaign', 'write-social'], none: ['create-run-of-show'] },
+      { prompt: 'Write LinkedIn thought leadership posts for our CEO', any: ['social'], platforms: ['linkedin'] },
+      { prompt: 'Script three TikTok videos for our budgeting app', any: ['video'], platforms: ['tiktok'] },
+      { prompt: 'Grow our Discord community from 500 to 5000 members', any: ['channels', 'campaign', 'social'], none: ['event'] },
     ],
   },
   {
     id: 'search', title: 'Search and AI answers',
     covers: 'Google SEO, programmatic SEO, ChatGPT and Perplexity answers, App Store and Google Play listings',
-    methods: ['optimize-search', 'answer-visibility-monitor', 'build-programmatic-search', 'optimize-app-store-listing'],
+    methods: ['seo', 'answers', 'pseo', 'appstore'],
     examples: [
-      { prompt: 'Get our product recommended by ChatGPT and Perplexity', any: ['optimize-search', 'answer-visibility-monitor'] },
-      { prompt: 'Optimize our App Store listing screenshots and keywords', any: ['optimize-search', 'create-app-preview'] },
+      { prompt: 'Get our product recommended by ChatGPT and Perplexity', any: ['seo', 'answers'] },
+      { prompt: 'Optimize our App Store listing screenshots and keywords', any: ['seo', 'trailer'] },
     ],
   },
   {
     id: 'paid', title: 'Paid ads',
     covers: 'Google, Meta, LinkedIn, TikTok, Reddit, and YouTube ads, UGC creators, creative briefs, results reviews',
-    methods: ['create-paid-campaign', 'brief-creative', 'evaluate-paid-campaign', 'paid-campaign-loop'],
+    methods: ['ads', 'creative', 'results', 'paid'],
     examples: [
-      { prompt: 'Set up a Google Ads search campaign with a $3k monthly budget', any: ['create-paid-campaign'] },
-      { prompt: 'Our Meta ads CPA doubled last week; evaluate the campaign results', any: ['evaluate-paid-campaign'] },
+      { prompt: 'Set up a Google Ads search campaign with a $3k monthly budget', any: ['ads'] },
+      { prompt: 'Our Meta ads CPA doubled last week; evaluate the campaign results', any: ['results'] },
     ],
   },
   {
     id: 'email', title: 'Email, outreach, and PR',
     covers: 'Cold email, sales follow-ups, LinkedIn DMs, welcome and win-back emails, newsletters, press, podcasts, partners',
-    methods: ['write-outreach', 'evaluate-outreach', 'lifecycle-campaign', 'earned-media-outreach', 'outreach-sequence'],
+    methods: ['outreach', 'results', 'lifecycle', 'press', 'outbound'],
     examples: [
-      { prompt: 'Write a 4-step cold email sequence to HR directors at mid-size companies', any: ['write-outreach'] },
-      { prompt: 'Build a win-back email flow for churned subscribers', any: ['lifecycle-campaign', 'write-copy', 'plan-campaign'], none: ['map-user-flow', 'brief-product-ui'] },
-      { prompt: 'Get press coverage in TechCrunch for our Series A', any: ['write-outreach', 'research-channel', 'research-positioning'] },
+      { prompt: 'Write a 4-step cold email sequence to HR directors at mid-size companies', any: ['outreach'] },
+      { prompt: 'Build a win-back email flow for churned subscribers', any: ['lifecycle', 'copy', 'campaign'], none: ['flow', 'ui'] },
+      { prompt: 'Get press coverage in TechCrunch for our Series A', any: ['outreach', 'channels', 'position'] },
     ],
   },
   {
     id: 'product', title: 'Growth inside the product',
     covers: 'Onboarding, activation, paywalls, trials, upgrade prompts, referral loops, checkout and page conversion',
-    methods: ['improve-conversion', 'map-user-flow', 'design-pricing-and-packaging', 'referral-loop', 'brief-product-ui'],
+    methods: ['convert', 'flow', 'pricing', 'referral', 'ui'],
     examples: [
-      { prompt: 'Improve activation in our onboarding; only 20% of signups create a project', any: ['lifecycle-campaign', 'improve-conversion', 'map-user-flow'] },
-      { prompt: 'Plan a paywall and trial experiment for our mobile app', any: ['design-pricing-and-packaging', 'improve-conversion'], none: ['allocate-marketing-budget'] },
-      { prompt: 'Design a referral program inside the product', any: ['referral-loop'] },
+      { prompt: 'Improve activation in our onboarding; only 20% of signups create a project', any: ['lifecycle', 'convert', 'flow'] },
+      { prompt: 'Plan a paywall and trial experiment for our mobile app', any: ['pricing', 'convert'], none: ['budget'] },
+      { prompt: 'Design a referral program inside the product', any: ['referral'] },
     ],
   },
   {
     id: 'content', title: 'Copy, content, and brand',
     covers: 'Landing and product pages, blog posts, case studies, brand voice and identity, Vietnamese copy',
-    methods: ['write-copy', 'write-longform', 'create-brand', 'create-landing-page', 'polish-vietnamese'],
+    methods: ['copy', 'article', 'brand', 'landing', 'vietnamese'],
     examples: [
-      { prompt: 'Write landing page copy for our AI note-taking app', any: ['write-copy', 'create-landing-page'] },
-      { prompt: 'Write a long-form blog post on why spreadsheets fail finance teams', any: ['write-longform'] },
+      { prompt: 'Write landing page copy for our AI note-taking app', any: ['copy', 'landing'] },
+      { prompt: 'Write a long-form blog post on why spreadsheets fail finance teams', any: ['article'] },
     ],
   },
   {
     id: 'measure', title: 'Measure and learn',
     covers: 'Growth drops, results reviews, campaign and video evaluations, marketing audits, fact checks',
-    methods: ['diagnose-growth', 'measure-growth', 'evaluate-shortform', 'audit-marketing', 'knowledge-review', 'fresh-eyes-review'],
+    methods: ['diagnose', 'measure', 'results', 'audit', 'factcheck', 'critique'],
     examples: [
-      { prompt: 'Our signups dropped 30% last month, find out why', any: ['diagnose-growth'] },
-      { prompt: 'Review last quarter\'s growth results and decide what to keep', any: ['measure-growth'] },
+      { prompt: 'Our signups dropped 30% last month, find out why', any: ['diagnose'] },
+      { prompt: 'Review last quarter\'s growth results and decide what to keep', any: ['measure'] },
     ],
   },
 ]);
 
-export const ALSO = 'Also: product flows, UI specs, web and iOS builds, system architecture, and technical docs.';
+export const ALSO = 'Also: product flows (`flow`), UI specs (`ui`), web and iOS builds (`build`), system architecture (`architect`), and technical docs (`docs`).';
 
 
-// Short names a user sees in the terminal. The routing-breadth E2E requires one per listed specialist.
-export const SPECIALISTS = Object.freeze({
-  'research-positioning': 'Positioning research', 'research-channel': 'Channel research', 'design-pricing-and-packaging': 'Pricing and packaging',
-  'prioritize-opportunities': 'Opportunity ranking', 'model-growth-funnel': 'Growth model', 'allocate-marketing-budget': 'Budget allocation',
-  'shape-initiative': 'Initiative shaping', 'decision-panel': 'Decision panel', 'plan-campaign': 'Campaign planner', 'launch-product': 'Launch playbook',
-  'create-run-of-show': 'Run of show', 'write-social': 'Social writer', 'research-content-ideas': 'Content ideas', 'create-shortform': 'Short-form video',
-  'analyze-video': 'Video analysis', 'optimize-search': 'SEO, AEO, and ASO', 'answer-visibility-monitor': 'AI answer monitor',
-  'build-programmatic-search': 'Programmatic SEO', 'optimize-app-store-listing': 'App store listing', 'create-paid-campaign': 'Paid campaign builder',
-  'brief-creative': 'Creative brief', 'evaluate-paid-campaign': 'Paid results review', 'paid-campaign-loop': 'Paid test loop', 'write-outreach': 'Outreach writer',
-  'evaluate-outreach': 'Outreach review', 'lifecycle-campaign': 'Lifecycle email', 'earned-media-outreach': 'Press and podcasts', 'outreach-sequence': 'Outbound sequence',
-  'improve-conversion': 'Conversion', 'map-user-flow': 'User flows', 'referral-loop': 'Referral loop', 'brief-product-ui': 'Product UI spec', 'write-copy': 'Copywriter',
-  'write-longform': 'Long-form writer', 'create-brand': 'Brand', 'create-landing-page': 'Landing page', 'polish-vietnamese': 'Vietnamese editor',
-  'diagnose-growth': 'Growth diagnosis', 'measure-growth': 'Results review', 'evaluate-shortform': 'Video results review', 'audit-marketing': 'Marketing audit',
-  'knowledge-review': 'Fact check', 'fresh-eyes-review': 'Fresh-eyes review',
-});
-const label = name => SPECIALISTS[name] ?? name;
-const GUIDE_KINDS = ['playbook', 'platform', 'checklist', 'channel', 'workflow'];
+// The name a user sees for each command in an area is the command itself.
+export const SPECIALISTS = Object.freeze(Object.fromEntries(AREAS.flatMap(area => area.methods).map(name => [name, name])));
+const label = name => name;
+const GUIDE_KINDS = ['playbook', 'platform', 'checklist', 'channel', 'play'];
 
 // Playbook counts per area, from the same index the brief uses.
 export async function depth() {
@@ -124,7 +111,7 @@ export async function depth() {
   for (const area of AREAS) {
     const names = new Set(area.methods);
     counts[area.id] = index.docs.filter(doc => GUIDE_KINDS.includes(doc.kind)
-      && ((doc.method && names.has(doc.method)) || [...names].some(name => doc.key.startsWith(`conquistador/references/${name}/`)))).length;
+      && doc.method && names.has(doc.method)).length;
   }
   return { counts, total: index.docs.filter(doc => GUIDE_KINDS.includes(doc.kind)).length };
 }
@@ -137,7 +124,7 @@ export function areaText(area) {
   return [
     area.covers,
     '',
-    `Specialists: ${area.methods.map(label).join(', ')}`,
+    `Commands: ${area.methods.map(label).join(', ')}`,
     '',
     'Try:',
     ...area.examples.map(example => `  "${example.prompt}"`),
@@ -148,7 +135,7 @@ export async function listText() {
   const { counts, total } = await depth();
   const lines = [`Conquistador covers marketing and growth on any platform, in any service, and inside the product.`, `${total} playbooks and guides across ${AREAS.length} areas. Ask your agent for the outcome; it reads the matching playbooks first.`, ''];
   for (const area of AREAS) {
-    lines.push(`${area.title} (${counts[area.id]} playbooks)`, `  ${area.covers}`, `  Specialists: ${area.methods.map(label).join(', ')}`);
+    lines.push(`${area.title} (${counts[area.id]} playbooks)`, `  ${area.covers}`, `  Commands: ${area.methods.map(label).join(', ')}`);
     for (const example of area.examples) lines.push(`  • "${example.prompt}"`);
     lines.push('');
   }
@@ -165,14 +152,15 @@ export async function welcomeMarkdown() {
     '',
     'Show this when the user invokes Conquistador without a task, asks what it can do, or seems new.',
     'Keep it short: show the areas and three or four examples that fit what you know about the user\'s',
-    'product, then ask one question: "What are you working on?" Do not list internal paths or methods.',
+    'product, then ask one question: "What are you working on?" Do not list internal paths.',
     '',
     'Conquistador is a marketing and growth operator. It covers any platform, any service, and growth',
     'inside the product. Each answer uses field-tested playbooks and ends with the playbooks applied.',
+    'Users can name a command (`/conquistador copy`) or describe the outcome in plain words.',
     '',
-    '| Area | Covers | Specialists |',
+    '| Area | Covers | Commands |',
     '| --- | --- | --- |',
-    ...AREAS.map(area => `| ${area.title} | ${area.covers} | ${area.methods.map(label).join(', ')} |`),
+    ...AREAS.map(area => `| ${area.title} | ${area.covers} | ${area.methods.map(name => `\`${name}\``).join(', ')} |`),
     '',
     ALSO,
     '',

@@ -11,16 +11,16 @@ import { AREAS } from './tour.mjs';
 
 // At most 20 files: the tightest common upload limit.
 export const GROUPS = [
-  ['01-launch-and-campaigns', ['plan-campaign', 'create-run-of-show', 'allocate-marketing-budget', 'shape-initiative']],
-  ['02-positioning-and-brand', ['research-positioning', 'create-brand', 'design-pricing-and-packaging']],
-  ['03-copy', ['write-copy', 'write-longform', 'polish-vietnamese', 'fresh-eyes-review']],
-  ['04-social-and-community', ['write-social', 'research-content-ideas', 'research-channel']],
-  ['05-short-form-video', ['create-shortform', 'evaluate-shortform', 'analyze-video', 'brief-creative']],
-  ['06-search-and-answer-engines', ['optimize-search']],
-  ['07-paid-and-outreach', ['create-paid-campaign', 'evaluate-paid-campaign', 'write-outreach', 'evaluate-outreach']],
-  ['08-conversion-and-growth', ['improve-conversion', 'diagnose-growth', 'model-growth-funnel', 'measure-growth', 'audit-marketing', 'prioritize-opportunities']],
-  ['09-decisions-and-knowledge', ['decision-panel', 'knowledge-review', 'submit-feedback']],
-  ['10-product-and-engineering', ['map-user-flow', 'brief-product-ui', 'architect-software-system', 'build-ios-app', 'build-web-app', 'write-technical-docs']],
+  ['01-launch-and-campaigns', ['campaign', 'event', 'budget', 'shape']],
+  ['02-positioning-and-brand', ['position', 'brand', 'pricing']],
+  ['03-copy', ['copy', 'article', 'vietnamese', 'critique']],
+  ['04-social-and-community', ['social', 'ideas', 'channels']],
+  ['05-short-form-video', ['video', 'watch', 'creative']],
+  ['06-search-and-answer-engines', ['seo']],
+  ['07-paid-and-outreach', ['ads', 'outreach', 'results']],
+  ['08-conversion-and-growth', ['convert', 'diagnose', 'funnel', 'measure', 'audit', 'prioritize']],
+  ['09-decisions-and-knowledge', ['decide', 'factcheck', 'feedback']],
+  ['10-product-and-engineering', ['flow', 'ui', 'architect', 'build', 'docs']],
 ];
 
 const SYSTEM_PROMPT = `You are Conquistador, a marketing and growth operator for any platform, any service, and growth inside the product: strategy, launches, social, search and AI answers, paid ads, email and outreach, in-product growth, content, and measurement.
@@ -103,7 +103,7 @@ function writeBotPack(out, index, includeUser) {
       lines.push(`- ${method.label}: ${method.description.split('. ')[0]}.`);
       parts.push(`\n\n# METHOD: ${method.label}\n\n${read(method.path)}`);
 
-      for (const doc of index.docs.filter(item => item.method === name && keep(item)).sort((a, b) => a.key.localeCompare(b.key))) {
+      for (const doc of index.docs.filter(item => item.source === 'method' && item.method === name && keep(item)).sort((a, b) => a.key.localeCompare(b.key))) {
         if (seen.has(doc.digest)) { parts.push(`\n\n## PLAYBOOK: ${posix.basename(doc.key)} (same text as an earlier section)`); continue; }
 
         seen.add(doc.digest);
@@ -116,11 +116,11 @@ function writeBotPack(out, index, includeUser) {
     lines.push('');
   }
 
-  // Shared channel guides, standards, and composition workflows from the parent.
-  const shared = index.docs.filter(doc => doc.source === 'shared' && ['channel', 'playbook', 'workflow', 'standard', 'checklist'].includes(doc.kind) && !seen.has(doc.digest));
-  write('knowledge/11-channels-standards-workflows.md', ['# Channels, standards, and workflows', ...shared.map(doc => `\n\n## ${doc.key}\n\n${fs.readFileSync(doc.absolute, 'utf8')}`)].join('\n'));
+  // Shared channel guides, standards, and plays (with their playbooks) from the parent.
+  const shared = index.docs.filter(doc => (doc.source === 'shared' || doc.source === 'play') && ['channel', 'playbook', 'play', 'standard', 'checklist'].includes(doc.kind) && !seen.has(doc.digest));
+  write('knowledge/11-channels-standards-workflows.md', ['# Channels, standards, and plays', ...shared.map(doc => `\n\n## ${doc.key}\n\n${fs.readFileSync(doc.absolute, 'utf8')}`)].join('\n'));
   written.push('11-channels-standards-workflows.md');
-  lines.push('## 11-channels-standards-workflows.md', '- Channel guides (Product Hunt, Reddit, LinkedIn, X, TikTok, YouTube, Instagram, Hacker News, newsletters), quality and safety standards, and multi-step workflows.', '');
+  lines.push('## 11-channels-standards-workflows.md', '- Channel guides (Product Hunt, Reddit, LinkedIn, X, TikTok, YouTube, Instagram, Hacker News, newsletters), quality and safety standards, and plays (multi-step chains of commands).', '');
 
   if (users.length) {
     write('knowledge/99-your-playbooks.md', ['# Your playbooks (rank these first)', ...users.map(doc => `\n\n## ${doc.key}\n\n${fs.readFileSync(doc.absolute, 'utf8')}`)].join('\n'));

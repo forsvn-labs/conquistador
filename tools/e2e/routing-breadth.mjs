@@ -23,11 +23,11 @@ export async function loadCases() {
   // The start picker's tasks, as the full prompt the agent receives (in and outside a project).
   if (existsSync(join(root, 'tools/launch.mjs'))) {
     const { STARTS, promptFor } = await import('../launch.mjs');
-    const expect = [['write-copy'], ['diagnose-growth'], ['map-user-flow']];
+    const expect = [['copy'], ['diagnose'], ['flow']];
 
     if (STARTS.length !== expect.length) throw Error('Update first-use routing expectations when changing starter tasks.');
     const agent = { slash: '/conquistador ' };
-    const tasks = [...STARTS.map((task, index) => [task, expect[index]]), ['Plan marketing and growth for my product', ['plan-campaign']]];
+    const tasks = [...STARTS.map((task, index) => [task, expect[index]]), ['Plan marketing and growth for my product', ['campaign']]];
     for (const [task, any] of tasks) for (const cwd of [root, dirname(root)]) cases.push({ area: 'start', task: promptFor(agent, task, cwd), any });
   }
   return cases;

@@ -17,8 +17,8 @@ export function stageMethodLibrary(source, entry, { include = () => true, subset
       writeFileSync(destination, internalText(partial ? subsetLinks(text, file, files) : text));
     }
   }
-  const names = files.filter(file => /^[^/]+\/SKILL\.md$/.test(file)).map(file => file.split('/')[0]);
-  if (!names.includes('conquistador')) throw Error('Lazy library requires its parent.');
+  if (!files.includes('conquistador/SKILL.md')) throw Error('Lazy library requires its parent.');
+  const names = ['conquistador', ...files.map(file => /^conquistador\/commands\/([^/]+)\/COMMAND\.md$/.exec(file)?.[1]).filter(Boolean)];
   writeFileSync(join(entry, 'library/conquistador/catalog.md'), capabilityCatalog(source, names));
   writeFileSync(join(entry, 'SKILL.md'), template);
   mkdirSync(join(entry, 'agents'), { recursive: true });
