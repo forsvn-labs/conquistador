@@ -4664,7 +4664,7 @@
     },
     {
       "path": "tools/check/index.mjs",
-      "sha256": "f3c5f6fdb2fbad44a39b649d225b7d67f01665b311530c723a9cef59cf471734"
+      "sha256": "9b438ded0c164ee7ec204656471fcac3a030f60536d3af184e95f3d27076b69e"
     },
     {
       "path": "tools/check/rules.mjs",

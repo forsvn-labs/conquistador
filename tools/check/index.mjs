@@ -148,7 +148,13 @@ function walk(folder, found = []) {
 
 // Fetch a URL and check its visible text and meta tags. Reads only; never posts.
 export async function checkUrl(url, options) {
-  const response = await fetch(url, { redirect: 'follow', signal: AbortSignal.timeout(options.timeout ?? 15_000), headers: { 'user-agent': 'conquistador-check (+https://github.com/forsvn-labs/conquistador)', accept: 'text/html,text/plain;q=0.9,*/*;q=0.1' } });
+  let response;
+
+  try {
+    response = await fetch(url, { redirect: 'follow', signal: AbortSignal.timeout(options.timeout ?? 15_000), headers: { 'user-agent': 'conquistador-check (+https://github.com/forsvn-labs/conquistador)', accept: 'text/html,text/plain;q=0.9,*/*;q=0.1' } });
+  } catch (error) {
+    throw new Error(`cannot fetch ${url}: ${error.cause?.code ?? error.cause?.message ?? error.message}`);
+  }
 
   if (!response.ok) throw new Error(`${url} returned HTTP ${response.status}`);
   const type = response.headers.get('content-type') ?? '';
