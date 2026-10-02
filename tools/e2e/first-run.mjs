@@ -213,7 +213,7 @@ function briefChecks({ saas }) {
 async function liveChecks({ saas }) {
   const hold = 'Not run: the captain has not cleared Executor CLI calls.';
   if (!live) {
-    check('executor', 'signals reports "other folder" when only another folder\'s Executor answers', [], { status: 'not run', reason: 'Pass --live to read the real ~/.executor records.' });
+    check('executor', 'signals reads the running Executor through connect's probe and starts nothing', [], { status: 'not run', reason: 'Pass --live to read the real ~/.executor records.' });
   } else {
     const data = join(homedir(), '.executor');
     const records = () => files(data).filter(name => /^daemon-.*\.json$/.test(name));
@@ -222,9 +222,9 @@ async function liveChecks({ saas }) {
     const status = await executorSignals(saas, { home: homedir(), call: false });
     const problems = [];
     expect(problems, ['running', 'not running', 'not installed'].includes(status.status), `status ${status.status}`);
-    if (status.status === 'running') expect(problems, status.scope === 'other folder' && status.integrations === null && status.advice === 'Executor is running. Run `conquistador connect` to use its integrations.', `scope ${status.scope}: ${status.advice}`);
+    if (status.status === 'running') expect(problems, ['service', 'folder'].includes(status.scope) && status.integrations === null, `scope ${status.scope}: ${status.advice}`);
     expect(problems, JSON.stringify(records()) === JSON.stringify(before), 'a daemon record appeared');
-    check('executor', 'signals reports "other folder" when only another folder\'s Executor answers', problems, { status: status.status, scope: status.scope });
+    check('executor', 'signals reads the running Executor through connect's probe and starts nothing', problems, { status: status.status, scope: status.scope });
   }
   check('executor', 'signals counts integrations when this folder\'s Executor answers', [], { status: 'not run', reason: hold });
   check('executor', 'signals reports "not running" and starts nothing when Executor is installed but stopped', [], { status: 'not run', reason: `${hold} The isolated-home signals cases cover the no-record path.` });

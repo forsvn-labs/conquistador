@@ -6,7 +6,8 @@ import { spawnSync } from 'node:child_process';
 import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { homedir } from 'node:os';
 import { join, relative, sep } from 'node:path';
-import { onPath } from './agents.mjs';
+import { isMarketingFile as isMarketingPath } from './check/channels.mjs';
+import { findExecutor, findServer, parseIntegrations, runExecutor } from './connect.mjs';
 import { contextFiles, describeContext, projectRoot } from './context-files.mjs';
 import { spawnCommand } from './spawn.mjs';
 
@@ -95,24 +96,12 @@ const SURFACES = {
   changelog: [/^(?:.*\/)?(?:CHANGELOG|CHANGES|HISTORY|RELEASES)(?:\.mdx?|\.txt)?$/i, /^(?:.*\/)?changelog(?=\/|$)/i],
   appStore: [/^(?:.*\/)?fastlane\/metadata(?=\/|$)/, /^(?:.*\/)?(?:app-?store|play-?store|store-?listing)(?:\.[\w.]+)?(?=\/|$)/i, /^(?:.*\/)?metadata\/[a-z]{2}(?:-[A-Za-z]{2,4})?\/(?:description|keywords|promotional_text|subtitle|name)\.txt$/],
 };
-// Changed marketing files use the same rule as the check hook (W3, tools/check/channels.mjs
-// isMarketingFile). Copied until integration unifies them: a file counts when it declares
-// `channel:` in front matter, sits in a marketing folder, or is a site page. Project docs,
-// agent files, code, and non-marketing folders never count.
-const MARKETING_FOLDERS = new Set(['content', 'blog', 'posts', 'marketing', 'campaigns', 'emails', 'landing', 'social', 'ads', 'press', 'newsletter']);
-const EXCLUDED_FOLDERS = new Set(['docs', 'skills', 'hooks', '.github', 'node_modules', '.git', 'dist', 'build', 'out', 'coverage', 'vendor',
-  '.next', '.nuxt', '.svelte-kit', '.claude', '.codex', '.cursor', '.agents', '.conquistador']);
-const PROJECT_FILES = /^(?:readme|changelog|license|licence|agents|claude|gemini|contributing|install|security|code_of_conduct|skill|command|notice|migration|vision|roadmap|progress|index|versions|todo)$/i;
-const SITE_PAGE = /\.(?:html?|mdx)$|(?:^|\/)pages\/(?:.*\/)?[^/]+\.astro$/i;
-const declaresChannel = text => /^---\r?\n[\s\S]*?^channel:\s*\S/m.test(text.slice(0, 4_000)) && /^---\r?\n/.test(text);
+// Changed marketing files use the check hook's rule (tools/check/channels.mjs), so signals and
+// the hook agree on what counts as marketing work.
+const frontMatterChannel = text => (/^---\r?\n([\s\S]*?)\r?\n---/.exec(text.slice(0, 4_000))?.[1].match(/^channel:\s*["']?([^"'\r\n]+?)["']?\s*$/m) ?? [])[1];
 
 export function isMarketingFile(path, text = '') {
-  const parts = path.split(sep).join('/').split('/');
-  const name = parts.at(-1).replace(/\.[^.]+$/, '').replace(/\.[^.]+$/, '');
-  if (parts.slice(0, -1).some(part => EXCLUDED_FOLDERS.has(part))) return false;
-  const channel = declaresChannel(text);
-  if (PROJECT_FILES.test(name) && !channel) return false;
-  return channel || SITE_PAGE.test(path.split(sep).join('/')) || parts.slice(0, -1).some(part => MARKETING_FOLDERS.has(part.toLowerCase()));
+  return isMarketingPath(path.split(sep).join('/'), { data: { channel: frontMatterChannel(text) } });
 }
 
 function walk(root) {
@@ -254,46 +243,24 @@ function launchSignals(root, surfaces, gitInfo, now) {
   return { hint, unreleased: release.unreleased, latest };
 }
 
-const alive = pid => { try { process.kill(pid, 0); return true; } catch (error) { return error.code === 'EPERM'; } };
-
-async function answers(record, timeout) {
-  try {
-    await fetch(`http://${record.hostname || 'localhost'}:${record.port}/`, { signal: AbortSignal.timeout(timeout), redirect: 'manual' });
-    return true;
-  } catch { return false; }
-}
-
-// Executor's CLI starts a daemon for its working folder when none answers. So the CLI runs only
-// when a daemon record for this exact folder exists, its process lives, and its port answers.
+// Executor status comes from `conquistador connect`'s probe (tools/connect.mjs): it reads the
+// daemon records and default ports, never starts a server, and passes --base-url on each call.
 export async function executorSignals(root, { env = process.env, home = homedir(), probeTimeout = 800, cliTimeout = 5_000, call = true } = {}) {
-  const installed = Boolean(onPath('executor'));
-  const folder = env.EXECUTOR_DATA_DIR || join(home, '.executor');
-  let records = [];
-  try {
-    records = readdirSync(folder).filter(name => /^daemon-.*\.json$/.test(name)).map(name => {
-      try { const { hostname, port, pid, scopeId } = JSON.parse(readFileSync(join(folder, name), 'utf8')); return { hostname, port, pid, scopeId: scopeId ?? null }; } catch { return null; }
-    }).filter(record => record && Number.isInteger(record.port) && Number.isInteger(record.pid) && alive(record.pid));
-  } catch { records = []; }
-  const answering = [];
-  for (const record of records) if (await answers(record, probeTimeout)) answering.push(record);
-  const advice = 'Open Executor.app or run `executor web`, then run `conquistador connect`.';
-  if (!answering.length) return { status: installed ? 'not running' : 'not installed', installed, integrations: null, scope: null, advice: installed ? advice : 'Run `conquistador connect` to install Executor.' };
-  const scoped = answering.find(record => record.scopeId === `cwd:${root}`);
-  if (!scoped) return { status: 'running', installed, integrations: null, scope: 'other folder', advice: 'Executor is running. Run `conquistador connect` to use its integrations.' };
-  if (!call || !installed) return { status: 'running', installed, integrations: null, scope: 'this folder', advice: null };
-  const { file, args, options } = spawnCommand('executor', ['tools', 'integrations']);
-  const result = spawnSync(file, args, { cwd: root, encoding: 'utf8', timeout: cliTimeout, stdio: ['ignore', 'pipe', 'pipe'], ...options });
-  return { status: 'running', installed, integrations: result.status === 0 ? countIntegrations(result.stdout) : null, scope: 'this folder', advice: result.status === 0 ? null : 'Executor did not list integrations in time. Run `conquistador connect`.' };
-}
-
-// The CLI output format is not a stable contract: accept JSON, else count listed rows.
-export function countIntegrations(output) {
-  try {
-    const value = JSON.parse(output);
-    if (Array.isArray(value)) return value.length;
-    if (Array.isArray(value?.integrations)) return value.integrations.length;
-  } catch { /* Plain text. */ }
-  return output.split('\n').map(line => line.trim()).filter(line => line && !/^(?:integrations?\b|name\b|[-=─\s|]+$|no integrations)/i.test(line)).length;
+  const probeEnv = { ...env, HOME: home };
+  const executor = findExecutor(probeEnv);
+  const installed = Boolean(executor);
+  const server = await findServer({ env: probeEnv, timeout: probeTimeout });
+  if (server.state !== 'running') {
+    return { status: installed ? 'not running' : 'not installed', installed, integrations: null, scope: null,
+      advice: installed ? 'Open Executor.app or run `executor web`, then run `conquistador connect`.' : 'Run `conquistador connect` to install Executor.' };
+  }
+  const scope = server.folderScoped ? 'folder' : 'service';
+  const advice = server.folderScoped ? 'Only a folder-scoped Executor answers; it may not show your integrations. Open Executor.app, then run `conquistador connect`.' : null;
+  // A folder-scoped daemon hides the user's integrations, so its count would mislead.
+  if (!call || !installed || server.folderScoped) return { status: 'running', installed, integrations: null, scope, advice };
+  const result = await runExecutor(['tools', 'integrations'], [], { executor, server, env: probeEnv, timeout: cliTimeout });
+  return { status: 'running', installed, integrations: result.status === 0 ? parseIntegrations(result.stdout).length : null, scope,
+    advice: result.status === 0 ? advice : 'Executor did not list integrations in time. Run `conquistador connect`.' };
 }
 
 export async function collectSignals(cwd = process.cwd(), { executor = true, now = Date.now(), env = process.env, home = homedir() } = {}) {

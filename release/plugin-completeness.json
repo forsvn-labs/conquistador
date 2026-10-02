@@ -4784,7 +4784,7 @@
     },
     {
       "path": "tools/check/channels.mjs",
-      "sha256": "76799b4ba914beee5421a1a7bd5a39aa9c4add3fefe232f86bdbf4d3e127932b"
+      "sha256": "84b81d69ed91438d84ba970b11b941fecbd54c48a1a93e633556ba4aee840ba5"
     },
     {
       "path": "tools/check/extract.mjs",

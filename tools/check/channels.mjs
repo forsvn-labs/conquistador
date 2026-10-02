@@ -1,6 +1,6 @@
 // Channel detection and channel-specific field readers.
 // Order: --channel, then front matter `channel:`, then file and folder names, then the file type.
-import { basename, dirname, extname, sep } from 'node:path';
+import { basename, dirname, sep } from 'node:path';
 
 export const channels = {
   x: 'X (Twitter) post or thread',
@@ -82,23 +82,34 @@ export function detectChannel(file, document, override) {
 }
 
 // Words in a path that mark a file as marketing work even when no channel is named.
-const marketingWords = new Set(['marketing', 'copy', 'campaign', 'campaigns', 'launch', 'launches', 'content', 'social', 'posts', 'ads', 'press', 'outreach', 'announcement', 'announcements', 'growth', 'gtm', 'seo', 'drafts', 'deliverables']);
+// One rule for the check hook and `conquistador signals`.
+const marketingWords = new Set(['marketing', 'copy', 'campaign', 'campaigns', 'launch', 'launches', 'content', 'blog', 'posts', 'social', 'ads', 'press', 'outreach', 'announcement', 'announcements', 'growth', 'gtm', 'seo', 'emails', 'landing', 'newsletter']);
 
+// Never marketing, even with a channel: dependencies, build output, and agent or Conquistador files.
 const skippedFolders = new Set(['node_modules', '.git', 'dist', 'build', 'out', 'coverage', 'vendor', '.next', '.nuxt', '.svelte-kit', 'skills', '.claude', '.codex', '.cursor', '.agents', '.conquistador', '.github']);
+
+// Project documentation folders count only when the file names its channel.
+const docFolders = new Set(['docs', 'hooks']);
 
 const projectFiles = /^(readme|changelog|license|licence|agents|claude|gemini|contributing|install|security|code_of_conduct|skill|command|notice|migration|vision|roadmap|progress|index|versions|todo)(\.[a-z]+)?$/i;
 
-// The hook stays silent unless a file looks like marketing copy. Code, docs, and agent files never qualify.
+const sitePage = /\.(?:html?|mdx)$|(?:^|\/)pages\/(?:.*\/)?[^/]+\.astro$/i;
+
+// The hook and signals stay silent unless a file looks like marketing copy. Code, docs, and agent files never qualify.
+// document is the parsed file ({ data: { channel } }); signals passes only the front matter channel.
 export function isMarketingFile(file, document) {
-  const parts = file.split(/[\\/]/);
+  const path = file.split(/[\\/]/).join('/');
+  const parts = path.split('/');
+  const channel = normalizeChannel(document?.data?.channel);
 
   if (parts.slice(0, -1).some(part => skippedFolders.has(part))) return false;
 
-  if (projectFiles.test(basename(file).replace(/\.[^.]+$/, '').replace(/\.[^.]+$/, '')) && !document?.data?.channel) return false;
+  if (parts.slice(0, -1).some(part => docFolders.has(part)) && !channel) return false;
 
-  if (normalizeChannel(document?.data?.channel)) return true;
+  // Site pages count first, so index.html is a landing page, not the INDEX.md project file.
+  if (channel || sitePage.test(path)) return true;
 
-  if (['.html', '.htm'].includes(extname(file).toLowerCase())) return true;
+  if (projectFiles.test(basename(file).replace(/\.[^.]+$/, '').replace(/\.[^.]+$/, ''))) return false;
 
   if (channelFromName(basename(file))) return true;
 
