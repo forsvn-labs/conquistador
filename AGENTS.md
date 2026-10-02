@@ -18,15 +18,16 @@ This repository owns product code and its release evidence.
 - The repository root is the plugin (Claude Code, Codex, Cursor, Copilot, Agent Plugins). `tools/brief.mjs`
   ranks the playbooks for a task; `mcp/server.mjs`, `hooks/conquistador-hook.mjs`, `conquistador brief`,
   and `conquistador bot` all use it. `tools/front-door.mjs` and `tools/agents.mjs` own the agent installer;
-  `tools/launch.mjs` owns the start flow (task picker, agent launch).
+  `tools/launch.mjs` owns the start flow (detect, scope, install, task picker, agent launch); `tools/doctor.mjs` owns `conquistador doctor`.
 - After adding, renaming, or removing a knowledge file, run `node tools/knowledge-map.mjs` and
   `node tools/update-completeness.mjs`. `node tools/knowledge-map.mjs --check` must pass.
   After any plugin payload edit (including hooks, briefing helpers, and README), regenerate `release/plugin-completeness.json` with
   `node tools/update-completeness.mjs`; never hand-edit its expected hashes.
 - E2E: `node tools/e2e/routing-breadth.mjs` (offline; marketing breadth, coding silence, tour drift),
-  `expect tools/e2e/agent-first.exp` (bare `conquistador` to a pre-filled Claude Code and Codex, isolated
-  home, no model call), `node tools/e2e/package-install.mjs` (installs the package from Git and `npx`
-  as users do, all detected agents, isolated homes; needs `script` and `expect`, which Windows lacks, so
+  `expect tools/e2e/agent-first.exp` (bare `conquistador`: keep or customize, scope, `/conquistador init`
+  pre-filled in Claude Code, then Codex; isolated home, no model call), `node tools/e2e/package-install.mjs`
+  (installs the package from Git and `npx` as users do, all detected agents, project and global scope,
+  doctor, every CLI command from the tarball; set `CONQUISTADOR_E2E_NODE22` to add a Node 22.18 run; isolated homes; needs `script` and `expect`, which Windows lacks, so
   those checks report "not run" there; CI runs it on Linux and Windows through `install-e2e.yml`),
   `node tools/e2e/update-latest.mjs` (`conquistador update` against a local Verdaccio registry, all agents),
   and `node tools/e2e/knowledge-use.mjs [--set breadth]` (headless Claude Code; spends tokens). Reports go to `dist/e2e/`.
