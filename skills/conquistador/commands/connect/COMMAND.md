@@ -46,33 +46,9 @@ Follow the task-time protocol in [setup](../../standards/setup.md#use-live-data-
 
 ## Capabilities
 
-`capabilities.json` in the Conquistador package is the source of truth. It also maps each command
-to the capabilities it can use.
-
-| Capability | Class | Search phrases |
-| --- | --- | --- |
-| `analytics.read` | read | `run analytics report`, `website traffic sessions by source` |
-| `product-analytics.read` | read | `query product events`, `funnel conversion retention cohort` |
-| `crm.read` | read | `search crm contacts`, `list deals pipeline` |
-| `crm.write` | write | `create crm contact`, `update deal stage` |
-| `email.read` | read | `search email messages`, `list email campaigns` |
-| `email.send` | write | `send email`, `send broadcast campaign` |
-| `ads.read` | read | `ads campaign insights spend`, `list ad campaigns` |
-| `ads.write` | write | `create ad campaign`, `update ad budget` |
-| `search.read` | read | `web search`, `search the web for pages` |
-| `seo.read` | read | `search analytics query performance`, `keyword rankings` |
-| `social.read` | read | `list social posts`, `post engagement metrics` |
-| `social.publish` | write | `create social post`, `schedule post` |
-| `payments.read` | read | `list subscriptions`, `revenue charges report` |
-| `docs.read` | read | `search documents`, `get page content` |
-| `docs.write` | write | `create document page`, `update page content` |
-| `warehouse.read` | read | `run sql query`, `execute query warehouse` |
-| `support.read` | read | `list support tickets`, `search conversations` |
-| `calendar.read` | read | `list calendar events`, `free busy availability` |
-| `chat.read` | read | `search messages`, `channel history` |
-| `chat.send` | write | `post message to channel`, `send chat message` |
-| `issues.read` | read | `list issues`, `search issues` |
-| `issues.write` | write | `create issue`, `update issue` |
+[`capabilities.json`](../../capabilities.json) lists every capability with its class and Executor
+search phrases, and maps each command to the capabilities it can use. Each capability has a
+recipe in [`integrations/`](../../integrations/README.md).
 
 Read-class tools run within host policy. Write-class tools send, publish, spend, or change data:
 show the exact payload and get the user's explicit approval for each call.

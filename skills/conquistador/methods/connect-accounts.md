@@ -18,7 +18,7 @@ exposes the tools.
    an `executor` command to wake it.
 4. A capability is missing: run `conquistador connect add`. The user chooses Add Integration in
    the Executor web UI and signs in to the provider there. Suggest providers from
-   `integrations/<capability>.md`. Limit the integration's policy to the operations the task needs.
+   [`integrations/<capability>.md`](../integrations/README.md). Limit the integration's policy to the operations the task needs.
 5. Verify one bounded read: `conquistador connect verify <capability> --tool <path> --args '<json>'`.
 6. Resume the requested deliverable. Use live data through the protocol in
    [setup](../standards/setup.md#use-live-data-through-executor).

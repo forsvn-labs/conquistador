@@ -1,7 +1,8 @@
 // `conquistador connect`: which capabilities this user can reach through Executor.
 // Conquistador names capabilities (crm.read, email.send); the user's own Executor integrations
-// supply the tools. capabilities.json maps commands to capabilities and capabilities to search
-// phrases; integrations/<capability>.md holds the provider hints.
+// supply the tools. skills/conquistador/capabilities.json maps commands to capabilities and
+// capabilities to search phrases; skills/conquistador/integrations/<capability>.md holds the
+// provider hints. Both ship inside the skill, so skill-only installs have them too.
 //
 // Executor's CLI read commands start a folder-scoped daemon when no server answers, and that
 // daemon does not show the user's integrations. So this file never runs an executor command
@@ -17,6 +18,7 @@ import { fileURLToPath } from 'node:url';
 import { spawnCommand } from './spawn.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+const SKILL = 'skills/conquistador';
 const DEFAULT_PORTS = [4788, 4789];
 const PROBE_MS = 800;
 const CALL_MS = 20_000;
@@ -37,7 +39,7 @@ Set CONQUISTADOR_EXECUTOR_URL to check one Executor server only.
 `;
 
 export function loadCapabilities(directory = root) {
-  return JSON.parse(readFileSync(join(directory, 'capabilities.json'), 'utf8'));
+  return JSON.parse(readFileSync(join(directory, SKILL, 'capabilities.json'), 'utf8'));
 }
 
 // The capability ids a command can use, in declared order. Unknown commands use none.
@@ -146,11 +148,12 @@ function collect(child, timeout) {
 }
 
 // Runs one executor CLI command against the server that already answers.
-// words: subcommand words; positional: arguments after the options.
+// words: subcommand words; positional: arguments; options follow them, as in
+// `executor tools search "send email" --limit 5`.
 export async function runExecutor(words, positional, { executor, server, env = process.env, timeout = CALL_MS, extra = [] }) {
   if (!executor) throw new Error('Executor is not installed.');
   if (server?.state !== 'running') throw new Error('Executor is not running.');
-  const args = [...words, '--base-url', server.origin, ...extra, ...positional];
+  const args = [...words, ...positional, '--base-url', server.origin, ...extra];
   const { file, args: fileArgs, options } = spawnCommand(executor, args, env);
   const child = spawn(file, fileArgs, {
     env: { ...env, NO_COLOR: '1', EXECUTOR_DISABLE_UPDATE_CHECK: '1' },
@@ -161,61 +164,36 @@ export async function runExecutor(words, positional, { executor, server, env = p
   return collect(child, timeout);
 }
 
-// Executor prints JSON for most results. Accept the whole output, or the first JSON block in it.
-export function parseJsonish(text) {
-  const trimmed = String(text ?? '').trim();
-  if (!trimmed) return null;
-  try { return JSON.parse(trimmed); } catch { /* Not plain JSON. */ }
-  const start = trimmed.search(/^[[{]/m);
-  if (start < 0) return null;
-  try { return JSON.parse(trimmed.slice(start)); } catch { return null; }
+// Executor 1.5.40 prints JSON: {"items":[...]} for tools search and tools integrations, and
+// {"ok":true,"data":...} for call.
+export function parseJson(text) {
+  try { return JSON.parse(String(text ?? '').trim()); } catch { return null; }
 }
 
-const listIn = value => (Array.isArray(value) ? value
-  : ['tools', 'results', 'items', 'integrations', 'data', 'value'].map(key => value?.[key]).find(Array.isArray) ?? []);
-const pathPattern = /^[\s>*•-]*([A-Za-z0-9_$-]+(?:[./][A-Za-z0-9_$-]+)+)\b/;
+const items = text => { const parsed = parseJson(text); return Array.isArray(parsed?.items) ? parsed.items : []; };
 const BUILT_IN = new Set(['executor']);
 
 // Tool search results: [{ path, integration, description }]. Executor's own tools are left out.
+// An item: { path: "google_gmail.org.localGmailApi.gmail.users.messages.send", name, description, integration, score }.
 export function parseTools(text) {
-  const parsed = parseJsonish(text);
-  const tools = parsed !== null
-    ? listIn(parsed).map(item => {
-      const path = typeof item === 'string' ? item : item?.address ?? item?.path ?? item?.id ?? item?.name;
-      if (typeof path !== 'string') return null;
-      const integration = typeof item?.integration === 'string' ? item.integration : item?.integration?.slug ?? item?.namespace ?? item?.source;
-      return { path, integration: typeof integration === 'string' ? integration : path.split(/[./]/)[0], description: typeof item?.description === 'string' ? item.description : '' };
-    })
-    : String(text ?? '').split(/\r?\n/).map(line => {
-      const match = pathPattern.exec(line);
-      return match ? { path: match[1], integration: match[1].split(/[./]/)[0], description: line.slice(match.index + match[0].length).replace(/^[\s:—-]+/, '').trim() } : null;
-    });
-  const seen = new Set();
-  return tools.filter(tool => tool && !BUILT_IN.has(tool.integration) && !seen.has(tool.path) && seen.add(tool.path));
+  return items(text)
+    .filter(item => typeof item?.path === 'string')
+    .map(item => ({ path: item.path, integration: typeof item.integration === 'string' ? item.integration : item.path.split('.')[0], description: typeof item.description === 'string' ? item.description : '' }))
+    .filter(tool => !BUILT_IN.has(tool.integration));
 }
 
-// Configured integrations: [{ slug, tools }].
+// Configured integrations: [{ slug, tools }]. An item: { id: "anytype_mcp", name, kind, toolCount }.
 export function parseIntegrations(text) {
-  const parsed = parseJsonish(text);
-  if (parsed !== null) {
-    return listIn(parsed).map(item => {
-      const slug = typeof item === 'string' ? item : item?.slug ?? item?.namespace ?? item?.id ?? item?.name;
-      const count = item?.toolCount ?? item?.tools ?? item?.count;
-      return typeof slug === 'string' ? { slug, tools: Number.isInteger(count) ? count : Array.isArray(count) ? count.length : null } : null;
-    }).filter(item => item && !BUILT_IN.has(item.slug));
-  }
-  return String(text ?? '').split(/\r?\n/).map(line => {
-    const match = /^[\s>*•-]*([A-Za-z0-9_.-]+)\b(?:.*?\b(\d+)\s+tools?\b)?/i.exec(line);
-    if (!match || /^(?:integrations?|no|name|slug|total)$/i.test(match[1])) return null;
-    return { slug: match[1], tools: match[2] ? Number(match[2]) : null };
-  }).filter(item => item && !BUILT_IN.has(item.slug));
+  return items(text)
+    .filter(item => typeof item?.id === 'string' && !BUILT_IN.has(item.id))
+    .map(item => ({ slug: item.id, tools: Number.isInteger(item.toolCount) ? item.toolCount : null }));
 }
 
 const READ_VERBS = new Set(['get', 'list', 'search', 'query', 'read', 'fetch', 'find', 'retrieve', 'describe', 'run', 'report', 'export', 'count', 'lookup', 'stats', 'insights', 'history', 'view', 'show', 'aggregate', 'download', 'analytics', 'metrics', 'overview']);
 const WRITE_VERBS = new Set(['create', 'update', 'delete', 'remove', 'send', 'post', 'publish', 'insert', 'upsert', 'write', 'set', 'add', 'patch', 'put', 'cancel', 'refund', 'archive', 'merge', 'assert', 'mutate', 'trigger', 'schedule', 'upload', 'pause', 'resume', 'enable', 'disable', 'invite', 'move', 'append', 'edit', 'replace', 'submit', 'charge', 'pay', 'transfer', 'reply', 'share', 'import', 'unsubscribe', 'subscribe']);
 
-// Classifies a tool by its name: 'read', 'write', or 'unknown'. Names start or end with the verb
-// (create_issue, issues.create, issueCreate, chat.postMessage).
+// Classifies a tool by its name: 'read', 'write', or 'unknown'. Names usually start or end with
+// the verb (create_issue, issues.create, issueCreate, chat.postMessage).
 export function toolClass(path) {
   const last = String(path).split(/[./]/).pop() ?? '';
   const words = last.replace(/([a-z0-9])([A-Z])/g, '$1 $2').toLowerCase().split(/[^a-z0-9]+/).filter(Boolean);
@@ -225,6 +203,9 @@ export function toolClass(path) {
   if (READ_VERBS.has(first)) return 'read';
   if (WRITE_VERBS.has(first) || WRITE_VERBS.has(final)) return 'write';
   if (READ_VERBS.has(final)) return 'read';
+  // Prefixed names such as api_search_global: the verb sits in the middle.
+  if (words.some(word => WRITE_VERBS.has(word))) return 'write';
+  if (words.some(word => READ_VERBS.has(word))) return 'read';
   return 'unknown';
 }
 
@@ -281,6 +262,7 @@ export async function readiness({ names = [], env = process.env, fetchImpl = fet
     capabilities: [],
     next: [],
   };
+  // recipe is relative to the skill folder (skills/conquistador in the package).
   const base = id => ({ id, class: map.capabilities[id].class, description: map.capabilities[id].description, recipe: `integrations/${id}.md` });
   if (!executor) {
     report.capabilities = ids.map(id => ({ ...base(id), state: 'missing', integrations: [], tools: [] }));
@@ -319,7 +301,7 @@ export async function readiness({ names = [], env = process.env, fetchImpl = fet
       ...(record ? { verifiedAt: record.verifiedAt, verifiedTool: record.tool } : {}),
     };
   });
-  if (report.capabilities.some(item => item.state === 'missing')) report.next.push('Add an integration for a missing capability: conquistador connect add. The recipe in integrations/<capability>.md names common providers.');
+  if (report.capabilities.some(item => item.state === 'missing')) report.next.push('Add an integration for a missing capability: conquistador connect add. The recipe in skills/conquistador/integrations/<capability>.md names common providers.');
   const unverified = report.capabilities.find(item => item.state === 'connected' && item.class === 'read');
   if (unverified) report.next.push(`Verify one read: conquistador connect verify ${unverified.id} --tool ${unverified.tools[0]} --args '<json from executor tools describe>'`);
   return report;
@@ -343,13 +325,18 @@ export async function verify({ capability, tool, args, env = process.env, fetchI
   if (!executor) return { status: 'failed', capability, tool, reason: 'Executor is not installed.' };
   const server = await findServer({ env, fetchImpl });
   if (server.state !== 'running') return { status: 'failed', capability, tool, reason: 'Executor is not running. Open Executor.app, or run executor web.' };
-  const result = await runExecutor(['call'], [...tool.split(/[./]/), JSON.stringify(input)], { executor, server, env, timeout: 60_000 });
+  // The full dotted path is one argument: executor call <path> '<json>'.
+  const result = await runExecutor(['call'], [tool, JSON.stringify(input)], { executor, server, env, timeout: 60_000 });
   const output = `${result.stdout}\n${result.stderr}`;
   const execution = /\bexec_[A-Za-z0-9_-]+/.exec(output)?.[0];
   if (execution && /paus|approv|auth|resume/i.test(output)) {
-    return { status: 'paused', capability, tool, execution, reason: `Executor paused the call for sign-in or approval. Finish it in Executor, then run: executor resume --execution-id ${execution}` };
+    return { status: 'paused', capability, tool, execution, reason: `Executor paused the call for sign-in or approval. Finish it in Executor, then run: executor resume --execution-id ${execution} --base-url ${server.origin}` };
   }
-  if (result.status !== 0) return { status: 'failed', capability, tool, reason: firstLine(result.stderr || result.stdout) || `executor call exited with ${result.status}` };
+  const parsed = parseJson(result.stdout);
+  if (result.status !== 0 || parsed?.ok !== true) {
+    const detail = typeof parsed?.error === 'string' ? parsed.error : parsed?.error?.message;
+    return { status: 'failed', capability, tool, reason: detail || firstLine(result.stderr || result.stdout) || `executor call exited with ${result.status}` };
+  }
   const verifiedAt = new Date().toISOString();
   const integration = tool.split(/[./]/)[0];
   const data = readConnections(env);

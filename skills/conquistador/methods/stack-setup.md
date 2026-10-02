@@ -10,7 +10,7 @@ before you ask the user. For each system the task needs, note:
 
 | Field | Note |
 | --- | --- |
-| Capability | The capability id from `capabilities.json`, for example `crm.read` |
+| Capability | The capability id from [`capabilities.json`](../capabilities.json), for example `crm.read` |
 | Job | The exact read or write this task needs |
 | Route | Existing host tool, Executor integration, or the provider's official CLI |
 | Scope | Account, workspace, and environment, without secret values |

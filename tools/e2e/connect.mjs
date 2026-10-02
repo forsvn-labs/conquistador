@@ -16,6 +16,7 @@ import { findExecutor, findServer, toolClass } from '../connect.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const cli = join(root, 'runtime/bin/conquistador.js');
+const skill = join(root, 'skills/conquistador');
 const args = process.argv.slice(2);
 const option = (name, fallback) => (args.includes(name) ? args[args.indexOf(name) + 1] : fallback);
 const out = resolve(option('--out', join(root, 'dist/e2e/connect')));
@@ -70,7 +71,7 @@ function shapeProblems(report) {
     if (!STATES.has(item.state)) problems.push(`${item.id}: state ${item.state}`);
     if (!['read', 'write'].includes(item.class)) problems.push(`${item.id}: class ${item.class}`);
     if (!Array.isArray(item.integrations) || !Array.isArray(item.tools)) problems.push(`${item.id}: integrations or tools missing`);
-    if (!existsSync(join(root, item.recipe ?? ''))) problems.push(`${item.id}: recipe ${item.recipe} missing`);
+    if (!existsSync(join(skill, item.recipe ?? ''))) problems.push(`${item.id}: recipe ${item.recipe} missing`);
   }
   if (JSON.stringify(report).match(/token|secret|password|apikey/i)) problems.push('report mentions a credential field');
   return problems;
@@ -96,25 +97,27 @@ async function listening(port) {
 
 const daemonFiles = folder => { try { return readdirSync(folder).filter(name => name.startsWith('daemon-')).sort(); } catch { return []; } };
 
-// 1. The capability map covers every command, every capability has a recipe, and the connect
-// command's table matches the map.
+// 1. The capability map covers every command, every capability has a recipe, and both ship in the skill.
 record('contract', () => {
   const problems = [];
-  const map = JSON.parse(readFileSync(join(root, 'capabilities.json'), 'utf8'));
+  const map = JSON.parse(readFileSync(join(skill, 'capabilities.json'), 'utf8'));
   for (const [id, spec] of Object.entries(map.capabilities)) {
     if (!/^[a-z-]+\.[a-z]+$/.test(id)) problems.push(`${id}: id format`);
     if (!['read', 'write'].includes(spec.class)) problems.push(`${id}: class`);
     if (!spec.description) problems.push(`${id}: description`);
     if (!Array.isArray(spec.search) || !spec.search.length) problems.push(`${id}: search phrases`);
-    if (!existsSync(join(root, 'integrations', `${id}.md`))) problems.push(`${id}: recipe missing`);
+    if (!existsSync(join(skill, 'integrations', `${id}.md`))) problems.push(`${id}: recipe missing`);
   }
   for (const command of [...SKILLS, ...PLAYS, ...META]) if (!map.commands[command]) problems.push(`command ${command} not mapped`);
   for (const [command, spec] of Object.entries(map.commands)) {
     if (![...SKILLS, ...PLAYS, ...META].includes(command)) problems.push(`command ${command} is not in D2`);
     for (const id of spec.uses) if (!map.capabilities[id]) problems.push(`${command}: unknown capability ${id}`);
   }
-  const table = readFileSync(join(root, 'skills/conquistador/commands/connect/COMMAND.md'), 'utf8');
-  for (const id of Object.keys(map.capabilities)) if (!table.includes(`| \`${id}\` |`)) problems.push(`COMMAND.md table lacks ${id}`);
+  const command = readFileSync(join(skill, 'commands/connect/COMMAND.md'), 'utf8');
+  if (!command.includes('](../../capabilities.json)')) problems.push('COMMAND.md does not link capabilities.json');
+  // The skill ships the map and recipes, so a skill-only install has them.
+  const files = JSON.parse(readFileSync(join(root, 'package.json'), 'utf8')).files;
+  if (!files.includes('skills')) problems.push('package.json files lacks skills');
   return { problems, facts: { capabilities: Object.keys(map.capabilities).length, commands: Object.keys(map.commands).length } };
 });
 
@@ -158,7 +161,7 @@ record('not-running-starts-nothing', () => {
   if (report.executor.installed !== true) problems.push('executor not detected on PATH');
   if (report.executor.server.state !== 'not-running') problems.push(`server state ${report.executor.server.state}`);
   if (report.capabilities.some(item => item.state !== 'unknown')) problems.push('a capability is not unknown');
-  const map = JSON.parse(readFileSync(join(root, 'capabilities.json'), 'utf8'));
+  const map = JSON.parse(readFileSync(join(skill, 'capabilities.json'), 'utf8'));
   if (report.capabilities.map(item => item.id).join() !== map.commands.launch.uses.join()) problems.push('launch did not select its capabilities');
   if (!report.next.some(step => step.includes('executor web'))) problems.push('no start step');
   const add = conquistador(['connect', 'add'], env);
@@ -186,7 +189,7 @@ record('verify-guards', () => {
   expect(['connect', 'verify', 'nope.read', '--tool', 'a.b', '--args', '{}'], 2, 'Unknown capability');
   expect(['connect', 'nope'], 2, 'Unknown capability or command');
   expect(['connect', '--colour'], 2, 'Unknown option');
-  for (const [path, kind] of [['hubspot.crm.contacts.search', 'read'], ['linear.issueCreate', 'write'], ['slack.chat.postMessage', 'write'], ['x.get_post', 'read'], ['ga4.properties.runReport', 'read'], ['stripe.subscriptions.list', 'read'], ['resend.emails.send', 'write']]) {
+  for (const [path, kind] of [['hubspot.crm.contacts.search', 'read'], ['linear.issueCreate', 'write'], ['slack.chat.postMessage', 'write'], ['x.get_post', 'read'], ['ga4.properties.runReport', 'read'], ['stripe.subscriptions.list', 'read'], ['resend.emails.send', 'write'], ['anytype_mcp.org.localAnytypeMcp.api_search_global', 'read'], ['google_gmail.org.localGmailApi.gmail.users.messages.send', 'write']]) {
     if (toolClass(path) !== kind) problems.push(`toolClass(${path}) is ${toolClass(path)}, expected ${kind}`);
   }
   return { problems };

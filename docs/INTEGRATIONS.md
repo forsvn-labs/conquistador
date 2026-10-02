@@ -12,12 +12,13 @@ live action makes the result better.
 
 | Part | Owns |
 | --- | --- |
-| [`capabilities.json`](../capabilities.json) | Capability ids, their class (`read` or `write`), Executor search phrases, and the capabilities each command can use |
-| [`integrations/<capability>.md`](../integrations/README.md) | Recipes: the questions a capability answers, search phrases, and hints for common providers |
+| [`capabilities.json`](../skills/conquistador/capabilities.json) | Capability ids, their class (`read` or `write`), Executor search phrases, and the capabilities each command can use |
+| [`integrations/<capability>.md`](../skills/conquistador/integrations/README.md) | Recipes: the questions a capability answers, search phrases, and hints for common providers |
 | Executor | Your integrations, credentials, and per-tool policies |
 | Your coding agent | Finds the tool with `executor tools search`, reads its schema with `executor tools describe`, and calls it with `executor call` |
 
-Any provider that Executor reaches works: an MCP server, an OpenAPI spec, or a GraphQL API. To
+Both files ship inside the `conquistador` skill (`skills/conquistador/`), so a skill-only install
+has them. Any provider that Executor reaches works: an MCP server, an OpenAPI spec, or a GraphQL API. To
 add a provider hint, edit a recipe. To add a capability, edit `capabilities.json` and add a
 recipe. Neither change needs code.
 
@@ -95,7 +96,8 @@ data. The agent shows the exact payload and asks for your approval before each w
 - If no server answers, Conquistador reports Executor as not running. It does not run an
   `executor` command, because Executor's read commands start a folder-scoped server that does
   not show your integrations.
-- Every `executor` command that Conquistador runs gets `--base-url` for the server that answered.
+- Every `executor` command that Conquistador runs gets `--base-url` for the server that answered,
+  after the positional arguments: `executor tools search "send email" --base-url <origin>`.
 - If the only server that answers was started for one folder, `connect` warns you.
 
 ## Maintainer paths
