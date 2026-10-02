@@ -39,8 +39,9 @@ Review runs `lavish-axi@0.1.80` through `bunx`, or `npm exec` when Bun is absent
 `LAVISH_AXI_TELEMETRY=0` and gives each session its own state directory and free port. Nothing is
 installed globally. `review poll` is Lavish's long poll; keep it running in the foreground.
 
-The [artifact kit](../kit/README.md) has templates for an ad set, social posts, an email, a landing
+The artifact kit has templates for an ad set, social posts, an email, a landing
 section, a funnel (Mermaid), and a campaign calendar.
+`conquistador review kit` lists them and copies one next to your deliverable.
 
 ## Rules
 

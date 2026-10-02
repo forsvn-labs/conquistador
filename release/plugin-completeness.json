@@ -763,6 +763,10 @@
       "sha256": "7945e09e0623af3fdc1eef2452ab91ea81228236e50113e59e2bc78978df006f"
     },
     {
+      "path": "skills/conquistador/commands/review/COMMAND.md",
+      "sha256": "3aabef9cabc2078fac7fd150f0f559fe337a4a7f352cb5aa5487645b0d22a7b1"
+    },
+    {
       "path": "skills/conquistador/examples/content-improvement.md",
       "sha256": "7804a6c5d5d38090763a23136df2536f1111659c13e455d123e4ed87c0cc440f"
     },
@@ -1580,7 +1584,7 @@
     },
     {
       "path": "skills/conquistador/standards/preview.md",
-      "sha256": "a8a91c03f75288b08033b549517636d1e65f7936472cb95013b2ef424af5ceec"
+      "sha256": "9bec74b64046852fd4b966fab8003b76eec2e0ce7a57c5da9e201bb6a5ea5672"
     },
     {
       "path": "skills/conquistador/standards/quality.md",
