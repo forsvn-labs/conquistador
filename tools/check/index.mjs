@@ -34,13 +34,15 @@ export function globToRegExp(glob) {
   return new RegExp(`^${pattern}$`);
 }
 
-const stringList = value => (Array.isArray(value) ? value.filter(item => typeof item === 'string' && item.trim()).map(item => item.trim()) : []);
+// Config values come from a user file: keep only nonblank strings.
+const stringList = value => (Array.isArray(value) ? value.flatMap(item => (String(item) === item && item.trim() ? [item.trim()] : [])) : []);
 
 // Read `check.ignoreRules` and `check.ignoreFiles` from `.conquistador/config.json` in the project root.
 export function loadConfig(root) {
   const path = join(root, '.conquistador', 'config.json');
 
   if (!existsSync(path)) return { ignoreRules: [], ignoreFiles: [], path: null };
+
   try {
     const check = JSON.parse(readFileSync(path, 'utf8'))?.check ?? {};
 
@@ -69,7 +71,9 @@ export function waivers(source) {
       const ids = match[2].split(/[\s,]+/).filter(Boolean).map(id => id.toLowerCase());
 
       if (!match[1]) for (const id of ids) file.add(id);
+
       if (match[1] === '-line') add(index + 1, ids);
+
       if (match[1] === '-next-line') {
         const next = raw.findIndex((text, position) => position > index && text.trim() && !/conquistador-disable/.test(text));
 
@@ -93,14 +97,17 @@ export function checkDocument(document, options) {
 
   for (const rule of rules) {
     if (rule.channels && !rule.channels.includes(options.channel)) continue;
+
     if (options.ignoreRules?.includes(rule.id)) continue;
     let hits = [];
 
     try { hits = rule.check({ document, channel: options.channel, file: options.file }); } catch { hits = []; }
+
     for (const hit of hits) {
       findings.push({ rule: rule.id, name: rule.name, family: rule.family, severity: rule.severity, message: rule.message, fix: rule.fix, file: options.file, channel: options.channel, line: hit.line, snippet: hit.snippet });
     }
   }
+
   const waiver = options.inline === false ? null : waivers(document.source);
   const seen = new Set();
 
@@ -132,6 +139,7 @@ function walk(folder, found = []) {
     const path = join(folder, entry.name);
 
     if (entry.isDirectory() && !skippedFolders.has(entry.name)) walk(path, found);
+
     if (entry.isFile() && scannableExtensions.includes(extname(entry.name).toLowerCase())) found.push(path);
   }
 
@@ -167,11 +175,13 @@ export async function scanTargets(targets, options) {
         scanned += 1;
         continue;
       }
+
       const path = resolve(root, target);
       const stat = statSync(path);
       const files = stat.isDirectory() ? walk(path) : [path];
 
       if (!stat.isDirectory() && !scannableExtensions.includes(extname(path).toLowerCase())) throw new Error(`${target} is not a supported file (${scannableExtensions.join(', ')})`);
+
       for (const file of files) {
         if (ignoredFile(file, root, config)) continue;
         const display = relative(root, file).startsWith('..') ? file : relative(root, file);
@@ -198,8 +208,10 @@ export function formatFindings(findings) {
   const byFile = new Map();
 
   for (const finding of findings) byFile.set(finding.file, [...(byFile.get(finding.file) ?? []), finding]);
+
   for (const [file, items] of byFile) {
     out.push('', `${file} (${items[0].channel})`);
+
     for (const item of items) {
       out.push(`  line ${item.line}: [${item.rule}] ${item.severity}. ${item.message}`, `    "${item.snippet}"`, `    Fix: ${item.fix}`);
     }
@@ -233,7 +245,12 @@ export async function runCheck(args, io = { stdout: process.stdout, stderr: proc
   const targets = args.filter((arg, index) => !arg.startsWith('--') && !(channelIndex >= 0 && !args[channelIndex].includes('=') && index === channelIndex + 1));
   const unknown = args.filter(arg => arg.startsWith('--') && !['--json', '--no-config', '--help', '--rules'].includes(arg) && !arg.startsWith('--channel'));
 
-  if (args.includes('--help')) { io.stdout.write(usage); return 0; }
+  if (args.includes('--help')) {
+    io.stdout.write(usage);
+
+    return 0;
+  }
+
   if (args.includes('--rules')) {
     const list = rules.map(rule => ({ id: rule.id, family: rule.family, severity: rule.severity, name: rule.name, channels: rule.channels ?? 'all', message: rule.message, fix: rule.fix }));
 
@@ -241,9 +258,25 @@ export async function runCheck(args, io = { stdout: process.stdout, stderr: proc
 
     return 0;
   }
-  if (unknown.length) { io.stderr.write(`Unknown option: ${unknown.join(' ')}\n\n${usage}`); return 1; }
-  if (channelIndex >= 0 && !normalizeChannel(channelValue)) { io.stderr.write(`Unknown channel: ${channelValue ?? '(none)'}. Use one of: ${Object.keys(channels).join(', ')}\n`); return 1; }
-  if (!targets.length) { io.stderr.write(usage); return 1; }
+
+  if (unknown.length) {
+    io.stderr.write(`Unknown option: ${unknown.join(' ')}\n\n${usage}`);
+
+    return 1;
+  }
+
+  if (channelIndex >= 0 && !normalizeChannel(channelValue)) {
+    io.stderr.write(`Unknown channel: ${channelValue ?? '(none)'}. Use one of: ${Object.keys(channels).join(', ')}\n`);
+
+    return 1;
+  }
+
+  if (!targets.length) {
+    io.stderr.write(usage);
+
+    return 1;
+  }
+
   let result;
 
   try {
@@ -253,10 +286,12 @@ export async function runCheck(args, io = { stdout: process.stdout, stderr: proc
 
     return 1;
   }
+
   const { findings, failures, scanned } = result;
   const primary = findings.filter(counted);
 
   for (const failure of failures) io.stderr.write(`Error: ${failure.target}: ${failure.error}\n`);
+
   if (json) {
     io.stdout.write(`${JSON.stringify(findings, null, 2)}\n`);
   } else if (findings.length) {

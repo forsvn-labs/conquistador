@@ -40,12 +40,19 @@ function channelFromName(name) {
   const ad = words.some(word => ['ad', 'ads', 'advert', 'creative'].includes(word));
 
   if (/-(rsa|adwords|sem|ppc)-/.test(joined) || (ad && /-(google|search)-/.test(joined))) return 'google-ads';
+
   if (ad && /-(meta|facebook|fb|instagram|ig)-/.test(joined)) return 'meta-ads';
+
   if (/-(x|tweet|tweets|twitter|thread)-/.test(joined)) return 'x';
+
   if (/-linkedin-/.test(joined)) return 'linkedin';
+
   if (/-(email|emails|newsletter|edm|nurture|drip|lifecycle)-/.test(joined)) return 'email';
+
   if (/-(landing|lp|homepage)-/.test(joined)) return 'landing';
+
   if (/-(blog|article|longform)-/.test(joined)) return 'article';
+
   if (/-(social)-/.test(joined)) return 'social';
 
   return null;
@@ -62,11 +69,13 @@ export function detectChannel(file, document, override) {
   const own = channelFromName(basename(path));
 
   if (own) return own;
+
   for (const folder of dirname(path).split(/[\\/]/).reverse().slice(0, 3)) {
     const found = channelFromName(folder);
 
     if (found) return found;
   }
+
   if (document.kind === 'html' && /<form\b|<button\b|type=["']?submit/i.test(document.source) && /<h1\b/i.test(document.source)) return 'landing';
 
   return document.kind === 'html' ? 'web' : 'general';
@@ -84,9 +93,13 @@ export function isMarketingFile(file, document) {
   const parts = file.split(/[\\/]/);
 
   if (parts.slice(0, -1).some(part => skippedFolders.has(part))) return false;
+
   if (projectFiles.test(basename(file).replace(/\.[^.]+$/, '').replace(/\.[^.]+$/, '')) && !document?.data?.channel) return false;
+
   if (normalizeChannel(document?.data?.channel)) return true;
+
   if (['.html', '.htm'].includes(extname(file).toLowerCase())) return true;
+
   if (channelFromName(basename(file))) return true;
 
   return parts.slice(-4, -1).some(part => marketingWords.has(part.toLowerCase()) || channelFromName(part));
@@ -102,6 +115,7 @@ export function weightedLength(text) {
 
   for (const { segment } of new Intl.Segmenter('en', { granularity: 'grapheme' }).segment(text.replace(urlPattern, ''))) {
     if (/\p{Emoji_Presentation}|\p{Extended_Pictographic}\uFE0F/u.test(segment)) { total += 2; continue; }
+
     for (const character of segment) {
       const code = character.codePointAt(0);
 
@@ -137,6 +151,7 @@ export function adFields(document) {
   fromData('descriptions', document.data.descriptions ?? document.data.description_lines);
   fromData('paths', document.data.paths);
   fromData('primary', document.data.primary_text ?? document.data.primary);
+
   if (document.kind === 'html') return fields;
   let section = null;
 
@@ -147,7 +162,9 @@ export function adFields(document) {
     const listed = /^(?:[-*+]|\d+[.)])\s+(.+)$/.exec(raw);
 
     if (heading) { section = fieldFor(heading[1].replace(/[*_`]/g, '')); continue; }
+
     if (labeled && fieldFor(labeled[1])) { fields[fieldFor(labeled[1])].push({ text: labeled[2].replace(/^["“]|["”]$/g, '').replace(/\s*\(\d+\s*(chars?|characters?)\)\s*$/i, ''), n: line.n }); continue; }
+
     if (section && listed) fields[section].push({ text: listed[1].replace(/[*_`]/g, '').replace(/^["“]|["”]$/g, '').replace(/\s*\(\d+\s*(chars?|characters?)\)\s*$/i, '').trim(), n: line.n });
     else if (section === 'primary' && raw) fields.primary.push({ text: raw, n: line.n });
   }
@@ -167,13 +184,15 @@ export function socialPosts(document) {
     const rule = /^\s*-{3,}\s*$/.test(line.raw);
 
     if ((usesHeadings && heading) || (usesRules && rule)) { if (current) posts.push(current); current = null; continue; }
+
     if (!line.raw.trim() && !current) continue;
     current ??= { n: line.n, lines: [] };
     current.lines.push(line.raw);
   }
+
   if (current) posts.push(current);
 
-  return posts.map(post => ({ n: post.n, text: post.lines.join('\n').trim() })).filter(post => post.text);
+  return posts.flatMap(post => (post.lines.join('\n').trim() ? [{ n: post.n, text: post.lines.join('\n').trim() }] : []));
 }
 
 export const relativeTo = (root, file) => file.startsWith(root + sep) ? file.slice(root.length + 1) : file;

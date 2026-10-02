@@ -12,10 +12,15 @@ import { fileURLToPath } from 'node:url';
 import { spawnCommand } from '../spawn.mjs';
 
 const root = fileURLToPath(new URL('../../', import.meta.url));
+
 const fixtures = join(root, 'tools/e2e/fixtures/check');
+
 const bin = join(root, 'runtime/bin/conquistador.js');
+
 const args = process.argv.slice(2);
+
 const out = resolve(args.includes('--out') ? args[args.indexOf('--out') + 1] : join(root, 'dist/e2e/check'));
+
 const results = [];
 
 // Expected rule ids per bad fixture: the exact set the checker must report.
@@ -164,9 +169,13 @@ const hosts = {
 };
 
 record('manifests route Write and Edit tools to the check hook', /Write/.test(hosts.claude.matcher) && /Edit/.test(hosts.claude.matcher) && /apply_patch/.test(hosts.codex.matcher) && /Write/.test(hosts.cursor.matcher), `${hosts.claude.matcher} | ${hosts.codex.matcher} | ${hosts.cursor.matcher}`);
+
 const hookProject = mkdtempSync(join(tmpdir(), 'conquistador-check-hook-'));
+
 const state = mkdtempSync(join(tmpdir(), 'conquistador-check-state-'));
+
 const timings = [];
+
 let timing = null;
 
 function hook(host, input, env = {}) {
@@ -206,9 +215,15 @@ try {
   const cursor = hook('cursor', { conversation_id: 'e2e-5', tool_name: 'Write', tool_input: { file_path: join(hookProject, 'marketing/launch-email.md') } });
 
   record('Cursor: findings return as additional_context', /\[email-fake-reply\]/.test(cursor.json?.additional_context ?? ''), cursor.stdout.slice(0, 80));
+
   // Wall time depends on machine load, so the pass condition uses CPU time for the hook's own work:
   // importing the checker, reading one file, and running every rule. Wall times go in the report.
-  const cpu = () => { const usage = process.cpuUsage(); return (usage.user + usage.system) / 1000; };
+  const cpu = () => {
+    const usage = process.cpuUsage();
+
+    return (usage.user + usage.system) / 1000;
+  };
+
   const before = cpu();
   const { extractDocument } = await import('../check/extract.mjs');
   const { checkDocument } = await import('../check/index.mjs');
@@ -222,6 +237,7 @@ try {
     bare.push(run(process.execPath, ['-e', '0']).ms);
     hook('claude', { ...write, session_id: `e2e-time-${index}` });
   }
+
   const median = values => [...values].sort((left, right) => left - right)[Math.floor(values.length / 2)];
 
   timing = { hookWallMedianMs: Math.round(median(timings)), bareNodeWallMedianMs: Math.round(median(bare)), checkerCpuMs: Math.round(work), loadAverage: loadavg().map(value => Number(value.toFixed(2))) };
@@ -253,7 +269,9 @@ const report = {
 };
 
 mkdirSync(out, { recursive: true });
+
 writeFileSync(join(out, 'report.json'), `${JSON.stringify(report, null, 2)}\n`);
+
 writeFileSync(join(out, 'report.md'), [
   `# conquistador check E2E: ${report.passed}/${report.total} pass`, '',
   `Run: ${report.createdAt}. Node ${report.node}, ${report.platform}. Rules: ${report.rules}.`, '',
@@ -261,6 +279,9 @@ writeFileSync(join(out, 'report.md'), [
   '| Result | Case | Detail |', '| --- | --- | --- |',
   ...results.map(item => `| ${item.pass ? 'pass' : 'FAIL'} | ${item.name} | ${String(item.detail).replace(/\|/g, '/').replace(/\n/g, ' ')} |`), '',
 ].join('\n'));
+
 for (const item of results) if (!item.pass) console.log(`FAIL ${item.name}\n     ${item.detail}`);
+
 console.log(`${report.passed}/${report.total} pass. Report: ${join(out, 'report.md')}`);
+
 process.exitCode = report.passed === report.total ? 0 : 1;

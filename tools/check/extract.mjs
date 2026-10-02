@@ -17,7 +17,9 @@ function scalar(value) {
   const text = value.trim();
 
   if (/^".*"$/.test(text)) return text.slice(1, -1).replace(/\\"/g, '"');
+
   if (/^'.*'$/.test(text)) return text.slice(1, -1).replace(/''/g, "'");
+
   if (/^(true|false)$/i.test(text)) return text.toLowerCase() === 'true';
 
   return text.replace(/\s+#.*$/, '');
@@ -67,11 +69,16 @@ const autoLink = /<((?:https?:\/\/|mailto:)[^>\s]+)>/g;
 // Strip inline Markdown and keep link targets beside the text.
 function markdownLine(raw) {
   const links = [];
+
   let text = raw.replace(markdownLink, (match, label, href) => {
     if (!match.startsWith('!')) links.push({ href, text: label.replace(/[*_`]/g, '').trim() });
 
     return match.startsWith('!') ? '' : label;
-  }).replace(autoLink, (match, href) => { links.push({ href, text: href }); return href; });
+  }).replace(autoLink, (match, href) => {
+    links.push({ href, text: href });
+
+    return href;
+  });
 
   for (const [match, href] of text.matchAll(/(?<![("<])\bhttps?:\/\/[^\s)\]>"']+/g)) if (!links.some(link => link.href === match)) links.push({ href, text: match });
   text = text.replace(/<[^>]+>/g, ' ')
@@ -97,9 +104,12 @@ function markdownDocument(source) {
     const marker = /^(```+|~~~+)/.exec(trimmed);
 
     if (fence) { if (marker && marker[1][0] === fence[0] && marker[1].length >= fence.length) fence = null; continue; }
+
     if (marker) { fence = marker[1]; continue; }
+
     // MDX imports and exports are code, not copy.
     if (jsx || /^(import|export)\s/.test(trimmed)) { jsx = !/[;}]\s*$|from\s+["'][^"']+["'];?$/.test(trimmed) && /[{(]\s*$/.test(trimmed); continue; }
+
     let visible = line;
 
     if (comment) {
@@ -109,11 +119,14 @@ function markdownDocument(source) {
       visible = ' '.repeat(close + 3) + visible.slice(close + 3);
       comment = false;
     }
+
     visible = visible.replace(/<!--[\s\S]*?-->/g, '');
     const open = visible.indexOf('<!--');
 
     if (open >= 0) { visible = visible.slice(0, open); comment = true; }
+
     body.push({ n: index + 1, raw: visible });
+
     if (/^\s*(-{3,}|\*{3,}|_{3,})\s*$/.test(visible) || /^\s*\|?\s*:?-{3,}/.test(visible)) continue;
     const { text, links } = markdownLine(visible.replace(/\|/g, ' '));
 
@@ -142,14 +155,18 @@ function htmlDocument(source) {
   const title = /<title[^>]*>([\s\S]*?)<\/title>/i.exec(html);
 
   if (title) data.title = decodeEntities(title[1].replace(/\s+/g, ' ').trim());
+
   for (const [tag] of html.matchAll(/<meta\b[^>]*>/gi)) {
     const name = (attribute(tag, 'name') ?? attribute(tag, 'property') ?? '').toLowerCase();
     const content = attribute(tag, 'content');
 
     if (content === null) continue;
+
     if (name === 'description') data.description = content.trim();
+
     if (['og:title', 'og:description', 'subject', 'channel'].includes(name)) data[name.replace(':', '_')] = content.trim();
   }
+
   data.html_lang = attribute(/<html\b[^>]*>/i.exec(html)?.[0] ?? '', 'lang');
   let visible = html.replace(/<!--[\s\S]*?-->/g, blankOut).replace(/<!doctype[^>]*>/gi, blankOut);
 
@@ -171,13 +188,18 @@ function htmlDocument(source) {
       const closing = token.startsWith('</');
 
       if (tag === 'a' && !closing) anchor = { href: attribute(token, 'href') ?? '', text: '', tag: 'a' };
+
       if (tag === 'button' && !closing) anchor = { href: '', text: '', tag: 'button' };
+
       if (tag === 'input' && /type\s*=\s*["']?(submit|button)/i.test(token)) (current ??= { n: line, text: '', links: [] }).links.push({ href: '', text: attribute(token, 'value') ?? '', tag: 'button' });
+
       if ((tag === 'a' || tag === 'button') && closing && anchor) {
         (current ??= { n: line, text: '', links: [] }).links.push({ ...anchor, text: anchor.text.replace(/\s+/g, ' ').trim() });
         anchor = null;
       }
+
       if (!closing && preheader === null && /\b(class|id)\s*=\s*["'][^"']*(preheader|preview)/i.test(token)) preheader = '';
+
       if (blockTags.has(tag) && !(tag === 'button' && !closing)) flush();
     } else {
       const text = decodeEntities(token);
@@ -185,15 +207,20 @@ function htmlDocument(source) {
       if (text.trim()) {
         current ??= { n: line + (token.match(/^\s*/)[0].match(/\n/g)?.length ?? 0), text: '', links: [] };
         current.text += text;
+
         if (anchor) anchor.text += text;
+
         if (preheader === '') preheader = text.replace(/\s+/g, ' ').trim();
       } else if (current) {
         current.text += ' ';
       }
     }
+
     line += token.match(/\n/g)?.length ?? 0;
   }
+
   flush();
+
   if (preheader) data.preheader = preheader;
 
   return { kind: 'html', data, lines, body: html.split('\n').map((raw, index) => ({ n: index + 1, raw })) };

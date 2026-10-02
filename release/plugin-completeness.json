@@ -40,7 +40,7 @@
     },
     {
       "path": "hooks/check-hook.mjs",
-      "sha256": "081de1ae231ad166b85f39038415fb6880d604ecff0679f1f9816c9db14b4c22"
+      "sha256": "271c7ab2da0c628b0f55143c33bd61c548e10c14af7c9b31f6cb77d1b9860852"
     },
     {
       "path": "hooks/claude.json",
@@ -4656,15 +4656,15 @@
     },
     {
       "path": "tools/check/channels.mjs",
-      "sha256": "1bfb7b8e0563a437df15ebb1ca192ae71fa82118f6e9a3ea8a08d84558ded436"
+      "sha256": "76799b4ba914beee5421a1a7bd5a39aa9c4add3fefe232f86bdbf4d3e127932b"
     },
     {
       "path": "tools/check/extract.mjs",
-      "sha256": "869cdb816890091560cf16c82650d80ac03f38ad49d7a203a17334e357c665cd"
+      "sha256": "0c80ba7d50a37c2b0030b7fe33c34b55461de6ba1d56ffef5734eaddb0bb5380"
     },
     {
       "path": "tools/check/index.mjs",
-      "sha256": "49aed7f3f42ad40a8559b5671a57d15a9ebbd848c943d4c8822c3ad474e77f69"
+      "sha256": "f3c5f6fdb2fbad44a39b649d225b7d67f01665b311530c723a9cef59cf471734"
     },
     {
       "path": "tools/check/rules.mjs",
