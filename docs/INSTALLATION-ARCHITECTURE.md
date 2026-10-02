@@ -95,7 +95,7 @@ subset adaptation. The filtered catalog is not a permission grant. The same doma
 callable admission checks remain authoritative. Full-library doctor continues to reject restricted
 or standalone copies as incomplete, rather than claiming full-library or domain execution proof.
 
-Local MCP retains its canonical resource API and all 39 entries, parent plus 38 outcomes. Those
+Local MCP retains its canonical resource API and all 36 entries, parent plus 35 commands. Those
 entries are MCP read resources, not native discoverable skills. Runtime MCP retains its separate
 playbook contract. Explicit standalone `skill:NAME` packages keep their original SKILL.md and
 independent resources. Experimental Eve/Grok guidance still creates no files; low-level legacy

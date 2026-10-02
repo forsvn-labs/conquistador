@@ -175,7 +175,7 @@ export function knowledgeIndex(root = moduleRoot, { playbooks = userPlaybookRoot
   if (cache.has(cacheKey)) return cache.get(cacheKey);
   const contract = loadRoutingContract(packageRoot);
   const libraryRoot = posix.dirname(contract.parentPath);
-  const entryName = posix.basename(contract.parentPath + '/' + contract.document);
+  const entryName = contract.document ?? 'SKILL.md';
   const planned = [];
   const parentDir = join(packageRoot, contract.parentPath);
   // One tree: shared parent files, commands/<name>/ (source "method"), and plays/<name>[.md|/] (source "play").

@@ -1,5 +1,6 @@
-// Routing breadth: does the brief pick the right methods for marketing work on any platform,
-// inside the product, and in any service, while staying silent on coding prompts?
+// Routing breadth: does the brief pick the right command or play for marketing work on any platform,
+// inside the product, and in any service, while staying silent on coding prompts? Old IDs must
+// still route, filler words must not select a command, and a multi-step outcome must return a play.
 // Deterministic and offline. No agent session, no tokens.
 //   node tools/e2e/routing-breadth.mjs [--out DIR] [--json]
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
@@ -35,19 +36,24 @@ export async function loadCases() {
 
 export function judge(item, { playbooks = [] } = {}) {
   const brief = createBrief(item.task, { force: !item.silent, root, playbooks });
-  const methods = brief.methods.map(method => method.name);
+  const play = brief.play?.name ?? null;
+  // A play counts as a selected command for `any` and `none`; its first step command is also listed.
+  const methods = [...(play ? [play] : []), ...brief.methods.map(method => method.name)];
   const must = brief.must.map(file => basename(file.path, '.md'));
   const problems = [];
   if (item.silent) {
     if (brief.action !== 'none') problems.push(`expected no brief, got ${methods.join(', ') || 'platform-only brief'}`);
   } else {
-    if (!methods.length) problems.push('no method (R1)');
+    if (!methods.length && !item.allowEmpty) problems.push('no method (R1)');
     else if (item.any && !methods.some(name => item.any.includes(name))) problems.push(`none of [${item.any.join(', ')}] (R2)`);
     for (const name of item.none ?? []) if (methods.includes(name)) problems.push(`forbidden ${name} (R3)`);
     for (const stem of item.platforms ?? []) if (!brief.platforms.includes(stem)) problems.push(`platform ${stem} not detected`);
     for (const stem of item.mustNot ?? []) if (must.includes(stem)) problems.push(`must-read includes ${stem} (R4)`);
+    if (item.play && play !== item.play) problems.push(`expected play ${item.play}, got ${play ?? 'none'} (R5)`);
+    if (item.play && brief.play && !brief.play.steps.some(step => step.now)) problems.push('play has no first step (R5)');
+    if (item.noPlay && play) problems.push(`expected a single command, got play ${play} (R6)`);
   }
-  return { ...item, pass: problems.length === 0, problems, methods, must };
+  return { ...item, pass: problems.length === 0, problems, methods, must, play };
 }
 
 // The tour may only name real specialists, and the agent-facing welcome must match the tour.
@@ -56,14 +62,14 @@ async function tourChecks() {
   const { AREAS, SPECIALISTS, welcomeMarkdown, welcomePath } = await import('../tour.mjs');
   const { loadRoutingContract } = await import('../routing-contract.mjs');
   const contract = loadRoutingContract(root);
-  const known = new Set([...Object.keys(contract.methods), ...(contract.workflows ?? []).map(item => item.name)]);
+  const known = new Set([...Object.keys(contract.methods), ...(contract.plays ?? []).map(item => item.name)]);
   const unknown = AREAS.flatMap(area => area.methods.filter(name => !known.has(name) || !SPECIALISTS[name]));
   const fresh = existsSync(welcomePath()) && readFileSync(welcomePath(), 'utf8') === await welcomeMarkdown();
   const readme = readFileSync(join(root, 'README.md'), 'utf8');
   const missing = AREAS.filter(area => !readme.includes(`| ${area.title} | ${area.covers} |`)).map(area => area.title);
   const row = (task, problems) => ({ area: 'tour', task, pass: !problems.length, problems, methods: [], must: [] });
   return [
-    row('Tour names only real specialists', unknown.map(name => `unknown specialist ${name}`)),
+    row('Tour names only real commands and plays', unknown.map(name => `unknown command ${name}`)),
     row('welcome.md matches tools/tour.mjs', fresh ? [] : ['stale: run node tools/tour.mjs --write (O6)']),
     row('README area table matches tools/tour.mjs', missing.map(title => `README row differs: ${title}`)),
   ];
@@ -86,8 +92,8 @@ export async function run() {
 function markdown(report) {
   const lines = [`# Routing breadth: ${report.passed}/${report.total} pass`, '', `Run: ${report.createdAt}`, '', '| Area | Pass |', '| --- | --- |'];
   for (const row of report.summary) lines.push(`| ${row.area} | ${row.pass}/${row.total} |`);
-  lines.push('', '| Result | Area | Task | Methods | Problems |', '| --- | --- | --- | --- | --- |');
-  for (const item of report.results) lines.push(`| ${item.pass ? 'pass' : 'FAIL'} | ${item.area} | ${item.task.replace(/\|/g, '/')} | ${item.methods.join(', ') || '—'} | ${item.problems.join('; ')} |`);
+  lines.push('', '| Result | Area | Task | Play | Commands | Problems |', '| --- | --- | --- | --- | --- | --- |');
+  for (const item of report.results) lines.push(`| ${item.pass ? 'pass' : 'FAIL'} | ${item.area} | ${item.task.replace(/\|/g, '/')} | ${item.play ?? '—'} | ${item.methods.filter(name => name !== item.play).join(', ') || '—'} | ${item.problems.join('; ')} |`);
   return `${lines.join('\n')}\n`;
 }
 

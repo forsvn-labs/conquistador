@@ -2,7 +2,7 @@
 
 The Conquistador parent uses these roles for assignments that cross GTM capabilities. Each role
 combines existing outcome skills, project knowledge, and named composition workflows. These roles do
-not replace the 38 outcomes or create another method library.
+not replace the commands or create another method library.
 
 | Specialist | Use for | Primary skills | Named workflows |
 | --- | --- | --- | --- |

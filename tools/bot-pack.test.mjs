@@ -39,14 +39,14 @@ function fixture(t) {
   fs.mkdirSync(privateRoot);
   fs.writeFileSync(join(privateRoot, 'synthetic.md'), '# Synthetic private playbook\nSYNTHETIC_PRIVATE_BOT_MARKER\n');
 
-  for (const method of ['conquistador', 'write-copy']) fs.mkdirSync(join(root, 'skills', method), { recursive: true });
+  for (const directory of ['conquistador', 'conquistador/commands/copy']) fs.mkdirSync(join(root, 'skills', directory), { recursive: true });
   fs.writeFileSync(join(root, 'skills/conquistador/SKILL.md'), '# Synthetic parent\n');
-  fs.writeFileSync(join(root, 'skills/write-copy/SKILL.md'), '# Synthetic copy method\n');
-  fs.writeFileSync(join(root, 'skills/write-copy/reference.md'), '# Synthetic reference\nRead the supplied facts.\n');
+  fs.writeFileSync(join(root, 'skills/conquistador/commands/copy/COMMAND.md'), '# Synthetic copy method\n');
+  fs.writeFileSync(join(root, 'skills/conquistador/commands/copy/reference.md'), '# Synthetic reference\nRead the supplied facts.\n');
   fs.writeFileSync(join(root, 'skills/conquistador/routing-contract.json'), JSON.stringify({
     schemaVersion: 'conquistador.routing-contract/v1', parentPath: 'skills/conquistador',
-    methods: { 'write-copy': {
-      name: 'write-copy', path: 'skills/write-copy/SKILL.md', label: 'Write copy', description: 'Write synthetic copy.',
+    methods: { 'copy': {
+      name: 'copy', path: 'skills/conquistador/commands/copy/COMMAND.md', label: 'Write copy', description: 'Write synthetic copy.',
       requiredResources: [], conditionalResources: [], optionalResources: [], intents: [], exclusions: [],
     } },
   }));

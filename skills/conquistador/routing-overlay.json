@@ -528,7 +528,6 @@
         "build-web-app"
       ],
       "exclusions": [
-        "web app",
         "marketing copy about an app",
         "landing page copy"
       ],

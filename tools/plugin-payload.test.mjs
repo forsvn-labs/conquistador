@@ -1,3 +1,4 @@
+import { methodPath } from './method-library.mjs';
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
@@ -11,9 +12,9 @@ const completeness = JSON.parse(readFileSync(join(productRoot, 'release/complete
 
 const sha256 = bytes => createHash('sha256').update(bytes).digest('hex');
 
-const resource = `skills/${completeness.requiredResources.find(item => item.path.startsWith('write-copy/references/')).path}`;
+const resource = `skills/${completeness.requiredResources.find(item => item.path.startsWith('conquistador/commands/copy/references/')).path}`;
 
-const checks = ['skills/write-copy/SKILL.md', resource, 'hooks/conquistador-hook.mjs', '.codex-plugin/plugin.json', 'tools/skills-mcp.mjs', pluginManifestPath];
+const checks = ['skills/conquistador/commands/copy/COMMAND.md', resource, 'hooks/conquistador-hook.mjs', '.codex-plugin/plugin.json', 'tools/skills-mcp.mjs', pluginManifestPath];
 
 // All writes are disposable synthetic damage to public package copies. No agent binary,
 // account, provider, model, or actual user installation is used by these tests.
@@ -29,10 +30,11 @@ test('generated plugin manifest includes every release method/resource and only 
   assert.deepEqual(manifest, buildPluginManifest(productRoot, completeness), 'Run node tools/update-completeness.mjs after intentional payload edits');
   const entries = new Map(manifest.files.map(item => [item.path, item.sha256]));
 
-  for (const method of [completeness.parent, ...completeness.outcomes]) assert.equal(entries.get(`skills/${method.name}/SKILL.md`), method.sha256);
+  for (const method of [completeness.parent, ...completeness.outcomes]) assert.equal(entries.get(`skills/${methodPath(method.name)}`), method.sha256);
 
   for (const item of completeness.requiredResources) assert.equal(entries.get(`skills/${item.path}`), item.sha256);
-  assert.equal([...entries.keys()].filter(path => /^skills\/[^/]+\/SKILL\.md$/.test(path)).length, 39);
+  assert.deepEqual([...entries.keys()].filter(path => /(^|\/)SKILL\.md$/.test(path) && path.startsWith('skills/')), ['skills/conquistador/SKILL.md']);
+  assert.equal([...entries.keys()].filter(path => /^skills\/conquistador\/commands\/[^/]+\/COMMAND\.md$/.test(path)).length, 35);
   assert.equal(entries.has('hosts/coding-agent/operator.mjs'), false);
   assert.equal(entries.has('runtime/bin/conquistador.js'), false);
   assert.equal(entries.has('release/completeness.json'), false);
@@ -45,12 +47,12 @@ test('copy and reuse verify complete plugin bytes, including a second copy from 
   copyPayload(f.source);
   mkdirSync(join(f.source, 'skills/node_modules'), { recursive: true });
   writeFileSync(join(f.source, 'skills/node_modules/extra.txt'), 'synthetic dependency');
-  writeFileSync(join(f.source, 'skills/write-copy/unlisted.txt'), 'synthetic local extra');
+  writeFileSync(join(f.source, 'skills/conquistador/commands/copy/unlisted.txt'), 'synthetic local extra');
   copyPayload(f.installed, { source: f.source });
   assert.equal(payloadCurrent(f.installed), true);
   assert.deepEqual(missingPayload(f.installed), []);
   assert.equal(existsSync(join(f.installed, 'skills/node_modules')), false);
-  assert.equal(existsSync(join(f.installed, 'skills/write-copy/unlisted.txt')), false);
+  assert.equal(existsSync(join(f.installed, 'skills/conquistador/commands/copy/unlisted.txt')), false);
   assert.equal(existsSync(join(f.installed, 'runtime')), false);
   assert.equal(existsSync(join(f.installed, 'hosts')), false);
   assert.equal(existsSync(join(f.installed, 'release/completeness.json')), false);
@@ -82,8 +84,8 @@ test('an installed manifest cannot remove requirements or authorize altered file
   copyPayload(f.installed);
   const file = join(f.installed, pluginManifestPath);
   const manifest = JSON.parse(readFileSync(file, 'utf8'));
-  rmSync(join(f.installed, 'skills/write-copy/SKILL.md'));
-  manifest.files = manifest.files.filter(item => item.path !== 'skills/write-copy/SKILL.md');
+  rmSync(join(f.installed, 'skills/conquistador/commands/copy/COMMAND.md'));
+  manifest.files = manifest.files.filter(item => item.path !== 'skills/conquistador/commands/copy/COMMAND.md');
   const altered = Buffer.from('// synthetic altered hook\n');
   writeFileSync(join(f.installed, 'hooks/conquistador-hook.mjs'), altered);
   manifest.files.find(item => item.path === 'hooks/conquistador-hook.mjs').sha256 = sha256(altered);
@@ -119,22 +121,22 @@ test('invalid source bytes or manifest leave the last known good installation un
 test('an invalid source does not create a destination parent or staging directory', t => {
   const f = fixture(t);
   copyPayload(f.source);
-  rmSync(join(f.source, 'skills/write-copy/SKILL.md'));
+  rmSync(join(f.source, 'skills/conquistador/commands/copy/COMMAND.md'));
   const destination = join(f.root, 'not-created', 'plugin');
-  assert.throws(() => copyPayload(destination, { source: f.source }), /missing skills\/write-copy\/SKILL.md/);
+  assert.throws(() => copyPayload(destination, { source: f.source }), /missing skills\/conquistador\/commands\/copy\/COMMAND.md/);
   assert.equal(existsSync(dirname(destination)), false);
 });
 
 test('same-byte symlink replacement cannot pass payload health or source validation', { skip: process.platform === 'win32' && 'Symlink creation needs Windows privileges' }, t => {
   const f = fixture(t);
   copyPayload(f.installed);
-  const file = join(f.installed, 'skills/write-copy/SKILL.md');
+  const file = join(f.installed, 'skills/conquistador/commands/copy/COMMAND.md');
   const outside = join(f.root, 'synthetic-outside.md');
   writeFileSync(outside, readFileSync(file));
   rmSync(file);
   symlinkSync(outside, file);
   assert.equal(payloadCurrent(f.installed), false);
-  assert.throws(() => copyPayload(f.source, { source: f.installed }), /non-regular skills\/write-copy\/SKILL.md/);
+  assert.throws(() => copyPayload(f.source, { source: f.installed }), /non-regular skills\/conquistador\/commands\/copy\/COMMAND.md/);
 });
 
 test('wrong or missing ownership version is never current', t => {

@@ -232,8 +232,8 @@ test('domain install records the restriction; knowledge roots stay outside the p
   }));
   assert.match(good('install', '--target', 'skill', '--path', path, '--domain', manifest, '--knowledge-roots', rootsFile), /Domain: domain:diagnosis/);
   assert.ok(existsSync(join(path, 'domain-restriction.json')));
-  assert.ok(existsSync(join(path, 'library/diagnose-growth/METHOD.md')));
-  assert.equal(existsSync(join(path, 'library/write-copy')), false);
+  assert.ok(existsSync(join(path, 'library/conquistador/commands/diagnose/COMMAND.md')));
+  assert.equal(existsSync(join(path, 'library/conquistador/commands/copy')), false);
   good('uninstall', '--path', path);
   const inside = join(root, 'skills');
   writeFileSync(join(parent, 'inside-roots.json'), JSON.stringify({
@@ -376,7 +376,7 @@ test('normal hook CLI uses the installed domain and uninstall preserves register
   const project = join(parent, 'hook-project');
   mkdirSync(project);
   const domain = join(parent, 'hook-domain.json');
-  writeFileSync(domain, JSON.stringify({ schemaVersion: 'conquistador.domain-package/v1', id: 'domain:diagnosis', agentPackageSchemaVersion: 'conquistador.agent-package/v2', allowed: { roles: [], skills: ['diagnose-growth'], workflows: [], tools: ['host-model'], knowledgeHandles: [] } }));
+  writeFileSync(domain, JSON.stringify({ schemaVersion: 'conquistador.domain-package/v1', id: 'domain:diagnosis', agentPackageSchemaVersion: 'conquistador.agent-package/v2', allowed: { roles: [], skills: ['diagnose'], workflows: [], tools: ['host-model'], knowledgeHandles: [] } }));
   const config = join(parent, 'proactive.json');
   writeFileSync(config, JSON.stringify({ schemaVersion: 1, enabled: true, events: ['prompt-submitted'] }));
   const cli = join(root, 'runtime/bin/conquistador.js');
@@ -390,7 +390,7 @@ test('normal hook CLI uses the installed domain and uninstall preserves register
   assert.equal(report.hostActivationVerified, false);
   const route = JSON.parse(invoke('route', '--prompt', 'Write landing page copy.').stdout);
   assert.deepEqual(route.selected, []);
-  assert.ok(route.unavailable.includes('write-copy'));
+  assert.ok(route.unavailable.includes('copy'));
   const refused = invoke('uninstall');
   assert.equal(refused.status, 1);
   assert.match(refused.stderr, /hooks remove/);

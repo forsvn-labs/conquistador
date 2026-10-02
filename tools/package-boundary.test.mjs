@@ -10,6 +10,6 @@ test('source-import guards reject book binaries, transcript dumps, private roots
 });
 test('a host-supplied synthetic fingerprint catches copied text under an ordinary method path', () => {
   const sentinel = 'SYNTHETIC_PRIVATE_' + 'SOURCE_FINGERPRINT_0123456789';
-  assert.throws(() => checkPackageBoundary({ 'skills/write-copy/method.md': file(`Original heading\n${sentinel}`) }, [sentinel]), /Private source match/);
-  assert.equal(checkPackageBoundary({ 'skills/write-copy/method.md': file('Original product method.') }, [sentinel]).semanticReviewRequired, true);
+  assert.throws(() => checkPackageBoundary({ 'skills/conquistador/commands/copy/method.md': file(`Original heading\n${sentinel}`) }, [sentinel]), /Private source match/);
+  assert.equal(checkPackageBoundary({ 'skills/conquistador/commands/copy/method.md': file('Original product method.') }, [sentinel]).semanticReviewRequired, true);
 });

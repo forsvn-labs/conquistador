@@ -200,3 +200,11 @@ consent to the exact destination and final payload through a verified Executor c
 For public briefs and receipts, use caller-approved summaries and the public role roster. Do not copy
 raw private context into a public receipt. Preserve each observed review execution and digest, and
 distinguish blocked executions from assignments that did not run.
+
+### Runtime playbooks
+
+A play file is composition prose with no execution authority. Four plays also have an executable graph
+in `runtime/fixtures/playbooks/` (for example `content-intelligence-loop.json` for the `content` play).
+Each graph is locally implemented and verified with synthetic fixtures. Live execution, provider
+behavior and human acceptance remain unverified. Installing the skill does not load that runner or
+authorize publication, spend, or other external actions.

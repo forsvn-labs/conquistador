@@ -3,7 +3,7 @@
 Start with the [recommended operator installation](../INSTALL.md#project-operator-recommended). This reference keeps
 the direct commands for local source copies, native plugin managers, runtime operators, and
 containers. Use the original installer to update and remove a copy. Full skill and plugin packages
-include all 38 outcome methods; domain and standalone method packages can contain fewer.
+include all 35 commands and 21 plays; domain and standalone method packages can contain fewer.
 
 Version [0.0.14](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.14) is the latest verified private alpha. See [INSTALL.md](../INSTALL.md) for the authenticated private-Git persistent CLI and exact release identity.
 `private: true` blocks registry publication; private Git and local package execution remain possible. See [package verification](../INSTALL.md#verify-the-package).

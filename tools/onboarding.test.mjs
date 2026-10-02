@@ -317,7 +317,7 @@ test('--skills stages a transformed parent and invokes the pinned manager with t
     },
   });
   assert.equal(result, 0);
-  assert.ok(existsSync(join(project, '.conquistador-skills-source/library/write-copy/METHOD.md')));
+  assert.ok(existsSync(join(project, '.conquistador-skills-source/library/conquistador/commands/copy/COMMAND.md')));
   const npx = spawned.find(args => args[0] === 'npx');
   assert.ok(npx);
   assert.deepEqual(npx.slice(0, 3), ['npx', '--yes', SKILLS_PIN]);

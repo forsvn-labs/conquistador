@@ -5,7 +5,7 @@
   "version": "1.0.0",
   "kind": "executable-playbook",
   "executionStatus": "executable",
-  "proseSource": "skills/conquistador/workflows/creative-asset-review.md",
+  "proseSource": "skills/conquistador/plays/qa.md",
   "inputs": {
     "version": "1.0.0",
     "fields": [

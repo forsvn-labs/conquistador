@@ -1,7 +1,7 @@
 ---
 command: outbound
 label: Run an outbound sequence
-intents: ["outbound","outbound campaign","outreach sequence","cold outreach campaign","sales sequence","prospecting campaign"]
+intents: ["outbound campaign","outbound sequence","outreach sequence","cold outreach campaign","sales sequence","prospecting campaign"]
 chain:
   - { command: position, when: "segment, proof, or offer is unresolved" }
   - { command: outreach }

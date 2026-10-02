@@ -9,32 +9,33 @@ import {
 } from './routing-contract.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
-const outcomes = readdirSync(join(root, 'skills')).filter(name => name !== 'conquistador').sort();
+const outcomes = readdirSync(join(root, 'skills/conquistador/commands')).filter(name => !name.startsWith('.')).sort();
 
-test('routing contract describes all 38 methods with required and deferred resources', () => {
+test('routing contract describes all 35 commands with required and deferred resources', () => {
   const contract = loadRoutingContract(root);
   assert.equal(Object.keys(contract.methods).sort().join(','), outcomes.join(','));
-  assert.equal(outcomes.length, 38);
+  assert.equal(outcomes.length, 35);
   assert.ok(contract.parentMethods['connect-accounts']);
   for (const name of outcomes) {
     const method = contract.methods[name];
-    assert.ok(method.path.endsWith(`/${name}/SKILL.md`));
+    assert.ok(method.path.endsWith(`/commands/${name}/COMMAND.md`));
     assert.ok(Array.isArray(method.requiredResources));
     assert.ok(Array.isArray(method.conditionalResources));
-    assert.ok(method.explicitOnly === (name === 'submit-feedback'));
+    assert.ok(method.explicitOnly === (name === 'feedback'));
   }
 });
 
+
 test('every method prepares a bounded assignment without recursive overflow', async () => {
-  const failingBefore = ['brief-creative', 'create-brand', 'create-shortform', 'optimize-search', 'research-positioning'];
+  const failingBefore = ['creative', 'brand', 'video', 'seo', 'position'];
   for (const name of outcomes) {
     const prepared = prepareAssignmentResources(root, name);
-    assert.ok(prepared.required.includes(`skills/${name}/SKILL.md`));
+    assert.ok(prepared.required.includes(`skills/conquistador/commands/${name}/COMMAND.md`));
     const loaded = await loadAssignment(root, {
       id: 'work', role: 'outcome', goal: 'Produce a bounded draft.',
       skills: [name], workflows: [], knowledgeHandles: [], dependsOn: [],
     });
-    assert.ok(loaded.methods.some(item => item.path === `skills/${name}/SKILL.md`));
+    assert.ok(loaded.methods.some(item => item.path === `skills/conquistador/commands/${name}/COMMAND.md`));
     const bytes = loaded.methods.reduce((sum, item) => sum + Buffer.byteLength(item.body), 0);
     assert.ok(bytes <= ASSIGNMENT_BUDGET_BYTES, `${name} loaded ${bytes} bytes`);
     assert.ok(loaded.methods.length <= 100, `${name} loaded ${loaded.methods.length} files`);
@@ -47,11 +48,11 @@ test('every method prepares a bounded assignment without recursive overflow', as
 
 test('rebuilding the contract from overlay stays layout-faithful', () => {
   const built = buildRoutingContract(root);
-  assert.equal(Object.keys(built.methods).length, 38);
-  assert.ok(built.methods['write-copy'].requiredResources.some(path => path.includes('fallbacks/')));
+  assert.equal(Object.keys(built.methods).length, 35);
+  assert.ok(built.methods['copy'].requiredResources.some(path => path.includes('fallbacks/')));
 });
 
-test('all 38 methods load in fresh operator and plugin payloads with reachable deferred resources', async t => {
+test('all 35 commands load in fresh operator and plugin payloads with reachable deferred resources', async t => {
   const { mkdtempSync, realpathSync, rmSync, existsSync } = await import('node:fs');
   const { tmpdir } = await import('node:os');
   const { execFileSync } = await import('node:child_process');

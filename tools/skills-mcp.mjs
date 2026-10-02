@@ -3,7 +3,7 @@ import { dirname, join, extname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createBrief, formatBriefPack, searchKnowledge } from './brief.mjs';
 
-export const LIMITS = Object.freeze({ request: 65536, file: 262144, response: 524288, files: 256, depth: 8, methods: 128, entries: 2048 });
+export const LIMITS = Object.freeze({ request: 65536, file: 262144, response: 524288, files: 256, depth: 12, methods: 128, entries: 2048 });
 const bundledRoot = fileURLToPath(new URL('../skills', import.meta.url));
 const decoder = new TextDecoder('utf-8', { fatal: true });
 const extensions = new Set(['.md', '.json', '.yaml', '.yml', '.txt', '.csv', '.tsv', '.py', '.sh', '.swift', '.pbxproj', '.xcworkspacedata']);
@@ -101,8 +101,9 @@ export function createMethodAccess(root = bundledRoot) {
   }
   function files(method) {
     if (typeof method !== 'string' || method.length > 100 || !methodPattern.test(method)) throw new Error('Invalid method');
-    let directory = `conquistador/commands/${method}`;
-    try { contained(`${directory}/COMMAND.md`); } catch {
+    let directory = method === 'conquistador' ? 'conquistador' : `conquistador/commands/${method}`;
+    if (method === 'conquistador') contained('conquistador/SKILL.md');
+    else try { contained(`${directory}/COMMAND.md`); } catch {
       contained(`conquistador/plays/${method}.md`);
       directory = `conquistador/plays/${method}`;
       try { contained(directory, true); } catch { return { files: [`conquistador/plays/${method}.md`] }; }
@@ -115,6 +116,8 @@ export function createMethodAccess(root = bundledRoot) {
         if (++visited > LIMITS.entries) throw new Error('Too many entries');
         if (!segment.test(entry.name) || entry.isSymbolicLink()) continue;
         const name = `${path}/${entry.name}`;
+        // The parent lists its shared files; each command and play is listed on its own.
+        if (entry.isDirectory() && (name === 'conquistador/commands' || name === 'conquistador/plays')) continue;
         if (entry.isDirectory()) walk(name, depth + 1);
         else if (entry.isFile() && extensions.has(extname(name))) {
           if (result.length >= LIMITS.files) throw new Error('Too many files');

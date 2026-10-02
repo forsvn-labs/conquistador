@@ -5,7 +5,7 @@
   "version": "1.0.0",
   "kind": "executable-playbook",
   "executionStatus": "executable",
-  "proseSource": "skills/conquistador/workflows/paid-campaign-loop.md",
+  "proseSource": "skills/conquistador/plays/paid.md",
   "inputs": {
     "version": "1.0.0",
     "fields": [

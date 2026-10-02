@@ -12,7 +12,8 @@ This repository owns product code and its release evidence.
 
 - The repository and the npm package are public. Do not push, tag, publish to npm, or merge
   without the user's explicit authorization. Local commits and local packages are allowed.
-- `skills/<outcome>/` owns an independently usable method. `skills/conquistador/` owns parent routing.
+- `skills/conquistador/` is the one host skill. `commands/<command>/COMMAND.md` owns one method;
+  `plays/<command>.md` declares a chain of commands in front matter. Do not add another `SKILL.md`.
 - `runtime/`, `catalog/`, and `evals/` own runner, typed tools, and evidence contracts.
 - `hosts/` and `agents/` contain installation contracts; `tools/` contains local development helpers.
 - The repository root is the plugin (Claude Code, Codex, Cursor, Copilot, Agent Plugins). `tools/brief.mjs`
@@ -30,8 +31,9 @@ This repository owns product code and its release evidence.
   those checks report "not run" there; CI runs it on Linux and Windows through `install-e2e.yml`),
   `node tools/e2e/update-latest.mjs` (`conquistador update` against a local Verdaccio registry, all agents),
   and `node tools/e2e/knowledge-use.mjs [--set breadth]` (headless Claude Code; spends tokens). Reports go to `dist/e2e/`.
-- Router phrases: curated `intents` describe a method; practitioner wording that only selects it goes
-  in `aliases` in `skills/conquistador/routing-overlay.json`. Rebuild with `writeRoutingContract`.
+- Router phrases: curated `intents` describe a command; practitioner wording that only selects it goes
+  in `aliases` in `skills/conquistador/routing-overlay.json`. Play intents live in each play's front
+  matter. Rebuild with `node tools/routing-contract.mjs write`.
 - `tools/tour.mjs` owns the capability areas. After editing it, run `node tools/tour.mjs --write`.
 - Keep methods original and retain applicable MIT license and notices. Never add private knowledge,
   customer transcripts, credentials, internal decisions, or private workspace history to this repo.

@@ -8,23 +8,23 @@
     },
     {
       "path": ".claude-plugin/marketplace.json",
-      "sha256": "2aa6bbaa2e5f534da1aa3d4525b22c86ddf4c9c3bbd9682b03ff0e35e550f4e3"
+      "sha256": "f973186f196e78378226c54394c34cab43802fc6e90d10ab2679cfa26fd66a31"
     },
     {
       "path": ".claude-plugin/plugin.json",
-      "sha256": "a8b7292a8b9504350fb31ff0f746f925910416ec709876707018eb865d7e84c5"
+      "sha256": "3b6f13c15ce6f9dc86f44b5eda24c4aaedadb94f1d75c4998df08be63d16d9a5"
     },
     {
       "path": ".codex-plugin/plugin.json",
-      "sha256": "dea18e420e3fd793395ce34af9fa0c11232f7e3aaa25ee2a269d328e9a4d3ac5"
+      "sha256": "ce7eb0d9a5c3ccaafbd7d975c650b01cc4bca068260ddd4769ee9753594c9bfe"
     },
     {
       "path": ".cursor-plugin/marketplace.json",
-      "sha256": "ef876779b82d245641906858a1a5be511d4f02d0889ce196b7a87b245d3ffa3d"
+      "sha256": "7c551102d33793c1aa4ce8021150b8676beef811fcc05088e3c83eee65973e43"
     },
     {
       "path": ".cursor-plugin/plugin.json",
-      "sha256": "ba70f4e0320c284f44b77ac994648d2ea33b24db6d2ddf510abb3e4e72805f6c"
+      "sha256": "7b4f64af0d76d0a92a80b8708418aa562259bb45182a11f960bf8cadd6341a7f"
     },
     {
       "path": "agents/conquistador.md",
@@ -80,7 +80,7 @@
     },
     {
       "path": "plugin.json",
-      "sha256": "70d50326de26eadfab454b1e5046aba824e0c7673cffb3c4abef91a746c435b0"
+      "sha256": "83010043c722e6ab5ec4e3b936908e48b78677b7d57b47181131e285275cf581"
     },
     {
       "path": "README.md",
@@ -104,7 +104,7 @@
     },
     {
       "path": "skills/conquistador/adapters/single-agent.md",
-      "sha256": "2e1714f4de3cb6f1c268cf191bf47f14334eae1e3c621abc402d3202f50a204d"
+      "sha256": "43664adf6bbf9da2ee52c02edf00f891a4d6b127894442a93738ab2ca55ecf99"
     },
     {
       "path": "skills/conquistador/adapters/social-publishing-handoff.md",
@@ -3804,7 +3804,7 @@
     },
     {
       "path": "skills/conquistador/plays/answers.md",
-      "sha256": "d9c6b13ab68d13a6015bec660a990d2ef0c9350bae6e79e8672a8f844e68b508"
+      "sha256": "99658f433d2ce48621d4cdd6f2928d44cc18b0ec6f0eca9ecd9b745c98fd71c4"
     },
     {
       "path": "skills/conquistador/plays/answers/agents/citation-monitor-agent.md",
@@ -4064,7 +4064,7 @@
     },
     {
       "path": "skills/conquistador/plays/launch.md",
-      "sha256": "de3761bbb0a0b871d281da89589db5e4079642cbe68fefe30cc23671ee358296"
+      "sha256": "6c797bb1fcec5bb9ce9c3ffbde508f80e861ed150e3aa51f7bad034885e7eee6"
     },
     {
       "path": "skills/conquistador/plays/launch/agents/bundle-critic-agent.md",
@@ -4136,7 +4136,7 @@
     },
     {
       "path": "skills/conquistador/plays/outbound.md",
-      "sha256": "6666e7ec517efd88840ab1737c2286604e42d44ac2073c170c94409ffbfff3e3"
+      "sha256": "d3deaf300629a09b365009114d1363a27f766d144233ee326331a548ffe59e49"
     },
     {
       "path": "skills/conquistador/plays/paid.md",
@@ -4556,11 +4556,11 @@
     },
     {
       "path": "skills/conquistador/routing-contract.json",
-      "sha256": "d0b3a72f68c4e21e2a47575282a523edcb0627e4b5b9d3161120307787115ab9"
+      "sha256": "148254832bd70fbd57d8727b1c01d656158b37ac218d9777162dbf8024332a7b"
     },
     {
       "path": "skills/conquistador/routing-overlay.json",
-      "sha256": "d4083268874cceb06ad5d6af66d079ee7fb5c46a87c0bda4ec833d94ce94772d"
+      "sha256": "3c57ad64984a8beb1b270b6f6f3b9b26913e458d891e684c0065c02fb2138d44"
     },
     {
       "path": "skills/conquistador/rubrics/composition.md",
@@ -4604,7 +4604,7 @@
     },
     {
       "path": "skills/conquistador/specialists/roster.md",
-      "sha256": "fa3fb84788fba7b189c118c99b3cd1b64a0c23f9dd78aeac76663c1400962d4d"
+      "sha256": "b6c0f0b63350b43dfdd5607bf4a364ea30632b16a0bfb1eee43ddba9cf7c223a"
     },
     {
       "path": "skills/conquistador/specialists/saas-landing-agent.md",
@@ -4652,7 +4652,7 @@
     },
     {
       "path": "tools/brief.mjs",
-      "sha256": "d8cf241b8a4b22741731f2b847daeccbcf45ef0f071c8b73e49d4aadd38da19e"
+      "sha256": "deae2bb0801d931d78e0605c8db87acc0dee731aa73c45374ce9895ec7b5187f"
     },
     {
       "path": "tools/context-selection.mjs",
@@ -4684,7 +4684,7 @@
     },
     {
       "path": "tools/skills-mcp.mjs",
-      "sha256": "99813b59725c2ebc8c71d289b8ef6368934b4f2fa892a8747c84092767d63efd"
+      "sha256": "b5ae88a062b553ca1aa2330cfca8b7f6bd8a0d5bb1af9eaffea37567dabee415"
     }
   ]
 }

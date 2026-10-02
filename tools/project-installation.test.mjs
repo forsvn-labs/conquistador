@@ -19,7 +19,7 @@ test('complete operator installs an obvious parent and each selected native skil
     ok(project, 'install', '--host', host);
     assert.ok(existsSync(join(project, '.conquistador/SKILL.md')));
     assert.ok(existsSync(join(project, hostFolders[host], 'SKILL.md')));
-    assert.ok(existsSync(join(project, hostFolders[host], 'library/write-copy/METHOD.md')));
+    assert.ok(existsSync(join(project, hostFolders[host], 'library/conquistador/commands/copy/COMMAND.md')));
     const bypass = spawnSync(process.execPath, [join(root, 'tools/install.mjs'), 'remove', 'single-agent', join(project, '.conquistador')], { encoding: 'utf8' });
     assert.equal(bypass.status, 1); assert.match(bypass.stderr, /owns a native skill/);
     const doctor = JSON.parse(ok(project, 'operator', 'doctor', '--json'));
@@ -85,11 +85,11 @@ test('legacy domain migration creates the same restricted native library and pre
   ok(project, 'operator', 'update');
   const operator = join(project, '.conquistador'), skill = join(project, hostFolders.codex);
   assert.deepEqual(JSON.parse(readFileSync(join(operator, 'domain-restriction.json'))), JSON.parse(readFileSync(join(skill, 'domain-restriction.json'))));
-  assert.equal(existsSync(join(skill, 'library/write-copy')), false);
-  assert.ok(existsSync(join(skill, 'library/diagnose-growth/METHOD.md')));
+  assert.equal(existsSync(join(skill, 'library/conquistador/commands/copy')), false);
+  assert.ok(existsSync(join(skill, 'library/conquistador/commands/diagnose/COMMAND.md')));
   ok(project, 'operator', 'update', '--hosts', 'codex,bb,cursor');
   assert.deepEqual(JSON.parse(readFileSync(join(project, hostFolders.cursor, 'domain-restriction.json'))), JSON.parse(readFileSync(join(operator, 'domain-restriction.json'))));
-  assert.equal(existsSync(join(project, hostFolders.cursor, 'library/write-copy')), false);
+  assert.equal(existsSync(join(project, hostFolders.cursor, 'library/conquistador/commands/copy')), false);
   ok(project, 'operator', 'uninstall'); assert.deepEqual(readdirSync(project), ['domain.json']);
 });
 

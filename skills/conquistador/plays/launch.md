@@ -1,7 +1,7 @@
 ---
 command: launch
 label: Launch a product or feature
-intents: ["launch","product launch","product hunt launch","launch our app","launch plan","relaunch","go to market for a release","launch day","launch product"]
+intents: ["product launch","product hunt launch","launch our app","launch plan","relaunch","go to market for a release","launch day","launch product"]
 chain:
   - { command: position, when: "no accepted positioning in PRODUCT.md or GROWTH.md" }
   - { command: campaign }

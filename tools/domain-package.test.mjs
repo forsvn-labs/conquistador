@@ -40,12 +40,12 @@ test('canonical library includes parent, review, seven specialists and logical t
   assert.deepEqual(library.tools, [...LOGICAL_TOOLS]);
 });
 
-test('domain closure always adds parent and mandatory review, not write-copy for diagnosis', () => {
+test('domain closure always adds parent and mandatory review, not copy for diagnosis', () => {
   const selection = resolveDomainSelection(root, manifest());
   assert.ok(selection.skills.includes(PARENT_SKILL));
   assert.ok(selection.skills.includes(REVIEW_SKILL));
-  assert.ok(selection.skills.includes('diagnose-growth'));
-  assert.equal(selection.skills.includes('write-copy'), false);
+  assert.ok(selection.skills.includes('diagnose'));
+  assert.equal(selection.skills.includes('copy'), false);
   assert.deepEqual(selection.roles, ['data-diagnosis']);
   parseRestriction(selection.restriction);
   assert.throws(() => parseDomainManifest(manifest({ skills: [PARENT_SKILL] })), /parent is always included/);
@@ -55,12 +55,12 @@ test('parent integration with empty skills authorizes; outcome uses any allowed 
   const restriction = resolveDomainSelection(root, manifest()).restriction;
   authorizeTask(restriction, assignment('parent'));
   authorizeTask(restriction, assignment('outcome', { skills: [REVIEW_SKILL] }));
-  authorizeTask(restriction, assignment('outcome', { skills: ['diagnose-growth'] }));
-  authorizeTask(restriction, assignment('data-diagnosis', { skills: ['diagnose-growth'] }));
+  authorizeTask(restriction, assignment('outcome', { skills: ['diagnose'] }));
+  authorizeTask(restriction, assignment('data-diagnosis', { skills: ['diagnose'] }));
   assert.throws(() => authorizeTask(restriction, assignment('outcome')), /existing skill/);
-  assert.throws(() => authorizeTask(restriction, assignment('outcome', { skills: ['write-copy'] })), /forbids skill write-copy/);
+  assert.throws(() => authorizeTask(restriction, assignment('outcome', { skills: ['copy'] })), /forbids skill copy/);
   assert.throws(() => authorizeTask(restriction, assignment('copy')), /forbids role copy/);
-  assert.throws(() => authorizeTask(restriction, assignment('parent', { skills: ['write-copy'] })), /forbids skill write-copy/);
+  assert.throws(() => authorizeTask(restriction, assignment('parent', { skills: ['copy'] })), /forbids skill copy/);
   await createDomainAuthorizer(root, restriction)(assignment('parent'));
 });
 
@@ -75,7 +75,7 @@ test('restriction rejects unknown allowed keys and unsafe identifiers', () => {
 test('missing restriction is a no-op; present restriction is automatic at the install root', t => {
   const dir = mkdtempSync(join(tmpdir(), 'domain auth '));
   t.after(() => rmSync(dir, { recursive: true, force: true }));
-  authorizeLoadedAssignment(dir, assignment('copy', { skills: ['write-copy'] }));
+  authorizeLoadedAssignment(dir, assignment('copy', { skills: ['copy'] }));
   assert.equal(loadRestriction(dir), null);
   const restriction = resolveDomainSelection(root, manifest()).restriction;
   writeFileSync(join(dir, RESTRICTION_NAME), `${JSON.stringify(restriction, null, 2)}\n`);
@@ -97,8 +97,8 @@ test('knowledge handles accept kebab or scope:name; roots stay outside the produ
 
 test('skill staging follows restriction without hiding undeclared siblings later', () => {
   const selection = resolveDomainSelection(root, manifest());
-  assert.equal(shouldStageSkillPath('skills/diagnose-growth/SKILL.md', selection), true);
-  assert.equal(shouldStageSkillPath('skills/write-copy/SKILL.md', selection), false);
+  assert.equal(shouldStageSkillPath('skills/conquistador/commands/diagnose/COMMAND.md', selection), true);
+  assert.equal(shouldStageSkillPath('skills/conquistador/commands/copy/COMMAND.md', selection), false);
   assert.equal(shouldStageSkillPath('skills/conquistador/specialists/data-diagnosis-agent.md', selection), true);
   assert.equal(shouldStageSkillPath('skills/conquistador/specialists/copy-agent.md', selection), false);
   assert.equal(shouldStageSkillPath('docs/USAGE.md', selection), true);

@@ -100,8 +100,8 @@ test('plugin and operator packages expose one parent while retaining the complet
     for (const [task, expected] of [
       [assignment('parent'), 'conquistador/METHOD.md'],
       [assignment('copy'), 'conquistador/specialists/copy-agent.md'],
-      [assignment('outcome', { skills: ['write-copy'] }), 'write-copy/METHOD.md'],
-      [assignment('parent', { workflows: ['launch-product'] }), 'conquistador/workflows/launch-product.md'],
+      [assignment('outcome', { skills: ['copy'] }), 'conquistador/commands/copy/METHOD.md'],
+      [assignment('parent', { workflows: ['launch'] }), 'conquistador/plays/launch.md'],
     ]) {
       const loaded = await load(path, task);
       assert.ok(loaded.methods.some(method => method.path === `${library.layout}/${expected}`));
@@ -128,18 +128,18 @@ test('domain copies have one parent, a filtered catalog, preserved allowed metho
     assert.equal(skillDiscovery(path).count, 1);
     const library = join(path, methodLibrary(path)[0].layout);
     assert.deepEqual(regularFiles(library).sort(), [...selected.map(internalPath), 'conquistador/catalog.md'].sort());
-    assert.equal(existsSync(join(library, 'write-copy')), false);
+    assert.equal(existsSync(join(library, 'copy')), false);
     const catalog = readFileSync(join(library, 'conquistador/catalog.md'), 'utf8');
-    assert.match(catalog, /diagnose-growth/);
-    assert.match(catalog, /fresh-eyes-review/);
-    assert.doesNotMatch(catalog, /write-copy/);
+    assert.match(catalog, /diagnose/);
+    assert.match(catalog, /critique/);
+    assert.doesNotMatch(catalog, /copy/);
     checkLinks(library);
     if (target !== 'codex') {
       const load = await installedLoader(path);
       await load(path, assignment('parent'));
-      await load(path, assignment('data-diagnosis', { skills: ['diagnose-growth'] }));
+      await load(path, assignment('data-diagnosis', { skills: ['diagnose'] }));
       await assert.rejects(load(path, assignment('copy')), /forbids role copy/);
-      await assert.rejects(load(path, assignment('outcome', { skills: ['write-copy'] })), /forbids skill write-copy/);
+      await assert.rejects(load(path, assignment('outcome', { skills: ['copy'] })), /forbids skill copy/);
     }
     // These selected outcomes retain their entire canonical contract and supporting files.
     for (const source of selected.filter(file => !file.startsWith('conquistador/'))) {
@@ -159,10 +159,10 @@ test('one explicitly selected specialist remains canonical and has its own owned
   const invalid = spawnSync(process.execPath, [cli, 'setup', 'install', '--target', 'skill:conquistador', '--path', path], { cwd: project, encoding: 'utf8' });
   assert.notEqual(invalid.status, 0);
   assert.equal(existsSync(path), false);
-  invoke(project, 'setup', 'install', '--target', 'skill:write-copy', '--path', path);
-  assert.deepEqual(skillDiscovery(path).entries.map(entry => entry.name), ['write-copy']);
-  const files = regularFiles(join(root, 'skills/write-copy'));
-  for (const file of files) assert.deepEqual(readFileSync(join(path, 'skills/write-copy', file)), readFileSync(join(root, 'skills/write-copy', file)));
+  invoke(project, 'setup', 'install', '--target', 'skill:copy', '--path', path);
+  assert.deepEqual(skillDiscovery(path).entries.map(entry => entry.name), ['copy']);
+  const files = regularFiles(join(root, 'skills/copy'));
+  for (const file of files) assert.deepEqual(readFileSync(join(path, 'skills/copy', file)), readFileSync(join(root, 'skills/copy', file)));
   assert.equal(existsSync(join(path, 'skills/conquistador')), false);
   invoke(project, 'setup', 'update', '--path', path);
   invoke(project, 'setup', 'uninstall', '--path', path);
@@ -200,7 +200,7 @@ test('unchanged v1 canonical copies migrate without leaving legacy entries or wi
 test('workflow domains and each isolated squad member retain only their declared internal methods', async t => {
   const project = temporary(t), path = join(project, 'owned');
   const domain = { schemaVersion: 'conquistador.domain-package/v1', id: 'domain:launch', agentPackageSchemaVersion: 'conquistador.agent-package/v2',
-    allowed: { roles: [], skills: [], workflows: ['launch-product'], tools: ['host-model'], knowledgeHandles: [] } };
+    allowed: { roles: [], skills: [], workflows: ['launch'], tools: ['host-model'], knowledgeHandles: [] } };
   const file = join(project, 'domain.json');
   writeFileSync(file, JSON.stringify(domain));
   invoke(project, 'setup', 'install', '--target', 'operator', '--path', path, '--domain', file);
@@ -209,8 +209,8 @@ test('workflow domains and each isolated squad member retain only their declared
   assert.deepEqual(regularFiles(library).sort(), [...canonical.filter(file => shouldStageSkillPath(`skills/${file}`, selection)).map(internalPath), 'conquistador/catalog.md'].sort());
   checkLinks(library);
   const load = await installedLoader(path);
-  await load(path, assignment('parent', { workflows: ['launch-product'] }));
-  await assert.rejects(load(path, assignment('parent', { workflows: ['paid-campaign-loop'] })), /forbids workflow/);
+  await load(path, assignment('parent', { workflows: ['launch'] }));
+  await assert.rejects(load(path, assignment('parent', { workflows: ['paid'] })), /forbids workflow/);
   invoke(project, 'setup', 'uninstall', '--path', path);
   invoke(project, 'setup', 'install', '--target', 'squad', '--path', path);
   assert.equal(skillDiscovery(path).count, 2, 'One parent per separate member context');
@@ -232,7 +232,7 @@ test('doctor rejects stale SKILL links or an added specialist entry even without
   rmSync(join(path, '.conquistador-install.json'));
   const parent = join(path, 'library/conquistador/METHOD.md');
   const original = readFileSync(parent, 'utf8');
-  writeFileSync(parent, original.replace('../write-copy/METHOD.md', '../write-copy/SKILL.md'));
+  writeFileSync(parent, original.replace('../copy/METHOD.md', '../conquistador/commands/copy/COMMAND.md'));
   const doctor = () => spawnSync(process.execPath, [cli, 'setup', 'doctor', '--path', path, '--json'], { encoding: 'utf8' });
   assert.equal(doctor().status, 1);
   writeFileSync(parent, original);

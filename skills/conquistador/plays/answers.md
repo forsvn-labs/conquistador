@@ -1,7 +1,7 @@
 ---
 command: answers
 label: Check visibility in AI answers
-intents: ["ai answer visibility","answer visibility","chatgpt mentions","cited by chatgpt","perplexity citations","aeo audit","llm visibility","ai search visibility"]
+intents: ["ai answer visibility","cite our","chatgpt and perplexity","ai citations","answer visibility","chatgpt mentions","cited by chatgpt","perplexity citations","aeo audit","llm visibility","ai search visibility"]
 chain:
   - { command: seo, for: "query set, eligibility, extractability" }
   - { command: factcheck, for: "source authority and uncertainty" }

@@ -10,7 +10,7 @@ import { createBbHost } from './bb.mjs';
 import { digest, protocol, validatePlan, validateResult } from './contracts.mjs';
 
 const root = fileURLToPath(new URL('../../', import.meta.url));
-const task = (id, dependsOn = []) => ({ id, role: 'copy', goal: 'Write a short draft.', skills: ['write-copy'], workflows: [], knowledgeHandles: [], dependsOn });
+const task = (id, dependsOn = []) => ({ id, role: 'copy', goal: 'Write a short draft.', skills: ['copy'], workflows: [], knowledgeHandles: [], dependsOn });
 const plan = () => ({ schemaVersion: protocol, id: 'test-team', goal: 'Prepare one coherent draft with no invented proof.',
   assignments: [task('first'), task('second')], limits: { concurrency: 2, timeoutSeconds: 10, maxAttempts: 1, maxDispatches: 6, maxOutputBytes: 4000 } });
 const resultFor = packet => ({ schemaVersion: protocol, assignmentId: packet.assignment.id, status: 'draft',
@@ -172,7 +172,7 @@ test('installed plugin and harness loaders enforce domain restrictions during ex
     const manifest = join(temporary, 'domain.json');
     writeFileSync(manifest, JSON.stringify({ schemaVersion: 'conquistador.domain-package/v1', id: 'domain:copy',
       agentPackageSchemaVersion: 'conquistador.agent-package/v2', allowed: {
-        roles: [], skills: ['write-copy'], workflows: [], tools: ['host-model'], knowledgeHandles: [],
+        roles: [], skills: ['copy'], workflows: [], tools: ['host-model'], knowledgeHandles: [],
       } }));
     for (const mode of ['plugin', 'single-agent']) {
       const installed = join(temporary, mode);
@@ -183,10 +183,10 @@ test('installed plugin and harness loaders enforce domain restrictions during ex
       const out = await installedModule.runSpecialistTeam({ plan: p, root: installed, parent });
       assert.equal(out.mode, 'sequential-in-context');
       const skillRoot = mode === 'plugin' ? 'skills/conquistador' : '.';
-      cpSync(join(root, 'skills/create-paid-campaign'), join(installed, skillRoot, 'create-paid-campaign'), { recursive: true });
-      p.assignments[0].skills = ['create-paid-campaign'];
+      cpSync(join(root, 'skills/conquistador/commands/ads'), join(installed, skillRoot, 'ads'), { recursive: true });
+      p.assignments[0].skills = ['ads'];
       await assert.rejects(installedModule.runSpecialistTeam({ plan: p, root: installed, parent }), /Domain restriction forbids skill/);
-      p.assignments[0].skills = ['write-copy'];
+      p.assignments[0].skills = ['copy'];
       await assert.rejects(installedModule.runSpecialistTeam({ plan: p, root: installed,
         host: { ...parent, capabilities: { isolatedContexts: true, maxConcurrency: 1 } } }), /host-worker-context/);
     }

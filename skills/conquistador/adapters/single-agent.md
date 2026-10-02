@@ -2,7 +2,7 @@
 
 Use the parent as the main entry point. The `operator` setup target, also available as `harness` with --path, installs
 the portable master-agent contract, operator profile, specialist assignment files, BB adapter, and
-all 38 outcome skills. The consuming host decides whether it can create isolated specialists. Select
+all 35 commands and 21 plays. The consuming host decides whether it can create isolated specialists. Select
 only the roles and outcomes needed for the request. Preserve the user's scope and the host's declared
 capabilities. Default activation is `manual`; `project` routing needs a host adapter that calls admitRequest.
 Setup does not register that adapter. Load the parent entry identified by canonicalSkillRoot in agent/agent.json in a fresh

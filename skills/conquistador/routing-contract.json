@@ -696,7 +696,6 @@
         "build-web-app"
       ],
       "exclusions": [
-        "web app",
         "marketing copy about an app",
         "landing page copy"
       ],
@@ -4126,6 +4125,9 @@
       "path": "skills/conquistador/plays/answers.md",
       "intents": [
         "ai answer visibility",
+        "cite our",
+        "chatgpt and perplexity",
+        "ai citations",
         "answer visibility",
         "chatgpt mentions",
         "cited by chatgpt",
@@ -4502,7 +4504,6 @@
       "description": "Use for a focused product launch or relaunch on one or more named channels.",
       "path": "skills/conquistador/plays/launch.md",
       "intents": [
-        "launch",
         "product launch",
         "product hunt launch",
         "launch our app",
@@ -4621,8 +4622,8 @@
       "description": "Use for founder, sales, partnership, or other direct outreach from creation through readout.",
       "path": "skills/conquistador/plays/outbound.md",
       "intents": [
-        "outbound",
         "outbound campaign",
+        "outbound sequence",
         "outreach sequence",
         "cold outreach campaign",
         "sales sequence",

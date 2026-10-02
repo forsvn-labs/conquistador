@@ -1,6 +1,6 @@
 # What Conquistador helps you deliver
 
-Conquistador brings 38 outcome methods to growth, GTM, sales, marketing, product, and
+Conquistador brings 35 commands and 21 plays to growth, GTM, sales, marketing, product, and
 knowledge work. Give the parent a result to produce. It selects methods, uses specialists when
 appropriate and available, integrates the work, reviews it, and proposes a next action.
 Your host supplies the model, tools, project access, and permissions.
