@@ -59,7 +59,7 @@ Use
 Other routes (see INSTALL.md)
   conquistador project              Per-project operator copy
   conquistador --advanced | --skills | --plugin | --mcp [--host HOST] | --bot [grok-bot|hermes]
-  conquistador status | operator doctor | route --prompt TEXT | hooks | runtime --help
+  conquistador status | operator status | operator doctor | route --prompt TEXT | hooks | runtime --help
 
 Removal keeps playbooks, config, bot exports, and the npm CLI.
 Turn hooks off later: CONQUISTADOR_HOOKS=off. Send instead of pre-fill in Claude Code: CONQUISTADOR_PREFILL=off.`;

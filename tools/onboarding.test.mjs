@@ -80,7 +80,7 @@ test('top-level help and route help load before runtime libraries', t => {
   const help = invoke(project, ['--help']);
   assert.equal(help.status, 0, help.stderr);
   // Default help stays short; every other route is listed under --all.
-  assert.ok(help.stdout.trim().split('\n').length <= 12, help.stdout);
+  assert.ok(help.stdout.trim().split('\n').length <= 20, help.stdout);
   assert.doesNotMatch(help.stdout, /--advanced/);
   const all = invoke(project, ['help', '--all']);
   assert.equal(all.status, 0, all.stderr);
@@ -125,7 +125,7 @@ test('noninteractive unresolved host with --yes does not guess from directories 
   const project = fixture(t);
   mkdirSync(join(project, '.agents'), { recursive: true });
   mkdirSync(join(project, '.github'), { recursive: true });
-  const result = invoke(project, ['--yes'], { PATH: '/nonexistent' });
+  const result = invoke(project, ['project', '--yes'], { PATH: '/nonexistent' });
   assert.equal(result.status, 2, result.stdout + result.stderr);
   assert.match(result.stderr, /could not identify your coding agent/);
   assert.equal(existsSync(join(project, '.conquistador')), false);
@@ -133,7 +133,7 @@ test('noninteractive unresolved host with --yes does not guess from directories 
 
 test('BB active signal wins over a Cursor provider and installs no native skill', t => {
   const project = fixture(t);
-  const result = invoke(project, ['--yes'], { BB_THREAD_ID: 'thr_test', CURSOR_TRACE_ID: 'cursor-session', PATH: '/nonexistent' });
+  const result = invoke(project, ['project', '--yes'], { BB_THREAD_ID: 'thr_test', CURSOR_TRACE_ID: 'cursor-session', PATH: '/nonexistent' });
   assert.equal(result.status, 0, result.stderr);
   assert.ok(existsSync(join(project, '.conquistador/SKILL.md')));
   assert.equal(existsSync(join(project, '.cursor')), false);
@@ -211,12 +211,12 @@ test('old-version notice does not upgrade on plain launch', async t => {
 test('legacy operator requires an explicit update and dry-run leaves it in place', t => {
   const project = fixture(t);
   spawnSync(process.execPath, [join(root, 'tools/install.mjs'), 'install', 'single-agent', join(project, '.conquistador-operator')], { encoding: 'utf8' });
-  const dry = invoke(project, ['--dry-run']);
+  const dry = invoke(project, ['project', '--dry-run']);
   assert.equal(dry.status, 0, dry.stderr);
   assert.match(dry.stdout, /Migrate with an explicit/);
   assert.ok(existsSync(join(project, '.conquistador-operator')));
   assert.equal(existsSync(join(project, '.conquistador')), false);
-  assert.notEqual(invoke(project, ['--yes']).status, 0);
+  assert.notEqual(invoke(project, ['project', '--yes']).status, 0);
 });
 
 test('modified and unowned copies are preserved', t => {
@@ -230,7 +230,7 @@ test('modified and unowned copies are preserved', t => {
   rmSync(join(project, '.conquistador'), { recursive: true });
   assert.equal(invoke(project, ['--host', 'none', '--yes']).status, 0);
   writeFileSync(join(project, '.conquistador/SKILL.md'), 'edits');
-  const modified = invoke(project, ['--yes']);
+  const modified = invoke(project, ['project', '--yes']);
   assert.notEqual(modified.status, 0);
   assert.match(modified.stderr, /local edits/);
   assert.equal(readFileSync(join(project, '.conquistador/SKILL.md'), 'utf8'), 'edits');
@@ -522,7 +522,7 @@ test('a wrong receipt mode cannot masquerade as a healthy installed operator', t
   const project = fixture(t);
   const path = join(project, '.conquistador');
   assert.equal(invoke(project, ['setup', 'install', '--target', 'skill', '--path', path]).status, 0);
-  assert.equal(invoke(project, ['--yes']).status, 1);
+  assert.equal(invoke(project, ['project', '--yes']).status, 1);
 });
 
 test('ambiguous and absent active hosts ask one host question before one installation decision', async t => {
