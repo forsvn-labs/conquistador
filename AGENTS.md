@@ -21,6 +21,8 @@ This repository owns product code and its release evidence.
   `tools/launch.mjs` owns the start flow (task picker, agent launch).
 - After adding, renaming, or removing a knowledge file, run `node tools/knowledge-map.mjs` and
   `node tools/update-completeness.mjs`. `node tools/knowledge-map.mjs --check` must pass.
+  After any plugin payload edit (including hooks, briefing helpers, and README), regenerate `release/plugin-completeness.json` with
+  `node tools/update-completeness.mjs`; never hand-edit its expected hashes.
 - E2E: `node tools/e2e/routing-breadth.mjs` (offline; marketing breadth, coding silence, tour drift),
   `expect tools/e2e/agent-first.exp` (bare `conquistador` to a pre-filled Claude Code and Codex, isolated
   home, no model call), `node tools/e2e/package-install.mjs` (installs the package from Git and `npx`

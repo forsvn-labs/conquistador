@@ -36,9 +36,10 @@ const helpOrVersion = args.includes('--help') || args.includes('-h') || args.inc
 const supportedNode = Number(process.versions.node.split('.')[0]) >= 24;
 const onboarding = args.length === 0 || args[0].startsWith('-') || args[0] === 'project';
 const preflight = helpOrVersion || supportedNode || !onboarding ? null : await (await import('../../tools/node-preflight.mjs')).nodePreflight();
+
 // The start flow, installer, and playbook commands come first; older per-project routes follow.
 // A first argument with a space is a task: `conquistador "plan our launch"` (same rule as front-door isStart).
-const task = args.length > 0 && (/\s/.test(args[0]) || ['--in', '--no-open'].includes(args[0]) || args[0].startsWith('--in='));
+const task = args.length > 0 && (/\s/.test(args[0]) || ['task', '--in', '--no-open'].includes(args[0]) || args[0].startsWith('--in='));
 const frontDoor = preflight === null && (args.length === 0 || task || ['add', 'update', 'remove', 'agents', 'brief', 'playbooks', 'bot', 'tour', 'help', '--help', '-h'].includes(args[0]))
   ? await (await import('../../tools/front-door.mjs')).runFrontDoor(args) : null;
 if (preflight !== null) {

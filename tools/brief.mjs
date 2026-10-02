@@ -445,7 +445,7 @@ export function formatReadingList(brief, { absolute = true, limit = 9000 } = {})
     '1. Apply the specific rules from these files. Where you deviate, say why.',
     '2. End the answer with "Playbooks applied": each file you used and the rule you took from it.',
     '3. Never invent metrics, quotes, or customer facts. Mark assumptions.',
-    'If the Conquistador MCP tool conquistador_brief is available, it returns all of these files in one call.',
+    'If conquistador_brief is available, it returns selected files inline and labels omissions or unavailable files that still need a separate read.',
     '</conquistador-brief>',
   );
   let output = lines.join('\n');
@@ -457,45 +457,78 @@ function readText(path) {
   try { return readFileSync(path, 'utf8'); } catch { return null; }
 }
 
-// Full form for MCP and the CLI: method bodies and must-read files inline.
+// Evidence describes text returned by the tool, not whether a model used or understood it.
+// Normalize host line endings and outer whitespace only; all internal content stays exact.
+export const normalizeKnowledgeText = text => text.replace(/\r\n/g, '\n').trim();
+
+export function knowledgeFileEvidence(item, body = readText(item.absolute)) {
+  if (body === null) return { id: item.path, status: 'unavailable' };
+  const text = normalizeKnowledgeText(body);
+
+  return { id: item.path, status: 'complete', bytes: Buffer.byteLength(text), sha256: createHash('sha256').update(text).digest('hex') };
+}
+
+const evidenceMarker = evidence => `<!-- conquistador-file ${JSON.stringify(evidence)} -->`;
+
+const fileEnd = '<!-- /conquistador-file -->';
+
+function clipUtf8(text, limit) {
+  const bytes = Buffer.from(text);
+
+  if (bytes.length <= limit) return text;
+  let end = Math.max(0, limit);
+
+  while (end > 0 && (bytes[end] & 0xc0) === 0x80) end--;
+
+  return bytes.subarray(0, end).toString('utf8');
+}
+
+// Full form for MCP and the CLI. Only complete, digest-checked blocks count as returned files.
 export function formatBriefPack(brief, { limit = LIMITS.packBytes } = {}) {
   if (brief.action !== 'brief') {
     return 'No Conquistador method matches this task. For growth, GTM, marketing, sales, or product work, restate the outcome and channel (for example "write a win-back email flow", "get recommended by ChatGPT", or "plan a TikTok series") or call conquistador_search.';
   }
-  const parts = [
+
+  limit = Number.isFinite(limit) ? Math.max(0, Math.floor(limit)) : LIMITS.packBytes;
+
+  const header = [
     '# Conquistador brief',
     '',
     `Methods: ${brief.methods.map(item => `${item.label} [${item.name}]`).join(', ') || 'none; platform guidance only'}`,
     brief.platforms.length ? `Platforms named: ${brief.platforms.join(', ')}` : '',
     '',
     'Rules for this task:',
-    '1. The files below are the playbooks for this task. Follow their specific rules; generic advice is not a substitute.',
+    '1. Follow the specific rules in the playbooks; generic advice is not a substitute.',
     '2. End your answer with "Playbooks applied": each file you used and the rule you took from it.',
     '3. Never invent metrics, quotes, or customer facts. Mark assumptions. Ask before publishing, spending, or sending.',
     '4. Read a "situational" file with conquistador_read when the task reaches that step.',
+    'Files marked omitted or unavailable still need a separate successful read.',
     '',
-  ].filter(line => line !== undefined);
-  let size = Buffer.byteLength(parts.join('\n'));
-  const push = (heading, path, body) => {
-    const block = `\n---\n\n## ${heading}\n\nFile: ${path}\n\n${body.trim()}\n`;
-    const blockSize = Buffer.byteLength(block);
-    if (size + blockSize > limit) { parts.push(`\n(${path} omitted: response budget reached. Read it with conquistador_read.)`); return; }
-    parts.push(block);
-    size += blockSize;
-  };
-  for (const method of brief.methods) {
-    const body = readText(method.absolute);
-    if (body) push(`Method: ${method.label}`, method.path, body);
+  ].join('\n');
+
+  const entries = [...brief.methods.map(item => ({ item, heading: `Method: ${item.label}` })),
+    ...brief.must.map(item => ({ item, heading: `${item.source === 'user' ? 'Your playbook' : 'Playbook'}: ${item.title || posix.basename(item.path)}` }))]
+    .map(({ item, heading }) => {
+      const body = readText(item.absolute);
+      const evidence = knowledgeFileEvidence(item, body);
+      const status = body === null ? 'unavailable' : 'omitted';
+      const fallback = `\n${evidenceMarker({ id: item.path, status })}\n(${item.path} ${status}: ${status === 'omitted' ? 'response budget reached' : 'file could not be read'}. Read it separately.)\n`;
+      const block = body === null ? null : `\n---\n\n## ${heading}\n\nFile: ${item.path}\n${item.why ? `\nWhy: ${item.why}\n` : ''}\n${evidenceMarker(evidence)}\n${normalizeKnowledgeText(body)}\n${fileEnd}\n`;
+
+      return { block, fallback };
+    });
+
+  const situational = brief.situational.length ? `\n---\n\n## Situational (read with conquistador_read when needed)\n${brief.situational.map(item => `- ${item.path} — ${item.why}`).join('\n')}\n` : '';
+  // Reserve the exact status text for every remaining required file before adding a body.
+  let remaining = entries.reduce((sum, entry) => sum + Buffer.byteLength(entry.fallback), 0);
+  let output = header;
+
+  for (const entry of entries) {
+    remaining -= Buffer.byteLength(entry.fallback);
+    output += entry.block && Buffer.byteLength(output) + Buffer.byteLength(entry.block) + remaining <= limit ? entry.block : entry.fallback;
   }
-  for (const item of brief.must) {
-    const body = readText(item.absolute);
-    if (body) push(`${item.source === 'user' ? 'Your playbook' : 'Playbook'}: ${item.title || posix.basename(item.path)}`, item.path, `Why: ${item.why}\n\n${body}`);
-  }
-  if (brief.situational.length) {
-    parts.push('\n---\n\n## Situational (read with conquistador_read when needed)\n');
-    for (const item of brief.situational) parts.push(`- ${item.path} — ${item.why}`);
-  }
-  return parts.join('\n');
+
+  return clipUtf8(output + situational, limit);
 }
 
 // Search the whole library, not only the selected methods.

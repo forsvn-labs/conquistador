@@ -1,80 +1,144 @@
 # Install Conquistador
 
-Choose one route. The plugin is recommended because it is the only route with hooks that check
-that the agent read the playbooks.
+The published public alpha is **0.2.2**. Choose one route and use that route's update and removal
+commands. The plugin route can provide playbook-reading hooks where the host supports and trusts
+them; an installed plugin does not by itself prove that hooks or model execution work.
+
+This checkout includes [unshipped first-use changes](PROGRESS.md). The scoped explicit-install
+commands below work with published 0.2.2; the new selected-host launcher is labeled separately.
 
 ## Before you start
 
-- Node 24 or later: `node --version`.
+- Node 24 or later: `node --version`
+- An existing supported coding agent and its model/usage access for the plugin route
+- A product folder **or** a short supplied brief; no dummy repository is required
+
+Drafting from supplied material needs no marketing-service account or new connection. Install
+and log in to your coding agent through its own instructions if it is not available yet.
 
 ## Plugin for coding agents (recommended)
 
-Install the command, then run it with no arguments:
+Install the CLI, preview one target, then add it. This example chooses Codex:
 
 ```sh
 npm install -g @forsvn/conquistador
-conquistador
+conquistador add codex --dry-run
+conquistador add codex --yes
+conquistador agents
 ```
 
-The command does these steps:
+Open a new Codex session, select Conquistador, and use a [first-task template](docs/USAGE.md).
+For other hosts, replace `codex` with `claude-code`, `cursor`, `copilot`, or `grok`.
 
-1. It finds the supported agents on your computer and installs into all of them. It does not ask.
-   An agent you removed by name (`conquistador remove grok`) stays removed until you add it again.
-2. It copies the plugin to `~/.conquistador/plugin` and registers that folder with each agent's
-   own plugin manager.
-3. It asks what to work on, then opens your agent with the task typed in. With several agents, it
-   asks once which one to open and remembers the choice.
+### Scope and undo
 
-Later runs skip step 1 and 2 unless the version changed, a new agent appeared, or the plugin copy
-is missing or damaged. A damaged copy is repaired.
-`conquistador --no-open` installs and stops. `conquistador "TASK" --in codex` opens one agent for
-one run. Without a terminal (a script or a pipe), `conquistador "TASK"` only prints the command
-it would run.
+- The shared plugin copy is `~/.conquistador/plugin` (or `CONQUISTADOR_HOME/plugin` when set).
+  Updating that shared copy also changes the files already registered hosts read from it.
+- Only the named host registrations are added or repaired. Their native plugin managers own
+  their registration/configuration; Cursor receives an owned local-plugin copy instead.
+- The plugin includes a read-only playbook MCP server and host-specific hooks. Review their
+  trust requirements below. No project dependency, lockfile, background job, or campaign is added.
+- Preview with `conquistador add codex --dry-run`; it prints the proposed commands without
+  creating files, changing registrations, remembering a choice, or launching an agent.
+- Undo that registration with `conquistador remove codex`. An all-host removal with
+  `conquistador remove` also removes the owned shared plugin after host removal succeeds.
 
-The stable copy matters: with nvm or another Node version manager, the npm global folder changes
-when you switch Node versions. The agents point at `~/.conquistador/plugin`, not at npm.
+The stable copy survives npm global-prefix changes caused by Node version managers. Your
+personal playbooks and `~/.conquistador/config.json` stay outside it. Do not edit the installed
+plugin as a place to save your own work.
 
-To install an exact tag from Git instead of npm, use both flags. `--ignore-scripts` skips npm
-lifecycle scripts. `--install-links` makes npm copy the Git checkout instead of linking to
-temporary files.
+### Selected-host start flow (unshipped)
+
+In this source checkout, `conquistador` chooses the target **before** installation. A single
+available host is shown as the scope. With several, choose one; `--in AGENT` selects it directly.
+Only that host is prepared, then the task picker opens. A remembered launch choice does not
+authorize adding newly detected hosts.
+
+```sh
+conquistador
+conquistador "Draft one welcome email from our brief" --in codex
+conquistador --in codex --no-open       # Prepare Codex without launching it
+conquistador --in codex --dry-run       # Preview without writes or launch
+```
+
+The preview names the shared location, selected host changes, and undo command. A canceled
+host choice makes no installation changes. If a later task choice is canceled after installation,
+the installed scope is reported; it is not described as a rollback. If installation fails, use
+`conquistador add AGENT --yes` for that target after addressing the reported error.
+
+On **published 0.2.2**, bare interactive `conquistador` and `--no-open` install into all detected
+agents; `--in` changes only the launch target. Use the explicit named `add` route above for a
+bounded 0.2.2 install, then start work in that host. The source changes here have not been released.
+
+Without an interactive terminal, start prints a command or prompt; it does not install or launch.
+Installation and host discovery do not establish hook trust, loaded playbooks, task execution,
+or useful output. Check those separately in a fresh host session.
+
+### Supported agent installation mechanisms
+
+| Agent | Host changes | Task launch behavior |
+| --- | --- | --- |
+| Claude Code | `claude plugin marketplace add` and `claude plugin install` | `claude --prefill "PROMPT"` where supported; press Enter to send |
+| Codex | `codex plugin marketplace add` and `codex plugin add` | `codex "PROMPT"` starts immediately; review hook trust in `/hooks` |
+| Cursor | Owned copy at `~/.cursor/plugins/local/conquistador` (or `CURSOR_HOME/plugins/local/conquistador`) | `cursor-agent "PROMPT"` starts immediately; editor-only users reload the window and paste the prompt |
+| GitHub Copilot CLI | `copilot plugin marketplace add` and `copilot plugin install` | `copilot -i "PROMPT"` starts immediately |
+| Grok CLI | `grok plugin install --trust` | `grok "PROMPT"` starts immediately; selecting installation grants plugin trust |
+
+Claude Code prefill was observed from version 2.1.283. Older versions, or
+`CONQUISTADOR_PREFILL=off`, send the prompt immediately instead. Host versions and trust can
+change execution behavior; the table describes installer mechanisms, not a model-quality claim.
+
+### Status, repair, update, and removal
+
+```sh
+conquistador agents                       # Found hosts and recorded registrations
+conquistador add codex --dry-run           # Preview the exact target's changes
+conquistador add codex --yes               # Add or repair that target
+conquistador add --all --yes               # Explicitly add all detected hosts
+conquistador update --dry-run              # Preview the update
+conquistador update                        # Latest package; tracked hosts only
+conquistador remove codex --dry-run        # Preview named removal
+conquistador remove codex                  # Remove the named host registration
+conquistador remove                       # Remove all tracked hosts and owned shared plugin
+npm uninstall -g @forsvn/conquistador      # Remove the separately installed npm executable
+```
+
+With several detected hosts, the unshipped `add` flow requires named agents or an explicit
+`--all`; a single detected host may be selected with its scope shown. `--yes` authorizes the
+listed scope. It does not add unrelated detected hosts during update. Unknown agent names fail
+without changing anything. A dry run neither writes nor launches.
+
+A named removal keeps the shared plugin for other clients. Removing all tracked hosts removes
+that owned plugin only after successful removal. Playbooks read in place, configuration,
+exported bot packs, project artifacts, and the npm executable are preserved. Remove the global
+CLI with npm only after removing its host registrations if you want both gone. A project
+operator is a separate route and has separate removal commands below.
+
+`agents` reports installer records and detection, not a universal ready state. Start a fresh
+session to verify discovery, trust hooks where desired, and complete a task plus a correction.
+A failed host removal remains a recovery task; do not assume that a nonzero exit cleaned up all
+registrations.
+
+### Run without a global CLI
+
+```sh
+npx @forsvn/conquistador add codex --dry-run
+npx @forsvn/conquistador add codex --yes
+npx @forsvn/conquistador agents
+npx @forsvn/conquistador remove codex
+```
+
+This still installs the persistent plugin and host registration, but leaves no global
+`conquistador` executable. Use the `npx @forsvn/conquistador` prefix for later lifecycle commands.
+
+### Exact published version
+
+Pin npm when you need reproducible acquisition: `npm install -g @forsvn/conquistador@0.2.2`.
+For a Git tag, `--ignore-scripts` skips npm lifecycle scripts and `--install-links` copies the
+checkout out of npm's temporary storage:
 
 ```sh
 npm install -g --ignore-scripts --install-links git+https://github.com/forsvn-labs/conquistador.git#v0.2.2
-```
-
-### Run once without a global install
-
-```sh
-npx @forsvn/conquistador
-```
-
-This installs into your agents and opens one, like the global command. It leaves no `conquistador`
-command behind, so you run `npx @forsvn/conquistador` again for the next task, `update`, or `remove`. On
-the test machine the first run took 24 seconds and later runs about 5 seconds. Inside your agent,
-`/conquistador` works either way.
-
-### Supported agents
-
-| Agent | How the installer adds the plugin | How `conquistador` opens it |
-| --- | --- | --- |
-| Claude Code | `claude plugin marketplace add` and `claude plugin install` | `claude --prefill "PROMPT"`: the task waits in the input box for Enter |
-| Codex | `codex plugin marketplace add` and `codex plugin add` | `codex "PROMPT"`: starts at once. Trust the plugin hooks when Codex asks (`/hooks`) |
-| Cursor | Copies the plugin to `~/.cursor/plugins/local/conquistador` | `cursor-agent "PROMPT"`. With the editor only, the prompt is copied for you to paste; run **Developer: Reload Window** first |
-| GitHub Copilot CLI | `copilot plugin marketplace add` and `copilot plugin install` | `copilot -i "PROMPT"`: starts at once |
-| Grok CLI | `grok plugin install --trust` (running `conquistador` is the consent) | `grok "PROMPT"`: starts at once |
-
-`--prefill` is not in `claude --help`. Conquistador uses it from Claude Code 2.1.283, where it was
-tested. With an older version, or with `CONQUISTADOR_PREFILL=off`, Claude Code starts the task at
-once instead.
-
-Without a terminal, or in scripts, use flags:
-
-```sh
-conquistador add claude-code codex --yes   # Install into named agents
-conquistador add --dry-run                 # Print the commands only
-conquistador agents                        # Show what is found and installed
-conquistador update                        # Get the latest version and update every agent you installed into
-conquistador remove                        # Remove from every agent and delete ~/.conquistador/plugin
 ```
 
 ### Install from inside Claude Code
@@ -93,8 +157,9 @@ conquistador remove                        # Remove from every agent and delete 
   relevant prompts, and a stop hook that sends the agent back once if it skipped those files.
   Cursor cannot add context per prompt, so it gets the protocol at session start instead.
 
-The plugin runs bundled Node scripts only. It installs no dependencies and makes no network
-requests.
+The playbook MCP server and hooks run bundled Node scripts and read local playbooks. Package
+acquisition and host plugin-manager operations can use the network; they are separate from the
+read-only playbook tools. A host may send loaded context to its model under its own data policy.
 
 To turn off the hooks, set `CONQUISTADOR_HOOKS=off`, or add `{"hooks": false}` to
 `~/.conquistador/config.json`.
@@ -121,7 +186,7 @@ Run the server over stdio:
 conquistador mcp
 ```
 
-After `conquistador add`, a stable copy exists at `~/.conquistador/plugin`. Point clients at it so
+After an explicit `conquistador add AGENT --yes`, a stable copy exists at `~/.conquistador/plugin`. Point clients at it so
 that a Node version switch does not break them:
 
 ```json
@@ -158,12 +223,24 @@ The server is read-only. Anyone with the URL and token can read the playbooks.
 For ChatGPT GPTs, Claude Projects, Grok projects, and Gemini Gems:
 
 ```sh
-conquistador bot --out ./conquistador-bot
+conquistador bot --out ./conquistador-bot --no-private
 ```
 
-Paste `SYSTEM-PROMPT.md` into the app's instructions, and upload the files in `knowledge/`
-(12 files, fewer than the tightest common upload limit). If you configured your own playbooks,
-the pack includes them in `99-your-playbooks.md`. Add `--no-private` to leave them out.
+Review `SYSTEM-PROMPT.md` before pasting it into the app's instructions. Upload **only the
+knowledge files listed in the generated README**, after reviewing their contents and destination.
+Do not upload ownership metadata or unrelated files in the output folder. `--no-private` excludes
+your own playbooks; without it, configured personal playbooks are included in
+`knowledge/99-your-playbooks.md`. Exporting locally does not authorize uploading private content.
+
+This checkout's unshipped exporter stages a complete pack and records owned files with hashes.
+It replaces only an unchanged owned pack. A pre-fix export without an ownership manifest,
+unknown files, or modified generated files is refused: preserve the old folder and choose a
+fresh `--out` directory. Do not delete personal files merely to force a rebuild.
+
+Rebuilding with `--no-private` removes the private file from an unchanged owned **local** pack.
+It cannot remove anything previously uploaded to a chat app; inspect and remove those old
+uploads in that app separately if needed. Published 0.2.2 does not provide these new replacement
+safeguards, so use a fresh output directory when rebuilding a pack from that release.
 
 ## Your own playbooks
 
@@ -186,12 +263,17 @@ operator contracts and the BB specialist adapter. The flags `--skills`, `--plugi
 
 | Symptom | Fix |
 | --- | --- |
-| 0.0.16 stops with `ENOENT … conquistador.tmp-NNNN/.conquistador-owned.json` | 0.0.16 copied an empty plugin from npm installs. Install 0.0.17 or later with the command above and run `conquistador` again. It removes the leftover folder and repairs every agent. |
-| `… exists and was not created by Conquistador` | A folder that you or another tool made is in the way. Move or delete it, then run `conquistador` again. The other agents install anyway. |
-| `The Conquistador package at … is incomplete` | The npm install is damaged. Install again with the command above. Your agents keep the last good copy. |
-| `Conquistador stopped: …` | Open the `Details:` file it prints, and send it with a report. `CONQUISTADOR_DEBUG=1` prints the full error. |
-| `Conquistador requires Node 24 or later` | Install Node 24 or later, open a new terminal, and run the command again. |
-| An agent shows `✗` after install | Run the printed command yourself to see the full error, then run `conquistador add AGENT --yes`. |
-| The agent does not list Conquistador | Start a new session. In Cursor, reload the window. In Codex, trust the hooks. |
-| The agent ignores the playbooks | Check that hooks are on (`CONQUISTADOR_HOOKS` unset), and run `conquistador brief "TASK"` to see what it should read. |
-| MCP server fails after a Node switch | Point the client at `~/.conquistador/plugin/mcp/server.mjs`. |
+| No supported agent is found | Install a supported coding agent through its official instructions, then preview `conquistador add AGENT --dry-run`. Drafting still needs no marketing-service connection. |
+| `… exists and was not created by Conquistador` | Inspect and preserve that folder. Move it yourself if appropriate, then retry `conquistador add AGENT --yes`; the installer must not overwrite unowned work. |
+| `The Conquistador package at … is incomplete` | Reinstall the package, then retry `conquistador add AGENT --yes`. A rejected staged copy must not replace the last good copy. |
+| `Conquistador stopped: …` | Inspect the printed `Details:` file locally. Redact private paths and data before choosing to share a report. `CONQUISTADOR_DEBUG=1` prints the full error. |
+| `Conquistador requires Node 24 or later` | Install Node 24 or later, open a new terminal, and run the command again. No installation success should be inferred from this error. |
+| A host install fails | Read its error and preview the named scope again, then retry `conquistador add AGENT --yes`. Check `conquistador agents` for partial state. |
+| The agent does not list Conquistador | Start a new session. In Cursor, reload the window. Check the host's plugin listing. Hook trust is a separate choice from discovery. |
+| Hooks are off or denied | Use Conquistador explicitly and ask it to read the selected playbooks. This has no hook enforcement; verify actual reading and output separately. |
+| The agent ignores the playbooks | Run `conquistador brief "TASK"` to inspect the reading list. If you want hooks, check `CONQUISTADOR_HOOKS`, `config.json`, and host trust. A citation alone does not prove correct use. |
+| MCP server fails after a Node switch | Check the active Node executable and point the client at `~/.conquistador/plugin/mcp/server.mjs`. Confirm a read works in that client. |
+
+For route-specific local diagnostics, use the original installer: plugin status is
+`conquistador agents`; the optional project operator uses `conquistador operator status` and
+`conquistador operator doctor --json` in its receiving project. Neither proves host/model readiness.

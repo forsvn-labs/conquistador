@@ -30,8 +30,10 @@ frontmatter names and parent routing. An isolated skill must not depend on sibli
 Record unshipped behavior changes and checks in PROGRESS.md. CHANGELOG.md contains shipped work only. Do not add private issue exports,
 source history, raw provider receipts, customer content, or credentials to a pull request.
 
-After intentional skill or supporting-resource edits, run `node tools/update-completeness.mjs` and
-review `release/completeness.json` with the source changes. It records exact method versions and
+After intentional skill, supporting-resource, or plugin payload edits (including hooks,
+briefing helpers, and README), run `node tools/update-completeness.mjs`. Review both
+`release/completeness.json` and the plugin-specific `release/plugin-completeness.json` with the
+source changes. It records exact method versions and
 content hashes for the complete library. The installation-doctor tests reject missing or stale
 manifest entries. Use `node runtime/bin/conquistador.js operator doctor --path /absolute/install`
 to check local files without starting a host or service. This does not establish host activation,

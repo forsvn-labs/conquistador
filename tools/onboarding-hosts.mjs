@@ -1,4 +1,4 @@
-import { existsSync, accessSync, constants } from 'node:fs';
+import { existsSync, accessSync, constants, lstatSync, readFileSync } from 'node:fs';
 import { delimiter, dirname, join, resolve } from 'node:path';
 import { homedir } from 'node:os';
 import { DEFAULT_HOSTS } from './onboarding-parse.mjs';
@@ -66,7 +66,22 @@ export function activeHosts(env = process.env) {
 
 export function gitRoot(cwd) {
   for (let cursor = resolve(cwd); ; cursor = dirname(cursor)) {
-    if (existsSync(join(cursor, '.git'))) return cursor;
+    // Empty/placeholder .git paths are not repositories. Also support Git worktree files
+    // without requiring a Git executable on PATH during installation.
+    const marker = join(cursor, '.git');
+
+    try {
+      const stat = lstatSync(marker);
+
+      const target = stat.isDirectory() ? marker : stat.isFile()
+        ? /^gitdir: (.+)\r?\n?$/.exec(readFileSync(marker, 'utf8'))?.[1] : null;
+
+      if (target) {
+        const head = readFileSync(join(resolve(cursor, target), 'HEAD'), 'utf8').trim();
+
+        if (/^(?:ref: refs\/[^\s]+|[a-f0-9]{40}|[a-f0-9]{64})$/.test(head)) return cursor;
+      }
+    } catch { /* Unreadable or incomplete metadata is not a discovered repository. */ }
     if (cursor === dirname(cursor)) return null;
   }
 }

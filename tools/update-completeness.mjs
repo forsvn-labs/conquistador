@@ -7,6 +7,7 @@ import { methodIdentity } from './installation-doctor.mjs';
 
 import { operatorFiles } from './operator-package.mjs';
 import { writeRoutingContract } from './routing-contract.mjs';
+import { buildPluginManifest, pluginManifestPath } from './plugin-payload.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 writeRoutingContract(root);
@@ -37,3 +38,5 @@ const manifest = {
 };
 if (!manifest.parent || manifest.outcomes.length !== 38) throw Error('Expected the parent and 38 outcomes; review the release contract before changing this count.');
 writeFileSync(join(root, 'release/completeness.json'), JSON.stringify(manifest, null, 2) + '\n');
+
+writeFileSync(join(root, pluginManifestPath), JSON.stringify(buildPluginManifest(root, manifest), null, 2) + '\n');

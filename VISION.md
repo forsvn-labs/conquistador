@@ -9,10 +9,13 @@ Research, creative work, engineering, and review support that mission.
 
 ## Make the first task easy
 
-Setup ends inside the user's agent, with the task already typed, not in a list of next steps.
-Bare `conquistador` installs into every agent it finds without asking, asks what to work on, and
-opens the agent with that task. The agent learns the product from the repository, so the user does
-not describe it first. The user learns four commands: `conquistador`, `conquistador "TASK"`,
+Setup makes its scope visible before it changes a host, then ends inside the selected agent
+with one bounded task. Choose one target before installation; a single detected host may be
+selected automatically with its scope shown. `--in AGENT` selects that target, and adding all
+hosts requires an explicit all-host choice. Show the shared plugin location, host changes, and
+exact undo command. A remembered launch choice never authorizes adding other hosts.
+The agent learns from a repository when one is available, or from a supplied brief when it is
+not. A repository and connected marketing accounts are not prerequisites for a first draft. The user learns four commands: `conquistador`, `conquistador "TASK"`,
 update, and remove, plus `/conquistador` inside the agent. Every other route stays available
 behind `help --all` and INSTALL.md, because a long menu stops people from starting. Install once
 per user; it works in every project. The same package
@@ -32,8 +35,14 @@ global install. Pinned Git tags stay available for exact versions. List the same
 agent marketplaces. Advertise a version only after its exact package is on the registry and a
 clean global lifecycle passes.
 
+Make the first result small enough to review: one complete marketing draft, one growth
+experiment brief, or one product specification. Give one focused correction opportunity and
+preserve the user's other facts. Synthetic examples demonstrate a contract; they are not host
+runs or customer outcome evidence. Specification acceptance does not authorize implementation.
+
 An installed library must contain the methods and resources its parent routes to. Report local
-completeness, host activation, knowledge use, and task success separately. A passing install or
+completeness, host discovery, hook trust, actual knowledge use, task success, correction quality,
+and human usefulness separately. A passing install or
 a cited playbook does not prove that the answer is useful.
 
 The host supplies the model, context, tools, permissions, and worker contexts. Use specialists
@@ -73,6 +82,7 @@ learning, or background feedback upload is planned.
 
 ## Public alpha, judged by real tasks
 
-The repository and the npm package are public from 0.2.0. Judge the product through real tasks and
+The repository and the npm package are public from 0.2.0; 0.2.2 is the current published alpha.
+Source changes remain unshipped until their release is recorded. Judge the product through real tasks and
 corrections, not install counts. Each release, marketplace listing, and landing change still needs
 an explicit decision. Local package records do not grant release authority. See [ROADMAP.md](ROADMAP.md) and [PROGRESS.md](PROGRESS.md).

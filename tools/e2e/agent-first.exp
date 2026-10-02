@@ -1,7 +1,7 @@
 #!/usr/bin/expect -f
 # The agent-first start, end to end, with real agents in an isolated home. No model is called:
 # every agent session is closed before a prompt is sent.
-#   1. Bare `conquistador` installs into every agent it finds, asks for a task, asks which agent,
+#   1. Bare `conquistador` asks for one target, confirms installation, then asks for a task,
 #      and opens Claude Code with the task pre-filled. The pre-fill survives the trust screen (A3).
 #   2. Bare `conquistador` again skips install, remembers the agent, and takes a typed task.
 #   3. `conquistador "TASK" --in codex` opens Codex with the prompt as its argument (A8).
@@ -67,11 +67,12 @@ cd $project
 set transcript ""
 eval spawn $cli
 stty rows 50 columns 140 < $spawn_out(slave,name)
-step {What should we work on\?}
-record "first run installs into every detected agent" [has "Installed into"] ""
-send "\r"
-# Several agents on this machine: one question, Claude Code first.
 step {Open in}
+send "\r"
+step {Install Conquistador into Claude Code\?}
+send "\r"
+step {What should we work on\?}
+record "first run installs only the selected agent" [has "Installed into Claude Code"] ""
 send "\r"
 # Wait for the whole trust screen and its input handler before answering it.
 step {cancel}
@@ -80,7 +81,7 @@ send "\033\[B"; sleep 0.5; send "\r"
 step {Pre-filled}
 drain
 set first [plain $transcript]
-record "Claude Code opens with the task pre-filled" [has "/conquistador Plan marketing and growth for this project."] ""
+record "Claude Code opens with the task pre-filled" [has "/conquistador Draft one welcome email for new trial users; do not send it."] ""
 record "prompt tells the agent to learn from the folder" [has "Learn the product from this folder first."] ""
 record "task is not sent (no model call)" [has "review before pressing Enter"] ""
 # Keys typed now must reach the agent, not the waiting Conquistador process.
@@ -112,7 +113,7 @@ set run2 $transcript
 
 # --- 3. Direct task into Codex ---------------------------------------------------------------
 set transcript ""
-eval spawn $cli {"Write a cold email sequence to HR directors"} --in codex
+eval spawn $cli {"Write a cold email sequence to HR directors"} --in codex --yes
 stty rows 50 columns 140 < $spawn_out(slave,name)
 step {Opening Codex}
 sleep 3

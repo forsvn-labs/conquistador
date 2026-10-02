@@ -6,7 +6,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parseOnboarding, UsageError, SKILLS_PIN, SKILLS_AGENTS } from './onboarding-parse.mjs';
-import { activeHosts, resolveHost, ACTIVE_SIGNALS } from './onboarding-hosts.mjs';
+import { activeHosts, resolveHost, ACTIVE_SIGNALS, gitRoot } from './onboarding-hosts.mjs';
 import { EventEmitter } from 'node:events';
 import { cancellableUi } from './onboarding-ui.mjs';
 import { confirmPlan, mcpHandoff, retrySkills } from './onboarding-routes.mjs';
@@ -386,6 +386,7 @@ test('dry-run validates every shortcut destination and runtime URL before writin
   ]) {
     const project = fixture(t);
     mkdirSync(join(project, '.git'));
+    writeFileSync(join(project, '.git', 'HEAD'), 'ref: refs/heads/main\n');
     mkdirSync(join(project, folder));
     writeFileSync(join(project, folder, 'keep'), 'untouched');
     const before = readdirSync(project);
@@ -471,6 +472,7 @@ test('a manager exit zero without the promised copy or lockfile is not success',
 test('Hermes uses v2 ownership, retains it on repeat launch, and refuses duplicate shared discovery', t => {
   const project = fixture(t);
   mkdirSync(join(project, '.git'));
+  writeFileSync(join(project, '.git', 'HEAD'), 'ref: refs/heads/main\n');
   assert.equal(invoke(project, ['--bot', 'hermes', '--yes']).status, 0);
   const path = join(project, '.conquistador');
   assert.equal(projectIntegration(path).schemaVersion, 'conquistador.project-installation/v2');
@@ -581,4 +583,26 @@ test('local errors retain their cause and recovery state after application begin
   assert.match(rerun.stderr, /previous installation left recovery files/);
   assert.equal(existsSync(join(project, '.conquistador')), false);
   assert.ok(existsSync(join(project, '.conquistador-transaction-recovery')));
+});
+
+
+test('Git root discovery ignores empty markers and accepts valid worktree metadata', t => {
+  const project = fixture(t);
+  const marker = join(project, '.git');
+
+  mkdirSync(marker);
+  assert.notEqual(gitRoot(project), project);
+  writeFileSync(join(marker, 'HEAD'), 'not a Git HEAD');
+  assert.notEqual(gitRoot(project), project);
+  writeFileSync(join(marker, 'HEAD'), 'ref: refs/heads/main\n');
+  assert.equal(gitRoot(project), project);
+  rmSync(marker, { recursive: true });
+  const metadata = join(project, 'worktree-metadata');
+
+  mkdirSync(metadata);
+  writeFileSync(join(metadata, 'HEAD'), '0123456789abcdef0123456789abcdef01234567\n');
+  writeFileSync(marker, 'gitdir: worktree-metadata\n');
+  assert.equal(gitRoot(project), project);
+  writeFileSync(marker, 'not a Git worktree file');
+  assert.notEqual(gitRoot(project), project);
 });

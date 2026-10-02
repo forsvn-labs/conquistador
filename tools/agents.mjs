@@ -5,10 +5,12 @@
 import { spawnSync } from 'node:child_process';
 import { cpSync, existsSync, mkdirSync, readdirSync, readFileSync, renameSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import { homedir } from 'node:os';
-import { basename, delimiter, dirname, join, relative, resolve } from 'node:path';
+import { basename, delimiter, dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { briefFiles } from './operator-package.mjs';
+import { invalidPayload, pluginManifestPath, readPluginManifest } from './plugin-payload.mjs';
 import { spawnCommand } from './spawn.mjs';
+
+export { pluginPayload } from './plugin-payload.mjs';
 
 export const productRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 export const version = JSON.parse(readFileSync(join(productRoot, 'package.json'), 'utf8')).version;
@@ -23,13 +25,6 @@ export const self = /[\\/]_npx[\\/]/.test(productRoot)
   : 'conquistador';
 const MARKETPLACE = 'conquistador';
 const PLUGIN = `conquistador@${MARKETPLACE}`;
-
-// Everything a plugin host needs. Core Node modules only; no dependency install.
-export const pluginPayload = [
-  '.claude-plugin', '.codex-plugin', '.cursor-plugin', '.agents', 'plugin.json', 'mcp.json', 'hooks', 'skills', 'assets',
-  'agents/conquistador.md', 'package.json', 'LICENSE', 'NOTICE.md', 'README.md', 'SKILL.md',
-  'mcp/server.mjs', 'tools/mcp-http.mjs', ...briefFiles,
-];
 
 export function onPath(command) {
   for (const folder of (process.env.PATH ?? '').split(delimiter)) {
@@ -51,10 +46,10 @@ export const AGENTS = [
     install: src => [step('claude', ['plugin', 'marketplace', 'add', src]), step('claude', ['plugin', 'install', PLUGIN])],
     update: () => [step('claude', ['plugin', 'marketplace', 'update', MARKETPLACE]), step('claude', ['plugin', 'update', PLUGIN], { okIf: /latest|up to date|already/i })],
     remove: () => [step('claude', ['plugin', 'uninstall', PLUGIN], { okIf: /not (?:installed|found)/i }), step('claude', ['plugin', 'marketplace', 'remove', MARKETPLACE], { okIf: /not found|no marketplace/i })],
-    installed: () => run('claude', ['plugin', 'list', '--json']).stdout.includes(`"${PLUGIN}"`),
+    installed: () => registration('claude', ['plugin', 'list', '--json'], text => text.includes(`"${PLUGIN}"`)),
     // Claude Code 2.1.283 puts --prefill text in the input box without sending it (verified 2026-09-28).
     // The flag is not in --help, so older versions and CONQUISTADOR_PREFILL=off send the prompt instead.
-    open: prompt => (prefill() ? { command: 'claude', args: ['--prefill', prompt], sends: false } : { command: 'claude', args: [prompt], sends: true }),
+    open: (prompt, { preview = false } = {}) => ((preview ? process.env.CONQUISTADOR_PREFILL !== 'off' : prefill()) ? { command: 'claude', args: ['--prefill', prompt], sends: false } : { command: 'claude', args: [prompt], sends: true }),
     slash: '/conquistador ',
   },
   {
@@ -64,7 +59,7 @@ export const AGENTS = [
     install: src => [step('codex', ['plugin', 'marketplace', 'add', src], { okIf: /already added/i }), step('codex', ['plugin', 'add', PLUGIN])],
     update: src => [step('codex', ['plugin', 'marketplace', 'add', src], { okIf: /already added/i }), step('codex', ['plugin', 'add', PLUGIN])],
     remove: () => [step('codex', ['plugin', 'remove', PLUGIN], { okIf: /not installed|not found/i }), step('codex', ['plugin', 'marketplace', 'remove', MARKETPLACE], { okIf: /not found|no marketplace/i })],
-    installed: () => run('codex', ['plugin', 'list']).stdout.includes(PLUGIN),
+    installed: () => registration('codex', ['plugin', 'list'], text => text.includes(PLUGIN)),
     open: prompt => ({ command: 'codex', args: [prompt], sends: true }),
     note: 'Codex asks once to trust the Conquistador hooks. Type /hooks to trust them.',
   },
@@ -84,19 +79,25 @@ export const AGENTS = [
     install: src => [step('copilot', ['plugin', 'marketplace', 'add', src], { okIf: /already/i }), step('copilot', ['plugin', 'install', PLUGIN], { okIf: /already/i })],
     update: () => [step('copilot', ['plugin', 'update', PLUGIN], { okIf: /latest|up to date|live/i })],
     remove: () => [step('copilot', ['plugin', 'uninstall', PLUGIN], { okIf: /not installed|not found/i }), step('copilot', ['plugin', 'marketplace', 'remove', MARKETPLACE], { okIf: /not found/i })],
-    installed: () => run('copilot', ['plugin', 'list']).stdout.includes(PLUGIN),
+    installed: () => registration('copilot', ['plugin', 'list'], text => text.includes(PLUGIN)),
     open: prompt => ({ command: 'copilot', args: ['-i', prompt], sends: true }),
   },
   {
     id: 'grok', label: 'Grok CLI', command: 'grok', how: 'plugin',
-    // Grok asks for explicit trust. Running `conquistador` or `conquistador add grok` is that consent.
+    // Grok's --trust is disclosed in the selected-host install confirmation/explicit add preview.
     install: src => [step('grok', ['plugin', 'install', src, '--trust'], { okIf: /already installed/i, then: step('grok', ['plugin', 'update']) })],
     update: () => [step('grok', ['plugin', 'update'])],
     remove: () => [step('grok', ['plugin', 'uninstall', 'conquistador'], { okIf: /not found/i })],
-    installed: () => /\bconquistador\b/.test(run('grok', ['plugin', 'list']).stdout),
+    installed: () => registration('grok', ['plugin', 'list'], text => /\bconquistador\b/.test(text)),
     open: prompt => ({ command: 'grok', args: [prompt], sends: true }),
   },
 ];
+
+function registration(command, args, matches) {
+  const result = run(command, args, { timeout: 5_000 });
+
+  return result.status === 0 && matches(result.stdout);
+}
 
 // The first Claude Code version where --prefill was verified.
 const PREFILL_SINCE = [2, 1, 283];
@@ -119,16 +120,21 @@ export function detectAgents() {
   return AGENTS.map(agent => ({ ...agent, found: [agent.command, ...(agent.alsoDetect ?? [])].some(onPath) || (agent.id === 'cursor' && existsSync(join(homedir(), '.cursor'))) }));
 }
 
-// Files every agent's plugin manager needs. A copy without them is never registered (I2).
+// Bootstrap paths retained for lightweight external smoke checks. Installation and reuse
+// verify the complete generated plugin inventory, not only these sentinels (I2, I6).
 export const requiredPayload = [
   '.claude-plugin/plugin.json', '.claude-plugin/marketplace.json', '.codex-plugin/plugin.json', '.cursor-plugin/plugin.json',
   'plugin.json', 'mcp.json', 'mcp/server.mjs', 'hooks/conquistador-hook.mjs', 'skills/conquistador/SKILL.md', 'tools/brief.mjs',
+  pluginManifestPath,
 ];
-export const missingPayload = folder => requiredPayload.filter(item => !existsSync(join(folder, item)));
 
-// Skip dependency and Git folders inside the payload. Test the path relative to the payload item:
-// the package itself lives under node_modules when npm or npx installs it (I1).
-const skipped = /(?:^|[\\/])(?:node_modules|\.git)(?:[\\/]|$)/;
+export const missingPayload = folder => readPluginManifest(productRoot, version).map(item => item.path).filter(item => !existsSync(join(folder, item)));
+
+function incompletePayload(source, problems) {
+  const detail = problems.slice(0, 5).join(', ') + (problems.length > 5 ? `, and ${problems.length - 5} more` : '');
+
+  return Error(`The Conquistador package at ${tilde(source)} is incomplete or damaged (${detail}). Reinstall it, then run ${self} again.`);
+}
 
 // Remove staging and backup folders that an earlier crashed run left next to the destination (I4).
 function removeStale(destination) {
@@ -152,19 +158,32 @@ function alive(pid) {
 export function copyPayload(destination, { source = productRoot } = {}) {
   const marker = join(destination, '.conquistador-owned.json');
   if (existsSync(destination) && !existsSync(marker)) throw Error(`${tilde(destination)} exists and was not created by Conquistador. Move or delete it, then run ${self} again.`);
+  let expected;
+
+  try { expected = readPluginManifest(productRoot, version); }
+  catch { throw incompletePayload(productRoot, [`missing or invalid ${pluginManifestPath}`]); }
+
+  // Cursor may copy from the stable installed plugin. Its manifest is still checked against
+  // this package's expected bytes, so altering an installed hash list cannot hide damage.
+  const sourceProblems = invalidPayload(source, expected);
+
+  if (sourceProblems.length) throw incompletePayload(source, sourceProblems);
   mkdirSync(dirname(destination), { recursive: true });
   removeStale(destination);
   const staging = `${destination}.tmp-${process.pid}`;
   mkdirSync(staging, { recursive: true });
   try {
-    for (const item of pluginPayload) {
+    // Only copy manifest-listed files; dependency folders, Git data and unlisted local files
+    // cannot leak into the managed payload, including from an npm node_modules source (I1).
+    for (const { path: item } of expected) {
       const from = join(source, item);
-      if (!existsSync(from)) continue;
       mkdirSync(dirname(join(staging, item)), { recursive: true });
-      cpSync(from, join(staging, item), { recursive: true, dereference: false, filter: path => !skipped.test(relative(from, path)) });
+      cpSync(from, join(staging, item), { dereference: false });
     }
-    const missing = missingPayload(staging);
-    if (missing.length) throw Error(`The Conquistador package at ${tilde(source)} is incomplete (missing ${missing.join(', ')}). Reinstall it, then run ${self} again.`);
+
+    const problems = invalidPayload(staging, expected);
+
+    if (problems.length) throw incompletePayload(source, problems);
     writeFileSync(join(staging, '.conquistador-owned.json'), `${JSON.stringify({ version, source, copiedAt: new Date().toISOString() }, null, 2)}\n`);
   } catch (error) {
     rmSync(staging, { recursive: true, force: true });
@@ -177,10 +196,12 @@ export function copyPayload(destination, { source = productRoot } = {}) {
   return destination;
 }
 
-// A copy is current when it is complete and was made from this version (I6).
+// This is local content health only: it does not establish host activation or model use.
 export function payloadCurrent(folder) {
-  if (missingPayload(folder).length) return false;
-  try { return JSON.parse(readFileSync(join(folder, '.conquistador-owned.json'), 'utf8')).version === version; } catch { return false; }
+  try {
+    return JSON.parse(readFileSync(join(folder, '.conquistador-owned.json'), 'utf8')).version === version
+      && invalidPayload(folder, readPluginManifest(productRoot, version)).length === 0;
+  } catch { return false; }
 }
 
 export function removePayload(destination) {

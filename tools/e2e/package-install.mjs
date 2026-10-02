@@ -13,7 +13,7 @@ import { cpSync, existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, 
 import { tmpdir } from 'node:os';
 import { delimiter, dirname, join, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { onPath, requiredPayload } from '../agents.mjs';
+import { onPath, missingPayload } from '../agents.mjs';
 import { spawnCommand } from '../spawn.mjs';
 
 const root = resolve(fileURLToPath(new URL('../../', import.meta.url)));
@@ -77,13 +77,14 @@ function isolated(name, prefixBin) {
   };
   return { home, env, plugin, cursor, listed };
 }
-const missing = folder => requiredPayload.filter(item => !existsSync(join(folder, item)));
+
+const missing = missingPayload;
 const stackTrace = text => /\n\s+at .+:\d+:\d+/.test(text);
 const observe = (box, agents) => Object.fromEntries(agents.map(id => [id, box.listed[id]()]));
 const all = (observed, value) => Object.values(observed).length > 0 && Object.values(observed).every(item => item === value);
 const deadPid = () => { for (let pid = 999_999; pid > 900_000; pid -= 1) { try { process.kill(pid, 0); } catch (error) { if (error.code === 'ESRCH') return pid; } } return 999_999; };
 const marker = folder => { try { return JSON.parse(readFileSync(join(folder, '.conquistador-owned.json'), 'utf8')); } catch { return null; } };
-// A pseudo-terminal, so the start flow runs its interactive path. `--no-open` asks no questions.
+// Explicit target and approval keep the terminal install-only checks noninteractive.
 // macOS has BSD script, Linux has util-linux script, and Windows has neither.
 const tty = (cli, args, box) => (process.platform === 'darwin'
   ? run('script', ['-q', '/dev/null', cli, ...args], { env: box.env, cwd: join(box.home, 'acme') })
@@ -138,15 +139,17 @@ check('A0', `the installed CLI reports ${version}`, run(cli, ['--version'], { en
 const agents = JSON.parse(run(cli, ['agents', '--json'], { env: a.env }).stdout || '{"agents":[]}').agents.filter(agent => agent.found).map(agent => agent.id);
 check('A0', `agents found: ${agents.join(', ') || 'none'}`, agents.length > 0);
 
-let result = run(cli, ['add', '--yes'], { env: a.env });
+let result = run(cli, ['add', '--all', '--yes'], { env: a.env });
 let seen = observe(a, agents);
-check('I1', 'add --yes from the npm package installs every agent', result.status === 0 && all(seen, true), JSON.stringify(seen));
+
+check('I1', 'add --all --yes from the npm package installs every agent', result.status === 0 && all(seen, true), JSON.stringify(seen));
 check('I1', 'the stable plugin copy is complete', missing(a.plugin).length === 0, missing(a.plugin).join(', '));
 check('I1', 'the Cursor copy is complete', missing(a.cursor).length === 0, missing(a.cursor).join(', '));
 
-result = run(cli, ['add', '--yes'], { env: a.env });
+result = run(cli, ['add', '--all', '--yes'], { env: a.env });
 seen = observe(a, agents);
-check('A1', 'add --yes again is idempotent', result.status === 0 && all(seen, true), JSON.stringify(seen));
+
+check('A1', 'add --all --yes again is idempotent', result.status === 0 && all(seen, true), JSON.stringify(seen));
 
 const pid = deadPid();
 const stale = [`${a.cursor}.tmp-${pid}`, `${a.plugin}.old-${pid}`];
@@ -156,23 +159,25 @@ check('I4', 'update removes folders a crashed run left behind', result.status ==
 
 rmSync(join(a.plugin, 'mcp', 'server.mjs'), { force: true });
 if (hasTty) {
-  result = tty(cli, ['--no-open'], a);
+  result = tty(cli, ['--in', 'cursor', '--no-open', '--yes'], a);
   check('I6', 'bare conquistador repairs a broken plugin copy', result.status === 0 && missing(a.plugin).length === 0 && /Installed into/.test(result.output), result.output.trim().split('\n').slice(-4).join(' | '));
 } else {
   notRun('I6', 'bare conquistador repairs a broken plugin copy', 'no pseudo-terminal on this platform');
-  run(cli, ['add', '--yes'], { env: a.env });
+  run(cli, ['add', '--all', '--yes'], { env: a.env });
 }
 
 rmSync(a.cursor, { recursive: true, force: true });
 mkdirSync(a.cursor, { recursive: true });
 writeFileSync(join(a.cursor, 'notes.txt'), 'mine\n');
-result = run(cli, ['add', '--yes'], { env: a.env });
+
+result = run(cli, ['add', '--all', '--yes'], { env: a.env });
 seen = observe(a, agents.filter(id => id !== 'cursor'));
 check('I5', 'a folder Conquistador did not create is left in place', readFileSync(join(a.cursor, 'notes.txt'), 'utf8') === 'mine\n' && readdirSync(a.cursor).length === 1);
 check('I3', 'Cursor fails with a reason; the other agents still install', result.status === 1 && /✗ Cursor: .*not created by Conquistador/.test(result.output) && all(seen, true) && !stackTrace(result.output), result.output.trim().split('\n').slice(-3).join(' | '));
-result = hasTty ? tty(cli, ['--no-open'], a) : null;
+
+result = hasTty ? tty(cli, ['--in', 'cursor', '--no-open', '--yes'], a) : null;
 if (!result) notRun('I3', 'the start flow reports Cursor, offers a retry, and still finishes', 'no pseudo-terminal on this platform');
-else check('I3', 'the start flow reports Cursor, offers a retry, and still finishes', result.status === 0 && /Cursor: .*not created by Conquistador/.test(result.output) && /conquistador add cursor/.test(result.output) && /Ready/.test(result.output) && !stackTrace(result.output), result.output.trim().split('\n').slice(-5).join(' | '));
+else check('I3', 'the selected-host start reports Cursor failure and offers a retry', result.status === 1 && /Cursor: .*not created by Conquistador/.test(result.output) && /conquistador add cursor/.test(result.output) && /No agent opened/.test(result.output) && !stackTrace(result.output), result.output.trim().split('\n').slice(-5).join(' | '));
 rmSync(a.cursor, { recursive: true, force: true });
 result = run(cli, ['add', 'cursor', '--yes'], { env: a.env });
 check('I3', 'add cursor --yes succeeds after the folder moves', result.status === 0 && missing(a.cursor).length === 0);
@@ -181,7 +186,8 @@ const broken = join(work, 'broken', 'node_modules', '@forsvn', 'conquistador');
 if (existsSync(packageDir)) cpSync(packageDir, broken, { recursive: true });
 rmSync(join(broken, '.codex-plugin', 'plugin.json'), { force: true });
 const before = marker(a.plugin);
-result = run(process.execPath, [join(broken, 'runtime', 'bin', 'conquistador.js'), 'add', '--yes'], { env: a.env });
+
+result = run(process.execPath, [join(broken, 'runtime', 'bin', 'conquistador.js'), 'add', '--all', '--yes'], { env: a.env });
 const leftovers = readdirSync(dirname(a.plugin)).filter(name => /\.(?:tmp|old)-\d+$/.test(name));
 check('I2', 'an incomplete package names the missing file and installs nothing', result.status === 1 && /missing \.codex-plugin\/plugin\.json/.test(result.output) && /agents are unchanged/.test(result.output) && !stackTrace(result.output), result.output.trim().split('\n').slice(-3).join(' | '));
 check('I2', 'the last good plugin copy stays in place', missing(a.plugin).length === 0 && marker(a.plugin)?.copiedAt === before?.copiedAt && leftovers.length === 0, leftovers.join(', '));
@@ -210,7 +216,8 @@ check('B0', `npm pack: ${packed.entryCount ?? '?'} files, ${((packed.size ?? 0) 
 check('B0', 'the tarball has no nested node_modules', (packed.files ?? []).length > 0 && !(packed.files ?? []).some(file => /node_modules[\\/]/.test(file.path)));
 const b = isolated('home-b', null);
 const npxCache = join(work, 'npx-cache');
-result = run('npx', ['--yes', '--cache', npxCache, '--package', tarball, '--', 'conquistador', 'add', '--yes'], { env: b.env });
+
+result = run('npx', ['--yes', '--cache', npxCache, '--package', tarball, '--', 'conquistador', 'add', '--all', '--yes'], { env: b.env });
 seen = observe(b, agents);
 check('B1', `npx from the tarball installs every agent (${Math.round(result.ms / 1000)} s)`, result.status === 0 && all(seen, true) && missing(b.plugin).length === 0, JSON.stringify(seen));
 check('B1', 'after npx, the next step is /conquistador in the agent, not a missing command', /type \/conquistador in your agent/.test(result.output) && !/Start a task: conquistador/.test(result.output), result.output.trim().split('\n').slice(-2).join(' | '));
