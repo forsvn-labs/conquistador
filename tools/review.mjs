@@ -13,7 +13,7 @@ import { fileURLToPath } from 'node:url';
 import { spawnCommand } from './spawn.mjs';
 
 export const PROOF_REPOSITORY = 'https://github.com/forsvn-labs/proof.git';
-export const PROOF_COMMIT = '7e2a457d78ac81eacf94156c810740894e951ab9';
+export const PROOF_COMMIT = 'e5753a2485a3baa6267399ed30212c2f4234e9ca';
 // SHA-256 of the unmodified upstream MIT LICENSE (Every, 2026).
 const PROOF_LICENSE_SHA256 = '4648b2d84d492d891c68c4ff906ffd600438b7c7cd2ade0f904abbb404657829';
 export const LAVISH_PACKAGE = 'lavish-axi@0.1.80';

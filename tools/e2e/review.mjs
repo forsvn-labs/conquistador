@@ -137,7 +137,7 @@ Freelance designers spend their Fridays chasing invoices. Today we ship automati
 ## Playbooks applied
 
 - write-social: hook-first opening
-- channels/linkedin: fold at 210 characters
+- channels/linkedin: fold at 150 characters
 `;
 const source = join(project, 'launch.md');
 writeFileSync(source, markdown);
@@ -176,7 +176,7 @@ if (binary && session) {
 let approvedSha = '';
 if (!browser) {
   const reason = !binary ? 'no Chrome or Chromium found; set CHROME_PATH' : !session ? 'no review session' : `the browser did not start (${browserError})`;
-  for (const [id, name] of [['R5a', 'the Proof editor shows the document text'], ['R5', 'the review page shows the LinkedIn channel preview'], ['R6', 'the Playbooks applied panel lists the final section'], ['R7', 'the reviewer approves in the browser'], ['R8', 'the stamp hash equals the SHA-256 of the exact document text']]) notRun(id, name, reason);
+  for (const [id, name] of [['R5a', 'the Proof editor shows the document text'], ['R5b', 'front matter shows as one metadata line and its YAML block is hidden'], ['R5c', 'no Proof toast covers the Review panel'], ['R5', 'the review page shows the LinkedIn channel preview, folded at 150 characters'], ['R6', 'the Playbooks applied panel lists the final section'], ['R7', 'the reviewer approves in the browser'], ['R8', 'the stamp hash equals the SHA-256 of the exact document text']]) notRun(id, name, reason);
 } else {
   // The test reviewer's display name, so Proof's first-visit name dialog does not cover the page.
   await browser.go(new URL('/', url).href);
@@ -184,9 +184,18 @@ if (!browser) {
   await browser.go(url);
   const shown = await browser.until("(document.querySelector('#editor .ProseMirror')?.innerText ?? '').includes('Freelance designers')", 45_000);
   check('R5a', 'the Proof editor shows the document text', shown, await browser.evaluate("(document.querySelector('#editor')?.innerText ?? '').slice(0, 200) + ' | status: ' + (document.body.innerText.match(/Connect\\w*|Offline|Live/)?.[0] ?? '')").catch(error => error.message));
+  const chip = await browser.until("document.querySelector('#cq-front-matter .cq-front-matter-text')?.textContent === 'LinkedIn post · Launch post · Acme Invoices'");
+  const yamlHidden = await browser.evaluate("[...document.querySelectorAll('#editor pre[data-frontmatter]')].every(node => node.offsetParent === null)");
+  check('R5b', 'front matter shows as one metadata line and its YAML block is hidden', chip && yamlHidden, await browser.evaluate("document.querySelector('#cq-front-matter')?.textContent ?? 'no chip'"));
+  await wait(1500);
+  // Proof's toasts must not cover the Review panel.
+  const covered = await browser.evaluate(`(() => { const panel = document.querySelector('.cq-panel').getBoundingClientRect();
+    return [...document.querySelectorAll('.proof-external-change-toast')].filter(node => { const box = node.getBoundingClientRect();
+      return getComputedStyle(node).display !== 'none' && box.width > 0 && box.left < panel.right && box.right > panel.left && box.top < panel.bottom && box.bottom > panel.top; }).length; })()`);
+  check('R5c', 'no Proof toast covers the Review panel', covered === 0, `${covered} overlapping`);
   const panel = await browser.until("document.querySelector('.cq-li-text') !== null");
   const preview = panel ? await browser.evaluate("document.querySelector('.cq-li-text').textContent") : '';
-  check('R5', 'the review page shows the LinkedIn channel preview', panel && preview.startsWith('Launch day') && preview.endsWith('…'), preview);
+  check('R5', 'the review page shows the LinkedIn channel preview, folded at 150 characters', panel && preview.startsWith('Launch day') && preview.endsWith('…') && Array.from(preview).length === 150, preview);
   await browser.shot('1-proof-linkedin-preview.png');
   await browser.evaluate("document.querySelector('[data-tab=playbooks]').click()");
   const listed = await browser.until("document.querySelectorAll('.cq-playbooks li').length === 2");
