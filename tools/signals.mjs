@@ -95,17 +95,24 @@ const SURFACES = {
   changelog: [/^(?:.*\/)?(?:CHANGELOG|CHANGES|HISTORY|RELEASES)(?:\.mdx?|\.txt)?$/i, /^(?:.*\/)?changelog(?=\/|$)/i],
   appStore: [/^(?:.*\/)?fastlane\/metadata(?=\/|$)/, /^(?:.*\/)?(?:app-?store|play-?store|store-?listing)(?:\.[\w.]+)?(?=\/|$)/i, /^(?:.*\/)?metadata\/[a-z]{2}(?:-[A-Za-z]{2,4})?\/(?:description|keywords|promotional_text|subtitle|name)\.txt$/],
 };
-const SURFACE_PATHS = Object.values(SURFACES).flat();
-const DEV_DOCS = /(?:^|\/)(?:AGENTS|CLAUDE|CONTRIBUTING|CODE_OF_CONDUCT|SECURITY|LICENSE|NOTICE|INDEX|MIGRATION)(?:\.md)?$/i;
-const MARKETING_DIRS = /(?:^|\/)(?:marketing|content|copy|emails?|campaigns?|landing|press|social|ads|launch)(?:\/)/i;
+// Changed marketing files use the same rule as the check hook (W3, tools/check/channels.mjs
+// isMarketingFile). Copied until integration unifies them: a file counts when it declares
+// `channel:` in front matter, sits in a marketing folder, or is a site page. Project docs,
+// agent files, code, and non-marketing folders never count.
+const MARKETING_FOLDERS = new Set(['content', 'blog', 'posts', 'marketing', 'campaigns', 'emails', 'landing', 'social', 'ads', 'press', 'newsletter']);
+const EXCLUDED_FOLDERS = new Set(['docs', 'skills', 'hooks', '.github', 'node_modules', '.git', 'dist', 'build', 'out', 'coverage', 'vendor',
+  '.next', '.nuxt', '.svelte-kit', '.claude', '.codex', '.cursor', '.agents', '.conquistador']);
+const PROJECT_FILES = /^(?:readme|changelog|license|licence|agents|claude|gemini|contributing|install|security|code_of_conduct|skill|command|notice|migration|vision|roadmap|progress|index|versions|todo)$/i;
+const SITE_PAGE = /\.(?:html?|mdx)$|(?:^|\/)pages\/(?:.*\/)?[^/]+\.astro$/i;
+const declaresChannel = text => /^---\r?\n[\s\S]*?^channel:\s*\S/m.test(text.slice(0, 4_000)) && /^---\r?\n/.test(text);
 
-// A file a marketer would review: a surface, a marketing folder, or prose that is not contributor docs.
-export function isMarketingFile(path) {
-  const file = path.split(sep).join('/');
-  if (/(?:^|\/)(?:PRODUCT|GROWTH|README)\.md$/i.test(file)) return true;
-  if (DEV_DOCS.test(file)) return false;
-  if (MARKETING_DIRS.test(file) || SURFACE_PATHS.some(pattern => pattern.test(file))) return true;
-  return /\.(?:mdx?|html?)$/i.test(file);
+export function isMarketingFile(path, text = '') {
+  const parts = path.split(sep).join('/').split('/');
+  const name = parts.at(-1).replace(/\.[^.]+$/, '').replace(/\.[^.]+$/, '');
+  if (parts.slice(0, -1).some(part => EXCLUDED_FOLDERS.has(part))) return false;
+  const channel = declaresChannel(text);
+  if (PROJECT_FILES.test(name) && !channel) return false;
+  return channel || SITE_PAGE.test(path.split(sep).join('/')) || parts.slice(0, -1).some(part => MARKETING_FOLDERS.has(part.toLowerCase()));
 }
 
 function walk(root) {
@@ -212,7 +219,7 @@ function gitSignals(root) {
   const base = branch && branch !== 'HEAD' ? baseBranch(root, branch) : null;
   const dirty = (git(['status', '--porcelain', '-uall'], root) ?? '').split('\n').filter(Boolean).map(line => line.slice(3).replace(/^.* -> /, '').replace(/^"|"$/g, ''));
   const branchFiles = base ? (git(['diff', '--name-only', `${base}...HEAD`], root) ?? '').split('\n').filter(Boolean) : [];
-  const changed = [...new Set([...dirty, ...branchFiles])].filter(isMarketingFile).sort();
+  const changed = [...new Set([...dirty, ...branchFiles])].filter(file => isMarketingFile(file, /\.(?:mdx?|txt)$/i.test(file) ? read(join(root, file), 4_000) : '')).sort();
   const tag = (git(['for-each-ref', '--sort=-creatordate', '--count=1', '--format=%(refname:short)%09%(creatordate:short)', 'refs/tags'], root) ?? '').split('\t');
   return { isRepo: true, branch, base, changedMarketingFiles: changed.slice(0, 20), changedCount: changed.length, latestTag: tag[0] ? { name: tag[0], date: tag[1] || null } : null };
 }
@@ -272,7 +279,7 @@ export async function executorSignals(root, { env = process.env, home = homedir(
   const advice = 'Open Executor.app or run `executor web`, then run `conquistador connect`.';
   if (!answering.length) return { status: installed ? 'not running' : 'not installed', installed, integrations: null, scope: null, advice: installed ? advice : 'Run `conquistador connect` to install Executor.' };
   const scoped = answering.find(record => record.scopeId === `cwd:${root}`);
-  if (!scoped) return { status: 'running', installed, integrations: null, scope: 'other folder', advice: 'Executor runs for another folder. Run `conquistador connect` here to use it.' };
+  if (!scoped) return { status: 'running', installed, integrations: null, scope: 'other folder', advice: 'Executor is running. Run `conquistador connect` to use its integrations.' };
   if (!call || !installed) return { status: 'running', installed, integrations: null, scope: 'this folder', advice: null };
   const { file, args, options } = spawnCommand('executor', ['tools', 'integrations']);
   const result = spawnSync(file, args, { cwd: root, encoding: 'utf8', timeout: cliTimeout, stdio: ['ignore', 'pipe', 'pipe'], ...options });
@@ -325,7 +332,7 @@ function summary(signals) {
     `Project: ${signals.root}`,
     `Context: PRODUCT.md ${signals.context.product ? 'yes' : 'missing'}, GROWTH.md ${signals.context.growth ? 'yes' : 'missing'}`,
     `Platform: ${signals.platform.recorded ?? list(signals.platform.found)}`,
-    ...Object.entries(signals.stack).map(([key, value]) => `Stack ${key}: ${list(value)}`),
+    ...(Object.values(signals.stack).every(value => !value.length) ? ['Stack: none found'] : Object.entries(signals.stack).filter(([, value]) => value.length).map(([key, value]) => `Stack ${key}: ${value.join(', ')}`)),
     `Surfaces: ${list(Object.entries(signals.surfaces).filter(([, value]) => value.count).map(([key, value]) => `${key} (${value.paths.join(', ')})`))}`,
     `Launch: ${signals.launch.hint ?? 'no recent release'}${signals.launch.latest ? ` (latest ${signals.launch.latest.version ?? ''} ${signals.launch.latest.date}, ${signals.launch.latest.daysAgo} days ago)` : ''}`,
     `Changed marketing files: ${list(signals.git.changedMarketingFiles)}`,

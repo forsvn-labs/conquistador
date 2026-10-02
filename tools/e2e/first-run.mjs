@@ -57,6 +57,12 @@ function fixtures() {
   write(join(saas, 'lib/billing.ts'), 'export const plans = ["team"];\n');
   git(['commit', '-q', '-am', 'Rewrite pricing'], saas);
   write(join(saas, 'content/blog/hello.mdx'), '# Hello, annual plans\n');
+  // Project docs, agent files, and code change too; only the blog post and the channel draft count.
+  write(join(saas, 'README.md'), '# Ledgerly\n\nNow with annual plans.\n');
+  write(join(saas, 'PROGRESS.md'), '# Progress\n\n- Annual plans\n');
+  write(join(saas, 'docs/getting-started.md'), '# Getting started\n\nPick a plan.\n');
+  write(join(saas, 'drafts/launch-post.md'), '---\nchannel: x\n---\n\nAnnual plans are live.\n');
+  write(join(saas, 'drafts/notes.md'), 'Ideas for later.\n');
 
   const ios = join(work, 'ios');
   write(join(ios, 'Shop.xcodeproj/project.pbxproj'), '// !$*UTF8*$!\n');
@@ -97,7 +103,9 @@ function signalsChecks({ saas, ios, empty }) {
       for (const [key, path] of [['landing', 'app/page.tsx'], ['pricing', 'app/pricing'], ['blog', 'content/blog'], ['docs', 'docs'], ['changelog', 'CHANGELOG.md']]) expect(problems, includes(json.surfaces[key].paths, path), `surfaces.${key} lacks ${path}`);
       expect(problems, json.launch.hint === 'unreleased' && json.launch.latest?.version && json.launch.latest.daysAgo === 0, `launch ${JSON.stringify(json.launch)}`);
       expect(problems, json.git.base === 'main', `git base ${json.git.base}`);
-      expect(problems, JSON.stringify(json.git.changedMarketingFiles) === '["app/pricing/page.tsx","content/blog/hello.mdx"]', `changed ${json.git.changedMarketingFiles}`);
+      expect(problems, JSON.stringify(json.git.changedMarketingFiles) === '["content/blog/hello.mdx","drafts/launch-post.md"]', `changed ${json.git.changedMarketingFiles}`);
+      const text = conquistador(['signals', '--no-executor'], folder).stdout;
+      expect(problems, !/Stack.*none found/.test(text) && !/^Stack analytics/m.test(text) && /^Stack payments: Stripe$/m.test(text), 'text output lists empty stack groups');
     }
     if (json && name === 'ios') {
       expect(problems, JSON.stringify(json.platform.found) === '["ios"]', `platform ${json.platform.found}`);
@@ -109,6 +117,7 @@ function signalsChecks({ saas, ios, empty }) {
       expect(problems, json.hasCode === false && json.platform.found.length === 0 && Object.values(json.stack).every(list => list.length === 0) && Object.values(json.surfaces).every(item => item.count === 0), 'empty folder reported signals');
       const text = conquistador(['signals'], folder);
       expect(problems, text.status === 0 && text.stdout.includes('Next: run /conquistador init'), 'text output does not lead with init');
+      expect(problems, text.stdout.split('\n').filter(line => line.startsWith('Stack')).join('|') === 'Stack: none found', 'empty stack is not one line');
     }
     check('signals', `signals --json: ${name} fixture`, problems);
   }
@@ -213,7 +222,7 @@ async function liveChecks({ saas }) {
     const status = await executorSignals(saas, { home: homedir(), call: false });
     const problems = [];
     expect(problems, ['running', 'not running', 'not installed'].includes(status.status), `status ${status.status}`);
-    if (status.status === 'running') expect(problems, status.scope === 'other folder' && status.integrations === null, `scope ${status.scope}`);
+    if (status.status === 'running') expect(problems, status.scope === 'other folder' && status.integrations === null && status.advice === 'Executor is running. Run `conquistador connect` to use its integrations.', `scope ${status.scope}: ${status.advice}`);
     expect(problems, JSON.stringify(records()) === JSON.stringify(before), 'a daemon record appeared');
     check('executor', 'signals reports "other folder" when only another folder\'s Executor answers', problems, { status: status.status, scope: status.scope });
   }
