@@ -35,7 +35,8 @@ Start each project with:
 /conquistador init
 ```
 
-`init` reads the project, asks one round of questions, and writes `PRODUCT.md` and `GROWTH.md`.
+`init` reads the project, asks only about gaps (at most three questions per round), and writes
+`PRODUCT.md` and `GROWTH.md`.
 It adds only missing facts to a `PRODUCT.md` that another tool wrote.
 
 ### Commands

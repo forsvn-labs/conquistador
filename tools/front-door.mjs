@@ -12,7 +12,7 @@ export const HELP = `Conquistador ${version}
 Growth, marketing, sales, and product playbooks for your AI agents.
 
 Start
-  npx @forsvn/conquistador    Detect your agents, install, and open one
+  conquistador                Detect your agents, install, and open one
   conquistador "TASK"         Open your agent with this task
 
 In your agent
