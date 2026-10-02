@@ -191,7 +191,8 @@ function detectSurfaces({ files, dirs }) {
 function git(args, cwd) {
   const { file, args: fileArgs, options } = spawnCommand('git', args);
   const result = spawnSync(file, fileArgs, { cwd, encoding: 'utf8', timeout: 3_000, stdio: ['ignore', 'pipe', 'ignore'], ...options });
-  return result.status === 0 ? result.stdout.trim() : null;
+  // trimEnd only: porcelain lines start with a status column that may be a space.
+  return result.status === 0 ? result.stdout.trimEnd() : null;
 }
 
 // The branch this work merges into: the remote default, else main or master.
@@ -239,7 +240,9 @@ function launchSignals(root, surfaces, gitInfo, now) {
     release.latest?.date && { source: changelog, version: release.latest.version, date: release.latest.date },
     gitInfo.latestTag?.date && { source: 'git tag', version: gitInfo.latestTag.name, date: gitInfo.latestTag.date },
   ].filter(Boolean).sort((a, b) => b.date.localeCompare(a.date));
-  const latest = candidates[0] ? { ...candidates[0], daysAgo: Math.floor((now - Date.parse(`${candidates[0].date}T00:00:00Z`)) / DAY) } : null;
+  // Calendar days in local time: git prints tag dates in local time, and people date changelogs that way.
+  const midnight = new Date(now).setHours(0, 0, 0, 0);
+  const latest = candidates[0] ? { ...candidates[0], daysAgo: Math.round((midnight - new Date(`${candidates[0].date}T00:00:00`).getTime()) / DAY) } : null;
   const hint = release.unreleased ? 'unreleased' : latest && latest.daysAgo >= 0 && latest.daysAgo <= RECENT_DAYS ? 'recent-release' : null;
   return { hint, unreleased: release.unreleased, latest };
 }
