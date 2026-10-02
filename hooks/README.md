@@ -1,7 +1,9 @@
 # Plugin reading-list hooks
 
-`conquistador-hook.mjs` runs the prompt, stop, and Cursor start hooks. Set
-`CONQUISTADOR_HOOKS=off` or `{"hooks": false}` in the user config to disable them.
+`conquistador-hook.mjs` runs the prompt, stop, and Cursor start hooks. `check-hook.mjs` runs
+`conquistador check` after the agent writes or edits a marketing file and returns the findings to
+the agent; see [docs/CHECK.md](../docs/CHECK.md#edit-hook). Set `CONQUISTADOR_HOOKS=off` or
+`{"hooks": false}` in the user config to disable them.
 
 A relevant prompt starts a new reading requirement; every new nonempty prompt first clears
 prior state, including coding requests and short clarification replies. A short clarifying

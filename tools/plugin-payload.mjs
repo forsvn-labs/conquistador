@@ -11,7 +11,7 @@ export const pluginManifestPath = 'release/plugin-completeness.json';
 export const pluginPayload = [
   '.claude-plugin', '.codex-plugin', '.cursor-plugin', '.agents', 'plugin.json', 'mcp.json', 'hooks', 'skills', 'assets',
   'agents/conquistador.md', 'package.json', 'LICENSE', 'NOTICE.md', 'README.md', 'SKILL.md',
-  'mcp/server.mjs', 'tools/mcp-http.mjs', ...briefFiles,
+  'mcp/server.mjs', 'tools/mcp-http.mjs', 'tools/check', ...briefFiles,
 ];
 
 const schemaVersion = 'conquistador.plugin-completeness/v1';
