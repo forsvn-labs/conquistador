@@ -3,7 +3,7 @@ import { dirname, join, extname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createBrief, formatBriefPack, searchKnowledge } from './brief.mjs';
 
-export const LIMITS = Object.freeze({ request: 65536, file: 262144, response: 524288, files: 256, depth: 8, methods: 128, entries: 2048 });
+export const LIMITS = Object.freeze({ request: 65536, file: 262144, response: 524288, files: 256, depth: 12, methods: 128, entries: 2048 });
 const bundledRoot = fileURLToPath(new URL('../skills', import.meta.url));
 const decoder = new TextDecoder('utf-8', { fatal: true });
 const extensions = new Set(['.md', '.json', '.yaml', '.yml', '.txt', '.csv', '.tsv', '.py', '.sh', '.swift', '.pbxproj', '.xcworkspacedata']);
@@ -14,16 +14,16 @@ const object = value => value !== null && typeof value === 'object' && !Array.is
 const schema = properties => ({ type: 'object', properties, required: Object.keys(properties), additionalProperties: false });
 const readOnly = { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false };
 const TOOLS = [
-  { name: 'conquistador_brief', description: 'Call this FIRST for any growth, GTM, launch, marketing, sales, pricing, positioning, copy, content, SEO, ads, outreach, or product-marketing task. Describe the task in plain words. Returns the selected method and the full text of the field-tested playbooks for that task, plus the rules for using them. Read the whole response before drafting.', inputSchema: { type: 'object', properties: { task: { type: 'string', minLength: 1, maxLength: 8000, description: 'The user request, including product, audience, channel, and goal when known.' } }, required: ['task'], additionalProperties: false } },
+  { name: 'conquistador_brief', description: 'Call this FIRST for any growth, GTM, launch, marketing, sales, pricing, positioning, copy, content, SEO, ads, outreach, or product-marketing task. Describe the task in plain words. Returns the selected command, or the play (its steps in order) for a multi-step outcome, with the full text of the playbooks to read now, the playbooks to read at later steps, and the rules for using them. Read the whole response before drafting.', inputSchema: { type: 'object', properties: { task: { type: 'string', minLength: 1, maxLength: 8000, description: 'The user request, including product, audience, channel, and goal when known.' } }, required: ['task'], additionalProperties: false } },
   { name: 'conquistador_search', description: 'Search all Conquistador playbooks, platform guides, examples, and your own playbooks by keyword. Use it when a task reaches a step the brief did not cover. Returns paths with summaries; read one with conquistador_read.', inputSchema: { type: 'object', properties: { query: { type: 'string', minLength: 1, maxLength: 400 } }, required: ['query'], additionalProperties: false } },
-  { name: 'conquistador_methods', description: 'List bundled methods and the parent guide. Prefer conquistador_brief, which selects methods and playbooks for you.', inputSchema: schema({}) },
-  { name: 'conquistador_files', description: 'List readable text resources in one bundled method. Scripts are text only and are never executed.', inputSchema: schema({ method: { type: 'string', pattern: methodPattern.source, maxLength: 100 } }) },
-  { name: 'conquistador_read', description: 'Read one bundled method or playbook by its skills-relative path, such as plan-campaign/references/channel-strategy.md, or a path returned by conquistador_brief or conquistador_search. No project files, credentials or runtime state are available.', inputSchema: schema({ path: { type: 'string', minLength: 1, maxLength: 400 } }) },
+  { name: 'conquistador_methods', description: 'List the commands, the plays, and the parent guide. Prefer conquistador_brief, which selects them and their playbooks for you.', inputSchema: schema({}) },
+  { name: 'conquistador_files', description: 'List readable text resources in one command or play. Scripts are text only and are never executed.', inputSchema: schema({ method: { type: 'string', pattern: methodPattern.source, maxLength: 100 } }) },
+  { name: 'conquistador_read', description: 'Read one bundled method or playbook by its skills-relative path, such as conquistador/commands/campaign/references/channel-strategy.md, or a path returned by conquistador_brief or conquistador_search. No project files, credentials or runtime state are available.', inputSchema: schema({ path: { type: 'string', minLength: 1, maxLength: 400 } }) },
 ].map(tool => ({ ...tool, annotations: readOnly }));
 const PROMPTS = [
   { name: 'growth-plan', title: 'Plan marketing and growth', description: 'Choose channels, campaigns, launches, and in-product moves with the Conquistador playbooks.', text: 'Plan marketing and growth for {{product}}. Use conquistador_brief first and follow its playbooks.' },
-  { name: 'diagnose-growth', title: 'Diagnose a growth stall', description: 'Find why a growth metric changed.', text: 'Diagnose this growth change: {{product}}. Use conquistador_brief first and follow its playbooks.' },
-  { name: 'write-copy', title: 'Write marketing copy', description: 'Write landing page, email, or ad copy.', text: 'Write marketing copy for {{product}}. Use conquistador_brief first and follow its playbooks.' },
+  { name: 'diagnose', title: 'Diagnose a growth stall', description: 'Find why a growth metric changed.', text: 'Diagnose this growth change: {{product}}. Use conquistador_brief first and follow its playbooks.' },
+  { name: 'copy', title: 'Write marketing copy', description: 'Write landing page, email, or ad copy.', text: 'Write marketing copy for {{product}}. Use conquistador_brief first and follow its playbooks.' },
   { name: 'review-results', title: 'Review campaign results', description: 'Decide what to keep, drop, and test next.', text: 'Review these results and tell me what to keep, drop, and test: {{product}}. Use conquistador_brief first and follow its playbooks.' },
 ].map(prompt => ({ ...prompt, arguments: [{ name: 'product', description: 'Product, audience, goal, and any facts or numbers you have.', required: true }] }));
 export const SERVER_INSTRUCTIONS = 'Conquistador supplies field-tested playbooks for growth, GTM, launch, marketing, sales, pricing, positioning, copy, content, SEO, ads, and outreach work. For any such task, call conquistador_brief with the task before you draft, read the whole result, apply its specific rules, and end your answer with "Playbooks applied": each file and the rule you took from it. Never invent metrics, quotes, or customer facts. Ask the user before publishing, spending, or sending. Your host supplies the model, tools, and permissions; this server only reads playbooks.';
@@ -84,17 +84,30 @@ export function createMethodAccess(root = bundledRoot) {
   }
   function methods() {
     const result = [];
-    for (const entry of entries(skills)) {
+    const plays = [];
+    for (const entry of entries(contained('conquistador/commands', true))) {
       if (!entry.isDirectory() || !methodPattern.test(entry.name)) continue;
-      contained(`${entry.name}/SKILL.md`);
+      contained(`conquistador/commands/${entry.name}/COMMAND.md`);
       if (result.length >= LIMITS.methods) throw new Error('Too many methods');
-      result.push({ method: entry.name, path: `${entry.name}/SKILL.md` });
+      result.push({ method: entry.name, path: `conquistador/commands/${entry.name}/COMMAND.md` });
     }
-    return { guide: 'conquistador/SKILL.md', methods: result };
+    for (const entry of entries(contained('conquistador/plays', true))) {
+      const name = entry.name.replace(/\.md$/, '');
+      if (!entry.isFile() || !entry.name.endsWith('.md') || !methodPattern.test(name)) continue;
+      if (plays.length >= LIMITS.methods) throw new Error('Too many plays');
+      plays.push({ play: name, path: `conquistador/plays/${entry.name}` });
+    }
+    return { guide: 'conquistador/SKILL.md', methods: result, plays };
   }
   function files(method) {
     if (typeof method !== 'string' || method.length > 100 || !methodPattern.test(method)) throw new Error('Invalid method');
-    contained(`${method}/SKILL.md`);
+    let directory = method === 'conquistador' ? 'conquistador' : `conquistador/commands/${method}`;
+    if (method === 'conquistador') contained('conquistador/SKILL.md');
+    else try { contained(`${directory}/COMMAND.md`); } catch {
+      contained(`conquistador/plays/${method}.md`);
+      directory = `conquistador/plays/${method}`;
+      try { contained(directory, true); } catch { return { files: [`conquistador/plays/${method}.md`] }; }
+    }
     const result = [];
     let visited = 0;
     function walk(path, depth) {
@@ -103,6 +116,8 @@ export function createMethodAccess(root = bundledRoot) {
         if (++visited > LIMITS.entries) throw new Error('Too many entries');
         if (!segment.test(entry.name) || entry.isSymbolicLink()) continue;
         const name = `${path}/${entry.name}`;
+        // The parent lists its shared files; each command and play is listed on its own.
+        if (entry.isDirectory() && (name === 'conquistador/commands' || name === 'conquistador/plays')) continue;
         if (entry.isDirectory()) walk(name, depth + 1);
         else if (entry.isFile() && extensions.has(extname(name))) {
           if (result.length >= LIMITS.files) throw new Error('Too many files');
@@ -111,7 +126,8 @@ export function createMethodAccess(root = bundledRoot) {
         }
       }
     }
-    walk(method, 0);
+    walk(directory, 0);
+    if (directory.startsWith('conquistador/plays/')) result.unshift(`${directory}.md`);
     return { files: result };
   }
   return { methods, files, read };

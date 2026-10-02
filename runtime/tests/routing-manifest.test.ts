@@ -25,26 +25,25 @@ describe("parent routing manifest", () => {
       expect(requestedEngineeringOutcome(`/conquistador ${id}-example`)).toBeUndefined();
     }
   });
-  it("keeps compatible job values and identifies the six engineering outcomes", () => {
+  it("keeps compatible job values and identifies the five engineering outcomes", () => {
     expect([...PARENT_JOBS]).toEqual([
       "launch-or-grow",
       "create-or-improve",
       "learn-from-results",
     ]);
     expect([...ENGINEERING_OUTCOMES]).toEqual([
-      "architect-software-system",
-      "brief-product-ui",
-      "build-ios-app",
-      "build-web-app",
-      "map-user-flow",
-      "write-technical-docs",
+      "architect",
+      "ui",
+      "build",
+      "flow",
+      "docs",
     ]);
     expect([...ENGINEERING_WORKFLOWS]).toEqual([
-      "specify-product-experience",
+      "spec",
     ]);
-    expect(isEngineeringOutcome("map-user-flow")).toBe(true);
-    expect(isEngineeringOutcome("write-copy")).toBe(false);
-    expect(isEngineeringWorkflow("specify-product-experience")).toBe(
+    expect(isEngineeringOutcome("flow")).toBe(true);
+    expect(isEngineeringOutcome("copy")).toBe(false);
+    expect(isEngineeringWorkflow("spec")).toBe(
       true,
     );
     expect(isEngineeringWorkflow("landing-page-messaging")).toBe(

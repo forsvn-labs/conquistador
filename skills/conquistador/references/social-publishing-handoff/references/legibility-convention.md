@@ -1,7 +1,7 @@
 # Legibility Convention
 
 **Status:** canonical cross-stack contract. **Consumed by:** every pack-aware skill
-(`write-social`, operator-owned publishing, `create-shortform`, `plan-campaign`, `measure-growth`, the launch chains).
+(`social`, operator-owned publishing, `video`, `campaign`, `measure`, the launch chains).
 **Pairs with:** the playbook-pack contract (the local pack's `last_verified` date and 90-day stale rule).
 
 ## Why this exists

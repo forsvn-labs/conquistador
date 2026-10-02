@@ -1,5 +1,6 @@
 import { existsSync, lstatSync, readFileSync, readdirSync } from 'node:fs';
 import { dirname, isAbsolute, join, relative, resolve, sep } from 'node:path';
+import { commandNames } from './method-library.mjs';
 
 export const AGENT_PACKAGE_SCHEMA_VERSION = 'conquistador.agent-package/v2';
 export const DOMAIN_SCHEMA_VERSION = 'conquistador.domain-package/v1';
@@ -12,7 +13,7 @@ export const LOGICAL_TOOLS = Object.freeze([
 export const LOAD_KINDS = Object.freeze(['skill', 'workflow', 'role', 'tool', 'knowledgeHandle']);
 export const PROTOCOL_ROLES = Object.freeze(['parent', 'outcome']);
 export const PARENT_SKILL = 'conquistador';
-export const REVIEW_SKILL = 'fresh-eyes-review';
+export const REVIEW_SKILL = 'critique';
 const NAME = /^[a-z][a-z0-9-]{0,63}$/;
 const HANDLE = /^(?:[a-z][a-z0-9-]{0,63}|[a-z][a-z0-9-]*:[a-z][a-z0-9-]*)$/;
 const fail = message => { throw new Error(message); };
@@ -25,10 +26,11 @@ const sortedUnique = values => {
 
 export function loadCanonicalLibrary(root) {
   const skillsRoot = join(root, 'skills');
-  const workflowsRoot = join(skillsRoot, 'conquistador/workflows');
+  // Restrictions keep the "workflows" field name; its values are play names.
+  const workflowsRoot = join(skillsRoot, 'conquistador/plays');
   const specialistsRoot = join(skillsRoot, 'conquistador/specialists');
   if (!existsSync(join(skillsRoot, 'conquistador/SKILL.md'))) fail('Canonical parent skill is missing.');
-  const skills = readdirSync(skillsRoot).sort().filter(name => NAME.test(name) && existsSync(join(skillsRoot, name, 'SKILL.md')));
+  const skills = [PARENT_SKILL, ...commandNames(skillsRoot)].sort();
   const workflows = readdirSync(workflowsRoot).sort()
     .filter(name => name.endsWith('.md')).map(name => name.slice(0, -3)).filter(name => NAME.test(name));
   const roles = readdirSync(specialistsRoot).sort()
@@ -54,7 +56,7 @@ function roleDependencies(root, library, role) {
 }
 
 function workflowDependencies(root, library, workflow) {
-  const path = join(root, 'skills/conquistador/workflows', `${workflow}.md`);
+  const path = join(root, 'skills/conquistador/plays', `${workflow}.md`);
   if (!existsSync(path) || !lstatSync(path).isFile()) fail(`Unknown workflow: ${workflow}`);
   return namesIn(readFileSync(path, 'utf8'), library);
 }
@@ -157,7 +159,7 @@ export function parseRestriction(value) {
   if (roles.some(name => !NAME.test(name))) fail('Unknown or unsafe role name.');
   if (skills.some(name => !NAME.test(name))) fail('Unknown or unsafe skill name.');
   if (workflows.some(name => !NAME.test(name))) fail('Unknown or unsafe workflow name.');
-  if (!skills.includes(PARENT_SKILL) || !skills.includes(REVIEW_SKILL)) fail('Domain restriction must include the parent skill and fresh-eyes-review.');
+  if (!skills.includes(PARENT_SKILL) || !skills.includes(REVIEW_SKILL)) fail('Domain restriction must include the parent skill and critique.');
   if (tools.some(name => !LOGICAL_TOOLS.includes(name))) fail('Unknown logical tool handle.');
   if (knowledgeHandles.some(name => !HANDLE.test(name))) fail('Unknown or unsafe knowledge handle.');
   return {
@@ -242,8 +244,9 @@ export function shouldStageSkillPath(sourceKey, selection) {
   const parts = sourceKey.split('/');
   if (parts[0] !== 'skills' || !parts[1]) return true;
   if (!selection.skills.includes(parts[1])) return false;
-  if (parts[1] === 'conquistador' && parts[2] === 'workflows' && parts[3]?.endsWith('.md')) {
-    return selection.workflows.includes(parts[3].slice(0, -3));
+  if (parts[1] === 'conquistador' && parts[2] === 'commands' && parts[3]) return selection.skills.includes(parts[3]);
+  if (parts[1] === 'conquistador' && parts[2] === 'plays' && parts[3]) {
+    return selection.workflows.includes(parts[3].replace(/\.md$/, ''));
   }
   if (parts[1] === 'conquistador' && parts[2] === 'specialists' && parts[3]?.endsWith('-agent.md')) {
     return selection.roles.includes(parts[3].slice(0, -'-agent.md'.length));

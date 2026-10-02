@@ -20,9 +20,9 @@
     "generic bot import"
   ],
   "mayLoadSkills": [
-    "decision-panel",
-    "knowledge-review",
-    "fresh-eyes-review"
+    "decide",
+    "factcheck",
+    "critique"
   ],
   "mayLoadWorkflows": [],
   "proseOnlyWorkflows": [],

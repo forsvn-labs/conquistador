@@ -47,7 +47,7 @@ const lines = messages => messages.map(message => JSON.stringify(message)).join(
 
 test('cold spawned stdio lists methods and reads the parent, outcome, and routing contract', async t => {
   const path = cold(t);
-  const result = await run(path, lines([...start, rpc(2, 'tools/list'), call(3, 'conquistador_methods'), call(4, 'conquistador_files', { method: 'conquistador' }), call(5, 'conquistador_read', { path: 'conquistador/SKILL.md' }), call(6, 'conquistador_read', { path: 'write-copy/SKILL.md' }), call(7, 'conquistador_read', { path: 'conquistador/routing-contract.json' })]));
+  const result = await run(path, lines([...start, rpc(2, 'tools/list'), call(3, 'conquistador_methods'), call(4, 'conquistador_files', { method: 'conquistador' }), call(5, 'conquistador_read', { path: 'conquistador/SKILL.md' }), call(6, 'conquistador_read', { path: 'conquistador/commands/copy/COMMAND.md' }), call(7, 'conquistador_read', { path: 'conquistador/routing-contract.json' })]));
   assert.equal(result.code, 0);
   assert.equal(result.stderr, '');
   assert.equal(result.messages.length, 7);
@@ -55,20 +55,21 @@ test('cold spawned stdio lists methods and reads the parent, outcome, and routin
   assert.deepEqual(result.messages[1].result.tools.map(tool => tool.name), ['conquistador_brief', 'conquistador_search', 'conquistador_methods', 'conquistador_files', 'conquistador_read']);
   const methods = JSON.parse(result.messages[2].result.content[0].text);
   assert.equal(methods.guide, 'conquistador/SKILL.md');
-  assert.equal(methods.methods.length, 39);
+  assert.equal(methods.methods.length, 35);
+  assert.equal(methods.plays.length, 21);
   assert.ok(JSON.parse(result.messages[3].result.content[0].text).files.includes('conquistador/standards/safety.md'));
-  assert.match(result.messages[4].result.content[0].text, /# Conquistador master agent/);
-  assert.match(result.messages[5].result.content[0].text, /name: write-copy/);
+  assert.match(result.messages[4].result.content[0].text, /^name: conquistador$/m);
+  assert.match(result.messages[5].result.content[0].text, /name: copy/);
   const routing = JSON.parse(result.messages[6].result.content[0].text);
   assert.equal(routing.schemaVersion, 'conquistador.routing-contract/v1');
-  assert.equal(Object.keys(routing.methods).length, 38);
+  assert.equal(Object.keys(routing.methods).length, 35);
 });
 
 test('contained reads refuse traversal, symlinks, hidden files, binary and oversized resources', t => {
   const path = temporary(t);
-  mkdirSync(join(path, 'skills/test/references'), { recursive: true });
-  const write = (name, body) => writeFileSync(join(path, 'skills/test', name), body);
-  write('SKILL.md', 'valid');
+  mkdirSync(join(path, 'skills/conquistador/commands/test/references'), { recursive: true });
+  const write = (name, body) => writeFileSync(join(path, 'skills/conquistador/commands/test', name), body);
+  write('COMMAND.md', 'valid');
   write('references/utf8.md', 'Tiếng Việt');
   write('large.md', Buffer.alloc(LIMITS.file + 1, 97));
   write('boundary.md', 'é'.repeat(LIMITS.file / 2));
@@ -77,17 +78,17 @@ test('contained reads refuse traversal, symlinks, hidden files, binary and overs
   write('.secret.md', 'secret');
   write('secret.env', 'secret');
   writeFileSync(join(path, 'outside.md'), 'secret');
-  symlinkSync(join(path, 'outside.md'), join(path, 'skills/test/link.md'));
-  symlinkSync(path, join(path, 'skills/test/escape'));
+  symlinkSync(join(path, 'outside.md'), join(path, 'skills/conquistador/commands/test/link.md'));
+  symlinkSync(path, join(path, 'skills/conquistador/commands/test/escape'));
   const access = createMethodAccess(join(path, 'skills'));
-  assert.equal(access.read('test/references/utf8.md'), 'Tiếng Việt');
-  assert.equal(Buffer.byteLength(access.read('test/boundary.md')), LIMITS.file);
-  for (const name of ['../outside.md', '/etc/passwd', 'test/../outside.md', 'test//SKILL.md', 'test/./SKILL.md', 'test\\SKILL.md', 'test/%2e%2e/outside.md', 'test/.secret.md', 'test/secret.env', 'test/link.md', 'test/escape/outside.md', 'test/large.md', 'test/invalid.md', 'test/binary.md', 'test/references', `test/${'a'.repeat(401)}.md`]) assert.throws(() => access.read(name), name);
-  assert.ok(!access.files('test').files.includes('test/link.md'));
+  assert.equal(access.read('conquistador/commands/test/references/utf8.md'), 'Tiếng Việt');
+  assert.equal(Buffer.byteLength(access.read('conquistador/commands/test/boundary.md')), LIMITS.file);
+  for (const name of ['../outside.md', '/etc/passwd', 'conquistador/commands/test/../../../../outside.md', 'conquistador/commands/test//COMMAND.md', 'conquistador/commands/test/./COMMAND.md', 'conquistador\\commands\\test\\COMMAND.md', 'conquistador/commands/test/%2e%2e/outside.md', 'conquistador/commands/test/.secret.md', 'conquistador/commands/test/secret.env', 'conquistador/commands/test/link.md', 'conquistador/commands/test/escape/outside.md', 'conquistador/commands/test/large.md', 'conquistador/commands/test/invalid.md', 'conquistador/commands/test/binary.md', 'conquistador/commands/test/references', `conquistador/commands/test/${'a'.repeat(401)}.md`]) assert.throws(() => access.read(name), name);
+  assert.ok(!access.files('test').files.includes('conquistador/commands/test/link.md'));
   assert.throws(() => access.files('../test'));
-  rmSync(join(path, 'skills/test/references'), { recursive: true });
-  symlinkSync(path, join(path, 'skills/test/references'));
-  assert.throws(() => access.read('test/references/outside.md'));
+  rmSync(join(path, 'skills/conquistador/commands/test/references'), { recursive: true });
+  symlinkSync(path, join(path, 'skills/conquistador/commands/test/references'));
+  assert.throws(() => access.read('conquistador/commands/test/references/outside.md'));
 });
 
 test('protocol errors are bounded and do not echo supplied paths, secrets, or invalid IDs', async t => {
@@ -97,7 +98,7 @@ test('protocol errors are bounded and do not echo supplied paths, secrets, or in
     call(2, 'conquistador_read', { path: '../../secret-token.md' }),
     call(3, 'conquistador_files', { method: '../secret-token' }),
     call(4, 'conquistador_read', { path: `test/${'x'.repeat(401)}.md` }),
-    call(5, 'conquistador_read', { path: 'write-copy/SKILL.md', constructor: 'secret-token' }),
+    call(5, 'conquistador_read', { path: 'conquistador/commands/copy/COMMAND.md', constructor: 'secret-token' }),
     rpc(null, 'ping'), rpc({}, 'ping'), rpc('x'.repeat(129), 'ping'), [],
     { jsonrpc: '2.0', method: 'notifications/cancelled', params: { requestId: 2 } }, rpc(6, 'ping'),
   ]) + '{secret-token}\n' + '{"jsonrpc":"2.0","id":1e400,"method":"ping"}\n');
@@ -203,7 +204,7 @@ test('initialization negotiates a supported version for older and unknown client
 
 test('bundled iOS resources with internal spaces are listed and readable, but ambiguous segments are refused', () => {
   const access = createMethodAccess();
-  const files = access.files('build-ios-app').files;
+  const files = access.files('build').files;
   const spacedResources = [
     'App NameUITests/App_NameUITests.swift',
     'App NameUITests/App_NameUITestsLaunchTests.swift',
@@ -216,10 +217,10 @@ test('bundled iOS resources with internal spaces are listed and readable, but am
     'App Name/Assets.xcassets/AppIcon.appiconset/Contents.json',
     'App Name/Assets.xcassets/AccentColor.colorset/Contents.json',
     'App Name.xcodeproj/project.xcworkspace/contents.xcworkspacedata',
-  ].map(path => `build-ios-app/template/${path}`);
+  ].map(path => `conquistador/commands/build/references/modes/ios/template/${path}`);
   for (const path of spacedResources) {
     assert.ok(files.includes(path), path);
     assert.ok(access.read(path).length > 0);
   }
-  for (const path of ['build-ios-app/template/ App Name/ContentView.swift', 'build-ios-app/template/App Name /ContentView.swift', 'build-ios-app/template/App Name./ContentView.swift', 'build-ios-app/template/../SKILL.md']) assert.throws(() => access.read(path), path);
+  for (const path of ['conquistador/commands/build/references/modes/ios/template/ App Name/ContentView.swift', 'conquistador/commands/build/references/modes/ios/template/App Name /ContentView.swift', 'conquistador/commands/build/references/modes/ios/template/App Name./ContentView.swift', 'conquistador/commands/build/references/modes/ios/template/../SKILL.md']) assert.throws(() => access.read(path), path);
 });

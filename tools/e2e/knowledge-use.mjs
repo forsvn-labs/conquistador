@@ -46,7 +46,7 @@ function claude(prompt, config, transcript) {
   });
 }
 
-// Every knowledge file key ("plan-campaign/references/channel-strategy.md") in this checkout.
+// Every knowledge file key ("conquistador/commands/campaign/references/channel-strategy.md") in this checkout.
 const knownKeys = knowledgeIndex(root, { playbooks: [] }).docs.map(doc => doc.key);
 function analyze(text, must) {
   const tokens = new Set();

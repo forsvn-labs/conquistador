@@ -20,8 +20,8 @@ not completed acceptance runs.
    hosts; do not record the unshipped selected-host behavior as released
 3. Record the shared plugin path, selected host changes, hook/MCP trust requirements, and matching
    undo command. Check that no project manifest, dependencies, or lockfile appeared
-4. Run `conquistador agents` and the host's own plugin listing. The standard plugin has the parent
-   plus 38 methods (39 skills); it is not required to expose only one skill
+4. Run `conquistador agents` and the host's own plugin listing. The standard plugin exposes one skill,
+   `conquistador`, with its commands and plays under it
 5. For an intentionally installed **project operator**, use `conquistador operator status` and
    `conquistador operator doctor --json` in its project. That route and staged compact packages
    use one entry with internal methods. Do not apply that one-entry assertion to the default plugin

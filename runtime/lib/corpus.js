@@ -7,6 +7,10 @@ const JOB_MARKERS = [
     "create or improve marketing work",
     "learn from these results",
 ];
+// Each command is conquistador/commands/<id>/COMMAND.md; each play is conquistador/plays/<id>.md.
+const COMMAND_DOCUMENT = /^conquistador\/commands\/([^/]+)\/COMMAND\.md$/;
+const PLAY_DOCUMENT = /^conquistador\/plays\/([^/]+)\.md$/;
+const commandId = (fileId) => COMMAND_DOCUMENT.exec(fileId)?.[1];
 function inventory(directory, prefix = "") {
     const files = [];
     for (const entry of readdirSync(directory, { withFileTypes: true }).sort((left, right) => left.name.localeCompare(right.name))) {
@@ -33,9 +37,9 @@ function descriptorFor(files) {
             throw new Error(`[conquistador.corpus] parent job is missing: ${marker}`);
         }
     }
-    const skillIds = files
-        .filter((entry) => /^[^/]+\/SKILL\.md$/.test(entry.id))
-        .map((entry) => entry.id.slice(0, -"/SKILL.md".length))
+    const skillIds = ["conquistador", ...files
+            .map((entry) => commandId(entry.id))
+            .filter((id) => id !== undefined)]
         .sort();
     return deepFreeze({
         schemaVersion: "conquistador.corpus/v1",
@@ -90,7 +94,7 @@ function linkedFiles(initial, byId) {
             if (id.startsWith("../") || id === "..")
                 continue;
             const linked = byId.get(id);
-            if (linked && !selected.has(id) && !/^[^/]+\/SKILL\.md$/.test(id)) {
+            if (linked && !selected.has(id) && id !== "conquistador/SKILL.md" && !COMMAND_DOCUMENT.test(id)) {
                 selected.set(id, linked);
                 queue.push(linked);
             }
@@ -113,24 +117,23 @@ function selectionFor(files, descriptor, prompt) {
         requiredIds.push("conquistador/standards/learning.md");
     if (/[\u00c0-\u024f\u1e00-\u1eff]/u.test(prompt))
         requiredIds.push("conquistador/standards/vietnamese.md");
-    const allOutcomes = files.filter((file) => /^[^/]+\/SKILL\.md$/.test(file.id) && file.id !== "conquistador/SKILL.md");
-    const allWorkflows = files.filter((file) => file.id.startsWith("conquistador/workflows/") && file.id.endsWith(".md"));
+    const allOutcomes = files.filter((file) => COMMAND_DOCUMENT.test(file.id));
+    const allWorkflows = files.filter((file) => PLAY_DOCUMENT.test(file.id));
     // A leading outcome name is an exact request, not a lexical mention in a brief.
     // This makes every installed outcome reachable without loading the full library.
+    // Command names are common words ("copy", "build"), so they name a command only after /conquistador.
+    const explicit = /^\/conquistador\b/i.test(prompt.trim());
     const request = prompt.trim().replace(/^\/conquistador\b\s*:?\s*/i, "");
-    const namedOutcome = allOutcomes.find((file) => {
-        const id = file.id.slice(0, -"/SKILL.md".length);
-        return new RegExp(`^/?${id}(?=$|[\\s:,.!?])`, "i").test(request);
-    });
-    const engineeringId = requestedEngineeringOutcome(request);
-    const explicitOutcome = namedOutcome ?? (engineeringId ? byId.get(`${engineeringId}/SKILL.md`) : undefined);
+    const namedOutcome = explicit ? allOutcomes.find((file) => new RegExp(`^${commandId(file.id)}(?=$|[\\s:,.!?])`, "i").test(request)) : undefined;
+    const engineeringId = requestedEngineeringOutcome(prompt);
+    const explicitOutcome = namedOutcome ?? (engineeringId ? byId.get(`conquistador/commands/${engineeringId}/COMMAND.md`) : undefined);
     const engineeringIntent = engineeringId !== undefined ||
-        (namedOutcome !== undefined && isEngineeringOutcome(namedOutcome.id.split("/")[0]));
-    const outcomes = allOutcomes.filter((file) => !isEngineeringOutcome(file.id.split("/")[0]));
+        (namedOutcome !== undefined && isEngineeringOutcome(commandId(namedOutcome.id)));
+    const outcomes = allOutcomes.filter((file) => !isEngineeringOutcome(commandId(file.id)));
     const defaults = {
-        "launch-or-grow": "plan-campaign/SKILL.md",
-        "create-or-improve": "write-copy/SKILL.md",
-        "learn-from-results": "measure-growth/SKILL.md",
+        "launch-or-grow": "conquistador/commands/campaign/COMMAND.md",
+        "create-or-improve": "conquistador/commands/copy/COMMAND.md",
+        "learn-from-results": "conquistador/commands/measure/COMMAND.md",
     };
     const selectedOutcomes = explicitOutcome ? [explicitOutcome] : engineeringIntent ? [] : ranked(promptTokens, outcomes, 2);
     if (selectedOutcomes.length === 0 && !engineeringIntent) {
@@ -138,7 +141,7 @@ function selectionFor(files, descriptor, prompt) {
         if (fallback)
             selectedOutcomes.push(fallback);
     }
-    const workflows = allWorkflows.filter((file) => !isEngineeringWorkflow(file.id.slice("conquistador/workflows/".length, -".md".length)));
+    const workflows = allWorkflows.filter((file) => !isEngineeringWorkflow(PLAY_DOCUMENT.exec(file.id)[1]));
     // Narrow explicit requests need only their outcome. The parent can compose
     // additional outcomes progressively when the requested deliverable needs them.
     const selectedWorkflows = explicitOutcome || engineeringIntent ? [] : ranked(promptTokens, workflows, 2);

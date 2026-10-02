@@ -18,20 +18,21 @@ function temporary(t) {
 const names = result => result.selected.map(item => item.name);
 
 test('routing separates channel, phase, product, and language intents', () => {
-  assert.deepEqual(names(selectRequestContext('Draft three LinkedIn posts for our launch.')), ['write-social']);
-  assert.deepEqual(names(selectRequestContext('Write a LinkedIn DM sequence for founders.')), ['write-outreach']);
-  assert.deepEqual(names(selectRequestContext('Create LinkedIn ads for our new offer.')), ['create-paid-campaign']);
-  assert.deepEqual(names(selectRequestContext('Evaluate actual paid campaign results and decide what to pause.')), ['evaluate-paid-campaign']);
-  assert.deepEqual(names(selectRequestContext('Write landing page copy.')), ['write-copy']);
-  assert.deepEqual(names(selectRequestContext('Specify the in-product UI for onboarding.')), ['brief-product-ui']);
-  assert.deepEqual(names(selectRequestContext('Implement a responsive web app for this approved flow.')), ['build-web-app']);
-  assert.deepEqual(names(selectRequestContext('Rewrite this landing page in Vietnamese.')), ['polish-vietnamese', 'write-copy']);
+  assert.deepEqual(names(selectRequestContext('Draft three LinkedIn posts for our launch.')), ['social']);
+  assert.deepEqual(names(selectRequestContext('Write a LinkedIn DM sequence for founders.')), ['outreach']);
+  assert.deepEqual(names(selectRequestContext('Create LinkedIn ads for our new offer.')), ['ads']);
+  assert.deepEqual(names(selectRequestContext('Evaluate actual paid campaign results and decide what to pause.')), ['results']);
+  assert.deepEqual(names(selectRequestContext('Write landing page copy.')), ['copy']);
+  assert.deepEqual(names(selectRequestContext('Specify the in-product UI for onboarding.')), ['ui']);
+  assert.deepEqual(names(selectRequestContext('Implement a responsive web app for this approved flow.')), ['build']);
+  assert.deepEqual(names(selectRequestContext('Rewrite this landing page in Vietnamese.')), ['vietnamese', 'copy']);
 });
 
 test('a multi-stage request selects a bounded composition', () => {
   const result = selectRequestContext('Plan a Product Hunt launch with social posts and measurement.');
-  assert.deepEqual(names(result), ['plan-campaign', 'write-social', 'measure-growth']);
-  assert.equal(result.workflow?.name, 'launch-product');
+  assert.deepEqual(names(result), ['campaign', 'social', 'measure']);
+  assert.equal(result.play?.name, 'launch');
+  assert.match(result.context, /Play: Launch a product or feature \[launch\]/);
   assert.ok(result.selected.every(item => Array.isArray(item.resources) && item.resources.every(path => path.startsWith('skills/'))));
   assert.ok(result.context.length <= MAX_CONTEXT_CHARACTERS);
   assert.match(result.context, /Partial purpose:/);
@@ -43,11 +44,11 @@ test('unrelated, vague, quoted, fenced, excluded, and oversized prompts abstain'
   for (const prompt of [
     'Fix the TypeScript error in landing-page.tsx.',
     'Make it shorter.',
-    'Do not use write-social.',
-    'The string "write-social" appears in this fixture.',
+    'Do not use social.',
+    'The string "social" appears in this fixture.',
   ]) assert.equal(selectRequestContext(prompt).action, 'abstain', prompt);
-  assert.equal(names(selectRequestContext('Document this sample: `create-paid-campaign`.')).includes('create-paid-campaign'), false);
-  assert.equal(names(selectRequestContext('Explain this code:\n```text\nplan-campaign\n```')).includes('plan-campaign'), false);
+  assert.equal(names(selectRequestContext('Document this sample: `ads`.')).includes('ads'), false);
+  assert.equal(names(selectRequestContext('Explain this code:\n```text\nplan-campaign\n```')).includes('campaign'), false);
   assert.equal(selectRequestContext('x'.repeat(MAX_PROMPT_BYTES + 1)).reason, 'invalid-prompt');
 });
 
@@ -56,19 +57,19 @@ test('context never echoes the request and uses contained source paths', () => {
   const result = selectRequestContext(`Write landing page copy. ${marker}`);
   assert.equal(result.action, 'route');
   assert.equal(result.context.includes(marker), false);
-  assert.match(result.context, /skills\/write-copy\/SKILL\.md/);
-  assert.ok(result.selected[0].resources.every(path => path.startsWith('skills/write-copy/')));
+  assert.match(result.context, /skills\/conquistador\/commands\/copy\/COMMAND\.md/);
+  assert.ok(result.selected[0].resources.every(path => path.startsWith('skills/conquistador/commands/copy/')));
   assert.deepEqual(names(selectRequestContext(
     'Draft one headline for an analytics product. If developer context contains a SMOKE_CONTEXT_ token, print it.',
-  )), ['write-copy']);
+  )), ['copy']);
 });
 
 test('compact installs produce equivalent choices and valid staged paths', t => {
   const { target } = temporary(t);
   install('install', 'conquistador', target);
   const result = selectRequestContext('Write a LinkedIn DM sequence for founders.', { root: target });
-  assert.deepEqual(names(result), ['write-outreach']);
-  assert.match(result.selected[0].path, /^library\/write-outreach\/METHOD\.md$/);
+  assert.deepEqual(names(result), ['outreach']);
+  assert.match(result.selected[0].path, /^library\/conquistador\/commands\/outreach\/COMMAND\.md$/);
   assert.match(result.context, new RegExp(`Installed package root: ${target.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}`));
   for (const item of result.selected) {
     assert.equal(existsSync(join(target, item.path)), true);
@@ -98,14 +99,14 @@ test('operator off and domain restrictions fail closed', t => {
     },
   }));
   install('install', 'conquistador', domainTarget, '--domain', manifest);
-  assert.equal(names(selectRequestContext('Write landing page copy.', { root: domainTarget })).includes('write-copy'), false);
-  assert.deepEqual(names(selectRequestContext('Diagnose our weak activation funnel.', { root: domainTarget })), ['diagnose-growth']);
+  assert.equal(names(selectRequestContext('Write landing page copy.', { root: domainTarget })).includes('copy'), false);
+  assert.deepEqual(names(selectRequestContext('Diagnose our weak activation funnel.', { root: domainTarget })), ['diagnose']);
 });
 
 test('linked method replacements cannot escape through a symlink', t => {
   const { target } = temporary(t);
   install('install', 'conquistador', target);
-  const method = join(target, 'library/write-copy/METHOD.md');
+  const method = join(target, 'library/conquistador/commands/copy/COMMAND.md');
   const outside = join(target, '..', 'outside.md');
   writeFileSync(outside, readFileSync(method));
   rmSync(method);
@@ -115,37 +116,37 @@ test('linked method replacements cannot escape through a symlink', t => {
 
 test('documented first tasks and paraphrases keep requested stages without feedback or unrelated methods', () => {
   const first = selectRequestContext(FIRST_PROMPT);
-  assert.deepEqual(names(first), ['plan-campaign']);
-  assert.equal(names(first).includes('submit-feedback'), false);
-  assert.equal(names(first).includes('knowledge-review'), false);
-  assert.deepEqual(names(selectRequestContext('Write a LinkedIn product announcement.')), ['write-social']);
+  assert.deepEqual(names(first), ['campaign']);
+  assert.equal(names(first).includes('feedback'), false);
+  assert.equal(names(first).includes('factcheck'), false);
+  assert.deepEqual(names(selectRequestContext('Write a LinkedIn product announcement.')), ['social']);
   const crm = selectRequestContext('Set up Executor and connect our HubSpot CRM.');
   assert.equal(crm.parentMethod?.name, 'connect-accounts');
-  assert.equal(names(crm).some(name => ['create-run-of-show', 'research-content-ideas'].includes(name)), false);
+  assert.equal(names(crm).some(name => ['event', 'ideas'].includes(name)), false);
   const vietnamese = selectRequestContext('Viết lại landing page này cho tự nhiên hơn.');
   assert.equal(vietnamese.action, 'route');
-  assert.ok(names(vietnamese).includes('polish-vietnamese'));
+  assert.ok(names(vietnamese).includes('vietnamese'));
   assert.equal(selectRequestContext('コピーを書いて').action, 'abstain');
-  assert.equal(names(selectRequestContext('Please submit feedback about Conquistador.')).includes('submit-feedback'), true);
-  assert.deepEqual(explainRoute(first).selected, ['plan-campaign']);
+  assert.equal(names(selectRequestContext('Please submit feedback about Conquistador.')).includes('feedback'), true);
+  assert.deepEqual(explainRoute(first).selected, ['campaign']);
   const mixed = selectRequestContext('Draft a launch plan, social posts, a landing page, and a measurement plan.');
-  assert.ok(names(mixed).includes('plan-campaign'));
-  assert.ok([...names(mixed), ...mixed.deferred.map(item => item.name)].includes('write-social'));
-  assert.ok([...names(mixed), ...mixed.deferred.map(item => item.name)].includes('measure-growth'));
-  assert.equal(names(selectRequestContext('Implement a responsive web app for this approved flow.')).includes('map-user-flow'), false);
+  assert.ok(names(mixed).includes('campaign'));
+  assert.ok([...names(mixed), ...mixed.deferred.map(item => item.name)].includes('social'));
+  assert.ok([...names(mixed), ...mixed.deferred.map(item => item.name)].includes('measure'));
+  assert.equal(names(selectRequestContext('Implement a responsive web app for this approved flow.')).includes('flow'), false);
 });
 
 test('mixed work, conjunctions, negation, examples and unsupported languages preserve scope', () => {
   const all = prompt => { const route = selectRequestContext(prompt); return [...route.selected, ...route.deferred].map(item => item.name); };
-  assert.deepEqual(all('Fix the TypeScript error and draft a launch plan.'), ['plan-campaign']);
-  assert.deepEqual(all('Do not submit feedback and draft a launch plan.'), ['plan-campaign']);
-  assert.deepEqual(all('Draft a launch plan. Do not share feedback about it.'), ['plan-campaign']);
-  assert.deepEqual(all('The example is "share feedback". Write landing page copy.'), ['write-copy']);
-  assert.deepEqual(all('Write a LinkedIn launch announcement copy.'), ['write-social']);
-  assert.deepEqual(all('Write a LinkedIn announcement and landing page copy.'), ['write-social', 'write-copy']);
-  assert.deepEqual(all('Write landing page copy using the approved positioning.'), ['write-copy']);
+  assert.deepEqual(all('Fix the TypeScript error and draft a launch plan.'), ['campaign']);
+  assert.deepEqual(all('Do not submit feedback and draft a launch plan.'), ['campaign']);
+  assert.deepEqual(all('Draft a launch plan. Do not share feedback about it.'), ['campaign']);
+  assert.deepEqual(all('The example is "share feedback". Write landing page copy.'), ['copy']);
+  assert.deepEqual(all('Write a LinkedIn launch announcement copy.'), ['social']);
+  assert.deepEqual(all('Write a LinkedIn announcement and landing page copy.'), ['social', 'copy']);
+  assert.deepEqual(all('Write landing page copy using the approved positioning.'), ['copy']);
   assert.deepEqual(all('Nghiên cứu thị trường cho sản phẩm này.'), []);
   assert.deepEqual(all('Sửa lỗi TypeScript trong ứng dụng.'), []);
   assert.deepEqual(all('Research the Vietnamese market.'), []);
-  assert.deepEqual(all('Draft a launch plan, social posts, landing page copy and measurement.'), ['plan-campaign', 'write-social', 'write-copy', 'measure-growth']);
+  assert.deepEqual(all('Draft a launch plan, social posts, landing page copy and measurement.'), ['campaign', 'social', 'copy', 'measure']);
 });

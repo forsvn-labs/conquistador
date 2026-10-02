@@ -219,7 +219,7 @@ describe("owned CLI execution boundary", () => {
     );
     expect(JSON.parse(output.stdout.at(-1)!)).toMatchObject({
       outcome: "skill",
-      targetId: "write-copy",
+      targetId: "copy",
     });
     expect(output.stdout.join("\n")).not.toMatch(
       /sk-|OPENAI_API_KEY|credential/i,

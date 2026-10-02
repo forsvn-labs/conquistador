@@ -8,7 +8,7 @@ import { fileURLToPath } from 'node:url';
 import { loadRestriction, shouldStageSkillPath } from './domain-package.mjs';
 import { validateContractAgainstInstall } from './routing-contract.mjs';
 import { isRuntimeExecutable } from './install-paths.mjs';
-import { canonicalText, capabilityCatalog, internalPath, internalText, methodLibrary, skillDiscovery, regularFiles, subsetLinks } from './method-library.mjs';
+import { canonicalText, capabilityCatalog, internalPath, internalText, methodLibrary, methodPath, skillDiscovery, regularFiles, subsetLinks } from './method-library.mjs';
 
 const distribution = fileURLToPath(new URL('../', import.meta.url));
 const manifestPath = 'release/completeness.json';
@@ -119,11 +119,11 @@ function inspectLibrary(root, manifest, issues) {
   const methods = [];
   for (const expected of [manifest.parent, ...manifest.outcomes]) {
     if (restriction && !restriction.allowed.skills.includes(expected.name)) continue;
-    const path = resourcePath(`${expected.name}/SKILL.md`);
+    const path = resourcePath(methodPath(expected.name));
     try {
       const text = textAt(root, path);
       const identity = methodIdentity(text);
-      const expectedHash = restriction ? hash(subsetLinks(textAt(join(distribution, 'skills'), `${expected.name}/SKILL.md`), `${expected.name}/SKILL.md`, selectedFiles)) : expected.sha256;
+      const expectedHash = restriction ? hash(subsetLinks(textAt(join(distribution, 'skills'), methodPath(expected.name)), methodPath(expected.name), selectedFiles)) : expected.sha256;
       const valid = identity.name === expected.name && identity.version === expected.version && hash(originalBytes(path, Buffer.from(text))) === expectedHash;
       methods.push({ name: expected.name, version: identity.version, expectedVersion: expected.version, valid });
       if (!valid) issues.push(`Method differs from the doctor release manifest: ${path}`);

@@ -33,7 +33,7 @@ describe("Capability Router contract", () => {
     });
     expect(routeIntent("please write copy for the pricing page")).toMatchObject({
       outcome: "skill",
-      targetId: "write-copy",
+      targetId: "copy",
     });
     expect(routeIntent("")).toMatchObject({ outcome: "abstain", reason: "empty-intent" });
     expect(routeIntent("   ")).toMatchObject({ outcome: "abstain", reason: "empty-intent" });
@@ -48,7 +48,7 @@ describe("Capability Router contract", () => {
     const decision = routeIntent("write copy and write a social post");
     expect(decision).toMatchObject({ outcome: "abstain", reason: "ambiguous-intent" });
     if (decision.outcome !== "abstain") throw new Error("expected abstention");
-    expect(decision.candidates).toEqual(expect.arrayContaining(["skill:write-copy", "skill:write-social"]));
+    expect(decision.candidates).toEqual(expect.arrayContaining(["skill:copy", "skill:social"]));
     expect(decision.clarification).toMatch(/Which outcome do you want/);
 
     const overlap = routeIntent("research content ideas inside the content intelligence loop");
@@ -57,13 +57,16 @@ describe("Capability Router contract", () => {
     expect(overlap.reason).toBe("ambiguous-intent");
     expect(overlap.candidates).toEqual(expect.arrayContaining([
       "playbook:content-intelligence-loop",
-      "skill:research-content-ideas",
+      "skill:ideas",
     ]));
   });
 
   it("routes every installed outcome ID and spaced alias to skill guidance", () => {
-    const ids = readdirSync(resolve(root, "../skills")).filter((id) => id !== "conquistador").sort();
-    expect(ids).toHaveLength(38);
+    // Routed commands only; meta commands (init, pin, check, ...) run when named and are not served.
+    const routing = JSON.parse(readFileSync(resolve(root, "../skills/conquistador/routing-contract.json"), "utf8"));
+    const ids = readdirSync(resolve(root, "../skills/conquistador/commands"))
+      .filter((id) => !id.startsWith(".") && routing.methods[id]?.kind !== "meta").sort();
+    expect(ids).toHaveLength(35);
     const contract = loadRouterContract();
     expect(contract.routes.filter((route) => route.target.kind === "skill").map((route) => route.target.id).sort()).toEqual(ids);
     for (const id of ids) {

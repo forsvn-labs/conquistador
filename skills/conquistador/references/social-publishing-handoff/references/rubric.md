@@ -19,7 +19,7 @@ Override the aggregate. Any of these → immediate FAIL, regardless of other sco
 3. **Dim 6 — Credential leak detected.** Grep across emitted files returns any literal credential value pattern.
 4. **Dim 6 — Policy-violating copy explicit.** Platform-specific banned-word hit OR claim banned under platform ad/content policy.
 5. **Dim 7 — Narration block missing / invalid / un-mirrored.** A per-platform draft lacks a non-empty `## Legibility` block, OR it is Absent despite a pack being supplied, OR its `pack_verified`/`applied_tactics` frontmatter does not mirror the block.
-6. **Dim 7 — Why-this-works duplicated.** Any bundle file contains a `## Why this works` block (product-fit must be carried forward from the upstream write-social artifact, never re-authored here).
+6. **Dim 7 — Why-this-works duplicated.** Any bundle file contains a `## Why this works` block (product-fit must be carried forward from the upstream `social` artifact, never re-authored here).
 7. **Dim 7 — D17 automation ran without confirmation.** `automation_result_per_platform[p].status == "success"` appears with `confirmation_result != "confirmed"`.
 8. **Dim 7 — Cookie leak detected.** Cookie value substring matches across any emitted file or log line.
 9. **Dim 7 — Captcha-bypass attempt.** Retry log line within 1s of captcha detection log line.

@@ -22,6 +22,6 @@ Behavior when missing: fail-closed-draft.
 
 ## Video analysis prerequisites
 
-`analyze-video` additionally needs local file access, code execution, Gemini credentials and
+`watch` additionally needs local file access, code execution, Gemini credentials and
 permission to upload the selected video. This package supplies none of those capabilities.
 If any is unavailable, report video analysis as unavailable and do not claim to have watched it.

@@ -7,17 +7,16 @@ export const PARENT_JOBS = [
 export type ParentJob = (typeof PARENT_JOBS)[number];
 
 export const ENGINEERING_OUTCOMES = [
-  "architect-software-system",
-  "brief-product-ui",
-  "build-ios-app",
-  "build-web-app",
-  "map-user-flow",
-  "write-technical-docs",
+  "architect",
+  "ui",
+  "build",
+  "flow",
+  "docs",
 ] as const;
 
 export type EngineeringOutcome = (typeof ENGINEERING_OUTCOMES)[number];
 
-export const ENGINEERING_WORKFLOWS = ["specify-product-experience"] as const;
+export const ENGINEERING_WORKFLOWS = ["spec"] as const;
 
 export type EngineeringWorkflow = (typeof ENGINEERING_WORKFLOWS)[number];
 
@@ -36,17 +35,18 @@ export function isEngineeringWorkflow(id: string): boolean {
 // method prose changes the lexical ranking. These patterns describe requests,
 // rather than incidental mentions of software in a marketing brief.
 const ENGINEERING_REQUESTS: Record<EngineeringOutcome, RegExp> = {
-  "architect-software-system": /^architect\s+(?:(?:the|a|an)\s+)?(?:software\s+)?system\b/i,
-  "brief-product-ui": /^(?:specify|brief|design)\s+(?:(?:the|a|an)\s+)?(?:product\s+)?(?:ui|user interface)\b/i,
-  "build-ios-app": /^build\s+(?:(?:the|a|an)\s+)?ios\s+app\b/i,
-  "build-web-app": /^build\s+(?:(?:the|a|an)\s+)?web\s+app\b/i,
-  "map-user-flow": /^map\s+(?:(?:the|a|an)\s+)?(?:onboarding\s+)?user\s+flow\b/i,
-  "write-technical-docs": /^write\s+(?:(?:the|a|an)\s+)?technical\s+(?:documentation|docs)\b/i,
+  "architect": /^architect\s+(?:(?:the|a|an)\s+)?(?:software\s+)?system\b/i,
+  "ui": /^(?:specify|brief|design)\s+(?:(?:the|a|an)\s+)?(?:product\s+)?(?:ui|user interface)\b/i,
+  "build": /^build\s+(?:(?:the|a|an)\s+)?(?:ios|web)\s+app\b/i,
+  "flow": /^map\s+(?:(?:the|a|an)\s+)?(?:onboarding\s+)?user\s+flow\b/i,
+  "docs": /^write\s+(?:(?:the|a|an)\s+)?technical\s+(?:documentation|docs)\b/i,
 };
 
 export function requestedEngineeringOutcome(prompt: string): EngineeringOutcome | undefined {
+  // A bare command name ("build", "docs") names the outcome only after an explicit /conquistador.
+  const explicit = /^\/conquistador\b/i.test(prompt.trim());
   const request = prompt.trim().replace(/^\/conquistador\b\s*:?\s*/i, "").replace(/^(?:please\s+|(?:can|could|would)\s+you\s+(?:please\s+)?)/i, "");
-  return ENGINEERING_OUTCOMES.find((id) => new RegExp(`^/?${id}(?=$|[\\s:,.!?])`, "i").test(request) || ENGINEERING_REQUESTS[id].test(request));
+  return ENGINEERING_OUTCOMES.find((id) => (explicit && new RegExp(`^${id}(?=$|[\\s:,.!?])`, "i").test(request)) || ENGINEERING_REQUESTS[id].test(request));
 }
 
 // Kept for source consumers of the original inventory API. These names describe

@@ -18,9 +18,8 @@ In a fresh host session, select Conquistador from the skill picker or use the ho
 `/conquistador:conquistador` name. If an invocation is unavailable, check the host's plugin listing
 rather than assume that installed files are active.
 
-The default plugin contains the parent and 38 methods, exposed as 39 skills. A staged compact
-skill or project operator instead exposes one entry and loads its internal methods after
-selection. These are different installation routes, not conflicting readiness checks.
+The plugin exposes one skill, `conquistador`, with 35 commands and 21 plays under it. A staged
+compact skill or project operator also exposes one entry and loads its commands after selection.
 
 Include the outcome, audience, source facts, constraints, and output you want. Say whether you
 want a **draft**, **specification**, or **implementation**. Use readable file paths or paste a

@@ -209,7 +209,7 @@ describe("content-intelligence-loop executable playbook", () => {
     const create = trace.find((event) =>
       event.type === "judgment.completed" && event.stepId === "create-artifact"
     );
-    expect(create?.detail.skillId).toBe("write-social");
+    expect(create?.detail.skillId).toBe("social");
 
     const receipt = readFileSync(
       resolve(runDir, "artifacts/action-receipt.md"),
@@ -266,7 +266,7 @@ describe("content-intelligence-loop executable playbook", () => {
     const created = first.trace.find((event) =>
       event.type === "judgment.completed" && event.stepId === "create-artifact"
     );
-    expect(created?.detail.skillId).toBe("write-copy");
+    expect(created?.detail.skillId).toBe("copy");
     const hypothesis = readFileSync(
       resolve(first.directory, "artifacts/hypothesis.md"),
       "utf8",

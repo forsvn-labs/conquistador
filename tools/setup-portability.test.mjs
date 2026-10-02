@@ -61,7 +61,7 @@ test('the guide retains connectors, shared plugin sources, squads, specialist sk
   for (const [answers, expected] of [
     [[['plugin'], ['copilot-plugin', 'claude-plugin'], '/owned/plugin', true], ['install', '--target', 'copilot-plugin', '--path', '/owned/plugin']],
     [[['harness'], 'squad', '/owned/squad', true], ['install', '--target', 'squad', '--path', '/owned/squad']],
-    [[['specialist'], 'write-copy', '/owned/copy', true], ['install', '--target', 'skill:write-copy', '--path', '/owned/copy']],
+    [[['specialist'], 'copy', '/owned/copy', true], ['install', '--target', 'skill:copy', '--path', '/owned/copy']],
     [[['runtime-mcp'], 'https://runtime.example', '/stable', '/owned/mcp', true], ['install', '--target', 'mcp', '--path', '/owned/mcp', '--url', 'https://runtime.example', '--runtime-path', '/stable']],
   ]) {
     const calls = []; assert.equal(await runSetupGuide({ cwd: '/example-project', version: '0.0.10', ui: fakeUi(answers), run: async args => { calls.push(args); return ''; } }), 0);

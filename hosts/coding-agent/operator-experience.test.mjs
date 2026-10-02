@@ -7,7 +7,7 @@ import { digest, protocol, publicCapabilities, redactText, specialistTitle, vali
 import { deriveReceipt, formatEngagementBrief, formatReceiptJson, formatReceiptMarkdown, validateReceipt } from './receipt.mjs';
 
 const root = fileURLToPath(new URL('../../', import.meta.url));
-const task = (id, dependsOn = []) => ({ id, role: 'copy', goal: 'Write a short draft.', skills: ['write-copy'], workflows: [], knowledgeHandles: [], dependsOn });
+const task = (id, dependsOn = []) => ({ id, role: 'copy', goal: 'Write a short draft.', skills: ['copy'], workflows: [], knowledgeHandles: [], dependsOn });
 const plan = () => ({ schemaVersion: protocol, id: 'test-team', goal: 'Prepare one coherent draft with no invented proof.',
   assignments: [task('first'), task('second')], limits: { concurrency: 2, timeoutSeconds: 10, maxAttempts: 1, maxDispatches: 6, maxOutputBytes: 4000 } });
 const resultFor = packet => ({ schemaVersion: protocol, assignmentId: packet.assignment.id, status: 'draft',

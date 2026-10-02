@@ -5,13 +5,13 @@ costly moment, product truth, proof, and action.
 
 Route by destination before writing:
 
-- paid ads use `create-paid-campaign`;
-- product, landing, and offer pages use `write-copy`;
-- one-to-one messages use `write-outreach`;
-- account-owned social posts use `write-social`;
-- articles and guides use `write-longform`.
+- paid ads use `ads`;
+- product, landing, and offer pages use `copy`;
+- one-to-one messages use `outreach`;
+- account-owned social posts use `social`;
+- articles and guides use `article`.
 
-Use `position-to-campaign`, `create-landing-page`, or `outreach-sequence` only when the assignment
+Use `gtm`, `landing`, or `outbound` only when the assignment
 needs that full composition. Load the direct-response or SaaS landing specialist when the page type
 changes the argument.
 

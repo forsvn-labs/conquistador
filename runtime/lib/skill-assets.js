@@ -34,14 +34,15 @@ export function loadSkillAssets(skillId, skillsRoot = DEFAULT_SKILLS_ROOT) {
             files.push({ path: id, digest: createHash("sha256").update(bytes).digest("hex"), content: id.endsWith(".md") ? bytes.toString("utf8") : null });
         }
     };
-    walk(resolve(skillsRoot, skillId), "");
-    if (!files.some((file) => file.path === "SKILL.md"))
+    // Each command lives under the one parent skill: conquistador/commands/<id>/COMMAND.md.
+    walk(resolve(skillsRoot, "conquistador/commands", skillId), "");
+    if (!files.some((file) => file.path === "COMMAND.md"))
         throw new Error("skill method is missing");
     return { digest: sha256(files.map(({ path, digest }) => ({ path, digest }))), files };
 }
 export function skillMethodContext(assets, maximumBytes = 24_000) {
     const byPath = new Map(assets.files.map((file) => [file.path, file]));
-    const queue = ["SKILL.md"];
+    const queue = ["COMMAND.md"];
     const seen = new Set();
     const parts = [];
     let bytes = 0;
@@ -59,7 +60,7 @@ export function skillMethodContext(assets, maximumBytes = 24_000) {
         const part = `<skill-method path=${JSON.stringify(path)}>\n${content}\n</skill-method>`;
         const size = Buffer.byteLength(part);
         if (bytes + size > maximumBytes) {
-            if (path === "SKILL.md")
+            if (path === "COMMAND.md")
                 throw new Error("skill front door exceeds method context budget");
             continue;
         }

@@ -389,13 +389,13 @@ async function onPrompt(input) {
   const { createBrief, formatReadingList, knowledgeFileEvidence } = await import('../tools/brief.mjs');
   const brief = createBrief(prompt.slice(0, 32_000), { root: pluginRoot });
   if (brief.action !== 'brief') return client === 'cursor' ? { continue: true } : null;
-  const must = [...brief.methods, ...brief.must].map(item => ({
+  const must = [...(brief.play ? [brief.play] : []), ...brief.methods, ...brief.must].map(item => ({
     absolute: item.absolute,
     path: item.path,
     ...knowledgeFileEvidence(item),
   }));
 
-  saveState(input, { createdAt: Date.now(), promptSha256: digest(normalizeText(prompt)), transcript: transcriptSnapshot(input), methods: brief.methods.map(item => item.name), must, enforced: false });
+  saveState(input, { createdAt: Date.now(), promptSha256: digest(normalizeText(prompt)), transcript: transcriptSnapshot(input), methods: brief.methods.map(item => item.name), play: brief.play?.name ?? null, must, enforced: false });
   if (client === 'cursor') return { continue: true };
   return { hookSpecificOutput: { hookEventName: 'UserPromptSubmit', additionalContext: formatReadingList(brief) } };
 }

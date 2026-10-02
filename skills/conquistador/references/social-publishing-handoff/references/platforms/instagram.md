@@ -66,7 +66,7 @@ Cross-reference `references/_shared/platform-intelligence/reels.md` (IG Reels). 
 ## Formatter Implementation Notes
 
 - Default to caption-bottom hashtag stack (5 blank lines separator).
-- Flag explicit operator instruction to use first-comment stack via write-social artifact.
+- Flag explicit operator instruction to use first-comment stack via `social` artifact.
 - Cross-check first 125 chars contain the hook + CTA (or first portion of CTA).
 - For Reels, route to produce-video manifest cross-check (9:16 aspect required).
 - For carousel, route to produce-asset manifest cross-check (up to 10 slots).

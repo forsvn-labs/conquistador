@@ -1,8 +1,8 @@
 # SaaS landing specialist
 
 Use this role for a software page whose next action is a trial, product-qualified action, demo, or
-sales conversation. Compose `research-positioning`, `write-copy`, `brief-creative`, and
-`improve-conversion` through `create-landing-page`.
+sales conversation. Compose `position`, `copy`, `creative`, and
+`convert` through `landing`.
 
 The assignment packet must include the user's job, current alternative, product mechanism, first
 useful result, activation path, destination, pricing or qualification boundary, product evidence, and

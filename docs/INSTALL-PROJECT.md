@@ -381,7 +381,7 @@ assets and SHA256SUMS attached to the same exact public release; do not substitu
 v0.0.14 private-alpha assets for the current release. Use the skill ZIP as a skills.sh local source or the plugin ZIP with a
 host plugin manager. The manager owns its installed copies. The source ZIP and Git checkout retain
 canonical authoring files. For this compact route, prepare them with setup first. The recommended
-global plugin route in INSTALL uses its own registration/payload path and exposes all 39 skills.
+global plugin route in INSTALL uses its own registration/payload path and exposes one skill.
 
 ## Plugins
 

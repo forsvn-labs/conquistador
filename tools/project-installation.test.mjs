@@ -1,3 +1,4 @@
+import { commandNames } from './method-library.mjs';
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { execFileSync, spawnSync } from 'node:child_process';
@@ -7,6 +8,8 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { hostFolders, projectLifecycle, treeDigest } from './project-installation.mjs';
 const root = fileURLToPath(new URL('../', import.meta.url));
+// Commands in this checkout, including meta commands other slices add.
+const N = commandNames(join(root, 'skills')).length;
 const cli = join(root, 'runtime/bin/conquistador.js');
 function fixture(t) { const project = realpathSync(mkdtempSync(join(tmpdir(), 'conquistador project '))); t.after(() => rmSync(project, { recursive: true, force: true })); return project; }
 function run(project, ...args) { return spawnSync(process.execPath, [cli, ...args], { cwd: project, encoding: 'utf8' }); }
@@ -19,11 +22,11 @@ test('complete operator installs an obvious parent and each selected native skil
     ok(project, 'install', '--host', host);
     assert.ok(existsSync(join(project, '.conquistador/SKILL.md')));
     assert.ok(existsSync(join(project, hostFolders[host], 'SKILL.md')));
-    assert.ok(existsSync(join(project, hostFolders[host], 'library/write-copy/METHOD.md')));
+    assert.ok(existsSync(join(project, hostFolders[host], 'library/conquistador/commands/copy/COMMAND.md')));
     const bypass = spawnSync(process.execPath, [join(root, 'tools/install.mjs'), 'remove', 'single-agent', join(project, '.conquistador')], { encoding: 'utf8' });
     assert.equal(bypass.status, 1); assert.match(bypass.stderr, /owns a native skill/);
     const doctor = JSON.parse(ok(project, 'operator', 'doctor', '--json'));
-    assert.equal(doctor.library.available, 38); assert.equal(doctor.bbAdapterPresent, true); assert.equal(doctor.discovery.count, 1);
+    assert.equal(doctor.library.available, N); assert.equal(doctor.bbAdapterPresent, true); assert.equal(doctor.discovery.count, 1);
     assert.match(ok(project, 'start'), /first|launch plan/);
     assert.match(ok(project, 'skills'), /Write product or campaign copy/);
     ok(project, 'operator', 'update'); ok(project, 'operator', 'uninstall');
@@ -64,7 +67,7 @@ test('legacy operator migration keeps an existing unchanged skill and removes th
   ok(project, 'operator', 'update');
   assert.equal(existsSync(legacy), false);
   assert.ok(existsSync(join(project, '.conquistador/SKILL.md')));
-  assert.equal(JSON.parse(ok(project, 'operator', 'doctor', '--json')).library.available, 38);
+  assert.equal(JSON.parse(ok(project, 'operator', 'doctor', '--json')).library.available, N);
   ok(project, 'operator', 'uninstall'); assert.deepEqual(readdirSync(project), []);
 });
 
@@ -85,11 +88,11 @@ test('legacy domain migration creates the same restricted native library and pre
   ok(project, 'operator', 'update');
   const operator = join(project, '.conquistador'), skill = join(project, hostFolders.codex);
   assert.deepEqual(JSON.parse(readFileSync(join(operator, 'domain-restriction.json'))), JSON.parse(readFileSync(join(skill, 'domain-restriction.json'))));
-  assert.equal(existsSync(join(skill, 'library/write-copy')), false);
-  assert.ok(existsSync(join(skill, 'library/diagnose-growth/METHOD.md')));
+  assert.equal(existsSync(join(skill, 'library/conquistador/commands/copy')), false);
+  assert.ok(existsSync(join(skill, 'library/conquistador/commands/diagnose/COMMAND.md')));
   ok(project, 'operator', 'update', '--hosts', 'codex,bb,cursor');
   assert.deepEqual(JSON.parse(readFileSync(join(project, hostFolders.cursor, 'domain-restriction.json'))), JSON.parse(readFileSync(join(operator, 'domain-restriction.json'))));
-  assert.equal(existsSync(join(project, hostFolders.cursor, 'library/write-copy')), false);
+  assert.equal(existsSync(join(project, hostFolders.cursor, 'library/conquistador/commands/copy')), false);
   ok(project, 'operator', 'uninstall'); assert.deepEqual(readdirSync(project), ['domain.json']);
 });
 

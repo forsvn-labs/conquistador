@@ -1,3 +1,4 @@
+import { commandNames } from './method-library.mjs';
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
@@ -7,6 +8,8 @@ import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
+// Commands in this checkout, including meta commands other slices add.
+const N = commandNames(join(root, 'skills')).length;
 
 const prompt = 'Our B2B SaaS growth has stalled. Weekly unique visitors held at 10,000 in both 8-week periods. Free-trial signups fell from 800 to 500; paid upgrades from 160 to 75. We have no analytics access beyond these totals. What is going on and what should we do next? Do not make changes.';
 
@@ -53,7 +56,7 @@ test('installed growth route, first task, hook context, and removal work togethe
   assert.match(setup, /First task: Diagnose a growth stall/);
   assert.match(setup, /Activation: manual/);
   assert.match(setup, /Method use:/);
-  assert.match(setup, /Local route preview: diagnose-growth/);
+  assert.match(setup, /Local route preview: diagnose/);
   assert.match(setup, /If discovery fails:/);
   assert.match(setup, /Hook trust:/);
   assert.ok(existsSync(join(project, '.conquistador/SKILL.md')));
@@ -121,25 +124,25 @@ test('installed growth route, first task, hook context, and removal work togethe
   assert.match(invalidStart.stdout, /Activation: invalid profile;/);
 
   const before = JSON.parse(checked(run(cli, project, 'operator', 'doctor', '--json'), 'doctor before hook'));
-  assert.equal(before.library.available, 38);
+  assert.equal(before.library.available, N);
   assert.equal(before.operatorActivation, 'manual');
   assert.equal(before.hooks.find(item => item.host === 'codex').routingAvailable, false);
   assert.equal(before.taskExecutionVerified, false);
   const installedContract = JSON.parse(readFileSync(join(project, '.conquistador/library/conquistador/routing-contract.json'), 'utf8'));
 
   const methodRoutes = Object.entries(installedContract.methods).map(([name, method]) => {
-    const text = `Use Conquistador to ${method.intents[0]}.`;
+    const text = method.intents.length ? `Use Conquistador to ${method.intents[0]}.` : `/conquistador ${name}`;
     const route = JSON.parse(checked(run(cli, project, 'route', '--prompt', text), `method route: ${name}`));
     assert.deepEqual(route.selected, [name], `${name}: ${JSON.stringify(route)}`);
 
     return { name, prompt: text, selected: route.selected };
   });
 
-  assert.equal(methodRoutes.length, 38);
+  assert.equal(methodRoutes.length, N);
 
   const routes = [prompt, ...paraphrases].map(text => {
     const route = JSON.parse(checked(run(cli, project, 'route', '--prompt', text), `route: ${text}`));
-    assert.deepEqual(route.selected, ['diagnose-growth']);
+    assert.deepEqual(route.selected, ['diagnose']);
 
     return { prompt: text, selected: route.selected };
   });
@@ -155,24 +158,24 @@ test('installed growth route, first task, hook context, and removal work togethe
   const initiativeRoute = JSON.parse(checked(run(cli, project, 'route', '--prompt',
     'Growth stalled and signups fell. Shape this initiative for our team.'), 'explicit initiative shaping'));
 
-  assert.deepEqual(initiativeRoute.selected, ['diagnose-growth', 'shape-initiative']);
+  assert.deepEqual(initiativeRoute.selected, ['diagnose', 'shape']);
 
   const namedMethods = JSON.parse(checked(run(cli, project, 'route', '--prompt',
     'Use shape-initiative and plan-campaign to decide a launch approach.'), 'named methods'));
 
-  assert.deepEqual(namedMethods.selected, ['shape-initiative', 'plan-campaign']);
+  assert.deepEqual(namedMethods.selected, ['shape', 'campaign']);
 
   const adversarialRoutes = [
-    ['Use shape-initiative, then diagnose-growth.', ['shape-initiative', 'diagnose-growth']],
-    ['Use Conquistador to plan-campaign and do not shape-initiative.', ['plan-campaign']],
-    ['Use Conquistador to plan-campaign. "Use shape-initiative" is only a quoted example.', ['plan-campaign']],
-    ['Use Conquistador for authority and freshness.', ['knowledge-review']],
-    ['Use Conquistador to review knowledge freshness for this project.', ['knowledge-review']],
-    ['Use Conquistador to design-pricing-and-packaging and do not write-copy.', ['design-pricing-and-packaging']],
-    ['Use Conquistador to review authority and freshness and do not write-copy.', ['knowledge-review']],
-    ['Use Conquistador to write readme and setup and do not write-copy.', ['write-technical-docs']],
-    ['Use Conquistador for readme and setup.', ['write-technical-docs']],
-    ['Why did signups drop after our campaign?', ['diagnose-growth']],
+    ['Use shape-initiative, then diagnose-growth.', ['shape', 'diagnose']],
+    ['Use Conquistador to plan-campaign and do not shape-initiative.', ['campaign']],
+    ['Use Conquistador to plan-campaign. "Use shape-initiative" is only a quoted example.', ['campaign']],
+    ['Use Conquistador for authority and freshness.', ['factcheck']],
+    ['Use Conquistador to review knowledge freshness for this project.', ['factcheck']],
+    ['Use Conquistador to design-pricing-and-packaging and do not write-copy.', ['pricing']],
+    ['Use Conquistador to review authority and freshness and do not write-copy.', ['factcheck']],
+    ['Use Conquistador to write readme and setup and do not write-copy.', ['docs']],
+    ['Use Conquistador for readme and setup.', ['docs']],
+    ['Why did signups drop after our campaign?', ['diagnose']],
   ].map(([text, expected]) => {
     const route = JSON.parse(checked(run(cli, project, 'route', '--prompt', text), `adversarial route: ${text}`));
     assert.deepEqual(route.selected, expected, `${text}: ${JSON.stringify(route)}`);
@@ -205,7 +208,7 @@ test('installed growth route, first task, hook context, and removal work togethe
   const explicitBusinessDiagnosis = JSON.parse(checked(run(cli, project, 'route', '--prompt',
     'Diagnose why trial signups fell, then refactor the validation handler.'), 'mixed business diagnosis and coding'));
 
-  assert.ok(explicitBusinessDiagnosis.selected.includes('diagnose-growth'));
+  assert.ok(explicitBusinessDiagnosis.selected.includes('diagnose'));
 
   const whollyNegated = JSON.parse(checked(run(cli, project, 'route', '--prompt',
     'Use Conquistador to do not design-pricing-and-packaging.'), 'wholly negated compound method'));
@@ -218,8 +221,8 @@ test('installed growth route, first task, hook context, and removal work togethe
   assert.equal(markerRoute.action, 'abstain', JSON.stringify(markerRoute));
 
   const explicitReviewNames = [
-    ['Use Conquistador to audit campaign performance with brief-creative.', 'brief-creative'],
-    ['Use Conquistador to evaluate landing-page performance with improve-conversion.', 'improve-conversion'],
+    ['Use Conquistador to audit campaign performance with brief-creative.', 'creative'],
+    ['Use Conquistador to evaluate landing-page performance with improve-conversion.', 'convert'],
   ];
 
   for (const [text, expected] of explicitReviewNames) {
@@ -235,25 +238,25 @@ test('installed growth route, first task, hook context, and removal work togethe
 
   const reviewPrompt = 'Use Conquistador to review the latest growth results in this project. Name the sources and baseline, separate observed changes from assumptions, and recommend one keep, drop, or test decision. Mark missing data.';
   const reviewRoute = JSON.parse(checked(run(cli, project, 'route', '--prompt', reviewPrompt), 'review growth first task'));
-  assert.deepEqual(reviewRoute.selected, ['measure-growth']);
+  assert.deepEqual(reviewRoute.selected, ['measure']);
 
   const pricing = JSON.parse(checked(run(cli, project, 'route', '--prompt',
     'Use Conquistador to design pricing and packaging for our B2B SaaS.'), 'pricing and packaging'));
 
-  assert.ok(pricing.selected.includes('design-pricing-and-packaging'));
+  assert.ok(pricing.selected.includes('pricing'));
 
   const namedPricing = JSON.parse(checked(run(cli, project, 'route', '--prompt',
     'Use design-pricing-and-packaging for this offer.'), 'named pricing method'));
 
-  assert.ok(namedPricing.selected.includes('design-pricing-and-packaging'));
+  assert.ok(namedPricing.selected.includes('pricing'));
   const launch = JSON.parse(checked(run(cli, project, 'route', '--prompt', 'Use Conquistador to draft a launch plan from product facts.'), 'launch route'));
-  assert.deepEqual(launch.selected, ['plan-campaign']);
+  assert.deepEqual(launch.selected, ['campaign']);
   const runtimeRoute = checked(run(cli, project, 'runtime', 'route', '--intent', 'content intelligence loop'), 'runtime route');
   assert.match(runtimeRoute, /content-intelligence-loop/);
 
   const start = checked(run(cli, project, 'start', '--task', 'diagnose-growth'), 'start');
   assert.match(start, /First task: Diagnose a growth stall/);
-  assert.match(start, /Local route preview: diagnose-growth/);
+  assert.match(start, /Local route preview: diagnose/);
   assert.match(start, /Activation: manual/);
   assert.match(start, /If discovery fails:/);
   assert.match(start, /Hook trust:/);
@@ -271,10 +274,10 @@ test('installed growth route, first task, hook context, and removal work togethe
   });
 
   const context = JSON.parse(checked(handled, 'installed hook')).hookSpecificOutput.additionalContext;
-  assert.match(context, /Diagnose a growth problem \[diagnose-growth\]/);
+  assert.match(context, /Diagnose a growth problem \[diagnose\]/);
   assert.doesNotMatch(context, /Shape an ambiguous initiative/);
   const methodPath = /Full method: ([^\n]+)/.exec(context)?.[1];
-  assert.equal(methodPath, 'library/diagnose-growth/METHOD.md');
+  assert.equal(methodPath, 'library/conquistador/commands/diagnose/COMMAND.md');
   const resources = /Required resources: ([^\n]+)/.exec(context)?.[1].split(', ');
   assert.ok(resources.length >= 3);
 
@@ -291,8 +294,8 @@ test('installed growth route, first task, hook context, and removal work togethe
   });
 
   const reviewContext = JSON.parse(checked(reviewHandled, 'review growth hook')).hookSpecificOutput.additionalContext;
-  assert.match(reviewContext, /Learn from aggregate growth results \[measure-growth\]/);
-  assert.match(reviewContext, /Full method: library\/measure-growth\/METHOD.md/);
+  assert.match(reviewContext, /Learn from aggregate growth results \[measure\]/);
+  assert.match(reviewContext, /Full method: library\/conquistador\/commands\/measure\/COMMAND.md/);
 
   const namedHandled = spawnSync(process.execPath, [handler, '--handle', '--host', 'codex', '--event', 'prompt-submitted',
     '--config', config], {
@@ -301,8 +304,8 @@ test('installed growth route, first task, hook context, and removal work togethe
   });
 
   const namedContext = JSON.parse(checked(namedHandled, 'named methods hook')).hookSpecificOutput.additionalContext;
-  assert.match(namedContext, /Shape an ambiguous initiative \[shape-initiative\]/);
-  assert.match(namedContext, /Plan a campaign or launch \[plan-campaign\]/);
+  assert.match(namedContext, /Shape an ambiguous initiative \[shape\]/);
+  assert.match(namedContext, /Plan a campaign or launch \[campaign\]/);
 
   const ciHandled = spawnSync(process.execPath, [handler, '--handle', '--host', 'codex', '--event', 'prompt-submitted',
     '--config', config], {
@@ -319,7 +322,7 @@ test('installed growth route, first task, hook context, and removal work togethe
     const routed = JSON.parse(checked(response, `compound intent hook: ${text}`)).hookSpecificOutput.additionalContext;
 
     assert.match(routed, new RegExp(`\\[${selected[0]}\\]`));
-    assert.doesNotMatch(routed, /\[write-copy\]/);
+    assert.doesNotMatch(routed, /\[copy\]/);
   }
 
   for (const text of technicalExplanations) {
@@ -382,7 +385,7 @@ test('installed growth route, first task, hook context, and removal work togethe
   const mcpFiles = JSON.parse(mcpMessages[1].result.content[0].text).files;
   assert.ok(mcpFiles.includes('conquistador/routing-contract.json'));
   const mcpContractText = mcpMessages[2].result.content[0].text;
-  assert.equal(Object.keys(JSON.parse(mcpContractText).methods).length, 38);
+  assert.equal(Object.keys(JSON.parse(mcpContractText).methods).length, N);
   checked(run(cli, project, 'setup', 'uninstall', '--target', 'mcp', '--path', mcpPath), 'local MCP uninstall');
   assert.equal(existsSync(mcpPath), false);
   assert.equal(readFileSync(join(project, 'keep.txt'), 'utf8'), 'Keep this project file.\n');
@@ -415,7 +418,7 @@ test('installed growth route, first task, hook context, and removal work togethe
       reviewHookContextSha256: digest(reviewContext),
       namedHookContextSha256: digest(namedContext),
       ciHookAbstained: true,
-      mcp: { listedRoutingContract: true, readRoutingContractSha256: digest(mcpContractText), methods: 38,
+      mcp: { listedRoutingContract: true, readRoutingContractSha256: digest(mcpContractText), methods: N,
         removed: true },
       launch: launch.selected,
       sourceReads,

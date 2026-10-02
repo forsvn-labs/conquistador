@@ -1,69 +1,69 @@
 {
   "schema": "conquistador.routing-breadth/v1",
-  "note": "Written before the routing fix. Each case passes when the brief selects at least one method in `any`, none in `none`, every platform stem in `platforms`, and no must-read file whose name is in `mustNot`. Cases with `silent: true` must return no brief when hooks run (no force). Tour examples from tools/tour.mjs join this corpus at run time.",
+  "note": "Written before the routing fix. Each case passes when the brief selects at least one method in `any`, none in `none`, every platform stem in `platforms`, and no must-read file whose name is in `mustNot`. Cases with `silent: true` must return no brief when hooks run (no force). Tour examples from tools/tour.mjs join this corpus at run time. Play cases: `play` names the play the brief must return; `noPlay: true` forbids any play; `allowEmpty: true` accepts a brief with no command (filler-word cases).",
   "cases": [
     {
       "area": "strategy",
       "task": "Figure out our positioning against Notion and Coda for a team wiki product",
       "any": [
-        "research-positioning"
+        "position"
       ]
     },
     {
       "area": "strategy",
       "task": "Define our ICP and top three customer segments",
       "any": [
-        "research-positioning"
+        "position"
       ]
     },
     {
       "area": "strategy",
       "task": "Decide pricing tiers for our B2B API product",
       "any": [
-        "design-pricing-and-packaging"
+        "pricing"
       ]
     },
     {
       "area": "strategy",
       "task": "We have ten growth ideas; rank them and tell me what to cut",
       "any": [
-        "prioritize-opportunities"
+        "prioritize"
       ]
     },
     {
       "area": "strategy",
       "task": "Split a $20k monthly marketing budget across channels",
       "any": [
-        "allocate-marketing-budget"
+        "budget"
       ]
     },
     {
       "area": "strategy",
       "task": "Model what it takes to hit $50k MRR by June",
       "any": [
-        "model-growth-funnel"
+        "funnel"
       ]
     },
     {
       "area": "strategy",
       "task": "Which channel should a B2B devtool start with?",
       "any": [
-        "research-channel"
+        "channels"
       ]
     },
     {
       "area": "strategy",
       "task": "Build a brand identity and voice for a fintech app",
       "any": [
-        "create-brand"
+        "brand"
       ]
     },
     {
       "area": "launch",
       "task": "Plan a Product Hunt launch for Tinyshot, a macOS screenshot tool",
       "any": [
-        "plan-campaign",
-        "launch-product"
+        "campaign",
+        "launch"
       ],
       "platforms": [
         "producthunt"
@@ -73,8 +73,8 @@
       "area": "launch",
       "task": "Launch on Hacker News with a Show HN post",
       "any": [
-        "launch-product",
-        "write-social"
+        "launch",
+        "social"
       ],
       "platforms": [
         "showhn"
@@ -84,55 +84,55 @@
       "area": "launch",
       "task": "Plan a holiday campaign for our DTC skincare brand",
       "any": [
-        "plan-campaign"
+        "campaign"
       ]
     },
     {
       "area": "launch",
       "task": "Run a webinar to generate B2B pipeline",
       "any": [
-        "create-run-of-show",
-        "plan-campaign"
+        "event",
+        "campaign"
       ]
     },
     {
       "area": "launch",
       "task": "Plan the run of show for our launch livestream",
       "any": [
-        "create-run-of-show"
+        "event"
       ]
     },
     {
       "area": "launch",
       "task": "Plan the App Store launch of our iOS habit tracker",
       "any": [
-        "plan-campaign",
-        "launch-product",
-        "optimize-search"
+        "campaign",
+        "launch",
+        "seo"
       ],
       "none": [
-        "build-ios-app"
+        "build"
       ]
     },
     {
       "area": "launch",
       "task": "Use Conquistador to draft a marketing and growth plan from the product facts in this project. Mark missing facts. Keep it as a draft.",
       "any": [
-        "plan-campaign"
+        "campaign"
       ]
     },
     {
       "area": "launch",
       "task": "Plan marketing and growth for our budgeting app",
       "any": [
-        "plan-campaign"
+        "campaign"
       ]
     },
     {
       "area": "social",
       "task": "Write LinkedIn thought leadership posts for our CEO",
       "any": [
-        "write-social"
+        "social"
       ],
       "platforms": [
         "linkedin"
@@ -142,7 +142,7 @@
       "area": "social",
       "task": "Write an X thread announcing our new feature",
       "any": [
-        "write-social"
+        "social"
       ],
       "platforms": [
         "x"
@@ -152,7 +152,7 @@
       "area": "social",
       "task": "Write a Reddit post for r/SaaS about lessons from our first 1,000 users",
       "any": [
-        "write-social"
+        "social"
       ],
       "platforms": [
         "reddit"
@@ -162,49 +162,49 @@
       "area": "social",
       "task": "Grow our Discord community from 500 to 5000 members",
       "any": [
-        "research-channel",
-        "plan-campaign",
-        "write-social"
+        "channels",
+        "campaign",
+        "social"
       ],
       "none": [
-        "create-run-of-show"
+        "event"
       ]
     },
     {
       "area": "social",
       "task": "Write a Threads and Bluesky content plan",
       "any": [
-        "research-content-ideas",
-        "write-social",
-        "plan-campaign"
+        "ideas",
+        "social",
+        "campaign"
       ],
       "none": [
-        "content-performance-review"
+        "report"
       ]
     },
     {
       "area": "social",
       "task": "Create a Pinterest strategy for a home decor brand",
       "any": [
-        "research-channel",
-        "plan-campaign"
+        "channels",
+        "campaign"
       ],
       "none": [
-        "create-brand"
+        "brand"
       ]
     },
     {
       "area": "social",
       "task": "Find content ideas our audience actually wants",
       "any": [
-        "research-content-ideas"
+        "ideas"
       ]
     },
     {
       "area": "social",
       "task": "Script three TikTok videos for our budgeting app",
       "any": [
-        "create-shortform"
+        "video"
       ],
       "platforms": [
         "tiktok"
@@ -214,9 +214,9 @@
       "area": "social",
       "task": "Plan a YouTube channel strategy for a B2B SaaS",
       "any": [
-        "plan-campaign",
-        "research-channel",
-        "create-shortform"
+        "campaign",
+        "channels",
+        "video"
       ],
       "platforms": [
         "youtube"
@@ -226,7 +226,7 @@
       "area": "social",
       "task": "Write an Instagram Reels script for our coffee brand",
       "any": [
-        "create-shortform"
+        "video"
       ],
       "platforms": [
         "reels"
@@ -236,44 +236,44 @@
       "area": "search",
       "task": "Grow organic SEO traffic to our docs and blog",
       "any": [
-        "optimize-search"
+        "seo"
       ]
     },
     {
       "area": "search",
       "task": "Get our product recommended by ChatGPT and Perplexity",
       "any": [
-        "optimize-search",
-        "answer-visibility-monitor"
+        "seo",
+        "answers"
       ]
     },
     {
       "area": "search",
       "task": "Optimize our App Store listing screenshots and keywords",
       "any": [
-        "optimize-search",
-        "create-app-preview"
+        "seo",
+        "trailer"
       ]
     },
     {
       "area": "search",
       "task": "Improve our Google Play store listing",
       "any": [
-        "optimize-search"
+        "seo"
       ]
     },
     {
       "area": "search",
       "task": "Build programmatic SEO pages for every integration we support",
       "any": [
-        "optimize-search"
+        "seo"
       ]
     },
     {
       "area": "paid",
       "task": "Set up a Google Ads search campaign with a $3k monthly budget",
       "any": [
-        "create-paid-campaign"
+        "ads"
       ],
       "mustNot": [
         "tiktok-ads",
@@ -284,7 +284,7 @@
       "area": "paid",
       "task": "Create Meta ads for our DTC skincare brand",
       "any": [
-        "create-paid-campaign"
+        "ads"
       ],
       "mustNot": [
         "linkedin-ads"
@@ -294,278 +294,278 @@
       "area": "paid",
       "task": "Write LinkedIn ads for our HR software",
       "any": [
-        "create-paid-campaign"
+        "ads"
       ],
       "none": [
-        "write-social"
+        "social"
       ]
     },
     {
       "area": "paid",
       "task": "Brief a UGC creator for a TikTok ad",
       "any": [
-        "brief-creative",
-        "create-paid-campaign",
-        "create-shortform"
+        "creative",
+        "ads",
+        "video"
       ]
     },
     {
       "area": "paid",
       "task": "Our Meta ads CPA doubled last week; evaluate the campaign results",
       "any": [
-        "evaluate-paid-campaign"
+        "results"
       ]
     },
     {
       "area": "email-outreach",
       "task": "Write a 4-step cold email sequence to HR directors at mid-size companies",
       "any": [
-        "write-outreach"
+        "outreach"
       ]
     },
     {
       "area": "email-outreach",
       "task": "Build a win-back email flow for churned subscribers",
       "any": [
-        "lifecycle-campaign",
-        "write-copy",
-        "plan-campaign"
+        "lifecycle",
+        "copy",
+        "campaign"
       ],
       "none": [
-        "map-user-flow",
-        "brief-product-ui"
+        "flow",
+        "ui"
       ]
     },
     {
       "area": "email-outreach",
       "task": "Write a welcome email sequence for new trial users",
       "any": [
-        "lifecycle-campaign",
-        "write-copy"
+        "lifecycle",
+        "copy"
       ],
       "none": [
-        "map-user-flow",
-        "brief-product-ui"
+        "flow",
+        "ui"
       ]
     },
     {
       "area": "email-outreach",
       "task": "Write an email newsletter on Substack to grow subscribers",
       "any": [
-        "write-longform",
-        "plan-campaign",
-        "research-channel"
+        "article",
+        "campaign",
+        "channels"
       ],
       "none": [
-        "create-shortform"
+        "video"
       ]
     },
     {
       "area": "email-outreach",
       "task": "Get press coverage in TechCrunch for our Series A",
       "any": [
-        "write-outreach",
-        "research-channel",
-        "research-positioning"
+        "outreach",
+        "channels",
+        "position"
       ]
     },
     {
       "area": "email-outreach",
       "task": "Pitch our founder as a guest on marketing podcasts",
       "any": [
-        "write-outreach",
-        "research-channel"
+        "outreach",
+        "channels"
       ]
     },
     {
       "area": "email-outreach",
       "task": "Evaluate last week's outbound batch: 400 sent, 6 replies",
       "any": [
-        "evaluate-outreach"
+        "results"
       ]
     },
     {
       "area": "email-outreach",
       "task": "Set up a partner and affiliate program",
       "any": [
-        "referral-loop",
-        "plan-campaign"
+        "referral",
+        "campaign"
       ]
     },
     {
       "area": "email-outreach",
       "task": "Get listed and reviewed on G2 and Capterra",
       "any": [
-        "research-channel",
-        "plan-campaign",
-        "write-outreach"
+        "channels",
+        "campaign",
+        "outreach"
       ],
       "none": [
-        "fresh-eyes-review"
+        "critique"
       ]
     },
     {
       "area": "email-outreach",
       "task": "Write a sales follow-up email after a demo call",
       "any": [
-        "write-outreach"
+        "outreach"
       ]
     },
     {
       "area": "in-product",
       "task": "Improve activation in our in-app onboarding; only 20% of signups create a project",
       "any": [
-        "lifecycle-campaign",
-        "improve-conversion",
-        "map-user-flow"
+        "lifecycle",
+        "convert",
+        "flow"
       ]
     },
     {
       "area": "in-product",
       "task": "Design a referral program inside the product",
       "any": [
-        "referral-loop"
+        "referral"
       ]
     },
     {
       "area": "in-product",
       "task": "Plan a paywall and trial experiment for our mobile app",
       "any": [
-        "design-pricing-and-packaging",
-        "improve-conversion"
+        "pricing",
+        "convert"
       ],
       "none": [
-        "allocate-marketing-budget"
+        "budget"
       ]
     },
     {
       "area": "in-product",
       "task": "Improve conversion on our Shopify product page",
       "any": [
-        "improve-conversion"
+        "convert"
       ]
     },
     {
       "area": "in-product",
       "task": "Rewrite our pricing page and decide tiers",
       "any": [
-        "design-pricing-and-packaging",
-        "write-copy"
+        "pricing",
+        "copy"
       ],
       "none": [
-        "optimize-search"
+        "seo"
       ]
     },
     {
       "area": "in-product",
       "task": "Map the signup to first-value flow in our app",
       "any": [
-        "map-user-flow"
+        "flow"
       ]
     },
     {
       "area": "in-product",
       "task": "Write in-app upgrade prompts for free users who hit the limit",
       "any": [
-        "write-copy",
-        "improve-conversion",
-        "design-pricing-and-packaging"
+        "copy",
+        "convert",
+        "pricing"
       ]
     },
     {
       "area": "in-product",
       "task": "Reduce churn for our subscription app",
       "any": [
-        "diagnose-growth",
-        "lifecycle-campaign",
-        "improve-conversion",
-        "plan-campaign"
+        "diagnose",
+        "lifecycle",
+        "convert",
+        "campaign"
       ]
     },
     {
       "area": "content",
       "task": "Write landing page copy for our AI note-taking app",
       "any": [
-        "write-copy",
-        "create-landing-page"
+        "copy",
+        "landing"
       ]
     },
     {
       "area": "content",
       "task": "Write a long-form blog post on why spreadsheets fail finance teams",
       "any": [
-        "write-longform"
+        "article"
       ]
     },
     {
       "area": "content",
       "task": "Write a creative brief for our new homepage hero video",
       "any": [
-        "brief-creative"
+        "creative"
       ]
     },
     {
       "area": "content",
       "task": "Translate and polish our landing page into Vietnamese",
       "any": [
-        "polish-vietnamese"
+        "vietnamese"
       ]
     },
     {
       "area": "measure",
       "task": "Our signups dropped 30% last month, find out why",
       "any": [
-        "diagnose-growth"
+        "diagnose"
       ]
     },
     {
       "area": "measure",
       "task": "Review last quarter's growth results and decide what to keep",
       "any": [
-        "measure-growth"
+        "measure"
       ]
     },
     {
       "area": "measure",
       "task": "Audit our marketing package before launch",
       "any": [
-        "audit-marketing"
+        "audit"
       ]
     },
     {
       "area": "measure",
       "task": "Evaluate our TikTok videos from last month",
       "any": [
-        "evaluate-shortform"
+        "results"
       ]
     },
     {
       "area": "measure",
       "task": "Fact-check the claims on our comparison page",
       "any": [
-        "knowledge-review"
+        "factcheck"
       ]
     },
     {
       "area": "measure",
       "task": "Our B2B SaaS growth has stalled. Free-trial signups fell from 800 to 500; paid upgrades from 160 to 75. What is going on?",
       "any": [
-        "diagnose-growth"
+        "diagnose"
       ],
       "none": [
-        "design-pricing-and-packaging",
-        "improve-conversion"
+        "pricing",
+        "convert"
       ]
     },
     {
       "area": "measure",
       "task": "Why did trial-to-paid weaken?",
       "any": [
-        "diagnose-growth"
+        "diagnose"
       ],
       "none": [
-        "design-pricing-and-packaging",
-        "improve-conversion"
+        "pricing",
+        "convert"
       ]
     },
     {
@@ -667,6 +667,177 @@
       "area": "coding",
       "task": "Upload the build to App Store Connect",
       "silent": true
+    },
+    {
+      "area": "plays",
+      "task": "Launch our app on Product Hunt next week",
+      "play": "launch",
+      "platforms": [
+        "producthunt"
+      ]
+    },
+    {
+      "area": "plays",
+      "task": "Plan our product launch for the new AI feature",
+      "play": "launch"
+    },
+    {
+      "area": "plays",
+      "task": "Build a referral program for our budgeting app",
+      "play": "referral"
+    },
+    {
+      "area": "plays",
+      "task": "Create a landing page for our CRM, from positioning to the build brief",
+      "play": "landing"
+    },
+    {
+      "area": "plays",
+      "task": "Set up an onboarding sequence that gets trial users to activate",
+      "play": "lifecycle"
+    },
+    {
+      "area": "plays",
+      "task": "We want press coverage and podcast interviews for our Series A",
+      "play": "press"
+    },
+    {
+      "area": "plays",
+      "task": "Check whether ChatGPT and Perplexity cite our docs",
+      "play": "answers"
+    },
+    {
+      "area": "plays",
+      "task": "Turn our $1M ARR target into a growth plan",
+      "play": "plan"
+    },
+    {
+      "area": "plays",
+      "task": "Run a TikTok video series for our habit tracker",
+      "play": "series"
+    },
+    {
+      "area": "plays",
+      "task": "/conquistador gtm for our new analytics product",
+      "play": "gtm"
+    },
+    {
+      "area": "plays",
+      "task": "Write one LinkedIn post about our new feature",
+      "any": [
+        "social"
+      ],
+      "noPlay": true
+    },
+    {
+      "area": "plays",
+      "task": "Write a launch email for existing customers",
+      "any": [
+        "copy"
+      ],
+      "noPlay": true
+    },
+    {
+      "area": "plays",
+      "task": "Rewrite the hero headline on our pricing page",
+      "any": [
+        "copy"
+      ],
+      "noPlay": true
+    },
+    {
+      "area": "commands",
+      "task": "/conquistador copy rewrite the homepage hero",
+      "any": [
+        "copy"
+      ],
+      "noPlay": true
+    },
+    {
+      "area": "commands",
+      "task": "/conquistador results ads for last week's Meta campaign",
+      "any": [
+        "results"
+      ],
+      "noPlay": true
+    },
+    {
+      "area": "commands",
+      "task": "/conquistador build ios for the habit tracker",
+      "any": [
+        "build"
+      ],
+      "noPlay": true
+    },
+    {
+      "area": "legacy",
+      "task": "Use write-social to draft an X thread for our launch",
+      "any": [
+        "social"
+      ]
+    },
+    {
+      "area": "legacy",
+      "task": "/conquistador:write-copy for the homepage",
+      "any": [
+        "copy"
+      ],
+      "noPlay": true
+    },
+    {
+      "area": "legacy",
+      "task": "/conquistador research-positioning for a team wiki",
+      "any": [
+        "position"
+      ]
+    },
+    {
+      "area": "legacy",
+      "task": "/conquistador launch-product for our macOS app",
+      "play": "launch"
+    },
+    {
+      "area": "legacy",
+      "task": "Run the referral-loop workflow for our app",
+      "play": "referral"
+    },
+    {
+      "area": "filler",
+      "task": "Use Conquistador: I cannot find the doc, ask me",
+      "none": [
+        "video",
+        "budget"
+      ],
+      "allowEmpty": true
+    },
+    {
+      "area": "filler",
+      "task": "Use Conquistador: learn the product",
+      "none": [
+        "budget",
+        "video"
+      ],
+      "allowEmpty": true
+    },
+    {
+      "area": "filler",
+      "task": "I cannot find it, ask me what to do about marketing",
+      "none": [
+        "video",
+        "budget"
+      ],
+      "allowEmpty": true
+    },
+    {
+      "area": "filler",
+      "task": "Learn the product and write landing page copy",
+      "any": [
+        "copy"
+      ],
+      "none": [
+        "budget",
+        "video"
+      ]
     }
   ]
 }

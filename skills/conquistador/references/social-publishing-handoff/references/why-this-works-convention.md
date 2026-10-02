@@ -26,9 +26,9 @@ The two blocks are **adjacent, never overlapping**:
 | **Legibility — applied expertise** ([`legibility-convention.md`](legibility-convention.md)) | **channel-fit** | the platform pack (algorithm signals, format, §5 Playbook) | pack-consuming skills only |
 | **Why this works** (this file) | **product-fit** | the ICP / VoC / brand / positioning artifacts | every producing skill |
 
-A pack-consumer (e.g. `write-social`) emits **both**, in order: artifact → Legibility (why it fits the
+A pack-consumer (e.g. `social`) emits **both**, in order: artifact → Legibility (why it fits the
 *channel*) → Why this works (why it wins for *this product*) → critic verdict. A non-pack producer
-(e.g. `create-paid-campaign`, `brief-graphic`, `produce-video`) emits **Why this works** only. Never restate a
+(e.g. `ads`, `brief-graphic`, `produce-video`) emits **Why this works** only. Never restate a
 legibility tactic here; this block answers a different question.
 
 ## Placement (required)
@@ -39,7 +39,7 @@ one-paragraph "here's why this plate works for you," not the kitchen's inspectio
 last/appendix).
 
 Exception for brief-style deliverables that already open with a short **"the bet" / "TL;DR"** framing
-(e.g. `create-shortform`'s `## What This Brief Bets On`): carry the product-fit reasoning **in that
+(e.g. `video`'s `## What This Brief Bets On`): carry the product-fit reasoning **in that
 opening section** instead of repeating it lower down — provided the opening stays short (it must not
 bury the artifact) and the scorecard still comes last. One block per deliverable, never two.
 
@@ -62,7 +62,7 @@ Rules:
    (`ICP.md`, `PRODUCT-CONTEXT.md`, `BRAND.md` / `CREATIVE-DIRECTION.md`, the campaign plan). A claim
    with no source is a guess.
 3. **The bet is falsifiable.** "The bet" names what would make this deliverable *fail* — so
-   `measure-growth` / later evaluation can test it next cycle. It is the hypothesis, stated plainly.
+   `measure` / later evaluation can test it next cycle. It is the hypothesis, stated plainly.
 4. **Choices, not a summary.** Narrate the 2-4 *load-bearing* decisions, not a recap of the artifact.
 
 ## The three states (graceful degrade)
@@ -91,8 +91,8 @@ foundation source is the failure mode this convention exists to prevent (mirrors
 ## Hard rules
 
 1. **Markdown only** — the block rides the existing deliverable surface; no new app UI, no new
-   frontmatter field. (Producing skills that already carry a rationale surface — e.g. `create-paid-campaign`'s
-   `.rationale.md`, `write-copy`'s closing "Why This Works" — conform to this shape and
+   frontmatter field. (Producing skills that already carry a rationale surface — e.g. `ads`'s
+   `.rationale.md`, `copy`'s closing "Why This Works" — conform to this shape and
    **promote it to the placement above**, rather than adding a second block.)
 2. **Never fabricate product-fit.** No foundation → state 3. A "tailored to your product" claim with
    no `ICP.md` / `BRAND.md` source is a lie and a gate failure of this convention.
