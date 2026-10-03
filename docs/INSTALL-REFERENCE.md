@@ -385,4 +385,4 @@ release records. A package or install receipt is not live-provider evidence or r
 | A runtime request returns skill guidance instead of a session | That outcome has no selected executable playbook; use the coding-agent skill route |
 
 Host command examples describe setup procedures. They do not establish activation in your host.
-Use the [private-alpha checklist](PRIVATE-ALPHA.md) to record that separately.
+Use the [public-alpha checklist](PUBLIC-ALPHA.md) to record that separately.

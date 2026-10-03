@@ -196,7 +196,7 @@ The npm package contains what users run: the CLI, the skill, hooks, the MCP serv
 and the connect and review tools. The Eve runtime (`conquistador jobs`), evals, the typed catalog,
 and the Docker images stay in the [repository](https://github.com/forsvn-labs/conquistador).
 `conquistador project`, `--skills`, `--plugin`, `--mcp`, `--bot`, and `--advanced` still work;
-see the [per-project installation guide](https://github.com/forsvn-labs/conquistador/blob/private-alpha/docs/INSTALL-PROJECT.md).
+see the [per-project installation guide](https://github.com/forsvn-labs/conquistador/blob/main/docs/INSTALL-PROJECT.md).
 
 ## Troubleshooting
 

@@ -75,7 +75,7 @@ and human verdicts. It is a source/archive identity record, not release approval
 tags, signs, uploads, or publishes. Before any public release, obtain the applicable external and
 human acceptance evidence and explicit operator authorization.
 
-CI runs the same local commands for pull requests and pushes to `main`, historical `dogfood/0.1.0`, or `private-alpha`,
+CI runs the same local commands for pull requests and pushes to `main`,
 with read-only repository permissions. It never publishes.
 
 ## Release to npm
@@ -83,7 +83,7 @@ with read-only repository permissions. It never publishes.
 npm trusts `.github/workflows/publish.yml` in `forsvn-labs/conquistador` as the only publisher
 of `@forsvn/conquistador` (trusted publishing through OIDC). No npm token or 2FA prompt is needed.
 
-1. Merge the version bump into `private-alpha`, then tag the merge commit `vX.Y.Z` and push the tag.
+1. Merge the version bump into `main`, then tag the merge commit `vX.Y.Z` and push the tag.
 2. In a clean clone at the tag, run `npm run bootstrap` and `npm run package`.
 3. Create the GitHub release with the six assets from `dist/<commit>/`:
    `gh release create vX.Y.Z --verify-tag --title "..." --notes-file NOTES.md dist/<commit>/*`.

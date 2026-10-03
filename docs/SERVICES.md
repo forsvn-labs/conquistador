@@ -88,8 +88,8 @@ what happened in a live account. None alone establishes general provider support
 Local tests, synthetic fixtures, and package records do not prove native host activation, live
 provider operation, or business results. Portable Eve and official Grok Bot packages remain
 experimental; native import and delegation are unverified. See the [changelog](../CHANGELOG.md)
-for recorded checks and [private-alpha preparation](PRIVATE-ALPHA.md) for first-use guidance.
+for recorded checks and [public-alpha acceptance checklist](PUBLIC-ALPHA.md) for first-use guidance.
 
-Keep installed copies and private-alpha artifacts private. Store credentials, customer material, project
+Keep installed copies and alpha artifacts private. Store credentials, customer material, project
 knowledge, and finished work outside the product repository. Use the
 [installation guide](../INSTALL.md) for updates and removal through the original installer.

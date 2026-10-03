@@ -38,7 +38,7 @@
 4. Verify native Windows/Linux installation and host execution before claiming those platforms.
    macOS transports and Linux CI results do not certify native Windows or Linux host activation.
 
-Use the [public-alpha acceptance checklist](docs/PRIVATE-ALPHA.md), with historical private-alpha
+Use the [public-alpha acceptance checklist](docs/PUBLIC-ALPHA.md), with historical prerelease
 checks kept separate from the default plugin route. Installed files, provider observations,
 human acceptance and release authority remain separate evidence classes.
 
@@ -60,8 +60,7 @@ human acceptance and release authority remain separate evidence classes.
 ## Release follow-through
 
 Public alpha began at `0.2.0`; `0.3.0` is the current published release. The historical private
-`0.1.0` tag is not the public-alpha milestone; see [version policy](VERSIONS.md). The repository's
-`private-alpha` branch name is historical, not an access restriction.
+`0.1.0` tag is not the public-alpha milestone; see [version policy](VERSIONS.md).
 
 Before the next release, repeat first-use installation, update, removal, task, and correction
 acceptance on its exact candidate bytes. Keep CLI checks, native host observations, model outputs,

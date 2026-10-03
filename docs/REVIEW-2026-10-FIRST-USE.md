@@ -56,7 +56,7 @@ Checks distinguish these layers:
 | Knowledge delivery guard | Successful current-task paired results, failed/stale/partial/missing evidence and fail-open cases |
 | Starter routing and documentation | Offline routing checks, local links, three synthetic full outputs and revisions |
 | Native agent activation and hook trust | Not run locally; CI install checks, if available, are reported separately for their exact commit/platform |
-| First useful model output and correction quality | Not run; use the [acceptance checklist](PRIVATE-ALPHA.md) in a real authorized host |
+| First useful model output and correction quality | Not run; use the [acceptance checklist](PUBLIC-ALPHA.md) in a real authorized host |
 | Live provider/authentication and human verdict | Not run |
 | Website and release lifecycle | No website access; no release, merge, or deployment performed |
 

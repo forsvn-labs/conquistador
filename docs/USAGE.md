@@ -11,7 +11,7 @@ The current public npm release is **0.3.0**. Its bare interactive launcher shows
 agents, lets you keep or change that list, and asks whether to install for all projects or this
 one. To install without the launcher, run `conquistador add AGENT --dry-run`, then
 `conquistador add AGENT --yes`, and open that host yourself. See the
-[installation guide](https://github.com/forsvn-labs/conquistador/blob/private-alpha/INSTALL.md)
+[installation guide](https://github.com/forsvn-labs/conquistador/blob/main/INSTALL.md)
 for agent IDs, scope, and removal.
 
 In a fresh host session, select Conquistador from the skill picker or use the host's supported
@@ -290,7 +290,7 @@ Supplied facts and files come first. Name a service only if the task actually ne
 Conquistador should check permitted tools, explain the specific missing read or action, help
 with the needed connection, verify that operation, and resume the original task. Account login
 or MCP discovery does not prove a query works. Never paste credentials into chat. See
-[connection guidance](https://github.com/forsvn-labs/conquistador/blob/private-alpha/docs/INTEGRATIONS.md).
+[connection guidance](https://github.com/forsvn-labs/conquistador/blob/main/docs/INTEGRATIONS.md).
 
 Hooks denied/off or skills-only installation can still support explicit use: request the task
 and playbook reading yourself. Report the lack of hook enforcement rather than claim universal
@@ -316,5 +316,5 @@ draft until a recipient, destination, and exact content are approved. No automat
 collection or upload is implied; memory approval is separate from disclosure.
 
 Use the original installer to update/remove each route. A compact skill folder is not a runtime
-or development checkout. Links to the `private-alpha` Git branch refer to the public repository's
-historically named branch; pin a release tag or full commit when recording exact evidence.
+or development checkout. Links to the `main` branch follow the latest source; pin a release tag or
+full commit when recording exact evidence.
