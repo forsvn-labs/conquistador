@@ -2,25 +2,24 @@
 
 ## Public alpha follow-up
 
-1. List the plugin in the agent marketplaces, then check each listing installs 0.2.x.
-2. Test the interactive start flow on Windows (a pseudo-terminal harness), and Linux and Windows
+1. Run the five live Executor cases (first run and connect) that 0.3.0 shipped without. They need
+   a responding Executor.app.
+2. List the plugin in the agent marketplaces, then check each listing installs 0.3.x.
+3. Test the interactive start flow on Windows (a pseudo-terminal harness), and Linux and Windows
    on ARM.
 
 ## Next acceptance
 
 1. Add "Open in Claude Code" (`claude-cli://open?q=`) and "Open in Cursor" deep-link buttons with a
    "Copy prompt" fallback to the landing page. Test both links in a browser first.
-2. Fix router sensitivity to filler words: "cannot find" and "ask me" select the video method, and
-   "learn the product" selects the budget method. The start flow strips its own sentences, but
-   users type such words too.
-3. Observe the plugin hooks in a real Codex session (after hook trust), Cursor, Copilot CLI, and
+2. Observe the plugin hooks in a real Codex session (after hook trust), Cursor, Copilot CLI, and
    Grok CLI. Only Claude Code sessions have been observed.
-4. Repeat `node tools/e2e/knowledge-use.mjs` with more runs and more tasks after the plan limit
+3. Repeat `node tools/e2e/knowledge-use.mjs` with more runs and more tasks after the plan limit
    resets, across all nine areas (`--set breadth`), and add a quality comparison (blind review
    of before and after answers), not only reads.
-5. Seek Hung's verdict on a real task in his own agent: playbook relevance, clarity, and usefulness.
+4. Seek Hung's verdict on a real task in his own agent: playbook relevance, clarity, and usefulness.
    Tune the briefing engine and the vault playbook threshold from those corrections.
-6. Decide where to host the HTTP playbook server for Muse and other connector apps, then deploy it
+5. Decide where to host the HTTP playbook server for Muse and other connector apps, then deploy it
    with a token and submit the Muse connector.
 
 ## Private-alpha follow-up
@@ -60,7 +59,7 @@ human acceptance and release authority remain separate evidence classes.
 
 ## Release follow-through
 
-Public alpha began at `0.2.0`; `0.2.2` is the current published release. The historical private
+Public alpha began at `0.2.0`; `0.3.0` is the current published release. The historical private
 `0.1.0` tag is not the public-alpha milestone; see [version policy](VERSIONS.md). The repository's
 `private-alpha` branch name is historical, not an access restriction.
 
