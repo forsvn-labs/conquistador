@@ -19,6 +19,7 @@ on:
       - tools/e2e/agent-first.exp
       - runtime/bin/**
       - package.json
+      - .gitattributes
       - .github/workflows/install-e2e.yml
 permissions:
   contents: read

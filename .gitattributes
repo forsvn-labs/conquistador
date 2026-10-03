@@ -1,0 +1,4 @@
+# Installers verify every plugin file by SHA-256, and the hashes are of LF files. Git for Windows
+# defaults to core.autocrlf=true, which would write CRLF on checkout (and in `npm install -g git+…`),
+# so every hash would differ and nothing would install. Keep LF in every checkout.
+* text=auto eol=lf
