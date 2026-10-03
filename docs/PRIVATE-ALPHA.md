@@ -1,9 +1,9 @@
 # Public-alpha acceptance checklist
 
-The current published public alpha is **0.2.2**; `0.2.0` was the first public alpha. The repository
+The current published public alpha is **0.3.0**; `0.2.0` was the first public alpha. The repository
 and npm package are public. This filename is retained for existing links, not as an access gate.
 Unshipped source changes are listed in [PROGRESS.md](../PROGRESS.md); they do not change what a
-registry installation of 0.2.2 does. See [shipped release records](../CHANGELOG.md).
+registry installation of 0.3.0 does. See [shipped release records](../CHANGELOG.md).
 
 Use exact release bytes and one real task in your actual host. A passing install, synthetic test,
 playbook citation, or local package record is not model-quality proof, human acceptance, or
@@ -15,9 +15,9 @@ not completed acceptance runs.
 1. Follow the [plugin installation](../INSTALL.md#plugin-for-coding-agents-recommended), unless
    you intentionally chose a different route. Record version, source commit if known, package
    digest if available, OS/architecture, Node version, host version, and exact command
-2. For a scoped installation of published 0.2.2, preview `conquistador add AGENT --dry-run`, then
-   run `conquistador add AGENT --yes`. Its bare interactive launcher still adds all detected
-   hosts; do not record the unshipped selected-host behavior as released
+2. For a scoped installation of published 0.3.0, preview `conquistador add AGENT --dry-run`, then
+   run `conquistador add AGENT --yes`. If you use the bare interactive launcher instead, record
+   which detected agents you kept and the scope you chose
 3. Record the shared plugin path, selected host changes, hook/MCP trust requirements, and matching
    undo command. Check that no project manifest, dependencies, or lockfile appeared
 4. Run `conquistador agents` and the host's own plugin listing. The standard plugin exposes one skill,
@@ -88,7 +88,7 @@ that source status explicitly. Before release, repeat applicable cases on the ca
 
 A preview is not an all-or-nothing transaction. A platform-level test without an actual interactive
 host session does not certify that platform's interaction or model output. In particular, the
-published 0.2.2 release records Linux/Windows installation checks but not Windows interactive
+published 0.3.0 release records Linux/Windows installation checks but not Windows interactive
 start verification. Keep exact historical evidence in CHANGELOG; do not retroactively broaden it.
 
 ## 5. Keep a small private acceptance record

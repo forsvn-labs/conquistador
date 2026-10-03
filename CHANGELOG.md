@@ -4,6 +4,49 @@
 versions. Verification establishes the stated local scope; native host behavior, useful model
 output, human acceptance and rights disposition require separate evidence.
 
+## 2026-10-03, 0.3.0 public alpha
+
+Still a public alpha. Merged through [#36](https://github.com/forsvn-labs/conquistador/pull/36),
+which includes the first-use work from [#29](https://github.com/forsvn-labs/conquistador/pull/29).
+Spec: [docs/OVERHAUL-2026-10.md](docs/OVERHAUL-2026-10.md). Old names still route; see
+[MIGRATION.md](MIGRATION.md).
+
+- **One skill.** Agents register one skill, `/conquistador`, instead of 39. The methods are 35
+  one-word commands (`position`, `outreach`, `seo`, ...). The workflows are 21 plays (`launch`,
+  `gtm`, `outbound`, ...) that chain commands. Plays that ship finished assets end with `audit`.
+- **Router.** A request can name a command or describe the task. The brief scores plays and
+  commands together and returns each play step with the playbooks to read. Filler words such as
+  "cannot find" or "ask me" no longer select an unrelated command.
+- **First run.** `/conquistador init` writes `PRODUCT.md` (the same format as Impeccable) and
+  `GROWTH.md`, and every brief reads them first. `conquistador signals` reports what the project
+  has, and the no-argument menu leads with two or three matching commands. `pin` makes a direct
+  shortcut such as `/outreach`.
+- **Checker.** `conquistador check` applies 51 fixed rules with no model: unsupported claims,
+  AI-writing tells, vague calls to action, channel limits, email compliance, and links. A hook
+  runs it after edits to marketing files in Claude Code, Codex, and Cursor.
+- **Connect.** `conquistador connect` shows 22 capabilities (for example "read the CRM" or "send
+  email") as missing, connected, or verified through Executor. A new service needs one Markdown
+  recipe, not code. Reads run without a prompt; sends, publishing, and spend need approval each
+  time. Conquistador does not start an Executor daemon by accident.
+- **Review.** `conquistador review` opens Markdown in the FORSVN fork of Proof, with channel
+  previews, `check` findings as comments, the playbooks applied, and a human-only approval bound
+  to the SHA-256 of the exact text. HTML opens in Lavish 0.1.80 (was 0.1.50), with six templates.
+- **Install.** The installer detects 12 agents (was 5). It shows them, lets you keep or change the
+  list, asks for global or project scope, and opens the agent with `/conquistador init`.
+  `doctor --fix` repairs drift. Node 22.18 is enough (was 24). The package is 3.61 MB packed (was
+  4.46 MB).
+- **First use.** `add` checks every plugin file against `release/plugin-completeness.json` and
+  installs nothing when a file is missing or changed. Bot exports use staged replacement and
+  remove private files on rebuild. Task dry-run is read-only. Usage leads with three bounded
+  tasks with synthetic examples.
+- **Windows.** `.gitattributes` keeps LF line endings, so installs from Git pass the completeness
+  check on Windows.
+- Verification: `npm test` 833/833. Install E2E passes on Linux and Windows
+  ([run 37103096494](https://github.com/forsvn-labs/conquistador/actions/runs/37103096494)); on
+  Windows, the terminal start flow, `expect`, and Node 22.18 checks are not run. Routing breadth
+  142/142, check 44/44, review 18/18 with the real Proof fork and Lavish. Not run: the five live
+  Executor cases, hook observation outside Claude Code, model task quality, and human verdicts.
+
 ## 2026-09-30, 0.2.2 public alpha
 
 - Released at [`v0.2.2`](https://github.com/forsvn-labs/conquistador/releases/tag/v0.2.2) from
