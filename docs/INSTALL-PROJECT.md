@@ -322,7 +322,7 @@ A local doctor does not prove native host discovery, model method reads, useful 
 independent review, provider access, or a human verdict. Check a real task in a fresh host
 session and apply one correction. For substantial tasks, record the engagement brief,
 deliverable, labeled review, and execution receipt. Use the
-[public-alpha acceptance checklist](PRIVATE-ALPHA.md), and label this as the project operator
+[public-alpha acceptance checklist](PUBLIC-ALPHA.md), and label this as the project operator
 route rather than applying its one-entry inventory check to the default 39-skill plugin.
 
 ## Other ways to obtain the same package

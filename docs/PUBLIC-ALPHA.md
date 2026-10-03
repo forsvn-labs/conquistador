@@ -1,7 +1,7 @@
 # Public-alpha acceptance checklist
 
 The current published public alpha is **0.3.0**; `0.2.0` was the first public alpha. The repository
-and npm package are public. This filename is retained for existing links, not as an access gate.
+and npm package are public.
 Unshipped source changes are listed in [PROGRESS.md](../PROGRESS.md); they do not change what a
 registry installation of 0.3.0 does. See [shipped release records](../CHANGELOG.md).
 

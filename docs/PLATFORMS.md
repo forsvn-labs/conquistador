@@ -235,7 +235,7 @@ setup, credential boundaries, and update checks.
 These are experimental import contracts. Native import, specialist delegation, and execution have not been verified.
 `conquistador --bot grok-bot` prints the official Grok Bot app handoff and states that a private
 Conquistador installation in Grok Bot has not been verified. Grok CLI is a different host from the
-Grok Bot app. Use the coding-agent route for private-alpha testing. Eve stays available through
+Grok Bot app. Use the coding-agent route for public-alpha testing. Eve stays available through
 existing explicit experimental commands and `--advanced`.
 
 If you previously staged one of these packages with `install.mjs`, managed status and removal can

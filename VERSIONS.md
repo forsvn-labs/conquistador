@@ -7,7 +7,7 @@ was `0.2.0`. Each public release is tagged `vX.Y.Z` and published to npm as
 
 The public alpha is `0.2.0`, not `0.1.0`, because the tag `v0.1.0` already names a private dogfood
 release from 2026-09-15 (`dea03b3`). No historical tag moves. Public releases continue from
-`0.2.x`. The source branch is `private-alpha`; the name is historical.
+`0.2.x` on the `main` branch.
 
 The private prereleases keep their tags and assets: `v0.0.5` to
 [`v0.0.17`](https://github.com/forsvn-labs/conquistador/releases/tag/v0.0.17) (from merged source

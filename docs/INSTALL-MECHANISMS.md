@@ -2,7 +2,7 @@
 
 Primary documentation reviewed on 2026-09-17. These mechanisms explain how to distribute and
 activate packages. They do not establish that Conquistador has been activated in a native host.
-Use [INSTALL.md](../INSTALL.md) for the short private-alpha path and
+Use [INSTALL.md](../INSTALL.md) for the short public-alpha path and
 [PLATFORMS.md](PLATFORMS.md) for host-specific commands.
 
 | Mechanism | Official contract | Conquistador choice |

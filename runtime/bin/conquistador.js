@@ -103,7 +103,7 @@ if (preflight !== null) {
   const { run } = await import("../../hosts/executor/cli.mjs");
   process.exitCode = await run(args.slice(1));
 } else if (args[0] === "jobs" && !existsSync(new URL("../../hosts/eve/jobs.mjs", import.meta.url))) {
-  process.stderr.write("conquistador jobs needs a repository checkout: the npm package leaves the Eve runtime out.\nhttps://github.com/forsvn-labs/conquistador/tree/private-alpha/hosts/eve\n");
+  process.stderr.write("conquistador jobs needs a repository checkout: the npm package leaves the Eve runtime out.\nhttps://github.com/forsvn-labs/conquistador/tree/main/hosts/eve\n");
   process.exitCode = 2;
 } else if (args[0] === "jobs") {
   const { run } = await import("../../hosts/eve/jobs.mjs");

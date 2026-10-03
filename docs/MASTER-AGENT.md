@@ -57,7 +57,7 @@ classify live account data, audit host tool use, or grant human acceptance.
 
 The BB coordinator limits concurrency to four and total dispatches to twelve, including integration,
 review, and at most one correction cycle. Specialists receive bounded assignments and cannot delegate
-or authorize consequential actions. See the private [BB adapter reference](https://github.com/forsvn-labs/conquistador/blob/private-alpha/hosts/coding-agent/README.md)
+or authorize consequential actions. See the [BB adapter reference](https://github.com/forsvn-labs/conquistador/blob/main/hosts/coding-agent/README.md)
 for commands, host callbacks, cancellation, briefs, receipts, and observed execution limits. Recorded
 adapter runs do not establish general quality or human acceptance.
 
@@ -77,14 +77,14 @@ Use the staged parent-first folder for the skills CLI. A raw source-root copy ex
 folder. A managed compact copy is a different layout, and cannot run an adapter it does not contain.
 A standalone outcome install contains only that method and its required material.
 
-Use the private [installation guide](https://github.com/forsvn-labs/conquistador/blob/private-alpha/INSTALL.md)
+Use the [installation guide](https://github.com/forsvn-labs/conquistador/blob/main/INSTALL.md)
 for commands, updates, and removal. `operator doctor --path ABS` through the complete CLI checks local
 files against the manifest. It does not prove host activation, provider access, or task execution.
 Start a fresh host session and complete a bounded task to check actual use.
 
 Advanced hosts can restrict methods, knowledge, and tools to a domain. The coordinator enforces
 its restriction file; other consuming hosts must enforce their own access. Local domain MCP is
-unsupported. See the private [platform guide](https://github.com/forsvn-labs/conquistador/blob/private-alpha/docs/PLATFORMS.md)
+unsupported. See the [platform guide](https://github.com/forsvn-labs/conquistador/blob/main/docs/PLATFORMS.md)
 for domain installs, package compatibility, and host-specific activation.
 
 ## Connect tools only when needed
@@ -94,14 +94,14 @@ Conquistador helps set up Executor, hands sign-in to its UI, verifies one bounde
 and resumes the deliverable. A binary check, gateway login, or MCP tool listing does not establish
 provider operation. Account setup does not authorize later sends, publishing, spend, or live writes.
 
-The private [integration guide](https://github.com/forsvn-labs/conquistador/blob/private-alpha/docs/INTEGRATIONS.md)
+The [integration guide](https://github.com/forsvn-labs/conquistador/blob/main/docs/INTEGRATIONS.md)
 contains official Executor setup commands and the separate checks for local files, binary detection,
 discovery, and provider results. Credentials remain with their owner.
 
 Eve jobs and the Conquistador runtime are advanced, explicit choices. Installing skills starts
 neither service and enables no schedule. Eve preparation does not submit a job. The Conquistador
 runtime executes four declared playbooks, not arbitrary combinations of all 38 methods. See the
-private [runtime reference](https://github.com/forsvn-labs/conquistador/blob/private-alpha/runtime/README.md)
+[runtime reference](https://github.com/forsvn-labs/conquistador/blob/main/runtime/README.md)
 for model configuration, state, and execution limits.
 
 ## Optional feedback and follow-up
