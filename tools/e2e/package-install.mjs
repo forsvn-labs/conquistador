@@ -237,7 +237,7 @@ check('H1', 'doctor finds no install or hook problem after a project install', d
 const projectSkill = readText(join(projectCopies[1], 'SKILL.md'));
 if (projectSkill !== null) writeFileSync(join(projectCopies[1], 'SKILL.md'), `${projectSkill}\nchanged by hand\n`);
 doctor = run(cli, ['doctor'], { env: a.env, cwd: acme });
-check('H1', 'doctor reports a changed project copy and names the repair', doctor.status === 1 && /\.agents\/skills\/conquistador is damaged/.test(doctor.output) && /doctor --fix/.test(doctor.output), doctor.output.trim().split('\n').slice(-3).join(' | '));
+check('H1', 'doctor reports a changed project copy and names the repair', doctor.status === 1 && /\.agents[\\/]skills[\\/]conquistador is damaged/.test(doctor.output) && /doctor --fix/.test(doctor.output), doctor.output.trim().split('\n').slice(-3).join(' | '));
 doctor = run(cli, ['doctor', '--fix'], { env: a.env, cwd: acme });
 check('H1', 'doctor --fix repairs it', doctor.status === 0 && /Repaired/.test(doctor.output) && readText(join(projectCopies[1], 'SKILL.md'))?.includes('changed by hand') === false, doctor.output.trim().split('\n').slice(-3).join(' | '));
 writeFileSync(join(acme, 'GROWTH.md'), '# Growth\n\n## Goals and metrics\n## Channels\n## Proof and assets\n## Voice\n## Budget and compliance\n## Connected stack\n');
@@ -251,7 +251,7 @@ doctor = run(cli, ['doctor', '--json'], { env: a.env, cwd: acme });
 report = (() => { try { return JSON.parse(doctor.stdout); } catch { return { checks: [] }; } })();
 check('H1', 'with PRODUCT.md, a complete GROWTH.md, and a .gitignore entry, doctor is clean', doctor.status === 0 && report.checks.every(item => item.status === 'ok'), JSON.stringify(report.checks.filter(item => item.status !== 'ok')));
 result = run(cli, ['update', '--dry-run'], { env: a.env, cwd: acme });
-check('P2', 'update --dry-run lists the project copies and changes nothing', result.status === 0 && /\.claude\/skills\/conquistador \(project\)/.test(result.output), result.output.trim().split('\n').slice(-3).join(' | '));
+check('P2', 'update --dry-run lists the project copies and changes nothing', result.status === 0 && /\.claude[\\/]skills[\\/]conquistador \(project\)/.test(result.output), result.output.trim().split('\n').slice(-3).join(' | '));
 result = run(cli, ['remove', '--scope=project'], { env: a.env, cwd: acme });
 check('P2', 'remove --scope=project deletes the copies and keeps PRODUCT.md and GROWTH.md', result.status === 0 && projectCopies.every(folder => !existsSync(folder)) && existsSync(join(acme, 'GROWTH.md')) && existsSync(join(acme, 'PRODUCT.md')), result.output.trim().split('\n').slice(-3).join(' | '));
 
