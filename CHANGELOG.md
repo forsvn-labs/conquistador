@@ -11,6 +11,14 @@ which includes the first-use work from [#29](https://github.com/forsvn-labs/conq
 Spec: [docs/OVERHAUL-2026-10.md](docs/OVERHAUL-2026-10.md). Old names still route; see
 [MIGRATION.md](MIGRATION.md).
 
+- Released at [`v0.3.0`](https://github.com/forsvn-labs/conquistador/releases/tag/v0.3.0) from
+  merged `private-alpha` commit `a45b0fcfeb8660b95fabc32c1e5495a13edf62f5` through
+  [#37](https://github.com/forsvn-labs/conquistador/pull/37), and published as
+  [`@forsvn/conquistador@0.3.0`](https://www.npmjs.com/package/@forsvn/conquistador) (`latest`)
+  by [run 37106718781](https://github.com/forsvn-labs/conquistador/actions/runs/37106718781). The
+  registry shasum `98bc7cb` matches the release tarball, and `npm audit signatures` verifies its
+  signature and provenance attestation. From the registry, `conquistador update` moved a 0.2.2
+  install with Claude Code in an isolated home to 0.3.0.
 - **One skill.** Agents register one skill, `/conquistador`, instead of 39. The methods are 35
   one-word commands (`position`, `outreach`, `seo`, ...). The workflows are 21 plays (`launch`,
   `gtm`, `outbound`, ...) that chain commands. Plays that ship finished assets end with `audit`.
