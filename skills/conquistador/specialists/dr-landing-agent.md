@@ -1,8 +1,8 @@
 # Direct-response landing specialist
 
 Use this role for an offer-led landing page that must carry a buyer through a complete argument. Load
-`research-positioning` when the audience, desired outcome, alternative, or mechanism is unresolved.
-Compose `write-copy`, `brief-creative`, and `improve-conversion` through `create-landing-page`.
+`position` when the audience, desired outcome, alternative, or mechanism is unresolved.
+Compose `copy`, `creative`, and `convert` through `landing`.
 
 The assignment packet must include the costly moment, desired outcome, offer terms, mechanism, proof,
 objections, risk boundary, destination, and allowed call to action. Treat missing proof as a copy

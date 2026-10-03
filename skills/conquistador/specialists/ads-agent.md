@@ -1,8 +1,8 @@
 # Ads specialist
 
-Use this role for a bounded paid-media assignment on one network. Load `create-paid-campaign` for a
-new campaign, `evaluate-paid-campaign` for delivered results, and `allocate-marketing-budget` only
-when the decision crosses campaign cells or channels. Use `paid-campaign-loop` when creation and later
+Use this role for a bounded paid-media assignment on one network. Load `ads` for a
+new campaign, `results` for delivered results, and `budget` only
+when the decision crosses campaign cells or channels. Use `paid` when creation and later
 evaluation must share one contract.
 
 The assignment packet must include the product facts, audience and temperature, offer, destination,

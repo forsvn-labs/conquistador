@@ -97,7 +97,7 @@ test('Codex mode writes owned project hooks and preserves unrelated handlers', t
     host: 'codex', event: 'prompt-submitted', config,
     input: { hook_event_name: 'UserPromptSubmit', prompt: 'Write a LinkedIn DM sequence for founders.' },
   });
-  assert.match(routed.hookSpecificOutput.additionalContext, /write-outreach/);
+  assert.match(routed.hookSpecificOutput.additionalContext, /outreach/);
   const removed = applyMode('remove', { host: 'codex', project: dir });
   assert.equal(removed.state, 'disabled');
   assert.deepEqual(JSON.parse(readFileSync(settings, 'utf8')), {
@@ -194,7 +194,7 @@ test('handle ignores recursive stop hooks and returns additionalContext for Clau
     input: { hook_event_name: 'UserPromptSubmit', prompt: 'Write a LinkedIn DM sequence for founders.' },
   });
   assert.equal(routed.hookSpecificOutput.hookEventName, 'UserPromptSubmit');
-  assert.match(routed.hookSpecificOutput.additionalContext, /write-outreach/);
+  assert.match(routed.hookSpecificOutput.additionalContext, /outreach/);
   assert.deepEqual(handleHostEvent({
     host: 'claude-code', event: 'prompt-submitted', config,
     input: { hook_event_name: 'UserPromptSubmit', prompt: 'Fix a TypeScript error.' },

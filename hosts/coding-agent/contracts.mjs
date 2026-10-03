@@ -1,4 +1,4 @@
-import { methodDocument, methodLibrary } from '../../tools/method-library.mjs';
+import { methodLibrary, methodPath, playPath } from '../../tools/method-library.mjs';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { existsSync, readFileSync } from 'node:fs';
@@ -199,17 +199,16 @@ export async function loadAssignment(root, task, { authorize = () => {}, resolve
   const layouts = methodLibrary(root);
   assert.equal(layouts.length, 1, 'Ambiguous or missing method library');
   const { layout: skillsRoot, internal } = layouts[0];
-  const document = internal ? methodDocument : 'SKILL.md';
   const paths = [...loadRoutingContract(root).requiredStandards];
-  if (task.role === 'parent') paths.push(`${skillsRoot}/conquistador/${document}`);
+  if (task.role === 'parent') paths.push(`${skillsRoot}/${methodPath('conquistador', { internal })}`);
   else if (Object.hasOwn(roleFiles, task.role)) paths.push(roleFiles[task.role].replace(/^skills/, skillsRoot));
   for (const skill of task.skills) {
     assert.ok(manifest.mayLoadSkills.includes(skill), `Undeclared skill ${skill}`);
-    paths.push(`${skillsRoot}/${skill}/${document}`);
+    paths.push(`${skillsRoot}/${methodPath(skill, { internal })}`);
   }
   for (const workflow of task.workflows) {
     assert.ok(manifest.mayLoadWorkflows.includes(workflow), `Undeclared workflow ${workflow}`);
-    paths.push(`${skillsRoot}/conquistador/workflows/${workflow}.md`);
+    paths.push(`${skillsRoot}/${playPath(workflow)}`);
   }
   const extra = [];
   const deferred = [];

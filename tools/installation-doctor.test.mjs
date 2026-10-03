@@ -1,3 +1,4 @@
+import { commandNames, methodPath } from './method-library.mjs';
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
@@ -10,6 +11,8 @@ import { operatorFiles } from './operator-package.mjs';
 import { methodIdentity } from './installation-doctor.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
+// Commands in this checkout, including meta commands other slices add.
+const N = commandNames(join(root, 'skills')).length;
 const cli = join(root, 'runtime/bin/conquistador.js');
 const manifest = JSON.parse(readFileSync(join(root, 'release/completeness.json')));
 const hash = value => createHash('sha256').update(value).digest('hex');
@@ -51,11 +54,11 @@ function rewriteConnector(path, connector) {
 
 test('release manifest names every authored outcome, exact method contents, and required setup/specialist contracts', () => {
   assert.equal(manifest.schemaVersion, 'conquistador.install-completeness/v1');
-  assert.equal(manifest.outcomes.length, 38);
-  const names = readdirSync(join(root, 'skills')).filter(name => name !== 'conquistador').sort();
+  assert.equal(manifest.outcomes.length, N);
+  const names = commandNames(join(root, 'skills'));
   assert.deepEqual(manifest.outcomes.map(method => method.name).sort(), names);
   for (const method of [manifest.parent, ...manifest.outcomes]) {
-    const text = readFileSync(join(root, 'skills', method.name, 'SKILL.md'), 'utf8');
+    const text = readFileSync(join(root, 'skills', methodPath(method.name)), 'utf8');
     assert.deepEqual(methodIdentity(text), { name: method.name, version: method.version });
     assert.equal(hash(text), method.sha256, method.name);
   }
@@ -64,7 +67,7 @@ test('release manifest names every authored outcome, exact method contents, and 
   for (const required of [...specialists, 'conquistador/orchestration/specialist-team.md', 'conquistador/methods/connect-accounts.md', 'conquistador/methods/stack-setup.md', 'conquistador/standards/setup.md', 'conquistador/operator-profile.json']) assert.ok(resources.includes(required), required);
   assert.equal(new Set(resources).size, resources.length);
   // Compare the whole resource inventory, including references below individual outcomes.
-  const declared = new Set([...manifest.outcomes, manifest.parent].map(method => `${method.name}/SKILL.md`).concat(resources));
+  const declared = new Set([...manifest.outcomes, manifest.parent].map(method => methodPath(method.name)).concat(resources));
   for (const entry of readdirSync(join(root, 'skills'), { recursive: true, withFileTypes: true })) {
     if (entry.isFile()) assert.ok(declared.has(join(entry.parentPath, entry.name).slice(join(root, 'skills').length + 1)), entry.name);
   }
@@ -75,12 +78,12 @@ test('root bundle and installer-owned host link pass without claiming source ide
   rootBundle(path);
   symlinkSync(path, join(parent, 'host-link'));
   const report = doctor(join(parent, 'host-link'));
-  assert.equal(report.library.available, 38);
+  assert.equal(report.library.available, N);
   assert.equal(report.library.layout, 'skills');
   assert.equal(report.identity.sourceCommit, null);
   assert.equal(report.receipt.state, 'absent');
   assert.equal(report.path, path);
-  assert.match(report.summary, /^38 methods available;/);
+  assert.match(report.summary, new RegExp(`^${N} methods available;`));
   const text = run('doctor', '--path', path).stdout;
   assert.match(text, /No methods were loaded into the model context/);
   assert.ok(text.includes(`Parent version: ${manifest.parent.version}`));
@@ -93,7 +96,7 @@ test('compact, plugin, and harness payloads include the manifest and distinguish
     const receipt = readFileSync(join(path, '.conquistador-install.json'));
     const report = doctor(path);
     assert.equal(report.library.layout, layout);
-    assert.equal(report.library.available, 38);
+    assert.equal(report.library.available, N);
     assert.equal(report.manifest.packaged, 'matches');
     assert.equal(report.receipt.state, 'unchanged');
     assert.equal(report.receipt.productVersion, '0.2.2');
@@ -114,14 +117,14 @@ test('missing and nested-parent-only installations cannot pass', () => temporary
 
 test('missing outcomes and truncated methods fail even when frontmatter is intact', () => temporary(path => {
   rootBundle(path);
-  rmSync(join(path, 'skills/write-copy/SKILL.md'));
-  const method = join(path, 'skills/plan-campaign/SKILL.md');
+  rmSync(join(path, 'skills/conquistador/commands/copy/COMMAND.md'));
+  const method = join(path, 'skills/conquistador/commands/campaign/COMMAND.md');
   const original = readFileSync(method, 'utf8');
   writeFileSync(method, original.slice(0, original.indexOf('\n---', 4) + 4));
   const report = doctor(path, 1);
-  assert.equal(report.library.available, 36);
-  assert.ok(report.issues.some(issue => issue.includes('write-copy')));
-  assert.ok(report.issues.some(issue => issue.includes('plan-campaign')));
+  assert.equal(report.library.available, N - 2);
+  assert.ok(report.issues.some(issue => issue.includes('copy')));
+  assert.ok(report.issues.some(issue => issue.includes('campaign')));
 }));
 
 test('parent version, missing contracts, entrypoint drift, and manifest drift are visible independently', () => temporary(path => {
@@ -132,7 +135,7 @@ test('parent version, missing contracts, entrypoint drift, and manifest drift ar
   writeFileSync(join(path, 'SKILL.md'), '# A wrapper with no operating contract');
   writeFileSync(join(path, 'release/completeness.json'), '{}');
   const report = doctor(path, 1);
-  assert.equal(report.library.available, 38);
+  assert.equal(report.library.available, N);
   assert.equal(report.library.methods[0].version, '0.0.0');
   assert.ok(report.issues.some(issue => issue.includes('connect-accounts')));
   assert.ok(report.issues.some(issue => issue.includes('Entry point')));
@@ -143,7 +146,7 @@ test('modified receipts fail without changing user files', () => temporary(path 
   install(path);
   writeFileSync(join(path, 'operator-note.md'), 'preserve');
   const report = doctor(path, 1);
-  assert.equal(report.library.available, 38);
+  assert.equal(report.library.available, N);
   assert.equal(report.receipt.state, 'modified');
   assert.equal(readFileSync(join(path, 'operator-note.md'), 'utf8'), 'preserve');
 }));
@@ -166,23 +169,23 @@ test('an invalid operator profile fails closed without claiming activation', () 
 
 test('missing supporting resources fail for unmanaged installs even when all method bodies match', () => temporary(path => {
   rootBundle(path);
-  for (const resource of ['conquistador/standards/learning.md', 'conquistador/standards/context.md', 'write-copy/references/copy-review.md']) rmSync(join(path, 'skills', resource));
+  for (const resource of ['conquistador/standards/learning.md', 'conquistador/standards/context.md', 'conquistador/commands/copy/references/copy-review.md']) rmSync(join(path, 'skills', resource));
   const report = doctor(path, 1);
-  assert.equal(report.library.available, 38);
+  assert.equal(report.library.available, N);
   assert.equal(report.issues.filter(issue => issue.startsWith('Missing or unreadable resource:')).length, 3);
 }));
 
 test('symlinked method bodies are refused even when they point at the expected bytes', () => temporary(path => {
   rootBundle(path);
-  rmSync(join(path, 'skills/write-copy/SKILL.md'));
-  symlinkSync(join(root, 'skills/write-copy/SKILL.md'), join(path, 'skills/write-copy/SKILL.md'));
-  assert.equal(doctor(path, 1).library.available, 37);
+  rmSync(join(path, 'skills/conquistador/commands/copy/COMMAND.md'));
+  symlinkSync(join(root, 'skills/conquistador/commands/copy/COMMAND.md'), join(path, 'skills/conquistador/commands/copy/COMMAND.md'));
+  assert.equal(doctor(path, 1).library.available, N - 1);
 }));
 
 test('managed MCP checks the source library and saved paths independently from its unchanged receipt', () => temporary((path, parent) => {
   install(path, 'mcp');
   const initial = doctor(path);
-  assert.equal(initial.library.available, 38);
+  assert.equal(initial.library.available, N);
   assert.deepEqual(initial.connector, { nodeExecutable: true, packageExecutable: true, mode: 'local-methods' });
   const connector = JSON.parse(readFileSync(join(path, 'connector.json')));
   connector.command = join(parent, 'node');
@@ -229,12 +232,12 @@ test('managed MCP follows the package script to the library Node would import', 
   const [a, b] = sources.map(source => join(source, 'runtime/bin/conquistador.js'));
   cpSync(cli, b);
   symlinkSync(b, a);
-  rmSync(join(sources[1], 'skills/write-copy/SKILL.md'));
+  rmSync(join(sources[1], 'skills/conquistador/commands/copy/COMMAND.md'));
   rewriteConnector(path, { command: process.execPath, args: [a, 'mcp'] });
   const report = doctor(path, 1);
   assert.equal(report.receipt.state, 'unchanged');
   assert.equal(report.bundleRoot, sources[1]);
-  assert.equal(report.library.available, 37);
+  assert.equal(report.library.available, N - 1);
 }));
 
 test('Git identity belongs only to an exact source root and marks modified checkouts', () => temporary((path, parent) => {
@@ -302,7 +305,7 @@ test('doctor rejects unknown and duplicate operator domains with the same valida
 
 test('doctor certifies a valid domain subset and checks its actual dependency graph', () => temporary((path, parent) => {
   const domain = join(parent, 'domain.json');
-  writeFileSync(domain, JSON.stringify({ schemaVersion: 'conquistador.domain-package/v1', id: 'domain:copy', agentPackageSchemaVersion: 'conquistador.agent-package/v2', allowed: { roles: [], skills: ['write-copy'], workflows: [], tools: ['host-model'], knowledgeHandles: [] } }));
+  writeFileSync(domain, JSON.stringify({ schemaVersion: 'conquistador.domain-package/v1', id: 'domain:copy', agentPackageSchemaVersion: 'conquistador.agent-package/v2', allowed: { roles: [], skills: ['copy'], workflows: [], tools: ['host-model'], knowledgeHandles: [] } }));
   const installed = run('install', '--target', 'operator', '--path', path, '--domain', domain);
   assert.equal(installed.status, 0, installed.stderr);
   const report = doctor(path);
@@ -312,7 +315,7 @@ test('doctor certifies a valid domain subset and checks its actual dependency gr
   assert.equal(report.routing.consistent, true);
   const contractPath = join(path, 'library/conquistador/routing-contract.json');
   const contract = JSON.parse(readFileSync(contractPath));
-  contract.methods['write-copy'].requiredResources = [];
+  contract.methods['copy'].requiredResources = [];
   writeFileSync(contractPath, JSON.stringify(contract));
   assert.equal(doctor(path, 1).routing.consistent, false);
 }));

@@ -12,24 +12,29 @@ This repository owns product code and its release evidence.
 
 - The repository and the npm package are public. Do not push, tag, publish to npm, or merge
   without the user's explicit authorization. Local commits and local packages are allowed.
-- `skills/<outcome>/` owns an independently usable method. `skills/conquistador/` owns parent routing.
+- `skills/conquistador/` is the one host skill. `commands/<command>/COMMAND.md` owns one method;
+  `plays/<command>.md` declares a chain of commands in front matter. Do not add another `SKILL.md`.
 - `runtime/`, `catalog/`, and `evals/` own runner, typed tools, and evidence contracts.
 - `hosts/` and `agents/` contain installation contracts; `tools/` contains local development helpers.
 - The repository root is the plugin (Claude Code, Codex, Cursor, Copilot, Agent Plugins). `tools/brief.mjs`
   ranks the playbooks for a task; `mcp/server.mjs`, `hooks/conquistador-hook.mjs`, `conquistador brief`,
   and `conquistador bot` all use it. `tools/front-door.mjs` and `tools/agents.mjs` own the agent installer;
-  `tools/launch.mjs` owns the start flow (task picker, agent launch).
+  `tools/launch.mjs` owns the start flow (detect, scope, install, task picker, agent launch); `tools/doctor.mjs` owns `conquistador doctor`.
 - After adding, renaming, or removing a knowledge file, run `node tools/knowledge-map.mjs` and
   `node tools/update-completeness.mjs`. `node tools/knowledge-map.mjs --check` must pass.
+  After any plugin payload edit (including hooks, briefing helpers, and README), regenerate `release/plugin-completeness.json` with
+  `node tools/update-completeness.mjs`; never hand-edit its expected hashes.
 - E2E: `node tools/e2e/routing-breadth.mjs` (offline; marketing breadth, coding silence, tour drift),
-  `expect tools/e2e/agent-first.exp` (bare `conquistador` to a pre-filled Claude Code and Codex, isolated
-  home, no model call), `node tools/e2e/package-install.mjs` (installs the package from Git and `npx`
-  as users do, all detected agents, isolated homes; needs `script` and `expect`, which Windows lacks, so
+  `expect tools/e2e/agent-first.exp` (bare `conquistador`: keep or customize, scope, `/conquistador init`
+  pre-filled in Claude Code, then Codex; isolated home, no model call), `node tools/e2e/package-install.mjs`
+  (installs the package from Git and `npx` as users do, all detected agents, project and global scope,
+  doctor, every CLI command from the tarball; set `CONQUISTADOR_E2E_NODE22` to add a Node 22.18 run; isolated homes; needs `script` and `expect`, which Windows lacks, so
   those checks report "not run" there; CI runs it on Linux and Windows through `install-e2e.yml`),
   `node tools/e2e/update-latest.mjs` (`conquistador update` against a local Verdaccio registry, all agents),
   and `node tools/e2e/knowledge-use.mjs [--set breadth]` (headless Claude Code; spends tokens). Reports go to `dist/e2e/`.
-- Router phrases: curated `intents` describe a method; practitioner wording that only selects it goes
-  in `aliases` in `skills/conquistador/routing-overlay.json`. Rebuild with `writeRoutingContract`.
+- Router phrases: curated `intents` describe a command; practitioner wording that only selects it goes
+  in `aliases` in `skills/conquistador/routing-overlay.json`. Play intents live in each play's front
+  matter. Rebuild with `node tools/routing-contract.mjs write`.
 - `tools/tour.mjs` owns the capability areas. After editing it, run `node tools/tour.mjs --write`.
 - Keep methods original and retain applicable MIT license and notices. Never add private knowledge,
   customer transcripts, credentials, internal decisions, or private workspace history to this repo.

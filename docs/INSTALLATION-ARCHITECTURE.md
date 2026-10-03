@@ -53,7 +53,8 @@ use full-library MCP to bypass a host's domain access boundary.
 
 ## Parent-first discovery and lazy methods
 
-Canonical authoring sources remain `skills/<method>/SKILL.md`. The managed installer transforms
+Canonical authoring sources are `skills/conquistador/SKILL.md` and
+`skills/conquistador/commands/<command>/COMMAND.md`. The managed installer transforms
 copies with `stage-method-library.mjs`; it never edits those sources. A compact host skill has:
 
 ```text
@@ -62,9 +63,9 @@ agents/openai.yaml
 library/conquistador/METHOD.md
 library/conquistador/catalog.md
 library/conquistador/operator-profile.json
-library/<outcome>/METHOD.md
-library/<outcome>/references/...
-library/<outcome>/scripts/...
+library/conquistador/commands/<command>/COMMAND.md
+library/conquistador/commands/<command>/references/...
+library/conquistador/plays/<play>.md
 ```
 
 The entry description starts with the product's task triggers and stays below 180 characters.
@@ -95,7 +96,7 @@ subset adaptation. The filtered catalog is not a permission grant. The same doma
 callable admission checks remain authoritative. Full-library doctor continues to reject restricted
 or standalone copies as incomplete, rather than claiming full-library or domain execution proof.
 
-Local MCP retains its canonical resource API and all 39 entries, parent plus 38 outcomes. Those
+Local MCP retains its canonical resource API and all 36 entries, parent plus 35 commands. Those
 entries are MCP read resources, not native discoverable skills. Runtime MCP retains its separate
 playbook contract. Explicit standalone `skill:NAME` packages keep their original SKILL.md and
 independent resources. Experimental Eve/Grok guidance still creates no files; low-level legacy

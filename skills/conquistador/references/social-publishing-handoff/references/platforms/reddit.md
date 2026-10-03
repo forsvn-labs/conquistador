@@ -43,7 +43,7 @@ Common subreddit rules to flag:
 - **No external links** in body (text-only) subs.
 - **Flair requirements:** post must have a flair set in some subs.
 
-publish-social CANNOT verify subreddit rules programmatically without a Reddit API call (out of v1 scope). Per-platform draft includes a "Subreddit check" section listing the rules formatter is aware of from the write-social brief.
+publish-social CANNOT verify subreddit rules programmatically without a Reddit API call (out of v1 scope). Per-platform draft includes a "Subreddit check" section listing the rules formatter is aware of from the `social` brief.
 
 ## Algorithm Signals
 
@@ -66,8 +66,8 @@ publish-social CANNOT verify subreddit rules programmatically without a Reddit A
 
 - Body field in generic CSV uses `||` separator: `<title> || <body>`.
 - Per-platform draft emits `## Title` + `## Body` + `## Subreddit Targets` + `## Subreddit Rules Check` sections.
-- If write-social artifact doesn't specify target subreddits, formatter flags NEEDS_CONTEXT.
-- Hashtags in write-social Reddit variant = critic dim 4 auto-fail.
+- If `social` artifact doesn't specify target subreddits, formatter flags NEEDS_CONTEXT.
+- Hashtags in `social` Reddit variant = critic dim 4 auto-fail.
 
 ## Scheduler Compatibility
 

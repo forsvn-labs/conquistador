@@ -1,6 +1,6 @@
 """Installed-package terminal E2E. Run with an installed CLI path and Node 26 PATH.
 
-Example: CONQUISTADOR_E2E_WRONG_NODE=/path/to/node26 CONQUISTADOR_E2E_NODE24=/path/to/node24 \\
+Example: CONQUISTADOR_E2E_WRONG_NODE=/path/to/node20 CONQUISTADOR_E2E_NODE24=/path/to/node24 \\
     python3 tools/node-onboarding.e2e.py dist/node-onboarding-e2e/prefix/node_modules/.bin/conquistador dist/node-onboarding-e2e
 Writes transcript and JSON evidence under the supplied output directory (not committed).
 """
@@ -24,13 +24,16 @@ root = Path(sys.argv[2]).resolve()
 wrong_node = os.environ.get('CONQUISTADOR_E2E_WRONG_NODE')
 right_node = os.environ.get('CONQUISTADOR_E2E_NODE24')
 if not wrong_node or not right_node:
-    sys.exit('Set CONQUISTADOR_E2E_WRONG_NODE and CONQUISTADOR_E2E_NODE24 to absolute executables (Node 26 and 24).')
+    sys.exit('Set CONQUISTADOR_E2E_WRONG_NODE (below 22.18) and CONQUISTADOR_E2E_NODE24 (Node 24) to absolute executables.')
 wrong_node, right_node = str(Path(wrong_node).resolve()), str(Path(right_node).resolve())
 wrong, right = str(Path(wrong_node).parent), str(Path(right_node).parent)
-if not subprocess.check_output([wrong_node, '-v']).startswith(b'v26') or not subprocess.check_output([right_node, '-v']).startswith(b'v24'):
-    sys.exit('Expected Node 26 and Node 24 executables, respectively.')
+def below_floor(version):
+    major, minor = (int(part) for part in version.decode().lstrip('v').split('.')[:2])
+    return major < 22 or (major == 22 and minor < 18)
+if not below_floor(subprocess.check_output([wrong_node, '-v'])) or not subprocess.check_output([right_node, '-v']).startswith(b'v24'):
+    sys.exit('Expected a Node below 22.18 and a Node 24 executable, respectively.')
 if wrong in ('/opt/homebrew/bin', '/usr/local/bin'):
-    sys.exit('Use an isolated Node 26 bin directory, not Homebrew bin, to exercise the no-candidate path.')
+    sys.exit('Use an isolated old-Node bin directory, not Homebrew bin, to exercise the no-candidate path.')
 for name in ['neutral', 'project', 'other', 'empty-home', 'adoption', 'files-only', 'fresh-failure', 'fresh-optional-cancel', 'optional-failure', 'term-apply', 'reset-rollback', 'multi-host']:
     shutil.rmtree(root / name, ignore_errors=True)
     (root / name).mkdir(parents=True)
@@ -98,7 +101,7 @@ assert code == 130 and 'Cancelled' in text
 code, text = terminal('no-node24', neutral, [(b'How do you want to proceed', b'\r')], {
     **env, 'HOME': str(root / 'empty-home'), 'PATH': wrong + ':/usr/bin:/bin',
 })
-assert code == 1 and 'Node 24 setup' in text and 'nvm install 24' not in text
+assert code == 1 and 'Node setup' in text and 'nvm install 24' not in text
 code, text = terminal('repeat-existing', project, [
     (b'How do you want to continue', b'\r'),
     (b'Where should Conquistador', b'\r'),

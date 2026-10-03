@@ -81,7 +81,7 @@ export function npxInvocation(env = process.env, platform = process.platform) {
       .filter(Boolean).map(folder => join(folder, 'node_modules/npm/bin/npx-cli.js')),
   ];
   const entry = candidates.find(path => existsSync(path));
-  if (!entry) throw Error('Cannot locate npm npx-cli.js. Install npm with Node 24 and rerun; the staged source is preserved.');
+  if (!entry) throw Error('Cannot locate npm npx-cli.js. Install npm with Node 22.18 or later and rerun; the staged source is preserved.');
   return { command: process.execPath, prefix: [entry] };
 }
 

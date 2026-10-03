@@ -34,8 +34,8 @@ it("requires missing fields and routes skills to their contained source without 
   expect(lines.join()).toContain("Missing --product");
   lines.length = 0;
   expect(await runChat({ intent: "write copy" }, host)).toBe(2);
-  expect(lines.join()).toContain(join(DEFAULT_SKILLS_ROOT, "write-copy/SKILL.md"));
-  expect(lines.join()).toContain("install skill:write-copy ABS_DEST");
+  expect(lines.join()).toContain(join(DEFAULT_SKILLS_ROOT, "conquistador/commands/copy/COMMAND.md"));
+  expect(lines.join()).toContain("install skill:copy ABS_DEST");
 });
 it("collects missing fields and exercises actual durable API without a provider or fabricated generation", async () => {
   const root = mkdtempSync(join(tmpdir(), "chat-test-")); roots.push(root);

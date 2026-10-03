@@ -13,6 +13,13 @@
         "timeout": 15
       }
     ],
+    "postToolUse": [
+      {
+        "command": "node \"${CURSOR_PLUGIN_ROOT}/hooks/check-hook.mjs\" cursor edit",
+        "matcher": "Write",
+        "timeout": 10
+      }
+    ],
     "stop": [
       {
         "command": "node \"${CURSOR_PLUGIN_ROOT}/hooks/conquistador-hook.mjs\" cursor stop",

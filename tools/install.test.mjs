@@ -1,3 +1,4 @@
+import { methodPath } from './method-library.mjs';
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
@@ -20,7 +21,7 @@ test('one entry point contains every method and upgrades without losing user cha
   install('install', 'conquistador', target);
   assert.match(readFileSync(join(target, 'SKILL.md'), 'utf8'), /library\/conquistador\/METHOD.md/);
   assert.deepEqual(readdirSync(join(target, 'library')).sort(), skills);
-  for (const name of skills) assert.deepEqual(canonicalText(readFileSync(join(target, 'library', name, 'METHOD.md'), 'utf8')), readFileSync(join(root, 'skills', name, 'SKILL.md'), 'utf8'));
+  for (const name of skills) assert.deepEqual(canonicalText(readFileSync(join(target, 'library', methodPath(name, { internal: true })), 'utf8')), readFileSync(join(root, 'skills', methodPath(name)), 'utf8'));
   assert.ok(existsSync(join(target, 'tools/proactive.mjs')));
   assert.ok(existsSync(join(target, 'docs/PROACTIVE.md')));
   assert.deepEqual(readFileSync(join(target, 'docs/PREVIEW.md')), readFileSync(join(root, 'docs/PREVIEW.md')));
@@ -46,7 +47,7 @@ test('portable master contains specialist contracts, declared outcomes and its c
     assert.ok(existsSync(join(target, agent.canonicalSkillRoot, 'library/conquistador/specialists', `${name}-agent.md`)));
   }
   assert.deepEqual(readdirSync(join(target, 'library')).sort(), skills);
-  for (const name of agent.mayLoadSkills) assert.ok(existsSync(join(target, 'library', name, 'METHOD.md')));
+  for (const name of agent.mayLoadSkills) assert.ok(existsSync(join(target, 'library', methodPath(name, { internal: true }))));
   install('remove', 'single-agent', target);
   assert.equal(existsSync(target), false);
 }));
@@ -71,9 +72,9 @@ test('host and squad declarations resolve inside each staged package', () => {
         assert.ok(existsSync(join(target, agent.canonicalSkillRoot, 'SKILL.md')));
         if (role === 'advisor') {
           assert.deepEqual(agent.mayLoadWorkflows, []);
-          assert.deepEqual([...agent.mayLoadSkills].sort(), ['decision-panel', 'fresh-eyes-review', 'knowledge-review']);
+          assert.deepEqual([...agent.mayLoadSkills].sort(), ['critique', 'decide', 'factcheck']);
         }
-        for (const name of agent.mayLoadSkills) assert.ok(existsSync(join(target, role, 'skills/conquistador/library', name, 'METHOD.md')));
+        for (const name of agent.mayLoadSkills) assert.ok(existsSync(join(target, role, 'skills/conquistador/library', methodPath(name, { internal: true }))));
       }
     } else {
       const host = JSON.parse(readFileSync(join(target, 'host.json')));
@@ -87,7 +88,7 @@ test('host and squad declarations resolve inside each staged package', () => {
 
 
 test('every staged mode includes usage docs with contained existing Markdown links', () => {
-  for (const mode of ['conquistador', 'plugin', 'single-agent', 'squad', 'eve', 'grok-bot', 'skill:write-copy']) temporary(target => {
+  for (const mode of ['conquistador', 'plugin', 'single-agent', 'squad', 'eve', 'grok-bot', 'skill:copy']) temporary(target => {
     install('install', mode, target);
     const readme = readFileSync(join(target, 'README.md'), 'utf8');
     assert.match(readme, /\[Use Conquistador\]\(docs\/USAGE.md\)/);
@@ -151,11 +152,11 @@ test('domain install writes restriction with mandatory review and omits undeclar
   install('install', 'plugin', target, '--domain', manifest);
   const restriction = JSON.parse(readFileSync(join(target, 'domain-restriction.json')));
   assert.ok(restriction.allowed.skills.includes('conquistador'));
-  assert.ok(restriction.allowed.skills.includes('fresh-eyes-review'));
-  assert.ok(restriction.allowed.skills.includes('diagnose-growth'));
-  assert.equal(restriction.allowed.skills.includes('write-copy'), false);
-  assert.ok(existsSync(join(target, 'skills/conquistador/library/diagnose-growth/METHOD.md')));
-  assert.equal(existsSync(join(target, 'skills/conquistador/library/write-copy')), false);
+  assert.ok(restriction.allowed.skills.includes('critique'));
+  assert.ok(restriction.allowed.skills.includes('diagnose'));
+  assert.equal(restriction.allowed.skills.includes('copy'), false);
+  assert.ok(existsSync(join(target, 'skills/conquistador/library/conquistador/commands/diagnose/COMMAND.md')));
+  assert.equal(existsSync(join(target, 'skills/conquistador/library/conquistador/commands/copy')), false);
   assert.ok(existsSync(join(target, 'skills/conquistador/library/conquistador/specialists/data-diagnosis-agent.md')));
   assert.equal(existsSync(join(target, 'skills/conquistador/library/conquistador/specialists/copy-agent.md')), false);
   assert.match(readFileSync(join(target, 'README.md'), 'utf8'), /domain-restriction.json is the load-time allowlist/);

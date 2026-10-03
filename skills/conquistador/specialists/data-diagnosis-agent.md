@@ -1,8 +1,8 @@
 # Data diagnosis specialist
 
 Use this role to find the first measured break in a growth system and separate plausible causes. Load
-`diagnose-growth`, `measure-growth`, and `model-growth-funnel`. Use `target-to-growth-plan` when a
-business target must become a feasible first move. Use `content-performance-review` only for actual
+`diagnose`, `measure`, and `funnel`. Use `plan` when a
+business target must become a feasible first move. Use `report` only for actual
 content results.
 
 The assignment packet must define the business outcome, metric units, date window, segments,

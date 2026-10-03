@@ -5,12 +5,12 @@ generated routing registry.
 
 | Request name | Canonical destination |
 |---|---|
-| `debate-agents` | `decision-panel` request/migration alias |
-| `agents-panel` | `decision-panel` request/migration alias |
-| `stochastic-multiagents-discussion` | `decision-panel` optional separate-context deep mode |
+| `debate-agents` | `decide` request/migration alias |
+| `agents-panel` | `decide` request/migration alias |
+| `stochastic-multiagents-discussion` | `decide` optional separate-context deep mode |
 | `showhn` | `hacker-news` channel mapping |
-| `x-launch` | `x` channel mapping within `launch-product` |
-| `linkedin-launch` | `linkedin` channel mapping within `launch-product` |
+| `x-launch` | `x` channel mapping within `launch` |
+| `linkedin-launch` | `linkedin` channel mapping within `launch` |
 | `reels` | `instagram` channel plus short-form format mapping |
 | `shorts` | `youtube` channel plus short-form format mapping |
 

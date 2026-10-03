@@ -9,6 +9,14 @@ export function explicitInvocation(prompt) {
     .some(clause => !/\b(?:do not|don't|never|without)\b/i.test(clause) && new RegExp(invocation.source, 'i').test(clause));
 }
 
+// The command after an explicit invocation: "/conquistador launch ...", "$conquistador copy",
+// "/conquistador:write-copy", or a prompt that starts with "conquistador seo". Returns the raw word.
+const commandInvocation = /(?:^|[\s`])[/$@]conquistador(?:\s+|[:/])([a-z][a-z0-9-]*)\b|^\s*conquistador\s+([a-z][a-z0-9-]*)\b/i;
+export function invokedCommand(prompt) {
+  const match = commandInvocation.exec(unquotedRequest(prompt));
+  return match ? (match[1] ?? match[2]).toLowerCase() : null;
+}
+
 export function requestClauses(prompt, { protectedPhrases = [] } = {}) {
   const request = unquotedRequest(prompt).replace(invocation, ' ')
     .replace(/\b[\w/-]+\.(?:tsx?|jsx?|mjs|cjs|css|scss|vue|svelte|py|go|rs|java|rb)\b/gi, ' ');

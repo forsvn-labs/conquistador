@@ -15,7 +15,7 @@ function request(payload: unknown = { product: "Local test only" }) {
     sessionId: null, runId: "served-audit", candidateId: null, evidenceId: null,
     playbookId: "content-intelligence-loop", playbookVersion: "1.0.0",
     planDigest: `sha256:${"a".repeat(64)}`, stepId: "research", attempt: 1,
-    skill: skillRefFor("research-content-ideas", declared), purpose: "research",
+    skill: skillRefFor("ideas", declared), purpose: "research",
     runInputDigest: `sha256:${"b".repeat(64)}`, contextBundleDigest: `sha256:${"c".repeat(64)}`,
     payload, contextManifest: [], outputArtifacts: declared.outputs,
     maxStepTokens: 8000, remainingRunTokens: 20000, maximumChargeMicros: 0,
@@ -36,7 +36,7 @@ describe("served adapter contract, local unit fixtures only", () => {
     const sealed = request();
     const adapter = createServedJudgmentProvider(provider(generated(), (input) => { sent = input; }), model);
     const response = await adapter.execute(sealed, { signal: new AbortController().signal });
-    expect(sent!.system).toContain("research-content-ideas");
+    expect(sent!.system).toContain("ideas");
     expect(sent!.system).toContain("<skill-method");
     expect(Buffer.byteLength(sent!.system!)).toBeLessThan(25_000);
     expect(JSON.parse(sent!.prompt).outputContract).toHaveLength(2);

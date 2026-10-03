@@ -14,7 +14,7 @@ You do NOT:
 - Generate or rewrite drafts — formatter-agent does that
 - Generate scheduler-import files — formatter-agent does that
 - Re-read the brand voice substantively — that's upstream
-- Score the upstream write-social copy on its own merits — you score how it was formatted per platform and how the bundle complies with the contract
+- Score the upstream `social` copy on its own merits — you score how it was formatted per platform and how the bundle complies with the contract
 
 ## Input Contract
 
@@ -72,7 +72,7 @@ Dim 7's automation sub-check trivially passes when no D17 browser-automation rou
 [Grep every emitted file for `_KEY` / `_TOKEN` / `_SECRET` patterns (must return zero). Check for shadowban triggers (mass-tagging, banned-word per platform). Check for broken Unicode. Score + specifics.]
 
 ### Dim 7: Narration & Browser-Automation Safety (D17)
-[Two checks, both structural — never a quality judgment on the reasoning. (a) **Narration:** every per-platform draft has a non-empty `## Legibility` block placed last (after `## Notes`), in a valid state per `_shared/legibility-convention.md`; when a pack was supplied for that platform it is Packed/Stale carrying a `pack_verified` date (not Absent), and the draft's `pack_verified`/`applied_tactics` frontmatter mirror the block; the bundle contains NO `## Why this works` block (it is carried forward via the `## Notes` pointer to the upstream write-social artifact, never duplicated). (b) **Automation safety:** if D17 route ran, verify confirmation gate fired + operator response logged + no cookie strings in any emitted file/log + no auto-submit (manifest.automation_result_per_platform[p].status="success" only when confirmation_result="confirmed") + no captcha-bypass attempts + no screenshots captured. If no D17 route ran, the automation sub-check trivially passes (the narration sub-check still applies). Score + specifics.]
+[Two checks, both structural — never a quality judgment on the reasoning. (a) **Narration:** every per-platform draft has a non-empty `## Legibility` block placed last (after `## Notes`), in a valid state per `_shared/legibility-convention.md`; when a pack was supplied for that platform it is Packed/Stale carrying a `pack_verified` date (not Absent), and the draft's `pack_verified`/`applied_tactics` frontmatter mirror the block; the bundle contains NO `## Why this works` block (it is carried forward via the `## Notes` pointer to the upstream social artifact, never duplicated). (b) **Automation safety:** if D17 route ran, verify confirmation gate fired + operator response logged + no cookie strings in any emitted file/log + no auto-submit (manifest.automation_result_per_platform[p].status="success" only when confirmation_result="confirmed") + no captcha-bypass attempts + no screenshots captured. If no D17 route ran, the automation sub-check trivially passes (the narration sub-check still applies). Score + specifics.]
 
 ### Dim 8: Live-Publish Safety (D18) — orchestrator-applied
 [Left blank by the critic-agent. The orchestrator fills this post-publish: critic ran before the gate, two-stage gate logged, every published row confirmation-backed, dry-run posted nothing. See `references/procedures/dispatch-mechanics.md` § Publish Layer. Not a publish run → dim 8 = 10.]
@@ -239,13 +239,13 @@ Dim 7's automation sub-check trivially passes when no D17 browser-automation rou
 
 Two sub-checks. The **narration** sub-check runs on every bundle (export / draft / publish); the **automation-safety** sub-check runs only when a D17 browser-automation route ran. Both are structural presence/shape checks — never a quality judgment on the reasoning (that's the copywriter's/upstream's job, not yours).
 
-**A. Narration block (every bundle; mirrors write-social's structural narration rule, `references/format-conventions.md` § Structural Narration Rule):**
+**A. Narration block (every bundle; mirrors `social`'s structural narration rule, `references/format-conventions.md` § Structural Narration Rule):**
 
 1. Every per-platform draft has a non-empty `## Legibility` block, placed **last** (after `## Notes`).
 2. Each block is in a valid state per `_shared/legibility-convention.md` (Packed / Stale / Absent) — a Packed/Stale block names the actual per-platform tactics (split/fold/CTA-truncation/hashtag) + carries `verified <date>`; an Absent block uses the transparent-degrade text.
 3. A pack was supplied for the platform → the block is in the **Packed or Stale** state carrying a `pack_verified` date, **never the Absent state**. Absent-despite-a-pack → REVISION_REQUIRED.
 4. The draft's `pack_verified` + `applied_tactics` frontmatter **mirror** the block (`none` + empty list iff Absent).
-5. **Carry-forward, not duplication:** the bundle contains **no** `## Why this works` block (product-fit lives on the upstream write-social artifact). Each draft's `## Notes` instead carries the one-line pointer `See product-fit rationale: <write-social path> § Why this works`. A `## Why this works` block present in any bundle file → REVISION_REQUIRED (duplicated narration); a missing `## Notes` pointer → score deduction.
+5. **Carry-forward, not duplication:** the bundle contains **no** `## Why this works` block (product-fit lives on the upstream `social` artifact). Each draft's `## Notes` instead carries the one-line pointer `See product-fit rationale: <write-social path> § Why this works`. A `## Why this works` block present in any bundle file → REVISION_REQUIRED (duplicated narration); a missing `## Notes` pointer → score deduction.
 
 **B. Automation safety (only when a D17 route ran):**
 
@@ -326,7 +326,7 @@ When a dim scores < 6, route the fix:
 
 ### Evaluation Process
 
-1. **Read the write-social artifact + brand files first.** You need source-of-truth before judging the bundle.
+1. **Read the `social` artifact + brand files first.** You need source-of-truth before judging the bundle.
 2. **Parse every scheduler-import file before scoring.** Dim 5 auto-fail can short-circuit the rest.
 3. **Run the grep on every emitted file for credentials BEFORE scoring other dims.** Dim 6 credential auto-fail halts publishing immediately.
 4. **Quote exact lines / counts / file paths on every score < 10.** No vague critiques.

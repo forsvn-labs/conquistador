@@ -40,7 +40,7 @@ test('default is disabled; only explicit selected events enable bounded advice',
   const prompt = advisory('prompt-submitted', config, { prompt: 'Write landing page copy.' });
   assert.equal(prompt.enabled, true);
   assert.equal(prompt.instructions.length, 1);
-  assert.match(prompt.instructions[0], /write-copy/);
+  assert.match(prompt.instructions[0], /copy/);
   assert.equal(advisory('prompt-submitted', config, { prompt: 'Fix a TypeScript error.' }).instructions.length, 0);
   assert.equal(advisory('prompt-submitted', { ...config, events: [] }, { prompt: 'Write landing page copy.' }).enabled, false);
 });

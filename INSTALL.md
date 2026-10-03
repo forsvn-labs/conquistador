@@ -1,81 +1,89 @@
 # Install Conquistador
 
-Choose one route. The plugin is recommended because it is the only route with hooks that check
-that the agent read the playbooks.
-
 ## Before you start
 
-- Node 24 or later: `node --version`.
+- Node 22.18 or later: `node --version`
+- A coding agent from the table below, logged in through its own instructions
 
-## Plugin for coding agents (recommended)
+You do not need a marketing-service account to draft from facts you supply.
 
-Install the command, then run it with no arguments:
+## Install
+
+Run the installer in your project folder:
+
+```sh
+npx @forsvn/conquistador
+```
+
+Or install the CLI globally, then run it:
 
 ```sh
 npm install -g @forsvn/conquistador
 conquistador
 ```
 
-The command does these steps:
+The installer shows the agents it found and asks you to keep that set or customize it. Then it
+asks for the scope, installs, and opens one agent. In a project without `GROWTH.md`, the agent
+opens with `/conquistador init`. Otherwise you pick a task.
 
-1. It finds the supported agents on your computer and installs into all of them. It does not ask.
-   An agent you removed by name (`conquistador remove grok`) stays removed until you add it again.
-2. It copies the plugin to `~/.conquistador/plugin` and registers that folder with each agent's
-   own plugin manager.
-3. It asks what to work on, then opens your agent with the task typed in. With several agents, it
-   asks once which one to open and remembers the choice.
+### Options
 
-Later runs skip step 1 and 2 unless the version changed, a new agent appeared, or the plugin copy
-is missing or damaged. A damaged copy is repaired.
-`conquistador --no-open` installs and stops. `conquistador "TASK" --in codex` opens one agent for
-one run. Without a terminal (a script or a pipe), `conquistador "TASK"` only prints the command
-it would run.
+| Option | Does |
+|---|---|
+| `--providers=NAME[,NAME]` | Install for these agents. Names: `claude` (or `claude-code`), `codex`, `cursor`, `copilot`, `grok`, `gemini`, `opencode`, `pi`, `hermes`, `antigravity`, `kiro`, `vibe` |
+| `--scope=global` | Install for all projects. Agents with a plugin manager get the plugin: the skill, hooks, and the MCP server |
+| `--scope=project` | Copy the one skill into this project's skill folder. Commit it to share it with your team. No hooks or MCP server |
+| `-y`, `--yes` | Accept the detected agents and the default scope (global, or project when this project already has a copy) |
+| `--no-hooks` | Install without prompt hooks. Writes `{"hooks": false}` to `~/.conquistador/config.json` |
+| `--dry-run` | Show the plan and the launch command. Change nothing |
+| `--in AGENT` | Open this agent |
+| `--no-open` | Install only |
 
-The stable copy matters: with nvm or another Node version manager, the npm global folder changes
-when you switch Node versions. The agents point at `~/.conquistador/plugin`, not at npm.
-
-To install an exact tag from Git instead of npm, use both flags. `--ignore-scripts` skips npm
-lifecycle scripts. `--install-links` makes npm copy the Git checkout instead of linking to
-temporary files.
+Without a terminal, the installer prints the plan and changes nothing, unless you add `-y`.
 
 ```sh
-npm install -g --ignore-scripts --install-links git+https://github.com/forsvn-labs/conquistador.git#v0.2.2
+npx @forsvn/conquistador --providers=claude,codex --scope=project -y
+npx @forsvn/conquistador --providers=pi,hermes --scope=global --dry-run
 ```
 
-### Run once without a global install
+### Agents and folders
 
-```sh
-npx @forsvn/conquistador
-```
+Folders and launch flags come from each agent's documentation (checked 2026-10-03). Agents that
+share a project folder share one copy.
 
-This installs into your agents and opens one, like the global command. It leaves no `conquistador`
-command behind, so you run `npx @forsvn/conquistador` again for the next task, `update`, or `remove`. On
-the test machine the first run took 24 seconds and later runs about 5 seconds. Inside your agent,
-`/conquistador` works either way.
+| Agent | `--providers` | Global install | Project folder | Opens with |
+|---|---|---|---|---|
+| Claude Code | `claude` | Plugin: `claude plugin install` | `.claude/skills/conquistador` | `claude --prefill "PROMPT"` (press Enter to send) |
+| Codex | `codex` | Plugin: `codex plugin add` | `.agents/skills/conquistador` | `codex "PROMPT"` |
+| Cursor | `cursor` | Plugin copy in `~/.cursor/plugins/local/conquistador` | `.agents/skills/conquistador` | `cursor-agent "PROMPT"` |
+| GitHub Copilot CLI | `copilot` | Plugin: `copilot plugin install` | `.agents/skills/conquistador` | `copilot -i "PROMPT"` |
+| Grok CLI | `grok` | Plugin: `grok plugin install --trust` | `.grok/skills/conquistador` | `grok "PROMPT"` |
+| Gemini CLI | `gemini` | `~/.gemini/skills/conquistador` | `.agents/skills/conquistador` | `gemini -i "PROMPT"` |
+| OpenCode | `opencode` | `~/.config/opencode/skills/conquistador` | `.agents/skills/conquistador` | `opencode --prompt "PROMPT"` |
+| Pi | `pi` | `~/.agents/skills/conquistador` | `.agents/skills/conquistador` | `pi "/skill:conquistador ..."` |
+| Hermes Agent | `hermes` | `~/.hermes/skills/conquistador` (`$HERMES_HOME` inside your home folder) | `.hermes/skills/conquistador` | Paste the prompt (copied for you) |
+| Antigravity CLI | `antigravity` | `~/.gemini/antigravity-cli/skills/conquistador` | `.agents/skills/conquistador` | `agy -i "PROMPT"` |
+| Kiro CLI | `kiro` | `~/.kiro/skills/conquistador` | `.kiro/skills/conquistador` | Paste the prompt (copied for you) |
+| Mistral Vibe | `vibe` | `~/.vibe/skills/conquistador` | `.agents/skills/conquistador` | Paste the prompt (copied for you) |
 
-### Supported agents
+Sources: [Claude Code](https://code.claude.com/docs/en/skills),
+[Codex](https://learn.chatgpt.com/docs/build-skills), [Cursor](https://cursor.com/docs/context/skills),
+[GitHub Copilot](https://docs.github.com/en/copilot/how-tos/use-copilot-agents/coding-agent/create-skills),
+[Grok](https://docs.x.ai/build/features/skills-plugins-marketplaces),
+[Gemini CLI](https://geminicli.com/docs/cli/skills/), [OpenCode](https://opencode.ai/docs/skills/),
+[Pi](https://github.com/badlogic/pi-mono/blob/main/packages/coding-agent/docs/skills.md),
+[Hermes Agent](https://hermes-agent.nousresearch.com/docs/user-guide/features/skills),
+[Antigravity](https://antigravity.google/docs/skills), [Kiro](https://kiro.dev/docs/skills/),
+[Mistral Vibe](https://docs.mistral.ai/vibe/code/cli/skills).
 
-| Agent | How the installer adds the plugin | How `conquistador` opens it |
-| --- | --- | --- |
-| Claude Code | `claude plugin marketplace add` and `claude plugin install` | `claude --prefill "PROMPT"`: the task waits in the input box for Enter |
-| Codex | `codex plugin marketplace add` and `codex plugin add` | `codex "PROMPT"`: starts at once. Trust the plugin hooks when Codex asks (`/hooks`) |
-| Cursor | Copies the plugin to `~/.cursor/plugins/local/conquistador` | `cursor-agent "PROMPT"`. With the editor only, the prompt is copied for you to paste; run **Developer: Reload Window** first |
-| GitHub Copilot CLI | `copilot plugin marketplace add` and `copilot plugin install` | `copilot -i "PROMPT"`: starts at once |
-| Grok CLI | `grok plugin install --trust` (running `conquistador` is the consent) | `grok "PROMPT"`: starts at once |
+Notes:
 
-`--prefill` is not in `claude --help`. Conquistador uses it from Claude Code 2.1.283, where it was
-tested. With an older version, or with `CONQUISTADOR_PREFILL=off`, Claude Code starts the task at
-once instead.
-
-Without a terminal, or in scripts, use flags:
-
-```sh
-conquistador add claude-code codex --yes   # Install into named agents
-conquistador add --dry-run                 # Print the commands only
-conquistador agents                        # Show what is found and installed
-conquistador update                        # Get the latest version and update every agent you installed into
-conquistador remove                        # Remove from every agent and delete ~/.conquistador/plugin
-```
+- Codex asks once to trust the hooks. Type `/hooks` to trust them.
+- Pi, Hermes, and Mistral Vibe load project skills only after you trust the project folder.
+- Claude Code fills the prompt from version 2.1.283. Older versions, or
+  `CONQUISTADOR_PREFILL=off`, send the prompt at once.
+- The global plugin copy is `~/.conquistador/plugin` (`CONQUISTADOR_HOME/plugin` when set). Agents
+  with a plugin manager read it. Do not save your own work in it.
 
 ### Install from inside Claude Code
 
@@ -84,45 +92,62 @@ conquistador remove                        # Remove from every agent and delete 
 /plugin install conquistador@conquistador
 ```
 
-### What the plugin contains
+### Exact version
 
-- 39 skills: the Conquistador parent and 38 methods.
+```sh
+npm install -g @forsvn/conquistador@0.2.2
+npm install -g --ignore-scripts --install-links git+https://github.com/forsvn-labs/conquistador.git#v0.2.2
+```
+
+`--ignore-scripts` skips npm lifecycle scripts. `--install-links` copies the checkout out of npm's
+temporary storage.
+
+## Update, check, and remove
+
+```sh
+conquistador update               # Update the CLI, plugin installs, and skill copies
+conquistador update --dry-run     # Show the update; change nothing
+conquistador doctor               # Report drift in installs, hooks, and project context
+conquistador doctor --fix         # Repair what a copy can repair
+conquistador agents               # Show agents and install state
+conquistador remove               # Remove every install, global and in this project
+conquistador remove codex         # Remove one agent
+conquistador remove --scope=project
+npm uninstall -g @forsvn/conquistador
+```
+
+Without a global CLI, put `npx @forsvn/conquistador` in front of each command.
+
+`remove` keeps your playbooks, `~/.conquistador/config.json`, bot exports, project deliverables,
+`PRODUCT.md`, and `GROWTH.md`. It deletes only folders that hold `.conquistador-owned.json`.
+
+`doctor` checks:
+
+- **Install**: the plugin copy, each global install, and each project skill copy match this version.
+- **Hooks**: each plugin manifest names a hook file that exists, and each script that file runs
+  exists. It also reports when hooks are off.
+- **Project**: `PRODUCT.md` and `GROWTH.md` exist, `GROWTH.md` covers its sections, and
+  `.gitignore` has an entry for `.conquistador/`. Run `/conquistador init` to fix these.
+
+## What the plugin contains
+
+- The `conquistador` skill with its commands and plays.
 - An MCP server named `conquistador` with the tools `conquistador_brief`, `conquistador_search`,
   and `conquistador_read`. It only reads playbooks.
 - Hooks for Claude Code, Codex, and Cursor: a prompt hook that adds the must-read list to
-  relevant prompts, and a stop hook that sends the agent back once if it skipped those files.
-  Cursor cannot add context per prompt, so it gets the protocol at session start instead.
+  marketing prompts, and a stop hook that sends the agent back once if it skipped those files.
 
-The plugin runs bundled Node scripts only. It installs no dependencies and makes no network
-requests.
-
-To turn off the hooks, set `CONQUISTADOR_HOOKS=off`, or add `{"hooks": false}` to
+Turn off the hooks with `CONQUISTADOR_HOOKS=off` or `{"hooks": false}` in
 `~/.conquistador/config.json`.
 
-## Skills only
-
-For any agent that reads `SKILL.md` skills:
-
-```sh
-npx skills add https://github.com/forsvn-labs/conquistador/tree/private-alpha/skills
-```
-
-This installs all 39 skills (about 9 MB) into the agents you choose. Point it at the `skills/`
-folder as shown: the repository root holds a single entry skill, and the tool stops there.
-
-Skills-only installs have no hooks and no MCP server. Each method starts with a
-"Playbooks for this method" list that tells the agent what to read.
-
 ## MCP server for any MCP client
-
-Run the server over stdio:
 
 ```sh
 conquistador mcp
 ```
 
-After `conquistador add`, a stable copy exists at `~/.conquistador/plugin`. Point clients at it so
-that a Node version switch does not break them:
+After a global install, point clients at the stable copy so that a Node version switch does not
+break them:
 
 ```json
 {
@@ -132,38 +157,28 @@ that a Node version switch does not break them:
 }
 ```
 
-Use this shape in Claude Desktop, Cursor, Windsurf, and most clients. VS Code uses a `servers`
-key in `.vscode/mcp.json` with `"type": "stdio"`. Command-line agents have their own command, for
-example `codex mcp add conquistador -- conquistador mcp`.
+VS Code uses a `servers` key in `.vscode/mcp.json` with `"type": "stdio"`.
 
 ## Bots and remote apps
 
-### Apps with MCP connectors (Muse, ChatGPT developer mode, Claude.ai connectors)
-
-Host the HTTP server, then add its URL as a connector:
+For apps with MCP connectors, host the HTTP server and add its URL:
 
 ```sh
 CONQUISTADOR_MCP_TOKEN=choose-a-secret conquistador mcp --http --host 0.0.0.0 --port 8787
 ```
 
-- Endpoint: `POST /mcp` (JSON-RPC over HTTP). Health check: `GET /health`.
+- Endpoint: `POST /mcp`. Health check: `GET /health`.
 - Send `Authorization: Bearer <token>` when `CONQUISTADOR_MCP_TOKEN` is set.
-- To deploy in a container, build `docker build -f mcp/Dockerfile -t conquistador-mcp .` from the
-  repository root. The image contains the playbooks and core Node modules only.
-
-The server is read-only. Anyone with the URL and token can read the playbooks.
-
-### Apps with instructions and knowledge files
+- Anyone with the URL and token can read the playbooks.
 
 For ChatGPT GPTs, Claude Projects, Grok projects, and Gemini Gems:
 
 ```sh
-conquistador bot --out ./conquistador-bot
+conquistador bot --out ./conquistador-bot --no-private
 ```
 
-Paste `SYSTEM-PROMPT.md` into the app's instructions, and upload the files in `knowledge/`
-(12 files, fewer than the tightest common upload limit). If you configured your own playbooks,
-the pack includes them in `99-your-playbooks.md`. Add `--no-private` to leave them out.
+Read `SYSTEM-PROMPT.md` before you paste it. Upload only the knowledge files that the generated
+README lists. `--no-private` leaves your own playbooks out.
 
 ## Your own playbooks
 
@@ -172,26 +187,26 @@ conquistador playbooks add ~/notes/growth-playbooks
 conquistador playbooks list
 ```
 
-You can also set `CONQUISTADOR_PLAYBOOKS` to one or more folders, separated by `:`, or put
-Markdown files in `~/.conquistador/playbooks`. Conquistador reads them in place.
+You can also set `CONQUISTADOR_PLAYBOOKS` to folders separated by `:`, or put Markdown files in
+`~/.conquistador/playbooks`. Conquistador reads them in place.
 
-## Per-project operator
+## Repository-only features
 
-`conquistador project` installs a per-project copy in `.conquistador/`, with the portable
-operator contracts and the BB specialist adapter. The flags `--skills`, `--plugin`, `--mcp`,
-`--bot`, and `--advanced` also still work. See the
-[per-project installation guide](docs/INSTALL-PROJECT.md).
+The npm package contains what users run: the CLI, the skill, hooks, the MCP server, the checker,
+and the connect and review tools. The Eve runtime (`conquistador jobs`), evals, the typed catalog,
+and the Docker images stay in the [repository](https://github.com/forsvn-labs/conquistador).
+`conquistador project`, `--skills`, `--plugin`, `--mcp`, `--bot`, and `--advanced` still work;
+see the [per-project installation guide](https://github.com/forsvn-labs/conquistador/blob/private-alpha/docs/INSTALL-PROJECT.md).
 
 ## Troubleshooting
 
 | Symptom | Fix |
-| --- | --- |
-| 0.0.16 stops with `ENOENT … conquistador.tmp-NNNN/.conquistador-owned.json` | 0.0.16 copied an empty plugin from npm installs. Install 0.0.17 or later with the command above and run `conquistador` again. It removes the leftover folder and repairs every agent. |
-| `… exists and was not created by Conquistador` | A folder that you or another tool made is in the way. Move or delete it, then run `conquistador` again. The other agents install anyway. |
-| `The Conquistador package at … is incomplete` | The npm install is damaged. Install again with the command above. Your agents keep the last good copy. |
-| `Conquistador stopped: …` | Open the `Details:` file it prints, and send it with a report. `CONQUISTADOR_DEBUG=1` prints the full error. |
-| `Conquistador requires Node 24 or later` | Install Node 24 or later, open a new terminal, and run the command again. |
-| An agent shows `✗` after install | Run the printed command yourself to see the full error, then run `conquistador add AGENT --yes`. |
-| The agent does not list Conquistador | Start a new session. In Cursor, reload the window. In Codex, trust the hooks. |
-| The agent ignores the playbooks | Check that hooks are on (`CONQUISTADOR_HOOKS` unset), and run `conquistador brief "TASK"` to see what it should read. |
-| MCP server fails after a Node switch | Point the client at `~/.conquistador/plugin/mcp/server.mjs`. |
+|---|---|
+| No agent is found | Install a supported agent, or name one: `--providers=claude` |
+| `Not found on PATH` for a global install | Install that agent's CLI, or use `--scope=project` |
+| `… exists and was not created by Conquistador` | Move that folder yourself, then retry. The installer never overwrites a folder it did not create |
+| `The Conquistador package at … is incomplete` | Reinstall the package, then retry |
+| `Conquistador needs Node 22.18 or later` | Install Node 22.18 or later, open a new terminal, and retry |
+| The agent does not list Conquistador | Start a new session. In Cursor, reload the window. Run `conquistador doctor` |
+| The agent ignores the playbooks | Run `conquistador brief "TASK"` to see the reading list. Check that hooks are on |
+| `Conquistador stopped: …` | Read the `Details:` file. `CONQUISTADOR_DEBUG=1` prints the full error |

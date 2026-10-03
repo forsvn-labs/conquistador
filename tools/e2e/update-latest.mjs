@@ -107,6 +107,10 @@ function pack(name, packageVersion) {
   delete manifest.private;
   manifest.version = packageVersion;
   writeFileSync(join(clone, 'package.json'), `${JSON.stringify(manifest, null, 2)}\n`);
+  // The synthetic version changes package bytes; regenerate its plugin integrity inventory.
+  const generated = run(process.execPath, ['tools/update-completeness.mjs'], { cwd: clone });
+
+  if (generated.status !== 0) return '';
   const packed = run('npm', ['pack', '--json', '--pack-destination', work, '--cache', join(work, 'npm-cache-pack')], { cwd: clone });
   try { return join(work, JSON.parse(packed.stdout)[0].filename); } catch { return ''; }
 }
@@ -124,9 +128,11 @@ a.env.PATH = `${join(prefix, 'bin')}:${a.env.PATH}`;
 const cli = [join(prefix, 'bin', 'conquistador')];
 let result = run('npm', ['install', '--global', '--ignore-scripts', '--prefix', prefix, tarball1], { env: a.env });
 check('A0', `npm install -g ${v1} (${Math.round(result.ms / 1000)} s)`, result.status === 0 && run(cli[0], ['--version'], { env: a.env }).output.trim() === v1, tail(result.output));
-result = run(cli[0], ['add', '--yes'], { env: a.env });
+
+result = run(cli[0], ['add', '--all', '--yes'], { env: a.env });
 const agents = agentVersions(cli, a);
-check('A0', `add --yes installs ${agents.length} agents at ${v1}`, result.status === 0 && allAt(agents, v1), tail(result.output));
+
+check('A0', `add --all --yes installs ${agents.length} agents at ${v1}`, result.status === 0 && allAt(agents, v1), tail(result.output));
 
 result = run(cli[0], ['update'], { env: a.env });
 check('U3', 'package not on the registry: one line, reinstall, exit 0', result.status === 0 && /not on the npm registry yet\. Reinstalling/.test(result.output) && /Updated to /.test(result.output) && allAt(agentVersions(cli, a), v1), tail(result.output));
@@ -139,7 +145,8 @@ check('U4', 'same version on the registry: "latest", no install, exit 0', result
 result = publish(tarball2);
 check('R2', `publish ${v2}`, result.status === 0, tail(result.output));
 result = run(cli[0], ['update', '--dry-run'], { env: a.env });
-check('U10', '--dry-run prints the install and changes nothing', result.status === 0 && /\(dry run\)/.test(result.output) && result.output.includes(`npm install --global --prefix ${prefix}`) && run(cli[0], ['--version'], { env: a.env }).output.trim() === v1 && pluginVersion(a) === v1, tail(result.output));
+
+check('U10', '--dry-run previews the registry check and changes nothing', result.status === 0 && /Would check the configured registry/.test(result.output) && /Preview only/.test(result.output) && run(cli[0], ['--version'], { env: a.env }).output.trim() === v1 && pluginVersion(a) === v1, tail(result.output));
 
 const locked = [join(prefix, 'lib', 'node_modules', '@forsvn'), join(prefix, 'bin')];
 for (const folder of locked) chmodSync(folder, 0o555);
@@ -169,8 +176,10 @@ const prefixB = join(work, 'prefix-b');
 mkdirSync(prefixB, { recursive: true });
 b.env.npm_config_prefix = prefixB;
 const npx = ['npx', '--yes', `@forsvn/conquistador@${v1}`];
-result = run(npx[0], [...npx.slice(1), 'add', '--yes'], { env: b.env });
-check('B0', `npx @forsvn/conquistador@${v1} add --yes`, result.status === 0 && pluginVersion(b) === v1, tail(result.output));
+
+result = run(npx[0], [...npx.slice(1), 'add', '--all', '--yes'], { env: b.env });
+
+check('B0', `npx @forsvn/conquistador@${v1} add --all --yes`, result.status === 0 && pluginVersion(b) === v1, tail(result.output));
 result = run(npx[0], [...npx.slice(1), 'update'], { env: b.env });
 check('U8', `npx update registers ${v2} through npx`, result.status === 0 && pluginVersion(b) === v2 && allAt(agentVersions(npx, b), v2), tail(result.output, 4));
 check('U8', 'no global install was created', !existsSync(join(prefixB, 'lib', 'node_modules', '@forsvn')) && !existsSync(join(prefixB, 'bin', 'conquistador')));

@@ -39,7 +39,8 @@
 4. Verify native Windows/Linux installation and host execution before claiming those platforms.
    macOS transports and Linux CI results do not certify native Windows or Linux host activation.
 
-Use the [private-alpha checklist](docs/PRIVATE-ALPHA.md). Installed files, provider observations,
+Use the [public-alpha acceptance checklist](docs/PRIVATE-ALPHA.md), with historical private-alpha
+checks kept separate from the default plugin route. Installed files, provider observations,
 human acceptance and release authority remain separate evidence classes.
 
 ## Later product work
@@ -57,17 +58,15 @@ human acceptance and release authority remain separate evidence classes.
 - Exercise requested Eve jobs with a named owner, selected model and budget, approval, cancellation
   and saved-state recovery. Keep optional dependency pins until upgrades are reviewed.
 
-Public alpha is planned to start at `0.1.0`. The historical private tag already uses that name;
-resolve its migration explicitly before the public release. See [version policy](VERSIONS.md).
-Public distribution, registry publication, marketplaces, visibility changes and landing work need
-that later decision. The current private-alpha channel continues the earlier dogfood sequence.
+## Release follow-through
 
-For the public-alpha release, publish the exact `@forsvn/conquistador` package to npm and make
-`npm i -g @forsvn/conquistador` the primary installation command. List the same plugin in the
-Claude Code, Codex, Cursor, and Copilot marketplaces, the skills.sh directory, and the Muse
-connector platform. Before changing the publication
-guard, verify scope ownership, release authentication and provenance, package contents, license
-files, and registry tarball identity. From an empty npm cache and user-writable global prefix, run
-version, guided setup, doctor, start, update, and uninstall against the published version. Confirm
-that the receiving project gets no manifest, dependency directory, or lockfile. Keep the private
-Git and release-asset routes as documented fallbacks.
+Public alpha began at `0.2.0`; `0.2.2` is the current published release. The historical private
+`0.1.0` tag is not the public-alpha milestone; see [version policy](VERSIONS.md). The repository's
+`private-alpha` branch name is historical, not an access restriction.
+
+Before the next release, repeat first-use installation, update, removal, task, and correction
+acceptance on its exact candidate bytes. Keep CLI checks, native host observations, model outputs,
+and human verdicts distinct. Publish the exact reviewed package only with explicit authorization;
+then verify registry identity and the deployed landing page's release/access/setup/removal copy.
+Source edits alone do not close a deployed-site finding. Marketplace listings and other external
+distribution remain explicit decisions. See [PROGRESS.md](PROGRESS.md) for unshipped work.

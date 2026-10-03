@@ -1,3 +1,4 @@
+import { commandNames } from './method-library.mjs';
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
@@ -9,6 +10,8 @@ import { createServer } from 'node:http';
 import { createHash } from 'node:crypto';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+// Commands in this checkout, including meta commands other slices add.
+const N = commandNames(join(root, 'skills')).length;
 const script = join(root, 'tools/setup.mjs');
 function setup(...args) {
   const result = spawnSync(process.execPath, [script, ...args], { encoding: 'utf8', env: { ...process.env, PATH: '/nonexistent' } });
@@ -232,8 +235,8 @@ test('domain install records the restriction; knowledge roots stay outside the p
   }));
   assert.match(good('install', '--target', 'skill', '--path', path, '--domain', manifest, '--knowledge-roots', rootsFile), /Domain: domain:diagnosis/);
   assert.ok(existsSync(join(path, 'domain-restriction.json')));
-  assert.ok(existsSync(join(path, 'library/diagnose-growth/METHOD.md')));
-  assert.equal(existsSync(join(path, 'library/write-copy')), false);
+  assert.ok(existsSync(join(path, 'library/conquistador/commands/diagnose/COMMAND.md')));
+  assert.equal(existsSync(join(path, 'library/conquistador/commands/copy')), false);
   good('uninstall', '--path', path);
   const inside = join(root, 'skills');
   writeFileSync(join(parent, 'inside-roots.json'), JSON.stringify({
@@ -256,7 +259,7 @@ test('project operator and harness alias share lifecycle without changing host r
   assert.equal(JSON.parse(readFileSync(join(installed, '.conquistador-install.json'))).mode, 'single-agent');
   assert.match(good('status', '--target', 'harness', '--path', installed), /unchanged/);
   good('update', '--target', 'harness', '--path', installed);
-  assert.match(good('doctor', '--path', installed), /38 methods available/);
+  assert.match(good('doctor', '--path', installed), new RegExp(`${N} methods available`));
   good('uninstall', '--target', 'operator', '--project', project);
   assert.equal(existsSync(installed), false);
   assert.equal(readFileSync(sentinel, 'utf8'), 'Existing host instructions.');
@@ -279,7 +282,7 @@ test('short operator commands default to the current project and preserve the co
   assert.match(ok('install'), /Prepared locally/);
   const installed = join(project, '.conquistador');
   const report = JSON.parse(ok('operator', 'doctor', '--json'));
-  assert.equal(report.library.available, 38);
+  assert.equal(report.library.available, N);
   assert.equal(report.bbAdapterPresent, true);
   assert.equal(report.operatorProfilePresent, true);
   assert.equal(report.operatorActivation, 'manual');
@@ -310,7 +313,7 @@ test('setup lists routes and requires an explicit lifecycle target', () => tempo
   }
   assert.equal(invoke('install').status, 0);
   assert.match(invoke('status', '--target', 'operator').stdout, /unchanged/);
-  assert.equal(JSON.parse(invoke('doctor', '--target', 'operator', '--json').stdout).library.available, 38);
+  assert.equal(JSON.parse(invoke('doctor', '--target', 'operator', '--json').stdout).library.available, N);
   assert.equal(invoke('uninstall', '--target', 'operator').status, 0);
   assert.deepEqual(readdirSync(project), []);
 }));
@@ -339,8 +342,8 @@ test('local MCP survives loss of the launching cache and does not add project de
   const processResult = spawnSync(connector.command, connector.args, { encoding: 'utf8', input: messages.map(message => JSON.stringify(message)).join('\n') + '\n' });
   assert.equal(processResult.status, 0, processResult.stderr);
   const response = JSON.parse(processResult.stdout.trim().split('\n').at(-1));
-  assert.equal(JSON.parse(response.result.content[0].text).methods.length, 39);
-  assert.equal(JSON.parse(good('doctor', '--path', path, '--json')).library.available, 38);
+  assert.equal(JSON.parse(response.result.content[0].text).methods.length, N);
+  assert.equal(JSON.parse(good('doctor', '--path', path, '--json')).library.available, N);
   for (const name of ['node_modules', 'package.json', 'package-lock.json', 'bun.lock']) assert.equal(existsSync(join(parent, name)), false);
   good('update', '--path', path);
   good('uninstall', '--path', path);
@@ -367,7 +370,7 @@ test('unchanged legacy local MCP receipts migrate even when the old source is mi
   assert.match(good('status', '--path', path), /unchanged/);
   assert.equal(setup('doctor', '--path', path).code, 1);
   good('update', '--path', path);
-  assert.equal(JSON.parse(good('doctor', '--path', path, '--json')).library.available, 38);
+  assert.equal(JSON.parse(good('doctor', '--path', path, '--json')).library.available, N);
   assert.ok(existsSync(join(path, 'bundle/tools/skills-mcp.mjs')));
   good('uninstall', '--path', path);
 }));
@@ -376,7 +379,7 @@ test('normal hook CLI uses the installed domain and uninstall preserves register
   const project = join(parent, 'hook-project');
   mkdirSync(project);
   const domain = join(parent, 'hook-domain.json');
-  writeFileSync(domain, JSON.stringify({ schemaVersion: 'conquistador.domain-package/v1', id: 'domain:diagnosis', agentPackageSchemaVersion: 'conquistador.agent-package/v2', allowed: { roles: [], skills: ['diagnose-growth'], workflows: [], tools: ['host-model'], knowledgeHandles: [] } }));
+  writeFileSync(domain, JSON.stringify({ schemaVersion: 'conquistador.domain-package/v1', id: 'domain:diagnosis', agentPackageSchemaVersion: 'conquistador.agent-package/v2', allowed: { roles: [], skills: ['diagnose'], workflows: [], tools: ['host-model'], knowledgeHandles: [] } }));
   const config = join(parent, 'proactive.json');
   writeFileSync(config, JSON.stringify({ schemaVersion: 1, enabled: true, events: ['prompt-submitted'] }));
   const cli = join(root, 'runtime/bin/conquistador.js');
@@ -390,7 +393,7 @@ test('normal hook CLI uses the installed domain and uninstall preserves register
   assert.equal(report.hostActivationVerified, false);
   const route = JSON.parse(invoke('route', '--prompt', 'Write landing page copy.').stdout);
   assert.deepEqual(route.selected, []);
-  assert.ok(route.unavailable.includes('write-copy'));
+  assert.ok(route.unavailable.includes('copy'));
   const refused = invoke('uninstall');
   assert.equal(refused.status, 1);
   assert.match(refused.stderr, /hooks remove/);

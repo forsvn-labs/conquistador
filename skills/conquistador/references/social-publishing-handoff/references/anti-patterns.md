@@ -116,11 +116,11 @@
 
 ### 8. Cross-stack contract drift
 
-**Pattern:** write-social schema changes (e.g., adds a `thread_split_hint` field); publish-social doesn't update; bundles miss the new field silently.
+**Pattern:** `social` schema changes (e.g., adds a `thread_split_hint` field); publish-social doesn't update; bundles miss the new field silently.
 
 **Why it hurts:** Downstream evaluate-content can't read the field; operator manually re-derives.
 
-**Fix:** Per-stack schema changes require atomic update across upstream + downstream skills. Format-conventions § Schema Change Discipline enforces. publish-social pre-dispatch validates write-social artifact against expected schema and emits NEEDS_CONTEXT if version mismatch.
+**Fix:** Per-stack schema changes require atomic update across upstream + downstream skills. Format-conventions § Schema Change Discipline enforces. publish-social pre-dispatch validates `social` artifact against expected schema and emits NEEDS_CONTEXT if version mismatch.
 
 ### 9. Brand-system absent → token fabrication
 
@@ -128,7 +128,7 @@
 
 **Why it hurts:** Per-platform formatting drifts from brand voice; sacred elements (e.g., specific phrasing the brand always uses) get rewritten.
 
-**Fix:** SKILL.md `requires: brand/BRAND.md`. Missing → NEEDS_CONTEXT → defer to create-brand. Never improvise.
+**Fix:** SKILL.md `requires: brand/BRAND.md`. Missing → NEEDS_CONTEXT → defer to `brand`. Never improvise.
 
 ### 10. Skill-deference miss
 

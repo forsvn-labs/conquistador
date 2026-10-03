@@ -13,7 +13,7 @@ outcome materially needs its distinctive judgment.
 - Product lenses preserve flow, UI, systems architecture, iOS/web demand triggers, technical writing,
   implementation planning, service extraction, and engineering quality.
 - Review lenses preserve knowledge review, fresh-eyes actual-output review, marketing audit, evaluator
-  separation, and the `decision-panel` deep mode.
+  separation, and the `decide` deep mode.
 
 `stochastic-multiagents-discussion` may use genuinely separate contexts for a consequential decision;
 it must preserve blinded order, dissent, uncertainty, and resolver criteria. The sequential fallback

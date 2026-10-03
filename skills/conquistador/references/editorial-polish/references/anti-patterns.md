@@ -86,19 +86,19 @@ These patterns apply across the marketing stack — humanmaxxing, as the EN poli
 
 ### Upstream skill skipped humanmaxxing for EN-market output that needed it
 
-**Problem:** Upstream skill (e.g., `write-copy`, `write-ad`, `write-outreach`) produces EN prose that contains AI fingerprints and ships without auto-routing to humanmaxxing. Output reaches the user / publisher / detector with patterns intact.
+**Problem:** Upstream skill (e.g., `copy`, `write-ad`, `outreach`) produces EN prose that contains AI fingerprints and ships without auto-routing to humanmaxxing. Output reaches the user / publisher / detector with patterns intact.
 
 **INSTEAD:** Upstream skill's Pre-Dispatch SHOULD wire humanmaxxing auto-routing for EN content that has AI-generated origins (e.g., when the copywriting agent itself uses LLM generation, the polish chain SHOULD include humanmaxxing before delivery). This is upstream-side enforcement; humanmaxxing itself can't detect when it wasn't called. If discovered post-hoc (e.g., during eval), surface as a process bug in the upstream skill, not a humanmaxxing bug. Sibling pattern to vn-tone's "Upstream skill skipped vn-tone for VN-market output."
 
 ### Calling skill drops protected_tokens contract
 
-**Problem:** Upstream skill (e.g., `write-outreach`) passes a `protected_tokens` list including a named entity ("Acme Corp") + a number ("$2.3M ARR") + a URL. humanmaxxing processes the polish but the resulting Change Log shows compression-agent paraphrased "$2.3M ARR" to "millions in ARR" or compression-agent dropped the URL. The proof point that earned the cold email reply is now gone.
+**Problem:** Upstream skill (e.g., `outreach`) passes a `protected_tokens` list including a named entity ("Acme Corp") + a number ("$2.3M ARR") + a URL. humanmaxxing processes the polish but the resulting Change Log shows compression-agent paraphrased "$2.3M ARR" to "millions in ARR" or compression-agent dropped the URL. The proof point that earned the cold email reply is now gone.
 
 **INSTEAD:** Protected-token regression runs in Detector-Resistance Verification BEFORE delivery. Any missing or paraphrased token = critic auto-FAIL with `protected_tokens_preserved: false`; re-dispatch responsible agent (typically compression-agent or strip-agent, not soul-injection which usually adds rather than removes). Per Content Type Calibration, short-outbound caps compression at 0-10% precisely to protect tokens.
 
 ### Cross-stack contract drift (Artifact Template schema)
 
-**Problem:** A maintainer adds a new frontmatter field or body section to the humanmaxxing artifact without checking calling-skill consumers (`write-copy`, `write-ad`, etc. that read `detector_status`, `protected_tokens_preserved`, `compression` percentage from humanmaxxing output). Schema drifts; downstream parsers (if any are added) break.
+**Problem:** A maintainer adds a new frontmatter field or body section to the humanmaxxing artifact without checking calling-skill consumers (`copy`, `write-ad`, etc. that read `detector_status`, `protected_tokens_preserved`, `compression` percentage from humanmaxxing output). Schema drifts; downstream parsers (if any are added) break.
 
 **INSTEAD:** Artifact Template (8-field frontmatter + 3 body sections per `format-conventions.md`) is the contract. Schema changes require atomic update of `format-conventions.md` § "Frontmatter field order" + § "Body section headers (verbatim)" so the convention IS the contract. Currently no automated downstream consumer reads humanmaxxing artifacts (calling skills receive the polished text directly via Route C return value), but the contract still matters for the day one gets built.
 

@@ -71,6 +71,14 @@ const shown = ([command, args]) => [basename(command) === basename(process.execP
 export function selfUpdate(args, { dryRun = false, log = console.log } = {}) {
   // The new version was started by an older one. It must not ask the registry again (U7).
   if (process.env.CONQUISTADOR_UPDATED_FROM) return null;
+
+  if (dryRun) {
+    log(`npm view ${PACKAGE}@latest version --json`);
+    console.log(`Would check the configured registry, update the CLI if newer, then refresh only tracked agents. Current version: ${version}.`);
+
+    return null;
+  }
+
   const found = latest();
   if (found.error) { console.log(`Could not check for a newer version: ${found.error}. Reinstalling ${version}.`); return null; }
   if (!newer(found.version, version)) { console.log(`${version} is the latest version.`); return null; }

@@ -31,7 +31,7 @@ export async function runSpecialistTeam({ plan: input, root, host, parent, signa
   emit('team.started', { mode, planDigest: digest(plan), independentReview: false });
   // Validate every method and restriction before the first worker is created.
   const integration = { id: 'integrate', role: 'parent', goal: plan.goal, skills: [], workflows: [], knowledgeHandles: [], dependsOn: plan.assignments.map(t => t.id) };
-  const review = { id: 'review', role: 'outcome', goal: 'Review the exact integrated artifact against the goal. Identify contradictions, unsupported claims, and missing deliverables. Return draft or revise; never grant human acceptance.', skills: ['fresh-eyes-review'], workflows: [], knowledgeHandles: [], dependsOn: ['integrate'] };
+  const review = { id: 'review', role: 'outcome', goal: 'Review the exact integrated artifact against the goal. Identify contradictions, unsupported claims, and missing deliverables. Return draft or revise; never grant human acceptance.', skills: ['critique'], workflows: [], knowledgeHandles: [], dependsOn: ['integrate'] };
   const correction = { id: 'operator:correct', role: 'parent', goal: 'Apply one targeted correction to the integrated artifact using only the review findings. Do not rewrite unrelated work or grant human acceptance.', skills: [], workflows: [], knowledgeHandles: [], dependsOn: ['review'] };
   const finalReview = { ...review, id: 'operator:final-review', dependsOn: ['operator:correct'] };
   const assets = new Map();

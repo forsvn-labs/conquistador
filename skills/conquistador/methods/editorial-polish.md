@@ -1,6 +1,6 @@
 # Editorial polish method
 
-Use privately after `write-copy` or another creation outcome as the final voice and clarity pass for
+Use privately after `copy` or another creation outcome as the final voice and clarity pass for
 marketing work.
 
 Preserve the author's specific experience, vocabulary, rhythm, claims, protected terms, and intent

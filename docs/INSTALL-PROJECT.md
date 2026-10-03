@@ -7,7 +7,7 @@ The npm install and agent registration are tested on macOS, Linux, and Windows w
 [Part 7 of the surfaces review](REVIEW-2026-09-SURFACES.md). On Windows, the interactive start
 flow is not tested yet.
 
-## Project operator and native skill, recommended
+## Project operator and native skill (optional route)
 
 Use Node 24 and npm. Install the CLI once:
 
@@ -15,13 +15,13 @@ Use Node 24 and npm. Install the CLI once:
 npm install -g @forsvn/conquistador
 ```
 
-In each receiving project, run:
+This route is separate from the default global plugin. In each receiving project, run:
 
 ```sh
-conquistador
+conquistador project
 ```
 
-In the verified v0.0.14 release, plain `conquistador` asks which existing project directory to use (the current Git root is suggested when applicable), selects one host, shows its installation plan, applies after confirmation, runs the local doctor, and prints a first-task handoff. It installs one complete operator with its matching native entry. It chooses the package; you confirm. If host detection is inconclusive, it asks
+The project setup guide asks which existing project directory to use (the current Git root is suggested when applicable), selects one host, shows its installation plan, applies after confirmation, runs the local doctor, and prints a first-task handoff. It installs one complete operator with its matching native entry. It chooses the package; you confirm. If host detection is inconclusive, it asks
 which coding agent to use. Architecture choices stay behind `conquistador --advanced` and the
 explicit setup commands below. You can also choose an optional route in this guide, including on a later launch; that route performs its own preflight and confirmation in the same invocation. A failed or interrupted optional route returns nonzero while preserving completed copies; if the operator was already installed, cancellation names that owned copy. The default does not install all integrations. A plugin still needs host-manager registration, MCP needs client registration, skills.sh owns its copy and lockfile, and Hermes needs trust. The complete operator goes into `.conquistador`, with `SKILL.md`
 at its root. Native skills use:
@@ -64,9 +64,9 @@ absolute skill paths for that project. Open the host session in the selected pro
 checks that selected installation, while the host must still perform and verify the task.
 
 For automation, `conquistador install` selects the current project and Codex skill. Adaptive host
-choice belongs to plain `conquistador` and `conquistador setup`. Use
+choice belongs to `conquistador project` and the project setup guide. Use
 `--host bb`, `--host cursor`, `--host claude-code`, `--host copilot` or `--host none` to choose differently.
-Version 0.0.14 also supports `--hosts codex,bb,cursor` for several hosts. During update, it can add
+The project installer also supports `--hosts codex,bb,cursor` for several hosts. During update, it can add
 hosts while retaining existing owned skills; the interactive guide also adds the first native
 host to a files-only operator. `--host none` on an existing native operator leaves its hosts
 and ownership intact. Removing an owned native host requires uninstalling
@@ -87,7 +87,7 @@ conquistador version
 The one-time launcher remains available when you do not want a persistent CLI:
 
 ```sh
-npx @forsvn/conquistador
+npx @forsvn/conquistador project
 ```
 
 To install an exact Git tag instead of the registry package, add `--ignore-scripts` and
@@ -100,7 +100,7 @@ For a supplied release tarball, use the same persistent installation:
 
 ```sh
 npm install -g --ignore-scripts /absolute/path/forsvn-conquistador-0.2.2.tgz
-conquistador
+conquistador project
 ```
 
 Verify the tarball checksum first. The npm package, a Git tag, source checkout, ZIP, npm or Bun
@@ -108,7 +108,7 @@ tarball must produce the same complete operator. No token belongs in the command
 
 ### Verify the package
 
-Obtain the tarball and its `SHA256SUMS` from the same authorized private distribution, with a trusted
+Obtain the tarball and its `SHA256SUMS` from the same public release, with a trusted
 release identity. Calculate the file's SHA-256 and compare it with the exact tarball entry before
 execution. A checksum detects changed bytes; a checksum supplied by an untrusted sender does not
 authenticate that sender. Keep the tag, full source commit, and checksum together when recording the installed build.
@@ -125,11 +125,11 @@ for work based on supplied facts.
 
 ### First task
 
-The chooser and `--task` flag below are available in v0.0.14 and earlier releases.
-The prior `v0.0.11` fallback retains its original launch-plan handoff.
+The chooser and `--task` flag below belong to the optional project operator route. They are
+not the default global plugin launcher.
 
 The TUI lets you choose a first task before installation. For a scripted Codex install,
-`conquistador --host codex --task diagnose-growth --yes` prints the same task handoff.
+`conquistador project --host codex --task diagnose-growth --yes` prints the same task handoff.
 After installation, `conquistador start --task diagnose-growth` repeats it. The default
 task is a marketing and growth plan (`--task growth-plan`); `--task launch-plan` still works. Both commands print the saved activation setting, local
 request-time hook state, method-read check, and recovery steps. They do not execute a
@@ -140,7 +140,7 @@ fresh host session and its trace for the selected full method and required resou
 On a later interactive launch, the TUI asks for a starter task or one custom task and prints
 the selected-project handoff. Printed management commands carry the selected absolute path.
 
-In v0.0.14, if the operator or its recorded native skills have local edits, the
+If the operator or its recorded native skills have local edits, the
 interactive command offers to use those files as they are or back them up and set up again.
 Re-setup names a backup folder
 in the selected project before it moves the Conquistador-owned folders. The backup includes
@@ -152,7 +152,7 @@ Noninteractive commands still refuse modified or unowned files. A domain-restric
 unowned folder, conflicting operator copies, or unfinished transaction needs its original
 installer or inspection; the interactive command lets you choose another project.
 
-The complete operator and one native skill are the default interaction form. The other
+For this optional route, the complete operator and one native skill are the normal interaction form. The other
 commands above prepare portable skills, plugins, MCP, or a BB adapter with their stated
 host ownership and activation steps. Installing those files does not register them in a
 host or give a specialist an independent execution context.
@@ -312,23 +312,18 @@ A copy without Git still has unknown source commit identity. Use the doctor from
 
 ### What successful installation means
 
-Check the global CLI with `conquistador version`, then inspect each installed operator and native
-skill receipt with `conquistador operator status` and `conquistador operator doctor --json` in
-the selected project. In the observed macOS installation, both npm-owned CLI copies
-(`/opt/homebrew` and `~/.local`) and the home operator plus Codex, Claude Code, Cursor, and
-Copilot native skill copies report 0.0.13 and 38 methods. A login-shell bare command under Node 26
-reached a verified local Node 24 and completed setup, local doctor, and first-task handoff in a
-disposable project. Codex and Cursor retain a three-line private instruction: their installer
-receipts report modified, so the home operator doctor exits 1 for receipt integrity despite
-matching packaged completeness. Preserve those edits; Claude Code and Copilot doctors pass.
-A newer CLI alone does not update project copies. These checks do not prove native host discovery,
-model method reads, useful output, provider access, or the user's verdict. Check a real task
-in a fresh host session and seek the user's usefulness verdict.
+Check the CLI with `conquistador version`, then inspect the operator and native skill
+receipts with `conquistador operator status` and `conquistador operator doctor --json` in the
+selected project. These checks establish local files, ownership, and declared completeness.
+A newer global CLI alone does not update project copies. Modified receipt checks must remain
+visible; preserve the user's edits rather than call the copy clean.
 
-Check local completeness, host discovery, and a real first task separately. For substantial tasks,
-check the engagement brief, deliverable, labeled review, and execution receipt. Neither a plugin
-listing nor a passing doctor proves activation or output quality. Record observations with the
-[private-alpha checklist](PRIVATE-ALPHA.md).
+A local doctor does not prove native host discovery, model method reads, useful output,
+independent review, provider access, or a human verdict. Check a real task in a fresh host
+session and apply one correction. For substantial tasks, record the engagement brief,
+deliverable, labeled review, and execution receipt. Use the
+[public-alpha acceptance checklist](PRIVATE-ALPHA.md), and label this as the project operator
+route rather than applying its one-entry inventory check to the default 39-skill plugin.
 
 ## Other ways to obtain the same package
 
@@ -347,13 +342,13 @@ recommended operator flow.
 
 The Git route requires Git. Never put a token in the command.
 
-Maintainers verify a released private-Git tag from a neutral project, isolated npm prefix and empty
+Maintainers can verify an exact released Git tag from a neutral project, isolated npm prefix and empty
 cache with `npm run verify:private-git -- --spec GIT_SPEC --version VERSION`. The check removes its
 acquisition cache before executing the CLI, then runs install, doctor, start, update and uninstall.
 A tarball lifecycle cannot substitute for this Git durability check.
 
-The private HTTPS Git form is not the supported Bun route. Use its verified tarball form. There is
-no curl-to-shell installer. A future standalone installer needs authenticated private acquisition,
+Git acquisition is not the documented Bun route here. Use its verified tarball form. There is
+no curl-to-shell installer. A future standalone installer needs trusted acquisition,
 verified signed versioned artifacts, Windows/macOS/Linux support, safe PATH handling, rollback and
 removal, and the same payload checks. [Future installer criteria](INSTALLATION-ARCHITECTURE.md#future-standalone-installer)
 
@@ -381,18 +376,20 @@ See [host paths and invocation](PLATFORMS.md#coding-agents).
 
 ## Prepared release assets
 
-The v0.0.14 private release assets include `conquistador-skill-0.0.14.zip` and
-`conquistador-plugin-0.0.14.zip`, both covered by `SHA256SUMS`. These expose one parent
-with internal method files. Use the skill ZIP as a skills.sh local source or the plugin ZIP with a
+Prepared compact skill/plugin assets expose one parent with internal method files. Use the
+assets and SHA256SUMS attached to the same exact public release; do not substitute historical
+v0.0.14 private-alpha assets for the current release. Use the skill ZIP as a skills.sh local source or the plugin ZIP with a
 host plugin manager. The manager owns its installed copies. The source ZIP and Git checkout retain
-canonical authoring files; always run setup before pointing a direct manager at them.
+canonical authoring files. For this compact route, prepare them with setup first. The recommended
+global plugin route in INSTALL uses its own registration/payload path and exposes one skill.
 
 ## Plugins
 
 Use [native host-manager instructions](PLATFORMS.md#plugins). `conquistador --plugin` prepares
 a local plugin source from the supplied distribution before registration. Claude local scope is specific
 to the receiving project; Codex and Copilot plugin registration is user-level. Host trust and
-permission checks still apply. Conquistador does not bundle an auto-starting MCP server or hook.
+permission checks still apply. Preparing files does not start a daemon or service; native host
+activation and the host-specific hook/MCP behavior require separate verification.
 
 ## MCP over stdio
 
@@ -424,7 +421,7 @@ erases service data or stops a shared service.
 | Problem | Action |
 | --- | --- |
 | Unsupported Node version | In a terminal, choose the verified Node 24 executable when offered, or follow the printed nvm/Homebrew/Node download steps. The command does not install Node or change your parent shell. With no terminal, select Node 24 and rerun; setup exits nonzero. `--help` and `--version` still work. |
-| Tarball identity is unclear | Obtain the exact private build and trusted checksum; do not infer identity from its filename |
+| Tarball identity is unclear | Obtain the exact release artifact and trusted checksum; do not infer identity from its filename |
 | Destination already exists or has edits | Inspect its original owner; preserve edits and select a new folder |
 | Doctor passes but host cannot invoke it | Follow the selected host's activation step and use a fresh session |
 | MCP entry has old paths | Update/repair the owned copy, replace client configuration, and restart the entry |

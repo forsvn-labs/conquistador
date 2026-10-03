@@ -89,7 +89,11 @@ export function routeIntent(intent, contract = loadRouterContract()) {
             candidates: [],
         };
     }
-    const matched = contract.routes.filter((route) => matches(normalized, route));
+    // A command name alone, or after /conquistador, names that route exactly. Phrases match by
+    // substring, so one-word names ("copy", "build") are not phrases.
+    const exact = /^\/?(?:conquistador\s*:?\s*)?([a-z][a-z0-9-]*)$/.exec(normalized.replace(/^\/conquistador\b/, "conquistador"))?.[1];
+    const named = exact ? contract.routes.filter((route) => route.target.kind === "skill" && route.id === exact) : [];
+    const matched = named.length ? named : contract.routes.filter((route) => matches(normalized, route));
     if (matched.length === 0) {
         return {
             schemaVersion: "conquistador.route-decision/v1",

@@ -31,11 +31,11 @@ A minimal plan:
   "assignments": [
     {
       "id": "ads", "role": "ads", "goal": "Draft two search ads and their intent boundaries.",
-      "skills": ["create-paid-campaign"], "workflows": [], "knowledgeHandles": [], "dependsOn": []
+      "skills": ["ads"], "workflows": [], "knowledgeHandles": [], "dependsOn": []
     },
     {
       "id": "copy", "role": "copy", "goal": "Write landing copy aligned with the ad intent.",
-      "skills": ["write-copy"], "workflows": [], "knowledgeHandles": [], "dependsOn": ["ads"]
+      "skills": ["copy"], "workflows": [], "knowledgeHandles": [], "dependsOn": ["ads"]
     }
   ],
   "presentation": {

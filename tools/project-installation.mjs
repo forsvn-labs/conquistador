@@ -144,7 +144,7 @@ export function projectLifecycle(root, options, { rename = renameSync } = {}) {
         // Copying the old operator carries its domain restriction into upgrade.
         if (slot.host && !present(slot.stage) && present(join(source, 'domain-restriction.json')) && !options.domain) {
           const restriction = read(join(source, 'domain-restriction.json'));
-          const domain = { ...restriction, schemaVersion: 'conquistador.domain-package/v1', allowed: { ...restriction.allowed, skills: restriction.allowed.skills.filter(name => !['conquistador', 'fresh-eyes-review'].includes(name)) } };
+          const domain = { ...restriction, schemaVersion: 'conquistador.domain-package/v1', allowed: { ...restriction.allowed, skills: restriction.allowed.skills.filter(name => !['conquistador', 'critique'].includes(name)) } };
           slot.domain = join(temporary, 'domain.json'); writeFileSync(slot.domain, JSON.stringify(domain));
         }
         execFileSync(process.execPath, [join(root, 'tools/install.mjs'), present(slot.stage) ? 'upgrade' : 'install', slot.mode, slot.stage,

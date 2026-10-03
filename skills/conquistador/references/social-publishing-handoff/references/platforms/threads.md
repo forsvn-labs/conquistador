@@ -49,7 +49,7 @@ Threads algorithm cross-promotes from Instagram heavily (shared Meta account bas
 
 ## Formatter Implementation Notes
 
-- 500-char cap is comfortable for short posts; thread-up if write-social body exceeds.
+- 500-char cap is comfortable for short posts; thread-up if `social` body exceeds.
 - For thread chains, number posts `1/N`, `2/N` like X (but native reply-to-self chains; not symbol-marked).
 - Cross-check media against IG specs (Meta-shared media constraints).
 

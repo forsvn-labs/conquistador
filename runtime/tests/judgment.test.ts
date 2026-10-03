@@ -48,7 +48,7 @@ function build(overrides: Record<string, unknown>): JudgmentRequestV1 {
     planDigest: `sha256:${"a".repeat(64)}`,
     stepId: "rank-opportunities",
     attempt: 1,
-    skill: skillRefFor("research-content-ideas", declared),
+    skill: skillRefFor("ideas", declared),
     purpose: "research",
     runInputDigest: `sha256:${"b".repeat(64)}`,
     contextBundleDigest: `sha256:${"c".repeat(64)}`,

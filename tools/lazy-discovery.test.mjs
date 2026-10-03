@@ -7,7 +7,7 @@ import { copyFileSync, existsSync, mkdirSync, mkdtempSync, readFileSync, realpat
 import { tmpdir } from 'node:os';
 import { dirname, join, posix } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { canonicalText, internalPath, methodLibrary, regularFiles, skillDiscovery } from './method-library.mjs';
+import { canonicalText, commandNames, internalPath, methodLibrary, regularFiles, skillDiscovery } from './method-library.mjs';
 import { shouldStageSkillPath, resolveDomainSelection } from './domain-package.mjs';
 import { loadOperatorProfile } from '../hosts/coding-agent/operator.mjs';
 
@@ -70,7 +70,7 @@ test('every native skill target exposes one concise parent and preserves all met
     assert.ok(discovery.metadataCharacters < 512, JSON.stringify(discovery));
     checkFullParity(join(path, 'library'));
     const report = JSON.parse(invoke(project, 'setup', 'doctor', '--path', path, '--json'));
-    assert.equal(report.library.available, 38);
+    assert.equal(report.library.available, commandNames(join(root, 'skills')).length);
     assert.equal(report.discovery.count, 1);
     assert.equal(report.bbAdapterPresent, false);
     const before = report.receipt.digest;
@@ -93,15 +93,15 @@ test('plugin and operator packages expose one parent while retaining the complet
     checkFullParity(join(path, library.layout));
     assert.equal(loadOperatorProfile(path).activation, 'manual');
     const report = JSON.parse(invoke(project, 'setup', 'doctor', '--path', path, '--json'));
-    assert.equal(report.library.available, 38);
+    assert.equal(report.library.available, commandNames(join(root, 'skills')).length);
     assert.equal(report.bbAdapterPresent, true);
     assert.equal(report.hostActivationVerified, false);
     const load = await installedLoader(path);
     for (const [task, expected] of [
       [assignment('parent'), 'conquistador/METHOD.md'],
       [assignment('copy'), 'conquistador/specialists/copy-agent.md'],
-      [assignment('outcome', { skills: ['write-copy'] }), 'write-copy/METHOD.md'],
-      [assignment('parent', { workflows: ['launch-product'] }), 'conquistador/workflows/launch-product.md'],
+      [assignment('outcome', { skills: ['copy'] }), 'conquistador/commands/copy/COMMAND.md'],
+      [assignment('parent', { workflows: ['launch'] }), 'conquistador/plays/launch.md'],
     ]) {
       const loaded = await load(path, task);
       assert.ok(loaded.methods.some(method => method.path === `${library.layout}/${expected}`));
@@ -128,18 +128,18 @@ test('domain copies have one parent, a filtered catalog, preserved allowed metho
     assert.equal(skillDiscovery(path).count, 1);
     const library = join(path, methodLibrary(path)[0].layout);
     assert.deepEqual(regularFiles(library).sort(), [...selected.map(internalPath), 'conquistador/catalog.md'].sort());
-    assert.equal(existsSync(join(library, 'write-copy')), false);
+    assert.equal(existsSync(join(library, 'copy')), false);
     const catalog = readFileSync(join(library, 'conquistador/catalog.md'), 'utf8');
-    assert.match(catalog, /diagnose-growth/);
-    assert.match(catalog, /fresh-eyes-review/);
-    assert.doesNotMatch(catalog, /write-copy/);
+    assert.match(catalog, /diagnose/);
+    assert.match(catalog, /critique/);
+    assert.doesNotMatch(catalog, /copy/);
     checkLinks(library);
     if (target !== 'codex') {
       const load = await installedLoader(path);
       await load(path, assignment('parent'));
-      await load(path, assignment('data-diagnosis', { skills: ['diagnose-growth'] }));
+      await load(path, assignment('data-diagnosis', { skills: ['diagnose'] }));
       await assert.rejects(load(path, assignment('copy')), /forbids role copy/);
-      await assert.rejects(load(path, assignment('outcome', { skills: ['write-copy'] })), /forbids skill write-copy/);
+      await assert.rejects(load(path, assignment('outcome', { skills: ['copy'] })), /forbids skill copy/);
     }
     // These selected outcomes retain their entire canonical contract and supporting files.
     for (const source of selected.filter(file => !file.startsWith('conquistador/'))) {
@@ -159,10 +159,10 @@ test('one explicitly selected specialist remains canonical and has its own owned
   const invalid = spawnSync(process.execPath, [cli, 'setup', 'install', '--target', 'skill:conquistador', '--path', path], { cwd: project, encoding: 'utf8' });
   assert.notEqual(invalid.status, 0);
   assert.equal(existsSync(path), false);
-  invoke(project, 'setup', 'install', '--target', 'skill:write-copy', '--path', path);
-  assert.deepEqual(skillDiscovery(path).entries.map(entry => entry.name), ['write-copy']);
-  const files = regularFiles(join(root, 'skills/write-copy'));
-  for (const file of files) assert.deepEqual(readFileSync(join(path, 'skills/write-copy', file)), readFileSync(join(root, 'skills/write-copy', file)));
+  invoke(project, 'setup', 'install', '--target', 'skill:copy', '--path', path);
+  assert.deepEqual(skillDiscovery(path).entries.map(entry => entry.name), ['copy']);
+  const files = regularFiles(join(root, 'skills/conquistador/commands/copy'));
+  for (const file of files) assert.deepEqual(readFileSync(join(path, 'skills/copy', file === 'COMMAND.md' ? 'SKILL.md' : file)), readFileSync(join(root, 'skills/conquistador/commands/copy', file)));
   assert.equal(existsSync(join(path, 'skills/conquistador')), false);
   invoke(project, 'setup', 'update', '--path', path);
   invoke(project, 'setup', 'uninstall', '--path', path);
@@ -200,7 +200,7 @@ test('unchanged v1 canonical copies migrate without leaving legacy entries or wi
 test('workflow domains and each isolated squad member retain only their declared internal methods', async t => {
   const project = temporary(t), path = join(project, 'owned');
   const domain = { schemaVersion: 'conquistador.domain-package/v1', id: 'domain:launch', agentPackageSchemaVersion: 'conquistador.agent-package/v2',
-    allowed: { roles: [], skills: [], workflows: ['launch-product'], tools: ['host-model'], knowledgeHandles: [] } };
+    allowed: { roles: [], skills: [], workflows: ['launch'], tools: ['host-model'], knowledgeHandles: [] } };
   const file = join(project, 'domain.json');
   writeFileSync(file, JSON.stringify(domain));
   invoke(project, 'setup', 'install', '--target', 'operator', '--path', path, '--domain', file);
@@ -209,8 +209,8 @@ test('workflow domains and each isolated squad member retain only their declared
   assert.deepEqual(regularFiles(library).sort(), [...canonical.filter(file => shouldStageSkillPath(`skills/${file}`, selection)).map(internalPath), 'conquistador/catalog.md'].sort());
   checkLinks(library);
   const load = await installedLoader(path);
-  await load(path, assignment('parent', { workflows: ['launch-product'] }));
-  await assert.rejects(load(path, assignment('parent', { workflows: ['paid-campaign-loop'] })), /forbids workflow/);
+  await load(path, assignment('parent', { workflows: ['launch'] }));
+  await assert.rejects(load(path, assignment('parent', { workflows: ['paid'] })), /forbids workflow/);
   invoke(project, 'setup', 'uninstall', '--path', path);
   invoke(project, 'setup', 'install', '--target', 'squad', '--path', path);
   assert.equal(skillDiscovery(path).count, 2, 'One parent per separate member context');
@@ -218,7 +218,7 @@ test('workflow domains and each isolated squad member retain only their declared
     const member = join(path, role), library = join(member, 'skills/conquistador/library');
     const manifest = JSON.parse(readFileSync(join(member, 'agent.json')));
     assert.equal(skillDiscovery(member).count, 1);
-    const names = regularFiles(library).filter(file => /^[^/]+\/METHOD\.md$/.test(file)).map(file => file.split('/')[0]);
+    const names = regularFiles(library).flatMap(file => file === 'conquistador/METHOD.md' ? ['conquistador'] : /^conquistador\/commands\/([^/]+)\/COMMAND\.md$/.exec(file)?.slice(1) ?? []);
     assert.deepEqual(names.sort(), ['conquistador', ...manifest.mayLoadSkills].sort());
     checkLinks(library);
   }
@@ -232,7 +232,8 @@ test('doctor rejects stale SKILL links or an added specialist entry even without
   rmSync(join(path, '.conquistador-install.json'));
   const parent = join(path, 'library/conquistador/METHOD.md');
   const original = readFileSync(parent, 'utf8');
-  writeFileSync(parent, original.replace('../write-copy/METHOD.md', '../write-copy/SKILL.md'));
+  assert.ok(original.includes('](commands/copy/COMMAND.md)'));
+  writeFileSync(parent, original.replace('](commands/copy/COMMAND.md)', '](commands/copy/SKILL.md)'));
   const doctor = () => spawnSync(process.execPath, [cli, 'setup', 'doctor', '--path', path, '--json'], { encoding: 'utf8' });
   assert.equal(doctor().status, 1);
   writeFileSync(parent, original);

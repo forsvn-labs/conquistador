@@ -17,7 +17,7 @@ import {
 
 const root = resolve(import.meta.dirname, "..");
 const skillsRoot = DEFAULT_SKILLS_ROOT;
-const workflowsDir = resolve(skillsRoot, "conquistador/workflows");
+const workflowsDir = resolve(skillsRoot, "conquistador/plays");
 const fixturePath = resolve(root, "fixtures/playbooks/content-intelligence-loop.json");
 
 function compileSchema() {
@@ -35,7 +35,7 @@ function playbookFixture(): PlaybookRecord {
 function validSkill(overrides: Record<string, unknown> = {}): SkillRecord {
   return {
     schemaVersion: "conquistador.skill-record/v1",
-    id: "write-copy",
+    id: "copy",
     version: "2.1.0",
     kind: "outcome-skill",
     trigger: {
@@ -56,7 +56,7 @@ function validSkill(overrides: Record<string, unknown> = {}): SkillRecord {
     qualityCriteria: [{ id: "specific-and-credible", description: "Copy is specific, credible, and on-brand." }],
     failureBehavior: { onInvalidInput: "reject", onMissingTools: "degrade-to-local", onQualityFail: "stop" },
     provenance: {
-      sourcePath: "skills/skills/write-copy",
+      sourcePath: "skills/skills/copy",
       independentlyVersioned: true,
       recordedAt: "2026-08-20T00:00:00.000Z",
     },
@@ -124,7 +124,7 @@ describe("Playbook Registry contract", () => {
     expect(record.executionStatus).toBe("executable");
     expect(record.notExecutableReason).toBeUndefined();
     expect(record.version).toBe("1.0.0");
-    expect(record.proseSource).toBe("skills/conquistador/workflows/content-intelligence-loop.md");
+    expect(record.proseSource).toBe("skills/conquistador/plays/content.md");
     expect(record.stepGraph.nodes.map((node) => node.id)).toEqual([
       "load-context",
       "pull-signals",
@@ -215,10 +215,10 @@ describe("Playbook Registry contract", () => {
     expect(() => validatePlaybookRecord(emptyUses)).toThrow(/exactly one of skill, script, tool operation, or branch/);
   });
 
-  it("does not treat the 21 workflow Markdown files as registry entries", () => {
+  it("does not treat the 21 play Markdown files as registry entries", () => {
     const files = readdirSync(workflowsDir).filter((name) => name.endsWith(".md")).sort();
     expect(files).toHaveLength(21);
-    expect(files).toContain("content-intelligence-loop.md");
+    expect(files).toContain("content.md");
     for (const name of files) {
       const content = readFileSync(resolve(workflowsDir, name), "utf8");
       expect(() => JSON.parse(content)).toThrow();
@@ -255,7 +255,7 @@ describe("Playbook Registry contract", () => {
     expect(() => validatePlaybookRegistry({ ...registry, activationRequiredByPortablePlugin: true })).toThrow(
       /not required by the Portable Plugin/,
     );
-    expect(() => validatePlaybookRegistry({ ...registry, leaves: ["write-copy"] })).toThrow(/customer-managed catalog/);
+    expect(() => validatePlaybookRegistry({ ...registry, leaves: ["copy"] })).toThrow(/customer-managed catalog/);
   });
 });
 
@@ -263,12 +263,12 @@ describe("Portable Plugin boundary", () => {
   it("loads the authored corpus without registry activation", () => {
     const corpus = loadCorpusDescriptor(skillsRoot);
     expect(corpus.defaultAgent).toBe("conquistador");
-    expect(corpus.skillIds).toContain("write-copy");
-    expect(corpus.skillIds).toContain("research-content-ideas");
+    expect(corpus.skillIds).toContain("copy");
+    expect(corpus.skillIds).toContain("ideas");
     expect(existsSync(resolve(skillsRoot, "../hooks/skill-registry.json"))).toBe(false);
     expect(existsSync(resolve(skillsRoot, "conquistador/skill-registry.json"))).toBe(false);
-    const parent = readFileSync(resolve(skillsRoot, "conquistador/SKILL.md"), "utf8");
-    expect(parent).toMatch(/workflow Markdown file is not an executable playbook/i);
+    const contract = readFileSync(resolve(skillsRoot, "../docs/MASTER-AGENT.md"), "utf8");
+    expect(contract).toMatch(/play file is composition prose with no execution authority/i);
     const corpusSource = readFileSync(resolve(root, "src/corpus.ts"), "utf8");
     const runtimeSource = readFileSync(resolve(root, "src/runtime.ts"), "utf8");
     expect(corpusSource).not.toMatch(/registry/);

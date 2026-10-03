@@ -6,24 +6,24 @@ import { fileURLToPath } from 'node:url';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const parent = 'skills/conquistador';
-const review = `${parent}/references/content-performance-review`;
+const review = `${parent}/plays/report`;
 const conventions = `${review}/references/format-conventions.md`;
 const example = `${review}/references/examples/content-eval-cycle-walkthrough.md`;
 const read = path => readFileSync(resolve(root, path), 'utf8');
 const prose = path => read(path).replace(/\s+/g, ' ');
 
-test('workflow and parent distinguish executable fixture coverage from live acceptance', () => {
+test('play and operating contract distinguish executable fixture coverage from live acceptance', () => {
   const graph = JSON.parse(read('runtime/fixtures/playbooks/content-intelligence-loop.json'));
   assert.equal(graph.executionStatus, 'executable');
   assert.equal(graph.activation.requiredByPortablePlugin, false);
   assert.ok(graph.gates.review.length > 0);
-  for (const path of [`${parent}/SKILL.md`, graph.proseSource]) {
-    const text = prose(path);
-    assert.doesNotMatch(text, /release-required-unimplemented/);
-    assert.match(text, /locally implemented and verified with synthetic fixtures/i);
-    assert.match(text, /Live execution, provider behavior and human acceptance remain unverified/);
-    assert.match(text, /no execution authority/);
-  }
+  assert.match(prose(graph.proseSource), /runtime\/fixtures\/playbooks\/content-intelligence-loop\.json/);
+  assert.match(prose(graph.proseSource), /stops at human review/);
+  for (const path of [`${parent}/SKILL.md`, graph.proseSource]) assert.doesNotMatch(prose(path), /release-required-unimplemented/);
+  const contract = prose('docs/MASTER-AGENT.md');
+  assert.match(contract, /locally implemented and verified with synthetic fixtures/i);
+  assert.match(contract, /Live execution, provider behavior and human acceptance remain unverified/);
+  assert.match(contract, /no execution authority/);
 });
 
 test('medium-confidence single-cycle example cannot promote a durable learning', () => {

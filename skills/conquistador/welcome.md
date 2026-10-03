@@ -4,24 +4,25 @@
 
 Show this when the user invokes Conquistador without a task, asks what it can do, or seems new.
 Keep it short: show the areas and three or four examples that fit what you know about the user's
-product, then ask one question: "What are you working on?" Do not list internal paths or methods.
+product, then ask one question: "What are you working on?" Do not list internal paths.
 
 Conquistador is a marketing and growth operator. It covers any platform, any service, and growth
 inside the product. Each answer uses field-tested playbooks and ends with the playbooks applied.
+Users can name a command (`/conquistador copy`) or describe the outcome in plain words.
 
-| Area | Covers | Specialists |
+| Area | Covers | Commands |
 | --- | --- | --- |
-| Strategy and research | Positioning, ICP, competitors, pricing, channel choice, budget, growth targets | Positioning research, Channel research, Pricing and packaging, Opportunity ranking, Growth model, Budget allocation, Initiative shaping, Decision panel |
-| Launches and campaigns | Product Hunt, Hacker News, App Store, feature launches, seasonal campaigns, webinars, live events | Campaign planner, Launch playbook, Run of show |
-| Social, community, and video | X, LinkedIn, Reddit, Instagram, Facebook, TikTok, YouTube, Threads, Bluesky, Discord, communities | Social writer, Content ideas, Short-form video, Video analysis |
-| Search and AI answers | Google SEO, programmatic SEO, ChatGPT and Perplexity answers, App Store and Google Play listings | SEO, AEO, and ASO, AI answer monitor, Programmatic SEO, App store listing |
-| Paid ads | Google, Meta, LinkedIn, TikTok, Reddit, and YouTube ads, UGC creators, creative briefs, results reviews | Paid campaign builder, Creative brief, Paid results review, Paid test loop |
-| Email, outreach, and PR | Cold email, sales follow-ups, LinkedIn DMs, welcome and win-back emails, newsletters, press, podcasts, partners | Outreach writer, Outreach review, Lifecycle email, Press and podcasts, Outbound sequence |
-| Growth inside the product | Onboarding, activation, paywalls, trials, upgrade prompts, referral loops, checkout and page conversion | Conversion, User flows, Pricing and packaging, Referral loop, Product UI spec |
-| Copy, content, and brand | Landing and product pages, blog posts, case studies, brand voice and identity, Vietnamese copy | Copywriter, Long-form writer, Brand, Landing page, Vietnamese editor |
-| Measure and learn | Growth drops, results reviews, campaign and video evaluations, marketing audits, fact checks | Growth diagnosis, Results review, Video results review, Marketing audit, Fact check, Fresh-eyes review |
+| Strategy and research | Positioning, ICP, competitors, pricing, channel choice, budget, growth targets | `position`, `channels`, `pricing`, `prioritize`, `funnel`, `budget`, `shape`, `decide` |
+| Launches and campaigns | Product Hunt, Hacker News, App Store, feature launches, seasonal campaigns, webinars, live events | `campaign`, `launch`, `event` |
+| Social, community, and video | X, LinkedIn, Reddit, Instagram, Facebook, TikTok, YouTube, Threads, Bluesky, Discord, communities | `social`, `ideas`, `video`, `watch` |
+| Search and AI answers | Google SEO, programmatic SEO, ChatGPT and Perplexity answers, App Store and Google Play listings | `seo`, `answers`, `pseo`, `appstore` |
+| Paid ads | Google, Meta, LinkedIn, TikTok, Reddit, and YouTube ads, UGC creators, creative briefs, results reviews | `ads`, `creative`, `results`, `paid` |
+| Email, outreach, and PR | Cold email, sales follow-ups, LinkedIn DMs, welcome and win-back emails, newsletters, press, podcasts, partners | `outreach`, `results`, `lifecycle`, `press`, `outbound` |
+| Growth inside the product | Onboarding, activation, paywalls, trials, upgrade prompts, referral loops, checkout and page conversion | `convert`, `flow`, `pricing`, `referral`, `ui` |
+| Copy, content, and brand | Landing and product pages, blog posts, case studies, brand voice and identity, Vietnamese copy | `copy`, `article`, `brand`, `landing`, `vietnamese` |
+| Measure and learn | Growth drops, results reviews, campaign and video evaluations, marketing audits, fact checks | `diagnose`, `measure`, `results`, `audit`, `factcheck`, `critique` |
 
-Also: product flows, UI specs, web and iOS builds, system architecture, and technical docs.
+Also: product flows (`flow`), UI specs (`ui`), web and iOS builds (`build`), system architecture (`architect`), and technical docs (`docs`).
 
 ## Example requests
 

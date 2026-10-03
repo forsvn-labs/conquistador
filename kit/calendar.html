@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Campaign calendar: [campaign]</title>
+<style>
+  :root {
+    --brand-primary: #1f5f4a; --brand-on-primary: #ffffff; --brand-ink: #1c1f1d; --brand-muted: #5f6661;
+    --brand-canvas: #f4f3ee; --brand-surface: #ffffff; --brand-line: #dedcd3;
+    --brand-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; --brand-heading-font: var(--brand-font);
+    --brand-radius: 12px;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--brand-canvas); color: var(--brand-ink); font: 14px/1.45 var(--brand-font); }
+  main { max-width: 1280px; margin: 0 auto; padding: 32px 24px 48px; }
+  h1 { font: 700 28px/1.2 var(--brand-heading-font); margin: 0; }
+  .lede { color: var(--brand-muted); margin: 4px 0 20px; }
+  .scroll { overflow-x: auto; background: var(--brand-surface); border: 1px solid var(--brand-line); border-radius: var(--brand-radius); }
+  table { width: 100%; min-width: 860px; border-collapse: collapse; table-layout: fixed; }
+  th, td { padding: 10px; border-bottom: 1px solid var(--brand-line); border-right: 1px solid var(--brand-line); vertical-align: top; text-align: left; }
+  thead th { color: var(--brand-muted); font-weight: 600; background: color-mix(in srgb, var(--brand-primary) 6%, var(--brand-surface)); }
+  tbody th { width: 140px; font-weight: 600; }
+  .item { display: block; margin-bottom: 6px; padding: 6px 8px; border-radius: 6px; background: color-mix(in srgb, var(--brand-primary) 12%, var(--brand-surface)); border-left: 3px solid var(--brand-primary); overflow-wrap: anywhere; }
+  .item small { display: block; color: var(--brand-muted); }
+  .milestone { background: var(--brand-primary); color: var(--brand-on-primary); border-left-color: var(--brand-ink); }
+  .milestone small { color: inherit; opacity: .85; }
+  .legend { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 12px; color: var(--brand-muted); }
+</style>
+</head>
+<body>
+<main>
+  <h1>[Campaign]: calendar</h1>
+  <p class="lede">[Start date] to [end date] · Owner: [name] · Goal: [metric and target from GROWTH.md]</p>
+  <div class="scroll">
+    <table>
+      <thead><tr><th>Channel</th><th>Week 1 · [dates]</th><th>Week 2 · [dates]</th><th>Week 3 · [dates]</th><th>Week 4 · [dates]</th></tr></thead>
+      <tbody>
+        <tr><th>Milestones</th><td><span class="item milestone">[Launch]<small>[day]</small></span></td><td></td><td><span class="item milestone">[Webinar]<small>[day]</small></span></td><td></td></tr>
+        <tr><th>Email</th><td><span class="item">[Announcement]<small>[segment] · [day]</small></span></td><td><span class="item">[Follow-up]<small>[segment] · [day]</small></span></td><td></td><td><span class="item">[Last call]<small>[segment] · [day]</small></span></td></tr>
+        <tr><th>LinkedIn</th><td><span class="item">[Post]<small>[author] · [day]</small></span></td><td><span class="item">[Post]<small>[author] · [day]</small></span></td><td><span class="item">[Post]<small>[author] · [day]</small></span></td><td></td></tr>
+        <tr><th>X</th><td><span class="item">[Thread]<small>[day]</small></span></td><td></td><td><span class="item">[Post]<small>[day]</small></span></td><td></td></tr>
+        <tr><th>Paid</th><td></td><td><span class="item">[Ad set A]<small>[budget] · [dates]</small></span></td><td><span class="item">[Ad set B]<small>[budget] · [dates]</small></span></td><td></td></tr>
+        <tr><th>Content</th><td></td><td><span class="item">[Article]<small>[keyword] · [day]</small></span></td><td></td><td><span class="item">[Case study]<small>[customer, if approved] · [day]</small></span></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="legend"><span>Each item needs an owner and an approval before it ships.</span></p>
+</main>
+</body>
+</html>
