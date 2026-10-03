@@ -49,6 +49,18 @@ Hung's merge decision. Spec: [docs/OVERHAUL-2026-10.md](docs/OVERHAUL-2026-10.md
 - Not run: live Executor cases (Executor needs a restart), live hook observation outside Claude
   Code, model task quality, and human verdicts.
 
+### Windows install from Git (3 October 2026)
+
+- **Fixed: `add` refused every Git install on Windows.** The completeness check (from the bounded
+  first-use work) hashes files with LF line endings. Git for Windows checks out with CRLF, so
+  1,207 hashes did not match and `add` installed nothing. The new `.gitattributes` keeps LF on
+  checkout. Installs from the npm tarball were not affected.
+- The package-install E2E no longer crashes when a project install fails, and its H1 and P2 path
+  checks accept `\` as well as `/`.
+- `install-e2e` passes on Windows and Linux for PR #36 at `dac9b88`
+  ([run 37103096494](https://github.com/forsvn-labs/conquistador/actions/runs/37103096494)). On
+  Windows, I3 (start flow), I6, S1, and C1 are not run: they need a terminal, `expect`, or Node 22.18.
+
 ## Unshipped: bounded first use and release-state consistency
 
 The published public alpha remains **0.2.2**. These source changes do not imply a new registry
