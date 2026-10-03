@@ -91,6 +91,8 @@ const observe = (box, agents) => Object.fromEntries(agents.map(id => [id, box.li
 const all = (observed, value) => Object.values(observed).length > 0 && Object.values(observed).every(item => item === value);
 const deadPid = () => { for (let pid = 999_999; pid > 900_000; pid -= 1) { try { process.kill(pid, 0); } catch (error) { if (error.code === 'ESRCH') return pid; } } return 999_999; };
 const marker = folder => { try { return JSON.parse(readFileSync(join(folder, '.conquistador-owned.json'), 'utf8')); } catch { return null; } };
+// A file an earlier failed step did not write reads as null, so its checks fail instead of the run.
+const readText = path => { try { return readFileSync(path, 'utf8'); } catch { return null; } };
 // Explicit target and approval keep the terminal install-only checks noninteractive.
 // macOS has BSD script, Linux has util-linux script, and Windows has neither.
 const tty = (cli, args, box) => (process.platform === 'darwin'
@@ -232,11 +234,12 @@ check('P1', 'the next step names /conquistador init for a project without GROWTH
 let doctor = run(cli, ['doctor', '--json'], { env: a.env, cwd: acme });
 let report = (() => { try { return JSON.parse(doctor.stdout); } catch { return { checks: [] }; } })();
 check('H1', 'doctor finds no install or hook problem after a project install', doctor.status === 0 && report.checks.filter(item => item.area !== 'project').every(item => item.status === 'ok') && report.checks.some(item => /GROWTH\.md is missing/.test(item.detail)), doctor.stdout.slice(0, 300));
-writeFileSync(join(projectCopies[1], 'SKILL.md'), `${readFileSync(join(projectCopies[1], 'SKILL.md'), 'utf8')}\nchanged by hand\n`);
+const projectSkill = readText(join(projectCopies[1], 'SKILL.md'));
+if (projectSkill !== null) writeFileSync(join(projectCopies[1], 'SKILL.md'), `${projectSkill}\nchanged by hand\n`);
 doctor = run(cli, ['doctor'], { env: a.env, cwd: acme });
 check('H1', 'doctor reports a changed project copy and names the repair', doctor.status === 1 && /\.agents\/skills\/conquistador is damaged/.test(doctor.output) && /doctor --fix/.test(doctor.output), doctor.output.trim().split('\n').slice(-3).join(' | '));
 doctor = run(cli, ['doctor', '--fix'], { env: a.env, cwd: acme });
-check('H1', 'doctor --fix repairs it', doctor.status === 0 && /Repaired/.test(doctor.output) && !readFileSync(join(projectCopies[1], 'SKILL.md'), 'utf8').includes('changed by hand'), doctor.output.trim().split('\n').slice(-3).join(' | '));
+check('H1', 'doctor --fix repairs it', doctor.status === 0 && /Repaired/.test(doctor.output) && readText(join(projectCopies[1], 'SKILL.md'))?.includes('changed by hand') === false, doctor.output.trim().split('\n').slice(-3).join(' | '));
 writeFileSync(join(acme, 'GROWTH.md'), '# Growth\n\n## Goals and metrics\n## Channels\n## Proof and assets\n## Voice\n## Budget and compliance\n## Connected stack\n');
 writeFileSync(join(acme, 'PRODUCT.md'), '# Product\n');
 mkdirSync(join(acme, '.conquistador'), { recursive: true });
