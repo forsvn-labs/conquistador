@@ -4780,7 +4780,7 @@
     },
     {
       "path": "tools/brief.mjs",
-      "sha256": "3f5bcb1d7166b104e67763bf450fcae8eed8ac056ea7fa58388731264751957d"
+      "sha256": "99cbb4d0bb7b08e1824d9d6279af92f8d01fff53504d3263810b2aca28fdc073"
     },
     {
       "path": "tools/check/channels.mjs",
@@ -4796,7 +4796,7 @@
     },
     {
       "path": "tools/check/rules.mjs",
-      "sha256": "182d1490989c79f5972ec815c345605d5032246f18d4902f27bbb8e747e82631"
+      "sha256": "8b65ad3bf65621b1fc601217bb3e41e6167224ad6527e84e01d0e4eb42335d20"
     },
     {
       "path": "tools/context-files.mjs",
@@ -4832,7 +4832,7 @@
     },
     {
       "path": "tools/skills-mcp.mjs",
-      "sha256": "469c0adbc978463d5c9611f6551fc387a1f782c7ad934c7ca040d192a5266b4a"
+      "sha256": "c18f775fa7a9164013e02939652f6efbe75f1f107154586906c01d628f3a2744"
     }
   ]
 }

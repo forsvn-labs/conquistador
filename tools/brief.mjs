@@ -15,8 +15,8 @@ import { methodOwner } from './method-library.mjs';
 
 export const BRIEF_SCHEMA = 'conquistador.brief/v1';
 export const LIMITS = Object.freeze({
-  mustFiles: 8,
-  mustBytes: 90_000,
+  mustFiles: 10,
+  mustBytes: 110_000,
   situationalFiles: 8,
   userFiles: 4000,
   userFileBytes: 262_144,
@@ -300,6 +300,19 @@ export const START_CONTEXT = Object.freeze({
 const START_LEAD = /^\s*Use Conquistador:\s*/i;
 export const taskOf = prompt => Object.values(START_CONTEXT).reduce((rest, sentence) => rest.split(sentence).join(' '), prompt).replace(START_LEAD, '').trim();
 
+// Library keys of the "Core:" links in a command's generated playbook map.
+function coreKeys(packageRoot, commandPath, libraryRoot) {
+  const text = readText(join(packageRoot, commandPath));
+  if (!text) return [];
+  const lines = text.split(/^Core:\s*$/m)[1]?.split('\n') ?? [];
+  const end = lines.findIndex(line => line.trim() && !line.startsWith('- '));
+  const directory = posix.dirname(commandPath.slice(libraryRoot.length + 1));
+  return lines.slice(0, end < 0 ? undefined : end).flatMap(line => {
+    const link = line.match(/^- \[[^\]]+\]\(([^)#\s]+)\)/)?.[1];
+    return link && !link.includes('..') ? [posix.join(directory, link)] : [];
+  });
+}
+
 export function createBrief(input, { root = moduleRoot, playbooks, force = false, cwd = process.cwd() } = {}) {
   if (typeof input !== 'string' || !input.trim()) throw Error('Describe the task.');
   // "Use Conquistador:" asks for Conquistador by name, so it counts as an explicit invocation.
@@ -386,7 +399,15 @@ export function createBrief(input, { root = moduleRoot, playbooks, force = false
   for (const item of userHits.filter(entry => entry.score >= (userHits[0]?.score ?? 0) * 0.6).slice(0, 3)) take(item);
   // 3. A play's own playbooks (its recovered method folder) come first among method knowledge.
   if (play) scored.filter(entry => entry.owner === play.name && entry.doc.source === 'play' && entry.doc.kind === 'playbook').slice(0, 2).forEach(item => take(item));
-  // 4. Core playbooks of each selected method, primary first.
+  // 4. The primary command's declared Core list, in its order: the files COMMAND.md tells the
+  // agent to read in full before drafting. Then the strongest playbooks of each selected method.
+  if (methods[0]) {
+    const byKey = new Map(index.docs.map(doc => [doc.key, doc]));
+    for (const key of coreKeys(packageRoot, methods[0].path, libraryRoot)) {
+      const doc = byKey.get(key);
+      if (doc) take(scored.find(entry => entry.doc === doc) ?? { doc, score: 0, lexical: 0, sibling: false, owner: methods[0].name }, 'core file of this command');
+    }
+  }
   methods.forEach((method, position) => {
     const quota = position === 0 ? 3 : 1;
     // The strongest two always count; a third needs its own lexical match, not only membership.
@@ -551,7 +572,7 @@ export function formatBriefPack(brief, { limit = LIMITS.packBytes, callerContext
     '2. End your answer with "Playbooks applied": each file you used and the rule you took from it.',
     '3. Never invent metrics, quotes, or customer facts. Mark assumptions. Ask before publishing, spending, or sending.',
     '4. Read a "situational" file with conquistador_read when the task reaches that step.',
-    '5. Before you hand over marketing text, run conquistador_check (MCP) or `conquistador check` (CLI) on it with its channel. Fix each error and warning, or say why it stays.',
+    '5. Before you hand over marketing text, run conquistador_check (MCP) or `conquistador check` (CLI) on it with its channel. Fix each error and warning, or say why it stays. A clean check does not verify facts: compare each claim with the context and mark what you assumed.',
     'Files marked omitted or unavailable still need a separate successful read.',
     '',
   ].join('\n');

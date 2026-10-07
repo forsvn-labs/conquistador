@@ -195,9 +195,9 @@ export const rules = [
   context => context.document.lines.flatMap(line => line.links.filter(link => vagueLabel.test(link.text.trim())).map(link => ({ line: line.n, snippet: link.text.trim() || link.href })))
     .concat(context.document.lines.filter(line => !line.links.length && /^(?:learn more|read more|find out more|click here)\s*[→>»›.!]*$/i.test(line.text)).map(line => ({ line: line.n, snippet: line.text })))),
   documentRule({ id: 'cta-missing', family: 'cta', severity: 'warning', name: 'No call to action', channels: ['landing', 'email'],
-    message: 'This landing page or email has no call to action.', fix: 'Add one primary action with a specific label and a working link.' },
+    message: 'This landing page or email has no call to action.', fix: 'Add one primary action with a specific label: a working link, or in a 1:1 email a short direct question that asks for a reply or a meeting.' },
   context => {
-    const action = ctaLinks(context).length > 0 || context.document.lines.some(line => (ctaVerb.test(line.text) && line.text.split(/\s+/).length <= 8) || (context.channel === 'email' && asksForReply(line.text)));
+    const action = ctaLinks(context).length > 0 || context.document.lines.some(line => (ctaVerb.test(line.text) && line.text.split(/\s+/).length <= 14) || (context.channel === 'email' && asksForReply(line.text)));
 
     return action ? [] : [{ line: firstLine(context), snippet: 'No link, button, or action line found' }];
   }),

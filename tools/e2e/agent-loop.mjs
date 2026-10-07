@@ -90,12 +90,12 @@ async function main() {
     const first = await rpc('tools/call', { name: 'conquistador_check', arguments: { text: firstDraft, channel: 'email' } });
     const firstResult = JSON.parse(first.body.result?.content[0].text ?? '{}');
     const firstRules = [...new Set(firstResult.findings?.map(finding => finding.rule))].sort();
-    record('the first draft fails the check', firstResult.clean === false && firstRules.includes('ai-unlock') && firstRules.includes('claim-guarantee'), { counted: firstResult.counted, rules: firstRules, ms: first.ms });
+    record('the first draft fails the check', firstResult.clean === false && firstRules.includes('ai-unlock') && firstRules.includes('claim-guarantee'), { blocking: firstResult.blocking, rules: firstRules, ms: first.ms });
 
     const second = await rpc('tools/call', { name: 'conquistador_check', arguments: { text: revision, channel: 'email' } });
     const secondResult = JSON.parse(second.body.result?.content[0].text ?? '{}');
     const secondRules = [...new Set(secondResult.findings?.map(finding => `${finding.rule} (${finding.severity})`))].sort();
-    record('the revision passes the check', secondResult.clean === true, { counted: secondResult.counted, rules: secondRules, ms: second.ms });
+    record('the revision passes the check', secondResult.clean === true, { blocking: secondResult.blocking, rules: secondRules, ms: second.ms });
   } finally {
     server?.close();
   }

@@ -21,7 +21,14 @@ const schema = properties => ({ type: 'object', properties, required: Object.key
 const readOnly = { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false };
 const TOOLS = [
   { name: 'conquistador_brief', description: 'Call this FIRST for any growth, GTM, launch, marketing, sales, pricing, positioning, copy, content, SEO, ads, outreach, or product-marketing task. Describe the task in plain words. Returns the selected command, or the play (its steps in order) for a multi-step outcome, with the full text of the playbooks to read now, the playbooks to read at later steps, and the rules for using them. Read the whole response before drafting.', inputSchema: { type: 'object', properties: { task: { type: 'string', minLength: 1, maxLength: 8000, description: 'The user request, including product, audience, channel, and goal when known.' }, context: { type: 'string', maxLength: 8000, description: 'Optional facts you already hold: product, audience, proof points, voice, and constraints. The brief carries them as the product truth for this task, so a drafting step can work from the brief alone.' } }, required: ['task'], additionalProperties: false } },
-  { name: 'conquistador_check', description: 'Check a marketing draft against fixed rules before you hand it over: unsupported claims, AI-writing tells, vague calls to action, channel limits, email compliance, and link hygiene. No model; the same text always gets the same findings. Fix each error and warning, or say why it stays. Advisories are suggestions. A clean check is evidence, not proof of quality.', inputSchema: { type: 'object', properties: { text: { type: 'string', minLength: 1, maxLength: LIMITS.checkText, description: 'The draft. Markdown front matter (subject, title, channel) is read when present.' }, channel: { type: 'string', enum: Object.keys(channels), description: 'Where the text goes. Sets channel limits, for example x for 280 characters or email for unsubscribe and subject rules. Omit for general rules only.' }, format: { type: 'string', enum: Object.keys(checkFormats), description: 'How to read the text. Default markdown.' } }, required: ['text'], additionalProperties: false } },
+  { name: 'conquistador_check', description: 'Check a marketing draft against fixed rules before you hand it over: unsupported claims, AI-writing tells, vague calls to action, channel limits, email compliance, and link hygiene. No model; the same text always gets the same findings. Fix each error and warning, or say why it stays. Advisories are suggestions. A clean check is evidence, not proof of quality.', inputSchema: { type: 'object', properties: { text: { type: 'string', minLength: 1, maxLength: LIMITS.checkText, description: 'The draft. Markdown front matter (subject, title, channel) is read when present.' }, channel: { type: 'string', enum: Object.keys(channels), description: 'Where the text goes. Sets channel limits, for example x for 280 characters or email for unsubscribe and subject rules. Omit for general rules only.' }, format: { type: 'string', enum: Object.keys(checkFormats), description: 'How to read the text. Default markdown.' } }, required: ['text'], additionalProperties: false },
+    outputSchema: { type: 'object', properties: {
+      channel: { type: 'string', description: 'The channel whose rules applied.' },
+      clean: { type: 'boolean', description: 'True when no error or warning remains. Advisories do not block.' },
+      blocking: { type: 'integer', description: 'Errors plus warnings.' },
+      truncated: { type: 'boolean', description: `True when more than ${LIMITS.checkFindings} findings exist; only the first ${LIMITS.checkFindings} are listed.` },
+      findings: { type: 'array', items: { type: 'object', properties: { rule: { type: 'string' }, name: { type: 'string' }, family: { type: 'string' }, severity: { type: 'string', enum: ['error', 'warning', 'advisory'] }, message: { type: 'string' }, fix: { type: 'string' }, line: { type: 'integer' }, snippet: { type: 'string' } } } },
+    }, required: ['channel', 'clean', 'blocking', 'truncated', 'findings'] } },
   { name: 'conquistador_search', description: 'Search all Conquistador playbooks, platform guides, examples, and your own playbooks by keyword. Use it when a task reaches a step the brief did not cover. Returns paths with summaries; read one with conquistador_read.', inputSchema: { type: 'object', properties: { query: { type: 'string', minLength: 1, maxLength: 400 } }, required: ['query'], additionalProperties: false } },
   { name: 'conquistador_methods', description: 'List the commands, the plays, and the parent guide. Prefer conquistador_brief, which selects them and their playbooks for you.', inputSchema: schema({}) },
   { name: 'conquistador_files', description: 'List readable text resources in one command or play. Scripts are text only and are never executed.', inputSchema: schema({ method: { type: 'string', pattern: methodPattern.source, maxLength: 100 } }) },
@@ -155,7 +162,7 @@ function checkDraft({ text, channel, format = 'markdown' }) {
   return {
     channel: detected,
     clean: total === 0,
-    counted: total,
+    blocking: total,
     truncated: findings.length > LIMITS.checkFindings,
     findings: findings.slice(0, LIMITS.checkFindings).map(({ rule, name, family, severity, message, fix, line, snippet }) => ({ rule, name, family, severity, message, fix, line, snippet })),
   };
@@ -213,7 +220,7 @@ export function createMcpHandler({ root = bundledRoot, requireInitialize = true 
         access ??= createMethodAccess(root);
         value = params.name === 'conquistador_methods' ? access.methods() : params.name === 'conquistador_files' ? access.files(args.method) : access.read(args.path.replace(/^skills\//, ''));
       }
-      result = { content: [{ type: 'text', text: typeof value === 'string' ? value : JSON.stringify(value) }] };
+      result = { content: [{ type: 'text', text: typeof value === 'string' ? value : JSON.stringify(value) }], ...(definition.outputSchema ? { structuredContent: value } : {}) };
     } catch (failure) {
       result = { isError: true, content: [{ type: 'text', text: failure.usage ? failure.message : params.name === 'conquistador_brief' || params.name === 'conquistador_search' ? 'Cannot build a brief for this input. Describe the task in plain words.' : 'Cannot read bundled method: invalid path, unavailable text file, or bundle limit exceeded.' }] };
     }
