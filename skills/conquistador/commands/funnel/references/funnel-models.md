@@ -6,6 +6,8 @@ A useful funnel model describes a specific population moving through measurable 
 
 State whether the unit is a person, account, order, organization, or task. Identify the eligible population and observation window. Record identity joins, duplicate handling, and exclusions. Never multiply person-level and account-level rates without an explicit mapping.
 
+Choose as the headline outcome the event that counts delivered core value, such as nights booked or messages sent, not a generic activity count. Test the choice: the metric can rise only when more customers get the value. Set its measurement period to the product's natural use frequency; a daily active count misreads a product people need a few times a year.
+
 ## Trace the process
 
 List the actual steps between the starting event and the business outcome. Include review or approval steps that delay progress. Define entry and completion events for each stage, the source field or query, the owner, and expected delay.
@@ -28,6 +30,8 @@ Only multiply transition rates when the cohorts and observation rules are compat
 
 Map each proposed initiative to the event or delay it is intended to change. Name the mechanism, expected direction, and evidence supporting any proposed magnitude. If the initiative affects several stages, identify the primary effect and interactions to prevent double-counting.
 
+Write the growth equation as the product of the model's stages and recurring terms, and show which term each initiative moves.
+
 An initiative without a measurable link remains unmapped with an explanation. Do not invent a target to complete the table. Target-setting follows baseline verification.
 
 ## Output contract
@@ -41,5 +45,7 @@ For a trial product, the observable path may be permitted account creation, comp
 For a sales-assisted service, the path may be an eligible inquiry, completed qualification, accepted scope, and a signed agreement. State which records distinguish a proposed agreement from an accepted one. Payment and delivery can be separate downstream events.
 
 For physical goods, a placed order and a retained sale differ when cancellations or returns occur. Model the period required to observe returns rather than immediately treating all orders as realized contribution.
+
+For a consumer subscription app that gets users from content, the path may be content view to install, app open to paywall view, and paywall view to paid. Each break points to a different fix: a weak view-to-install step is a content or positioning problem, a weak open-to-paywall step is an onboarding problem, and a weak paywall-to-paid step is an offer or price problem. Work on the broken stage only. Count a free install as a demand signal; paid conversion is the evidence of fit.
 
 These examples are synthetic definitions, not conversion benchmarks or claims of live execution.
