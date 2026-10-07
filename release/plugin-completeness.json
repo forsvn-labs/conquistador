@@ -4824,7 +4824,7 @@
     },
     {
       "path": "tools/brief.mjs",
-      "sha256": "a5ae67147a8482ea0766859c4c8d0055e7fe83b0df958abbfc32ea58e33b67e1"
+      "sha256": "61f8debc711ccb747636fc6987a30e6dc2439fcd311688503f1fc408625efcb7"
     },
     {
       "path": "tools/check/channels.mjs",
@@ -4840,7 +4840,7 @@
     },
     {
       "path": "tools/check/rules.mjs",
-      "sha256": "eab4d0a5b6b0ae2bfd7547104154302c9b20b5ab496078efb1c4ab16b222443c"
+      "sha256": "7e25bfe0c952fc9ba2a32efe3bf38206fca690b16e941f6bd9fabadc6071c59b"
     },
     {
       "path": "tools/context-files.mjs",
@@ -4848,7 +4848,7 @@
     },
     {
       "path": "tools/context-selection.mjs",
-      "sha256": "1096dcbb74218831f4b27220ff602eb5534d0a6758861ac6ffad31ab261647a4"
+      "sha256": "dcee8fcd1f523919333eba39899ae9ecd7b4a799a2f84ce6562675b7f6919a99"
     },
     {
       "path": "tools/domain-package.mjs",
@@ -4856,11 +4856,15 @@
     },
     {
       "path": "tools/mcp-http.mjs",
-      "sha256": "7416dc2d84fa539df9774a55ba5427e0cef23539e48c605e1b2fb61a92efaa11"
+      "sha256": "d1c6360fff1fafc2d5cc42e2fa4066add017b11e2856098045201b6925cd9f6b"
     },
     {
       "path": "tools/method-library.mjs",
       "sha256": "ecf5fd0d2caf18260accf0914216444f84fd50e0567fdf3af5f24841c84d4317"
+    },
+    {
+      "path": "tools/module-root.mjs",
+      "sha256": "a81e4127f1b697ed9129d591995bb5e8d667c71806771a141c57abb7bd1db5c8"
     },
     {
       "path": "tools/plugin-contracts.mjs",
@@ -4872,11 +4876,11 @@
     },
     {
       "path": "tools/routing-contract.mjs",
-      "sha256": "f08c50205d84858d691f2ef727f326b9512e530329ecb13dd1e1aa2475b812a6"
+      "sha256": "1f0d4f6b821e0dc3357aa0b1987857e53d24d9acb836a8427198355416c9e289"
     },
     {
       "path": "tools/skills-mcp.mjs",
-      "sha256": "b5ae88a062b553ca1aa2330cfca8b7f6bd8a0d5bb1af9eaffea37567dabee415"
+      "sha256": "16e4222a4fe608c939603fc51c0c352ec8e37c5591ea7936d45e0b8b7197de27"
     }
   ]
 }
