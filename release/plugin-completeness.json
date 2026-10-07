@@ -4876,7 +4876,7 @@
     },
     {
       "path": "tools/mcp-http.mjs",
-      "sha256": "6368733e7c5b2f79faa3306af3307e7f8bc624b383e6af50f37e628930e50e52"
+      "sha256": "8a247e8c94374ad743a471497e4fc96d808ddfa6d6564e1a406ce36ae43fdb71"
     },
     {
       "path": "tools/method-library.mjs",
