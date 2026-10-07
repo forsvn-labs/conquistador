@@ -24,6 +24,22 @@ Prospect from observed demand or relevance signals, not title lists. Keep the as
 honest, opt-out clear, and sensitive material out of unsafe channels. Sending, enrichment, scheduling,
 suppression, list, and CRM writes remain behind exact human authority.
 
+When the seller has few or no paying customers and no repeatable channel, order contact routes by
+existing trust: own network, then introductions through second-degree contacts
+([intro-request mode](../commands/outreach/references/modes/intro-request.md)), then in-person rooms
+such as small conferences and hosted groups, then communities where the pain is public, then cold
+outbound to a sourced list. Label the route of each recipient group in the package; the route sets
+what the sender can honestly claim (shared context, an introduction, or no prior relationship).
+For many accounts, channels, or senders, tier accounts and assign channel roles with the
+[account program](../commands/outreach/references/frameworks/account-program.md).
+
+Bring an automated or agent-run system up in order: research and review queue with sending off,
+then monitoring, then sending in test mode, then a live pilot. Before go-live, test reply, bounce,
+unsubscribe, duplicate, stale-signal, and provider-failure cases. Pilot one narrow segment in a
+small batch. Judge the pilot by how often the reviewer agrees with the system's choice of account,
+buyer, timing, evidence, and action, not by message count. Raise autonomy or volume only after that
+agreement holds, and never raise both in the same step.
+
 Run `audit` on the finished package before the Review Packet.
 
 End with one terminal Review Packet for final human review: signal and segment, ready sequence or
