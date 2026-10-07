@@ -1,6 +1,6 @@
 // The rule registry. Each rule has an id, family, severity, message, and fix.
 // Severity: `error` and `warning` count toward exit code 2; `advisory` is listed but never fails a run.
-// docs/CHECK.md is the catalog and cites the source for every limit.
+// docs-site/check.mdx is the catalog and cites the source for every limit.
 import { adFields, adLength, socialPosts, weightedLength } from './channels.mjs';
 
 export const families = {
@@ -211,7 +211,7 @@ export const rules = [
     return targets.size > 3 ? [{ line: firstLine(context), snippet: `${targets.size} different link destinations` }] : [];
   }),
 
-  // Channel limits. Sources are in docs/CHECK.md.
+  // Channel limits. Sources are in docs-site/check.mdx.
   documentRule({ id: 'x-length', family: 'channel', severity: 'error', name: 'X post over 280', channels: ['x'],
     message: 'X post is over 280 weighted characters (URLs count 23, CJK and emoji count 2).', fix: 'Cut the post, or split it into a thread with `---` between posts.' },
   context => socialPosts(context.document).filter(post => weightedLength(post.text) > 280).map(post => ({ line: post.n, snippet: `${weightedLength(post.text)} of 280: ${clip(post.text.split('\n')[0])}` }))),

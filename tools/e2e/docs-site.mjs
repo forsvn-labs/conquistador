@@ -159,7 +159,8 @@ const tells = JSON.parse(scan.stdout || '[]').filter(finding => finding.family =
 record('pages have no AI-writing tells', scan.status !== 1 && !tells.length, tells.length ? list(tells.map(finding => `${relative(site, finding.file)}:${finding.line} ${finding.rule}`)) : `${scanned.length} pages`);
 
 // F14. docs-site/ stays out of the npm package.
-const pack = spawnSync('npm', ['pack', '--dry-run', '--json', '--ignore-scripts'], { cwd: root, encoding: 'utf8', shell: process.platform === 'win32' });
+// A private npm cache keeps the user's cache untouched and works in sandboxes.
+const pack = spawnSync('npm', ['pack', '--dry-run', '--json', '--ignore-scripts'], { cwd: root, encoding: 'utf8', shell: process.platform === 'win32', env: { ...process.env, npm_config_cache: join(out, 'npm-cache') } });
 try {
   const packed = JSON.parse(pack.stdout)[0].files.map(file => file.path);
   const leaked = packed.filter(path => path.startsWith('docs-site/') || path === 'context7.json');

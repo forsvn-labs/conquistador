@@ -1,0 +1,15 @@
+{
+  "$schema": "https://context7.com/schema/context7.json",
+  "projectTitle": "Conquistador",
+  "description": "Growth, marketing, sales, and product playbooks for AI coding agents and deployed agents: one skill, 35 commands, 21 plays, a rule-based copy checker, and an MCP server.",
+  "folders": [
+    "docs-site"
+  ],
+  "rules": [
+    "Call conquistador_brief with the task before you draft marketing or growth work, and read the playbooks it returns.",
+    "Run conquistador_check on each draft with its channel and the same context that you sent to the brief.",
+    "A host hands a draft to a person only when conquistador_verify returns valid, clean, and signed.",
+    "Install with npx @forsvn/conquistador@latest, or npm install -g @forsvn/conquistador. Use -g; without it the command is not on PATH.",
+    "Never publish, send, or spend without the user's approval each time. Never invent metrics, quotes, or customer facts."
+  ]
+}

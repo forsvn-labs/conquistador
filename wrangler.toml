@@ -1,4 +1,4 @@
-# Cloudflare Worker for the hosted Conquistador MCP server. See INSTALL.md, "Bots and remote apps".
+# Cloudflare Worker for the hosted Conquistador MCP server. See docs-site/hosted/self-host.mdx.
 # Set the token before the first deploy: wrangler secret put CONQUISTADOR_MCP_TOKEN
 name = "conquistador-mcp"
 main = "worker.mjs"
