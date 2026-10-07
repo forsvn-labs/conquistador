@@ -329,7 +329,16 @@ async function offline() {
   const slow = await cli(['login', '--no-open'], { ...cliEnv, CONQUISTADOR_HOME: join(home, 'slow') });
   const slowMs = Math.round(performance.now() - slowStarted);
   record('after slow_down the CLI waits longer and still signs in', slow.status === 0 && slowMs >= 6000 && existsSync(join(home, 'slow', 'mcp-token')), { status: slow.status, ms: slowMs });
-  // The slow sign-in rotated cli-user's token. Sign in again so the saved token is current.
+
+  // A token file that holds the shared admin token is kept, not overwritten.
+  const adminHome = join(home, 'admin-file');
+  mkdirSync(adminHome, { recursive: true });
+  writeFileSync(join(adminHome, 'mcp-token'), `${admin}\n`, { mode: 0o600 });
+  double.nextDevice = { user: users.cli, mode: 'approve' };
+  const overAdmin = await cli(['login', '--no-open'], { ...cliEnv, CONQUISTADOR_HOME: adminHome });
+  const previous = join(adminHome, 'mcp-token.previous');
+  record('login keeps an admin token that was in the token file and says where', overAdmin.status === 0 && existsSync(previous) && readFileSync(previous, 'utf8').trim() === admin && (process.platform === 'win32' || (statSync(previous).mode & 0o777) === 0o600) && TOKEN.test(readFileSync(join(adminHome, 'mcp-token'), 'utf8')) && /mcp-token\.previous/.test(overAdmin.stdout + overAdmin.stderr), { status: overAdmin.status });
+  // That sign-in rotated cli-user's token again.
   double.nextDevice = { user: users.cli, mode: 'approve' };
   await cli(['login', '--no-open'], cliEnv);
   const current = readFileSync(tokenFile, 'utf8').trim();
@@ -398,7 +407,7 @@ async function offline() {
 
   // 13. The sign-up rate limit (per IP, on /signup/start and POST /api/login).
   let signupLimited = null;
-  for (let attempt = 0; attempt < 45 && !signupLimited; attempt += 1) {
+  for (let attempt = 0; attempt < 70 && !signupLimited; attempt += 1) {
     const response = await fetch(`${base}/signup/start`, { redirect: 'manual' });
     if (response.status === 429) signupLimited = { attempt, retryAfter: response.headers.get('retry-after'), text: await response.text() };
   }
