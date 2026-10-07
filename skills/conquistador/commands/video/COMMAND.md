@@ -2,7 +2,7 @@
 name: video
 description: "Script short-form video: hooks, storyboards, recuts, and production specs."
 metadata:
-  version: 2.1.0
+  version: 2.2.0
 ---
 
 # Create a short-form video package
