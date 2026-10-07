@@ -51,6 +51,7 @@ export const PLATFORMS = Object.freeze({
   // Ad platforms. The longer phrase wins, so "LinkedIn ads" does not also pull organic LinkedIn.
   'google ads': ['google-ads'],
   'search ads': ['google-ads'],
+  'cold email': ['email'],
   'apple search ads': ['apple-search-ads'],
   'apple ads': ['apple-search-ads'],
   'meta ads': ['meta-cold-traffic', 'meta-retargeting'],
@@ -356,7 +357,7 @@ export function createBrief(input, { root = moduleRoot, playbooks, force = false
   const required = new Set(methods.flatMap(item => item.requiredResources ?? []).map(path => path.slice(libraryRoot.length + 1)));
   const ownerOf = doc => (doc.source === 'method' && selectedNames.has(doc.method)) || (doc.source === 'play' && doc.method === play?.name) ? doc.method : null;
   const scoreDoc = (doc, owned) => {
-    if (doc.kind === 'process') return null;
+    if (doc.kind === 'process' || doc.key === 'conquistador/welcome.md') return null;
     // Integration recipes join the brief only for the connect command.
     if (doc.kind === 'integration') { if (!selectedNames.has('connect')) return null; owned = 'connect'; }
     const shared = doc.source === 'shared';
@@ -573,7 +574,7 @@ export function packBrief(brief, { limit = LIMITS.packBytes, callerContext, host
     '# Conquistador brief',
     '',
     start,
-    hosted ? 'Hosted: you have no repository or file system here. Where a playbook says to write files (for example under .forsvn/ or in the project), put that content in your answer instead. Read a linked file with conquistador_read and pass the linking file as `from`.' : '',
+    hosted ? 'Hosted: you have no repository or file system here. Where a playbook says to write files (for example under .forsvn/ or in the project), put that content in your answer instead. Read a linked file with conquistador_read and pass the linking file as `from`. Where a command asks you to load specialist roles, follow its single-agent fallback (fallbacks/sequential.md) instead.' : '',
     '',
     brief.play ? `Play: ${brief.play.label} [${brief.play.name}]` : '',
     brief.play ? brief.play.steps.map(step => `${step.step}. ${step.command ?? step.method}${step.mode ? ` (mode ${step.mode})` : ''}${step.when ? ` — when ${step.when}` : ''}${step.for ? ` — for ${step.for}` : ''}${step.now ? ' ← start here' : ''}`).join('\n') : '',

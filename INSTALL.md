@@ -186,6 +186,11 @@ so the server reads the library from the Worker bundle with `node:fs`. It never 
 playbooks. The Worker refuses every MCP request with 503 until the token is set. Run it locally
 with `npx wrangler@4.148.0 dev --var CONQUISTADOR_MCP_TOKEN:local-test`.
 
+On the `workers.dev` address, Cloudflare refuses the default `Python-urllib` User-Agent with error
+1010. Python `httpx` (used by the MCP Python SDK), Node `fetch`, and curl work. A client on plain
+`urllib` must set its own User-Agent, or serve the Worker from a custom domain whose browser
+integrity check is off.
+
 A deployed agent uses two tools in a loop: `conquistador_brief` with the task (and, when the agent
 has no `PRODUCT.md`, the product facts in `context`), then `conquistador_check` on each draft with
 its channel and the same `context`, which flags numbers and customer names the context lacks. Over

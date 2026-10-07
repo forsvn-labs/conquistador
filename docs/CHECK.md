@@ -182,6 +182,9 @@ a run.
 | --- | --- | --- | --- | --- |
 | `email-unsubscribe-missing` | error | email | Commercial email with no unsubscribe link or instruction. | Add a visible unsubscribe link, or your platform's unsubscribe merge tag. |
 | `email-address-missing` | error | email | Commercial email with no physical postal address. | Add your street address, registered PO box, or your platform's address merge tag to the footer. |
+| `email-presumed-pain` | warning | email | The email tells the reader they have a problem the sender has not observed, such as "I noticed your team is struggling". | State the observed signal and its source, or write the problem as a condition. |
+| `email-relative-time` | warning | email | A phrase such as "I wrote last week" is true only if the real send gap matches. | Write "I wrote earlier" or remove the reference. |
+| `email-merge-tag` | advisory | email | The postal address is a merge tag, which the address rule accepts. The email is compliant only if the sending tool fills it. | Confirm the tag resolves to the sender's postal address, or write the address. |
 | `email-fake-reply` | error | email | Subject starts with "Re:" or "Fwd:" on a first-touch email. That misrepresents the message. | Remove the prefix. Write a subject that describes the content. |
 | `email-subject-shouting` | warning | email | Subject has all-caps words, repeated "!" or "$", or "FREE" in caps. Spam filters and readers both penalize it. | Use sentence case and one plain benefit. |
 

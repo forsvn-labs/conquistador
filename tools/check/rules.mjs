@@ -295,6 +295,18 @@ export const rules = [
   documentRule({ id: 'email-address-missing', family: 'email', severity: 'error', name: 'No postal address', channels: ['email'],
     message: 'Commercial email with no physical postal address.', fix: 'Add your street address, registered PO box, or your platform\'s address merge tag to the footer.' },
   context => /\b\d{1,6}\s+(?:[A-Z][\w.'-]*\s+){1,4}(?:street|st|avenue|ave|road|rd|boulevard|blvd|lane|ln|drive|dr|way|suite|ste|court|ct|place|pl|square|sq|parkway|pkwy|highway|hwy|terrace|plaza)\b\.?|\bp\.?\s?o\.?\s+box\s+\d+|\b[A-Z]{2}\s+\d{5}(?:-\d{4})?\b|\b[A-Z]{1,2}\d[A-Z\d]?\s+\d[A-Z]{2}\b|\*\|LIST:ADDRESS(?:LINE)?\|\*|\{\{\s*[\w.]*address[\w.]*\s*\}\}|%(?:company_)?address%|\{\$?(?:company_)?address\}/i.test(context.document.source) ? [] : [{ line: firstLine(context), snippet: 'No postal address found' }]),
+  phrase({ id: 'email-presumed-pain', family: 'claims', severity: 'warning', name: 'Presumed pain', channels: ['email'],
+    message: 'The email tells the reader they have a problem the sender has not observed.', fix: 'State the observed signal and its source, or write the problem as a condition: "If your team matches the two by hand, ...".' },
+  /\bI (?:noticed|saw|see|can tell|could see|know)(?: that)? (?:your|you(?:'re| are)) (?:\w+ ){0,2}(?:is |are |were )?(?:struggling|having (?:trouble|a hard time)|losing|wasting|drowning|frustrated|stuck)\b/i),
+  phrase({ id: 'email-relative-time', family: 'claims', severity: 'warning', name: 'Timing that depends on the send gap', channels: ['email'],
+    message: 'A phrase such as "I wrote last week" is true only if the real send gap matches.', fix: 'Write "I wrote earlier" or remove the reference.' },
+  /\b(?:I (?:wrote|emailed|reached out|sent|messaged|followed up)(?: (?:to )?you)?(?: about \S+(?: \S+){0,4})? (?:last week|yesterday|a few days ago|earlier this week|on (?:monday|tuesday|wednesday|thursday|friday))|(?:last week|yesterday|a few days ago),? I (?:wrote|emailed|reached out|sent))\b/i),
+  documentRule({ id: 'email-merge-tag', family: 'email', severity: 'advisory', name: 'Address is a merge tag', channels: ['email'],
+    message: 'The postal address is a merge tag. The address rule accepts it, so the email is compliant only if the sending tool fills it with a real address.', fix: 'Confirm that the tag resolves to the sender\'s postal address, or write the address.' },
+  context => {
+    const tags = [...new Set(context.document.source.match(/\{\{\s*[\w.]*address[\w.]*\s*\}\}|\*\|LIST:ADDRESS(?:LINE)?\|\*|%(?:company_)?address%|\{\$?(?:company_)?address\}/gi) ?? [])];
+    return tags.length ? [{ line: firstLine(context), snippet: tags.slice(0, 8).join(', ') }] : [];
+  }),
   documentRule({ id: 'email-fake-reply', family: 'email', severity: 'error', name: 'Fake "Re:" or "Fwd:"', channels: ['email'],
     message: 'Subject starts with "Re:" or "Fwd:" on a first-touch email. That misrepresents the message.', fix: 'Remove the prefix. Write a subject that describes the content.' },
   context => {

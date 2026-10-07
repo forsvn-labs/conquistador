@@ -2,6 +2,12 @@
 
 ## Unshipped
 
+- **Fixes from the second deployed-agent run.** The context check reads every number in the
+  context (so "50-500" covers "50 to 500") and no longer treats pronouns, weekdays, or words after
+  the clause as customer names. New email rules flag presumed pain ("I noticed your team is
+  struggling"), timing that depends on the send gap ("I wrote last week"), and a postal address
+  left as a merge tag. Hosted briefs point single agents to the sequential fallback, "cold email"
+  brings the email channel guide, and `welcome.md` no longer enters briefs.
 - **Outreach for products with no proof yet.** `outreach` 2.3.0 adds an early-stage mode (honest
   substitutes for proof: a pilot or design-partner offer, a first run on the prospect's data, a
   labelled sample output, the founder's reason, an observed problem), sequence mechanics (one new

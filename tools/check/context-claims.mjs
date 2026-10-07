@@ -8,6 +8,9 @@ const number = /(?<![\w-])(?:[$€£]\s?)?\d[\d,.]*(?:\s?(?:%|x\b|k\b|m\b|percen
 // "teams like Acme", "used by Acme and Northwind", "customers such as Acme"
 const customerLead = /\b(?:teams?|companies|customers|clients|brands|users|founders|leaders)\s+(?:like|such as|including|at)\s+|\b(?:used|trusted|loved|chosen)\s+by\s+/gi;
 const properName = /[A-Z][\w&.-]*(?:\s+[A-Z][\w&.-]*)*/g;
+const notNames = new Set(['i', 'we', 'you', 'our', 'your', 'they', 'their', 'it', 'this', 'that', 'these', 'those', 'he', 'she', 'my', 'us',
+  'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday', 'january', 'february', 'march', 'april', 'may', 'june',
+  'july', 'august', 'september', 'october', 'november', 'december']);
 
 // Compare the value with its unit, so 10x does not match 10%. Thousands separators do not count.
 const key = value => {
@@ -18,7 +21,8 @@ const key = value => {
 
 export function contextClaims(document, context) {
   const known = context.toLowerCase();
-  const knownNumbers = new Set((context.match(number) ?? []).map(key).filter(Boolean));
+  // Every number the context mentions counts, including both ends of a range such as 50-500.
+  const knownNumbers = new Set([...(context.match(number) ?? []).map(key), ...(context.match(/\d[\d,.]*/g) ?? []).map(key)].filter(Boolean));
   const findings = [];
   for (const line of document.lines) {
     const text = line.text.replace(mergeTag, ' ');
@@ -28,9 +32,10 @@ export function contextClaims(document, context) {
       if (value && !knownNumbers.has(value)) findings.push({ line: line.n, snippet: match.trim(), kind: 'number' });
     }
     for (const lead of text.matchAll(customerLead)) {
-      const rest = text.slice(lead.index + lead[0].length);
-      for (const name of rest.split(/[,;.!]|\s+(?:and|or)\s+/).slice(0, 4).map(part => part.trim().match(properName)?.[0]).filter(Boolean)) {
-        if (!known.includes(name.toLowerCase())) findings.push({ line: line.n, snippet: name, kind: 'customer' });
+      // The names run to the end of the clause: "teams like Acme, Northwind, and Initech."
+      const clause = text.slice(lead.index + lead[0].length).split(/[.;!?:]/)[0];
+      for (const name of clause.split(/,|\s+(?:and|or)\s+/).slice(0, 6).map(part => part.trim().replace(/^and\s+/i, '').match(properName)?.[0]).filter(Boolean)) {
+        if (!notNames.has(name.toLowerCase()) && !known.includes(name.toLowerCase())) findings.push({ line: line.n, snippet: name, kind: 'customer' });
       }
     }
   }
