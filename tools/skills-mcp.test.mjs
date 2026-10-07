@@ -198,7 +198,7 @@ test('initialization negotiates a supported version for older and unknown client
     assert.equal(result.code, 0);
     assert.equal(result.stderr, '');
     assert.equal(result.messages[0].result.protocolVersion, protocolVersion === '2099-01-01' ? '2025-11-25' : protocolVersion);
-    assert.equal(result.messages[1].result.tools.length, 5);
+    assert.equal(result.messages[1].result.tools.length, 6);
   }
 });
 
