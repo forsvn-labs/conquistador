@@ -93,7 +93,8 @@ function fixture(name, { agents = ['claude', 'codex'], apps = {}, executor = nul
   const env = {
     PATH, HOME: home, USERPROFILE: home, TERM: 'xterm-256color', LANG: 'en_US.UTF-8', TMPDIR: process.env.TMPDIR ?? tmpdir(),
     FAKE_AGENT_LOG: logFile, npm_config_registry: `${registry.url}/`, CONQUISTADOR_HOSTED_URL: `${hosted.url}/mcp`,
-    CONQUISTADOR_PREFILL: 'off', ...(executor ? { FAKE_EXECUTOR: executor } : {}), ...extra,
+    // CONQUISTADOR_EXECUTOR_APP=off: never fall back to a real Executor.app on this machine.
+    CONQUISTADOR_PREFILL: 'off', CONQUISTADOR_EXECUTOR_APP: 'off', ...(executor ? { FAKE_EXECUTOR: executor } : {}), ...extra,
   };
   for (const key of Object.keys(env)) if (env[key] === undefined) delete env[key];
   const cli = join(login ? packageWithLogin(work) : root, 'runtime/bin/conquistador.js');

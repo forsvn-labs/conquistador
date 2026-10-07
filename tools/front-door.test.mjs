@@ -26,7 +26,7 @@ function fixture(t, commands = ['claude', 'codex']) {
     CONQUISTADOR_HOME: join(directory, '.conquistador'), CURSOR_HOME: join(directory, '.cursor'),
     CODEX_HOME: join(directory, '.codex'), CLAUDE_CONFIG_DIR: join(directory, '.claude'),
     CONQUISTADOR_PLAYBOOKS: '', CONQUISTADOR_UPDATED_FROM: 'synthetic-test', CONQUISTADOR_CACHE: join(directory, 'cache'),
-    PATH: bin, TEST_HOST_LOG: join(directory, 'calls.jsonl'), TEST_HOST_HOME: directory };
+    PATH: bin, TEST_HOST_LOG: join(directory, 'calls.jsonl'), TEST_HOST_HOME: directory, CONQUISTADOR_EXECUTOR_APP: 'off' };
 
   Object.assign(process.env, env);
 

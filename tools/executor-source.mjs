@@ -13,7 +13,19 @@
 // coreTools.integrations.remove: replacing or removing a source there is a step by hand.
 // A version without mcp.addServer gets manual steps for the whole change.
 import { existsSync } from 'node:fs';
-import { onPath, run as runCommand } from './agents.mjs';
+import { homedir } from 'node:os';
+import { join } from 'node:path';
+import { onPath as onPathDefault, run as runCommand } from './agents.mjs';
+
+// The Executor CLI: `executor` on PATH, else the CLI inside the macOS app (Executor.app bundles one).
+// CONQUISTADOR_EXECUTOR_APP=off skips the app, so tests with an isolated HOME never reach a real one.
+export function executorBinary({ onPath = onPathDefault, platform = process.platform, home = homedir(), exists = existsSync, env = process.env } = {}) {
+  const found = onPath('executor');
+  if (found) return found;
+  if (platform !== 'darwin' || env.CONQUISTADOR_EXECUTOR_APP === 'off') return null;
+  const inside = 'Executor.app/Contents/Resources/executor/executor';
+  return [join('/Applications', inside), join(home, 'Applications', inside)].find(exists) ?? null;
+}
 
 export const slugFor = name => String(name ?? '').trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'conquistador';
 
@@ -32,19 +44,21 @@ export function executorOutcome(text) {
 }
 
 export function executorStatus({ run = runCommand } = {}) {
-  if (!onPath('executor')) return { installed: false, running: false, version: null };
-  const version = /(\d+\.\d+\.\d+)/.exec(run('executor', ['--version'], { timeout: 8_000 }).stdout)?.[1] ?? null;
-  const status = run('executor', ['daemon', 'status'], { timeout: 8_000 });
+  const bin = executorBinary();
+  if (!bin) return { installed: false, running: false, version: null };
+  const version = /(\d+\.\d+\.\d+)/.exec(run(bin, ['--version'], { timeout: 8_000 }).stdout)?.[1] ?? null;
+  const status = run(bin, ['daemon', 'status'], { timeout: 8_000 });
   const text = `${status.stdout}\n${status.stderr}`;
-  return { installed: true, version, running: !/not running/i.test(text) && /reachable|running/i.test(text) };
+  return { installed: true, version, running: !/not running/i.test(text) && /reachable|running/i.test(text), app: bin.includes('Executor.app') };
 }
 
 // Call one Executor tool and accept its approval prompt.
 function call(path, input, run) {
-  const first = run('executor', ['call', 'executor', ...path.split('.'), JSON.stringify(input)], { timeout: 90_000 });
+  const bin = executorBinary() ?? 'executor';
+  const first = run(bin, ['call', 'executor', ...path.split('.'), JSON.stringify(input)], { timeout: 90_000 });
   const outcome = executorOutcome(first.stdout || first.stderr);
   if (!outcome.paused) return outcome;
-  const resumed = run('executor', ['resume', '--execution-id', outcome.paused, '--action', 'accept', '--content', '{}'], { timeout: 90_000 });
+  const resumed = run(bin, ['resume', '--execution-id', outcome.paused, '--action', 'accept', '--content', '{}'], { timeout: 90_000 });
   return executorOutcome(resumed.stdout || resumed.stderr);
 }
 
@@ -64,7 +78,7 @@ export function manualSteps(name, server) {
 
 // Returns { ok, status: added | updated | unchanged | manual, error? }.
 export function registerSource(name, server, { run = runCommand, start = false } = {}) {
-  if (start) run('executor', ['daemon', 'run'], { timeout: 60_000 });
+  if (start) run(executorBinary() ?? 'executor', ['daemon', 'run'], { timeout: 60_000 });
   const slug = slugFor(name);
   const existing = call('mcp.getServer', { slug }, run);
   if (existing.error?.code === 'tool_not_found') return { ok: false, status: 'manual', error: 'This Executor version cannot add a source from the command line.' };
@@ -85,14 +99,14 @@ export function registerSource(name, server, { run = runCommand, start = false }
 }
 
 export function removeSource(slug, { run = runCommand } = {}) {
-  if (!onPath('executor')) return { ok: false, error: `Executor is not on PATH. Remove the "${slug}" integration in Executor by hand.` };
+  if (!executorBinary()) return { ok: false, error: `Executor is not installed here. Remove the "${slug}" integration in Executor by hand.` };
   const removed = call('coreTools.integrations.remove', { slug }, run);
   if (removed.error?.code === 'tool_not_found') return { ok: false, error: `This Executor version cannot remove a source from the command line. Remove "${slug}" in the Executor app: executor web` };
   return removed.ok ? { ok: true, removed: removed.data?.removed !== false } : { ok: false, error: removed.error?.message ?? 'Executor did not remove the source' };
 }
 
 export function checkSource(slug, { run = runCommand } = {}) {
-  if (!onPath('executor')) return { ok: false, detail: 'Executor is not on PATH' };
+  if (!executorBinary()) return { ok: false, detail: 'Executor is not installed here' };
   const found = call('mcp.getServer', { slug }, run);
   const config = found.ok ? found.data?.integration?.config : null;
   if (!config) return { ok: false, detail: `source "${slug}" not found${found.ok ? '' : ` (${found.error?.code ?? 'no answer'})`}` };

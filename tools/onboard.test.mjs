@@ -5,7 +5,7 @@ import assert from 'node:assert/strict';
 import { appConfigPath, mergeEntry, removeEntry, serverEntry } from './mcp-apps.mjs';
 import { pathCopies, shadowCheck, updateNotice } from './preflight.mjs';
 import { parseOnboard, planJson } from './onboard.mjs';
-import { executorOutcome, slugFor } from './executor-source.mjs';
+import { executorBinary, executorOutcome, slugFor } from './executor-source.mjs';
 
 const server = { command: '/usr/local/bin/node', args: ['/home/hung/.conquistador/plugin/mcp/server.mjs'] };
 
@@ -129,4 +129,15 @@ test('Executor answers map to outcomes; names become safe slugs (F22)', () => {
   assert.deepEqual(executorOutcome('Execution paused: Add an MCP server\n\nexecutionId: exec_12-ab\n'), { paused: 'exec_12-ab' });
   assert.equal(executorOutcome('{"ok": false, "error": {"code": "tool_not_found"}}').error.code, 'tool_not_found');
   assert.equal(executorOutcome('garbage').error.code, 'unreadable');
+});
+
+test('Executor is found as a CLI on PATH or as the macOS app with its bundled CLI', () => {
+  const app = '/Applications/Executor.app/Contents/Resources/executor/executor';
+  const userApp = '/Users/hung/Applications/Executor.app/Contents/Resources/executor/executor';
+  assert.equal(executorBinary({ onPath: () => '/opt/homebrew/bin/executor', platform: 'darwin', home: '/Users/hung', exists: () => true }), '/opt/homebrew/bin/executor');
+  assert.equal(executorBinary({ onPath: () => null, platform: 'darwin', home: '/Users/hung', exists: path => path === app }), app);
+  assert.equal(executorBinary({ onPath: () => null, platform: 'darwin', home: '/Users/hung', exists: path => path === userApp }), userApp);
+  assert.equal(executorBinary({ onPath: () => null, platform: 'linux', home: '/home/hung', exists: () => true }), null);
+  assert.equal(executorBinary({ onPath: () => null, platform: 'darwin', home: '/Users/hung', exists: () => false }), null);
+  assert.equal(executorBinary({ onPath: () => null, platform: 'darwin', home: '/Users/hung', exists: () => true, env: { CONQUISTADOR_EXECUTOR_APP: 'off' } }), null);
 });
