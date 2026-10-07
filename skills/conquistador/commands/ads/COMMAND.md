@@ -2,7 +2,7 @@
 name: ads
 description: "Create a paid-media test: audience, offer, finished ads, budget, and measurement."
 metadata:
-  version: 2.2.0
+  version: 2.3.0
 ---
 
 # Create a paid campaign

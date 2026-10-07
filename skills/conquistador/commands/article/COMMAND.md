@@ -2,7 +2,7 @@
 name: article
 description: "Write a long-form article, essay, guide, or report with a defensible thesis."
 metadata:
-  version: 2.1.0
+  version: 2.2.0
 ---
 
 # Write a defensible long-form argument

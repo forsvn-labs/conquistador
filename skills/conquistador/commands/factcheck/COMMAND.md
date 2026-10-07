@@ -2,7 +2,7 @@
 name: factcheck
 description: "Check the sources behind a claim for authority, freshness, and conflicts."
 metadata:
-  version: 1.2.0
+  version: 1.3.0
 ---
 
 # Knowledge review
