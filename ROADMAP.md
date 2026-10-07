@@ -7,6 +7,10 @@
 2. List the plugin in the agent marketplaces, then check each listing installs 0.3.x.
 3. Test the interactive start flow on Windows (a pseudo-terminal harness), and Linux and Windows
    on ARM.
+4. Put the docs site live at `https://conquistador.forsvn.com/docs`: create the Mintlify project,
+   add the Vercel rewrites and the CSP change in the landing, and submit the repository to
+   Context7 (steps in `docs-site/README.md`). After `feat/onboarding-v2` merges, check the install
+   pages against it.
 
 ## Next acceptance
 

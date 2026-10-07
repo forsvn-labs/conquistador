@@ -2,6 +2,12 @@
 
 ## Unshipped
 
+- **Docs site.** `docs-site/` is a Mintlify site with 23 pages: install options (written for the
+  onboarding-v2 installer), use, the copy check, deployed agents, troubleshooting, and reference.
+  `INSTALL.md` and `docs/CHECK.md` now point to it, and `context7.json` tells Context7 to index it.
+  It is not live: the Mintlify project, the `/docs` rewrite on the landing, and the Context7
+  submission are open (see `docs-site/README.md`). `node tools/e2e/docs-site.mjs` checks the site
+  against the CLI, the MCP tools, and the check rules.
 - **The 2026-10-07 hosted changes, for installed users.** Everything in the 2026-10-07 hosted
   deployment ([CHANGELOG.md](CHANGELOG.md)) is merged on `main` but not in an npm release (0.3.0 is
   current). For installed users that is: the distilled playbooks and `outreach` 2.4.0; rubric gates;
