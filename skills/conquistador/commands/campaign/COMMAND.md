@@ -2,7 +2,7 @@
 name: campaign
 description: "Plan a launch or growth campaign: outcome, channels, sequence, assets, and signal."
 metadata:
-  version: 2.1.0
+  version: 2.2.0
 ---
 
 # Plan an executable campaign
@@ -21,7 +21,7 @@ Core:
 - [growth-play-patterns](references/growth-play-patterns.md): Campaign experiments. Use an experiment only when it resolves a decision the user needs to make. These…
 - [platform-channels](references/platform-channels.md): Platform choices in the campaign plan. Use channel-strategy.md to compare the campaign's channel options.…
 
-By step: [3d-angle-framework](references/3d-angle-framework.md), [clipping-and-live](references/distribution-models/clipping-and-live.md), [hook-archetypes](references/hook-archetypes.md), [pillars-before-angles](references/pillars-before-angles.md).
+By step: [3d-angle-framework](references/3d-angle-framework.md), [clipping-and-live](references/distribution-models/clipping-and-live.md), [creator-program](references/distribution-models/creator-program.md), [hook-archetypes](references/hook-archetypes.md), [pillars-before-angles](references/pillars-before-angles.md).
 
 Platform packs (read the one for each platform in the task): [facebook](references/platform-intelligence/facebook.md), [founder-demo](references/platform-intelligence/founder-demo.md), [linkedin-launch](references/platform-intelligence/linkedin-launch.md), [linkedin](references/platform-intelligence/linkedin.md), [motion-background](references/platform-intelligence/motion-background.md), [newsletter](references/platform-intelligence/newsletter.md), [producthunt](references/platform-intelligence/producthunt.md), [reddit](references/platform-intelligence/reddit.md), [reels](references/platform-intelligence/reels.md), [shorts](references/platform-intelligence/shorts.md), [showhn](references/platform-intelligence/showhn.md), [tiktok](references/platform-intelligence/tiktok.md), [ugc](references/platform-intelligence/ugc.md), [x-launch](references/platform-intelligence/x-launch.md), [x](references/platform-intelligence/x.md), [youtube](references/platform-intelligence/youtube.md).
 
@@ -79,7 +79,8 @@ If the spine cannot fit in a short paragraph, narrow the campaign.
 Select the smallest channel set that covers the job:
 
 - Existing demand: search, comparison pages, marketplaces, launch directories.
-- Borrowed trust: communities, partners, creators, advocates.
+- Borrowed trust: communities, partners, creators, advocates. For a paid creator program, load
+  [creator program](references/distribution-models/creator-program.md).
 - Direct access: email, outreach, sales-assisted conversations.
 - Compounding attention: useful content, social distribution, owned audience.
 - Paid acceleration: only when message and conversion path are testable.
