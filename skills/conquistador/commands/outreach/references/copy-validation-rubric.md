@@ -40,3 +40,21 @@ written as a fact is a fabricated observation. Greetings, affiliation, and sign-
 
 After two revision cycles, report the actual failure and remaining gap. Never round up, waive a
 hard gate, or return PASS merely because time or revision budget ended.
+
+## Machine-readable gate
+
+`conquistador_score` checks a self-score against these rules. Use variant `ready` for targeted or
+commercial READY drafts and `needs-signal` for no-pitch templates. Report any failure above as a
+hard fail.
+
+```json conquistador-gate
+{
+  "scale": { "min": 0, "max": 10 },
+  "dimensions": ["Peer voice", "Signal connection", "CTA friction", "Recipient relevance", "Specificity"],
+  "variants": {
+    "ready": { "minEach": 6, "minTotal": 35, "doneAt": 40 },
+    "needs-signal": { "notApplicable": ["Signal connection"], "minEach": 6, "minTotal": 24, "doneAt": 28 }
+  },
+  "hardFails": ["fabricated-observation", "unsupported-claim", "hidden-sales-intent", "false-identity", "deceptive-threading", "invented-scarcity", "repitch-after-opt-out", "unauthorized-external-action", "too-vague-to-answer"]
+}
+```

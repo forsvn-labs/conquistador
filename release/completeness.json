@@ -2359,7 +2359,7 @@
     },
     {
       "path": "conquistador/commands/outreach/references/copy-validation-rubric.md",
-      "sha256": "46cc48bbc9cc1338bc278c8afbf3648f30579a1a0e92dbadf6e0c7198d388d70"
+      "sha256": "4eceaa13eeaa90c30adcaa03c64b17c287e8f68ece2ab58cfeca36875b1fa6ad"
     },
     {
       "path": "conquistador/commands/outreach/references/examples/critic-case-sourced-signal-no-pitch.md",
@@ -4849,7 +4849,7 @@
     },
     {
       "path": "tools/brief.mjs",
-      "sha256": "70107c1253cf3289763f53ede3525dbe17c38da8ae0ad15d46701570c095f77b"
+      "sha256": "c1c6088b501ad2cdbc95a713f586320d467584a98c6efbe4f70ffec658f73bfb"
     },
     {
       "path": "tools/context-files.mjs",

@@ -8,10 +8,16 @@ no_bundle = true
 find_additional_modules = true
 base_dir = "."
 
+# The API hostname. A zone configuration rule turns off the browser integrity check for this host
+# only, so plain HTTP clients are not refused (workers.dev stays on as a fallback).
+routes = [
+  { pattern = "mcp.forsvn.com", custom_domain = true },
+]
+
 # Only the modules the server imports and the bundled library. Never local playbooks.
 [[rules]]
 type = "ESModule"
-globs = ["tools/skills-mcp.mjs", "tools/mcp-http.mjs", "tools/brief.mjs", "tools/context-files.mjs", "tools/context-selection.mjs", "tools/request-text.mjs", "tools/routing-contract.mjs", "tools/domain-package.mjs", "tools/method-library.mjs", "tools/plugin-contracts.mjs", "tools/module-root.mjs", "tools/check/*.mjs"]
+globs = ["tools/skills-mcp.mjs", "tools/mcp-http.mjs", "tools/brief.mjs", "tools/context-files.mjs", "tools/context-selection.mjs", "tools/request-text.mjs", "tools/routing-contract.mjs", "tools/domain-package.mjs", "tools/method-library.mjs", "tools/plugin-contracts.mjs", "tools/module-root.mjs", "tools/rubric-gate.mjs", "tools/check/*.mjs"]
 fallthrough = false
 
 [[rules]]

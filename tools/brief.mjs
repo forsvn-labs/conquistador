@@ -558,7 +558,7 @@ export const formatBriefPack = (brief, options) => packBrief(brief, options).tex
 
 // The brief as text plus the same lists in structured form, so an agent can see what is inlined
 // and what it still has to read without parsing prose. `hosted` marks a caller with no repository.
-export function packBrief(brief, { limit = LIMITS.packBytes, callerContext, hosted = false } = {}) {
+export function packBrief(brief, { limit = LIMITS.packBytes, callerContext, hosted = false, compact = false } = {}) {
   if (brief.action !== 'brief') {
     return { structured: { action: 'none', inlined: [], readNow: [], readAtStep: [], situational: [] }, text: 'No Conquistador method matches this task. For growth, GTM, marketing, sales, or product work, restate the outcome and channel (for example "write a win-back email flow", "get recommended by ChatGPT", or "plan a TikTok series") or call conquistador_search.' };
   }
@@ -591,12 +591,20 @@ export function packBrief(brief, { limit = LIMITS.packBytes, callerContext, host
     '4. Read a "situational" file with conquistador_read when the task reaches that step.',
     '5. Before you hand over marketing text, run conquistador_check (MCP) or `conquistador check` (CLI) on it with its channel. Fix each error and warning, or say why it stays. A clean check does not verify facts: compare each claim with the context and mark what you assumed.',
     '6. Lead with the deliverable the user asked for; put plans, scores, and supporting material after it.',
+    '7. When you score a draft with a rubric that has a machine-readable gate, check the score with conquistador_score (MCP) before you report a verdict.',
     'Files marked omitted or unavailable still need a separate successful read.',
     '',
   ].join('\n');
 
+  // A compact brief inlines only the command. Its core files become required reads, one per
+  // conquistador_read call, and the other selected files move to the situational list, so a model
+  // with a small context keeps the same contract in smaller pieces.
+  const inlineMust = compact ? [] : brief.must;
+  const requiredReads = compact ? brief.must.filter(item => item.why === 'core file of this command') : [];
+  const deferred = compact ? brief.must.filter(item => !requiredReads.includes(item)) : [];
+  const laterReading = [...deferred, ...brief.situational];
   const entries = [...(brief.play ? [{ item: brief.play, heading: `Play: ${brief.play.label}` }] : []), ...brief.methods.map(item => ({ item, heading: `Command: ${item.label}` })),
-    ...brief.must.map(item => ({ item, heading: `${item.source === 'user' ? 'Your playbook' : 'Playbook'}: ${item.title || posix.basename(item.path)}` }))]
+    ...inlineMust.map(item => ({ item, heading: `${item.source === 'user' ? 'Your playbook' : 'Playbook'}: ${item.title || posix.basename(item.path)}` }))]
     .map(({ item, heading }) => {
       const body = readText(item.absolute);
       const evidence = knowledgeFileEvidence(item, body);
@@ -609,8 +617,9 @@ export function packBrief(brief, { limit = LIMITS.packBytes, callerContext, host
 
   const later = (brief.play?.steps ?? []).filter(step => !step.now)
     .map(step => `\nStep ${step.step} (${step.command ?? step.method}):\n- ${step.path} — ${step.label}${step.playbooks.map(item => `\n- ${item.path} — ${item.why}`).join('')}`).join('\n');
-  const situational = (later ? `\n---\n\n## Read at that step (conquistador_read when the play reaches it)\n${later}\n` : '')
-    + (brief.situational.length ? `\n---\n\n## Situational (read with conquistador_read when needed)\n${brief.situational.map(item => `- ${item.path} — ${item.why}`).join('\n')}\n` : '');
+  const required = requiredReads.length ? `\n---\n\n## Read now, one file per conquistador_read call, before you draft\n${requiredReads.map(item => `- ${item.path} — ${item.why}`).join('\n')}\n` : '';
+  const situational = required + (later ? `\n---\n\n## Read at that step (conquistador_read when the play reaches it)\n${later}\n` : '')
+    + (laterReading.length ? `\n---\n\n## Situational (read with conquistador_read when needed)\n${laterReading.map(item => `- ${item.path} — ${item.why}`).join('\n')}\n` : '');
   // Reserve the exact status text for every remaining required file before adding a body.
   let remaining = entries.reduce((sum, entry) => sum + Buffer.byteLength(entry.fallback), 0);
   let output = header;
@@ -629,9 +638,9 @@ export function packBrief(brief, { limit = LIMITS.packBytes, callerContext, host
     command: primary?.name ?? null,
     play: brief.play?.name ?? null,
     inlined,
-    readNow,
+    readNow: [...readNow, ...requiredReads.map(item => item.path)],
     readAtStep: (brief.play?.steps ?? []).filter(step => !step.now).flatMap(step => [step.path, ...step.playbooks.map(item => item.path)].map(path => ({ step: step.step, path }))),
-    situational: brief.situational.map(item => item.path),
+    situational: laterReading.map(item => item.path),
   };
   return { structured, text: clipUtf8(output + situational, limit) };
 }

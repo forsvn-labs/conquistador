@@ -112,6 +112,13 @@ async function main() {
     const inventedRules = (parsed(invented).findings ?? []).filter(finding => finding.rule === 'claim-not-in-context').map(finding => finding.snippet);
     record('with the context, the check flags an invented number and customer', inventedRules.includes('40%') && inventedRules.includes('Acme'), { flagged: inventedRules, ms: invented.ms });
 
+    const gated = await rpc('tools/call', { name: 'conquistador_score', arguments: { rubric: 'conquistador/commands/outreach/references/copy-validation-rubric.md', variant: 'ready', scores: { 'Peer voice': 8, 'Signal connection': 7, 'CTA friction': 8, 'Recipient relevance': 7, Specificity: 5 } } });
+    const gatedResult = gated.body.result?.structuredContent ?? {};
+    const compactBrief = await rpc('tools/call', { name: 'conquistador_brief', arguments: { task, context, size: 'compact' } });
+    const compactBytes = Buffer.byteLength(compactBrief.body.result?.content[0].text ?? '');
+    record('the score gate fails a dimension below its floor, and a compact brief is smaller', gatedResult.verdict === 'fail' && gatedResult.failures?.some(item => /Specificity/.test(item)) && compactBytes > 0 && compactBytes < Buffer.byteLength(text),
+      { verdict: gatedResult.verdict, compactBytes, fullBytes: Buffer.byteLength(text) });
+
     const second = await rpc('tools/call', { name: 'conquistador_check', arguments: { text: revision, channel: 'email', context } });
     const secondResult = parsed(second);
     const secondRules = [...new Set(secondResult.findings?.map(finding => `${finding.rule} (${finding.severity})`))].sort();

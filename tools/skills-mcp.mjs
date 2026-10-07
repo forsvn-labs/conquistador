@@ -5,6 +5,7 @@ import { checkDocument, counted } from './check/index.mjs';
 import { channels, detectChannel, normalizeChannel } from './check/channels.mjs';
 import { extractDocument } from './check/extract.mjs';
 import { contextClaims } from './check/context-claims.mjs';
+import { evaluateGate, parseGate } from './rubric-gate.mjs';
 import { packageRootOf } from './module-root.mjs';
 
 export const LIMITS = Object.freeze({ request: 65536, file: 262144, response: 524288, files: 256, depth: 12, methods: 128, entries: 2048, context: 8000, checkText: 60000, checkFindings: 100 });
@@ -21,7 +22,7 @@ const object = value => value !== null && typeof value === 'object' && !Array.is
 const schema = properties => ({ type: 'object', properties, required: Object.keys(properties), additionalProperties: false });
 const readOnly = { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false };
 const TOOLS = [
-  { name: 'conquistador_brief', description: 'Call this FIRST for any growth, GTM, launch, marketing, sales, pricing, positioning, copy, content, SEO, ads, outreach, or product-marketing task. Describe the task in plain words. Returns the selected command, or the play (its steps in order) for a multi-step outcome, with the full text of the playbooks to read now, the playbooks to read at later steps, and the rules for using them. Read the whole response before drafting.', inputSchema: { type: 'object', properties: { task: { type: 'string', minLength: 1, maxLength: 8000, description: 'The user request, including product, audience, channel, and goal when known.' }, context: { type: 'string', maxLength: 8000, description: 'Optional facts you already hold: product, audience, proof points, voice, and constraints. The brief carries them as the product truth for this task, so a drafting step can work from the brief alone.' } }, required: ['task'], additionalProperties: false },
+  { name: 'conquistador_brief', description: 'Call this FIRST for any growth, GTM, launch, marketing, sales, pricing, positioning, copy, content, SEO, ads, outreach, or product-marketing task. Describe the task in plain words. Returns the selected command, or the play (its steps in order) for a multi-step outcome, with the full text of the playbooks to read now, the playbooks to read at later steps, and the rules for using them. Read the whole response before drafting.', inputSchema: { type: 'object', properties: { task: { type: 'string', minLength: 1, maxLength: 8000, description: 'The user request, including product, audience, channel, and goal when known.' }, context: { type: 'string', maxLength: 8000, description: 'Optional facts you already hold: product, audience, proof points, voice, and constraints. The brief carries them as the product truth for this task, so a drafting step can work from the brief alone.' }, size: { type: 'string', enum: ['full', 'compact'], description: 'compact inlines only the command and its core files and lists the rest, for models with a small context. Default full.' } }, required: ['task'], additionalProperties: false },
     outputSchema: { type: 'object', properties: {
       action: { type: 'string', enum: ['brief', 'none'] },
       command: { type: ['string', 'null'], description: 'The command to run first.' },
@@ -39,6 +40,17 @@ const TOOLS = [
       truncated: { type: 'boolean', description: `True when more than ${LIMITS.checkFindings} findings exist; only the first ${LIMITS.checkFindings} are listed.` },
       findings: { type: 'array', items: { type: 'object', properties: { rule: { type: 'string' }, name: { type: 'string' }, family: { type: 'string' }, severity: { type: 'string', enum: ['error', 'warning', 'advisory'] }, message: { type: 'string' }, fix: { type: 'string' }, line: { type: 'integer' }, snippet: { type: 'string' } } } },
     }, required: ['channel', 'clean', 'blocking', 'truncated', 'findings'] } },
+  { name: 'conquistador_score', description: 'Check your rubric self-score against the rubric\'s own pass rules before you report a verdict. Pass the rubric path from the brief, the variant when the rubric has more than one, a score for every dimension, and any hard fails you found. Returns pass, pass_with_concerns, fail, or incomplete with the reasons. It checks the rules, not your judgment.', inputSchema: { type: 'object', properties: {
+    rubric: { type: 'string', minLength: 1, maxLength: 400, description: 'Library path of a rubric with a gate, such as conquistador/commands/outreach/references/copy-validation-rubric.md.' },
+    variant: { type: 'string', maxLength: 100, description: 'The rubric variant, such as ready or needs-signal. The error lists them when it is needed.' },
+    scores: { type: 'object', description: 'One entry per dimension: a number on the rubric scale, a level such as pass or weak, or "N/A" where the variant allows it.', additionalProperties: { type: ['number', 'string'] } },
+    hardFails: { type: 'array', maxItems: 32, items: { type: 'string', maxLength: 100 }, description: 'IDs of hard fails the review found. Any one fails the draft.' },
+  }, required: ['rubric', 'scores'], additionalProperties: false },
+    outputSchema: { type: 'object', properties: {
+      verdict: { type: 'string', enum: ['pass', 'pass_with_concerns', 'fail', 'incomplete'] }, variant: { type: 'string' },
+      total: { type: ['number', 'null'] }, max: { type: ['number', 'null'] },
+      failures: { type: 'array', items: { type: 'string' } }, missing: { type: 'array', items: { type: 'string' } },
+    }, required: ['verdict', 'failures', 'missing'] } },
   { name: 'conquistador_search', description: 'Search all Conquistador playbooks, platform guides, examples, and your own playbooks by keyword. Use it when a task reaches a step the brief did not cover. Returns paths with summaries; read one with conquistador_read.', inputSchema: { type: 'object', properties: { query: { type: 'string', minLength: 1, maxLength: 400 } }, required: ['query'], additionalProperties: false } },
   { name: 'conquistador_methods', description: 'List the commands, the plays, and the parent guide. Prefer conquistador_brief, which selects them and their playbooks for you.', inputSchema: schema({}) },
   { name: 'conquistador_files', description: 'List readable text resources in one command or play. Scripts are text only and are never executed.', inputSchema: schema({ method: { type: 'string', pattern: methodPattern.source, maxLength: 100 } }) },
@@ -50,7 +62,7 @@ const PROMPTS = [
   { name: 'copy', title: 'Write marketing copy', description: 'Write landing page, email, or ad copy.', text: 'Write marketing copy for {{product}}. Use conquistador_brief first and follow its playbooks.' },
   { name: 'review-results', title: 'Review campaign results', description: 'Decide what to keep, drop, and test next.', text: 'Review these results and tell me what to keep, drop, and test: {{product}}. Use conquistador_brief first and follow its playbooks.' },
 ].map(prompt => ({ ...prompt, arguments: [{ name: 'product', description: 'Product, audience, goal, and any facts or numbers you have.', required: true }] }));
-export const SERVER_INSTRUCTIONS = 'Conquistador supplies field-tested playbooks for growth, GTM, launch, marketing, sales, pricing, positioning, copy, content, SEO, ads, and outreach work. For any such task, call conquistador_brief with the task before you draft, read the whole result, apply its specific rules, run conquistador_check on the draft, and end your answer with "Playbooks applied": each file and the rule you took from it. Never invent metrics, quotes, or customer facts. Ask the user before publishing, spending, or sending. Your host supplies the model, tools, and permissions; this server only reads playbooks.';
+export const SERVER_INSTRUCTIONS = 'Conquistador supplies field-tested playbooks for growth, GTM, launch, marketing, sales, pricing, positioning, copy, content, SEO, ads, and outreach work. For any such task, call conquistador_brief with the task before you draft, read the whole result, apply its specific rules, run conquistador_check on the draft, check any rubric self-score with conquistador_score, and end your answer with "Playbooks applied": each file and the rule you took from it. Never invent metrics, quotes, or customer facts. Ask the user before publishing, spending, or sending. Your host supplies the model, tools, and permissions; this server only reads playbooks.';
 const packageVersion = (() => { try { return JSON.parse(readFileSync(join(packageRootOf(import.meta.url), 'package.json'), 'utf8')).version; } catch { return '0.0.0'; } })();
 
 // The caller controls only relative names, never the bundle root. Reject every symlink
@@ -181,6 +193,8 @@ function checkDraft({ text, channel, format = 'markdown', context }) {
   };
 }
 
+const matchesType = (type, value) => type === 'string' ? typeof value === 'string' : type === 'object' ? object(value) : type === 'array' ? Array.isArray(value) && value.every(item => typeof item === 'string') : true;
+
 // A library path, with an optional `skills/` prefix, or a relative link resolved from the file
 // that contains it. Resolution never leaves the library; contained() checks the result.
 function libraryPath(path, from) {
@@ -233,7 +247,7 @@ export function createMcpHandler({ root = bundledRoot, requireInitialize = true,
     if (method !== 'tools/call') return error(id, -32601, 'Method not found');
     const definition = TOOLS.find(tool => tool.name === params.name);
     const args = params.arguments ?? {};
-    if (!definition || !object(args) || Object.keys(args).some(key => !Object.hasOwn(definition.inputSchema.properties, key) || definition.inputSchema.properties[key].type === 'string' && typeof args[key] !== 'string') || definition.inputSchema.required.some(key => typeof args[key] !== 'string')) return error(id, -32602, 'Invalid tool arguments');
+    if (!definition || !object(args) || Object.keys(args).some(key => !Object.hasOwn(definition.inputSchema.properties, key) || !matchesType(definition.inputSchema.properties[key].type, args[key])) || definition.inputSchema.required.some(key => args[key] === undefined || !matchesType(definition.inputSchema.properties[key].type, args[key]))) return error(id, -32602, 'Invalid tool arguments');
     let result;
     let structured;
     try {
@@ -241,9 +255,19 @@ export function createMcpHandler({ root = bundledRoot, requireInitialize = true,
       if (params.name === 'conquistador_brief') {
         if (!args.task.trim() || args.task.length > 8000) throw new Error('Invalid task');
         if ((args.context?.length ?? 0) > LIMITS.context) throw usageError(`Context is over ${LIMITS.context} characters. Keep the facts that matter for this task.`);
-        const pack = packBrief(createBrief(args.task, { root: packageRoot(), force: true }), { callerContext: args.context?.trim(), hosted });
+        if (args.size !== undefined && !['full', 'compact'].includes(args.size)) throw usageError('Use size full or compact.');
+        const pack = packBrief(createBrief(args.task, { root: packageRoot(), force: true }), { callerContext: args.context?.trim(), hosted, compact: args.size === 'compact' });
         value = pack.text;
         structured = pack.structured;
+      } else if (params.name === 'conquistador_score') {
+        access ??= createMethodAccess(root);
+        let gate;
+        try { gate = parseGate(access.read(libraryPath(args.rubric))); } catch (failure) {
+          if (failure instanceof SyntaxError) throw usageError('This rubric\'s gate block is not valid JSON.');
+          throw usageError(readFailure(failure));
+        }
+        if (!gate) throw usageError('This rubric has no machine-readable gate yet. Apply its pass rules by hand and say so.');
+        value = evaluateGate(gate, { variant: args.variant, scores: args.scores, hardFails: args.hardFails });
       } else if (params.name === 'conquistador_check') {
         value = checkDraft(args);
       } else if (params.name === 'conquistador_search') {
