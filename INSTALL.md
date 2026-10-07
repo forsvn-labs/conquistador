@@ -22,29 +22,83 @@ npm install -g @forsvn/conquistador
 conquistador
 ```
 
-The installer shows the agents it found and asks you to keep that set or customize it. Then it
-asks for the scope, installs, and opens one agent. In a project without `GROWTH.md`, the agent
-opens with `/conquistador init`. Otherwise you pick a task.
+`conquistador` runs the installer the first time. It takes about a minute, and nothing changes
+until you confirm the review.
+
+1. **Preflight.** It is silent unless there is a problem: another `conquistador` earlier on your
+   PATH (or with another version), or a newer version on npm. It prints the exact fix.
+2. **Where do you want Conquistador?** Choose one or more surfaces. What it found on this computer is
+   chosen for you.
+3. **Details** for each surface: which agents, all projects or only this one, prompt hooks on or
+   off, which MCP apps, the Executor source name, the bot folder.
+4. **Review.** Every change with its path or command, what stays unchanged, and how to undo it.
+5. **Install**, one line per step. A step that fails does not stop the others. Then a verify pass
+   runs the `conquistador doctor` checks for each surface and one MCP handshake.
+6. **Project setup.** In a project without `GROWTH.md`, open your agent with `/conquistador init`
+   now, or later.
+7. **First task**, or **Finish for now**. Then a summary of what is installed where.
+
+Run `conquistador add` to open the installer again. Ctrl-C or Escape before the review changes
+nothing.
+
+### Surfaces
+
+| Surface | `--surface` | What it installs | Found by |
+|---|---|---|---|
+| Coding agents (recommended) | `agents` | The plugin (skill, hooks, local MCP server) for Claude Code, Codex, Cursor, Copilot CLI, and Grok CLI. A skill copy for the other agents in the table below | The agent's command on PATH or its home folder |
+| MCP apps | `mcp-apps` | An entry named `conquistador` in the app's MCP config: Claude Desktop, VS Code, Windsurf, Zed, Cursor. It runs `~/.conquistador/plugin/mcp/server.mjs` with the Node that ran the installer | The app's config folder |
+| Hosted MCP | `hosted` | Sign in with GitHub, then print the client config for deployed agents and remote apps | Shown only when this version can sign in, and only online |
+| Executor | `executor` | A source in [Executor](https://executor.sh), so every agent connected to Executor gets the playbook tools | `executor` on PATH |
+| Chat bots | `bot` | A system prompt and knowledge files for GPTs, Claude Projects, Grok projects, and Gems (`conquistador bot`) | Never chosen for you |
+
+An app is never set up twice. An agent with the plugin already has the MCP server, so the MCP apps
+step leaves out Cursor when Cursor gets the plugin.
+
+MCP apps: before Conquistador changes a config file, it saves a copy next to it
+(`FILE.conquistador-backup`) and keeps every other server and setting. It never rewrites a file that
+is not plain JSON, for example a Zed `settings.json` with comments. It shows the entry to add by
+hand instead.
+
+Executor: the installer runs `executor call executor mcp addServer`. Executor asks to approve the
+change, and the installer says yes for that one change, because you approved it in the review. When
+Executor is installed but not running, the review says so and the step starts it
+(`executor daemon run`). Executor versions without `mcp.addServer` (1.5 and earlier) get the steps
+to add the source by hand.
 
 ### Options
 
 | Option | Does |
 |---|---|
+| `--surface=NAME[,NAME]` | Install these surfaces: `agents`, `mcp-apps`, `hosted`, `executor`, `bot`. Skips the surfaces question |
 | `--providers=NAME[,NAME]` | Install for these agents. Names: `claude` (or `claude-code`), `codex`, `cursor`, `copilot`, `grok`, `gemini`, `opencode`, `pi`, `hermes`, `antigravity`, `kiro`, `vibe` |
 | `--scope=global` | Install for all projects. Agents with a plugin manager get the plugin: the skill, hooks, and the MCP server |
 | `--scope=project` | Copy the one skill into this project's skill folder. Commit it to share it with your team. No hooks or MCP server |
-| `-y`, `--yes` | Accept the detected agents and the default scope (global, or project when this project already has a copy) |
+| `--apps=NAME[,NAME]` | MCP apps: `claude-desktop`, `vscode`, `windsurf`, `zed`, `cursor` |
+| `--executor-name=NAME` | The source name in Executor. Default: `conquistador` |
+| `--bot-out=DIR` | The folder for the chat bot files. Default: `./conquistador-bot` |
+| `-y`, `--yes` | Accept the defaults: the detected agents and the default scope (global, or project when this project already has a copy). Without `--surface`, only coding agents |
 | `--no-hooks` | Install without prompt hooks. Writes `{"hooks": false}` to `~/.conquistador/config.json` |
 | `--dry-run` | Show the plan and the launch command. Change nothing |
+| `--json` | Print the plan as JSON (schema `conquistador.onboarding-plan/v1`). Change nothing |
+| `--plain` | Line prompts with no color and no cursor moves. `TERM=dumb` does the same. `NO_COLOR` turns off color only |
 | `--in AGENT` | Open this agent |
 | `--no-open` | Install only |
 
-Without a terminal, the installer prints the plan and changes nothing, unless you add `-y`.
+Without a terminal and without `--yes`, the installer prints the plan, changes nothing, and exits
+with code 2. With `--yes`, it installs, runs the verify pass, prints the summary, and exits with
+code 1 when a step or a check failed.
 
 ```sh
 npx @forsvn/conquistador --providers=claude,codex --scope=project -y
+npx @forsvn/conquistador --surface=agents,mcp-apps --apps=claude-desktop -y
 npx @forsvn/conquistador --providers=pi,hermes --scope=global --dry-run
+npx @forsvn/conquistador --surface=agents,executor --json
 ```
+
+The old flags still work. `--mcp`, `--plugin`, `--skills`, `--bot`, and `--advanced` open the
+installer with that surface chosen and print the new flag. With a route option (`--host`, `--path`,
+`--url`, a bot name such as `--bot hermes`, or `--help`), they keep the older per-project route
+([docs/INSTALL-PROJECT.md](docs/INSTALL-PROJECT.md)).
 
 ### Agents and folders
 
@@ -110,7 +164,7 @@ conquistador update --dry-run     # Show the update; change nothing
 conquistador doctor               # Report drift in installs, hooks, and project context
 conquistador doctor --fix         # Repair what a copy can repair
 conquistador agents               # Show agents and install state
-conquistador remove               # Remove every install, global and in this project
+conquistador remove               # Remove every install: agents, MCP app entries, the Executor source
 conquistador remove codex         # Remove one agent
 conquistador remove --scope=project
 npm uninstall -g @forsvn/conquistador
@@ -123,7 +177,9 @@ Without a global CLI, put `npx @forsvn/conquistador` in front of each command.
 
 `doctor` checks:
 
-- **Install**: the plugin copy, each global install, and each project skill copy match this version.
+- **Install**: the plugin copy, each global install, each project skill copy, each MCP app entry,
+  and the Executor source match this version. It warns when one agent loads both the global plugin
+  and a project copy.
 - **Hooks**: each plugin manifest names a hook file that exists, and each script that file runs
   exists. It also reports when hooks are off.
 - **Project**: `PRODUCT.md` and `GROWTH.md` exist, `GROWTH.md` covers its sections, and
@@ -141,6 +197,9 @@ Turn off the hooks with `CONQUISTADOR_HOOKS=off` or `{"hooks": false}` in
 `~/.conquistador/config.json`.
 
 ## MCP server for any MCP client
+
+The installer configures Claude Desktop, VS Code, Windsurf, Zed, and Cursor for you
+(`--surface=mcp-apps`). For another client, run the server:
 
 ```sh
 conquistador mcp
@@ -241,14 +300,19 @@ You can also set `CONQUISTADOR_PLAYBOOKS` to folders separated by `:`, or put Ma
 The npm package contains what users run: the CLI, the skill, hooks, the MCP server, the checker,
 and the connect and review tools. The Eve runtime (`conquistador jobs`), evals, the typed catalog,
 and the Docker images stay in the [repository](https://github.com/forsvn-labs/conquistador).
-`conquistador project`, `--skills`, `--plugin`, `--mcp`, `--bot`, and `--advanced` still work;
-see the [per-project installation guide](https://github.com/forsvn-labs/conquistador/blob/main/docs/INSTALL-PROJECT.md).
+`conquistador project` and the older `--skills`, `--plugin`, `--mcp`, and `--bot` routes (with
+`--host`, `--path`, `--url`, or a bot name) still work; see the
+[per-project installation guide](https://github.com/forsvn-labs/conquistador/blob/main/docs/INSTALL-PROJECT.md).
 
 ## Troubleshooting
 
 | Symptom | Fix |
 |---|---|
-| No agent is found | Install a supported agent, or name one: `--providers=claude` |
+| No agent is found | Install a supported agent, or name one: `--providers=claude`. You can still install MCP apps, Executor, or chat bots |
+| `The conquistador command on your PATH is version …` | An older copy runs instead of the one you installed. Run `npm i -g @forsvn/conquistador@latest`, or remove the old copy with the command the warning prints |
+| `npm i @forsvn/conquistador` (without `-g`) gives no `conquistador` command | That puts the package in `./node_modules`. Use `npm i -g @forsvn/conquistador`, or run `npx @forsvn/conquistador` |
+| An MCP app config `is not plain JSON` | The installer left it unchanged. Add the entry it printed by hand, or remove the comments and run `conquistador add` |
+| Executor `cannot add a source from the command line` | Update Executor (`npm i -g executor`), or add the source by hand with the printed steps |
 | `Not found on PATH` for a global install | Install that agent's CLI, or use `--scope=project` |
 | `… exists and was not created by Conquistador` | Move that folder yourself, then retry. The installer never overwrites a folder it did not create |
 | `The Conquistador package at … is incomplete` | Reinstall the package, then retry |

@@ -8,7 +8,8 @@ import { Screen } from './vt.mjs';
 
 const bridge = join(dirname(fileURLToPath(import.meta.url)), 'pty-bridge.py');
 export const KEYS = { enter: '\r', up: '\x1b[A', down: '\x1b[B', right: '\x1b[C', left: '\x1b[D', space: ' ', escape: '\x1b', ctrlC: '\x03', tab: '\t', backspace: '\x7f' };
-const squash = text => text.replace(/\s+/g, '');
+// Compare without whitespace or Clack's gutter, so a wrapped line still matches.
+const squash = text => text.replace(/[\s│]+/g, '');
 // Python from this process's PATH: the program under test may get a much shorter PATH.
 const python3 = (process.env.PATH ?? '').split(delimiter).map(folder => join(folder, 'python3')).find(existsSync) ?? 'python3';
 

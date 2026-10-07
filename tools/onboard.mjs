@@ -6,7 +6,7 @@
 import { spawn } from 'node:child_process';
 import { existsSync, realpathSync } from 'node:fs';
 import { homedir } from 'node:os';
-import { join, resolve } from 'node:path';
+import { join, relative, resolve } from 'node:path';
 import { AGENTS, OWNED, agentId, detectAgents, home, installOne, payloadCurrent, pluginHome, productRoot, projectFolders, projectRoot, readState,
   self, setHooks, skillCurrent, stageTargets, version, writeState } from './agents.mjs';
 import { MCP_APPS, appById, applyApp, checkApp, detectApps, inspectApp } from './mcp-apps.mjs';
@@ -122,7 +122,12 @@ export function parseOnboard(args) {
   return options;
 }
 
-const tilde = (path, base = homedir()) => (typeof path === 'string' && (path === base || path.startsWith(`${base}/`) || path.startsWith(`${base}\\`)) ? `~${path.slice(base.length)}` : path);
+const realHome = () => { try { return realpathSync(homedir()); } catch { return homedir(); } };
+const tilde = path => {
+  if (typeof path !== 'string') return path;
+  for (const base of [homedir(), realHome()]) if (path === base || path.startsWith(`${base}/`) || path.startsWith(`${base}\\`)) return `~${path.slice(base.length)}`;
+  return path;
+};
 // The local MCP server every MCP app and Executor runs: this Node and the stable plugin copy.
 export const localServer = () => ({ command: process.execPath, args: [join(pluginHome(), 'mcp', 'server.mjs')] });
 
@@ -204,7 +209,7 @@ export function buildPlan(choices, ctx) {
     for (const agent of chosen) {
       const folder = ctx.project.find(item => item.agents.includes(agent));
       const global = ctx.state.agents?.[agent.id] || choices.scope === 'global';
-      if (folder && global && agent.how !== 'skill') warnings.push(`${agent.label} loads both the global plugin and the project copy in ${tilde(folder.path, ctx.root)}. Keep one: ${self} remove --scope=project`);
+      if (folder && global && agent.how !== 'skill') warnings.push(`${agent.label} loads both the global plugin and the project copy in ./${relative(ctx.root, folder.path)}. Keep one: ${self} remove --scope=project`);
     }
     const plugins = chosen.some(agent => agent.how !== 'skill') && choices.scope === 'global';
     surfaces.push({ id: 'agents', label: SURFACE_LABELS.agents, scope: choices.scope, hooks: plugins ? choices.hooks : null, steps,
@@ -230,7 +235,7 @@ export function buildPlan(choices, ctx) {
     const steps = !ctx.executor.installed
       ? [{ action: 'manual', reason: 'Executor is not installed. Install it (npm i -g executor), then run conquistador --surface=executor.' }]
       : [...(ctx.executor.running === false ? [{ action: 'start', detail: 'Executor is not running. This step starts it: executor daemon run' }] : []),
-        { action: 'add', name, slug: slugFor(name), detail: `Add the source "${name}" with executor call executor mcp addServer. Executor asks for approval; Conquistador answers yes for this change only.` }];
+        { action: 'add', name, slug: slugFor(name), detail: `Add the source "${name}": executor call executor mcp addServer\n  Executor asks to approve it. Conquistador says yes for this one change.` }];
     surfaces.push({ id: 'executor', label: SURFACE_LABELS.executor, version: ctx.executor.version, steps, notes: [] });
   }
   if (choices.surfaces.includes('bot')) {
@@ -268,7 +273,8 @@ export function planLines(plan) {
         lines.push(`  ${step.label}: ${ACTION_TEXT[step.action]}${step.from ? ` from ${step.from} to ${plan.version}` : ''}`);
         for (const command of step.commands ?? []) lines.push(`    ${command}`);
       } else if (surface.id === 'mcp-apps') {
-        lines.push(`  ${step.label}: ${ACTION_TEXT[step.action]}${step.target && step.action !== 'skip' ? ` in ${tilde(step.target)}${step.action === 'add' || step.action === 'update' ? ' (backup first)' : ''}` : ''}`);
+        lines.push(`  ${step.label}: ${ACTION_TEXT[step.action]}${['add', 'update'].includes(step.action) && existsSync(step.target) ? ' (backup first)' : ''}`);
+        if (step.target && step.action !== 'skip') lines.push(`    ${tilde(step.target)}`);
       } else if (surface.id === 'bot') lines.push(`  ${ACTION_TEXT[step.action]} to ${tilde(step.target)}: ${step.detail}`);
       else lines.push(`  ${step.detail ?? ACTION_TEXT[step.action]}`);
       if (step.reason) lines.push(`    ${step.reason}`);
@@ -383,7 +389,7 @@ export async function verifyResults(results, plan, { progress }) {
       if (plan.scope === 'project') {
         for (const folder of projectFolders(plan.root, AGENTS.filter(agent => (result.agents ?? [result.agent]).includes(agent.id)))) {
           const ok = skillCurrent(folder.path);
-          add(result.label, ok, ok ? `skill copy ${tilde(folder.path)} is complete` : `skill copy ${tilde(folder.path)} is damaged`, ok ? null : `${self} doctor --fix`);
+          add(result.label, ok, ok ? 'project skill copy is complete' : `skill copy ${tilde(folder.path)} is damaged`, ok ? null : `${self} doctor --fix`);
         }
         continue;
       }
@@ -393,12 +399,12 @@ export async function verifyResults(results, plan, { progress }) {
         return { registered, healthy };
       }, { quiet: true });
       const ok = outcome.registered && outcome.healthy && (agent.how === 'skill' || payloadCurrent(pluginHome()));
-      add(agent.label, ok, ok ? (agent.how === 'skill' ? 'skill copy is complete' : 'plugin is registered and complete') : !outcome.registered ? `${agent.label} reports the plugin is not registered` : 'installed files are damaged', ok ? null : `${self} doctor --fix`);
+      add(agent.label, ok, ok ? (agent.how === 'skill' ? 'skill copy is complete' : 'plugin is registered') : !outcome.registered ? 'not registered with the agent' : 'installed files are damaged', ok ? null : `${self} doctor --fix`);
       continue;
     }
     if (result.surface === 'mcp-apps') {
       const check = checkApp(result.app, localServer());
-      add(result.label, check.ok, check.ok ? `entry in ${tilde(check.detail)}` : check.detail, check.ok ? null : retryFor('mcp-apps', result, plan));
+      add(result.label, check.ok, check.ok ? 'server entry is current' : check.detail, check.ok ? null : retryFor('mcp-apps', result, plan));
       continue;
     }
     if (result.surface === 'executor') {
@@ -411,7 +417,7 @@ export async function verifyResults(results, plan, { progress }) {
   }
   if (results.some(item => item.ok && item.surface === 'mcp-apps' && !item.skipped) || results.some(item => item.ok && item.surface === 'executor')) {
     const ok = await progress('Checking the MCP server', () => handshake(localServer()), { quiet: true });
-    add('MCP server', ok, ok ? 'answers and lists the Conquistador tools' : 'did not answer an MCP handshake', ok ? null : `${self} doctor --fix`);
+    add('MCP server', ok, ok ? 'answers and lists its tools' : 'did not answer an MCP handshake', ok ? null : `${self} doctor --fix`);
   }
   return checks;
 }
@@ -419,7 +425,8 @@ export async function verifyResults(results, plan, { progress }) {
 // --- Summary -----------------------------------------------------------------------------------------
 export function summaryLines({ results, checks, plan, notice, p }) {
   const lines = [];
-  const done = results.filter(item => item.ok && !item.skipped);
+  const failedChecks = new Set(checks.filter(item => !item.ok).map(item => item.label));
+  const done = results.filter(item => item.ok && !item.skipped && !failedChecks.has(item.label));
   const failed = results.filter(item => !item.ok);
   const badChecks = checks.filter(item => !item.ok);
   if (done.length) {
@@ -516,7 +523,7 @@ export async function runInstaller(options, { cwd = process.cwd(), ui, width, in
       choices.agents = AGENTS.filter(agent => ids.includes(agent.id)).map(agent => agent.id);
     }
     if (!options.scope) {
-      const scope = await ask(ui, 'select', { message: `${detail}Install for all projects, or only this one?`, initialValue: choices.scope, options: [
+      const scope = await ask(ui, 'select', { message: `${detail}All projects, or only this one?`, initialValue: choices.scope, options: [
         { value: 'global', label: 'All projects', hint: 'plugin with hooks and the MCP server where the agent has one' },
         { value: 'project', label: 'Only this project', hint: 'one skill folder you can commit' },
       ] });
@@ -547,7 +554,7 @@ export async function runInstaller(options, { cwd = process.cwd(), ui, width, in
     choices.executorName = String(name || 'conquistador').trim() || 'conquistador';
   }
   if (choices.surfaces.includes('bot') && !options.botOut && !options.yes) {
-    const out = await ask(ui, 'text', { message: `${detail}Folder for the bot files`, initialValue: tilde(choices.botOut, ctx.cwd).replace(/^~/, '.'), placeholder: './conquistador-bot' });
+    const out = await ask(ui, 'text', { message: `${detail}Folder for the bot files`, initialValue: `./${relative(ctx.cwd, choices.botOut) || '.'}`, placeholder: './conquistador-bot' });
     if (ui.isCancel(out)) return cancelled();
     choices.botOut = resolve(ctx.cwd, String(out || 'conquistador-bot').replace(/^~(?=$|[\\/])/, homedir()));
   }
@@ -573,12 +580,12 @@ export async function runInstaller(options, { cwd = process.cwd(), ui, width, in
     return result;
   };
   const results = await applyPlan(plan, choices, { ui, progress, login: ctx.login });
-  ui.log.step('Checking the installs');
-  const checks = await verifyResults(results, plan, { progress });
-  for (const check of checks) {
-    const line = `${check.ok ? p.ok('✓') : p.bad('✗')} ${check.label}: ${check.detail}${check.fix ? `\n  Fix: ${check.fix}` : ''}`;
-    if (check.ok) ui.log.message(wrap(line)); else ui.log.error(wrap(line));
-  }
+  const spin = ui.spinner();
+  spin.start('Checking the installs');
+  const checks = await verifyResults(results, plan, { progress: async (label, work) => { spin.message?.(label); await new Promise(next => setTimeout(next, 20)); return work(); } });
+  const bad = checks.filter(check => !check.ok).length;
+  spin.stop(bad ? `${p.bad('✗')} ${bad} of ${checks.length} ${checks.length === 1 ? 'check' : 'checks'} found a problem` : `${p.ok('✓')} ${checks.length} ${checks.length === 1 ? 'check' : 'checks'} passed`, bad ? 1 : 0);
+  if (checks.length) ui.log.message(wrap(checks.map(check => `${check.ok ? p.ok('✓') : p.bad('✗')} ${check.label}: ${check.detail}${check.fix ? `\n    Fix: ${check.fix}` : ''}`).join('\n')));
   update.persist();
   const problems = results.some(item => !item.ok) || checks.some(item => !item.ok);
   const latest = await update.latest(1500);

@@ -55,7 +55,7 @@ recorded Hermes host and presents the separate trust step again.
 
 ## Plugins
 
-Prefer the native host manager for a plugin. For private alpha now, run `conquistador --plugin` to prepare a local source from the verified supplied package. The commands below
+Prefer the native host manager for a plugin. For private alpha now, run `conquistador --plugin --host HOST` to prepare a local source from the verified supplied package. The commands below
 use that staged source folder. Do not register the editable checkout or an untransformed source
 archive by default: their canonical skills remain separately discoverable. Native managers do not
 run the Conquistador transformation. Source-direct registration is an explicit specialist-exposure
@@ -236,7 +236,7 @@ These are experimental import contracts. Native import, specialist delegation, a
 `conquistador --bot grok-bot` prints the official Grok Bot app handoff and states that a private
 Conquistador installation in Grok Bot has not been verified. Grok CLI is a different host from the
 Grok Bot app. Use the coding-agent route for public-alpha testing. Eve stays available through
-existing explicit experimental commands and `--advanced`.
+existing explicit experimental commands and `conquistador --advanced --project PATH`.
 
 If you previously staged one of these packages with `install.mjs`, managed status and removal can
 inspect its receipt. Remove any host registration in that app before deleting the prepared folder.

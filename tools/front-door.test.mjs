@@ -55,11 +55,11 @@ else if (args[0]==='plugin' && args[1]!=='marketplace') {
 }
 
 // Answers are keyed by a phrase in each question. `questions` records the phrase of every question asked.
-const QUESTIONS = ['Where do you want', 'Which agents', 'all projects, or only this one', 'Turn on prompt hooks', 'Which MCP apps', 'Install now', 'Set up this project now', 'What should we work on', 'Open in'];
+const QUESTIONS = ['Where do you want', 'Which agents', 'or only this one', 'Turn on prompt hooks', 'Which MCP apps', 'Install now', 'Set up this project now', 'What should we work on', 'Open in'];
 
 function ui({ selected = 'codex', surfaces = ['agents'], scope = 'global', ids = ['codex'], hooks = true, consent = true, setup = 'now', task = 'Draft one welcome email' } = {}) {
   const messages = [], questions = [];
-  const answers = { 'Where do you want': surfaces, 'Which agents': ids, 'all projects, or only this one': scope, 'Turn on prompt hooks': hooks,
+  const answers = { 'Where do you want': surfaces, 'Which agents': ids, 'or only this one': scope, 'Turn on prompt hooks': hooks,
     'Install now': consent, 'Set up this project now': setup, 'What should we work on': task, 'Open in': selected };
   const ask = async options => {
     const key = QUESTIONS.find(phrase => options.message.includes(phrase)) ?? options.message;
@@ -157,7 +157,7 @@ test('keep detected hosts installs globally; a healthy repeat skips writes; host
   const f = fixture(t), firstUi = ui({ ids: ['claude-code', 'codex'] });
   assert.equal(await runStart(['--no-open'], { cwd: f.directory, tty: true, ui: firstUi }), 0);
   assert.deepEqual(Object.keys(readState().agents).sort(), ['claude-code', 'codex']);
-  assert.deepEqual(firstUi.questions, ['Where do you want', 'Which agents', 'all projects, or only this one', 'Turn on prompt hooks', 'Install now']);
+  assert.deepEqual(firstUi.questions, ['Where do you want', 'Which agents', 'or only this one', 'Turn on prompt hooks', 'Install now']);
   const before = readFileSync(join(pluginHome(), '.conquistador-owned.json'), 'utf8');
   const repeat = ui();
   assert.equal(await runStart(['--in=codex', '--no-open'], { cwd: f.directory, tty: true, ui: repeat }), 0);
@@ -172,7 +172,7 @@ test('customize selects named hosts; project scope copies one skill per folder a
   const f = fixture(t), screen = ui({ ids: ['claude-code', 'pi', 'opencode'], scope: 'project' });
   mkdirSync(join(f.directory, '.git'));
   assert.equal(await runStart(['--no-open'], { cwd: f.directory, tty: true, ui: screen }), 0, screen.messages.join('\n'));
-  assert.deepEqual(screen.questions, ['Where do you want', 'Which agents', 'all projects, or only this one', 'Install now']);
+  assert.deepEqual(screen.questions, ['Where do you want', 'Which agents', 'or only this one', 'Install now']);
   assert.deepEqual(f.calls(), []);
   assert.deepEqual(readState().agents ?? {}, {});
   for (const folder of ['.claude/skills/conquistador', '.agents/skills/conquistador']) assert.ok(existsSync(join(f.directory, folder, 'SKILL.md')), folder);

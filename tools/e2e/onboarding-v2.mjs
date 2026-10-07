@@ -121,7 +121,7 @@ const scenarios = [];
 const scenario = (name, covers, body) => scenarios.push({ name, covers, body });
 const SGR_COLOR = /\x1b\[([\d;]*)m/g;
 const hasColor = raw => [...raw.matchAll(SGR_COLOR)].some(match => match[1].split(';').some(code => /^(?:3\d|4\d|9[0-7]|10[0-7])$/.test(code)));
-const has = (text, needle) => text.replace(/\s+/g, '').includes(needle.replace(/\s+/g, ''));
+const has = (text, needle) => text.replace(/[\s│]+/g, '').includes(needle.replace(/\s+/g, ''));
 // Lines as a terminal would show them if it never wrapped: render at a huge width.
 const unwrappedWidth = raw => { const screen = new Screen(400, 2000); screen.write(raw); return Math.max(0, ...screen.lines({ history: true }).map(line => [...line].length)); };
 
@@ -137,7 +137,7 @@ async function toggle(s, steps) { for (let index = 0; index < steps; index += 1)
 async function acceptDefaultsToReview(s, { snap = true, hooks = true, apps = true, executor = true } = {}) {
   await s.waitFor('Where do you want Conquistador?'); if (snap) await s.snap('surfaces'); await s.press('enter');
   await s.waitFor('Which agents?'); if (snap) await s.snap('agents'); await s.press('enter');
-  await s.waitFor('all projects, or only this one?'); if (snap) await s.snap('scope'); await s.press('enter');
+  await s.waitFor('or only this one?'); if (snap) await s.snap('scope'); await s.press('enter');
   if (hooks) { await s.waitFor('Turn on prompt hooks?'); if (snap) await s.snap('hooks'); await s.press('enter'); }
   if (apps) { await s.waitFor('Which MCP apps?'); if (snap) await s.snap('mcp-apps'); await s.press('enter'); }
   if (executor) { await s.waitFor('Name for the source in Executor'); if (snap) await s.snap('executor'); await s.press('enter'); }
@@ -175,7 +175,7 @@ scenario('happy', ['F21', 'F24', 'F26', 'F27', 'F29'], async ({ expect, keepSnap
     const code = await s.exit();
     expect(code === 0, `first run exited ${code}`);
     const installed = s.snaps.find(item => item.name === 'installed-and-verified').text;
-    expect(has(installed, 'Checking') && !installed.includes('✗'), 'verify pass missing or failed');
+    expect(has(installed, 'checks passed') && !installed.includes('✗'), 'verify pass missing or failed');
     const summary = s.snaps.at(-1).text;
     for (const text of ['/conquistador', 'conquistador doctor', 'conquistador update', 'conquistador remove']) expect(has(summary, text), `summary lacks ${text}`);
     const calls = f.calls().map(call => `${call.name} ${call.args.join(' ')}`);
@@ -309,8 +309,8 @@ scenario('both-scopes', ['F5'], async ({ expect }) => {
     const s = f.term(['add']);
     await s.waitFor('Where do you want Conquistador?'); await s.press('enter');
     await s.waitFor('Which agents?'); await s.press('enter');
-    await s.waitFor('all projects, or only this one?'); await s.press('enter');
-    await s.waitFor('Turn on prompt hooks?'); await s.press('enter');
+    // The default scope stays project, because this project already has a copy: no hooks question.
+    await s.waitFor('or only this one?'); await s.press('enter');
     await s.waitFor('Install now?'); await s.snap('review-both-scopes');
     expect(has(s.screen.text(), 'loads both'), 'review does not warn about two copies (F5)');
     await s.press('escape');
@@ -335,7 +335,7 @@ scenario('update', ['F6'], async ({ expect }) => {
     const s = f.term(['add']);
     await s.waitFor('Where do you want Conquistador?'); await s.press('enter');
     await s.waitFor('Which agents?'); await s.press('enter');
-    await s.waitFor('all projects, or only this one?'); await s.press('enter');
+    await s.waitFor('or only this one?'); await s.press('enter');
     await s.waitFor('Turn on prompt hooks?'); await s.press('enter');
     await s.waitFor('Install now?'); await s.snap('review-update'); await s.press('enter');
     await finishAfterInstall(s);
@@ -367,7 +367,7 @@ scenario('verify-problem', ['F8'], async ({ expect }) => {
 const CANCEL_STEPS = [
   ['surfaces', 'Where do you want Conquistador?', 'ctrlC', []],
   ['agents', 'Which agents?', 'escape', []],
-  ['scope', 'all projects, or only this one?', 'ctrlC', []],
+  ['scope', 'or only this one?', 'ctrlC', []],
   ['hooks', 'Turn on prompt hooks?', 'escape', []],
   ['mcp-apps', 'Which MCP apps?', 'ctrlC', []],
   ['executor', 'Name for the source in Executor', 'ctrlC', []],
@@ -383,7 +383,7 @@ for (const [step, question, key, extra] of CANCEL_STEPS) {
       const s = f.term([]);
       const answers = [
         ['Where do you want Conquistador?', extra.includes('bot') ? async () => { await toggle(s, 3); await s.press('enter'); } : null],
-        ['Which agents?'], ['all projects, or only this one?'], ['Turn on prompt hooks?'], ['Which MCP apps?'],
+        ['Which agents?'], ['or only this one?'], ['Turn on prompt hooks?'], ['Which MCP apps?'],
         ['Name for the source in Executor'], ...(extra.includes('bot') ? [['Folder for the bot files']] : []), ['Install now?'],
       ];
       for (const [text, act] of answers) {
@@ -443,7 +443,9 @@ scenario('non-tty', ['F10', 'F11', 'F12'], async ({ expect, transcript }) => {
     expect(first.stdout === second.stdout, 'JSON plan differs between two runs (F12)');
     expect(JSON.stringify(parsed?.surfaces?.map(item => item.id)) === '["agents","mcp-apps","executor","bot"]', 'JSON plan surfaces wrong (F12)');
     expect(JSON.stringify(f.tree()) === JSON.stringify(before), 'a preview changed files (F10, F11, F12)');
-    expect(f.calls().length === 0, `a preview ran a host command: ${JSON.stringify(f.calls())}`);
+    // Previews may ask Executor for its version and status (read-only); nothing else runs.
+    const ran = f.calls().filter(call => !(call.name === 'executor' && ['--version', 'daemon status'].includes(call.args.join(' '))));
+    expect(ran.length === 0, `a preview ran a host command: ${JSON.stringify(ran)}`);
     return tty.snaps;
   } finally { f.cleanup(); }
 });
@@ -469,7 +471,7 @@ scenario('no-color', ['F14'], async ({ expect }) => {
     const s = f.term([], { env: { NO_COLOR: '1' } });
     await s.waitFor('Where do you want Conquistador?'); await s.snap('surfaces-no-color'); await s.press('enter');
     await s.waitFor('Which agents?'); await s.press('enter');
-    await s.waitFor('all projects, or only this one?'); await s.press('enter');
+    await s.waitFor('or only this one?'); await s.press('enter');
     await s.waitFor('Turn on prompt hooks?'); await s.press('enter');
     await s.waitFor('Install now?'); await s.snap('review-no-color');
     await s.press('ctrlC');
@@ -486,7 +488,7 @@ scenario('plain', ['F25'], async ({ expect }) => {
     const s = f.term([], { env: { TERM: 'dumb' } });
     await s.waitFor('Where do you want Conquistador?'); await s.snap('plain-surfaces'); await s.press('enter');
     await s.waitFor('Which agents?'); await s.press('enter');
-    await s.waitFor('all projects, or only this one?'); await s.press('enter');
+    await s.waitFor('or only this one?'); await s.press('enter');
     await s.waitFor('Turn on prompt hooks?'); await s.press('enter');
     await s.waitFor('Install now?'); await s.snap('plain-review'); await s.press('enter');
     await s.waitFor('Set up this project now?'); await s.type('2\r');

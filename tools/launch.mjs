@@ -201,9 +201,10 @@ async function afterInstall(ui, outcome, options, cwd) {
   } else {
     if (needsInit(cwd)) {
       const single = ready.length === 1 ? ready[0] : null;
+      if (!options.yes) ui.log.message('This project has no GROWTH.md yet. /conquistador init records\nyour product and growth context, so later work starts from facts.');
       const setup = options.yes ? 'now' : await ui.select({ message: `${prefix}Set up this project now?`, options: [
-        { value: 'now', label: `Yes, open ${single ? single.label : 'my agent'} with /conquistador init`, hint: 'records PRODUCT.md and GROWTH.md' },
-        { value: 'later', label: 'Later', hint: 'run /conquistador init in your agent' },
+        { value: 'now', label: `Yes, open ${single ? single.label : 'my agent'} with /conquistador init` },
+        { value: 'later', label: 'Later' },
       ] });
       if (ui.isCancel(setup)) return cancelled();
       if (setup === 'now') {
@@ -281,9 +282,11 @@ export async function runStart(args = [], { cwd = process.cwd(), tty = process.s
   const ui = suppliedUi ?? (plain ? plainUi() : await import('./vendor/clack.mjs'));
 
   if (install) {
-    const outcome = await runInstaller({ ...options, plain }, { cwd, ui, updateCheck: !suppliedUi });
-    if (!outcome.finish) { ui.close?.(); return outcome.code; }
-    return afterInstall(ui, outcome, options, cwd);
+    // The plain UI reads stdin; close it so the process can exit (launchInto closes it before a hand-off).
+    try {
+      const outcome = await runInstaller({ ...options, plain }, { cwd, ui, updateCheck: !suppliedUi });
+      return outcome.finish ? await afterInstall(ui, outcome, options, cwd) : outcome.code;
+    } finally { ui.close?.(); }
   }
 
   ui.intro(`Conquistador ${version}`);
