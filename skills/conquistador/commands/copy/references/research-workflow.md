@@ -79,6 +79,15 @@ A strong Unique Mechanism passes four tests:
 - **Causal:** it explains why the promised outcome becomes possible.
 - **Defensible:** it is supported by proof, process detail, credentials, or observed results.
 
+Write the mechanism in two lines:
+
+- **Problem side:** why the reader's earlier attempts did not work. Put the cause in the method or conditions, not in the reader's character.
+- **Solution side:** the one concrete difference in how this product works.
+
+Apply the Defensible test to both lines. Reject a problem-side story the evidence does not support, even if it persuades. If either line cannot be written, block the offer draft and name the missing input.
+
+An adherence mechanism is valid: a real reduction of friction in a routine. Claim easier follow-through, not a stronger effect. When the category already makes many bigger promises, lead with the mechanism instead of raising the promise.
+
 Weak mechanisms are usually generic labels: "AI-powered", "done-for-you", "personalized", "proven framework", "automation". These can become mechanisms only if the copy explains the specific causal process that competitors do not share.
 
 ## Dispatch Notes

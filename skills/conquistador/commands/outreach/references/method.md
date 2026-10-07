@@ -87,6 +87,21 @@ For a sequence, include suppression, owner-set batch and stop rules, and a propo
 a qualified conversation. Leave results empty until observed. Do not invent platform limits or
 legal compliance determinations; identify what the operator must verify for this channel and region.
 
+In every sequence plan, define the stop rules as state changes. Each sending event causes exactly one:
+
+| Event | State change |
+|---|---|
+| Sequence starts | Mark that channel active for the contact |
+| Any reply | Pause all channels for the contact before the reply is classified |
+| Unsubscribe or opt-out | Suppress the contact on every channel |
+| Duplicate event | Ignore it |
+| Provider keeps failing | Create a task for the owner; leave the state unchanged |
+| Two tools disagree on the contact's state | Stop that contact until a person resolves it |
+
+Classification never decides whether sending continues. Give each channel its own approval; an
+edited message locks its channel until the new version is approved. After a prospect engages,
+draft a suggested reply for a person to send. Never send a substantive sales reply automatically.
+
 Drafting does not send, enrich contacts, upload lists, write CRM records, or schedule. Those require
 separate approval for the exact action, final payload, recipient scope, account, and timing. A
 changed payload or destination needs a new review. A critic score cannot supply that authority.
