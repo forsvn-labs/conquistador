@@ -81,7 +81,7 @@ export function createMethodAccess(root = bundledRoot) {
     try {
       const stat = fstatSync(fd);
       const checked = lstatSync(contained(path));
-      if (stat.size > LIMITS.file) throw new Error('File too large');
+      if (stat.size > LIMITS.file) throw Object.assign(new Error('File too large'), { code: 'TOO_LARGE' });
       if (!stat.isFile() || stat.dev !== checked.dev || stat.ino !== checked.ino) throw new Error('Invalid file');
       const bytes = Buffer.alloc(LIMITS.file + 1);
       let size = 0;
@@ -90,7 +90,7 @@ export function createMethodAccess(root = bundledRoot) {
         if (!count) break;
         size += count;
       }
-      if (size > LIMITS.file) throw new Error('File too large');
+      if (size > LIMITS.file) throw Object.assign(new Error('File too large'), { code: 'TOO_LARGE' });
       const text = decoder.decode(bytes.subarray(0, size));
       if (text.includes('\0')) throw new Error('Binary file');
       return text;
@@ -194,7 +194,7 @@ function libraryPath(path, from) {
 // Name the cause without echoing the supplied path.
 function readFailure(failure) {
   if (failure.code === 'ENOENT') return 'Not found: no bundled file has that path. List files with conquistador_files or find one with conquistador_search.';
-  if (failure.message === 'File too large') return `File too large: bundled files over ${LIMITS.file} bytes are not served.`;
+  if (failure.code === 'TOO_LARGE') return `File too large: bundled files over ${LIMITS.file} bytes are not served.`;
   return 'Invalid path: use a library path such as conquistador/commands/copy/COMMAND.md, or a relative link with its file as `from`.';
 }
 

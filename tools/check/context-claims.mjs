@@ -3,22 +3,28 @@
 // The ask line (a question) and merge tags are skipped: a proposed call length is an offer, not a claim.
 
 const mergeTag = /\{\{[^}]*\}\}|\{[a-z_]+\}|\*\|[A-Z_]+\|\*|%[a-z_]+%/gi;
-const number = /(?:[$€£]\s?)?\d[\d,.]*(?:\s?(?:%|x\b|k\b|m\b|percent\b))?/gi;
+// A number attached to a hyphenated word ("3-email", "15-minute") describes the message, not a result.
+const number = /(?<![\w-])(?:[$€£]\s?)?\d[\d,.]*(?:\s?(?:%|x\b|k\b|m\b|percent\b))?(?!-?\w)/gi;
 // "teams like Acme", "used by Acme and Northwind", "customers such as Acme"
 const customerLead = /\b(?:teams?|companies|customers|clients|brands|users|founders|leaders)\s+(?:like|such as|including|at)\s+|\b(?:used|trusted|loved|chosen)\s+by\s+/gi;
 const properName = /[A-Z][\w&.-]*(?:\s+[A-Z][\w&.-]*)*/g;
 
-const digits = value => value.replace(/[^\d.]/g, '').replace(/\.$/, '');
+// Compare the value with its unit, so 10x does not match 10%. Thousands separators do not count.
+const key = value => {
+  const amount = value.replace(/[^\d.]/g, '').replace(/\.$/, '');
+  const unit = /%|percent/i.test(value) ? '%' : /x$/i.test(value.trim()) ? 'x' : /k$/i.test(value.trim()) ? 'k' : /m$/i.test(value.trim()) ? 'm' : /[$€£]/.test(value) ? value.match(/[$€£]/)[0] : '';
+  return amount ? `${amount}${unit}` : '';
+};
 
 export function contextClaims(document, context) {
   const known = context.toLowerCase();
-  const knownNumbers = new Set((context.match(number) ?? []).map(digits).filter(Boolean));
+  const knownNumbers = new Set((context.match(number) ?? []).map(key).filter(Boolean));
   const findings = [];
   for (const line of document.lines) {
     const text = line.text.replace(mergeTag, ' ');
     if (!text.trim() || /\?\s*$/.test(text.trim())) continue;
     for (const match of text.match(number) ?? []) {
-      const value = digits(match);
+      const value = key(match);
       if (value && !knownNumbers.has(value)) findings.push({ line: line.n, snippet: match.trim(), kind: 'number' });
     }
     for (const lead of text.matchAll(customerLead)) {

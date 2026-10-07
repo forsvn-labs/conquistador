@@ -4832,7 +4832,7 @@
     },
     {
       "path": "tools/check/context-claims.mjs",
-      "sha256": "9b4205c2aa2d9e74fe8e246982d382956cb96db1ebf14b7d49a830c7f3c5c6ac"
+      "sha256": "e3348eef2788b2c321c64289815b308842614cc08244c1f95b03ab3dc23f3b70"
     },
     {
       "path": "tools/check/extract.mjs",
@@ -4884,7 +4884,7 @@
     },
     {
       "path": "tools/skills-mcp.mjs",
-      "sha256": "9d436a239a9c07d0c4a1e1cf04d539a6a48181e7d93de412e09db9fad17a4b89"
+      "sha256": "9bcacdad70ee7d4fa4de80774a6c3acb745df4ccd51e54265d31903ee95a5cba"
     }
   ]
 }

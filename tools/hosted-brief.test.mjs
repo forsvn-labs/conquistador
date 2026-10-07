@@ -96,3 +96,10 @@ test('the ask line, merge tags, and checks without context are not flagged', () 
   assert.equal(rules(email('Teams cut month-end close by 40%.')).length, 0);
   assert.equal(call(local, 'conquistador_check', { text: 'Hi', context: 5 }).error?.code, -32602);
 });
+
+test('a number keeps its unit when compared, and hyphenated words are not claims', () => {
+  const percent = 'Product: Ledgerline. Proof: 10% fewer manual checks in one pilot.';
+  assert.ok(rules(email('Ledgerline makes reconciliation 10x faster.'), percent).some(finding => finding.snippet === '10x'));
+  assert.equal(rules(email('In one pilot, Ledgerline led to 10% fewer manual checks.'), percent).length, 0);
+  assert.equal(rules(email('This is the second note in a 3-email series about month-end.'), context).length, 0);
+});
