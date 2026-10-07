@@ -2,7 +2,7 @@
 name: copy
 description: "Write paste-ready copy for pages, headlines, calls to action, emails, and launches."
 metadata:
-  version: 2.1.1
+  version: 2.2.0
 ---
 
 # Write product-marketing copy
