@@ -154,7 +154,7 @@ test('cancellation at any install question leaves hosts unchanged', async t => {
 });
 
 test('keep detected hosts installs globally; a healthy repeat skips writes; host-side uninstall is repaired', async t => {
-  const f = fixture(t), firstUi = ui();
+  const f = fixture(t), firstUi = ui({ ids: ['claude-code', 'codex'] });
   assert.equal(await runStart(['--no-open'], { cwd: f.directory, tty: true, ui: firstUi }), 0);
   assert.deepEqual(Object.keys(readState().agents).sort(), ['claude-code', 'codex']);
   assert.deepEqual(firstUi.questions, ['Where do you want', 'Which agents', 'all projects, or only this one', 'Turn on prompt hooks', 'Install now']);
@@ -171,7 +171,7 @@ test('keep detected hosts installs globally; a healthy repeat skips writes; host
 test('customize selects named hosts; project scope copies one skill per folder and runs no host command', async t => {
   const f = fixture(t), screen = ui({ ids: ['claude-code', 'pi', 'opencode'], scope: 'project' });
   mkdirSync(join(f.directory, '.git'));
-  assert.equal(await runStart(['--no-open'], { cwd: f.directory, tty: true, ui: screen }), 0);
+  assert.equal(await runStart(['--no-open'], { cwd: f.directory, tty: true, ui: screen }), 0, screen.messages.join('\n'));
   assert.deepEqual(screen.questions, ['Where do you want', 'Which agents', 'all projects, or only this one', 'Install now']);
   assert.deepEqual(f.calls(), []);
   assert.deepEqual(readState().agents ?? {}, {});
