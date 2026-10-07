@@ -26,6 +26,18 @@ Record before designing anything:
 
 Missing frames are gaps to surface, not fields to guess.
 
+Then classify the target segment by how well current options serve it, and let that set the
+price direction:
+
+- **Underserved** buyers (important needs met poorly) can support a better, dearer offer.
+- **Overserved** buyers and non-consumers favor a cheaper, simpler offer.
+- **Better and cheaper** wins every segment but needs a cost advantage you can name.
+- **Dearer and worse** works only where buyers have no alternative; label it a lock-in risk.
+
+Flag an offer that is only slightly better or slightly cheaper than the incumbent. It rarely
+moves switchers and mostly helps whoever already holds the customer. Label the served state
+`hypothesis` unless outcome-level evidence from `position` supports it.
+
 ## 2. Choose or test the value metric
 
 A value metric is the unit the price grows on. Candidates include seats, usage units, outcomes,
@@ -71,11 +83,28 @@ Every recommendation ships with its reversal condition written first:
 
 - the smallest reversible test that distinguishes serious options (audience, variants, primary
   signal, guardrails, window, keep/revise/stop rule);
+- a higher-price cell when buyers may read price as a quality signal (B2B tools, professional
+  services), not only cells at or below the planned price;
+- a shallower-discount cell before you approve a deep discount, so the test shows whether the
+  extra depth buys any extra conversion;
 - migration, grandfathering, downgrade, billing, and communication implications;
 - the observation that would prove the change wrong and the date it gets checked.
 
 If no reversible test exists — for example a contractual price change with no cohort separation —
 the recommendation must say so and stop at analysis plus a human decision gate.
+
+## Offer mechanics
+
+Decide each mechanic as an explicit choice with a reason, not as a default:
+
+- **Trial existence.** Do not add a free trial to rescue an offer that has no paid demand yet.
+  Show that some buyers pay without a trial first; then test a trial as an optimization.
+- **Trial placement.** For consumer subscriptions, a trial on one plan steers buyers toward that
+  plan. Test trial-on-one-plan against trial-on-all-plans and no trial.
+- **Short billing periods.** When you test a weekly or monthly plan against annual, compare net
+  revenue per buyer after churn and refunds, not conversion rate.
+- **Lifetime deals.** Offer one only with a written reason. Record the open-ended service cost,
+  the lost renewal revenue, and the complication for any later sale of the business.
 
 ## Deliverable shape
 

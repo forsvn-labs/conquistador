@@ -25,6 +25,11 @@ and a single method never settles it.
    own.
 5. **Surveys and conjoint** — structured stated preference. Better than open questions, still
    hypothetical; report the method and sample.
+   For a price-sensitivity survey, ask four questions in this order: the price that is too
+   expensive to consider; expensive but still considered; a good deal; so cheap that quality is
+   in doubt. Plot the four curves and use their overlap only as a range to test, never as the
+   price. Pair each respondent's price answers with the features or benefits they rank highest,
+   so the range maps to a package.
 6. **Competitor pricing pages** — dated screenshots of another offer's structure. Weak anchor:
    different costs, different audience, possibly different strategy. Use to bound the conversation,
    not to set the number.

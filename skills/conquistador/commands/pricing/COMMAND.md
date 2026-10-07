@@ -2,7 +2,7 @@
 name: pricing
 description: "Design pricing, packages, and upgrade paths, and test a price change safely."
 metadata:
-  version: 1.0.0
+  version: 1.1.0
 ---
 
 # Design pricing and packaging
