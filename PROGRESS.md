@@ -7,6 +7,11 @@
   labelled sample output, the founder's reason, an observed problem), sequence mechanics (one new
   element per touch, spacing from the buyer's cycle, threading, when to stop), and a worked
   3-email SaaS sequence with a weak version and its flaws. `outreach-decisions` stays in Core.
+  `outreach` 2.4.0 fixes three findings from the second deployed-agent run: the mode separates
+  the proof stages (no users; users but no measured results; results but no publishable case
+  study) and forbids upgrading or downgrading the stage; a substitute without sender input becomes
+  a pre-send gap; and the worked sequence now uses a different synthetic product (Plinthwise) than
+  the Ledgerline e2e task.
 - **Hosted briefs and claim checks from the deployed-agent findings.** Every brief starts with the
   route ("Start here") and a rule to lead with the requested deliverable. Over HTTP the brief says
   the agent has no repository, so file-writing steps become content in the answer, and it returns
