@@ -32,6 +32,17 @@ Compose these exact files, in order, for one platform and one artifact:
 6. [`measure`](../commands/measure/COMMAND.md) — after the observation window, interpret actual
    results and choose one next change.
 
+## Test distinctiveness before ranking
+
+- Before an angle is chosen, map the strongest existing coverage of the topic. Record the angle each
+  piece already owns and the questions it leaves open. If existing coverage already owns the
+  proposed angle, find a sharper contribution or archive the idea.
+- Hold an idea that has only one source, with a note such as "needs a second independent source".
+  Do not rank it as a pattern.
+- When the human rejects an angle, record one plain reason, such as: the conversation already
+  peaked, the angle is already owned, it is not relevant to our reader, or we cannot make it
+  credible. Use past rejection reasons as examples in later rankings.
+
 Use `channels` to validate the platform before step 2 when it is in doubt. The optional runtime graph
 for this play is `runtime/fixtures/playbooks/content-intelligence-loop.json`; it stops at human review.
 
