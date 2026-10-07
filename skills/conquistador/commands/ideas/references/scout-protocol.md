@@ -114,6 +114,14 @@ For each candidate URL, capture the following fields (write `metric_unobserved: 
 
 ---
 
+## Outliers and Post Age
+
+- Call a post an outlier only against the same author's median for that format, over a stated window, by a multiple stated before the search. Do not rank raw views across accounts of different sizes; audience size is not a pattern.
+- Read engagement again at several fixed post ages and record whether the curve still rises. Label a single reading as a single snapshot.
+- When the author's baseline is not visible, mark `outlier: unverified` instead of guessing.
+
+---
+
 ## Fallback Logic
 
 If after 3 query attempts the platform returns < 3 entries:

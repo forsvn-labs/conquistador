@@ -41,6 +41,8 @@ The two-window split prevents the "fresh date, stale truth" failure mode where o
 - **ICP is soft-required.** Research without ICP underperforms — the audience-fit-agent flags `NEEDS_CONTEXT` and the brief skill downstream sees the flag. Operator can override (cold-start hint) but the warning persists.
 - **Critic gate is 5 rubrics, 2-cycle cap.** PASS = record `done`. FAIL → re-dispatch named agents with feedback. After 2 cycles, stop for the human with internal grade `done_with_concerns`; failed rubrics pinned at top of artifact. Don't loop forever.
 - **Conditional dispatch for audio.** `audio-trend-agent` runs only if TikTok or Reels is in scope. YouTube Shorts uses original audio more often; X/LinkedIn rarely use audio trends. Running it for non-applicable platforms wastes tokens and produces empty sections.
+- **Look past the category and the year.** Search outside the product's category and outside the current year for formats. A strong candidate often joins a current format to an older proven one; record both sources.
+- **Read crowding from creator spread.** In a niche search, count how many different creators appear. Many distinct creators suggest room to enter; the same few creators repeated suggest a crowded niche. Record the query and date with the reading.
 - **The artifact IS the contract.** Output artifact frontmatter + body section order are consumed downstream by `video` (per-asset) and `results` (cycle-N scoring against the catalog). Contract changes require atomic updates to both consumers — never silently drift the schema.
 
 ## When NOT to use this skill
