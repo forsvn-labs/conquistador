@@ -246,3 +246,22 @@ Every dim's check must be:
 - **Bounded** — no open-ended "is this good?" judgments; only "does this match the spec?"
 
 If a dim falls back to subjective scoring, flag it for the next revision cycle.
+
+## Machine-readable gate
+
+`conquistador_score` checks a self-score against these rules. Use `critic` for the critic-agent's
+pre-publish pass over dims 1-7, and `final` for the orchestrator's /80 score after dim 8 (an export
+or draft run scores dim 8 at 10). The rubric states no aggregate for dims 1-7 alone, so `critic`
+checks only the per-dimension floor. Report each auto-fail condition above as a hard fail.
+
+```json conquistador-gate
+{
+  "scale": { "min": 0, "max": 10 },
+  "dimensions": ["Platform Char-Cap Compliance", "Media Spec Compliance", "CTA Visibility", "Hashtag-Rules Per Platform", "Scheduler-Format Validation", "Anti-Pattern Compliance", "Narration & Browser-Automation Safety", "Live-Publish Safety"],
+  "variants": {
+    "critic": { "notApplicable": ["Live-Publish Safety"], "minEach": 6 },
+    "final": { "minEach": 6, "minTotal": 56 }
+  },
+  "hardFails": ["char-cap-exceeded", "scheduler-format-unparseable", "credential-leak", "policy-violating-copy", "narration-block-invalid", "why-this-works-duplicated", "automation-without-confirmation", "cookie-leak", "captcha-bypass-attempt", "live-publish-without-confirmation", "critic-after-publish", "dry-run-posted"]
+}
+```

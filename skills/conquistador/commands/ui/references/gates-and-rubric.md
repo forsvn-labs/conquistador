@@ -79,3 +79,19 @@ The critic returns the failing CP-IDs, each with a specific fix and the named ag
 and critic annotations pinned. Flag `status: DONE_WITH_CONCERNS` as an internal grade only; it
 never authorizes publish, send, deploy, or production. Verdict is binary per checkpoint — no
 "conditional pass."
+
+## Machine-readable gate
+
+`conquistador_score` checks the critic's eight checkpoints against these rules. Use the single
+`default` variant and score each checkpoint `pass` or `fail`. The five Critical Gates run before
+dispatch and stay outside the gate.
+
+```json conquistador-gate
+{
+  "scale": { "levels": ["fail", "pass"] },
+  "dimensions": ["CP-01 Flow grounding", "CP-02 Component reuse & hierarchy", "CP-03 Token fidelity", "CP-04 Layout system", "CP-05 State coverage", "CP-06 Accessibility floor", "CP-07 Handoff readiness", "CP-08 No-render discipline"],
+  "variants": {
+    "default": { "minEach": "pass" }
+  }
+}
+```

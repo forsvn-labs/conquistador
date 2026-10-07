@@ -62,3 +62,21 @@ Label both simulated comparisons and review scores as synthetic evaluation, not 
 | Version | Date | Change |
 |---|---|---|
 | 0.2 | 2026-09-15 | Replaced inherited performance gates with task, evidence, reading and delivery checks. |
+
+## Machine-readable gate
+
+`conquistador_score` checks a self-score against these rules. Use the single `default` variant;
+`pass_with_concerns` is `done_with_concerns`. A material task-local verification gap also means
+`done_with_concerns`; that is judgment and stays outside the gate. Report verdict rules 1 and 2 as
+hard fails.
+
+```json conquistador-gate
+{
+  "scale": { "min": 0, "max": 10 },
+  "dimensions": ["Hook scroll-stop strength", "Char/word limit compliance", "CTA placement vs truncation", "Reading continuity", "Format compliance"],
+  "variants": {
+    "default": { "minTotal": 25, "doneAt": 35, "concernsBelowEach": 4 }
+  },
+  "hardFails": ["unverified-first-person", "internal-jargon", "hard-constraint-violation", "unusable-required-action"]
+}
+```

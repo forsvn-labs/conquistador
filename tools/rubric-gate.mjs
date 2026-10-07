@@ -8,8 +8,10 @@
 //
 // A level scale uses { "levels": ["fail", "weak", "pass"] } with "minEach" naming a level and
 // "maxAtLevel" capping how many dimensions may sit at a level. "notApplicable" lists dimensions a
-// variant may score as "N/A"; they leave the total and the maximum. The scores are the reviewer's
-// judgment; the gate only checks them against the rubric's own rules.
+// variant may score as "N/A"; they leave the total and the maximum. "minScore" sets a floor for one
+// named dimension. "concernsBelowEach" lowers a pass to pass_with_concerns when any dimension
+// scores below it. The scores are the reviewer's judgment; the gate only checks them against the
+// rubric's own rules.
 
 const usage = message => Object.assign(new Error(message), { usage: true });
 
@@ -36,6 +38,7 @@ export function evaluateGate(gate, { variant, scores, hardFails = [] }) {
   let total = 0;
   let max = 0;
   const atLevel = {};
+  let concerns = false;
   for (const name of gate.dimensions) {
     const value = scores[name];
     if (value === 'N/A') {
@@ -47,17 +50,23 @@ export function evaluateGate(gate, { variant, scores, hardFails = [] }) {
       if (!levels.includes(value)) throw usage(`Score ${name} with one of: ${levels.join(', ')}.`);
       atLevel[value] = (atLevel[value] ?? 0) + 1;
       if (rules.minEach && levels.indexOf(value) < levels.indexOf(rules.minEach)) failures.push(`${name} is ${value}; the minimum is ${rules.minEach}`);
+      const floor = rules.minScore?.[name];
+      if (floor && levels.indexOf(value) < levels.indexOf(floor)) failures.push(`${name} is ${value}; its minimum is ${floor}`);
+      if (rules.concernsBelowEach && levels.indexOf(value) < levels.indexOf(rules.concernsBelowEach)) concerns = true;
     } else {
       if (typeof value !== 'number' || !Number.isFinite(value) || value < gate.scale.min || value > gate.scale.max) throw usage(`Score ${name} with a number from ${gate.scale.min} to ${gate.scale.max}.`);
       total += value;
       max += gate.scale.max;
       if (rules.minEach !== undefined && value < rules.minEach) failures.push(`${name} is ${value}; each dimension needs at least ${rules.minEach}`);
+      const floor = rules.minScore?.[name];
+      if (floor !== undefined && value < floor) failures.push(`${name} is ${value}; it needs at least ${floor}`);
+      if (rules.concernsBelowEach !== undefined && value < rules.concernsBelowEach) concerns = true;
     }
   }
   for (const [level, cap] of Object.entries(rules.maxAtLevel ?? {})) {
     if ((atLevel[level] ?? 0) > cap) failures.push(`${atLevel[level]} dimensions are ${level}; at most ${cap} may be`);
   }
   if (!levels && rules.minTotal !== undefined && !missing.length && total < rules.minTotal) failures.push(`total is ${total}/${max}; the minimum is ${rules.minTotal}`);
-  const verdict = hardFails.length ? 'fail' : missing.length ? 'incomplete' : failures.length ? 'fail' : !levels && rules.doneAt !== undefined && total < rules.doneAt ? 'pass_with_concerns' : 'pass';
+  const verdict = hardFails.length ? 'fail' : missing.length ? 'incomplete' : failures.length ? 'fail' : concerns || (!levels && rules.doneAt !== undefined && total < rules.doneAt) ? 'pass_with_concerns' : 'pass';
   return { verdict, variant, total: levels ? null : total, max: levels ? null : max, failures, missing };
 }
