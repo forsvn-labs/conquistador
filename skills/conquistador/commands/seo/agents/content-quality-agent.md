@@ -111,7 +111,7 @@ Return a single markdown document with exactly these sections:
 
 **Duplicate content analysis:**
 - Near-duplicate pages (same content with minor variations)
-- Content cannibalization: multiple pages targeting the same keyword cluster
+- Content cannibalization: multiple pages targeting the same keyword cluster; follow the cannibalization procedure in [technical audit](../references/technical-audit.md)
 - Syndicated content without canonical attribution
 - Internal content that overlaps substantially between pages
 

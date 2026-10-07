@@ -2,7 +2,7 @@
 name: seo
 description: "Improve visibility in search, AI answers, and app stores."
 metadata:
-  version: 2.1.0
+  version: 2.2.0
 ---
 
 # Optimize search and answer visibility
@@ -24,7 +24,7 @@ Core:
 - [evaluation-loop-rubric](references/evaluation-loop-rubric.md): Evaluation-Loop Rubric — shared frame for the evaluate-* eval-loop critics. Why this is shared: the three…
 - [platform-search](references/platform-search.md): Platform search routing. Select the destination and user decision before loading a method. A channel…
 
-By step: [competitor-pages](references/competitor-pages.md), [evidence-classes](references/evidence-classes.md), [geo-citation-readiness-checklist](references/geo-citation-readiness-checklist.md), [linkable-asset-playbook](references/linkable-asset-playbook.md), [live-serp-remediation](references/live-serp-remediation.md), [programmatic-seo](references/programmatic-seo.md), [programmatic-template-playbooks](references/programmatic-template-playbooks.md), [retrieval-layer-seo](references/retrieval-layer-seo.md), [rubric](references/rubric.md), [schema-reference](references/schema-reference.md), [technical-audit](references/technical-audit.md), [technical-crawler-checklist](references/technical-crawler-checklist.md).
+By step: [competitor-pages](references/competitor-pages.md), [evidence-classes](references/evidence-classes.md), [geo-citation-readiness-checklist](references/geo-citation-readiness-checklist.md), [linkable-asset-playbook](references/linkable-asset-playbook.md), [live-serp-remediation](references/live-serp-remediation.md), [local-seo](references/local-seo.md), [programmatic-seo](references/programmatic-seo.md), [programmatic-template-playbooks](references/programmatic-template-playbooks.md), [retrieval-layer-seo](references/retrieval-layer-seo.md), [rubric](references/rubric.md), [schema-reference](references/schema-reference.md), [technical-audit](references/technical-audit.md), [technical-crawler-checklist](references/technical-crawler-checklist.md).
 
 Platform packs (read the one for each platform in the task): [bing-readiness](references/platform-intelligence/bing-readiness.md).
 
@@ -147,6 +147,7 @@ separate lenses.
   [critic](agents/critic-agent.md).
 - Load [technical audit](references/technical-audit.md),
   [crawler checklist](references/technical-crawler-checklist.md),
+  [local SEO](references/local-seo.md) for a local business,
   [AI SEO](references/ai-seo.md), [retrieval](references/retrieval-layer-seo.md),
   [schema](references/schema-reference.md), [ASO](references/aso.md), and
   [evidence classes](references/evidence-classes.md) as the mode requires.

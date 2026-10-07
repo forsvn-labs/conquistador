@@ -42,6 +42,33 @@ Hard overrides regardless of total:
 If multiple opportunities cluster on one topic (signal 3), **build the asset once and
 reuse it across every pitch in that batch** — the cluster is what makes the asset pay back.
 
+## The replacement-asset route
+
+Use this route when competitor pages on the topic already earn links and the site can
+build a better resource.
+
+1. **Find the targets.** Pull backlink profiles for a few direct competitors and sort
+   their pages by referring domains. Keep pages that are on topic and still have search
+   demand. Rank them on links, relevance, demand, and how winnable the results page is.
+   Start with the top target.
+2. **Find the link reason.** Sample the pages that link to the target. Read each anchor
+   and the sentence around it, and classify why they linked: a statistic, a tool or
+   template, a definitive guide, original research, or an interview. If the page has
+   changed, check an archived copy.
+3. **Set the coverage floor.** Cover what the top-ranking pages and the leading videos
+   for the query cover; use the video transcripts.
+4. **Find the gaps.** Mine forums, video comments, and reviews for questions that recur
+   and that current resources do not answer, and for complaints about those resources.
+   Make each one a section.
+5. **Beat the link reason, not the length.** Add original data with its method, current
+   figures, and answers to the gaps. Reject "longer" as the differentiator.
+6. **Pitch the swap.** Prioritize sites that link to two or more competing pages on the
+   topic. Find the author of each linking article. The pitch names their article and the
+   exact link, states the upgrade in one line, and makes the swap easy. Draft the pitch
+   through `outreach`; send only with approval.
+7. **Track and refresh.** Track the target page, links won, replies, and rank. Set a
+   refresh date for the asset's facts.
+
 ## Source-quality hierarchy
 
 Every stat on a linkable asset must trace to a real, fetched source. Prefer sources in
