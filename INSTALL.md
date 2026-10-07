@@ -62,8 +62,9 @@ hand instead.
 Executor: the installer runs `executor call executor mcp addServer`. Executor asks to approve the
 change, and the installer says yes for that one change, because you approved it in the review. When
 Executor is installed but not running, the review says so and the step starts it
-(`executor daemon run`). Executor versions without `mcp.addServer` (1.5 and earlier) get the steps
-to add the source by hand.
+(`executor daemon run`). An Executor version without `mcp.addServer` gets the steps to add the
+source by hand. Executor 1.5.40 can add a source but cannot remove or replace one from the command
+line: `conquistador remove` then tells you to remove it in the Executor app (`executor web`).
 
 ### Options
 

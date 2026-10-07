@@ -1,11 +1,12 @@
 #!/usr/bin/expect -f
 # The agent-first start, end to end, with real agents in an isolated home. No model is called:
 # every agent session is closed before a prompt is sent.
-#   1. Bare `conquistador` shows the detected agents, keeps them, asks the scope, installs, and
-#      opens Claude Code with `/conquistador init` pre-filled (no GROWTH.md yet). The pre-fill
-#      survives the trust screen (A3).
+#   1. `conquistador --surface=agents` shows the detected agents chosen, asks the scope and hooks,
+#      installs, checks, offers init, and opens Claude Code with `/conquistador init` pre-filled (no
+#      GROWTH.md yet). The pre-fill survives the trust screen (A3). --surface=agents keeps the run
+#      away from an Executor or MCP app on this machine.
 #   2. With GROWTH.md, bare `conquistador` skips install, remembers the agent, and takes a typed task.
-#   2b. `conquistador --scope=project` in a second project: customize, then one skill copy per folder.
+#   2b. `conquistador --scope=project --surface=agents` in a second project: one skill copy per folder.
 #   3. `conquistador "TASK" --in codex` opens Codex with the prompt as its argument (A8).
 #   4. Without a terminal it prints the command and never opens an agent (A5).
 #   5. Outside a project folder the prompt asks for the product first (A7).
@@ -70,20 +71,27 @@ proc trust {} { step {cancel}; sleep 1.5; send "\033\[B"; sleep 0.5; send "\r" }
 # --- 1. First run: keep the detected agents, global scope ------------------------------------
 cd $project
 set transcript ""
-eval spawn $cli
+eval spawn $cli --surface=agents
 stty rows 50 columns 140 < $spawn_out(slave,name)
-step {Install for}
-record "first run shows the detected agents with their paths" [expr {[has "Detected agents"] && [has "Claude Code"]}] ""
+step {Which agents\?}
+# The options draw after the question line.
+step {Claude Code}
+record "first run shows the detected agents" [expr {[has "Which agents"] && [has "Claude Code"]}] ""
 send "\r"
-step {Install location}
+step {or only this one\?}
+send "\r"
+step {Turn on prompt hooks\?}
 send "\r"
 step {Install now\?}
 send "\r"
 # Every detected plugin manager runs now; that can take a few minutes.
 set timeout 600
-step {Open in}
+step {Set up this project now\?}
 set timeout 60
 record "first run installs every kept agent" [expr {[has "✓ Claude Code"] && [has "✓ Codex"]}] ""
+record "first run checks the installs" [has "checks passed"] ""
+send "\r"
+step {Open in}
 send "\r"
 trust
 step {Pre-filled}
@@ -127,14 +135,14 @@ set fh [open $project2/README.md w]; puts $fh "# Studio\n\nA booking tool for ph
 exec git -C $project2 init -q
 cd $project2
 set transcript ""
-eval spawn $cli --scope=project
+eval spawn $cli --scope=project --surface=agents
 stty rows 50 columns 140 < $spawn_out(slave,name)
-step {Install for}
-send "\033\[B"; sleep 0.3; send "\r"
-step {Select agents}
+step {Which agents\?}
 send "\r"
 step {Install now\?}
-record "customize offers every agent, and --scope skips the location question" [expr {![has "Install location"]}] ""
+record "--scope skips the location question" [expr {![has "or only this one"]}] ""
+send "\r"
+step {Set up this project now\?}
 send "\r"
 trust
 step {Pre-filled}

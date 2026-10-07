@@ -1,8 +1,10 @@
 // A stand-in for the Executor CLI in the onboarding E2E: node fake-executor.mjs ARGS...
-// It copies the behavior observed in Executor 1.6.8 (2026-10-07): `call` pauses for approval and
+// It copies the behavior observed in Executor 1.6.8 (2026-10-08): `call` pauses for approval and
 // prints an execution ID; `resume --action accept` runs the call and prints {"ok": ...} JSON.
+// `mcp getServer` is not gated and answers {"integration": null} for a missing source.
 // State lives in $HOME/.fake-executor.json. FAKE_EXECUTOR=stopped starts with no daemon;
-// FAKE_EXECUTOR=old has no mcp.addServer tool. Every call goes to $FAKE_AGENT_LOG.
+// FAKE_EXECUTOR=old has no mcp.addServer tool; FAKE_EXECUTOR=v1.5 has no coreTools.integrations.remove
+// (as Executor 1.5.40). Every call goes to $FAKE_AGENT_LOG.
 import { appendFileSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 
@@ -15,7 +17,7 @@ const save = () => writeFileSync(file, `${JSON.stringify(state, null, 2)}\n`);
 if (process.env.FAKE_AGENT_LOG) appendFileSync(process.env.FAKE_AGENT_LOG, `${JSON.stringify({ name: 'executor', args })}\n`);
 const json = value => { console.log(JSON.stringify(value, null, 2)); process.exit(0); };
 
-if (args[0] === '--version') { console.log(mode === 'old' ? 'executor v1.5.40' : 'executor v1.6.8'); process.exit(0); }
+if (args[0] === '--version') { console.log(mode === 'old' ? 'executor v1.4.0' : mode === 'v1.5' ? 'executor v1.5.40' : 'executor v1.6.8'); process.exit(0); }
 if (args[0] === 'daemon' && args[1] === 'status') { console.log(state.running ? 'Daemon reachable at http://localhost:4788 (pid 4242).' : 'Daemon not running at http://localhost:4788.'); process.exit(0); }
 if (args[0] === 'daemon' && args[1] === 'run') { state.running = true; save(); console.log('Starting daemon on localhost:4788...'); process.exit(0); }
 if (args[0] === 'tools' && args[1] === 'integrations') {
@@ -27,8 +29,13 @@ if (args[0] === 'call' && args[1] === 'executor') {
   if (!state.running) { console.log('Starting daemon on localhost:4788...'); state.running = true; }
   const path = args.slice(2, -1).join('.');
   const input = JSON.parse(args.at(-1));
+  if (path === 'coreTools.integrations.remove' && mode === 'v1.5') { save(); json({ ok: false, error: { code: 'tool_not_found', message: 'Tool not found: executor.coreTools.integrations.remove' } }); }
   if (path === 'mcp.addServer' && mode === 'old') { save(); json({ ok: false, error: { code: 'tool_not_found', message: 'Tool not found: executor.mcp.addServer' } }); }
-  if (path === 'mcp.getServer') { save(); json(state.integrations[input.slug] ? { ok: true, data: state.integrations[input.slug] } : { ok: false, error: { code: 'integration_not_found', message: `Integration ${input.slug} not found` } }); }
+  if (path === 'mcp.getServer') {
+    const found = state.integrations[input.slug];
+    save();
+    json({ ok: true, data: { integration: found ? { slug: input.slug, name: found.name, kind: 'mcp', config: { transport: 'stdio', command: found.command, args: found.args } } : null } });
+  }
   if (['mcp.addServer', 'coreTools.integrations.remove'].includes(path)) {
     const id = `exec_${Object.keys(state.pending).length + 1}0000000-fake`;
     state.pending[id] = { path, input };

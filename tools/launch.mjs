@@ -9,7 +9,7 @@ import { join, resolve } from 'node:path';
 import { START_CONTEXT } from './brief.mjs';
 import { AGENTS, OWNED, agentId, detectAgents, installTargets, payloadCurrent, pluginHome, projectFolders, projectRoot, readState, self, skillCurrent, version, writeState } from './agents.mjs';
 import { installWithoutTerminal, parseOnboard, printPlan, runInstaller } from './onboard.mjs';
-import { paint, plainUi, stepLabel } from './onboard-ui.mjs';
+import { paint, plainUi, stepLabel, wrapText } from './onboard-ui.mjs';
 
 export { normalizeScope } from './agents.mjs';
 
@@ -201,7 +201,7 @@ async function afterInstall(ui, outcome, options, cwd) {
   } else {
     if (needsInit(cwd)) {
       const single = ready.length === 1 ? ready[0] : null;
-      if (!options.yes) ui.log.message('This project has no GROWTH.md yet. /conquistador init records\nyour product and growth context, so later work starts from facts.');
+      if (!options.yes) ui.log.message(wrapText('This project has no GROWTH.md yet. /conquistador init records your product and growth context, so later work starts from facts.', Math.max(40, Math.min(process.stdout.columns || 80, 100)) - 6));
       const setup = options.yes ? 'now' : await ui.select({ message: `${prefix}Set up this project now?`, options: [
         { value: 'now', label: `Yes, open ${single ? single.label : 'my agent'} with /conquistador init` },
         { value: 'later', label: 'Later' },

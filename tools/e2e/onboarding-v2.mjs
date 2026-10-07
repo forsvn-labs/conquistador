@@ -123,7 +123,7 @@ const SGR_COLOR = /\x1b\[([\d;]*)m/g;
 const hasColor = raw => [...raw.matchAll(SGR_COLOR)].some(match => match[1].split(';').some(code => /^(?:3\d|4\d|9[0-7]|10[0-7])$/.test(code)));
 const has = (text, needle) => text.replace(/[\s│]+/g, '').includes(needle.replace(/\s+/g, ''));
 // Lines as a terminal would show them if it never wrapped: render at a huge width.
-const unwrappedWidth = raw => { const screen = new Screen(400, 2000); screen.write(raw); return Math.max(0, ...screen.lines({ history: true }).map(line => [...line].length)); };
+const tooWide = (raw, width) => { const screen = new Screen(400, 2000); screen.write(raw); return screen.lines({ history: true }).filter(line => [...line].length > width); };
 
 function checker() {
   const problems = [];
@@ -459,8 +459,8 @@ scenario('narrow', ['F13'], async ({ expect }) => {
     await s.press('enter');
     await finishAfterInstall(s);
     await s.exit();
-    const widest = unwrappedWidth(s.raw);
-    expect(widest <= 60, `a line is ${widest} columns wide at 60 columns (F13)`);
+    const wide = tooWide(s.raw, 60);
+    expect(!wide.length, `lines wider than 60 columns (F13):\n${wide.join('\n')}`);
     return s.snaps;
   } finally { f.cleanup(); }
 });
@@ -590,6 +590,20 @@ scenario('executor-old', ['F22'], async ({ expect, transcript }) => {
     transcript('executor-old', `$ conquistador --surface=executor --yes   (exit ${result.status})\n${result.stdout}${result.stderr}`);
     expect(result.status === 1, `exit ${result.status}`);
     expect(has(result.stdout, 'Add Integration') && has(result.stdout, 'server.mjs'), 'no manual steps for an old Executor (F22)');
+    return [];
+  } finally { f.cleanup(); }
+});
+
+// --- F30: Executor 1.5.40 adds a source but cannot remove one ---------------------------------------
+scenario('executor-1.5', ['F30'], async ({ expect, transcript }) => {
+  const f = fixture('executor-1.5', { agents: [], executor: 'v1.5' });
+  try {
+    const install = f.run(['--surface=executor', '--yes']);
+    expect(install.status === 0, `install exit ${install.status}: ${install.stdout}`);
+    const removed = f.run(['remove']);
+    transcript('executor-1.5-remove', `$ conquistador remove   (exit ${removed.status})\n${removed.stdout}${removed.stderr}`);
+    expect(removed.status === 1 && has(removed.stdout, 'in the Executor app'), 'remove does not give the manual step (F30)');
+    expect(f.json(join(f.home, '.conquistador/installs.json'))?.executor?.slug === 'conquistador', 'remove forgot a source it could not remove (F30)');
     return [];
   } finally { f.cleanup(); }
 });
