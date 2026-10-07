@@ -899,6 +899,10 @@
         {
           "path": "references/landing-anti-patterns.md",
           "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/app-onboarding-paywall.md",
+          "when": "Load when the conversion surface is a subscription app's onboarding-to-paywall flow."
         }
       ],
       "optionalResources": [],
@@ -1288,6 +1292,10 @@
         {
           "path": "references/report-template.md",
           "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/misjudgment-check.md",
+          "when": "Load before the resolver chooses."
         }
       ],
       "optionalResources": [],
