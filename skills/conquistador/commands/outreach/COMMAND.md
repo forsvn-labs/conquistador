@@ -2,7 +2,7 @@
 name: outreach
 description: "Write signal-led outreach sequences, follow-ups, and reply handling."
 metadata:
-  version: 2.3.0
+  version: 2.4.0
 ---
 
 # Write trustworthy outreach
