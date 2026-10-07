@@ -100,6 +100,14 @@ are what make the rendered asset *good*. Both are now required (critic gates 8â€
 | A specific product/logo object held across a series | MJ `--oref` + high `--ow` | Subject lock, not style lock |
 | A photoreal hero, no literal copy | MJ (`--style raw` for brand-literal) or Imagen 4 | Best photoreal + brand restraint |
 | A transparent-bg or composited element | `gpt-image-1` (`background: transparent`) | Native alpha output |
+| The same scene across a multi-image series, with no reference-lock feature | Any engine, with a fixed scene block | Text-only scene lock |
+
+**Fixed scene block.** Write one block that fixes the scene: dimensions, camera position and
+angle, fixed objects and where they stand, window and door positions, floor, ceiling, and light
+source. Paste it unchanged into every prompt in the series and change only the part meant to vary,
+such as the style. Reject any image in which a fixed element has moved. When a "before" image must
+feel relatable, show signs of everyday use, such as personal objects or clutter, not an empty or
+derelict room.
 
 When the session is **tool-agnostic** (no bound engine), the prompt-author writes a
 renderer-agnostic body **plus** a per-engine hints table covering at least Midjourney /
