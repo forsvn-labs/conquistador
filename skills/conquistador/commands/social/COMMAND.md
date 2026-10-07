@@ -2,7 +2,7 @@
 name: social
 description: "Write channel-native posts for X, LinkedIn, Reddit, Product Hunt, and communities."
 metadata:
-  version: 2.1.0
+  version: 2.2.0
 ---
 
 # Write social and community marketing
@@ -19,9 +19,11 @@ Core:
 
 - [anti-patterns](references/anti-patterns.md): Social copy anti-patterns. These are original artifact checks. They do not claim measured platform penalties.
 - [critical-gates](references/critical-gates.md): Procedure — Critical Gates (write-social). Load before Pre-Dispatch. These four gates are non-negotiable;…
-- [hook-archetypes](references/hook-archetypes.md): Opening choices. Use the visible task and the intended reader decision to choose an opening. The filename…
 - [method](references/method.md): Method: `social`. Turn one brief into a complete social or community artifact for one platform and market.…
+- [photo-slideshows](references/photo-slideshows.md): Photo slideshows. Use for a photo slideshow or swipeable image sequence on TikTok, Instagram, or a similar…
 - [rubric](references/rubric.md): Social copy critic rubric. Score five dimensions from 0 to 10. Scores are local review conventions, not…
+
+By step: [hook-archetypes](references/hook-archetypes.md).
 
 Platform packs (read the one for each platform in the task): [facebook](references/platform-intelligence/facebook.md), [founder-demo](references/platform-intelligence/founder-demo.md), [linkedin-launch](references/platform-intelligence/linkedin-launch.md), [linkedin](references/platform-intelligence/linkedin.md), [motion-background](references/platform-intelligence/motion-background.md), [newsletter](references/platform-intelligence/newsletter.md), [producthunt](references/platform-intelligence/producthunt.md), [reddit](references/platform-intelligence/reddit.md), [reels](references/platform-intelligence/reels.md), [shorts](references/platform-intelligence/shorts.md), [showhn](references/platform-intelligence/showhn.md), [tiktok](references/platform-intelligence/tiktok.md), [ugc](references/platform-intelligence/ugc.md), [x-launch](references/platform-intelligence/x-launch.md), [x](references/platform-intelligence/x.md), [youtube](references/platform-intelligence/youtube.md).
 
@@ -77,6 +79,12 @@ advance the idea rather than repeat it.
 Open on a concrete professional tension, result, or lesson. Prefer lived specificity and real
 tradeoffs over inspiration. Keep line breaks readable without theatrical fragmentation. Use founder
 voice for conviction and learning; company voice for product truth and proof.
+
+### Slideshows
+
+For a TikTok or Instagram photo slideshow, follow `references/photo-slideshows.md`:
+adapt a proven structure, give value before the product, and judge results by product questions
+and installs, not views.
 
 ## Route elsewhere
 

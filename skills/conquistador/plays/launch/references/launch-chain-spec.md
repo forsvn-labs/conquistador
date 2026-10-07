@@ -22,6 +22,17 @@ tool, or hidden state machine. Every named outcome is present in the installed C
 
 Skip inapplicable steps. A small launch should not acquire ceremony merely to fill the chain.
 
+## Pre-launch cadence
+
+Use when the launch is weeks away and the team ships user-visible increments before it.
+
+- Plan one public post for each shipped, user-visible increment, with the launch as the larger
+  announcement at the end. Each post shows real product behavior.
+- When more than one team member posts, give each person a different angle and audience. Record
+  which angle draws qualified responses, and use the best-supported angle in the launch copy.
+- A few days before launch, prepare a reminder for contacts who opted in. Give the date and what
+  becomes available. Never ask for votes or coordinated engagement.
+
 ## Bundle contract
 
 Return one coherent package with:

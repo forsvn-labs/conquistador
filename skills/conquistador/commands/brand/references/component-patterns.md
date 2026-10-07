@@ -231,11 +231,11 @@ Success: border-green-500 (optional checkmark)
 **Tokens**: Standard dialog tokens
 **Skip option**: Always available (ghost button)
 
-### Tooltip Tour
-**When**: Explaining complex UI on first use
-**Rules**: Max 5 steps, clear progress, easy exit
+### Tooltip Tour (optional)
+**When**: A specific control stays unclear after a value-first first run. Try empty-state guidance and progressive onboarding first
+**Rules**: Max 5 steps, clear progress, dismissible at every step, never blocks the task
 **Tokens**: bg-popover text-popover-foreground
-**Trigger**: Auto on first visit or user-initiated help
+**Trigger**: User-initiated help, or contextual on first use of the feature it explains. Never force a tour on first visit
 
 ### Progressive Onboarding
 **When**: Complex products with learning curve

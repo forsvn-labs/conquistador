@@ -28,6 +28,21 @@ declared is inventing product, not specifying it.
 5. **Every state gets a visual treatment.** Every interactive element specifies its full state set;
    every screen's empty / loading / error has a concrete visual spec, never "show an error."
 
+## Interaction details every spec names
+
+CP-02 and CP-05 check these. Each is a spec line, not a taste note.
+
+- **Immediate feedback.** Every input gets a pressed state, an optimistic update, or a skeleton.
+- **Selected state.** A selected state changes shape or weight, such as a filled icon, not only color.
+- **One icon family.** Use one icon set with one stroke and weight across the product.
+- **Haptics on mobile.** Name the haptic level for each event: light for normal taps, stronger for
+  confirmations and milestones.
+- **Purposeful motion.** Use motion only to show what changed.
+- **Honest cancel.** Cancel takes one honest step. Before a destructive or downgrade action, state
+  what the user keeps and what they lose.
+- **Value-first first run.** Prefer a first-run screen that delivers value over a forced tooltip or
+  product tour. A tour stays optional, contextual, and dismissible.
+
 ## Quality Gate — the 8-Checkpoint Critic Rubric (CP-01 → CP-08)
 
 The critic (`agents/critic-agent.md`) evaluates each checkpoint **binary PASS/FAIL**. Any FAIL fails
@@ -36,7 +51,7 @@ the gate and re-dispatches the named agent. All 8 must PASS to ship.
 1. **CP-01 Flow grounding** — every screen traces to a `flow` screen/state or the compact in-skill flow validation; zero invented
    screens; every flow edge / empty / loading / error state has a visual treatment. *(→ screen-inventory-agent)*
 2. **CP-02 Component reuse & hierarchy** — components named and reused across screens (no per-screen
-   one-offs); composition hierarchy explicit; primitive count bounded and listed. *(→ component-system-agent)*
+   one-offs); composition hierarchy explicit; primitive count bounded and listed; one icon family. *(→ component-system-agent)*
 3. **CP-03 Token fidelity** — every color, space, type, and radius references the declared token
    source; no supplied name was replaced by a recovered default; house rules run only in house mode;
    `brand_source: cold-start-hint` is present when tokens are absent. *(→ token-application-agent)*
@@ -44,7 +59,8 @@ the gate and re-dispatches the named agent. All 8 must PASS to ship.
    per surface; no ad-hoc spacing. *(→ layout-state-agent)*
 5. **CP-05 State coverage** — every interactive element specifies the full state set
    (default/hover/active/focus/disabled); every screen's empty/loading/error has a visual spec, not
-   just "show error." *(→ layout-state-agent)*
+   just "show error." Feedback, selected-state shape, cancel path, and first run follow
+   "Interaction details every spec names". *(→ layout-state-agent)*
 6. **CP-06 Accessibility floor** — contrast pairings are named and ratios are computed when token
    values exist; unresolved value-dependent checks are explicit in a portable spec. Focus order is
    defined, touch targets cite a supplied token or named platform rule when available, and reduced-

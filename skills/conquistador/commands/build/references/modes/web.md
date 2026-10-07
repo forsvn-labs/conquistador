@@ -3,7 +3,7 @@ command: build
 mode: web
 description: "Implement and verify an explicit web-product outcome in an existing or approved project. Use for end-to-end vertical slices, responsive accessible UI, client/server state, data, validation, auth, security, recovery, tests, browser checks, migrations, and bounded deployment handoffs."
 metadata:
-  version: 1.0.0
+  version: 1.1.0
 ---
 
 # Build a web app outcome
@@ -18,6 +18,7 @@ Read the core files in full before you draft; read the others when their step or
 
 Core:
 
+- [landing-performance](web/references/landing-performance.md): Landing Page Performance. Use when a request asks to make a landing or marketing page faster, or to raise…
 - [test-contract](web/references/test-contract.md): Web Test Contract. The test contract states, before implementation, which checks must run for a slice's…
 - [web-engineering-method](web/references/web-engineering-method.md): Web Engineering Method. Implement one complete vertical slice with verified behavior, in the project's…
 
@@ -60,6 +61,10 @@ end-to-end, browser, responsive, accessibility, security, migration, and build c
 actual rendered behavior when tools allow. Report commands, environment, results, artifacts, and named
 untested cells; do not claim a browser, deployment, or production result that did not run, and never
 describe an unexecuted check as passing.
+
+For a request to make a landing or marketing page faster, follow
+[landing performance](web/references/landing-performance.md): measure the production URL first, fix
+LCP before other metrics, and report only measured results.
 
 A worked (fictional) example of the delivered artifact shape:
 [authenticated settings slice walkthrough](web/references/examples/settings-slice-walkthrough.md).
