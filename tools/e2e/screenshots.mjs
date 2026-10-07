@@ -44,7 +44,7 @@ for (const [figure, columns, caption, body] of figures) {
   const height = body.split('\n').length * 19 + 110;
   const png = resolve(outDir, `${name}.png`);
   const result = spawnSync(chrome, ['--headless', '--disable-gpu', '--hide-scrollbars', '--force-device-scale-factor=2', '--virtual-time-budget=2000', `--window-size=${width},${height}`, `--screenshot=${png}`, `file://${page}`], { encoding: 'utf8', timeout: 60_000 });
-  if (result.status !== 0 || !existsSync(png)) console.error(`Could not render ${caption}: ${result.stderr.trim().split('\n').at(-1) ?? ''}`);
+  if (result.status !== 0 || !existsSync(png)) console.error(`Could not render ${caption}: ${(result.stderr || result.error?.message || '').trim().split('\n').at(-1)}`);
   else written += 1;
 }
 rmSync(work, { recursive: true, force: true });

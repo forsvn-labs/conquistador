@@ -120,7 +120,12 @@ export function removeApp(id, ctx) {
   try {
     if (!existsSync(path)) return { ok: true, path, status: 'absent' };
     const result = removeEntry(read(path), id);
-    if (result.status === 'removed') writeFileSync(path, result.text);
+    if (result.status === 'removed') {
+      if (!existsSync(`${path}${BACKUP_SUFFIX}`)) copyFileSync(path, `${path}${BACKUP_SUFFIX}`);
+      const temporary = `${path}.conquistador-${process.pid}.tmp`;
+      writeFileSync(temporary, result.text);
+      renameSync(temporary, path);
+    }
     return { ok: true, path, status: result.status };
   } catch (error) { return { ok: false, path, error: `${error.message}. Remove "${SERVER_NAME}" from ${path} by hand.` }; }
 }

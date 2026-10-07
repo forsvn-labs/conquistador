@@ -365,9 +365,12 @@ export function handshake(server, timeout = 15_000) {
     let child;
     try { child = spawn(server.command, server.args, { stdio: ['pipe', 'pipe', 'ignore'] }); } catch { done(false); return; }
     let buffer = '';
-    const finish = value => { clearTimeout(timer); child.kill(); done(value); };
+    let settled = false;
+    const finish = value => { if (settled) return; settled = true; clearTimeout(timer); child.kill(); done(value); };
     const timer = setTimeout(() => finish(false), timeout);
     child.on('error', () => finish(false));
+    // A server that exits before it answers fails at once, not after the timeout.
+    child.on('exit', () => finish(false));
     child.stdout.on('data', chunk => {
       buffer += chunk;
       for (let index = buffer.indexOf('\n'); index >= 0; index = buffer.indexOf('\n')) {
