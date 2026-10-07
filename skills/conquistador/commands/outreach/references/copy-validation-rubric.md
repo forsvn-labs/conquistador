@@ -33,5 +33,10 @@ pressure based on invented scarcity, repitching after opt-out, and unauthorized 
 fail regardless of total. A generic research question may be factually safe yet fail for being too
 vague to produce a useful answer. Missing evidence is not repaired by more persuasive wording.
 
+Label each sentence of the draft as one of four types: sourced fact, hedged inference, supported
+offer claim, or a question that does not assume interest. Delete a sentence that fits no type; do
+not reword it to fit. An inference must carry hedged wording ("may", "might", "if"). An inference
+written as a fact is a fabricated observation. Greetings, affiliation, and sign-off lines are exempt.
+
 After two revision cycles, report the actual failure and remaining gap. Never round up, waive a
 hard gate, or return PASS merely because time or revision budget ended.

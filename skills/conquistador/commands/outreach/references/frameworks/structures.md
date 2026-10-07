@@ -16,3 +16,13 @@ A refusal or acknowledgement may correctly contain no new request.
 
 Follow-ups must name a new, truthful reason to contact the person. Never imply that silence creates
 a debt, a prior conversation, or agreement. Stop at the operator's authorized boundary and on opt-out.
+
+Give each follow-up exactly one element that earlier touches did not contain:
+
+- authorized terms that reduce the buyer's risk;
+- one verified result from a comparable customer, within its documented scope;
+- a short close-the-loop question that is easy to answer with "not now".
+
+Build the follow-up around that element plus the context needed to read it. Do not re-send the
+full pitch. In email, write the
+subject and preview text as one unit, and check that greeting or footer text does not fill the preview.
