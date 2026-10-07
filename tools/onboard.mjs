@@ -223,7 +223,8 @@ export function buildPlan(choices, ctx) {
       const inspected = inspectApp(id, server);
       return { app: id, label: appById(id).label, action: inspected.action, target: inspected.path, ...(inspected.reason ? { reason: inspected.reason } : {}) };
     });
-    surfaces.push({ id: 'mcp-apps', label: SURFACE_LABELS['mcp-apps'], server: { command: server.command, args: server.args }, steps, notes: [] });
+    surfaces.push({ id: 'mcp-apps', label: SURFACE_LABELS['mcp-apps'], server: { command: server.command, args: server.args }, steps,
+      notes: steps.length ? [] : [`No MCP app found. Name one: --apps=${MCP_APPS.map(app => app.id).join(',')}`] });
   }
   if (choices.surfaces.includes('hosted')) {
     surfaces.push({ id: 'hosted', label: SURFACE_LABELS.hosted, steps: ctx.login
@@ -609,7 +610,7 @@ export async function printPlan(options, { cwd = process.cwd(), launchLine = nul
   if (problem) process.stderr.write(`${wrapText([problem.message, ...problem.fix].join('\n'), width)}\n`);
   const detected = ctx.found.map(agent => agent.label).join(', ') || 'no agent';
   const lines = [`${options.dryRun ? 'Dry run. ' : ''}Conquistador ${version} install plan`, `Detected: ${detected}. MCP apps: ${ctx.apps.filter(app => app.found).map(app => app.label).join(', ') || 'none'}. Executor: ${ctx.executor.installed ? `${ctx.executor.version ?? 'found'}${ctx.executor.running ? ', running' : ', not running'}` : 'not installed'}.`, '',
-    ...planLines(plan)];
+    'Plan:', ...planLines(plan)];
   if (launchLine) lines.push(...launchLine);
   const flags = [`--surface=${choices.surfaces.join(',')}`, ...(choices.surfaces.includes('agents') ? [`--providers=${choices.agents.join(',') || 'NAME'}`, `--scope=${choices.scope}`] : []),
     ...(choices.surfaces.includes('mcp-apps') && choices.apps.length ? [`--apps=${choices.apps.join(',')}`] : []), ...(choices.hooks ? [] : ['--no-hooks'])];
