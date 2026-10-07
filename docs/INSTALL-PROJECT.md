@@ -22,8 +22,8 @@ conquistador project
 ```
 
 The project setup guide asks which existing project directory to use (the current Git root is suggested when applicable), selects one host, shows its installation plan, applies after confirmation, runs the local doctor, and prints a first-task handoff. It installs one complete operator with its matching native entry. It chooses the package; you confirm. If host detection is inconclusive, it asks
-which coding agent to use. Architecture choices stay behind `conquistador --advanced` and the
-explicit setup commands below. You can also choose an optional route in this guide, including on a later launch; that route performs its own preflight and confirmation in the same invocation. A failed or interrupted optional route returns nonzero while preserving completed copies; if the operator was already installed, cancellation names that owned copy. The default does not install all integrations. A plugin still needs host-manager registration, MCP needs client registration, skills.sh owns its copy and lockfile, and Hermes needs trust. The complete operator goes into `.conquistador`, with `SKILL.md`
+which coding agent to use. Architecture choices stay behind `conquistador --advanced --project PATH`
+and the explicit setup commands below. You can also choose an optional route in this guide, including on a later launch; that route performs its own preflight and confirmation in the same invocation. A failed or interrupted optional route returns nonzero while preserving completed copies; if the operator was already installed, cancellation names that owned copy. The default does not install all integrations. A plugin still needs host-manager registration, MCP needs client registration, skills.sh owns its copy and lockfile, and Hermes needs trust. The complete operator goes into `.conquistador`, with `SKILL.md`
 at its root. Native skills use:
 
 | Coding agent | Project skill |
@@ -39,11 +39,17 @@ at its root. Native skills use:
 ```sh
 conquistador --bot hermes
 conquistador --bot grok-bot
-conquistador --skills [--host HOST]
-conquistador --plugin [--host claude-code|codex|copilot|none]
-conquistador --mcp [--host HOST]
-conquistador --advanced
+conquistador --skills --host HOST
+conquistador --plugin --host claude-code|codex|copilot|none
+conquistador --mcp --host HOST
+conquistador --advanced --project PATH
 ```
+
+Without a route option (`--host`, `--project`, `--path`, `--url`, a bot name, or `--help`), these
+flags open the main installer (`conquistador add`, see [INSTALL.md](../INSTALL.md)) with that surface
+chosen, and print the new flag: `--mcp` is `--surface=mcp-apps`, `--plugin` is
+`--surface=agents --scope=global`, `--skills` is `--surface=agents --scope=project`, `--bot` is
+`--surface=bot`.
 
 The operator and selected native skills contain the method library. The operator also includes
 the BB adapter, portable contracts, schemas and profile. These owned copies share one

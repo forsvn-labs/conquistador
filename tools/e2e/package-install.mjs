@@ -223,7 +223,7 @@ result = run(cli, ['--dry-run', '--providers=claude,codex,pi,hermes', '--scope=p
 check('D1', '--dry-run prints the plan and the launch, and writes nothing', result.status === 0 && /Plan:/.test(result.output) && /\/conquistador init/.test(result.output) && files(a.home).join('\n') === snapshot, result.output.trim().split('\n').slice(-3).join(' | '));
 snapshot = files(a.home).join('\n');
 result = run(cli, ['--providers=claude,codex,pi,hermes', '--scope=project'], { env: a.env, cwd: acme });
-check('D1', 'without a terminal and without -y, the installer changes nothing', result.status === 0 && files(a.home).join('\n') === snapshot);
+check('D1', 'without a terminal and without -y, the installer prints the plan, exits 2, and changes nothing', result.status === 2 && /Plan:/.test(result.output) && files(a.home).join('\n') === snapshot);
 result = run(cli, ['--providers=claude,codex,pi,hermes', '--scope=project', '-y'], { env: a.env, cwd: acme });
 const projectCopies = ['.claude/skills/conquistador', '.agents/skills/conquistador', '.hermes/skills/conquistador'].map(folder => join(acme, folder));
 check('P1', 'project scope copies the skill into each host folder, one copy per shared folder', result.status === 0 && projectCopies.every(folder => existsSync(join(folder, 'SKILL.md')) && marker(folder)?.version === version), result.output.trim().split('\n').slice(-4).join(' | '));

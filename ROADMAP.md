@@ -5,13 +5,19 @@
 1. Run the five live Executor cases (first run and connect) that 0.3.0 shipped without. They need
    a responding Executor.app.
 2. List the plugin in the agent marketplaces, then check each listing installs 0.3.x.
-3. Test the interactive start flow on Windows (a pseudo-terminal harness), and Linux and Windows
-   on ARM.
+3. Test the interactive installer on Windows (a pseudo-terminal harness), and Linux and Windows
+   on ARM. `tools/e2e/onboarding-v2.mjs` needs a Windows pseudo-terminal bridge first.
+4. Merge onboarding v2, then connect its Hosted MCP surface to the real `tools/login.mjs` from the
+   hosted sign-up work and run the `hosted` E2E case against it.
+5. Open each MCP app (Claude Desktop, VS Code, Windsurf, Zed, Cursor) after the installer writes
+   its entry, and check that the app lists the Conquistador tools. Only the config file and an MCP
+   handshake are checked now.
 
 ## Next acceptance
 
-0. Show a host integration that enforces `conquistador_verify` before handover (an example for the
-   Claude Agent SDK and one MCP client), then repeat the Haiku-class run with that host and compare.
+0. Rerun the Haiku-class gate test with run 3's exact context (no sender address) to exercise the
+   rejection path live, and add a judgment check for invented backstory and stage changes, which the
+   rule-based checker cannot see (run 4, 2026-10-07).
 1. Add "Open in Claude Code" (`claude-cli://open?q=`) and "Open in Cursor" deep-link buttons with a
    "Copy prompt" fallback to the landing page. Test both links in a browser first.
 2. Observe the plugin hooks in a real Codex session (after hook trust), Cursor, Copilot CLI, and
