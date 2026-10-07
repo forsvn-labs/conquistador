@@ -5,6 +5,13 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { createMcpHandler } from './skills-mcp.mjs';
 import { packBrief } from './brief.mjs';
+import { mkdtempSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+
+// Read only the bundled library, never this machine's own playbooks; userPlaybookRoots reads these at call time.
+process.env.CONQUISTADOR_HOME = mkdtempSync(join(tmpdir(), 'conquistador-home-'));
+delete process.env.CONQUISTADOR_PLAYBOOKS;
 
 const hosted = createMcpHandler({ requireInitialize: false, hosted: true });
 const local = createMcpHandler({ requireInitialize: false });

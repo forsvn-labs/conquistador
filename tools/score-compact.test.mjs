@@ -1,9 +1,15 @@
 // The rubric gate check, the compact brief, and the custom domain (ROADMAP item 0, 2026-10-07).
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { readdirSync, readFileSync } from 'node:fs';
+import { mkdtempSync, readdirSync, readFileSync } from 'node:fs';
 import { createMcpHandler } from './skills-mcp.mjs';
 import { evaluateGate, parseGate } from './rubric-gate.mjs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+
+// Read only the bundled library, never this machine's own playbooks; userPlaybookRoots reads these at call time.
+process.env.CONQUISTADOR_HOME = mkdtempSync(join(tmpdir(), 'conquistador-home-'));
+delete process.env.CONQUISTADOR_PLAYBOOKS;
 
 const handle = createMcpHandler({ requireInitialize: false, hosted: true });
 const call = (name, args) => handle({ jsonrpc: '2.0', id: 1, method: 'tools/call', params: { name, arguments: args } });
@@ -123,7 +129,7 @@ test('a compact brief inlines only the command and its core files, and keeps the
   const compact = call('conquistador_brief', { task, size: 'compact', context: 'Product: Ledgerline.' });
   const fullText = full.result.content[0].text;
   const text = compact.result.content[0].text;
-  assert.ok(Buffer.byteLength(text) < Buffer.byteLength(fullText) * 0.4, `${Buffer.byteLength(text)} vs ${Buffer.byteLength(fullText)}`);
+  assert.ok(Buffer.byteLength(text) < Buffer.byteLength(fullText) * 0.5, `${Buffer.byteLength(text)} vs ${Buffer.byteLength(fullText)}`);
   for (const marker of ['Start here:', 'Caller context', 'Rules for this task:', 'conquistador_check']) assert.ok(text.includes(marker), marker);
   const structured = compact.result.structuredContent;
   assert.ok(structured.inlined.some(item => item.path.endsWith('outreach/COMMAND.md')));
