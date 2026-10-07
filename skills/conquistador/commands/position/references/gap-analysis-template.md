@@ -67,6 +67,41 @@ Score each opportunity 1-5 on four dimensions:
 3. **Zero on any dimension is disqualifying** — a perfect-fit opportunity with no demand evidence is still a guess
 4. **Flag any score of 1** — an opportunity with a 1 in any dimension needs a clear mitigation plan
 
+## Outcome-Based Scoring (when survey data exists)
+
+Use this option when a survey rated each outcome statement (see
+[customer interviews](customer-interviews.md#job-and-outcome-statements)) for importance and for
+satisfaction with the current solution.
+
+1. **Compute an opportunity score per outcome:** importance + max(importance − satisfaction, 0).
+   Take each value as the share of respondents in the top two boxes of the scale. Report sample
+   and date with the scores.
+2. **Classify each outcome:**
+   - *Underserved* — high importance, low satisfaction. Candidate for the promise.
+   - *Table stakes* — high importance, high satisfaction. A new offer must still meet it.
+   - *Overserved* — satisfaction above importance. Candidate for cost or feature removal.
+3. **Segment by served state, not demographics.** Group respondents by which outcomes they find
+   underserved. Then profile what makes the struggling group's situation harder.
+4. **Rate competitors by outcome.** Use customers' satisfaction ratings for each alternative on each
+   outcome, not feature lists. Flag competitor strengths that serve low-importance outcomes; they
+   add cost without value.
+5. **Build the promise around the top underserved outcomes in the target segment.** Avoid the
+   outcome every competitor already claims. When the product cannot change, first re-message
+   existing features that already serve those outcomes.
+6. **Without survey data,** label any outcome scores `hypothesis` and specify the survey you would
+   need: outcomes, importance and satisfaction scales, target segment, and sample. Never estimate
+   the scores yourself.
+
+## Edge Types
+
+For the product and each main alternative, name the kind of edge it competes on, with evidence:
+accumulation or network, price, time and craft, uniqueness, reliability and defense, timing,
+accreditation and curation, collaboration and ecosystem, speed and iteration, ease, adaptability.
+
+- Prefer a position built on a narrow combination of edges that no listed alternative shares.
+- Mark any edge without evidence as an assumption.
+- Exclude edges that rely on harming or deceiving rivals or customers.
+
 ## Risk Assessment
 
 For each top opportunity, document:

@@ -16,6 +16,8 @@ List product capabilities, limitations, pricing terms, prerequisites, contact or
 
 Check whether the approved public page or document exposes those facts as readable text with stable links. Compare important facts across the primary page, documentation, and structured representations. A structured file that contradicts the visible offer creates ambiguity rather than discoverability.
 
+Check that prices, plan limits, and terms appear as plain text in the page source, not only as the output of client-side widgets such as sliders or calculators. A reader that does not run scripts cannot see interaction-only pricing. When that is the case, propose a text version that matches the visible page, for example a Markdown pricing page, with the same plans, version, currency, and date.
+
 Check access and indexing settings through authorized local inspection or approved tools. Do not promise placement in search results or model answers. Presence of a file does not prove that an external system consumes it.
 
 ## Design verification

@@ -49,6 +49,17 @@ If the value metric requires instrumentation that does not exist, estimate build
 metering honestly and include it in the timeline. A metric you cannot meter yet is a roadmap item,
 not a launch dependency.
 
+### 6. Platform fees and cash timing
+
+- For app-store or marketplace billing, subtract the platform commission at its current,
+  dated rate from the price before you compute margin. Check whether a reduced small-seller rate
+  applies and whether the seller qualifies.
+- Model cash timing apart from lifetime value. Acquisition is paid now; platform payouts arrive
+  later; monthly or weekly revenue arrives over months. A tier that pays back on lifetime value
+  can still exhaust cash.
+- When acquisition cost per paying customer approaches the first-period price, flag the cash
+  gap and show how an up-front annual plan changes it.
+
 ## Output
 
 Each check returns pass, fail, or unknown-with-owner. The deliverable carries the table; failed
