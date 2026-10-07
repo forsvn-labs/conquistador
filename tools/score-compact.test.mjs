@@ -142,5 +142,6 @@ test('a compact brief inlines only the command and its core files, and keeps the
 test('the Worker serves mcp.forsvn.com as a custom domain and keeps workers.dev', () => {
   const config = readFileSync(new URL('../wrangler.toml', import.meta.url), 'utf8');
   assert.match(config, /pattern = "mcp\.forsvn\.com", custom_domain = true/);
-  assert.doesNotMatch(config, /^workers_dev = false/m);
+  // Wrangler turns workers.dev off when routes exist unless the file says otherwise.
+  assert.match(config, /^workers_dev = true$/m);
 });
