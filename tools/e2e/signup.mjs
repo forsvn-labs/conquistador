@@ -38,6 +38,7 @@ const record = (name, passed, detail = {}) => {
 // --- Processes ------------------------------------------------------------------------------
 
 const children = [];
+const servers = [];
 function wrangler(wranglerArgs, options = {}) {
   const command = process.env.WRANGLER_BIN ? [process.env.WRANGLER_BIN, wranglerArgs] : ['npx', ['wrangler@4.148.0', ...wranglerArgs]];
   const { file, args: fileArgs, options: spawnOptions } = spawnCommand(command[0], command[1]);
@@ -68,7 +69,8 @@ async function startWorker(name, vars) {
   const state = join(out, 'state', name);
   rmSync(state, { recursive: true, force: true });
   const varArgs = Object.entries(vars).flatMap(([key, value]) => ['--var', `${key}:${value}`]);
-  const child = wrangler(['dev', '--port', String(port), '--ip', '127.0.0.1', '--persist-to', state, '--show-interactive-dev-session=false', ...varArgs], { stdio: ['ignore', 'pipe', 'pipe'] });
+  // --local-upstream keeps the request host; otherwise wrangler dev rewrites it to the route host.
+  const child = wrangler(['dev', '--port', String(port), '--ip', '127.0.0.1', '--local-upstream', `127.0.0.1:${port}`, '--persist-to', state, '--show-interactive-dev-session=false', ...varArgs], { stdio: ['ignore', 'pipe', 'pipe'] });
   children.push(child);
   let log = '';
   child.stdout.on('data', chunk => { log += chunk; });
@@ -177,7 +179,7 @@ function githubDouble({ clientId, clientSecret }) {
     return json(response, 404, { message: 'Not Found' });
   });
   double.start = () => new Promise(done => server.listen(0, '127.0.0.1', () => { double.url = `http://127.0.0.1:${server.address().port}`; done(); }));
-  double.stop = () => new Promise(done => server.close(done));
+  servers.push(server);
   return double;
 }
 
@@ -429,7 +431,6 @@ async function offline() {
   record('without an admin token, /mcp refuses every request that has no valid personal token', bareMcp.status === 401 && bareNone.status === 401 && double.log.length === bareGithubCalls, { statuses: [bareMcp.status, bareNone.status] });
   bare.child.kill();
   writeFileSync(join(out, 'wrangler-unconfigured.log'), bare.log());
-  await double.stop();
 }
 
 // --- Live run --------------------------------------------------------------------------------
@@ -481,7 +482,10 @@ async function main() {
   mkdirSync(out, { recursive: true });
   const started = new Date().toISOString();
   let failure = null;
-  try { await (live ? liveRun() : offline()); } catch (error) { failure = error; record(`the run finished (${error.message})`, false, {}); } finally { for (const child of children) if (child.exitCode === null) child.kill(); }
+  try { await (live ? liveRun() : offline()); } catch (error) { failure = error; record(`the run finished (${error.message})`, false, {}); } finally {
+    for (const child of children) if (child.exitCode === null) child.kill();
+    for (const server of servers) { server.closeAllConnections(); server.close(); }
+  }
   const passed = steps.filter(step => step.passed).length;
   const report = {
     suite: 'signup',

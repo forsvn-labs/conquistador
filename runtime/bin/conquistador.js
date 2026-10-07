@@ -99,6 +99,10 @@ if (preflight !== null) {
 } else if (args[0] === "connect") {
   const { runConnect } = await import("../../tools/connect.mjs");
   process.exitCode = await runConnect(args.slice(1));
+} else if (["login", "logout", "whoami"].includes(args[0])) {
+  const login = await import("../../tools/login.mjs");
+  const run = { login: login.runLoginCommand, logout: login.runLogout, whoami: login.runWhoami }[args[0]];
+  process.exitCode = await run(args.slice(1));
 } else if (args[0] === "connections") {
   const { run } = await import("../../hosts/executor/cli.mjs");
   process.exitCode = await run(args.slice(1));

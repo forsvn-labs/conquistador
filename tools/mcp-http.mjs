@@ -10,6 +10,8 @@ const headers = { 'content-type': 'application/json', 'cache-control': 'no-store
 
 // A hosted deployment sets requireToken, so a missing token fails closed instead of serving
 // the playbooks openly. readBody returns the request text, or null when it exceeds MAX_BODY.
+// A request can carry its own authorize(header), which returns null to allow it or a refusal
+// ({ status, body, headers }); the Worker uses it for personal tokens and rate limits.
 export function createMcpResponder({ token = process.env.CONQUISTADOR_MCP_TOKEN, root, requireToken = false, receiptKey = process.env.CONQUISTADOR_RECEIPT_KEY } = {}) {
   const handle = createMcpHandler({ ...(root ? { root } : {}), requireInitialize: false, hosted: true, receiptKey });
   const authorized = header => {
@@ -19,11 +21,16 @@ export function createMcpResponder({ token = process.env.CONQUISTADOR_MCP_TOKEN,
     return actual.length === expected.length && timingSafeEqual(actual, expected);
   };
   const reply = (status, body, extra = {}) => ({ status, headers: { ...headers, ...extra }, body: body === undefined ? '' : JSON.stringify(body) });
-  return async ({ method, path, authorization, readBody }) => {
+  return async ({ method, path, authorization, readBody, authorize }) => {
     if (path === '/health') return reply(200, { ok: true, server: 'conquistador' });
     if (path !== '/mcp') return reply(404, { error: 'Use POST /mcp.' });
-    if (requireToken && !token) return reply(503, { error: 'This server has no access token configured.' });
-    if (!authorized(authorization)) return reply(401, { error: 'Missing or invalid bearer token.' }, { 'www-authenticate': 'Bearer' });
+    if (authorize) {
+      const refusal = await authorize(authorization);
+      if (refusal) return reply(refusal.status, refusal.body, refusal.headers);
+    } else {
+      if (requireToken && !token) return reply(503, { error: 'This server has no access token configured.' });
+      if (!authorized(authorization)) return reply(401, { error: 'Missing or invalid bearer token.' }, { 'www-authenticate': 'Bearer' });
+    }
     if (method === 'DELETE') return reply(200, {});
     if (method !== 'POST') return reply(405, { error: 'This server answers POST requests with JSON.' }, { allow: 'POST' });
     const text = await readBody();

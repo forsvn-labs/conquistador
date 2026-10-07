@@ -1,5 +1,6 @@
-# Cloudflare Worker for the hosted Conquistador MCP server. See INSTALL.md, "Bots and remote apps".
-# Set the token before the first deploy: wrangler secret put CONQUISTADOR_MCP_TOKEN
+# Cloudflare Worker for the hosted Conquistador MCP server. See INSTALL.md, "Hosted server".
+# Secrets: CONQUISTADOR_MCP_TOKEN (admin), CONQUISTADOR_RECEIPT_KEY, GITHUB_CLIENT_ID, and
+# GITHUB_CLIENT_SECRET (sign-up). Without them the Worker refuses the matching requests.
 name = "conquistador-mcp"
 main = "worker.mjs"
 compatibility_date = "2026-10-01"
@@ -15,10 +16,32 @@ routes = [
 ]
 workers_dev = true
 
+# Personal tokens. KV holds the SHA-256 hash of each token and the GitHub id and login of its owner.
+# Create the namespace once (wrangler kv namespace create conquistador-tokens) and add its id here.
+# wrangler dev uses a local namespace without an id.
+[[kv_namespaces]]
+binding = "TOKENS"
+
+# Requests per minute for each token (personal or admin). Change limit and RATE_LIMIT_PER_MINUTE
+# together; the period must be 10 or 60. namespace_id is any number unique in the account.
+[[ratelimits]]
+name = "MCP_LIMITER"
+namespace_id = "1001"
+simple = { limit = 60, period = 60 }
+
+# Sign-in attempts per minute from one IP address (/signup/start and POST /api/login).
+[[ratelimits]]
+name = "SIGNUP_LIMITER"
+namespace_id = "1002"
+simple = { limit = 30, period = 60 }
+
+[vars]
+RATE_LIMIT_PER_MINUTE = "60"
+
 # Only the modules the server imports and the bundled library. Never local playbooks.
 [[rules]]
 type = "ESModule"
-globs = ["tools/skills-mcp.mjs", "tools/mcp-http.mjs", "tools/brief.mjs", "tools/context-files.mjs", "tools/context-selection.mjs", "tools/request-text.mjs", "tools/routing-contract.mjs", "tools/domain-package.mjs", "tools/method-library.mjs", "tools/plugin-contracts.mjs", "tools/module-root.mjs", "tools/rubric-gate.mjs", "tools/check-receipt.mjs", "tools/check/*.mjs"]
+globs = ["tools/skills-mcp.mjs", "tools/mcp-http.mjs", "tools/brief.mjs", "tools/context-files.mjs", "tools/context-selection.mjs", "tools/request-text.mjs", "tools/routing-contract.mjs", "tools/domain-package.mjs", "tools/method-library.mjs", "tools/plugin-contracts.mjs", "tools/module-root.mjs", "tools/rubric-gate.mjs", "tools/check-receipt.mjs", "tools/hosted-auth.mjs", "tools/mcp-client-config.mjs", "tools/check/*.mjs"]
 fallthrough = false
 
 [[rules]]
