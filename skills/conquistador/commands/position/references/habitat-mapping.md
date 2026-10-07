@@ -44,7 +44,6 @@ For each platform where you find concentrated audience activity:
 - Flag communities where your audience clusters densely (H density)
 - Record the type of content consumed in each habitat
 - Distinguish **discovery habitats** (where they find new things) from **trust habitats** (where they validate decisions) from **conversion habitats** (where they take action)
-
 - Record offline and direct habitats beside the online ones: industry conferences, small
   invite-only events, peer referral paths, phone, and closed groups. Use the same table fields.
 - Record each public place where buyers describe the problem in their own words (thread, group
