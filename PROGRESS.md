@@ -2,6 +2,14 @@
 
 ## Unshipped
 
+- **Self-serve tokens for the hosted server.** Anyone can sign in with GitHub at `/signup` or with
+  `conquistador login` and get a personal `cq_` token. The Worker stores only the SHA-256 hash in KV,
+  keeps one active token per GitHub account, rate-limits each token (60 requests per minute), and
+  still accepts the admin token. `conquistador whoami` and `logout` complete the set.
+  `node tools/e2e/signup.mjs` passes 40/40 against `wrangler dev` with a local stand-in for GitHub.
+  Not deployed: it needs the one-time setup in [ROADMAP.md](ROADMAP.md) ("Hosted server access"),
+  then a `--live` run with real GitHub, which has not happened. The CLI commands reach installed
+  users with the next npm release.
 - **The 2026-10-07 hosted changes, for installed users.** Everything in the 2026-10-07 hosted
   deployment ([CHANGELOG.md](CHANGELOG.md)) is merged on `main` but not in an npm release (0.3.0 is
   current). For installed users that is: the distilled playbooks and `outreach` 2.4.0; rubric gates;
