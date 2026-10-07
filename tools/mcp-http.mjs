@@ -53,8 +53,7 @@ export function createMcpRequestHandler(options = {}) {
     });
     const result = await respond({ method: request.method, path: (request.url ?? '/').split('?')[0], authorization: request.headers.authorization, readBody });
     response.writeHead(result.status, result.headers);
-    response.end(result.body);
-    if (result.status === 413) request.destroy();
+    response.end(result.body, () => { if (result.status === 413) request.destroy(); });
   };
 }
 

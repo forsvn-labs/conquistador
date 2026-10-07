@@ -61,3 +61,12 @@ test('module roots come from the module URL, or /bundle when a Worker leaves it 
   assert.equal(packageRootOf(new URL('file:///opt/app/tools/brief.mjs').href), '/opt/app');
   assert.equal(packageRootOf(undefined), '/bundle');
 });
+
+test('the worker stops reading a streamed body without a length once it passes the limit', async () => {
+  let pulled = 0;
+  const chunk = new Uint8Array(16_384).fill(120);
+  const body = new ReadableStream({ pull(controller) { pulled += chunk.length; if (pulled > 10_000_000) controller.close(); else controller.enqueue(chunk); } });
+  const response = await worker.fetch(new Request('https://mcp.example/mcp', { method: 'POST', body, duplex: 'half', headers: { authorization: 'Bearer tok' } }), { CONQUISTADOR_MCP_TOKEN: 'tok' });
+  assert.equal(response.status, 413);
+  assert.ok(pulled < 1_000_000, `read ${pulled} bytes`);
+});

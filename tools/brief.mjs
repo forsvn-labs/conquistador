@@ -381,9 +381,10 @@ export function createBrief(input, { root = moduleRoot, playbooks, force = false
 
   const must = [];
   let bytes = 0;
-  const take = (item, why) => {
+  // A command's Core files are required reading, so they are not limited by the file count.
+  const take = (item, why, core = false) => {
     if (item.sibling || must.some(entry => entry.doc.digest === item.doc.digest)) return;
-    if (must.length >= LIMITS.mustFiles || (bytes + item.doc.bytes > LIMITS.mustBytes && must.length >= 3)) return;
+    if (!core && (must.length >= LIMITS.mustFiles || (bytes + item.doc.bytes > LIMITS.mustBytes && must.length >= 3))) return;
     must.push({ ...item, why });
     bytes += item.doc.bytes;
   };
@@ -405,7 +406,7 @@ export function createBrief(input, { root = moduleRoot, playbooks, force = false
     const byKey = new Map(index.docs.map(doc => [doc.key, doc]));
     for (const key of coreKeys(packageRoot, methods[0].path, libraryRoot)) {
       const doc = byKey.get(key);
-      if (doc) take(scored.find(entry => entry.doc === doc) ?? { doc, score: 0, lexical: 0, sibling: false, owner: methods[0].name }, 'core file of this command');
+      if (doc) take(scored.find(entry => entry.doc === doc) ?? { doc, score: 0, lexical: 0, sibling: false, owner: methods[0].name }, 'core file of this command', true);
     }
   }
   methods.forEach((method, position) => {
@@ -565,7 +566,8 @@ export function formatBriefPack(brief, { limit = LIMITS.packBytes, callerContext
     `Commands: ${brief.methods.map(item => `${item.label} [${item.name}]`).join(', ') || 'none; platform guidance only'}`,
     brief.context?.length ? `Project context: read ${brief.context.map(item => item.path).join(' and ')} first; your message, then GROWTH.md, then PRODUCT.md.` : '',
     brief.platforms.length ? `Platforms named: ${brief.platforms.join(', ')}` : '',
-    callerContext ? `\n## Caller context\n\nProduct truth for this task, supplied by the caller. Use only these facts and the user's message; mark anything else as an assumption.\n\n${callerContext}\n` : '',
+    // The caller's text must not carry file-evidence markers that the read check trusts.
+    callerContext ? `\n## Caller context\n\nProduct truth for this task, supplied by the caller. Use only these facts and the user's message; mark anything else as an assumption.\n\n${callerContext.replace(/<!--(\s*\/?\s*conquistador-file)/gi, '&lt;!--$1')}\n` : '',
     '',
     'Rules for this task:',
     '1. Follow the specific rules in the playbooks; generic advice is not a substitute.',

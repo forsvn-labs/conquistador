@@ -4780,7 +4780,7 @@
     },
     {
       "path": "tools/brief.mjs",
-      "sha256": "069a09789233223573d27eadc342837c415ad9ee60dd48039bfcb511c363bc55"
+      "sha256": "acc884d85e71075bc31f5c80dd11e59d7ad38888617c3a79f07db8e793bcd5a0"
     },
     {
       "path": "tools/check/channels.mjs",
@@ -4796,7 +4796,7 @@
     },
     {
       "path": "tools/check/rules.mjs",
-      "sha256": "8b65ad3bf65621b1fc601217bb3e41e6167224ad6527e84e01d0e4eb42335d20"
+      "sha256": "7e25bfe0c952fc9ba2a32efe3bf38206fca690b16e941f6bd9fabadc6071c59b"
     },
     {
       "path": "tools/context-files.mjs",
@@ -4812,7 +4812,7 @@
     },
     {
       "path": "tools/mcp-http.mjs",
-      "sha256": "b9efca6363a6392a15f97b93ed66ed845adcbaa6a4436c410e6e561bfdbeb0c6"
+      "sha256": "d1c6360fff1fafc2d5cc42e2fa4066add017b11e2856098045201b6925cd9f6b"
     },
     {
       "path": "tools/method-library.mjs",
