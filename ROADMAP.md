@@ -10,8 +10,8 @@
 
 ## Next acceptance
 
-0. Add gates to the remaining rubrics, then run a third deployed-agent test with a smaller hosted
-   model on `size: "compact"` and compare it with the two frontier-model runs.
+0. Show a host integration that enforces `conquistador_verify` before handover (an example for the
+   Claude Agent SDK and one MCP client), then repeat the Haiku-class run with that host and compare.
 1. Add "Open in Claude Code" (`claude-cli://open?q=`) and "Open in Cursor" deep-link buttons with a
    "Copy prompt" fallback to the landing page. Test both links in a browser first.
 2. Observe the plugin hooks in a real Codex session (after hook trust), Cursor, Copilot CLI, and

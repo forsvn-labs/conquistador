@@ -52,7 +52,7 @@ test('cold spawned stdio lists methods and reads the parent, outcome, and routin
   assert.equal(result.stderr, '');
   assert.equal(result.messages.length, 7);
   assert.match(result.messages[0].result.instructions, /conquistador_brief/);
-  assert.deepEqual(result.messages[1].result.tools.map(tool => tool.name), ['conquistador_brief', 'conquistador_check', 'conquistador_score', 'conquistador_search', 'conquistador_methods', 'conquistador_files', 'conquistador_read']);
+  assert.deepEqual(result.messages[1].result.tools.map(tool => tool.name), ['conquistador_brief', 'conquistador_check', 'conquistador_verify', 'conquistador_score', 'conquistador_search', 'conquistador_methods', 'conquistador_files', 'conquistador_read']);
   const methods = JSON.parse(result.messages[2].result.content[0].text);
   assert.equal(methods.guide, 'conquistador/SKILL.md');
   // 35 method commands plus 6 meta commands (init, pin, check, connect, review, doctor).
@@ -198,7 +198,7 @@ test('initialization negotiates a supported version for older and unknown client
     assert.equal(result.code, 0);
     assert.equal(result.stderr, '');
     assert.equal(result.messages[0].result.protocolVersion, protocolVersion === '2099-01-01' ? '2025-11-25' : protocolVersion);
-    assert.equal(result.messages[1].result.tools.length, 7);
+    assert.equal(result.messages[1].result.tools.length, 8);
   }
 });
 

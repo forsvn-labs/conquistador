@@ -7,7 +7,7 @@ WORKDIR /app
 COPY package.json LICENSE NOTICE.md ./
 COPY skills ./skills
 COPY mcp/server.mjs ./mcp/server.mjs
-COPY tools/skills-mcp.mjs tools/mcp-http.mjs tools/brief.mjs tools/context-files.mjs tools/context-selection.mjs tools/request-text.mjs tools/routing-contract.mjs tools/domain-package.mjs tools/method-library.mjs tools/plugin-contracts.mjs tools/module-root.mjs tools/rubric-gate.mjs ./tools/
+COPY tools/skills-mcp.mjs tools/mcp-http.mjs tools/brief.mjs tools/context-files.mjs tools/context-selection.mjs tools/request-text.mjs tools/routing-contract.mjs tools/domain-package.mjs tools/method-library.mjs tools/plugin-contracts.mjs tools/module-root.mjs tools/rubric-gate.mjs tools/check-receipt.mjs ./tools/
 COPY tools/check/index.mjs tools/check/rules.mjs tools/check/channels.mjs tools/check/extract.mjs tools/check/context-claims.mjs ./tools/check/
 ENV PORT=8787 CONQUISTADOR_CACHE=/tmp/conquistador-cache
 EXPOSE 8787

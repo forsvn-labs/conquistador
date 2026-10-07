@@ -4839,6 +4839,10 @@
       "sha256": "c1c6088b501ad2cdbc95a713f586320d467584a98c6efbe4f70ffec658f73bfb"
     },
     {
+      "path": "tools/check-receipt.mjs",
+      "sha256": "f954cd08f94e0fb1fa095cd8ada4cfa2548a27d3da998e5659febad834107876"
+    },
+    {
       "path": "tools/check/channels.mjs",
       "sha256": "84b81d69ed91438d84ba970b11b941fecbd54c48a1a93e633556ba4aee840ba5"
     },
@@ -4872,7 +4876,7 @@
     },
     {
       "path": "tools/mcp-http.mjs",
-      "sha256": "780bcc085c9b6be3441f0826223893cbb582c6efc31a86064dce9ab3844de658"
+      "sha256": "6368733e7c5b2f79faa3306af3307e7f8bc624b383e6af50f37e628930e50e52"
     },
     {
       "path": "tools/method-library.mjs",
@@ -4900,7 +4904,7 @@
     },
     {
       "path": "tools/skills-mcp.mjs",
-      "sha256": "0eccf8483de05abde757ee41bdfbc9db469af2c8b94c17ee7635aee6b0edd046"
+      "sha256": "18fa65d4a6b18688398bbe6a06d4ad3956a10c35946d60a7ba13b96edf4a2154"
     }
   ]
 }
