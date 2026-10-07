@@ -10,6 +10,15 @@
   action in `conquistador check`; and the local MCP server's new tools (`conquistador_check`,
   `conquistador_verify`, `conquistador_score`). Receipts from a local server without
   `CONQUISTADOR_RECEIPT_KEY` are unsigned.
+- **Host gate for agent handover** ([#57](https://github.com/forsvn-labs/conquistador/pull/57)).
+  `examples/verify-gate` (repository only, not in the npm package) has a gate that accepts drafts
+  only when `conquistador_verify` proves each is the exact text of a clean, signed check with the
+  host's channel and context, an MCP client for it, and a Claude Agent SDK host with a `deliver`
+  tool and a `Stop` hook. `tools/e2e/verify-gate.mjs` passed 19/19 offline. A live run with Claude
+  Haiku 4.5 behind the host (run 4) delivered three emails that the gate verified clean on the first
+  attempt (25 turns, $0.17); run 3 without a gate had delivered failing text reported as clean. Run 4
+  also had a sender address that run 3 lacked, and its emails still contained an invented founder
+  backstory, which no rule-based check detects.
 - **MCP SDK security bump for the Executor host.** `hosts/executor` pins
   `@modelcontextprotocol/sdk` 1.31.0 instead of 1.30.0 for
   [GHSA-6qxp-vccf-f47h](https://github.com/advisories/GHSA-6qxp-vccf-f47h)
