@@ -219,6 +219,59 @@ break them:
 
 VS Code uses a `servers` key in `.vscode/mcp.json` with `"type": "stdio"`.
 
+## Hosted server
+
+The hosted server at `https://mcp.forsvn.com/mcp` serves the bundled playbooks, the brief, and the
+check over Streamable HTTP. Each request needs a personal token. Sign in with GitHub to get one. You
+do not need anyone's approval.
+
+In a browser, open <https://mcp.forsvn.com/signup> and sign in with GitHub. The next page shows your
+token once, with the configuration for Claude Code, Claude Desktop, Cursor, and other MCP clients.
+Copy the token before you leave the page.
+
+In a terminal (Conquistador releases after 0.3.0):
+
+```sh
+conquistador login     # sign in with GitHub and save a token
+conquistador whoami    # show who the saved token belongs to
+conquistador logout    # revoke the token and delete your record
+```
+
+`login` shows a code and a GitHub address. Enter the code there. The command saves the token to
+`~/.conquistador/mcp-token`, which only you can read, and prints the client configuration. If that
+file held another token, for example a server admin token, `login` moves it to `mcp-token.previous`.
+To use another deployment, set `CONQUISTADOR_MCP_URL` or pass `--server URL`.
+
+- Each GitHub account has one active token. When you sign in again, you get a new token and the
+  old one stops working.
+- Each token can send 60 requests per minute. Over the limit, the server answers 429 and says how
+  many seconds to wait (`retry-after`).
+- A token that is not used for a year stops working. Sign in again to get a new one.
+- After a new sign-in or a logout, the old token can still work for up to 60 seconds in other
+  Cloudflare locations.
+
+### Privacy
+
+The server stores this for each person who signs in:
+
+- the GitHub user id and login;
+- a SHA-256 hash of the token, not the token itself;
+- when the token was made, when it was last used, and its status (active or blocked).
+
+The server does not store your GitHub access token, email address, or repositories. It asks GitHub
+only for your public profile, and it revokes the GitHub access token as soon as it reads your user
+id. The Worker does not log the text of your requests.
+
+To delete your record, run `conquistador logout`, or send:
+
+```sh
+curl -X POST https://mcp.forsvn.com/api/logout -H "Authorization: Bearer YOUR_TOKEN"
+```
+
+Both revoke the token and delete your record at once. If you lost the token, sign in again, then
+log out. To remove the app from your GitHub account too, open GitHub, Settings, Applications,
+Authorized OAuth Apps.
+
 ## Bots and remote apps
 
 For apps with MCP connectors, host the HTTP server and add its URL:
@@ -233,19 +286,63 @@ CONQUISTADOR_MCP_TOKEN=choose-a-secret conquistador mcp --http --host 0.0.0.0 --
 - The server also serves the playbooks you added on that machine. To serve only the bundled
   library, set `CONQUISTADOR_HOME` to an empty folder.
 
-To host it on Cloudflare Workers, sign in once, set the token, then deploy from the repository root:
+To host it on Cloudflare Workers, sign in once, set the secrets, create the token store, then
+deploy from the repository root:
 
 ```sh
 npx wrangler@4.148.0 login
 openssl rand -hex 32 | npx wrangler@4.148.0 secret put CONQUISTADOR_MCP_TOKEN
 openssl rand -hex 32 | npx wrangler@4.148.0 secret put CONQUISTADOR_RECEIPT_KEY
+npx wrangler@4.148.0 kv namespace create conquistador-tokens
+```
+
+Copy the `id` that the last command prints into `wrangler.toml`, under `[[kv_namespaces]]` with
+`binding = "TOKENS"`. Then deploy:
+
+```sh
 npx wrangler@4.148.0 deploy
 ```
 
+`CONQUISTADOR_MCP_TOKEN` is the admin token. Keep it for yourself and for tests. To let other
+people sign up and get their own tokens (see [Hosted server](#hosted-server)), connect a GitHub
+OAuth App once:
+
+1. Open <https://github.com/organizations/YOUR_ORG/settings/applications/new> (or
+   <https://github.com/settings/applications/new> for a personal account).
+2. Set **Application name** to `Conquistador MCP`, **Homepage URL** to your site, and
+   **Authorization callback URL** to `https://YOUR_HOST/signup/callback`.
+3. Select **Enable Device Flow**, then **Register application**.
+4. Select **Generate a new client secret**. Set both values on the Worker, then deploy again:
+
+```sh
+npx wrangler@4.148.0 secret put GITHUB_CLIENT_ID       # paste the Client ID
+npx wrangler@4.148.0 secret put GITHUB_CLIENT_SECRET   # paste the client secret
+npx wrangler@4.148.0 deploy
+```
+
+The browser sign-in works only on the host in the callback URL. `conquistador login` works on any
+host. Without the two GitHub secrets, `/signup` answers 503 and only the admin token works.
+
+The token limit is in `wrangler.toml`: change `limit` under `MCP_LIMITER` and
+`RATE_LIMIT_PER_MINUTE` together. `SIGNUP_LIMITER` limits sign-in attempts from one IP address.
+To block a GitHub account, set `"status": "blocked"` in its record:
+`npx wrangler@4.148.0 kv key get user:GITHUB_ID --binding TOKENS --remote`, edit the JSON, and write
+it back with `npx wrangler@4.148.0 kv key put user:GITHUB_ID 'JSON' --binding TOKENS --remote`.
+
 `wrangler.toml` uploads `worker.mjs`, the server modules, `package.json`, and `skills/` unbundled,
 so the server reads the library from the Worker bundle with `node:fs`. It never uploads your own
-playbooks. The Worker refuses every MCP request with 503 until the token is set. Run it locally
-with `npx wrangler@4.148.0 dev --var CONQUISTADOR_MCP_TOKEN:local-test`.
+playbooks. The Worker refuses every MCP request with 503 until the admin token or the token store
+is set. Run it locally with `npx wrangler@4.148.0 dev --var CONQUISTADOR_MCP_TOKEN:local-test`.
+
+To test sign-up, run `node tools/e2e/signup.mjs`. It starts `wrangler dev` with a local token store
+and a local stand-in for GitHub, and writes `dist/e2e/signup/report.md`. With the real OAuth App:
+
+```sh
+# Local Worker, real GitHub. You approve a device code in the browser.
+GITHUB_CLIENT_ID=... GITHUB_CLIENT_SECRET=... node tools/e2e/signup.mjs --live
+# The deployed Worker.
+node tools/e2e/signup.mjs --live --url https://mcp.forsvn.com
+```
 
 `wrangler.toml` serves the Worker at `mcp.forsvn.com`; replace the route with your own hostname.
 On that host a zone configuration rule turns off Cloudflare's browser integrity check, so any HTTP

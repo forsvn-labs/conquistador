@@ -71,7 +71,8 @@ Agents that run outside a coding repository reach the same library through a hos
 few tools carry the loop, not one tool per command: a brief built from the caller's facts, a
 rule-based check, a rubric gate, and verification. The host still supplies the model. Because a
 model can skip the check or misreport it, the server signs each check receipt with a key callers
-never hold, and the host, not the agent, decides whether a draft is ready to hand over.
+never hold, and the host, not the agent, decides whether a draft is ready to hand over. Access is
+self-serve: a GitHub sign-in gives each person a personal token, so nobody has to ask the owner.
 
 ## Connect only what the task needs
 

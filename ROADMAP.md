@@ -32,6 +32,32 @@
 6. Release the 2026-10-07 changes to npm (see [PROGRESS.md](PROGRESS.md)) after the install, update,
    removal, task, and correction acceptance on the exact candidate.
 
+## Hosted server access
+
+1. Do the one-time setup for self-serve tokens (see [INSTALL.md](INSTALL.md), "Bots and remote
+   apps"): create the GitHub OAuth App with the callback `https://mcp.forsvn.com/signup/callback` and
+   device flow on, set `GITHUB_CLIENT_ID` and `GITHUB_CLIENT_SECRET`, create the `TOKENS` KV
+   namespace and add its id to `wrangler.toml`, and deploy. Then run
+   `node tools/e2e/signup.mjs --live --url https://mcp.forsvn.com` and sign in once at `/signup`.
+2. Phase 2: MCP authorization, so claude.ai, Claude Desktop connectors, and other MCP clients sign
+   in without a copied token. Design:
+   - The Worker becomes an OAuth 2.1 authorization server for MCP clients, with
+     `@cloudflare/workers-oauth-provider`. It serves `/.well-known/oauth-authorization-server`,
+     `/.well-known/oauth-protected-resource`, dynamic client registration (`/register`),
+     `/authorize`, and `/token`, with PKCE required.
+   - `/authorize` sends the person to GitHub (the same OAuth App, a second callback path on the
+     same host) and then shows a consent page that names the MCP client.
+   - The provider stores grants and tokens in KV (`OAUTH_KV`). Each grant carries the GitHub id, so
+     the per-token rate limit, the blocked status, and `conquistador logout` apply to OAuth grants
+     too.
+   - `cq_` tokens and the admin token keep working as plain bearer tokens beside OAuth, for CLIs,
+     bots, and tests.
+   - Acceptance: claude.ai adds `https://mcp.forsvn.com/mcp` as a custom connector and calls the
+     brief and the check; Claude Code connects with `/mcp` and no header; a revoked grant stops
+     working; the sign-up E2E gains an OAuth client that registers, authorizes, and refreshes.
+   - Open questions: consent-page wording; whether to keep the 365-day expiry for OAuth refresh
+     tokens; whether a GitHub org allowlist is needed if abuse appears.
+
 ## Private-alpha follow-up
 
 1. Obtain the human verdict for the observed six-context BB run and record concrete task feedback.
