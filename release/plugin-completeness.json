@@ -4836,7 +4836,7 @@
     },
     {
       "path": "tools/brief.mjs",
-      "sha256": "d8921e8c3faa5a6d0eab7fb3e0956f37b00ff57c47e6c4f9970e186640d12213"
+      "sha256": "70107c1253cf3289763f53ede3525dbe17c38da8ae0ad15d46701570c095f77b"
     },
     {
       "path": "tools/check/channels.mjs",
@@ -4844,7 +4844,7 @@
     },
     {
       "path": "tools/check/context-claims.mjs",
-      "sha256": "e3348eef2788b2c321c64289815b308842614cc08244c1f95b03ab3dc23f3b70"
+      "sha256": "a63e984df218bdf4af18883c793660e8c9980c51ab32d5647ca26cc32e48f49c"
     },
     {
       "path": "tools/check/extract.mjs",
@@ -4856,7 +4856,7 @@
     },
     {
       "path": "tools/check/rules.mjs",
-      "sha256": "7e25bfe0c952fc9ba2a32efe3bf38206fca690b16e941f6bd9fabadc6071c59b"
+      "sha256": "ca2389597b07793ab3899ed675591d654daff976ab62b7e941d2d3f0519e211b"
     },
     {
       "path": "tools/context-files.mjs",
