@@ -1947,13 +1947,10 @@
       "requiredResources": [
         "references/copy-validation-rubric.md",
         "references/anti-patterns.md",
-        "fallbacks/sequential.md"
+        "fallbacks/sequential.md",
+        "references/frameworks/outreach-decisions.md"
       ],
       "conditionalResources": [
-        {
-          "path": "references/frameworks/outreach-decisions.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
         {
           "path": "references/modes/no-pitch-research.md",
           "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."

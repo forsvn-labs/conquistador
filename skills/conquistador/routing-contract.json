@@ -2623,10 +2623,10 @@
       "requiredResources": [
         "skills/conquistador/commands/outreach/references/copy-validation-rubric.md",
         "skills/conquistador/commands/outreach/references/anti-patterns.md",
-        "skills/conquistador/commands/outreach/fallbacks/sequential.md"
+        "skills/conquistador/commands/outreach/fallbacks/sequential.md",
+        "skills/conquistador/commands/outreach/references/frameworks/outreach-decisions.md"
       ],
       "conditionalResources": [
-        "skills/conquistador/commands/outreach/references/frameworks/outreach-decisions.md",
         "skills/conquistador/commands/outreach/references/modes/no-pitch-research.md",
         "skills/conquistador/commands/outreach/agents/signal-analyst.md",
         "skills/conquistador/commands/outreach/agents/strategist.md",
@@ -2645,10 +2645,6 @@
         "skills/conquistador/commands/outreach/references/examples/saas-sequence-no-proof.md"
       ],
       "resourceConditions": [
-        {
-          "path": "skills/conquistador/commands/outreach/references/frameworks/outreach-decisions.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
         {
           "path": "skills/conquistador/commands/outreach/references/modes/no-pitch-research.md",
           "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."

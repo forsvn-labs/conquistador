@@ -2320,7 +2320,7 @@
     },
     {
       "path": "skills/conquistador/commands/outreach/COMMAND.md",
-      "sha256": "85c787e9fa9d8621d20fd3878cc78262584ea77af0e71c5c7a6bd18bc4443ecb"
+      "sha256": "8f2cc022ec3b2e2b4fc5b7f2245a66435b1ba11fe888232e8dac504e568115cc"
     },
     {
       "path": "skills/conquistador/commands/outreach/fallbacks/sequential.md",
@@ -4740,11 +4740,11 @@
     },
     {
       "path": "skills/conquistador/routing-contract.json",
-      "sha256": "599697b02c8dda7a4b13eef7e10ba45f289250dcaf50d38633c2296cae977c49"
+      "sha256": "45e67c6ede19e6a54299d7765f46542e1840f8bd84c1ab4f0fb7b11fd18128b1"
     },
     {
       "path": "skills/conquistador/routing-overlay.json",
-      "sha256": "942a6a73fcb31075816a7771f40ed798b98b1a5a19822ab566e816bf3ea65a87"
+      "sha256": "8e545d4647addd62c41731664130c2c9176b538e6faa3b180b9913f0c34c6bdb"
     },
     {
       "path": "skills/conquistador/rubrics/composition.md",
