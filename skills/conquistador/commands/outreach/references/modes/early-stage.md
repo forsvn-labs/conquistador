@@ -26,6 +26,8 @@ for it as a pre-send gap.
 
 Use one substitute per touch. Each one needs input from the sender before it appears in copy. If
 the sender cannot supply that input, do not use the substitute; ask for it as a pre-send gap.
+Show the gap where that touch would go: the substitute, the missing input, and the questions for
+the sender. Do not draft the touch with invented input and list the input as an assumption later.
 
 | Substitute | Fits when | Sender supplies first | Write it as |
 |---|---|---|---|
