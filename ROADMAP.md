@@ -10,9 +10,9 @@
 
 ## Next acceptance
 
-0. Repeat the Haiku-class run behind the Claude Agent SDK host in
-   [`examples/verify-gate`](examples/verify-gate/README.md) and compare it with run 3: outcome,
-   rejections, the delivered text's check result, turns, and cost.
+0. Rerun the Haiku-class gate test with run 3's exact context (no sender address) to exercise the
+   rejection path live, and add a judgment check for invented backstory and stage changes, which the
+   rule-based checker cannot see (run 4, 2026-10-07).
 1. Add "Open in Claude Code" (`claude-cli://open?q=`) and "Open in Cursor" deep-link buttons with a
    "Copy prompt" fallback to the landing page. Test both links in a browser first.
 2. Observe the plugin hooks in a real Codex session (after hook trust), Cursor, Copilot CLI, and

@@ -4,6 +4,19 @@
 versions. Verification establishes the stated local scope; native host behavior, useful model
 output, human acceptance and rights disposition require separate evidence.
 
+## 2026-10-07, verify gate host example
+
+Repository only; not in the npm package.
+
+- **Host gate for agent handover** ([#57](https://github.com/forsvn-labs/conquistador/pull/57)).
+  `examples/verify-gate` has a gate that accepts drafts only when `conquistador_verify` proves each is
+  the exact text of a clean, signed check with the host's channel and context, an MCP client for it,
+  and a Claude Agent SDK host with a `deliver` tool and a `Stop` hook. `tools/e2e/verify-gate.mjs`
+  passed 18/18 offline. A live run with Claude Haiku 4.5 behind the host delivered three emails that
+  the gate verified clean on the first attempt (25 turns, $0.17); run 3 without a gate had delivered
+  failing text reported as clean. Run 4 also had a sender address that run 3 lacked, and the
+  emails still contained an invented founder backstory, which no rule-based check detects.
+
 ## 2026-10-07, hosted MCP server deployment
 
 A deployment, not an npm release: `@forsvn/conquistador` stays at 0.3.0, and installed users get
