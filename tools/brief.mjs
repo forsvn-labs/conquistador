@@ -529,7 +529,7 @@ function clipUtf8(text, limit) {
 }
 
 // Full form for MCP and the CLI. Only complete, digest-checked blocks count as returned files.
-export function formatBriefPack(brief, { limit = LIMITS.packBytes } = {}) {
+export function formatBriefPack(brief, { limit = LIMITS.packBytes, callerContext } = {}) {
   if (brief.action !== 'brief') {
     return 'No Conquistador method matches this task. For growth, GTM, marketing, sales, or product work, restate the outcome and channel (for example "write a win-back email flow", "get recommended by ChatGPT", or "plan a TikTok series") or call conquistador_search.';
   }
@@ -544,12 +544,14 @@ export function formatBriefPack(brief, { limit = LIMITS.packBytes } = {}) {
     `Commands: ${brief.methods.map(item => `${item.label} [${item.name}]`).join(', ') || 'none; platform guidance only'}`,
     brief.context?.length ? `Project context: read ${brief.context.map(item => item.path).join(' and ')} first; your message, then GROWTH.md, then PRODUCT.md.` : '',
     brief.platforms.length ? `Platforms named: ${brief.platforms.join(', ')}` : '',
+    callerContext ? `\n## Caller context\n\nProduct truth for this task, supplied by the caller. Use only these facts and the user's message; mark anything else as an assumption.\n\n${callerContext}\n` : '',
     '',
     'Rules for this task:',
     '1. Follow the specific rules in the playbooks; generic advice is not a substitute.',
     '2. End your answer with "Playbooks applied": each file you used and the rule you took from it.',
     '3. Never invent metrics, quotes, or customer facts. Mark assumptions. Ask before publishing, spending, or sending.',
     '4. Read a "situational" file with conquistador_read when the task reaches that step.',
+    '5. Before you hand over marketing text, run conquistador_check (MCP) or `conquistador check` (CLI) on it with its channel. Fix each error and warning, or say why it stays.',
     'Files marked omitted or unavailable still need a separate successful read.',
     '',
   ].join('\n');

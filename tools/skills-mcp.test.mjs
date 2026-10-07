@@ -52,7 +52,7 @@ test('cold spawned stdio lists methods and reads the parent, outcome, and routin
   assert.equal(result.stderr, '');
   assert.equal(result.messages.length, 7);
   assert.match(result.messages[0].result.instructions, /conquistador_brief/);
-  assert.deepEqual(result.messages[1].result.tools.map(tool => tool.name), ['conquistador_brief', 'conquistador_search', 'conquistador_methods', 'conquistador_files', 'conquistador_read']);
+  assert.deepEqual(result.messages[1].result.tools.map(tool => tool.name), ['conquistador_brief', 'conquistador_check', 'conquistador_search', 'conquistador_methods', 'conquistador_files', 'conquistador_read']);
   const methods = JSON.parse(result.messages[2].result.content[0].text);
   assert.equal(methods.guide, 'conquistador/SKILL.md');
   // 35 method commands plus 6 meta commands (init, pin, check, connect, review, doctor).

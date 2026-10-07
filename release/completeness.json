@@ -4789,7 +4789,7 @@
     },
     {
       "path": "tools/brief.mjs",
-      "sha256": "78d24026d069f6910289e4f846d320a594ee7b494bdcd6788aee5d653a80a311"
+      "sha256": "3f5bcb1d7166b104e67763bf450fcae8eed8ac056ea7fa58388731264751957d"
     },
     {
       "path": "tools/context-files.mjs",

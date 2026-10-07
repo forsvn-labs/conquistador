@@ -2,8 +2,14 @@ import { constants, openSync, closeSync, readSync, fstatSync, lstatSync, realpat
 import { dirname, join, extname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createBrief, formatBriefPack, searchKnowledge } from './brief.mjs';
+import { checkDocument, counted } from './check/index.mjs';
+import { channels, detectChannel, normalizeChannel } from './check/channels.mjs';
+import { extractDocument } from './check/extract.mjs';
 
-export const LIMITS = Object.freeze({ request: 65536, file: 262144, response: 524288, files: 256, depth: 12, methods: 128, entries: 2048 });
+export const LIMITS = Object.freeze({ request: 65536, file: 262144, response: 524288, files: 256, depth: 12, methods: 128, entries: 2048, context: 8000, checkText: 60000, checkFindings: 100 });
+const checkFormats = { markdown: '.md', html: '.html', text: '.txt' };
+// A message the caller can act on. Other failures keep the generic text so paths and internals stay private.
+const usageError = message => Object.assign(new Error(message), { usage: true });
 const bundledRoot = fileURLToPath(new URL('../skills', import.meta.url));
 const decoder = new TextDecoder('utf-8', { fatal: true });
 const extensions = new Set(['.md', '.json', '.yaml', '.yml', '.txt', '.csv', '.tsv', '.py', '.sh', '.swift', '.pbxproj', '.xcworkspacedata']);
@@ -14,7 +20,8 @@ const object = value => value !== null && typeof value === 'object' && !Array.is
 const schema = properties => ({ type: 'object', properties, required: Object.keys(properties), additionalProperties: false });
 const readOnly = { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false };
 const TOOLS = [
-  { name: 'conquistador_brief', description: 'Call this FIRST for any growth, GTM, launch, marketing, sales, pricing, positioning, copy, content, SEO, ads, outreach, or product-marketing task. Describe the task in plain words. Returns the selected command, or the play (its steps in order) for a multi-step outcome, with the full text of the playbooks to read now, the playbooks to read at later steps, and the rules for using them. Read the whole response before drafting.', inputSchema: { type: 'object', properties: { task: { type: 'string', minLength: 1, maxLength: 8000, description: 'The user request, including product, audience, channel, and goal when known.' } }, required: ['task'], additionalProperties: false } },
+  { name: 'conquistador_brief', description: 'Call this FIRST for any growth, GTM, launch, marketing, sales, pricing, positioning, copy, content, SEO, ads, outreach, or product-marketing task. Describe the task in plain words. Returns the selected command, or the play (its steps in order) for a multi-step outcome, with the full text of the playbooks to read now, the playbooks to read at later steps, and the rules for using them. Read the whole response before drafting.', inputSchema: { type: 'object', properties: { task: { type: 'string', minLength: 1, maxLength: 8000, description: 'The user request, including product, audience, channel, and goal when known.' }, context: { type: 'string', maxLength: 8000, description: 'Optional facts you already hold: product, audience, proof points, voice, and constraints. The brief carries them as the product truth for this task, so a drafting step can work from the brief alone.' } }, required: ['task'], additionalProperties: false } },
+  { name: 'conquistador_check', description: 'Check a marketing draft against fixed rules before you hand it over: unsupported claims, AI-writing tells, vague calls to action, channel limits, email compliance, and link hygiene. No model; the same text always gets the same findings. Fix each error and warning, or say why it stays. Advisories are suggestions. A clean check is evidence, not proof of quality.', inputSchema: { type: 'object', properties: { text: { type: 'string', minLength: 1, maxLength: LIMITS.checkText, description: 'The draft. Markdown front matter (subject, title, channel) is read when present.' }, channel: { type: 'string', enum: Object.keys(channels), description: 'Where the text goes. Sets channel limits, for example x for 280 characters or email for unsubscribe and subject rules. Omit for general rules only.' }, format: { type: 'string', enum: Object.keys(checkFormats), description: 'How to read the text. Default markdown.' } }, required: ['text'], additionalProperties: false } },
   { name: 'conquistador_search', description: 'Search all Conquistador playbooks, platform guides, examples, and your own playbooks by keyword. Use it when a task reaches a step the brief did not cover. Returns paths with summaries; read one with conquistador_read.', inputSchema: { type: 'object', properties: { query: { type: 'string', minLength: 1, maxLength: 400 } }, required: ['query'], additionalProperties: false } },
   { name: 'conquistador_methods', description: 'List the commands, the plays, and the parent guide. Prefer conquistador_brief, which selects them and their playbooks for you.', inputSchema: schema({}) },
   { name: 'conquistador_files', description: 'List readable text resources in one command or play. Scripts are text only and are never executed.', inputSchema: schema({ method: { type: 'string', pattern: methodPattern.source, maxLength: 100 } }) },
@@ -26,7 +33,7 @@ const PROMPTS = [
   { name: 'copy', title: 'Write marketing copy', description: 'Write landing page, email, or ad copy.', text: 'Write marketing copy for {{product}}. Use conquistador_brief first and follow its playbooks.' },
   { name: 'review-results', title: 'Review campaign results', description: 'Decide what to keep, drop, and test next.', text: 'Review these results and tell me what to keep, drop, and test: {{product}}. Use conquistador_brief first and follow its playbooks.' },
 ].map(prompt => ({ ...prompt, arguments: [{ name: 'product', description: 'Product, audience, goal, and any facts or numbers you have.', required: true }] }));
-export const SERVER_INSTRUCTIONS = 'Conquistador supplies field-tested playbooks for growth, GTM, launch, marketing, sales, pricing, positioning, copy, content, SEO, ads, and outreach work. For any such task, call conquistador_brief with the task before you draft, read the whole result, apply its specific rules, and end your answer with "Playbooks applied": each file and the rule you took from it. Never invent metrics, quotes, or customer facts. Ask the user before publishing, spending, or sending. Your host supplies the model, tools, and permissions; this server only reads playbooks.';
+export const SERVER_INSTRUCTIONS = 'Conquistador supplies field-tested playbooks for growth, GTM, launch, marketing, sales, pricing, positioning, copy, content, SEO, ads, and outreach work. For any such task, call conquistador_brief with the task before you draft, read the whole result, apply its specific rules, run conquistador_check on the draft, and end your answer with "Playbooks applied": each file and the rule you took from it. Never invent metrics, quotes, or customer facts. Ask the user before publishing, spending, or sending. Your host supplies the model, tools, and permissions; this server only reads playbooks.';
 const packageVersion = (() => { try { return JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8')).version; } catch { return '0.0.0'; } })();
 
 // The caller controls only relative names, never the bundle root. Reject every symlink
@@ -133,6 +140,27 @@ export function createMethodAccess(root = bundledRoot) {
   return { methods, files, read };
 }
 
+// The CLI checker, applied to text the caller sends. No project config: a hosted caller has no project.
+function checkDraft({ text, channel, format = 'markdown' }) {
+  if (!text.trim()) throw usageError('Send the draft text.');
+  if (text.length > LIMITS.checkText) throw usageError(`Text is over ${LIMITS.checkText} characters. Check one deliverable at a time.`);
+  if (!Object.hasOwn(checkFormats, format)) throw usageError(`Unknown format. Use one of: ${Object.keys(checkFormats).join(', ')}.`);
+  const named = channel === undefined ? undefined : normalizeChannel(channel);
+  if (named === null) throw usageError(`Unknown channel. Use one of: ${Object.keys(channels).join(', ')}.`);
+  const file = `draft${checkFormats[format]}`;
+  const document = extractDocument(text, checkFormats[format]);
+  const detected = detectChannel(file, document, named);
+  const findings = checkDocument(document, { channel: detected, file });
+  const total = findings.filter(counted).length;
+  return {
+    channel: detected,
+    clean: total === 0,
+    counted: total,
+    truncated: findings.length > LIMITS.checkFindings,
+    findings: findings.slice(0, LIMITS.checkFindings).map(({ rule, name, family, severity, message, fix, line, snippet }) => ({ rule, name, family, severity, message, fix, line, snippet })),
+  };
+}
+
 // One JSON-RPC handler shared by stdio and HTTP. It returns the response object, or null for notifications.
 export function createMcpHandler({ root = bundledRoot, requireInitialize = true } = {}) {
   let access;
@@ -168,13 +196,16 @@ export function createMcpHandler({ root = bundledRoot, requireInitialize = true 
     if (method !== 'tools/call') return error(id, -32601, 'Method not found');
     const definition = TOOLS.find(tool => tool.name === params.name);
     const args = params.arguments ?? {};
-    if (!definition || !object(args) || Object.keys(args).some(key => !Object.hasOwn(definition.inputSchema.properties, key)) || definition.inputSchema.required.some(key => typeof args[key] !== 'string')) return error(id, -32602, 'Invalid tool arguments');
+    if (!definition || !object(args) || Object.keys(args).some(key => !Object.hasOwn(definition.inputSchema.properties, key) || definition.inputSchema.properties[key].type === 'string' && typeof args[key] !== 'string') || definition.inputSchema.required.some(key => typeof args[key] !== 'string')) return error(id, -32602, 'Invalid tool arguments');
     let result;
     try {
       let value;
       if (params.name === 'conquistador_brief') {
         if (!args.task.trim() || args.task.length > 8000) throw new Error('Invalid task');
-        value = formatBriefPack(createBrief(args.task, { root: packageRoot(), force: true }));
+        if ((args.context?.length ?? 0) > LIMITS.context) throw usageError(`Context is over ${LIMITS.context} characters. Keep the facts that matter for this task.`);
+        value = formatBriefPack(createBrief(args.task, { root: packageRoot(), force: true }), { callerContext: args.context?.trim() });
+      } else if (params.name === 'conquistador_check') {
+        value = checkDraft(args);
       } else if (params.name === 'conquistador_search') {
         if (!args.query.trim() || args.query.length > 400) throw new Error('Invalid query');
         value = searchKnowledge(args.query, { root: packageRoot() });
@@ -183,8 +214,8 @@ export function createMcpHandler({ root = bundledRoot, requireInitialize = true 
         value = params.name === 'conquistador_methods' ? access.methods() : params.name === 'conquistador_files' ? access.files(args.method) : access.read(args.path.replace(/^skills\//, ''));
       }
       result = { content: [{ type: 'text', text: typeof value === 'string' ? value : JSON.stringify(value) }] };
-    } catch {
-      result = { isError: true, content: [{ type: 'text', text: params.name === 'conquistador_brief' || params.name === 'conquistador_search' ? 'Cannot build a brief for this input. Describe the task in plain words.' : 'Cannot read bundled method: invalid path, unavailable text file, or bundle limit exceeded.' }] };
+    } catch (failure) {
+      result = { isError: true, content: [{ type: 'text', text: failure.usage ? failure.message : params.name === 'conquistador_brief' || params.name === 'conquistador_search' ? 'Cannot build a brief for this input. Describe the task in plain words.' : 'Cannot read bundled method: invalid path, unavailable text file, or bundle limit exceeded.' }] };
     }
     if (Buffer.byteLength(JSON.stringify(result)) > LIMITS.response - 1024) {
       result = { isError: true, content: [{ type: 'text', text: 'Encoded text exceeds the response limit.' }] };
