@@ -4780,6 +4780,10 @@
       "sha256": "1f0d4f6b821e0dc3357aa0b1987857e53d24d9acb836a8427198355416c9e289"
     },
     {
+      "path": "tools/module-root.mjs",
+      "sha256": "a81e4127f1b697ed9129d591995bb5e8d667c71806771a141c57abb7bd1db5c8"
+    },
+    {
       "path": "tools/request-text.mjs",
       "sha256": "f406cb30e8cf5cb9ded419d1ed661dbd99fa1de909d02103fd671be10a13f231"
     },
