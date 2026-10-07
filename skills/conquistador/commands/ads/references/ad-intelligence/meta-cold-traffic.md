@@ -20,6 +20,11 @@ business event that would justify the acquisition cost. Keep Facebook and Instag
 placement differences visible in the brief. A broad audience, interest audience, or
 lookalike is a candidate configuration, not a required winner.
 
+When the buyer segment is narrow, consider a test cell with broad eligibility and an
+optimization event that fires only for qualified leads, compared with a cell that
+narrows targeting. Record the qualification logic behind that event and verify the
+event is permitted for the category.
+
 Use this decision record:
 
 | Input | Required decision |

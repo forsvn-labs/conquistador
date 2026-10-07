@@ -33,11 +33,12 @@ critic_per_variant:
 
 Values above illustrate the schema, not a recommended setup or actual score.
 status is done, done_with_concerns, blocked, or needs_context. network is meta,
-google-ads, tiktok-ads, or linkedin-ads. Use intent_tier instead of audience_temp
-for Google Ads, and targeting_mode for LinkedIn. Keep one scope per artifact.
+google-ads, apple-search-ads, tiktok-ads, or linkedin-ads. Use intent_tier instead
+of audience_temp for Google Ads and Apple Ads, and targeting_mode for LinkedIn. Keep one scope per artifact.
 
 Meta/TikTok audience_temp is cold or retargeting based on actual eligibility.
-Google intent_tier is branded, non-branded, competitor, or generic. LinkedIn
+Google intent_tier is branded, non-branded, competitor, or generic. Apple Ads
+intent_tier is brand, category, competitor, or discovery. LinkedIn
 targeting_mode is job-title, company-list, or matched-audience when verified.
 These labels carry no assumed intent level, cost, or preferred budget.
 

@@ -138,6 +138,18 @@ Use this structure for the audit deliverable:
 
 ---
 
+## Keyword Cannibalization Procedure
+
+Use when two or more pages may compete for the same query intent.
+
+1. **Build the candidate list cheaply.** Start from sitemap URLs and slug patterns; do not fetch every page. Include exact, reversed, and modified service or location slugs, location pages that overlap service pages, and articles that target the same intent.
+2. **Record each candidate.** Capture the title, H1, main H2s, canonical, robots directive, status code, page type, and the intent it targets. Group candidates by intent, for example main service, urgent or modified service, nearby area, informational, or archive.
+3. **Choose the primary page** when the user has not named one. Judge fit to the intent, the page type the current results favor, title and H1 fit, depth, internal links, and a clean canonical and index setup. Explain the choice.
+4. **Check internal link signals.** Find which page receives the most internal links and where anchors that use the target term point. Report anchors that point to more than one competing page as a mixed signal.
+5. **Assign one action per competing page:** merge, redirect, canonicalize, differentiate by intent, link to the primary page, keep separate, or leave alone. When pages look similar but serve different intents, state that they do not compete.
+
+---
+
 ## Site Architecture Deliverables
 
 When site architecture redesign is needed, produce these 3 outputs:

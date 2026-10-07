@@ -1,7 +1,7 @@
 # Claim, permission, and platform review
 
 This document defines artifact review requirements. It does not certify current
-Meta, Google Ads, TikTok Ads, or LinkedIn Ads policy and is not a legal opinion.
+Meta, Google Ads, Apple Ads, TikTok Ads, or LinkedIn Ads policy and is not a legal opinion.
 Use supplied current policy or account evidence for the selected region, product,
 placement, and account. Record the rule, source, date, and applicability.
 
@@ -23,6 +23,7 @@ claim or format if the truthful version does not fit.
 |---|---|
 | Meta | Applicable Advertising Standards, audience eligibility, sensitive claims, destination and placement requirements |
 | Google Ads | Editorial requirements, trademark use, restricted categories, certification, final URL and asset combinations |
+| Apple Ads | Ad policies, trademark use on competitor terms, custom product page content and App Store review requirements |
 | TikTok Ads | Advertising Policies, Spark authorization, music and creator rights, disclosure, placement and category restrictions |
 | LinkedIn Ads | Advertising Policies, targeting eligibility, professional claims, Lead Gen Form terms and data use |
 

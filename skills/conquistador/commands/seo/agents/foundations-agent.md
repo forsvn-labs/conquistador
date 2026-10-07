@@ -125,7 +125,7 @@ Return a single markdown document with exactly these sections:
 | **SaaS** | Pricing page indexation, feature page cannibalization, docs vs. marketing SEO conflict |
 | **E-commerce** | Faceted navigation duplicates, out-of-stock page handling, product schema |
 | **Content/Blog** | Thin content pages, category/tag page bloat, author page optimization |
-| **Local Business** | NAP consistency, local schema, Google Business Profile alignment |
+| **Local Business** | NAP consistency, local schema, Google Business Profile alignment; follow [local SEO](../references/local-seo.md) |
 
 ### Anti-Patterns
 

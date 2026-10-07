@@ -115,6 +115,10 @@ When your base data isn't enough for a full page:
 
 ## Decide which pages should be discoverable
 
+Store each planned page as a record before you generate it. The record holds the intent, the primary and supporting queries, the parent hub, related pages, the schema type, and the last-modified date. Generate pages only from validated records.
+
+Before you publish, compare records for query and intent overlap, and hash the generated body text to find near-duplicates. Merge records that a reader could not tell apart, or give them a canonical. Do this before generation, not after indexing. Each page names its parent hub, its sibling pages, and the next page a reader should go to.
+
 Evaluate generated pages by their actual information and intended task. Check for duplicate or contradictory records, unsupported claims, empty states, and missing source data. A word-count threshold does not establish usefulness or index eligibility.
 
 Recommend index directives only after checking the page's purpose, canonical relationships, access requirements, and current search documentation. Do not promise that a quality check prevents a particular algorithm response.
@@ -129,6 +133,7 @@ When an index report changes, inspect the reported state and representative URLs
 - Slugify entity names: lowercase, hyphens, no special characters
 - Handle duplicates: if two entities would produce the same slug, add disambiguation
 - Redirect old URLs if entities are renamed or merged
+- When the URL count exceeds one sitemap file's limit in the current sitemap protocol, use a sitemap index with sitemaps split by section, and give each URL an accurate lastmod
 
 ### Internal Linking at Scale
 - Every pSEO page links to its hub/category page

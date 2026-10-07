@@ -18,6 +18,10 @@ For a full plan, record select, test or skip for each category. For a bounded pa
 | Mailbox | Expected email, onboarding, newsletter or permitted outreach. | Audience source, purpose, suppression, sender controls and exact sending authority. |
 | SMS | A permitted transactional or promotional message. | Consent scope, message format, sender identity, unsubscribe and destination. |
 
+When the plan borrows reach from a creator, affiliate, sponsor or partner account, compare candidates by typical recent reach per post (for example, median views or impressions over a stated window, from public metrics or partner-supplied analytics) and by audience match to the buyer. Do not rank them by follower count. Record the source and date. For paid creators, load `distribution-models/creator-program.md`.
+
+When a founder or brand account exists to sell, build its audience in the topic network where the buyers already gather. Do not grow in an easier adjacent network on the plan to sell to it later.
+
 Use actual platform names only to identify a selected destination or integration. Do not assume that a named publication, creator or community endorses the product or offers access.
 
 ## Audience-to-channel record

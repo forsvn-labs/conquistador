@@ -1,5 +1,5 @@
 ---
-method_updated: 2026-09-15
+method_updated: 2026-10-07
 last_verified: null
 verifier: none
 status: draft
@@ -18,6 +18,10 @@ Select only the answer surfaces needed for that decision. Record the actual inte
 locale, date, account/session settings and model identifier when exposed. Search-result answers
 and chat answers are separate observation groups. AEO and GEO are routing labels here, not a
 claim about how a vendor retrieves or trains.
+
+When the product cannot credibly answer the broad category query, choose a narrower qualified
+query that it can answer, such as a use case, an audience, or a workflow. Build the answer for
+that query and record why the broad query was set aside.
 
 Google AI Overviews, Bing Copilot, ChatGPT, Perplexity, Claude, Gemini, Grok, You.com and Phind
 may be named as requested targets. Availability, model version, browsing and source display must
@@ -53,6 +57,18 @@ A source must support the exact claim. An owned product specification can suppor
 capability; an external review does not automatically outrank it. Follow supplied citation chains
 to their evidence, note inaccessible sources, and retain licenses and required attribution.
 Do not add quotations or named authorities merely to increase citations.
+
+When the facts on a decision page were reviewed, show a last-reviewed date and a named author or
+reviewer.
+
+## Review third-party presence
+
+From the captured answers, list the third-party domains cited for each evaluative query, such as
+forums, review sites, directories, video, and publishers. For each domain, record whether the
+product appears and whether its description is accurate. Propose only disclosed, policy-compliant
+actions: claim or correct a profile, request inclusion in a review or list, or contribute an answer
+with the affiliation disclosed. The owner approves each action. Never plant reviews, comments, or
+undisclosed mentions.
 
 ## Plan and record observations
 
