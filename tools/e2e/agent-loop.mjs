@@ -23,6 +23,7 @@ const context = [
   'Buyer: RevOps lead at a 50-500 person B2B SaaS company.',
   'Proof: none supplied. Do not invent customers or numbers.',
   'Voice: plain, specific, no hype.',
+  'Sender: Sam Lee at Ledgerline, 100 Example Street, Springfield.',
 ].join('\n');
 const firstDraft = `---
 subject: Unlock seamless revenue ops!!
@@ -88,6 +89,9 @@ async function main() {
     const command = text.match(/^Commands: (.*)$/m)?.[1];
     const files = [...text.matchAll(/^File: (.*)$/gm)].map(match => match[1]);
     record('brief routes to outreach, carries the context, and requires the check', /\[outreach\]/.test(command ?? '') && text.includes('Ledgerline') && /conquistador_check/.test(text), { command, files, bytes: Buffer.byteLength(text), ms: brief.ms });
+    const structured = brief.body.result?.structuredContent ?? {};
+    record('the hosted brief leads with the route, knows it has no repository, and lists its files', /^Start here: .*\[outreach\]/m.test(text) && /no repository/i.test(text) && structured.command === 'outreach' && structured.inlined?.length >= 5 && Array.isArray(structured.readNow),
+      { inlined: structured.inlined?.length, readNow: structured.readNow?.length, situational: structured.situational?.length });
 
     // The library tools read the bundled files directly; a host without full node:fs fails here.
     const methods = await rpc('tools/call', { name: 'conquistador_methods', arguments: {} });
@@ -104,7 +108,11 @@ async function main() {
     const firstRules = [...new Set(firstResult.findings?.map(finding => finding.rule))].sort();
     record('the first draft fails the check', firstResult.clean === false && firstRules.includes('ai-unlock') && firstRules.includes('claim-guarantee'), { blocking: firstResult.blocking, rules: firstRules, ms: first.ms });
 
-    const second = await rpc('tools/call', { name: 'conquistador_check', arguments: { text: revision, channel: 'email' } });
+    const invented = await rpc('tools/call', { name: 'conquistador_check', arguments: { text: revision.replace('Ledgerline compares the two every night', 'Teams like Acme cut month-end close by 40% because Ledgerline compares the two every night'), channel: 'email', context } });
+    const inventedRules = (parsed(invented).findings ?? []).filter(finding => finding.rule === 'claim-not-in-context').map(finding => finding.snippet);
+    record('with the context, the check flags an invented number and customer', inventedRules.includes('40%') && inventedRules.includes('Acme'), { flagged: inventedRules, ms: invented.ms });
+
+    const second = await rpc('tools/call', { name: 'conquistador_check', arguments: { text: revision, channel: 'email', context } });
     const secondResult = parsed(second);
     const secondRules = [...new Set(secondResult.findings?.map(finding => `${finding.rule} (${finding.severity})`))].sort();
     record('the revision passes the check', secondResult.clean === true, { blocking: secondResult.blocking, rules: secondRules, ms: second.ms });

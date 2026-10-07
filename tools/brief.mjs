@@ -553,15 +553,27 @@ function clipUtf8(text, limit) {
 }
 
 // Full form for MCP and the CLI. Only complete, digest-checked blocks count as returned files.
-export function formatBriefPack(brief, { limit = LIMITS.packBytes, callerContext } = {}) {
+export const formatBriefPack = (brief, options) => packBrief(brief, options).text;
+
+// The brief as text plus the same lists in structured form, so an agent can see what is inlined
+// and what it still has to read without parsing prose. `hosted` marks a caller with no repository.
+export function packBrief(brief, { limit = LIMITS.packBytes, callerContext, hosted = false } = {}) {
   if (brief.action !== 'brief') {
-    return 'No Conquistador method matches this task. For growth, GTM, marketing, sales, or product work, restate the outcome and channel (for example "write a win-back email flow", "get recommended by ChatGPT", or "plan a TikTok series") or call conquistador_search.';
+    return { structured: { action: 'none', inlined: [], readNow: [], readAtStep: [], situational: [] }, text: 'No Conquistador method matches this task. For growth, GTM, marketing, sales, or product work, restate the outcome and channel (for example "write a win-back email flow", "get recommended by ChatGPT", or "plan a TikTok series") or call conquistador_search.' };
   }
 
   limit = Number.isFinite(limit) ? Math.max(0, Math.floor(limit)) : LIMITS.packBytes;
 
+  const lead = brief.play?.steps.find(step => step.now);
+  const primary = brief.methods[0];
+  const start = lead ? `Start here: step ${lead.step} of the ${brief.play.name} play, ${lead.label} [${lead.command ?? lead.method}]. Read the inlined files below in order, then do that step.`
+    : primary ? `Start here: ${primary.label} [${primary.name}]. Read the inlined files below in order, then draft.`
+      : 'Start here: the platform guides below.';
   const header = [
     '# Conquistador brief',
+    '',
+    start,
+    hosted ? 'Hosted: you have no repository or file system here. Where a playbook says to write files (for example under .forsvn/ or in the project), put that content in your answer instead. Read a linked file with conquistador_read and pass the linking file as `from`.' : '',
     '',
     brief.play ? `Play: ${brief.play.label} [${brief.play.name}]` : '',
     brief.play ? brief.play.steps.map(step => `${step.step}. ${step.command ?? step.method}${step.mode ? ` (mode ${step.mode})` : ''}${step.when ? ` — when ${step.when}` : ''}${step.for ? ` — for ${step.for}` : ''}${step.now ? ' ← start here' : ''}`).join('\n') : '',
@@ -577,6 +589,7 @@ export function formatBriefPack(brief, { limit = LIMITS.packBytes, callerContext
     '3. Never invent metrics, quotes, or customer facts. Mark assumptions. Ask before publishing, spending, or sending.',
     '4. Read a "situational" file with conquistador_read when the task reaches that step.',
     '5. Before you hand over marketing text, run conquistador_check (MCP) or `conquistador check` (CLI) on it with its channel. Fix each error and warning, or say why it stays. A clean check does not verify facts: compare each claim with the context and mark what you assumed.',
+    '6. Lead with the deliverable the user asked for; put plans, scores, and supporting material after it.',
     'Files marked omitted or unavailable still need a separate successful read.',
     '',
   ].join('\n');
@@ -590,7 +603,7 @@ export function formatBriefPack(brief, { limit = LIMITS.packBytes, callerContext
       const fallback = `\n${evidenceMarker({ id: item.path, status })}\n(${item.path} ${status}: ${status === 'omitted' ? 'response budget reached' : 'file could not be read'}. Read it separately.)\n`;
       const block = body === null ? null : `\n---\n\n## ${heading}\n\nFile: ${item.path}\n${item.why ? `\nWhy: ${item.why}\n` : ''}\n${evidenceMarker(evidence)}\n${normalizeKnowledgeText(body)}\n${fileEnd}\n`;
 
-      return { block, fallback };
+      return { block, fallback, path: item.path, title: item.title ?? item.label ?? posix.basename(item.path) };
     });
 
   const later = (brief.play?.steps ?? []).filter(step => !step.now)
@@ -600,13 +613,26 @@ export function formatBriefPack(brief, { limit = LIMITS.packBytes, callerContext
   // Reserve the exact status text for every remaining required file before adding a body.
   let remaining = entries.reduce((sum, entry) => sum + Buffer.byteLength(entry.fallback), 0);
   let output = header;
+  const inlined = [];
+  const readNow = [];
 
   for (const entry of entries) {
     remaining -= Buffer.byteLength(entry.fallback);
-    output += entry.block && Buffer.byteLength(output) + Buffer.byteLength(entry.block) + remaining <= limit ? entry.block : entry.fallback;
+    const fits = entry.block && Buffer.byteLength(output) + Buffer.byteLength(entry.block) + remaining <= limit;
+    output += fits ? entry.block : entry.fallback;
+    (fits ? inlined : readNow).push(fits ? { path: entry.path, title: entry.title } : entry.path);
   }
 
-  return clipUtf8(output + situational, limit);
+  const structured = {
+    action: 'brief',
+    command: primary?.name ?? null,
+    play: brief.play?.name ?? null,
+    inlined,
+    readNow,
+    readAtStep: (brief.play?.steps ?? []).filter(step => !step.now).flatMap(step => [step.path, ...step.playbooks.map(item => item.path)].map(path => ({ step: step.step, path }))),
+    situational: brief.situational.map(item => item.path),
+  };
+  return { structured, text: clipUtf8(output + situational, limit) };
 }
 
 // Search the whole library, not only the selected methods.

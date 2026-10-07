@@ -188,8 +188,11 @@ with `npx wrangler@4.148.0 dev --var CONQUISTADOR_MCP_TOKEN:local-test`.
 
 A deployed agent uses two tools in a loop: `conquistador_brief` with the task (and, when the agent
 has no `PRODUCT.md`, the product facts in `context`), then `conquistador_check` on each draft with
-its channel. `node tools/e2e/agent-loop.mjs --url https://HOST/mcp` checks that loop against a
-deployed server; set `CONQUISTADOR_MCP_TOKEN` first.
+its channel and the same `context`, which flags numbers and customer names the context lacks. Over
+HTTP the brief returns structured lists (`inlined`, `readNow`, `readAtStep`, `situational`), and
+`conquistador_read` resolves a relative link when you pass the linking file as `from`.
+`node tools/e2e/agent-loop.mjs --url https://HOST/mcp` checks that loop against a deployed server;
+set `CONQUISTADOR_MCP_TOKEN` first.
 
 For ChatGPT GPTs, Claude Projects, Grok projects, and Gemini Gems:
 
