@@ -7,7 +7,9 @@ import { createMcpHandler } from './skills-mcp.mjs';
 
 const MAX_BODY = 65_536;
 
-export function createMcpHttpServer({ token = process.env.CONQUISTADOR_MCP_TOKEN, root } = {}) {
+// One request handler for `--http` and the hosted function. A hosted deployment sets
+// requireToken, so a missing token fails closed instead of serving the playbooks openly.
+export function createMcpRequestHandler({ token = process.env.CONQUISTADOR_MCP_TOKEN, root, requireToken = false } = {}) {
   const handle = createMcpHandler({ ...(root ? { root } : {}), requireInitialize: false });
   const authorized = header => {
     if (!token) return true;
@@ -15,14 +17,16 @@ export function createMcpHttpServer({ token = process.env.CONQUISTADOR_MCP_TOKEN
     const actual = Buffer.from(String(header ?? ''));
     return actual.length === expected.length && timingSafeEqual(actual, expected);
   };
-  return createServer((request, response) => {
+  return (request, response) => {
     const reply = (status, body, headers = {}) => {
       response.writeHead(status, { 'content-type': 'application/json', 'cache-control': 'no-store', ...headers });
       response.end(body === undefined ? '' : JSON.stringify(body));
     };
     const path = (request.url ?? '/').split('?')[0];
-    if (path === '/health') return reply(200, { ok: true, server: 'conquistador' });
-    if (path !== '/mcp') return reply(404, { error: 'Use POST /mcp.' });
+    // A hosting rewrite can deliver /mcp as /api/mcp.
+    if (path === '/health' || path === '/api/health') return reply(200, { ok: true, server: 'conquistador' });
+    if (path !== '/mcp' && path !== '/api/mcp') return reply(404, { error: 'Use POST /mcp.' });
+    if (requireToken && !token) return reply(503, { error: 'This server has no access token configured.' });
     if (!authorized(request.headers.authorization)) return reply(401, { error: 'Missing or invalid bearer token.' }, { 'www-authenticate': 'Bearer' });
     if (request.method === 'DELETE') return reply(200, {});
     if (request.method !== 'POST') return reply(405, { error: 'This server answers POST requests with JSON.' }, { allow: 'POST' });
@@ -42,7 +46,11 @@ export function createMcpHttpServer({ token = process.env.CONQUISTADOR_MCP_TOKEN
       if (!results.length) return reply(202);
       return reply(200, batch ? results : results[0]);
     });
-  });
+  };
+}
+
+export function createMcpHttpServer(options = {}) {
+  return createServer(createMcpRequestHandler(options));
 }
 
 export async function runMcpHttp(args) {

@@ -1,0 +1,14 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": null,
+  "installCommand": "echo 'No install: the MCP server uses core Node modules only.'",
+  "buildCommand": "echo 'No build.'",
+  "outputDirectory": "mcp/public",
+  "functions": {
+    "api/mcp.mjs": { "includeFiles": "{skills/**,package.json}", "maxDuration": 15 }
+  },
+  "rewrites": [
+    { "source": "/mcp", "destination": "/api/mcp" },
+    { "source": "/health", "destination": "/api/mcp" }
+  ]
+}

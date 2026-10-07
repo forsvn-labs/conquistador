@@ -1,0 +1,14 @@
+/*
+!api
+!tools
+!skills
+!mcp
+!package.json
+!vercel.json
+!LICENSE
+!NOTICE.md
+tools/vendor
+tools/oxlint
+tools/tui
+tools/e2e
+tools/*.test.mjs
