@@ -2,7 +2,7 @@
 name: outreach
 description: "Write signal-led outreach sequences, follow-ups, and reply handling."
 metadata:
-  version: 2.3.0
+  version: 2.4.0
 ---
 
 # Write trustworthy outreach
@@ -49,8 +49,9 @@ and asks one research question. Missing signal on **no-pitch-research** withhold
 readiness (`NEEDS_SIGNAL`) and allows only a labeled generic template. Claim-bearing missing/weak
 signal stays `READY` with conditional relevance. Missing proof narrows what a claim-bearing message may
 claim; it does not force a pitch, an invented result, or an invented observation.
-When the product has no customers, results, or case studies yet, use the
-[early-stage](references/modes/early-stage.md) mode to choose an honest substitute for proof; see the
+When the sender has no publishable proof yet (no users, no measured results, or no case study), use
+the [early-stage](references/modes/early-stage.md) mode: state only the stage the sender confirmed
+and choose an honest substitute for proof; see the
 [worked sequence](references/examples/saas-sequence-no-proof.md).
 
 Trace target-specific statements to public, operator-supplied, or permissioned evidence. Label that

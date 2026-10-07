@@ -2699,7 +2699,7 @@
         },
         {
           "path": "skills/conquistador/commands/outreach/references/modes/early-stage.md",
-          "when": "Load when the product or service has no customers, measured results, or case studies yet."
+          "when": "Load when the sender has no publishable proof yet: no users, no measured results, or no case study they may publish."
         },
         {
           "path": "skills/conquistador/commands/outreach/references/frameworks/sequences.md",
@@ -2707,7 +2707,7 @@
         },
         {
           "path": "skills/conquistador/commands/outreach/references/examples/saas-sequence-no-proof.md",
-          "when": "Load when drafting a multi-touch commercial sequence and the sender has no customers or case studies yet."
+          "when": "Load when drafting a multi-touch commercial sequence and the sender has no publishable proof yet."
         }
       ],
       "optionalResources": [],

@@ -2320,7 +2320,7 @@
     },
     {
       "path": "skills/conquistador/commands/outreach/COMMAND.md",
-      "sha256": "8f2cc022ec3b2e2b4fc5b7f2245a66435b1ba11fe888232e8dac504e568115cc"
+      "sha256": "506635a6b99f7ef726f53a733c25b5be6808e7c4609ab9b61546816df6f97625"
     },
     {
       "path": "skills/conquistador/commands/outreach/fallbacks/sequential.md",
@@ -2388,7 +2388,7 @@
     },
     {
       "path": "skills/conquistador/commands/outreach/references/examples/saas-sequence-no-proof.md",
-      "sha256": "9901aa7374fc44c0b1607ba96d9b086ea535af30bce00718b0c6e004ed5724dd"
+      "sha256": "78498ba0fee2dee672043e6e48e62318c30ee242484379fddde46ded62c81d9f"
     },
     {
       "path": "skills/conquistador/commands/outreach/references/examples/sourced-signal-no-pitch.md",
@@ -2452,7 +2452,7 @@
     },
     {
       "path": "skills/conquistador/commands/outreach/references/modes/early-stage.md",
-      "sha256": "61c823d08f1245e1af8350f577b1cbf51f0e8cb6fc1ec96d4c3656f21612cd1a"
+      "sha256": "24b74a6d0e9d474d8a537ba0725788817945c63650ae8611308388f607350c09"
     },
     {
       "path": "skills/conquistador/commands/outreach/references/modes/intro-request.md",
@@ -4740,11 +4740,11 @@
     },
     {
       "path": "skills/conquistador/routing-contract.json",
-      "sha256": "45e67c6ede19e6a54299d7765f46542e1840f8bd84c1ab4f0fb7b11fd18128b1"
+      "sha256": "feba3e36aab365421ab3b2cdfb531e29fe8929362f1171afa6279efc00fd9e7b"
     },
     {
       "path": "skills/conquistador/routing-overlay.json",
-      "sha256": "8e545d4647addd62c41731664130c2c9176b538e6faa3b180b9913f0c34c6bdb"
+      "sha256": "f067cc911650132f3dcd782a7e1692cf7385486975efe768cd3b8dd354c136d0"
     },
     {
       "path": "skills/conquistador/rubrics/composition.md",

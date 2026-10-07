@@ -1,24 +1,37 @@
 # early-stage
 
-Use when the product or service has no customers, measured results, or case studies yet.
-Combine it with the matching sell mode, such as
+Use when the sender has no publishable proof yet: no users, no measured results, or results
+without a case study the sender may publish. Combine it with the matching sell mode, such as
 [saas](saas.md) or [services](services.md). That mode bounds the claims; this file says what to
 offer in place of proof so that each touch still gives the reader something to judge.
 
 ## Say where the product stands
 
-State the stage once, in plain words, where a reader would otherwise assume adoption: "We are new
-and have no customers yet." Do not apologize for it in every touch, and do not hide it behind
+Find the stage the sender confirmed. State that stage once, in plain words, where a reader would
+otherwise assume adoption. Do not apologize for it in every touch, and do not hide it behind
 "teams like yours" or "companies we work with". The stage is a fact about the sender, not a pitch.
+
+| Stage the sender confirmed | The copy may say | The copy must not say |
+|---|---|---|
+| No users yet | The product is new and no one uses it yet | Any user, pilot, or result |
+| Users, but no measured results | Who uses it and how, only as the sender describes it (for example, a count of pilot teams). Names only with permission | "No customers" or "no one uses it". Any outcome, or "customers" for users the sender does not call customers |
+| Measured results, but no publishable case study | A result only in the words, scope, and form the sender allows to be shared, such as unnamed | "No customers" or "no results". A named customer or a broader result than the sender stated |
+| Not stated, such as "no case studies" alone | "We have no published case studies yet", or nothing about the stage | Anything about users or results |
+
+Never upgrade or downgrade the stage. "No case studies" does not mean "no customers", and "a few
+pilot teams" does not mean "customers". If the copy needs a stage the sender did not state, ask
+for it as a pre-send gap.
 
 ## Choose an honest substitute for proof
 
 Use one substitute per touch. Each one needs input from the sender before it appears in copy. If
 the sender cannot supply that input, do not use the substitute; ask for it as a pre-send gap.
+Show the gap where that touch would go: the substitute, the missing input, and the questions for
+the sender. Do not draft the touch with invented input and list the input as an assumption later.
 
 | Substitute | Fits when | Sender supplies first | Write it as |
 |---|---|---|---|
-| Design-partner or pilot offer | The sender can work closely with a small number of early users and wants their feedback | What the partner gives (time, access, feedback), what they get, who does the work, how either side exits, and how shared data is handled | Both sides of the exchange and the exit. If terms are not set, say they are to be agreed. Do not invent a free period, discount, seat count, or duration |
+| Design-partner or pilot offer | The sender can work closely with a small number of early users and wants their feedback | What the partner gives (time, access, feedback), what they get, who does the work, how either side exits, and how shared data is handled | Both sides of the exchange and the exit. If the exit or data handling is missing, hold the touch as a pre-send gap. Write "to be agreed" only for terms the sender has said the copy may leave open. Do not invent a free period, discount, seat count, or duration |
 | First run on the prospect's own data | The product can run on an export or a limited-access connection, and the sender has time to run it and explain the output | The exact access needed, who runs it, what the output is, and when the copy is deleted | Proposed work to agree on before any access. Do not imply findings before the run, and do not call it an audit that already exists |
 | Sample output from public or synthetic data | The output is easier to judge by sight than by description | The real output of a real run, its data source, and permission to share it | Labelled in the copy as built from public or synthetic data. It shows the format, not a result. Never show a real company's data without permission |
 | The founder's reason for building it | The founder met the problem directly in earlier work | The true account and permission to share its details | One or two sentences about the problem, not a hero story. It explains the sender's interest; it does not show that the recipient has the problem |
