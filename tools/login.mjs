@@ -132,7 +132,7 @@ export async function runLogin({ ui, server, env = process.env, fetch: fetchImpl
 
 // The client configs as plain text, for a terminal.
 export function formatConfigs({ url, token }) {
-  return clientConfigs({ url, token }).map(item => `${item.client}. ${item.where}\n${item.text.split('\n').map(line => `  ${line}`).join('\n')}`).join('\n\n');
+  return clientConfigs({ url, token }).map(item => `${item.client}\n${item.where}\n${item.text.split('\n').map(line => `  ${line}`).join('\n')}`).join('\n\n');
 }
 
 function parse(args, flags) {

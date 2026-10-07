@@ -100,10 +100,17 @@ async function kvDump(state) {
 }
 
 // Runs the real CLI. Asynchronous, so the GitHub test double in this process can answer it.
-function cli(cliArgs, env, { inherit = false } = {}) {
+// Every run goes into transcript.md, with tokens redacted.
+const transcript = [];
+async function cli(cliArgs, env, { inherit = false } = {}) {
   const child = spawn(process.execPath, [bin, ...cliArgs], { cwd: root, env: { ...process.env, ...env, NO_COLOR: '1' }, stdio: inherit ? ['inherit', 'pipe', 'inherit'] : ['ignore', 'pipe', 'pipe'] });
   if (inherit) child.stdout.on('data', chunk => process.stdout.write(chunk));
-  return collect(child);
+  const result = await collect(child);
+  // Drops terminal control sequences and all but the last spinner frame.
+  const plain = text => text.replace(/\u001b\[[0-9;?]*[A-Za-z]/g, '').replace(/(?:[◒◐◓◑] {2}[^◒◐◓◑◇\n]*)+/g, '');
+  const redact = text => plain(text).replace(new RegExp(TOKEN.source, 'g'), 'cq_<redacted>').replaceAll(out, '<out>').replaceAll(root, '<repo>');
+  transcript.push(`$ conquistador ${cliArgs.join(' ')}\n${redact(result.stdout)}${redact(result.stderr ?? '')}[exit ${result.status}]\n`);
+  return result;
 }
 
 // --- GitHub test double (offline only) ------------------------------------------------------
@@ -513,6 +520,7 @@ async function main() {
     '',
   ];
   writeFileSync(join(out, 'report.md'), lines.join('\n'));
+  writeFileSync(join(out, 'transcript.md'), `# CLI transcript (${report.mode})\n\nTokens are redacted. Terminal control sequences and spinner frames are removed.\n\n\`\`\`text\n${transcript.join('\n')}\`\`\`\n`);
   process.stdout.write(`${passed}/${steps.length} passed. Report: ${join(out, 'report.md')}\n`);
   if (failure && process.env.CONQUISTADOR_DEBUG === '1') process.stderr.write(`${failure.stack}\n`);
   process.exitCode = passed === steps.length && !failure ? 0 : 1;
