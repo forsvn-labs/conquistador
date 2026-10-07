@@ -186,16 +186,19 @@ so the server reads the library from the Worker bundle with `node:fs`. It never 
 playbooks. The Worker refuses every MCP request with 503 until the token is set. Run it locally
 with `npx wrangler@4.148.0 dev --var CONQUISTADOR_MCP_TOKEN:local-test`.
 
-On the `workers.dev` address, Cloudflare refuses the default `Python-urllib` User-Agent with error
-1010. Python `httpx` (used by the MCP Python SDK), Node `fetch`, and curl work. A client on plain
-`urllib` must set its own User-Agent, or serve the Worker from a custom domain whose browser
-integrity check is off.
+`wrangler.toml` serves the Worker at `mcp.forsvn.com`; replace the route with your own hostname.
+On that host a zone configuration rule turns off Cloudflare's browser integrity check, so any HTTP
+client works. The `workers.dev` address stays on, but Cloudflare refuses the default
+`Python-urllib` User-Agent there with error 1010.
 
 A deployed agent uses two tools in a loop: `conquistador_brief` with the task (and, when the agent
 has no `PRODUCT.md`, the product facts in `context`), then `conquistador_check` on each draft with
 its channel and the same `context`, which flags numbers and customer names the context lacks. Over
 HTTP the brief returns structured lists (`inlined`, `readNow`, `readAtStep`, `situational`), and
-`conquistador_read` resolves a relative link when you pass the linking file as `from`.
+`conquistador_read` resolves a relative link when you pass the linking file as `from`. Models with a
+small context can ask for `size: "compact"`: the brief then inlines only the command and lists its
+core files as required reads. When a rubric declares a gate, `conquistador_score` checks the agent's
+self-score against the rubric's floors, totals, and hard fails before the agent reports a verdict.
 `node tools/e2e/agent-loop.mjs --url https://HOST/mcp` checks that loop against a deployed server;
 set `CONQUISTADOR_MCP_TOKEN` first.
 

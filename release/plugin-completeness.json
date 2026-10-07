@@ -2352,7 +2352,7 @@
     },
     {
       "path": "skills/conquistador/commands/outreach/references/copy-validation-rubric.md",
-      "sha256": "46cc48bbc9cc1338bc278c8afbf3648f30579a1a0e92dbadf6e0c7198d388d70"
+      "sha256": "4eceaa13eeaa90c30adcaa03c64b17c287e8f68ece2ab58cfeca36875b1fa6ad"
     },
     {
       "path": "skills/conquistador/commands/outreach/references/examples/critic-case-sourced-signal-no-pitch.md",
@@ -4836,7 +4836,7 @@
     },
     {
       "path": "tools/brief.mjs",
-      "sha256": "70107c1253cf3289763f53ede3525dbe17c38da8ae0ad15d46701570c095f77b"
+      "sha256": "c1c6088b501ad2cdbc95a713f586320d467584a98c6efbe4f70ffec658f73bfb"
     },
     {
       "path": "tools/check/channels.mjs",
@@ -4895,8 +4895,12 @@
       "sha256": "1f0d4f6b821e0dc3357aa0b1987857e53d24d9acb836a8427198355416c9e289"
     },
     {
+      "path": "tools/rubric-gate.mjs",
+      "sha256": "5c3469814ebfe57dd43cb3a0b1b3d91a7f375293171a55295dbd1fbc7f8b5553"
+    },
+    {
       "path": "tools/skills-mcp.mjs",
-      "sha256": "9bcacdad70ee7d4fa4de80774a6c3acb745df4ccd51e54265d31903ee95a5cba"
+      "sha256": "0eccf8483de05abde757ee41bdfbc9db469af2c8b94c17ee7635aee6b0edd046"
     }
   ]
 }

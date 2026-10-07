@@ -10,9 +10,8 @@
 
 ## Next acceptance
 
-0. Serve the hosted MCP server from a custom domain with the browser integrity check off, so plain
-   `urllib` clients work. Add a tool that checks a rubric self-score against the rubric's pass rules,
-   and a compact brief for smaller hosted models (inline the core files, list the rest).
+0. Add gates to the remaining rubrics, then run a third deployed-agent test with a smaller hosted
+   model on `size: "compact"` and compare it with the two frontier-model runs.
 1. Add "Open in Claude Code" (`claude-cli://open?q=`) and "Open in Cursor" deep-link buttons with a
    "Copy prompt" fallback to the landing page. Test both links in a browser first.
 2. Observe the plugin hooks in a real Codex session (after hook trust), Cursor, Copilot CLI, and

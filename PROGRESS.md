@@ -2,6 +2,12 @@
 
 ## Unshipped
 
+- **Rubric gates, compact briefs, and a custom domain.** `conquistador_score` checks a rubric
+  self-score against a gate the rubric declares (floors, totals, the concerns band, N/A rules,
+  level scales, hard fails); the outreach rubric declares the first gate. `size: "compact"` briefs
+  inline only the command and list its core files as required reads (18 KB instead of 42 KB for
+  outreach). The Worker serves `mcp.forsvn.com`, where a host-scoped Cloudflare configuration rule
+  turns off the browser integrity check, so plain `urllib` clients are not refused.
 - **Fixes from the second deployed-agent run.** The context check reads every number in the
   context (so "50-500" covers "50 to 500") and no longer treats pronouns, weekdays, or words after
   the clause as customer names. New email rules flag presumed pain ("I noticed your team is
