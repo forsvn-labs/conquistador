@@ -4,6 +4,40 @@
 versions. Verification establishes the stated local scope; native host behavior, useful model
 output, human acceptance and rights disposition require separate evidence.
 
+## 2026-10-07, hosted MCP server deployment
+
+A deployment, not an npm release: `@forsvn/conquistador` stays at 0.3.0, and installed users get
+these changes only with the next release (see [PROGRESS.md](PROGRESS.md)). Deployed the Cloudflare
+Worker `conquistador-mcp` from `main` commit `90c8d7baed6135a68db54cb844d833b094e31950` (Worker
+version `8b099e63-c4d1-44a2-b90f-e549cba933ad`) to <https://mcp.forsvn.com/mcp>, with
+<https://conquistador-mcp.levinhhungg.workers.dev/mcp> as a second address. Every MCP request needs a
+bearer token. `node tools/e2e/agent-loop.mjs --url` passed 11/11 against each address.
+
+- **Tools for deployed agents** ([#40](https://github.com/forsvn-labs/conquistador/pull/40),
+  [#49](https://github.com/forsvn-labs/conquistador/pull/49),
+  [#51](https://github.com/forsvn-labs/conquistador/pull/51),
+  [#53](https://github.com/forsvn-labs/conquistador/pull/53),
+  [#55](https://github.com/forsvn-labs/conquistador/pull/55)). `conquistador_brief` takes the caller's
+  `context`, starts with the route, inlines each command's Core list, says when the caller has no
+  repository, returns structured lists, and has a `compact` size. `conquistador_check` applies the
+  rule-based checker to sent text, flags numbers and customer names the context lacks, and returns
+  a receipt signed with a key callers never hold. `conquistador_verify` lets a host confirm the final
+  text, context, and channel against that receipt. `conquistador_score` checks a rubric self-score
+  against the rubric's declared gate. `conquistador_read` names the cause of a failed read and
+  resolves relative links.
+- **Playbooks distilled from the imported library**
+  ([#45](https://github.com/forsvn-labs/conquistador/pull/45)): about 330 rules across 22 commands,
+  3 channel guides, and 4 plays, and 11 new reference files, from 65 of 205 triaged sources.
+- **Outreach for products with no proof yet** ([#50](https://github.com/forsvn-labs/conquistador/pull/50),
+  [#52](https://github.com/forsvn-labs/conquistador/pull/52)): `outreach` 2.4.0 with an early-stage
+  mode, sequence mechanics, and a worked synthetic sequence.
+- **Rubric gates** ([#54](https://github.com/forsvn-labs/conquistador/pull/54)): 20 of 34 rubrics
+  declare a machine-readable gate.
+- Three deployed-agent runs (two frontier-model runs and one Haiku 4.5 run on a compact brief) drove
+  these changes. In the Haiku run the agent delivered text that failed the check while reporting it
+  clean; INSTALL now advises Sonnet-class or stronger models unsupervised, and smaller models only
+  where the host requires signed `conquistador_verify` results.
+
 ## 2026-10-03, 0.3.0 public alpha
 
 Still a public alpha. Merged through [#36](https://github.com/forsvn-labs/conquistador/pull/36),

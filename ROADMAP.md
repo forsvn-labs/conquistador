@@ -21,8 +21,10 @@
    of before and after answers), not only reads.
 4. Seek Hung's verdict on a real task in his own agent: playbook relevance, clarity, and usefulness.
    Tune the briefing engine and the vault playbook threshold from those corrections.
-5. Decide where to host the HTTP playbook server for Muse and other connector apps, then deploy it
-   with a token and submit the Muse connector.
+5. Submit the Muse connector for the hosted server at `https://mcp.forsvn.com/mcp`, then check that
+   a Muse task reaches the brief and the check.
+6. Release the 2026-10-07 changes to npm (see [PROGRESS.md](PROGRESS.md)) after the install, update,
+   removal, task, and correction acceptance on the exact candidate.
 
 ## Private-alpha follow-up
 
