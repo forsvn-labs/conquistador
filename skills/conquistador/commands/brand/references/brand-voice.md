@@ -37,6 +37,15 @@ For a fintech app targeting young professionals:
 | **Encouraging** | We celebrate progress without being patronizing. We acknowledge that money is stressful. | "You saved $200 more than last month. That's real momentum." | "Great job, buddy! You're such a good saver! 🎉🎉🎉" |
 | **Honest** | We tell the truth even when it's uncomfortable. We never hide fees, risks, or limitations. | "This investment carries risk. Here's what could go wrong." | "Guaranteed returns! No risk! Sign up now!" |
 
+### Extract Voice from Samples
+
+Use when the user supplies their own writing (posts, sent emails, essays), and before you draft outreach or posts "in my voice". Build the profile from recent sent writing, enough of it to show repeated patterns.
+
+1. Describe only what you can see in the text: mix of sentence lengths and fragments, vocabulary level, punctuation habits, paragraph length, direct address and questions, formatting, and what the writer never does.
+2. Support each observation with at least two quoted instances from the samples. If the samples are too short to show a pattern, write "insufficient data".
+3. Never record an adjective such as "conversational" or "engaging" as a finding.
+4. Return the analysis, which a person can check against the samples, separately from the reusable voice instructions.
+
 ## Tone Spectrum
 
 ### Choose language for the user's situation
