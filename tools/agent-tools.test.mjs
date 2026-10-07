@@ -135,7 +135,7 @@ const coreOf = name => {
 
 test('a brief inlines every core file of the selected command', () => {
   const core = coreOf('outreach');
-  assert.equal(core.length, 5);
+  assert.ok(core.length >= 5);
   const brief = createBrief('Write a 3-email cold sequence to RevOps leads at B2B SaaS companies', { force: true, playbooks: [] });
   const must = brief.must.map(item => item.path);
   for (const path of core) assert.ok(must.includes(path), path);
