@@ -31,3 +31,18 @@ The proposed pack changelog entry is dated, accurate and append-only; it separat
 ## Discrimination test
 1. Could this read have been written *without* the numbers? If yes → cap dimensions 1–2 at 4.
 2. Does it name anything that did NOT work? If no → pressure-test dimension 3 before passing; assume sycophancy until disproven.
+
+## Machine-readable gate
+
+`conquistador_score` checks a self-score against these rules. Use the single `default` variant.
+Apply the Discrimination Test caps before you score; they are judgment and stay outside the gate.
+
+```json conquistador-gate
+{
+  "scale": { "min": 0, "max": 10 },
+  "dimensions": ["Attribution", "Falsifiability", "Honesty", "Actionability", "Write-back fidelity"],
+  "variants": {
+    "default": { "minEach": 1, "minTotal": 35 }
+  }
+}
+```

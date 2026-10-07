@@ -28,3 +28,19 @@ be justified while the performance question stays inconclusive.
 Check optional learning promotion separately. Retain account, audience, offer,
 period, uncertainty, and expiry. No universal benchmark may be promoted from this
 cycle. Return the precise defect and needed evidence, not a generic score alone.
+
+## Machine-readable gate
+
+`conquistador_score` checks a self-score against these rules. Use the single `default` variant; this
+rubric states no concerns band. Report each hard blocker above as a hard fail.
+
+```json conquistador-gate
+{
+  "scale": { "min": 0, "max": 10 },
+  "dimensions": ["Loop fit", "Metric integrity", "Attribution honesty", "Decision discipline", "Audience fidelity", "Fatigue awareness", "Ledger correctness"],
+  "variants": {
+    "default": { "minEach": 6, "minTotal": 49 }
+  },
+  "hardFails": ["fabricated-data", "unsplittable-cells-called-comparable", "hidden-missing-denominator", "unsupported-causality", "ignored-loss-limit", "action-outside-authority"]
+}
+```
