@@ -5,8 +5,8 @@
 // receipt, edited text, wrong context or channel, a failed check, a forged receipt, a reused
 // receipt, a malformed receipt, an unsigned server, and an unreachable or refusing server. It then
 // drives the Claude Agent SDK session's deliver tool and Stop hook without a model.
-// Needs `bun install` in examples/verify-gate. Report: dist/e2e/verify-gate/report.json and report.md.
-import { mkdirSync, writeFileSync } from 'node:fs';
+// Needs `bun install` (or `npm install`) in examples/verify-gate. Report: dist/e2e/verify-gate/report.json and report.md.
+import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { createServer } from 'node:http';
 import { randomBytes } from 'node:crypto';
 import { join, resolve } from 'node:path';
@@ -23,12 +23,12 @@ try {
   clientModule = await import('../../examples/verify-gate/mcp-client.mjs');
   sessionModule = await import('../../examples/verify-gate/claude-agent-sdk.mjs');
 } catch (failure) {
-  console.error(`Could not load examples/verify-gate (${failure.message}). Run \`bun install\` in examples/verify-gate first.`);
+  console.error(`Could not load examples/verify-gate (${failure.message}). Run \`bun install\` or \`npm install\` in examples/verify-gate first.`);
   process.exit(1);
 }
 const { createHandoverGate } = gateModule;
 const { connectConquistador } = clientModule;
-const { createGatedSession } = sessionModule;
+const { createGatedSession, runGatedAgent } = sessionModule;
 
 const context = [
   'Product: Ledgerline (synthetic test product) reconciles Stripe and HubSpot revenue every night and flags mismatches.',
@@ -163,6 +163,14 @@ async function main() {
     const down = await hostDown.deliver({ drafts: [{ title: 'Email 1', text: clean, receipt: cleanCheck.receipt }] });
     const downStop = await hostDown.onStop({ hook_event_name: 'Stop', stop_hook_active: false });
     record('16. a host error ends the session as host-error without handing anything over', hostDown.state.outcome === 'host-error' && down.isError && downStop.decision !== 'block' && hostDown.state.delivered.length === 0, { outcome: hostDown.state.outcome });
+
+    // A run that cannot reach the server must not leave an earlier run's accepted drafts behind.
+    const runOut = join(out, 'failed-run');
+    mkdirSync(runOut, { recursive: true });
+    writeFileSync(join(runOut, 'delivered.md'), '## Email 1\n\nOLD ACCEPTED DRAFT\n');
+    const failedRun = await runGatedAgent({ url: 'http://127.0.0.1:9/mcp', token, task: 'test', context: `${context}\n`, channel: 'email', model: 'none', out: runOut });
+    const deliveredAfter = readFileSync(join(runOut, 'delivered.md'), 'utf8');
+    record('17. a run that cannot connect clears old drafts and records host-error', failedRun.outcome === 'host-error' && !deliveredAfter.includes('OLD ACCEPTED DRAFT') && JSON.parse(readFileSync(join(runOut, 'run.json'), 'utf8')).outcome === 'host-error', { outcome: failedRun.outcome, error: failedRun.error });
   } finally {
     await agent.close();
     await host.close();

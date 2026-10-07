@@ -24,10 +24,10 @@ network.
 
 ## Install
 
-Use Node 24 and Bun. From this directory:
+Use Node 24. From this directory:
 
 ```sh
-bun install
+bun install    # or: npm install
 ```
 
 These packages are not part of the npm package `@forsvn/conquistador`.

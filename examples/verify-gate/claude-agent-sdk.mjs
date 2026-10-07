@@ -10,7 +10,7 @@
 //
 // Outputs in --out: delivered.md (only the verified drafts), run.json (outcome, each review, cost),
 // and transcript.jsonl (the SDK messages).
-import { mkdirSync, readFileSync, writeFileSync, appendFileSync } from 'node:fs';
+import { appendFileSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { argv } from 'node:process';
 import { fileURLToPath } from 'node:url';
@@ -72,11 +72,37 @@ const deliverShape = {
 };
 
 export async function runGatedAgent({ url, token, task, context, channel, model, out, maxTurns = 60 }) {
+  // The agent and the gate must use the same context, so normalize it once.
+  const facts = context.trim();
   mkdirSync(out, { recursive: true });
   const transcript = join(out, 'transcript.jsonl');
+  // Clear an earlier run's artifacts first, so a failed run never leaves accepted drafts behind.
+  rmSync(join(out, 'run.json'), { force: true });
+  writeFileSync(join(out, 'delivered.md'), 'Nothing was handed over. The run did not finish.\n');
   writeFileSync(transcript, '');
-  const host = await connectConquistador({ url, token, name: 'conquistador-verify-gate-host' });
-  const session = createGatedSession({ gate: createHandoverGate({ callTool: host.callTool, channel, context }) });
+  const started = Date.now();
+  const write = (session, result, error) => {
+    const run = {
+      model, url, channel, outcome: error ? 'host-error' : session.state.outcome, error: error?.message ?? null,
+      rejections: session?.state.rejections ?? 0, stopBlocks: session?.state.stopBlocks ?? 0, reviews: session?.state.reviews ?? [],
+      turns: result?.num_turns ?? null, costUsd: result?.total_cost_usd ?? null,
+      durationMs: Date.now() - started, finalMessage: typeof result?.result === 'string' ? result.result : null,
+    };
+    writeFileSync(join(out, 'run.json'), `${JSON.stringify(run, null, 2)}\n`);
+    // The verified text exactly as the gate checked it.
+    const delivered = error ? [] : session.state.delivered;
+    writeFileSync(join(out, 'delivered.md'), delivered.length
+      ? delivered.map(draft => `## ${draft.title}\n\n${draft.text}${draft.text.endsWith('\n') ? '' : '\n'}`).join('\n')
+      : `Nothing was handed over. Outcome: ${run.outcome}.\n`);
+    return run;
+  };
+  let host;
+  try {
+    host = await connectConquistador({ url, token, name: 'conquistador-verify-gate-host' });
+  } catch (failure) {
+    return write(null, null, failure);
+  }
+  const session = createGatedSession({ gate: createHandoverGate({ callTool: host.callTool, channel, context: facts }) });
   const handover = createSdkMcpServer({ name: 'handover', version: '0.1.0', tools: [
     tool('deliver', 'Hand your final drafts to the host. The host verifies each one with Conquistador and hands them over only when every draft is the exact text of a clean check. If it rejects the delivery, fix what it lists, check again, and deliver again.', deliverShape, deliver => session.deliver(deliver)),
   ] });
@@ -84,14 +110,13 @@ export async function runGatedAgent({ url, token, task, context, channel, model,
     task.trim(),
     '',
     'Facts from the sender (pass them as `context` to conquistador_brief and conquistador_check, word for word):',
-    '<context>', context.trim(), '</context>',
+    '<context>', facts, '</context>',
     '',
     `Use the Conquistador tools: conquistador_brief first (size "compact"), conquistador_read for the files it lists, then conquistador_check on each draft with channel "${channel}" and the context above. Revise until each check is clean.`,
     'Hand the drafts over only with the deliver tool, each with the receipt from its last check. The host verifies them and rejects text that changed after its check or that did not pass.',
   ].join('\n');
 
   let result = null;
-  const started = Date.now();
   try {
     for await (const message of query({ prompt, options: {
       model,
@@ -107,20 +132,13 @@ export async function runGatedAgent({ url, token, task, context, channel, model,
       appendFileSync(transcript, `${JSON.stringify(message)}\n`);
       if (message.type === 'result') result = message;
     }
+  } catch (failure) {
+    return write(session, result, failure);
   } finally {
     await host.close();
   }
   if (session.state.outcome === 'working') session.state.outcome = 'not-delivered';
-  const run = {
-    model, url, channel, outcome: session.state.outcome, rejections: session.state.rejections, stopBlocks: session.state.stopBlocks,
-    reviews: session.state.reviews, turns: result?.num_turns ?? null, costUsd: result?.total_cost_usd ?? null,
-    durationMs: Date.now() - started, finalMessage: typeof result?.result === 'string' ? result.result : null,
-  };
-  writeFileSync(join(out, 'run.json'), `${JSON.stringify(run, null, 2)}\n`);
-  writeFileSync(join(out, 'delivered.md'), session.state.delivered.length
-    ? session.state.delivered.map(draft => `## ${draft.title}\n\n${draft.text.trim()}\n`).join('\n')
-    : `Nothing was handed over. Outcome: ${run.outcome}.\n`);
-  return run;
+  return write(session, result);
 }
 
 async function cli(args) {
