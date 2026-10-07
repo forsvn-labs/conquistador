@@ -2,7 +2,7 @@
 name: shape
 description: "Turn a vague initiative into one bounded decision and a first move."
 metadata:
-  version: 1.0.0
+  version: 1.1.0
 ---
 
 # Shape an initiative

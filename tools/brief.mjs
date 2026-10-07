@@ -51,6 +51,8 @@ export const PLATFORMS = Object.freeze({
   // Ad platforms. The longer phrase wins, so "LinkedIn ads" does not also pull organic LinkedIn.
   'google ads': ['google-ads'],
   'search ads': ['google-ads'],
+  'apple search ads': ['apple-search-ads'],
+  'apple ads': ['apple-search-ads'],
   'meta ads': ['meta-cold-traffic', 'meta-retargeting'],
   'facebook ads': ['meta-cold-traffic', 'meta-retargeting'],
   'instagram ads': ['meta-cold-traffic', 'meta-retargeting'],

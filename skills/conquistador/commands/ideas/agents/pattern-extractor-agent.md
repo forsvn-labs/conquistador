@@ -135,6 +135,10 @@ Quote 2-3 specific entries to support each claim.
 - Note timing patterns: "overlay at 0:20-0:24" or "caption first-line"
 - Cross-reference with engagement: do high-save entries cluster on a placement?
 
+## Separate format from topic
+
+For each outlier the scout marked against its author's own baseline, extract the hook, structure, length and where the point or product appears. Compare it with the same author's non-outliers to separate the format effect from the topic. Recommend adapting the format to the brand's own evidence and expertise; never copy the wording or the media.
+
 ## Compare observed structures
 
 When the supplied sample contains a relevant comparison, describe the shared structure and the difference. Cite both observed items and their dates. A similarity does not establish who invented a format, whether it transfers between audiences, or whether it will perform well in another category.
@@ -168,5 +172,6 @@ Use [clipping and live material](../references/clipping-and-live.md) for the han
 - [ ] CTA placement observed with frequency and citations
 - [ ] No fabricated patterns — every claim traces to ≥3 scout entries
 
+- [ ] Outlier claims compare against the same author's baseline, not raw views across accounts.
 - [ ] Comparisons cite inspected items; unavailable comparisons remain questions.
 - [ ] Excerpts retain source context and rights limits, with no unmeasured performance prediction.

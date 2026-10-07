@@ -2,7 +2,7 @@
 name: results
 description: "Evaluate real results from ads, outreach, or short-form video."
 metadata:
-  version: 1.0.0
+  version: 1.1.0
 ---
 
 # Evaluate results

@@ -2,7 +2,7 @@
 name: ads
 description: "Create a paid-media test: audience, offer, finished ads, budget, and measurement."
 metadata:
-  version: 2.1.0
+  version: 2.2.0
 ---
 
 # Create a paid campaign
@@ -23,7 +23,7 @@ Core:
 - [anti-patterns](references/anti-patterns.md): Paid creation failure checks. Apply these checks to the brief and finished assets. Identify the exact…
 - [rubric](references/rubric.md): Paid creation review rubric. Score each dimension from 0 to 10 for each variant. These scores assess…
 
-By step: [creative-cadence](references/ad-intelligence/creative-cadence.md), [linkedin-ads](references/ad-intelligence/linkedin-ads.md), [meta-retargeting](references/ad-intelligence/meta-retargeting.md), [earn-the-impression](references/earn-the-impression.md), [format-spec](references/format-spec.md), [message-transmutation](references/message-transmutation.md), [policy-floor](references/policy-floor.md), [realized-surface-grounding](references/realized-surface-grounding.md), [research-workflow](references/research-workflow.md).
+By step: [apple-search-ads](references/ad-intelligence/apple-search-ads.md), [creative-cadence](references/ad-intelligence/creative-cadence.md), [linkedin-ads](references/ad-intelligence/linkedin-ads.md), [meta-retargeting](references/ad-intelligence/meta-retargeting.md), [earn-the-impression](references/earn-the-impression.md), [format-spec](references/format-spec.md), [message-transmutation](references/message-transmutation.md), [policy-floor](references/policy-floor.md), [realized-surface-grounding](references/realized-surface-grounding.md), [research-workflow](references/research-workflow.md).
 
 Specialist roles: [composer](agents/composer.md), [critic](agents/critic.md), [format-checker](agents/format-checker.md), [strategist](agents/strategist.md), [voice-auditor](agents/voice-auditor.md).
 
@@ -101,6 +101,7 @@ Before delivery, load the method instead of paraphrasing it:
   [Meta cold traffic](references/ad-intelligence/meta-cold-traffic.md),
   [Meta retargeting](references/ad-intelligence/meta-retargeting.md),
   [Google Ads](references/ad-intelligence/google-ads.md),
+  [Apple Ads](references/ad-intelligence/apple-search-ads.md),
   [LinkedIn Ads](references/ad-intelligence/linkedin-ads.md), or
   [TikTok Ads](references/ad-intelligence/tiktok-ads.md) — plus
   [creative cadence](references/ad-intelligence/creative-cadence.md) when spend or fatigue rules

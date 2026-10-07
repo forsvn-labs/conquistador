@@ -2,7 +2,7 @@
 name: funnel
 description: "Model the growth funnel backward from a target: rates, capacity, and unit economics."
 metadata:
-  version: 2.1.0
+  version: 2.2.0
 ---
 
 # Model a growth funnel

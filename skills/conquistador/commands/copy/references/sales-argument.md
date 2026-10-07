@@ -6,7 +6,11 @@ Use when the deliverable must help a reader decide whether an offer fits their s
 
 Write a plain description of the offer, eligible buyer, delivery, price or price-discovery step, and limits. Record what the reader gives up by accepting: money, time, access, migration effort, or an ongoing commitment. If the terms are not supplied, draft around known facts and identify the unresolved term.
 
+When the offer is a diagnostic (audit, review, or assessment), lead with what the buyer gets, the delivery time, and the risk term; describe the diagnostic activities as the delivery method. State a guarantee only when the offer owner supplies it, in one sentence with outcome, time window, and remedy, followed by its conditions. If the offer stays unclear after this step, say so and fix it before you recommend paid traffic to it.
+
 ## Explain the connection to the buyer's work
+
+Record two versions of the buyer's problem: the stated problem in the buyer's words, from supplied research, and the underlying cause the product addresses. Mark the underlying cause as an inference unless evidence supports it. Open with the stated problem so the reader recognizes the situation, explain the product mechanism against the underlying cause, and connect the two in one explicit sentence. If buyers do not yet connect the cause to the problem they state, mark an education need and give that connection its own section before the offer.
 
 Choose a concrete situation from the brief. Describe how the current task works and which part the product changes. Connect the product behavior to a useful result without extending it into an unsupported business outcome. A faster export does not by itself prove higher revenue.
 

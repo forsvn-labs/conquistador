@@ -4,7 +4,7 @@ platform: x-launch
 schema_version: 2
 pack_type: launch-channel
 status: draft
-method_updated: 2026-09-15
+method_updated: 2026-10-07
 last_verified: null
 verifier: none
 source_basis: "Conquistador task specification; platform constraints require task-local verification."
@@ -28,6 +28,8 @@ Choose an opening by the evidence it can deliver. These choices have no performa
 | Release in use | Show a task completed with the new release. | Make the shipped behavior visible. |
 | Before and after | State the prior constraint and the change. | Compare using the same conditions without invented metrics. |
 | Builder note | Describe a decision that affects the user. | Connect the decision to a usable feature or explicit limitation. |
+
+When the launch post carries a video, open the video on the product moment or a verified result, not on a logo animation or introduction. Build it with the founder-demo pack's prep questions and scene rules.
 
 Record the audience, desired decision, supported claim and visible evidence before drafting. Reject an opening whose promised answer the asset does not provide.
 
@@ -75,5 +77,7 @@ Record every step between the asset and the desired outcome. Distinguish attempt
 List unresolved account capabilities, audience fit, asset rights, exposure comparability and attribution gaps. For each gap, state whether it blocks production, blocks publication or only limits interpretation. Carry the result with its date and scope; a successful local test does not become a universal platform rule.
 
 ## 9. Changelog
+
+2026-10-07: pointed launch videos to the founder-demo prep questions and payoff-first opening.
 
 2026-09-15: replaced the research-derived pack with a Conquistador outcome, production and test specification. No external verification or live performance evidence was collected.

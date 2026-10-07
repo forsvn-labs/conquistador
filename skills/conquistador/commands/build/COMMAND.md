@@ -2,7 +2,7 @@
 name: build
 description: "Build and verify a requested web or iOS app outcome."
 metadata:
-  version: 1.0.0
+  version: 1.1.0
 ---
 
 # Build an app outcome

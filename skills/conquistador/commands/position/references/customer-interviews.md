@@ -66,6 +66,58 @@ Public VoC (Step 2 in COMMAND.md) reveals what people say openly. Direct researc
 
 ---
 
+## Job and Outcome Statements
+
+Use these when the persona or positioning needs the job the customer is trying to get done, not
+only their complaints.
+
+1. **Write the core job as verb + object + context** ("get breakfast while commuting to work").
+   Reject a job statement that contains a quality adjective ("quickly", "safely"), a feeling, or
+   a product name.
+2. **Separate the job from the situation.** "A long commute" is a situation; what the person
+   chooses to do during it is the job.
+3. **Test the scope both ways.** If the product covers only one step of the job, the job is too
+   narrow. If the team cannot serve the whole job over time, it is too broad.
+4. **Ask about the end goal, not the purchase.** Do not ask "what did you hire the product for?".
+   Ask what the person is ultimately trying to get done and where the product fits in that.
+5. **Map the job before you collect needs.** List its steps without naming any solution. Use
+   define, locate, prepare, confirm, execute, monitor, modify, and conclude as a checklist. A job
+   map is not a customer journey; keep buying, set-up, and upkeep needs in a separate list.
+6. **Write each need as one measurable outcome:** direction + metric (time or likelihood) + object
+   + context ("minimize the likelihood that the cut drifts off the line on long cuts"). One need
+   per statement, no solutions, no "and" joining two needs.
+7. **Collect needs from each role separately:** the end user (functional outcomes), the people
+   who install, maintain, or support the product (upkeep outcomes), and the buyer (financial
+   outcomes). When the user is also the buyer, ask the money questions in a separate pass.
+
+Feed the outcome statements to [gap analysis](gap-analysis-template.md) when importance and
+satisfaction data exist.
+
+---
+
+## Must-Have Survey
+
+Use this to test whether current active users consider the product essential before you plan a
+growth push or a repositioning.
+
+- **Core question:** "How disappointed would you be if you could no longer use [product]?" Options:
+  very disappointed / somewhat disappointed / not disappointed / I no longer use it.
+- **Follow-ups:** the alternative they would use instead; the main benefit they get; whether they
+  have recommended it and how they described it; the type of person who would benefit most; one
+  improvement.
+- **Sample:** survey recently active users only, never dormant accounts. When too few people will
+  answer for a stable percentage, run interviews with the same questions and report themes, not a
+  share.
+- **Report:** the "very disappointed" share with sample size, selection method, and date. Compare
+  it across segments and over time. Do not treat any single share as a pass mark.
+- **Use the answers:** mine "how did you describe it" for customer language and "who benefits
+  most" for the audience decision. The segment with the most "very disappointed" answers is a
+  candidate for the narrowest valuable audience.
+- **Do not** run it on a mature, widely adopted product, and do not imply that the product may be
+  withdrawn.
+
+---
+
 ## Support Ticket Analysis
 
 ### Mining Support Tickets for ICP Insights

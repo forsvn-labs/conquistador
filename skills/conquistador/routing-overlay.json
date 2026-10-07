@@ -151,6 +151,10 @@
         {
           "path": "references/message-transmutation.md",
           "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/ad-intelligence/apple-search-ads.md",
+          "when": "Load when the campaign runs on Apple Search Ads or the App Store search results."
         }
       ],
       "optionalResources": [],
@@ -600,6 +604,10 @@
         {
           "path": "references/modes/web/references/test-contract.md",
           "when": "Mode web. Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/modes/web/references/landing-performance.md",
+          "when": "Load when the web build is a landing or marketing page whose load speed matters."
         }
       ],
       "optionalResources": [
@@ -707,6 +715,10 @@
         {
           "path": "references/pillars-before-angles.md",
           "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/distribution-models/creator-program.md",
+          "when": "Load when the campaign pays or seeds creators to make or post content."
         }
       ],
       "optionalResources": [],
@@ -793,6 +805,10 @@
         {
           "path": "references/scoring-rubrics.md",
           "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/creator-channel-fit.md",
+          "when": "Load when creator sponsorship is a candidate channel."
         }
       ],
       "optionalResources": [],
@@ -899,6 +915,10 @@
         {
           "path": "references/landing-anti-patterns.md",
           "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/app-onboarding-paywall.md",
+          "when": "Load when the conversion surface is a subscription app's onboarding-to-paywall flow."
         }
       ],
       "optionalResources": [],
@@ -1288,6 +1308,10 @@
         {
           "path": "references/report-template.md",
           "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/misjudgment-check.md",
+          "when": "Load before the resolver chooses."
         }
       ],
       "optionalResources": [],
@@ -1969,6 +1993,18 @@
         {
           "path": "references/proof-types.md",
           "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/frameworks/account-program.md",
+          "when": "Load when outreach targets named accounts across more than one channel."
+        },
+        {
+          "path": "references/modes/creator-sponsorship.md",
+          "when": "Load when the message proposes a sponsorship or paid collaboration to a creator."
+        },
+        {
+          "path": "references/modes/intro-request.md",
+          "when": "Load when the route is an introduction through a mutual contact."
         }
       ],
       "optionalResources": [],
@@ -2646,6 +2682,10 @@
         {
           "path": "agents/eval-critic-agent.md",
           "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/local-seo.md",
+          "when": "Load when the business serves a local area or the query shows a map pack."
         }
       ],
       "optionalResources": [],
@@ -2767,7 +2807,8 @@
         "references/method.md",
         "references/anti-patterns.md",
         "references/critical-gates.md",
-        "fallbacks/sequential.md"
+        "fallbacks/sequential.md",
+        "references/hook-archetypes.md"
       ],
       "conditionalResources": [
         {
@@ -2801,6 +2842,10 @@
         {
           "path": "references/why-this-works-convention.md",
           "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/photo-slideshows.md",
+          "when": "Load when the post is a photo carousel or slideshow on TikTok or Instagram."
         }
       ],
       "optionalResources": [

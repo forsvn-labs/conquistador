@@ -8,6 +8,19 @@ Every flow, regardless of type, obeys: **entry trigger → N event-gated steps i
 
 ---
 
+## 0. Find the activation event (before any onboarding or activation flow)
+
+When the activation metric is not already measured, find it before you design steps:
+
+1. Set the realistic use frequency for this category (daily for messaging, weekly or less for travel or reviews).
+2. Find the users who reach that frequency. Compare their first-window actions with those of users who stopped.
+3. Name the one action and count that best separates the two groups. Confirm it on a second cohort before it becomes the flow's activation metric.
+4. If very few users ever reach the expected frequency, stop: the product or the audience needs work before a flow can help. Route to `diagnose` or `position`.
+
+Without behavior data, label the activation event `assumed` and state the query that would confirm it.
+
+---
+
 ## 1. Onboarding (signup → activation)
 
 **Entry:** signup / first login. **Job:** reach the activation metric. **Window:** the empirical activation window (the time by which most users who ever activate have activated — typically 7–14 days; measure, don't guess).
@@ -19,6 +32,11 @@ Every flow, regardless of type, obeys: **entry trigger → N event-gated steps i
 | Friction removal | started the activation path, didn't finish, +behavior | stalled mid-path |
 | Social / teammate pull (if multi-player) | core action done, +1–2d | activation event still open |
 | Last-chance + human-touch offer | end of window, not activated | not activated, not unsubscribed |
+
+**Step rules:**
+- Drive the user along the path to the activation action. Remove any step that does not lead there.
+- Right after the first reward, ask for one small investment that stores value (content, data, connections, preferences) and sets up the next reason to return. Never ask for it before the reward.
+- Ask for notification or email permission only after the user has seen the value those messages will deliver. A permission request on the first screen is an anti-pattern.
 
 **Suppression:** activated (the headline exit) · converted to paid · unsubscribed · frequency cap. The activation exit is the most important — the day-5 "still stuck?" must NOT reach a user who activated on day 1.
 
@@ -51,6 +69,8 @@ Every flow, regardless of type, obeys: **entry trigger → N event-gated steps i
 | What's new since they left (specific) | no return after step 1 |
 | Re-onboard the value moment / final pulse | no return after step 2 |
 
+**Before you write winback copy,** sort known churn reasons into those the product or message can fix and those it cannot (moved away, need ended, price out of reach). Send fixable reasons to the flow; route the others to the product or offer owner instead of messaging them.
+
 **Suppression:** returned (used the product) · unsubscribed · marked dead. **Falsifiable anti-pattern:** leading with a discount. Detection: step-1 CTA is a coupon → flag. Discount-led winback teaches users to lapse for discounts and erodes price integrity. A discount, if used at all, comes last, not first.
 
 ---
@@ -67,6 +87,19 @@ Every flow, regardless of type, obeys: **entry trigger → N event-gated steps i
 | Graceful exit + win-back seed | left anyway |
 
 **Suppression:** reversed the cancel · completed the leave · unsubscribed. **Anti-pattern:** the reflexive discount as step 1. Order of save offers: pause/downgrade plan → resolve the specific friction → (only then) discount. Guilt-tripping ("are you sure you want to lose all this?") confirms the cancel; never use it.
+
+---
+
+## 5. Habit (post-activation)
+
+**Entry:** activated. **Job:** make the next return come from the user's own need, not from the message. **Window:** the product's natural use cycle.
+
+- **Write the habit sentence:** "Each time the user [feels or faces situation X], they [take first action Y]." Time each external trigger to just before that situation. A trigger with no tie to a core-value event is overhead; cut it.
+- **Match the reward to the product:** social (recognition from others), resource (finding something useful), or mastery (progress, completion). Keep some variety in what the user finds so repeat visits stay worth it.
+- **Respect frequency.** Do not try to build a daily habit for a product people need rarely. For low-frequency products, aim to be the default choice when the need comes up: a timely reminder at the known need moment, not a streak.
+- **Ongoing onboarding:** introduce the next feature only after the user has used the previous one, one at a time. Do not announce many features in one message.
+
+**Suppression:** churned · unsubscribed · frequency cap. **Falsifiable anti-pattern:** a send whose trigger is the calendar, not a user state or a known need moment.
 
 ---
 

@@ -12,6 +12,9 @@ recipient to endorse the sender's diagnosis. In a reply, the next decision may b
 State time, cost, access, or data requirements when known and material. Mark unknown requirements
 for sender review. Do not promise no obligation if answering enrolls the recipient into a sequence.
 
+When the next decision is a call, make one reply enough to schedule it. Offer one or two concrete
+time options and the medium, and add a self-serve booking link when the sender has one.
+
 A refusal must work. Do not make an opt-out conditional on a reason. Silence ends a single bounded
 research attempt. A commercial sequence uses explicit sender-set cadence and suppression rules;
 the draft does not authorize any scheduled touch.

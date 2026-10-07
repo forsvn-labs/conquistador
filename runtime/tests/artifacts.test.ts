@@ -212,7 +212,7 @@ describe("Artifact envelope", () => {
     expect(created.provenance.playbookId).toBe("content-intelligence-loop");
     expect(created.provenance.playbookVersion).toBe(playbook().version);
     expect(created.provenance.skillId).toBe("social");
-    expect(created.provenance.skillVersion).toBe("2.1.0");
+    expect(created.provenance.skillVersion).toBe("2.2.0");
     expect(created.provenance.skillPackageDigest).toMatch(/^sha256:[a-f0-9]{64}$/);
     expect(created.provenance.skillInterfaceDigest).toMatch(/^sha256:[a-f0-9]{64}$/);
     expect(created.status).toBe("approved");

@@ -152,7 +152,7 @@
     },
     {
       "path": "skills/conquistador/channels/instagram.md",
-      "sha256": "ffeb83ddd3993ce8a00bca71ebd6ecc36d22eb2e8636210a5bc44f8c7416c4ad"
+      "sha256": "f8ac62ab7ef4d45648eac53a84902d8e9d3af1adbd493263299a2f8b16cb0d5c"
     },
     {
       "path": "skills/conquistador/channels/linkedin.md",
@@ -168,7 +168,7 @@
     },
     {
       "path": "skills/conquistador/channels/tiktok.md",
-      "sha256": "02035e5ad658293ab2eb4298ab7210acba062791906e0eb3461627b84a2bbdc6"
+      "sha256": "530fd19cdd800e53dda6da3021f812e8d2381e393ba3fdac93004ada2cf0b32a"
     },
     {
       "path": "skills/conquistador/channels/x.md",
@@ -176,7 +176,7 @@
     },
     {
       "path": "skills/conquistador/channels/youtube.md",
-      "sha256": "7945e09e0623af3fdc1eef2452ab91ea81228236e50113e59e2bc78978df006f"
+      "sha256": "980f32afe53d9a77468e535945ad0cfe6469429c142dff1b8730e51a93909672"
     },
     {
       "path": "skills/conquistador/commands/ads/agents/composer.md",
@@ -204,19 +204,23 @@
     },
     {
       "path": "skills/conquistador/commands/ads/COMMAND.md",
-      "sha256": "5571b37bb6b4db6d006619d4bc3fd82b86aeffa4ac23439bbb17b4b2503a73db"
+      "sha256": "f6f9f7ab5f64416585cef6e43f0f59eba46d1c57f6b5b9fdedce6113490752c7"
     },
     {
       "path": "skills/conquistador/commands/ads/fallbacks/sequential.md",
       "sha256": "ad585605a9868e19447bc9b956f9a9be7d3f586411542f1304a4cc2ac782b0ec"
     },
     {
+      "path": "skills/conquistador/commands/ads/references/ad-intelligence/apple-search-ads.md",
+      "sha256": "a7c70fc31bc681bd26729894a7b5788c04d9ca5910d3411e6c78a44f85b46144"
+    },
+    {
       "path": "skills/conquistador/commands/ads/references/ad-intelligence/creative-cadence.md",
-      "sha256": "2647108ade79a327d19ba947607bbf7f85f8c5786d327fbb2bcdf0eb4a8d0851"
+      "sha256": "399d37c12fb1dbd89adb22696b24fa33cda52f751bd41a7b4408309864d73266"
     },
     {
       "path": "skills/conquistador/commands/ads/references/ad-intelligence/google-ads.md",
-      "sha256": "adfa3bdc9f5e2fe13347b60ef6b59cb07163d18f89979ee3ed506ec1cd8f5074"
+      "sha256": "03064b0f8e2ace0f26847da14cbc794607d12257ecff7acf6e1e282655593802"
     },
     {
       "path": "skills/conquistador/commands/ads/references/ad-intelligence/linkedin-ads.md",
@@ -224,7 +228,7 @@
     },
     {
       "path": "skills/conquistador/commands/ads/references/ad-intelligence/meta-cold-traffic.md",
-      "sha256": "3b8655c59b8c576adb2df7a852e5e75f990c6fd9ade40ede21651e7dd53c3824"
+      "sha256": "d7a7a8b98e6d3a004dbd97db22f3c291de8b1dd19b2dc00512d88d793ba3e918"
     },
     {
       "path": "skills/conquistador/commands/ads/references/ad-intelligence/meta-retargeting.md",
@@ -252,7 +256,7 @@
     },
     {
       "path": "skills/conquistador/commands/ads/references/format-conventions.md",
-      "sha256": "634b48f41f20045ef2ebf091fac4174b5312643dc8ce78463dd26450e87ebe15"
+      "sha256": "7a7a859090f2e28bec7e92810d4041460cd82c3baf7e50f4af442a4ef693646a"
     },
     {
       "path": "skills/conquistador/commands/ads/references/format-spec.md",
@@ -268,7 +272,7 @@
     },
     {
       "path": "skills/conquistador/commands/ads/references/policy-floor.md",
-      "sha256": "f104213c4437856b15a0aaf6ab950083ab26bb3ee5c531c5a56212a877fdc76d"
+      "sha256": "31ef2a24389349b5b0f1d33e5cd9c9abaa879ce3d38f7eae87c3a5ac726a0d18"
     },
     {
       "path": "skills/conquistador/commands/ads/references/realized-surface-grounding.md",
@@ -524,7 +528,7 @@
     },
     {
       "path": "skills/conquistador/commands/brand/COMMAND.md",
-      "sha256": "f3049187233894d6fc6d51da2c931baac11e00199d67e5763c7a832475fed1cd"
+      "sha256": "e4ab959b47980598a5e5c1dd2bf778b0c3c9b2cc7c5d3f9ac9b8d43087167477"
     },
     {
       "path": "skills/conquistador/commands/brand/fallbacks/sequential.md",
@@ -568,7 +572,7 @@
     },
     {
       "path": "skills/conquistador/commands/brand/references/brand-voice.md",
-      "sha256": "bccc0c341cbb3f9c9cf2c613b4734ba77f4851099a77f515d699c1056b035cc4"
+      "sha256": "f42ee178e4aca0baf6dad2a96bebf68d67a3977cb575857684be6662cba93bca"
     },
     {
       "path": "skills/conquistador/commands/brand/references/color-emotion.md",
@@ -576,7 +580,7 @@
     },
     {
       "path": "skills/conquistador/commands/brand/references/component-patterns.md",
-      "sha256": "3cb8cbb192f0c9121f4b68cc1159d38320ce8edde2351a9b7cd8c2480f45166e"
+      "sha256": "f98ad641a2843a0a5d0259951b78fcc253d895b19125af44ea7fedce3c5ce016"
     },
     {
       "path": "skills/conquistador/commands/brand/references/component-tokens.md",
@@ -696,7 +700,7 @@
     },
     {
       "path": "skills/conquistador/commands/build/COMMAND.md",
-      "sha256": "839a360b77bae7dcce94861bb9f39648cfbe9c794ab5a2f7f827ea0d9bfe10e8"
+      "sha256": "ef28c82bf85b9c5cddc4f00e068e84ea828a67c47f4e1f1b2976353b9b260c9f"
     },
     {
       "path": "skills/conquistador/commands/build/references/modes/ios.md",
@@ -808,7 +812,7 @@
     },
     {
       "path": "skills/conquistador/commands/build/references/modes/web.md",
-      "sha256": "0d9b610c29a8bbed539e05b835faa3199ec8d0aa43845f7a6bb7eb5d5423868d"
+      "sha256": "15375249d4a09c6bec168998366623ba4c8d828c85204813ddb4a17dad0c8c51"
     },
     {
       "path": "skills/conquistador/commands/build/references/modes/web/agents/openai.yaml",
@@ -821,6 +825,10 @@
     {
       "path": "skills/conquistador/commands/build/references/modes/web/references/examples/settings-slice-walkthrough.md",
       "sha256": "61f3b76d7d24eeee32d722ccdb34dd482652315fd820bdf5af7f20b9e665b470"
+    },
+    {
+      "path": "skills/conquistador/commands/build/references/modes/web/references/landing-performance.md",
+      "sha256": "1c19868301540f9a5a541b8f3dde5f3bff4654c6633f5a0562b437d066ea77aa"
     },
     {
       "path": "skills/conquistador/commands/build/references/modes/web/references/test-contract.md",
@@ -860,7 +868,7 @@
     },
     {
       "path": "skills/conquistador/commands/campaign/COMMAND.md",
-      "sha256": "4db07a31c8a03b7f7702919115baed4f02d2da9100cefa28d723100c65aa166b"
+      "sha256": "85380f278336d5bcac5ff6cc2ecb4088f4830238e78e4af2cccdb7bff61d6acb"
     },
     {
       "path": "skills/conquistador/commands/campaign/fallbacks/sequential.md",
@@ -876,11 +884,15 @@
     },
     {
       "path": "skills/conquistador/commands/campaign/references/channel-strategy.md",
-      "sha256": "e718503b841f8459fdeccaff003d3117f6fdab0ff219ef85202a522621dc6006"
+      "sha256": "86eac2a45fbecb99404264d3b4a0c7aafbd90bd2188d8417fc82297fec07c734"
     },
     {
       "path": "skills/conquistador/commands/campaign/references/distribution-models/clipping-and-live.md",
       "sha256": "332813d4ed32a79f39b85dba3ea4625a9f87fefcd22e1954235c6b5bb1355c8b"
+    },
+    {
+      "path": "skills/conquistador/commands/campaign/references/distribution-models/creator-program.md",
+      "sha256": "45cc3f9e0f619d96a1492da481ac4a81f0ad5c93439ea65fbadc9f8a2131dd4a"
     },
     {
       "path": "skills/conquistador/commands/campaign/references/examples.md",
@@ -964,7 +976,7 @@
     },
     {
       "path": "skills/conquistador/commands/campaign/references/platform-intelligence/ugc.md",
-      "sha256": "683fd367c3facd4ef351906d1707895c654a43c965bbe199264fbff898367249"
+      "sha256": "e681a393af375b152907046590a76a189b1072eefa762ccd73287e7c21a5d288"
     },
     {
       "path": "skills/conquistador/commands/campaign/references/platform-intelligence/x-launch.md",
@@ -1008,7 +1020,7 @@
     },
     {
       "path": "skills/conquistador/commands/channels/COMMAND.md",
-      "sha256": "131cdc871a5c1fa1b603d1d26ac1457139f183734878c639e59d59431e55ffc3"
+      "sha256": "53405a355f7f6b13b4903c6827bd7ce71e4f541e945e9fb8c27b9a718336a005"
     },
     {
       "path": "skills/conquistador/commands/channels/fallbacks/sequential.md",
@@ -1025,6 +1037,10 @@
     {
       "path": "skills/conquistador/commands/channels/references/confidence-labeling.md",
       "sha256": "d7e2c7b04a036fcedce23f5a2bf3763093752a8f0c7188dba66d806d13317da0"
+    },
+    {
+      "path": "skills/conquistador/commands/channels/references/creator-channel-fit.md",
+      "sha256": "cad85807f4f27ccf63dee7c5d4bc636adc3c97262c94ad9aab19378470fc7563"
     },
     {
       "path": "skills/conquistador/commands/channels/references/evidence-protocol.md",
@@ -1116,7 +1132,7 @@
     },
     {
       "path": "skills/conquistador/commands/convert/COMMAND.md",
-      "sha256": "63fd4893911efe0e93c41b8c1b483c693c7e0db1c6546b8777e10fe8480e5d3a"
+      "sha256": "b525e613d97275b25a90c1c2dcdc59d42b2dcb9b479f328344ad5cd8b9fe645b"
     },
     {
       "path": "skills/conquistador/commands/convert/fallbacks/sequential.md",
@@ -1129,6 +1145,10 @@
     {
       "path": "skills/conquistador/commands/convert/references/anti-sycophancy.md",
       "sha256": "65ee6852d22107495df3e7bd2e56fe1f1558239aeca99e19287621b62dd2d58a"
+    },
+    {
+      "path": "skills/conquistador/commands/convert/references/app-onboarding-paywall.md",
+      "sha256": "b2bfb9c27af3b5bcf31e063cf8571b8e450790fd8b7e107fc74fe4255615f59d"
     },
     {
       "path": "skills/conquistador/commands/convert/references/conversion-diagnosis-anti-patterns.md",
@@ -1224,7 +1244,7 @@
     },
     {
       "path": "skills/conquistador/commands/copy/COMMAND.md",
-      "sha256": "66840a9398f33405290e7c0aa260044895a6ab6c71b32285f9fe5b62e8dabeee"
+      "sha256": "515b115ad8fdbc2c8b71c8b90bc8c7889c6c426f3a2f473fec04eebac91c53a0"
     },
     {
       "path": "skills/conquistador/commands/copy/fallbacks/sequential.md",
@@ -1248,7 +1268,7 @@
     },
     {
       "path": "skills/conquistador/commands/copy/references/emotional-triggers.md",
-      "sha256": "00d8f185d27b129944d5d4ee0454ae9597cfdc4a3ec1c433fd5cd5fdbe5a9329"
+      "sha256": "11e8e2605bcc752b5c5da155d1ecb8ad98eea2aff29a45135e13edfe01a605fc"
     },
     {
       "path": "skills/conquistador/commands/copy/references/examples/copywriting-walkthrough.md",
@@ -1260,7 +1280,7 @@
     },
     {
       "path": "skills/conquistador/commands/copy/references/headline-formulas.md",
-      "sha256": "0ca38a11ba59875e30391d5805959fe303ceb1a3f076c622c6c22102d16b3c76"
+      "sha256": "12b4c29655d0ae0a348e613719defba6c3c1b78c4eb3ec4b492d5d3b0effded8"
     },
     {
       "path": "skills/conquistador/commands/copy/references/lead-magnet-stack.md",
@@ -1276,11 +1296,11 @@
     },
     {
       "path": "skills/conquistador/commands/copy/references/research-workflow.md",
-      "sha256": "2e53a6073a3d4f2e386300e1ec1d17e2a8d16a46005f8708d929d1a50851f2eb"
+      "sha256": "29ca965976bd0a02daeef70d22edc75895d96f374ce72e99cd8c6f9435216b24"
     },
     {
       "path": "skills/conquistador/commands/copy/references/sales-argument.md",
-      "sha256": "61991e96494229e1c218104c217ee4f58aa9e3730bbc7993f49596446bbe4852"
+      "sha256": "780cf70544049133532edec8e5a749958180c5479b09754685a6cf0af9a1be2e"
     },
     {
       "path": "skills/conquistador/commands/creative/agents/asset-critic-agent.md",
@@ -1340,7 +1360,7 @@
     },
     {
       "path": "skills/conquistador/commands/creative/COMMAND.md",
-      "sha256": "4bd5536b6f1af56f57f07c9a3bca08f9fc9ba6b87fcbeac31a933a73e1c7f7dd"
+      "sha256": "53de320f217d0c614647e2e6a7b0b1129e02a8b11bb9d9b49dba99023e27ee67"
     },
     {
       "path": "skills/conquistador/commands/creative/fallbacks/sequential.md",
@@ -1404,7 +1424,7 @@
     },
     {
       "path": "skills/conquistador/commands/creative/references/image-engine-dialects.md",
-      "sha256": "ff60f73dc7d9509a4ecfadae5b31c9abad71b2c952a60a15de2632cb0334d850"
+      "sha256": "41b290afa654a4def8ca271360b8f265b4eb049a559fe0ecb3bd1b4f7f8f5ecb"
     },
     {
       "path": "skills/conquistador/commands/creative/references/ooh-anti-patterns.md",
@@ -1544,7 +1564,7 @@
     },
     {
       "path": "skills/conquistador/commands/decide/agents/resolver-agent.md",
-      "sha256": "c42c6a2d1c98db61a12e84ebcd68e081eb89acb6cee17648272a09ffe87f1b50"
+      "sha256": "4e33a256f0de978355fe7b1ab3c012708ceb2688bfcf03e21573c9ac271f374e"
     },
     {
       "path": "skills/conquistador/commands/decide/agents/skeptic-agent.md",
@@ -1556,7 +1576,7 @@
     },
     {
       "path": "skills/conquistador/commands/decide/COMMAND.md",
-      "sha256": "1bd72b0fcd903ffd3d3e06a3e9efce216a32e69dbff74d0cc919e9bae2e3566f"
+      "sha256": "ea00594fe725ed7b5c61b0efa4b427b5773ecbff1cf734648203cd8957795995"
     },
     {
       "path": "skills/conquistador/commands/decide/fallbacks/sequential.md",
@@ -1589,6 +1609,10 @@
     {
       "path": "skills/conquistador/commands/decide/references/independent-positions-method.md",
       "sha256": "c0b8ed7eb0ac74bd610d762ff0459ec788107c8ccf3b421f30215d9d99f580eb"
+    },
+    {
+      "path": "skills/conquistador/commands/decide/references/misjudgment-check.md",
+      "sha256": "5fc37cc82872a4f36fe62ad54cadc70302381d5f5aaafc225a9085eccebf4dac"
     },
     {
       "path": "skills/conquistador/commands/decide/references/poll-protocol.md",
@@ -1628,7 +1652,7 @@
     },
     {
       "path": "skills/conquistador/commands/diagnose/COMMAND.md",
-      "sha256": "3fa41aff15e7be087eb8d64bfa8729ce0205cc90e960347144fbeaf811f7190d"
+      "sha256": "6cc1f89ecec91f77abbb502cb526383bf1713c13e77d6dc4119e7f997cf033d1"
     },
     {
       "path": "skills/conquistador/commands/diagnose/fallbacks/sequential.md",
@@ -1644,7 +1668,7 @@
     },
     {
       "path": "skills/conquistador/commands/diagnose/references/diagnostic-evidence-method.md",
-      "sha256": "922ad9a7225ea69e0b4501bfb612f95fe91f0887f44a0ad57f34a46cf9899111"
+      "sha256": "a64dc5c0484d45c1a27df8b5d9400a5954ae610b35b8c5648a146e8e023503ca"
     },
     {
       "path": "skills/conquistador/commands/diagnose/references/examples/diagnose-walkthrough.md",
@@ -1948,7 +1972,7 @@
     },
     {
       "path": "skills/conquistador/commands/funnel/COMMAND.md",
-      "sha256": "eb74f5bee590ec71fc83115cfc0134792f7db873d46f573130117113ef0bc5af"
+      "sha256": "f3502c29ab3e7e0201f05f58cd06a005171b39562bb797ce481406f291d4e054"
     },
     {
       "path": "skills/conquistador/commands/funnel/fallbacks/sequential.md",
@@ -1976,7 +2000,7 @@
     },
     {
       "path": "skills/conquistador/commands/funnel/references/funnel-models.md",
-      "sha256": "8c74650904fa3d6006634a32464cee8b491837bab9b8ccd00830645ec43117d8"
+      "sha256": "af456bfa71424398c50c59f31bd63802415954c3e7cda3d3e7bb331f2d86ebbf"
     },
     {
       "path": "skills/conquistador/commands/funnel/references/stress-tests.md",
@@ -2004,7 +2028,7 @@
     },
     {
       "path": "skills/conquistador/commands/ideas/agents/pattern-extractor-agent.md",
-      "sha256": "9adb8c71e6b6bf7d6ababb854b0f6d5c732e10431bb9f68e4335dc0e6329a739"
+      "sha256": "b9d3464288ae63a00e0b5878f4fe7dcd1d2689274e417ac854965b311815da37"
     },
     {
       "path": "skills/conquistador/commands/ideas/agents/platform-scout-agent.md",
@@ -2016,7 +2040,7 @@
     },
     {
       "path": "skills/conquistador/commands/ideas/COMMAND.md",
-      "sha256": "5c31e9b2846f3b40abc2907cb8f9100a9b0309ee7970ebf4366b87a675235e26"
+      "sha256": "0cdc5ce14b474db2a92995adba8225ed4fe96f51f1be9b5345c3df1e0ea04f4c"
     },
     {
       "path": "skills/conquistador/commands/ideas/fallbacks/sequential.md",
@@ -2036,7 +2060,7 @@
     },
     {
       "path": "skills/conquistador/commands/ideas/references/content-ideas-method.md",
-      "sha256": "139061c88af0cd2682711d61a0217367068fd37d29aea8d9f423030076e97727"
+      "sha256": "d889ce8ae1669d4ffa6f3a477d3f0de6bf0b6a0f72d9aaaea12755555571ded8"
     },
     {
       "path": "skills/conquistador/commands/ideas/references/examples/shortform-research-walkthrough.md",
@@ -2076,7 +2100,7 @@
     },
     {
       "path": "skills/conquistador/commands/ideas/references/scout-protocol.md",
-      "sha256": "6e50567897fef1bcde4ca1ef59ebf304f42dc6dee5372d12672c2479db1153f8"
+      "sha256": "465dba31eabf833bce77d7a87bca5395fe7aa8b73fbacda71bd78420042cff51"
     },
     {
       "path": "skills/conquistador/commands/init/COMMAND.md",
@@ -2120,7 +2144,7 @@
     },
     {
       "path": "skills/conquistador/commands/measure/COMMAND.md",
-      "sha256": "a6fd0ed94e985b0a0cb932b29f5362fa2a41e57ad70ced397fb37d6d08ef51a3"
+      "sha256": "e075f1372cd2eadc7acab240a226c4a00a3ac2403062bccf5934415892c3754c"
     },
     {
       "path": "skills/conquistador/commands/measure/fallbacks/sequential.md",
@@ -2180,7 +2204,7 @@
     },
     {
       "path": "skills/conquistador/commands/measure/references/measurement-design-contract.md",
-      "sha256": "495b60ae0cbe6082dbc9187d6b78e870bf2a576b1d892aa0f96f80acd67bceb3"
+      "sha256": "c093ebb4262b9253b3d662027e8d11296a5f46454edb37a9bbd35cea476693a1"
     },
     {
       "path": "skills/conquistador/commands/measure/references/performance-data.md",
@@ -2240,7 +2264,7 @@
     },
     {
       "path": "skills/conquistador/commands/measure/references/platform-intelligence/ugc.md",
-      "sha256": "683fd367c3facd4ef351906d1707895c654a43c965bbe199264fbff898367249"
+      "sha256": "e681a393af375b152907046590a76a189b1072eefa762ccd73287e7c21a5d288"
     },
     {
       "path": "skills/conquistador/commands/measure/references/platform-intelligence/x-launch.md",
@@ -2296,7 +2320,7 @@
     },
     {
       "path": "skills/conquistador/commands/outreach/COMMAND.md",
-      "sha256": "f0fe4801c4f837bdbae28c8cd14f3809edcc7b79bb6adf051ebfa0caad0ccb8d"
+      "sha256": "c7a02186fb1933f1db03cd651169dfddbd68f2c2831231d24df0b476d1b3adc0"
     },
     {
       "path": "skills/conquistador/commands/outreach/fallbacks/sequential.md",
@@ -2328,7 +2352,7 @@
     },
     {
       "path": "skills/conquistador/commands/outreach/references/copy-validation-rubric.md",
-      "sha256": "92201073eefaf0357990e97a94dcc7a0680c4584da9c0d46bb2bd0edb2fe2229"
+      "sha256": "46cc48bbc9cc1338bc278c8afbf3648f30579a1a0e92dbadf6e0c7198d388d70"
     },
     {
       "path": "skills/conquistador/commands/outreach/references/examples/critic-case-sourced-signal-no-pitch.md",
@@ -2379,12 +2403,16 @@
       "sha256": "97312c0b508357c271595e38cd0e3fd6ce2733050eb46a3dff328f07eec67886"
     },
     {
+      "path": "skills/conquistador/commands/outreach/references/frameworks/account-program.md",
+      "sha256": "be9cc31126f85593b543efa1a793507b350a56b2cd96f2356805db1292edf2a8"
+    },
+    {
       "path": "skills/conquistador/commands/outreach/references/frameworks/cold-email-frameworks.md",
       "sha256": "c5cc39cdd6e918099cb3ab8c36c31283825427c454e5035b560683018d6c34f2"
     },
     {
       "path": "skills/conquistador/commands/outreach/references/frameworks/ctas.md",
-      "sha256": "c915fa846b5935fbf90c7fe080ac59f57631d926537d6d4d3038e6a1db276cd5"
+      "sha256": "db19319d10f038b157104fff3a288329a25239887504bbb1ec955cff23b92dc6"
     },
     {
       "path": "skills/conquistador/commands/outreach/references/frameworks/objections.md",
@@ -2396,19 +2424,27 @@
     },
     {
       "path": "skills/conquistador/commands/outreach/references/frameworks/personalization-signals.md",
-      "sha256": "829b73d0a9df8edf1300a132ab9873741274dd36ae546143098505b1f864df61"
+      "sha256": "237bf4af66511d8fbbd846388ae1a0ff321b69b971380cab2926d6fb55f9706b"
     },
     {
       "path": "skills/conquistador/commands/outreach/references/frameworks/structures.md",
-      "sha256": "b2df531834b4267ac7b9b3f05fa3f62e056d48596b8fc54fd093be1ebd45ad9c"
+      "sha256": "1bf4288acb2585949743b1855bbbc8abe2554bdcb85f82fd7d5e313150e99823"
     },
     {
       "path": "skills/conquistador/commands/outreach/references/method.md",
-      "sha256": "672312807f6b0f495893b239c50607cdf9c5c3bc1ee3bada5b383f5aa657fc57"
+      "sha256": "59c35fbc488e29506074656f3212ac5934e53657f7badd425be023b8b88619d7"
     },
     {
       "path": "skills/conquistador/commands/outreach/references/modes/community.md",
       "sha256": "594204e577e9206a94b20d631ec342ee5b6df800178d70a1321b70092464c8d6"
+    },
+    {
+      "path": "skills/conquistador/commands/outreach/references/modes/creator-sponsorship.md",
+      "sha256": "04ff078017257b12dad74c15842ecff28f8bba4d3e57cd97c995dd5af42d8918"
+    },
+    {
+      "path": "skills/conquistador/commands/outreach/references/modes/intro-request.md",
+      "sha256": "b06bca667984328eb720886c42bbc517bf8a43639b9ab3f174f987540bb0caed"
     },
     {
       "path": "skills/conquistador/commands/outreach/references/modes/no-pitch-research.md",
@@ -2424,7 +2460,7 @@
     },
     {
       "path": "skills/conquistador/commands/outreach/references/modes/services.md",
-      "sha256": "7c841020b0038da69a0a9c71e21924095b260872a2e5d4d3070c7367915dd343"
+      "sha256": "2fe44abd72e081b83eeb5e6d38ac37c517aaf0de427f5a5169d9d3e276973544"
     },
     {
       "path": "skills/conquistador/commands/outreach/references/proof-types.md",
@@ -2500,7 +2536,7 @@
     },
     {
       "path": "skills/conquistador/commands/position/COMMAND.md",
-      "sha256": "61587585c0c42121d7f96fd347c87fdd3e1ad341f8ccba6ea167c0cee77c17b5"
+      "sha256": "61bd6eb8cb0baebfb0a57d086e08aeb873483b0b67a2ed603378051c0cfe880c"
     },
     {
       "path": "skills/conquistador/commands/position/fallbacks/sequential.md",
@@ -2524,7 +2560,7 @@
     },
     {
       "path": "skills/conquistador/commands/position/references/customer-interviews.md",
-      "sha256": "ffc96dc95e0fbf22b218c7616ed4eaa64888a5fd7274e62c4fa64489a95a5f09"
+      "sha256": "be228beae07e3d2bebda8c00a10e917cb1bd818a2bafc54f04d299b8cd7ec19b"
     },
     {
       "path": "skills/conquistador/commands/position/references/examples/icp-walkthrough.md",
@@ -2540,11 +2576,11 @@
     },
     {
       "path": "skills/conquistador/commands/position/references/gap-analysis-template.md",
-      "sha256": "40033769912d14f0beb64221ff7292e1e558dc2960b6f8434d8853f4059c16a0"
+      "sha256": "6a8e1e6000b061ad8158868aef9ef8b43e3972b68f21742cc57d6f5b5b6b02de"
     },
     {
       "path": "skills/conquistador/commands/position/references/habitat-mapping.md",
-      "sha256": "76f3bbc88fe11460aa936e76f1316e1a964e5aa248bc32787e0eca39b637f1db"
+      "sha256": "682d13c01538aa7a5c829d75dd5bac4da5dc502c7d2a78fa5cbb1e792da1e38e"
     },
     {
       "path": "skills/conquistador/commands/position/references/icp-anti-patterns.md",
@@ -2588,7 +2624,7 @@
     },
     {
       "path": "skills/conquistador/commands/pricing/COMMAND.md",
-      "sha256": "ff4d1a1d997f3d12cce0ff71b24e4ecb95b46b0777782eb59173b74e6896308a"
+      "sha256": "8988954cc1786f0c5567c4e8a7f56ccd81d8a0dd9c4104e6e307e8b3cc2b2626"
     },
     {
       "path": "skills/conquistador/commands/pricing/fallbacks/sequential.md",
@@ -2604,7 +2640,7 @@
     },
     {
       "path": "skills/conquistador/commands/pricing/references/pricing-method.md",
-      "sha256": "58061452633d0f799521c38a3df88cf0405273a8ea0c1659114d285911941b96"
+      "sha256": "f1370901a699faa8b71fb59ee270ab4f24a5678b5a6155e9c3affe71841791ff"
     },
     {
       "path": "skills/conquistador/commands/pricing/references/pricing-rubric.md",
@@ -2612,11 +2648,11 @@
     },
     {
       "path": "skills/conquistador/commands/pricing/references/unit-economics-checks.md",
-      "sha256": "c3cbd2460cbc63165826d16abd64ded5951e975e0271421486367c86423cca88"
+      "sha256": "025916b6c960b2ab56b62852f7c2f0c8804541b7cdfbaa81a12d8351ec1d0354"
     },
     {
       "path": "skills/conquistador/commands/pricing/references/wtp-evidence.md",
-      "sha256": "29423aad94fb6cd7e3f78c118907eb47e4b1b647602631216d130982c1410208"
+      "sha256": "200e71e09f2b5ac16f15dbc41331ea9877e143379004175a241199dbaeedf70c"
     },
     {
       "path": "skills/conquistador/commands/prioritize/agents/critic-agent.md",
@@ -2708,7 +2744,7 @@
     },
     {
       "path": "skills/conquistador/commands/results/COMMAND.md",
-      "sha256": "0b84b279414b22fc551befb8faef2894030d26c0539a8c48564de7f545a78fec"
+      "sha256": "6a82f5c71e603ec6a425695630d03e725d50819e114f32bffb16bd53f87628b8"
     },
     {
       "path": "skills/conquistador/commands/results/references/modes/ads.md",
@@ -2720,7 +2756,7 @@
     },
     {
       "path": "skills/conquistador/commands/results/references/modes/ads/agents/diagnosis-agent.md",
-      "sha256": "1d2ae4bf446cf9d09f4d4b1452c4d9225a5e832bf281c0255e4692583b02fd49"
+      "sha256": "2964c5c8c80b5ae419f97cdd6aab6a55215976af2c1553a8f50739b2b307e47e"
     },
     {
       "path": "skills/conquistador/commands/results/references/modes/ads/agents/metric-ingest-agent.md",
@@ -2924,7 +2960,7 @@
     },
     {
       "path": "skills/conquistador/commands/results/references/modes/video/references/platform-intelligence/ugc.md",
-      "sha256": "683fd367c3facd4ef351906d1707895c654a43c965bbe199264fbff898367249"
+      "sha256": "e681a393af375b152907046590a76a189b1072eefa762ccd73287e7c21a5d288"
     },
     {
       "path": "skills/conquistador/commands/results/references/modes/video/references/platform-intelligence/x-launch.md",
@@ -2984,7 +3020,7 @@
     },
     {
       "path": "skills/conquistador/commands/seo/agents/content-quality-agent.md",
-      "sha256": "682f60d9d7f2ab9a233dd12a6322dff31d3230a733bf53b311a09d743bc01f3a"
+      "sha256": "d039024a014ebda1c2d05076399500db8f15aaef28b7c598c6be3a600bc91b20"
     },
     {
       "path": "skills/conquistador/commands/seo/agents/crawl-agent.md",
@@ -3012,7 +3048,7 @@
     },
     {
       "path": "skills/conquistador/commands/seo/agents/foundations-agent.md",
-      "sha256": "549cbb5f81f2f53399a2b6fe07e9c27977de64246785a8a3d5e8df5f490a0564"
+      "sha256": "f3002977bf48119b05d0e931ca48f9811247456e2f4d4ed2a43058399bed47c4"
     },
     {
       "path": "skills/conquistador/commands/seo/agents/openai.yaml",
@@ -3032,7 +3068,7 @@
     },
     {
       "path": "skills/conquistador/commands/seo/COMMAND.md",
-      "sha256": "abeea86ad7af6637566ee02f8be174288e8cbf1ef2fe23eee5d83f10163b31d2"
+      "sha256": "73672a8c9bc88e91ccfe25cd723db167aa9d9dea9616dad0938eec36d8e9805c"
     },
     {
       "path": "skills/conquistador/commands/seo/fallbacks/sequential.md",
@@ -3040,7 +3076,7 @@
     },
     {
       "path": "skills/conquistador/commands/seo/references/ai-seo.md",
-      "sha256": "673e4b552d5c26eb7e1e3646854a0aa10f81d0dc642b3b6a7c170a688c47765c"
+      "sha256": "f82723f9fac200dd8f7f8cb952cd555d0c113f2cf24c8c67e62a6c099a1bd181"
     },
     {
       "path": "skills/conquistador/commands/seo/references/anti-patterns.md",
@@ -3092,11 +3128,15 @@
     },
     {
       "path": "skills/conquistador/commands/seo/references/linkable-asset-playbook.md",
-      "sha256": "3019702a9bd78d302b75cd5209f824259aaef4afa8b2dd2cba2cab5af976997a"
+      "sha256": "97dbf9024f25117d417761cabf8a359e4abc4fbdfc9ad5c84e181376d1b4436b"
     },
     {
       "path": "skills/conquistador/commands/seo/references/live-serp-remediation.md",
       "sha256": "a59fee8f01a35467869035b62ba78424a8dfc744f7bb90593232ca915e06c198"
+    },
+    {
+      "path": "skills/conquistador/commands/seo/references/local-seo.md",
+      "sha256": "d5b1d30caf1c81158b27b94f1087f6a04f3f84ce2642d51a5e993763cc7be663"
     },
     {
       "path": "skills/conquistador/commands/seo/references/platform-intelligence/bing-readiness.md",
@@ -3108,7 +3148,7 @@
     },
     {
       "path": "skills/conquistador/commands/seo/references/programmatic-seo.md",
-      "sha256": "596e70b47ee489d8a58a0edccb83c8ccc889a612e224320bab43de5e250c801a"
+      "sha256": "e9f4988d763d3c861d5a1f6f15bb72143a26d19537e75a129ce6d63f7d8a20dc"
     },
     {
       "path": "skills/conquistador/commands/seo/references/programmatic-template-playbooks.md",
@@ -3128,7 +3168,7 @@
     },
     {
       "path": "skills/conquistador/commands/seo/references/technical-audit.md",
-      "sha256": "bd4933861ac1223559e85c35771dbc6190eb39d8fb4261b7619e543d7b2843cd"
+      "sha256": "e723c42d42ed35df8d6b2307f126490989541bbf1bee5f20c39e5223a0bb98f4"
     },
     {
       "path": "skills/conquistador/commands/seo/references/technical-crawler-checklist.md",
@@ -3148,7 +3188,7 @@
     },
     {
       "path": "skills/conquistador/commands/shape/COMMAND.md",
-      "sha256": "b62338dbc598b96b75b6f74327b8bba3eca56432b2b5e9ac8d2959889091f1d8"
+      "sha256": "29c2b571fe2440014928201a4335f741571210a653c5c50a9fccea626b729492"
     },
     {
       "path": "skills/conquistador/commands/shape/fallbacks/sequential.md",
@@ -3192,7 +3232,7 @@
     },
     {
       "path": "skills/conquistador/commands/shape/references/decision-checks/machine-readable-product.md",
-      "sha256": "5063a497d7ab826af75169d4c63524701c5b441f96f36071d89164c1fe29f602"
+      "sha256": "a66e1424af3719e619ede7b005260291e356cdcb5f5eea0195d7a106068a172d"
     },
     {
       "path": "skills/conquistador/commands/shape/references/decision-checks/physical-product-economics.md",
@@ -3268,7 +3308,7 @@
     },
     {
       "path": "skills/conquistador/commands/social/COMMAND.md",
-      "sha256": "6cb378b3df76d4e5bc54bb5c0bc94890e64924324b27e9cecfbc51e14922c74a"
+      "sha256": "cbfafed33331daf9b1ed79a4565ed55b24d3e10a207f4334a784d6705e9e63a6"
     },
     {
       "path": "skills/conquistador/commands/social/fallbacks/sequential.md",
@@ -3300,7 +3340,7 @@
     },
     {
       "path": "skills/conquistador/commands/social/references/hook-archetypes.md",
-      "sha256": "c29f0600859f98ca773e61db8f84aedd045187b28fd97d8ffc39e6a8957b2824"
+      "sha256": "2d7fe2d1e5225cf5c3a6dd2a38313cb7d8f95f904455044765ed88f63662d333"
     },
     {
       "path": "skills/conquistador/commands/social/references/legibility-convention.md",
@@ -3308,7 +3348,11 @@
     },
     {
       "path": "skills/conquistador/commands/social/references/method.md",
-      "sha256": "cf4302903d3ed014c59b6241e8c9987f6caa3d9436e499baf3a6770709014d9c"
+      "sha256": "d9e4c5f21021bafaa2584f3d3d0a2cd20be1a14ea2afab94097e03dc0505bc1e"
+    },
+    {
+      "path": "skills/conquistador/commands/social/references/photo-slideshows.md",
+      "sha256": "cbcccea496233cf5323ff0117653b9bba6318b2df3744a89d014db51d532c090"
     },
     {
       "path": "skills/conquistador/commands/social/references/platform-intelligence/facebook.md",
@@ -3316,7 +3360,7 @@
     },
     {
       "path": "skills/conquistador/commands/social/references/platform-intelligence/founder-demo.md",
-      "sha256": "0bed2b15d2448cd75f1e49336bf5978ffb0422c9527546c9859f53c80d04c21f"
+      "sha256": "d33a298ecb6d6eaed5d4ff7a7b80484133995dc3ddb177e074445ffc9a8e05a6"
     },
     {
       "path": "skills/conquistador/commands/social/references/platform-intelligence/linkedin-launch.md",
@@ -3360,11 +3404,11 @@
     },
     {
       "path": "skills/conquistador/commands/social/references/platform-intelligence/ugc.md",
-      "sha256": "683fd367c3facd4ef351906d1707895c654a43c965bbe199264fbff898367249"
+      "sha256": "e681a393af375b152907046590a76a189b1072eefa762ccd73287e7c21a5d288"
     },
     {
       "path": "skills/conquistador/commands/social/references/platform-intelligence/x-launch.md",
-      "sha256": "875019509d2d9deb3c74f79bc7170e596088630b49488789e9199ea9326f41a6"
+      "sha256": "d9a8388e9868052cbe02f5703b01c260e4a9fd8cbd04bae9a2c22f524f6bc726"
     },
     {
       "path": "skills/conquistador/commands/social/references/platform-intelligence/x.md",
@@ -3372,11 +3416,11 @@
     },
     {
       "path": "skills/conquistador/commands/social/references/platform-intelligence/youtube.md",
-      "sha256": "c79abaab8429a68773ac446b8007d0f9430a02d5b25ea6ec708bb7056bffeb09"
+      "sha256": "6b692f9f15d429bff3de288b4d7fee4502410673c1cc663006dd31d18969bf29"
     },
     {
       "path": "skills/conquistador/commands/social/references/rubric.md",
-      "sha256": "2daaa73d1235936c8e57e8e5b444180fa048e8112b80dfcf032fe72ee7a80602"
+      "sha256": "bee6ac0b1279f7f808d8b04186d1826e6c73e99c4dedbd87159398c9a2766e8e"
     },
     {
       "path": "skills/conquistador/commands/social/references/why-this-works-convention.md",
@@ -3416,7 +3460,7 @@
     },
     {
       "path": "skills/conquistador/commands/ui/COMMAND.md",
-      "sha256": "71143dc89db6fd198a6cb36e3ac21a21d59356438f5f2363029aa19d9d32e3a5"
+      "sha256": "5570fcbe5ddae1378cbf4f2fe6e72736e4ec733ac5e71d7ca2b925c2e628daca"
     },
     {
       "path": "skills/conquistador/commands/ui/fallbacks/sequential.md",
@@ -3444,7 +3488,7 @@
     },
     {
       "path": "skills/conquistador/commands/ui/references/gates-and-rubric.md",
-      "sha256": "f8223ba0c7f69823a6517f534bfedd6c56fc943a25ee86ea4e0c916b2b9d1d6f"
+      "sha256": "26d548b431b362b2a160a51534f80ff5ee89746f717e56822b636015ee1a7bf8"
     },
     {
       "path": "skills/conquistador/commands/ui/references/house-token-bindings.md",
@@ -3512,7 +3556,7 @@
     },
     {
       "path": "skills/conquistador/commands/video/COMMAND.md",
-      "sha256": "aabe6a6ffcb04f5c8e79310dc208ce1f7c8a4cac07a2a8cfd857b7f230958511"
+      "sha256": "23d8bbe19530f4eb5640783931c252344d3da0a34614490929491f1fdc9d593b"
     },
     {
       "path": "skills/conquistador/commands/video/fallbacks/sequential.md",
@@ -3572,7 +3616,7 @@
     },
     {
       "path": "skills/conquistador/commands/video/references/platform-intelligence/founder-demo.md",
-      "sha256": "0bed2b15d2448cd75f1e49336bf5978ffb0422c9527546c9859f53c80d04c21f"
+      "sha256": "d33a298ecb6d6eaed5d4ff7a7b80484133995dc3ddb177e074445ffc9a8e05a6"
     },
     {
       "path": "skills/conquistador/commands/video/references/platform-intelligence/linkedin-launch.md",
@@ -3616,11 +3660,11 @@
     },
     {
       "path": "skills/conquistador/commands/video/references/platform-intelligence/ugc.md",
-      "sha256": "683fd367c3facd4ef351906d1707895c654a43c965bbe199264fbff898367249"
+      "sha256": "e681a393af375b152907046590a76a189b1072eefa762ccd73287e7c21a5d288"
     },
     {
       "path": "skills/conquistador/commands/video/references/platform-intelligence/x-launch.md",
-      "sha256": "875019509d2d9deb3c74f79bc7170e596088630b49488789e9199ea9326f41a6"
+      "sha256": "d9a8388e9868052cbe02f5703b01c260e4a9fd8cbd04bae9a2c22f524f6bc726"
     },
     {
       "path": "skills/conquistador/commands/video/references/platform-intelligence/x.md",
@@ -3628,7 +3672,7 @@
     },
     {
       "path": "skills/conquistador/commands/video/references/platform-intelligence/youtube.md",
-      "sha256": "c79abaab8429a68773ac446b8007d0f9430a02d5b25ea6ec708bb7056bffeb09"
+      "sha256": "6b692f9f15d429bff3de288b4d7fee4502410673c1cc663006dd31d18969bf29"
     },
     {
       "path": "skills/conquistador/commands/video/references/polish-chain.md",
@@ -3988,7 +4032,7 @@
     },
     {
       "path": "skills/conquistador/plays/content.md",
-      "sha256": "003c07f738919e693036fc0e28472350834dd01f38130d9f0ce54bdfa61360ab"
+      "sha256": "daca8c9f31347a8d8bf07b6d721acf2b55ffc8412b5194ff47995e56960faa43"
     },
     {
       "path": "skills/conquistador/plays/expand.md",
@@ -4208,7 +4252,7 @@
     },
     {
       "path": "skills/conquistador/plays/launch/references/launch-chain-spec.md",
-      "sha256": "4f030029f31356f4c48495e26fc6947ccdf00372a85bdf0ad4874596096f0db9"
+      "sha256": "a42444df496e9ccad95441597de6c8bd268c872be3189416168a1d6843cc056c"
     },
     {
       "path": "skills/conquistador/plays/lifecycle.md",
@@ -4244,7 +4288,7 @@
     },
     {
       "path": "skills/conquistador/plays/lifecycle/references/flow-patterns.md",
-      "sha256": "0a600a82606ae8ade91d1e7a6eb1ca1250a75ceb4ba0638081e0092eb8108454"
+      "sha256": "7613a119161479914f63da51fa210ee5e413c2a5f6f771a4e05b97402340118c"
     },
     {
       "path": "skills/conquistador/plays/lifecycle/references/format-conventions.md",
@@ -4260,7 +4304,7 @@
     },
     {
       "path": "skills/conquistador/plays/outbound.md",
-      "sha256": "d3deaf300629a09b365009114d1363a27f766d144233ee326331a548ffe59e49"
+      "sha256": "979904b8dc31c00a7a6a27ebbb5aaa89629b45765612f5d0a2f21fe5b018e8d1"
     },
     {
       "path": "skills/conquistador/plays/paid.md",
@@ -4684,11 +4728,11 @@
     },
     {
       "path": "skills/conquistador/routing-contract.json",
-      "sha256": "5a1ab17cb88e815a47a3f01800cf5048eff98d4228a2722522bc268b912ecc76"
+      "sha256": "090aa8f82f0753f0ee13b7817f2937d6308403576e6240bcdae5f6d634d29fda"
     },
     {
       "path": "skills/conquistador/routing-overlay.json",
-      "sha256": "3c57ad64984a8beb1b270b6f6f3b9b26913e458d891e684c0065c02fb2138d44"
+      "sha256": "6add70232bc5949d00d6bc2da7017bc0e62ab3d0bab181338374f06dd6f859ae"
     },
     {
       "path": "skills/conquistador/rubrics/composition.md",
@@ -4780,7 +4824,7 @@
     },
     {
       "path": "tools/brief.mjs",
-      "sha256": "acc884d85e71075bc31f5c80dd11e59d7ad38888617c3a79f07db8e793bcd5a0"
+      "sha256": "61f8debc711ccb747636fc6987a30e6dc2439fcd311688503f1fc408625efcb7"
     },
     {
       "path": "tools/check/channels.mjs",

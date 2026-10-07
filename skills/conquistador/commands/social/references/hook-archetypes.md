@@ -22,6 +22,10 @@ while keeping the body, claim scope, offer, and intended action comparable.
 | Compare decisions | The reader must choose between plausible options | State the tradeoff, conditions, and cost of each option without inventing a losing opponent |
 | Present bounded evidence | Supplied evidence changes a decision | Name the source, scope, denominator and limitation; separate an example from an observed result |
 | Give the answer | The reader needs a usable instruction or conclusion | Put the answer first, then explain when it applies and how to use it |
+| Show another person's reaction | The product makes a visible result that can change a doubter's mind | Name the other person and their doubt or refusal, show them the result, then show the changed mind. If you cannot name both the person and the conflict, use another opening |
+
+Use the reaction opening only for a real, consented story. Otherwise label it as a scenario; never
+present an invented reaction as a customer story.
 
 Other openings are allowed when the author explains the reader need they address. Do not add
 credentials, invented customer language, delayed reveals, or a fixed timing target to satisfy a label.

@@ -2,7 +2,7 @@
 name: outreach
 description: "Write signal-led outreach sequences, follow-ups, and reply handling."
 metadata:
-  version: 2.1.1
+  version: 2.2.0
 ---
 
 # Write trustworthy outreach
@@ -23,7 +23,7 @@ Core:
 - [outreach-decisions](references/frameworks/outreach-decisions.md): Decide what makes this message worth reviewing. Use this worksheet when a commercial message is proposed.…
 - [structures](references/frameworks/structures.md): Arrange a message for its actual task. A message has no required sentence order. Place the information…
 
-By step: [email](references/channels/email.md), [imessage](references/channels/imessage.md), [linkedin](references/channels/linkedin.md), [platform-proposals](references/channels/platform-proposals.md), [twitter](references/channels/twitter.md), [ctas](references/frameworks/ctas.md), [objections](references/frameworks/objections.md), [personalization-signals](references/frameworks/personalization-signals.md), [method](references/method.md), [community](references/modes/community.md), [no-pitch-research](references/modes/no-pitch-research.md), [partnership](references/modes/partnership.md), [saas](references/modes/saas.md), [services](references/modes/services.md), [proof-types](references/proof-types.md).
+By step: [email](references/channels/email.md), [imessage](references/channels/imessage.md), [linkedin](references/channels/linkedin.md), [platform-proposals](references/channels/platform-proposals.md), [twitter](references/channels/twitter.md), [account-program](references/frameworks/account-program.md), [ctas](references/frameworks/ctas.md), [objections](references/frameworks/objections.md), [personalization-signals](references/frameworks/personalization-signals.md), [method](references/method.md), [community](references/modes/community.md), [creator-sponsorship](references/modes/creator-sponsorship.md), [intro-request](references/modes/intro-request.md), [no-pitch-research](references/modes/no-pitch-research.md), [partnership](references/modes/partnership.md), [saas](references/modes/saas.md), [services](references/modes/services.md), [proof-types](references/proof-types.md).
 
 Specialist roles: [composer](agents/composer.md), [critic](agents/critic.md), [proof-selector](agents/proof-selector.md), [reply-classifier](agents/reply-classifier.md), [reply-composer](agents/reply-composer.md), [signal-analyst](agents/signal-analyst.md), [strategist](agents/strategist.md), [voice-auditor](agents/voice-auditor.md).
 
@@ -37,6 +37,9 @@ Output formats and fallbacks: [sequential](fallbacks/sequential.md), [format-con
 
 Define one segment, channel, observed selection signal, costly moment, affiliation, proof boundary,
 and next action. A job title or company category alone is not personalization.
+When the program spans many accounts, channels, or senders, tier the accounts and assign channel
+roles with the [account program](references/frameworks/account-program.md) framework. When the sender asks a mutual contact for an
+introduction, use the [intro request](references/modes/intro-request.md) mode.
 
 Choose the intent before applying proof gates. Sales, partnership, and product-claim outreach need
 seller-side proof appropriate to the claim. Legitimate no-pitch founder research may proceed without seller proof. Targeted READY names a real

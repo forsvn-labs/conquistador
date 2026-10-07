@@ -2,7 +2,7 @@
 name: diagnose
 description: "Find why growth, revenue, or a funnel stalled before you prescribe tactics."
 metadata:
-  version: 1.0.0
+  version: 1.1.0
 ---
 
 # Diagnose growth

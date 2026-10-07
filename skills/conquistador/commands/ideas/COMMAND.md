@@ -2,7 +2,7 @@
 name: ideas
 description: "Find and rank content ideas from current audience signals."
 metadata:
-  version: 2.1.0
+  version: 2.2.0
 ---
 
 # Research content ideas

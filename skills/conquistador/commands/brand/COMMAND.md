@@ -2,7 +2,7 @@
 name: brand
 description: "Define the brand foundation: point of view, voice, messaging, and visual direction."
 metadata:
-  version: 2.1.0
+  version: 2.2.0
 ---
 
 # Create a practical brand foundation
