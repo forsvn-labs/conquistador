@@ -70,3 +70,13 @@ test('the worker stops reading a streamed body without a length once it passes t
   assert.equal(response.status, 413);
   assert.ok(pulled < 1_000_000, `read ${pulled} bytes`);
 });
+
+test('Wrangler default module rules are off, so nothing outside the declared globs uploads', () => {
+  const config = readFileSync(new URL('../wrangler.toml', import.meta.url), 'utf8');
+  const rules = config.split('[[rules]]').slice(1);
+  for (const type of ['ESModule', 'CommonJS', 'CompiledWasm', 'Text', 'Data']) {
+    const rule = rules.find(item => item.includes(`type = "${type}"`));
+    assert.ok(rule, `${type} rule`);
+    assert.match(rule, /fallthrough = false/, type);
+  }
+});
