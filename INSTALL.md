@@ -209,6 +209,9 @@ server signs receipts with `CONQUISTADOR_RECEIPT_KEY`, a secret that callers nev
 agent that holds the access token cannot forge or flip one, and a check run without the expected
 context does not count. Without that key, receipts are unsigned: an agent can compute the hash
 itself, so an unsigned receipt does not prove that a check ran.
+[`examples/verify-gate`](examples/verify-gate/README.md) has a gate that any host can use, an MCP
+client for it, and a Claude Agent SDK host that accepts drafts only through a `deliver` tool and
+keeps the agent working until the gate accepts them.
 
 Choose the model with this in mind. A Sonnet-class or stronger model completed the brief, check,
 and revise loop unsupervised in our tests. A Haiku-class model (Haiku 4.5, 2026-10-07) produced a
