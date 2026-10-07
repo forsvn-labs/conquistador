@@ -2,6 +2,11 @@
 
 ## Unshipped
 
+- **Outreach for products with no proof yet.** `outreach` 2.3.0 adds an early-stage mode (honest
+  substitutes for proof: a pilot or design-partner offer, a first run on the prospect's data, a
+  labelled sample output, the founder's reason, an observed problem), sequence mechanics (one new
+  element per touch, spacing from the buyer's cycle, threading, when to stop), and a worked
+  3-email SaaS sequence with a weak version and its flaws. `outreach-decisions` stays in Core.
 - **Hosted briefs and claim checks from the deployed-agent findings.** Every brief starts with the
   route ("Start here") and a rule to lead with the requested deliverable. Over HTTP the brief says
   the agent has no repository, so file-writing steps become content in the answer, and it returns
