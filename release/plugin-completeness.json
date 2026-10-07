@@ -4836,11 +4836,15 @@
     },
     {
       "path": "tools/brief.mjs",
-      "sha256": "61f8debc711ccb747636fc6987a30e6dc2439fcd311688503f1fc408625efcb7"
+      "sha256": "d8921e8c3faa5a6d0eab7fb3e0956f37b00ff57c47e6c4f9970e186640d12213"
     },
     {
       "path": "tools/check/channels.mjs",
       "sha256": "84b81d69ed91438d84ba970b11b941fecbd54c48a1a93e633556ba4aee840ba5"
+    },
+    {
+      "path": "tools/check/context-claims.mjs",
+      "sha256": "e3348eef2788b2c321c64289815b308842614cc08244c1f95b03ab3dc23f3b70"
     },
     {
       "path": "tools/check/extract.mjs",
@@ -4868,7 +4872,7 @@
     },
     {
       "path": "tools/mcp-http.mjs",
-      "sha256": "d1c6360fff1fafc2d5cc42e2fa4066add017b11e2856098045201b6925cd9f6b"
+      "sha256": "780bcc085c9b6be3441f0826223893cbb582c6efc31a86064dce9ab3844de658"
     },
     {
       "path": "tools/method-library.mjs",
@@ -4892,7 +4896,7 @@
     },
     {
       "path": "tools/skills-mcp.mjs",
-      "sha256": "16e4222a4fe608c939603fc51c0c352ec8e37c5591ea7936d45e0b8b7197de27"
+      "sha256": "9bcacdad70ee7d4fa4de80774a6c3acb745df4ccd51e54265d31903ee95a5cba"
     }
   ]
 }

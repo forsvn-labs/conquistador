@@ -11,7 +11,7 @@ const headers = { 'content-type': 'application/json', 'cache-control': 'no-store
 // A hosted deployment sets requireToken, so a missing token fails closed instead of serving
 // the playbooks openly. readBody returns the request text, or null when it exceeds MAX_BODY.
 export function createMcpResponder({ token = process.env.CONQUISTADOR_MCP_TOKEN, root, requireToken = false } = {}) {
-  const handle = createMcpHandler({ ...(root ? { root } : {}), requireInitialize: false });
+  const handle = createMcpHandler({ ...(root ? { root } : {}), requireInitialize: false, hosted: true });
   const authorized = header => {
     if (!token) return true;
     const expected = Buffer.from(`Bearer ${token}`);

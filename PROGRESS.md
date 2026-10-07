@@ -2,6 +2,13 @@
 
 ## Unshipped
 
+- **Hosted briefs and claim checks from the deployed-agent findings.** Every brief starts with the
+  route ("Start here") and a rule to lead with the requested deliverable. Over HTTP the brief says
+  the agent has no repository, so file-writing steps become content in the answer, and it returns
+  structured lists (`inlined`, `readNow`, `readAtStep`, `situational`). `conquistador_read` names
+  the cause of a failed read (not found, too large, invalid path) and resolves relative links with
+  `from`. `conquistador_check` takes the brief's `context` and flags numbers and customer names
+  the context lacks (`claim-not-in-context`).
 - **Playbooks distilled from the imported library.** Five read-only workers triaged 205 sources (194
   articles and 11 GTM books in the IPSE vault): 65 had procedures that the library lacked, 7 went
   to the private overlay, 133 were reading material. Four editors applied about 330 rules in our

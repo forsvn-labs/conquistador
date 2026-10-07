@@ -10,11 +10,9 @@
 
 ## Next acceptance
 
-0. Close the gaps that a deployed-agent run found
-   on 2026-10-07: an outreach mode for products with no proof yet (pilot or design-partner offers),
-   sequence mechanics and a worked 3-email SaaS sequence, a brief that leads with the selected route
-   and omits repository-only paths, structured brief output (inlined, read now, read at step),
-   distinct read errors, and a check that compares claims with the caller's `context`.
+0. Repeat the deployed-agent run on the live endpoint after the outreach content for products with
+   no proof yet (early-stage mode, sequence mechanics, a worked 3-email SaaS sequence) ships, and
+   compare its friction notes with the 2026-10-07 run.
 1. Add "Open in Claude Code" (`claude-cli://open?q=`) and "Open in Cursor" deep-link buttons with a
    "Copy prompt" fallback to the landing page. Test both links in a browser first.
 2. Observe the plugin hooks in a real Codex session (after hook trust), Cursor, Copilot CLI, and
