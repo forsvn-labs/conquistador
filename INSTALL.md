@@ -170,6 +170,26 @@ CONQUISTADOR_MCP_TOKEN=choose-a-secret conquistador mcp --http --host 0.0.0.0 --
 - Endpoint: `POST /mcp`. Health check: `GET /health`.
 - Send `Authorization: Bearer <token>` when `CONQUISTADOR_MCP_TOKEN` is set.
 - Anyone with the URL and token can read the playbooks.
+- The server also serves the playbooks you added on that machine. To serve only the bundled
+  library, set `CONQUISTADOR_HOME` to an empty folder.
+
+To host it on Cloudflare Workers, sign in once, set the token, then deploy from the repository root:
+
+```sh
+npx wrangler@4.148.0 login
+openssl rand -hex 32 | npx wrangler@4.148.0 secret put CONQUISTADOR_MCP_TOKEN
+npx wrangler@4.148.0 deploy
+```
+
+`wrangler.toml` uploads `worker.mjs`, the server modules, `package.json`, and `skills/` unbundled,
+so the server reads the library from the Worker bundle with `node:fs`. It never uploads your own
+playbooks. The Worker refuses every MCP request with 503 until the token is set. Run it locally
+with `npx wrangler@4.148.0 dev --var CONQUISTADOR_MCP_TOKEN:local-test`.
+
+A deployed agent uses two tools in a loop: `conquistador_brief` with the task (and, when the agent
+has no `PRODUCT.md`, the product facts in `context`), then `conquistador_check` on each draft with
+its channel. `node tools/e2e/agent-loop.mjs --url https://HOST/mcp` checks that loop against a
+deployed server; set `CONQUISTADOR_MCP_TOKEN` first.
 
 For ChatGPT GPTs, Claude Projects, Grok projects, and Gemini Gems:
 

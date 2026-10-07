@@ -71,6 +71,11 @@ const footerLink = link => /unsubscribe|opt[- ]?out|preferences|privacy|terms|vi
 
 const ctaVerb = /^(?:→\s*)?(?:get|start|try|book|sign up|join|download|request|schedule|buy|shop|claim|reserve|register|contact|subscribe|apply|create|see|watch|explore|grab|install|upgrade|order|reply|talk to|chat with|compare|calculate|build|launch|save|redeem|activate)\b/i;
 
+// A short direct question that asks for a reply or a meeting is the usual action in a 1:1 email.
+// It opens with an ask and names the action; "Is this useful?" is rhetorical, not an ask.
+const askOpener = /^(?:would|could|can|should|are you|open to|worth|interested in|is (?:it|this|that) worth|do you want|want to|mind if)\b/i;
+const askAction = /\b(?:reply|call|chat|talk|meet|meeting|demo|conversation|walkthrough|look|minutes?)\b/i;
+const asksForReply = text => /\?\s*$/.test(text) && askOpener.test(text.trim()) && askAction.test(text) && text.split(/\s+/).length <= 20;
 const ctaLinks = context => context.document.lines.flatMap(line => line.links.filter(link => !footerLink(link) && link.href !== '#'));
 
 const marketingLinks = context => context.document.lines.flatMap(line => line.links.filter(link => /^https?:/i.test(link.href) && !footerLink(link)).map(link => ({ ...link, n: line.n })));
@@ -192,9 +197,9 @@ export const rules = [
   context => context.document.lines.flatMap(line => line.links.filter(link => vagueLabel.test(link.text.trim())).map(link => ({ line: line.n, snippet: link.text.trim() || link.href })))
     .concat(context.document.lines.filter(line => !line.links.length && /^(?:learn more|read more|find out more|click here)\s*[→>»›.!]*$/i.test(line.text)).map(line => ({ line: line.n, snippet: line.text })))),
   documentRule({ id: 'cta-missing', family: 'cta', severity: 'warning', name: 'No call to action', channels: ['landing', 'email'],
-    message: 'This landing page or email has no call to action.', fix: 'Add one primary action with a specific label and a working link.' },
+    message: 'This landing page or email has no call to action.', fix: 'Add one primary action with a specific label: a working link, or in a 1:1 email a short direct question that asks for a reply or a meeting.' },
   context => {
-    const action = ctaLinks(context).length > 0 || context.document.lines.some(line => ctaVerb.test(line.text) && line.text.split(/\s+/).length <= 8);
+    const action = ctaLinks(context).length > 0 || context.document.lines.some(line => (ctaVerb.test(line.text) && line.text.split(/\s+/).length <= 14) || (context.channel === 'email' && asksForReply(line.text)));
 
     return action ? [] : [{ line: firstLine(context), snippet: 'No link, button, or action line found' }];
   }),

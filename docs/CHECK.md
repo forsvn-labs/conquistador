@@ -152,7 +152,7 @@ a run.
 | --- | --- | --- | --- | --- |
 | `cta-click-here` | warning | all | "Click here" says nothing about the destination. | Make the link text the action and the result, for example "Download the 2026 pricing guide". |
 | `cta-vague` | warning | all | Link or button text such as "Learn more" or "Submit" that does not say what happens next. | Use a verb and the outcome, for example "See pricing" or "Book a 20-minute demo". |
-| `cta-missing` | warning | landing, email | This landing page or email has no call to action. | Add one primary action with a specific label and a working link. |
+| `cta-missing` | warning | landing, email | This landing page or email has no call to action. A link, a short line that starts with an action verb, or (in email) a short direct question that asks for a reply or a meeting counts. | Add one primary action with a specific label: a working link, or in a 1:1 email a short direct question that asks for a reply or a meeting. |
 | `cta-competing` | advisory | email | More than three different destinations compete for the click. | Pick one primary action. Move the rest to a later email. |
 
 ### Channel limits (`channel`)

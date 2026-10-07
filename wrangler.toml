@@ -1,0 +1,19 @@
+# Cloudflare Worker for the hosted Conquistador MCP server. See INSTALL.md, "Bots and remote apps".
+# Set the token before the first deploy: wrangler secret put CONQUISTADOR_MCP_TOKEN
+name = "conquistador-mcp"
+main = "worker.mjs"
+compatibility_date = "2026-10-01"
+compatibility_flags = ["nodejs_compat"]
+no_bundle = true
+find_additional_modules = true
+base_dir = "."
+
+# Only the modules the server imports and the bundled library. Never local playbooks.
+[[rules]]
+type = "ESModule"
+globs = ["tools/skills-mcp.mjs", "tools/mcp-http.mjs", "tools/brief.mjs", "tools/context-files.mjs", "tools/context-selection.mjs", "tools/request-text.mjs", "tools/routing-contract.mjs", "tools/domain-package.mjs", "tools/method-library.mjs", "tools/plugin-contracts.mjs", "tools/module-root.mjs", "tools/check/*.mjs"]
+
+[[rules]]
+type = "Text"
+globs = ["package.json", "skills/**/*.md", "skills/**/*.json", "skills/**/*.yaml", "skills/**/*.py", "skills/**/*.sh", "skills/**/*.swift", "skills/**/*.pbxproj", "skills/**/*.xcworkspacedata"]
+fallthrough = false
