@@ -7,9 +7,14 @@ unshipped validation belongs in PROGRESS.md, and shipped release evidence in CHA
 ## Entry points
 
 `runtime/bin/conquistador.js` dispatches help and onboarding, then `install`, `operator`, `setup`, and local `mcp` before
-importing the optional runtime. Bare `conquistador` and interactive `conquistador setup` use the recommended
-complete-operator flow in `tools/onboarding.mjs`. `--bot`, `--skills`, `--plugin`, and `--mcp` select one
-integration family. `--advanced` opens the combination guide. Setup needs Node 24 and core Node modules, not a build or bootstrap.
+importing the optional runtime. Bare `conquistador` (first run), `conquistador add`, and the install flags use
+the one installer in `tools/onboard.mjs` through `tools/launch.mjs`: preflight (`tools/preflight.mjs`),
+surfaces (coding agents, MCP apps in `tools/mcp-apps.mjs`, Hosted MCP through `tools/login.mjs` when it
+exists, Executor in `tools/executor-source.mjs`, chat bots), details, review, install with a verify pass,
+project setup, first task, and summary. `--bot`, `--skills`, `--plugin`, `--mcp`, and `--advanced` without a
+route option preselect a surface there. With `--host`, `--project`, `--path`, `--url`, a bot name, or `--help`
+they keep the per-project route in `tools/onboarding.mjs`, where `--advanced` opens the combination guide.
+`conquistador project` also uses that route. Setup needs Node 22.18 and core Node modules, not a build or bootstrap.
 `tools/operator-setup.mjs` preserves the concise project operator commands and relative project paths.
 Bare `status` and `doctor` diagnose the project operator. Runtime graphs are namespaced under
 `conquistador runtime` and keep `--run-id` / `--config` compatibility aliases.

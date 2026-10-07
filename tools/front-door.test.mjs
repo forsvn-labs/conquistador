@@ -26,7 +26,7 @@ function fixture(t, commands = ['claude', 'codex']) {
     CONQUISTADOR_HOME: join(directory, '.conquistador'), CURSOR_HOME: join(directory, '.cursor'),
     CODEX_HOME: join(directory, '.codex'), CLAUDE_CONFIG_DIR: join(directory, '.claude'),
     CONQUISTADOR_PLAYBOOKS: '', CONQUISTADOR_UPDATED_FROM: 'synthetic-test', CONQUISTADOR_CACHE: join(directory, 'cache'),
-    PATH: bin, TEST_HOST_LOG: join(directory, 'calls.jsonl'), TEST_HOST_HOME: directory };
+    PATH: bin, TEST_HOST_LOG: join(directory, 'calls.jsonl'), TEST_HOST_HOME: directory, CONQUISTADOR_EXECUTOR_APP: 'off' };
 
   Object.assign(process.env, env);
 
@@ -54,29 +54,25 @@ else if (args[0]==='plugin' && args[1]!=='marketplace') {
   return { directory, env: { ...process.env }, calls: () => existsSync(env.TEST_HOST_LOG) ? readFileSync(env.TEST_HOST_LOG, 'utf8').trim().split('\n').filter(Boolean).map(JSON.parse) : [] };
 }
 
-function ui({ selected = 'codex', mode = 'keep', scope = 'global', ids = ['codex'], consent = true, task = 'Draft one welcome email' } = {}) {
+// Answers are keyed by a phrase in each question. `questions` records the phrase of every question asked.
+const QUESTIONS = ['Where do you want', 'Which agents', 'or only this one', 'Turn on prompt hooks', 'Which MCP apps', 'Install now', 'Set up this project now', 'What should we work on', 'Open in'];
+
+function ui({ selected = 'codex', surfaces = ['agents'], scope = 'global', ids = ['codex'], hooks = true, consent = true, setup = 'now', task = 'Draft one welcome email' } = {}) {
   const messages = [], questions = [];
-  const answers = { 'Open in': selected, 'Install for': mode, 'Install location': scope };
+  const answers = { 'Where do you want': surfaces, 'Which agents': ids, 'or only this one': scope, 'Turn on prompt hooks': hooks,
+    'Install now': consent, 'Set up this project now': setup, 'What should we work on': task, 'Open in': selected };
+  const ask = async options => {
+    const key = QUESTIONS.find(phrase => options.message.includes(phrase)) ?? options.message;
+    questions.push(key);
+
+    return key in answers ? answers[key] : task;
+  };
 
   return { messages, questions, intro() {}, outro: value => messages.push(value), cancel: value => messages.push(value),
     note: value => messages.push(value), isCancel: value => value === cancel,
-    select: async options => {
-      questions.push(options.message);
-
-      return options.message in answers ? answers[options.message] : task;
-    },
-    multiselect: async options => {
-      questions.push(options.message);
-
-      return ids;
-    },
-    confirm: async options => {
-      questions.push(options.message);
-
-      return consent;
-    },
-    log: { info: value => messages.push(value), warn: value => messages.push(value), error: value => messages.push(value) },
-    spinner: () => ({ start: value => messages.push(value), stop: value => messages.push(value) }) };
+    select: ask, multiselect: ask, confirm: ask, text: ask,
+    log: { info: value => messages.push(value), warn: value => messages.push(value), error: value => messages.push(value), step: value => messages.push(value), success: value => messages.push(value), message: value => messages.push(value) },
+    spinner: () => ({ start: value => messages.push(value), stop: value => messages.push(value), message: value => messages.push(value) }) };
 }
 
 function invoke(f, args, options = {}) {
@@ -150,7 +146,7 @@ test('brief rejects unsupported options before creating a knowledge cache or hom
 test('cancellation at any install question leaves hosts unchanged', async t => {
   const f = fixture(t);
 
-  for (const options of [{ mode: cancel }, { mode: 'customize', ids: cancel }, { scope: cancel }, { consent: false }, { consent: cancel }]) {
+  for (const options of [{ surfaces: cancel }, { ids: cancel }, { scope: cancel }, { hooks: cancel }, { consent: false }, { consent: cancel }]) {
     assert.equal(await runStart([], { cwd: f.directory, tty: true, ui: ui(options) }), 130);
     assert.deepEqual(f.calls(), []);
     assert.deepEqual(readdirSync(f.directory), ['bin']);
@@ -158,10 +154,10 @@ test('cancellation at any install question leaves hosts unchanged', async t => {
 });
 
 test('keep detected hosts installs globally; a healthy repeat skips writes; host-side uninstall is repaired', async t => {
-  const f = fixture(t), firstUi = ui();
+  const f = fixture(t), firstUi = ui({ ids: ['claude-code', 'codex'] });
   assert.equal(await runStart(['--no-open'], { cwd: f.directory, tty: true, ui: firstUi }), 0);
   assert.deepEqual(Object.keys(readState().agents).sort(), ['claude-code', 'codex']);
-  assert.deepEqual(firstUi.questions, ['Install for', 'Install location', 'Install now?']);
+  assert.deepEqual(firstUi.questions, ['Where do you want', 'Which agents', 'or only this one', 'Turn on prompt hooks', 'Install now']);
   const before = readFileSync(join(pluginHome(), '.conquistador-owned.json'), 'utf8');
   const repeat = ui();
   assert.equal(await runStart(['--in=codex', '--no-open'], { cwd: f.directory, tty: true, ui: repeat }), 0);
@@ -173,10 +169,10 @@ test('keep detected hosts installs globally; a healthy repeat skips writes; host
 });
 
 test('customize selects named hosts; project scope copies one skill per folder and runs no host command', async t => {
-  const f = fixture(t), screen = ui({ mode: 'customize', ids: ['claude-code', 'pi', 'opencode'], scope: 'project' });
+  const f = fixture(t), screen = ui({ ids: ['claude-code', 'pi', 'opencode'], scope: 'project' });
   mkdirSync(join(f.directory, '.git'));
-  assert.equal(await runStart(['--no-open'], { cwd: f.directory, tty: true, ui: screen }), 0);
-  assert.deepEqual(screen.questions, ['Install for', 'Select agents (space to toggle)', 'Install location', 'Install now?']);
+  assert.equal(await runStart(['--no-open'], { cwd: f.directory, tty: true, ui: screen }), 0, screen.messages.join('\n'));
+  assert.deepEqual(screen.questions, ['Where do you want', 'Which agents', 'or only this one', 'Install now']);
   assert.deepEqual(f.calls(), []);
   assert.deepEqual(readState().agents ?? {}, {});
   for (const folder of ['.claude/skills/conquistador', '.agents/skills/conquistador']) assert.ok(existsSync(join(f.directory, folder, 'SKILL.md')), folder);

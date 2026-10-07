@@ -5,6 +5,9 @@ import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { AGENTS, OWNED, applyAgent, copyPayload, copySkill, home, payloadCurrent, pluginHome, productRoot, projectFolders, projectRoot, readState, self, skillCurrent, tilde, version } from './agents.mjs';
 import { isProject } from './launch.mjs';
+import { localServer } from './onboard.mjs';
+import { appById, applyApp, checkApp } from './mcp-apps.mjs';
+import { checkSource, registerSource } from './executor-source.mjs';
 
 const MANIFESTS = ['.claude-plugin/plugin.json', '.codex-plugin/plugin.json', '.cursor-plugin/plugin.json'];
 // GROWTH.md topics from the overhaul spec (D4). A heading that names the topic counts.
@@ -45,7 +48,7 @@ export function inspect(cwd = process.cwd()) {
   const root = projectRoot(cwd);
 
   // Install: the shared plugin copy, each tracked global host, and each project skill copy.
-  if (plugins.length) {
+  if (plugins.length || Object.keys(state.mcpApps ?? {}).length || state.executor) {
     if (payloadCurrent(pluginHome())) add('install', 'ok', `Plugin copy ${tilde(pluginHome())} matches ${version}`);
     else add('install', 'fail', `Plugin copy ${tilde(pluginHome())} is missing, damaged, or not ${version}`, () => copyPayload(pluginHome()));
   }
@@ -66,6 +69,23 @@ export function inspect(cwd = process.cwd()) {
     const hosts = folder.agents.map(agent => agent.label).join(', ');
     if (skillCurrent(folder.path)) add('install', 'ok', `Project skill ${tilde(folder.path)} is current (${hosts})`);
     else add('install', 'fail', `Project skill ${tilde(folder.path)} is damaged or not ${version}`, () => copySkill(folder.path));
+  }
+  // MCP apps and the Executor source run the plugin copy with this Node.
+  const server = localServer();
+  for (const id of Object.keys(state.mcpApps ?? {}).filter(appById)) {
+    const check = checkApp(id, server);
+    if (check.ok) add('install', 'ok', `${appById(id).label}: MCP server entry is current`);
+    else add('install', 'fail', `${appById(id).label}: ${check.detail}`, () => { const result = applyApp(id, server); if (!result.ok) throw Error(result.error); });
+  }
+  if (state.executor?.slug) {
+    const check = checkSource(state.executor.slug);
+    if (check.ok) add('install', 'ok', `Executor: ${check.detail}`);
+    else add('install', 'fail', `Executor: ${check.detail}`, () => { const result = registerSource(state.executor.name ?? state.executor.slug, server); if (!result.ok) throw Error(result.error); });
+  }
+  // One agent with two copies: the global plugin and a project skill folder.
+  for (const agent of plugins) {
+    const folder = projectFolders(root, [agent])[0];
+    if (existsSync(join(folder.path, OWNED))) add('install', 'warn', `${agent.label} loads both the global plugin and the project copy in ${tilde(folder.path)}. Keep one: ${self} remove --scope=project`);
   }
   if (!tracked.length && !checks.length) add('install', 'warn', `Not installed for any agent here. Run: ${self}`);
 

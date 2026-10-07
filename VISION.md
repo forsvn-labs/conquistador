@@ -11,18 +11,21 @@ Research, creative work, engineering, and review support that mission.
 
 ## Make the first task easy
 
-`npx @forsvn/conquistador` detects the user's agents, shows that set with "keep or customize",
-asks for global or project scope, installs one skill, and opens the agent. A project without
-`GROWTH.md` opens with `/conquistador init`; otherwise the task picker opens. Choose the target
-before any change, show the scope and the exact undo command, and never add hosts that the user
-did not choose. Support every agent whose skill path the agent's own documentation confirms.
+`npx @forsvn/conquistador`, or the first `conquistador` run, is the one installer. It asks where
+Conquistador should live (coding agents, MCP apps, Hosted MCP, Executor, chat bots) with what it
+found already chosen, asks only the details those surfaces need, and shows every change, what stays
+unchanged, and the exact undo command before anything changes. Then it installs, checks each
+install, offers `/conquistador init` in a project without `GROWTH.md`, and offers a first task or a
+finish with a summary. Never configure two surfaces for one app, never prompt during `npm install`,
+and say so when another copy of the command would run instead. Never add hosts that the user did
+not choose. Support every agent whose skill path the agent's own documentation confirms.
 
 Copy Impeccable's interaction model for growth work. Users learn a small vocabulary: one-word
 commands such as `position`, `outreach`, `launch`, and `audit`, typed after `/conquistador`, or a
 plain request that the router sends to the right command or play. Hosts register exactly one
 skill. `/conquistador` with no argument shows a menu that leads with two or three commands that
 fit this project. `/conquistador pin outreach` makes a standalone shortcut. Old skill names keep
-working as aliases. On the CLI, the user needs `conquistador`, `conquistador "TASK"`, update,
+working as aliases. On the CLI, the user needs `conquistador`, `conquistador "TASK"`, add, update,
 doctor, and remove; every other route stays behind `help --all` and INSTALL.md.
 
 `/conquistador init` records durable product truth in `PRODUCT.md` (shared with Impeccable) and

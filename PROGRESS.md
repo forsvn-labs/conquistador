@@ -2,6 +2,17 @@
 
 ## Unshipped
 
+- **Onboarding v2, [#60](https://github.com/forsvn-labs/conquistador/pull/60) (not merged).** `conquistador` on the first run,
+  `conquistador add`, and every install flag go through one installer (`tools/onboard.mjs`):
+  preflight (shadowed or stale `conquistador` on PATH, newer npm version), surfaces (coding agents,
+  MCP apps, Hosted MCP, Executor, chat bots), details, review, install with a verify pass, project
+  setup, first task, and summary. New flags: `--surface`, `--apps`, `--executor-name`, `--bot-out`,
+  `--json`, `--plain`. Without a terminal and without `--yes`, the plan prints with exit 2. Old
+  flags preselect a surface; with route options they keep the per-project route. `remove`, `update`,
+  and `doctor` cover MCP app entries and the Executor source. Checked: `node tools/e2e/onboarding-v2.mjs`
+  (fake agents and Executor in a pseudo-terminal, isolated HOME) and the Executor calls against
+  real Executor 1.6.8 and 1.5.40 in throwaway data folders. Not observed: real MCP apps loading the
+  entry, the Hosted MCP surface with the real `tools/login.mjs` (another branch), and Windows.
 - **The 2026-10-07 hosted changes, for installed users.** Everything in the 2026-10-07 hosted
   deployment ([CHANGELOG.md](CHANGELOG.md)) is merged on `main` but not in an npm release (0.3.0 is
   current). For installed users that is: the distilled playbooks and `outreach` 2.4.0; rubric gates;

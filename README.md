@@ -103,21 +103,29 @@ You need Node 22.18 or later and a coding agent.
 npx @forsvn/conquistador
 ```
 
-The installer:
+The installer takes about a minute. Nothing changes until you confirm the review.
 
-1. Shows the agents it found, for example `~/.local/bin/claude` or `~/.hermes`.
-2. Asks you to keep that set or customize it.
-3. Asks for the scope: **global** (all projects) or **project** (this folder).
-4. Installs the `conquistador` skill, plus hooks and the MCP server where the agent supports them.
-5. Opens your agent with `/conquistador init` when the project has no `GROWTH.md`, or with the
-   task picker when it does.
+1. Warns you when an older `conquistador` on your PATH would run instead, or when npm has a newer
+   version.
+2. Asks where you want Conquistador: **coding agents**, **MCP apps** (Claude Desktop, VS Code,
+   Windsurf, Zed, Cursor), **Executor**, **chat bots**, or **Hosted MCP** for deployed agents (when
+   available). What it found on this computer is chosen for you.
+3. Asks the details: which agents, all projects or only this one, prompt hooks, which apps.
+4. Shows every change, what stays unchanged, and how to undo it.
+5. Installs, then checks each install.
+6. Offers to open your agent with `/conquistador init` when the project has no `GROWTH.md`, then
+   a first task, or **Finish for now**, with a summary of what is installed where.
 
-Skip the questions in scripts:
+Run `conquistador add` to open the installer again. Skip the questions in scripts:
 
 ```sh
 npx @forsvn/conquistador --providers=claude,codex --scope=project -y
+npx @forsvn/conquistador --surface=agents,mcp-apps -y
 npx @forsvn/conquistador --dry-run          # Show the plan; change nothing
+npx @forsvn/conquistador --json             # The plan as JSON
 ```
+
+Without a terminal and without `-y`, the installer prints the plan and exits with code 2.
 
 Supported agents: Claude Code, Codex, Cursor, GitHub Copilot CLI, Grok CLI, Gemini CLI, OpenCode,
 Pi, Hermes Agent, Antigravity CLI, Kiro CLI, and Mistral Vibe. [INSTALL.md](INSTALL.md) lists the
