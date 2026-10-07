@@ -12,7 +12,7 @@
     "test:native": "node native-smoke.mjs"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "1.30.0"
+    "@modelcontextprotocol/sdk": "1.31.0"
   },
   "devDependencies": {
     "executor": "1.6.8"
