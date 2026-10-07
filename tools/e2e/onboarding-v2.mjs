@@ -30,7 +30,7 @@ const hosted = await listen((request, response) => { response.writeHead(401, { '
 const hanging = await listen(() => { /* Never answers: the update check must not wait for it. */ });
 const closed = await new Promise(done => { const server = createTcpServer(); server.listen(0, '127.0.0.1', () => { const { port } = server.address(); server.close(() => done(`http://127.0.0.1:${port}`)); }); });
 
-// A stand-in for tools/login.mjs (built on another branch). It follows the agreed contract:
+// A stand-in for tools/login.mjs, so the test never signs in to real GitHub. Same contract:
 // runLogin({ ui }) resolves to { token, login } or null.
 const FAKE_LOGIN = `export async function runLogin({ ui }) {
   if (process.env.FAKE_LOGIN === 'cancel') { ui.log.warn('Sign-in cancelled.'); return null; }
@@ -134,6 +134,17 @@ function checker() {
 // Press Down N times, then Space: toggle the Nth option below the cursor in a multiselect.
 async function toggle(s, steps) { for (let index = 0; index < steps; index += 1) await s.press('down'); await s.press('space'); }
 
+// Toggle an option by its label in a fresh multiselect (cursor on the first option). The option
+// list depends on what the package contains, so positions are not fixed.
+async function toggleLabel(s, label) {
+  const lines = s.screen.text().split('\n');
+  const start = lines.findLastIndex(line => line.includes('◆'));
+  const options = lines.slice(start + 1).filter(line => /[◻◼]/.test(line));
+  const index = options.findIndex(line => line.includes(label));
+  if (index < 0) throw Error(`option not found: ${label}`);
+  await toggle(s, index);
+}
+
 // The happy path's questions, answered with Enter (defaults), up to the review.
 async function acceptDefaultsToReview(s, { snap = true, hooks = true, apps = true, executor = true } = {}) {
   await s.waitFor('Where do you want Conquistador?'); if (snap) await s.snap('surfaces'); await s.press('enter');
@@ -167,8 +178,9 @@ scenario('happy', ['F21', 'F24', 'F26', 'F27', 'F29'], async ({ expect, keepSnap
     await s.snap('welcome');
     await acceptDefaultsToReview(s);
     const surfaces = s.snaps.find(item => item.name === 'surfaces').text;
-    for (const label of ['Coding agents', 'MCP apps', 'Executor', 'Chat bots', 'Step 1 of 5']) expect(has(surfaces, label), `surfaces screen lacks ${label}`);
-    expect(!has(surfaces, 'Hosted MCP'), 'Hosted MCP shown without tools/login.mjs (F24)');
+    for (const label of ['Coding agents', 'MCP apps', 'Hosted MCP', 'Executor', 'Chat bots', 'Step 1 of 5']) expect(has(surfaces, label), `surfaces screen lacks ${label}`);
+    // F24: the package ships tools/login.mjs, so Hosted MCP is offered but never preselected.
+    expect(!/◼\s*Hosted MCP/.test(surfaces), 'Hosted MCP preselected (F24)');
     const review = s.snaps.at(-1).text;
     for (const text of ['Claude Code', 'Codex', 'Claude Desktop', 'VS Code', 'backup', 'Unchanged', 'conquistador remove', 'Step 3 of 5']) expect(has(review, text), `review lacks ${text}`);
     await s.press('enter');
@@ -221,8 +233,8 @@ scenario('no-agent', ['F1'], async ({ expect }) => {
     await s.waitFor('Where do you want Conquistador?');
     await s.snap('surfaces');
     expect(has(s.screen.text(), 'No coding agent found'), 'surfaces screen does not say no agent was found');
-    // Options: Coding agents, MCP apps, Executor, Chat bots. Nothing is preselected.
-    await toggle(s, 3);
+    // Nothing is preselected.
+    await toggleLabel(s, 'Chat bots');
     await s.press('enter');
     await s.waitFor('Folder for the bot files'); await s.snap('bot-folder'); await s.press('enter');
     await s.waitFor('Install now?'); await s.snap('review'); await s.press('enter');
@@ -383,7 +395,7 @@ for (const [step, question, key, extra] of CANCEL_STEPS) {
       const before = f.tree();
       const s = f.term([]);
       const answers = [
-        ['Where do you want Conquistador?', extra.includes('bot') ? async () => { await toggle(s, 3); await s.press('enter'); } : null],
+        ['Where do you want Conquistador?', extra.includes('bot') ? async () => { await toggleLabel(s, 'Chat bots'); await s.press('enter'); } : null],
         ['Which agents?'], ['or only this one?'], ['Turn on prompt hooks?'], ['Which MCP apps?'],
         ['Name for the source in Executor'], ...(extra.includes('bot') ? [['Folder for the bot files']] : []), ['Install now?'],
       ];
@@ -548,7 +560,7 @@ scenario('hosted', ['F23'], async ({ expect }) => {
     await s.snap('surfaces-online');
     expect(has(s.screen.text(), 'Hosted MCP'), 'Hosted MCP not offered with tools/login.mjs present');
     // Options: Coding agents, MCP apps, Hosted MCP, Executor, Chat bots.
-    await toggle(s, 2);
+    await toggleLabel(s, 'Hosted MCP');
     await s.press('enter');
     await s.waitFor('Install now?'); await s.snap('review-hosted'); await s.press('enter');
     await s.waitFor('Summary'); await s.snap('summary-hosted');

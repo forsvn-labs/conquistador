@@ -13,8 +13,9 @@
 // Report: dist/e2e/signup/report.json and report.md.
 import { spawn } from 'node:child_process';
 import { createHash, randomBytes } from 'node:crypto';
-import { existsSync, mkdirSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import { createServer } from 'node:http';
+import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnCommand } from '../spawn.mjs';
@@ -25,6 +26,8 @@ const args = process.argv.slice(2);
 const option = name => (args.includes(name) ? args[args.indexOf(name) + 1] : undefined);
 const live = args.includes('--live');
 const out = resolve(option('--out') ?? join(root, 'dist/e2e/signup'));
+const stateRoot = mkdtempSync(join(tmpdir(), 'cq-signup-state-'));
+process.on('exit', () => rmSync(stateRoot, { recursive: true, force: true }));
 const TOKEN = /cq_[A-Za-z0-9_-]{43}/;
 const sha256 = text => createHash('sha256').update(text).digest('hex');
 const wait = ms => new Promise(done => setTimeout(done, ms));
@@ -66,7 +69,9 @@ async function freePort() {
 // Starts `wrangler dev` with the repository's wrangler.toml and the given variables.
 async function startWorker(name, vars) {
   const port = await freePort();
-  const state = join(out, 'state', name);
+  // Keep the local KV and rate-limiter state outside the repository: wrangler dev watches the
+  // repository, and state files written there during the run exhaust its file watcher (EMFILE).
+  const state = join(stateRoot, name);
   rmSync(state, { recursive: true, force: true });
   const varArgs = Object.entries(vars).flatMap(([key, value]) => ['--var', `${key}:${value}`]);
   // --local-upstream keeps the request host; otherwise wrangler dev rewrites it to the route host.
