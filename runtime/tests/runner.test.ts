@@ -968,7 +968,7 @@ describe("Local Playbook Runner", () => {
       resolve(directory, "run-malicious-request-mutation", pending.requestPath!),
       "utf8",
     )) as { skill: { version: string } };
-    expect(sealed.skill.version).toBe("2.1.0");
+    expect(sealed.skill.version).toBe("2.2.0");
   });
 
   it("continues to accept provider-neutral raw helpers", async () => {
