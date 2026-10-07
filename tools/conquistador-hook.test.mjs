@@ -9,7 +9,7 @@ import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { currentTaskTranscript, unreadFiles } from '../hooks/conquistador-hook.mjs';
-import { formatBriefPack, knowledgeFileEvidence, normalizeKnowledgeText } from './brief.mjs';
+import { createBrief, formatBriefPack, knowledgeFileEvidence, namedPlatforms, normalizeKnowledgeText } from './brief.mjs';
 import { spawnCommand } from './spawn.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
@@ -271,4 +271,14 @@ test('Cursor keeps its response shape and coding prompts never create state', t 
   assert.match(runHook(home, 'stop', input, 'cursor').followup_message, /does not verify/);
   assert.deepEqual(runHook(home, 'prompt', { ...input, prompt: 'Fix a TypeScript error' }, 'cursor'), { continue: true });
   assert.equal(runHook(home, 'stop', input, 'cursor'), null);
+});
+
+test('Apple Search Ads requests reach the Apple pack, not the Google Ads pack', () => {
+  for (const prompt of ['Plan our Apple Search Ads campaign', 'set up apple ads for the app']) {
+    assert.deepEqual(namedPlatforms(prompt), ['apple-search-ads'], prompt);
+    const must = createBrief(prompt, { force: true, playbooks: [] }).must.map(item => item.path);
+    assert.ok(must.some(path => path.endsWith('ad-intelligence/apple-search-ads.md')), prompt);
+    assert.ok(!must.some(path => path.endsWith('ad-intelligence/google-ads.md')), prompt);
+  }
+  assert.deepEqual(namedPlatforms('Write Google search ads for our CRM'), ['google-ads']);
 });

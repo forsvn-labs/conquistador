@@ -120,7 +120,8 @@
         "skills/conquistador/commands/ads/references/ad-intelligence/creative-cadence.md",
         "skills/conquistador/commands/ads/references/format-spec.md",
         "skills/conquistador/commands/ads/references/policy-floor.md",
-        "skills/conquistador/commands/ads/references/message-transmutation.md"
+        "skills/conquistador/commands/ads/references/message-transmutation.md",
+        "skills/conquistador/commands/ads/references/ad-intelligence/apple-search-ads.md"
       ],
       "resourceConditions": [
         {
@@ -182,6 +183,10 @@
         {
           "path": "skills/conquistador/commands/ads/references/message-transmutation.md",
           "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/conquistador/commands/ads/references/ad-intelligence/apple-search-ads.md",
+          "when": "Load when the campaign runs on Apple Search Ads or the App Store search results."
         }
       ],
       "optionalResources": [],
@@ -717,7 +722,8 @@
         "skills/conquistador/commands/build/references/modes/ios/references/device-registration.md",
         "skills/conquistador/commands/build/references/modes/ios/references/screenshots.md",
         "skills/conquistador/commands/build/references/modes/ios/references/api-reference.md",
-        "skills/conquistador/commands/build/references/modes/web/references/test-contract.md"
+        "skills/conquistador/commands/build/references/modes/web/references/test-contract.md",
+        "skills/conquistador/commands/build/references/modes/web/references/landing-performance.md"
       ],
       "resourceConditions": [
         {
@@ -787,6 +793,10 @@
         {
           "path": "skills/conquistador/commands/build/references/modes/web/references/test-contract.md",
           "when": "Mode web. Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/conquistador/commands/build/references/modes/web/references/landing-performance.md",
+          "when": "Load when the web build is a landing or marketing page whose load speed matters."
         }
       ],
       "optionalResources": [
@@ -868,7 +878,8 @@
         "skills/conquistador/commands/campaign/references/channel-strategy.md",
         "skills/conquistador/commands/campaign/references/platform-channels.md",
         "skills/conquistador/commands/campaign/references/growth-play-patterns.md",
-        "skills/conquistador/commands/campaign/references/pillars-before-angles.md"
+        "skills/conquistador/commands/campaign/references/pillars-before-angles.md",
+        "skills/conquistador/commands/campaign/references/distribution-models/creator-program.md"
       ],
       "resourceConditions": [
         {
@@ -914,6 +925,10 @@
         {
           "path": "skills/conquistador/commands/campaign/references/pillars-before-angles.md",
           "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/conquistador/commands/campaign/references/distribution-models/creator-program.md",
+          "when": "Load when the campaign pays or seeds creators to make or post content."
         }
       ],
       "optionalResources": [],
@@ -999,7 +1014,8 @@
         "skills/conquistador/commands/channels/agents/synthesis-agent.md",
         "skills/conquistador/commands/channels/agents/recommendation-agent.md",
         "skills/conquistador/commands/channels/agents/critic-agent.md",
-        "skills/conquistador/commands/channels/references/scoring-rubrics.md"
+        "skills/conquistador/commands/channels/references/scoring-rubrics.md",
+        "skills/conquistador/commands/channels/references/creator-channel-fit.md"
       ],
       "resourceConditions": [
         {
@@ -1025,6 +1041,10 @@
         {
           "path": "skills/conquistador/commands/channels/references/scoring-rubrics.md",
           "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/conquistador/commands/channels/references/creator-channel-fit.md",
+          "when": "Load when creator sponsorship is a candidate channel."
         }
       ],
       "optionalResources": [],
@@ -1135,7 +1155,8 @@
         "skills/conquistador/commands/convert/agents/landing-critic-agent.md",
         "skills/conquistador/commands/convert/references/anti-sycophancy.md",
         "skills/conquistador/commands/convert/references/conversion-diagnosis-anti-patterns.md",
-        "skills/conquistador/commands/convert/references/landing-anti-patterns.md"
+        "skills/conquistador/commands/convert/references/landing-anti-patterns.md",
+        "skills/conquistador/commands/convert/references/app-onboarding-paywall.md"
       ],
       "resourceConditions": [
         {
@@ -1197,6 +1218,10 @@
         {
           "path": "skills/conquistador/commands/convert/references/landing-anti-patterns.md",
           "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/conquistador/commands/convert/references/app-onboarding-paywall.md",
+          "when": "Load when the conversion surface is a subscription app's onboarding-to-paywall flow."
         }
       ],
       "optionalResources": [],
@@ -1667,7 +1692,8 @@
         "skills/conquistador/commands/decide/references/poll-protocol.md",
         "skills/conquistador/commands/decide/references/idea-ranking-core.md",
         "skills/conquistador/commands/decide/agents/resolver-agent.md",
-        "skills/conquistador/commands/decide/references/report-template.md"
+        "skills/conquistador/commands/decide/references/report-template.md",
+        "skills/conquistador/commands/decide/references/misjudgment-check.md"
       ],
       "resourceConditions": [
         {
@@ -1721,6 +1747,10 @@
         {
           "path": "skills/conquistador/commands/decide/references/report-template.md",
           "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/conquistador/commands/decide/references/misjudgment-check.md",
+          "when": "Load before the resolver chooses."
         }
       ],
       "optionalResources": [],
@@ -2606,7 +2636,10 @@
         "skills/conquistador/commands/outreach/agents/critic.md",
         "skills/conquistador/commands/outreach/agents/reply-classifier.md",
         "skills/conquistador/commands/outreach/agents/reply-composer.md",
-        "skills/conquistador/commands/outreach/references/proof-types.md"
+        "skills/conquistador/commands/outreach/references/proof-types.md",
+        "skills/conquistador/commands/outreach/references/frameworks/account-program.md",
+        "skills/conquistador/commands/outreach/references/modes/creator-sponsorship.md",
+        "skills/conquistador/commands/outreach/references/modes/intro-request.md"
       ],
       "resourceConditions": [
         {
@@ -2652,6 +2685,18 @@
         {
           "path": "skills/conquistador/commands/outreach/references/proof-types.md",
           "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/conquistador/commands/outreach/references/frameworks/account-program.md",
+          "when": "Load when outreach targets named accounts across more than one channel."
+        },
+        {
+          "path": "skills/conquistador/commands/outreach/references/modes/creator-sponsorship.md",
+          "when": "Load when the message proposes a sponsorship or paid collaboration to a creator."
+        },
+        {
+          "path": "skills/conquistador/commands/outreach/references/modes/intro-request.md",
+          "when": "Load when the route is an introduction through a mutual contact."
         }
       ],
       "optionalResources": [],
@@ -3448,7 +3493,8 @@
         "skills/conquistador/commands/seo/agents/eval-metric-ingest-agent.md",
         "skills/conquistador/commands/seo/agents/eval-diagnosis-agent.md",
         "skills/conquistador/commands/seo/agents/eval-recommendation-agent.md",
-        "skills/conquistador/commands/seo/agents/eval-critic-agent.md"
+        "skills/conquistador/commands/seo/agents/eval-critic-agent.md",
+        "skills/conquistador/commands/seo/references/local-seo.md"
       ],
       "resourceConditions": [
         {
@@ -3562,6 +3608,10 @@
         {
           "path": "skills/conquistador/commands/seo/agents/eval-critic-agent.md",
           "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/conquistador/commands/seo/references/local-seo.md",
+          "when": "Load when the business serves a local area or the query shows a map pack."
         }
       ],
       "optionalResources": [],
@@ -3717,7 +3767,8 @@
         "skills/conquistador/commands/social/references/method.md",
         "skills/conquistador/commands/social/references/anti-patterns.md",
         "skills/conquistador/commands/social/references/critical-gates.md",
-        "skills/conquistador/commands/social/fallbacks/sequential.md"
+        "skills/conquistador/commands/social/fallbacks/sequential.md",
+        "skills/conquistador/commands/social/references/hook-archetypes.md"
       ],
       "conditionalResources": [
         "skills/conquistador/commands/social/agents/launch-copywriter-agent.md",
@@ -3727,7 +3778,8 @@
         "skills/conquistador/commands/social/agents/critic-agent.md",
         "skills/conquistador/commands/social/references/hook-archetypes.md",
         "skills/conquistador/commands/social/references/legibility-convention.md",
-        "skills/conquistador/commands/social/references/why-this-works-convention.md"
+        "skills/conquistador/commands/social/references/why-this-works-convention.md",
+        "skills/conquistador/commands/social/references/photo-slideshows.md"
       ],
       "resourceConditions": [
         {
@@ -3761,6 +3813,10 @@
         {
           "path": "skills/conquistador/commands/social/references/why-this-works-convention.md",
           "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "skills/conquistador/commands/social/references/photo-slideshows.md",
+          "when": "Load when the post is a photo carousel or slideshow on TikTok or Instagram."
         }
       ],
       "optionalResources": [
