@@ -10,7 +10,7 @@ recuts. Verify current duration, music, disclosure, commerce, and advertising ru
 - Read retention, completion, rewatches, comments, qualified actions, and downstream value separately.
 
 Treat a photo slideshow as its own format and follow
-[slideshow posts](../commands/social/references/slideshow-posts.md). Generate every slide in portrait,
+[photo slideshows](../commands/social/references/photo-slideshows.md). Generate every slide in portrait,
 at one shared aspect ratio. Put the hook text on slide 1, clear of the top interface area, with
 manual line breaks so the renderer does not squeeze it. Check readability in a phone preview. When a
 person must choose the music in the app, upload a private draft, hand over the caption separately,

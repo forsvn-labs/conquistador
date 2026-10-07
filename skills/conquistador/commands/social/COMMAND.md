@@ -20,8 +20,8 @@ Core:
 - [anti-patterns](references/anti-patterns.md): Social copy anti-patterns. These are original artifact checks. They do not claim measured platform penalties.
 - [critical-gates](references/critical-gates.md): Procedure — Critical Gates (write-social). Load before Pre-Dispatch. These four gates are non-negotiable;…
 - [method](references/method.md): Method: `social`. Turn one brief into a complete social or community artifact for one platform and market.…
+- [photo-slideshows](references/photo-slideshows.md): Photo slideshows. Use for a photo slideshow or swipeable image sequence on TikTok, Instagram, or a similar…
 - [rubric](references/rubric.md): Social copy critic rubric. Score five dimensions from 0 to 10. Scores are local review conventions, not…
-- [slideshow-posts](references/slideshow-posts.md): Slideshow posts. Use for a photo slideshow or swipeable image post on TikTok, Instagram, or a similar…
 
 By step: [hook-archetypes](references/hook-archetypes.md).
 
@@ -82,7 +82,7 @@ voice for conviction and learning; company voice for product truth and proof.
 
 ### Slideshows
 
-For a TikTok or Instagram photo slideshow, follow [slideshow posts](references/slideshow-posts.md):
+For a TikTok or Instagram photo slideshow, follow `references/photo-slideshows.md`:
 adapt a proven structure, give value before the product, and judge results by product questions
 and installs, not views.
 
