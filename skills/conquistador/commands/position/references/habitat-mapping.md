@@ -45,6 +45,15 @@ For each platform where you find concentrated audience activity:
 - Record the type of content consumed in each habitat
 - Distinguish **discovery habitats** (where they find new things) from **trust habitats** (where they validate decisions) from **conversion habitats** (where they take action)
 
+- Record offline and direct habitats beside the online ones: industry conferences, small
+  invite-only events, peer referral paths, phone, and closed groups. Use the same table fields.
+- Record each public place where buyers describe the problem in their own words (thread, group
+  post, video comment, forum) with URL and date. Hand these to `outreach` as candidate sourced
+  signals and to `campaign` for community-answer discovery.
+- Add a **cold-inbox reach** note per segment: the evidence that this buyer reads and answers
+  unsolicited email from unknown senders, or `unknown`. When the note is no or unknown, do not make
+  cold email the default route in the handoff to `campaign` or `outreach`.
+
 ---
 
 ## Habitat Roles

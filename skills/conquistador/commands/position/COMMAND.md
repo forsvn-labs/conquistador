@@ -2,7 +2,7 @@
 name: position
 description: "Find the audience, promise, and proof that make the product the clear choice."
 metadata:
-  version: 2.1.0
+  version: 2.2.0
 ---
 
 # Research and position a product
@@ -108,6 +108,15 @@ Resolve:
 5. the strongest credible promise;
 6. the proof that reduces the main objection;
 7. the category or frame that makes the choice legible.
+
+Test the audience in item 1 before you accept it. Its members can be reached together (one
+marketplace, community, event, or list); the need recurs often for them; few alternatives serve them
+well; and the product could plausibly win a large share of them soon. Reject a start segment that
+fails reach or recurrence, however large it is. Flag any plan that starts from "a small share of a
+huge market" as a positioning risk. Name the next two adjacent segments in order of similarity
+(same job, channel, and buying motion), and expand only after the first segment is won. Define and
+size the market at the level where the customer actually chooses; do not narrow it to look unique
+and then size it at the wide level.
 
 Reject a position that could describe a direct competitor unchanged. If proof is weak, reduce the
 promise or increase reversibility instead of adding hype.
