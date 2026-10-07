@@ -1,0 +1,54 @@
+---
+title: "Hosted MCP"
+description: "Connect a deployed agent or a remote-only app to the hosted Conquistador MCP server at mcp.forsvn.com."
+---
+
+The hosted server runs the same tools as the local server, at:
+
+```text
+https://mcp.forsvn.com/mcp
+```
+
+Every request needs a bearer token. The hosted server runs the code on `main`, so it has `conquistador_check`, `conquistador_verify`, and `conquistador_score` now, before they are in an npm release. It signs check receipts. See [Receipts and verify](/hosted/receipts).
+
+## Get a token
+
+<Warning>
+  Public sign-up is not open yet. From 0.4.0 the installer has a **Hosted MCP** option: you sign in with GitHub, the installer stores a personal token, and it prints the client config. Until then, [host your own server](/hosted/self-host).
+</Warning>
+
+1. Run `npx @forsvn/conquistador@latest` and choose **Hosted MCP**.
+2. Sign in with GitHub in the browser window that opens.
+3. Copy the client config that the installer prints.
+
+The installer shows this option only when it can reach the sign-in service. Offline, it hides the option.
+
+## Configure a client
+
+Send the token in the `Authorization` header. A generic MCP client config:
+
+```json
+{
+  "mcpServers": {
+    "conquistador": {
+      "type": "http",
+      "url": "https://mcp.forsvn.com/mcp",
+      "headers": { "Authorization": "Bearer YOUR_TOKEN" }
+    }
+  }
+}
+```
+
+In Claude Code:
+
+```sh
+claude mcp add --transport http conquistador https://mcp.forsvn.com/mcp \
+  --header "Authorization: Bearer $CONQUISTADOR_MCP_TOKEN"
+```
+
+Keep the token out of Git, chat, and shell history. Store it in your secret manager or in an environment variable.
+
+## Next
+
+- [Deployed agents](/hosted/overview): the brief, check, and verify loop, and which model to use.
+- [MCP tools](/reference/mcp-tools): inputs and outputs of each tool.

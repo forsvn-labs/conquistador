@@ -1,0 +1,148 @@
+---
+title: "MCP tools"
+description: "Inputs and outputs of every Conquistador MCP tool: brief, check, verify, score, search, methods, files, and read."
+---
+
+The server is named `conquistador`. Every tool only reads: it has `readOnlyHint: true` and `destructiveHint: false`. The server has no access to project files, credentials, or runtime state.
+
+| Tool | Does | Local server | Hosted server |
+|---|---|---|---|
+| `conquistador_brief` | Picks the command or play and returns its playbooks | 0.3.0 | Yes |
+| `conquistador_check` | Checks a draft against the copy rules and returns a receipt | From 0.4.0 | Yes |
+| `conquistador_verify` | Confirms a final text against a check receipt | From 0.4.0 | Yes |
+| `conquistador_score` | Checks a rubric self-score against the rubric's gate | From 0.4.0 | Yes |
+| `conquistador_search` | Searches playbooks by keyword | 0.3.0 | Yes |
+| `conquistador_methods` | Lists the commands and plays | 0.3.0 | Yes |
+| `conquistador_files` | Lists the files of one command or play | 0.3.0 | Yes |
+| `conquistador_read` | Reads one playbook | 0.3.0 | Yes |
+
+The local server runs with `conquistador mcp`. The hosted server is `https://mcp.forsvn.com/mcp` and runs the code on `main`. For the order of calls, see [Deployed agents](/hosted/overview).
+
+## `conquistador_brief`
+
+Call it first for any growth, launch, marketing, sales, pricing, positioning, copy, content, SEO, ads, or outreach task.
+
+| Input | Type | Required | Description |
+|---|---|---|---|
+| `task` | string, at most 8,000 characters | Yes | The request, with product, audience, channel, and goal when known |
+| `context` | string, at most 8,000 characters | No | From 0.4.0 in the local server. Facts that you hold: product, audience, proof points, voice, constraints. The brief carries them as the product truth for this task |
+| `size` | `full` or `compact` | No | From 0.4.0 in the local server. `compact` inlines only the command and its core files, for models with a small context. Default `full` |
+
+The text result has the route and the full text of the playbooks to read now. From 0.4.0 the local server also returns these structured fields:
+
+| Output | Description |
+|---|---|
+| `action` | `brief`, or `none` when no command matches the task |
+| `command` | The command to run first, or `null` |
+| `play` | The play, or `null` |
+| `inlined` | Files whose full text is in the result: `path` and `title` |
+| `readNow` | Required files left out for space. Read each with `conquistador_read` before drafting |
+| `readAtStep` | Files to read when a play reaches a step: `step` and `path` |
+| `situational` | Files to read only when the task reaches their topic |
+
+## `conquistador_check`
+
+From 0.4.0 in the local server. Checks a draft with the [copy check](/check) rules. No model: the same text always gets the same findings. A hosted caller has no project, so project config does not apply.
+
+| Input | Type | Required | Description |
+|---|---|---|---|
+| `text` | string, at most 60,000 characters | Yes | The draft. Markdown front matter (`subject`, `title`, `channel`) is read when present |
+| `channel` | `x`, `linkedin`, `email`, `landing`, `google-ads`, `meta-ads`, `article`, `social`, `web`, or `general` | No | Where the text goes. Sets the channel rules. Omit for general rules only |
+| `format` | `markdown`, `html`, or `text` | No | How to read the text. Default `markdown` |
+| `context` | string, at most 8,000 characters | No | The facts that you sent to `conquistador_brief`. Numbers and customer names in the draft that the context lacks are flagged as `claim-not-in-context` |
+
+| Output | Description |
+|---|---|
+| `channel` | The channel whose rules applied |
+| `clean` | `true` when no error or warning remains. Advisories do not block |
+| `blocking` | The number of errors plus warnings |
+| `truncated` | `true` when there are more than 100 findings. Only the first 100 are listed |
+| `findings` | Each finding: `rule`, `name`, `family`, `severity`, `message`, `fix`, `line`, `snippet` |
+| `receipt` | Proof of this check for this exact text. See [Receipts and verify](/hosted/receipts#the-receipt) |
+
+## `conquistador_verify`
+
+From 0.4.0 in the local server. For hosts: confirm that a final draft is the exact text that a check receipt covers, and whether that check was clean. Call it before a person sees the draft or before you send it.
+
+| Input | Type | Required | Description |
+|---|---|---|---|
+| `text` | string, at most 60,000 characters | Yes | The final draft, as delivered |
+| `receipt` | object | Yes | The `receipt` from `conquistador_check` |
+| `context` | string, at most 8,000 characters | No | The context that the check had to use. A receipt from a check without it is not valid |
+| `channel` | string, at most 40 characters | No | The channel that the check had to use |
+
+| Output | Description |
+|---|---|
+| `valid` | `true` when the text, channel, context, and signature all match |
+| `clean` | `true` when the matched check was clean |
+| `signed` | `true` when this server signed the receipt |
+| `reason` | One sentence that explains the result |
+
+Hand the draft over only when `valid`, `clean`, and `signed` are all `true`.
+
+## `conquistador_score`
+
+From 0.4.0 in the local server. Checks a rubric self-score against the pass rules of the rubric before the agent reports a verdict. It checks the rules, not the judgment. 20 of the 34 rubrics declare a machine-readable gate. For a rubric without a gate, the tool returns an error that says to apply the pass rules by hand.
+
+| Input | Type | Required | Description |
+|---|---|---|---|
+| `rubric` | string, at most 400 characters | Yes | Library path of a rubric with a gate, for example `conquistador/commands/outreach/references/copy-validation-rubric.md` |
+| `variant` | string, at most 100 characters | No | The rubric variant, for example `ready` or `needs-signal`. The error lists them when the rubric needs one |
+| `scores` | object | Yes | One entry for each dimension: a number on the rubric scale, a level such as `pass` or `weak`, or `"N/A"` where the variant allows it |
+| `hardFails` | array of strings, at most 32 | No | IDs of hard fails that the review found. Any one fails the draft |
+
+| Output | Description |
+|---|---|
+| `verdict` | `pass`, `pass_with_concerns`, `fail`, or `incomplete` |
+| `variant` | The variant that applied |
+| `total` | The total score, or `null` |
+| `max` | The maximum total, or `null` |
+| `failures` | The rules that failed |
+| `missing` | The dimensions without a score |
+
+## `conquistador_search`
+
+Searches all playbooks, platform guides, examples, and your own playbooks by keyword. Use it when a task reaches a step that the brief did not cover.
+
+| Input | Type | Required | Description |
+|---|---|---|---|
+| `query` | string, at most 400 characters | Yes | Keywords |
+
+Returns paths with summaries. Read one with `conquistador_read`.
+
+## `conquistador_methods`
+
+Lists the commands, the plays, and the parent guide. It has no inputs. Prefer `conquistador_brief`, which selects them for you.
+
+## `conquistador_files`
+
+Lists the readable text files of one command or play. Scripts are text only and are never run.
+
+| Input | Type | Required | Description |
+|---|---|---|---|
+| `method` | string, lowercase words joined by `-`, at most 100 characters | Yes | A command or play, for example `outreach` |
+
+## `conquistador_read`
+
+Reads one bundled playbook by its library path.
+
+| Input | Type | Required | Description |
+|---|---|---|---|
+| `path` | string, at most 400 characters | Yes | A library path, for example `conquistador/commands/campaign/references/channel-strategy.md`, or a path from the brief or search |
+| `from` | string, at most 400 characters | No | From 0.4.0 in the local server. The library path of the file that holds a relative link, such as `../agents/critic.md` |
+
+When a read fails, the error names the cause and says how to find the right path.
+
+## Prompts
+
+The server also gives four prompts: `growth-plan`, `diagnose`, `copy`, and `review-results`. Each one asks the agent to call `conquistador_brief` first.
+
+## Limits
+
+| Limit | Value |
+|---|---|
+| Request body | 64 KiB |
+| One file | 256 KiB |
+| Check text | 60,000 characters |
+| Listed check findings | 100 |
+| Brief task, context | 8,000 characters each |

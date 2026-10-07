@@ -1,0 +1,70 @@
+---
+title: "Quickstart"
+description: "Install Conquistador in a coding agent, set up your project, and run a first task."
+---
+
+This page uses a coding agent, for example Claude Code or Codex. For other places, see [Install options](/install/overview).
+
+## Before you start
+
+- Node 22.18 or later. Check with `node --version`.
+- A supported coding agent, signed in.
+
+You do not need an account for a marketing service. The agent drafts from the facts that you give it.
+
+## 1. Run the installer
+
+In your project folder, run:
+
+```sh
+npx @forsvn/conquistador@latest
+```
+
+The installer finds your agents, asks where to install, shows the plan, and changes nothing until you confirm. For the steps, see [Coding agents](/install/coding-agents).
+
+To keep the `conquistador` command, install it globally. Use `-g`:
+
+```sh
+npm install -g @forsvn/conquistador
+conquistador
+```
+
+<Warning>
+  `npm install @forsvn/conquistador` without `-g` puts the package in a `node_modules` folder that is not on your `PATH`. The `conquistador` command then runs an older copy, or nothing. See [Troubleshooting](/troubleshooting#npm-install-without-g).
+</Warning>
+
+## 2. Record your product
+
+The installer opens your agent. In a project without `PRODUCT.md` and `GROWTH.md`, it opens with this command. You can also type it yourself:
+
+```text
+/conquistador init
+```
+
+`init` reads the project, asks only about gaps (at most three questions per round), and writes `PRODUCT.md` and `GROWTH.md`. Every later command reads these files.
+
+## 3. Run a task
+
+Name a command, or describe the task in plain words:
+
+```text
+/conquistador outreach churned customers
+/conquistador launch
+/conquistador write a win-back email flow for trial users who never activated
+```
+
+The agent reads the playbooks for the task, writes the deliverable, and ends with "Playbooks applied": each file and the rule it took from it.
+
+## 4. Check the copy
+
+```sh
+conquistador check marketing/
+```
+
+Exit code 0 means no errors or warnings. Exit code 2 means findings. In Claude Code, Codex, and Cursor, a hook runs the check after the agent edits a marketing file. See [Copy check](/check).
+
+## Next steps
+
+- [Use in your agent](/use/overview): commands, plays, and shortcuts.
+- [Update and remove](/install/update-remove): keep the install current.
+- [Troubleshooting](/troubleshooting): if the agent does not list Conquistador.

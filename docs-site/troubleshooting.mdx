@@ -1,0 +1,97 @@
+---
+title: "Troubleshooting"
+description: "Fix common Conquistador problems: doctor, Node versions, a stale or shadowed conquistador on PATH, and npm install without -g."
+---
+
+## Start with doctor
+
+```sh
+conquistador doctor
+conquistador doctor --fix
+```
+
+`doctor` reports drift in the installs, the hooks, and the project context. `--fix` repairs what a new copy or an agent command can repair. See [Check the install](/install/update-remove#check-the-install).
+
+To see the error behind `Conquistador stopped: …`, read the `Details:` file that it names, or run the command again with `CONQUISTADOR_DEBUG=1`.
+
+## Node version
+
+Conquistador 0.3.0 and later needs Node 22.18 or later. Check:
+
+```sh
+node --version
+```
+
+If your Node is older, the CLI stops before it changes a file. In a terminal it can continue with a newer Node that it finds in nvm or Homebrew, or it shows the commands to select one. Your shell keeps its own Node.
+
+<Note>
+  Versions before 0.3.0 needed Node 24 and printed "Conquistador requires Node 24". If you see that message on Node 22.18 or later, you are running an old copy. See the next section.
+</Note>
+
+## A stale or shadowed `conquistador` on PATH
+
+Your shell runs the first `conquistador` on your `PATH`. That copy can be older than the package that you just installed.
+
+<Steps>
+  <Step title="Find every copy">
+    ```sh
+    which -a conquistador      # Every conquistador on PATH, in order
+    conquistador --version     # The version of the first one
+    npm ls -g @forsvn/conquistador
+    npm prefix -g              # The global npm folder; its bin folder must be on PATH
+    ```
+    On Windows, use `where conquistador`.
+  </Step>
+  <Step title="Remove the old copy">
+    Uninstall it with the tool that installed it, for example `npm uninstall -g @forsvn/conquistador` with that Node selected. If a file in a folder such as `~/.local/bin` remains, delete that file.
+  </Step>
+  <Step title="Install the current version">
+    ```sh
+    npm install -g @forsvn/conquistador@latest
+    hash -r                    # Clear the shell's command cache (bash, zsh)
+    conquistador --version
+    ```
+  </Step>
+</Steps>
+
+From 0.4.0 the installer checks this for you. It warns when it is not the first `conquistador` on your `PATH`, when another copy on your `PATH` has a different version, or when it is behind the newest version on npm. Then it prints the exact fix.
+
+Each Node version manager (nvm, fnm, Volta, asdf) has its own global npm folder. A global install with one Node version is not on your `PATH` when you select another one.
+
+## npm install without -g
+
+`npm install @forsvn/conquistador` without `-g` installs into the `node_modules` folder of the current folder. In your home folder, that is `~/node_modules`. That folder is not on your `PATH`, so `conquistador` runs an older global copy, or the shell reports "command not found".
+
+Fix:
+
+```sh
+npm uninstall @forsvn/conquistador        # In the same folder, to remove the local copy
+npm install -g @forsvn/conquistador@latest
+```
+
+Or run it without an install:
+
+```sh
+npx @forsvn/conquistador@latest
+```
+
+## Other problems
+
+| Symptom | Fix |
+|---|---|
+| No agent is found | Install a supported agent, or name one: `--providers=claude` |
+| `Not found on PATH` for a global install | Install the CLI of that agent, or use `--scope=project` |
+| `… exists and was not created by Conquistador` | Move that folder yourself, then try again. The installer never overwrites a folder that it did not create |
+| `The Conquistador package at … is incomplete` | Install the package again, then try again |
+| `Conquistador needs Node 22.18 or later` | Install Node 22.18 or later, open a new terminal, and try again |
+| The agent does not list Conquistador | Start a new session. In Cursor, reload the window. Run `conquistador doctor` |
+| The agent ignores the playbooks | Run `conquistador brief "TASK"` to see the reading list. Check that the hooks are on |
+| Codex does not run the hooks | Type `/hooks` in Codex and trust them |
+| A project skill does not load in Pi, Hermes, or Mistral Vibe | Trust the project folder in that agent |
+| The hosted server returns 401 | Send `Authorization: Bearer <token>` with a valid token |
+| The hosted server returns 503 | The server has no access token configured. Set `CONQUISTADOR_MCP_TOKEN` on the server |
+| `conquistador_verify` returns `signed: false` | The server has no `CONQUISTADOR_RECEIPT_KEY`. An unsigned receipt does not prove that a check ran |
+
+## Report a problem
+
+Open an issue at [github.com/forsvn-labs/conquistador/issues](https://github.com/forsvn-labs/conquistador/issues). Attach the `Details:` file. In your agent, `/conquistador feedback` drafts a redacted issue for you.

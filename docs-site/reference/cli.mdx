@@ -1,0 +1,229 @@
+---
+title: "CLI commands"
+description: "Every conquistador command: start, maintain, use, check, connect, review, and the older routes."
+---
+
+Run `conquistador help` for the short list and `conquistador help --all` for every command. Without a global install, put `npx @forsvn/conquistador@latest` in front of each command.
+
+## Start
+
+### `conquistador`
+
+```sh
+conquistador [TASK] [options]
+```
+
+Detect agents, install where needed, and open one. With a `TASK` (a first argument with a space), the agent opens with that task typed in. See [Install options](/install/overview) for the flow and every flag.
+
+### `conquistador task`
+
+```sh
+conquistador task WORD
+```
+
+Start a one-word task, for example `conquistador task launch`.
+
+## Maintain
+
+### `conquistador update`
+
+```sh
+conquistador update [--dry-run]
+```
+
+Update the CLI, the plugin installs, and the skill copies. `--dry-run` shows the update and changes nothing.
+
+### `conquistador doctor`
+
+```sh
+conquistador doctor [--fix] [--json]
+```
+
+Report drift in the installs, the hooks, and the project context. `--fix` repairs what it can. See [Check the install](/install/update-remove#check-the-install).
+
+### `conquistador remove`
+
+```sh
+conquistador remove [AGENT...] [--scope=project|global]
+```
+
+Remove installs. Without `--scope`, it removes both. It keeps playbooks, config, bot exports, project files, and the npm CLI.
+
+### `conquistador agents`
+
+```sh
+conquistador agents [--json]
+```
+
+Show the detected agents and their install state.
+
+### `conquistador add`
+
+```sh
+conquistador add AGENT... --yes [--dry-run]
+conquistador add --all --yes
+```
+
+Install into named agents, without the questions. The same as `--providers`.
+
+## Use
+
+### `conquistador brief`
+
+```sh
+conquistador brief "TASK" [--full]
+```
+
+Show the command or play for a task and the playbooks to read. `--full` prints the playbooks.
+
+### `conquistador tour`
+
+```sh
+conquistador tour [AREA]
+```
+
+Print what Conquistador covers, by area, with example requests.
+
+### `conquistador playbooks`
+
+```sh
+conquistador playbooks add DIR
+conquistador playbooks remove DIR
+conquistador playbooks list
+```
+
+Add, remove, or list your own playbook folders. Your playbooks rank first. See [Your own playbooks](/use/your-playbooks).
+
+### `conquistador mcp`
+
+```sh
+conquistador mcp
+conquistador mcp --http [--host HOST] [--port N]
+```
+
+Run the playbook MCP server over stdio, or over HTTP for remote apps. See [MCP apps](/install/mcp-apps) and [Self-host the server](/hosted/self-host).
+
+### `conquistador bot`
+
+```sh
+conquistador bot [--out DIR] [--no-private]
+```
+
+Write a system prompt and knowledge files for chat bots. The default folder is `conquistador-bot`. See [Chat bots](/install/chat-bots).
+
+### `conquistador check`
+
+```sh
+conquistador check [--json] [--channel C] [--no-config] <file|folder|url...>
+conquistador check --rules [--json]
+```
+
+Check marketing text with fixed rules. Exit code 0 is clean, 2 is findings, 1 is a scan failure. See [Copy check](/check).
+
+### `conquistador connect`
+
+```sh
+conquistador connect [--json] [CAPABILITY|COMMAND...]
+conquistador connect add
+conquistador connect verify CAPABILITY --tool PATH --args JSON [--json]
+```
+
+Show which capabilities you can use through Executor, add an integration, or verify one read tool. See [Executor](/install/executor).
+
+### `conquistador review`
+
+```sh
+conquistador review <file.md|file.html> [--no-open]
+conquistador review poll <file> [--json] [--wait <seconds>]
+conquistador review sync <file> [--force]
+conquistador review end <file>
+conquistador review kit [<template> <destination.html>]
+```
+
+Open a deliverable for human review. Markdown opens in Proof. HTML opens in Lavish. `poll` reads new comments, suggestions, and the approval. `sync` sends the revised source. `kit` lists or copies an artifact template.
+
+### `conquistador pin`
+
+```sh
+conquistador pin <command> [--as <name>] [--project] [--agents=claude-code,codex,...] [--json]
+```
+
+Make a shortcut such as `/outreach` for one command. `--project` makes it in this project only.
+
+### `conquistador unpin`
+
+```sh
+conquistador unpin <command>
+```
+
+Remove a shortcut.
+
+### `conquistador signals`
+
+```sh
+conquistador signals [--json] [--no-executor]
+```
+
+Read the project and report what the menu in your agent needs to recommend the next command. It only reads. It asks Executor for integrations only when an Executor server for this folder already runs.
+
+### `conquistador context`
+
+```sh
+conquistador context [--json] [--gitignore]
+```
+
+Report the state of `PRODUCT.md` and `GROWTH.md` in this project. `--gitignore` adds or updates the Conquistador block in `.gitignore`.
+
+## Older and repository routes
+
+These routes still work. The [per-project installation guide](https://github.com/forsvn-labs/conquistador/blob/main/docs/INSTALL-PROJECT.md) in the repository describes them.
+
+### `conquistador project`
+
+Make a per-project operator copy.
+
+### `conquistador status`
+
+Show the state of an operator install. `conquistador operator status` and `conquistador operator doctor` do the same for the operator.
+
+### `conquistador operator`
+
+```sh
+conquistador operator install|status|doctor|update|uninstall
+```
+
+Manage the per-project operator.
+
+### `conquistador route`
+
+```sh
+conquistador route --prompt TEXT
+```
+
+Explain which command or play a prompt routes to.
+
+### `conquistador hooks`
+
+```sh
+conquistador hooks enable --project ABS
+```
+
+Manage the hooks of a per-project operator install.
+
+### `conquistador runtime`
+
+```sh
+conquistador runtime --help
+```
+
+The runtime CLI.
+
+### `conquistador jobs`
+
+Run the Eve runtime. It needs a repository checkout; the npm package leaves the Eve runtime out.
+
+Older flags: `conquistador --advanced`, `--skills`, `--plugin`, `--mcp [--host HOST]`, and `--bot [grok-bot|hermes]`. From 0.4.0 they select an option in the installer. See [Install options](/install/overview#install-without-questions).
+
+## Environment variables
+
+See [Config files and variables](/reference/config#environment-variables).

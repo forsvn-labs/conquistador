@@ -1,0 +1,35 @@
+---
+title: "Self-host the server"
+description: "Run the Conquistador MCP server over HTTP on your own machine or on Cloudflare Workers."
+---
+
+## Run it over HTTP
+
+```sh
+CONQUISTADOR_MCP_TOKEN=choose-a-secret conquistador mcp --http --host 0.0.0.0 --port 8787
+```
+
+- Endpoint: `POST /mcp`. Health check: `GET /health`.
+- Send `Authorization: Bearer <token>` when `CONQUISTADOR_MCP_TOKEN` is set.
+- The default host is `127.0.0.1` and the default port is `8787`. When `PORT` is set, the server uses it and listens on `0.0.0.0`.
+- On a host other than `127.0.0.1` or `localhost` without `CONQUISTADOR_MCP_TOKEN`, the server prints a warning and serves anyway. Always set a token on a public interface.
+- Anyone with the URL and the token can read the playbooks.
+- The server serves the playbooks that you added on that computer. To serve only the bundled library, set `CONQUISTADOR_HOME` to an empty folder.
+- Set `CONQUISTADOR_RECEIPT_KEY` to sign check receipts. See [Receipts and verify](/hosted/receipts).
+
+## Deploy to Cloudflare Workers
+
+From the repository root, sign in once, set the secrets, and deploy:
+
+```sh
+npx wrangler@4.148.0 login
+openssl rand -hex 32 | npx wrangler@4.148.0 secret put CONQUISTADOR_MCP_TOKEN
+openssl rand -hex 32 | npx wrangler@4.148.0 secret put CONQUISTADOR_RECEIPT_KEY
+npx wrangler@4.148.0 deploy
+```
+
+- `wrangler.toml` uploads `worker.mjs`, the server modules, `package.json`, and `skills/` without bundling. The server reads the library from the Worker bundle with `node:fs`. It never uploads your own playbooks.
+- The Worker refuses every MCP request with 503 until the token is set.
+- Run it locally with `npx wrangler@4.148.0 dev --var CONQUISTADOR_MCP_TOKEN:local-test`.
+- `wrangler.toml` serves the Worker at `mcp.forsvn.com`. Replace the route with your own hostname.
+- On `mcp.forsvn.com`, a zone configuration rule turns off the Cloudflare browser integrity check, so any HTTP client works. The `workers.dev` address stays on, but Cloudflare refuses the default `Python-urllib` User-Agent there with error 1010.

@@ -1,0 +1,90 @@
+---
+title: "Coding agents"
+description: "Install the Conquistador plugin or skill in Claude Code, Codex, Cursor, Copilot CLI, Grok CLI, and seven skill-only agents."
+---
+
+This is the recommended option. You need Node 22.18 or later and a supported agent, signed in.
+
+```sh
+npx @forsvn/conquistador@latest
+```
+
+Choose **Coding agents**. The installer shows the agents it found. Keep that set or change it. Then choose the scope and the hooks.
+
+## Plugin or skills only
+
+| Agents | What they get |
+|---|---|
+| Claude Code, Codex, Cursor, GitHub Copilot CLI, Grok CLI | The **plugin** in a global install: the `conquistador` skill, the hooks, and the local MCP server. |
+| Gemini CLI, OpenCode, Pi, Hermes Agent, Antigravity CLI, Kiro CLI, Mistral Vibe | The **skill folder** only. These agents have no plugin manager, so there are no hooks and no MCP server. |
+| Every agent, in a project install | The **skill folder** only, in the project. |
+
+The plugin contains:
+
+- The `conquistador` skill with its commands and plays.
+- The MCP server `conquistador`. See [MCP tools](/reference/mcp-tools).
+- Hooks for Claude Code, Codex, and Cursor. The prompt hook adds the must-read list to marketing prompts. The stop hook sends the agent back once if it skipped those files. The check hook runs the [copy check](/check) after the agent edits a marketing file.
+
+## Scope
+
+- **Global** installs for all projects. Agents with a plugin manager get the plugin.
+- **Project** copies the skill into this project's skill folder. Commit the folder to share it with your team. A project install has no hooks and no MCP server.
+
+With `--yes`, the default scope is global. When the project already has a copy, the default is project.
+
+## Agents and folders
+
+Folders and launch flags come from the documentation of each agent (checked 2026-10-03). Agents that share a project folder share one copy.
+
+| Agent | `--providers` | Global install | Project folder | Opens with |
+|---|---|---|---|---|
+| Claude Code | `claude` | Plugin: `claude plugin install` | `.claude/skills/conquistador` | `claude --prefill "PROMPT"` (press Enter to send) |
+| Codex | `codex` | Plugin: `codex plugin add` | `.agents/skills/conquistador` | `codex "PROMPT"` |
+| Cursor | `cursor` | Plugin copy in `~/.cursor/plugins/local/conquistador` | `.agents/skills/conquistador` | `cursor-agent "PROMPT"` |
+| GitHub Copilot CLI | `copilot` | Plugin: `copilot plugin install` | `.agents/skills/conquistador` | `copilot -i "PROMPT"` |
+| Grok CLI | `grok` | Plugin: `grok plugin install --trust` | `.grok/skills/conquistador` | `grok "PROMPT"` |
+| Gemini CLI | `gemini` | `~/.gemini/skills/conquistador` | `.agents/skills/conquistador` | `gemini -i "PROMPT"` |
+| OpenCode | `opencode` | `~/.config/opencode/skills/conquistador` | `.agents/skills/conquistador` | `opencode --prompt "PROMPT"` |
+| Pi | `pi` | `~/.agents/skills/conquistador` | `.agents/skills/conquistador` | `pi "/skill:conquistador ..."` |
+| Hermes Agent | `hermes` | `~/.hermes/skills/conquistador` (`$HERMES_HOME` in your home folder) | `.hermes/skills/conquistador` | Paste the prompt (copied for you) |
+| Antigravity CLI | `antigravity` | `~/.gemini/antigravity-cli/skills/conquistador` | `.agents/skills/conquistador` | `agy -i "PROMPT"` |
+| Kiro CLI | `kiro` | `~/.kiro/skills/conquistador` | `.kiro/skills/conquistador` | Paste the prompt (copied for you) |
+| Mistral Vibe | `vibe` | `~/.vibe/skills/conquistador` | `.agents/skills/conquistador` | Paste the prompt (copied for you) |
+
+`claude-code` is also accepted for Claude Code.
+
+Sources: [Claude Code](https://code.claude.com/docs/en/skills), [Codex](https://learn.chatgpt.com/docs/build-skills), [Cursor](https://cursor.com/docs/context/skills), [GitHub Copilot](https://docs.github.com/en/copilot/how-tos/use-copilot-agents/coding-agent/create-skills), [Grok](https://docs.x.ai/build/features/skills-plugins-marketplaces), [Gemini CLI](https://geminicli.com/docs/cli/skills/), [OpenCode](https://opencode.ai/docs/skills/), [Pi](https://github.com/badlogic/pi-mono/blob/main/packages/coding-agent/docs/skills.md), [Hermes Agent](https://hermes-agent.nousresearch.com/docs/user-guide/features/skills), [Antigravity](https://antigravity.google/docs/skills), [Kiro](https://kiro.dev/docs/skills/), [Mistral Vibe](https://docs.mistral.ai/vibe/code/cli/skills).
+
+## Notes for each agent
+
+- Codex asks once to trust the hooks. Type `/hooks` to trust them.
+- Pi, Hermes, and Mistral Vibe load project skills only after you trust the project folder.
+- Claude Code fills in the prompt from version 2.1.283. In older versions, or with `CONQUISTADOR_PREFILL=off`, the installer sends the prompt at once.
+- The global plugin copy is `~/.conquistador/plugin` (`CONQUISTADOR_HOME/plugin` when you set it). Agents with a plugin manager read it. Do not save your own work in it.
+- After the install, start a new agent session. In Cursor, reload the window.
+
+## Install from inside Claude Code
+
+```text
+/plugin marketplace add forsvn-labs/conquistador
+/plugin install conquistador@conquistador
+```
+
+## Install an exact version
+
+```sh
+npm install -g @forsvn/conquistador@0.3.0
+npm install -g --ignore-scripts --install-links git+https://github.com/forsvn-labs/conquistador.git#v0.3.0
+```
+
+`--ignore-scripts` skips npm lifecycle scripts. `--install-links` copies the checkout out of the temporary storage of npm.
+
+## Turn off the hooks
+
+Use one of these:
+
+- `--no-hooks` at install. This writes `{"hooks": false}` to `~/.conquistador/config.json`.
+- `CONQUISTADOR_HOOKS=off` in your environment.
+- `{"hooks": false}` in `~/.conquistador/config.json`.
+
+Each one turns off the prompt, stop, and check hooks. The skill still lists the playbooks for each command, so the agent can find them without hooks.

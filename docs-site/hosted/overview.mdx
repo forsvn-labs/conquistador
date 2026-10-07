@@ -1,0 +1,54 @@
+---
+title: "Deployed agents"
+description: "Use Conquistador from an agent that runs on a server: the brief, check, score, and verify loop, and which model to use."
+---
+
+A deployed agent has no plugin, no hooks, and often no repository. It connects to the MCP server over HTTP: the [hosted server](/install/hosted-mcp) or [your own](/hosted/self-host). The server only reads playbooks and checks text. It never sends, publishes, or spends.
+
+## The loop
+
+<Steps>
+  <Step title="Brief">
+    Call `conquistador_brief` with the `task`. When the agent has no `PRODUCT.md`, also send the product facts in `context`: product, audience, proof points, voice, and constraints. The brief returns the route (the command or play), the playbooks to read, and the rules for using them.
+  </Step>
+  <Step title="Read">
+    Read the files in `readNow` with `conquistador_read` before the agent drafts. Read the files in `readAtStep` when a play reaches that step. Read `situational` files only when the task reaches their topic.
+  </Step>
+  <Step title="Draft and check">
+    Call `conquistador_check` on each draft with its `channel` and the same `context`. Fix each error and warning, or say why it stays. The check flags numbers and customer names that the context does not contain (`claim-not-in-context`).
+  </Step>
+  <Step title="Score">
+    When the brief names a rubric with a gate, call `conquistador_score` with the agent's self-score. It checks the score against the rubric's floors, totals, and hard fails before the agent reports a verdict.
+  </Step>
+  <Step title="Verify before handover">
+    The host, not the agent, calls `conquistador_verify` with the final text and the receipt from the check. Hand the draft to a person only when the result is `valid`, `clean`, and `signed`. See [Receipts and verify](/hosted/receipts).
+  </Step>
+</Steps>
+
+<Note>
+  The hosted server has `conquistador_check`, `conquistador_verify`, and `conquistador_score` now. The local server (`conquistador mcp`) has them from 0.4.0.
+</Note>
+
+## Brief size
+
+Over HTTP the brief returns structured lists: `inlined`, `readNow`, `readAtStep`, and `situational`. A model with a small context can send `size: "compact"`. The brief then inlines only the command and lists its core files as required reads in `readNow`.
+
+`conquistador_read` resolves a relative link when you send the file that holds the link as `from`.
+
+## Choose the model
+
+- A Sonnet-class or stronger model completed the brief, check, and revise loop without supervision in our tests.
+- A Haiku-class model (Haiku 4.5, tested 2026-10-07) wrote a usable draft from a compact brief. It then delivered text that failed the check and reported it clean.
+
+Use smaller models only where the host enforces the loop with signed `conquistador_verify` results. The [verify gate](/hosted/verify-gate) is an example host that does this.
+
+## Test a deployment
+
+From a checkout of the repository:
+
+```sh
+export CONQUISTADOR_MCP_TOKEN=...
+node tools/e2e/agent-loop.mjs --url https://HOST/mcp
+```
+
+The script checks the loop against a deployed server.
