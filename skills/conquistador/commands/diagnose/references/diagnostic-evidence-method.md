@@ -8,6 +8,10 @@ Write the metric definition before decomposing it. Record the counted entity, nu
 
 Check whether both periods use the same event definitions, attribution rules, collection coverage, currency and reporting maturity. Record missing records and delayed outcomes. Reconcile a sample against another available record where useful. Measurement error can explain part of a gap, coexist with real change or remain unknown.
 
+Before you collect any data, write the plan: the question, the current hypothesis and its reason, and the analysis and data that would confirm or reject it.
+
+When no event data exists, for example in an offline or uninstrumented business, create the observation instead of guessing. Survey the target population with sequential yes/no questions (aware? tried? returned?) so each person falls into exactly one stage. Then interview a few people from each leaking stage to learn the reasons. Label the result as survey evidence with its sample and date.
+
 Use an evidence ledger with a location for every observed value. Label each entry `observed`, `derived`, `assumed` or `unknown`. Keep formula inputs linked to their entries so another reader can reproduce the calculation. Never fill missing observations with zero.
 
 ## Separate accounting from explanation
@@ -40,6 +44,8 @@ For each serious candidate, preserve the handoff fields `If`, `Then`, `Because`,
 The prediction must distinguish the candidate from the strongest available alternative. Specify the population, period, metric and expected contrast. Include conditions under which the check would be inconclusive, such as incomplete exposure records or simultaneous changes.
 
 Inspect mix before assigning a within-segment explanation. If segment rates are stable but their weights change, the blended rate may move without a deterioration inside any measured segment. That identifies an accounting contribution; the reason the mix changed still needs evidence.
+
+Apply the same check across sign-up cohorts. When total users or revenue grow while the owner reports weak results, compare retention by cohort; strong new volume can hide falling retention in recent cohorts, often from one campaign or channel. When a candidate fix is more acquisition, first check whether active users treat the product as essential, for example with the must-have survey in `position/references/customer-interviews.md` or a retention curve that flattens. Without that check, mark acquisition fixes `Inconclusive`.
 
 Rank next checks by their ability to change the decision, evidence access, cost and potential consequence. A fast query that all candidates predict equally is less useful than a slower discriminating observation. Do not turn ordinal priorities into probabilities.
 
