@@ -14,6 +14,9 @@ The reader should recognize the task, receive the promised answer and have a usa
 3. Produce one to three opening variants that change a meaningful entry point, with a complete
    body and CTA. Use `hook-archetypes.md` for task, decision, bounded-evidence and answer choices.
    A label is descriptive. It does not establish quality or a platform preference.
+   When the operator supplies posts they admire, break each into opening move, body pattern and
+   close, and note why each part works. A variant may then use a different whole-post structure
+   from those breakdowns to carry the same supported idea. Never reuse the reference wording.
 4. Count each publication unit, inspect supplied constraints and preview evidence, and mark
    missing checks. A method_updated date identifies the method, not verified platform facts.
 5. Check reading continuity and production completeness. Social needs the caption/body, variants,

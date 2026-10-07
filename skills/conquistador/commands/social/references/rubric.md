@@ -27,6 +27,17 @@ interrupt count, assumed posting time, external-link placement theory or presume
 Apply CTA checks to every requested format; no platform gets a default ten. A deliberate
 no-CTA awareness piece must name the reader outcome and explain how it is delivered.
 
+## Tone and reshare checks
+
+Run both checks before scoring and cite each failure under the dimension it weakens.
+
+- **Earned tone.** Each emotional claim comes from the author's direct experience or supplied
+  evidence. The author would say it the same way to a peer in person. The intensity matches the
+  stakes. The post helps the reader decide or act. Cut or rewrite any claim that fails.
+- **Reshare value.** Name what a reader shows their own network by resharing the post, such as
+  competence, being early or generosity. If nothing applies, record that the post is not built for
+  reshares. Do not add bait to fix it.
+
 ## Verdict
 
 1. SKILL stops for Unverified first-person or Internal jargon in native copy force `fail`.
