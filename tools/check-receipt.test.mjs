@@ -6,7 +6,7 @@ import { createHash } from 'node:crypto';
 import { createMcpHandler } from './skills-mcp.mjs';
 
 const signed = createMcpHandler({ requireInitialize: false, hosted: true, receiptKey: 'server-only-receipt-key' });
-const unsigned = createMcpHandler({ requireInitialize: false });
+const unsigned = createMcpHandler({ requireInitialize: false, receiptKey: '' });
 const call = (handle, name, args) => handle({ jsonrpc: '2.0', id: 1, method: 'tools/call', params: { name, arguments: args } });
 const good = '---\nsubject: Stripe and HubSpot totals\npreheader: One question\n---\nHi Dana,\n\nLedgerline compares the two every night.\n\nWould a 15-minute look be useful?\n\nLedgerline, 100 Example Street, Springfield. To opt out, reply "stop".\n';
 const bad = good.replace('Ledgerline compares', 'Unlock seamless growth: Ledgerline compares');
@@ -15,13 +15,15 @@ const verify = (handle, text, receipt) => call(handle, 'conquistador_verify', { 
 
 test('a check result carries a receipt for the exact text it checked', () => {
   const result = check(signed, good);
-  const normalized = good.replace(/\r\n/g, '\n').replace(/[ \t]+$/gm, '').trim();
-  assert.equal(result.receipt.sha256, createHash('sha256').update(normalized).digest('hex'));
+  assert.equal(result.receipt.sha256, createHash('sha256').update(good).digest('hex'));
   assert.equal(result.receipt.clean, result.clean);
   assert.equal(result.receipt.blocking, result.blocking);
   assert.equal(result.receipt.channel, 'email');
   assert.match(result.receipt.signature, /^[0-9a-f]{64}$/);
-  assert.equal(check(signed, good.replace(/\n/g, '\r\n').replace(/Hi Dana,/, 'Hi Dana,   ')).receipt.sha256, result.receipt.sha256);
+  // Only line endings are normalized: indentation and trailing spaces carry meaning in Markdown.
+  assert.equal(check(signed, good.replace(/\n/g, '\r\n')).receipt.sha256, result.receipt.sha256);
+  assert.notEqual(check(signed, good.replace('Hi Dana,', 'Hi Dana,  ')).receipt.sha256, result.receipt.sha256);
+  assert.notEqual(check(signed, `    ${good}`).receipt.sha256, result.receipt.sha256);
 });
 
 test('verify accepts the checked text and rejects edited text', () => {
@@ -65,4 +67,19 @@ test('invalid tool arguments name the arguments the tool takes, without echoing 
   assert.match(response.error.message, /scores \(required\)/);
   assert.match(response.error.message, /hardFails/);
   assert.doesNotMatch(response.error.message, /secret-draft-xyz|rubric_key/);
+});
+
+test('the receipt binds the context and channel, and verify rejects a check run without them', () => {
+  const context = 'Product: Ledgerline. Proof: none.';
+  const withContext = call(signed, 'conquistador_check', { text: good, channel: 'email', context }).result.structuredContent.receipt;
+  const without = check(signed, good).receipt;
+  assert.notEqual(withContext.contextSha256, null);
+  assert.equal(without.contextSha256, null);
+  const expect = (receipt, expected) => call(signed, 'conquistador_verify', { text: good, receipt, ...expected }).result.structuredContent;
+  assert.equal(expect(withContext, { context, channel: 'email' }).valid, true);
+  const skipped = expect(without, { context });
+  assert.equal(skipped.valid, false);
+  assert.match(skipped.reason, /context/i);
+  assert.equal(expect(withContext, { channel: 'linkedin' }).valid, false);
+  assert.equal(verify(signed, good, { ...withContext, contextSha256: null }).result.structuredContent.valid, false, 'the signature covers the context hash');
 });

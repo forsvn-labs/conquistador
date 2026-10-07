@@ -40,11 +40,13 @@ const TOOLS = [
       blocking: { type: 'integer', description: 'Errors plus warnings.' },
       truncated: { type: 'boolean', description: `True when more than ${LIMITS.checkFindings} findings exist; only the first ${LIMITS.checkFindings} are listed.` },
       findings: { type: 'array', items: { type: 'object', properties: { rule: { type: 'string' }, name: { type: 'string' }, family: { type: 'string' }, severity: { type: 'string', enum: ['error', 'warning', 'advisory'] }, message: { type: 'string' }, fix: { type: 'string' }, line: { type: 'integer' }, snippet: { type: 'string' } } } },
-      receipt: { type: 'object', description: 'Proof of this check for this exact text. Hand it over with the final text; a host can confirm it with conquistador_verify.', properties: { sha256: { type: 'string' }, clean: { type: 'boolean' }, blocking: { type: 'integer' }, channel: { type: 'string' }, signature: { type: ['string', 'null'] } } },
+      receipt: { type: 'object', description: 'Proof of this check for this exact text. Hand it over with the final text; a host can confirm it with conquistador_verify.', properties: { sha256: { type: 'string' }, clean: { type: 'boolean' }, blocking: { type: 'integer' }, channel: { type: 'string' }, format: { type: 'string' }, contextSha256: { type: ['string', 'null'] }, signature: { type: ['string', 'null'] } } },
     }, required: ['channel', 'clean', 'blocking', 'truncated', 'findings', 'receipt'] } },
   { name: 'conquistador_verify', description: 'For hosts: confirm that a final draft is the exact text a conquistador_check receipt covers, and whether that check was clean. Use it before handing an agent\'s draft to a person or sending it. A changed text or a forged receipt is not valid.', inputSchema: { type: 'object', properties: {
     text: { type: 'string', minLength: 1, maxLength: LIMITS.checkText, description: 'The final draft, as delivered.' },
     receipt: { type: 'object', description: 'The receipt object from conquistador_check.' },
+    context: { type: 'string', maxLength: 8000, description: 'Optional: the context the check had to use. A receipt from a check without it is not valid.' },
+    channel: { type: 'string', maxLength: 40, description: 'Optional: the channel the check had to use.' },
   }, required: ['text', 'receipt'], additionalProperties: false },
     outputSchema: { type: 'object', properties: { valid: { type: 'boolean' }, clean: { type: 'boolean' }, signed: { type: 'boolean' }, reason: { type: 'string' } }, required: ['valid', 'clean', 'signed', 'reason'] } },
   { name: 'conquistador_score', description: 'Check your rubric self-score against the rubric\'s own pass rules before you report a verdict. Pass the rubric path from the brief, the variant when the rubric has more than one, a score for every dimension, and any hard fails you found. Returns pass, pass_with_concerns, fail, or incomplete with the reasons. It checks the rules, not your judgment.', inputSchema: { type: 'object', properties: {
@@ -197,7 +199,7 @@ function checkDraft({ text, channel, format = 'markdown', context }, receiptKey)
     blocking: total,
     truncated: findings.length > LIMITS.checkFindings,
     findings: findings.slice(0, LIMITS.checkFindings).map(({ rule, name, family, severity, message, fix, line, snippet }) => ({ rule, name, family, severity, message, fix, line, snippet })),
-    receipt: issueReceipt(text, { clean: total === 0, blocking: total, channel: detected }, receiptKey),
+    receipt: issueReceipt(text, { clean: total === 0, blocking: total, channel: detected, format, context }, receiptKey),
   };
 }
 
@@ -284,7 +286,7 @@ export function createMcpHandler({ root = bundledRoot, requireInitialize = true,
       } else if (params.name === 'conquistador_check') {
         value = checkDraft(args, receiptKey);
       } else if (params.name === 'conquistador_verify') {
-        value = verifyReceipt(args.text, args.receipt, receiptKey);
+        value = verifyReceipt(args.text, args.receipt, receiptKey, { context: args.context, channel: args.channel === undefined ? undefined : normalizeChannel(args.channel) ?? args.channel });
       } else if (params.name === 'conquistador_search') {
         if (!args.query.trim() || args.query.length > 400) throw new Error('Invalid query');
         value = searchKnowledge(args.query, { root: packageRoot() });

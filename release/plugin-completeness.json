@@ -4840,7 +4840,7 @@
     },
     {
       "path": "tools/check-receipt.mjs",
-      "sha256": "f954cd08f94e0fb1fa095cd8ada4cfa2548a27d3da998e5659febad834107876"
+      "sha256": "77b2187690f561ad60d6886eca6cc8e3c7b6f437775bb00777de43ea89e4d7f1"
     },
     {
       "path": "tools/check/channels.mjs",
@@ -4904,7 +4904,7 @@
     },
     {
       "path": "tools/skills-mcp.mjs",
-      "sha256": "18fa65d4a6b18688398bbe6a06d4ad3956a10c35946d60a7ba13b96edf4a2154"
+      "sha256": "a5a4a84157dc96a051a8c4de4ffc00ce0d15690359ca312fd9ec35d459b9f4a4"
     }
   ]
 }

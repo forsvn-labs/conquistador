@@ -203,15 +203,17 @@ self-score against the rubric's floors, totals, and hard fails before the agent 
 
 Do not trust an agent's own report that its draft passed. Each `conquistador_check` result carries a
 `receipt` for the exact text it checked. Before the host shows a draft to a person or sends it, it
-calls `conquistador_verify` with the final text and that receipt: the result is valid only if the
-text is unchanged and the receipt came from this server. The server signs receipts with
-`CONQUISTADOR_RECEIPT_KEY`, a secret that callers never receive, so an agent that holds the access
-token still cannot forge one. Without that key, receipts are unsigned and prove only the text match.
+calls `conquistador_verify` with the final text, that receipt, and the `context` and `channel` the
+check had to use. Hand the draft over only when the result is `valid`, `clean`, and `signed`. The
+server signs receipts with `CONQUISTADOR_RECEIPT_KEY`, a secret that callers never receive, so an
+agent that holds the access token cannot forge or flip one, and a check run without the expected
+context does not count. Without that key, receipts are unsigned: an agent can compute the hash
+itself, so an unsigned receipt does not prove that a check ran.
 
 Choose the model with this in mind. A Sonnet-class or stronger model completed the brief, check,
 and revise loop unsupervised in our tests. A Haiku-class model (Haiku 4.5, 2026-10-07) produced a
 usable draft from a compact brief but delivered text that failed the check while reporting it clean.
-Use smaller models only where the host enforces the loop with `conquistador_verify`.
+Use smaller models only where the host enforces the loop with signed `conquistador_verify` results.
 `node tools/e2e/agent-loop.mjs --url https://HOST/mcp` checks that loop against a deployed server;
 set `CONQUISTADOR_MCP_TOKEN` first.
 
