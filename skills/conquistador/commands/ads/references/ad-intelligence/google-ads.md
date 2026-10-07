@@ -33,6 +33,11 @@ to improve an assumed Ad Strength score.
 
 Keep brand, category, and competitor comparisons separate where their eligibility
 or measurement differs. Campaign count follows budget control and comparison needs.
+
+Keep message match: put the target term in the keyword, an ad headline, and the
+landing page's main heading, unless the page cannot truthfully carry it. When a
+search term produces the agreed conversion, move it to its own exact-match ad group
+or campaign, and add it as a negative where it came from.
 Before using another brand in copy, record the applicable trademark and editorial
 requirements and evidence of permitted use; do not infer permission from targeting.
 

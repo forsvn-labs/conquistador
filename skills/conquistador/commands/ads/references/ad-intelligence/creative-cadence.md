@@ -54,6 +54,18 @@ For in-house, affiliate-creator, or external-freelance production, record capaci
 review ownership, usage rights, disclosure, and payment terms. Do not infer a need
 to outsource from a target spend figure.
 
+## Keep an input log
+
+Log every produced asset with its inputs (brief, script, angle, source material) and
+its outcome. Read the log before you produce the next batch. When new variants start
+to repeat earlier ones, add new inputs, such as competitor ads from the public ad
+library, customer reviews, and recorded category conversations, and record which
+input produced each variant.
+
+Before you conclude that a channel does not work for an offer, test several distinct
+positioning angles, including one that contrasts with the incumbent. Report the
+number of angles tested in the readout.
+
 ## Refresh only with a stated question
 
 Log exposure, outcome cost, placement mix, event lag, and creative changes. If
