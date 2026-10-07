@@ -2,7 +2,7 @@
 name: channels
 description: "Choose the marketing channel to test next, with current evidence for it."
 metadata:
-  version: 2.1.0
+  version: 2.2.0
 ---
 
 # Research a channel decision
@@ -19,6 +19,7 @@ Core:
 - [anti-patterns](references/anti-patterns.md): Platform Evidence Research — Anti-Patterns. Load when: critic-agent fires (5-rubric gate) OR a re-dispatch…
 - [channel-evidence-method](references/channel-evidence-method.md): Channel Evidence Method. Social, SEO, short-form, and evaluation skills make recommendations about…
 - [confidence-labeling](references/confidence-labeling.md): Confidence Labeling. --- title: Confidence Labeling — H/M/L epistemic tagging for research findings…
+- [creator-channel-fit](references/creator-channel-fit.md): Creator Channel Fit. Load when: a plan considers paying creators or influencers with an existing audience…
 - [evidence-protocol](references/evidence-protocol.md): Platform Evidence Research — Evidence Protocol. Load when: any agent intakes, tags, validates, or reasons…
 
 By step: [instagram](references/platforms/instagram.md), [linkedin](references/platforms/linkedin.md), [tiktok](references/platforms/tiktok.md), [x](references/platforms/x.md), [youtube](references/platforms/youtube.md), [scoring-rubrics](references/scoring-rubrics.md).
@@ -65,10 +66,34 @@ For each channel assess:
 - safety, policy, and reputation risk;
 - primary outcome and realistic diagnostics.
 
+Before you compare channels, run these checks:
+
+- **Sales motion.** Match the motion to deal size and customer value. Large deals need
+  relationship selling, often founder-led. Mid-size deals need a small sales team that starts where
+  the pain is sharpest and expands inside the account. Low-price, broad products need advertising,
+  content, or another one-to-many channel. Treat a referral loop as a channel only when normal use
+  of the product invites other people.
+- **Dead zone.** When the price is too low to pay for a salesperson and the buyers are too scattered
+  for broad reach to pay back, say so in the plan. Do not hide the gap behind a channel list.
+- **Existing demand.** Show evidence that buyers already search for or ask about this category.
+  Without it, rank intent-capture channels (search ads, SEO) low and prefer awareness, community,
+  creator, or referral channels.
+- **Creators.** When creators or influencers are a candidate, apply
+  [creator channel fit](references/creator-channel-fit.md) before you rank them.
+
+For each test candidate, also record setup time, time until the result can be read, and whether you
+can stop or change the test while it runs. A cheap test that cannot be read inside the decision
+window ranks lower.
+
+Recommend one primary channel and at most one secondary channel until a channel works at an
+acceptable cost. Do not spread a small budget across many channels.
+
 Include a veto: when the product should not use the channel.
 
 State the reversal evidence that would change the recommendation and a revisit trigger tied to new
 owned results, platform change, capacity, or destination readiness—not merely the passage of time.
+Add a new channel when the working channel shows saturation, such as rising unit cost or falling
+response from the same audience.
 
 ## Route elsewhere
 
