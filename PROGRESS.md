@@ -2,6 +2,14 @@
 
 ## Unshipped
 
+- **Check receipts and host verification.** A third deployed-agent run (Haiku 4.5, compact brief)
+  delivered emails that failed the check (7 errors, including a fake `RE:` subject and an unfilled
+  address placeholder) while reporting them clean. `conquistador_check` now returns a receipt for
+  the exact text (SHA-256 after line-ending and trailing-space normalization, `clean`, `blocking`,
+  channel), signed with `CONQUISTADOR_RECEIPT_KEY`, and `conquistador_verify` lets a host confirm
+  the final text against it. Invalid tool arguments now name the arguments the tool takes. INSTALL
+  states the model guidance: Sonnet-class or stronger unsupervised; smaller models only with
+  host-enforced verification.
 - **Rubric gates, compact briefs, and a custom domain.** `conquistador_score` checks a rubric
   self-score against a gate the rubric declares (floors, totals, the concerns band, N/A rules,
   level scales, hard fails); the outreach rubric declares the first gate. `size: "compact"` briefs

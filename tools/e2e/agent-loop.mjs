@@ -58,7 +58,7 @@ async function main() {
     process.env.CONQUISTADOR_HOME = join(out, 'empty-home');
     delete process.env.CONQUISTADOR_PLAYBOOKS;
     token = randomBytes(24).toString('hex');
-    server = createServer(createMcpRequestHandler({ token, requireToken: true }));
+    server = createServer(createMcpRequestHandler({ token, requireToken: true, receiptKey: randomBytes(24).toString('hex') }));
     await new Promise(done => server.listen(0, '127.0.0.1', done));
     url = `http://127.0.0.1:${server.address().port}/mcp`;
   }
@@ -123,6 +123,13 @@ async function main() {
     const secondResult = parsed(second);
     const secondRules = [...new Set(secondResult.findings?.map(finding => `${finding.rule} (${finding.severity})`))].sort();
     record('the revision passes the check', secondResult.clean === true, { blocking: secondResult.blocking, rules: secondRules, ms: second.ms });
+
+    // A host confirms the handed-over text against the receipt instead of trusting the agent.
+    const verified = await rpc('tools/call', { name: 'conquistador_verify', arguments: { text: revision, receipt: secondResult.receipt ?? {}, context, channel: 'email' } });
+    const tampered = await rpc('tools/call', { name: 'conquistador_verify', arguments: { text: `${revision}\nP.S. Teams like Acme love it.`, receipt: secondResult.receipt ?? {} } });
+    const ok = verified.body.result?.structuredContent ?? {};
+    const changed = tampered.body.result?.structuredContent ?? {};
+    record('the host verifies a signed clean receipt and rejects edited text', ok.valid === true && ok.clean === true && ok.signed === true && changed.valid === false, { signed: ok.signed, verifyReason: ok.reason, editedReason: changed.reason });
   } finally {
     server?.close();
   }

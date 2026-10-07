@@ -3,15 +3,17 @@
 // Every MCP request is refused until the CONQUISTADOR_MCP_TOKEN secret is set.
 import { createMcpResponder, MAX_BODY } from './tools/mcp-http.mjs';
 
+// CONQUISTADOR_RECEIPT_KEY signs check receipts; callers hold the access token but never this key.
 const responders = new Map();
-const responderFor = token => {
-  if (!responders.has(token)) responders.set(token, createMcpResponder({ token, requireToken: true }));
-  return responders.get(token);
+const responderFor = (token, receiptKey) => {
+  const key = `${token}\0${receiptKey}`;
+  if (!responders.has(key)) responders.set(key, createMcpResponder({ token, requireToken: true, receiptKey: receiptKey || undefined }));
+  return responders.get(key);
 };
 
 export default {
   async fetch(request, env) {
-    const respond = responderFor(env.CONQUISTADOR_MCP_TOKEN ?? '');
+    const respond = responderFor(env.CONQUISTADOR_MCP_TOKEN ?? '', env.CONQUISTADOR_RECEIPT_KEY ?? '');
     // Stop reading once the body passes MAX_BODY; a client can omit Content-Length.
     const readBody = async () => {
       if (Number(request.headers.get('content-length') ?? 0) > MAX_BODY) return null;
