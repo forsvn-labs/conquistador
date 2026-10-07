@@ -38,8 +38,8 @@ Output formats and fallbacks: [sequential](fallbacks/sequential.md), [format-con
 Define one segment, channel, observed selection signal, costly moment, affiliation, proof boundary,
 and next action. A job title or company category alone is not personalization.
 When the program spans many accounts, channels, or senders, tier the accounts and assign channel
-roles with the [account program](references/frameworks/account-program.md). When the sender asks a
-mutual contact for an introduction, use [intro-request mode](references/modes/intro-request.md).
+roles with the `account-program` framework. When the sender asks a mutual contact for an
+introduction, use the `intro-request` mode. Both are linked in the playbook list above.
 
 Choose the intent before applying proof gates. Sales, partnership, and product-claim outreach need
 seller-side proof appropriate to the claim. Legitimate no-pitch founder research may proceed without seller proof. Targeted READY names a real
