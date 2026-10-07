@@ -7,8 +7,9 @@
   without a repository gets a self-contained work order. Every brief now requires the check before
   handover. The email `cta-missing` rule accepts a short direct question that asks for a reply.
   The HTTP image now copies `tools/context-files.mjs`; before, a hosted brief failed. The server
-  can run as a Vercel function (`api/mcp.mjs`) that refuses requests until its token is set. It is
-  not deployed yet. `tools/e2e/agent-loop.mjs` checks the loop over HTTP.
+  runs as a Cloudflare Worker (`worker.mjs`, `wrangler.toml`) that reads the library from its
+  bundle and refuses requests until its token is set. The agent-loop E2E passes in workerd through
+  `wrangler dev`, including methods, files, read, and search. It is not deployed yet. `tools/e2e/agent-loop.mjs` checks the loop over HTTP.
 - **Briefs inline each command's Core list.** A brief included only the top three lexical matches,
   so it could leave out files that `COMMAND.md` says to read in full. A Claude agent that used only
   the HTTP endpoint found this on 2026-10-07: the outreach brief carried 2 of its 5 core files.

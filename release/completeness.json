@@ -4777,7 +4777,7 @@
     },
     {
       "path": "tools/routing-contract.mjs",
-      "sha256": "f08c50205d84858d691f2ef727f326b9512e530329ecb13dd1e1aa2475b812a6"
+      "sha256": "1f0d4f6b821e0dc3357aa0b1987857e53d24d9acb836a8427198355416c9e289"
     },
     {
       "path": "tools/request-text.mjs",
@@ -4789,7 +4789,7 @@
     },
     {
       "path": "tools/brief.mjs",
-      "sha256": "99cbb4d0bb7b08e1824d9d6279af92f8d01fff53504d3263810b2aca28fdc073"
+      "sha256": "069a09789233223573d27eadc342837c415ad9ee60dd48039bfcb511c363bc55"
     },
     {
       "path": "tools/context-files.mjs",
@@ -4797,7 +4797,7 @@
     },
     {
       "path": "tools/context-selection.mjs",
-      "sha256": "1096dcbb74218831f4b27220ff602eb5534d0a6758861ac6ffad31ab261647a4"
+      "sha256": "dcee8fcd1f523919333eba39899ae9ecd7b4a799a2f84ce6562675b7f6919a99"
     },
     {
       "path": "agents/conquistador/agent.json",

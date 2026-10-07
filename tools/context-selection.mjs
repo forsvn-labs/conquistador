@@ -1,14 +1,14 @@
 import { existsSync, lstatSync, readFileSync } from 'node:fs';
-import { dirname, join, posix, resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { join, posix, resolve } from 'node:path';
 import { assertLoadAllowed, loadRestriction } from './domain-package.mjs';
 import { explicitInvocation, invokedCommand, requestClauses, normalizeRequest as normalized, includesPhrase } from './request-text.mjs';
 import { loadRoutingContract } from './routing-contract.mjs';
+import { packageRootOf } from './module-root.mjs';
 
 export const REQUEST_CONTEXT_SCHEMA_VERSION = 'conquistador.request-context/v1';
 export const MAX_PROMPT_BYTES = 32000;
 export const MAX_CONTEXT_CHARACTERS = 7500;
-const moduleRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+const moduleRoot = packageRootOf(import.meta.url);
 const fail = message => { throw new Error(message); };
 const feedbackOptIn = /\b(?:submit|share|send)\s+(?:product\s+)?feedback\b|\breport (?:a )?conquistador (?:bug|failure|issue)\b|\bfile a conquistador issue\b/i;
 const connectionSetup = /\b(?:set\s*up|setup|install|connect|wire|configure)\b[\s\S]{0,80}\b(?:executor|hubspot|salesforce|pipedrive|crm|ads account)\b/i;

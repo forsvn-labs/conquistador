@@ -6,12 +6,12 @@ import { createHash } from 'node:crypto';
 import { lstatSync, mkdirSync, readdirSync, readFileSync, realpathSync, renameSync, statSync, writeFileSync } from 'node:fs';
 import { homedir, tmpdir } from 'node:os';
 import { delimiter, dirname, extname, isAbsolute, join, posix, relative, resolve, sep } from 'node:path';
-import { fileURLToPath } from 'node:url';
 import { selectRequestContext } from './context-selection.mjs';
 import { contextFiles } from './context-files.mjs';
 import { explicitInvocation, normalizeRequest } from './request-text.mjs';
 import { loadRoutingContract } from './routing-contract.mjs';
 import { methodOwner } from './method-library.mjs';
+import { packageRootOf } from './module-root.mjs';
 
 export const BRIEF_SCHEMA = 'conquistador.brief/v1';
 export const LIMITS = Object.freeze({
@@ -23,7 +23,7 @@ export const LIMITS = Object.freeze({
   userDepth: 8,
   packBytes: 160_000,
 });
-const moduleRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+const moduleRoot = packageRootOf(import.meta.url);
 
 // Platforms and channels the user can name. Each maps to the file stems used in the library.
 export const PLATFORMS = Object.freeze({

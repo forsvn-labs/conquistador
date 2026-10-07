@@ -4,6 +4,7 @@ import { fileURLToPath } from 'node:url';
 import { containedPath } from './plugin-contracts.mjs';
 import { commandNames, methodDocument, methodLibrary, methodPath, playPath } from './method-library.mjs';
 import { assertLoadAllowed, loadRestriction } from './domain-package.mjs';
+import { packageRootOf } from './module-root.mjs';
 
 export const ROUTING_CONTRACT_SCHEMA = 'conquistador.routing-contract/v1';
 export const ROUTING_OVERLAY_SCHEMA = 'conquistador.routing-overlay/v1';
@@ -11,7 +12,7 @@ export const KNOWLEDGE_INDEX_SCHEMA = 'conquistador.knowledge-index/v1';
 export const ASSIGNMENT_BUDGET_BYTES = 196608;
 export const ASSIGNMENT_BUDGET_FILES = 100;
 const NAME = /^[a-z][a-z0-9-]{0,63}$/;
-const moduleRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+const moduleRoot = packageRootOf(import.meta.url);
 const fail = message => { throw new Error(message); };
 
 const CONTRACT_CANDIDATES = [

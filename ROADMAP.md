@@ -10,7 +10,7 @@
 
 ## Next acceptance
 
-0. Deploy the hosted MCP server (Vercel project `conquistador-mcp`, token set first) and run
+0. Deploy the hosted MCP server (Cloudflare Worker `conquistador-mcp`, token set first) and run
    `tools/e2e/agent-loop.mjs --url` against it. Then close the gaps that a deployed-agent run found
    on 2026-10-07: an outreach mode for products with no proof yet (pilot or design-partner offers),
    sequence mechanics and a worked 3-email SaaS sequence, a brief that leads with the selected route

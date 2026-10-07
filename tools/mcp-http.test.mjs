@@ -40,13 +40,12 @@ test('bad methods, bad JSON, and oversized bodies get bounded errors', async t =
   assert.equal((await request('/mcp', { raw: 'x'.repeat(70_000), token: 'tok' })).status, 413);
 });
 
-test('a rewritten function path serves MCP, and health needs no token', async t => {
+test('health needs no token, and other paths are not served', async t => {
   const request = await serve(t, { token: 'tok', requireToken: true });
-  const response = await request('/api/mcp', { body: list, token: 'tok' });
-  assert.equal(response.status, 200);
-  const health = await request('/api/health', { method: 'GET' });
+  const health = await request('/health', { method: 'GET' });
   assert.equal(health.status, 200);
   assert.deepEqual(await health.json(), { ok: true, server: 'conquistador' });
+  assert.equal((await request('/api/mcp', { body: list, token: 'tok' })).status, 404);
   assert.equal((await request('/elsewhere', { body: list, token: 'tok' })).status, 404);
 });
 

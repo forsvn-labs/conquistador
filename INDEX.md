@@ -23,7 +23,7 @@ Map of this repository. Read with `AGENTS.md` and the four horsemen.
 | `agents/` | Portable agent, squad, and receipt schemas and packages |
 | `hooks/` | Plugin hooks that add the playbook brief (command or play) to prompts |
 | `mcp/`, `mcp.json` | Playbook MCP server |
-| `api/`, `vercel.json`, `.vercelignore` | Hosted MCP server as a Vercel function |
+| `worker.mjs`, `wrangler.toml` | Hosted MCP server as a Cloudflare Worker |
 | `tools/` | Installer, start flow, packaging, and development helpers; `tools/e2e/` holds the E2E tests |
 | `release/` | `completeness.json`, the hash list the installer and doctor check |
 | `docs/MASTER-AGENT.md` | Execution modes and the full operating contract |

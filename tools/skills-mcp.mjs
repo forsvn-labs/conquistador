@@ -1,16 +1,16 @@
 import { constants, openSync, closeSync, readSync, fstatSync, lstatSync, realpathSync, opendirSync, readFileSync } from 'node:fs';
 import { dirname, join, extname } from 'node:path';
-import { fileURLToPath } from 'node:url';
 import { createBrief, formatBriefPack, searchKnowledge } from './brief.mjs';
 import { checkDocument, counted } from './check/index.mjs';
 import { channels, detectChannel, normalizeChannel } from './check/channels.mjs';
 import { extractDocument } from './check/extract.mjs';
+import { packageRootOf } from './module-root.mjs';
 
 export const LIMITS = Object.freeze({ request: 65536, file: 262144, response: 524288, files: 256, depth: 12, methods: 128, entries: 2048, context: 8000, checkText: 60000, checkFindings: 100 });
 const checkFormats = { markdown: '.md', html: '.html', text: '.txt' };
 // A message the caller can act on. Other failures keep the generic text so paths and internals stay private.
 const usageError = message => Object.assign(new Error(message), { usage: true });
-const bundledRoot = fileURLToPath(new URL('../skills', import.meta.url));
+const bundledRoot = join(packageRootOf(import.meta.url), 'skills');
 const decoder = new TextDecoder('utf-8', { fatal: true });
 const extensions = new Set(['.md', '.json', '.yaml', '.yml', '.txt', '.csv', '.tsv', '.py', '.sh', '.swift', '.pbxproj', '.xcworkspacedata']);
 const segment = /^[A-Za-z0-9](?:[A-Za-z0-9._ -]*[A-Za-z0-9_-])?$/;
@@ -41,7 +41,7 @@ const PROMPTS = [
   { name: 'review-results', title: 'Review campaign results', description: 'Decide what to keep, drop, and test next.', text: 'Review these results and tell me what to keep, drop, and test: {{product}}. Use conquistador_brief first and follow its playbooks.' },
 ].map(prompt => ({ ...prompt, arguments: [{ name: 'product', description: 'Product, audience, goal, and any facts or numbers you have.', required: true }] }));
 export const SERVER_INSTRUCTIONS = 'Conquistador supplies field-tested playbooks for growth, GTM, launch, marketing, sales, pricing, positioning, copy, content, SEO, ads, and outreach work. For any such task, call conquistador_brief with the task before you draft, read the whole result, apply its specific rules, run conquistador_check on the draft, and end your answer with "Playbooks applied": each file and the rule you took from it. Never invent metrics, quotes, or customer facts. Ask the user before publishing, spending, or sending. Your host supplies the model, tools, and permissions; this server only reads playbooks.';
-const packageVersion = (() => { try { return JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8')).version; } catch { return '0.0.0'; } })();
+const packageVersion = (() => { try { return JSON.parse(readFileSync(join(packageRootOf(import.meta.url), 'package.json'), 'utf8')).version; } catch { return '0.0.0'; } })();
 
 // The caller controls only relative names, never the bundle root. Reject every symlink
 // below the canonical installation root, including intermediate directories.

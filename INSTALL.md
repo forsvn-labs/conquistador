@@ -173,16 +173,18 @@ CONQUISTADOR_MCP_TOKEN=choose-a-secret conquistador mcp --http --host 0.0.0.0 --
 - The server also serves the playbooks you added on that machine. To serve only the bundled
   library, set `CONQUISTADOR_HOME` to an empty folder.
 
-To host it on Vercel, link the repository root and set the token before the first deploy:
+To host it on Cloudflare Workers, sign in once, set the token, then deploy from the repository root:
 
 ```sh
-vercel link --project conquistador-mcp
-openssl rand -hex 32 | vercel env add CONQUISTADOR_MCP_TOKEN production --sensitive
-vercel deploy --prod
+npx wrangler@4.148.0 login
+openssl rand -hex 32 | npx wrangler@4.148.0 secret put CONQUISTADOR_MCP_TOKEN
+npx wrangler@4.148.0 deploy
 ```
 
-`vercel.json` skips install and build and bundles `skills/`. The function refuses every MCP request
-with 503 until the token is set.
+`wrangler.toml` uploads `worker.mjs`, the server modules, `package.json`, and `skills/` unbundled,
+so the server reads the library from the Worker bundle with `node:fs`. It never uploads your own
+playbooks. The Worker refuses every MCP request with 503 until the token is set. Run it locally
+with `npx wrangler@4.148.0 dev --var CONQUISTADOR_MCP_TOKEN:local-test`.
 
 A deployed agent uses two tools in a loop: `conquistador_brief` with the task (and, when the agent
 has no `PRODUCT.md`, the product facts in `context`), then `conquistador_check` on each draft with

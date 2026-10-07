@@ -87,6 +87,16 @@ async function main() {
     const files = [...text.matchAll(/^File: (.*)$/gm)].map(match => match[1]);
     record('brief routes to outreach, carries the context, and requires the check', /\[outreach\]/.test(command ?? '') && text.includes('Ledgerline') && /conquistador_check/.test(text), { command, files, bytes: Buffer.byteLength(text), ms: brief.ms });
 
+    // The library tools read the bundled files directly; a host without full node:fs fails here.
+    const methods = await rpc('tools/call', { name: 'conquistador_methods', arguments: {} });
+    const methodList = JSON.parse(methods.body.result?.content[0].text ?? '{}');
+    const listing = await rpc('tools/call', { name: 'conquistador_files', arguments: { method: 'outreach' } });
+    const fileList = JSON.parse(listing.body.result?.content[0].text ?? '{}').files ?? [];
+    const read = await rpc('tools/call', { name: 'conquistador_read', arguments: { path: 'conquistador/commands/outreach/references/frameworks/ctas.md' } });
+    const search = await rpc('tools/call', { name: 'conquistador_search', arguments: { query: 'cold email call to action' } });
+    record('methods, files, read, and search answer from the bundled library', methodList.methods?.length > 30 && methodList.plays?.length > 10 && fileList.length > 10 && (read.body.result?.content[0].text ?? '').length > 500 && !read.body.result?.isError && !search.body.result?.isError,
+      { commands: methodList.methods?.length, plays: methodList.plays?.length, outreachFiles: fileList.length, readBytes: (read.body.result?.content[0].text ?? '').length, ms: methods.ms + listing.ms + read.ms + search.ms });
+
     const first = await rpc('tools/call', { name: 'conquistador_check', arguments: { text: firstDraft, channel: 'email' } });
     const firstResult = JSON.parse(first.body.result?.content[0].text ?? '{}');
     const firstRules = [...new Set(firstResult.findings?.map(finding => finding.rule))].sort();
