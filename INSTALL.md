@@ -170,6 +170,24 @@ CONQUISTADOR_MCP_TOKEN=choose-a-secret conquistador mcp --http --host 0.0.0.0 --
 - Endpoint: `POST /mcp`. Health check: `GET /health`.
 - Send `Authorization: Bearer <token>` when `CONQUISTADOR_MCP_TOKEN` is set.
 - Anyone with the URL and token can read the playbooks.
+- The server also serves the playbooks you added on that machine. To serve only the bundled
+  library, set `CONQUISTADOR_HOME` to an empty folder.
+
+To host it on Vercel, link the repository root and set the token before the first deploy:
+
+```sh
+vercel link --project conquistador-mcp
+openssl rand -hex 32 | vercel env add CONQUISTADOR_MCP_TOKEN production --sensitive
+vercel deploy --prod
+```
+
+`vercel.json` skips install and build and bundles `skills/`. The function refuses every MCP request
+with 503 until the token is set.
+
+A deployed agent uses two tools in a loop: `conquistador_brief` with the task (and, when the agent
+has no `PRODUCT.md`, the product facts in `context`), then `conquistador_check` on each draft with
+its channel. `node tools/e2e/agent-loop.mjs --url https://HOST/mcp` checks that loop against a
+deployed server; set `CONQUISTADOR_MCP_TOKEN` first.
 
 For ChatGPT GPTs, Claude Projects, Grok projects, and Gemini Gems:
 
