@@ -21,12 +21,14 @@ Anti-patterns: [`../references/anti-patterns.md`](../references/anti-patterns.md
 
 ## Resolve
 
-1. Score each surviving position against the pre-declared criteria.
-2. Choose one position, declare honest deadlock, or make a bounded temporary choice when the decision
+1. Run the [misjudgment check](../references/misjudgment-check.md) on every surviving position,
+   including the preferred one.
+2. Score each surviving position against the pre-declared criteria.
+3. Choose one position, declare honest deadlock, or make a bounded temporary choice when the decision
    cannot wait.
-3. Name the strongest surviving dissent and why it lost on the criteria (not because it was unpopular).
-4. State uncertainty, assumptions, and the evidence that would reverse the decision.
-5. If evidence cannot separate the top options, propose the smallest discriminating test.
+4. Name the strongest surviving dissent and why it lost on the criteria (not because it was unpopular).
+5. State uncertainty, assumptions, and the evidence that would reverse the decision.
+6. If evidence cannot separate the top options, propose the smallest discriminating test.
 
 ## Output
 

@@ -2,7 +2,7 @@
 name: decide
 description: "Resolve a hard decision with independent positions and explicit criteria."
 metadata:
-  version: 1.1.0
+  version: 1.2.0
 ---
 
 # Resolve a consequential decision
@@ -22,7 +22,7 @@ Core:
 - [independent-positions-method](references/independent-positions-method.md): Independent Positions Method. A single agent answering a hard question gives one perspective shaped by…
 - [poll-protocol](references/poll-protocol.md): Decision Panel — Poll Protocol. Load when: the body's Mode Routing table resolves to poll, OR the operator…
 
-By step: [anti-sycophancy](references/anti-sycophancy.md), [decision-tree](references/decision-tree.md), [idea-ranking-core](references/idea-ranking-core.md), [report-template](references/report-template.md).
+By step: [anti-sycophancy](references/anti-sycophancy.md), [decision-tree](references/decision-tree.md), [idea-ranking-core](references/idea-ranking-core.md), [misjudgment-check](references/misjudgment-check.md), [report-template](references/report-template.md).
 
 Specialist roles: [architect-agent](agents/architect-agent.md), [critic-agent](agents/critic-agent.md), [optimist-agent](agents/optimist-agent.md), [pragmatist-agent](agents/pragmatist-agent.md), [resolver-agent](agents/resolver-agent.md), [skeptic-agent](agents/skeptic-agent.md), [synthesizer-agent](agents/synthesizer-agent.md).
 
@@ -72,12 +72,15 @@ never replaces criteria.
 
 ## Resolve
 
-One [resolver](agents/resolver-agent.md) applies the criteria fixed at the start. It chooses, declares
-honest deadlock, or makes a bounded temporary choice when the decision cannot wait. Return:
+One [resolver](agents/resolver-agent.md) applies the criteria fixed at the start. Before it chooses,
+it runs the [misjudgment check](references/misjudgment-check.md): clear simple constraints, invert the
+leading option, and check every position for misjudgment. It chooses, declares honest deadlock, or
+makes a bounded temporary choice when the decision cannot wait. Return:
 
 - chosen position and why it wins on the criteria;
 - strongest surviving dissent;
 - uncertainty and assumptions;
+- inversion and misjudgment findings, including any stacked case;
 - evidence that would reverse the decision;
 - smallest test when evidence cannot separate the options;
 - review mode: separate-context panel or single-context fallback.
