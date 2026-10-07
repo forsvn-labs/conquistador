@@ -1,7 +1,8 @@
 # Product principles
 
-Conquistador helps users do marketing and growth work in their existing coding agent: on any
-platform, in any service, and inside their product. Launches are one job among many; strategy,
+Conquistador helps users do marketing and growth work in their existing coding agent, and gives
+deployed agents the same playbooks as tools: on any platform, in any service, and inside their
+product. Launches are one job among many; strategy,
 social, search and AI answers, paid ads, email and outreach, in-product growth, content, and
 measurement carry equal weight. Users ask for an outcome. One skill, `/conquistador`, routes it to a
 command (one method) or a play (a declared chain of commands), assigns bounded specialist work when
@@ -60,6 +61,14 @@ within host limits; use a labeled same-context fallback when separate contexts a
 Specialist roles compose the existing methods, not a second library. Installation starts no
 daemon, watcher, or schedule. Hooks are read-only, fast, never block unrelated work, and can be
 turned off. Public labels stay visible; prompts, routing scores, and chain-of-thought stay private.
+
+## Serve deployed agents as tools
+
+Agents that run outside a coding repository reach the same library through a hosted MCP server. A
+few tools carry the loop, not one tool per command: a brief built from the caller's facts, a
+rule-based check, a rubric gate, and verification. The host still supplies the model. Because a
+model can skip the check or misreport it, the server signs each check receipt with a key callers
+never hold, and the host, not the agent, decides whether a draft is ready to hand over.
 
 ## Connect only what the task needs
 
