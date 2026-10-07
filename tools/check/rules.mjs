@@ -71,6 +71,9 @@ const footerLink = link => /unsubscribe|opt[- ]?out|preferences|privacy|terms|vi
 
 const ctaVerb = /^(?:→\s*)?(?:get|start|try|book|sign up|join|download|request|schedule|buy|shop|claim|reserve|register|contact|subscribe|apply|create|see|watch|explore|grab|install|upgrade|order|reply|talk to|chat with|compare|calculate|build|launch|save|redeem|activate)\b/i;
 
+// A short direct question that asks for a reply or a meeting is the usual action in a 1:1 email.
+const askQuestion = /\b(?:would|could|can|should|is|are|open to|worth|interested|make sense|useful|helpful|reply|call|chat|talk|look|meet|demo)\b.*\?\s*$/i;
+const asksForReply = text => askQuestion.test(text) && /\b(?:open to|worth|interested|make sense|useful|helpful|reply|call|chat|talk|look|meet|demo|conversation|walkthrough)\b/i.test(text) && text.split(/\s+/).length <= 20;
 const ctaLinks = context => context.document.lines.flatMap(line => line.links.filter(link => !footerLink(link) && link.href !== '#'));
 
 const marketingLinks = context => context.document.lines.flatMap(line => line.links.filter(link => /^https?:/i.test(link.href) && !footerLink(link)).map(link => ({ ...link, n: line.n })));
@@ -194,7 +197,7 @@ export const rules = [
   documentRule({ id: 'cta-missing', family: 'cta', severity: 'warning', name: 'No call to action', channels: ['landing', 'email'],
     message: 'This landing page or email has no call to action.', fix: 'Add one primary action with a specific label and a working link.' },
   context => {
-    const action = ctaLinks(context).length > 0 || context.document.lines.some(line => ctaVerb.test(line.text) && line.text.split(/\s+/).length <= 8);
+    const action = ctaLinks(context).length > 0 || context.document.lines.some(line => (ctaVerb.test(line.text) && line.text.split(/\s+/).length <= 8) || (context.channel === 'email' && asksForReply(line.text)));
 
     return action ? [] : [{ line: firstLine(context), snippet: 'No link, button, or action line found' }];
   }),

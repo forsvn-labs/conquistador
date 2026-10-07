@@ -4796,7 +4796,7 @@
     },
     {
       "path": "tools/check/rules.mjs",
-      "sha256": "eab4d0a5b6b0ae2bfd7547104154302c9b20b5ab496078efb1c4ab16b222443c"
+      "sha256": "182d1490989c79f5972ec815c345605d5032246f18d4902f27bbb8e747e82631"
     },
     {
       "path": "tools/context-files.mjs",

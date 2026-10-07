@@ -107,3 +107,14 @@ test('the HTTP image copies every module the MCP server imports', () => {
     assert.ok(covered(file), `${file} is not copied into the image`);
   }
 });
+
+test('an email that asks for a reply with a direct question has a call to action', () => {
+  const email = ask => `---\nsubject: Stripe and HubSpot totals\n---\nHi Dana,\n\nLedgerline compares the two every night.\n\n${ask}\n`;
+  const rules = ask => json(check({ text: email(ask), channel: 'email' })).findings.map(finding => finding.rule);
+  for (const ask of ['Would a 15-minute look at one month of your data be useful?', 'Open to a short call next week?', 'Worth a reply?', 'Is this worth a conversation?']) {
+    assert.ok(!rules(ask).includes('cta-missing'), ask);
+  }
+  for (const ask of ['Why does this matter?', 'Who knew reconciliation could be this dull?', `Would ${'a very long and winding '.repeat(5)}conversation be useful?`]) {
+    assert.ok(rules(ask).includes('cta-missing'), ask);
+  }
+});
