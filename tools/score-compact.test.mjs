@@ -1,9 +1,9 @@
 // The rubric gate check, the compact brief, and the custom domain (ROADMAP item 0, 2026-10-07).
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, readFileSync } from 'node:fs';
+import { mkdtempSync, readdirSync, readFileSync } from 'node:fs';
 import { createMcpHandler } from './skills-mcp.mjs';
-import { evaluateGate } from './rubric-gate.mjs';
+import { evaluateGate, parseGate } from './rubric-gate.mjs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
@@ -84,6 +84,43 @@ test('level scales (pass, weak, fail) are evaluated by the same gate', () => {
   assert.equal(evaluateGate(gate, { scores: { A: 'pass', B: 'pass', C: 'weak' } }).verdict, 'pass');
   assert.equal(evaluateGate(gate, { scores: { A: 'weak', B: 'pass', C: 'weak' } }).verdict, 'fail');
   assert.equal(evaluateGate(gate, { scores: { A: 'fail', B: 'pass', C: 'pass' } }).verdict, 'fail');
+  const cautions = { ...gate, variants: { default: { minEach: 'weak', concernsBelowEach: 'pass' } } };
+  assert.equal(evaluateGate(cautions, { scores: { A: 'pass', B: 'pass', C: 'pass' } }).verdict, 'pass');
+  assert.equal(evaluateGate(cautions, { scores: { A: 'weak', B: 'pass', C: 'weak' } }).verdict, 'pass_with_concerns');
+  assert.equal(evaluateGate(cautions, { scores: { A: 'fail', B: 'pass', C: 'weak' } }).verdict, 'fail');
+});
+
+test('a named-dimension floor fails, and a concerns floor only lowers a pass', () => {
+  const gate = { scale: { min: 0, max: 7 }, dimensions: ['A', 'B', 'Originality'], variants: { default: { minEach: 4, minTotal: 12, doneAt: 15, minScore: { Originality: 5 } } } };
+  assert.equal(evaluateGate(gate, { scores: { A: 7, B: 7, Originality: 5 } }).verdict, 'pass');
+  const low = evaluateGate(gate, { scores: { A: 7, B: 7, Originality: 4 } });
+  assert.equal(low.verdict, 'fail');
+  assert.ok(low.failures.some(item => /Originality/.test(item)));
+  assert.equal(evaluateGate(gate, { scores: { A: 4, B: 4, Originality: 5 } }).verdict, 'pass_with_concerns');
+  const concerns = { scale: { min: 0, max: 10 }, dimensions: ['A', 'B'], variants: { default: { minTotal: 10, doneAt: 14, concernsBelowEach: 4 } } };
+  assert.equal(evaluateGate(concerns, { scores: { A: 10, B: 10 } }).verdict, 'pass');
+  const weak = evaluateGate(concerns, { scores: { A: 10, B: 3 } });
+  assert.equal(weak.verdict, 'pass_with_concerns');
+  assert.equal(weak.failures.length, 0);
+  assert.equal(evaluateGate(concerns, { scores: { A: 6, B: 3 } }).verdict, 'fail');
+});
+
+test('every rubric gate in the library parses and names only its own dimensions', () => {
+  const files = readdirSync(new URL('../skills/conquistador', import.meta.url), { recursive: true }).filter(name => name.endsWith('.md'));
+  let gates = 0;
+  for (const name of files) {
+    const text = readFileSync(new URL(`../skills/conquistador/${name}`, import.meta.url), 'utf8');
+    if (!text.includes('```json conquistador-gate')) continue;
+    const gate = parseGate(text);
+    gates += 1;
+    assert.ok(Array.isArray(gate.dimensions) && gate.dimensions.length, name);
+    for (const [variant, rules] of Object.entries(gate.variants)) {
+      for (const dimension of [...(rules.notApplicable ?? []), ...Object.keys(rules.minScore ?? {})]) assert.ok(gate.dimensions.includes(dimension), `${name} ${variant}: ${dimension}`);
+      if (gate.scale.levels) for (const level of [rules.minEach, rules.concernsBelowEach, ...Object.keys(rules.maxAtLevel ?? {}), ...Object.values(rules.minScore ?? {})].filter(Boolean)) assert.ok(gate.scale.levels.includes(level), `${name} ${variant}: ${level}`);
+    }
+    for (const id of gate.hardFails ?? []) assert.match(id, /^[a-z0-9]+(-[a-z0-9]+)*$/, `${name}: ${id}`);
+  }
+  assert.ok(gates > 1, `${gates} gates`);
 });
 
 test('a compact brief inlines only the command and its core files, and keeps the rules', () => {
@@ -105,5 +142,6 @@ test('a compact brief inlines only the command and its core files, and keeps the
 test('the Worker serves mcp.forsvn.com as a custom domain and keeps workers.dev', () => {
   const config = readFileSync(new URL('../wrangler.toml', import.meta.url), 'utf8');
   assert.match(config, /pattern = "mcp\.forsvn\.com", custom_domain = true/);
-  assert.doesNotMatch(config, /^workers_dev = false/m);
+  // Wrangler turns workers.dev off when routes exist unless the file says otherwise.
+  assert.match(config, /^workers_dev = true$/m);
 });

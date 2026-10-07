@@ -2,7 +2,7 @@
 name: social
 description: "Write channel-native posts for X, LinkedIn, Reddit, Product Hunt, and communities."
 metadata:
-  version: 2.2.0
+  version: 2.3.0
 ---
 
 # Write social and community marketing

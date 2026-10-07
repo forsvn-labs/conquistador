@@ -51,3 +51,19 @@
 ## Scoring note
 
 The rubric scores a **design**, not a launched loop. K and CPAU are *projected from labeled inputs*; the critic rewards a sound, falsifiable projection (every input has a basis, the math is correct, the verdict follows) — never a rosy guess. A loop whose honest computed K is a kill-candidate but whose *design and math are correct* can still score well on soundness; the loop-architect's verdict says "kill/redesign", and that honesty is the point.
+
+## Machine-readable gate
+
+`conquistador_score` checks a self-score against these rules. Use the single `default` variant;
+30-34 is DONE_WITH_CONCERNS. Report the four hard gates from `agents/critic.md` as hard fails.
+
+```json conquistador-gate
+{
+  "scale": { "min": 0, "max": 7 },
+  "dimensions": ["Loop-math soundness", "Cycle-time realism", "Incentive economics", "Trigger placement", "Mechanic falsifiability", "Fraud/abuse guard"],
+  "variants": {
+    "default": { "minEach": 4, "minTotal": 30, "doneAt": 35 }
+  },
+  "hardFails": ["no-retention-evidence", "k-not-computed", "incentive-does-not-pay", "autonomous-payout"]
+}
+```

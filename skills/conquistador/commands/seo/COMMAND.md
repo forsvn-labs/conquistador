@@ -2,7 +2,7 @@
 name: seo
 description: "Improve visibility in search, AI answers, and app stores."
 metadata:
-  version: 2.2.0
+  version: 2.3.0
 ---
 
 # Optimize search and answer visibility

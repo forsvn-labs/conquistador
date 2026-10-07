@@ -100,3 +100,19 @@ All five must PASS for an overall PASS. Each is binary — no partial credit.
 Critic loops max at **2 cycles**. After cycle 2 with any remaining FAIL, stop for the human: `done_with_concerns` is recorded as the internal grade with the failed rubrics' evidence pinned at the top of the artifact — it never ships.
 
 This is a cost-discipline rule. A third cycle compounds spend with diminishing returns — and a transparently-flagged concern handed to a human is more useful than a forced PASS.
+
+## Machine-readable gate
+
+`conquistador_score` checks the critic's five binary rubrics against these rules. Use the single
+`default` variant and score each rubric `pass` or `fail`. The two-cycle loop cap is a process rule
+and stays outside the gate.
+
+```json conquistador-gate
+{
+  "scale": { "levels": ["fail", "pass"] },
+  "dimensions": ["Evidence Citation", "Source-Type Honesty", "Coverage-Flag Accuracy", "Recommendation Completeness", "Freshness"],
+  "variants": {
+    "default": { "minEach": "pass" }
+  }
+}
+```

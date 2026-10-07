@@ -30,3 +30,20 @@ Specificity has no count quota for entities, numbers, citations, or claims.
 Compare final variants to the test contract and any pre-polish versions. Return
 the affected passage, decision impact, and smallest supported repair. No score
 can approve a live action or substitute for a human verdict.
+
+## Machine-readable gate
+
+`conquistador_score` checks a self-score against these rules. Score each creative variant (hero,
+variant_a, variant_b) separately with the single `default` variant; 49-55 is pass with concerns. The
+/210 aggregate is reported, not gated. Report each hard blocker above as a hard fail.
+
+```json conquistador-gate
+{
+  "scale": { "min": 0, "max": 10 },
+  "dimensions": ["Audience and task", "Component compliance", "Destination continuity", "Test discrimination", "Evidence and rights", "Specificity", "Creative feasibility"],
+  "variants": {
+    "default": { "minEach": 6, "minTotal": 49, "doneAt": 56 }
+  },
+  "hardFails": ["fabricated-or-overstated-proof", "incompatible-destination-terms", "unauthorized-actor-or-asset", "false-platform-clearance", "spend-above-ceiling"]
+}
+```

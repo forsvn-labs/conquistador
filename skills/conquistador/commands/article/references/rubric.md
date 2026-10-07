@@ -60,3 +60,21 @@
 ## Scoring order (critic must follow)
 
 Score **Originality FIRST, against the research agent's named Consensus baseline.** This prevents the most dangerous failure: a polished, on-brand, beautifully-structured piece that is pure consensus — where high marks on the other six dimensions disguise a fundamental collapse into `copy`. Originality <5 is an automatic FAIL no matter the total.
+
+## Machine-readable gate
+
+`conquistador_score` checks a self-score against these rules. Use the single `default` variant;
+36-40 is DONE_WITH_CONCERNS. Search/AEO-readiness is never N/A: when the piece is not SEO-anchored,
+score the structural-clarity proxy. The Originality floor is a dimension floor here; report the
+other three hard gates from `agents/critic.md` as hard fails.
+
+```json conquistador-gate
+{
+  "scale": { "min": 0, "max": 7 },
+  "dimensions": ["Thesis clarity", "Structural integrity", "Evidence quality", "Originality", "Reader-fit", "Prose quality", "Search/AEO-readiness"],
+  "variants": {
+    "default": { "minEach": 4, "minScore": { "Originality": 5 }, "minTotal": 36, "doneAt": 41 }
+  },
+  "hardFails": ["uncited-or-invented-claim", "thesis-not-defended", "filler-section"]
+}
+```

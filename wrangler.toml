@@ -13,6 +13,7 @@ base_dir = "."
 routes = [
   { pattern = "mcp.forsvn.com", custom_domain = true },
 ]
+workers_dev = true
 
 # Only the modules the server imports and the bundled library. Never local playbooks.
 [[rules]]

@@ -186,3 +186,21 @@ For each per-dim score in the Critic Verdict, include 1 sentence of rationale ti
 ```
 
 Scoreless verdicts (PASS without per-dim breakdown) are themselves a Hard Fail signal — the rubric exists to make the verdict falsifiable.
+
+## Machine-readable gate
+
+`conquistador_score` checks a self-score against these rules. The pass gate comes from the shared
+evaluation-loop frame: every dimension at least 6, an aggregate below 42 fails, and 42-48 is
+PASS_WITH_CONCERNS. Use the single `default` variant for every cycle. Report each auto-fail
+condition above as a hard fail.
+
+```json conquistador-gate
+{
+  "scale": { "min": 0, "max": 10 },
+  "dimensions": ["Loop Fit", "Metric Integrity", "Attribution Honesty", "Decision Discipline", "Engagement-Quality Discrimination", "Platform-Fit", "Ledger Correctness"],
+  "variants": {
+    "default": { "minEach": 6, "minTotal": 42, "doneAt": 49 }
+  },
+  "hardFails": ["hf-1-no-loop", "hf-2-no-measurement", "hf-6-fabrication", "hf-7-off-spec-status", "hf-8-untagged-ledger", "hf-3-no-primary-platform-tag", "hf-4-secondary-platform-blended", "hf-5-no-comparable-baseline", "hf-11-keep-on-vanity-headline", "hf-12-keep-below-confidence-floor", "multiple-ledger-rows", "persistent-write-without-consent"]
+}
+```

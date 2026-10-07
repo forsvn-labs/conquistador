@@ -40,3 +40,20 @@ These stable identifiers name the obligations checked by this rubric:
 
 The rubric grades review quality only. It never issues the human verdict on the underlying claim,
 and never approves publication, action, or release.
+
+## Machine-readable gate
+
+`conquistador_score` checks a self-score against these rules. Use the single `default` variant.
+`pass` means sound for human decision; `pass_with_concerns` means sound with limitations, which
+holds only when each weakness is disclosed inline next to the affected claim. The gate cannot check
+that disclosure.
+
+```json conquistador-gate
+{
+  "scale": { "levels": ["fail", "weak", "pass"] },
+  "dimensions": ["Claim fidelity", "Source coverage", "Authority & freshness", "Contradiction handling", "Resolution honesty", "Verification honesty", "Unknowns & recheck", "Non-fabrication"],
+  "variants": {
+    "default": { "minEach": "weak", "concernsBelowEach": "pass" }
+  }
+}
+```

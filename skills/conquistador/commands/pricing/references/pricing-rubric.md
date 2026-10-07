@@ -37,3 +37,20 @@ three failures this skill exists to prevent.
 - **not ready** — any blocking failure; return to the failed step with the gap named.
 
 The rubric never issues approval. A human decides whether the offer ships.
+
+## Machine-readable gate
+
+`conquistador_score` checks a self-score against these rules. Use the single `default` variant.
+`pass` means ready for human decision; `pass_with_concerns` means ready with material cautions.
+Whether a weak load-bearing dimension (3, 4, or 5) can ship with cautions is not stated, so the gate
+leaves it to the reviewer.
+
+```json conquistador-gate
+{
+  "scale": { "levels": ["fail", "weak", "pass"] },
+  "dimensions": ["Value metric", "Fences", "WTP evidence", "Unit economics", "Reversibility", "Boundary customers", "Migration", "Honesty"],
+  "variants": {
+    "default": { "minEach": "weak", "concernsBelowEach": "pass" }
+  }
+}
+```

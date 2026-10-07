@@ -2,7 +2,7 @@
 name: channels
 description: "Choose the marketing channel to test next, with current evidence for it."
 metadata:
-  version: 2.2.0
+  version: 2.3.0
 ---
 
 # Research a channel decision

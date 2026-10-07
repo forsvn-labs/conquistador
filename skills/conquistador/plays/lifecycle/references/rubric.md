@@ -63,3 +63,19 @@ Activation lift over a control (or honest directional downgrade) + a kill rule.
 ## Scoring note
 
 The rubric scores a **design**, not a sent campaign. "Measurability" scores whether the plan *can* prove lift, not whether lift was observed (the flow hasn't run). The critic never rewards a flow for projected numbers — only for a sound, falsifiable measurement design.
+
+## Machine-readable gate
+
+`conquistador_score` checks a self-score against these rules. Use the single `default` variant;
+30-34 is DONE_WITH_CONCERNS. Report the four hard gates from `agents/critic.md` as hard fails.
+
+```json conquistador-gate
+{
+  "scale": { "min": 0, "max": 7 },
+  "dimensions": ["Activation-fit", "Trigger/Suppression soundness", "Timing discipline", "Branch logic", "Per-step copy quality", "Measurability"],
+  "variants": {
+    "default": { "minEach": 4, "minTotal": 30, "doneAt": 35 }
+  },
+  "hardFails": ["missing-suppression", "consent-or-pii-violation", "multiple-activation-metrics", "autonomous-send"]
+}
+```
