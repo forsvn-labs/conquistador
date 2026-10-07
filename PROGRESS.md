@@ -2,7 +2,7 @@
 
 ## Unshipped
 
-- **Onboarding v2, on branch `feat/onboarding-v2` (not merged).** `conquistador` on the first run,
+- **Onboarding v2, [#60](https://github.com/forsvn-labs/conquistador/pull/60) (not merged).** `conquistador` on the first run,
   `conquistador add`, and every install flag go through one installer (`tools/onboard.mjs`):
   preflight (shadowed or stale `conquistador` on PATH, newer npm version), surfaces (coding agents,
   MCP apps, Hosted MCP, Executor, chat bots), details, review, install with a verify pass, project
