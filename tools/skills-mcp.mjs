@@ -1,9 +1,10 @@
 import { constants, openSync, closeSync, readSync, fstatSync, lstatSync, realpathSync, opendirSync, readFileSync } from 'node:fs';
-import { dirname, join, extname } from 'node:path';
-import { createBrief, formatBriefPack, searchKnowledge } from './brief.mjs';
+import { dirname, join, extname, posix } from 'node:path';
+import { createBrief, packBrief, searchKnowledge } from './brief.mjs';
 import { checkDocument, counted } from './check/index.mjs';
 import { channels, detectChannel, normalizeChannel } from './check/channels.mjs';
 import { extractDocument } from './check/extract.mjs';
+import { contextClaims } from './check/context-claims.mjs';
 import { packageRootOf } from './module-root.mjs';
 
 export const LIMITS = Object.freeze({ request: 65536, file: 262144, response: 524288, files: 256, depth: 12, methods: 128, entries: 2048, context: 8000, checkText: 60000, checkFindings: 100 });
@@ -20,8 +21,17 @@ const object = value => value !== null && typeof value === 'object' && !Array.is
 const schema = properties => ({ type: 'object', properties, required: Object.keys(properties), additionalProperties: false });
 const readOnly = { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false };
 const TOOLS = [
-  { name: 'conquistador_brief', description: 'Call this FIRST for any growth, GTM, launch, marketing, sales, pricing, positioning, copy, content, SEO, ads, outreach, or product-marketing task. Describe the task in plain words. Returns the selected command, or the play (its steps in order) for a multi-step outcome, with the full text of the playbooks to read now, the playbooks to read at later steps, and the rules for using them. Read the whole response before drafting.', inputSchema: { type: 'object', properties: { task: { type: 'string', minLength: 1, maxLength: 8000, description: 'The user request, including product, audience, channel, and goal when known.' }, context: { type: 'string', maxLength: 8000, description: 'Optional facts you already hold: product, audience, proof points, voice, and constraints. The brief carries them as the product truth for this task, so a drafting step can work from the brief alone.' } }, required: ['task'], additionalProperties: false } },
-  { name: 'conquistador_check', description: 'Check a marketing draft against fixed rules before you hand it over: unsupported claims, AI-writing tells, vague calls to action, channel limits, email compliance, and link hygiene. No model; the same text always gets the same findings. Fix each error and warning, or say why it stays. Advisories are suggestions. A clean check is evidence, not proof of quality.', inputSchema: { type: 'object', properties: { text: { type: 'string', minLength: 1, maxLength: LIMITS.checkText, description: 'The draft. Markdown front matter (subject, title, channel) is read when present.' }, channel: { type: 'string', enum: Object.keys(channels), description: 'Where the text goes. Sets channel limits, for example x for 280 characters or email for unsubscribe and subject rules. Omit for general rules only.' }, format: { type: 'string', enum: Object.keys(checkFormats), description: 'How to read the text. Default markdown.' } }, required: ['text'], additionalProperties: false },
+  { name: 'conquistador_brief', description: 'Call this FIRST for any growth, GTM, launch, marketing, sales, pricing, positioning, copy, content, SEO, ads, outreach, or product-marketing task. Describe the task in plain words. Returns the selected command, or the play (its steps in order) for a multi-step outcome, with the full text of the playbooks to read now, the playbooks to read at later steps, and the rules for using them. Read the whole response before drafting.', inputSchema: { type: 'object', properties: { task: { type: 'string', minLength: 1, maxLength: 8000, description: 'The user request, including product, audience, channel, and goal when known.' }, context: { type: 'string', maxLength: 8000, description: 'Optional facts you already hold: product, audience, proof points, voice, and constraints. The brief carries them as the product truth for this task, so a drafting step can work from the brief alone.' } }, required: ['task'], additionalProperties: false },
+    outputSchema: { type: 'object', properties: {
+      action: { type: 'string', enum: ['brief', 'none'] },
+      command: { type: ['string', 'null'], description: 'The command to run first.' },
+      play: { type: ['string', 'null'] },
+      inlined: { type: 'array', description: 'Files whose full text is in this response.', items: { type: 'object', properties: { path: { type: 'string' }, title: { type: 'string' } } } },
+      readNow: { type: 'array', description: 'Required files left out for space. Read each with conquistador_read before drafting.', items: { type: 'string' } },
+      readAtStep: { type: 'array', description: 'Files to read when a play reaches that step.', items: { type: 'object', properties: { step: { type: 'integer' }, path: { type: 'string' } } } },
+      situational: { type: 'array', description: 'Files to read only when the task reaches their topic.', items: { type: 'string' } },
+    }, required: ['action', 'inlined', 'readNow', 'readAtStep', 'situational'] } },
+  { name: 'conquistador_check', description: 'Check a marketing draft against fixed rules before you hand it over: unsupported claims, AI-writing tells, vague calls to action, channel limits, email compliance, and link hygiene. No model; the same text always gets the same findings. Fix each error and warning, or say why it stays. Advisories are suggestions. A clean check is evidence, not proof of quality.', inputSchema: { type: 'object', properties: { text: { type: 'string', minLength: 1, maxLength: LIMITS.checkText, description: 'The draft. Markdown front matter (subject, title, channel) is read when present.' }, channel: { type: 'string', enum: Object.keys(channels), description: 'Where the text goes. Sets channel limits, for example x for 280 characters or email for unsubscribe and subject rules. Omit for general rules only.' }, format: { type: 'string', enum: Object.keys(checkFormats), description: 'How to read the text. Default markdown.' }, context: { type: 'string', maxLength: 8000, description: 'Optional: the facts you passed to conquistador_brief. Numbers and customer names in the draft that this text lacks are flagged as claim-not-in-context.' } }, required: ['text'], additionalProperties: false },
     outputSchema: { type: 'object', properties: {
       channel: { type: 'string', description: 'The channel whose rules applied.' },
       clean: { type: 'boolean', description: 'True when no error or warning remains. Advisories do not block.' },
@@ -32,7 +42,7 @@ const TOOLS = [
   { name: 'conquistador_search', description: 'Search all Conquistador playbooks, platform guides, examples, and your own playbooks by keyword. Use it when a task reaches a step the brief did not cover. Returns paths with summaries; read one with conquistador_read.', inputSchema: { type: 'object', properties: { query: { type: 'string', minLength: 1, maxLength: 400 } }, required: ['query'], additionalProperties: false } },
   { name: 'conquistador_methods', description: 'List the commands, the plays, and the parent guide. Prefer conquistador_brief, which selects them and their playbooks for you.', inputSchema: schema({}) },
   { name: 'conquistador_files', description: 'List readable text resources in one command or play. Scripts are text only and are never executed.', inputSchema: schema({ method: { type: 'string', pattern: methodPattern.source, maxLength: 100 } }) },
-  { name: 'conquistador_read', description: 'Read one bundled method or playbook by its skills-relative path, such as conquistador/commands/campaign/references/channel-strategy.md, or a path returned by conquistador_brief or conquistador_search. No project files, credentials or runtime state are available.', inputSchema: schema({ path: { type: 'string', minLength: 1, maxLength: 400 } }) },
+  { name: 'conquistador_read', description: 'Read one bundled method or playbook by its library path, such as conquistador/commands/campaign/references/channel-strategy.md, or a path returned by conquistador_brief or conquistador_search. No project files, credentials or runtime state are available.', inputSchema: { type: 'object', properties: { path: { type: 'string', minLength: 1, maxLength: 400 }, from: { type: 'string', maxLength: 400, description: 'Optional: the library path of the file that contains a relative link, such as ../agents/critic.md.' } }, required: ['path'], additionalProperties: false } },
 ].map(tool => ({ ...tool, annotations: readOnly }));
 const PROMPTS = [
   { name: 'growth-plan', title: 'Plan marketing and growth', description: 'Choose channels, campaigns, launches, and in-product moves with the Conquistador playbooks.', text: 'Plan marketing and growth for {{product}}. Use conquistador_brief first and follow its playbooks.' },
@@ -71,7 +81,8 @@ export function createMethodAccess(root = bundledRoot) {
     try {
       const stat = fstatSync(fd);
       const checked = lstatSync(contained(path));
-      if (!stat.isFile() || stat.size > LIMITS.file || stat.dev !== checked.dev || stat.ino !== checked.ino) throw new Error('Invalid file');
+      if (stat.size > LIMITS.file) throw new Error('File too large');
+      if (!stat.isFile() || stat.dev !== checked.dev || stat.ino !== checked.ino) throw new Error('Invalid file');
       const bytes = Buffer.alloc(LIMITS.file + 1);
       let size = 0;
       while (size < bytes.length) {
@@ -148,7 +159,7 @@ export function createMethodAccess(root = bundledRoot) {
 }
 
 // The CLI checker, applied to text the caller sends. No project config: a hosted caller has no project.
-function checkDraft({ text, channel, format = 'markdown' }) {
+function checkDraft({ text, channel, format = 'markdown', context }) {
   if (!text.trim()) throw usageError('Send the draft text.');
   if (text.length > LIMITS.checkText) throw usageError(`Text is over ${LIMITS.checkText} characters. Check one deliverable at a time.`);
   if (!Object.hasOwn(checkFormats, format)) throw usageError(`Unknown format. Use one of: ${Object.keys(checkFormats).join(', ')}.`);
@@ -157,7 +168,9 @@ function checkDraft({ text, channel, format = 'markdown' }) {
   const file = `draft${checkFormats[format]}`;
   const document = extractDocument(text, checkFormats[format]);
   const detected = detectChannel(file, document, named);
-  const findings = checkDocument(document, { channel: detected, file });
+  if ((context?.length ?? 0) > LIMITS.context) throw usageError(`Context is over ${LIMITS.context} characters.`);
+  const findings = [...checkDocument(document, { channel: detected, file }), ...(context?.trim() ? contextClaims(document, context) : [])]
+    .sort((left, right) => left.line - right.line || left.rule.localeCompare(right.rule));
   const total = findings.filter(counted).length;
   return {
     channel: detected,
@@ -168,8 +181,25 @@ function checkDraft({ text, channel, format = 'markdown' }) {
   };
 }
 
+// A library path, with an optional `skills/` prefix, or a relative link resolved from the file
+// that contains it. Resolution never leaves the library; contained() checks the result.
+function libraryPath(path, from) {
+  const strip = value => value.replace(/^skills\//, '');
+  if (from === undefined) return strip(path);
+  const resolved = posix.normalize(posix.join(posix.dirname(strip(from)), path));
+  if (resolved.startsWith('../') || resolved === '..' || posix.isAbsolute(resolved)) throw new Error('Invalid path');
+  return resolved;
+}
+
+// Name the cause without echoing the supplied path.
+function readFailure(failure) {
+  if (failure.code === 'ENOENT') return 'Not found: no bundled file has that path. List files with conquistador_files or find one with conquistador_search.';
+  if (failure.message === 'File too large') return `File too large: bundled files over ${LIMITS.file} bytes are not served.`;
+  return 'Invalid path: use a library path such as conquistador/commands/copy/COMMAND.md, or a relative link with its file as `from`.';
+}
+
 // One JSON-RPC handler shared by stdio and HTTP. It returns the response object, or null for notifications.
-export function createMcpHandler({ root = bundledRoot, requireInitialize = true } = {}) {
+export function createMcpHandler({ root = bundledRoot, requireInitialize = true, hosted = false } = {}) {
   let access;
   let initialized = !requireInitialize;
   let ready = !requireInitialize;
@@ -205,12 +235,15 @@ export function createMcpHandler({ root = bundledRoot, requireInitialize = true 
     const args = params.arguments ?? {};
     if (!definition || !object(args) || Object.keys(args).some(key => !Object.hasOwn(definition.inputSchema.properties, key) || definition.inputSchema.properties[key].type === 'string' && typeof args[key] !== 'string') || definition.inputSchema.required.some(key => typeof args[key] !== 'string')) return error(id, -32602, 'Invalid tool arguments');
     let result;
+    let structured;
     try {
       let value;
       if (params.name === 'conquistador_brief') {
         if (!args.task.trim() || args.task.length > 8000) throw new Error('Invalid task');
         if ((args.context?.length ?? 0) > LIMITS.context) throw usageError(`Context is over ${LIMITS.context} characters. Keep the facts that matter for this task.`);
-        value = formatBriefPack(createBrief(args.task, { root: packageRoot(), force: true }), { callerContext: args.context?.trim() });
+        const pack = packBrief(createBrief(args.task, { root: packageRoot(), force: true }), { callerContext: args.context?.trim(), hosted });
+        value = pack.text;
+        structured = pack.structured;
       } else if (params.name === 'conquistador_check') {
         value = checkDraft(args);
       } else if (params.name === 'conquistador_search') {
@@ -218,11 +251,11 @@ export function createMcpHandler({ root = bundledRoot, requireInitialize = true 
         value = searchKnowledge(args.query, { root: packageRoot() });
       } else {
         access ??= createMethodAccess(root);
-        value = params.name === 'conquistador_methods' ? access.methods() : params.name === 'conquistador_files' ? access.files(args.method) : access.read(args.path.replace(/^skills\//, ''));
+        value = params.name === 'conquistador_methods' ? access.methods() : params.name === 'conquistador_files' ? access.files(args.method) : access.read(libraryPath(args.path, args.from));
       }
-      result = { content: [{ type: 'text', text: typeof value === 'string' ? value : JSON.stringify(value) }], ...(definition.outputSchema ? { structuredContent: value } : {}) };
+      result = { content: [{ type: 'text', text: typeof value === 'string' ? value : JSON.stringify(value) }], ...(definition.outputSchema ? { structuredContent: structured ?? value } : {}) };
     } catch (failure) {
-      result = { isError: true, content: [{ type: 'text', text: failure.usage ? failure.message : params.name === 'conquistador_brief' || params.name === 'conquistador_search' ? 'Cannot build a brief for this input. Describe the task in plain words.' : 'Cannot read bundled method: invalid path, unavailable text file, or bundle limit exceeded.' }] };
+      result = { isError: true, content: [{ type: 'text', text: failure.usage ? failure.message : params.name === 'conquistador_read' ? readFailure(failure) : params.name === 'conquistador_brief' || params.name === 'conquistador_search' ? 'Cannot build a brief for this input. Describe the task in plain words.' : 'Cannot read bundled method: invalid path, unavailable text file, or bundle limit exceeded.' }] };
     }
     if (Buffer.byteLength(JSON.stringify(result)) > LIMITS.response - 1024) {
       result = { isError: true, content: [{ type: 'text', text: 'Encoded text exceeds the response limit.' }] };
