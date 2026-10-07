@@ -306,7 +306,9 @@ export async function applyPlan(plan, choices, { ui, progress, login }) {
       for (const step of runnable) record({ surface: 'agents', label: step.label, ok: false, error: `${error} Nothing installed.`, agent: step.agent });
       return results.concat(plan.surfaces.filter(surface => surface.id !== 'agents').map(surface => ({ surface: surface.id, label: surface.label, ok: false, error })));
     }
-    if (agents && targets.some(agent => agent.how !== 'skill') && plan.scope === 'global') setHooks(choices.hooks);
+    // --no-hooks is always recorded, as before; turning hooks back on applies where a plugin installs.
+    if (agents && !choices.hooks) setHooks(false);
+    else if (agents && targets.some(agent => agent.how !== 'skill') && plan.scope === 'global') setHooks(true);
     const done = new Set();
     for (const step of runnable) {
       const agent = AGENTS.find(item => item.id === (step.agent ?? step.agents[0]));
