@@ -4,7 +4,7 @@ platform: ugc
 schema_version: 2
 pack_type: asset-format
 status: draft
-method_updated: 2026-09-15
+method_updated: 2026-10-07
 last_verified: null
 verifier: none
 source_basis: "Conquistador task specification; platform constraints require task-local verification."
@@ -34,6 +34,14 @@ Record the audience, desired decision, supported claim and visible evidence befo
 ## 2. Format constraints and production handoff
 
 Record creator consent, permitted channels, editing rights, paid-use rights, term, territory and music/image permissions. Check the destination's disclosure tools and format constraints. Capture a clean master, captions and authorized alternate crops.
+
+For a sponsored creator who posts to their own audience, brief inside their existing work:
+
+- Study the creator's recent posts before you brief. Place the product in the format that already performs best for them, for example a day in the life, a routine, a tip, a skit, a progress update, a personal story, or an answer to a viewer question.
+- Make the creator the protagonist. The product appears as a moment of use inside their content, not as the topic.
+- Keep the brief short: what the product is, what it does, and the required or prohibited claims and disclosures. Do not supply a word-for-word script, and keep review to one round for compliance.
+- Feature the single core use first. Move to a secondary feature only when that creator's results decline.
+- Provide a camera-ready demo state, such as clean sample data and a tidy interface, that still shows real product behavior.
 
 The handoff must identify the destination account, format, verified constraints and their dates, asset paths, preview checks, accessibility work, rights status and any unresolved upload requirement. Keep production settings separate from claims about what the platform rewards.
 
@@ -66,7 +74,7 @@ Set duration and cadence from the content needed, production capacity, audience 
 
 ## 7. CTA and conversion path
 
-State the offer and relationship near the action where required by the approved disclosure plan. Verify any creator-specific link or code resolves correctly; do not promise attribution coverage it cannot provide.
+State the offer and relationship near the action where required by the approved disclosure plan. Verify any creator-specific link or code resolves correctly; do not promise attribution coverage it cannot provide. On a sponsored post, the brand account may reply openly in the comments to answer questions and point viewers to the brand profile. Never seed comments from undisclosed or friendly accounts.
 
 Record every step between the asset and the desired outcome. Distinguish attempted actions from completed actions. Hand off the exact destination, tracking parameters if used, access terms and response owner with the final copy.
 
@@ -75,5 +83,7 @@ Record every step between the asset and the desired outcome. Distinguish attempt
 List unresolved account capabilities, audience fit, asset rights, exposure comparability and attribution gaps. For each gap, state whether it blocks production, blocks publication or only limits interpretation. Carry the result with its date and scope; a successful local test does not become a universal platform rule.
 
 ## 9. Changelog
+
+2026-10-07: added sponsored-creator briefing rules and open brand replies in comments. No external verification or live performance evidence was collected.
 
 2026-09-15: replaced the research-derived pack with a Conquistador outcome, production and test specification. No external verification or live performance evidence was collected.
