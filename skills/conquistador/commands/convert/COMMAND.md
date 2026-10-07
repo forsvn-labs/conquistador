@@ -2,7 +2,7 @@
 name: convert
 description: "Fix one conversion surface and return one test that settles it."
 metadata:
-  version: 2.1.0
+  version: 2.2.0
 ---
 
 # Improve conversion performance
@@ -17,6 +17,7 @@ Read the core files in full before you draft; read the others when their step or
 Core:
 
 - [anti-patterns](references/anti-patterns.md): LP-Eval Anti-Patterns. Re-read before any cycle artifact ships. The first 10 patterns are lp-eval-specific…
+- [app-onboarding-paywall](references/app-onboarding-paywall.md): App onboarding and paywall. Use this when the conversion surface is the onboarding-to-paywall flow of a…
 - [conversion-diagnosis-anti-patterns](references/conversion-diagnosis-anti-patterns.md): Conversion diagnosis review failures. Apply these checks with diagnostic-evidence-method.md and…
 - [conversion-diagnosis-method](references/conversion-diagnosis-method.md): Conversion diagnosis workflow. Use diagnostic-evidence-method.md to distinguish a conversion observation…
 - [diagnostic-evidence-method](references/diagnostic-evidence-method.md): Diagnostic evidence method. Start with the decision the conversion owner needs to make and the evidence…
@@ -85,9 +86,22 @@ Separate missing data from zero. Treat vanity engagement as diagnostic, not busi
 6. **Friction:** they wanted it but the next step was costly or broken.
 7. **Value:** they acted but the product or offer did not deliver.
 
-Inspect audience, channel, device, geography, and customer mix before aggregating. Treat co-timed
+Inspect audience, channel, device, geography, and customer mix before aggregating. Break the
+drop-off down by acquisition source before you blame the surface; the same page can convert very
+differently by channel. Treat co-timed
 movement as correlation until evidence distinguishes causes. State the mechanism connecting each
 proposed cause to the observed behavior.
+
+When qualitative evidence is thin, collect it before you choose a cause:
+
+- Ask one or two open questions on the surface, shown only at a hesitation signal (long dwell,
+  exit intent) or right after a completed step.
+- Ask people who completed the step what nearly stopped them; they met the same obstacles as
+  those who left.
+- For each friction step, name the scarce resource it uses: time, money, physical effort,
+  thinking, social risk, or a break from routine. Reduce the most-used resource first.
+- Consider value before sign-up: let the visitor complete the first useful action, then ask for
+  the account.
 
 ## Prioritize a discriminating test
 
@@ -138,6 +152,9 @@ front-door Reach→Value logic, supplied evidence, explicit assumptions, and the
   [diagnostic evidence method](references/diagnostic-evidence-method.md),
   [hypothesis framework](../diagnose/references/hypothesis-framework.md),
   [diagnostic examples](references/logic-tree-examples.md).
+
+**App onboarding and paywall** (subscription app first-run flow): add
+[app onboarding and paywall](references/app-onboarding-paywall.md) to the conversion diagnosis lens.
 
 **Landing eval lens** (launched surface evidence → keep / discard / watch / blocked):
 
