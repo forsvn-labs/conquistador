@@ -88,7 +88,7 @@
     },
     {
       "path": "README.md",
-      "sha256": "b3e187fdf192a7cdc2e9de0e67c1b93c47b819599b4a39a9ecfb59f61f42dc90"
+      "sha256": "eef243c9a473e2bd95b35e8f18ec933ef46c572b9f212201f94e8f7f9ee73c8f"
     },
     {
       "path": "SKILL.md",
@@ -4876,7 +4876,7 @@
     },
     {
       "path": "tools/mcp-http.mjs",
-      "sha256": "6368733e7c5b2f79faa3306af3307e7f8bc624b383e6af50f37e628930e50e52"
+      "sha256": "8a247e8c94374ad743a471497e4fc96d808ddfa6d6564e1a406ce36ae43fdb71"
     },
     {
       "path": "tools/method-library.mjs",

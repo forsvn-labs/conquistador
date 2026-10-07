@@ -80,3 +80,103 @@ test('Wrangler default module rules are off, so nothing outside the declared glo
     assert.match(rule, /fallthrough = false/, type);
   }
 });
+
+// Personal tokens. The full flows run in workerd: tools/e2e/signup.mjs. These cover binding
+// permutations that one wrangler.toml cannot express.
+const memoryKv = (entries = {}) => {
+  const data = new Map(Object.entries(entries).map(([key, value]) => [key, JSON.stringify(value)]));
+  return {
+    data,
+    get: async (key, type) => (data.has(key) ? ((type === 'json' || type?.type === 'json') ? JSON.parse(data.get(key)) : data.get(key)) : null),
+    put: async (key, value) => { data.set(key, value); },
+    delete: async key => { data.delete(key); },
+  };
+};
+const allow = { limit: async () => ({ success: true }) };
+const { createHash, randomBytes } = await import('node:crypto');
+const hashOf = token => createHash('sha256').update(token).digest('hex');
+const personal = () => `cq_${randomBytes(32).toString('base64url')}`;
+const seeded = (token, user = {}) => memoryKv({
+  [`token:${hashOf(token)}`]: { githubId: 7, created: '2026-10-07T00:00:00.000Z', lastUsed: '2026-10-07T00:00:00.000Z' },
+  'user:7': { githubId: 7, login: 'seven', tokenHash: hashOf(token), created: '2026-10-07T00:00:00.000Z', status: 'active', ...user },
+});
+
+test('a personal token fails closed when the KV namespace is not bound', async () => {
+  const response = await call('/mcp', { body: list, token: personal(), env: { CONQUISTADOR_MCP_TOKEN: 'tok', MCP_LIMITER: allow } });
+  assert.equal(response.status, 503);
+  assert.match((await response.json()).error, /not set up/);
+});
+
+test('a personal token fails closed when the rate limiter is not bound', async () => {
+  const token = personal();
+  const response = await call('/mcp', { body: list, token, env: { TOKENS: seeded(token) } });
+  assert.equal(response.status, 503);
+  assert.match((await response.json()).error, /rate limit/i);
+});
+
+test('a seeded personal token works, and the admin token works beside it', async () => {
+  const token = personal();
+  const env = { CONQUISTADOR_MCP_TOKEN: 'tok', TOKENS: seeded(token), MCP_LIMITER: allow };
+  assert.equal((await call('/mcp', { body: list, token, env })).status, 200);
+  assert.equal((await call('/mcp', { body: list, token: 'tok', env })).status, 200);
+});
+
+test('a token record whose user record points at another hash is refused', async () => {
+  // Two sign-ins at once, or a late last-used write after a rotation, leave such a record.
+  const token = personal();
+  const env = { TOKENS: seeded(token, { tokenHash: hashOf(personal()) }), MCP_LIMITER: allow };
+  const response = await call('/mcp', { body: list, token, env });
+  assert.equal(response.status, 401);
+  assert.match((await response.json()).error, /conquistador login/);
+});
+
+test('a token record without a user record is refused', async () => {
+  const token = personal();
+  const kv = seeded(token);
+  kv.data.delete('user:7');
+  assert.equal((await call('/mcp', { body: list, token, env: { TOKENS: kv, MCP_LIMITER: allow } })).status, 401);
+});
+
+test('the rate limiter refuses with 429, the reason, and retry-after', async () => {
+  const token = personal();
+  const env = { TOKENS: seeded(token), MCP_LIMITER: { limit: async () => ({ success: false }) }, RATE_LIMIT_PER_MINUTE: '60' };
+  const response = await call('/mcp', { body: list, token, env });
+  assert.equal(response.status, 429);
+  assert.equal(response.headers.get('retry-after'), '60');
+  const body = await response.json();
+  assert.match(body.error, /60 requests per minute/);
+  assert.equal(body.retryAfter, 60);
+});
+
+test('the admin token cannot be revoked through /api/logout', async () => {
+  const response = await call('/api/logout', { token: 'tok', env: { CONQUISTADOR_MCP_TOKEN: 'tok', TOKENS: memoryKv(), MCP_LIMITER: allow } });
+  assert.equal(response.status, 400);
+});
+
+test('sign-up refuses GitHub URL overrides that are not HTTPS or loopback', async () => {
+  const env = { GITHUB_CLIENT_ID: 'id', GITHUB_CLIENT_SECRET: 'secret', TOKENS: memoryKv(), SIGNUP_LIMITER: allow, MCP_LIMITER: allow, GITHUB_URL: 'http://evil.example' };
+  const response = await call('/signup/start', { method: 'GET', env });
+  assert.equal(response.status, 503);
+  assert.equal(response.headers.get('location'), null);
+});
+
+test('sign-up needs the KV namespace and the sign-up limiter', async () => {
+  const base = { GITHUB_CLIENT_ID: 'id', GITHUB_CLIENT_SECRET: 'secret', TOKENS: memoryKv(), SIGNUP_LIMITER: allow, MCP_LIMITER: allow };
+  assert.equal((await call('/signup/start', { method: 'GET', env: base })).status, 302);
+  for (const missing of ['TOKENS', 'SIGNUP_LIMITER', 'GITHUB_CLIENT_SECRET']) {
+    const env = { ...base };
+    delete env[missing];
+    assert.equal((await call('/signup/start', { method: 'GET', env })).status, 503, missing);
+  }
+});
+
+test('the rate-limit message reads the same limit that wrangler.toml configures', () => {
+  const config = readFileSync(new URL('../wrangler.toml', import.meta.url), 'utf8');
+  const limiter = config.split('[[ratelimits]]').slice(1).find(block => /name = "MCP_LIMITER"/.test(block));
+  assert.ok(limiter, 'MCP_LIMITER binding');
+  assert.match(limiter, /period = 60/);
+  const limit = limiter.match(/limit = (\d+)/)?.[1];
+  assert.equal(config.match(/^RATE_LIMIT_PER_MINUTE = "(\d+)"$/m)?.[1], limit);
+  assert.match(config, /binding = "TOKENS"/);
+  assert.ok(config.split('[[ratelimits]]').slice(1).some(block => /name = "SIGNUP_LIMITER"/.test(block)));
+});

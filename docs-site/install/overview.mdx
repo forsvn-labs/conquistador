@@ -61,16 +61,19 @@ npx @forsvn/conquistador@latest --dry-run --json   # Print the plan as JSON
 |---|---|
 | `--surface=LIST` | From 0.4.0. Choose the options: `agents`, `mcp-apps`, `hosted`, `executor`, `bot` |
 | `--providers=LIST` | Install for these agents. See [Coding agents](/install/coding-agents#agents-and-folders) |
-| `--apps=LIST` | From 0.4.0. Configure these MCP apps |
+| `--apps=LIST` | From 0.4.0. Configure these MCP apps: `claude-desktop`, `vscode`, `windsurf`, `zed`, `cursor` |
+| `--executor-name=NAME` | From 0.4.0. The source name in Executor. Default: `conquistador` |
+| `--bot-out=DIR` | From 0.4.0. The folder for the chat bot files. Default: `./conquistador-bot` |
 | `--scope=project` or `--scope=global` | Install for this project or for all projects |
 | `--no-hooks` | Install without the prompt, stop, and check hooks |
-| `-y`, `--yes` | Accept the plan |
+| `-y`, `--yes` | Accept the defaults. Without `--surface`, only coding agents. With `--yes`, the installer exits with code 1 when a step or a check failed |
 | `--dry-run` | Show the plan. Change nothing |
-| `--json` | From 0.4.0. Print the plan as JSON |
+| `--json` | From 0.4.0. Print the plan as JSON (schema `conquistador.onboarding-plan/v1`). Change nothing |
+| `--plain` | From 0.4.0. Line prompts with no color and no cursor moves. `TERM=dumb` does the same. `NO_COLOR` turns off color only |
 | `--in AGENT` | Open this agent after the install |
 | `--no-open` | Install only |
 
-From 0.4.0 the old flags still work. Each one selects an option and prints a one-line note: `--mcp` selects MCP apps, `--bot` selects chat bots, and `--skills` and `--plugin` select coding agents.
+From 0.4.0 the old flags still work. `--mcp`, `--plugin`, `--skills`, `--bot`, and `--advanced` open the installer with that option chosen and print the new flag. With a route option (`--host`, `--path`, `--url`, a bot name such as `--bot hermes`, or `--help`), they keep the older per-project route.
 
 ## Why there is no install-time setup
 

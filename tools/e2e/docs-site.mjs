@@ -79,7 +79,7 @@ const helpCommands = [...new Set([...help.matchAll(/^ {2}conquistador ([a-z]+)/g
 const dispatcher = new Set([...read('runtime/bin/conquistador.js').matchAll(/["']([a-z]+)["']/g)].map(match => match[1]));
 const cliPage = page('reference/cli');
 const documented = [...new Set([...cliPage.matchAll(/^#{2,3} `conquistador ([a-z]+)/gm)].map(match => match[1]))];
-const required = [...helpCommands, 'check', 'connect', 'review', 'pin', 'unpin'];
+const required = [...helpCommands, 'check', 'connect', 'review', 'pin', 'unpin', 'login', 'logout', 'whoami'];
 const undocumentedCommands = required.filter(name => !documented.includes(name));
 record('CLI reference documents every command', !undocumentedCommands.length, undocumentedCommands.length ? list(undocumentedCommands) : `${documented.length} commands`);
 const unknownCommands = documented.filter(name => !dispatcher.has(name));
@@ -129,13 +129,26 @@ record('MCP tools newer than 0.3.0 are marked from 0.4.0', newTools.length > 0 &
 
 // F9. Repository files whose content moved point to the site and keep only what tests and
 // offline readers need.
-const moved = { 'INSTALL.md': 'install/overview', 'docs/CHECK.md': 'check' };
+// INSTALL.md stays the full install reference (it ships in the npm package) and links to the site.
+const moved = { 'docs/CHECK.md': 'check' };
 for (const [file, target] of Object.entries(moved)) {
   const text = read(file);
   const lines = text.trim().split('\n').length;
   record(`${file} points to the site`, text.includes(`${SITE_URL}/${target}`) && text.includes(`docs-site/${target}.mdx`) && lines <= 40, `${lines} lines`);
 }
 record('README links to the docs site', read('README.md').includes(SITE_URL));
+record('INSTALL.md links to the docs site', read('INSTALL.md').includes(`${SITE_URL}/install/overview`));
+
+// F10. The install and hosted pages match what the installer (#60) and the sign-up (#59) do.
+const perMinute = /name = "MCP_LIMITER"[\s\S]*?limit = (\d+)/.exec(read('wrangler.toml'))?.[1];
+const facts = {
+  'install/overview': ['--surface', '--apps', '--executor-name', '--bot-out', '--json', '--plain'],
+  'install/hosted-mcp': ['conquistador login', 'conquistador whoami', 'conquistador logout', '/signup', 'cq_', `${perMinute} requests per minute`],
+  'install/executor': ['addServer', '1.5.40', 'executor daemon run'],
+  'install/mcp-apps': ['conquistador-backup', 'Cursor'],
+};
+const factGaps = Object.entries(facts).flatMap(([name, needles]) => needles.filter(needle => !page(name).includes(needle)).map(needle => `${name}: ${needle}`));
+record('install pages match the installer and the sign-up', Boolean(perMinute) && !factGaps.length, factGaps.length ? list(factGaps) : `${Object.values(facts).flat().length} facts`);
 
 // F10. context7.json is valid for the Context7 schema and indexes docs-site/.
 try {

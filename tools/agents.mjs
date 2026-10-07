@@ -372,24 +372,32 @@ export function setHooks(on) {
   writeFileSync(file, `${JSON.stringify(config, null, 2)}\n`);
 }
 
-// Install the chosen hosts in one scope. Returns the hosts that succeeded.
-export function installTargets(targets, { scope, root, hooks = true, log = () => {} }) {
-  const results = [];
-  // A damaged package must reach no agent, not even as a skill copy (I2).
-  const fail = error => ({ results: targets.map(agent => ({ agent, result: { ok: false, error: error.message } })), staged: false, error: error.message });
+// Check the package, then copy the plugin payload when a global plugin install needs it.
+// Returns null, or the error. A damaged package must reach no agent, not even as a skill copy (I2).
+export function stageTargets(targets, { scope, plugin = false }) {
   try {
     const problems = invalidPayload(productRoot, expectedFiles());
     if (problems.length) throw incompletePayload(productRoot, problems);
-    if (scope === 'global' && targets.some(agent => agent.how !== 'skill')) copyPayload(pluginHome());
-  } catch (error) { return fail(error); }
+    if (plugin || (scope === 'global' && targets.some(agent => agent.how !== 'skill'))) copyPayload(pluginHome());
+    return null;
+  } catch (error) { return error.message; }
+}
+
+// Install one host after stageTargets. Hosts that share a skill folder share `done`.
+export function installOne(agent, { scope, root, done = new Set(), log = () => {} }) {
+  const state = readState();
+  const action = scope === 'global' && state.agents?.[agent.id] && agent.installed() ? 'update' : 'install';
+  const result = applyAgent(agent, action, { source: pluginHome(), scope, root, done, log });
+  const updated = readState();
+  if (result.ok && (updated.removed ?? []).includes(agent.id)) writeState({ ...updated, removed: updated.removed.filter(id => id !== agent.id) });
+  return result;
+}
+
+// Install the chosen hosts in one scope. Returns the hosts that succeeded.
+export function installTargets(targets, { scope, root, hooks = true, log = () => {} }) {
+  const error = stageTargets(targets, { scope });
+  if (error) return { results: targets.map(agent => ({ agent, result: { ok: false, error } })), staged: false, error };
   if (!hooks) setHooks(false);
   const done = new Set();
-  for (const agent of targets) {
-    const state = readState();
-    const action = scope === 'global' && state.agents?.[agent.id] && agent.installed() ? 'update' : 'install';
-    results.push({ agent, result: applyAgent(agent, action, { source: pluginHome(), scope, root, done, log }) });
-  }
-  const updated = readState();
-  writeState({ ...updated, removed: (updated.removed ?? []).filter(id => !results.some(item => item.result.ok && item.agent.id === id)) });
-  return { results, staged: true };
+  return { results: targets.map(agent => ({ agent, result: installOne(agent, { scope, root, done, log }) })), staged: true };
 }
