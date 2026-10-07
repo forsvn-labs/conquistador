@@ -2,7 +2,7 @@
 name: outreach
 description: "Write signal-led outreach sequences, follow-ups, and reply handling."
 metadata:
-  version: 2.2.0
+  version: 2.3.0
 ---
 
 # Write trustworthy outreach
@@ -20,14 +20,14 @@ Core:
 - [anti-patterns](references/anti-patterns.md): Outreach failures and repairs. Do not ban ordinary pronouns, greetings, punctuation, or formal language as…
 - [copy-validation-rubric](references/copy-validation-rubric.md): Outreach review rubric. This is a local editorial rubric. Scores express review judgments, not measured…
 - [cold-email-frameworks](references/frameworks/cold-email-frameworks.md): Choose the information the reader needs. Use this reference to resolve a drafting choice, not to assign a…
-- [outreach-decisions](references/frameworks/outreach-decisions.md): Decide what makes this message worth reviewing. Use this worksheet when a commercial message is proposed.…
+- [sequences](references/frameworks/sequences.md): Plan a multi-touch sequence. Use when a request covers more than one touch. Each touch must make sense…
 - [structures](references/frameworks/structures.md): Arrange a message for its actual task. A message has no required sentence order. Place the information…
 
-By step: [email](references/channels/email.md), [imessage](references/channels/imessage.md), [linkedin](references/channels/linkedin.md), [platform-proposals](references/channels/platform-proposals.md), [twitter](references/channels/twitter.md), [account-program](references/frameworks/account-program.md), [ctas](references/frameworks/ctas.md), [objections](references/frameworks/objections.md), [personalization-signals](references/frameworks/personalization-signals.md), [method](references/method.md), [community](references/modes/community.md), [creator-sponsorship](references/modes/creator-sponsorship.md), [intro-request](references/modes/intro-request.md), [no-pitch-research](references/modes/no-pitch-research.md), [partnership](references/modes/partnership.md), [saas](references/modes/saas.md), [services](references/modes/services.md), [proof-types](references/proof-types.md).
+By step: [email](references/channels/email.md), [imessage](references/channels/imessage.md), [linkedin](references/channels/linkedin.md), [platform-proposals](references/channels/platform-proposals.md), [twitter](references/channels/twitter.md), [account-program](references/frameworks/account-program.md), [ctas](references/frameworks/ctas.md), [objections](references/frameworks/objections.md), [outreach-decisions](references/frameworks/outreach-decisions.md), [personalization-signals](references/frameworks/personalization-signals.md), [method](references/method.md), [community](references/modes/community.md), [creator-sponsorship](references/modes/creator-sponsorship.md), [early-stage](references/modes/early-stage.md), [intro-request](references/modes/intro-request.md), [no-pitch-research](references/modes/no-pitch-research.md), [partnership](references/modes/partnership.md), [saas](references/modes/saas.md), [services](references/modes/services.md), [proof-types](references/proof-types.md).
 
 Specialist roles: [composer](agents/composer.md), [critic](agents/critic.md), [proof-selector](agents/proof-selector.md), [reply-classifier](agents/reply-classifier.md), [reply-composer](agents/reply-composer.md), [signal-analyst](agents/signal-analyst.md), [strategist](agents/strategist.md), [voice-auditor](agents/voice-auditor.md).
 
-Worked examples: [critic-case-sourced-signal-no-pitch](references/examples/critic-case-sourced-signal-no-pitch.md), [critic-case-useful-neutral-template](references/examples/critic-case-useful-neutral-template.md), [critic-case-weak-signal-claim-bearing](references/examples/critic-case-weak-signal-claim-bearing.md), [critic-case-weak-vague-template](references/examples/critic-case-weak-vague-template.md), [missing-signal-neutral-template](references/examples/missing-signal-neutral-template.md), [missing-signal-no-pitch](references/examples/missing-signal-no-pitch.md), [missing-signal-observed-opener](references/examples/missing-signal-observed-opener.md), [missing-signal-weak-template](references/examples/missing-signal-weak-template.md), [sourced-signal-no-pitch](references/examples/sourced-signal-no-pitch.md), [weak-signal-claim-bearing](references/examples/weak-signal-claim-bearing.md), [write-outreach-walkthrough](references/examples/write-outreach-walkthrough.md).
+Worked examples: [critic-case-sourced-signal-no-pitch](references/examples/critic-case-sourced-signal-no-pitch.md), [critic-case-useful-neutral-template](references/examples/critic-case-useful-neutral-template.md), [critic-case-weak-signal-claim-bearing](references/examples/critic-case-weak-signal-claim-bearing.md), [critic-case-weak-vague-template](references/examples/critic-case-weak-vague-template.md), [missing-signal-neutral-template](references/examples/missing-signal-neutral-template.md), [missing-signal-no-pitch](references/examples/missing-signal-no-pitch.md), [missing-signal-observed-opener](references/examples/missing-signal-observed-opener.md), [missing-signal-weak-template](references/examples/missing-signal-weak-template.md), [saas-sequence-no-proof](references/examples/saas-sequence-no-proof.md), [sourced-signal-no-pitch](references/examples/sourced-signal-no-pitch.md), [weak-signal-claim-bearing](references/examples/weak-signal-claim-bearing.md), [write-outreach-walkthrough](references/examples/write-outreach-walkthrough.md).
 
 Output formats and fallbacks: [sequential](fallbacks/sequential.md), [format-conventions](references/format-conventions.md).
 
@@ -48,6 +48,9 @@ and asks one research question. Missing signal on **no-pitch-research** withhold
 readiness (`NEEDS_SIGNAL`) and allows only a labeled generic template. Claim-bearing missing/weak
 signal stays `READY` with conditional relevance. Missing proof narrows what a claim-bearing message may
 claim; it does not force a pitch, an invented result, or an invented observation.
+When the product has no customers, results, or case studies yet, use the
+[early-stage](references/modes/early-stage.md) mode to choose an honest substitute for proof; see the
+[worked sequence](references/examples/saas-sequence-no-proof.md).
 
 Trace target-specific statements to public, operator-supplied, or permissioned evidence. Label that
 access class. Preserve the observation accurately and keep interpretation separate. The research
@@ -68,6 +71,9 @@ Create the smallest useful sequence:
 - proof appropriate to the claim, or an explicit no-pitch research boundary;
 - one low-friction ask;
 - follow-up that adds value or closes the loop.
+
+For more than one touch, plan each touch's new element, spacing, subject, and stop rules with
+[sequence mechanics](references/frameworks/sequences.md).
 
 A labeled generic template (`readiness: NEEDS_SIGNAL`) skips “tied to the signal” on
 **no-pitch-research** only. Use affiliation, research intent, one generic question, and recipient Control.
@@ -144,8 +150,10 @@ Before delivery, load the method and its review contracts:
   [voice-auditor](agents/voice-auditor.md), [critic](agents/critic.md);
 - reply route: [reply-classifier](agents/reply-classifier.md) and
   [reply-composer](agents/reply-composer.md);
-- matching [channel](references/channels/) and [mode](references/modes/) files, plus
-  [frameworks](references/frameworks/), [proof types](references/proof-types.md),
+- matching [channel](references/channels/) and [mode](references/modes/) files (add
+  [early-stage](references/modes/early-stage.md) when there is no proof yet), plus
+  [frameworks](references/frameworks/) ([sequence mechanics](references/frameworks/sequences.md) for
+  more than one touch), [proof types](references/proof-types.md),
   [copy-validation](references/copy-validation-rubric.md), and
   [anti-patterns](references/anti-patterns.md).
 

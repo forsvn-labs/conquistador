@@ -2639,7 +2639,10 @@
         "skills/conquistador/commands/outreach/references/proof-types.md",
         "skills/conquistador/commands/outreach/references/frameworks/account-program.md",
         "skills/conquistador/commands/outreach/references/modes/creator-sponsorship.md",
-        "skills/conquistador/commands/outreach/references/modes/intro-request.md"
+        "skills/conquistador/commands/outreach/references/modes/intro-request.md",
+        "skills/conquistador/commands/outreach/references/modes/early-stage.md",
+        "skills/conquistador/commands/outreach/references/frameworks/sequences.md",
+        "skills/conquistador/commands/outreach/references/examples/saas-sequence-no-proof.md"
       ],
       "resourceConditions": [
         {
@@ -2697,6 +2700,18 @@
         {
           "path": "skills/conquistador/commands/outreach/references/modes/intro-request.md",
           "when": "Load when the route is an introduction through a mutual contact."
+        },
+        {
+          "path": "skills/conquistador/commands/outreach/references/modes/early-stage.md",
+          "when": "Load when the product or service has no customers, measured results, or case studies yet."
+        },
+        {
+          "path": "skills/conquistador/commands/outreach/references/frameworks/sequences.md",
+          "when": "Load when the request covers more than one touch, such as a sequence or a follow-up."
+        },
+        {
+          "path": "skills/conquistador/commands/outreach/references/examples/saas-sequence-no-proof.md",
+          "when": "Load when drafting a multi-touch commercial sequence and the sender has no customers or case studies yet."
         }
       ],
       "optionalResources": [],

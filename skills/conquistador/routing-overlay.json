@@ -2005,6 +2005,18 @@
         {
           "path": "references/modes/intro-request.md",
           "when": "Load when the route is an introduction through a mutual contact."
+        },
+        {
+          "path": "references/modes/early-stage.md",
+          "when": "Load when the product or service has no customers, measured results, or case studies yet."
+        },
+        {
+          "path": "references/frameworks/sequences.md",
+          "when": "Load when the request covers more than one touch, such as a sequence or a follow-up."
+        },
+        {
+          "path": "references/examples/saas-sequence-no-proof.md",
+          "when": "Load when drafting a multi-touch commercial sequence and the sender has no customers or case studies yet."
         }
       ],
       "optionalResources": [],

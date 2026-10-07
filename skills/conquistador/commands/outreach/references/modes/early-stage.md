@@ -1,7 +1,7 @@
 # early-stage
 
-Use when the product or service has no customers, measured results, or case studies yet, for a
-cold email, a sequence, or a direct message. Combine it with the matching sell mode, such as
+Use when the product or service has no customers, measured results, or case studies yet.
+Combine it with the matching sell mode, such as
 [saas](saas.md) or [services](services.md). That mode bounds the claims; this file says what to
 offer in place of proof so that each touch still gives the reader something to judge.
 
