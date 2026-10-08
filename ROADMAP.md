@@ -4,12 +4,11 @@
 
 1. Run the five live Executor cases (first run and connect) that 0.3.0 shipped without. They need
    a responding Executor.app.
-2. List the plugin in the agent marketplaces, then check each listing installs 0.3.x.
+2. List the plugin in the agent marketplaces, then check each listing installs 0.4.x.
 3. Test the interactive installer on Windows (a pseudo-terminal harness), and Linux and Windows
    on ARM. `tools/e2e/onboarding-v2.mjs` needs a Windows pseudo-terminal bridge first.
-4. Put the docs site live at `https://conquistador.forsvn.com/docs`: create the Mintlify project,
-   add the Vercel rewrites and the CSP change in the landing, and submit the repository to
-   Context7 (steps in `docs-site/README.md`).
+4. Optional: add `conquistador.forsvn.com` as the Mintlify custom domain with base path `/docs`, so the
+   Mintlify dashboard and canonical links name it. The landing rewrite serves `/docs` without it.
 5. Open each MCP app (Claude Desktop, VS Code, Windsurf, Zed, Cursor) after the installer writes
    its entry, and check that the app lists the Conquistador tools. Only the config file and an MCP
    handshake are checked now.
@@ -30,16 +29,12 @@
    Tune the briefing engine and the vault playbook threshold from those corrections.
 5. Submit the Muse connector for the hosted server at `https://mcp.forsvn.com/mcp`, then check that
    a Muse task reaches the brief and the check.
-6. Release the 2026-10-07 changes to npm (see [PROGRESS.md](PROGRESS.md)) after the install, update,
-   removal, task, and correction acceptance on the exact candidate.
 
 ## Hosted server access
 
-1. Do the one-time setup for self-serve tokens (see [INSTALL.md](INSTALL.md), "Bots and remote
-   apps"): create the GitHub OAuth App with the callback `https://mcp.forsvn.com/signup/callback` and
-   device flow on, set `GITHUB_CLIENT_ID` and `GITHUB_CLIENT_SECRET`, create the `TOKENS` KV
-   namespace and add its id to `wrangler.toml`, and deploy. Then run
-   `node tools/e2e/signup.mjs --live --url https://mcp.forsvn.com` and sign in once at `/signup`.
+1. Sign in once at `https://mcp.forsvn.com/signup` in a browser with a real GitHub account, and
+   check that the page shows a `cq_` token and the client setup text. Only terminal sign-in
+   (`conquistador login`) has passed live.
 2. Phase 2: MCP authorization, so claude.ai, Claude Desktop connectors, and other MCP clients sign
    in without a copied token. Design:
    - The Worker becomes an OAuth 2.1 authorization server for MCP clients, with
