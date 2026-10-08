@@ -11,6 +11,14 @@ Still a public alpha. Merged through [#60](https://github.com/forsvn-labs/conqui
 [#57](https://github.com/forsvn-labs/conquistador/pull/57). Brings the
 [2026-10-07 hosted changes](#2026-10-07-hosted-mcp-server-deployment) to installed users.
 
+- Released at [`v0.4.0`](https://github.com/forsvn-labs/conquistador/releases/tag/v0.4.0) from
+  merged `main` commit `e8a1ba78a9e7e6610e3651f68adef8513b062b5b` through
+  [#61](https://github.com/forsvn-labs/conquistador/pull/61), and published as
+  [`@forsvn/conquistador@0.4.0`](https://www.npmjs.com/package/@forsvn/conquistador) (`latest`)
+  by [run 37736862605](https://github.com/forsvn-labs/conquistador/actions/runs/37736862605). The
+  registry shasum `66a1b05` matches the release tarball, `npm audit signatures` verifies its
+  attestations, and `npx @forsvn/conquistador@latest --version` prints 0.4.0.
+
 - **One installer.** `conquistador` on the first run, `conquistador add`, and every install flag go
   through one flow: preflight, surfaces, details, review, install with a verify pass, project setup,
   first task, and summary. The surfaces are coding agents, MCP apps (Claude Desktop, VS Code,
