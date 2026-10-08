@@ -1,9 +1,30 @@
-// Onboarding v2, end to end, in a real pseudo-terminal. Every scenario gets a new HOME, a project
+// The installer, end to end, in a real pseudo-terminal. Every scenario gets a new HOME, a project
 // folder, and fake agent and Executor CLIs on PATH (tools/e2e/fake-agent.mjs, fake-executor.mjs).
-// No real agent, no network beyond 127.0.0.1, no model. Failure-mode IDs (F1-F29) are in the PR.
-//   node tools/e2e/onboarding-v2.mjs [--only NAME[,NAME]] [--out DIR]
+// No real agent, no network beyond 127.0.0.1, no model.
+//   node tools/e2e/installer.mjs [--only NAME[,NAME]] [--out DIR] [--keep]
 // Writes one transcript per screen, screens.html (for screenshots), report.json, and report.md.
 // Needs python3 (the PTY bridge). Sandboxes that block /dev/ptmx must run it outside the sandbox.
+//
+// Failure modes of the full-screen installer (T) and of onboarding v2 that still apply (F1-F30):
+//   T1  A first run in a terminal opens the full-screen installer (alternate screen), not line prompts.
+//   T2  Every exit (done, cancel, error) restores the normal screen and the cursor, and leaves the
+//       summary in scrollback.
+//   T3  A cancel before Install (Esc, q, Ctrl-C) changes no file, runs no host command, exits 130.
+//   T4  Ctrl-C during the install does not stop a step half way; Ctrl-C after it keeps the installs.
+//   T5  No agent found: the screen says so; an empty plan cannot install.
+//   T7  No line is wider than the terminal at 60 or 100 columns; no screen is taller than 24 rows.
+//   T8  NO_COLOR prints no color; TERM=dumb and --plain get line prompts with no escape codes.
+//   T10 A run after the install opens a home screen (installs and actions), not the installer and
+//       not a task picker.
+//   T11 One failed agent shows a cross and a retry command; the others install; exit 1.
+//   T12 A failed check shows the fix; exit 1.
+//   T13 The terminal never opens an agent and never asks for a task. The last screen says what to
+//       type in each agent (/conquistador init in a project without GROWTH.md).
+//   T14 `conquistador "TASK"` prints the task context for an agent: no installer, no agent, no files.
+//   T15 Old --in and --no-open flags still parse.
+//   T16 Flags answer questions: with --providers, --scope, and --no-hooks the installer opens on Review.
+//   T17 Hosted MCP is offered only online with sign-in present; the token shows in the summary.
+//   T19 Preflight problems (a stale copy on PATH) show on the first screen.
 import { spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { chmodSync, cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, symlinkSync, writeFileSync } from 'node:fs';
@@ -18,7 +39,7 @@ import { HTML_HEAD, Screen } from './vt.mjs';
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const argv = process.argv.slice(2);
 const option = (name, fallback) => (argv.includes(name) ? argv[argv.indexOf(name) + 1] : fallback);
-const out = resolve(option('--out', join(root, 'dist/e2e/onboarding-v2')));
+const out = resolve(option('--out', join(root, 'dist/e2e/installer')));
 const only = option('--only', '')?.split(',').filter(Boolean) ?? [];
 const version = JSON.parse(readFileSync(join(root, 'package.json'), 'utf8')).version;
 const keep = argv.includes('--keep');
@@ -125,77 +146,95 @@ const hasColor = raw => [...raw.matchAll(SGR_COLOR)].some(match => match[1].spli
 const has = (text, needle) => text.replace(/[\s│]+/g, '').includes(needle.replace(/\s+/g, ''));
 // Lines as a terminal would show them if it never wrapped: render at a huge width.
 const tooWide = (raw, width) => { const screen = new Screen(400, 2000); screen.write(raw); return screen.lines({ history: true }).filter(line => [...line].length > width); };
+// A launch is any agent call that is not a plugin, version, or MCP list command (fake-agent.mjs).
+const launches = f => f.calls().filter(call => call.name !== 'executor' && !['plugin', '--version', 'mcp'].includes(call.args[0]));
 
 function checker() {
   const problems = [];
   return { problems, expect: (condition, message) => { if (!condition) problems.push(message); } };
 }
 
-// Press Down N times, then Space: toggle the Nth option below the cursor in a multiselect.
-async function toggle(s, steps) { for (let index = 0; index < steps; index += 1) await s.press('down'); await s.press('space'); }
+// --- Driving the full-screen installer --------------------------------------------------------------
+// Card titles. Each screen has one; the step bar under the wordmark names all five steps.
+const TITLE = { agents: 'Which agents?', options: 'Choose options', review: 'Review the changes', install: 'Installing', done: 'Next, in your agent', home: 'Conquistador is installed' };
 
-// Toggle an option by its label in a fresh multiselect (cursor on the first option). The option
-// list depends on what the package contains, so positions are not fixed.
-async function toggleLabel(s, label) {
+// Move the cursor (›) to the row that holds the label. Rows depend on the package and the
+// fixture, so positions are never fixed.
+async function moveTo(s, label) {
   const lines = s.screen.text().split('\n');
-  const start = lines.findLastIndex(line => line.includes('◆'));
-  const options = lines.slice(start + 1).filter(line => /[◻◼]/.test(line));
-  const index = options.findIndex(line => line.includes(label));
-  if (index < 0) throw Error(`option not found: ${label}`);
-  await toggle(s, index);
+  const rows = lines.map((line, index) => ({ line, index })).filter(item => /[›◉○◆◇]/.test(item.line) || /‹.*›/.test(item.line));
+  const cursor = rows.findIndex(item => /›\s/.test(item.line.replace(/‹[^›]*›/g, '')));
+  const target = rows.findIndex(item => item.line.includes(label));
+  if (target < 0) throw Error(`row not found: ${label}\n${s.screen.text()}`);
+  const delta = target - Math.max(0, cursor);
+  for (let index = 0; index < Math.abs(delta); index += 1) await s.press(delta > 0 ? 'down' : 'up');
+  await s.settle(120);
 }
-
-// The happy path's questions, answered with Enter (defaults), up to the review.
-async function acceptDefaultsToReview(s, { snap = true, hooks = true, apps = true, executor = true } = {}) {
-  await s.waitFor('Where do you want Conquistador?'); if (snap) await s.snap('surfaces'); await s.press('enter');
-  await s.waitFor('Which agents?'); if (snap) await s.snap('agents'); await s.press('enter');
-  await s.waitFor('or only this one?'); if (snap) await s.snap('scope'); await s.press('enter');
-  if (hooks) { await s.waitFor('Turn on prompt hooks?'); if (snap) await s.snap('hooks'); await s.press('enter'); }
-  if (apps) { await s.waitFor('Which MCP apps?'); if (snap) await s.snap('mcp-apps'); await s.press('enter'); }
-  if (executor) { await s.waitFor('Name for the source in Executor'); if (snap) await s.snap('executor'); await s.press('enter'); }
-  await s.waitFor('Install now?');
-  if (snap) await s.snap('review');
-}
-
-// After install: decline project setup, pick Finish, wait for the summary.
-async function finishAfterInstall(s, { project = true } = {}) {
-  if (project) {
-    await s.waitFor('Set up this project now?'); await s.snap('installed-and-verified');
-    await s.press('down', 'enter');
+async function toggleRow(s, label) { await moveTo(s, label); await s.press('space'); await s.settle(120); }
+// Press Right on an option row until it shows the wanted value.
+async function setOption(s, label, value) {
+  await moveTo(s, label);
+  for (let tries = 0; tries < 4; tries += 1) {
+    const line = s.screen.text().split('\n').find(item => item.includes(label)) ?? '';
+    if (new RegExp(`‹\\s*${value}\\s*›`).test(line)) return;
+    await s.press('right'); await s.settle(120);
   }
-  await s.waitFor('What should we work on?'); await s.snap('first-task');
-  await s.press('up', 'enter');
-  await s.waitFor('Summary'); await s.snap('summary');
+  throw Error(`option ${label} never showed ${value}\n${s.screen.text()}`);
 }
 
-// --- F24, F21, F26, F27, F29: the happy path ------------------------------------------------------
-scenario('happy', ['F21', 'F24', 'F26', 'F27', 'F29'], async ({ expect, keepSnaps }) => {
+// The default path: keep the detected agents, set options, review.
+async function toReview(s, { snap = true, options = {} } = {}) {
+  await s.waitFor(TITLE.agents); if (snap) await s.snap('agents'); await s.press('enter');
+  await s.waitFor(TITLE.options);
+  for (const [label, value] of Object.entries(options)) await setOption(s, label, value);
+  if (snap) await s.snap('options');
+  await s.press('enter');
+  await s.waitFor(TITLE.review); if (snap) await s.snap('review');
+}
+
+// After the install: the Done screen, then Enter, then the summary on the normal screen.
+async function finish(s, { snap = true } = {}) {
+  await s.waitFor(TITLE.done, { timeout: 60_000 }); if (snap) await s.snap('done');
+  await s.press('enter');
+  await s.waitFor('Summary'); if (snap) await s.snap('summary');
+}
+
+// --- T1, T2, T13, F21, F24, F26, F27, F29: the happy path ------------------------------------------
+scenario('happy', ['T1', 'T2', 'T13', 'F21', 'F24', 'F26', 'F27', 'F29'], async ({ expect, keepSnaps }) => {
   const f = fixture('happy', { agents: ['claude', 'codex'], executor: 'running',
     apps: { 'claude-desktop': { mcpServers: { other: { command: 'other-server' } } }, vscode: null } });
   try {
     const s = f.term([]);
-    await s.waitFor('Nothing changes until you confirm.');
+    await s.waitFor(TITLE.agents);
     await s.snap('welcome');
-    await acceptDefaultsToReview(s);
-    const surfaces = s.snaps.find(item => item.name === 'surfaces').text;
-    for (const label of ['Coding agents', 'MCP apps', 'Hosted MCP', 'Executor', 'Chat bots', 'Step 1 of 5']) expect(has(surfaces, label), `surfaces screen lacks ${label}`);
-    // F24: the package ships tools/login.mjs, so Hosted MCP is offered but never preselected.
-    expect(!/◼\s*Hosted MCP/.test(surfaces), 'Hosted MCP preselected (F24)');
-    // A label with its own parentheses plus a hint in parentheses reads as "(a) (b)".
-    for (const snap of s.snaps) expect(!/\)\s*\(/.test(snap.text), `${snap.name} screen shows ") (" in a label`);
-    // Step 2 holds several questions; the step counter shows once, not on each question.
-    const detailScreen = s.snaps.find(item => item.name === 'executor').text;
-    expect((detailScreen.match(/Step 2 of 5/g) ?? []).length === 1, 'Step 2 of 5 repeats on each detail question');
+    const welcome = s.screen.text();
+    // T1: the full-screen installer, not line prompts. The wordmark, the step bar, and both agents show.
+    for (const text of ['Agents', 'Options', 'Review', 'Install', 'Done', 'Claude Code', 'Codex', 'Nothing changes until you confirm']) expect(has(welcome, text), `welcome screen lacks ${text}`);
+    expect(s.raw.includes('\x1b[?1049h'), 'the installer did not open the alternate screen (T1)');
+    await toReview(s, { options: { 'MCP apps': 'On', Executor: 'On' } });
+    const options = s.snaps.find(item => item.name === 'options').text;
+    for (const label of ['Install for', 'Prompt hooks', 'MCP apps', 'Executor', 'Chat bot files', 'Hosted MCP']) expect(has(options, label), `options screen lacks ${label}`);
+    // F24: the package ships tools/login.mjs, so Hosted MCP is offered but never on by default.
+    expect(/Hosted MCP.*‹\s*Off\s*›/.test(options), 'Hosted MCP is on by default (F24)');
     const review = s.snaps.at(-1).text;
-    for (const text of ['Claude Code', 'Codex', 'Claude Desktop', 'VS Code', 'backup', 'Unchanged', 'conquistador remove', 'Step 3 of 5']) expect(has(review, text), `review lacks ${text}`);
+    for (const text of ['Claude Code', 'Codex', 'Claude Desktop', 'VS Code', 'backup', 'Unchanged', 'conquistador remove']) expect(has(review, text), `review lacks ${text}`);
     await s.press('enter');
-    await finishAfterInstall(s);
+    await finish(s);
     const code = await s.exit();
     expect(code === 0, `first run exited ${code}`);
-    const installed = s.snaps.find(item => item.name === 'installed-and-verified').text;
-    expect(has(installed, 'checks passed') && !installed.includes('✗'), 'verify pass missing or failed');
+    const done = s.snaps.find(item => item.name === 'done').text;
+    expect(has(done, 'checks passed') && !done.includes('✗'), 'verify pass missing or failed');
+    // T13: the Done screen says what to type in each agent; this project has no GROWTH.md.
+    expect(has(done, '/conquistador init'), 'Done screen does not say /conquistador init (T13)');
+    // T2: the normal screen is back, the summary stays in scrollback, the cursor shows again.
+    expect(s.raw.lastIndexOf('\x1b[?1049l') > s.raw.lastIndexOf('\x1b[?1049h'), 'the alternate screen was not closed (T2)');
+    const after = s.screen.text({ history: true });
+    expect(!has(after, TITLE.review) && has(after, 'Summary'), 'the installer screens stayed on the normal screen, or no summary (T2)');
+    expect(/\x1b\[\?25h/.test(s.raw.slice(s.raw.lastIndexOf('\x1b[?1049l'))), 'the cursor is hidden after exit (T2)');
     const summary = s.snaps.at(-1).text;
     for (const text of ['/conquistador', 'conquistador doctor', 'conquistador update', 'conquistador remove']) expect(has(summary, text), `summary lacks ${text}`);
+    // T13: no agent opened.
+    expect(!launches(f).length && !has(after, 'OPENED WITH'), `an agent was opened: ${JSON.stringify(launches(f))} (T13)`);
     const calls = f.calls().map(call => `${call.name} ${call.args.join(' ')}`);
     expect(calls.some(call => call.startsWith('claude plugin install conquistador@conquistador')), 'Claude Code plugin not installed');
     expect(calls.some(call => call.startsWith('codex plugin add conquistador@conquistador')), 'Codex plugin not installed');
@@ -206,14 +245,16 @@ scenario('happy', ['F21', 'F24', 'F26', 'F27', 'F29'], async ({ expect, keepSnap
     expect(readdirSync(dirname(appFile(f.home, 'claude-desktop'))).some(file => file.includes('conquistador-backup')), 'no backup of the Claude Desktop config (F21)');
     expect(f.json(appFile(f.home, 'vscode'))?.servers?.conquistador?.type === 'stdio', 'VS Code entry missing');
 
-    // F29: a second run opens the task flow, not the installer.
+    // T10, F29: a second run opens the home screen, not the installer and not a task picker.
     const again = f.term([]);
-    await again.waitFor(/Open in|What should we work on|OPENED WITH/);
-    await again.snap('second-run');
-    expect(!has(again.screen.text({ history: true }), 'Where do you want Conquistador?'), 'second run showed the installer (F29)');
-    if (has(again.screen.text(), 'Open in')) await again.press('enter');
-    await again.waitFor('OPENED WITH');
-    await again.exit();
+    await again.waitFor(TITLE.home);
+    await again.snap('home');
+    const home = again.screen.text();
+    expect(!has(home, TITLE.agents) && !has(home, 'What should we work on'), 'second run showed the installer or a task picker (T10, F29)');
+    for (const text of ['Claude Code', 'Codex', 'Add or change agents', 'Update', 'Check and repair', 'Remove', 'Quit', '/conquistador']) expect(has(home, text), `home screen lacks ${text} (T10)`);
+    await moveTo(again, 'Quit'); await again.press('enter');
+    expect(await again.exit() === 0, 'Quit on the home screen did not exit 0 (T10)');
+    expect(!launches(f).length, 'the home screen opened an agent (T10)');
     keepSnaps(again.snaps);
 
     const doctor = f.run(['doctor']);
@@ -222,33 +263,68 @@ scenario('happy', ['F21', 'F24', 'F26', 'F27', 'F29'], async ({ expect, keepSnap
     // F26: remove undoes the MCP entries and the Executor source; other servers stay.
     const removed = f.run(['remove']);
     expect(removed.status === 0, `remove exited ${removed.status}: ${removed.stdout}${removed.stderr}`);
-    const after = f.json(appFile(f.home, 'claude-desktop'));
-    expect(after?.mcpServers?.other && !after.mcpServers.conquistador, 'remove left the Claude Desktop entry or dropped the other server (F26)');
+    const gone = f.json(appFile(f.home, 'claude-desktop'));
+    expect(gone?.mcpServers?.other && !gone.mcpServers.conquistador, 'remove left the Claude Desktop entry or dropped the other server (F26)');
     expect(!f.json(appFile(f.home, 'vscode'))?.servers?.conquistador, 'remove left the VS Code entry (F26)');
     expect(f.calls().some(call => call.name === 'executor' && call.args.join(' ').includes('integrations remove')), 'remove did not remove the Executor source (F26)');
     return [...s.snaps];
   } finally { f.cleanup(); }
 });
 
-// --- F1: no agent detected ------------------------------------------------------------------------
-scenario('no-agent', ['F1'], async ({ expect }) => {
+// --- T14, T15: a task gives the agent context; nothing opens or installs -----------------------------
+scenario('task-context', ['T14', 'T15'], async ({ expect, transcript }) => {
+  const f = fixture('task-context', { agents: ['claude'] });
+  try {
+    const before = f.tree();
+    const piped = f.run(['Write a welcome email for new trial users']);
+    transcript('task-piped', `$ conquistador "Write a welcome email for new trial users"   (exit ${piped.status})\n${piped.stdout}${piped.stderr}`);
+    expect(piped.status === 0, `a task without a terminal exited ${piped.status} (T14)`);
+    expect(/\.md\b/.test(piped.stdout) && has(piped.stdout, 'playbook'), 'the task did not print a reading list (T14)');
+    const s = f.term(['Write a welcome email for new trial users']);
+    await s.waitFor('/conquistador Write a welcome email');
+    await s.snap('task-tty');
+    expect(await s.exit() === 0, 'a task in a terminal did not exit 0 (T14)');
+    expect(!s.raw.includes('\x1b[?1049h'), 'a task opened the installer (T14)');
+    const legacy = f.run(['--in', 'claude', '--no-open', 'task', 'launch']);
+    transcript('task-legacy-flags', `$ conquistador --in claude --no-open task launch   (exit ${legacy.status})\n${legacy.stdout}${legacy.stderr}`);
+    expect(legacy.status === 0, `--in and --no-open with a task exited ${legacy.status} (T15)`);
+    expect(!f.calls().length, `a task ran an agent command: ${JSON.stringify(f.calls())} (T14)`);
+    expect(JSON.stringify(f.tree()) === JSON.stringify(before), 'a task changed files (T14)');
+    return s.snaps;
+  } finally { f.cleanup(); }
+});
+
+// --- T5, F1: no agent detected ------------------------------------------------------------------------
+scenario('no-agent', ['T5', 'F1'], async ({ expect }) => {
   const f = fixture('no-agent', { agents: [] });
   try {
     const s = f.term([]);
-    await s.waitFor('Where do you want Conquistador?');
-    await s.snap('surfaces');
-    expect(has(s.screen.text(), 'No coding agent found'), 'surfaces screen does not say no agent was found');
-    // Nothing is preselected.
-    await toggleLabel(s, 'Chat bots');
+    await s.waitFor(TITLE.agents);
+    await s.snap('agents-none');
+    expect(has(s.screen.text(), 'No coding agent found'), 'agents screen does not say no agent was found');
+    // T5: nothing chosen, so the review has nothing to do until a surface is on.
     await s.press('enter');
-    await s.waitFor('Folder for the bot files'); await s.snap('bot-folder'); await s.press('enter');
-    await s.waitFor('Install now?'); await s.snap('review'); await s.press('enter');
-    await s.waitFor('Summary'); await s.snap('summary');
+    await s.waitFor(TITLE.options);
+    await setOption(s, 'Chat bot files', 'On');
+    await s.snap('options-bot');
+    await s.press('enter');
+    await s.waitFor(TITLE.review); await s.snap('review'); await s.press('enter');
+    await finish(s);
     const code = await s.exit();
     expect(code === 0, `exit ${code}`);
     expect(existsSync(join(f.project, 'conquistador-bot', 'SYSTEM-PROMPT.md')), 'bot files missing');
     expect(f.calls().length === 0, 'an agent command ran');
-    return s.snaps;
+    const empty = fixture('no-agent-empty', { agents: [] });
+    try {
+      const e = empty.term([]);
+      await e.waitFor(TITLE.agents); await e.press('enter');
+      await e.waitFor(TITLE.options); await e.press('enter');
+      await e.waitFor('Nothing to install'); await e.snap('review-empty');
+      await e.press('escape'); await e.waitFor(TITLE.options); await e.press('escape'); await e.waitFor(TITLE.agents); await e.press('escape');
+      await e.waitFor('Cancelled. No files changed.');
+      expect(await e.exit() === 130, 'an empty plan did not cancel cleanly (T5)');
+      return [...s.snaps, ...e.snaps];
+    } finally { empty.cleanup(); }
   } finally { f.cleanup(); }
 });
 
@@ -257,12 +333,12 @@ scenario('skill-only', ['F2'], async ({ expect }) => {
   const f = fixture('skill-only', { agents: ['gemini', 'opencode'] });
   try {
     const s = f.term([]);
-    await acceptDefaultsToReview(s, { hooks: false, apps: false, executor: false });
+    await toReview(s);
+    expect(!has(s.snaps.find(item => item.name === 'options').text, 'Prompt hooks'), 'hooks option shown with no plugin agent');
     await s.press('enter');
-    await finishAfterInstall(s);
+    await finish(s);
     const code = await s.exit();
     expect(code === 0, `exit ${code}`);
-    expect(!has(s.screen.text({ history: true }), 'Turn on prompt hooks?'), 'hooks question shown with no plugin agent');
     expect(existsSync(join(f.home, '.gemini/skills/conquistador/SKILL.md')), 'Gemini CLI skill copy missing');
     expect(existsSync(join(f.home, '.config/opencode/skills/conquistador/SKILL.md')), 'OpenCode skill copy missing');
     expect(!f.calls().some(call => call.args[0] === 'plugin'), 'a plugin command ran for a skill-only agent');
@@ -270,19 +346,21 @@ scenario('skill-only', ['F2'], async ({ expect }) => {
   } finally { f.cleanup(); }
 });
 
-// --- F3, F7, F20: one agent fails, one app cannot be edited, the rest installs ---------------------
-scenario('half-fail', ['F3', 'F7', 'F20'], async ({ expect }) => {
+// --- T11, F3, F7, F20: one agent fails, one app cannot be edited, the rest installs ----------------
+scenario('half-fail', ['T11', 'F3', 'F7', 'F20'], async ({ expect }) => {
   const zed = '{\n  // My Zed settings\n  "theme": "One Dark"\n}\n';
   const f = fixture('half-fail', { agents: ['claude', 'codex'], env: { FAKE_AGENT_FAIL: 'codex' },
     apps: { 'claude-desktop': null, zed } });
   try {
     const s = f.term([]);
-    await acceptDefaultsToReview(s, { executor: false });
+    await toReview(s, { options: { 'MCP apps': 'On' } });
     expect(has(s.snaps.at(-1).text, 'by hand'), 'review does not say the Zed entry is manual (F20)');
     await s.press('enter');
-    await finishAfterInstall(s);
+    await finish(s);
     const code = await s.exit();
     expect(code === 1, `exit ${code}; a failed surface must exit 1 (F7)`);
+    const done = s.snaps.find(item => item.name === 'done').text;
+    expect(done.includes('✗') && has(done, 'Codex'), 'Done screen does not show the Codex failure (T11)');
     const summary = s.snaps.at(-1).text;
     expect(has(summary, 'Codex') && has(summary, 'conquistador --providers=codex'), 'summary lacks the Codex failure and retry (F3)');
     expect(has(summary, 'Claude Desktop'), 'summary lacks the app that worked (F7)');
@@ -298,13 +376,13 @@ scenario('dedupe', ['F4'], async ({ expect }) => {
   const f = fixture('dedupe', { agents: ['claude'], apps: { cursor: null, 'claude-desktop': null } });
   try {
     const s = f.term([]);
-    await acceptDefaultsToReview(s, { executor: false });
-    const apps = s.snaps.find(item => item.name === 'mcp-apps').text;
-    expect(has(apps, 'Cursor gets the plugin'), 'MCP apps step does not explain why Cursor is left out (F4)');
+    await toReview(s, { options: { 'MCP apps': 'On' } });
+    const options = s.snaps.find(item => item.name === 'options').text;
+    expect(has(options, 'Cursor gets the plugin') || !has(options, 'Cursor'), 'options screen offers Cursor as an MCP app next to its plugin (F4)');
     const review = s.snaps.at(-1).text;
     expect(!/Cursor\s+add/.test(review) && !has(review, '.cursor/mcp.json'), 'review plans an MCP entry for Cursor (F4)');
     await s.press('enter');
-    await finishAfterInstall(s);
+    await finish(s);
     await s.exit();
     expect(!existsSync(appFile(f.home, 'cursor')), 'Cursor MCP config was written (F4)');
     const plan = JSON.parse(f.run(['--json', '--surface=agents,mcp-apps', '--providers=cursor', '--apps=cursor,claude-desktop']).stdout);
@@ -318,20 +396,19 @@ scenario('dedupe', ['F4'], async ({ expect }) => {
 scenario('both-scopes', ['F5'], async ({ expect }) => {
   const f = fixture('both-scopes', { agents: ['claude'] });
   try {
-    expect(f.run(['--providers=claude', '--scope=project', '--yes', '--no-open']).status === 0, 'project install failed');
-    const second = f.run(['--providers=claude', '--scope=global', '--yes', '--no-open']);
+    expect(f.run(['--providers=claude', '--scope=project', '--yes']).status === 0, 'project install failed');
+    const second = f.run(['--providers=claude', '--scope=global', '--yes']);
     expect(second.status === 0, `global install exited ${second.status}`);
     expect(has(second.stdout, 'loads both'), `install summary does not warn about two copies (F5):\n${second.stdout}`);
     const doctor = f.run(['doctor']);
     expect(has(doctor.stdout, 'loads both') && has(doctor.stdout, 'conquistador remove --scope=project'), `doctor does not warn about two copies (F5):\n${doctor.stdout}`);
     const s = f.term(['add']);
-    await s.waitFor('Where do you want Conquistador?'); await s.press('enter');
-    await s.waitFor('Which agents?'); await s.press('enter');
-    // The default scope stays project, because this project already has a copy: no hooks question.
-    await s.waitFor('or only this one?'); await s.press('enter');
-    await s.waitFor('Install now?'); await s.snap('review-both-scopes');
+    // The default scope stays project, because this project already has a copy.
+    await toReview(s);
+    expect(/Install for.*‹\s*This project\s*›/.test(s.snaps.find(item => item.name === 'options').text), 'default scope is not project when a project copy exists (F5)');
     expect(has(s.screen.text(), 'loads both'), 'review does not warn about two copies (F5)');
-    await s.press('escape');
+    await s.press('q');
+    await s.waitFor('Cancelled. No files changed.');
     await s.exit();
     return s.snaps;
   } finally { f.cleanup(); }
@@ -341,7 +418,7 @@ scenario('both-scopes', ['F5'], async ({ expect }) => {
 scenario('update', ['F6'], async ({ expect }) => {
   const f = fixture('update', { agents: ['claude'] });
   try {
-    expect(f.run(['--providers=claude', '--yes', '--no-open']).status === 0, 'first install failed');
+    expect(f.run(['--providers=claude', '--yes']).status === 0, 'first install failed');
     const stateFile = join(f.home, '.conquistador/installs.json');
     const state = f.json(stateFile);
     state.agents['claude-code'].version = '0.2.0';
@@ -351,12 +428,10 @@ scenario('update', ['F6'], async ({ expect }) => {
     const plan = f.run(['--surface=agents', '--providers=claude', '--dry-run']);
     expect(has(plan.stdout, 'update') && has(plan.stdout, '0.2.0'), `plan does not say update from 0.2.0 (F6):\n${plan.stdout}`);
     const s = f.term(['add']);
-    await s.waitFor('Where do you want Conquistador?'); await s.press('enter');
-    await s.waitFor('Which agents?'); await s.press('enter');
-    await s.waitFor('or only this one?'); await s.press('enter');
-    await s.waitFor('Turn on prompt hooks?'); await s.press('enter');
-    await s.waitFor('Install now?'); await s.snap('review-update'); await s.press('enter');
-    await finishAfterInstall(s);
+    await toReview(s);
+    expect(has(s.screen.text(), '0.2.0'), 'review does not say update from 0.2.0 (F6)');
+    await s.press('enter');
+    await finish(s);
     const code = await s.exit();
     expect(code === 0, `update exit ${code}`);
     expect(f.calls().some(call => call.name === 'claude' && call.args.join(' ') === 'plugin update conquistador@conquistador'), 'host update command did not run (F6)');
@@ -366,13 +441,17 @@ scenario('update', ['F6'], async ({ expect }) => {
   } finally { f.cleanup(); }
 });
 
-// --- F8: the verify pass finds a problem ----------------------------------------------------------
-scenario('verify-problem', ['F8'], async ({ expect }) => {
+// --- T12, T16, F8: flags answer the questions; the verify pass finds a problem ----------------------
+scenario('verify-problem', ['T12', 'T16', 'F8'], async ({ expect }) => {
   const f = fixture('verify-problem', { agents: ['claude'], env: { FAKE_AGENT_NOREG: 'claude' } });
   try {
     const s = f.term(['--providers=claude', '--scope=global', '--no-hooks']);
-    await s.waitFor('Install now?'); await s.snap('review'); await s.press('enter');
-    await s.waitFor('Summary'); await s.snap('summary');
+    // T16: every question has a flag, so the installer opens on the review.
+    await s.waitFor(TITLE.review); await s.snap('review');
+    expect(!has(s.screen.text({ history: true }), TITLE.agents), 'flags did not skip the agents screen (T16)');
+    expect(has(s.screen.text(), 'hooks off'), 'review does not show hooks off from --no-hooks (T16)');
+    await s.press('enter');
+    await finish(s);
     const code = await s.exit();
     expect(code === 1, `exit ${code}`);
     const text = s.screen.text({ history: true });
@@ -381,39 +460,32 @@ scenario('verify-problem', ['F8'], async ({ expect }) => {
   } finally { f.cleanup(); }
 });
 
-// --- F9: cancel at each step leaves no files -------------------------------------------------------
+// --- T3, F9: cancel at each screen leaves no files -------------------------------------------------
 const CANCEL_STEPS = [
-  ['surfaces', 'Where do you want Conquistador?', 'ctrlC', []],
-  ['agents', 'Which agents?', 'escape', []],
-  ['scope', 'or only this one?', 'ctrlC', []],
-  ['hooks', 'Turn on prompt hooks?', 'escape', []],
-  ['mcp-apps', 'Which MCP apps?', 'ctrlC', []],
-  ['executor', 'Name for the source in Executor', 'ctrlC', []],
-  ['bot-folder', 'Folder for the bot files', 'escape', ['bot']],
-  ['review-no', 'Install now?', 'no', []],
-  ['review-escape', 'Install now?', 'escape', []],
+  ['agents', TITLE.agents, 'ctrlC'],
+  ['agents-escape', TITLE.agents, 'escape'],
+  ['options', TITLE.options, 'ctrlC'],
+  ['options-q', TITLE.options, 'q'],
+  ['review', TITLE.review, 'ctrlC'],
+  ['review-q', TITLE.review, 'q'],
 ];
-for (const [step, question, key, extra] of CANCEL_STEPS) {
-  scenario(`cancel-${step}`, ['F9'], async ({ expect }) => {
+for (const [step, title, key] of CANCEL_STEPS) {
+  scenario(`cancel-${step}`, ['T3', 'F9'], async ({ expect }) => {
     const f = fixture(`cancel-${step}`, { agents: ['claude'], executor: 'running', apps: { 'claude-desktop': { mcpServers: {} } } });
     try {
       const before = f.tree();
       const s = f.term([]);
-      const answers = [
-        ['Where do you want Conquistador?', extra.includes('bot') ? async () => { await toggleLabel(s, 'Chat bots'); await s.press('enter'); } : null],
-        ['Which agents?'], ['or only this one?'], ['Turn on prompt hooks?'], ['Which MCP apps?'],
-        ['Name for the source in Executor'], ...(extra.includes('bot') ? [['Folder for the bot files']] : []), ['Install now?'],
-      ];
-      for (const [text, act] of answers) {
-        await s.waitFor(text);
-        if (text === question) break;
-        if (act) await act(); else await s.press('enter');
+      for (const screen of [TITLE.agents, TITLE.options, TITLE.review]) {
+        await s.waitFor(screen);
+        if (screen === title) break;
+        await s.press('enter');
       }
-      if (key === 'no') await s.press('right', 'enter'); else await s.press(key);
+      await s.press(key);
       await s.waitFor('Cancelled. No files changed.');
       await s.snap(`cancelled-at-${step}`);
       const code = await s.exit();
       expect(code === 130, `exit ${code}`);
+      expect(s.raw.lastIndexOf('\x1b[?1049l') > s.raw.lastIndexOf('\x1b[?1049h'), 'cancel left the alternate screen open (T2)');
       expect(JSON.stringify(f.tree()) === JSON.stringify(before), `files changed after cancel at ${step}:\n${f.tree().filter(line => !before.includes(line)).join('\n')}`);
       expect(!f.calls().some(call => call.args[0] === 'plugin' && !/list/.test(call.args[1])) && !f.calls().some(call => call.name === 'executor' && /call|resume|daemon run/.test(call.args.join(' '))), 'a host command ran before confirm');
       return s.snaps;
@@ -421,18 +493,20 @@ for (const [step, question, key, extra] of CANCEL_STEPS) {
   });
 }
 
-// --- F28: cancel after install keeps the installs --------------------------------------------------
-scenario('cancel-after-install', ['F28'], async ({ expect }) => {
+// --- T4, F28: Ctrl-C during and after the install keeps the installs ---------------------------------
+scenario('cancel-after-install', ['T4', 'F28'], async ({ expect }) => {
   const f = fixture('cancel-after-install', { agents: ['claude'] });
   try {
     const s = f.term(['--providers=claude', '--scope=global']);
-    await s.waitFor('Turn on prompt hooks?'); await s.press('enter');
-    await s.waitFor('Install now?'); await s.press('enter');
-    await s.waitFor('Set up this project now?'); await s.press('ctrlC');
-    await s.waitFor('Conquistador is installed'); await s.snap('cancelled-after-install');
+    await s.waitFor(TITLE.review); await s.press('enter');
+    // T4: Ctrl-C while installing does not stop a step half way.
+    await s.press('ctrlC');
+    await s.waitFor(TITLE.done, { timeout: 60_000 }); await s.snap('done');
+    await s.press('ctrlC');
+    await s.waitFor('Summary'); await s.snap('summary-after-ctrl-c');
     const code = await s.exit();
-    expect(code === 130, `exit ${code}`);
-    expect(f.json(join(f.home, '.conquistador/installs.json'))?.agents?.['claude-code'], 'install was undone by a later cancel');
+    expect(code === 0, `exit ${code}; Ctrl-C after a good install is not a failure`);
+    expect(f.json(join(f.home, '.conquistador/installs.json'))?.agents?.['claude-code'], 'install was undone by a later Ctrl-C');
     return s.snaps;
   } finally { f.cleanup(); }
 });
@@ -468,30 +542,29 @@ scenario('non-tty', ['F10', 'F11', 'F12'], async ({ expect, transcript }) => {
   } finally { f.cleanup(); }
 });
 
-// --- F13, F14: 60 columns and NO_COLOR -------------------------------------------------------------
-scenario('narrow', ['F13'], async ({ expect }) => {
-  const f = fixture('narrow', { agents: ['claude', 'codex'], executor: 'running', apps: { 'claude-desktop': { mcpServers: {} } } });
-  try {
-    const s = f.term([], { columns: 60 });
-    await acceptDefaultsToReview(s);
-    await s.press('enter');
-    await finishAfterInstall(s);
-    await s.exit();
-    const wide = tooWide(s.raw, 60);
-    expect(!wide.length, `lines wider than 60 columns (F13):\n${wide.join('\n')}`);
-    return s.snaps;
-  } finally { f.cleanup(); }
-});
+// --- T7, F13: 60 and 100 columns, 24 rows; F14: NO_COLOR -----------------------------------------------
+for (const [name, columns, rows] of [['narrow', 60, 24], ['wide', 100, 30]]) {
+  scenario(name, ['T7', 'F13'], async ({ expect }) => {
+    const f = fixture(name, { agents: ['claude', 'codex', 'gemini', 'opencode'], executor: 'running', apps: { 'claude-desktop': { mcpServers: {} } } });
+    try {
+      const s = f.term([], { columns, rows });
+      await toReview(s, { options: { 'MCP apps': 'On', Executor: 'On' } });
+      await s.press('enter');
+      await finish(s);
+      await s.exit();
+      const wide = tooWide(s.raw, columns);
+      expect(!wide.length, `lines wider than ${columns} columns (T7, F13):\n${wide.join('\n')}`);
+      for (const snap of s.snaps.filter(item => item.name !== 'summary')) expect(snap.text.split('\n').length <= rows + 1, `${snap.name} has more lines than the terminal (T7)`);
+      return s.snaps;
+    } finally { f.cleanup(); }
+  });
+}
 
-scenario('no-color', ['F14'], async ({ expect }) => {
+scenario('no-color', ['T8', 'F14'], async ({ expect }) => {
   const f = fixture('no-color', { agents: ['claude'] });
   try {
     const s = f.term([], { env: { NO_COLOR: '1' } });
-    await s.waitFor('Where do you want Conquistador?'); await s.snap('surfaces-no-color'); await s.press('enter');
-    await s.waitFor('Which agents?'); await s.press('enter');
-    await s.waitFor('or only this one?'); await s.press('enter');
-    await s.waitFor('Turn on prompt hooks?'); await s.press('enter');
-    await s.waitFor('Install now?'); await s.snap('review-no-color');
+    await toReview(s);
     await s.press('ctrlC');
     await s.exit();
     expect(!hasColor(s.raw), 'color codes printed with NO_COLOR=1 (F14)');
@@ -499,8 +572,8 @@ scenario('no-color', ['F14'], async ({ expect }) => {
   } finally { f.cleanup(); }
 });
 
-// --- F25: TERM=dumb gets line prompts ---------------------------------------------------------------
-scenario('plain', ['F25'], async ({ expect }) => {
+// --- T8, F25: TERM=dumb gets line prompts and never asks for a task ---------------------------------
+scenario('plain', ['T8', 'T13', 'F25'], async ({ expect }) => {
   const f = fixture('plain', { agents: ['claude'] });
   try {
     const s = f.term([], { env: { TERM: 'dumb' } });
@@ -509,25 +582,27 @@ scenario('plain', ['F25'], async ({ expect }) => {
     await s.waitFor('or only this one?'); await s.press('enter');
     await s.waitFor('Turn on prompt hooks?'); await s.press('enter');
     await s.waitFor('Install now?'); await s.snap('plain-review'); await s.press('enter');
-    await s.waitFor('Set up this project now?'); await s.type('2\r');
-    await s.waitFor('What should we work on?'); await s.type('6\r');
     await s.waitFor('Summary'); await s.snap('plain-summary');
     const code = await s.exit();
     expect(code === 0, `exit ${code}`);
     expect(!/\x1b/.test(s.raw), 'escape codes printed with TERM=dumb (F25)');
+    const text = s.screen.text({ history: true });
+    expect(!has(text, 'What should we work on') && !has(text, 'Set up this project now'), 'the plain flow asked for a task (T13)');
+    expect(has(text, '/conquistador init'), 'the plain flow does not say /conquistador init (T13)');
+    expect(!launches(f).length, 'the plain flow opened an agent (T13)');
     expect(f.json(join(f.home, '.conquistador/installs.json'))?.agents?.['claude-code'], 'plain flow did not install');
     return s.snaps;
   } finally { f.cleanup(); }
 });
 
-// --- F15: a stale copy earlier on PATH --------------------------------------------------------------
-scenario('shadowed', ['F15'], async ({ expect, transcript }) => {
+// --- T19, F15: a stale copy earlier on PATH --------------------------------------------------------------
+scenario('shadowed', ['T19', 'F15'], async ({ expect, transcript }) => {
   const f = fixture('shadowed', { agents: ['claude'], stale: '0.0.14' });
   try {
-    const s = f.term([]);
-    await s.waitFor('Where do you want Conquistador?');
+    const s = f.term([], { rows: 40 });
+    await s.waitFor(TITLE.agents);
     await s.snap('preflight-shadowed');
-    const text = s.screen.text({ history: true });
+    const text = s.screen.text();
     expect(has(text, '0.0.14') && has(text, version) && has(text, 'npm i -g @forsvn/conquistador@latest'), 'preflight does not name both versions and the fix (F15)');
     await s.press('ctrlC');
     await s.exit();
@@ -538,18 +613,20 @@ scenario('shadowed', ['F15'], async ({ expect, transcript }) => {
   } finally { f.cleanup(); }
 });
 
-// --- F16, F23: offline, and the hosted surface when tools/login.mjs exists -------------------------
-scenario('offline', ['F16'], async ({ expect }) => {
+// --- T17, F16, F23: offline, and the hosted surface when tools/login.mjs exists ----------------------
+scenario('offline', ['T17', 'F16'], async ({ expect }) => {
   const f = fixture('offline', { agents: ['claude'], login: true, env: { npm_config_registry: `${hanging.url}/`, CONQUISTADOR_HOSTED_URL: `${closed}/mcp` } });
   try {
     const started = Date.now();
     const s = f.term([]);
-    await s.waitFor('Where do you want Conquistador?');
+    await s.waitFor(TITLE.agents);
     const waited = Date.now() - started;
-    await s.snap('surfaces-offline');
-    const text = s.screen.text({ history: true });
-    expect(waited < 6000, `the surfaces question took ${waited} ms offline (F16)`);
-    expect(!/[◻◼□■\[]\s*\]?\s*Hosted MCP/.test(text) && has(text, 'Hosted MCP needs a network connection'), 'Hosted MCP offered offline, or no reason shown (F16)');
+    await s.press('enter');
+    await s.waitFor(TITLE.options);
+    await s.snap('options-offline');
+    const text = s.screen.text();
+    expect(waited < 6000, `the first screen took ${waited} ms offline (F16)`);
+    expect(!/Hosted MCP.*‹/.test(text) && has(text, 'Hosted MCP needs a network connection'), 'Hosted MCP offered offline, or no reason shown (F16)');
     expect(!has(text, 'is out'), 'update notice shown offline (F16)');
     await s.press('ctrlC');
     await s.exit();
@@ -557,18 +634,17 @@ scenario('offline', ['F16'], async ({ expect }) => {
   } finally { f.cleanup(); }
 });
 
-scenario('hosted', ['F23'], async ({ expect }) => {
+scenario('hosted', ['T17', 'F23'], async ({ expect }) => {
   const f = fixture('hosted', { agents: [], login: true });
   try {
     const s = f.term([]);
-    await s.waitFor('Where do you want Conquistador?');
-    await s.snap('surfaces-online');
-    expect(has(s.screen.text(), 'Hosted MCP'), 'Hosted MCP not offered with tools/login.mjs present');
-    // Options: Coding agents, MCP apps, Hosted MCP, Executor, Chat bots.
-    await toggleLabel(s, 'Hosted MCP');
+    await s.waitFor(TITLE.agents); await s.press('enter');
+    await s.waitFor(TITLE.options);
+    await setOption(s, 'Hosted MCP', 'On');
+    await s.snap('options-hosted');
     await s.press('enter');
-    await s.waitFor('Install now?'); await s.snap('review-hosted'); await s.press('enter');
-    await s.waitFor('Summary'); await s.snap('summary-hosted');
+    await s.waitFor(TITLE.review); await s.snap('review-hosted'); await s.press('enter');
+    await finish(s);
     const code = await s.exit();
     const text = s.screen.text({ history: true });
     expect(code === 0, `exit ${code}`);
@@ -577,7 +653,7 @@ scenario('hosted', ['F23'], async ({ expect }) => {
     const cancel = fixture('hosted-cancel', { agents: [], login: true, env: { FAKE_LOGIN: 'cancel' } });
     try {
       const c = cancel.term(['--surface=hosted', '--yes']);
-      await c.waitFor('Summary'); await c.snap('summary-hosted-cancelled');
+      await finish(c);
       expect(await c.exit() === 1, 'a cancelled sign-in must not exit 0 (F23)');
       expect(has(c.screen.text({ history: true }), 'skipped'), 'cancelled sign-in not reported as skipped (F23)');
       return [...s.snaps, ...c.snaps];
@@ -631,9 +707,10 @@ scenario('old-flags', ['F18'], async ({ expect, transcript }) => {
   const f = fixture('old-flags', { agents: ['claude'], apps: { 'claude-desktop': null } });
   try {
     const s = f.term(['--mcp']);
-    await s.waitFor('Where do you want Conquistador?');
+    await s.waitFor(TITLE.options);
     await s.snap('old-flag-mcp');
-    expect(has(s.screen.text({ history: true }), '--surface=mcp-apps'), '--mcp does not print the new flag');
+    expect(has(s.screen.text(), '--surface=mcp-apps'), '--mcp does not print the new flag');
+    expect(/MCP apps.*‹\s*On\s*›/.test(s.screen.text()), '--mcp did not turn MCP apps on');
     await s.press('ctrlC');
     await s.exit();
     const legacy = f.run(['--plugin', '--host', 'codex', '--dry-run']);
@@ -676,10 +753,10 @@ for (const item of scenarios.filter(entry => !only.length || only.includes(entry
 for (const server of [registry, hosted, hanging]) { server.server.closeAllConnections?.(); server.server.close(); }
 if (packageCopy && !keep) rmSync(packageCopy, { recursive: true, force: true });
 const passed = results.filter(item => item.pass).length;
-const report = { schema: 'conquistador.e2e-onboarding-v2/v1', createdAt: new Date().toISOString(), version, node: process.version, platform: process.platform, total: results.length, passed, results };
+const report = { schema: 'conquistador.e2e-installer/v1', createdAt: new Date().toISOString(), version, node: process.version, platform: process.platform, total: results.length, passed, results };
 writeFileSync(join(out, 'report.json'), `${JSON.stringify(report, null, 2)}\n`);
 writeFileSync(join(out, 'screens.html'), `${HTML_HEAD}\n${gallery.join('\n')}\n`);
-writeFileSync(join(out, 'report.md'), [`# Onboarding v2 E2E: ${passed}/${results.length} pass`, '', `Run ${report.createdAt} on ${process.platform}, Node ${process.version}, Conquistador ${version}.`, '',
+writeFileSync(join(out, 'report.md'), [`# Installer E2E: ${passed}/${results.length} pass`, '', `Run ${report.createdAt} on ${process.platform}, Node ${process.version}, Conquistador ${version}.`, '',
   '| Result | Scenario | Failure modes | Screens | Problems |', '| --- | --- | --- | --- | --- |',
   ...results.map(item => `| ${item.pass ? 'pass' : 'FAIL'} | ${item.name} | ${item.covers.join(', ')} | ${item.screens} | ${item.problems.join('; ').replace(/\|/g, '/').replace(/\n/g, ' ').slice(0, 300)} |`), ''].join('\n'));
 console.log(`\n${passed}/${results.length} pass. Report: ${join(out, 'report.md')}`);
