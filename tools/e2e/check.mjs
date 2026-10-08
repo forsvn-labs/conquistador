@@ -249,11 +249,11 @@ try {
 
 // 7. The catalog documents every rule.
 {
-  const catalog = readFileSync(join(root, 'docs/CHECK.md'), 'utf8');
+  const catalog = readFileSync(join(root, 'docs-site/check.mdx'), 'utf8');
   const listed = JSON.parse(check(['--rules', '--json']).stdout).map(rule => rule.id);
   const undocumented = listed.filter(id => !catalog.includes(`\`${id}\``));
 
-  record('docs/CHECK.md lists every rule', !undocumented.length, undocumented.length ? `missing: ${undocumented.join(', ')}` : `${listed.length} rules`);
+  record('docs-site/check.mdx lists every rule', !undocumented.length, undocumented.length ? `missing: ${undocumented.join(', ')}` : `${listed.length} rules`);
 }
 
 // Report.

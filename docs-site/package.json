@@ -1,0 +1,13 @@
+{
+  "name": "conquistador-docs-site",
+  "private": true,
+  "description": "Mintlify docs site for Conquistador. Not part of the npm package.",
+  "scripts": {
+    "dev": "mint dev",
+    "validate": "mint validate",
+    "links": "mint broken-links"
+  },
+  "devDependencies": {
+    "mint": "4.2.991"
+  }
+}

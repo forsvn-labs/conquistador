@@ -1,0 +1,51 @@
+---
+title: "Receipts and verify"
+description: "Do not trust an agent's report that its draft passed. Verify the check receipt on the host before a person sees the draft."
+---
+
+<Note>
+  The hosted server has receipts now. The local server has them from 0.4.0.
+</Note>
+
+An agent can report "all checks clean" when they are not. Receipts let the host confirm the check itself.
+
+## How it works
+
+1. The agent calls `conquistador_check`. The result has a `receipt` for the exact text that it checked.
+2. The agent hands over the final text and the receipt.
+3. The host calls `conquistador_verify` with the final text, the receipt, and the `context` and `channel` that the check had to use.
+4. The host hands the draft over only when the result is `valid: true`, `clean: true`, and `signed: true`.
+
+A changed text, a forged receipt, or a check without the expected context or channel is not valid.
+
+## The receipt
+
+| Field | Meaning |
+|---|---|
+| `sha256` | The hash of the checked text |
+| `clean` | `true` when no error or warning remained |
+| `blocking` | The number of errors plus warnings |
+| `channel` | The channel whose rules applied |
+| `format` | How the server read the text |
+| `contextSha256` | The hash of the context, or `null` when the check had none |
+| `signature` | The server's signature, or `null` when the server has no receipt key |
+
+## The verify result
+
+| Field | Meaning |
+|---|---|
+| `valid` | `true` when the text, channel, and context match the receipt. On a server with a key, the signature must match too |
+| `clean` | `true` when the matched check had no errors or warnings |
+| `signed` | `true` when this server signed the receipt |
+| `reason` | One sentence, for example "The text changed after the check. Check the final text again." |
+
+## Signed and unsigned receipts
+
+The server signs receipts with `CONQUISTADOR_RECEIPT_KEY`. Callers never get this key. An agent that holds the access token cannot forge a receipt or change one.
+
+Without the key, receipts are unsigned. An agent can compute the hash itself, so an unsigned receipt does not prove that a check ran. The hosted server signs. A local server signs only when you set `CONQUISTADOR_RECEIPT_KEY`.
+
+## Limits
+
+- Only `valid`, `clean`, and `signed` together prove that this server checked the exact text and found it clean. Even then, the receipt proves only the rule-based check. It does not prove that the copy is true, persuasive, or legal. A person still reviews it.
+- The host must send the right `context`. With the wrong context, verify checks against the wrong facts.

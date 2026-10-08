@@ -1,0 +1,70 @@
+---
+title: "Use in your agent"
+description: "Call Conquistador in your agent, set up project context, make shortcuts, and know what the agent may do without asking."
+---
+
+## Call the skill
+
+```text
+/conquistador <command> [target]
+/conquistador <plain request>
+/conquistador
+```
+
+- **A command**, for example `/conquistador outreach churned customers`. The agent loads that command.
+- **A plain request**, for example `/conquistador write a win-back email flow for trial users`. The router picks the command or the play.
+- **No argument** shows a menu with two or three commands that match your project. It never runs a command by itself.
+
+Some agents use a different form: `$conquistador`, or `/skill:conquistador` in Pi. The Claude Code plugin can show the name `/conquistador:conquistador`. You can also pick Conquistador from the skill picker. If the command is not available, check the plugin list of your agent.
+
+## Set up the project once
+
+```text
+/conquistador init
+```
+
+`init` reads the project, asks only about gaps (at most three questions per round), and writes two files:
+
+- `PRODUCT.md`: the product, audience, and proof. It uses the same format as Impeccable. If another tool wrote `PRODUCT.md`, `init` adds only the missing facts.
+- `GROWTH.md`: goals and metrics, audience segments, and which channels worked, did not work, or are not tried.
+
+Every later command reads both files, so you do not explain the product again.
+
+## Write a good request
+
+Include the outcome, the audience, the facts, the constraints, and the output you want. Say if you want a **draft**, a **specification**, or an **implementation**. The agent asks only when a missing fact changes the result.
+
+Each answer ends with **Playbooks applied**: each file and the rule that the agent took from it.
+
+For three complete example tasks with expected output, see [Use Conquistador](https://github.com/forsvn-labs/conquistador/blob/main/docs/USAGE.md) in the repository.
+
+## Start from a terminal
+
+```sh
+conquistador "Plan our Product Hunt launch"   # Open your agent with this task typed in
+conquistador brief "Plan our Product Hunt launch"   # Show the playbooks this task needs
+```
+
+## Make a shortcut
+
+```text
+/conquistador pin outreach
+```
+
+This makes `/outreach`. `/conquistador unpin outreach` removes it. From a terminal:
+
+```sh
+conquistador pin outreach --as cold-email --project
+```
+
+## Approvals
+
+The agent asks for your approval each time before it sends, publishes, posts, spends, changes a live account, or writes to an external system. A brief, a hook, or an earlier approval does not give that permission. The agent can read connected data within the rules of your agent. It never asks for keys in chat; it uses [`conquistador connect`](/install/executor#connect-services-with-conquistador-connect).
+
+## Review a deliverable
+
+```sh
+conquistador review launch-email.md
+```
+
+Markdown opens in Proof for comments and suggestions. HTML opens in Lavish. The review shows channel previews, the [copy check](/check) findings as comments, and the playbooks applied. Approval is for people only and is bound to the SHA-256 hash of the exact text.

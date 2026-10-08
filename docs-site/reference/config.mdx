@@ -1,0 +1,81 @@
+---
+title: "Config files and variables"
+description: "The files Conquistador reads and writes, their keys, and the environment variables."
+---
+
+## Files in your project
+
+| File | Written by | Purpose |
+|---|---|---|
+| `PRODUCT.md` | `/conquistador init` | Product truth: the product, audience, and proof. Same format as Impeccable. Keep it in Git |
+| `GROWTH.md` | `/conquistador init` | Growth truth: goals and metrics, segments, and channels. Keep it in Git |
+| `.conquistador/config.json` | You | Project settings for the copy check. Keep it in Git |
+| `.gitignore` block | `conquistador context --gitignore` | Ignores the temporary folders in `.conquistador/` |
+| Skill folder, for example `.claude/skills/conquistador` | The installer, project scope | The skill copy. Commit it to share it with your team |
+
+`.conquistador/config.json`:
+
+```json
+{
+  "check": {
+    "ignoreRules": ["ai-em-dash"],
+    "ignoreFiles": ["drafts/**", "legal/*.md"]
+  }
+}
+```
+
+The `.gitignore` block:
+
+```text
+# conquistador:start
+# Ephemeral Conquistador files. PRODUCT.md, GROWTH.md, and .conquistador/config.json stay in Git.
+.conquistador/runs/
+.conquistador/cache/
+.conquistador/logs/
+.conquistador/tmp/
+.conquistador/*.local.json
+# conquistador:end
+```
+
+## Files in your home folder
+
+All of these are in `~/.conquistador`, or in `CONQUISTADOR_HOME` when you set it.
+
+| Path | Purpose |
+|---|---|
+| `config.json` | User settings. See below |
+| `plugin/` | The global plugin copy that agents read. Do not save your own work in it |
+| `playbooks/` | Optional. Markdown playbooks here rank first |
+| `connections.json` | Results of `conquistador connect verify` |
+| `logs/` | Error logs. `Conquistador stopped: …` names the file |
+
+`config.json`:
+
+```json
+{
+  "hooks": false,
+  "playbooks": ["/Users/YOU/notes/growth-playbooks"]
+}
+```
+
+| Key | Type | Description |
+|---|---|---|
+| `hooks` | boolean | `false` turns off the prompt, stop, and check hooks. `--no-hooks` at install writes it |
+| `playbooks` | array of paths | Your playbook folders. `conquistador playbooks add` and `remove` change it |
+
+A folder that the installer created holds `.conquistador-owned.json`. `conquistador remove` deletes only folders with this file.
+
+## Environment variables
+
+| Variable | Description |
+|---|---|
+| `CONQUISTADOR_HOME` | The user folder. Default `~/.conquistador` |
+| `CONQUISTADOR_HOOKS` | `off` turns off the prompt, stop, and check hooks |
+| `CONQUISTADOR_PLAYBOOKS` | Your playbook folders, separated by `:` (`;` on Windows) |
+| `CONQUISTADOR_PREFILL` | `off` makes the installer send the prompt in Claude Code at once, instead of filling it in |
+| `CONQUISTADOR_DEBUG` | `1` prints the full error |
+| `CONQUISTADOR_CACHE` | The brief cache folder. Default: `conquistador-cache` in the system temporary folder |
+| `CONQUISTADOR_MCP_TOKEN` | The bearer token that the HTTP server requires. Also read by `tools/e2e/agent-loop.mjs` and the verify gate |
+| `CONQUISTADOR_RECEIPT_KEY` | The key that signs check receipts. Set it only on the server |
+| `CONQUISTADOR_EXECUTOR_URL` | Makes `conquistador connect` check one Executor server only |
+| `PORT` | The port of `conquistador mcp --http`. When set, the server listens on `0.0.0.0`, which other computers can reach. Set `CONQUISTADOR_MCP_TOKEN` first: without it, anyone who can reach the port can read the playbooks. On `127.0.0.1` the token is optional |

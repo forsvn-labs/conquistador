@@ -10,9 +10,11 @@
   set `GITHUB_CLIENT_ID` and `GITHUB_CLIENT_SECRET` on the Worker, deploy, and run
   `node tools/e2e/signup.mjs --live --url https://mcp.forsvn.com`, which has not happened. Until
   then `conquistador login` against mcp.forsvn.com fails and the admin token still works.
-- **Docs site** ([#58](https://github.com/forsvn-labs/conquistador/pull/58), open). Mintlify site in
-  `docs-site/`; not live. It needs the Mintlify project, the `/docs` rewrites on the landing site,
-  and Context7 registration.
+- **Docs site** ([#58](https://github.com/forsvn-labs/conquistador/pull/58), merged; not live).
+  `docs-site/` is a Mintlify site with 23 pages; `node tools/e2e/docs-site.mjs` checks it against
+  the CLI, the MCP tools, and the check rules. Open: the Mintlify project must serve it at base path
+  `/docs`, the landing must deploy its `/docs` rewrites, and the repository must be submitted to
+  Context7 (see `docs-site/README.md`).
 
 Shipped work, by date, is in [CHANGELOG.md](CHANGELOG.md). Ordered upcoming work is in
 [ROADMAP.md](ROADMAP.md). Earlier progress records are retained in Git history.

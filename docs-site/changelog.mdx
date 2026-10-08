@@ -1,0 +1,49 @@
+---
+title: "Changelog"
+description: "What changed in each Conquistador release and deployment."
+rss: true
+---
+
+This page lists the changes that users see. The full record, with pull requests, commits, and verification, is [CHANGELOG.md](https://github.com/forsvn-labs/conquistador/blob/main/CHANGELOG.md) in the repository.
+
+<Update label="0.4.0" description="2026-10-08">
+  - **One installer.** The first run of `conquistador`, `conquistador add`, and every install flag use one flow. It asks where you want Conquistador: coding agents, MCP apps, Hosted MCP, Executor, or chat bots. It shows the plan and changes nothing until you confirm. See [Install options](/install/overview).
+  - **Preflight.** The installer warns when an older copy of `conquistador` on PATH runs instead, and when npm has a newer version.
+  - **Hosted tokens.** `conquistador login` signs in with GitHub and saves a personal token. `whoami` shows its owner, and `logout` revokes it.
+  - The local MCP server gets `conquistador_check`, `conquistador_verify`, and `conquistador_score`. Receipts from a local server without `CONQUISTADOR_RECEIPT_KEY` are unsigned.
+  - `conquistador_brief` takes `context` and `size`, starts with the route, inlines the Core list of each command, and returns structured lists. `conquistador_read` takes `from`.
+  - New check rules: `email-presumed-pain`, `email-relative-time`, and `email-merge-tag`. In email, a short direct question that asks for a reply counts as a call to action.
+  - About 330 rules distilled into 22 commands, 3 channel guides, and 4 plays. `outreach` 2.4.0 has an early-stage mode for products with no proof yet.
+  - 20 of 34 rubrics declare a machine-readable gate for `conquistador_score`.
+</Update>
+
+<Update label="2026-10-07" description="Hosted MCP server">
+  The hosted server at `https://mcp.forsvn.com/mcp` runs `main`. Every request needs a bearer token. It has the tools for deployed agents: brief with context, check with signed receipts, verify, and score. See [Deployed agents](/hosted/overview).
+
+  In a test, a Haiku 4.5 agent delivered text that failed the check and reported it clean. Use Sonnet-class or stronger models without supervision, and smaller models only where the host requires signed `conquistador_verify` results.
+</Update>
+
+<Update label="0.3.0" description="2026-10-03">
+  - **One skill.** Agents register one skill, `/conquistador`, instead of 39. 35 one-word commands and 21 plays.
+  - **Router.** A request can name a command or describe the task.
+  - **First run.** `/conquistador init` writes `PRODUCT.md` and `GROWTH.md`. `pin` makes a shortcut such as `/outreach`.
+  - **Copy check.** `conquistador check` applies 51 fixed rules with no model. A hook runs it after edits to marketing files.
+  - **Connect.** `conquistador connect` shows 22 capabilities through Executor.
+  - **Review.** `conquistador review` opens Markdown in Proof and HTML in Lavish.
+  - **Install.** The installer detects 12 agents (was 5) and asks for the scope. `doctor --fix` repairs drift. Node 22.18 is enough (was 24).
+  - Old skill names still route. See [MIGRATION.md](https://github.com/forsvn-labs/conquistador/blob/main/MIGRATION.md).
+</Update>
+
+<Update label="0.2.2" description="2026-09-30">
+  - Windows: installs into Claude Code, Codex, and Copilot CLI work. The agent launch no longer splits a task with spaces.
+  - A broken link on `PATH` no longer counts as an installed agent.
+</Update>
+
+<Update label="0.2.1" description="2026-09-30">
+  - The first release published to npm from CI, with provenance.
+</Update>
+
+<Update label="0.2.0" description="2026-09-29">
+  - The first public alpha. Install with `npm install -g @forsvn/conquistador`, or run once with `npx @forsvn/conquistador`.
+  - `conquistador update` gets the newest version from npm and registers it with every agent. It never downgrades.
+</Update>

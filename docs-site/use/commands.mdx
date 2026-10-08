@@ -1,0 +1,69 @@
+---
+title: "Commands"
+description: "The 41 Conquistador commands by group: setup, strategy, plan, create, grow, review, learn, product, and meta."
+---
+
+A command is one method for one job. The MCP tools call commands "methods" (`conquistador_methods`). Type `/conquistador <command> [target]`, or describe the job and let the router pick.
+
+```text
+/conquistador position against the two biggest competitors
+/conquistador ads results from last month's Meta campaign
+/conquistador check landing/index.html
+```
+
+| Group | Command | Does |
+|---|---|---|
+| Setup | `init` | Record product and growth truth in `PRODUCT.md` and `GROWTH.md` |
+| Setup | `connect` | Show connected capabilities and add what a task needs |
+| Setup | `doctor` | Report and repair install and project-context drift |
+| Setup | `pin` | Make a standalone shortcut for one command (`unpin` removes it) |
+| Strategy | `position` | Find the audience, promise, and proof that win |
+| Strategy | `brand` | Define voice, messaging, and visual direction |
+| Strategy | `pricing` | Design prices, packages, and upgrade paths |
+| Strategy | `channels` | Choose the next channel to test, with evidence |
+| Strategy | `budget` | Split a budget across channels and reserves |
+| Strategy | `funnel` | Model the funnel backward from a target |
+| Strategy | `diagnose` | Find why growth or a funnel stalled |
+| Strategy | `prioritize` | Rank opportunities into proceed, park, and stop |
+| Strategy | `shape` | Turn a vague initiative into one bounded bet |
+| Strategy | `decide` | Resolve a hard decision with explicit criteria |
+| Plan | `campaign` | Plan a campaign: outcome, channels, sequence, assets |
+| Plan | `event` | Write a run of show for a live or virtual event |
+| Create | `copy` | Pages, headlines, calls to action, emails, launches |
+| Create | `social` | Channel-native posts for X, LinkedIn, Reddit, Product Hunt |
+| Create | `outreach` | Signal-led sequences, follow-ups, and replies |
+| Create | `article` | Long-form essays, guides, and reports |
+| Create | `video` | Short-form scripts, storyboards, and recuts |
+| Create | `ads` | A paid test: audience, offer, finished ads, budget |
+| Create | `creative` | Creative briefs for pages, graphics, and video |
+| Create | `ideas` | Content angles ranked from audience signals |
+| Create | `vietnamese` | Native Vietnamese marketing and product language |
+| Grow | `seo` | Visibility in search, AI answers, and app stores |
+| Grow | `convert` | Fix one conversion surface and test it |
+| Review | `check` | Run the rule-based copy check on a file or URL |
+| Review | `audit` | Audit a marketing package before it ships |
+| Review | `critique` | Fresh-eyes review before a ship decision |
+| Review | `factcheck` | Check sources for authority, freshness, and conflicts |
+| Review | `review` | Open a deliverable for human review |
+| Learn | `measure` | Plan measurement or read results into a decision |
+| Learn | `results` | Evaluate real results: modes `ads`, `outreach`, `video` |
+| Learn | `watch` | Analyze a local video with timestamps |
+| Product | `flow` | Map screens, decisions, and recovery states |
+| Product | `ui` | Write an implementation-ready UI brief |
+| Product | `architect` | Design a system for an explicit build |
+| Product | `build` | Build a requested app: modes `web`, `ios` |
+| Product | `docs` | Write technical documentation from the code |
+| Meta | `feedback` | Draft a redacted public issue, only on request |
+
+## How a command finds its playbooks
+
+1. **The brief** picks the command or play and ranks the playbooks for the task. A named platform, for example TikTok or Google Ads, brings its platform guide and leaves the others out.
+2. **The MCP tool** `conquistador_brief` returns the selected playbooks inline.
+3. **The prompt hook** adds the must-read list to marketing prompts. Coding prompts get nothing.
+4. **The stop hook** checks the transcript. If the agent answered without reading the must-read files, the hook sends it back once to read them and revise.
+
+Each command also lists its playbooks in its `COMMAND.md`, so an install without hooks still points the agent at the right files.
+
+## Old names
+
+Old skill names still route to their commands, for example `write-copy` to `copy` and `launch-product` to `launch`. See [MIGRATION.md](https://github.com/forsvn-labs/conquistador/blob/main/MIGRATION.md).

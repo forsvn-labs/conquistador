@@ -1,0 +1,60 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "mint",
+  "name": "Conquistador",
+  "description": "Growth, marketing, sales, and product playbooks for AI coding agents and deployed agents. Install, use, copy check, hosted MCP, and reference.",
+  "colors": {
+    "primary": "#B8400E",
+    "light": "#FF8A4C",
+    "dark": "#B8400E"
+  },
+  "favicon": "/favicon.svg",
+  "logo": {
+    "light": "/logo/light.svg",
+    "dark": "/logo/dark.svg",
+    "href": "https://conquistador.forsvn.com"
+  },
+  "navbar": {
+    "links": [
+      { "label": "npm", "href": "https://www.npmjs.com/package/@forsvn/conquistador" }
+    ],
+    "primary": {
+      "type": "github",
+      "href": "https://github.com/forsvn-labs/conquistador"
+    }
+  },
+  "navigation": {
+    "groups": [
+      { "group": "Get started", "pages": ["index", "quickstart"] },
+      {
+        "group": "Install",
+        "pages": [
+          "install/overview",
+          "install/coding-agents",
+          "install/mcp-apps",
+          "install/hosted-mcp",
+          "install/executor",
+          "install/chat-bots",
+          "install/update-remove"
+        ]
+      },
+      { "group": "Use", "pages": ["use/overview", "use/commands", "use/plays", "use/your-playbooks"] },
+      { "group": "Copy check", "pages": ["check"] },
+      {
+        "group": "Deployed agents",
+        "pages": ["hosted/overview", "hosted/receipts", "hosted/verify-gate", "hosted/self-host"]
+      },
+      { "group": "Help", "pages": ["troubleshooting"] },
+      { "group": "Reference", "pages": ["reference/cli", "reference/mcp-tools", "reference/config", "changelog"] }
+    ]
+  },
+  "contextual": {
+    "options": ["copy", "view", "chatgpt", "claude", "mcp", "cursor", "vscode"]
+  },
+  "footer": {
+    "socials": {
+      "github": "https://github.com/forsvn-labs/conquistador",
+      "website": "https://conquistador.forsvn.com"
+    }
+  }
+}

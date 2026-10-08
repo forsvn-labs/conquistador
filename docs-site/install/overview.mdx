@@ -1,0 +1,80 @@
+---
+title: "Install options"
+description: "Choose where Conquistador runs: coding agents, MCP apps, hosted MCP, Executor, or chat bots. Learn how the options overlap."
+---
+
+One installer configures every option. Run it in your project folder:
+
+```sh
+npx @forsvn/conquistador@latest
+```
+
+The first question is **Where do you want Conquistador?** You can choose more than one place. The installer preselects what it finds on your computer.
+
+| Option | What it installs | Use it when |
+|---|---|---|
+| [Coding agents](/install/coding-agents) (recommended) | The plugin (skill, hooks, local MCP server) for agents with a plugin manager. A skill copy for the other agents. | You work in Claude Code, Codex, Cursor, or another coding agent. |
+| [MCP apps](/install/mcp-apps) | The local MCP server, `conquistador mcp`, in apps that do not get the plugin. | You use Claude Desktop, VS Code, Windsurf, Zed, or a similar app. |
+| [Hosted MCP](/install/hosted-mcp) | A personal access token and the client config for the hosted server. | Your agent runs on a server, or your app connects only to remote MCP servers. |
+| [Executor](/install/executor) | Conquistador as a source in Executor. | Your agents reach their tools through Executor. |
+| [Chat bots](/install/chat-bots) | A system prompt and knowledge files. | You use ChatGPT GPTs, Claude Projects, Grok projects, or Gemini Gems. |
+
+## How the options overlap
+
+The installer never configures two options for the same app.
+
+- **The plugin includes the MCP server.** An agent that gets the plugin already has the `conquistador` MCP server. The MCP apps step lists only apps that do not get the plugin.
+- **Skills only is a subset of the plugin.** Agents without a plugin manager (Gemini CLI, OpenCode, Pi, Hermes Agent, Antigravity CLI, Kiro CLI, Mistral Vibe) get the skill folder only: no hooks and no MCP server. A project-scope install gives every agent the skill folder only.
+- **Local MCP and hosted MCP serve the same tools.** Use the local server on your computer. Use the hosted server where your agent cannot run a local process.
+- **Executor is a second path to the same server.** Choose it only for agents that do not get the plugin or a direct MCP config.
+- **Chat bots get files, not a server.** A bot export is a snapshot. Export it again after an update.
+
+## The install flow
+
+<Note>
+  The flow below is the installer from 0.4.0. In 0.3.0 the installer asks only for the coding agents and the scope. In 0.3.0 the other options use separate flags: `--mcp`, `--bot`, `--skills`, `--plugin`, and `--advanced`.
+</Note>
+
+1. **Preflight.** The installer checks your Node version, other `conquistador` commands on your `PATH`, and the newest version on npm. It prints nothing unless there is a problem. Then it prints the exact fix.
+2. **Welcome.** The version and one line about what happens. Nothing changes until you confirm.
+3. **Where.** Choose the options in the table above.
+4. **Details.** For each option: the agents, the scope (project or global), hooks on or off, the MCP apps, the Executor source name, or the bot output folder.
+5. **Plan review.** Every change, with paths and commands, what stays unchanged, and how to undo it (`conquistador remove`). Confirm to continue.
+6. **Install and verify.** One progress line for each step. If one option fails, the others continue. Then the installer runs the [doctor](/install/update-remove#check-the-install) checks for each option it installed.
+7. **Project setup.** In a project without `PRODUCT.md` and `GROWTH.md`, the installer offers to open your agent with `/conquistador init`.
+8. **First task.** Pick an area and an example, or finish.
+9. **Summary.** What is installed where, and the next commands.
+
+Press Ctrl-C or Escape to cancel. Before you confirm the plan at the review, the installer prints "Cancelled. No files changed." After you confirm, the parts that finished installing stay; run `conquistador remove` to undo them.
+
+## Install without questions
+
+Every answer has a flag. Without a terminal and without `--yes`, the installer prints the plan and exits with code 2.
+
+```sh
+npx @forsvn/conquistador@latest --surface=agents --providers=claude,codex --scope=project --yes
+npx @forsvn/conquistador@latest --dry-run          # Show the plan; change nothing
+npx @forsvn/conquistador@latest --dry-run --json   # Print the plan as JSON
+```
+
+| Flag | Does |
+|---|---|
+| `--surface=LIST` | From 0.4.0. Choose the options: `agents`, `mcp-apps`, `hosted`, `executor`, `bot` |
+| `--providers=LIST` | Install for these agents. See [Coding agents](/install/coding-agents#agents-and-folders) |
+| `--apps=LIST` | From 0.4.0. Configure these MCP apps: `claude-desktop`, `vscode`, `windsurf`, `zed`, `cursor` |
+| `--executor-name=NAME` | From 0.4.0. The source name in Executor. Default: `conquistador` |
+| `--bot-out=DIR` | From 0.4.0. The folder for the chat bot files. Default: `./conquistador-bot` |
+| `--scope=project` or `--scope=global` | Install for this project or for all projects |
+| `--no-hooks` | Install without the prompt, stop, and check hooks |
+| `-y`, `--yes` | Accept the defaults. Without `--surface`, only coding agents. With `--yes`, the installer exits with code 1 when a step or a check failed |
+| `--dry-run` | Show the plan. Change nothing |
+| `--json` | From 0.4.0. Print the plan as JSON (schema `conquistador.onboarding-plan/v1`). Change nothing |
+| `--plain` | From 0.4.0. Line prompts with no color and no cursor moves. `TERM=dumb` does the same. `NO_COLOR` turns off color only |
+| `--in AGENT` | Open this agent after the install |
+| `--no-open` | Install only |
+
+From 0.4.0 the old flags still work. `--mcp`, `--plugin`, `--skills`, `--bot`, and `--advanced` open the installer with that option chosen and print the new flag. With a route option (`--host`, `--path`, `--url`, a bot name such as `--bot hermes`, or `--help`), they keep the older per-project route.
+
+## Why there is no install-time setup
+
+`npm install` runs no setup script. npm hides the output of install scripts, CI and Docker installs have no terminal, and an install-time prompt is a supply-chain risk. Setup starts when you run `conquistador`, or `npx @forsvn/conquistador@latest` without an install.

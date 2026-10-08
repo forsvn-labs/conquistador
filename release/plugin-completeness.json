@@ -60,7 +60,7 @@
     },
     {
       "path": "hooks/README.md",
-      "sha256": "1477fd9905057226a2e550510bc6327d26dcb1a2e5d0b64622ff253d2d9f6e03"
+      "sha256": "022fb91b81b95b55edefd97cf602809c51f6ea2ce986ecc3538332a5bad3b4ba"
     },
     {
       "path": "LICENSE",
@@ -88,7 +88,7 @@
     },
     {
       "path": "README.md",
-      "sha256": "ba3d19886bfe5fe770f298181936bb71d190d3e7687e0909d8819dad40d0ff42"
+      "sha256": "843aa84869575f3273ff8b0757d4bd2a9c173b315f985fc2396ded55dac135bb"
     },
     {
       "path": "SKILL.md",
@@ -1080,7 +1080,7 @@
     },
     {
       "path": "skills/conquistador/commands/check/COMMAND.md",
-      "sha256": "158059f40bce564b0934a75c37709d8b2783524b32d6a181d4e1f02215969bbe"
+      "sha256": "551764fe27002c4d765ed52d46063f9c95fc4ee5581c50d050cb0a076c499613"
     },
     {
       "path": "skills/conquistador/commands/connect/COMMAND.md",
@@ -4860,7 +4860,7 @@
     },
     {
       "path": "tools/check/rules.mjs",
-      "sha256": "ca2389597b07793ab3899ed675591d654daff976ab62b7e941d2d3f0519e211b"
+      "sha256": "55af068df7a3161cfb5bc20052fcbe81ac2fb72b25251845ca5102f532430acb"
     },
     {
       "path": "tools/context-files.mjs",

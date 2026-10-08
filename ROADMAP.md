@@ -7,8 +7,9 @@
 2. List the plugin in the agent marketplaces, then check each listing installs 0.3.x.
 3. Test the interactive installer on Windows (a pseudo-terminal harness), and Linux and Windows
    on ARM. `tools/e2e/onboarding-v2.mjs` needs a Windows pseudo-terminal bridge first.
-4. Merge onboarding v2, then connect its Hosted MCP surface to the real `tools/login.mjs` from the
-   hosted sign-up work and run the `hosted` E2E case against it.
+4. Put the docs site live at `https://conquistador.forsvn.com/docs`: create the Mintlify project,
+   add the Vercel rewrites and the CSP change in the landing, and submit the repository to
+   Context7 (steps in `docs-site/README.md`).
 5. Open each MCP app (Claude Desktop, VS Code, Windsurf, Zed, Cursor) after the installer writes
    its entry, and check that the app lists the Conquistador tools. Only the config file and an MCP
    handshake are checked now.
