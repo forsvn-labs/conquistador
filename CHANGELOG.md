@@ -6,7 +6,9 @@ output, human acceptance and rights disposition require separate evidence.
 
 ## 2026-10-08, hosted sign-up, docs site, and credential hardening
 
-A deployment, not an npm release.
+A deployment, not an npm release. The Worker `conquistador-mcp` runs the `v0.4.0` Worker code, deployed
+from `main` commit `c0703bc` as version `695243c8-952f-494f-a2c3-a0e5f3f95f8c` on
+<https://mcp.forsvn.com/mcp>. The docs site builds from `main` at <https://conquistador.forsvn.com/docs>.
 
 - **Self-serve tokens are live** ([#59](https://github.com/forsvn-labs/conquistador/pull/59)). The
   Worker on <https://mcp.forsvn.com> has the GitHub OAuth secrets and the `conquistador-tokens` KV
