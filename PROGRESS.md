@@ -9,13 +9,13 @@
   `node tools/e2e/signup.mjs --live --url https://mcp.forsvn.com` passed 7/7 with real GitHub
   (07:30 UTC): login saves a `cq_` token, `whoami` names the user, the token opens `/mcp`, unknown
   tokens get 401, and logout revokes. Not tried with a real account: browser sign-in at `/signup`.
-  Open: the landing's "Get a token" link (`CQ_TOKEN_SIGNUP`) is not on in production.
-- **Docs site** ([#58](https://github.com/forsvn-labs/conquistador/pull/58), merged; not live).
-  `docs-site/` is a Mintlify site with 23 pages; `node tools/e2e/docs-site.mjs` checks it against
-  the CLI, the MCP tools, and the check rules. Context7 indexes it as `/forsvn-labs/conquistador`
-  (checked 2026-10-08). Open: the Mintlify project `forsvn` still serves its starter template and
-  must serve `docs-site/` at base path `/docs`. The landing with the `/docs` rewrites is in
-  production (0.4.0 page), so `/docs` returns Mintlify's 404 until then.
+- **Docs site: live at <https://conquistador.forsvn.com/docs>** (2026-10-08). The Mintlify project
+  `forsvn` builds `forsvn-labs/conquistador` `main`, folder `docs-site`, base path `/docs`; the landing
+  proxies `/docs` to it. `node tools/e2e/docs-site.mjs --live https://conquistador.forsvn.com/docs`
+  passes 20/20, and a browser load shows no CSP errors or broken images. Context7 indexes it as
+  `/forsvn-labs/conquistador`. Open: the landing's "Docs" and "Get a token" links are in a checked
+  preview, not yet in production; Mintlify has no custom-domain entry for `conquistador.forsvn.com`
+  (the rewrite works without it).
 
 Shipped work, by date, is in [CHANGELOG.md](CHANGELOG.md). Ordered upcoming work is in
 [ROADMAP.md](ROADMAP.md). Earlier progress records are retained in Git history.
