@@ -2,8 +2,33 @@
 
 ## Unshipped
 
-Nothing remains implemented but unshipped. `main` after `v0.4.0` holds only records and
-dev-only lockfile fixes; the hosted Worker and the docs site run current `main`.
+### Full-screen installer; the terminal never opens an agent (branch `cli/tui-installer`)
+
+Implemented and tested, not merged or released. Hung asked on 2026-10-08 for a terminal that only
+installs, with a well-designed full-screen UI, and for CLI commands that give the agent context
+instead of doing the work.
+
+- `tools/installer-tui.mjs`: the installer is an Ink app in the terminal's alternate screen. Five
+  steps (Agents, Options, Review, Install, Done) with the brand colors and a gradient wordmark. The
+  Done screen says what to type in each agent (`/conquistador init` in a project without
+  `GROWTH.md`). A later `conquistador` run opens a home screen: add or change agents, update,
+  check and repair, remove. Ink 8 and React 19 are bundled into `tools/vendor/ink.mjs` (406 KB);
+  the npm package still depends only on `jose`.
+- The terminal never opens an agent and never asks for a task. `conquistador "TASK"` prints the
+  task's reading list and the command to type in the agent. `--in AGENT` now names the agent to
+  install; `--no-open` is accepted and does nothing. The agents' launch commands and the Claude
+  `--prefill` probe are removed. `--plain` and `TERM=dumb` keep the line flow without the task step.
+- Help leads with install, then the commands an agent runs for context.
+- Docs: README, INSTALL, VISION, the docs-site install, quickstart, and CLI pages. The docs site
+  labels the change "From 0.5.0"; the version number is an assumption until Hung picks it.
+- Verification on 2026-10-08 (macOS, Node 26.9.0): `node tools/dev.mjs test` passes (396 tool
+  tests; runtime 294, catalog 167, evals 63). `node tools/e2e/installer.mjs` 28/28 (failure modes
+  T1-T19 and F1-F30, fake agents). `expect tools/e2e/real-agents.exp` 21/21 with real Claude Code
+  2.1.292 and Codex 0.160.1 (no model calls). `tools/e2e/package-install.mjs` was updated for the
+  new output but not run.
+
+Open: a frozen spinner while a plugin manager runs (installs call `spawnSync`); no resize test in
+the E2E harness; Windows is untested, as before.
 
 Shipped work, by date, is in [CHANGELOG.md](CHANGELOG.md). Ordered upcoming work is in
 [ROADMAP.md](ROADMAP.md). Earlier progress records are retained in Git history.

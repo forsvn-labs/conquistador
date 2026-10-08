@@ -32,20 +32,18 @@ The installer never configures two options for the same app.
 ## The install flow
 
 <Note>
-  The flow below is the installer from 0.4.0. In 0.3.0 the installer asks only for the coding agents and the scope. In 0.3.0 the other options use separate flags: `--mcp`, `--bot`, `--skills`, `--plugin`, and `--advanced`.
+  From 0.5.0 the installer is a full-screen terminal UI, and it never opens an agent or asks for a task: the terminal only installs Conquistador, and the work happens inside your agent. In 0.4.0 the installer used line prompts and could open your agent with a first task. In 0.3.0 it asked only for the coding agents and the scope.
 </Note>
 
-1. **Preflight.** The installer checks your Node version, other `conquistador` commands on your `PATH`, and the newest version on npm. It prints nothing unless there is a problem. Then it prints the exact fix.
-2. **Welcome.** The version and one line about what happens. Nothing changes until you confirm.
-3. **Where.** Choose the options in the table above.
-4. **Details.** For each option: the agents, the scope (project or global), hooks on or off, the MCP apps, the Executor source name, or the bot output folder.
-5. **Plan review.** Every change, with paths and commands, what stays unchanged, and how to undo it (`conquistador remove`). Confirm to continue.
-6. **Install and verify.** One progress line for each step. If one option fails, the others continue. Then the installer runs the [doctor](/install/update-remove#check-the-install) checks for each option it installed.
-7. **Project setup.** In a project without `PRODUCT.md` and `GROWTH.md`, the installer offers to open your agent with `/conquistador init`.
-8. **First task.** Pick an area and an example, or finish.
-9. **Summary.** What is installed where, and the next commands.
+1. **Agents.** The coding agents found on your computer are chosen. Press Space to change a choice. Problems found before the start show here with the exact fix: an old Node, another `conquistador` command on your `PATH`, or a newer version on npm.
+2. **Options.** The scope (project or global), hooks on or off, and the other options in the table above: MCP apps, Executor, chat bot files, and Hosted MCP. The arrow keys change a value.
+3. **Review.** Every change, with paths and commands, what stays unchanged, and how to undo it (`conquistador remove`). Press Enter to install.
+4. **Install and verify.** One progress line for each step. If one option fails, the others continue. Then the installer runs the [doctor](/install/update-remove#check-the-install) checks for each option it installed.
+5. **Done.** The command to type in each agent: `/conquistador init` in a project without `PRODUCT.md` and `GROWTH.md`, otherwise `/conquistador`. When you exit, the summary stays in your terminal.
 
-Press Ctrl-C or Escape to cancel. Before you confirm the plan at the review, the installer prints "Cancelled. No files changed." After you confirm, the parts that finished installing stay; run `conquistador remove` to undo them.
+Press Escape, `q`, or Ctrl-C to cancel. Before the install starts, the installer prints "Cancelled. No files changed." Ctrl-C during the install does not stop a step half way. After the install, the parts that finished stay; run `conquistador remove` to undo them.
+
+Run `conquistador` again to see what is installed. That screen adds or changes agents, updates, checks and repairs, or removes Conquistador. Use `--plain`, or `TERM=dumb`, for line prompts instead of the full screen.
 
 ## Install without questions
 
@@ -66,12 +64,11 @@ npx @forsvn/conquistador@latest --dry-run --json   # Print the plan as JSON
 | `--bot-out=DIR` | From 0.4.0. The folder for the chat bot files. Default: `./conquistador-bot` |
 | `--scope=project` or `--scope=global` | Install for this project or for all projects |
 | `--no-hooks` | Install without the prompt, stop, and check hooks |
-| `-y`, `--yes` | Accept the defaults. Without `--surface`, only coding agents. With `--yes`, the installer exits with code 1 when a step or a check failed |
+| `-y`, `--yes` | Accept the defaults. Without `--surface`, only coding agents. In a terminal, the installer goes straight to the install and closes by itself. With `--yes`, the installer exits with code 1 when a step or a check failed |
 | `--dry-run` | Show the plan. Change nothing |
 | `--json` | From 0.4.0. Print the plan as JSON (schema `conquistador.onboarding-plan/v1`). Change nothing |
 | `--plain` | From 0.4.0. Line prompts with no color and no cursor moves. `TERM=dumb` does the same. `NO_COLOR` turns off color only |
-| `--in AGENT` | Open this agent after the install |
-| `--no-open` | Install only |
+| `--in AGENT` | Install for this agent, the same as `--providers=AGENT` |
 
 From 0.4.0 the old flags still work. `--mcp`, `--plugin`, `--skills`, `--bot`, and `--advanced` open the installer with that option chosen and print the new flag. With a route option (`--host`, `--path`, `--url`, a bot name such as `--bot hermes`, or `--help`), they keep the older per-project route.
 

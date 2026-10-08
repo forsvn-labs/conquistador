@@ -8,10 +8,13 @@ unshipped validation belongs in PROGRESS.md, and shipped release evidence in CHA
 
 `runtime/bin/conquistador.js` dispatches help and onboarding, then `install`, `operator`, `setup`, and local `mcp` before
 importing the optional runtime. Bare `conquistador` (first run), `conquistador add`, and the install flags use
-the one installer in `tools/onboard.mjs` through `tools/launch.mjs`: preflight (`tools/preflight.mjs`),
-surfaces (coding agents, MCP apps in `tools/mcp-apps.mjs`, Hosted MCP through `tools/login.mjs` when it
-exists, Executor in `tools/executor-source.mjs`, chat bots), details, review, install with a verify pass,
-project setup, first task, and summary. `--bot`, `--skills`, `--plugin`, `--mcp`, and `--advanced` without a
+the one installer through `tools/launch.mjs`. In a terminal it is the full-screen Ink UI in
+`tools/installer-tui.mjs` (Ink and React are bundled into `tools/vendor/ink.mjs`); `--plain` and `TERM=dumb`
+use the line flow in `tools/onboard.mjs`. Both build one plan in `tools/onboard.mjs`: preflight
+(`tools/preflight.mjs`), surfaces (coding agents, MCP apps in `tools/mcp-apps.mjs`, Hosted MCP through
+`tools/login.mjs` when it exists, Executor in `tools/executor-source.mjs`, chat bots), details, review,
+install with a verify pass, and a summary that says what to type in each agent. The installer never
+opens an agent; `conquistador "TASK"` prints the task's reading list. `--bot`, `--skills`, `--plugin`, `--mcp`, and `--advanced` without a
 route option preselect a surface there. With `--host`, `--project`, `--path`, `--url`, a bot name, or `--help`
 they keep the per-project route in `tools/onboarding.mjs`, where `--advanced` opens the combination guide.
 `conquistador project` also uses that route. Setup needs Node 22.18 and core Node modules, not a build or bootstrap.

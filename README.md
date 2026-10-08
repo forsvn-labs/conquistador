@@ -100,24 +100,28 @@ Make a shortcut for a command you use often: `/conquistador pin outreach` create
 
 ## Install
 
-You need Node 22.18 or later and a coding agent.
+You need Node 22.18 or later and a coding agent. Run the installer with your package manager:
 
 ```sh
-npx @forsvn/conquistador
+npx @forsvn/conquistador        # or: bunx @forsvn/conquistador, pnpm dlx @forsvn/conquistador
 ```
 
-The installer takes about a minute. Nothing changes until you confirm the review.
+The terminal only installs Conquistador. The work happens inside your coding agent. The
+full-screen installer takes about a minute, and nothing changes until you confirm the review.
 
-1. Warns you when an older `conquistador` on your PATH would run instead, or when npm has a newer
-   version.
-2. Asks where you want Conquistador: **coding agents**, **MCP apps** (Claude Desktop, VS Code,
-   Windsurf, Zed, Cursor), **Executor**, **chat bots**, or **Hosted MCP** for deployed agents (when
-   available). What it found on this computer is chosen for you.
-3. Asks the details: which agents, all projects or only this one, prompt hooks, which apps.
-4. Shows every change, what stays unchanged, and how to undo it.
-5. Installs, then checks each install.
-6. Offers to open your agent with `/conquistador init` when the project has no `GROWTH.md`, then
-   a first task, or **Finish for now**, with a summary of what is installed where.
+1. **Agents.** The agents it found are chosen for you. It warns you when an older `conquistador`
+   on your PATH would run instead, or when npm has a newer version.
+2. **Options.** All projects (plugin with prompt hooks and the MCP server) or only this project
+   (one skill folder you can commit). Turn on more places if you want them: **MCP apps** (Claude
+   Desktop, VS Code, Windsurf, Zed, Cursor), **Executor**, **chat bot files**, or **Hosted MCP**
+   for deployed agents.
+3. **Review.** Every change, what stays unchanged, and how to undo it.
+4. **Install.** Each agent installs with its own plugin manager, then each install is checked.
+5. **Done.** The exact command to type in each agent: `/conquistador init` in a project without
+   `GROWTH.md`, otherwise `/conquistador`. The installer never opens an agent.
+
+Run `conquistador` again to see what is installed and to add, update, repair, or remove. Use
+`--plain` (or `TERM=dumb`) for line prompts without the full screen. Skip the questions in scripts:
 
 Run `conquistador add` to open the installer again. Skip the questions in scripts:
 
@@ -162,10 +166,12 @@ conquistador remove     # Remove Conquistador from your agents
 /conquistador write a win-back email flow for trial users who never activated
 ```
 
-From a terminal, open your agent with a task already typed in:
+The CLI also gives your agent context. These commands print and change nothing:
 
 ```sh
-conquistador "Plan our Product Hunt launch"
+conquistador "Plan our Product Hunt launch"   # The playbooks this task needs
+conquistador tour                             # What Conquistador covers, by area
+conquistador check landing/index.html         # Check copy against fixed rules
 ```
 
 ## How Conquistador makes the agent read the playbooks
