@@ -26,6 +26,13 @@
 //       with --yes it asks nothing, installs, and closes by itself.
 //   T17 Hosted MCP is offered only online with sign-in present; the token shows in the summary.
 //   T19 Preflight problems (a stale copy on PATH) show on the first screen.
+//   H1-H6 Ctrl-C cancels hosted sign-in during config/device fetch, polling sleep, an in-flight
+//       poll, a stalled response body, or token exchange. Completed installs and tokens stay.
+//   H7 A stalled sign-in request is bounded even without Ctrl-C.
+//   H8 Cancelled sign-in reaches Done, records skipped + retry, verifies prior installs, exits 1,
+//       restores the normal screen and cursor, and closes the pending network request.
+//   L1 --yes never asks a line-fallback question, including TERM=dumb and an omitted scope.
+//   S1 Scroll reaches the final recovery line without exceeding its allocated row count.
 import { spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { chmodSync, cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, symlinkSync, writeFileSync } from 'node:fs';
@@ -613,6 +620,74 @@ scenario('plain', ['T8', 'T13', 'F25'], async ({ expect }) => {
   } finally { f.cleanup(); }
 });
 
+for (const mode of ['plain', 'dumb']) {
+  for (const choice of ['explicit', 'defaults']) {
+    scenario(`yes-${mode}-${choice}`, ['L1', 'T16', 'F25'], async ({ expect, transcript }) => {
+      const f = fixture(`yes-${mode}-${choice}`, { agents: ['claude'], apps: { 'claude-desktop': { mcpServers: {} } } });
+      const args = ['--yes', ...(mode === 'plain' ? ['--plain'] : []), ...(choice === 'explicit' ? ['--surface=agents,mcp-apps', '--providers=pi'] : [])];
+      const s = f.term(args, { env: mode === 'dumb' ? { TERM: 'dumb' } : {} });
+      try {
+        // No key presses: --yes must choose scope, agents, apps and consent on its own.
+        await s.waitFor('Summary', { timeout: 12_000 }); await s.snap('no-input-summary');
+        expect(await s.exit({ timeout: 6000 }) === 0, '--yes fallback did not exit 0 without input');
+        const shown = s.screen.text({ history: true });
+        for (const question of ['Where do you want Conquistador?', 'Which agents?', 'All projects, or only this one?', 'Which MCP apps?', 'Turn on prompt hooks?', 'Install now?']) {
+          expect(!has(shown, question), `--yes fallback asked ${question}`);
+        }
+        expect(f.json(join(f.home, '.conquistador/installs.json'))?.agents?.[choice === 'explicit' ? 'pi' : 'claude-code'], 'default global agent install was not recorded');
+        expect(!launches(f).length, '--yes fallback opened an agent');
+        return s.snaps;
+      } finally { transcript('terminal-raw', s.raw); s.kill(); await s.exit({ timeout: 1000 }); f.cleanup(); }
+    });
+  }
+}
+
+scenario('scroll-capacity', ['S1', 'T7'], async ({ expect, transcript }) => {
+  // Exercise the real private Scroll function with a minimal element renderer. Check row bounds
+  // independently from its implementation; the PTY narrow/wide cases check full Ink frames.
+  const source = readFileSync(join(root, 'tools/installer-tui.mjs'), 'utf8');
+  const scrollSource = /function Scroll\([\s\S]*?\n}/.exec(source)?.[0];
+  if (!scrollSource) throw Error('Scroll function not found');
+  const h = (type, props, ...children) => ({ type, props, children: children.flat().filter(Boolean) });
+  const scroll = new Function('h', 'Box', 'Text', 'Line', `${scrollSource}; return Scroll;`)(h, 'box', 'text', 'line');
+  const lines = Array.from({ length: 12 }, (_, i) => ({ text: i === 11 ? 'Retry: conquistador doctor --fix' : `Recovery line ${i + 1}` }));
+  const evidence = [];
+  for (const height of [1, 2, 3, 4, 10, 12, 15]) {
+    const limit = { current: 0 };
+    scroll({ c: {}, lines, offset: 0, height, limit });
+    const last = scroll({ c: {}, lines, offset: limit.current, height, limit });
+    expect(last.children.some(row => row.props?.text === lines.at(-1).text), `height ${height}: final retry line is unreachable`);
+    expect(!last.children.some(row => row.children?.some(text => typeof text === 'string' && text.startsWith('↓'))), `height ${height}: bottom marker remains at end`);
+    for (let offset = 0; offset <= limit.current + 2; offset += 1) {
+      const rows = scroll({ c: {}, lines, offset, height, limit }).children;
+      expect(rows.length <= height, `height ${height}, offset ${offset}: drew ${rows.length} rows`);
+    }
+    evidence.push({ height, maximumOffset: limit.current, finalRows: last.children.map(row => row.props?.text ?? row.children.join('')) });
+  }
+  transcript('scroll-row-bounds', JSON.stringify(evidence, null, 2));
+  return [];
+});
+
+scenario('scroll-recovery', ['S1', 'T2', 'T7'], async ({ expect, transcript }) => {
+  const f = fixture('scroll-recovery', { agents: ['claude'] });
+  mkdirSync(join(f.home, '.conquistador/config.json'), { recursive: true });
+  const s = f.term(['--providers=claude', '--scope=global', '--no-hooks'], { columns: 60, rows: 24 });
+  try {
+    await s.waitFor(TITLE.review); await s.press('enter');
+    await s.waitFor(TITLE.done); await s.snap('done-before-scroll');
+    for (let i = 0; i < 40; i += 1) await s.press('down');
+    await s.snap('done-at-end');
+    const end = s.screen.text();
+    expect(has(end, 'Retry: conquistador doctor --fix'), 'final recovery instruction is not visible');
+    expect(!/↓\s*\d+\s*more/.test(end), 'bottom marker remains after scrolling to the end');
+    expect(!tooWide(s.raw, 60).length, 'short recovery card overflows its width');
+    await s.press('enter'); await s.waitFor('Summary');
+    expect(await s.exit() === 1, 'failed recovery card did not exit 1');
+    expect(s.raw.lastIndexOf('\x1b[?1049l') > s.raw.lastIndexOf('\x1b[?1049h'), 'recovery card left the alternate screen open');
+    return s.snaps;
+  } finally { transcript('terminal-raw', s.raw); s.kill(); await s.exit({ timeout: 1000 }); f.cleanup(); }
+});
+
 // --- T19, F15: a stale copy earlier on PATH --------------------------------------------------------------
 scenario('shadowed', ['T19', 'F15'], async ({ expect, transcript }) => {
   const f = fixture('shadowed', { agents: ['claude'], stale: '0.0.14' });
@@ -678,6 +753,80 @@ scenario('hosted', ['T17', 'F23'], async ({ expect }) => {
     } finally { cancel.cleanup(); }
   } finally { f.cleanup(); }
 });
+
+// Real login code, loopback HTTP only. Do not replace login.mjs for these recovery checks.
+// The held request/body exercises fetch cancellation, rather than returning a canned cancel.
+for (const phase of ['config', 'device', 'sleep', 'poll', 'body', 'exchange', 'timeout', 'timeout-body', 'expiry']) {
+  scenario(`hosted-cancel-${phase}`, ['H1-H8', 'T2', 'T4', 'F23'], async ({ expect, transcript, keepSnaps }) => {
+    let reached;
+    const target = new Promise(done => { reached = done; });
+    let pendingClosed = false;
+    const requests = [];
+    const server = await listen((request, response) => {
+      const path = new URL(request.url, 'http://fixture').pathname;
+      const stage = path === '/api/login' ? request.method === 'POST' ? 'exchange' : 'config'
+        : path === '/login/device/code' ? 'device' : path === '/login/oauth/access_token' ? 'poll' : 'probe';
+      requests.push(stage);
+      const json = value => { response.setHeader('content-type', 'application/json'); response.end(JSON.stringify(value)); };
+      if (stage === 'probe') { response.writeHead(401); response.end('{}'); return; }
+      if (stage === phase || (stage === 'poll' && ['body', 'timeout', 'timeout-body', 'expiry'].includes(phase))) {
+        response.on('close', () => { pendingClosed = true; });
+        if (['body', 'timeout-body'].includes(phase)) { response.writeHead(200, { 'content-type': 'application/json' }); response.write('{'); }
+        reached(stage);
+        return;
+      }
+      if (stage === 'config') json({ githubClientId: 'local-e2e-client' });
+      else if (stage === 'device') {
+        json({ device_code: 'local-device', user_code: 'LOCAL-CODE', verification_uri: `${server.url}/device`, interval: phase === 'sleep' ? 60 : 1, expires_in: phase === 'expiry' ? 3 : 900 });
+        if (phase === 'sleep') reached('sleep');
+      } else if (stage === 'poll') json({ access_token: 'local-github-token' });
+      else json({ token: 'cq_local_issued', login: 'local-user' });
+    });
+    const f = fixture(`hosted-cancel-${phase}`, { agents: ['claude'], env: {
+      CONQUISTADOR_MCP_URL: server.url, CONQUISTADOR_GITHUB_URL: server.url, CONQUISTADOR_HOSTED_URL: `${server.url}/mcp`,
+    } });
+    const existingToken = join(f.home, '.conquistador/mcp-token');
+    mkdirSync(dirname(existingToken), { recursive: true });
+    writeFileSync(existingToken, 'cq_existing_token\n');
+    let s;
+    try {
+      s = f.term(['--surface=agents,hosted', '--providers=claude', '--scope=global', '--yes']);
+      let timer;
+      try { await Promise.race([target, new Promise((_, reject) => { timer = setTimeout(() => reject(Error(`login never reached ${phase}`)), 15_000); })]); }
+      finally { clearTimeout(timer); }
+      expect(f.json(join(f.home, '.conquistador/installs.json'))?.agents?.['claude-code'], 'agent install did not complete before sign-in');
+      const installedBefore = f.tree().filter(path => /\.conquistador\/plugin\//.test(path));
+      expect(installedBefore.length > 0, 'no completed plugin payload to preserve');
+      if (phase === 'sleep') await s.waitFor('Waiting for you to approve');
+      await s.snap(`waiting-${phase}`);
+      const started = Date.now();
+      const bounded = phase.startsWith('timeout') || phase === 'expiry';
+      if (!bounded) await s.press('ctrlC');
+      await s.waitFor(TITLE.done, { timeout: phase.startsWith('timeout') ? 20_000 : 5000 });
+      await s.snap(`done-${phase}`);
+      const elapsed = Date.now() - started;
+      expect(elapsed < (phase.startsWith('timeout') ? 20_000 : 5000), `sign-in recovery took ${elapsed} ms`);
+      await s.waitFor('Summary', { timeout: 6000 }); await s.snap(`summary-${phase}`);
+      expect(await s.exit({ timeout: 6000 }) === 1, 'cancelled or timed-out sign-in must exit 1');
+      const shown = s.screen.text({ history: true });
+      expect(has(shown, 'Hosted MCP') && has(shown, 'conquistador --surface=hosted'), 'no usable Hosted MCP retry');
+      expect(has(shown, 'Claude Code') && has(shown, 'checks passed'), 'completed agent did not pass verification');
+      if (!bounded) expect(has(shown, 'skipped'), 'cancelled sign-in was not recorded as skipped');
+      else expect(has(shown, phase === 'expiry' ? 'expired' : 'timed out'), 'stalled response did not report its finite timeout or expiry');
+      expect(f.read(existingToken) === 'cq_existing_token\n', 'existing token was replaced during failed sign-in');
+      expect(JSON.stringify(f.tree().filter(path => /\.conquistador\/plugin\//.test(path))) === JSON.stringify(installedBefore), 'completed plugin payload changed after sign-in cancellation');
+      expect(!launches(f).length, 'sign-in recovery opened an agent');
+      expect(s.raw.lastIndexOf('\x1b[?1049l') > s.raw.lastIndexOf('\x1b[?1049h'), 'alternate screen was not restored');
+      expect(/\x1b\[\?25h/.test(s.raw.slice(s.raw.lastIndexOf('\x1b[?1049l'))), 'cursor stayed hidden');
+      if (phase === 'sleep') expect(!requests.includes('poll'), 'polling continued after sleep cancellation');
+      else expect(pendingClosed, 'pending sign-in network request did not close');
+      return [];
+    } finally {
+      if (s) { transcript('terminal-raw', s.raw); keepSnaps(s.snaps); s.kill(); await s.exit({ timeout: 1000 }); }
+      server.server.closeAllConnections?.(); server.server.close(); f.cleanup();
+    }
+  });
+}
 
 // --- F17, F22: Executor stopped, Executor too old --------------------------------------------------
 scenario('executor-stopped', ['F17'], async ({ expect, transcript }) => {
