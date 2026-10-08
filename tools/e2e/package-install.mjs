@@ -169,7 +169,9 @@ check('I4', 'update removes folders a crashed run left behind', result.status ==
 rmSync(join(a.plugin, 'mcp', 'server.mjs'), { force: true });
 if (hasTty) {
   result = tty(cli, ['--in', 'cursor', '--no-open', '--yes'], a);
-  check('I6', 'bare conquistador repairs a broken plugin copy', result.status === 0 && missing(a.plugin).length === 0 && /Summary/.test(result.output) && /✓ Cursor/.test(result.output), result.output.trim().split('\n').slice(-4).join(' | '));
+  // The terminal output is colored: compare it without escape codes.
+  const shown = result.output.replace(/\x1b\[[0-9;?]*[A-Za-z]/g, '');
+  check('I6', 'bare conquistador repairs a broken plugin copy', result.status === 0 && missing(a.plugin).length === 0 && /Summary/.test(shown) && /✓ Cursor/.test(shown), `exit ${result.status}; missing ${missing(a.plugin).join(', ') || 'none'} | ${shown.trim().split('\n').slice(-4).join(' | ')}`);
 } else {
   notRun('I6', 'bare conquistador repairs a broken plugin copy', 'no pseudo-terminal on this platform');
   run(cli, ['add', '--all', '--yes'], { env: a.env });
