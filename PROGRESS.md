@@ -22,13 +22,23 @@ instead of doing the work.
 - Docs: README, INSTALL, VISION, the docs-site install, quickstart, and CLI pages. The docs site
   labels the change "From 0.5.0"; the version number is an assumption until Hung picks it.
 - Verification on 2026-10-08 (macOS, Node 26.9.0): `node tools/dev.mjs test` passes (396 tool
-  tests; runtime 294, catalog 167, evals 63). `node tools/e2e/installer.mjs` 28/28 (failure modes
+  tests; runtime 294, catalog 167, evals 63). `CI=true node tools/e2e/installer.mjs` passes 29/29
+  at `94b9df2`, including `--yes` without `--scope` (failure modes
   T1-T19 and F1-F30, fake agents). `expect tools/e2e/real-agents.exp` 21/21 with real Claude Code
-  2.1.292 and Codex 0.160.1 (no model calls). `tools/e2e/package-install.mjs` was updated for the
-  new output but not run.
+  2.1.292 and Codex 0.160.1 (no model calls). `node tools/e2e/package-install.mjs` passes 50/50
+  locally at `73d2413`; the optional Node 22.18 check was not run. CI run
+  [37799155850](https://github.com/forsvn-labs/conquistador/actions/runs/37799155850) tests the
+  GitHub merge ref for head `94b9df2`: Linux 50/50 and Windows 47/47. Linux skips Node 22.18;
+  Windows skips Node 22.18, two pseudo-terminal checks and the Expect real-agent check. Product
+  checks pass on Node 24 and 26, and both optional integration checks pass.
+- Review fixes: thrown install-effect errors reach Done with a failure summary and repair
+  command; every bundled package has complete license text, including yoga-layout's upstream MIT
+  license; `--yes` skips all installer questions; package I6 removes ANSI codes before matching
+  the summary while retaining exit-code and payload-completeness assertions. Both inline
+  CodeRabbit findings are resolved. Work remains unmerged and unreleased.
 
 Open: a frozen spinner while a plugin manager runs (installs call `spawnSync`); no resize test in
-the E2E harness; Windows is untested, as before.
+the E2E harness; interactive Windows installation and Linux/Windows ARM remain untested.
 
 Shipped work, by date, is in [CHANGELOG.md](CHANGELOG.md). Ordered upcoming work is in
 [ROADMAP.md](ROADMAP.md). Earlier progress records are retained in Git history.
