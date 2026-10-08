@@ -1,4 +1,4 @@
-// Turn a screens gallery (screens.html from tools/e2e/onboarding-v2.mjs) into one PNG per screen.
+// Turn a screens gallery (screens.html from tools/e2e/installer.mjs) into one PNG per screen.
 //   node tools/e2e/screenshots.mjs GALLERY.html OUT_DIR [--only TEXT[,TEXT]] [--browser PATH]
 // Needs a Chromium-family browser with --headless. CONQUISTADOR_E2E_BROWSER or --browser picks it;
 // otherwise the Playwright headless shell or Google Chrome is used when present.

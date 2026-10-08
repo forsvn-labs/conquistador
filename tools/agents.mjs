@@ -51,16 +51,16 @@ function hermesHome() {
 }
 const openCodeConfig = () => process.env.OPENCODE_CONFIG_DIR || join(process.env.XDG_CONFIG_HOME || join(homedir(), '.config'), 'opencode');
 
-// A host that reads the Agent Skills format but has no plugin manager we use. Skill folders and launch
-// flags come from each host's own documentation (checked 2026-10-03; see INSTALL.md). `open` is null
-// when the launch flag is not verified: the prompt then goes to the clipboard.
-function skillAgent({ id, label, command, detect = [], project, global, open = null, slash }) {
+// A host that reads the Agent Skills format but has no plugin manager we use. Skill folders come
+// from each host's own documentation (checked 2026-10-03; see INSTALL.md). `slash` is what a person
+// types to start Conquistador there; without one, they ask for it in words.
+function skillAgent({ id, label, command, detect = [], project, global, slash }) {
   return {
     id, label, command, detect, how: 'skill', project, global,
     install: () => skillStep(global), update: () => skillStep(global), remove: () => unskillStep(global),
     installed: () => existsSync(join(global(), 'conquistador', OWNED)),
     healthy: () => skillCurrent(join(global(), 'conquistador')),
-    open: open ?? (() => null), slash,
+    slash,
   };
 }
 
@@ -73,9 +73,6 @@ export const AGENTS = [
     update: () => [step('claude', ['plugin', 'marketplace', 'update', MARKETPLACE]), step('claude', ['plugin', 'update', PLUGIN], { okIf: /latest|up to date|already/i })],
     remove: () => [step('claude', ['plugin', 'uninstall', PLUGIN], { okIf: /not (?:installed|found)/i }), step('claude', ['plugin', 'marketplace', 'remove', MARKETPLACE], { okIf: /not found|no marketplace/i })],
     installed: () => registration('claude', ['plugin', 'list', '--json'], text => text.includes(`"${PLUGIN}"`)),
-    // Claude Code 2.1.283 puts --prefill text in the input box without sending it (verified 2026-09-28).
-    // The flag is not in --help, so older versions and CONQUISTADOR_PREFILL=off send the prompt instead.
-    open: (prompt, { preview = false } = {}) => ((preview ? process.env.CONQUISTADOR_PREFILL !== 'off' : prefill()) ? { command: 'claude', args: ['--prefill', prompt], sends: false } : { command: 'claude', args: [prompt], sends: true }),
     slash: '/conquistador ',
   },
   {
@@ -86,7 +83,6 @@ export const AGENTS = [
     update: src => [step('codex', ['plugin', 'marketplace', 'add', src], { okIf: /already added/i }), step('codex', ['plugin', 'add', PLUGIN])],
     remove: () => [step('codex', ['plugin', 'remove', PLUGIN], { okIf: /not installed|not found/i }), step('codex', ['plugin', 'marketplace', 'remove', MARKETPLACE], { okIf: /not found|no marketplace/i })],
     installed: () => registration('codex', ['plugin', 'list'], text => text.includes(PLUGIN)),
-    open: prompt => ({ command: 'codex', args: [prompt], sends: true }),
     note: 'Codex asks once to trust the Conquistador hooks. Type /hooks to trust them.',
   },
   {
@@ -97,8 +93,6 @@ export const AGENTS = [
     installed: () => existsSync(join(cursorPlugins(), '.cursor-plugin', 'plugin.json')),
     // Cursor reads its own copy, so that copy must be current too.
     healthy: () => payloadCurrent(cursorPlugins()),
-    // Cursor the editor has no terminal launch. Without cursor-agent, the prompt goes to the clipboard.
-    open: prompt => (onPath('cursor-agent') ? { command: 'cursor-agent', args: [prompt], sends: true } : null),
   },
   {
     id: 'copilot', label: 'GitHub Copilot CLI', command: 'copilot', how: 'plugin', project: '.agents/skills',
@@ -106,7 +100,6 @@ export const AGENTS = [
     update: () => [step('copilot', ['plugin', 'update', PLUGIN], { okIf: /latest|up to date|live/i })],
     remove: () => [step('copilot', ['plugin', 'uninstall', PLUGIN], { okIf: /not installed|not found/i }), step('copilot', ['plugin', 'marketplace', 'remove', MARKETPLACE], { okIf: /not found/i })],
     installed: () => registration('copilot', ['plugin', 'list'], text => text.includes(PLUGIN)),
-    open: prompt => ({ command: 'copilot', args: ['-i', prompt], sends: true }),
   },
   {
     id: 'grok', label: 'Grok CLI', command: 'grok', how: 'plugin', project: '.grok/skills',
@@ -115,17 +108,14 @@ export const AGENTS = [
     update: () => [step('grok', ['plugin', 'update'])],
     remove: () => [step('grok', ['plugin', 'uninstall', 'conquistador'], { okIf: /not found/i })],
     installed: () => registration('grok', ['plugin', 'list'], text => /\bconquistador\b/.test(text)),
-    open: prompt => ({ command: 'grok', args: [prompt], sends: true }),
   },
-  skillAgent({ id: 'gemini', label: 'Gemini CLI', command: 'gemini', project: '.agents/skills', global: () => join(homedir(), '.gemini', 'skills'),
-    open: prompt => ({ command: 'gemini', args: ['-i', prompt], sends: true }) }),
-  skillAgent({ id: 'opencode', label: 'OpenCode', command: 'opencode', project: '.agents/skills', global: () => join(openCodeConfig(), 'skills'),
-    open: prompt => ({ command: 'opencode', args: ['--prompt', prompt], sends: true }) }),
+  skillAgent({ id: 'gemini', label: 'Gemini CLI', command: 'gemini', project: '.agents/skills', global: () => join(homedir(), '.gemini', 'skills') }),
+  skillAgent({ id: 'opencode', label: 'OpenCode', command: 'opencode', project: '.agents/skills', global: () => join(openCodeConfig(), 'skills') }),
   skillAgent({ id: 'pi', label: 'Pi', command: 'pi', detect: ['.pi'], project: '.agents/skills', global: () => join(homedir(), '.agents', 'skills'),
-    open: prompt => ({ command: 'pi', args: [prompt], sends: true }), slash: '/skill:conquistador ' }),
+    slash: '/skill:conquistador ' }),
   skillAgent({ id: 'hermes', label: 'Hermes Agent', command: 'hermes', detect: ['.hermes'], project: '.hermes/skills', global: () => join(hermesHome(), 'skills'), slash: '/conquistador ' }),
   skillAgent({ id: 'antigravity', label: 'Antigravity CLI', command: 'agy', detect: ['.gemini/antigravity-cli'], project: '.agents/skills', global: () => join(homedir(), '.gemini', 'antigravity-cli', 'skills'),
-    open: prompt => ({ command: 'agy', args: ['-i', prompt], sends: true }), slash: '/conquistador ' }),
+    slash: '/conquistador ' }),
   skillAgent({ id: 'kiro', label: 'Kiro CLI', command: 'kiro-cli', detect: ['.kiro'], project: '.kiro/skills', global: () => join(homedir(), '.kiro', 'skills') }),
   skillAgent({ id: 'vibe', label: 'Mistral Vibe', command: 'vibe', detect: ['.vibe'], project: '.agents/skills', global: () => join(homedir(), '.vibe', 'skills') }),
 ];
@@ -141,17 +131,6 @@ function registration(command, args, matches) {
   const result = run(command, args, { timeout: 5_000 });
 
   return result.status === 0 && matches(result.stdout);
-}
-
-// The first Claude Code version where --prefill was verified.
-const PREFILL_SINCE = [2, 1, 283];
-function prefill() {
-  if (process.env.CONQUISTADOR_PREFILL === 'off') return false;
-  const found = /(\d+)\.(\d+)\.(\d+)/.exec(run('claude', ['--version'], { timeout: 15_000 }).stdout);
-  if (!found) return false;
-  const parts = found.slice(1).map(Number);
-  for (let index = 0; index < 3; index += 1) if (parts[index] !== PREFILL_SINCE[index]) return parts[index] > PREFILL_SINCE[index];
-  return true;
 }
 
 export function run(command, args, { timeout = 120_000 } = {}) {

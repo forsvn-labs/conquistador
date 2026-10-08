@@ -1,4 +1,5 @@
-// The front door: `conquistador` installs where needed and opens your agent with a task (tools/launch.mjs).
+// The front door: `conquistador` installs into your agents (tools/launch.mjs); the other commands
+// manage installs or print context for an agent.
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { AGENTS, OWNED, agentId, applyAgent, copyPayload, detectAgents, home, installTargets, normalizeScope, payloadCurrent, pluginHome, projectFolders, projectRoot, readState, removePayload, self, setHooks, skillCurrent, tilde, version, writeState } from './agents.mjs';
@@ -11,47 +12,58 @@ const bold = text => (process.stdout.isTTY ? `\x1b[1m${text}\x1b[22m` : text);
 const dim = text => (process.stdout.isTTY ? `\x1b[2m${text}\x1b[22m` : text);
 
 // Default help shows only what a new user needs. Everything else stays available under --all.
+// The terminal installs Conquistador; the work happens inside the agent. Commands an agent runs
+// print context and change nothing.
 export const HELP = `Conquistador ${version}
-Growth, marketing, sales, and product playbooks for your AI agents.
+Growth and marketing playbooks for your coding agent. The terminal installs
+Conquistador; the work happens inside your agent.
 
-Start
-  conquistador                Choose where to install, then open your agent
+  conquistador                Install into your agents, or manage the installs
   conquistador add            Add agents, MCP apps, Executor, or chat bots
-  conquistador "TASK"         Open your agent with this task
-
-In your agent
-  /conquistador init          Record PRODUCT.md and GROWTH.md for this project
-  /conquistador               Show the menu for this project
-  /conquistador launch        Plan and run a launch
-  /conquistador check         Check marketing copy against the rules
-
-Maintain
   conquistador update         Update the CLI and every install
   conquistador doctor         Find and repair install and project drift
   conquistador remove         Remove Conquistador from your agents
+
+In your agent
+  /conquistador init          Record PRODUCT.md and GROWTH.md for this project
+  /conquistador               Show the menu, or ask for an outcome
+
+Context for your agent (prints; changes nothing)
+  conquistador "TASK"         The playbooks this task needs
+  conquistador tour [AREA]    What Conquistador covers
+  conquistador check FILE     Check copy against fixed rules
 
 All commands: conquistador help --all`;
 
 export const HELP_ALL = `Conquistador ${version}: all commands
 
-Start
-  conquistador [TASK]               First run: choose surfaces, install, verify, open an agent
+Install
+  conquistador                      First run: the installer (agents, options, review, install, verify)
+                                    Later runs: the installs, with add, update, repair, and remove
   conquistador add                  Open the installer again
     --surface=NAME[,NAME]           ${['agents', 'mcp-apps', 'hosted', 'executor', 'bot'].join(', ')}
     --providers=NAME[,NAME]         Install for these agents: ${AGENTS.map(agent => agent.id).join(', ')}
+    --in AGENT                      Install for this agent
     --scope=project|global          Project skill folder, or global (plugin with hooks and MCP)
     --apps=NAME[,NAME]              MCP apps: claude-desktop, vscode, windsurf, zed, cursor
     --executor-name=NAME            Source name in Executor (default conquistador)
     --bot-out=DIR                   Folder for the chat bot files (default ./conquistador-bot)
-    -y, --yes                       Accept the defaults; without a terminal, install
+    -y, --yes                       Accept the defaults and install; without a terminal, install
     --no-hooks                      Install without prompt hooks
     --dry-run                       Show the plan; change nothing
     --json                          Print the plan as JSON; change nothing
     --plain                         Line prompts without color (also TERM=dumb)
-    --in AGENT                      Open this agent
-    --no-open                       Install only
-  conquistador task WORD            Start a one-word task
   Without a terminal and without --yes, the plan prints and the exit code is 2.
+  The installer never opens an agent. It ends with what to type in each one.
+
+Context for your agent (prints; changes nothing)
+  conquistador "TASK"               The playbooks this task needs (also: conquistador task WORD)
+  conquistador brief "TASK"         The same; --full prints the playbooks, --json the brief
+  conquistador tour [AREA]          What Conquistador covers, by area
+  conquistador check FILE|URL       Check marketing copy against fixed rules (no model)
+  conquistador playbooks add DIR    Add your own playbook folder; it ranks first
+  conquistador mcp [--http]         Run the playbook MCP server (stdio, or HTTP for remote apps)
+  conquistador bot [--out DIR]      Write a system prompt and knowledge files for chat bots
 
 Maintain
   conquistador update [--dry-run]   Update the CLI, plugin installs, and skill copies
@@ -59,13 +71,6 @@ Maintain
   conquistador remove [AGENT...]    Remove installs (--scope=project|global; default both)
   conquistador agents [--json]      Show detected agents and install state
   conquistador add AGENT... --yes   Install into named agents (same as --providers)
-
-Use
-  conquistador brief "TASK"         Show which playbooks a task needs (--full prints them)
-  conquistador tour [AREA]          Print what Conquistador covers
-  conquistador playbooks add DIR    Add your own playbook folder; it ranks first
-  conquistador mcp [--http]         Run the playbook MCP server (stdio, or HTTP for remote apps)
-  conquistador bot [--out DIR]      Write a system prompt and knowledge files for chat bots
 
 Other routes (see INSTALL.md)
   conquistador project              Per-project operator copy
@@ -76,7 +81,7 @@ Other routes (see INSTALL.md)
   conquistador status | operator status | operator doctor | route --prompt TEXT | hooks | runtime --help
 
 Removal keeps playbooks, config, bot exports, and the npm CLI.
-Turn hooks off later: CONQUISTADOR_HOOKS=off. Send instead of pre-fill in Claude Code: CONQUISTADOR_PREFILL=off.`;
+Turn hooks off later: CONQUISTADOR_HOOKS=off.`;
 
 const flag = (args, name) => args.includes(name);
 const positional = args => args.filter(arg => !arg.startsWith('-'));
@@ -151,7 +156,7 @@ export async function runAdd(args) {
   const { results, staged, error } = installTargets(chosen, { scope: 'global', root: projectRoot(), log });
   if (!staged) { console.error(`${error}\nNothing installed. Your agents are unchanged.`); return 1; }
   const failed = report(results);
-  console.log(self === 'conquistador' ? `\nStart a task: ${bold('conquistador')}, or type ${bold('/conquistador')} in your agent.` : `\nStart a task: type ${bold('/conquistador')} in your agent.`);
+  console.log(`\nNext: type ${bold('/conquistador')} in your agent.`);
   return failed ? 1 : 0;
 }
 
@@ -372,8 +377,7 @@ export async function runFrontDoor(args) {
   if (command === 'doctor' && !operator && !rest.some(arg => /^--(?:project|path|config)(?:=|$)/.test(arg))) return (await import('./doctor.mjs')).runDoctor(rest);
   if (command === 'brief') return runBrief(rest);
   if (command === 'playbooks') return runPlaybooks(rest);
-  // The task picker replaced the interactive tour. `tour AREA` and piped `tour` still print.
-  if (command === 'tour') return rest.length || !(process.stdin.isTTY && process.stdout.isTTY) ? (await import('./tour.mjs')).runTour(rest.length ? rest : ['--list']) : (await import('./launch.mjs')).runStart([]);
+  if (command === 'tour') return (await import('./tour.mjs')).runTour(rest.length ? rest : ['--list']);
   if (command === 'bot') return (await import('./bot-pack.mjs')).runBotPack(rest);
   return null;
 }

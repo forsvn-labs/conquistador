@@ -156,7 +156,7 @@ function checker() {
 
 // --- Driving the full-screen installer --------------------------------------------------------------
 // Card titles. Each screen has one; the step bar under the wordmark names all five steps.
-const TITLE = { agents: 'Which agents?', options: 'Choose options', review: 'Review the changes', install: 'Installing', done: 'Next, in your agent', home: 'Conquistador is installed' };
+const TITLE = { agents: 'Which agents?', options: 'Choose options', review: 'Review the changes', install: 'Installing', done: /Conquistador is ready|Installed with problems/, home: 'Conquistador is installed' };
 
 // Move the cursor (›) to the row that holds the label. Rows depend on the package and the
 // fixture, so positions are never fixed.

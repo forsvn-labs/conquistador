@@ -6,7 +6,7 @@
 //   Route A also covers project scope, skill-format hosts, --dry-run, --no-hooks, and doctor (D8).
 //   Route C: every CLI command from the packed tarball, on this Node and on Node 22.18 when
 //   CONQUISTADOR_E2E_NODE22 names that executable.
-//   Then agent-first.exp runs against the Route A binary.
+//   Then real-agents.exp runs against the Route A binary.
 //   node tools/e2e/package-install.mjs [OUT_DIR]
 //   CONQUISTADOR_E2E_REF=v0.0.16 node tools/e2e/package-install.mjs dist/e2e/package-install-v0.0.16
 // Writes OUT_DIR/report.json. Exit 1 when any check fails. The case IDs are in
@@ -169,7 +169,7 @@ check('I4', 'update removes folders a crashed run left behind', result.status ==
 rmSync(join(a.plugin, 'mcp', 'server.mjs'), { force: true });
 if (hasTty) {
   result = tty(cli, ['--in', 'cursor', '--no-open', '--yes'], a);
-  check('I6', 'bare conquistador repairs a broken plugin copy', result.status === 0 && missing(a.plugin).length === 0 && /Installed\./.test(result.output), result.output.trim().split('\n').slice(-4).join(' | '));
+  check('I6', 'bare conquistador repairs a broken plugin copy', result.status === 0 && missing(a.plugin).length === 0 && /Summary/.test(result.output) && /✓ Cursor/.test(result.output), result.output.trim().split('\n').slice(-4).join(' | '));
 } else {
   notRun('I6', 'bare conquistador repairs a broken plugin copy', 'no pseudo-terminal on this platform');
   run(cli, ['add', '--all', '--yes'], { env: a.env });
@@ -186,7 +186,7 @@ check('I3', 'Cursor fails with a reason; the other agents still install', result
 
 result = hasTty ? tty(cli, ['--in', 'cursor', '--no-open', '--yes'], a) : null;
 if (!result) notRun('I3', 'the start flow reports Cursor, offers a retry, and still finishes', 'no pseudo-terminal on this platform');
-else check('I3', 'the selected-host start reports Cursor failure and offers a retry', result.status === 1 && /Cursor: .*not created by Conquistador/.test(result.output) && /conquistador --providers=cursor --scope=global -y/.test(result.output) && /needs attention/.test(result.output) && !stackTrace(result.output), result.output.trim().split('\n').slice(-5).join(' | '));
+else check('I3', 'the selected-host start reports Cursor failure and offers a retry', result.status === 1 && /Cursor: .*not created by Conquistador/.test(result.output) && /conquistador --providers=cursor --scope=global -y/.test(result.output) && /Needs attention/.test(result.output) && !stackTrace(result.output), result.output.trim().split('\n').slice(-5).join(' | '));
 rmSync(a.cursor, { recursive: true, force: true });
 result = run(cli, ['add', 'cursor', '--yes'], { env: a.env });
 check('I3', 'add cursor --yes succeeds after the folder moves', result.status === 0 && missing(a.cursor).length === 0);
@@ -339,13 +339,13 @@ for (const [label, node] of [[`Node ${process.versions.node}`, process.execPath]
 }
 if (!node22) notRun('C1', 'Node 22.18: the CLI commands from the tarball', 'set CONQUISTADOR_E2E_NODE22 to a Node 22.18 executable');
 
-// The interactive start flow, against the installed binary instead of the checkout.
-if (windows) notRun('S1', 'agent-first.exp against the installed package', 'expect does not run on Windows');
+// The full-screen installer with real agents, against the installed binary instead of the checkout.
+if (windows) notRun('S1', 'real-agents.exp against the installed package', 'expect does not run on Windows');
 else if (which('expect')) {
-  result = run('expect', [join(root, 'tools/e2e/agent-first.exp')], { env: { ...process.env, CONQUISTADOR_E2E_CLI: cli, PATH: [prefixBin, ...toolDirs, dirname(process.execPath), ...systemDirs].join(delimiter) }, cwd: root });
+  result = run('expect', [join(root, 'tools/e2e/real-agents.exp')], { env: { ...process.env, CONQUISTADOR_E2E_CLI: cli, PATH: [prefixBin, ...toolDirs, dirname(process.execPath), ...systemDirs].join(delimiter) }, cwd: root });
   const passed = (result.output.match(/CHECK PASS/g) ?? []).length, failed = (result.output.match(/CHECK FAIL/g) ?? []).length;
-  check('S1', `agent-first.exp against the installed package: ${passed} passed, ${failed} failed`, result.status === 0 && failed === 0 && passed > 0, result.output.trim().split('\n').slice(-3).join(' | '));
-} else check('S1', 'agent-first.exp (expect is not installed)', false);
+  check('S1', `real-agents.exp against the installed package: ${passed} passed, ${failed} failed`, result.status === 0 && failed === 0 && passed > 0, result.output.trim().split('\n').slice(-3).join(' | '));
+} else check('S1', 'real-agents.exp (expect is not installed)', false);
 
 report = { schema: 'conquistador.e2e.package-install/v1', at: new Date().toISOString(), version, sha, dirty, node: process.version, platform: `${process.platform}-${process.arch}`, agents, work, package: { files: packed.entryCount, packedBytes: packed.size, unpackedBytes: packed.unpackedSize }, checks, ok: checks.every(item => item.ok !== false) && checks.some(item => item.ok) };
 mkdirSync(out, { recursive: true });

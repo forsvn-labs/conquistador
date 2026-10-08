@@ -1,8 +1,9 @@
-// Onboarding v2: the one first-run installer. `conquistador` (first run), `conquistador add`, and
-// the install flags all come here. Five surfaces: coding agents, MCP apps, Hosted MCP, Executor,
+// The installer's plan and steps, and its line flow. `conquistador` (first run), `conquistador add`,
+// and the install flags all come here. Five surfaces: coding agents, MCP apps, Hosted MCP, Executor,
 // and chat bots. Steps: preflight, welcome, surfaces, details, review, install with a verify pass,
-// project setup, first task, summary. Nothing changes before the user confirms the review.
-// Every answer has a flag; without a terminal and without --yes the plan prints and exits 2.
+// summary. Nothing changes before the user confirms the review. A terminal gets the full-screen
+// installer (installer-tui.mjs), which builds the same plan; --plain and TERM=dumb get the line
+// flow below. Every answer has a flag; without a terminal and without --yes the plan prints and exits 2.
 import { spawn } from 'node:child_process';
 import { existsSync, realpathSync } from 'node:fs';
 import { homedir } from 'node:os';
@@ -20,7 +21,7 @@ export const SURFACE_LABELS = { agents: 'Coding agents', 'mcp-apps': 'MCP apps',
 const SURFACE_ALIASES = { agent: 'agents', plugin: 'agents', skills: 'agents', mcp: 'mcp-apps', apps: 'mcp-apps', 'mcp-app': 'mcp-apps', remote: 'hosted', bots: 'bot' };
 const DEFAULT_HOSTED_URL = 'https://mcp.forsvn.com/mcp';
 const DOCS = 'https://github.com/forsvn-labs/conquistador#readme';
-const TOTAL = 5;
+const TOTAL = 4;
 
 // Old install flags. Each preselects a surface and prints one line about the new flag.
 export const LEGACY = {
@@ -153,11 +154,11 @@ export async function detect({ cwd = process.cwd(), probe = true } = {}) {
 }
 
 // Apps that already get the MCP server from the plugin are left out (never two surfaces per app).
-function duplicateApps(choices, ctx) {
+export function duplicateApps(choices, ctx) {
   const pluginAgents = new Set([...(choices.surfaces.includes('agents') && choices.scope === 'global' ? choices.agents : []), ...Object.keys(ctx.state.agents ?? {})]);
   return MCP_APPS.filter(app => app.agent && pluginAgents.has(app.agent)).map(app => app.id);
 }
-const dedupeNote = id => `${appById(id).label} gets the plugin, which includes the MCP server. It is not configured twice.`;
+export const dedupeNote = id => `${appById(id).label} gets the plugin, which includes the MCP server. It is not configured twice.`;
 
 // Answers from flags and detection. Interactive questions start from these.
 export function defaultChoices(options, ctx, { interactive = false } = {}) {
@@ -469,7 +470,7 @@ export function summaryLines({ results, checks, plan, notice, p }) {
 // --- The terminal flow -------------------------------------------------------------------------------
 const PREFLIGHT_TITLE = 'Before you start';
 
-function preflightNotes(update) {
+export function preflightNotes(update) {
   const notes = [];
   const problem = shadowProblem({ self: { root: realpathSync(productRoot), version } });
   if (problem) notes.push([problem.message, ...problem.fix].join('\n'));
@@ -481,7 +482,7 @@ function preflightNotes(update) {
 // Ask, or return the cancel symbol. Clack and the plain UI share this API.
 async function ask(ui, kind, options) { return ui[kind](options); }
 
-// The interactive installer. Returns { code } or { code, launch } (the caller opens the agent).
+// The line installer. Returns { code } on cancel, or { code, ready, finish, ... } after the install.
 export async function runInstaller(options, { cwd = process.cwd(), ui, width, interactive = true, updateCheck = true } = {}) {
   const p = paint(options.plain ? 'none' : undefined);
   const cols = () => Math.max(40, Math.min(width?.() ?? process.stdout.columns ?? 80, 100));
@@ -599,7 +600,7 @@ export async function runInstaller(options, { cwd = process.cwd(), ui, width, in
   const latest = await update.latest(1500);
   const finish = () => ui.note(wrap(summaryLines({ results, checks, plan, notice: updateNotice(latest, version, channel().kind), p }).join('\n')), 'Summary');
 
-  // 6-7. Project setup and first task, with an agent that installed and passed its check.
+  // The agents that installed and passed their check: the caller says what to type in each.
   const failedChecks = new Set(checks.filter(item => !item.ok).map(item => item.label));
   const ready = AGENTS.filter(agent => results.some(item => item.surface === 'agents' && item.ok && (item.agent === agent.id || item.agents?.includes(agent.id))) && !failedChecks.has(agent.label)
     && ctx.agents.find(item => item.id === agent.id)?.found);
