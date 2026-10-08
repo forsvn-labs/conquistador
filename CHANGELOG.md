@@ -4,6 +4,27 @@
 versions. Verification establishes the stated local scope; native host behavior, useful model
 output, human acceptance and rights disposition require separate evidence.
 
+## 2026-10-08, hosted sign-up, docs site, and credential hardening
+
+A deployment, not an npm release.
+
+- **Self-serve tokens are live** ([#59](https://github.com/forsvn-labs/conquistador/pull/59)). The
+  Worker on <https://mcp.forsvn.com> has the GitHub OAuth secrets and the `conquistador-tokens` KV
+  namespace. `node tools/e2e/signup.mjs --live --url https://mcp.forsvn.com` passed 7/7 with real
+  GitHub: `conquistador login` saves a `cq_` token, `whoami` names the user, the token opens `/mcp`,
+  unknown tokens get 401, and logout revokes. `tools/e2e/agent-loop.mjs` passes against the
+  deployed Worker with a personal token.
+- **Docs site is live** at <https://conquistador.forsvn.com/docs>
+  ([#58](https://github.com/forsvn-labs/conquistador/pull/58)): Mintlify builds `docs-site/` from
+  `main` at base path `/docs`, and the landing proxies the path. `tools/e2e/docs-site.mjs --live`
+  passes 20/20. Context7 indexes the repository as `/forsvn-labs/conquistador`. The landing shows
+  "Docs" and "Get a token".
+- **Security.** Secret scanning, push protection, and Dependabot alerts are on for this repository.
+  Dev-dependency advisories in `runtime/`, `catalog/`, and `evals/` are fixed
+  ([#64](https://github.com/forsvn-labs/conquistador/pull/64)); the npm package depends only on
+  `jose`. Deploys use a Cloudflare token scoped to Workers, KV, and routes in place of an
+  account-wide token, which is revoked.
+
 ## 2026-10-08, 0.4.0 public alpha
 
 Still a public alpha. Merged through [#60](https://github.com/forsvn-labs/conquistador/pull/60),
