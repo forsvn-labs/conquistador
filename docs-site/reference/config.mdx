@@ -78,4 +78,4 @@ A folder that the installer created holds `.conquistador-owned.json`. `conquista
 | `CONQUISTADOR_MCP_TOKEN` | The bearer token that the HTTP server requires. Also read by `tools/e2e/agent-loop.mjs` and the verify gate |
 | `CONQUISTADOR_RECEIPT_KEY` | The key that signs check receipts. Set it only on the server |
 | `CONQUISTADOR_EXECUTOR_URL` | Makes `conquistador connect` check one Executor server only |
-| `PORT` | The port of `conquistador mcp --http`. When set, the server listens on `0.0.0.0` |
+| `PORT` | The port of `conquistador mcp --http`. When set, the server listens on `0.0.0.0`, which other computers can reach. Set `CONQUISTADOR_MCP_TOKEN` first: without it, anyone who can reach the port can read the playbooks. On `127.0.0.1` the token is optional |

@@ -27,8 +27,10 @@ field, or a check rule is missing from the site, when a feature newer than npm 0
 
 ## Rules for editing
 
-- This site is the source of truth for install, use, the copy check, deployed agents,
-  troubleshooting, and reference. `INSTALL.md` and `docs/CHECK.md` only point here.
+- This site is the source of truth for use, the copy check, deployed agents, troubleshooting,
+  and reference. `docs/CHECK.md` only points here. `INSTALL.md` stays the full install reference,
+  because it ships in the npm package for offline readers; keep the install pages and INSTALL.md
+  in step.
 - Mark a feature that is on `main` but not in the current npm release with "from 0.4.0" (or the
   next version). Remove the mark after the release.
 - Write plain, short sentences: one idea per sentence, active voice, no hype.

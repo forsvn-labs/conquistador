@@ -38,9 +38,9 @@ Your shell runs the first `conquistador` on your `PATH`. That copy can be older 
     which -a conquistador      # Every conquistador on PATH, in order
     conquistador --version     # The version of the first one
     npm ls -g @forsvn/conquistador
-    npm prefix -g              # The global npm folder; its bin folder must be on PATH
+    npm prefix -g              # The global npm folder
     ```
-    On Windows, use `where conquistador`.
+    PATH must hold `PREFIX/bin` on macOS and Linux, and `PREFIX` itself on Windows, where `PREFIX` is what `npm prefix -g` prints. On Windows, use `where conquistador`.
   </Step>
   <Step title="Remove the old copy">
     Uninstall it with the tool that installed it, for example `npm uninstall -g @forsvn/conquistador` with that Node selected. If a file in a folder such as `~/.local/bin` remains, delete that file.

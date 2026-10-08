@@ -28,7 +28,7 @@ The server command is:
 conquistador mcp
 ```
 
-After a global install, point the app at the stable copy of the server. Then a change of Node version does not break the app.
+After a global install, point the app at the stable copy of the server, so the entry does not depend on where npm put the package. The examples below start `node` from PATH, so the app needs Node 22.18 or later on its PATH.
 
 ```json
 {
@@ -41,7 +41,7 @@ After a global install, point the app at the stable copy of the server. Then a c
 }
 ```
 
-Replace `/Users/YOU` with your home folder. VS Code uses a `servers` key in `.vscode/mcp.json` with `"type": "stdio"`:
+In both examples, replace `/Users/YOU` with your home folder. On Windows, use forward slashes, for example `C:/Users/YOU/.conquistador/plugin/mcp/server.mjs`, because a single backslash is not valid in JSON. VS Code uses a `servers` key in `.vscode/mcp.json` with `"type": "stdio"`:
 
 ```json
 {

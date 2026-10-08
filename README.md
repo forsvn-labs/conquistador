@@ -6,7 +6,8 @@ plays that chain them, and a rule-based checker for marketing copy.
 > **Quick start:** In your project folder, run `npx @forsvn/conquistador`. Then type
 > `/conquistador init` in your agent.
 >
-> **Documentation:** <https://conquistador.forsvn.com/docs>
+> **Documentation:** [INSTALL.md](INSTALL.md) and [docs-site/](docs-site/). The site at
+> <https://conquistador.forsvn.com/docs> is not live yet.
 
 ## Why Conquistador
 

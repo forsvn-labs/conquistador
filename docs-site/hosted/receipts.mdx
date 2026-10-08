@@ -34,7 +34,7 @@ A changed text, a forged receipt, or a check without the expected context or cha
 
 | Field | Meaning |
 |---|---|
-| `valid` | `true` when the text matches the receipt, the channel and context match, and the signature is correct |
+| `valid` | `true` when the text, channel, and context match the receipt. On a server with a key, the signature must match too |
 | `clean` | `true` when the matched check had no errors or warnings |
 | `signed` | `true` when this server signed the receipt |
 | `reason` | One sentence, for example "The text changed after the check. Check the final text again." |
@@ -47,5 +47,5 @@ Without the key, receipts are unsigned. An agent can compute the hash itself, so
 
 ## Limits
 
-- A valid receipt proves that the text passed the rule-based check. It does not prove that the copy is true, persuasive, or legal. A person still reviews it.
+- Only `valid`, `clean`, and `signed` together prove that this server checked the exact text and found it clean. Even then, the receipt proves only the rule-based check. It does not prove that the copy is true, persuasive, or legal. A person still reviews it.
 - The host must send the right `context`. With the wrong context, verify checks against the wrong facts.

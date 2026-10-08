@@ -19,6 +19,10 @@ const args = process.argv.slice(2);
 const option = name => (args.includes(name) ? args[args.indexOf(name) + 1] : undefined);
 const out = resolve(option('--out') ?? join(root, 'dist/e2e/docs-site'));
 const live = option('--live');
+if (args.includes('--live') && (!live || live.startsWith('--'))) {
+  process.stderr.write('--live needs the URL of the running preview, for example --live http://localhost:3000\n');
+  process.exit(1);
+}
 const SITE_URL = 'https://conquistador.forsvn.com/docs';
 
 const results = [];
@@ -29,6 +33,16 @@ function record(name, pass, detail = '') {
 const read = file => readFileSync(join(root, file), 'utf8');
 const cli = cliArgs => spawnSync(process.execPath, [bin, ...cliArgs], { cwd: root, encoding: 'utf8' });
 const git = gitArgs => spawnSync('git', gitArgs, { cwd: root, encoding: 'utf8' }).stdout;
+// Reads a file at the v0.3.0 tag. A shallow or tagless checkout cannot compare; stop instead of
+// treating the missing file as an empty list.
+const at030 = file => {
+  const result = spawnSync('git', ['show', `v0.3.0:${file}`], { cwd: root, encoding: 'utf8' });
+  if (result.status !== 0) {
+    process.stderr.write(`Cannot read ${file} at v0.3.0 (${result.stderr.trim()}). Run git fetch --tags, then run this test again.\n`);
+    process.exit(1);
+  }
+  return result.stdout;
+};
 const page = name => (existsSync(join(site, `${name}.mdx`)) ? readFileSync(join(site, `${name}.mdx`), 'utf8') : '');
 const list = items => items.slice(0, 12).join(', ') + (items.length > 12 ? ` (+${items.length - 12})` : '');
 
@@ -111,18 +125,19 @@ record('MCP reference names only real tools', !unknownTools.length, list(unknown
 const rules = JSON.parse(cli(['check', '--rules', '--json']).stdout).map(rule => rule.id);
 const contextRule = 'claim-not-in-context'; // Added by conquistador_check when the caller sends context.
 const checkPage = page('check');
-const missingRules = rules.filter(id => !checkPage.includes(`\`${id}\``));
+// Rule ids come from table rows only; a row may carry a version note after the id.
+const tableRules = [...checkPage.matchAll(/^\| `([a-z0-9-]+)`[^|]*\|/gm)].map(match => match[1]);
+const missingRules = rules.filter(id => !tableRules.includes(id));
 record('check page lists every rule', !missingRules.length, missingRules.length ? list(missingRules) : `${rules.length} rules`);
-const tableRules = [...checkPage.matchAll(/^\| `([a-z0-9-]+)` \|/gm)].map(match => match[1]);
 const unknownRules = tableRules.filter(id => !rules.includes(id) && id !== contextRule);
 record('check page names only real rules', !unknownRules.length, list(unknownRules));
 
 // F8. Everything on main that npm 0.3.0 lacks is marked "from 0.4.0" where it is listed.
-const rules030 = [...git(['show', 'v0.3.0:tools/check/rules.mjs']).matchAll(/id: '([a-z0-9-]+)'/g)].map(match => match[1]);
+const rules030 = [...at030('tools/check/rules.mjs').matchAll(/id: '([a-z0-9-]+)'/g)].map(match => match[1]);
 const newRules = rules.filter(id => !rules030.includes(id));
 const unmarkedRules = newRules.filter(id => !checkPage.split('\n').some(line => line.includes(`\`${id}\``) && /0\.4\.0/.test(line)));
 record('rules newer than 0.3.0 are marked from 0.4.0', newRules.length > 0 && !unmarkedRules.length, unmarkedRules.length ? list(unmarkedRules) : newRules.join(', '));
-const tools030 = [...git(['show', 'v0.3.0:tools/skills-mcp.mjs']).matchAll(/name: '(conquistador_[a-z]+)'/g)].map(match => match[1]);
+const tools030 = [...at030('tools/skills-mcp.mjs').matchAll(/name: '(conquistador_[a-z]+)'/g)].map(match => match[1]);
 const newTools = tools.map(tool => tool.name).filter(name => !tools030.includes(name));
 const unmarkedTools = newTools.filter(name => !/0\.4\.0/.test(section(mcpPage, `## \`${name}\``)));
 record('MCP tools newer than 0.3.0 are marked from 0.4.0', newTools.length > 0 && !unmarkedTools.length, unmarkedTools.length ? list(unmarkedTools) : newTools.join(', '));
