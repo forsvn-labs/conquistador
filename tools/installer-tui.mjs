@@ -235,8 +235,9 @@ function App({ options, cwd, first, update, warnings, onExit, mode }) {
       setOrder([...found.agents.filter(agent => agent.found), ...found.agents.filter(agent => !agent.found)]);
       setCtx(found);
       setChoices(next);
-      const askAgents = agentsOn && !options.providers && !options.wanted;
-      const askOptions = !fromFlags || (agentsOn && next.agents.length > 0 && !options.scope);
+      // --yes answers every question with its default.
+      const askAgents = !options.yes && agentsOn && !options.providers && !options.wanted;
+      const askOptions = !options.yes && (!fromFlags || (agentsOn && next.agents.length > 0 && !options.scope));
       setShown({ agents: askAgents, options: askOptions });
       go(askAgents ? 'agents' : askOptions ? 'options' : options.yes ? 'install' : 'review');
     })();

@@ -22,7 +22,8 @@
 //       type in each agent (/conquistador init in a project without GROWTH.md).
 //   T14 `conquistador "TASK"` prints the task context for an agent: no installer, no agent, no files.
 //   T15 Old --in and --no-open flags still parse.
-//   T16 Flags answer questions: with --providers, --scope, and --no-hooks the installer opens on Review.
+//   T16 Flags answer questions: with --providers, --scope, and --no-hooks the installer opens on Review;
+//       with --yes it asks nothing, installs, and closes by itself.
 //   T17 Hosted MCP is offered only online with sign-in present; the token shows in the summary.
 //   T19 Preflight problems (a stale copy on PATH) show on the first screen.
 import { spawnSync } from 'node:child_process';
@@ -457,6 +458,22 @@ scenario('verify-problem', ['T12', 'T16', 'F8'], async ({ expect }) => {
     expect(code === 1, `exit ${code}`);
     const text = s.screen.text({ history: true });
     expect(has(text, 'not registered') && has(text, 'conquistador doctor --fix'), 'verify line lacks the problem or the fix (F8)');
+    return s.snaps;
+  } finally { f.cleanup(); }
+});
+
+// --- T16: --yes answers every question, even without --scope, and closes by itself ------------------
+scenario('yes', ['T16'], async ({ expect }) => {
+  const f = fixture('yes', { agents: ['claude'] });
+  try {
+    // No keys are pressed: a screen that waits for input fails this scenario on the timeout.
+    const s = f.term(['--in', 'claude', '--no-open', '--yes']);
+    await s.waitFor('Summary', { timeout: 60_000 }); await s.snap('summary');
+    const code = await s.exit();
+    expect(code === 0, `exit ${code}`);
+    const seen = s.raw;
+    expect(!seen.includes(TITLE.options) && !seen.includes(TITLE.agents) && !seen.includes(TITLE.review), '--yes showed a question screen (T16)');
+    expect(f.json(join(f.home, '.conquistador/installs.json'))?.agents?.['claude-code'], '--yes did not install');
     return s.snaps;
   } finally { f.cleanup(); }
 });
