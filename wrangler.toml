@@ -17,10 +17,11 @@ routes = [
 workers_dev = true
 
 # Personal tokens. KV holds the SHA-256 hash of each token and the GitHub id and login of its owner.
-# Create the namespace once (wrangler kv namespace create conquistador-tokens) and add its id here.
-# wrangler dev uses a local namespace without an id.
+# Created once with wrangler kv namespace create conquistador-tokens. wrangler dev uses a local
+# namespace.
 [[kv_namespaces]]
 binding = "TOKENS"
+id = "88ca1ef031c2439dbc871be0a6fe6d94"
 
 # Requests per minute for each token (personal or admin). Change limit and RATE_LIMIT_PER_MINUTE
 # together; the period must be 10 or 60. namespace_id is any number unique in the account.

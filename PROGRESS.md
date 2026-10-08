@@ -7,8 +7,9 @@
   keeps one active token per GitHub account, rate-limits each token (60 requests per minute), and
   still accepts the admin token. `conquistador whoami` and `logout` complete the set.
   `node tools/e2e/signup.mjs` passes 40/40 against `wrangler dev` with a local stand-in for GitHub.
-  Not deployed: it needs the one-time setup in [ROADMAP.md](ROADMAP.md) ("Hosted server access"),
-  then a `--live` run with real GitHub, which has not happened. The CLI commands reach installed
+  Not deployed. Done on 2026-10-08: the GitHub OAuth App exists and the KV namespace
+  `conquistador-tokens` is created, with its id in `wrangler.toml`. Still to do: set the two GitHub
+  secrets on the Worker, deploy, and run `--live` with real GitHub, which has not happened. The CLI commands reach installed
   users with the next npm release.
 - **Onboarding v2, [#60](https://github.com/forsvn-labs/conquistador/pull/60), merged; not in npm.** `conquistador` on the first run,
   `conquistador add`, and every install flag go through one installer (`tools/onboard.mjs`):
@@ -21,6 +22,8 @@
   (fake agents and Executor in a pseudo-terminal, isolated HOME) and the Executor calls against
   real Executor 1.6.8 and 1.5.40 in throwaway data folders. Not observed: real MCP apps loading the
   entry, the Hosted MCP surface with the real `tools/login.mjs` (another branch), and Windows.
+  On 2026-10-08 the installer stopped repeating "Step 2 of 5" on each detail question and stopped
+  showing "(recommended) (…)" on the coding agents option; the E2E now checks both (29/29).
 - **The 2026-10-07 hosted changes, for installed users.** Everything in the 2026-10-07 hosted
   deployment ([CHANGELOG.md](CHANGELOG.md)) is merged on `main` but not in an npm release (0.3.0 is
   current). For installed users that is: the distilled playbooks and `outreach` 2.4.0; rubric gates;

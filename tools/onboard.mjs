@@ -507,7 +507,7 @@ export async function runInstaller(options, { cwd = process.cwd(), ui, width, in
     if (!ctx.found.length) ui.log.warn(wrap('No coding agent found on PATH or in your home folder.'));
     if (ctx.login && ctx.online === false) ui.log.warn(wrap('Hosted MCP needs a network connection. It is not offered now.'));
     const surfaceOptions = [
-      { value: 'agents', label: 'Coding agents (recommended)', hint: ctx.found.length ? 'plugin or skill in each agent' : 'No coding agent found' },
+      { value: 'agents', label: 'Coding agents', hint: ctx.found.length ? 'recommended; plugin or skill in each agent' : 'No coding agent found' },
       { value: 'mcp-apps', label: 'MCP apps', hint: 'local server in Claude Desktop, VS Code, Zed, and more' },
       ...(ctx.login && ctx.online !== false ? [{ value: 'hosted', label: 'Hosted MCP', hint: 'deployed agents and remote apps; sign in with GitHub' }] : []),
       { value: 'executor', label: 'Executor', hint: 'one source for every Executor-connected agent' },
@@ -520,16 +520,18 @@ export async function runInstaller(options, { cwd = process.cwd(), ui, width, in
   }
 
   // 3. Details for each chosen surface.
-  const detail = `${stepLabel(p, 2, TOTAL)}`;
+  // Step 2 can hold several questions; only the first one shows the step counter.
+  let stepShown = false;
+  const detail = () => { if (stepShown) return ''; stepShown = true; return stepLabel(p, 2, TOTAL); };
   if (choices.surfaces.includes('agents')) {
     if (!options.providers && !options.wanted) {
-      const ids = await ask(ui, 'multiselect', { message: `${detail}Which agents?`, required: true, initialValues: choices.agents,
+      const ids = await ask(ui, 'multiselect', { message: `${detail()}Which agents?`, required: true, initialValues: choices.agents,
         options: AGENTS.map(agent => { const found = ctx.agents.find(item => item.id === agent.id)?.found; return { value: agent.id, label: agent.label, hint: `${agent.how === 'skill' ? 'skill copy' : 'plugin'}${found ? '' : '; not found'}` }; }) });
       if (ui.isCancel(ids)) return cancelled();
       choices.agents = AGENTS.filter(agent => ids.includes(agent.id)).map(agent => agent.id);
     }
     if (!options.scope) {
-      const scope = await ask(ui, 'select', { message: `${detail}All projects, or only this one?`, initialValue: choices.scope, options: [
+      const scope = await ask(ui, 'select', { message: `${detail()}All projects, or only this one?`, initialValue: choices.scope, options: [
         { value: 'global', label: 'All projects', hint: 'plugin with hooks and the MCP server where the agent has one' },
         { value: 'project', label: 'Only this project', hint: 'one skill folder you can commit' },
       ] });
@@ -539,7 +541,7 @@ export async function runInstaller(options, { cwd = process.cwd(), ui, width, in
     const plugins = AGENTS.some(agent => choices.agents.includes(agent.id) && agent.how !== 'skill');
     if (plugins && choices.scope === 'global' && options.hooks && !options.yes) {
       ui.log.message(wrap('Prompt hooks give the agent the playbooks to read for growth, marketing, and sales prompts. Turn them off later with CONQUISTADOR_HOOKS=off.'));
-      const hooks = await ask(ui, 'confirm', { message: `${detail}Turn on prompt hooks?`, initialValue: true });
+      const hooks = await ask(ui, 'confirm', { message: `${detail()}Turn on prompt hooks?`, initialValue: true });
       if (ui.isCancel(hooks)) return cancelled();
       choices.hooks = hooks;
     }
@@ -548,19 +550,19 @@ export async function runInstaller(options, { cwd = process.cwd(), ui, width, in
     const skip = duplicateApps(choices, ctx);
     for (const id of skip) if (ctx.apps.find(app => app.id === id)?.found) ui.log.message(wrap(dedupeNote(id)));
     const available = MCP_APPS.filter(app => !skip.includes(app.id));
-    const apps = await ask(ui, 'multiselect', { message: `${detail}Which MCP apps?`, required: true,
+    const apps = await ask(ui, 'multiselect', { message: `${detail()}Which MCP apps?`, required: true,
       initialValues: available.filter(app => ctx.apps.find(item => item.id === app.id)?.found).map(app => app.id),
       options: available.map(app => ({ value: app.id, label: app.label, hint: ctx.apps.find(item => item.id === app.id)?.found ? 'found' : 'not found' })) });
     if (ui.isCancel(apps)) return cancelled();
     choices.apps = apps;
   }
   if (choices.surfaces.includes('executor') && ctx.executor.installed && !options.executorName && !options.yes) {
-    const name = await ask(ui, 'text', { message: `${detail}Name for the source in Executor`, initialValue: choices.executorName, placeholder: 'conquistador' });
+    const name = await ask(ui, 'text', { message: `${detail()}Name for the source in Executor`, initialValue: choices.executorName, placeholder: 'conquistador' });
     if (ui.isCancel(name)) return cancelled();
     choices.executorName = String(name || 'conquistador').trim() || 'conquistador';
   }
   if (choices.surfaces.includes('bot') && !options.botOut && !options.yes) {
-    const out = await ask(ui, 'text', { message: `${detail}Folder for the bot files`, initialValue: `./${relative(ctx.cwd, choices.botOut) || '.'}`, placeholder: './conquistador-bot' });
+    const out = await ask(ui, 'text', { message: `${detail()}Folder for the bot files`, initialValue: `./${relative(ctx.cwd, choices.botOut) || '.'}`, placeholder: './conquistador-bot' });
     if (ui.isCancel(out)) return cancelled();
     choices.botOut = resolve(ctx.cwd, String(out || 'conquistador-bot').replace(/^~(?=$|[\\/])/, homedir()));
   }
