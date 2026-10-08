@@ -2,8 +2,6 @@
 
 ## Unshipped
 
-- **0.4.0 is prepared, not published.** Manifests say 0.4.0 and the entry is in
-  [CHANGELOG.md](CHANGELOG.md). The tag, the npm publish, and the registry check come next.
 - **Self-serve tokens, server side.** The CLI commands (`login`, `whoami`, `logout`) ship in 0.4.0;
   the Worker that answers them is not deployed. Done on 2026-10-08: the GitHub OAuth App exists and
   the KV namespace `conquistador-tokens` is created, with its id in `wrangler.toml`. Still to do:
