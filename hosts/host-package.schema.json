@@ -38,7 +38,7 @@
     },
     "displayName": { "type": "string", "minLength": 1 },
     "productName": { "const": "conquistador" },
-    "pluginVersion": { "const": "0.3.0" },
+    "pluginVersion": { "const": "0.4.0" },
     "canonicalSkillsRoot": { "enum": ["skills", "agent/skills", "packaged-skills"] },
     "skillMount": { "type": "string", "minLength": 1 },
     "installClass": { "const": "candidate-only" },

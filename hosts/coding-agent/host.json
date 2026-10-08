@@ -4,7 +4,7 @@
   "hostKind": "coding-agent-plugin",
   "displayName": "Coding-agent plugin",
   "productName": "conquistador",
-  "pluginVersion": "0.3.0",
+  "pluginVersion": "0.4.0",
   "canonicalSkillsRoot": "skills",
   "skillMount": "skills",
   "installClass": "candidate-only",

@@ -6,15 +6,15 @@ rss: true
 
 This page lists the changes that users see. The full record, with pull requests, commits, and verification, is [CHANGELOG.md](https://github.com/forsvn-labs/conquistador/blob/main/CHANGELOG.md) in the repository.
 
-<Update label="Next release" description="0.4.0, on main, not in npm yet">
-  These changes are merged on `main`. Installed users get them with the next npm release. Pages on this site mark them "from 0.4.0".
-
+<Update label="0.4.0" description="2026-10-08">
+  - **One installer.** The first run of `conquistador`, `conquistador add`, and every install flag use one flow. It asks where you want Conquistador: coding agents, MCP apps, Hosted MCP, Executor, or chat bots. It shows the plan and changes nothing until you confirm. See [Install options](/install/overview).
+  - **Preflight.** The installer warns when an older copy of `conquistador` on PATH runs instead, and when npm has a newer version.
+  - **Hosted tokens.** `conquistador login` signs in with GitHub and saves a personal token. `whoami` shows its owner, and `logout` revokes it.
   - The local MCP server gets `conquistador_check`, `conquistador_verify`, and `conquistador_score`. Receipts from a local server without `CONQUISTADOR_RECEIPT_KEY` are unsigned.
   - `conquistador_brief` takes `context` and `size`, starts with the route, inlines the Core list of each command, and returns structured lists. `conquistador_read` takes `from`.
   - New check rules: `email-presumed-pain`, `email-relative-time`, and `email-merge-tag`. In email, a short direct question that asks for a reply counts as a call to action.
   - About 330 rules distilled into 22 commands, 3 channel guides, and 4 plays. `outreach` 2.4.0 has an early-stage mode for products with no proof yet.
   - 20 of 34 rubrics declare a machine-readable gate for `conquistador_score`.
-  - The installer is being rebuilt as one flow for every install option. See [Install options](/install/overview).
 </Update>
 
 <Update label="2026-10-07" description="Hosted MCP server">

@@ -181,6 +181,11 @@ scenario('happy', ['F21', 'F24', 'F26', 'F27', 'F29'], async ({ expect, keepSnap
     for (const label of ['Coding agents', 'MCP apps', 'Hosted MCP', 'Executor', 'Chat bots', 'Step 1 of 5']) expect(has(surfaces, label), `surfaces screen lacks ${label}`);
     // F24: the package ships tools/login.mjs, so Hosted MCP is offered but never preselected.
     expect(!/◼\s*Hosted MCP/.test(surfaces), 'Hosted MCP preselected (F24)');
+    // A label with its own parentheses plus a hint in parentheses reads as "(a) (b)".
+    for (const snap of s.snaps) expect(!/\)\s*\(/.test(snap.text), `${snap.name} screen shows ") (" in a label`);
+    // Step 2 holds several questions; the step counter shows once, not on each question.
+    const detailScreen = s.snaps.find(item => item.name === 'executor').text;
+    expect((detailScreen.match(/Step 2 of 5/g) ?? []).length === 1, 'Step 2 of 5 repeats on each detail question');
     const review = s.snaps.at(-1).text;
     for (const text of ['Claude Code', 'Codex', 'Claude Desktop', 'VS Code', 'backup', 'Unchanged', 'conquistador remove', 'Step 3 of 5']) expect(has(review, text), `review lacks ${text}`);
     await s.press('enter');
