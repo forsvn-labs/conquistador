@@ -4,6 +4,24 @@
 versions. Verification establishes the stated local scope; native host behavior, useful model
 output, human acceptance and rights disposition require separate evidence.
 
+## 2026-10-08, full-screen installer merged (unreleased)
+
+Merged [#67](https://github.com/forsvn-labs/conquistador/pull/67) at `84b06b4`, from independently
+reviewed head `bf8de82`. This is a source integration, not an npm release. The released package remains 0.4.0.
+
+- The terminal installs and manages Conquistador in a five-step full-screen flow. Task commands
+  provide reading context and agent-specific start instructions.
+- No-input `--yes` works in the TUI, plain and `TERM=dumb` flows. Long cards reveal their final line.
+  Ctrl-C cancels hosted sign-in, preserves completed installs and tokens, and reaches verification
+  and summary with retry guidance. Network requests and body reads are bounded.
+- Clean-head installer E2E passes 44/44. Product CI passes 920 tests per Node version on 24 and 26;
+  optional integrations pass. [Package CI](https://github.com/forsvn-labs/conquistador/actions/runs/37806890912)
+  passes Linux 50/50 +1 skip and Windows 47/47 +4 skips. Security, performance and correctness
+  re-reviews pass. Full bundled license text and both original inline findings are resolved.
+- Node 22.18, Windows pseudo-terminal/Expect, interactive Windows, resize and ARM coverage remain
+  incomplete. Synchronous package-manager calls pause the spinner. Screenshot attachments remain
+  pending permission; no new package was published.
+
 ## 2026-10-08, hosted sign-up, docs site, and credential hardening
 
 A deployment, not an npm release. The Worker `conquistador-mcp` runs the `v0.4.0` Worker code, deployed

@@ -1,12 +1,13 @@
 # Product progress
 
-## Unshipped
+## Merged, awaiting npm release
 
-### Full-screen installer; the terminal never opens an agent (branch `cli/tui-installer`)
+### Full-screen installer; the terminal never opens an agent
 
-Implemented and tested, not merged or released. Hung asked on 2026-10-08 for a terminal that only
-installs, with a well-designed full-screen UI, and for CLI commands that give the agent context
-instead of doing the work.
+Merged through [#67](https://github.com/forsvn-labs/conquistador/pull/67) on 2026-10-08 at
+`84b06b4`, from reviewed head `bf8de82`. The merge tree matches the reviewed tree. No npm release
+was published; `0.4.0` remains the released package. Hung asked for a terminal that installs with
+a full-screen UI and for CLI commands that give the agent context for its work.
 
 - `tools/installer-tui.mjs`: the installer is an Ink app in the terminal's alternate screen. Five
   steps (Agents, Options, Review, Install, Done) with the brand colors and a gradient wordmark. The
@@ -21,21 +22,23 @@ instead of doing the work.
 - Help leads with install, then the commands an agent runs for context.
 - Docs: README, INSTALL, VISION, the docs-site install, quickstart, and CLI pages. The docs site
   labels the change "From 0.5.0"; the version number is an assumption until Hung picks it.
-- Verification on 2026-10-08 (macOS, Node 26.9.0): `node tools/dev.mjs test` passes (396 tool
-  tests; runtime 294, catalog 167, evals 63). `CI=true node tools/e2e/installer.mjs` passes 29/29
-  at `94b9df2`, including `--yes` without `--scope` (failure modes
-  T1-T19 and F1-F30, fake agents). `expect tools/e2e/real-agents.exp` 21/21 with real Claude Code
-  2.1.292 and Codex 0.160.1 (no model calls). `node tools/e2e/package-install.mjs` passes 50/50
-  locally at `73d2413`; the optional Node 22.18 check was not run. CI run
-  [37799155850](https://github.com/forsvn-labs/conquistador/actions/runs/37799155850) tests the
-  GitHub merge ref for head `94b9df2`: Linux 50/50 and Windows 47/47. Linux skips Node 22.18;
-  Windows skips Node 22.18, two pseudo-terminal checks and the Expect real-agent check. Product
-  checks pass on Node 24 and 26, and both optional integration checks pass.
+- Final verification on 2026-10-08 at clean head `bf8de82` (macOS, Node 26.9.0):
+  `CI=true node tools/e2e/installer.mjs` passes 44/44, including no-input fallbacks, long-card
+  scrolling, hosted sign-in recovery, completed-install preservation and terminal restoration.
+  Agent commands and normal hosted success use fixtures; recovery runs the real login code
+  against loopback HTTP. `node tools/dev.mjs test` passes 920 tests (396 tooling, 294 runtime,
+  167 catalog, 63 evals). [Product CI](https://github.com/forsvn-labs/conquistador/actions/runs/37806890733)
+  passes on Node 24 and 26; both [integration checks](https://github.com/forsvn-labs/conquistador/actions/runs/37806890869)
+  pass. [Package CI](https://github.com/forsvn-labs/conquistador/actions/runs/37806890912) passes
+  Linux 50/50 and Windows 47/47, on merge ref `d4f80579` whose parents include `bf8de82`. Linux
+  skips Node 22.18; Windows skips Node 22.18, two pseudo-terminal checks and Expect. Earlier
+  macOS real-agent checks passed 21/21 without model calls. Live sign-in was not rerun for this correction.
 - Review fixes: thrown install-effect errors reach Done with a failure summary and repair
   command; every bundled package has complete license text, including yoga-layout's upstream MIT
   license; `--yes` skips all installer questions; package I6 removes ANSI codes before matching
   the summary while retaining exit-code and payload-completeness assertions. Both inline
-  CodeRabbit findings are resolved. Work remains unmerged and unreleased.
+  CodeRabbit findings are resolved. Its latest review covers `bf8de82` with no actionable findings.
+  Independent security, performance and correctness re-reviews pass on that exact head.
 - Independent review follow-up: `--yes` also skips every question in `--plain` and `TERM=dumb`,
   including an omitted scope. Short Review and Done cards can scroll to their final line without
   exceeding the body height. Ctrl-C cancels asynchronous hosted sign-in, including fetch and body
@@ -44,12 +47,13 @@ instead of doing the work.
   mutations keep their Ctrl-C guard. Login requests are bounded at 15 seconds and polling cannot
   outlast the device code's expiry.
 - The regression checks were written before the correction (`c2693cd`). Baseline checks at
-  `0bed602` reproduce all three findings. Nine hosted recovery checks now pass against loopback
-  HTTP fixtures, and the repository suite passes all 920 tests. Installer coverage is expanded
-  to 44 scenarios; the final committed-source run and CI remain to be recorded before merge.
+  `0bed602` reproduce all three findings. All nine hosted recovery checks pass within the final
+  44-case run. Exact-head reports retain source hashes, raw terminal output and screen galleries.
+  Before/after PNG capture and GitHub attachment uploads await explicit permission after browser
+  security review denied those actions.
 
 Open: a frozen spinner while a plugin manager runs (installs call `spawnSync`); no resize test in
 the E2E harness; interactive Windows installation and Linux/Windows ARM remain untested.
 
-Shipped work, by date, is in [CHANGELOG.md](CHANGELOG.md). Ordered upcoming work is in
+Merge and release history is in [CHANGELOG.md](CHANGELOG.md). Ordered upcoming work is in
 [ROADMAP.md](ROADMAP.md). Earlier progress records are retained in Git history.
