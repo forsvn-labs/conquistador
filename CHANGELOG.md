@@ -4,6 +4,51 @@
 versions. Verification establishes the stated local scope; native host behavior, useful model
 output, human acceptance and rights disposition require separate evidence.
 
+## 2026-10-08, 0.4.0 public alpha
+
+Still a public alpha. Merged through [#60](https://github.com/forsvn-labs/conquistador/pull/60),
+[#59](https://github.com/forsvn-labs/conquistador/pull/59), and
+[#57](https://github.com/forsvn-labs/conquistador/pull/57). Brings the
+[2026-10-07 hosted changes](#2026-10-07-hosted-mcp-server-deployment) to installed users.
+
+- **One installer.** `conquistador` on the first run, `conquistador add`, and every install flag go
+  through one flow: preflight, surfaces, details, review, install with a verify pass, project setup,
+  first task, and summary. The surfaces are coding agents, MCP apps (Claude Desktop, VS Code,
+  Windsurf, Zed, Cursor), Hosted MCP, Executor, and chat bots. MCP app configs are backed up first,
+  other servers are kept, and files with comments are never rewritten. An app that gets the plugin
+  is not configured twice. Executor gets a source through `executor mcp addServer`.
+- **Preflight.** The installer warns when another `conquistador` on PATH runs instead of this one
+  (for example a stale 0.0.14 in `~/.local/bin`), and when npm has a newer version.
+- **Flags.** New: `--surface`, `--apps`, `--executor-name`, `--bot-out`, `--json`, `--plain`.
+  Without a terminal and without `--yes`, the plan prints with exit 2. `-y` without `--surface`
+  installs coding agents only, as before. `--mcp`, `--plugin`, `--skills`, `--bot`, and
+  `--advanced` preselect a surface; with `--host`, a bot name, or `--help` they keep the old
+  per-project route.
+- **Hosted tokens from the CLI.** `conquistador login` signs in with GitHub (device flow) and saves
+  a personal `cq_` token; `whoami` shows its owner; `logout` revokes it. An existing admin token is
+  moved to `mcp-token.previous`, not overwritten. The hosted Worker for these commands deploys
+  separately (see [PROGRESS.md](PROGRESS.md)).
+- **From the 2026-10-07 hosted deployment:** the distilled playbooks and `outreach` 2.4.0; rubric
+  gates; briefs that start with the route and inline each command's Core list; the email rules
+  `email-presumed-pain`, `email-relative-time`, and `email-merge-tag` and the reply-question call to
+  action in `conquistador check`; and the local MCP server's `conquistador_check`,
+  `conquistador_verify`, and `conquistador_score`. Receipts from a local server without
+  `CONQUISTADOR_RECEIPT_KEY` are unsigned.
+- **Host gate example (repository only, not in the npm package).** `examples/verify-gate` accepts
+  drafts only when `conquistador_verify` proves each is the exact text of a clean, signed check. Run
+  4 (Haiku 4.5 behind the gate) delivered three emails verified clean on the first attempt (25
+  turns, $0.17); run 3 without a gate had delivered failing text reported as clean. Run 4 had a
+  sender address that run 3 lacked, and its emails still contained an invented founder backstory,
+  which no rule-based check detects.
+- **MCP SDK security bump for the Executor host:** `@modelcontextprotocol/sdk` 1.31.0 for
+  [GHSA-6qxp-vccf-f47h](https://github.com/advisories/GHSA-6qxp-vccf-f47h)
+  ([#46](https://github.com/forsvn-labs/conquistador/pull/46)).
+- **Default branch is `main`** (was `private-alpha`).
+- Verification before publish: `node tools/e2e/onboarding-v2.mjs` 29/29 (it now also checks that
+  "Step 2 of 5" shows once and that no option reads "(a) (b)"); `tools/e2e/signup.mjs` 40/40 against
+  `wrangler dev` with a local stand-in for GitHub; `tools/e2e/verify-gate.mjs` 19/19. Not run: real
+  MCP apps loading the entry, sign-in with real GitHub, and Windows interactive flows.
+
 ## 2026-10-07, hosted MCP server deployment
 
 A deployment, not an npm release: `@forsvn/conquistador` stays at 0.3.0, and installed users get

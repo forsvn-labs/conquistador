@@ -7,9 +7,9 @@ without a repository or connections to analytics, CRM, email, or advertising acc
 
 ## Start in your selected agent
 
-The current public npm release is **0.3.0**. Its bare interactive launcher shows the detected
-agents, lets you keep or change that list, and asks whether to install for all projects or this
-one. To install without the launcher, run `conquistador add AGENT --dry-run`, then
+The current public npm release is **0.4.0**. Its first run opens one installer: it shows what it
+found, asks where you want Conquistador (coding agents, MCP apps, Hosted MCP, Executor, or chat
+bots), shows the plan, and changes nothing until you confirm. To install without the launcher, run `conquistador add AGENT --dry-run`, then
 `conquistador add AGENT --yes`, and open that host yourself. See the
 [installation guide](https://github.com/forsvn-labs/conquistador/blob/main/INSTALL.md)
 for agent IDs, scope, and removal.
