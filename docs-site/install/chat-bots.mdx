@@ -1,0 +1,23 @@
+---
+title: "Chat bots"
+description: "Export a system prompt and knowledge files for ChatGPT GPTs, Claude Projects, Grok projects, and Gemini Gems."
+---
+
+Chat bots cannot run the plugin or an MCP server. Export a system prompt and knowledge files instead.
+
+```sh
+conquistador bot --out ./conquistador-bot --no-private
+```
+
+The installer offers this option too. It never preselects it.
+
+1. Read `SYSTEM-PROMPT.md` before you paste it into the bot.
+2. Upload only the knowledge files that the generated `README` lists.
+
+`--no-private` leaves your own playbooks out. Without it, the export includes the playbooks that you added with `conquistador playbooks add`.
+
+## Limits
+
+- The export is a snapshot. Export again after `conquistador update`.
+- A bot has no hooks and no copy check. Run `conquistador check` on the text that the bot writes.
+- Each export replaces the earlier export as a whole. It removes private files that an earlier export included.

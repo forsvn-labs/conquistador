@@ -2,7 +2,7 @@
 
 ## Unshipped
 
-- **Self-serve tokens for the hosted server.** Anyone can sign in with GitHub at `/signup` or with
+- **Self-serve tokens for the hosted server, [#59](https://github.com/forsvn-labs/conquistador/pull/59), merged; not deployed.** Anyone can sign in with GitHub at `/signup` or with
   `conquistador login` and get a personal `cq_` token. The Worker stores only the SHA-256 hash in KV,
   keeps one active token per GitHub account, rate-limits each token (60 requests per minute), and
   still accepts the admin token. `conquistador whoami` and `logout` complete the set.
@@ -19,8 +19,16 @@
   flags preselect a surface; with route options they keep the per-project route. `remove`, `update`,
   and `doctor` cover MCP app entries and the Executor source. Checked: `node tools/e2e/onboarding-v2.mjs`
   (fake agents and Executor in a pseudo-terminal, isolated HOME) and the Executor calls against
-  real Executor 1.6.8 and 1.5.40 in throwaway data folders. Not observed: real MCP apps loading the
-  entry, the Hosted MCP surface with the real `tools/login.mjs` (another branch), and Windows.
+  real Executor 1.6.8 and 1.5.40 in throwaway data folders. With #59 merged, the package ships `tools/login.mjs`, so the Hosted MCP surface is always offered;
+  the E2E drives it with a stand-in for the GitHub sign-in. Not observed: real MCP apps loading the
+  entry, the Hosted MCP surface with a real GitHub sign-in, and Windows.
+- **Docs site.** `docs-site/` is a Mintlify site with 23 pages: install options (written for the
+  onboarding-v2 installer), use, the copy check, deployed agents, troubleshooting, and reference.
+  `docs/CHECK.md` now points to it (`INSTALL.md` stays the full install reference that ships in the
+  npm package), and `context7.json` tells Context7 to index it.
+  It is not live: the Mintlify project, the `/docs` rewrite on the landing, and the Context7
+  submission are open (see `docs-site/README.md`). `node tools/e2e/docs-site.mjs` checks the site
+  against the CLI, the MCP tools, and the check rules.
 - **The 2026-10-07 hosted changes, for installed users.** Everything in the 2026-10-07 hosted
   deployment ([CHANGELOG.md](CHANGELOG.md)) is merged on `main` but not in an npm release (0.3.0 is
   current). For installed users that is: the distilled playbooks and `outreach` 2.4.0; rubric gates;

@@ -1,0 +1,32 @@
+---
+title: "Your own playbooks"
+description: "Add your own Markdown playbooks. They rank first in every brief."
+---
+
+Your playbooks rank before the bundled playbooks. Conquistador reads them in place. It does not copy them.
+
+```sh
+conquistador playbooks add ~/notes/growth-playbooks
+conquistador playbooks list
+conquistador playbooks remove ~/notes/growth-playbooks
+```
+
+You can also:
+
+- Set `CONQUISTADOR_PLAYBOOKS` to folders separated by `:`.
+- Put Markdown files in `~/.conquistador/playbooks`.
+
+To see which playbooks a task gets, run:
+
+```sh
+conquistador brief "Write a cold email to churned customers"
+conquistador brief "Write a cold email to churned customers" --full   # Print the playbooks too
+```
+
+## Where your playbooks go
+
+- **Local MCP server**: it serves your playbooks with the bundled ones.
+- **Self-hosted HTTP server**: it serves the playbooks added on that computer. To serve only the bundled library, set `CONQUISTADOR_HOME` to an empty folder. See [Self-host the server](/hosted/self-host).
+- **Cloudflare Worker**: it never uploads your playbooks.
+- **Bot export**: it includes them, unless you add `--no-private`.
+- **`conquistador remove`**: it keeps them.

@@ -1,0 +1,54 @@
+---
+title: "Conquistador"
+sidebarTitle: "Introduction"
+description: "Growth, marketing, sales, and product playbooks for AI coding agents and deployed agents."
+---
+
+Conquistador gives your agent the playbook for a growth or marketing task. The agent reads the playbook before it drafts, and it shows which rules it applied.
+
+It is one skill, `/conquistador`, with 35 commands and 21 plays. It also has a rule-based copy checker and an MCP server. Conquistador is open source under the MIT license. The npm package is `@forsvn/conquistador`.
+
+<Note>
+  Conquistador is a public alpha. The current npm release is **0.3.0**. Pages mark features that are on `main` but not in 0.3.0 with "from 0.4.0".
+</Note>
+
+## What you get
+
+| Part | What it does |
+|---|---|
+| The skill | `/conquistador <command>` or a plain request. The router picks the command or play and the playbooks to read. |
+| Project context | `/conquistador init` writes `PRODUCT.md` and `GROWTH.md`. Every later command reads them. |
+| Plays | A play runs commands in order. For example, `launch` runs positioning, the campaign plan, launch posts, launch copy, an audit, and a measurement plan. |
+| Copy check | `conquistador check` finds unsupported claims, AI-writing tells, vague calls to action, channel limits, email compliance gaps, and bad links. It uses no model. |
+| MCP server | `conquistador_brief` returns the playbooks for a task. Other tools search, read, check, and verify. |
+| Hooks | In Claude Code, Codex, and Cursor, hooks add the must-read list to marketing prompts and send the agent back once if it skipped those files. |
+
+## Where it runs
+
+- **Coding agents**: Claude Code, Codex, Cursor, GitHub Copilot CLI, Grok CLI, Gemini CLI, OpenCode, Pi, Hermes Agent, Antigravity CLI, Kiro CLI, and Mistral Vibe.
+- **MCP apps**: any app that runs a local MCP server, for example Claude Desktop, VS Code, Windsurf, or Zed.
+- **Deployed agents**: agents that you run on a server connect to a hosted MCP server.
+- **Chat bots**: GPTs, Claude Projects, Grok projects, and Gemini Gems get a system prompt and knowledge files.
+
+See [Install options](/install/overview) to choose.
+
+## What Conquistador does not do
+
+- It does not publish, send, spend, or write to an external system without your approval each time.
+- It does not invent metrics, customer quotes, or product capabilities.
+- It does not supply a model. Your agent supplies the model, tools, and permissions.
+
+<CardGroup cols={2}>
+  <Card title="Quickstart" icon="rocket" href="/quickstart">
+    Install, set up a project, and run a first task.
+  </Card>
+  <Card title="Copy check" icon="list-check" href="/check">
+    Check marketing text with fixed rules.
+  </Card>
+  <Card title="Deployed agents" icon="server" href="/hosted/overview">
+    Use the hosted MCP server from your own agent.
+  </Card>
+  <Card title="Reference" icon="book" href="/reference/cli">
+    CLI commands, MCP tools, and config files.
+  </Card>
+</CardGroup>

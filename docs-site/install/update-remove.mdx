@@ -1,0 +1,40 @@
+---
+title: "Update, check, and remove"
+description: "Keep Conquistador current with update, find drift with doctor, and remove it with remove."
+---
+
+```sh
+conquistador update               # Update the CLI, plugin installs, and skill copies
+conquistador update --dry-run     # Show the update; change nothing
+conquistador doctor               # Report drift in installs, hooks, and project context
+conquistador doctor --fix         # Repair what a copy can repair
+conquistador agents               # Show agents and install state
+conquistador remove               # Remove every install, global and in this project
+conquistador remove codex         # Remove one agent
+conquistador remove --scope=project
+npm uninstall -g @forsvn/conquistador
+```
+
+Without a global CLI, replace `conquistador` with `npx @forsvn/conquistador@latest`, for example `npx @forsvn/conquistador@latest update`.
+
+## Check the install
+
+`conquistador doctor` checks three areas:
+
+- **Install**: the plugin copy, each global install, and each project skill copy match this version.
+- **Hooks**: each plugin manifest names a hook file that exists, and each script that the file runs exists. It also reports when hooks are off.
+- **Project**: `PRODUCT.md` and `GROWTH.md` exist, `GROWTH.md` covers its sections, and `.gitignore` has an entry for `.conquistador/`. Run `/conquistador init` to fix these.
+
+`doctor --fix` repairs what a new copy or an agent command can repair. It never writes `PRODUCT.md` or `GROWTH.md`; `/conquistador init` owns them. Add `--json` for machine-readable output.
+
+## Remove
+
+`remove` deletes only folders that hold `.conquistador-owned.json`. It keeps:
+
+- Your playbooks.
+- `~/.conquistador/config.json`.
+- Bot exports.
+- Project deliverables, `PRODUCT.md`, and `GROWTH.md`.
+- The npm CLI. Remove it with `npm uninstall -g @forsvn/conquistador`.
+
+The installer never overwrites a folder that it did not create.

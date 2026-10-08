@@ -1,5 +1,8 @@
 # Install Conquistador
 
+The docs site has this guide with more detail: <https://conquistador.forsvn.com/docs/install/overview>.
+This file is the full install reference that ships in the npm package.
+
 ## Before you start
 
 - Node 22.18 or later: `node --version`

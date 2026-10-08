@@ -1,0 +1,43 @@
+---
+title: "Executor"
+description: "Use Conquistador with Executor: add Conquistador as a source, and connect analytics, CRM, ads, and email through Executor."
+---
+
+[Executor](https://executor.sh/) connects agents to tools and services. Conquistador uses Executor in two ways. Do not confuse them.
+
+| Use | What it does | Version |
+|---|---|---|
+| Conquistador as an Executor source | Every agent connected to Executor gets the Conquistador MCP tools. | From 0.4.0 |
+| `conquistador connect` | Conquistador reads your analytics, ads, CRM, email, and other services through Executor. | 0.3.0 |
+
+## Add Conquistador as a source
+
+<Note>
+  From 0.4.0.
+</Note>
+
+1. Run `npx @forsvn/conquistador@latest` and choose **Executor**.
+2. Enter a source name, or keep the default `conquistador` (`--executor-name=NAME`).
+3. Confirm the plan.
+
+The installer runs `executor call executor mcp addServer`. Executor asks to approve the change, and the installer says yes for that one change, because you approved it in the review. When Executor is installed but not running, the review says so, and the step starts it with `executor daemon run`. An Executor version without `mcp.addServer` gets the steps to add the source by hand.
+
+Executor 1.5.40 can add a source but cannot remove or replace one from the command line. With that version, `conquistador remove` tells you to remove the source in the Executor app (`executor web`).
+
+Choose this option only for agents that do not get the plugin or a direct MCP config. An agent that has both gets the same tools twice.
+
+## Connect services with `conquistador connect`
+
+`conquistador connect` shows 22 capabilities, for example "read the CRM" or "send email". Each one is missing, connected, or verified through Executor. Any provider that Executor reaches works.
+
+```sh
+conquistador connect                    # Show every capability
+conquistador connect launch             # Only the capabilities that the launch command uses
+conquistador connect add                # Open the Executor web UI to add an integration
+conquistador connect verify crm.read --tool hubspot.contacts.search --args '{}'
+```
+
+- `verify` runs one read tool and records the result in `~/.conquistador/connections.json`.
+- Set `CONQUISTADOR_EXECUTOR_URL` to check one Executor server only.
+- Reads run without a prompt. Sends, publishing, and spend need your approval each time.
+- Conquistador does not start an Executor daemon by accident.

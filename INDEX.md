@@ -38,7 +38,9 @@ Map of this repository. Read with `AGENTS.md` and the four horsemen.
 | Path | What it is |
 |---|---|
 | `README.md` | Product overview and install line |
-| `INSTALL.md` | Install, update, and removal |
+| `INSTALL.md` | Short install commands; points to the docs site |
+| `docs-site/` | The Mintlify docs site, <https://conquistador.forsvn.com/docs> |
+| `context7.json` | Tells Context7 to index `docs-site/` |
 | `CONTRIBUTING.md` | Development, packaging, and the npm release steps |
 | `AGENTS.md`, `CLAUDE.md` | Contributor instructions for coding agents |
 | `SKILL.md` | Root pointer to `skills/conquistador/SKILL.md` |

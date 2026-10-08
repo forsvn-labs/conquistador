@@ -1,0 +1,39 @@
+---
+title: "Plays"
+description: "The 21 plays: each runs Conquistador commands in order for one outcome."
+---
+
+A play runs commands in order for an outcome that needs more than one step. Each step reads its own playbooks. The agent returns one deliverable. A step marked "if needed" runs only when its condition is true, for example `position` runs only when `PRODUCT.md` and `GROWTH.md` have no accepted positioning. Plays that ship finished assets end with `audit`.
+
+You do not need to know which commands are plays. Type the name, or describe the outcome.
+
+```text
+/conquistador launch
+/conquistador plan our first paid campaign on Meta
+```
+
+| Play | Does | Steps |
+|---|---|---|
+| `launch` | Launch a product or feature | position (if needed), campaign, social, copy, creative (if needed), event (if needed), audit, measure |
+| `gtm` | Position a product and run its first campaign | position, campaign, copy, audit, measure |
+| `plan` | Turn a growth target into a plan | funnel, prioritize, budget, campaign |
+| `landing` | Create a landing page | position (if needed), copy, creative, convert, audit |
+| `lifecycle` | Run a lifecycle campaign | campaign, copy, audit, measure |
+| `referral` | Build a referral loop | measure, campaign, copy, audit |
+| `outbound` | Run an outbound sequence | position (if needed), outreach, audit, results (if needed), measure (if needed) |
+| `press` | Earn press and media coverage | channels, position, outreach, audit, results (if needed) |
+| `content` | Run a content learning loop | ideas, social, critique, measure (if needed) |
+| `series` | Run a short-form video series | ideas (if needed), video, audit, results (if needed) |
+| `paid` | Run and evaluate a paid campaign | position (if needed), ads, budget (if needed), creative (if needed), audit, results (if needed) |
+| `expand` | Open a new channel | channels, campaign (if needed), social |
+| `answers` | Check visibility in AI answers | seo, factcheck, measure |
+| `pseo` | Build programmatic search pages | seo, copy, audit |
+| `report` | Review content performance | measure, convert, results (if needed) |
+| `trailer` | Create an app preview video | flow (if needed), creative, audit |
+| `appstore` | Optimize an app store listing | seo, copy, creative, convert, audit |
+| `qa` | Review a rendered creative asset | creative, convert |
+| `interactive` | Create an interactive campaign | campaign, creative, flow (if needed), audit, measure |
+| `experiment` | Run a measured growth experiment | campaign, outreach, measure |
+| `spec` | Specify a product experience | flow, ui (if needed) |
+
+The steps come from the front matter of each play file in [`skills/conquistador/plays`](https://github.com/forsvn-labs/conquistador/tree/main/skills/conquistador/plays).

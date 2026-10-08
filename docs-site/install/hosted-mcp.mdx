@@ -1,0 +1,92 @@
+---
+title: "Hosted MCP"
+description: "Connect a deployed agent or a remote-only app to the hosted Conquistador MCP server at mcp.forsvn.com."
+---
+
+The hosted server runs the same tools as the local server, at:
+
+```text
+https://mcp.forsvn.com/mcp
+```
+
+Every request needs a personal token. Sign in with GitHub to get one. You do not need anyone's approval. The hosted server runs the code on `main`, so it has `conquistador_check`, `conquistador_verify`, and `conquistador_score` before they are in an npm release. It signs check receipts. See [Receipts and verify](/hosted/receipts).
+
+## Get a token
+
+<Tabs>
+  <Tab title="Browser">
+    1. Open [https://mcp.forsvn.com/signup](https://mcp.forsvn.com/signup) and sign in with GitHub.
+    2. The next page shows your `cq_` token once, with the configuration for Claude Code, Claude Desktop, Cursor, and other MCP clients.
+    3. Copy the token before you leave the page.
+  </Tab>
+  <Tab title="Terminal">
+    From 0.4.0:
+
+    ```sh
+    conquistador login     # sign in with GitHub and save a token
+    conquistador whoami    # show who the saved token belongs to
+    conquistador logout    # revoke the token and delete your record
+    ```
+
+    `conquistador login` shows a code and a GitHub address. Enter the code there. The command saves the token to `~/.conquistador/mcp-token`, which only you can read, and prints the client configuration. If that file held another token, for example a server admin token, `login` moves it to `mcp-token.previous`. To use another deployment, set `CONQUISTADOR_MCP_URL` or pass `--server URL`.
+  </Tab>
+  <Tab title="Installer">
+    From 0.4.0, run `npx @forsvn/conquistador@latest` and choose **Hosted MCP**. The installer runs the same GitHub sign-in as `conquistador login`. It shows this option only when it is online.
+  </Tab>
+</Tabs>
+
+## Token rules
+
+- Each GitHub account has one active token. When you sign in again, you get a new token, and the old one stops working.
+- Each token can send 60 requests per minute. Over the limit, the server answers 429 and says how many seconds to wait (`retry-after`).
+- A token that is not used for a year stops working. Sign in again to get a new one.
+- After a new sign-in or a logout, the old token can still work for up to 60 seconds in other Cloudflare locations.
+
+## Configure a client
+
+Send the token in the `Authorization` header. A generic MCP client config:
+
+```json
+{
+  "mcpServers": {
+    "conquistador": {
+      "type": "http",
+      "url": "https://mcp.forsvn.com/mcp",
+      "headers": { "Authorization": "Bearer YOUR_TOKEN" }
+    }
+  }
+}
+```
+
+In Claude Code:
+
+```sh
+claude mcp add --scope user --transport http conquistador https://mcp.forsvn.com/mcp \
+  --header "Authorization: Bearer $CONQUISTADOR_MCP_TOKEN"
+```
+
+Keep the token out of Git, chat, and shell history. Store it in your secret manager or in an environment variable.
+
+## Privacy
+
+The server stores this for each person who signs in:
+
+- the GitHub user id and login;
+- a SHA-256 hash of the token, not the token itself;
+- when the token was made, when it was last used, and its status (active or blocked).
+
+The server does not store your GitHub access token, email address, or repositories. It asks GitHub only for your public profile, and it revokes the GitHub access token as soon as it reads your user id. The server does not log the text of your requests.
+
+To delete your record, run `conquistador logout`, or send:
+
+```sh
+curl -X POST https://mcp.forsvn.com/api/logout -H "Authorization: Bearer YOUR_TOKEN"
+```
+
+Both revoke the token and delete your record at once. If you lost the token, sign in again, then log out. To remove the app from your GitHub account too, open GitHub, **Settings**, **Applications**, **Authorized OAuth Apps**.
+
+## Next
+
+- [Deployed agents](/hosted/overview): the brief, check, and verify loop, and which model to use.
+- [MCP tools](/reference/mcp-tools): inputs and outputs of each tool.
+- [Host your own server](/hosted/self-host).

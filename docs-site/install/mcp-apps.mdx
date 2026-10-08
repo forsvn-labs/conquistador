@@ -1,0 +1,66 @@
+---
+title: "MCP apps"
+description: "Run the Conquistador MCP server locally in Claude Desktop, VS Code, Windsurf, Zed, Cursor, and other MCP clients."
+---
+
+Use this option for apps that run a local MCP server but do not get the plugin. An agent that has the plugin already has this server. Do not add it twice.
+
+## Use the installer
+
+<Note>
+  From 0.4.0. The installer finds the config files of MCP apps and lists only apps without the plugin. In 0.3.0, use `conquistador --mcp`, or add the config by hand as below.
+</Note>
+
+Run `npx @forsvn/conquistador@latest` and choose **MCP apps**. Choose the apps: Claude Desktop, VS Code, Windsurf, Zed, or Cursor (`--apps=claude-desktop,vscode,windsurf,zed,cursor`). The plan review shows each config file and the entry that the installer adds. Cursor is left out when Cursor gets the plugin.
+
+The entry is named `conquistador`. It runs `~/.conquistador/plugin/mcp/server.mjs` with the Node that ran the installer.
+
+- Before the installer changes a config file, it saves a copy next to it (`FILE.conquistador-backup`).
+- It keeps every other server and setting in the file.
+- It never rewrites a file that is not plain JSON, for example a Zed `settings.json` with comments. It shows the entry to add by hand instead.
+- `conquistador remove` removes the entry, and `conquistador doctor` checks it.
+
+## Add the server by hand
+
+The server command is:
+
+```sh
+conquistador mcp
+```
+
+After a global install, point the app at the stable copy of the server, so the entry does not depend on where npm put the package. The examples below start `node` from PATH, so the app needs Node 22.18 or later on its PATH.
+
+```json
+{
+  "mcpServers": {
+    "conquistador": {
+      "command": "node",
+      "args": ["/Users/YOU/.conquistador/plugin/mcp/server.mjs"]
+    }
+  }
+}
+```
+
+In both examples, replace `/Users/YOU` with your home folder. On Windows, use forward slashes, for example `C:/Users/YOU/.conquistador/plugin/mcp/server.mjs`, because a single backslash is not valid in JSON. VS Code uses a `servers` key in `.vscode/mcp.json` with `"type": "stdio"`:
+
+```json
+{
+  "servers": {
+    "conquistador": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["/Users/YOU/.conquistador/plugin/mcp/server.mjs"]
+    }
+  }
+}
+```
+
+## What the server does
+
+The server only reads. It serves the bundled playbooks and the playbooks that you added on that computer. It has no access to your project files, credentials, or runtime state. For the tools, see [MCP tools](/reference/mcp-tools).
+
+<Note>
+  In 0.3.0 the local server has five tools: `conquistador_brief`, `conquistador_search`, `conquistador_methods`, `conquistador_files`, and `conquistador_read`. From 0.4.0 it also has `conquistador_check`, `conquistador_verify`, and `conquistador_score`.
+</Note>
+
+The server also gives four prompts: `growth-plan`, `diagnose`, `copy`, and `review-results`.
