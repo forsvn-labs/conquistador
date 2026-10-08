@@ -116,9 +116,12 @@ removal behavior. Cross-platform path tests do not establish native Windows acti
 commands are instructions, not hidden subprocesses. Test files and synthetic fixtures cannot
 prove native registration or service connectivity.
 
-The setup TUI uses the committed `tools/vendor/clack.mjs` bundle. To intentionally rebuild it,
-run `npm ci --ignore-scripts --prefix tools/tui` and `npm run build --prefix tools/tui` under Node 24.
-Review the exact lockfile and preserve `tools/vendor/NOTICE.txt`. Ordinary setup and packaging
+The terminal UIs use committed bundles: `tools/vendor/ink.mjs` (Ink and React, the full-screen
+installer) and `tools/vendor/clack.mjs` (Clack, the setup prompts). To intentionally rebuild them,
+run `bun install --ignore-scripts` and `bun run build` in `tools/tui` under Node 24. Review the exact
+lockfile and the regenerated `tools/vendor/NOTICE.txt`. Test the installer with
+`node tools/e2e/installer.mjs` (fake agents) and `expect tools/e2e/real-agents.exp` (real Claude Code
+and Codex); both need a pseudo-terminal. Ordinary setup and packaging
 use the committed bytes and do not require that dependency tree. The default test suite exercises
 project/native-skill ownership, migration, mixed installation plans, cancellation, preflight,
 partial failures, and the guided flow separately from native host acceptance. A guide plan is not

@@ -57,15 +57,24 @@ export function saveToken(token, env = process.env) {
   return kept;
 }
 
-async function call(fetchImpl, url, init = {}, label = origin(url)) {
+async function call(fetchImpl, url, init = {}, label = origin(url), { signal, timeout, deadline } = {}) {
+  const remaining = deadline ? deadline - Date.now() : Infinity;
+  if (remaining <= 0) throw Error('The GitHub code expired. Run conquistador login again.');
+  const requestSignal = timeout ? AbortSignal.any([AbortSignal.timeout(Math.max(1, Math.min(timeout, remaining))), ...(signal ? [signal] : [])]) : signal;
   let response;
+  let body = {};
   try {
-    response = await fetchImpl(url, { ...init, headers: { accept: 'application/json', ...init.headers } });
+    response = await fetchImpl(url, { ...init, headers: { accept: 'application/json', ...init.headers }, ...(requestSignal ? { signal: requestSignal } : {}) });
+    try { body = await response.json(); } catch (error) { if (requestSignal?.aborted) throw error; }
+    signal?.throwIfAborted();
   } catch {
+    signal?.throwIfAborted();
+    if (requestSignal?.aborted) {
+      if (deadline && Date.now() >= deadline) throw Error('The GitHub code expired. Run conquistador login again.');
+      throw Error(`${label} request timed out. Try signing in again.`);
+    }
     throw Error(`Could not reach ${label}. Check your connection, or set CONQUISTADOR_MCP_URL.`);
   }
-  let body = {};
-  try { body = await response.json(); } catch { /* Not JSON; the status says enough. */ }
   return { status: response.status, ok: response.ok, body };
 }
 
@@ -89,45 +98,54 @@ function openUrl(url) {
 // (note, spinner). Resolves to { token, login }, or null when the person cancels on GitHub or
 // `signal` aborts. Throws an Error with a plain message for every other failure.
 export async function runLogin({ ui, server, env = process.env, fetch: fetchImpl = globalThis.fetch, signal, open = false } = {}) {
-  const base = serverOf(env, server);
-  const github = githubOf(env);
-  const config = await call(fetchImpl, `${base}/api/login`);
-  if (!config.ok || !config.body.githubClientId) throw Error(config.body.error ?? `${base} does not offer sign-in (HTTP ${config.status}).`);
-  const clientId = config.body.githubClientId;
-
-  const device = (await call(fetchImpl, `${github}/login/device/code`, form({ client_id: clientId, scope: '' }), `GitHub (${github})`)).body;
-  if (!device.device_code) throw Error(`GitHub refused the device sign-in (${device.error ?? 'no device code'}). The OAuth App must allow the device flow.`);
-  ui.note(`Open ${device.verification_uri}\nEnter this code: ${device.user_code}`, 'Sign in with GitHub');
-  if (open) openUrl(device.verification_uri);
-
-  const spin = ui.spinner();
-  spin.start('Waiting for you to approve the sign-in on GitHub');
-  let interval = Math.max(Number(device.interval) || 5, 1) * 1000;
-  const deadline = Date.now() + (Number(device.expires_in) || 900) * 1000;
-  let githubToken = null;
+  let spin;
   try {
-    while (!githubToken) {
-      if (!(await sleep(interval, signal))) { spin.stop('Sign-in cancelled.', 1); return null; }
-      if (Date.now() > deadline) throw Error('The GitHub code expired. Run conquistador login again.');
-      const { body } = await call(fetchImpl, `${github}/login/oauth/access_token`, form({ client_id: clientId, device_code: device.device_code, grant_type: DEVICE_GRANT }), `GitHub (${github})`);
-      if (body.access_token) githubToken = body.access_token;
-      else if (body.error === 'authorization_pending') continue;
-      else if (body.error === 'slow_down') interval = Math.max((Number(body.interval) || 0) * 1000, interval + 5000);
-      else if (body.error === 'access_denied') { spin.stop('Sign-in cancelled on GitHub.', 1); return null; }
-      else if (body.error === 'expired_token') throw Error('The GitHub code expired. Run conquistador login again.');
-      else throw Error(`GitHub refused the sign-in (${body.error ?? 'no access token'}).`);
+    signal?.throwIfAborted();
+    const base = serverOf(env, server);
+    const github = githubOf(env);
+    const request = (url, init, label, deadline) => call(fetchImpl, url, init, label, { signal, timeout: 15_000, deadline });
+    const config = await request(`${base}/api/login`);
+    if (!config.ok || !config.body.githubClientId) throw Error(config.body.error ?? `${base} does not offer sign-in (HTTP ${config.status}).`);
+    const clientId = config.body.githubClientId;
+
+    const device = (await request(`${github}/login/device/code`, form({ client_id: clientId, scope: '' }), `GitHub (${github})`)).body;
+    if (!device.device_code) throw Error(`GitHub refused the device sign-in (${device.error ?? 'no device code'}). The OAuth App must allow the device flow.`);
+    ui.note(`Open ${device.verification_uri}\nEnter this code: ${device.user_code}`, 'Sign in with GitHub');
+    if (open) openUrl(device.verification_uri);
+
+    spin = ui.spinner();
+    spin.start('Waiting for you to approve the sign-in on GitHub');
+    let interval = Math.max(Number(device.interval) || 5, 1) * 1000;
+    const deadline = Date.now() + (Number(device.expires_in) || 900) * 1000;
+    let githubToken = null;
+    try {
+      while (!githubToken) {
+        if (!(await sleep(Math.min(interval, Math.max(1, deadline - Date.now())), signal))) { spin.stop('Sign-in cancelled.', 1); return null; }
+        if (Date.now() > deadline) throw Error('The GitHub code expired. Run conquistador login again.');
+        const { body } = await request(`${github}/login/oauth/access_token`, form({ client_id: clientId, device_code: device.device_code, grant_type: DEVICE_GRANT }), `GitHub (${github})`, deadline);
+        if (body.access_token) githubToken = body.access_token;
+        else if (body.error === 'authorization_pending') continue;
+        else if (body.error === 'slow_down') interval = Math.max((Number(body.interval) || 0) * 1000, interval + 5000);
+        else if (body.error === 'access_denied') { spin.stop('Sign-in cancelled on GitHub.', 1); return null; }
+        else if (body.error === 'expired_token') throw Error('The GitHub code expired. Run conquistador login again.');
+        else throw Error(`GitHub refused the sign-in (${body.error ?? 'no access token'}).`);
+      }
+    } catch (error) {
+      if (!signal?.aborted) spin.stop('Sign-in failed.', 2);
+      throw error;
     }
+    spin.stop('Approved on GitHub.');
+
+    const issued = await request(`${base}/api/login`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ githubToken }) });
+    if (!issued.ok || !issued.body.token) throw Error(issued.body.error ?? `${base} did not issue a token (HTTP ${issued.status}).`);
+    signal?.throwIfAborted();
+    const kept = saveToken(issued.body.token, env);
+    if (kept) ui.log.info(`The token file held another token, maybe the server admin token. It is now in ${kept}.`);
+    return { token: issued.body.token, login: issued.body.login };
   } catch (error) {
-    spin.stop('Sign-in failed.', 2);
+    if (signal?.aborted) { spin?.stop('Sign-in cancelled.', 1); return null; }
     throw error;
   }
-  spin.stop('Approved on GitHub.');
-
-  const issued = await call(fetchImpl, `${base}/api/login`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ githubToken }) });
-  if (!issued.ok || !issued.body.token) throw Error(issued.body.error ?? `${base} did not issue a token (HTTP ${issued.status}).`);
-  const kept = saveToken(issued.body.token, env);
-  if (kept) ui.log.info(`The token file held another token, maybe the server admin token. It is now in ${kept}.`);
-  return { token: issued.body.token, login: issued.body.login };
 }
 
 // The client configs as plain text, for a terminal.

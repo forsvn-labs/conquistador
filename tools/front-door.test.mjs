@@ -55,17 +55,16 @@ else if (args[0]==='plugin' && args[1]!=='marketplace') {
 }
 
 // Answers are keyed by a phrase in each question. `questions` records the phrase of every question asked.
-const QUESTIONS = ['Where do you want', 'Which agents', 'or only this one', 'Turn on prompt hooks', 'Which MCP apps', 'Install now', 'Set up this project now', 'What should we work on', 'Open in'];
+const QUESTIONS = ['Where do you want', 'Which agents', 'or only this one', 'Turn on prompt hooks', 'Which MCP apps', 'Install now'];
 
-function ui({ selected = 'codex', surfaces = ['agents'], scope = 'global', ids = ['codex'], hooks = true, consent = true, setup = 'now', task = 'Draft one welcome email' } = {}) {
+function ui({ surfaces = ['agents'], scope = 'global', ids = ['codex'], hooks = true, consent = true } = {}) {
   const messages = [], questions = [];
-  const answers = { 'Where do you want': surfaces, 'Which agents': ids, 'or only this one': scope, 'Turn on prompt hooks': hooks,
-    'Install now': consent, 'Set up this project now': setup, 'What should we work on': task, 'Open in': selected };
+  const answers = { 'Where do you want': surfaces, 'Which agents': ids, 'or only this one': scope, 'Turn on prompt hooks': hooks, 'Install now': consent };
   const ask = async options => {
     const key = QUESTIONS.find(phrase => options.message.includes(phrase)) ?? options.message;
     questions.push(key);
 
-    return key in answers ? answers[key] : task;
+    return answers[key];
   };
 
   return { messages, questions, intro() {}, outro: value => messages.push(value), cancel: value => messages.push(value),
@@ -87,7 +86,7 @@ test('start parser rejects missing/unknown values before effects and supports on
   assert.equal(parseStart(['--', '--literal task']).task, '--literal task');
 });
 
-test('TTY dry-run never installs, launches, probes versions, copies clipboard, or writes state', async t => {
+test('TTY dry-run never installs, probes versions, or writes state', async t => {
   const f = fixture(t, ['claude', 'codex', 'cursor', 'xclip']);
 
   for (const agent of ['claude-code', 'codex', 'cursor']) {
@@ -179,12 +178,13 @@ test('customize selects named hosts; project scope copies one skill per folder a
   assert.equal(existsSync(pluginHome()), false);
 });
 
-test('a project without GROWTH.md opens the agent with /conquistador init', async t => {
-  const f = fixture(t), project = join(f.directory, 'product');
+test('a project without GROWTH.md says to type /conquistador init and opens no agent', async t => {
+  const f = fixture(t), project = join(f.directory, 'product'), screen = ui();
   mkdirSync(join(project, '.git'), { recursive: true });
-  assert.equal(await runStart(['--providers=claude', '--scope=project', '--yes'], { cwd: project, tty: true, ui: ui() }), 0);
+  assert.equal(await runStart(['--providers=claude', '--scope=project', '--yes'], { cwd: project, tty: true, ui: screen }), 0);
   assert.ok(existsSync(join(project, '.claude/skills/conquistador/SKILL.md')));
-  assert.deepEqual(f.calls().filter(call => call.args[0] !== '--version'), [{ host: 'claude', args: ['--prefill', '/conquistador init'] }]);
+  assert.match(screen.messages.join('\n'), /type: \/conquistador init/);
+  assert.deepEqual(f.calls(), []);
 });
 
 test('failed selected host prints an executable retry; a successful retry preserves unrelated hosts', async t => {

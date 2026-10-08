@@ -1,5 +1,5 @@
 // Unit checks for onboarding v2 parts that do not need a terminal. The terminal flow is covered
-// end to end by tools/e2e/onboarding-v2.mjs. Windows cases run on every platform (F19).
+// end to end by tools/e2e/installer.mjs. Windows cases run on every platform (F19).
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { appConfigPath, mergeEntry, removeEntry, serverEntry } from './mcp-apps.mjs';

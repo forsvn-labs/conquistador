@@ -11,22 +11,25 @@ Research, creative work, engineering, and review support that mission.
 
 ## Make the first task easy
 
-`npx @forsvn/conquistador`, or the first `conquistador` run, is the one installer. It asks where
-Conquistador should live (coding agents, MCP apps, Hosted MCP, Executor, chat bots) with what it
-found already chosen, asks only the details those surfaces need, and shows every change, what stays
-unchanged, and the exact undo command before anything changes. Then it installs, checks each
-install, offers `/conquistador init` in a project without `GROWTH.md`, and offers a first task or a
-finish with a summary. Never configure two surfaces for one app, never prompt during `npm install`,
-and say so when another copy of the command would run instead. Never add hosts that the user did
-not choose. Support every agent whose skill path the agent's own documentation confirms.
+The terminal installs; the agent works. `npx @forsvn/conquistador` (or `bunx`, `pnpm dlx`, or the
+first `conquistador` run) opens one full-screen installer that is pleasant to use: the detected
+coding agents already chosen, a few options (scope, hooks, and more places such as MCP apps,
+Hosted MCP, Executor, and chat bots), and every change, what stays unchanged, and the exact undo
+command before anything changes. Then it installs, checks each install, and ends by saying exactly
+what to type in each agent: `/conquistador init` in a project without `GROWTH.md`. The terminal
+never opens an agent, never asks for a task, and never runs marketing work; the smart model in the
+agent does that. Never configure two surfaces for one app, never prompt during `npm install`, and
+say so when another copy of the command would run instead. Never add hosts that the user did not
+choose. Support every agent whose skill path the agent's own documentation confirms.
 
 Copy Impeccable's interaction model for growth work. Users learn a small vocabulary: one-word
 commands such as `position`, `outreach`, `launch`, and `audit`, typed after `/conquistador`, or a
 plain request that the router sends to the right command or play. Hosts register exactly one
 skill. `/conquistador` with no argument shows a menu that leads with two or three commands that
 fit this project. `/conquistador pin outreach` makes a standalone shortcut. Old skill names keep
-working as aliases. On the CLI, the user needs `conquistador`, `conquistador "TASK"`, add, update,
-doctor, and remove; every other route stays behind `help --all` and INSTALL.md.
+working as aliases. On the CLI, the user needs `conquistador`, add, update, doctor, and remove.
+The CLI's other commands serve the agent: `conquistador "TASK"`, `brief`, `tour`, and `check` print
+context and change nothing. Every other route stays behind `help --all` and INSTALL.md.
 
 `/conquistador init` records durable product truth in `PRODUCT.md` (shared with Impeccable) and
 growth truth in `GROWTH.md`. Every command reads both through the brief, so the agent does not

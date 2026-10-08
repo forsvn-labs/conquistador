@@ -294,8 +294,8 @@ const reasonFor = (doc, platforms) => {
   return doc.summary || doc.title;
 };
 
-// The start flow's own instructions (tools/launch.mjs). They say how to work, not what the task
-// is, and their words ("cannot find", "learn the product") would pull routing off the task.
+// Instructions that start prompts from 0.4.0 and earlier carried. Such prompts may still arrive, and
+// their words ("cannot find", "learn the product") would pull routing off the task, so taskOf strips them.
 export const START_CONTEXT = Object.freeze({
   project: 'Learn the product from this folder first. Ask me only for what you cannot find.',
   ask: 'First ask me what the product is, who it is for, and the goal.',

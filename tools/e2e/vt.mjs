@@ -1,5 +1,5 @@
-// A small terminal screen model for E2E transcripts. It understands what Clack and the
-// onboarding flow write: text, CR/LF, cursor moves, erase, save/restore, and SGR colors.
+// A small terminal screen model for E2E transcripts. It understands what Clack, Ink, and the
+// installer write: text, CR/LF, cursor moves, erase, save/restore, the alternate screen, and SGR colors.
 // screen.text() is what a person sees; screen.html() renders the same cells with colors.
 const PALETTE = ['#1d1f21', '#cc6666', '#b5bd68', '#f0c674', '#81a2be', '#b294bb', '#8abeb7', '#c5c8c6',
   '#666666', '#d54e53', '#b9ca4a', '#e7c547', '#7aa6da', '#c397d8', '#70c0b1', '#eaeaea'];
@@ -23,6 +23,7 @@ export class Screen {
     this.style = {};
     this.saved = [0, 0];
     this.pending = '';
+    this.normal = null;
   }
 
   write(chunk) {
@@ -72,6 +73,19 @@ export class Screen {
   }
 
   csi(prefix, params, final) {
+    // The alternate screen (1049): full-screen programs draw there; leaving it shows the normal screen again.
+    if (prefix === '?' && params.split(';').includes('1049')) {
+      if (final === 'h' && !this.normal) {
+        this.normal = { grid: this.grid, history: this.history, row: this.row, column: this.column };
+        this.grid = Array.from({ length: this.rows }, () => Array.from({ length: this.columns }, blank));
+        this.history = [];
+        this.row = 0; this.column = 0;
+      } else if (final === 'l' && this.normal) {
+        ({ grid: this.grid, history: this.history, row: this.row, column: this.column } = this.normal);
+        this.normal = null;
+      }
+      return;
+    }
     if (prefix === '?' || prefix === '>' || prefix === '=') return;
     const values = params.split(';').map(item => (item === '' ? null : Number(item.split(':')[0])));
     const n = (fallback = 1) => values[0] ?? fallback;

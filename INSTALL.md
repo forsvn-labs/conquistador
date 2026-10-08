@@ -12,11 +12,16 @@ You do not need a marketing-service account to draft from facts you supply.
 
 ## Install
 
-Run the installer in your project folder:
+Run the installer in your project folder, with the package manager you use:
 
 ```sh
 npx @forsvn/conquistador
+bunx @forsvn/conquistador
+pnpm dlx @forsvn/conquistador
 ```
+
+The terminal only installs Conquistador into your coding agents. The work happens inside the agent:
+you type `/conquistador` there. The CLI never opens an agent and never runs a task.
 
 Or install the CLI globally, then run it:
 
@@ -25,24 +30,24 @@ npm install -g @forsvn/conquistador
 conquistador
 ```
 
-`conquistador` runs the installer the first time. It takes about a minute, and nothing changes
-until you confirm the review.
+`conquistador` runs the installer the first time: a full-screen terminal UI with five steps. It
+takes about a minute, and nothing changes until you confirm the review.
 
-1. **Preflight.** It is silent unless there is a problem: another `conquistador` earlier on your
-   PATH (or with another version), or a newer version on npm. It prints the exact fix.
-2. **Where do you want Conquistador?** Choose one or more surfaces. What it found on this computer is
-   chosen for you.
-3. **Details** for each surface: which agents, all projects or only this one, prompt hooks on or
-   off, which MCP apps, the Executor source name, the bot folder.
-4. **Review.** Every change with its path or command, what stays unchanged, and how to undo it.
-5. **Install**, one line per step. A step that fails does not stop the others. Then a verify pass
+1. **Agents.** The coding agents it found are chosen; Space changes a choice. Problems found before
+   the start show here: another `conquistador` earlier on your PATH (or with another version), or a
+   newer version on npm, each with the exact fix.
+2. **Options.** All projects or only this project, prompt hooks on or off, and more places for
+   Conquistador: MCP apps, Executor, chat bot files, and Hosted MCP. The arrow keys change a value.
+3. **Review.** Every change with its path or command, what stays unchanged, and how to undo it.
+4. **Install**, one line per step. A step that fails does not stop the others. Then a verify pass
    runs the `conquistador doctor` checks for each surface and one MCP handshake.
-6. **Project setup.** In a project without `GROWTH.md`, open your agent with `/conquistador init`
-   now, or later.
-7. **First task**, or **Finish for now**. Then a summary of what is installed where.
+5. **Done.** What to type in each agent: `/conquistador init` in a project without `GROWTH.md`,
+   otherwise `/conquistador`. When you exit, the summary stays in your terminal.
 
-Run `conquistador add` to open the installer again. Ctrl-C or Escape before the review changes
-nothing.
+Escape, `q`, or Ctrl-C before the install changes nothing. Ctrl-C during the install does not stop a
+step half way. Run `conquistador` again to see what is installed, with actions to add agents,
+update, check and repair, or remove. `conquistador add` opens the installer again. `--plain` (or
+`TERM=dumb`) gives line prompts instead of the full screen.
 
 ### Surfaces
 
@@ -80,13 +85,12 @@ line: `conquistador remove` then tells you to remove it in the Executor app (`ex
 | `--apps=NAME[,NAME]` | MCP apps: `claude-desktop`, `vscode`, `windsurf`, `zed`, `cursor` |
 | `--executor-name=NAME` | The source name in Executor. Default: `conquistador` |
 | `--bot-out=DIR` | The folder for the chat bot files. Default: `./conquistador-bot` |
-| `-y`, `--yes` | Accept the defaults: the detected agents and the default scope (global, or project when this project already has a copy). Without `--surface`, only coding agents |
+| `-y`, `--yes` | Accept the defaults: the detected agents and the default scope (global, or project when this project already has a copy). Without `--surface`, only coding agents. In a terminal, the installer goes straight to the install and closes by itself |
 | `--no-hooks` | Install without prompt hooks. Writes `{"hooks": false}` to `~/.conquistador/config.json` |
-| `--dry-run` | Show the plan and the launch command. Change nothing |
+| `--dry-run` | Show the plan. Change nothing |
 | `--json` | Print the plan as JSON (schema `conquistador.onboarding-plan/v1`). Change nothing |
 | `--plain` | Line prompts with no color and no cursor moves. `TERM=dumb` does the same. `NO_COLOR` turns off color only |
-| `--in AGENT` | Open this agent |
-| `--no-open` | Install only |
+| `--in AGENT` | Install for this agent (the same as `--providers=AGENT`) |
 
 Without a terminal and without `--yes`, the installer prints the plan, changes nothing, and exits
 with code 2. With `--yes`, it installs, runs the verify pass, prints the summary, and exits with
@@ -106,23 +110,24 @@ installer with that surface chosen and print the new flag. With a route option (
 
 ### Agents and folders
 
-Folders and launch flags come from each agent's documentation (checked 2026-10-03). Agents that
-share a project folder share one copy.
+Folders come from each agent's documentation (checked 2026-10-03). Agents that share a project
+folder share one copy. "Start with" is what you type in the agent; the installer's last screen
+shows the same.
 
-| Agent | `--providers` | Global install | Project folder | Opens with |
+| Agent | `--providers` | Global install | Project folder | Start with |
 |---|---|---|---|---|
-| Claude Code | `claude` | Plugin: `claude plugin install` | `.claude/skills/conquistador` | `claude --prefill "PROMPT"` (press Enter to send) |
-| Codex | `codex` | Plugin: `codex plugin add` | `.agents/skills/conquistador` | `codex "PROMPT"` |
-| Cursor | `cursor` | Plugin copy in `~/.cursor/plugins/local/conquistador` | `.agents/skills/conquistador` | `cursor-agent "PROMPT"` |
-| GitHub Copilot CLI | `copilot` | Plugin: `copilot plugin install` | `.agents/skills/conquistador` | `copilot -i "PROMPT"` |
-| Grok CLI | `grok` | Plugin: `grok plugin install --trust` | `.grok/skills/conquistador` | `grok "PROMPT"` |
-| Gemini CLI | `gemini` | `~/.gemini/skills/conquistador` | `.agents/skills/conquistador` | `gemini -i "PROMPT"` |
-| OpenCode | `opencode` | `~/.config/opencode/skills/conquistador` | `.agents/skills/conquistador` | `opencode --prompt "PROMPT"` |
-| Pi | `pi` | `~/.agents/skills/conquistador` | `.agents/skills/conquistador` | `pi "/skill:conquistador ..."` |
-| Hermes Agent | `hermes` | `~/.hermes/skills/conquistador` (`$HERMES_HOME` inside your home folder) | `.hermes/skills/conquistador` | Paste the prompt (copied for you) |
-| Antigravity CLI | `antigravity` | `~/.gemini/antigravity-cli/skills/conquistador` | `.agents/skills/conquistador` | `agy -i "PROMPT"` |
-| Kiro CLI | `kiro` | `~/.kiro/skills/conquistador` | `.kiro/skills/conquistador` | Paste the prompt (copied for you) |
-| Mistral Vibe | `vibe` | `~/.vibe/skills/conquistador` | `.agents/skills/conquistador` | Paste the prompt (copied for you) |
+| Claude Code | `claude` | Plugin: `claude plugin install` | `.claude/skills/conquistador` | `/conquistador` |
+| Codex | `codex` | Plugin: `codex plugin add` | `.agents/skills/conquistador` | "Use Conquistador: …" |
+| Cursor | `cursor` | Plugin copy in `~/.cursor/plugins/local/conquistador` | `.agents/skills/conquistador` | "Use Conquistador: …" |
+| GitHub Copilot CLI | `copilot` | Plugin: `copilot plugin install` | `.agents/skills/conquistador` | "Use Conquistador: …" |
+| Grok CLI | `grok` | Plugin: `grok plugin install --trust` | `.grok/skills/conquistador` | "Use Conquistador: …" |
+| Gemini CLI | `gemini` | `~/.gemini/skills/conquistador` | `.agents/skills/conquistador` | "Use Conquistador: …" |
+| OpenCode | `opencode` | `~/.config/opencode/skills/conquistador` | `.agents/skills/conquistador` | "Use Conquistador: …" |
+| Pi | `pi` | `~/.agents/skills/conquistador` | `.agents/skills/conquistador` | `/skill:conquistador` |
+| Hermes Agent | `hermes` | `~/.hermes/skills/conquistador` (`$HERMES_HOME` inside your home folder) | `.hermes/skills/conquistador` | `/conquistador` |
+| Antigravity CLI | `antigravity` | `~/.gemini/antigravity-cli/skills/conquistador` | `.agents/skills/conquistador` | `/conquistador` |
+| Kiro CLI | `kiro` | `~/.kiro/skills/conquistador` | `.kiro/skills/conquistador` | "Use Conquistador: …" |
+| Mistral Vibe | `vibe` | `~/.vibe/skills/conquistador` | `.agents/skills/conquistador` | "Use Conquistador: …" |
 
 Sources: [Claude Code](https://code.claude.com/docs/en/skills),
 [Codex](https://learn.chatgpt.com/docs/build-skills), [Cursor](https://cursor.com/docs/context/skills),
@@ -138,8 +143,6 @@ Notes:
 
 - Codex asks once to trust the hooks. Type `/hooks` to trust them.
 - Pi, Hermes, and Mistral Vibe load project skills only after you trust the project folder.
-- Claude Code fills the prompt from version 2.1.283. Older versions, or
-  `CONQUISTADOR_PREFILL=off`, send the prompt at once.
 - The global plugin copy is `~/.conquistador/plugin` (`CONQUISTADOR_HOME/plugin` when set). Agents
   with a plugin manager read it. Do not save your own work in it.
 

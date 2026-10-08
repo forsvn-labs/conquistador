@@ -6,6 +6,8 @@ import { join } from 'node:path';
 // An error that escapes gets one plain line, a log file, and a place to report it (I11).
 function crash(error) {
   if (process.stdin.isTTY) try { process.stdin.setRawMode(false); } catch { /* Not in raw mode. */ }
+  // The full-screen installer leaves the alternate screen first, so the message stays visible.
+  globalThis.conquistadorRestoreScreen?.();
   const detail = error instanceof Error ? error.stack ?? error.message : String(error);
   if (process.env.CONQUISTADOR_DEBUG === '1') process.stderr.write(`${detail}\n`);
   let log = null;

@@ -1,27 +1,34 @@
 ---
 title: "CLI commands"
-description: "Every conquistador command: start, maintain, use, check, connect, review, and the older routes."
+description: "Every conquistador command: install, context for your agent, maintain, use, check, connect, review, and the older routes."
 ---
 
 Run `conquistador help` for the short list and `conquistador help --all` for every command. Without a global install, replace `conquistador` with `npx @forsvn/conquistador@latest`, for example `npx @forsvn/conquistador@latest doctor`.
 
-## Start
+## Install
+
+The terminal installs Conquistador. The work happens inside your agent: the CLI never opens an agent and never runs a task.
 
 ### `conquistador`
 
 ```sh
-conquistador [TASK] [options]
+conquistador [options]
 ```
 
-Detect agents, install where needed, and open one. With a `TASK` (a first argument with a space), the agent opens with that task typed in. See [Install options](/install/overview) for the flow and every flag.
+The first run opens the full-screen installer: agents, options, review, install, and done. The last screen shows the command to type in each agent. A later run shows what is installed, with actions to add agents, update, check and repair, or remove. See [Install options](/install/overview) for the flow and every flag.
 
-### `conquistador task`
+## Context for your agent
+
+These commands print context for an agent and change nothing.
+
+### `conquistador "TASK"`
 
 ```sh
+conquistador "TASK"
 conquistador task WORD
 ```
 
-Start a one-word task, for example `conquistador task launch`.
+Print the playbooks a task needs, and the command to type in the agent. A first argument with a space is a task; `task` passes a one-word task, for example `conquistador task launch`. From 0.5.0 this does not open an agent. It is the same reading list as `conquistador brief "TASK"`.
 
 ## Maintain
 
