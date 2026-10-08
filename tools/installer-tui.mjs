@@ -2,7 +2,7 @@
 // line flow in onboard.mjs (detect, choose, review, install with a verify pass), one card per step.
 // It never opens an agent and never asks for a task: the last screen says what to type in each
 // agent. On exit the normal screen comes back and the summary stays in scrollback.
-import { Box, Text, createElement as h, render, useAnimation, useApp, useEffect, useInput, useMemo, useState, useWindowSize } from './vendor/ink.mjs';
+import { Box, Text, createElement as h, render, useAnimation, useApp, useEffect, useInput, useMemo, useRef, useState, useWindowSize } from './vendor/ink.mjs';
 import { realpathSync } from 'node:fs';
 import { homedir } from 'node:os';
 import { join } from 'node:path';
@@ -91,9 +91,11 @@ function Keys({ keys }) {
 // One styled line of body text. `tone` picks the color.
 const Line = ({ c, text, tone, bold, dim }) => h(Text, { color: tone ? c[tone] : undefined, bold, dimColor: dim, wrap: 'truncate-end' }, text || ' ');
 
-// A scrolled block of body lines, with "more" markers when it does not fit.
-function Scroll({ c, lines, offset, height }) {
-  const top = Math.min(offset, Math.max(0, lines.length - height));
+// A scrolled block of body lines, with "more" markers when it does not fit. `limit` gets the
+// largest useful offset, so scrolling past the end does not pile up key presses.
+function Scroll({ c, lines, offset, height, limit }) {
+  limit.current = Math.max(0, lines.length - height);
+  const top = Math.min(offset, limit.current);
   const shown = lines.length > height ? lines.slice(top, top + height - 1) : lines;
   const below = lines.length > height ? lines.length - top - shown.length : 0;
   return h(Box, { flexDirection: 'column' },
@@ -211,6 +213,7 @@ function App({ options, cwd, first, update, warnings, onExit, mode }) {
   const [status, setStatus] = useState(null);
   const [message, setMessage] = useState(null);
   const [outcome, setOutcome] = useState(null);
+  const limit = useRef(0);
   const finish = result => { onExit(result); exit(); };
   const cancel = () => finish({ kind: 'cancel', code: 130 });
   const go = next => { setScreen(next); setCursor(0); setOffset(0); };
@@ -302,7 +305,7 @@ function App({ options, cwd, first, update, warnings, onExit, mode }) {
     if (screen === 'loading') { if (ctrlC || key.escape || input === 'q') cancel(); return; }
     if (screen === 'done') {
       if (up) setOffset(value => Math.max(0, value - 1));
-      else if (down) setOffset(value => value + 1);
+      else if (down) setOffset(value => Math.min(limit.current, value + 1));
       else if (key.return || ctrlC || key.escape || input === 'q') finish({ kind: 'done', ...outcome });
       return;
     }
@@ -359,7 +362,7 @@ function App({ options, cwd, first, update, warnings, onExit, mode }) {
     if (screen === 'review') {
       if (key.escape) { if (shown.options) go('options'); else if (shown.agents) go('agents'); else cancel(); }
       else if (up) setOffset(value => Math.max(0, value - 1));
-      else if (down) setOffset(value => value + 1);
+      else if (down) setOffset(value => Math.min(limit.current, value + 1));
       else if (key.return && plan.surfaces.length) go('install');
     }
   }, { isActive: true });
@@ -452,7 +455,7 @@ function App({ options, cwd, first, update, warnings, onExit, mode }) {
     const lines = reviewLines(plan, inner);
     const subtitle = plan.surfaces.length ? 'Nothing changes until you press Enter.' : 'Nothing to install yet.';
     return frame(h(Card, { c, width, title: 'Review the changes', subtitle },
-      h(Scroll, { c, lines, offset, height: room(0, subtitle) })),
+      h(Scroll, { c, lines, offset, height: room(0, subtitle), limit })),
     plan.surfaces.length ? [['enter', 'install'], ['↑↓', 'scroll'], ['esc', 'back'], ['q', 'quit']] : [['esc', 'back'], ['q', 'quit']]);
   }
 
@@ -474,7 +477,7 @@ function App({ options, cwd, first, update, warnings, onExit, mode }) {
   const lines = doneLines({ ...outcome, cwd, task: options.task }, inner);
   const subtitle = 'Conquistador works inside your agent. The terminal only installs it.';
   return frame(h(Card, { c, width, title: outcome.code ? 'Done, with problems' : 'Done', subtitle },
-    h(Scroll, { c, lines, offset, height: room(0, subtitle) })),
+    h(Scroll, { c, lines, offset, height: room(0, subtitle), limit })),
   [['enter', 'exit'], ['↑↓', 'scroll']]);
 }
 
