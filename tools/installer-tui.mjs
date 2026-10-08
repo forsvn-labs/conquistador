@@ -94,14 +94,16 @@ const Line = ({ c, text, tone, bold, dim }) => h(Text, { color: tone ? c[tone] :
 // A scrolled block of body lines, with "more" markers when it does not fit. `limit` gets the
 // largest useful offset, so scrolling past the end does not pile up key presses.
 function Scroll({ c, lines, offset, height, limit }) {
-  limit.current = Math.max(0, lines.length - height);
+  const markerRows = lines.length > height ? Math.min(2, Math.max(0, height - 1)) : 0;
+  const capacity = Math.max(1, height - markerRows);
+  limit.current = Math.max(0, lines.length - capacity);
   const top = Math.min(offset, limit.current);
-  const shown = lines.length > height ? lines.slice(top, top + height - 1) : lines;
-  const below = lines.length > height ? lines.length - top - shown.length : 0;
+  const shown = lines.slice(top, top + capacity);
+  const below = lines.length - top - shown.length;
   return h(Box, { flexDirection: 'column' },
-    top ? h(Text, { dimColor: true }, `↑ ${top} more`) : null,
+    top && markerRows ? h(Text, { dimColor: true }, `↑ ${top} more`) : null,
     ...shown.map((line, index) => h(Line, { key: index + top, c, ...line })),
-    below ? h(Text, { dimColor: true }, `↓ ${below} more`) : null);
+    below && markerRows > (top ? 1 : 0) ? h(Text, { dimColor: true }, `↓ ${below} more`) : null);
 }
 
 // --- The plan from the answers ----------------------------------------------------------------------
@@ -214,6 +216,7 @@ function App({ options, cwd, first, update, warnings, onExit, mode }) {
   const [message, setMessage] = useState(null);
   const [outcome, setOutcome] = useState(null);
   const limit = useRef(0);
+  const signIn = useRef(null);
   const finish = result => { onExit(result); exit(); };
   const cancel = () => finish({ kind: 'cancel', code: 130 });
   const go = next => { setScreen(next); setCursor(0); setOffset(0); };
@@ -252,17 +255,21 @@ function App({ options, cwd, first, update, warnings, onExit, mode }) {
   // Install, then verify. Each step draws one row; a failed step never stops the others.
   useEffect(() => {
     if (screen !== 'install') return;
+    const controller = new AbortController();
     (async () => {
       try {
-      const track = async (label, work, { quiet = false } = {}) => {
+      const track = async (label, work, { quiet = false, cancellable = false } = {}) => {
         const id = `${label}-${Math.random()}`;
         setProgress(list => [...list, { id, label, state: 'run', quiet }]);
-        await sleep(40);
-        const result = await work();
-        const ok = result?.ok ?? (typeof result === 'boolean' ? result : true);
-        const manual = result?.manual || result?.status === 'manual';
-        setProgress(list => list.map(item => (item.id === id ? { ...item, state: ok ? 'ok' : manual ? 'manual' : 'bad', label: quiet ? label.replace(/^Checking /, 'Checked ') : label } : item)));
-        return result;
+        if (cancellable) signIn.current = controller;
+        try {
+          await sleep(40);
+          const result = await work();
+          const ok = result?.ok ?? (typeof result === 'boolean' ? result : true);
+          const manual = result?.manual || result?.status === 'manual';
+          setProgress(list => list.map(item => (item.id === id ? { ...item, state: ok ? 'ok' : manual ? 'manual' : 'bad', label: quiet ? label.replace(/^Checking /, 'Checked ') : label } : item)));
+          return result;
+        } finally { if (cancellable) signIn.current = null; }
       };
       // The hosted sign-in talks through this Clack-shaped UI: the code goes on the card.
       const ui = {
@@ -271,7 +278,7 @@ function App({ options, cwd, first, update, warnings, onExit, mode }) {
         log: Object.fromEntries(['info', 'warn', 'error', 'message', 'step', 'success'].map(name => [name, text => setMessage({ title: null, body: String(text) })])),
         isCancel: () => false,
       };
-      const results = await applyPlan(plan, final, { ui, progress: track, login: ctx.login });
+      const results = await applyPlan(plan, final, { ui, progress: track, login: ctx.login, signal: controller.signal });
       setMessage(null);
       const checks = await verifyResults(results, plan, { progress: track });
       update.persist();
@@ -310,7 +317,11 @@ function App({ options, cwd, first, update, warnings, onExit, mode }) {
   useInput((input, key) => {
     const ctrlC = key.ctrl && input === 'c';
     const up = key.upArrow || input === 'k', down = key.downArrow || input === 'j';
-    if (screen === 'install') { if (ctrlC) setStatus('Installing. Wait for this step to finish; nothing is left half done.'); return; }
+    if (screen === 'install') {
+      if (ctrlC && signIn.current) { signIn.current.abort(); setStatus('Cancelling sign-in. Completed installs stay.'); }
+      else if (ctrlC) setStatus('Installing. Wait for this step to finish; nothing is left half done.');
+      return;
+    }
     if (screen === 'loading') { if (ctrlC || key.escape || input === 'q') cancel(); return; }
     if (screen === 'done') {
       if (up) setOffset(value => Math.max(0, value - 1));
@@ -479,7 +490,7 @@ function App({ options, cwd, first, update, warnings, onExit, mode }) {
         message.title ? h(Text, { bold: true, color: c.sky }, message.title) : null,
         ...rows(message.body, inner).map((text, index) => h(Text, { key: index }, text))) : null,
       status ? h(Text, { key: 'status', dimColor: true, wrap: 'truncate-end' }, `\n${status}`) : null),
-    [['…', 'installing']]);
+    signIn.current ? [['ctrl-c', 'skip sign-in']] : [['…', 'installing']]);
   }
 
   // Done.

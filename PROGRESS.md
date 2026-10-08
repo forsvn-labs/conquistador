@@ -36,6 +36,17 @@ instead of doing the work.
   license; `--yes` skips all installer questions; package I6 removes ANSI codes before matching
   the summary while retaining exit-code and payload-completeness assertions. Both inline
   CodeRabbit findings are resolved. Work remains unmerged and unreleased.
+- Independent review follow-up: `--yes` also skips every question in `--plain` and `TERM=dumb`,
+  including an omitted scope. Short Review and Done cards can scroll to their final line without
+  exceeding the body height. Ctrl-C cancels asynchronous hosted sign-in, including fetch and body
+  reads, while preserving completed installs and the existing token. It records Hosted MCP as
+  skipped, verifies completed installs, and reaches Done with a retry command. File/package
+  mutations keep their Ctrl-C guard. Login requests are bounded at 15 seconds and polling cannot
+  outlast the device code's expiry.
+- The regression checks were written before the correction (`c2693cd`). Baseline checks at
+  `0bed602` reproduce all three findings. Nine hosted recovery checks now pass against loopback
+  HTTP fixtures, and the repository suite passes all 920 tests. Installer coverage is expanded
+  to 44 scenarios; the final committed-source run and CI remain to be recorded before merge.
 
 Open: a frozen spinner while a plugin manager runs (installs call `spawnSync`); no resize test in
 the E2E harness; interactive Windows installation and Linux/Windows ARM remain untested.

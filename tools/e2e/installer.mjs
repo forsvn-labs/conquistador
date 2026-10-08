@@ -51,6 +51,10 @@ const out = resolve(option('--out', join(root, 'dist/e2e/installer')));
 const only = option('--only', '')?.split(',').filter(Boolean) ?? [];
 const version = JSON.parse(readFileSync(join(root, 'package.json'), 'utf8')).version;
 const keep = argv.includes('--keep');
+const commit = spawnSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).stdout.trim();
+const dirty = Boolean(spawnSync('git', ['status', '--porcelain'], { cwd: root, encoding: 'utf8' }).stdout.trim());
+const sourceHashes = Object.fromEntries(['tools/installer-tui.mjs', 'tools/onboard.mjs', 'tools/login.mjs', 'tools/e2e/installer.mjs']
+  .map(path => [path, createHash('sha256').update(readFileSync(join(root, path))).digest('hex')]));
 
 // --- Local servers: a fake npm registry, a fake hosted MCP endpoint, a hanging server, a closed port.
 const listen = handler => new Promise(done => { const server = createServer(handler); server.listen(0, '127.0.0.1', () => done({ server, url: `http://127.0.0.1:${server.address().port}` })); });
@@ -798,7 +802,10 @@ for (const phase of ['config', 'device', 'sleep', 'poll', 'body', 'exchange', 't
       const installedBefore = f.tree().filter(path => /\.conquistador\/plugin\//.test(path));
       expect(installedBefore.length > 0, 'no completed plugin payload to preserve');
       if (phase === 'sleep') await s.waitFor('Waiting for you to approve');
-      await s.snap(`waiting-${phase}`);
+      // The active install spinner never becomes quiet. Capture this frame directly so the
+      // test sends Ctrl-C while the held request is active, before its independent timeout.
+      const title = `waiting-${phase}`;
+      s.snaps.push({ name: title, text: s.screen.text(), html: s.screen.html({ title }), styled: s.screen.styled() });
       const started = Date.now();
       const bounded = phase.startsWith('timeout') || phase === 'expiry';
       if (!bounded) await s.press('ctrlC');
@@ -809,8 +816,9 @@ for (const phase of ['config', 'device', 'sleep', 'poll', 'body', 'exchange', 't
       await s.waitFor('Summary', { timeout: 6000 }); await s.snap(`summary-${phase}`);
       expect(await s.exit({ timeout: 6000 }) === 1, 'cancelled or timed-out sign-in must exit 1');
       const shown = s.screen.text({ history: true });
+      const done = s.snaps.find(snap => snap.name === `done-${phase}`).text;
       expect(has(shown, 'Hosted MCP') && has(shown, 'conquistador --surface=hosted'), 'no usable Hosted MCP retry');
-      expect(has(shown, 'Claude Code') && has(shown, 'checks passed'), 'completed agent did not pass verification');
+      expect(has(done, 'Claude Code') && /checks?\s+passed/.test(done), 'completed agent did not pass verification');
       if (!bounded) expect(has(shown, 'skipped'), 'cancelled sign-in was not recorded as skipped');
       else expect(has(shown, phase === 'expiry' ? 'expired' : 'timed out'), 'stalled response did not report its finite timeout or expiry');
       expect(f.read(existingToken) === 'cq_existing_token\n', 'existing token was replaced during failed sign-in');
@@ -920,10 +928,11 @@ for (const item of scenarios.filter(entry => !only.length || only.includes(entry
 for (const server of [registry, hosted, hanging]) { server.server.closeAllConnections?.(); server.server.close(); }
 if (packageCopy && !keep) rmSync(packageCopy, { recursive: true, force: true });
 const passed = results.filter(item => item.pass).length;
-const report = { schema: 'conquistador.e2e-installer/v1', createdAt: new Date().toISOString(), version, node: process.version, platform: process.platform, total: results.length, passed, results };
+const report = { schema: 'conquistador.e2e-installer/v1', createdAt: new Date().toISOString(), version, commit, dirty, sourceHashes, node: process.version, platform: process.platform, total: results.length, passed, results };
 writeFileSync(join(out, 'report.json'), `${JSON.stringify(report, null, 2)}\n`);
 writeFileSync(join(out, 'screens.html'), `${HTML_HEAD}\n${gallery.join('\n')}\n`);
 writeFileSync(join(out, 'report.md'), [`# Installer E2E: ${passed}/${results.length} pass`, '', `Run ${report.createdAt} on ${process.platform}, Node ${process.version}, Conquistador ${version}.`, '',
+  `Commit ${commit}${dirty ? ' with uncommitted changes' : ', clean checkout'}. Exact source hashes are in report.json.`, '',
   '| Result | Scenario | Failure modes | Screens | Problems |', '| --- | --- | --- | --- | --- |',
   ...results.map(item => `| ${item.pass ? 'pass' : 'FAIL'} | ${item.name} | ${item.covers.join(', ')} | ${item.screens} | ${item.problems.join('; ').replace(/\|/g, '/').replace(/\n/g, ' ').slice(0, 300)} |`), ''].join('\n'));
 console.log(`\n${passed}/${results.length} pass. Report: ${join(out, 'report.md')}`);

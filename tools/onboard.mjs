@@ -293,7 +293,7 @@ const retryFor = (surface, step, plan) => (surface === 'agents' ? `${self} --pro
   : surface === 'mcp-apps' ? `${self} --surface=mcp-apps --apps=${step.app} -y` : `${self} --surface=${surface} -y`);
 
 // Run every step. A failed surface never stops the others (F7). `progress` draws one line per step.
-export async function applyPlan(plan, choices, { ui, progress, login }) {
+export async function applyPlan(plan, choices, { ui, progress, login, signal }) {
   const results = [];
   const record = item => { results.push(item); return item; };
   const agents = plan.surfaces.find(surface => surface.id === 'agents');
@@ -344,9 +344,9 @@ export async function applyPlan(plan, choices, { ui, progress, login }) {
     if (!login) record({ surface: 'hosted', label: 'Hosted MCP', ok: false, error: hosted.steps[0].reason });
     else {
       let signedIn = null, error = null;
-      try { signedIn = await login.runLogin({ ui }); } catch (failure) { error = failure.message; }
+      try { signedIn = await progress('Hosted MCP', () => login.runLogin({ ui, signal }), { cancellable: true }); } catch (failure) { error = failure.message; }
       if (signedIn?.token) record({ surface: 'hosted', label: 'Hosted MCP', ok: true, login: signedIn.login, token: signedIn.token, url: hosted.steps[0].target });
-      else record({ surface: 'hosted', label: 'Hosted MCP', ok: false, skipped: !error, error: error ?? `Sign-in skipped. Try again: ${self} --surface=hosted` });
+      else record({ surface: 'hosted', label: 'Hosted MCP', ok: false, skipped: !error, error: error ?? 'Sign-in skipped.', retry: retryFor('hosted', null, plan) });
     }
   }
   const bot = plan.surfaces.find(surface => surface.id === 'bot');
@@ -495,10 +495,10 @@ export async function runInstaller(options, { cwd = process.cwd(), ui, width, in
   ui.log.message(wrap('Growth, marketing, and sales playbooks for your AI agents.\nAbout a minute. Nothing changes until you confirm.'));
   for (const note of preflightNotes(update)) ui.log.warn(wrap(note));
   const ctx = await detect({ cwd });
-  const choices = defaultChoices(options, ctx, { interactive: true });
+  const choices = defaultChoices(options, ctx, { interactive: !options.yes });
 
   // 2. Surfaces.
-  if (options.surfacesFrom !== 'flag' && options.surfacesFrom !== 'implied') {
+  if (!options.yes && options.surfacesFrom !== 'flag' && options.surfacesFrom !== 'implied') {
     const found = [
       ['Agents', ctx.found.map(agent => agent.label).join(', ') || 'none found'],
       ['MCP apps', ctx.apps.filter(app => app.found).map(app => app.label).join(', ') || 'none found'],
@@ -525,13 +525,13 @@ export async function runInstaller(options, { cwd = process.cwd(), ui, width, in
   let stepShown = false;
   const detail = () => { if (stepShown) return ''; stepShown = true; return stepLabel(p, 2, TOTAL); };
   if (choices.surfaces.includes('agents')) {
-    if (!options.providers && !options.wanted) {
+    if (!options.yes && !options.providers && !options.wanted) {
       const ids = await ask(ui, 'multiselect', { message: `${detail()}Which agents?`, required: true, initialValues: choices.agents,
         options: AGENTS.map(agent => { const found = ctx.agents.find(item => item.id === agent.id)?.found; return { value: agent.id, label: agent.label, hint: `${agent.how === 'skill' ? 'skill copy' : 'plugin'}${found ? '' : '; not found'}` }; }) });
       if (ui.isCancel(ids)) return cancelled();
       choices.agents = AGENTS.filter(agent => ids.includes(agent.id)).map(agent => agent.id);
     }
-    if (!options.scope) {
+    if (!options.yes && !options.scope) {
       const scope = await ask(ui, 'select', { message: `${detail()}All projects, or only this one?`, initialValue: choices.scope, options: [
         { value: 'global', label: 'All projects', hint: 'plugin with hooks and the MCP server where the agent has one' },
         { value: 'project', label: 'Only this project', hint: 'one skill folder you can commit' },
@@ -547,7 +547,7 @@ export async function runInstaller(options, { cwd = process.cwd(), ui, width, in
       choices.hooks = hooks;
     }
   }
-  if (choices.surfaces.includes('mcp-apps') && !options.apps) {
+  if (!options.yes && choices.surfaces.includes('mcp-apps') && !options.apps) {
     const skip = duplicateApps(choices, ctx);
     for (const id of skip) if (ctx.apps.find(app => app.id === id)?.found) ui.log.message(wrap(dedupeNote(id)));
     const available = MCP_APPS.filter(app => !skip.includes(app.id));
