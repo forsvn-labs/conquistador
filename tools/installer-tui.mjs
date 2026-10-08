@@ -252,6 +252,7 @@ function App({ options, cwd, first, update, warnings, onExit, mode }) {
   useEffect(() => {
     if (screen !== 'install') return;
     (async () => {
+      try {
       const track = async (label, work, { quiet = false } = {}) => {
         const id = `${label}-${Math.random()}`;
         setProgress(list => [...list, { id, label, state: 'run', quiet }]);
@@ -279,6 +280,13 @@ function App({ options, cwd, first, update, warnings, onExit, mode }) {
       const code = results.some(item => !item.ok) || checks.some(item => !item.ok) ? 1 : 0;
       setOutcome({ results, checks, plan, ready, code, notice: updateNotice(latest, version, channel().kind) });
       go('done');
+      } catch (error) {
+        // A step that throws (for example a config file that cannot be written) still ends on Done.
+        setMessage(null);
+        setOutcome({ results: [{ surface: 'installer', label: 'Installation', ok: false, error: error instanceof Error ? error.message : String(error), retry: `${self} doctor --fix` }],
+          checks: [], plan, ready: [], code: 1, notice: null });
+        go('done');
+      }
     })();
   }, [screen]);
 
@@ -494,7 +502,8 @@ export async function runTui(options, { cwd = process.cwd(), screen = 'install' 
   globalThis.conquistadorRestoreScreen = restore;
   process.on('exit', restore);
   const app = render(h(App, { options, cwd, first: screen, update, warnings, mode: colorMode(), onExit: value => { result = value; } }),
-    { alternateScreen: true, exitOnCtrlC: false, patchConsole: true });
+    // interactive: runStart already checked for a terminal; Ink would turn itself off when CI is set.
+    { alternateScreen: true, interactive: true, exitOnCtrlC: false, patchConsole: true });
   try { await app.waitUntilExit(); } finally { mounted = false; process.off('exit', restore); delete globalThis.conquistadorRestoreScreen; }
 
   if (result.kind === 'cancel') { console.log('Cancelled. No files changed.'); return 130; }

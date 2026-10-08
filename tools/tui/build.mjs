@@ -1,9 +1,10 @@
 // Bundle the terminal UI libraries into ../vendor, so installs need no npm dependencies.
 //   clack.mjs  line prompts for `conquistador setup` (Clack)
 //   ink.mjs    the full-screen installer (Ink and React)
-// NOTICE.txt collects the license of every package that ends up in a bundle.
+// NOTICE.txt collects the full license text of every package that ends up in a bundle. A package
+// that ships no license file (yoga-layout) gets the upstream text from licenses/NAME.LICENSE.
 import { build } from 'esbuild';
-import { existsSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -27,8 +28,11 @@ for (const { metafile } of results) {
     const match = /^(.*[\\/]node_modules[\\/](?:@[^\\/]+[\\/])?[^\\/]+)/.exec(path);
     if (!match || packages.has(match[1])) continue;
     const manifest = JSON.parse(readFileSync(join(match[1], 'package.json'), 'utf8'));
-    const file = ['LICENSE', 'LICENSE.md', 'license', 'license.md', 'LICENSE.txt'].map(name => join(match[1], name)).find(existsSync);
-    packages.set(match[1], { name: manifest.name, version: manifest.version, license: manifest.license, text: file ? readFileSync(file, 'utf8').trim() : `License: ${manifest.license}` });
+    const shipped = readdirSync(match[1]).find(name => /^(?:licen[cs]e|copying)(?:[.-][\w-]+)?(?:\.(?:md|txt))?$/i.test(name));
+    const kept = join(here, 'licenses', `${manifest.name.replace('/', '__')}.LICENSE`);
+    const file = shipped ? join(match[1], shipped) : existsSync(kept) ? kept : null;
+    if (!file) throw Error(`${manifest.name} ships no license file. Add its upstream license as ${relative(here, kept)}.`);
+    packages.set(match[1], { name: manifest.name, version: manifest.version, license: manifest.license, text: readFileSync(file, 'utf8').trim() });
   }
 }
 const list = [...packages.values()].sort((a, b) => a.name.localeCompare(b.name));

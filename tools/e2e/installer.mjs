@@ -112,7 +112,8 @@ function fixture(name, { agents = ['claude', 'codex'], apps = {}, executor = nul
   }
   const logFile = join(work, 'calls.jsonl');
   const env = {
-    PATH, HOME: home, USERPROFILE: home, TERM: 'xterm-256color', LANG: 'en_US.UTF-8', TMPDIR: process.env.TMPDIR ?? tmpdir(),
+    // CI=true as on GitHub Actions: Ink turns itself off there unless the installer forces it on.
+    PATH, HOME: home, USERPROFILE: home, TERM: 'xterm-256color', LANG: 'en_US.UTF-8', TMPDIR: process.env.TMPDIR ?? tmpdir(), CI: 'true',
     FAKE_AGENT_LOG: logFile, npm_config_registry: `${registry.url}/`, CONQUISTADOR_HOSTED_URL: `${hosted.url}/mcp`,
     // CONQUISTADOR_EXECUTOR_APP=off: never fall back to a real Executor.app on this machine.
     CONQUISTADOR_PREFILL: 'off', CONQUISTADOR_EXECUTOR_APP: 'off', ...(executor ? { FAKE_EXECUTOR: executor } : {}), ...extra,

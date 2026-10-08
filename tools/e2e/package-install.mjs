@@ -220,7 +220,7 @@ const files = folder => { const found = []; const walk = dir => { let entries = 
 const skillFiles = folder => files(folder).filter(path => path.endsWith(`${'/'}SKILL.md`) || path.endsWith('\\SKILL.md'));
 let snapshot = files(a.home).join('\n');
 result = run(cli, ['--dry-run', '--providers=claude,codex,pi,hermes', '--scope=project'], { env: a.env, cwd: acme });
-check('D1', '--dry-run prints the plan and the launch, and writes nothing', result.status === 0 && /Plan:/.test(result.output) && /\/conquistador init/.test(result.output) && files(a.home).join('\n') === snapshot, result.output.trim().split('\n').slice(-3).join(' | '));
+check('D1', '--dry-run prints the plan, opens nothing, and writes nothing', result.status === 0 && /Plan:/.test(result.output) && /agent opened/.test(result.output) && files(a.home).join('\n') === snapshot, result.output.trim().split('\n').slice(-3).join(' | '));
 snapshot = files(a.home).join('\n');
 result = run(cli, ['--providers=claude,codex,pi,hermes', '--scope=project'], { env: a.env, cwd: acme });
 check('D1', 'without a terminal and without -y, the installer prints the plan, exits 2, and changes nothing', result.status === 2 && /Plan:/.test(result.output) && files(a.home).join('\n') === snapshot);
