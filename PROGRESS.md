@@ -18,9 +18,10 @@ From the 2026-10-10 comparison with Impeccable 4.5.2 (`forsvn-brain/conquistador
   Antigravity CLI for unpaid and Google One users.
 - Verified 2026-10-10 (macOS, Node 26.9.0): `node tools/dev.mjs test` 939 (415 tooling, 294
   runtime, 167 catalog, 63 evals); `CI=true node tools/e2e/installer.mjs` 45/45 (new T20); build
-  and `runtime/lib` diff clean. Not run locally: package-install E2E (CI runs it). Not verified in a
-  live Copilot or Grok session: the hook formats follow their docs, the Copilot changelog, and
-  `grok plugin validate`.
+  and `runtime/lib` diff clean. Not run locally: package-install E2E (CI runs it).
+- Live Copilot check (Copilot CLI 1.0.78, one `-p` prompt with `--plugin-dir`, 1.51 credits): the
+  prompt hook and the copy-check hook ran, and the answer ended with "Playbooks applied". Grok is
+  not live-verified: `grok plugin validate` confirms it loads the hooks and MCP files.
 
 ## Merged, awaiting npm release
 
