@@ -1,7 +1,8 @@
 // Agent registry for the one-command installer.
 // Each agent is installed with its own plugin manager, from one stable local copy of the plugin
-// (~/.conquistador/plugin). Nothing here edits an agent's settings files directly, except the
-// documented Cursor local-plugin folder, which is a plain copy.
+// (~/.conquistador/plugin). Nothing here edits an agent's settings files directly. Two hosts get
+// their own plain copy: Cursor (its documented local-plugin folder) and Grok (~/.conquistador/
+// grok-plugin, which adds the hooks/hooks.json and .mcp.json that only Grok reads).
 import { spawnSync } from 'node:child_process';
 import { cpSync, existsSync, mkdirSync, readdirSync, readFileSync, renameSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import { homedir } from 'node:os';
@@ -40,6 +41,22 @@ export function onPath(command) {
 const step = (command, args, { okIf, then } = {}) => ({ command, args, okIf, then });
 const cursorPlugins = () => join(process.env.CURSOR_HOME || join(homedir(), '.cursor'), 'plugins', 'local', 'conquistador');
 
+// Grok reads plugin hooks only from hooks/hooks.json and MCP servers only from .mcp.json (checked
+// with `grok plugin validate`, Grok 1.0.50, 2026-10-10). Claude Code also loads hooks/hooks.json by
+// default, so those files live in a Grok-only copy, never in the shared plugin. Grok links a local
+// install to its source folder, so this copy is live. Grok discards prompt-hook output and passes no
+// verified transcript, so its hooks file holds only the copy check (see hooks/conquistador-hook.mjs).
+export const grokPluginHome = () => join(home(), 'grok-plugin');
+export function writeGrokFiles(folder) {
+  const script = name => join(folder, 'hooks', name);
+  const hooks = { hooks: { PostToolUse: [{ matcher: 'Edit|Write|MultiEdit|search_replace|write_file', hooks: [{ type: 'command', command: `node "${script('check-hook.mjs')}" grok edit`, timeout: 10 }] }] } };
+  const mcp = { mcpServers: { conquistador: { command: 'node', args: [join(folder, 'mcp', 'server.mjs')] } } };
+  mkdirSync(join(folder, 'hooks'), { recursive: true });
+  writeFileSync(join(folder, 'hooks', 'hooks.json'), `${JSON.stringify(hooks, null, 2)}\n`);
+  writeFileSync(join(folder, '.mcp.json'), `${JSON.stringify(mcp, null, 2)}\n`);
+}
+const grokFilesPresent = folder => ['hooks/hooks.json', '.mcp.json'].every(file => existsSync(join(folder, file)));
+
 // The one host skill. Hosts that use the Agent Skills format get a copy of this folder.
 export const SKILL = 'skills/conquistador';
 const skillStep = folder => [{ skill: () => join(folder(), 'conquistador') }];
@@ -52,8 +69,9 @@ function hermesHome() {
 const openCodeConfig = () => process.env.OPENCODE_CONFIG_DIR || join(process.env.XDG_CONFIG_HOME || join(homedir(), '.config'), 'opencode');
 
 // A host that reads the Agent Skills format but has no plugin manager we use. Skill folders come
-// from each host's own documentation (checked 2026-10-03; see INSTALL.md). `slash` is what a person
-// types to start Conquistador there; without one, they ask for it in words.
+// from each host's own documentation (checked 2026-10-03 and 2026-10-10; see INSTALL.md). `slash` is
+// what a person types to start Conquistador there; without one, they ask for it in words. A host
+// without its own command (`command: null`) is found by its home folder only.
 function skillAgent({ id, label, command, detect = [], project, global, slash }) {
   return {
     id, label, command, detect, how: 'skill', project, global,
@@ -104,10 +122,12 @@ export const AGENTS = [
   {
     id: 'grok', label: 'Grok CLI', command: 'grok', how: 'plugin', project: '.grok/skills',
     // Grok's --trust is disclosed in the selected-host install confirmation/explicit add preview.
-    install: src => [step('grok', ['plugin', 'install', src, '--trust'], { okIf: /already installed/i, then: step('grok', ['plugin', 'update']) })],
-    update: () => [step('grok', ['plugin', 'update'])],
-    remove: () => [step('grok', ['plugin', 'uninstall', 'conquistador'], { okIf: /not found/i })],
+    // A new source path would register a second "conquistador", so the old registration goes first.
+    install: () => grokInstall(),
+    update: () => grokInstall(),
+    remove: () => [step('grok', ['plugin', 'uninstall', 'conquistador', '--confirm'], { okIf: /not found|no plugin/i }), { remove: grokPluginHome }],
     installed: () => registration('grok', ['plugin', 'list'], text => /\bconquistador\b/.test(text)),
+    healthy: () => payloadCurrent(grokPluginHome()) && grokFilesPresent(grokPluginHome()),
   },
   skillAgent({ id: 'gemini', label: 'Gemini CLI', command: 'gemini', project: '.agents/skills', global: () => join(homedir(), '.gemini', 'skills') }),
   skillAgent({ id: 'opencode', label: 'OpenCode', command: 'opencode', project: '.agents/skills', global: () => join(openCodeConfig(), 'skills') }),
@@ -118,10 +138,26 @@ export const AGENTS = [
     slash: '/conquistador ' }),
   skillAgent({ id: 'kiro', label: 'Kiro CLI', command: 'kiro-cli', detect: ['.kiro'], project: '.kiro/skills', global: () => join(homedir(), '.kiro', 'skills') }),
   skillAgent({ id: 'vibe', label: 'Mistral Vibe', command: 'vibe', detect: ['.vibe'], project: '.agents/skills', global: () => join(homedir(), '.vibe', 'skills') }),
+  skillAgent({ id: 'qoder', label: 'Qoder', command: 'qodercli', detect: ['.qoder'], project: '.qoder/skills', global: () => join(homedir(), '.qoder', 'skills') }),
+  // Rovo Dev reads ~/.agents/skills as well as ~/.rovodev/skills; sharing Pi's folder keeps one copy.
+  // Its command is `acli`, which other Atlassian tools share, so only its home folder finds it.
+  skillAgent({ id: 'rovodev', label: 'Rovo Dev', command: null, detect: ['.rovodev'], project: '.rovodev/skills', global: () => join(homedir(), '.agents', 'skills') }),
+  skillAgent({ id: 'trae', label: 'Trae', command: null, detect: ['.trae'], project: '.trae/skills', global: () => join(homedir(), '.trae', 'skills') }),
+  skillAgent({ id: 'trae-cn', label: 'Trae CN', command: null, detect: ['.trae-cn'], project: '.trae/skills', global: () => join(homedir(), '.trae-cn', 'skills') }),
 ];
 
+// Stage the Grok-only copy, drop any registration from another source, then register the copy.
+function grokInstall() {
+  return [
+    { copy: grokPluginHome, after: writeGrokFiles },
+    step('grok', ['plugin', 'uninstall', 'conquistador', '--confirm', '--keep-data'], { okIf: /not found|no plugin|not installed/i }),
+    step('grok', ['plugin', 'install', grokPluginHome(), '--trust'], { okIf: /already installed/i }),
+  ];
+}
+
 // Names people type for a host. `--providers=claude,codex` uses these.
-const ALIASES = { claude: 'claude-code', 'gemini-cli': 'gemini', agy: 'antigravity', github: 'copilot', 'kiro-cli': 'kiro', 'mistral-vibe': 'vibe', 'grok-build': 'grok' };
+const ALIASES = { claude: 'claude-code', 'gemini-cli': 'gemini', agy: 'antigravity', github: 'copilot', 'kiro-cli': 'kiro', 'mistral-vibe': 'vibe', 'grok-build': 'grok',
+  qodercli: 'qoder', 'rovo-dev': 'rovodev', rovo: 'rovodev', traecn: 'trae-cn', trae_cn: 'trae-cn' };
 export const agentId = name => {
   const key = String(name).trim().toLowerCase();
   return AGENTS.some(agent => agent.id === key) ? key : ALIASES[key] ?? null;
@@ -142,7 +178,7 @@ export function run(command, args, { timeout = 120_000 } = {}) {
 // A host counts as found when its command is on PATH or its home folder exists.
 export function detectAgents() {
   return AGENTS.map(agent => {
-    const command = [agent.command, ...(agent.alsoDetect ?? [])].find(onPath);
+    const command = [agent.command, ...(agent.alsoDetect ?? [])].filter(Boolean).find(onPath);
     const folder = (agent.detect ?? []).map(name => join(homedir(), name)).find(path => existsSync(path));
     return { ...agent, found: Boolean(command || folder), foundAt: command ? onPath(command) : folder ?? null };
   });
@@ -303,7 +339,7 @@ function applySteps(agent, action, { source, dryRun = false, log = () => {}, sco
     if (item.copy) {
       const target = item.copy();
       log(`copy plugin → ${tilde(target)}`);
-      if (!dryRun) copyPayload(target, { source });
+      if (!dryRun) { copyPayload(target, { source }); item.after?.(target); }
       done.push(`copied to ${target}`);
       continue;
     }

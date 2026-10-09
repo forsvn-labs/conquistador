@@ -176,7 +176,8 @@ test('the Grok-only files point at the staged copy and register only the copy ch
   const folder = temp(t);
   const files = registry(folder, `
     m.writeGrokFiles(${JSON.stringify(folder)});
-    const read = path => JSON.parse((await import('node:fs')).readFileSync(path, 'utf8'));
+    const fs = await import('node:fs');
+    const read = path => JSON.parse(fs.readFileSync(path, 'utf8'));
     console.log(JSON.stringify({ hooks: read(${JSON.stringify(join(folder, 'hooks/hooks.json'))}), mcp: read(${JSON.stringify(join(folder, '.mcp.json'))}) }));
   `);
   assert.deepEqual(Object.keys(files.hooks.hooks), ['PostToolUse']);

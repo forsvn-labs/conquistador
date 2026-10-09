@@ -70,6 +70,8 @@ Maintain
   conquistador doctor [--fix]       Report (and repair) drift in installs, hooks, and project context
   conquistador remove [AGENT...]    Remove installs (--scope=project|global; default both)
   conquistador agents [--json]      Show detected agents and install state
+  conquistador hooks on|off|status  Turn the hooks on or off for every agent, or show their state
+                                    (in your agent: /conquistador hooks off)
   conquistador add AGENT... --yes   Install into named agents (same as --providers)
 
 Other routes (see INSTALL.md)

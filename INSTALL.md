@@ -110,8 +110,9 @@ installer with that surface chosen and print the new flag. With a route option (
 
 ### Agents and folders
 
-Folders come from each agent's documentation (checked 2026-10-03). Agents that share a project
-folder share one copy. "Start with" is what you type in the agent; the installer's last screen
+Folders come from each agent's documentation (checked 2026-10-03; Qoder and Rovo Dev on
+2026-10-10). Trae publishes no skills reference we could find; its folders follow Trae's own
+`.trae` folder and other installers, such as Impeccable. Agents that share a folder share one copy. "Start with" is what you type in the agent; the installer's last screen
 shows the same.
 
 | Agent | `--providers` | Global install | Project folder | Start with |
@@ -128,6 +129,10 @@ shows the same.
 | Antigravity CLI | `antigravity` | `~/.gemini/antigravity-cli/skills/conquistador` | `.agents/skills/conquistador` | `/conquistador` |
 | Kiro CLI | `kiro` | `~/.kiro/skills/conquistador` | `.kiro/skills/conquistador` | "Use Conquistador: …" |
 | Mistral Vibe | `vibe` | `~/.vibe/skills/conquistador` | `.agents/skills/conquistador` | "Use Conquistador: …" |
+| Qoder | `qoder` | `~/.qoder/skills/conquistador` | `.qoder/skills/conquistador` | "Use Conquistador: …" |
+| Rovo Dev | `rovodev` | `~/.agents/skills/conquistador` (shared with Pi; Rovo Dev reads it) | `.rovodev/skills/conquistador` | "Use Conquistador: …" |
+| Trae | `trae` | `~/.trae/skills/conquistador` | `.trae/skills/conquistador` | "Use Conquistador: …" |
+| Trae CN | `trae-cn` | `~/.trae-cn/skills/conquistador` | `.trae/skills/conquistador` | "Use Conquistador: …" |
 
 Sources: [Claude Code](https://code.claude.com/docs/en/skills),
 [Codex](https://learn.chatgpt.com/docs/build-skills), [Cursor](https://cursor.com/docs/context/skills),
@@ -137,7 +142,8 @@ Sources: [Claude Code](https://code.claude.com/docs/en/skills),
 [Pi](https://github.com/badlogic/pi-mono/blob/main/packages/coding-agent/docs/skills.md),
 [Hermes Agent](https://hermes-agent.nousresearch.com/docs/user-guide/features/skills),
 [Antigravity](https://antigravity.google/docs/skills), [Kiro](https://kiro.dev/docs/skills/),
-[Mistral Vibe](https://docs.mistral.ai/vibe/code/cli/skills).
+[Mistral Vibe](https://docs.mistral.ai/vibe/code/cli/skills), [Qoder](https://docs.qoder.com/en/cli/Skills),
+[Rovo Dev](https://support.atlassian.com/rovo/docs/extend-rovo-dev-cli-with-agent-skills/).
 
 Notes:
 
@@ -197,11 +203,22 @@ Without a global CLI, put `npx @forsvn/conquistador` in front of each command.
 - The `conquistador` skill with its commands and plays.
 - An MCP server named `conquistador` with the tools `conquistador_brief`, `conquistador_search`,
   and `conquistador_read`. It only reads playbooks.
-- Hooks for Claude Code, Codex, and Cursor: a prompt hook that adds the must-read list to
-  marketing prompts, and a stop hook that sends the agent back once if it skipped those files.
+- Hooks. What each agent gets depends on what its hook system can do:
 
-Turn off the hooks with `CONQUISTADOR_HOOKS=off` or `{"hooks": false}` in
-`~/.conquistador/config.json`.
+  | Agent | Playbook list on marketing prompts | Copy check after each edit | Read check before the answer ends |
+  |---|---|---|---|
+  | Claude Code, Codex | Yes | Yes | Yes |
+  | Cursor | At session start | Yes | Yes |
+  | GitHub Copilot CLI | Yes, and at session start | Yes | No |
+  | Grok CLI | No (Grok drops prompt-hook output; it gets the `conquistador_brief` MCP tool) | Yes | No |
+
+  The read check is off for Copilot and Grok: it counts only reads it can verify in the agent's
+  transcript, and their transcript formats are not verified yet, so it would send a good answer
+  back. Grok gets its hooks and MCP server from its own copy in `~/.conquistador/grok-plugin`.
+
+Turn the hooks off or on for every agent with `conquistador hooks off` or `conquistador hooks on`
+(in the agent: `/conquistador hooks off`). `conquistador hooks status` shows the state and what set
+it. `CONQUISTADOR_HOOKS=off` in the environment also turns them off, and wins over the setting.
 
 ## MCP server for any MCP client
 

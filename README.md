@@ -135,7 +135,7 @@ npx @forsvn/conquistador --json             # The plan as JSON
 Without a terminal and without `-y`, the installer prints the plan and exits with code 2.
 
 Supported agents: Claude Code, Codex, Cursor, GitHub Copilot CLI, Grok CLI, Gemini CLI, OpenCode,
-Pi, Hermes Agent, Antigravity CLI, Kiro CLI, and Mistral Vibe.
+Pi, Hermes Agent, Antigravity CLI, Kiro CLI, Mistral Vibe, Qoder, Rovo Dev, Trae, and Trae CN.
 [Coding agents](https://conquistador.forsvn.com/docs/install/coding-agents) lists the folder each
 one uses.
 
@@ -190,8 +190,10 @@ right files. Add your own playbooks; they rank first:
 conquistador playbooks add ~/notes/growth-playbooks
 ```
 
-Turn the hooks off with `--no-hooks` at install, `CONQUISTADOR_HOOKS=off`, or `{"hooks": false}` in
-`~/.conquistador/config.json`.
+Turn the hooks off with `conquistador hooks off` (in your agent: `/conquistador hooks off`), and
+back on with `conquistador hooks on`. `--no-hooks` at install and `CONQUISTADOR_HOOKS=off` also turn
+them off. Hooks run in Claude Code, Codex, Cursor, GitHub Copilot CLI, and Grok CLI; INSTALL.md lists
+what each agent gets.
 
 ## What Conquistador does not do
 

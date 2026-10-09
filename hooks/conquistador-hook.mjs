@@ -1,8 +1,11 @@
 #!/usr/bin/env node
-// Plugin hooks for Claude Code, Codex, and Cursor.
+// Plugin hooks for Claude Code, Codex, Cursor, and GitHub Copilot CLI.
 //   prompt: brief relevant requests and inject the must-read playbook list.
 //   stop:   if the agent answered without reading those playbooks, send it back once.
-//   start:  (Cursor) state the protocol, because Cursor cannot inject context per prompt.
+//   start:  (Cursor, Copilot) state the protocol, for hosts that may drop per-prompt context.
+// Copilot and Grok get no stop gate: their transcript formats are not verified, and the read
+// check counts an unknown format as "nothing read", which would block a good answer.
+// Grok discards prompt-hook output, so inside Grok (GROK_HOOK_EVENT is set) only the copy check runs.
 // Hooks never fail the host: every error path exits 0 with no output.
 // Turn them off with CONQUISTADOR_HOOKS=off or {"hooks": false} in ~/.conquistador/config.json.
 import { createHash } from 'node:crypto';
@@ -12,7 +15,10 @@ import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const pluginRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const [client = 'claude', event = 'prompt'] = process.argv.slice(2);
+const [named = 'claude', event = 'prompt'] = process.argv.slice(2);
+// Grok also runs Claude-format hooks it finds; it marks every hook with GROK_HOOK_EVENT.
+const client = process.env.GROK_HOOK_EVENT ? 'grok' : named;
+const noStopGate = new Set(['copilot', 'grok']);
 const STATE_TTL_MS = 12 * 60 * 60 * 1000;
 const MAX_TRANSCRIPT = 32 * 1024 * 1024;
 
@@ -381,6 +387,7 @@ export function unreadFiles(state, transcript) {
 }
 
 async function onPrompt(input) {
+  if (client === 'grok') return null;
   const prompt = input.prompt ?? input.user_prompt ?? input.text;
   if (typeof prompt !== 'string' || !prompt.trim()) return client === 'cursor' ? { continue: true } : null;
   const previous = statePath(input);
@@ -397,10 +404,12 @@ async function onPrompt(input) {
 
   saveState(input, { createdAt: Date.now(), promptSha256: digest(normalizeText(prompt)), transcript: transcriptSnapshot(input), methods: brief.methods.map(item => item.name), play: brief.play?.name ?? null, must, enforced: false });
   if (client === 'cursor') return { continue: true };
+  if (client === 'copilot') return { additionalContext: formatReadingList(brief) };
   return { hookSpecificOutput: { hookEventName: 'UserPromptSubmit', additionalContext: formatReadingList(brief) } };
 }
 
 function onStop(input) {
+  if (noStopGate.has(client)) return null;
   if (input.stop_hook_active === true || Number(input.loop_count ?? 0) > 0) return null;
   const state = loadState(input);
   if (!state || state.enforced || !state.must?.length) return null;
@@ -431,6 +440,8 @@ function onStop(input) {
 function onStart() {
   const text = 'Conquistador is installed. For growth, GTM, launch, marketing, sales, pricing, positioning, copy, content, SEO, ads, or outreach work: call the conquistador_brief MCP tool with the task before drafting, read the whole result, apply its playbooks, and end with "Playbooks applied". For other work, ignore this.';
   if (client === 'cursor') return { additional_context: text };
+  if (client === 'copilot') return { additionalContext: text };
+  if (client === 'grok') return null;
   return { hookSpecificOutput: { hookEventName: 'SessionStart', additionalContext: text } };
 }
 

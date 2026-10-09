@@ -326,13 +326,16 @@ scenario('folded-agents', ['T20'], async ({ expect }) => {
     await s.press('enter');
     await s.settle(200);
     await s.snap('agents-open');
+    // The opened list scrolls in 24 rows: walk down until Qoder is on screen.
+    for (let step = 0; step < 20 && !has(s.screen.text(), 'Qoder'); step += 1) { await s.press('down'); await s.settle(80); }
     await moveTo(s, 'Qoder');
     await s.press('space'); await s.settle(120);
     expect(/◉\s+Qoder/.test(s.screen.text()), 'Qoder could not be chosen after opening the list (T20)');
     await s.press('enter');
     await s.waitFor(TITLE.options); await s.press('enter');
     await s.waitFor(TITLE.review); await s.snap('review');
-    expect(has(s.screen.text(), 'Qoder'), 'the review does not include Qoder (T20)');
+    for (let step = 0; step < 12 && !has(s.screen.text(), 'Qoder'); step += 1) { await s.press('down'); await s.settle(80); }
+    expect(has(s.screen.text(), 'Qoder'), `the review does not include Qoder (T20)\n${s.screen.text()}`);
     await s.press('escape'); await s.settle(120);
     await s.press('escape'); await s.settle(120);
     await s.press('q');

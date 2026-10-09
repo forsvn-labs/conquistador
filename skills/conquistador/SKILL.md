@@ -97,6 +97,8 @@ Plays chain commands for a multi-step outcome. Each [play](plays/) lists its ste
 ## Routing
 
 - **No argument:** read [references/menu.md](references/menu.md) and show its menu. Never auto-run a command.
+- **`/conquistador hooks on|off|status`:** run `conquistador hooks on`, `conquistador hooks off`, or
+  `conquistador hooks status` in a terminal tool and report its output. It changes the hooks for every agent.
 - **Explicit command or play:** load its COMMAND.md or play file and follow it. Old IDs (`write-copy`,
   `launch-product`) still work; the routing contract lists each as a legacy name.
 - **Otherwise:** route through the brief. Each request is one job:

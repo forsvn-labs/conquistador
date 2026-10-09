@@ -1,5 +1,27 @@
 # Product progress
 
+## In review: installer reach (branch `cli/installer-reach`)
+
+From the 2026-10-10 comparison with Impeccable 4.5.2 (`forsvn-brain/conquistador/_show-me/installer`).
+
+- Hooks for GitHub Copilot CLI: `com.github.copilot/hooks/hooks.json` (our Agent Plugins manifest
+  makes Copilot read hooks only there). Playbook list on prompts and at session start, copy check
+  after edits. No read check: Copilot's transcript format is not verified.
+- Hooks and MCP for Grok CLI: Grok reads only `hooks/hooks.json` and `.mcp.json` (checked with
+  `grok plugin validate`), and Claude Code also loads `hooks/hooks.json`, so Grok gets its own copy
+  in `~/.conquistador/grok-plugin`. The install removes the old registration first (a second source
+  registers a second plugin). Copy check only: Grok drops prompt-hook output.
+- `conquistador hooks on|off|status`, also `/conquistador hooks …` in the agent.
+- Qoder, Rovo Dev (shares Pi's `~/.agents/skills` copy), Trae, and Trae CN as skill agents: 16 agents.
+- The agents screen lists found agents, then one "Add an agent not found" row.
+- Gemini CLI hooks are deferred: Gemini is not installed here to test, and Google replaced it with
+  Antigravity CLI for unpaid and Google One users.
+- Verified 2026-10-10 (macOS, Node 26.9.0): `node tools/dev.mjs test` 939 (415 tooling, 294
+  runtime, 167 catalog, 63 evals); `CI=true node tools/e2e/installer.mjs` 45/45 (new T20); build
+  and `runtime/lib` diff clean. Not run locally: package-install E2E (CI runs it). Not verified in a
+  live Copilot or Grok session: the hook formats follow their docs, the Copilot changelog, and
+  `grok plugin validate`.
+
 ## Merged, awaiting npm release
 
 ### Full-screen installer; the terminal never opens an agent
