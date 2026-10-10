@@ -158,7 +158,8 @@ export async function runAdd(args) {
   const { results, staged, error } = installTargets(chosen, { scope: 'global', root: projectRoot(), log });
   if (!staged) { console.error(`${error}\nNothing installed. Your agents are unchanged.`); return 1; }
   const failed = report(results);
-  console.log(`\nNext: type ${bold('/conquistador')} in your agent.`);
+  // Only some agents have a /conquistador slash command; the others start from plain words.
+  console.log(`\nNext, start a task in your agent:\n${chosen.map(agent => `  ${agent.label}: type ${agent.slash ? bold(agent.slash.trim()) : '"Use Conquistador: <your task>"'}`).join('\n')}`);
   return failed ? 1 : 0;
 }
 

@@ -246,3 +246,16 @@ test('status reconciles host registration instead of treating a receipt as readi
   assert.equal(codex.installed, false); assert.equal(codex.payloadHealthy, false);
   assert.equal(codex.activation, 'unverified'); assert.equal(codex.hookTrust, 'unverified');
 });
+
+test('add names the start instruction of each agent it installed', async t => {
+  t.mock.method(console, 'log');
+  const printed = () => console.log.mock.calls.map(call => call.arguments.join(' ')).join('\n').replace(/\x1b\[[0-9;]*m/g, '');
+  fixture(t);
+  assert.equal(await runAdd(['codex', '--yes']), 0);
+  assert.match(printed(), /Codex: type "Use Conquistador: <your task>"/);
+  assert.doesNotMatch(printed(), /type \/conquistador/, 'Codex has no /conquistador slash command');
+  console.log.mock.resetCalls();
+  assert.equal(await runAdd(['--all', '--yes']), 0);
+  assert.match(printed(), /Claude Code: type \/conquistador$/m);
+  assert.match(printed(), /Codex: type "Use Conquistador: <your task>"/);
+});
