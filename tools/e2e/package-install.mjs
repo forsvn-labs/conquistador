@@ -283,7 +283,7 @@ const npxCache = join(work, 'npx-cache');
 result = run('npx', ['--yes', '--cache', npxCache, '--package', tarball, '--', 'conquistador', 'add', '--all', '--yes'], { env: b.env });
 seen = observe(b, agents);
 check('B1', `npx from the tarball installs every agent (${Math.round(result.ms / 1000)} s)`, result.status === 0 && all(seen, true) && missing(b.plugin).length === 0, JSON.stringify(seen));
-check('B1', 'after npx, the next step is /conquistador in the agent, not a missing command', /type \/conquistador in your agent/.test(result.output) && !/Start a task: conquistador/.test(result.output), result.output.trim().split('\n').slice(-2).join(' | '));
+check('B1', 'after npx, each agent gets its own start instruction, not a missing command', /Claude Code: type \/conquistador$/m.test(result.output) && /Codex: type "Use Conquistador: <your task>"/.test(result.output) && !/Start a task: conquistador/.test(result.output), result.output.trim().split('\n').slice(-2).join(' | '));
 check('I12', 'no agent setting points into the npx cache', textBelow(b.home, npxCache) === null, textBelow(b.home, npxCache) ?? '');
 rmSync(npxCache, { recursive: true, force: true });
 seen = observe(b, agents);
