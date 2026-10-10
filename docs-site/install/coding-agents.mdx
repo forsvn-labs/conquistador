@@ -17,7 +17,7 @@ The installer shows the agents it found, already chosen. Keep that set or change
 | Agents | What they get |
 |---|---|
 | Claude Code, Codex, Cursor, GitHub Copilot CLI, Grok CLI | The **plugin** in a global install: the `conquistador` skill, the hooks, and the local MCP server. |
-| Gemini CLI, OpenCode, Pi, Hermes Agent, Antigravity CLI, Kiro CLI, Mistral Vibe | The **skill folder** only. These agents have no plugin manager, so there are no hooks and no MCP server. |
+| Gemini CLI, OpenCode, Pi, Hermes Agent, Antigravity CLI, Kiro CLI, Mistral Vibe, Qoder, Rovo Dev, Trae, Trae CN | The **skill folder** only. These agents have no plugin manager, so there are no hooks and no MCP server. |
 | Every agent, in a project install | The **skill folder** only, in the project. |
 
 The plugin contains:
@@ -51,10 +51,14 @@ Folders come from the documentation of each agent (checked 2026-10-03). Agents t
 | Antigravity CLI | `antigravity` | `~/.gemini/antigravity-cli/skills/conquistador` | `.agents/skills/conquistador` | `/conquistador` |
 | Kiro CLI | `kiro` | `~/.kiro/skills/conquistador` | `.kiro/skills/conquistador` | "Use Conquistador: …" |
 | Mistral Vibe | `vibe` | `~/.vibe/skills/conquistador` | `.agents/skills/conquistador` | "Use Conquistador: …" |
+| Qoder | `qoder` | `~/.qoder/skills/conquistador` | `.qoder/skills/conquistador` | "Use Conquistador: …" |
+| Rovo Dev | `rovodev` | `~/.agents/skills/conquistador` (shared with Pi) | `.rovodev/skills/conquistador` | "Use Conquistador: …" |
+| Trae | `trae` | `~/.trae/skills/conquistador` | `.trae/skills/conquistador` | "Use Conquistador: …" |
+| Trae CN | `trae-cn` | `~/.trae-cn/skills/conquistador` | `.trae/skills/conquistador` | "Use Conquistador: …" |
 
 `claude-code` is also accepted for Claude Code.
 
-Sources: [Claude Code](https://code.claude.com/docs/en/skills), [Codex](https://learn.chatgpt.com/docs/build-skills), [Cursor](https://cursor.com/docs/context/skills), [GitHub Copilot](https://docs.github.com/en/copilot/how-tos/use-copilot-agents/coding-agent/create-skills), [Grok](https://docs.x.ai/build/features/skills-plugins-marketplaces), [Gemini CLI](https://geminicli.com/docs/cli/skills/), [OpenCode](https://opencode.ai/docs/skills/), [Pi](https://github.com/badlogic/pi-mono/blob/main/packages/coding-agent/docs/skills.md), [Hermes Agent](https://hermes-agent.nousresearch.com/docs/user-guide/features/skills), [Antigravity](https://antigravity.google/docs/skills), [Kiro](https://kiro.dev/docs/skills/), [Mistral Vibe](https://docs.mistral.ai/vibe/code/cli/skills).
+Sources: [Claude Code](https://code.claude.com/docs/en/skills), [Codex](https://learn.chatgpt.com/docs/build-skills), [Cursor](https://cursor.com/docs/context/skills), [GitHub Copilot](https://docs.github.com/en/copilot/how-tos/use-copilot-agents/coding-agent/create-skills), [Grok](https://docs.x.ai/build/features/skills-plugins-marketplaces), [Gemini CLI](https://geminicli.com/docs/cli/skills/), [OpenCode](https://opencode.ai/docs/skills/), [Pi](https://github.com/badlogic/pi-mono/blob/main/packages/coding-agent/docs/skills.md), [Hermes Agent](https://hermes-agent.nousresearch.com/docs/user-guide/features/skills), [Antigravity](https://antigravity.google/docs/skills), [Kiro](https://kiro.dev/docs/skills/), [Mistral Vibe](https://docs.mistral.ai/vibe/code/cli/skills), [Qoder](https://docs.qoder.com/en/cli/Skills), [Rovo Dev](https://support.atlassian.com/rovo/docs/extend-rovo-dev-cli-with-agent-skills/). Trae publishes no skills reference we could find; its folders follow Trae's own `.trae` folder and other installers.
 
 ## Notes for each agent
 
@@ -79,12 +83,22 @@ npm install -g --ignore-scripts --install-links git+https://github.com/forsvn-la
 
 `--ignore-scripts` skips npm lifecycle scripts. `--install-links` copies the checkout out of the temporary storage of npm.
 
-## Turn off the hooks
+## Turn the hooks off or on
 
-Use one of these:
-
+- `conquistador hooks off`, or `/conquistador hooks off` in your agent. `conquistador hooks on`
+  turns them back on, and `conquistador hooks status` shows the state and what set it.
 - `--no-hooks` at install. This writes `{"hooks": false}` to `~/.conquistador/config.json`.
-- `CONQUISTADOR_HOOKS=off` in your environment.
-- `{"hooks": false}` in `~/.conquistador/config.json`.
+- `CONQUISTADOR_HOOKS=off` in your environment. It wins over the setting.
 
-Each one turns off the prompt, stop, and check hooks. The skill still lists the playbooks for each command, so the agent can find them without hooks.
+Each one turns off the prompt, stop, and check hooks, for every agent, from the next prompt.
+
+What each agent's hooks can do:
+
+| Agent | Playbook list on marketing prompts | Copy check after each edit | Read check before the answer ends |
+|---|---|---|---|
+| Claude Code, Codex | Yes | Yes | Yes |
+| Cursor | At session start | Yes | Yes |
+| GitHub Copilot CLI | Yes, and at session start | Yes | No |
+| Grok CLI | No: Grok drops prompt-hook output; it gets the `conquistador_brief` MCP tool | Yes | No |
+
+The read check is off where the agent's transcript format is not verified yet. The skill still lists the playbooks for each command, so the agent can find them without hooks.

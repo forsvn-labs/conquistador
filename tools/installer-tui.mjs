@@ -117,7 +117,7 @@ function optionRows(ctx, choices, options) {
   const plugins = AGENTS.some(agent => choices.agents.includes(agent.id) && agent.how !== 'skill');
   if (plugins && choices.scope === 'global' && options.hooks) {
     list.push({ id: 'hooks', label: 'Prompt hooks', values: [true, false], names: { true: 'On', false: 'Off' },
-      hint: () => 'Hooks give the agent the right playbooks for growth, marketing, and sales prompts. Turn them off later: CONQUISTADOR_HOOKS=off.' });
+      hint: () => 'Hooks give the agent the right playbooks for growth, marketing, and sales prompts, and check marketing copy after each edit (Claude Code, Codex, Cursor, Copilot, Grok). Turn them off later: /conquistador hooks off.' });
   }
   const skip = duplicateApps({ surfaces: ['agents'], scope: choices.scope, agents: choices.agents }, ctx);
   const apps = ctx.apps.filter(app => app.found && !skip.includes(app.id));
@@ -208,6 +208,8 @@ function App({ options, cwd, first, update, warnings, onExit, mode }) {
   const [choices, setChoices] = useState(null);
   const [toggles, setToggles] = useState({ 'mcp-apps': false, hosted: false, executor: false, bot: false });
   const [order, setOrder] = useState([]);
+  // The agents screen folds the agents not found into one row until someone opens it.
+  const [folded, setFolded] = useState(true);
   const [cursor, setCursor] = useState(0);
   const [offset, setOffset] = useState(0);
   const [shown, setShown] = useState({ agents: false, options: false });
@@ -248,6 +250,9 @@ function App({ options, cwd, first, update, warnings, onExit, mode }) {
   }, [screen]);
 
   const agentsOn = !options.surfaces || options.surfaces.includes('agents') || shown.agents;
+  const missing = order.filter(agent => !agent.found);
+  const foldable = folded && missing.length > 0 && missing.length < order.length && !missing.some(agent => choices?.agents.includes(agent.id));
+  const visible = foldable ? [...order.filter(agent => agent.found), { id: '__more', more: true, label: `Add an agent not found (${missing.length})` }] : order;
   const opts = useMemo(() => (ctx && choices ? optionRows(ctx, choices, options) : { list: [], notes: [] }), [ctx, choices]);
   const final = useMemo(() => (ctx && choices ? finalChoices(choices, toggles, agentsOn, ctx) : null), [ctx, choices, toggles, agentsOn]);
   const plan = useMemo(() => (final ? buildPlan(final, ctx) : null), [final]);
@@ -350,10 +355,11 @@ function App({ options, cwd, first, update, warnings, onExit, mode }) {
     if (ctrlC || input === 'q') { cancel(); return; }
     if (screen === 'agents') {
       if (key.escape) cancel();
-      else if (up) setCursor(value => (value + order.length - 1) % order.length);
-      else if (down) setCursor(value => (value + 1) % order.length);
+      else if (up) setCursor(value => (value + visible.length - 1) % visible.length);
+      else if (down) setCursor(value => (value + 1) % visible.length);
+      else if (visible[cursor]?.more && (input === ' ' || key.return)) setFolded(false);
       else if (input === ' ') {
-        const id = order[cursor].id;
+        const id = visible[cursor].id;
         setChoices(value => ({ ...value, agents: AGENTS.map(agent => agent.id).filter(item => (item === id ? !value.agents.includes(id) : value.agents.includes(item))) }));
       } else if (input === 'a') {
         const found = order.filter(agent => agent.found).map(agent => agent.id);
@@ -424,19 +430,20 @@ function App({ options, cwd, first, update, warnings, onExit, mode }) {
 
   if (screen === 'agents') {
     const notes = [...warnings, ...(ctx.found.length ? [] : ['No coding agent found on PATH or in your home folder. A skill-format agent still installs; or turn on an option on the next screen.'])].flatMap(text => rows(`! ${text}`, inner));
-    const detail = order[cursor];
-    const describe = detail.found
+    const detail = visible[Math.min(cursor, visible.length - 1)];
+    const describe = detail.more ? 'Press Enter to list the agents not found here. A skill-format agent installs now; the agent reads it once you install the agent.' : detail.found
       ? `Found${detail.foundAt ? ` at ${tilde(detail.foundAt)}` : ''}. ${detail.how === 'skill' ? 'Copies the Conquistador skill folder.' : 'Installs the plugin: the skill, prompt hooks, and the MCP server.'}`
       : detail.how === 'skill' ? 'Not found. The skill folder still installs; the agent reads it after you install the agent.' : `Not found. Install ${detail.label} first, or choose This project on the next screen.`;
     const hints = rows(describe, inner).slice(0, 2);
     const subtitle = 'Conquistador installs into each agent you choose. Nothing changes until you confirm.';
-    const list = windowed(order, cursor, room(notes.length + hints.length + 1, subtitle));
+    const list = windowed(visible, cursor, room(notes.length + hints.length + 1, subtitle));
     const labelWidth = Math.min(20, inner - 22);
     return frame(h(Card, { c, width, title: 'Which agents?', subtitle },
       ...notes.map((text, index) => h(Text, { key: `w${index}`, color: c.sticky }, text)),
       list.above ? h(Text, { key: 'above', dimColor: true }, `↑ ${list.above} more`) : null,
       ...list.shown.map((agent, index) => {
         const at = list.start + index, on = choices.agents.includes(agent.id), here = at === cursor;
+        if (agent.more) return h(Text, { key: agent.id, wrap: 'truncate-end' }, h(Text, { color: c.brand }, here ? '› ' : '  '), h(Text, { dimColor: !here }, `◇ ${agent.label}`));
         return h(Text, { key: agent.id, wrap: 'truncate-end' },
           h(Text, { color: c.brand }, here ? '› ' : '  '),
           h(Text, { color: on ? c.brand : undefined, dimColor: !on }, on ? '◉ ' : '○ '),

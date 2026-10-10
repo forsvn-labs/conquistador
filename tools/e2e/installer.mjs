@@ -33,6 +33,9 @@
 //       restores the normal screen and cursor, and closes the pending network request.
 //   L1 --yes never asks a line-fallback question, including TERM=dumb and an omitted scope.
 //   S1 Scroll reaches the final recovery line without exceeding its allocated row count.
+//   T20 The agents screen lists the agents it found, then one row for the agents not found. That row
+//       opens the full list; a not-found skill agent can still be chosen and reaches the review. The
+//       folded screen fits 24 rows. With no agent found, the full list shows at once (T5).
 import { spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { chmodSync, cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, symlinkSync, writeFileSync } from 'node:fs';
@@ -308,6 +311,39 @@ scenario('task-context', ['T14', 'T15'], async ({ expect, transcript }) => {
 });
 
 // --- T5, F1: no agent detected ------------------------------------------------------------------------
+scenario('folded-agents', ['T20'], async ({ expect }) => {
+  const f = fixture('folded-agents', { agents: ['claude', 'codex'] });
+  try {
+    const s = f.term([], { rows: 24 });
+    await s.waitFor(TITLE.agents);
+    await s.snap('agents-folded');
+    const folded = s.screen.text();
+    expect(has(folded, 'Claude Code') && has(folded, 'Codex'), 'the found agents are not listed (T20)');
+    expect(/Add an agent not found \(\d+\)/.test(folded), 'no row for the agents not found (T20)');
+    for (const label of ['Mistral Vibe', 'Qoder', 'Trae CN']) expect(!has(folded, label), `${label} shows before the list is opened (T20)`);
+    expect(folded.split('\n').length <= 24, 'the folded agents screen is taller than 24 rows (T20)');
+    await moveTo(s, 'Add an agent not found');
+    await s.press('enter');
+    await s.settle(200);
+    await s.snap('agents-open');
+    // The opened list scrolls in 24 rows: walk down until Qoder is on screen.
+    for (let step = 0; step < 20 && !has(s.screen.text(), 'Qoder'); step += 1) { await s.press('down'); await s.settle(80); }
+    await moveTo(s, 'Qoder');
+    await s.press('space'); await s.settle(120);
+    expect(/◉\s+Qoder/.test(s.screen.text()), 'Qoder could not be chosen after opening the list (T20)');
+    await s.press('enter');
+    await s.waitFor(TITLE.options); await s.press('enter');
+    await s.waitFor(TITLE.review); await s.snap('review');
+    for (let step = 0; step < 12 && !has(s.screen.text(), 'Qoder'); step += 1) { await s.press('down'); await s.settle(80); }
+    expect(has(s.screen.text(), 'Qoder'), `the review does not include Qoder (T20)\n${s.screen.text()}`);
+    await s.press('escape'); await s.settle(120);
+    await s.press('escape'); await s.settle(120);
+    await s.press('q');
+    const code = await s.exit();
+    expect(code === 130, `cancel exited ${code}`);
+  } finally { f.cleanup(); }
+});
+
 scenario('no-agent', ['T5', 'F1'], async ({ expect }) => {
   const f = fixture('no-agent', { agents: [] });
   try {

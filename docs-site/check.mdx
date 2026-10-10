@@ -108,8 +108,9 @@ folders such as `node_modules/`, `skills/`, `.claude/`, and `dist/`. It reports 
 in one session. It never blocks the edit and always exits 0. It reads
 `.conquistador/config.json` from the project root.
 
-Turn it off with `CONQUISTADOR_HOOKS=off`, or with `{"hooks": false}` in
-`~/.conquistador/config.json`. That also turns off the prompt and stop hooks.
+Turn it off with `conquistador hooks off` (in your agent: `/conquistador hooks off`), or with
+`CONQUISTADOR_HOOKS=off`. That also turns off the prompt and stop hooks. It runs in Claude Code,
+Codex, Cursor, GitHub Copilot CLI, and Grok CLI.
 
 ## Rules
 

@@ -39,8 +39,12 @@
       "sha256": "f0df2d2bae1e887b5763016853e567e297f1590ed5aca9699196309b87c4c3f4"
     },
     {
+      "path": "com.github.copilot/hooks/hooks.json",
+      "sha256": "98064c1001f68b1c2889d04d94e56bccb864910098129f8610caf5d27dd785e0"
+    },
+    {
       "path": "hooks/check-hook.mjs",
-      "sha256": "271c7ab2da0c628b0f55143c33bd61c548e10c14af7c9b31f6cb77d1b9860852"
+      "sha256": "e86503695a46597b31880e4d9502464401eee7753da06628c110b57a5b9aedd6"
     },
     {
       "path": "hooks/claude.json",
@@ -52,7 +56,7 @@
     },
     {
       "path": "hooks/conquistador-hook.mjs",
-      "sha256": "6de3847ec5848fad826e504f02401a9887bcab6e6a1765ef9ef76b855521f2d9"
+      "sha256": "4ec72d5852a4769b4f9af511aa6abbd46c8643bcf1a893b4020b342a0e8b8ae9"
     },
     {
       "path": "hooks/cursor.json",
@@ -80,7 +84,7 @@
     },
     {
       "path": "package.json",
-      "sha256": "f53d120429ce1daeceb9b5400099ff9858bb7a8d44648b299e9fd473dce3eb5a"
+      "sha256": "c38bf2ae661f90834c72cdc317b5e913b076ba6e9ba6e65e11ac00c77e9eb40d"
     },
     {
       "path": "plugin.json",
@@ -88,7 +92,7 @@
     },
     {
       "path": "README.md",
-      "sha256": "a0ca87bc6a35f6a5a8ed4be6b053f148257d7c4a689ce779f516311da53354a4"
+      "sha256": "aae9482c1c053a6abb63d0fa2e7045e599aa0b21ffe2a638ee0481dc236eb3d3"
     },
     {
       "path": "SKILL.md",
@@ -4756,7 +4760,7 @@
     },
     {
       "path": "skills/conquistador/SKILL.md",
-      "sha256": "8c77204bd108773e747884d815195f2ad4143aaa3c4c1508da24fed0b7cb9630"
+      "sha256": "1e9b3abcbdcf74edcb63f7039fd1b421198ecc0730e04aca4f42a57bfbb209fa"
     },
     {
       "path": "skills/conquistador/specialists/ads-agent.md",

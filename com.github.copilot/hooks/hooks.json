@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "hooks": {
+    "sessionStart": [
+      {
+        "type": "command",
+        "bash": "node \"$PLUGIN_ROOT/hooks/conquistador-hook.mjs\" copilot start",
+        "powershell": "node \"$env:PLUGIN_ROOT/hooks/conquistador-hook.mjs\" copilot start",
+        "timeoutSec": 10
+      }
+    ],
+    "userPromptSubmitted": [
+      {
+        "type": "command",
+        "bash": "node \"$PLUGIN_ROOT/hooks/conquistador-hook.mjs\" copilot prompt",
+        "powershell": "node \"$env:PLUGIN_ROOT/hooks/conquistador-hook.mjs\" copilot prompt",
+        "timeoutSec": 15
+      }
+    ],
+    "postToolUse": [
+      {
+        "type": "command",
+        "bash": "node \"$PLUGIN_ROOT/hooks/check-hook.mjs\" copilot edit",
+        "powershell": "node \"$env:PLUGIN_ROOT/hooks/check-hook.mjs\" copilot edit",
+        "timeoutSec": 10
+      }
+    ]
+  }
+}

@@ -31,6 +31,7 @@
     ".claude-plugin",
     ".codex-plugin",
     ".cursor-plugin",
+    "com.github.copilot",
     "plugin.json",
     "mcp.json",
     "mcp/server.mjs",

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // After the agent writes or edits a marketing file, run `conquistador check` on it and
-// return the findings to the agent. Claude Code and Codex: PostToolUse additional context.
-// Cursor: postToolUse `additional_context`.
+// return the findings to the agent. Claude Code, Codex, and Grok: PostToolUse additional context.
+// Cursor: postToolUse `additional_context`. GitHub Copilot CLI: postToolUse `additionalContext`.
 // The hook never blocks: every path exits 0. It is silent on code, docs, clean files, and
 // findings it already reported for the same file in this session.
 // Turn it off with CONQUISTADOR_HOOKS=off or {"hooks": false} in ~/.conquistador/config.json.
@@ -13,7 +13,7 @@ import { detectChannel, isMarketingFile } from '../tools/check/channels.mjs';
 import { extractDocument, scannableExtensions } from '../tools/check/extract.mjs';
 import { checkDocument, counted, globToRegExp, loadConfig } from '../tools/check/index.mjs';
 
-// Usage: check-hook.mjs <claude|codex|cursor> edit
+// Usage: check-hook.mjs <claude|codex|cursor|copilot|grok> edit
 const [client = 'claude'] = process.argv.slice(2);
 
 const maxFindings = 12;
@@ -48,9 +48,21 @@ function readInput() {
   });
 }
 
-// File paths from Claude Code Write/Edit/MultiEdit, Cursor Write, and Codex apply_patch.
+// Copilot sends its tool arguments as toolArgs, as a JSON string or an object.
+function toolArgs(input) {
+  const value = input.toolArgs;
+
+  if (value && String(value) === value) {
+    try { return JSON.parse(value); } catch { return {}; }
+  }
+
+  return value ?? {};
+}
+
+// File paths from Claude Code Write/Edit/MultiEdit, Cursor Write, Codex apply_patch, Copilot edit
+// and create, and Grok search_replace and write_file.
 function editedFiles(input, root) {
-  const tool = input.tool_input ?? input.toolInput ?? input.input ?? {};
+  const tool = input.tool_input ?? input.toolInput ?? input.input ?? toolArgs(input);
   const found = [];
   const direct = [tool.file_path, tool.path, tool.target_file, tool.filePath, input.file_path];
 
@@ -104,6 +116,8 @@ function report(file, findings, advisory) {
 
 function payload(text) {
   if (client === 'cursor') return { additional_context: text };
+
+  if (client === 'copilot') return { additionalContext: text };
 
   return { hookSpecificOutput: { hookEventName: 'PostToolUse', additionalContext: text } };
 }
