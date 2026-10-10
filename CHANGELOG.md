@@ -4,7 +4,28 @@
 versions. Verification establishes the stated local scope; native host behavior, useful model
 output, human acceptance and rights disposition require separate evidence.
 
-## 2026-10-08, full-screen installer merged (unreleased)
+## 2026-10-10, 0.5.0 public alpha
+
+Still a public alpha. Brings two merged installer changes to installed users:
+[#67](https://github.com/forsvn-labs/conquistador/pull/67) (the full-screen installer, below) and
+[#68](https://github.com/forsvn-labs/conquistador/pull/68) (installer reach, merged at `a482bd6`).
+
+- Hooks for GitHub Copilot CLI (`com.github.copilot/hooks/hooks.json`): the playbook list on
+  prompts and at session start, and the copy check after edits. No read check, because Copilot's
+  transcript format is not verified.
+- Hooks and MCP for Grok CLI, from its own plugin copy in `~/.conquistador/grok-plugin`. Copy
+  check only: Grok drops prompt-hook output, so it gets the playbooks through `conquistador_brief`.
+- `conquistador hooks on|off|status`, also `/conquistador hooks …` in the agent.
+- Qoder, Rovo Dev, Trae and Trae CN as skill agents: 16 agents in total.
+- The agents screen lists the agents found, then one "Add an agent not found" row.
+- Gemini CLI hooks are deferred: Gemini CLI was not available to test, and Google replaced it with
+  Antigravity CLI for unpaid and Google One users.
+- Verification of #68: `node tools/dev.mjs test` 939 tests (415 tooling, 294 runtime, 167 catalog,
+  63 evals) on macOS; installer E2E 45/45 (new T20); [product CI](https://github.com/forsvn-labs/conquistador/actions?query=branch%3Acli%2Finstaller-reach)
+  on Node 24 and 26 and package-install E2E on Linux and Windows pass at `d2104f6`. A live Copilot CLI
+  1.0.78 run fired the prompt and copy-check hooks. Grok is checked with `grok plugin validate` only.
+
+## 2026-10-08, full-screen installer merged (released in 0.5.0)
 
 Merged [#67](https://github.com/forsvn-labs/conquistador/pull/67) at `84b06b4`, from independently
 reviewed head `bf8de82`. This is a source integration, not an npm release. The released package remains 0.4.0.

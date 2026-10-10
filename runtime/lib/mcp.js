@@ -188,7 +188,7 @@ export async function runMcpStdio(options = {}) {
                 return;
             }
             initialized = true;
-            await send({ jsonrpc: "2.0", id, result: { protocolVersion: "2025-11-25", capabilities: { tools: {} }, serverInfo: { name: "conquistador", version: "0.4.0" } } });
+            await send({ jsonrpc: "2.0", id, result: { protocolVersion: "2025-11-25", capabilities: { tools: {} }, serverInfo: { name: "conquistador", version: "0.5.0" } } });
             return;
         }
         if (message.method === "ping") {

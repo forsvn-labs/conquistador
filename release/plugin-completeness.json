@@ -1,6 +1,6 @@
 {
   "schemaVersion": "conquistador.plugin-completeness/v1",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "files": [
     {
       "path": ".agents/plugins/marketplace.json",
@@ -8,15 +8,15 @@
     },
     {
       "path": ".claude-plugin/marketplace.json",
-      "sha256": "2c8be5236d030a2ec8cba0b436c69d3802755fb3388cdf2632d8844e7cc49716"
+      "sha256": "5d01830b0e7031d678221fd97a4c5f1bb7dcc8324757469380b06194ac2e922f"
     },
     {
       "path": ".claude-plugin/plugin.json",
-      "sha256": "866a3821220dd0a741e962e6325045c651528a0ba324c24aaba4ec7261b856bf"
+      "sha256": "db018671299f8a36748f26f2c834b399ed86cfba0213d3b932d73b7ddd370fb2"
     },
     {
       "path": ".codex-plugin/plugin.json",
-      "sha256": "373b10a84b4ba0047f16f5f7e21caad804f52fdb12054933f1437003613c1e44"
+      "sha256": "1604347f0b530660c2c82f9967752c13cbc9be347ce8ec58db9a070378747be7"
     },
     {
       "path": ".cursor-plugin/marketplace.json",
@@ -24,7 +24,7 @@
     },
     {
       "path": ".cursor-plugin/plugin.json",
-      "sha256": "7d88c12d27726ea35e2aab5f0545cfb2ffc3362df1c6ea3febbcc78effed4204"
+      "sha256": "3113d5558ae560c1f7ad7d18ab31428bfc4fe108f1c2a2885421d48baef03e4c"
     },
     {
       "path": "agents/conquistador.md",
@@ -84,11 +84,11 @@
     },
     {
       "path": "package.json",
-      "sha256": "c38bf2ae661f90834c72cdc317b5e913b076ba6e9ba6e65e11ac00c77e9eb40d"
+      "sha256": "24a79552c82746e737f099fe528c0669da6729f6b5d56bea7412f131a9fdb973"
     },
     {
       "path": "plugin.json",
-      "sha256": "348eab4d09de3dcb48163ff44492bc59b213bbdc7458f0c8cbc6ff51205c246f"
+      "sha256": "683ab8b529537252d6203eefff9acd1f292880922d55e4f2cf2a1b743f78184d"
     },
     {
       "path": "README.md",

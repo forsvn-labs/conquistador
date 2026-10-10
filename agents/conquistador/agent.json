@@ -5,7 +5,7 @@
   "role": "orchestrator",
   "displayName": "Conquistador",
   "productName": "conquistador",
-  "pluginVersion": "0.4.0",
+  "pluginVersion": "0.5.0",
   "canonicalSkill": "conquistador",
   "canonicalSkillRoot": "skills/conquistador",
   "installClass": "candidate-only",
