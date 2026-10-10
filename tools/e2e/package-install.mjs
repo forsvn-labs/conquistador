@@ -325,7 +325,7 @@ const MATRIX = [
   [['setup', '--help'], 0, /Usage/], [['project', '--help'], 0, /Conquistador/], [['--skills', '--help'], 0, /Usage/], [['--plugin', '--help'], 0, /Usage/],
   [['--mcp', '--help'], 0, /Usage/], [['--bot', '--help'], 0, /Usage/], [['--advanced', '--help'], 0, /Usage/], [['install', '--help'], 0, /Usage/],
   [['operator', '--help'], 0, /Usage/], [['status', '--help'], 0, /Usage/], [['route', '--prompt', 'write a launch email'], 1, /routing contract/],
-  [['hooks', '--help'], 1, /--project/], [['runtime', '--help'], 0, /Conquistador/], [['connections', '--help'], 0, /Executor/], [['integrations', '--help'], 0, /Usage/],
+  [['hooks', '--help'], 0, /hooks on\|off\|status/], [['runtime', '--help'], 0, /Conquistador/], [['connections', '--help'], 0, /Executor/], [['integrations', '--help'], 0, /Usage/],
   [['jobs', '--help'], 2, /repository checkout/], [['--providers=nope'], 2, /Unknown agent/], [['--scope=team'], 2, /Unknown scope/],
 ];
 const node22 = process.env.CONQUISTADOR_E2E_NODE22;

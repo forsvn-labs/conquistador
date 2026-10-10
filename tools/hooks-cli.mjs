@@ -36,6 +36,7 @@ function runSwitch(action) {
 }
 
 export async function runHooks(args) {
+  if (args[0] === '--help' || args[0] === '-h') { console.log(USAGE); return; }
   const projectIndex = args.indexOf('--project');
   if (projectIndex < 0) {
     const [action = 'status', ...extra] = args;
