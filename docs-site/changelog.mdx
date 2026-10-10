@@ -6,6 +6,13 @@ rss: true
 
 This page lists the changes that users see. The full record, with pull requests, commits, and verification, is [CHANGELOG.md](https://github.com/forsvn-labs/conquistador/blob/main/CHANGELOG.md) in the repository.
 
+<Update label="0.5.0" description="2026-10-10">
+  - **Full-screen installer.** `conquistador` opens a five-step terminal UI: Agents, Options, Review, Install, Done. A later run opens a home screen to add agents, update, check and repair, or remove. The terminal never opens an agent; the Done screen says what to type in each one. See [Install options](/install/overview).
+  - **More agents.** Qoder, Rovo Dev, Trae and Trae CN, for 16 in total. The agents screen lists the agents it found first, and folds the rest under one row.
+  - **Hooks in Copilot and Grok.** GitHub Copilot CLI gets the playbook list on marketing prompts and the copy check after edits. Grok CLI gets the copy check and the `conquistador_brief` MCP tool.
+  - **Hooks switch.** `conquistador hooks on`, `off` and `status`, or `/conquistador hooks off` in your agent.
+</Update>
+
 <Update label="0.4.0" description="2026-10-08">
   - **One installer.** The first run of `conquistador`, `conquistador add`, and every install flag use one flow. It asks where you want Conquistador: coding agents, MCP apps, Hosted MCP, Executor, or chat bots. It shows the plan and changes nothing until you confirm. See [Install options](/install/overview).
   - **Preflight.** The installer warns when an older copy of `conquistador` on PATH runs instead, and when npm has a newer version.

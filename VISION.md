@@ -119,7 +119,7 @@ learning, or background feedback upload is planned.
 
 ## Public alpha, judged by real tasks
 
-The repository and the npm package are public from 0.2.0; 0.4.0 is the current alpha.
+The repository and the npm package are public from 0.2.0; 0.5.0 is the current alpha.
 Source changes remain unshipped until their release is recorded. Judge the product through real tasks and
 corrections, not install counts. Each release, marketplace listing, and landing change still needs
 an explicit decision. Local package records do not grant release authority. See [ROADMAP.md](ROADMAP.md) and [PROGRESS.md](PROGRESS.md).

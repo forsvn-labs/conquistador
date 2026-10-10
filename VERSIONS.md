@@ -1,6 +1,6 @@
 # Versions
 
-Product, plugin, host, and portable-agent manifests identify `0.4.0`. The first public alpha
+Product, plugin, host, and portable-agent manifests identify `0.5.0`. The first public alpha
 was `0.2.0`. Each public release is tagged `vX.Y.Z` and published to npm as
 `@forsvn/conquistador` by the release workflow (see CONTRIBUTING.md). Install it with
 `npm install -g @forsvn/conquistador` or run it with `npx @forsvn/conquistador`.

@@ -91,7 +91,7 @@ human acceptance and release authority remain separate evidence classes.
 
 ## Release follow-through
 
-Public alpha began at `0.2.0`; `0.4.0` is the current release. The historical private
+Public alpha began at `0.2.0`; `0.5.0` is the current release. The historical private
 `0.1.0` tag is not the public-alpha milestone; see [version policy](VERSIONS.md).
 
 Before the next release, repeat first-use installation, update, removal, task, and correction

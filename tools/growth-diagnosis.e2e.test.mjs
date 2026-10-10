@@ -99,7 +99,7 @@ test('installed growth route, first task, hook context, and removal work togethe
   });
 
   checked(printedUpdateResult, 'printed other-project update');
-  assert.equal(JSON.parse(readFileSync(selectedReceiptPath, 'utf8')).productVersion, '0.4.0');
+  assert.equal(JSON.parse(readFileSync(selectedReceiptPath, 'utf8')).productVersion, '0.5.0');
   assert.equal(readFileSync(join(project, '.conquistador/.conquistador-install.json'), 'utf8'), callerReceipt);
   const otherDoctor = JSON.parse(checked(run(cli, project, 'operator', 'doctor', '--project', otherProject, '--json'), 'other-project doctor'));
   assert.equal(otherDoctor.path, join(otherProject, '.conquistador'));

@@ -31,8 +31,8 @@ field, or a check rule is missing from the site, when a feature newer than npm 0
   and reference. `docs/CHECK.md` only points here. `INSTALL.md` stays the full install reference,
   because it ships in the npm package for offline readers; keep the install pages and INSTALL.md
   in step.
-- Mark a feature that is on `main` but not in the current npm release with "from 0.4.0" (or the
-  next version). Remove the mark after the release.
+- Mark a feature that is on `main` but not in the current npm release with "from 0.6.0" (the
+  next version). Keep the mark after the release: it tells readers of older installs what they lack.
 - Write plain, short sentences: one idea per sentence, active voice, no hype.
 
 ## Set up hosting (one time, by the owner)
