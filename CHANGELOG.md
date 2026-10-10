@@ -10,6 +10,14 @@ Still a public alpha. Brings two merged installer changes to installed users:
 [#67](https://github.com/forsvn-labs/conquistador/pull/67) (the full-screen installer, below) and
 [#68](https://github.com/forsvn-labs/conquistador/pull/68) (installer reach, merged at `a482bd6`).
 
+- Released at [`v0.5.0`](https://github.com/forsvn-labs/conquistador/releases/tag/v0.5.0) from
+  merged `main` commit `bdf2c061c875e81d785683a6ca8e218f43aea048` through
+  [#69](https://github.com/forsvn-labs/conquistador/pull/69), packaged from a clean clone at the tag,
+  and published as [`@forsvn/conquistador@0.5.0`](https://www.npmjs.com/package/@forsvn/conquistador)
+  (`latest`) with provenance by [run 38029659885](https://github.com/forsvn-labs/conquistador/actions/runs/38029659885).
+  The registry tarball's SHA-256 `10aef544…666c86` matches the release asset. `npx
+  @forsvn/conquistador@0.5.0 hooks --help` from the registry prints the usage and exits 0.
+
 - Hooks for GitHub Copilot CLI (`com.github.copilot/hooks/hooks.json`): the playbook list on
   prompts and at session start, and the copy check after edits. No read check, because Copilot's
   transcript format is not verified.
