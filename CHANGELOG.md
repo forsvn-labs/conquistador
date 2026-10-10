@@ -8,6 +8,14 @@ output, human acceptance and rights disposition require separate evidence.
 
 Merged through [#70](https://github.com/forsvn-labs/conquistador/pull/70) at `901118b`.
 
+- Released at [`v0.5.1`](https://github.com/forsvn-labs/conquistador/releases/tag/v0.5.1) from
+  merged `main` commit `738b5c7d3991016f67d6493070ec6e41bf5423cb` through
+  [#71](https://github.com/forsvn-labs/conquistador/pull/71), and published as `latest` with
+  provenance by [run 38034428082](https://github.com/forsvn-labs/conquistador/actions/runs/38034428082).
+  The registry tarball's SHA-256 `f1f11690…b77db7` matches the release asset. `npx
+  @forsvn/conquistador@0.5.1 add codex --yes` against a stub Codex prints
+  `Codex: type "Use Conquistador: <your task>"`.
+
 - `conquistador add` ends with one start line per installed agent: `/conquistador` (or Pi's
   `/skill:conquistador`) where the agent has that slash command, else `"Use Conquistador: <your
   task>"`. 0.5.0 told every agent to type `/conquistador`, which Codex, Cursor and the plain-word

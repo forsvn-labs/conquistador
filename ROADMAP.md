@@ -20,9 +20,10 @@
    rule-based checker cannot see (run 4, 2026-10-07).
 1. Add "Open in Claude Code" (`claude-cli://open?q=`) and "Open in Cursor" deep-link buttons with a
    "Copy prompt" fallback to the landing page. Test both links in a browser first.
-2. Observe the plugin hooks in a real Codex session (after hook trust), Cursor, and Grok CLI.
-   Claude Code sessions and one Copilot CLI 1.0.78 prompt (2026-10-10) have been observed. Then
-   turn on the read check for Copilot and Grok once their transcript formats are verified.
+2. Observe the plugin hooks in a real Codex session (after hook trust) and Cursor. Claude Code
+   sessions, one Copilot CLI 1.0.78 prompt and one Grok CLI 1.0.50 prompt (2026-10-10) have been
+   observed. Then turn on the read check for Copilot and Grok once their transcript formats are
+   verified.
 3. Repeat `node tools/e2e/knowledge-use.mjs` with more runs and more tasks after the plan limit
    resets, across all nine areas (`--set breadth`), and add a quality comparison (blind review
    of before and after answers), not only reads.
