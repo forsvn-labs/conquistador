@@ -3,7 +3,7 @@
   "id": "squad:advisor-worker",
   "displayName": "Advisor/worker squad",
   "productName": "conquistador",
-  "pluginVersion": "0.5.0",
+  "pluginVersion": "0.5.1",
   "installClass": "candidate-only",
   "publicListing": false,
   "cleanHostProof": false,

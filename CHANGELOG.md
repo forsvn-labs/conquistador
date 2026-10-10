@@ -4,6 +4,20 @@
 versions. Verification establishes the stated local scope; native host behavior, useful model
 output, human acceptance and rights disposition require separate evidence.
 
+## 2026-10-10, 0.5.1 patch
+
+Merged through [#70](https://github.com/forsvn-labs/conquistador/pull/70) at `901118b`.
+
+- `conquistador add` ends with one start line per installed agent: `/conquistador` (or Pi's
+  `/skill:conquistador`) where the agent has that slash command, else `"Use Conquistador: <your
+  task>"`. 0.5.0 told every agent to type `/conquistador`, which Codex, Cursor and the plain-word
+  agents do not have. The full-screen installer was already correct.
+- Live Grok check on 0.5.0 from npm (Grok CLI 1.0.50, throwaway `HOME`): the plugin, its hook and the
+  MCP tools loaded; after the agent wrote a launch email, the copy-check hook ran in 65 ms and
+  returned findings; after the fixes it ran clean.
+- Tests first: the new front-door check failed on the old line. `npm test` 940; product and package
+  CI pass on Linux and Windows.
+
 ## 2026-10-10, 0.5.0 public alpha
 
 Still a public alpha. Brings two merged installer changes to installed users:

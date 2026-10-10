@@ -159,7 +159,7 @@ for relative, content in [('.conquistador/SKILL.md', 'operator original'),
 module = Path(cli).resolve().parents[2] / 'tools/onboarding-recovery.mjs'
 plan = {'project': str(rollback), 'backup': str(rollback / '.conquistador-backup-failure'),
         'paths': [str(rollback / '.conquistador'), str(rollback / '.claude/skills/conquistador')],
-        'hosts': ['claude-code'], 'version': '0.5.0'}
+        'hosts': ['claude-code'], 'version': '0.5.1'}
 plan['identities'] = [{'path': path, 'dev': os.lstat(path).st_dev, 'ino': os.lstat(path).st_ino}
                       for path in plan['paths']]
 script = (f'import {{ preserveForReset }} from {json.dumps(module.as_uri())}; '
