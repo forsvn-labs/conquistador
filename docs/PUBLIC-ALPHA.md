@@ -1,9 +1,9 @@
 # Public-alpha acceptance checklist
 
-The current public alpha is **0.5.0**; `0.2.0` was the first public alpha. The repository
+The current public alpha is **0.5.1**; `0.2.0` was the first public alpha. The repository
 and npm package are public.
 Unshipped source changes are listed in [PROGRESS.md](../PROGRESS.md); they do not change what a
-registry installation of 0.5.0 does. See [shipped release records](../CHANGELOG.md).
+registry installation of 0.5.1 does. See [shipped release records](../CHANGELOG.md).
 
 Use exact release bytes and one real task in your actual host. A passing install, synthetic test,
 playbook citation, or local package record is not model-quality proof, human acceptance, or
@@ -15,7 +15,7 @@ not completed acceptance runs.
 1. Follow the [plugin installation](../INSTALL.md#plugin-for-coding-agents-recommended), unless
    you intentionally chose a different route. Record version, source commit if known, package
    digest if available, OS/architecture, Node version, host version, and exact command
-2. For a scoped installation of 0.5.0, preview `conquistador add AGENT --dry-run`, then
+2. For a scoped installation of 0.5.1, preview `conquistador add AGENT --dry-run`, then
    run `conquistador add AGENT --yes`. If you use the bare interactive launcher instead, record
    which detected agents you kept and the scope you chose
 3. Record the shared plugin path, selected host changes, hook/MCP trust requirements, and matching

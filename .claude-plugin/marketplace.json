@@ -8,7 +8,7 @@
     {
       "name": "conquistador",
       "description": "Growth, GTM, launch, marketing, and sales playbooks for your agent: 1 skill, 63 commands, a playbook MCP server, and hooks that make the agent read them.",
-      "version": "0.5.0",
+      "version": "0.5.1",
       "author": {
         "name": "FORSVN",
         "url": "https://forsvn.com"
@@ -19,7 +19,7 @@
     }
   ],
   "metadata": {
-    "version": "0.5.0",
+    "version": "0.5.1",
     "description": "Conquistador growth, GTM, and marketing playbooks."
   }
 }

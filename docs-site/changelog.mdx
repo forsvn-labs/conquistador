@@ -6,6 +6,10 @@ rss: true
 
 This page lists the changes that users see. The full record, with pull requests, commits, and verification, is [CHANGELOG.md](https://github.com/forsvn-labs/conquistador/blob/main/CHANGELOG.md) in the repository.
 
+<Update label="0.5.1" description="2026-10-10">
+  - `conquistador add` now tells each agent how to start: `/conquistador` in Claude Code, `/skill:conquistador` in Pi, and "Use Conquistador: your task" in agents without that slash command, such as Codex and Cursor.
+</Update>
+
 <Update label="0.5.0" description="2026-10-10">
   - **Full-screen installer.** `conquistador` opens a five-step terminal UI: Agents, Options, Review, Install, Done. A later run opens a home screen to add agents, update, check and repair, or remove. The terminal never opens an agent; the Done screen says what to type in each one. See [Install options](/install/overview).
   - **More agents.** Qoder, Rovo Dev, Trae and Trae CN, for 16 in total. The agents screen lists the agents it found first, and folds the rest under one row.

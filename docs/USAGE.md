@@ -7,7 +7,7 @@ without a repository or connections to analytics, CRM, email, or advertising acc
 
 ## Start in your selected agent
 
-The current public npm release is **0.5.0**. Its first run opens one installer: it shows what it
+The current public npm release is **0.5.1**. Its first run opens one installer: it shows what it
 found, asks where you want Conquistador (coding agents, MCP apps, Hosted MCP, Executor, or chat
 bots), shows the plan, and changes nothing until you confirm. To install without the launcher, run `conquistador add AGENT --dry-run`, then
 `conquistador add AGENT --yes`, and open that host yourself. See the
