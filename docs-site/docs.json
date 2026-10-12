@@ -12,7 +12,7 @@
   "logo": {
     "light": "/logo/light.svg",
     "dark": "/logo/dark.svg",
-    "href": "https://conquistador.forsvn.com"
+    "href": "https://conquistador.app"
   },
   "navbar": {
     "links": [
@@ -54,7 +54,7 @@
   "footer": {
     "socials": {
       "github": "https://github.com/forsvn-labs/conquistador",
-      "website": "https://conquistador.forsvn.com"
+      "website": "https://conquistador.app"
     }
   }
 }

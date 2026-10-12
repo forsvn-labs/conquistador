@@ -7,8 +7,8 @@
 2. List the plugin in the agent marketplaces, then check each listing installs 0.4.x.
 3. Test the interactive installer on Windows (a pseudo-terminal harness), and Linux and Windows
    on ARM. `tools/e2e/installer.mjs` needs a Windows pseudo-terminal bridge first.
-4. Optional: add `conquistador.forsvn.com` as the Mintlify custom domain with base path `/docs`, so the
-   Mintlify dashboard and canonical links name it. The landing rewrite serves `/docs` without it.
+4. Optional: add `conquistador.app` as the Mintlify custom domain with base path `/docs`, so the
+   Mintlify dashboard and canonical links name it (today they say `forsvn.mintlify.dev`). The landing rewrite serves `/docs` without it.
 5. Open each MCP app (Claude Desktop, VS Code, Windsurf, Zed, Cursor) after the installer writes
    its entry, and check that the app lists the Conquistador tools. Only the config file and an MCP
    handshake are checked now.

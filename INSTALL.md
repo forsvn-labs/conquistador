@@ -1,6 +1,6 @@
 # Install Conquistador
 
-The docs site has this guide with more detail: <https://conquistador.forsvn.com/docs/install/overview>.
+The docs site has this guide with more detail: <https://conquistador.app/docs/install/overview>.
 This file is the full install reference that ships in the npm package.
 
 ## Before you start

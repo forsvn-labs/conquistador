@@ -6,8 +6,8 @@ plays that chain them, and a rule-based checker for marketing copy.
 > **Quick start:** In your project folder, run `npx @forsvn/conquistador`. Then type
 > `/conquistador init` in your agent.
 >
-> **Documentation:** [INSTALL.md](INSTALL.md) and [docs-site/](docs-site/). The site at
-> <https://conquistador.forsvn.com/docs> is not live yet.
+> **Documentation:** <https://conquistador.app/docs>, [INSTALL.md](INSTALL.md) and
+> [docs-site/](docs-site/).
 
 ## Why Conquistador
 
@@ -136,7 +136,7 @@ Without a terminal and without `-y`, the installer prints the plan and exits wit
 
 Supported agents: Claude Code, Codex, Cursor, GitHub Copilot CLI, Grok CLI, Gemini CLI, OpenCode,
 Pi, Hermes Agent, Antigravity CLI, Kiro CLI, Mistral Vibe, Qoder, Rovo Dev, Trae, and Trae CN.
-[Coding agents](https://conquistador.forsvn.com/docs/install/coding-agents) lists the folder each
+[Coding agents](https://conquistador.app/docs/install/coding-agents) lists the folder each
 one uses.
 
 To keep the `conquistador` command, install it globally:
@@ -204,9 +204,9 @@ what each agent gets.
 
 ## More information
 
-- [Documentation](https://conquistador.forsvn.com/docs): install options, use, copy check,
+- [Documentation](https://conquistador.app/docs): install options, use, copy check,
   deployed agents, troubleshooting, and reference. Source: [`docs-site/`](docs-site/)
-- [Install, update, and remove](https://conquistador.forsvn.com/docs/install/overview)
+- [Install, update, and remove](https://conquistador.app/docs/install/overview)
 - [Old skill names and their commands](MIGRATION.md)
 - [What shipped](CHANGELOG.md)
 
