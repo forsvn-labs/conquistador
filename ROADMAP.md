@@ -1,5 +1,28 @@
 # Product roadmap
 
+## High priority: social copy reads as AI slop
+
+Found on 2026-10-13 during a critique of the launch tweet. The `social` method rewrote Hung's draft
+into copy with a colon label ("Conquistador: a free…"), negative parallelism ("a real playbook, not
+vibes"), and a false range ("from positioning to launch posts"). It scored that copy "done with
+concerns", and `conquistador check --channel x` passed it. The check also passed a deliberately weak
+post. The session ran a stale global install (product 0.0.13, installed 2026-09-25), but the gaps
+below are also in 0.5.1.
+
+Write the failing evals first: Hung's original tweet and the three bad drafts as fixtures. The bad
+drafts must fail. The original must pass or get only minimal edits.
+
+1. Add `references/ai-patterns.md` and `references/human-writing-stylebook.md` to the core reads of
+   `commands/social`, and make the copywriter scan its own draft before handoff. Now they are reached
+   only through the optional `editorial-polish` pass.
+2. Make a banned pattern in the post body a hard failure in the `social` rubric and critic. The five
+   dimensions do not check AI tells now.
+3. Add checker rules for "X, not Y" negative parallelism, colon labels in short copy, and false
+   "from X to Y" ranges. Only "Not just X, it's Y" is caught now.
+4. Add an edit mode: when the user supplies a draft, keep the user's wording and change only what
+   fails a check.
+5. (Separate PR) Make `doctor` warn when the installed skill is older than the npm release.
+
 ## Public alpha follow-up
 
 1. Run the five live Executor cases (first run and connect) that 0.3.0 shipped without. They need
