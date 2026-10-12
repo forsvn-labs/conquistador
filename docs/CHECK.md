@@ -1,6 +1,6 @@
 # conquistador check
 
-The rule catalog moved to the docs site: <https://conquistador.forsvn.com/docs/check>.
+The rule catalog moved to the docs site: <https://conquistador.app/docs/check>.
 Its source is in this repository at [`docs-site/check.mdx`](../docs-site/check.mdx). It lists every
 rule with its severity, channels, fix, and source, and explains channels, file formats, waivers,
 and the edit hook.

@@ -64,7 +64,7 @@
     },
     {
       "path": "hooks/README.md",
-      "sha256": "022fb91b81b95b55edefd97cf602809c51f6ea2ce986ecc3538332a5bad3b4ba"
+      "sha256": "fc922afed62f32ba360e9b7a1bf982e905b52bcc2ca713938256471a7c6ea248"
     },
     {
       "path": "LICENSE",
@@ -92,7 +92,7 @@
     },
     {
       "path": "README.md",
-      "sha256": "aae9482c1c053a6abb63d0fa2e7045e599aa0b21ffe2a638ee0481dc236eb3d3"
+      "sha256": "25031e8cf95702d7bc1f5432bf7777bb42184b6f267fb3894efc2add2c85f350"
     },
     {
       "path": "SKILL.md",
@@ -1084,7 +1084,7 @@
     },
     {
       "path": "skills/conquistador/commands/check/COMMAND.md",
-      "sha256": "551764fe27002c4d765ed52d46063f9c95fc4ee5581c50d050cb0a076c499613"
+      "sha256": "878b8c1546812dfdd1db8e07302893670319a3cfe30c47c53b8e9352b8f8d881"
     },
     {
       "path": "skills/conquistador/commands/connect/COMMAND.md",

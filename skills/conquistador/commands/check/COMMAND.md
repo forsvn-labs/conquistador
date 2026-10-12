@@ -9,7 +9,7 @@ metadata:
 
 `conquistador check` runs fixed rules over marketing text. It uses no model and no key, and
 it gives the same result every time. List the rules with `conquistador check --rules`. The full
-catalog with sources is at https://conquistador.forsvn.com/docs/check.
+catalog with sources is at https://conquistador.app/docs/check.
 
 ## When to run it
 

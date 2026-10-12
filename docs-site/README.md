@@ -1,6 +1,6 @@
 # Conquistador docs site
 
-This folder is the Mintlify site for <https://conquistador.forsvn.com/docs>. `docs.json` is the
+This folder is the Mintlify site for <https://conquistador.app/docs>. `docs.json` is the
 config and the navigation. Each `.mdx` file is one page. This folder is not in the npm package.
 
 ## Preview and check
@@ -52,28 +52,13 @@ field, or a check rule is missing from the site, when a feature newer than npm 0
 ### 2. Serve it at `/docs` on the landing site
 
 1. In the dashboard, open **Settings > Custom domain**. Turn on **Host at**, enter
-   `conquistador.forsvn.com`, and enter `docs` as the base path. Click **Add domain**. Do not point
-   DNS at Mintlify: the landing site on Vercel keeps the domain.
-2. In the landing repository (`conquistador-landing`), add these rewrites to `vercel.json`.
-   Replace `SUBDOMAIN`:
-
-   ```json
-   "rewrites": [
-     { "source": "/_mintlify/:path*", "destination": "https://SUBDOMAIN.mintlify.site/_mintlify/:path*" },
-     { "source": "/api/request", "destination": "https://SUBDOMAIN.mintlify.site/_mintlify/api/request" },
-     { "source": "/docs", "destination": "https://SUBDOMAIN.mintlify.site/docs" },
-     { "source": "/docs/:match*", "destination": "https://SUBDOMAIN.mintlify.site/docs/:match*" },
-     { "source": "/mintlify-assets/:path+", "destination": "https://SUBDOMAIN.mintlify.site/mintlify-assets/:path+" }
-   ]
-   ```
-
-3. In the same `vercel.json`, stop the landing security headers from applying to the docs paths.
-   The landing sends `img-src 'self' data:`, `connect-src 'self'`, and `frame-src 'none'` on
-   `/(.*)`. These block Mintlify images, search, and the assistant. Change that `source` to
-   exclude the docs paths, for example
-   `"/((?!docs|_mintlify|mintlify-assets|api/request).*)"`. Mintlify sends its own CSP for its
-   pages.
-4. Deploy the landing. Open <https://conquistador.forsvn.com/docs>, check that images, search,
+   `conquistador.app`, and enter `docs` as the base path. Click **Add domain**. Do not point
+   DNS at Mintlify: the landing Worker on Cloudflare keeps the domain.
+2. The landing repository (`conquistador-landing`) already serves the docs: its Worker
+   (`worker/index.ts`) proxies `/docs`, `/docs/*`, `/_mintlify/*`, `/mintlify-assets/*` and
+   `/api/request` to `https://forsvn.mintlify.site`, and the landing CSP does not apply to those paths
+   (Mintlify sends its own). Change the origin there only if the Mintlify subdomain changes.
+3. Deploy the landing if you changed it. Open <https://conquistador.app/docs>, check that images, search,
    and the navigation work, and check the browser console for CSP errors.
 
 Source: Mintlify, [Deploy at a subpath with Vercel](https://www.mintlify.com/docs/deploy/vercel)
@@ -82,8 +67,8 @@ and [CSP configuration](https://www.mintlify.com/docs/deploy/csp-configuration),
 
 ### 3. What you get on Starter
 
-- `https://conquistador.forsvn.com/docs/llms.txt` and `/docs/llms-full.txt`, generated.
-- A search MCP server for the docs at `https://conquistador.forsvn.com/docs/mcp`.
+- `https://conquistador.app/docs/llms.txt` and `/docs/llms-full.txt`, generated.
+- A search MCP server for the docs at `https://conquistador.app/docs/mcp`.
 - The "Copy page" menu with ChatGPT, Claude, Cursor, VS Code, and MCP options (`contextual` in
   `docs.json`).
 

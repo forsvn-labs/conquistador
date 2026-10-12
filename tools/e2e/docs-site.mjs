@@ -23,7 +23,7 @@ if (args.includes('--live') && (!live || live.startsWith('--'))) {
   process.stderr.write('--live needs the URL of the running preview, for example --live http://localhost:3000\n');
   process.exit(1);
 }
-const SITE_URL = 'https://conquistador.forsvn.com/docs';
+const SITE_URL = 'https://conquistador.app/docs';
 
 const results = [];
 function record(name, pass, detail = '') {
