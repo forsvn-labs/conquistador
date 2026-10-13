@@ -137,6 +137,21 @@ integrity hashes match across the acceptance run and saved Bun candidate. Its SH
 Node 22.18 acceptance remains explicitly not run. The following documentation commit records
 these results without changing the package files.
 
+## Context alignment
+
+The branch is rebased on PR #76's merged record migration. ROADMAP owns the full live handoff,
+STRUCTURE maps the source and working commands, and DRIVE uses the approved neutral project key.
+The retired root files are absent. Active readers point to current records; historical changelog
+links point to a dated Git source without changing shipped facts. Six context checks pass. Task
+evidence is in the current registered project verification folder. Production code is unchanged
+by this rebase; the inherited E2E fixture uses ROADMAP as its project context.
+
+The exact package at `ba7cd9e` passes 50/50 applicable checks, including 21 native terminal
+checks. A real Bun global installation of the same bytes passes 7/7. Its SHA-256 is
+`cb7ff9732826a74d899976ada37d39f6aaa253088eaea7deb95647e15da49525`.
+The Node 22.18 case is explicitly not run. The next documentation commit records this acceptance
+without changing the package files.
+
 ## Limits and release
 
 The source is under review. npm `latest` remains 0.5.1. Native Windows interactive installation,

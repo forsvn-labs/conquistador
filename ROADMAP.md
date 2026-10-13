@@ -35,9 +35,12 @@ Verified locally on macOS arm64, Node 26.9.0:
 - Iris captures cover the picker, manager, MCP multi-selection, and 60×24 layout.
 - Copy-check E2E: 44/44 pass. Social-style E2E: 11/11 pass. Original tweet passes unchanged.
 - New installer modules pass their configured lint checks.
-- Exact-package installation at `d5b04bd` passes 50/50 applicable checks, including 21 native
+- Exact-package installation at `ba7cd9e` passes 50/50 applicable checks, including 21 native
   terminal checks. The Node 22.18 run is explicitly not run. A real Bun global install of the
-  same MCP-flow candidate passes 7/7 checks. The package integrity hashes match.
+  same context-aligned candidate passes 7/7 checks. The package integrity hashes match.
+- Project context: 6/6 checks pass. The live handoff is here; STRUCTURE maps source and commands,
+  and DRIVE resolves approved materials. Root INDEX and PROGRESS are retired. Historical links
+  point to dated Git records. This branch includes the context migration from PR #76.
 - Node 24/26 product CI, Linux/Windows package CI, and optional integration checks pass at `2c89d3e`.
 - Live docs canonical and `og:url` both point to `https://conquistador.app/docs`.
 
