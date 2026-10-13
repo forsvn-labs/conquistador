@@ -152,6 +152,21 @@ checks. A real Bun global installation of the same bytes passes 7/7. Its SHA-256
 The Node 22.18 case is explicitly not run. The next documentation commit records this acceptance
 without changing the package files.
 
+## Review fixes before merge
+
+Five verified review findings are corrected. Each candidate range gets its own exception and
+bounded prefix scan. An unverified CLI install records no new installation and preserves the
+previous CLI record. Copying the dry-run install command preserves npm or Bun. Failed or unreadable
+Executor version detection permits no legacy source operation; successful detection reads both
+output streams. The MCP client usage text now says that clients connect to the local server.
+
+The new regression run first passed 2/9 installer cases and 12/15 social cases. The initial
+first-use assertion used a non-terminal call, which prints help; it now exercises a real
+pseudo-terminal. The full 64-scenario terminal suite, 940 product checks, 44 copy checks, and
+15 social checks pass. Configured lint has no findings on changed JavaScript lines. Reports and
+terminal transcripts are kept in the project's approved verification folder. Negative Executor
+fixtures prove the guard, not live v2 connectivity. npm release and native v2 migration remain open.
+
 ## Limits and release
 
 The source is under review. npm `latest` remains 0.5.1. Native Windows interactive installation,

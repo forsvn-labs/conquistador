@@ -34,7 +34,15 @@ export const usesExecutor2 = version => Number.parseInt(version, 10) >= 2;
 
 export const executor2Handoff = 'Executor 2 configures apps and clients through MCP. Automated Conquistador source setup for Executor 2 is not available yet. Follow the Connect flow in Executor: https://executor.sh/docs/mcp';
 
-const executorVersion = run => /(\d+\.\d+\.\d+)/.exec(run(executorBinary() ?? 'executor', ['--version'], { timeout: 8_000 }).stdout)?.[1] ?? null;
+export const executorHandoff = version => !version
+  ? 'Could not verify the Executor version. Source changes are paused. Check executor --version, then retry.'
+  : usesExecutor2(version) ? executor2Handoff : null;
+
+function executorVersion(run) {
+  const result = run(executorBinary() ?? 'executor', ['--version'], { timeout: 8_000 });
+
+  return result.status === 0 ? /(\d+\.\d+\.\d+)/.exec(`${result.stdout}\n${result.stderr}`)?.[1] ?? null : null;
+}
 
 // Read one Executor answer: a paused execution, or the {"ok": ...} JSON envelope.
 export function executorOutcome(text) {
@@ -55,7 +63,7 @@ export function executorStatus({ run = runCommand } = {}) {
   if (!bin) return { installed: false, running: false, version: null };
   const version = executorVersion(run);
 
-  if (usesExecutor2(version)) return { installed: true, running: null, version, app: bin.includes('Executor.app') };
+  if (executorHandoff(version)) return { installed: true, running: null, version, app: bin.includes('Executor.app') };
   const status = run(bin, ['daemon', 'status'], { timeout: 8_000 });
   const text = `${status.stdout}\n${status.stderr}`;
   return { installed: true, version, running: !/not running/i.test(text) && /reachable|running/i.test(text), app: bin.includes('Executor.app') };
@@ -87,7 +95,9 @@ export function manualSteps(name, server) {
 
 // Returns { ok, status: added | updated | unchanged | manual, error? }.
 export function registerSource(name, server, { run = runCommand, start = false } = {}) {
-  if (usesExecutor2(executorVersion(run))) return { ok: false, status: 'manual', error: executor2Handoff };
+  const handoff = executorHandoff(executorVersion(run));
+
+  if (handoff) return { ok: false, status: 'manual', error: handoff };
   if (start) run(executorBinary() ?? 'executor', ['daemon', 'run'], { timeout: 60_000 });
   const slug = slugFor(name);
   const existing = call('mcp.getServer', { slug }, run);
@@ -111,7 +121,9 @@ export function registerSource(name, server, { run = runCommand, start = false }
 export function removeSource(slug, { run = runCommand } = {}) {
   if (!executorBinary()) return { ok: false, error: `Executor is not installed here. Remove the "${slug}" integration in Executor by hand.` };
 
-  if (usesExecutor2(executorVersion(run))) return { ok: false, error: `${executor2Handoff} The tracked source "${slug}" is kept until removal is verified.` };
+  const handoff = executorHandoff(executorVersion(run));
+
+  if (handoff) return { ok: false, error: `${handoff} The tracked source "${slug}" is kept until removal is verified.` };
   const removed = call('coreTools.integrations.remove', { slug }, run);
   if (removed.error?.code === 'tool_not_found') return { ok: false, error: `This Executor version cannot remove a source from the command line. Remove "${slug}" in the Executor app: executor web` };
   return removed.ok ? { ok: true, removed: removed.data?.removed !== false } : { ok: false, error: removed.error?.message ?? 'Executor did not remove the source' };
@@ -120,7 +132,9 @@ export function removeSource(slug, { run = runCommand } = {}) {
 export function checkSource(slug, { run = runCommand } = {}) {
   if (!executorBinary()) return { ok: false, detail: 'Executor is not installed here' };
 
-  if (usesExecutor2(executorVersion(run))) return { ok: false, detail: executor2Handoff };
+  const handoff = executorHandoff(executorVersion(run));
+
+  if (handoff) return { ok: false, detail: handoff };
   const found = call('mcp.getServer', { slug }, run);
   const config = found.ok ? found.data?.integration?.config : null;
   if (!config) return { ok: false, detail: `source "${slug}" not found${found.ok ? '' : ` (${found.error?.code ?? 'no answer'})`}` };

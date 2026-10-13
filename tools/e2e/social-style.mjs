@@ -2,7 +2,10 @@
 // Failure modes: the bad frames pass; ordinary time/price/place/file ranges fail; metadata colons
 // fail; the user's original voice is flagged; a high self-score bypasses an AI-style hard failure;
 // or the social brief omits the writing resources or edit mode.
+// Each range in a sentence gets its own exception. A valid first or last range must not hide
+// a prohibited range elsewhere in that sentence.
 import { spawnSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
 import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -14,6 +17,8 @@ const root = fileURLToPath(new URL('../../', import.meta.url));
 const input = JSON.parse(readFileSync(join(root, 'tools/e2e/fixtures/social-style.json'), 'utf8'));
 const work = mkdtempSync(join(tmpdir(), 'cq-social-style-'));
 const results = [];
+
+const sourceHashes = Object.fromEntries(['tools/check/rules.mjs', 'tools/e2e/fixtures/social-style.json', 'tools/e2e/social-style.mjs'].map(path => [path, createHash('sha256').update(readFileSync(join(root, path))).digest('hex')]));
 try {
   for (const fixture of input.cases) {
     const file = join(work, `${fixture.id}.md`);
@@ -41,7 +46,8 @@ try {
 const out = join(root, 'dist/e2e/social-style');
 mkdirSync(out, { recursive: true });
 const passed = results.filter(result => result.pass).length;
-writeFileSync(join(out, 'report.json'), `${JSON.stringify({ source: input.source, total: results.length, passed, results }, null, 2)}\n`);
+
+writeFileSync(join(out, 'report.json'), `${JSON.stringify({ source: input.source, sourceHashes, total: results.length, passed, results }, null, 2)}\n`);
 for (const result of results) console.log(`${result.pass ? 'pass' : 'FAIL'} ${result.name}`);
 console.log(`${passed}/${results.length} pass. ${join(out, 'report.json')}`);
 process.exitCode = passed === results.length ? 0 : 1;

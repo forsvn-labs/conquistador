@@ -11,7 +11,7 @@ import { join, relative, resolve } from 'node:path';
 import { AGENTS, OWNED, agentId, detectAgents, home, payloadCurrent, pluginHome, productRoot, projectFolders, projectRoot, readState,
   self, setHooks, skillCurrent, stageTargets, version, writeState } from './agents.mjs';
 import { MCP_APPS, appById, applyApp, checkApp, detectApps, inspectApp } from './mcp-apps.mjs';
-import { executorStatus, manualSteps, slugFor, usesExecutor2, executor2Handoff } from './executor-source.mjs';
+import { executorStatus, manualSteps, slugFor, executorHandoff } from './executor-source.mjs';
 import { reachable, shadowProblem, startUpdateCheck, updateNotice } from './preflight.mjs';
 import { paint, plainUi, stepLabel, wordmark, wrapText } from './onboard-ui.mjs';
 import { channel } from './self-update.mjs';
@@ -243,7 +243,7 @@ export function buildPlan(choices, ctx) {
     const name = choices.executorName;
     const steps = !ctx.executor.installed
       ? [{ action: 'manual', reason: 'Executor is not installed. Install it (npm i -g executor), then run conquistador --surface=executor.' }]
-      : usesExecutor2(ctx.executor.version) ? [{ action: 'manual', reason: executor2Handoff }]
+      : executorHandoff(ctx.executor.version) ? [{ action: 'manual', reason: executorHandoff(ctx.executor.version) }]
       : [...(ctx.executor.running === false ? [{ action: 'start', detail: 'Executor is not running. This step starts it: executor daemon run' }] : []),
         { action: 'add', name, slug: slugFor(name), detail: `Add the source "${name}": executor call executor mcp addServer\n  Executor asks to approve it. Conquistador says yes for this one change.` }];
     surfaces.push({ id: 'executor', label: SURFACE_LABELS.executor, version: ctx.executor.version, steps, notes: [] });
@@ -501,7 +501,7 @@ async function ask(ui, kind, options) { return ui[kind](options); }
 function executorSummary(executor) {
   if (!executor.installed) return 'not installed';
 
-  const status = usesExecutor2(executor.version) ? ', MCP setup required' : executor.running ? ', running' : ', not running';
+  const status = executorHandoff(executor.version) ? ', source setup paused' : executor.running ? ', running' : ', not running';
 
   return `${executor.version ?? 'found'}${status}`;
 }
@@ -655,7 +655,8 @@ export async function printPlan(options, { cwd = process.cwd(), launchLine = nul
     'Plan:', ...planLines(plan)];
   if (launchLine) lines.push(...launchLine);
   const flags = [`--surface=${choices.surfaces.join(',')}`, ...(choices.surfaces.includes('agents') ? [`--providers=${choices.agents.join(',') || 'NAME'}`, `--scope=${choices.scope}`] : []),
-    ...(choices.surfaces.includes('mcp-apps') && choices.apps.length ? [`--apps=${choices.apps.join(',')}`] : []), ...(choices.hooks ? [] : ['--no-hooks'])];
+    ...(choices.surfaces.includes('mcp-apps') && choices.apps.length ? [`--apps=${choices.apps.join(',')}`] : []),
+    ...(choices.surfaces.includes('cli') ? [`--package-manager=${choices.packageManager}`] : []), ...(choices.hooks ? [] : ['--no-hooks'])];
   lines.push('', `To install: ${self} ${flags.join(' ')} --yes`, 'No files changed, commands executed, or agent opened.');
   console.log(wrapText(lines.join('\n'), width));
   return options.dryRun ? 0 : 2;

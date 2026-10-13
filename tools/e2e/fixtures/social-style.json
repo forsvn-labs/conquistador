@@ -1,6 +1,26 @@
 {
-  "source": "Original tweet and rewrites A and B supplied by Hung on 2026-10-13. The third pattern fixture is synthetic.",
+  "source": "Original tweet and rewrites A and B supplied by Hung on 2026-10-13. Other pattern fixtures are synthetic.",
   "cases": [
+    {
+      "id": "numeric-range-then-false-range",
+      "text": "Supports from 1 to 5 seats and from onboarding to launch posts.",
+      "styleRules": ["ai-false-range"]
+    },
+    {
+      "id": "literal-conversion-then-false-range",
+      "text": "Supports from CSV to JSON and from positioning to launch posts.",
+      "styleRules": ["ai-false-range"]
+    },
+    {
+      "id": "false-range-between-numeric-ranges",
+      "text": "Supports from 1 to 5 seats, from onboarding to launch posts, and from 2 to 8 teams.",
+      "styleRules": ["ai-false-range"]
+    },
+    {
+      "id": "multiple-literal-ranges",
+      "text": "Supports from 1 to 5 seats and from CSV to JSON.",
+      "styleRules": []
+    },
     {
       "id": "original",
       "text": "So you vibecoded your app in a weekend? No user?\n\nMarketing shouldn’t be that hard. We make it slightly easier for you.\n\nIntroducing Conquistador. A free and open source marketing toolstack for your coding agents.\n\nDistribution is, indeed, the moat.\n\nnpx forsvn/conquistador",

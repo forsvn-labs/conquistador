@@ -18,7 +18,7 @@ import { runCommand } from './process-run.mjs';
 import { productRoot } from './agents.mjs';
 import { managedInstalls } from './managed-installs.mjs';
 import { installerOperation } from './installer-operation.mjs';
-import { usesExecutor2, executor2Handoff } from './executor-source.mjs';
+import { executorHandoff } from './executor-source.mjs';
 
 // Brand colors from conquistador-landing src/styles/tokens.css. NO_COLOR and dumb terminals get none.
 const COLORS = { brand: '#FF6B2C', ember: '#FF8A4C', sticky: '#FFE45C', sky: '#BFE0FF', ok: '#7FD18B', bad: '#FF7A6B', line: '#81756C', ink: '#1A100A' };
@@ -167,7 +167,7 @@ function optionRows(ctx, choices, options) {
     hint: () => [apps.length ? `Adds the local MCP server to ${apps.map(app => app.label).join(', ')}.` : 'No MCP client found. Name one with --apps.', ...deduped].join(' ') });
   if (ctx.executor.installed) {
     list.push({ id: 'executor', label: 'Executor', toggle: true,
-      hint: () => usesExecutor2(ctx.executor.version) ? executor2Handoff : `Adds the source "${choices.executorName}" for every Executor-connected agent.${ctx.executor.running === false ? ' Starts Executor first.' : ''} Rename: --executor-name.` });
+      hint: () => executorHandoff(ctx.executor.version) ?? `Adds the source "${choices.executorName}" for every Executor-connected agent.${ctx.executor.running === false ? ' Starts Executor first.' : ''} Rename: --executor-name.` });
   }
   list.push({ id: 'bot', label: 'Chat bot files', toggle: true, hint: () => `Writes a system prompt and knowledge files to ${tilde(choices.botOut)} for GPTs, Claude Projects, and Gems. Folder: --bot-out.` });
   if (ctx.login && ctx.online !== false) list.push({ id: 'hosted', label: 'Hosted MCP', toggle: true, hint: () => 'Sign in with GitHub to get a token for deployed agents and remote apps.' });

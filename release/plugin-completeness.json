@@ -4864,7 +4864,7 @@
     },
     {
       "path": "tools/check/rules.mjs",
-      "sha256": "d54a95831f5d85ec858fe74e9ae546a1dd685ee34a891844e81f9a1e11fb6eed"
+      "sha256": "a2127ed9bb4d00c4a02bbb81a4d0fb4d3c9a7e4b3b69c4afe0a8c9d14284744a"
     },
     {
       "path": "tools/context-files.mjs",

@@ -26,7 +26,8 @@ export async function installCli(manager) {
   const path = target ?? chosen;
   const check = path ? await runCommand(path, ['--version'], { timeout: 10_000 }) : null;
   const verified = Boolean(check?.status === 0 && check.stdout.trim() === version && chosen === path);
-  writeState({ ...readState(), cli: { manager, version, path, verified, at: new Date().toISOString() } });
+
+  if (verified) writeState({ ...readState(), cli: { manager, version, path, verified, at: new Date().toISOString() } });
 
   if (!verified) {
     const error = chosen && path && chosen !== path

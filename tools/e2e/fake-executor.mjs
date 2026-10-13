@@ -19,9 +19,14 @@ const save = () => writeFileSync(file, `${JSON.stringify(state, null, 2)}\n`);
 if (process.env.FAKE_AGENT_LOG) appendFileSync(process.env.FAKE_AGENT_LOG, `${JSON.stringify({ name: 'executor', args })}\n`);
 const json = value => { console.log(JSON.stringify(value, null, 2)); process.exit(0); };
 
-if (args[0] === '--version') { console.log(mode === 'v2' ? 'executor 2.0.0-beta.16' : mode === 'old' ? 'executor v1.4.0' : mode === 'v1.5' ? 'executor v1.5.40' : 'executor v1.6.8'); process.exit(0); }
+if (args[0] === '--version') {
+  const value = mode === 'unknown' ? 'Executor version unavailable' : mode.includes('v2') ? 'executor 2.0.0-beta.16' : mode === 'old' ? 'executor v1.4.0' : mode === 'v1.5' ? 'executor v1.5.40' : 'executor v1.6.8';
 
-if (mode === 'v2') { console.error('Executor 2 uses MCP. This Executor 1 command is no longer supported.'); process.exit(2); }
+  if (mode.startsWith('stderr-')) console.error(value); else console.log(value);
+  process.exit(mode === 'version-failed' ? 2 : 0);
+}
+
+if (['v2', 'stderr-v2', 'unknown', 'version-failed'].includes(mode)) { console.error('Unconfirmed or unsupported Executor source version. Legacy commands must not run.'); process.exit(2); }
 if (args[0] === 'daemon' && args[1] === 'status') { console.log(state.running ? 'Daemon reachable at http://localhost:4788 (pid 4242).' : 'Daemon not running at http://localhost:4788.'); process.exit(0); }
 if (args[0] === 'daemon' && args[1] === 'run') { state.running = true; save(); console.log('Starting daemon on localhost:4788...'); process.exit(0); }
 if (args[0] === 'tools' && args[1] === 'integrations') {

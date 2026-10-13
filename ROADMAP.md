@@ -2,7 +2,7 @@
 
 ## Current handoff
 
-Last verified: 2026-10-13. Implementation is under review; no release.
+Last verified: 2026-10-13. Hung approved integration. Review fixes are verified locally; CI must pass before merge. No npm release.
 
 [PR #75](https://github.com/forsvn-labs/conquistador/pull/75), on `feat/control-center`, implements the full agent catalog and search, permanent npm/Bun
 CLI installation, project skills, explicit MCP client selection, hook controls, in-TUI maintenance,
@@ -29,11 +29,12 @@ owned library and survive contract regeneration. Exact original/rewrite fixtures
 Verified locally on macOS arm64, Node 26.9.0:
 
 - Product checks: 940 pass, including build and type checks.
-- Terminal installer: 60/60 scenarios pass, including multi-selection, resize, live progress, per-item removal,
+- Terminal installer: 64/64 scenarios pass, including multi-selection, resize, live progress, per-item removal,
   MCP-only state, Executor 2 handoff, npm/Bun contracts, failure recovery, old flags, and non-interactive defaults.
-- Final MCP-flow checks: 6/6 affected terminal cases pass. Existing host/launch checks: 19 pass.
+- Review regressions cover copied npm/Bun choices, failed CLI records and first use, version
+  detection failures, and Executor versions printed to stderr. Existing host/launch checks: 19 pass.
 - Iris captures cover the picker, manager, MCP multi-selection, and 60×24 layout.
-- Copy-check E2E: 44/44 pass. Social-style E2E: 11/11 pass. Original tweet passes unchanged.
+- Copy-check E2E: 44/44 pass. Social-style E2E: 15/15 pass. Original tweet passes unchanged.
 - New installer modules pass their configured lint checks.
 - Exact-package installation at `ba7cd9e` passes 50/50 applicable checks, including 21 native
   terminal checks. The Node 22.18 run is explicitly not run. A real Bun global install of the

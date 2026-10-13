@@ -50,6 +50,10 @@
 //   E2  Executor 2 gets an honest MCP setup handoff. Detection, registration, verification,
 //       and removal never invoke removed v1 commands or claim an unverified connection.
 //       A process that was not checked is not reported as stopped.
+//   E3  Failed or unreadable version detection permits no legacy source operation. Successful
+//       version detection reads stderr too; a confirmed v1 retains its supported source path.
+//   C8  A copied CLI install command keeps the package manager. An unverified CLI installation
+//       creates no install record or home-screen shortcut and preserves a previous record.
 import { spawnSync } from 'node:child_process';
 import { runCommand } from '../process-run.mjs';
 import { createHash } from 'node:crypto';
@@ -589,7 +593,9 @@ for (const manager of ['npm', 'bun']) scenario(`cli-${manager}`, ['C6'], async (
     const preview = f.run(['--surface=cli', `--package-manager=${manager}`, '--dry-run']);
     expect(preview.status === 0 && has(preview.stdout, manager), 'CLI preview did not name the package manager');
     expect(!f.calls().some(call => ['install', 'add'].includes(call.args[0])), 'dry run installed a package');
-    const result = f.run(['--surface=cli', `--package-manager=${manager}`, '--yes']);
+    const printed = preview.stdout.split('To install:')[1]?.split('No files changed')[0]?.trim().split(/\s+/) ?? [];
+    expect(printed.includes(`--package-manager=${manager}`), 'the copied install command loses the package manager');
+    const result = f.run(printed.slice(printed.findIndex(arg => arg.startsWith('--'))));
     transcript('install-cli', `${result.stdout}${result.stderr}`);
     expect(result.status === 0, `CLI install exited ${result.status}`);
     expect(f.json(join(f.home, '.conquistador/installs.json'))?.cli?.manager === manager, 'CLI manager was not recorded');
@@ -599,13 +605,33 @@ for (const manager of ['npm', 'bun']) scenario(`cli-${manager}`, ['C6'], async (
 
 for (const failure of ['FAIL', 'NO_COMMAND']) scenario(`cli-recovery-${failure.toLowerCase()}`, ['C6'], async ({ expect, transcript }) => {
   const f = fixture(`cli-recovery-${failure}`, { agents: [], managers: true, env: { [`FAKE_CLI_${failure}`]: '1' } });
+  let s;
   try {
     const result = f.run(['--surface=cli', '--package-manager=npm', '--yes']);
     transcript('cli-recovery', `${result.stdout}${result.stderr}`);
     expect(result.status === 1, `CLI failure returned ${result.status}`);
     expect(has(result.stdout, 'Retry:') || has(result.stdout, 'PATH'), 'CLI failure has no recovery command');
-    expect(!f.json(join(f.home, '.conquistador/installs.json'))?.cli?.verified, 'failed CLI was marked verified');
-  } finally { f.cleanup(); }
+    expect(!f.json(join(f.home, '.conquistador/installs.json'))?.cli, 'an unverified CLI was recorded as an install');
+    s = f.term([]);
+    await s.waitFor(TITLE.agents, { timeout: 5000 });
+    await s.snap('first-use-after-failure');
+    await s.press('ctrlC');
+    expect(await s.exit() === 130, 'first-use installation did not cancel cleanly');
+
+    if (failure === 'NO_COMMAND') {
+      const prior = { manager: 'bun', version: '0.4.0', path: join(f.bin, 'previous-cli'), verified: true, at: '2026-10-01T00:00:00Z' };
+      mkdirSync(join(f.home, '.conquistador'), { recursive: true });
+      writeFileSync(join(f.home, '.conquistador/installs.json'), JSON.stringify({ agents: {}, cli: prior }));
+      const retry = f.run(['--surface=cli', '--package-manager=npm', '--yes']);
+      expect(retry.status === 1 && JSON.stringify(f.json(join(f.home, '.conquistador/installs.json'))?.cli) === JSON.stringify(prior), 'an unverified replacement overwrote the previous CLI record');
+    }
+
+    return s.snaps;
+  } finally {
+    if (s) { s.kill(); await s.exit({ timeout: 1000 }); }
+
+    f.cleanup();
+  }
 });
 
 scenario('no-agent', ['T5', 'F1'], async ({ expect }) => {
@@ -1178,18 +1204,19 @@ scenario('executor-1.5', ['F30'], async ({ expect, transcript }) => {
   } finally { f.cleanup(); }
 });
 
-scenario('executor-v2-handoff', ['E2'], async ({ expect, transcript }) => {
-  const f = fixture('executor-v2-handoff', { agents: [], executor: 'v2' });
+for (const mode of ['v2', 'stderr-v2', 'unknown', 'version-failed']) scenario(`executor-${mode === 'v2' ? 'v2-handoff' : mode}`, ['E2', 'E3'], async ({ expect, transcript }) => {
+  const f = fixture(`executor-${mode}`, { agents: [], executor: mode });
+  const message = mode.includes('v2') ? 'Executor 2' : 'Could not verify the Executor version';
 
   try {
     const dry = f.run(['--surface=executor', '--dry-run']);
     transcript('v2-plan', `${dry.stdout}${dry.stderr}`);
-    expect(has(dry.stdout, 'Executor 2') && has(dry.stdout, 'executor.sh/docs/mcp'), 'the review does not explain the current MCP flow');
+    expect(has(dry.stdout, message), 'the review does not explain why source setup is paused');
     expect(!has(dry.stdout, 'not running'), 'an unchecked v2 process is reported as stopped');
     expect(!has(dry.stdout, 'daemon run') && !has(dry.stdout, 'executor call'), 'the review promises removed v1 commands');
     const install = f.run(['--surface=executor', '--yes']);
     transcript('v2-handoff', `${install.stdout}${install.stderr}`);
-    expect(install.status === 1 && has(install.stdout, 'Executor 2'), 'the unsupported source route is reported as installed');
+    expect(install.status === 1 && has(install.stdout, message), 'the unsupported source route is reported as installed');
     expect(!existsSync(join(f.home, '.conquistador/plugin')), 'the manual-only handoff staged an unused plugin');
     expect(!f.json(join(f.home, '.conquistador/installs.json'))?.executor, 'the handoff recorded an unverified source');
 
@@ -1204,6 +1231,19 @@ scenario('executor-v2-handoff', ['E2'], async ({ expect, transcript }) => {
     expect(removal.status === 1 && f.json(join(f.home, '.conquistador/installs.json'))?.executor, 'unsupported removal discarded the tracked source');
     const deprecated = f.calls().filter(call => call.name === 'executor' && ['daemon', 'call', 'tools', 'resume', 'web'].includes(call.args[0]));
     expect(!deprecated.length, `removed Executor commands ran: ${JSON.stringify(deprecated)}`);
+
+    return [];
+  } finally { f.cleanup(); }
+});
+
+scenario('executor-stderr-v1', ['E3'], async ({ expect, transcript }) => {
+  const f = fixture('executor-stderr-v1', { agents: [], executor: 'stderr-v1' });
+
+  try {
+    const result = f.run(['--surface=executor', '--yes']);
+    transcript('stderr-v1-install', `${result.stdout}${result.stderr}`);
+    expect(result.status === 0 && f.json(join(f.home, '.conquistador/installs.json'))?.executor, 'a confirmed legacy version on stderr cannot install');
+    expect(f.calls().some(call => call.name === 'executor' && call.args.includes('addServer')), 'the confirmed legacy source path was not used');
 
     return [];
   } finally { f.cleanup(); }

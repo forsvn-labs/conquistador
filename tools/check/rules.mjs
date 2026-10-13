@@ -86,14 +86,29 @@ const socialChannels = ['x', 'linkedin', 'social'];
 // Only predictable rhetorical frames can be checked without a model. Literal numeric,
 // place, format-conversion, and ordered process ranges remain valid.
 function falseRange(sentence) {
-  const match = /\b(?:everything|anything|covers?|handles?|supports?|offers?|includes?|commands?|plays?|playbooks?|workflows?)\b[^.!?]{0,70}?\bfrom\s+([^,;.!?]{1,55}?)\s+to\s+([^,;.!?]{1,55})/i.exec(sentence);
-  if (!match) return null;
-  const [, start, end] = match;
-  if (/\d/.test(start + end)) return null;
-  if (/^[A-Z]/.test(start) && /^[A-Z]/.test(end)) return null;
-  if (/^(?:draft|drafting|ideation|idea|research|brief|input|beginning|start)\b/i.test(start) && /^(?:publication|publishing|launch|output|finish|end|delivery|review|approval)\b/i.test(end)) return null;
-  if (/^(?:small|smaller|low|lower|basic|beginner|cold|light|young|first)\b/i.test(start) && /^(?:large|larger|high|higher|advanced|expert|hot|heavy|old|last)\b/i.test(end)) return null;
-  return match[0];
+  const candidates = [...sentence.matchAll(/\bfrom\s+/gi)];
+
+  for (let index = 0; index < candidates.length; index++) {
+    const at = candidates[index].index;
+
+    if (!/\b(?:everything|anything|covers?|handles?|supports?|offers?|includes?|commands?|plays?|playbooks?|workflows?)\b[^.!?]{0,70}$/i.test(sentence.slice(Math.max(0, at - 90), at))) continue;
+    const match = /^from\s+([^,;.!?]{1,55}?)\s+to\s+([^,;.!?]{1,55})/i.exec(sentence.slice(at, candidates[index + 1]?.index ?? sentence.length));
+
+    if (!match) continue;
+    const [, start, end] = match;
+
+    if (/\d/.test(start + end)) continue;
+
+    if (/^[A-Z]/.test(start) && /^[A-Z]/.test(end)) continue;
+
+    if (/^(?:draft|drafting|ideation|idea|research|brief|input|beginning|start)\b/i.test(start) && /^(?:publication|publishing|launch|output|finish|end|delivery|review|approval)\b/i.test(end)) continue;
+
+    if (/^(?:small|smaller|low|lower|basic|beginner|cold|light|young|first)\b/i.test(start) && /^(?:large|larger|high|higher|advanced|expert|hot|heavy|old|last)\b/i.test(end)) continue;
+
+    return match[0];
+  }
+
+  return null;
 }
 
 const vagueLabel = /^(?:learn more|read more|more|find out more|more info(?:rmation)?|details|go|submit|click|continue|ok|here|this link|link|click here|see more)\s*[→>»›.!]*$/i;
