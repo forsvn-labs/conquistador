@@ -66,7 +66,7 @@ function fixtures() {
   write(join(saas, 'content/blog/hello.mdx'), '# Hello, annual plans\n');
   // Project docs, agent files, and code change too; only the blog post and the channel draft count.
   write(join(saas, 'README.md'), '# Ledgerly\n\nNow with annual plans.\n');
-  write(join(saas, 'PROGRESS.md'), '# Progress\n\n- Annual plans\n');
+  write(join(saas, 'ROADMAP.md'), '# Roadmap\n\n- Annual plans\n');
   write(join(saas, 'docs/getting-started.md'), '# Getting started\n\nPick a plan.\n');
   write(join(saas, 'drafts/launch-post.md'), '---\nchannel: x\n---\n\nAnnual plans are live.\n');
   write(join(saas, 'drafts/notes.md'), 'Ideas for later.\n');

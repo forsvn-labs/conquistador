@@ -1,4 +1,14 @@
-# Product roadmap
+# conquistador roadmap
+
+## Current handoff
+
+Record consolidation: 13 October 2026. Delivery dates below retain the source record's dates. This migration does not verify a new release.
+
+State: Ready to ship, recorded 12 October.
+
+PR #72 merged documentation-link changes at 9b2acca. The handoff records them as unreleased. Package version remains 0.5.1.
+
+Next action: Preserve the new social-copy priorities below. Verify the merged link changes in the next package release. Gemini hooks, synchronous prompt work, resize checks, and untested platform builds remain open.
 
 ## High priority: social copy reads as AI slop
 
@@ -124,4 +134,8 @@ acceptance on its exact candidate bytes. Keep CLI checks, native host observatio
 and human verdicts distinct. Publish the exact reviewed package only with explicit authorization;
 then verify registry identity and the deployed landing page's release/access/setup/removal copy.
 Source edits alone do not close a deployed-site finding. Marketplace listings and other external
-distribution remain explicit decisions. See [PROGRESS.md](PROGRESS.md) for unshipped work.
+distribution remain explicit decisions. See [ROADMAP.md](ROADMAP.md) for unshipped work.
+
+## Earlier implementation evidence
+
+The exact dated handoff and its verification details remain in [Git history](https://github.com/forsvn-labs/conquistador/blob/8b0d40011e07da4996642f883dbe4ab3613db3d3/PROGRESS.md). Recheck recorded branch work before promoting it to active or shipped.
