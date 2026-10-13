@@ -5,6 +5,8 @@
 // State lives in $HOME/.fake-executor.json. FAKE_EXECUTOR=stopped starts with no daemon;
 // FAKE_EXECUTOR=old has no mcp.addServer tool; FAKE_EXECUTOR=v1.5 has no coreTools.integrations.remove
 // (as Executor 1.5.40). Every call goes to $FAKE_AGENT_LOG.
+// FAKE_EXECUTOR=v2 is a negative contract fixture: it rejects removed v1 commands.
+// It is not evidence that Conquistador connects to a live Executor 2 server.
 import { appendFileSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 
@@ -17,7 +19,9 @@ const save = () => writeFileSync(file, `${JSON.stringify(state, null, 2)}\n`);
 if (process.env.FAKE_AGENT_LOG) appendFileSync(process.env.FAKE_AGENT_LOG, `${JSON.stringify({ name: 'executor', args })}\n`);
 const json = value => { console.log(JSON.stringify(value, null, 2)); process.exit(0); };
 
-if (args[0] === '--version') { console.log(mode === 'old' ? 'executor v1.4.0' : mode === 'v1.5' ? 'executor v1.5.40' : 'executor v1.6.8'); process.exit(0); }
+if (args[0] === '--version') { console.log(mode === 'v2' ? 'executor 2.0.0-beta.16' : mode === 'old' ? 'executor v1.4.0' : mode === 'v1.5' ? 'executor v1.5.40' : 'executor v1.6.8'); process.exit(0); }
+
+if (mode === 'v2') { console.error('Executor 2 uses MCP. This Executor 1 command is no longer supported.'); process.exit(2); }
 if (args[0] === 'daemon' && args[1] === 'status') { console.log(state.running ? 'Daemon reachable at http://localhost:4788 (pid 4242).' : 'Daemon not running at http://localhost:4788.'); process.exit(0); }
 if (args[0] === 'daemon' && args[1] === 'run') { state.running = true; save(); console.log('Starting daemon on localhost:4788...'); process.exit(0); }
 if (args[0] === 'tools' && args[1] === 'integrations') {

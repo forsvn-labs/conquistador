@@ -41,12 +41,15 @@
 //   C4  A slow plugin manager does not freeze the progress animation.
 //   C5  Resizing keeps the selected agent and final review/undo text reachable.
 //   C6  npm and Bun CLI installs are explicit, checked, and recover from missing PATH or permissions.
-//   C7  Removing one MCP app keeps another app, the agent, and all other server entries.
+//   C7  Removing one MCP client keeps another app, the agent, and all other server entries.
 //   M1  Agent multi-selection is explicit. Space, search, Back, resize, select-all, and clear
 //       preserve independent choices; the final install contains exactly the selected agents.
 //   M2  Toggling detected agents does not discard an undetected agent selected by the user.
-//   M3  MCP apps also use checkboxes and install multiple selected apps without adding another.
+//   M3  MCP clients also use checkboxes and install multiple selected apps without adding another.
 //   M4  Wide layouts show selection details; compact layouts keep choices and keys reachable.
+//   E2  Executor 2 gets an honest MCP setup handoff. Detection, registration, verification,
+//       and removal never invoke removed v1 commands or claim an unverified connection.
+//       A process that was not checked is not reported as stopped.
 import { spawnSync } from 'node:child_process';
 import { runCommand } from '../process-run.mjs';
 import { createHash } from 'node:crypto';
@@ -70,7 +73,7 @@ const commit = spawnSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'u
 const dirty = Boolean(spawnSync('git', ['status', '--porcelain'], { cwd: root, encoding: 'utf8' }).stdout.trim());
 const sourceHashes = Object.fromEntries(['runtime/bin/conquistador.js', 'tools/agents.mjs', 'tools/installer-tui.mjs', 'tools/onboard.mjs', 'tools/login.mjs',
   'tools/cli-install.mjs', 'tools/installer-operation.mjs', 'tools/process-run.mjs', 'tools/managed-installs.mjs', 'tools/launch.mjs',
-  'tools/front-door.mjs', 'tools/doctor.mjs', 'tools/self-update.mjs', 'tools/mcp-apps.mjs', 'tools/vendor/ink.mjs',
+  'tools/front-door.mjs', 'tools/doctor.mjs', 'tools/self-update.mjs', 'tools/mcp-apps.mjs', 'tools/executor-source.mjs', 'tools/e2e/fake-executor.mjs', 'tools/vendor/ink.mjs',
   'release/completeness.json', 'release/plugin-completeness.json', 'tools/e2e/installer.mjs']
   .map(path => [path, createHash('sha256').update(readFileSync(join(root, path))).digest('hex')]));
 
@@ -226,7 +229,8 @@ async function toReview(s, { snap = true, options = {} } = {}) {
   for (const [label, value] of Object.entries(options)) await setOption(s, label, value);
   if (snap) await s.snap('options');
   await s.press('enter');
-  if (s.screen.text().includes('Which MCP apps?')) { if (snap) await s.snap('mcp-apps'); await s.press('enter'); await s.waitFor(TITLE.options); await s.press('enter'); }
+
+  if (s.screen.text().includes('Which MCP clients?')) { if (snap) await s.snap('mcp-apps'); await s.press('enter'); await s.waitFor(TITLE.options); await s.press('enter'); }
   await s.waitFor(TITLE.review); if (snap) await s.snap('review');
 }
 
@@ -249,9 +253,10 @@ scenario('happy', ['T1', 'T2', 'T13', 'F21', 'F24', 'F26', 'F27', 'F29'], async 
     // T1: the full-screen installer, not line prompts. The wordmark, the step bar, and both agents show.
     for (const text of ['Agents', 'Options', 'Review', 'Install', 'Done', 'Claude Code', 'Codex', 'Nothing changes until you confirm']) expect(has(welcome, text), `welcome screen lacks ${text}`);
     expect(s.raw.includes('\x1b[?1049h'), 'the installer did not open the alternate screen (T1)');
-    await toReview(s, { options: { 'MCP apps': 'On', Executor: 'On' } });
+    await toReview(s, { options: { 'MCP clients': 'On', Executor: 'On' } });
     const options = s.snaps.find(item => item.name === 'options').text;
-    for (const label of ['Install for', 'Prompt hooks', 'MCP apps', 'Executor', 'Chat bot files', 'Hosted MCP']) expect(has(options, label), `options screen lacks ${label}`);
+
+    for (const label of ['Install for', 'Prompt hooks', 'MCP clients', 'Executor', 'Chat bot files', 'Hosted MCP']) expect(has(options, label), `options screen lacks ${label}`);
     // F24: the package ships tools/login.mjs, so Hosted MCP is offered but never on by default.
     expect(/Hosted MCP.*‹\s*Off\s*›/.test(options), 'Hosted MCP is on by default (F24)');
     const review = s.snaps.at(-1).text;
@@ -415,10 +420,10 @@ scenario('multi-mcp-apps', ['M3', 'T2'], async ({ expect, transcript }) => {
   const s = f.term(['--surface=mcp-apps'], { columns: 100, rows: 42 });
 
   try {
-    await s.waitFor('Which MCP apps?'); await s.snap('mcp-defaults');
+    await s.waitFor('Which MCP clients?'); await s.snap('mcp-defaults');
     expect(has(s.screen.text(), 'Select one or more apps'), 'the MCP picker does not disclose multi-selection');
     await s.press('n'); await s.settle(100);
-    expect(has(s.screen.text(), '0 selected'), 'clear does not clear MCP apps');
+    expect(has(s.screen.text(), '0 selected'), 'clear does not clear MCP clients');
     await toggleRow(s, 'Claude Desktop'); await toggleRow(s, 'Zed'); await s.snap('mcp-multi-selected');
     expect(has(s.screen.text(), '2 selected') && checked(s, 'Claude Desktop') && checked(s, 'Zed'), 'MCP choices are not independent checkboxes');
     await s.press('enter'); await s.waitFor(/Choose options|Review the changes/);
@@ -426,10 +431,10 @@ scenario('multi-mcp-apps', ['M3', 'T2'], async ({ expect, transcript }) => {
     if (has(s.screen.text(), TITLE.options)) await s.press('enter');
     await s.waitFor(TITLE.review); await s.snap('mcp-multi-review');
     await s.press('enter'); await finish(s);
-    expect(await s.exit() === 0, 'multiple MCP apps did not install together');
-    expect(f.json(appFile(f.home, 'claude-desktop'))?.mcpServers?.conquistador && f.json(appFile(f.home, 'zed'))?.context_servers?.conquistador, 'a selected MCP app was omitted');
+    expect(await s.exit() === 0, 'multiple MCP clients did not install together');
+    expect(f.json(appFile(f.home, 'claude-desktop'))?.mcpServers?.conquistador && f.json(appFile(f.home, 'zed'))?.context_servers?.conquistador, 'a selected MCP client was omitted');
     expect(f.json(appFile(f.home, 'claude-desktop'))?.mcpServers?.other?.command === 'keep-me', 'multi-selection changed another server');
-    expect(!existsSync(appFile(f.home, 'vscode')), 'an unchecked MCP app installed');
+    expect(!existsSync(appFile(f.home, 'vscode')), 'an unchecked MCP client installed');
 
     return s.snaps;
   } finally { transcript('terminal-raw', s.raw); s.kill(); await s.exit({ timeout: 1000 }); f.cleanup(); }
@@ -477,7 +482,8 @@ scenario('control-center', ['C2', 'T10'], async ({ expect }) => {
     s = f.term([], { rows: 40 });
     await s.waitFor(TITLE.home); await s.snap('home');
     const text = s.screen.text();
-    for (const label of ['16 supported agents', 'Claude Code', 'Codex', 'Cursor', 'Skills', 'MCP servers', 'Hooks', 'Install CLI command']) expect(has(text, label), `home lacks ${label} (C2)`);
+
+    for (const label of ['16 supported agents', 'Claude Code', 'Codex', 'Cursor', 'Skills', 'MCP connections', 'Hooks', 'Install CLI command']) expect(has(text, label), `home lacks ${label} (C2)`);
     await s.press('q'); expect(await s.exit() === 0, 'home did not quit');
     return s.snaps;
   } finally { if (s) s.kill(); f.cleanup(); }
@@ -492,7 +498,7 @@ scenario('mcp-only-home', ['C3'], async ({ expect }) => {
     // Waiting for either title makes the old behavior fail quickly without a 20-second timeout.
     await s.waitFor(/Which agents\?|Conquistador is installed/); await s.snap('mcp-home');
     expect(has(s.screen.text(), TITLE.home), 'MCP-only install opened the first-run installer (C3)');
-    expect(has(s.screen.text(), 'Claude Desktop'), 'home hides the installed MCP app (C3)');
+    expect(has(s.screen.text(), 'Claude Desktop'), 'home hides the installed MCP client (C3)');
     expect(f.json(appFile(f.home, 'claude-desktop'))?.mcpServers?.existing?.command === 'keep-me', 'existing MCP entry changed');
     await s.press('q'); await s.exit(); return s.snaps;
   } finally { if (s) s.kill(); f.cleanup(); }
@@ -510,10 +516,10 @@ scenario('in-app-management', ['C2', 'C3'], async ({ expect, transcript }) => {
     expect(f.json(config)?.hooks === false && f.json(config)?.keep === 'existing', 'hooks toggle lost another setting');
     await s.press('enter'); await moveTo(s, 'Check and repair'); await s.press('enter'); await s.waitFor('Complete. Review the result.'); await s.snap('doctor-report'); await s.press('enter');
     await s.settle(120); expect(has(s.screen.text(), TITLE.home), 'doctor left the TUI');
-    await moveTo(s, 'MCP servers'); await s.press('enter'); await s.waitFor('Which MCP apps?');
+    await moveTo(s, 'MCP connections'); await s.press('enter'); await s.waitFor('Which MCP clients?');
     await moveTo(s, 'Zed'); await s.press('space'); await s.snap('mcp-app-choice'); await s.press('enter'); await s.waitFor(TITLE.options); await s.press('enter'); await s.waitFor(TITLE.review); await s.press('enter');
     await s.waitFor(TITLE.done); await s.snap('mcp-done'); await s.press('enter'); await s.waitFor(TITLE.home); await s.snap('home-after-mcp');
-    expect(f.json(appFile(f.home, 'zed'))?.context_servers?.conquistador, 'an MCP app not detected could not be installed from the TUI');
+    expect(f.json(appFile(f.home, 'zed'))?.context_servers?.conquistador, 'an MCP client not detected could not be installed from the TUI');
     expect(f.json(join(f.home, '.conquistador/installs.json'))?.agents?.['claude-code'], 'MCP management lost the agent');
     await s.press('q'); await s.exit(); return s.snaps;
   } finally { if (s) { transcript('terminal-raw', s.raw); s.kill(); await s.exit({ timeout: 1000 }); } f.cleanup(); }
@@ -660,7 +666,7 @@ scenario('half-fail', ['T11', 'F3', 'F7', 'F20'], async ({ expect }) => {
     apps: { 'claude-desktop': null, zed } });
   try {
     const s = f.term([]);
-    await toReview(s, { options: { 'MCP apps': 'On' } });
+    await toReview(s, { options: { 'MCP clients': 'On' } });
     expect(has(s.snaps.at(-1).text, 'by hand'), 'review does not say the Zed entry is manual (F20)');
     await s.press('enter');
     await finish(s);
@@ -683,9 +689,9 @@ scenario('dedupe', ['F4'], async ({ expect }) => {
   const f = fixture('dedupe', { agents: ['claude'], apps: { cursor: null, 'claude-desktop': null } });
   try {
     const s = f.term([]);
-    await toReview(s, { options: { 'MCP apps': 'On' } });
+    await toReview(s, { options: { 'MCP clients': 'On' } });
     const options = s.snaps.find(item => item.name === 'options').text;
-    expect(has(options, 'Cursor gets the plugin') || !has(options, 'Cursor'), 'options screen offers Cursor as an MCP app next to its plugin (F4)');
+    expect(has(options, 'Cursor gets the plugin') || !has(options, 'Cursor'), 'options screen offers Cursor as an MCP client next to its plugin (F4)');
     const review = s.snaps.at(-1).text;
     expect(!/Cursor\s+add/.test(review) && !has(review, '.cursor/mcp.json'), 'review plans an MCP entry for Cursor (F4)');
     await s.press('enter');
@@ -871,7 +877,7 @@ for (const [name, columns, rows] of [['narrow', 60, 24], ['wide', 100, 30]]) {
     const f = fixture(name, { agents: ['claude', 'codex', 'gemini', 'opencode'], executor: 'running', apps: { 'claude-desktop': { mcpServers: {} } } });
     try {
       const s = f.term([], { columns, rows });
-      await toReview(s, { options: { 'MCP apps': 'On', Executor: 'On' } });
+      await toReview(s, { options: { 'MCP clients': 'On', Executor: 'On' } });
       await s.press('enter');
       await finish(s);
       await s.exit();
@@ -929,7 +935,8 @@ for (const mode of ['plain', 'dumb']) {
         await s.waitFor('Summary', { timeout: 12_000 }); await s.snap('no-input-summary');
         expect(await s.exit({ timeout: 6000 }) === 0, '--yes fallback did not exit 0 without input');
         const shown = s.screen.text({ history: true });
-        for (const question of ['Where do you want Conquistador?', 'Which agents?', 'All projects, or only this one?', 'Which MCP apps?', 'Turn on prompt hooks?', 'Install now?']) {
+
+        for (const question of ['Where do you want Conquistador?', 'Which agents?', 'All projects, or only this one?', 'Which MCP clients?', 'Turn on prompt hooks?', 'Install now?']) {
           expect(!has(shown, question), `--yes fallback asked ${question}`);
         }
         expect(f.json(join(f.home, '.conquistador/installs.json'))?.agents?.[choice === 'explicit' ? 'pi' : 'claude-code'], 'default global agent install was not recorded');
@@ -1171,17 +1178,49 @@ scenario('executor-1.5', ['F30'], async ({ expect, transcript }) => {
   } finally { f.cleanup(); }
 });
 
+scenario('executor-v2-handoff', ['E2'], async ({ expect, transcript }) => {
+  const f = fixture('executor-v2-handoff', { agents: [], executor: 'v2' });
+
+  try {
+    const dry = f.run(['--surface=executor', '--dry-run']);
+    transcript('v2-plan', `${dry.stdout}${dry.stderr}`);
+    expect(has(dry.stdout, 'Executor 2') && has(dry.stdout, 'executor.sh/docs/mcp'), 'the review does not explain the current MCP flow');
+    expect(!has(dry.stdout, 'not running'), 'an unchecked v2 process is reported as stopped');
+    expect(!has(dry.stdout, 'daemon run') && !has(dry.stdout, 'executor call'), 'the review promises removed v1 commands');
+    const install = f.run(['--surface=executor', '--yes']);
+    transcript('v2-handoff', `${install.stdout}${install.stderr}`);
+    expect(install.status === 1 && has(install.stdout, 'Executor 2'), 'the unsupported source route is reported as installed');
+    expect(!existsSync(join(f.home, '.conquistador/plugin')), 'the manual-only handoff staged an unused plugin');
+    expect(!f.json(join(f.home, '.conquistador/installs.json'))?.executor, 'the handoff recorded an unverified source');
+
+    // Keep a source recorded by an earlier supported installation when the CLI upgrades.
+    mkdirSync(join(f.home, '.conquistador'), { recursive: true });
+    writeFileSync(join(f.home, '.conquistador/installs.json'), JSON.stringify({ agents: {}, executor: { slug: 'conquistador', name: 'conquistador', version } }));
+    const doctor = f.run(['doctor', '--json']);
+    transcript('v2-doctor', doctor.stdout);
+    expect(JSON.parse(doctor.stdout).checks.some(check => check.detail.startsWith('Executor:') && check.status !== 'ok'), 'doctor claims the legacy source is verified on v2');
+    const removal = f.run(['remove']);
+    transcript('v2-remove', `${removal.stdout}${removal.stderr}`);
+    expect(removal.status === 1 && f.json(join(f.home, '.conquistador/installs.json'))?.executor, 'unsupported removal discarded the tracked source');
+    const deprecated = f.calls().filter(call => call.name === 'executor' && ['daemon', 'call', 'tools', 'resume', 'web'].includes(call.args[0]));
+    expect(!deprecated.length, `removed Executor commands ran: ${JSON.stringify(deprecated)}`);
+
+    return [];
+  } finally { f.cleanup(); }
+});
+
 // --- F18: old flags ----------------------------------------------------------------------------------
 scenario('old-flags', ['F18'], async ({ expect, transcript }) => {
   const f = fixture('old-flags', { agents: ['claude'], apps: { 'claude-desktop': null } });
+  let s;
   try {
-    const s = f.term(['--mcp']);
-    await s.waitFor('Which MCP apps?');
+    s = f.term(['--mcp']);
+    await s.waitFor('Which MCP clients?');
     await s.press('enter');
     await s.waitFor(TITLE.options);
     await s.snap('old-flag-mcp');
     expect(has(s.screen.text(), '--surface=mcp-apps'), '--mcp does not print the new flag');
-    expect(/MCP apps.*‹\s*On\s*›/.test(s.screen.text()), '--mcp did not turn MCP apps on');
+    expect(/MCP clients.*‹\s*On\s*›/.test(s.screen.text()), '--mcp did not turn MCP clients on');
     await s.press('ctrlC');
     await s.exit();
     const legacy = f.run(['--plugin', '--host', 'codex', '--dry-run']);
@@ -1195,7 +1234,11 @@ scenario('old-flags', ['F18'], async ({ expect, transcript }) => {
     expect(f.run(['project', '--help']).status === 0, 'conquistador project --help broke');
     expect(f.run(['--mcp', '--help']).status === 0, 'conquistador --mcp --help broke');
     return s.snaps;
-  } finally { f.cleanup(); }
+  } finally {
+    if (s) { s.kill(); await s.exit({ timeout: 1000 }); }
+
+    f.cleanup();
+  }
 });
 
 // --- Run ------------------------------------------------------------------------------------------------

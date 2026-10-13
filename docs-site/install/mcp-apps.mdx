@@ -1,17 +1,24 @@
 ---
-title: "MCP apps"
+title: "MCP clients"
 description: "Run the Conquistador MCP server locally in Claude Desktop, VS Code, Windsurf, Zed, Cursor, and other MCP clients."
 ---
+
+An MCP client is the app that connects to the Conquistador server, such as Claude Desktop,
+VS Code, or Zed. Select several clients in the installer. **MCP Apps** is a separate
+[protocol extension](https://modelcontextprotocol.io/extensions/apps/overview) for interactive
+interfaces inside an AI conversation. This page configures client connections.
+
+The CLI flag `--surface=mcp-apps` and this page's URL remain available for compatibility.
 
 Use this option for apps that run a local MCP server but do not get the plugin. An agent that has the plugin already has this server. Do not add it twice.
 
 ## Use the installer
 
 <Note>
-  From 0.4.0. The installer finds the config files of MCP apps and lists only apps without the plugin. In 0.3.0, use `conquistador --mcp`, or add the config by hand as below.
+  From 0.4.0. The installer finds the config files of MCP clients and lists only apps without the plugin. In 0.3.0, use `conquistador --mcp`, or add the config by hand as below.
 </Note>
 
-Run `npx @forsvn/conquistador@latest` and choose **MCP apps**. Choose the apps: Claude Desktop, VS Code, Windsurf, Zed, or Cursor (`--apps=claude-desktop,vscode,windsurf,zed,cursor`). The plan review shows each config file and the entry that the installer adds. Cursor is left out when Cursor gets the plugin.
+Run `npx @forsvn/conquistador@latest` and choose **MCP clients**. Choose the apps: Claude Desktop, VS Code, Windsurf, Zed, or Cursor (`--apps=claude-desktop,vscode,windsurf,zed,cursor`). The plan review shows each config file and the entry that the installer adds. Cursor is left out when Cursor gets the plugin.
 
 The entry is named `conquistador`. It runs `~/.conquistador/plugin/mcp/server.mjs` with the Node that ran the installer.
 

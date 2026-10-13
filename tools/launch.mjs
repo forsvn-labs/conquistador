@@ -92,7 +92,8 @@ function printStatus(options, cwd, root) {
   const agent = rows.map(row => row.agent).find(item => item.slash) ?? rows[0]?.agent;
   if (agent) console.log(`In your agent, type: ${nextStep(agent, cwd)}`);
   const state = readState();
-  for (const id of Object.keys(state.mcpApps ?? {})) console.log(`  MCP app: ${id}`);
+
+  for (const id of Object.keys(state.mcpApps ?? {})) console.log(`  MCP client: ${id}`);
   if (state.executor) console.log(`  Executor: ${state.executor.name ?? state.executor.slug}`);
   if (state.cli) console.log(`  CLI command: ${state.cli.manager}, ${state.cli.version}`);
   console.log(`Change installs: ${self} add. No files changed, commands executed, or agent opened.`);

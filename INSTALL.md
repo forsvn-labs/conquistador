@@ -41,8 +41,8 @@ takes about a minute, and nothing changes until you confirm the review.
    the start show here: another `conquistador` earlier on your PATH (or with another version), or a
    newer version on npm, each with the exact fix.
 2. **Options.** All projects or only this project, prompt hooks on or off, and more places for
-   Conquistador: MCP apps, Executor, chat bot files, Hosted MCP, and a permanent CLI command installed
-   with npm or Bun. The arrow keys change a value. The MCP app picker also supports multiple
+   Conquistador: MCP clients, Executor, chat bot files, Hosted MCP, and a permanent CLI command installed
+   with npm or Bun. The arrow keys change a value. The MCP client picker also supports multiple
    checkboxes: Space toggles an app, `a` selects all, and `n` clears the selection.
 3. **Review.** Every change with its path or command, what stays unchanged, and how to undo it.
 4. **Install**, one line per step. A step that fails does not stop the others. Then a verify pass
@@ -51,7 +51,7 @@ takes about a minute, and nothing changes until you confirm the review.
    otherwise `/conquistador`. Enter opens the manager. `q` exits and leaves the summary in your terminal.
 
 Escape, `q`, or Ctrl-C before the install changes nothing. Ctrl-C during the install does not stop a
-step half way. Run `conquistador` again to manage agents, project skills, MCP servers, hooks, and
+step half way. Run `conquistador` again to manage agents, project skills, MCP connections, hooks, and
 the CLI. **Installed items** shows each scope and path, with update and removal controls for one
 item. Shared skill folders name every affected agent before removal. Update, repair, and removal
 show their result inside the TUI. `conquistador add` opens the installer again. `--plain` (or
@@ -66,21 +66,27 @@ chooses where Conquistador installs; choose your AI model inside your coding age
 | Surface | `--surface` | What it installs | Found by |
 |---|---|---|---|
 | Coding agents (recommended) | `agents` | The plugin (skill, hooks, local MCP server) for Claude Code, Codex, Cursor, Copilot CLI, and Grok CLI. A skill copy for the other agents in the table below | The agent's command on PATH or its home folder |
-| MCP apps | `mcp-apps` | An entry named `conquistador` in the app's MCP config: Claude Desktop, VS Code, Windsurf, Zed, Cursor. It runs `~/.conquistador/plugin/mcp/server.mjs` with the Node that ran the installer | The app's config folder |
+| MCP clients | `mcp-apps` | An entry named `conquistador` in the app's MCP config: Claude Desktop, VS Code, Windsurf, Zed, Cursor. It runs `~/.conquistador/plugin/mcp/server.mjs` with the Node that ran the installer | The app's config folder |
 | Hosted MCP | `hosted` | Sign in with GitHub, then print the client config for deployed agents and remote apps | Shown only when this version can sign in, and only online |
 | Executor | `executor` | A source in [Executor](https://executor.sh), so every agent connected to Executor gets the playbook tools | `executor` on PATH |
 | Chat bots | `bot` | A system prompt and knowledge files for GPTs, Claude Projects, Grok projects, and Gems (`conquistador bot`) | Never chosen for you |
 | CLI command | `cli` | A permanent `conquistador` command, installed globally with npm or Bun | Choose the package manager in Options |
 
-An app is never set up twice. An agent with the plugin already has the MCP server, so the MCP apps
+An app is never set up twice. An agent with the plugin already has the MCP server, so the MCP clients
 step leaves out Cursor when Cursor gets the plugin.
 
-MCP apps: before Conquistador changes a config file, it saves a copy next to it
+MCP clients: before Conquistador changes a config file, it saves a copy next to it
 (`FILE.conquistador-backup`) and keeps every other server and setting. It never rewrites a file that
 is not plain JSON, for example a Zed `settings.json` with comments. It shows the entry to add by
 hand instead.
 
-Executor: the installer runs `executor call executor mcp addServer`. Executor asks to approve the
+Executor 2 uses apps and one MCP endpoint. Add your apps and connect accounts in Executor, then
+use its **Connect an agent** page. Provider credentials stay in Executor. See
+[client setup](https://executor.sh/docs/mcp-clients) and [tool discovery](https://executor.sh/docs/mcp).
+Automatic Conquistador source setup on v2 is not implemented yet. The installer shows this
+handoff, calls no removed v1 commands, and records no successful connection.
+
+Executor 1: the installer runs `executor call executor mcp addServer`. Executor asks to approve the
 change, and the installer says yes for that one change, because you approved it in the review. When
 Executor is installed but not running, the review says so and the step starts it
 (`executor daemon run`). An Executor version without `mcp.addServer` gets the steps to add the
@@ -95,7 +101,7 @@ line: `conquistador remove` then tells you to remove it in the Executor app (`ex
 | `--providers=NAME[,NAME]` | Install for these agents. Names: `claude` (or `claude-code`), `codex`, `cursor`, `copilot`, `grok`, `gemini`, `opencode`, `pi`, `hermes`, `antigravity`, `kiro`, `vibe`, `qoder`, `rovodev`, `trae`, `trae-cn` |
 | `--scope=global` | Install for all projects. Agents with a plugin manager get the plugin: the skill, hooks, and the MCP server |
 | `--scope=project` | Copy the one skill into this project's skill folder. Commit it to share it with your team. No hooks or MCP server |
-| `--apps=NAME[,NAME]` | MCP apps: `claude-desktop`, `vscode`, `windsurf`, `zed`, `cursor` |
+| `--apps=NAME[,NAME]` | MCP clients: `claude-desktop`, `vscode`, `windsurf`, `zed`, `cursor` |
 | `--executor-name=NAME` | The source name in Executor. Default: `conquistador` |
 | `--bot-out=DIR` | The folder for the chat bot files. Default: `./conquistador-bot` |
 | `--package-manager=npm\|bun` | Package manager for `--surface=cli`. Default: `npm`. The review shows the exact package command. Scripts stay disabled |
@@ -201,7 +207,7 @@ conquistador update --dry-run     # Show the update; change nothing
 conquistador doctor               # Report drift in installs, hooks, and project context
 conquistador doctor --fix         # Repair what a copy can repair
 conquistador agents               # Show agents and install state
-conquistador remove               # Remove every install: agents, MCP app entries, the Executor source
+conquistador remove               # Remove every install: agents, MCP client entries, the Executor source
 conquistador remove codex         # Remove one agent
 conquistador remove --scope=project
 npm uninstall -g @forsvn/conquistador
@@ -214,7 +220,7 @@ Without a global CLI, put `npx @forsvn/conquistador` in front of each command.
 
 `doctor` checks:
 
-- **Install**: the plugin copy, each global install, each project skill copy, each MCP app entry,
+- **Install**: the plugin copy, each global install, each project skill copy, each MCP client entry,
   and the Executor source match this version. It warns when one agent loads both the global plugin
   and a project copy.
 - **Hooks**: each plugin manifest names a hook file that exists, and each script that file runs
@@ -456,10 +462,10 @@ and the Docker images stay in the [repository](https://github.com/forsvn-labs/co
 
 | Symptom | Fix |
 |---|---|
-| No agent is found | Install a supported agent, or name one: `--providers=claude`. You can still install MCP apps, Executor, or chat bots |
+| No agent is found | Install a supported agent, or name one: `--providers=claude`. You can still install MCP clients, Executor, or chat bots |
 | `The conquistador command on your PATH is version …` | An older copy runs instead of the one you installed. Run `npm i -g @forsvn/conquistador@latest`, or remove the old copy with the command the warning prints |
 | `npm i @forsvn/conquistador` (without `-g`) gives no `conquistador` command | That puts the package in `./node_modules`. Use `npm i -g @forsvn/conquistador`, or run `npx @forsvn/conquistador` |
-| An MCP app config `is not plain JSON` | The installer left it unchanged. Add the entry it printed by hand, or remove the comments and run `conquistador add` |
+| An MCP client config `is not plain JSON` | The installer left it unchanged. Add the entry it printed by hand, or remove the comments and run `conquistador add` |
 | Executor `cannot add a source from the command line` | Update Executor (`npm i -g executor`), or add the source by hand with the printed steps |
 | `Not found on PATH` for a global install | Install that agent's CLI, or use `--scope=project` |
 | `… exists and was not created by Conquistador` | Move that folder yourself, then retry. The installer never overwrites a folder it did not create |

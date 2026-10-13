@@ -114,7 +114,7 @@ full-screen installer takes about a minute, and nothing changes until you confir
    `n`. It warns you when an older `conquistador`
    on your PATH would run instead, or when npm has a newer version.
 2. **Options.** All projects (plugin with prompt hooks and the MCP server) or only this project
-   (one skill folder you can commit). Turn on more places if you want them: **MCP apps** (Claude
+   (one skill folder you can commit). Turn on more places if you want them: **MCP clients** (Claude
    Desktop, VS Code, Windsurf, Zed, Cursor), **Executor**, **chat bot files**, or **Hosted MCP**
    for deployed agents. Choose npm or Bun to keep the permanent `conquistador` command.
 3. **Review.** Every change, what stays unchanged, and how to undo it.
@@ -122,7 +122,7 @@ full-screen installer takes about a minute, and nothing changes until you confir
 5. **Done.** The exact command to type in each agent: `/conquistador init` in a project without
    `GROWTH.md`, otherwise `/conquistador`. Enter opens the manager. `q` exits with a saved terminal summary.
 
-Run `conquistador` again to manage agents, project skills, MCP apps, hooks, and the CLI. Installed
+Run `conquistador` again to manage agents, project skills, MCP clients, hooks, and the CLI. Installed
 items show each scope and path, with controls to update or remove one item. Updates and repairs
 stay inside the TUI. Use `--plain` or `TERM=dumb` for line prompts. `conquistador add` opens the
 installer again. Skip the questions in scripts:

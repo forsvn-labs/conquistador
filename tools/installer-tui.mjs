@@ -18,6 +18,7 @@ import { runCommand } from './process-run.mjs';
 import { productRoot } from './agents.mjs';
 import { managedInstalls } from './managed-installs.mjs';
 import { installerOperation } from './installer-operation.mjs';
+import { usesExecutor2, executor2Handoff } from './executor-source.mjs';
 
 // Brand colors from conquistador-landing src/styles/tokens.css. NO_COLOR and dumb terminals get none.
 const COLORS = { brand: '#FF6B2C', ember: '#FF8A4C', sticky: '#FFE45C', sky: '#BFE0FF', ok: '#7FD18B', bad: '#FF7A6B', line: '#81756C', ink: '#1A100A' };
@@ -162,11 +163,11 @@ function optionRows(ctx, choices, options) {
   const skip = duplicateApps({ surfaces: ['agents'], scope: choices.scope, agents: choices.agents }, ctx);
   const apps = ctx.apps.filter(app => app.found && !skip.includes(app.id));
   const deduped = ctx.apps.filter(app => app.found && skip.includes(app.id)).map(app => dedupeNote(app.id));
-  list.push({ id: 'mcp-apps', label: 'MCP apps', toggle: true,
-    hint: () => [apps.length ? `Adds the local MCP server to ${apps.map(app => app.label).join(', ')}.` : 'No MCP app found. Name one with --apps.', ...deduped].join(' ') });
+  list.push({ id: 'mcp-apps', label: 'MCP clients', toggle: true,
+    hint: () => [apps.length ? `Adds the local MCP server to ${apps.map(app => app.label).join(', ')}.` : 'No MCP client found. Name one with --apps.', ...deduped].join(' ') });
   if (ctx.executor.installed) {
     list.push({ id: 'executor', label: 'Executor', toggle: true,
-      hint: () => `Adds the source "${choices.executorName}" for every Executor-connected agent.${ctx.executor.running === false ? ' Starts Executor first.' : ''} Rename: --executor-name.` });
+      hint: () => usesExecutor2(ctx.executor.version) ? executor2Handoff : `Adds the source "${choices.executorName}" for every Executor-connected agent.${ctx.executor.running === false ? ' Starts Executor first.' : ''} Rename: --executor-name.` });
   }
   list.push({ id: 'bot', label: 'Chat bot files', toggle: true, hint: () => `Writes a system prompt and knowledge files to ${tilde(choices.botOut)} for GPTs, Claude Projects, and Gems. Folder: --bot-out.` });
   if (ctx.login && ctx.online !== false) list.push({ id: 'hosted', label: 'Hosted MCP', toggle: true, hint: () => 'Sign in with GitHub to get a token for deployed agents and remote apps.' });
@@ -225,7 +226,8 @@ function doneLines({ results, checks, plan, ready, cwd, task, notice }, width) {
   }
   const bot = results.find(item => item.surface === 'bot' && item.ok);
   if (bot) { add(''); add(`Chat bots: follow ${tilde(join(bot.target, 'README.md'))} for each chat app.`); }
-  if (results.some(item => item.surface === 'mcp-apps' && item.ok && !item.skipped)) { add(''); add('MCP apps: restart each app to load the Conquistador server.'); }
+
+  if (results.some(item => item.surface === 'mcp-apps' && item.ok && !item.skipped)) { add(''); add('MCP clients: restart each app to load the Conquistador server.'); }
   if (results.some(item => item.surface === 'hosted' && item.ok)) { add(''); add('Hosted MCP: the client config prints when you exit. The token is secret.', { tone: 'sky' }); }
   if (problems) {
     add('');
@@ -389,7 +391,7 @@ function App({ options: initialOptions, cwd, first, update, warnings, onExit, mo
   const MENU = [
     { id: 'add', label: 'Add or change agents', hint: `Choose from all ${AGENTS.length} supported agents. Search with /. Only selected agents install.` },
     { id: 'skills', label: 'Skills in this project', hint: 'Copy the Conquistador skill into selected agent folders in this project.' },
-    { id: 'mcp', label: 'MCP servers', hint: 'Choose local MCP apps, Hosted MCP, Executor, or chat bot files.' },
+    { id: 'mcp', label: 'MCP connections', hint: 'Choose local MCP clients, Hosted MCP, Executor, or chat bot files.' },
     { id: 'hooks', label: 'Hooks', hint: 'Turn prompt and copy-check hooks on or off. Changes apply on the next prompt.' },
     { id: 'cli', label: 'Install CLI command', hint: 'Keep conquistador on PATH with npm or Bun, including after an npx run.' },
     { id: 'installed', label: 'Installed items', hint: 'See the scope and path of each install. Update or remove one selected item.' },
@@ -580,7 +582,7 @@ function App({ options: initialOptions, cwd, first, update, warnings, onExit, mo
     return frame(h(Card, { c, width, title: 'Conquistador is installed', subtitle },
       ...support.map((text, index) => h(Text, { key: `support${index}`, color: c.sky }, text)),
       ...installed.map((text, index) => h(Text, { key: `installed${index}`, dimColor: true }, text)),
-      h(Text, { color: homeRows.some(row => row.stale) ? c.sticky : c.ok, wrap: 'truncate-end' }, homeRows.some(row => row.stale) ? '! An installed copy needs update or repair.' : `${here.agents.length} ${here.agents.length === 1 ? 'agent' : 'agents'} installed · ${appLabels.length} MCP apps · hooks ${hooksState().on ? 'on' : 'off'}`),
+      h(Text, { color: homeRows.some(row => row.stale) ? c.sticky : c.ok, wrap: 'truncate-end' }, homeRows.some(row => row.stale) ? '! An installed copy needs update or repair.' : `${here.agents.length} ${here.agents.length === 1 ? 'agent' : 'agents'} installed · ${appLabels.length} MCP clients · hooks ${hooksState().on ? 'on' : 'off'}`),
       lead ? h(Text, { color: c.brand, wrap: 'truncate-end' }, `In ${lead.label}: ${nextStep(lead, cwd)}`) : null,
       notice ? h(Text, { key: 'notice', color: c.sticky, wrap: 'truncate-end' }, `! ${notice}`) : null,
       wide ? h(Columns, { c, mainWidth, sideWidth, height: bodyHeight, main: menuRows,
@@ -603,7 +605,7 @@ function App({ options: initialOptions, cwd, first, update, warnings, onExit, mo
     return frame(h(Card, { c, width, title: 'Installed items', subtitle },
       list.above ? h(Text, { dimColor: true }, `↑ ${list.above} more`) : null,
       ...list.shown.map((item, index) => h(Text, { key: item.id, color: list.start + index === cursor ? c.brand : undefined, wrap: 'truncate-end' },
-        `${list.start + index === cursor ? '› ◆' : '  ◇'} ${item.label} · ${item.scope === 'project' ? 'this project' : item.scope === 'global' ? 'all projects' : item.surface === 'mcp-apps' ? 'MCP app' : 'source'}`)),
+        `${list.start + index === cursor ? '› ◆' : '  ◇'} ${item.label} · ${item.scope === 'project' ? 'this project' : item.scope === 'global' ? 'all projects' : item.surface === 'mcp-apps' ? 'MCP client' : 'source'}`)),
       list.below ? h(Text, { dimColor: true }, `↓ ${list.below} more`) : null,
       !installedItems.length ? h(Text, null, 'No tracked agent or MCP installs here. Choose an install option from the home screen.') : null),
     [['↑↓', 'move'], ['enter', 'details'], ['esc', 'back'], ['q', 'quit']]);
@@ -626,7 +628,7 @@ function App({ options: initialOptions, cwd, first, update, warnings, onExit, mo
   }
 
   if (screen === 'confirm-remove') {
-    return frame(h(Card, { c, width, title: 'Remove Conquistador?', subtitle: target ? `Only ${target.label}${target.scope ? ` (${target.scope})` : ''}.` : 'From every agent, MCP app, and Executor source this installer added.' },
+    return frame(h(Card, { c, width, title: 'Remove Conquistador?', subtitle: target ? `Only ${target.label}${target.scope ? ` (${target.scope})` : ''}.` : 'From every agent, MCP client, and Executor source this installer added.' },
       ...(target?.path ? rows(target.path, inner).map((text, index) => h(Text, { key: `path${index}` }, text)) : []),
       target?.agents?.length > 1 ? h(Text, { color: c.sticky }, 'Shared folder: every named agent loses this skill copy.') : null,
       ...rows('Your playbooks, config, bot exports, and the npm CLI stay. You can install again with conquistador.', inner).map((text, index) => h(Text, { key: index }, text))),
@@ -666,8 +668,8 @@ function App({ options: initialOptions, cwd, first, update, warnings, onExit, mo
   }
 
   if (screen === 'apps') {
-    const subtitle = 'Select one or more apps. Other MCP servers stay.';
-    const description = appChoices.length ? 'Checked apps get the local Conquistador MCP server. You can select apps before installing them. Restart each app after setup.' : 'Selected plugins already provide the server. Nothing to add.';
+    const subtitle = 'Select one or more apps to use Conquistador.';
+    const description = appChoices.length ? 'These apps are MCP clients. Checked apps connect to the local Conquistador server. Other servers stay. Restart each app after setup.' : 'Selected plugins already provide the server. Nothing to add.';
     const hints = wide ? [] : rows(description, inner).slice(0, 2);
     const capacity = room(1 + hints.length + (hints.length ? 1 : 0), subtitle);
     const list = windowed(appChoices, cursor, capacity);
@@ -680,10 +682,11 @@ function App({ options: initialOptions, cwd, first, update, warnings, onExit, mo
     ];
 
     const bodyHeight = Math.min(capacity, Math.max(10, list.shown.length + Number(Boolean(list.above)) + Number(Boolean(list.below))));
-    return frame(h(Card, { c, width, title: 'Which MCP apps?', subtitle },
+
+    return frame(h(Card, { c, width, title: 'Which MCP clients?', subtitle },
       h(Text, null, h(Text, { dimColor: true }, `${appChoices.length} apps · `), h(Text, { bold: true, color: c.ok }, `${choices.apps.length} selected`)),
       wide ? h(Columns, { c, mainWidth, sideWidth, height: bodyHeight, main: listRows,
-        side: h(Detail, { c, width: sideWidth, height: bodyHeight, title: appChoices[cursor]?.label ?? 'MCP apps', description,
+        side: h(Detail, { c, width: sideWidth, height: bodyHeight, title: appChoices[cursor]?.label ?? 'MCP clients', description,
           selected: appChoices.filter(app => choices.apps.includes(app.id)).map(app => app.label), selectionTitle: 'Selected apps' }) }) : listRows,
       hints.length ? h(Text, { key: 'gap' }, ' ') : null,
       ...hints.map((text, index) => h(Text, { key: `hint${index}`, dimColor: true }, text))),

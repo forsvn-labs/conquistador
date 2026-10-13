@@ -18,7 +18,7 @@ export const HELP = `Conquistador ${version}
 Growth and marketing playbooks. Install here; work in your coding agent.
 
   conquistador                Install into your agents, or manage the installs
-  conquistador add            Add agents, MCP apps, Executor, or chat bots
+  conquistador add            Add agents, MCP clients, Executor, or chat bots
   conquistador install-cli    Keep the CLI command with npm or Bun
   conquistador update         Update the CLI and every install
   conquistador doctor         Find and repair install and project drift
@@ -45,7 +45,7 @@ Install
     --providers=NAME[,NAME]         Install for these agents: ${AGENTS.map(agent => agent.id).join(', ')}
     --in AGENT                      Install for this agent
     --scope=project|global          Project skill folder, or global (plugin with hooks and MCP)
-    --apps=NAME[,NAME]              MCP apps: claude-desktop, vscode, windsurf, zed, cursor
+    --apps=NAME[,NAME]              MCP clients: claude-desktop, vscode, windsurf, zed, cursor
     --executor-name=NAME            Source name in Executor (default conquistador)
     --bot-out=DIR                   Folder for the chat bot files (default ./conquistador-bot)
     --package-manager=npm|bun       Package manager for --surface=cli (default npm)
@@ -191,12 +191,16 @@ export function runUpdate(args) {
   const source = plugins.length || apps.length || state.executor ? stageSource({ dryRun }) : pluginHome();
   if (!source) return 1;
   const done = new Set();
-  // MCP apps and Executor run this Node and the plugin copy; refresh their entries too.
+  // MCP clients and Executor run this Node and the plugin copy; refresh their entries too.
   const server = localServer();
   const results = [
     ...tracked.map(agent => ({ agent, result: applyAgent(agent, !dryRun && !agent.installed() ? 'install' : 'update', { source, dryRun, log, done }) })),
     ...folders.map(folder => ({ agent: { label: `${tilde(folder.path)} (project)` }, result: applyAgent(folder.agents[0], 'update', { scope: 'project', root, dryRun, log, done }) })),
-    ...apps.map(id => { log(`update "conquistador" in ${tilde(state.mcpApps[id].path ?? id)}`); return { agent: { label: `${appById(id).label} (MCP app)` }, result: dryRun ? { ok: true } : applyApp(id, server) }; }),
+    ...apps.map(id => {
+      log(`update "conquistador" in ${tilde(state.mcpApps[id].path ?? id)}`);
+
+      return { agent: { label: `${appById(id).label} (MCP client)` }, result: dryRun ? { ok: true } : applyApp(id, server) };
+    }),
     ...(state.executor ? [{ agent: { label: `Executor source "${state.executor.slug}"` }, result: dryRun ? { ok: true } : registerSource(state.executor.name ?? state.executor.slug, server) }] : []),
   ];
   const failed = report(results);
@@ -227,7 +231,7 @@ export function runRemove(args) {
   // Hosts that share a project folder share one copy; removing one host removes that copy.
   const folders = scope === 'global' ? [] : projectFolders(root, names.length ? AGENTS.filter(agent => names.includes(agent.id)) : AGENTS).filter(folder => existsSync(join(folder.path, OWNED)));
 
-  // A full removal also takes out the MCP app entries and the Executor source.
+  // A full removal also takes out the MCP client entries and the Executor source.
   const everything = !names.length && scope !== 'project';
   const apps = everything ? Object.keys(state.mcpApps ?? {}).filter(appById) : [];
   const executor = everything ? state.executor ?? null : null;
@@ -243,7 +247,8 @@ export function runRemove(args) {
     ...folders.map(folder => ({ agent: { label: `${tilde(folder.path)} (project)` }, result: applyAgent(folder.agents[0], 'remove', { scope: 'project', root, dryRun, log, done }) })),
     ...apps.map(id => {
       log(`remove "conquistador" from ${tilde(state.mcpApps[id].path ?? id)}`);
-      return { agent: { label: `${appById(id).label} (MCP app)`, app: id }, result: dryRun ? { ok: true } : removeApp(id) };
+
+      return { agent: { label: `${appById(id).label} (MCP client)`, app: id }, result: dryRun ? { ok: true } : removeApp(id) };
     }),
     ...(executor ? [(() => {
       log(`executor call executor coreTools integrations remove '{"slug":"${executor.slug}"}'`);

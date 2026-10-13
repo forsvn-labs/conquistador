@@ -7,14 +7,14 @@ install opened the first-run installer again. The new controls address those fai
 ## Main implementation
 
 `tools/installer-tui.mjs` is the main screen controller. It lists all 16 supported agents with
-search, selects MCP apps, manages project skills and hooks, shows each install's scope and path,
+search, selects MCP clients, manages project skills and hooks, shows each install's scope and path,
 and displays maintenance results inside the TUI. Enter on Done opens the manager; `q` exits.
 Removal requires `y` after a review, including every agent affected by a shared skill folder.
 
 The visual follow-up preserves the orange/yellow wordmark and uses orange rows for keyboard
 focus. Wide terminals put the focused choice's explanation and selection summary beside the
 list. Compact terminals use one column and keep the controls visible at 60×24. Checkboxes
-distinguish selected agents and MCP apps from the keyboard cursor. Multiple selections survive
+distinguish selected agents and MCP clients from the keyboard cursor. Multiple selections survive
 search, Back, resize, and installation. Space toggles one choice; `A` selects every agent, `a`
 toggles detected agents, and `n` clears the list. Toggling detected agents keeps manual choices.
 The TUI selects installation targets. Each coding agent owns its AI model settings.
@@ -68,7 +68,7 @@ save screen transcripts and a gallery. The report records source hashes. Iris ca
 before/after terminal cells, with synthetic host fixtures; screenshots are attached to the PR
 and kept in the project's Drive evidence folder, outside Git.
 
-Local results: 940 product tests, 59 terminal scenarios, 44 copy-check scenarios, and 11 social
+Local results: 940 product tests, 60 terminal scenarios, 44 copy-check scenarios, and 11 social
 style checks pass. Build and type checks pass. The new installer modules pass configured lint.
 The existing broader tooling lint baseline is outside this change's validation claim.
 The two modified TUI/E2E files have no configured lint findings on changed lines. Their existing
@@ -90,10 +90,50 @@ earlier `2c89d3e` code. [PR #75](https://github.com/forsvn-labs/conquistador/pul
 current CI results, review, and captures. The following documentation commit records this
 acceptance and does not change the candidate's package files.
 
+## MCP flow review
+
+Reviewed Executor's official docs on 2026-10-13. Our old "MCP apps" label meant desktop/editor
+clients. It is now "MCP clients"; the manager says "MCP connections". The official
+[MCP Apps extension](https://modelcontextprotocol.io/extensions/apps/overview) means an interactive
+interface inside an AI conversation. Public flags, config keys, and documentation URLs stay compatible.
+
+Executor's [getting-started flow](https://executor.sh/docs) adds apps, connects reusable accounts,
+then connects the agent. Its [client setup](https://executor.sh/docs/mcp-clients) uses one HTTP
+endpoint and browser sign-in for hosted use. Scoped connections choose accessible profiles and
+tools. Provider credentials stay in Executor. Use an approval mode where the person can answer
+the exact request. Reconnect the client before checking discovery.
+
+The [MCP guide](https://executor.sh/docs/mcp) keeps the exposed tool set small. Read app skills,
+search for the needed operation, inspect its signature, then call it. Use code mode for dependent
+calls or to reduce large results. Resume a paused request after the user's answer; do not replay it.
+The [approval contract](https://executor.sh/docs/concepts/tools-and-approvals) belongs to each
+operation. A skill or a read-like name does not grant permission.
+
+Our adapter used Executor 1's source CLI. The current
+[CLI migration guide](https://executor.sh/docs/run/cli) replaces those commands in v2. Detection,
+registration, verification, and removal now guard v2 before invoking them. An unsupported
+registration gets a manual handoff, stages no unused plugin, and records no connection.
+Unsupported removal keeps the previous source record. This is a compatibility guard, not native
+Executor 2 integration. Local stdio remains a standard
+[MCP transport](https://modelcontextprotocol.io/specification/2025-11-25/basic/transports).
+
+Next: follow [native app authoring](https://executor.sh/docs/author-an-app) or the documented
+MCP import flow, pin the host's framework version, and verify scoped authentication, discovery,
+approvals, updates, and removal against an actual v2 host. Keep the existing Conquistador
+library as the source of the playbooks. No remote app was created or deployed in this review.
+
+The MCP follow-up passes all 60 terminal scenarios and 940 product checks. The initial three
+affected scenarios failed before the change. A separate failing status-message check was added
+before fixing it; the final six affected scenarios pass. Configured lint has no findings on
+changed JavaScript lines. The v2 fixture rejects removed commands and makes no successful host
+connection. These checks prove the local handoff and record preservation, not live v2 support.
+The repeatable E2E report includes source hashes for the source adapter and contract fixture.
+Iris captures the renamed client picker with Claude Desktop and Zed both selected.
+
 ## Limits and release
 
 The source is under review. npm `latest` remains 0.5.1. Native Windows interactive installation,
-ARM platform coverage, native MCP app loading, live Executor cases, real writing quality, and
+ARM platform coverage, native MCP client loading, live Executor cases, real writing quality, and
 human acceptance remain separate checks. Package verification tests installation bytes and
 local host registration; it does not establish an agent's output quality. Merge and release
 require Hung's approval. No npm release or hosted server deployment occurred in this task.

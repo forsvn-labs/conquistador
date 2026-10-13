@@ -14,9 +14,9 @@ Research, creative work, engineering, and review support that mission.
 The terminal installs; the agent works. `npx @forsvn/conquistador` (or `bunx`, `pnpm dlx`, or the
 first `conquistador` run) opens one full-screen installer that is pleasant to use: the detected
 coding agents already chosen and the full supported-agent catalog visible. Search and installed
-status distinguish support from detection. Agent and MCP app pickers use independent checkboxes,
+status distinguish support from detection. Agent and MCP client pickers use independent checkboxes,
 preserve multiple selections, and fit wide or compact terminals. Options control scope, hooks,
-MCP apps, Hosted MCP, Executor, chat bots, and a permanent CLI command through npm or Bun.
+MCP clients, Hosted MCP, Executor, chat bots, and a permanent CLI command through npm or Bun.
 Show every change and the exact undo
 command before anything changes. Then it installs, checks each install, and shows exactly
 what to type in each agent: `/conquistador init` in a project without `GROWTH.md`. The terminal

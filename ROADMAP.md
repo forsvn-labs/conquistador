@@ -13,13 +13,13 @@ Next action: Preserve the new social-copy priorities below. Verify the merged li
 ## Implemented, awaiting review and release
 
 The control-center work now lists all 16 supported agents, supports search, manages project
-skills and MCP apps, changes hooks, installs the permanent CLI with npm or Bun, and keeps
+skills and MCP clients, changes hooks, installs the permanent CLI with npm or Bun, and keeps
 update, repair, and removal inside the TUI. Each installed item has a scope and path. Slow
 plugin managers leave progress responsive. Resize and MCP-only first-use checks are covered.
 The CLI and install docs include one-command npm and Bun installation followed by TUI launch.
 Package lifecycle scripts remain non-interactive.
 
-The TUI refinement adds checkboxes for multiple agents and MCP apps, live counts and selection
+The TUI refinement adds checkboxes for multiple agents and MCP clients, live counts and selection
 summaries, an orange focus row, and details beside choices in wide terminals. A compact layout
 keeps the controls visible at 60×24. Bulk selection preserves manually chosen agents.
 
@@ -49,6 +49,11 @@ claim the synthetic fixture reproduces its exact text.
 
 ## Public alpha follow-up
 
+0. Migrate the Executor source and capability adapters to the current v2 apps/MCP contract.
+   The present adapter supports Executor 1 and now gives a v2 handoff without removed CLI calls.
+   Follow the official Connect flow: accounts in Executor, a scoped endpoint for the agent,
+   skills and schema discovery, and per-operation approvals. Verify actual v2 install, read,
+   approval, correction, update, and removal before advertising v2 support.
 1. Run the five live Executor cases (first run and connect) that 0.3.0 shipped without. They need
    a responding Executor.app.
 2. List the plugin in the agent marketplaces, then check each listing installs 0.4.x.
@@ -56,7 +61,7 @@ claim the synthetic fixture reproduces its exact text.
    on ARM. `tools/e2e/installer.mjs` needs a Windows pseudo-terminal bridge first.
 4. Docs canonical verified on 2026-10-13: `/docs` now declares `https://conquistador.app/docs`
    in both the canonical link and `og:url`. Keep this check in release acceptance.
-5. Open each MCP app (Claude Desktop, VS Code, Windsurf, Zed, Cursor) after the installer writes
+5. Open each MCP client (Claude Desktop, VS Code, Windsurf, Zed, Cursor) after the installer writes
    its entry, and check that the app lists the Conquistador tools. Only the config file and an MCP
    handshake are checked now.
 
