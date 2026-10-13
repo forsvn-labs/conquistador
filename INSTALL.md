@@ -33,14 +33,17 @@ bun add --global @forsvn/conquistador && conquistador
 `conquistador` runs the installer the first time: a full-screen terminal UI with five steps. It
 takes about a minute, and nothing changes until you confirm the review.
 
-1. **Agents.** All 16 supported agents are listed. Detected agents are chosen; Space changes a choice.
-   Press `/` to search. Press Enter to stop typing and select a result. Escape clears the search.
+1. **Agents.** All 16 supported agents are listed. Select one or more with checkboxes. Detected
+   agents start selected. Space toggles one agent; `a` toggles detected agents, `A` selects all,
+   and `n` clears the selection. Press `/` to search, Enter to finish typing, then Space to toggle
+   a result. Escape clears the search. Other selections stay.
    Problems found before
    the start show here: another `conquistador` earlier on your PATH (or with another version), or a
    newer version on npm, each with the exact fix.
 2. **Options.** All projects or only this project, prompt hooks on or off, and more places for
    Conquistador: MCP apps, Executor, chat bot files, Hosted MCP, and a permanent CLI command installed
-   with npm or Bun. The arrow keys change a value. Choose each MCP app in its own selection screen.
+   with npm or Bun. The arrow keys change a value. The MCP app picker also supports multiple
+   checkboxes: Space toggles an app, `a` selects all, and `n` clears the selection.
 3. **Review.** Every change with its path or command, what stays unchanged, and how to undo it.
 4. **Install**, one line per step. A step that fails does not stop the others. Then a verify pass
    runs the `conquistador doctor` checks for each surface and one MCP handshake.
@@ -53,6 +56,10 @@ the CLI. **Installed items** shows each scope and path, with update and removal 
 item. Shared skill folders name every affected agent before removal. Update, repair, and removal
 show their result inside the TUI. `conquistador add` opens the installer again. `--plain` (or
 `TERM=dumb`) gives line prompts instead of the full screen.
+
+Wide terminals show details and the selected agents beside the list. Compact terminals keep
+one column with a selection count. Search, Back, and resizing preserve your choices. The TUI
+chooses where Conquistador installs; choose your AI model inside your coding agent.
 
 ### Surfaces
 

@@ -42,6 +42,11 @@
 //   C5  Resizing keeps the selected agent and final review/undo text reachable.
 //   C6  npm and Bun CLI installs are explicit, checked, and recover from missing PATH or permissions.
 //   C7  Removing one MCP app keeps another app, the agent, and all other server entries.
+//   M1  Agent multi-selection is explicit. Space, search, Back, resize, select-all, and clear
+//       preserve independent choices; the final install contains exactly the selected agents.
+//   M2  Toggling detected agents does not discard an undetected agent selected by the user.
+//   M3  MCP apps also use checkboxes and install multiple selected apps without adding another.
+//   M4  Wide layouts show selection details; compact layouts keep choices and keys reachable.
 import { spawnSync } from 'node:child_process';
 import { runCommand } from '../process-run.mjs';
 import { createHash } from 'node:crypto';
@@ -192,7 +197,8 @@ const TITLE = { agents: 'Which agents?', options: 'Choose options', review: 'Rev
 async function moveTo(s, label) {
   await s.settle(120);
   for (let attempt = 0; attempt < 40; attempt += 1) {
-    const rows = s.screen.text().split('\n').filter(line => /[›◉○◆◇]/.test(line) || /‹.*›/.test(line));
+    const rows = s.screen.text().split('\n').map(line => line.includes('│') ? line.split('│')[1] : line)
+      .filter(line => /[›◆◇]/.test(line) || /\[[ ✓]\]/.test(line) || /‹.*›/.test(line));
     const cursor = rows.findIndex(line => /›\s/.test(line.replace(/‹[^›]*›/g, '')));
     const target = rows.findIndex(line => line.includes(label));
     if (target >= 0 && target === cursor) return;
@@ -346,7 +352,7 @@ scenario('agent-catalog', ['C1', 'T20'], async ({ expect }) => {
     if (!has(s.screen.text(), 'Qoder')) { await s.press('ctrlC'); await s.exit(); return s.snaps; }
     await moveTo(s, 'Qoder');
     await s.press('space'); await s.settle(120);
-    expect(/◉\s+Qoder/.test(s.screen.text()), 'Qoder could not be chosen after opening the list (T20)');
+    expect(/\[✓\]\s+Qoder/.test(s.screen.text()), 'Qoder could not be chosen after opening the list (T20)');
     await s.press('escape');
     await s.press('enter');
     await s.waitFor(TITLE.options); await s.press('enter');
@@ -359,6 +365,108 @@ scenario('agent-catalog', ['C1', 'T20'], async ({ expect }) => {
     const code = await s.exit();
     expect(code === 130, `cancel exited ${code}`);
   } finally { f.cleanup(); }
+});
+
+const checked = (s, label) => s.screen.text().split('\n').some(line =>
+  line.replace(/^[\s│]+/, '').match(/^(?:›\s+)?\[✓\]\s+(.+)/)?.[1].startsWith(label));
+
+scenario('multi-agents', ['M1', 'M2', 'M4', 'T2'], async ({ expect, transcript }) => {
+  const f = fixture('multi-agents', { agents: ['claude', 'codex', 'cursor'], env: { FORCE_COLOR: '3' } });
+  const s = f.term([], { columns: 100, rows: 42 });
+
+  try {
+    await s.waitFor(TITLE.agents); await s.snap('multi-defaults');
+    expect(has(s.screen.text(), 'Select one or more agents'), 'the picker does not disclose multi-selection');
+    expect(checked(s, 'Claude Code') && checked(s, 'Codex') && checked(s, 'Cursor'), 'detected agents are not checked independently');
+    await s.press('n'); await s.settle(100);
+    expect(has(s.screen.text(), '0 selected'), 'clear does not clear every agent');
+    await toggleRow(s, 'Claude Code'); await toggleRow(s, 'Codex');
+    await s.press('/'); await s.type('qoder'); await s.press('enter'); await s.press('space'); await s.settle(100);
+    expect(has(s.screen.text(), '3 selected') && checked(s, 'Qoder'), 'search replaced the previous choices');
+    await s.resize(60, 24); await s.snap('multi-compact');
+    expect(has(s.screen.text(), '3 selected') && checked(s, 'Qoder') && has(s.screen.text(), 'continue'), 'compact layout loses selections or keys');
+    await s.press('escape'); await s.press('a'); await s.settle(100);
+    expect(has(s.screen.text(), '4 selected'), 'selecting detected agents discarded the manual choice');
+    await s.press('a'); await s.settle(100);
+    expect(has(s.screen.text(), '1 selected'), 'clearing detected agents discarded the manual choice');
+    await s.press('A'); await s.settle(100);
+    expect(has(s.screen.text(), '16 selected'), 'select all does not select the complete catalog');
+    await s.press('n'); await s.resize(100, 42);
+    await toggleRow(s, 'Claude Code'); await toggleRow(s, 'Codex');
+    await s.press('/'); await s.type('qoder'); await s.press('enter'); await s.press('space'); await s.press('escape');
+    await s.press('enter'); await s.waitFor(TITLE.options); await setOption(s, 'Install for', 'This project');
+    await s.press('escape'); await s.waitFor(TITLE.agents); await s.snap('multi-back');
+    expect(has(s.screen.text(), '3 selected') && checked(s, 'Claude Code') && checked(s, 'Codex'), 'Back discarded the independent selections');
+    await s.press('enter'); await s.waitFor(TITLE.options); await s.press('enter'); await s.waitFor(TITLE.review); await s.snap('multi-review');
+    await s.press('enter'); await finish(s);
+    expect(await s.exit() === 0, 'multiple selected agents did not install together');
+
+    for (const folder of ['.claude', '.agents', '.qoder']) expect(existsSync(join(f.project, folder, 'skills/conquistador/SKILL.md')), `selected project skill ${folder} did not install`);
+    expect(!has(s.snaps.find(snap => snap.name === 'multi-review').text, 'Cursor:'), 'the review included an unchecked agent');
+    expect(!Object.keys(f.json(join(f.home, '.conquistador/installs.json'))?.agents ?? {}).length, 'project selection created a global agent registration');
+    expect(has(s.screen.text({ history: true }), 'Qoder'), 'the install summary omitted the manual selection');
+
+    return s.snaps;
+  } finally { transcript('terminal-raw', s.raw); s.kill(); await s.exit({ timeout: 1000 }); f.cleanup(); }
+});
+
+scenario('multi-mcp-apps', ['M3', 'T2'], async ({ expect, transcript }) => {
+  const f = fixture('multi-mcp-apps', { agents: [], apps: { 'claude-desktop': { mcpServers: { other: { command: 'keep-me' } } }, vscode: null }, env: { FORCE_COLOR: '3' } });
+  const s = f.term(['--surface=mcp-apps'], { columns: 100, rows: 42 });
+
+  try {
+    await s.waitFor('Which MCP apps?'); await s.snap('mcp-defaults');
+    expect(has(s.screen.text(), 'Select one or more apps'), 'the MCP picker does not disclose multi-selection');
+    await s.press('n'); await s.settle(100);
+    expect(has(s.screen.text(), '0 selected'), 'clear does not clear MCP apps');
+    await toggleRow(s, 'Claude Desktop'); await toggleRow(s, 'Zed'); await s.snap('mcp-multi-selected');
+    expect(has(s.screen.text(), '2 selected') && checked(s, 'Claude Desktop') && checked(s, 'Zed'), 'MCP choices are not independent checkboxes');
+    await s.press('enter'); await s.waitFor(/Choose options|Review the changes/);
+
+    if (has(s.screen.text(), TITLE.options)) await s.press('enter');
+    await s.waitFor(TITLE.review); await s.snap('mcp-multi-review');
+    await s.press('enter'); await finish(s);
+    expect(await s.exit() === 0, 'multiple MCP apps did not install together');
+    expect(f.json(appFile(f.home, 'claude-desktop'))?.mcpServers?.conquistador && f.json(appFile(f.home, 'zed'))?.context_servers?.conquistador, 'a selected MCP app was omitted');
+    expect(f.json(appFile(f.home, 'claude-desktop'))?.mcpServers?.other?.command === 'keep-me', 'multi-selection changed another server');
+    expect(!existsSync(appFile(f.home, 'vscode')), 'an unchecked MCP app installed');
+
+    return s.snaps;
+  } finally { transcript('terminal-raw', s.raw); s.kill(); await s.exit({ timeout: 1000 }); f.cleanup(); }
+});
+
+scenario('picker-layout', ['M4', 'T7', 'T8'], async ({ expect, transcript }) => {
+  const f = fixture('picker-layout', { agents: ['claude', 'codex', 'cursor'], env: { FORCE_COLOR: '3' } });
+  const s = f.term([], { columns: 120, rows: 44 });
+
+  try {
+    await s.waitFor(TITLE.agents); await s.snap('picker-wide');
+    expect(has(s.screen.text(), 'Selected agents') && has(s.screen.text(), 'Trae CN'), 'wide picker hides the selection summary or the catalog');
+    expect(hasColor(s.raw), 'the rich terminal lost its brand palette');
+
+    for (const [columns, rows] of [[80, 30], [60, 24]]) {
+      await s.resize(columns, rows); await s.snap(`picker-${columns}x${rows}`);
+      const text = s.screen.text();
+      expect(text.split('\n').length <= rows && text.split('\n').every(line => [...line].length <= columns), `picker exceeds ${columns}x${rows}`);
+      expect(has(text, '3 selected') && has(text, 'continue'), `picker loses count or keys at ${columns}x${rows}`);
+    }
+
+    await s.press('q'); await s.exit();
+    expect(f.run(['--providers=claude,codex,cursor', '--yes']).status === 0, 'manager fixture did not install');
+    const manager = f.term([], { columns: 120, rows: 44 });
+
+    try {
+      await manager.waitFor(TITLE.home); await manager.snap('manager-wide');
+
+      for (const label of ['Add or change agents', 'Installed items', 'Check and repair', 'Remove', 'Quit', '16 supported agents']) expect(has(manager.screen.text(), label), `wide manager hides ${label}`);
+      await moveTo(manager, 'Install CLI command'); await manager.snap('manager-cli-focus');
+      await manager.resize(60, 24); await manager.snap('manager-compact');
+      expect(has(manager.screen.text(), 'Install CLI command') && has(manager.screen.text(), 'enter'), 'compact manager loses focus or keys');
+      await manager.press('q'); await manager.exit();
+
+      return [...s.snaps, ...manager.snaps];
+    } finally { manager.kill(); await manager.exit({ timeout: 1000 }); }
+  } finally { transcript('terminal-raw', s.raw); s.kill(); await s.exit({ timeout: 1000 }); f.cleanup(); }
 });
 
 scenario('control-center', ['C2', 'T10'], async ({ expect }) => {
@@ -417,7 +525,7 @@ scenario('resize', ['C5', 'T7'], async ({ expect, transcript }) => {
   try {
     await s.waitFor(TITLE.agents); await s.press('/'); await s.type('qoder'); await s.press('enter'); await s.press('space');
     await s.resize(60, 24); await s.snap('agents-60x24');
-    expect(/◉\s+Qoder/.test(s.screen.text()), 'resize lost the chosen agent');
+    expect(/\[✓\]\s+Qoder/.test(s.screen.text()), 'resize lost the chosen agent');
     expect(has(s.screen.text(), 'continue'), 'resize hid the continue key');
     await s.press('escape'); await s.press('enter'); await s.waitFor(TITLE.options); await s.press('enter'); await s.waitFor(TITLE.review);
     for (let i = 0; i < 40; i += 1) await s.press('down'); await s.snap('review-bottom');

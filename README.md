@@ -109,8 +109,9 @@ npx @forsvn/conquistador        # or: bunx @forsvn/conquistador, pnpm dlx @forsv
 The terminal only installs Conquistador. The work happens inside your coding agent. The
 full-screen installer takes about a minute, and nothing changes until you confirm the review.
 
-1. **Agents.** All 16 supported agents are visible. Detected agents are chosen for you. Search
-   with `/`, select with Space. It warns you when an older `conquistador`
+1. **Agents.** All 16 supported agents are visible. Select several with checkboxes; detected
+   agents start selected. Search with `/`, toggle with Space, select all with `A`, or clear with
+   `n`. It warns you when an older `conquistador`
    on your PATH would run instead, or when npm has a newer version.
 2. **Options.** All projects (plugin with prompt hooks and the MCP server) or only this project
    (one skill folder you can commit). Turn on more places if you want them: **MCP apps** (Claude

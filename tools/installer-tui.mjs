@@ -20,7 +20,7 @@ import { managedInstalls } from './managed-installs.mjs';
 import { installerOperation } from './installer-operation.mjs';
 
 // Brand colors from conquistador-landing src/styles/tokens.css. NO_COLOR and dumb terminals get none.
-const COLORS = { brand: '#FF6B2C', ember: '#FF8A4C', sticky: '#FFE45C', sky: '#BFE0FF', ok: '#7FD18B', bad: '#FF7A6B', line: '#81756C' };
+const COLORS = { brand: '#FF6B2C', ember: '#FF8A4C', sticky: '#FFE45C', sky: '#BFE0FF', ok: '#7FD18B', bad: '#FF7A6B', line: '#81756C', ink: '#1A100A' };
 const LOGO = [
   ['▄▀▀', '▄▀▄', '█▄ █', '▄▀▄', '█ █', '█', '▄▀▀', '▀█▀', '▄▀▄', '█▀▄', '▄▀▄', '█▀▄'],
   ['▀▄▄', '▀▄▀', '█ ▀█', '▀▄█', '▀▄▀', '█', '▄▄▀', ' █ ', '█▀█', '█▄▀', '▀▄▀', '█▀▄'],
@@ -51,7 +51,7 @@ function rows(text, width) {
 // The part of a list that fits: keeps the cursor in view and says how many rows are hidden.
 function windowed(items, cursor, height) {
   if (items.length <= height) return { start: 0, shown: items, above: 0, below: 0 };
-  const size = Math.max(1, height - 1);
+  const size = Math.max(1, height - 2);
   const start = Math.min(Math.max(0, cursor - Math.floor(size / 2)), items.length - size);
   return { start, shown: items.slice(start, start + size), above: start, below: items.length - start - size };
 }
@@ -61,8 +61,8 @@ function Spinner({ color }) {
   return h(Text, { color }, SPINNER[frame % SPINNER.length]);
 }
 
-function Header({ c, columns, step }) {
-  const logo = columns - 4 >= LOGO_WIDTH + 8;
+function Header({ c, columns, step, compact }) {
+  const logo = !compact && columns - 4 >= LOGO_WIDTH + 8;
   const letters = LOGO[0].length;
   return h(Box, { flexDirection: 'column', paddingX: 2, paddingTop: 1 },
     logo
@@ -70,7 +70,7 @@ function Header({ c, columns, step }) {
         ...line.flatMap((letter, index) => [h(Text, { key: index, bold: true, color: c.brand && mix(COLORS.brand, COLORS.sticky, index / (letters - 1)) }, letter), index < letters - 1 ? h(Text, { key: `s${index}` }, ' ') : null]),
         row === 1 ? h(Text, { dimColor: true }, `  ${version}`) : null))
       : h(Text, null, h(Text, { bold: true, color: c.brand }, 'CONQUISTADOR'), h(Text, { dimColor: true }, `  ${version}`)),
-    h(Text, { dimColor: true }, columns >= 68 ? 'Growth, marketing, and sales playbooks for your coding agent.' : 'Growth playbooks for your coding agent.'),
+    !compact ? h(Text, { dimColor: true }, columns >= 68 ? 'Growth, marketing, and sales playbooks for your coding agent.' : 'Growth playbooks for your coding agent.') : null,
     step === null ? h(Text, null, ' ') : h(Box, { marginTop: 1 }, ...STEPS.flatMap((name, index) => {
       const state = index < step ? 'done' : index === step ? 'now' : 'next';
       const mark = state === 'done' ? '✓' : state === 'now' ? '●' : '○';
@@ -89,13 +89,47 @@ function Card({ c, width, title, subtitle, children }) {
 }
 
 // Key hints under the card. Each hint stays whole; a narrow terminal wraps between hints.
-function Keys({ keys }) {
-  return h(Box, { paddingX: 2, marginTop: 1, flexWrap: 'wrap', columnGap: 3 }, ...keys.map(([key, label]) =>
-    h(Box, { key, flexShrink: 0 }, h(Text, { bold: true }, key), h(Text, { dimColor: true }, ` ${label}`))));
+function Keys({ c, keys }) {
+  return h(Box, { paddingX: 2, marginTop: 1, flexWrap: 'wrap', columnGap: 2 }, ...keys.map(([key, label]) =>
+    h(Box, { key, flexShrink: 0 }, h(Text, { bold: true, color: key === 'enter' ? c.brand : undefined }, key), h(Text, { dimColor: true }, ` ${label}`))));
 }
 
 // One styled line of body text. `tone` picks the color.
 const Line = ({ c, text, tone, bold, dim }) => h(Text, { color: tone ? c[tone] : undefined, bold, dimColor: dim, wrap: 'truncate-end' }, text || ' ');
+
+// A cursor is an action focus. A checkbox is an independent selection, including without color.
+function FocusRow({ c, label, width, focused, selected, status = '' }) {
+  const check = selected === undefined ? '' : selected ? '[✓] ' : '[ ] ';
+  const available = Math.max(1, width - 2 - check.length - (status ? status.length + 2 : 0));
+  const name = label.length > available ? `${label.slice(0, available - 1)}…` : label.padEnd(available);
+
+  return h(Text, { backgroundColor: focused ? c.brand : undefined, color: focused && c.brand ? c.ink : undefined, bold: focused, wrap: 'truncate-end' },
+    h(Text, { color: focused ? undefined : c.brand }, focused ? '› ' : '  '),
+    h(Text, { color: !focused && selected ? c.ok : undefined }, check),
+    name, status ? h(Text, { dimColor: !focused }, `  ${status}`) : null);
+}
+
+// Wide terminals put the explanation beside the choices. Compact terminals keep one column.
+function Columns({ c, mainWidth, sideWidth, height, main, side }) {
+  return h(Box, { flexDirection: 'row' },
+    h(Box, { flexDirection: 'column', width: mainWidth }, main),
+    h(Box, { width: 1, marginX: 2 }, h(Text, { color: c.line }, Array.from({ length: height }, () => '│').join('\n'))),
+    h(Box, { flexDirection: 'column', width: sideWidth }, side));
+}
+
+function Detail({ c, title, description, selected, selectionTitle, width, height }) {
+  const descriptionRows = rows(description, width).slice(0, Math.max(0, Math.min(4, height - 4)));
+  const capacity = Math.max(0, height - descriptionRows.length - 3);
+  const visibleCount = Math.max(0, capacity - (selected.length > capacity ? 1 : 0));
+
+  return h(Box, { flexDirection: 'column' },
+    h(Text, { bold: true, color: c.sky, wrap: 'truncate-end' }, title),
+    ...descriptionRows.map((text, index) => h(Text, { key: `detail${index}`, dimColor: true }, text)),
+    h(Text, null, ' '),
+    h(Text, { bold: true }, `${selectionTitle} · ${selected.length}`),
+    ...selected.slice(0, visibleCount).map(label => h(Text, { key: label, color: c.ok, wrap: 'truncate-end' }, `✓ ${label}`)),
+    selected.length > visibleCount ? h(Text, { dimColor: true }, `+ ${selected.length - visibleCount} more selected`) : !selected.length && capacity ? h(Text, { dimColor: true }, 'None selected') : null);
+}
 
 // A scrolled block of body lines, with "more" markers when it does not fit. `limit` gets the
 // largest useful offset, so scrolling past the end does not pile up key presses.
@@ -209,8 +243,12 @@ function App({ options: initialOptions, cwd, first, update, warnings, onExit, mo
   const { exit } = useApp();
   const { columns, rows: height } = useWindowSize();
   const c = mode === 'none' ? {} : COLORS;
-  const width = Math.max(18, Math.min(columns - 4, 96));
+  const width = Math.max(18, Math.min(columns - 4, 116));
   const inner = width - 4;
+  const compact = height < 32;
+  const wide = inner >= 80 && !compact;
+  const sideWidth = Math.min(38, Math.floor(inner * 0.4));
+  const mainWidth = wide ? inner - sideWidth - 5 : inner;
   const [screen, setScreen] = useState(first === 'home' ? 'home' : 'loading');
   const [options, setOptions] = useState(initialOptions);
   const [ctx, setCtx] = useState(null);
@@ -458,7 +496,11 @@ function App({ options: initialOptions, cwd, first, update, warnings, onExit, mo
         setChoices(value => ({ ...value, agents: AGENTS.map(agent => agent.id).filter(item => (item === id ? !value.agents.includes(id) : value.agents.includes(item))) }));
       } else if (input === 'a') {
         const found = order.filter(agent => agent.found).map(agent => agent.id);
-        setChoices(value => ({ ...value, agents: found.every(id => value.agents.includes(id)) ? [] : AGENTS.map(agent => agent.id).filter(id => found.includes(id) || value.agents.includes(id)) }));
+        setChoices(value => ({ ...value, agents: found.every(id => value.agents.includes(id)) ? value.agents.filter(id => !found.includes(id)) : AGENTS.map(agent => agent.id).filter(id => found.includes(id) || value.agents.includes(id)) }));
+      } else if (input === 'A') {
+        setChoices(value => ({ ...value, agents: AGENTS.map(agent => agent.id) }));
+      } else if (input === 'n') {
+        setChoices(value => ({ ...value, agents: [] }));
       } else if (key.return) go(shown.options ? 'options' : 'review');
       return;
     }
@@ -469,6 +511,10 @@ function App({ options: initialOptions, cwd, first, update, warnings, onExit, mo
       else if (input === ' ' && appChoices[cursor]) {
         const id = appChoices[cursor].id;
         setChoices(value => ({ ...value, apps: value.apps.includes(id) ? value.apps.filter(app => app !== id) : [...value.apps, id] }));
+      } else if (input === 'a' || input === 'A') {
+        setChoices(value => ({ ...value, apps: appChoices.map(app => app.id) }));
+      } else if (input === 'n') {
+        setChoices(value => ({ ...value, apps: [] }));
       } else if (key.return) { setChoices(value => ({ ...value, appsChosen: true })); go(shown.options ? 'options' : 'review'); }
       return;
     }
@@ -499,12 +545,11 @@ function App({ options: initialOptions, cwd, first, update, warnings, onExit, mo
     }
   }, { isActive: true });
 
-  // Rows left for a list after the header (6), the card frame, title, and subtitle (5 or more),
-  // and the keys (2), with one row to spare.
-  const room = (notes, subtitle = '') => Math.max(3, height - 14 - Math.max(1, rows(subtitle, inner).length) - notes);
+  // Reserve the frame and wrapped key hints. Small terminals use the compact wordmark.
+  const room = (notes, subtitle = '') => Math.max(3, height - (compact ? 12 : 14) - Math.max(1, rows(subtitle, inner).length) - notes);
   const step = STEP_OF[screen] ?? null;
   const frame = (card, keys) => h(Box, { flexDirection: 'column', width: columns },
-    h(Header, { c, columns, step }), card, h(Keys, { keys }));
+    h(Header, { c, columns, step, compact }), card, h(Keys, { c, keys }));
 
   if (screen === 'loading') {
     return frame(h(Card, { c, width, title: 'Looking for your coding agents', subtitle: 'Reading PATH and your home folder. Nothing changes yet.' },
@@ -517,21 +562,31 @@ function App({ options: initialOptions, cwd, first, update, warnings, onExit, mo
     const notice = updateNotice(update.cached, version, channel().kind);
     const state = readState();
     const appLabels = Object.keys(state.mcpApps ?? {}).map(id => appById(id)?.label).filter(Boolean);
-    const subtitle = `${AGENTS.length} supported agents. Manage skills, MCP servers, hooks, and the CLI.`;
-    const support = rows('Claude Code · Codex · Cursor · Copilot · Gemini · OpenCode', inner).slice(0, 2);
-    const installed = rows(`Installed: ${[...new Set(homeRows.map(row => row.label ?? row.agent.label)), ...appLabels, ...(state.executor ? ['Executor'] : [])].join(', ') || 'choose an option below'}`, inner).slice(0, 2);
-    const capacity = room(support.length + installed.length + 3 + (notice ? 1 : 0), subtitle);
+    const subtitle = `${AGENTS.length} supported agents · Manage your installs.`;
+    const support = compact ? [] : rows('Claude Code · Codex · Cursor · Copilot · Gemini · OpenCode', inner).slice(0, 2);
+    const installedLabels = [...new Set(homeRows.map(row => row.label ?? row.agent.label)), ...appLabels, ...(state.executor ? ['Executor'] : []), ...(state.cli ? ['CLI command'] : [])];
+    const installed = wide ? [] : rows(`Installed: ${installedLabels.join(', ') || 'choose an option below'}`, inner).slice(0, compact ? 1 : 2);
+    const hints = wide ? [] : rows(MENU[cursor].hint, inner).slice(0, compact ? 1 : 2);
+    const capacity = room(support.length + installed.length + 1 + (lead ? 1 : 0) + (notice ? 1 : 0) + hints.length + (hints.length && !compact ? 1 : 0), subtitle);
     const menu = windowed(MENU, cursor, capacity);
+
+    const menuRows = [
+      menu.above ? h(Text, { key: 'above', dimColor: true }, `↑ ${menu.above} more actions`) : null,
+      ...menu.shown.map((item, index) => h(FocusRow, { key: item.id, c, label: item.label, width: mainWidth, focused: menu.start + index === cursor })),
+      menu.below ? h(Text, { key: 'below', dimColor: true }, `↓ ${menu.below} more actions`) : null,
+    ];
+
+    const bodyHeight = menu.shown.length + Number(Boolean(menu.above)) + Number(Boolean(menu.below));
     return frame(h(Card, { c, width, title: 'Conquistador is installed', subtitle },
       ...support.map((text, index) => h(Text, { key: `support${index}`, color: c.sky }, text)),
       ...installed.map((text, index) => h(Text, { key: `installed${index}`, dimColor: true }, text)),
       h(Text, { color: homeRows.some(row => row.stale) ? c.sticky : c.ok, wrap: 'truncate-end' }, homeRows.some(row => row.stale) ? '! An installed copy needs update or repair.' : `${here.agents.length} ${here.agents.length === 1 ? 'agent' : 'agents'} installed · ${appLabels.length} MCP apps · hooks ${hooksState().on ? 'on' : 'off'}`),
       lead ? h(Text, { color: c.brand, wrap: 'truncate-end' }, `In ${lead.label}: ${nextStep(lead, cwd)}`) : null,
       notice ? h(Text, { key: 'notice', color: c.sticky, wrap: 'truncate-end' }, `! ${notice}`) : null,
-      menu.above ? h(Text, { dimColor: true }, `↑ ${menu.above} more actions`) : null,
-      ...menu.shown.map((item, index) => h(Text, { key: item.id, color: menu.start + index === cursor ? c.brand : undefined, bold: menu.start + index === cursor }, `${menu.start + index === cursor ? '› ◆' : '  ◇'} ${item.label}`)),
-      menu.below ? h(Text, { dimColor: true }, `↓ ${menu.below} more actions`) : null,
-      h(Text, { key: 'hint', dimColor: true, wrap: 'truncate-end' }, MENU[cursor].hint)), [['↑↓', 'move'], ['enter', 'choose'], ['q', 'quit']]);
+      wide ? h(Columns, { c, mainWidth, sideWidth, height: bodyHeight, main: menuRows,
+        side: h(Detail, { c, width: sideWidth, height: bodyHeight, title: MENU[cursor].label, description: MENU[cursor].hint, selected: installedLabels, selectionTitle: 'Installed here' }) }) : menuRows,
+      hints.length && !compact ? h(Text, { key: 'gap' }, ' ') : null,
+      ...hints.map((text, index) => h(Text, { key: `hint${index}`, dimColor: true, wrap: 'truncate-end' }, text))), [['↑↓', 'move'], ['enter', 'choose'], ['q', 'quit']]);
   }
 
   if (screen === 'hooks') {
@@ -582,62 +637,85 @@ function App({ options: initialOptions, cwd, first, update, warnings, onExit, mo
     const notes = [...warnings, ...(ctx.found.length ? [] : ['No coding agent found on PATH or in your home folder. A skill-format agent still installs; or turn on an option on the next screen.'])].flatMap(text => rows(`! ${text}`, inner));
     const detail = visible[Math.min(cursor, visible.length - 1)];
     const describe = !detail ? 'No matching agent. Clear the search with Escape.' : detail.found
-      ? `Found${detail.foundAt ? ` at ${tilde(detail.foundAt)}` : ''}. ${detail.how === 'skill' ? 'Copies the Conquistador skill folder.' : 'Installs the plugin: the skill, prompt hooks, and the MCP server.'}`
+      ? detail.how === 'skill' ? 'Copies the Conquistador skill folder into your agent.' : 'Global installs include the skill, hooks, and MCP. Project installs copy one skill folder.'
       : detail.how === 'skill' ? 'Not found. The skill folder still installs; the agent reads it after you install the agent.' : `Not found. Install ${detail.label} first, or choose This project on the next screen.`;
-    const hints = rows(describe, inner).slice(0, 2);
-    const subtitle = `${AGENTS.length} supported agents · ${ctx.found.length} found · ${choices.agents.length} selected. Nothing changes until you confirm.`;
-    const list = windowed(visible, cursor, room(notes.length + hints.length + 1, subtitle));
-    const labelWidth = Math.max(8, Math.min(20, inner - 22));
+
+    const hints = wide ? [] : rows(describe, inner).slice(0, 2);
+    const subtitle = 'Select one or more agents. Nothing changes until you confirm.';
+    const capacity = room(notes.length + hints.length + (hints.length ? 1 : 0) + 1 + (query || searching ? 1 : 0), subtitle);
+    const list = windowed(visible, cursor, capacity);
+
+    const listRows = [
+      list.above ? h(Text, { key: 'above', dimColor: true }, `↑ ${list.above} more`) : null,
+      ...list.shown.map((agent, index) => h(FocusRow, { key: agent.id, c, width: mainWidth, label: agent.label,
+        focused: list.start + index === cursor, selected: choices.agents.includes(agent.id), status: agent.found ? 'found' : 'not found' })),
+      list.below ? h(Text, { key: 'below', dimColor: true }, `↓ ${list.below} more`) : null,
+    ];
+
+    const bodyHeight = Math.min(capacity, Math.max(10, list.shown.length + Number(Boolean(list.above)) + Number(Boolean(list.below))));
     return frame(h(Card, { c, width, title: 'Which agents?', subtitle },
+      h(Text, null, h(Text, { color: c.sky }, `${AGENTS.length} supported agents`), h(Text, { dimColor: true }, ` · ${ctx.found.length} found · `), h(Text, { bold: true, color: c.ok }, `${choices.agents.length} selected`)),
       query || searching ? h(Text, { color: c.brand }, `Search: ${query}${searching ? '▎' : ''}`) : null,
       ...notes.map((text, index) => h(Text, { key: `w${index}`, color: c.sticky }, text)),
-      list.above ? h(Text, { key: 'above', dimColor: true }, `↑ ${list.above} more`) : null,
-      ...list.shown.map((agent, index) => {
-        const at = list.start + index, on = choices.agents.includes(agent.id), here = at === cursor;
-        return h(Text, { key: agent.id, wrap: 'truncate-end' },
-          h(Text, { color: c.brand }, here ? '› ' : '  '),
-          h(Text, { color: on ? c.brand : undefined, dimColor: !on }, on ? '◉ ' : '○ '),
-          h(Text, { bold: here }, agent.label.slice(0, labelWidth).padEnd(labelWidth)),
-          h(Text, { dimColor: true }, ` ${(agent.how === 'skill' ? 'skill' : 'plugin').padEnd(7)}`),
-          h(Text, { color: agent.found ? c.ok : undefined, dimColor: !agent.found }, agent.found ? 'found' : 'not found'));
-      }),
-      list.below ? h(Text, { key: 'below', dimColor: true }, `↓ ${list.below} more`) : null,
-      h(Text, { key: 'gap' }, ' '),
+      wide ? h(Columns, { c, mainWidth, sideWidth, height: bodyHeight, main: listRows,
+        side: h(Detail, { c, width: sideWidth, height: bodyHeight, title: detail?.label ?? 'No matching agent', description: describe,
+          selected: AGENTS.filter(agent => choices.agents.includes(agent.id)).map(agent => agent.label), selectionTitle: 'Selected agents' }) }) : listRows,
+      hints.length ? h(Text, { key: 'gap' }, ' ') : null,
       ...hints.map((text, index) => h(Text, { key: `h${index}`, dimColor: true }, text))),
-    searching ? [['type', 'search'], ['enter', 'select results'], ['esc', 'stop search']] : [['↑↓', 'move'], ['space', 'select'], ['/', 'search'], ['a', 'all found'], ['enter', 'continue'], ['esc', query ? 'clear search' : 'quit']]);
+    searching ? [['type', 'search'], ['enter', 'finish search'], ['esc', 'stop search']] : [['↑↓', 'move'], ['space', 'toggle'], ['/', 'search'], ['a', 'found'], ['A', 'all'], ['n', 'clear'], ['enter', 'continue'], ['esc', query ? 'clear search' : 'quit']]);
   }
 
   if (screen === 'apps') {
-    const subtitle = 'Choose the apps that get the local Conquistador MCP server. Other servers stay.';
-    const list = windowed(appChoices, cursor, room(2, subtitle));
+    const subtitle = 'Select one or more apps. Other MCP servers stay.';
+    const description = appChoices.length ? 'Checked apps get the local Conquistador MCP server. You can select apps before installing them. Restart each app after setup.' : 'Selected plugins already provide the server. Nothing to add.';
+    const hints = wide ? [] : rows(description, inner).slice(0, 2);
+    const capacity = room(1 + hints.length + (hints.length ? 1 : 0), subtitle);
+    const list = windowed(appChoices, cursor, capacity);
+
+    const listRows = [
+      list.above ? h(Text, { key: 'above', dimColor: true }, `↑ ${list.above} more`) : null,
+      ...list.shown.map((app, index) => h(FocusRow, { key: app.id, c, width: mainWidth, label: app.label,
+        focused: list.start + index === cursor, selected: choices.apps.includes(app.id), status: app.found ? 'found' : 'not found' })),
+      list.below ? h(Text, { key: 'below', dimColor: true }, `↓ ${list.below} more`) : null,
+    ];
+
+    const bodyHeight = Math.min(capacity, Math.max(10, list.shown.length + Number(Boolean(list.above)) + Number(Boolean(list.below))));
     return frame(h(Card, { c, width, title: 'Which MCP apps?', subtitle },
-      list.above ? h(Text, { dimColor: true }, `↑ ${list.above} more`) : null,
-      ...list.shown.map((app, index) => h(Text, { key: app.id },
-        h(Text, { color: c.brand }, `${list.start + index === cursor ? '›' : ' '} ${choices.apps.includes(app.id) ? '◉' : '○'} `),
-        h(Text, { bold: list.start + index === cursor }, app.label),
-        h(Text, { dimColor: true }, app.found ? '  found' : '  not found'))),
-      list.below ? h(Text, { dimColor: true }, `↓ ${list.below} more`) : null,
-      h(Text, { dimColor: true }, appChoices.length ? 'Space selects an app. Enter continues.' : 'Selected plugins already provide the server. Nothing to add.')),
-    [['↑↓', 'move'], ['space', 'select'], ['enter', 'continue'], ['esc', 'back']]);
+      h(Text, null, h(Text, { dimColor: true }, `${appChoices.length} apps · `), h(Text, { bold: true, color: c.ok }, `${choices.apps.length} selected`)),
+      wide ? h(Columns, { c, mainWidth, sideWidth, height: bodyHeight, main: listRows,
+        side: h(Detail, { c, width: sideWidth, height: bodyHeight, title: appChoices[cursor]?.label ?? 'MCP apps', description,
+          selected: appChoices.filter(app => choices.apps.includes(app.id)).map(app => app.label), selectionTitle: 'Selected apps' }) }) : listRows,
+      hints.length ? h(Text, { key: 'gap' }, ' ') : null,
+      ...hints.map((text, index) => h(Text, { key: `hint${index}`, dimColor: true }, text))),
+    [['↑↓', 'move'], ['space', 'toggle'], ['a', 'all'], ['n', 'clear'], ['enter', 'continue'], ['esc', 'back']]);
   }
 
   if (screen === 'options') {
     const list = opts.list;
     const row = list[Math.min(cursor, list.length - 1)];
     const notes = [...(shown.agents ? [] : warnings), ...opts.notes].flatMap(text => rows(text.startsWith('Hosted') ? text : `! ${text}`, inner));
-    const hints = row ? rows(row.hint(valueOf(row, choices, toggles)), inner).slice(0, 3) : [];
+    const description = row?.hint(valueOf(row, choices, toggles)) ?? '';
+    const hints = wide ? [] : rows(description, inner).slice(0, 3);
     const chosen = choices.agents.length ? `${choices.agents.length} ${choices.agents.length === 1 ? 'agent' : 'agents'} chosen.` : 'No agent chosen.';
-    return frame(h(Card, { c, width, title: 'Choose options', subtitle: `${chosen} Turn on more places for Conquistador, or press Enter.` },
+    const subtitle = `${chosen} Turn on more places for Conquistador, or press Enter.`;
+    const capacity = room(notes.length + hints.length + (hints.length ? 1 : 0), subtitle);
+    const visibleOptions = windowed(list, cursor, capacity);
+
+    const optionViews = [
+      visibleOptions.above ? h(Text, { key: 'above', dimColor: true }, `↑ ${visibleOptions.above} more options`) : null,
+      ...visibleOptions.shown.map((item, index) => h(FocusRow, { key: item.id, c, width: mainWidth, focused: visibleOptions.start + index === cursor,
+        label: `${item.label.padEnd(16)} ‹ ${nameOf(item, valueOf(item, choices, toggles))} ›` })),
+      visibleOptions.below ? h(Text, { key: 'below', dimColor: true }, `↓ ${visibleOptions.below} more options`) : null,
+    ];
+
+    const bodyHeight = Math.min(capacity, Math.max(10, visibleOptions.shown.length + Number(Boolean(visibleOptions.above)) + Number(Boolean(visibleOptions.below))));
+
+    return frame(h(Card, { c, width, title: 'Choose options', subtitle },
       ...notes.map((text, index) => h(Text, { key: `w${index}`, color: c.sticky }, text)),
-      ...list.map((item, index) => {
-        const value = valueOf(item, choices, toggles), here = index === cursor;
-        const on = item.toggle ? value : true;
-        return h(Text, { key: item.id, wrap: 'truncate-end' },
-          h(Text, { color: c.brand }, here ? '› ' : '  '),
-          h(Text, { bold: here }, item.label.padEnd(16)),
-          h(Text, { color: on && (here || !item.toggle) ? c.brand : on ? c.ember : undefined, dimColor: !on, bold: here }, `‹ ${nameOf(item, value)} ›`));
-      }),
-      h(Text, { key: 'gap' }, ' '),
+      wide ? h(Columns, { c, mainWidth, sideWidth, height: bodyHeight, main: optionViews,
+        side: h(Detail, { c, width: sideWidth, height: bodyHeight, title: row?.label ?? 'Options', description,
+          selected: AGENTS.filter(agent => choices.agents.includes(agent.id)).map(agent => agent.label), selectionTitle: 'Selected agents' }) }) : optionViews,
+      hints.length ? h(Text, { key: 'gap' }, ' ') : null,
       ...hints.map((text, index) => h(Text, { key: `h${index}`, dimColor: true }, text))),
     [['↑↓', 'move'], ['←→', 'change'], ['enter', 'review'], ['esc', 'back'], ['q', 'quit']]);
   }

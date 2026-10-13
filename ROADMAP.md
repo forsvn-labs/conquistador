@@ -19,6 +19,10 @@ plugin managers leave progress responsive. Resize and MCP-only first-use checks 
 The CLI and install docs include one-command npm and Bun installation followed by TUI launch.
 Package lifecycle scripts remain non-interactive.
 
+The TUI refinement adds checkboxes for multiple agents and MCP apps, live counts and selection
+summaries, an orange focus row, and details beside choices in wide terminals. A compact layout
+keeps the controls visible at 60×24. Bulk selection preserves manually chosen agents.
+
 The social fixes below are implemented locally. Exact fixtures contain Hung's original tweet
 and the two supplied rewrites. A third negative-parallelism case is explicitly synthetic.
 The original passes unchanged; the rewrites fail. Core reads include the shared AI-pattern

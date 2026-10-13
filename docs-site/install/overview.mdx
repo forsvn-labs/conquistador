@@ -9,8 +9,9 @@ One installer configures every option. Run it in your project folder:
 npx @forsvn/conquistador@latest
 ```
 
-The first screen lists all 16 supported agents. It preselects detected agents. Search with `/` and
-select with Space. Options then control project skills, hooks, MCP apps, Hosted MCP, Executor, chat
+The first screen lists all 16 supported agents with independent checkboxes. It preselects detected
+agents. Search with `/` and toggle with Space. Select several agents in one install. Options then
+control project skills, hooks, MCP apps, Hosted MCP, Executor, chat
 bot files, and the permanent CLI command. Every change appears in the review before installation.
 
 Install the permanent CLI and open the TUI in one command:
@@ -48,8 +49,8 @@ The installer never configures two options for the same app.
   From 0.5.0 the installer is a full-screen terminal UI, and it never opens an agent or asks for a task: the terminal only installs Conquistador, and the work happens inside your agent. In 0.4.0 the installer used line prompts and could open your agent with a first task. In 0.3.0 it asked only for the coding agents and the scope.
 </Note>
 
-1. **Agents.** All supported agents are visible. Detected agents are chosen. Search with `/`, press Enter to stop typing, then Space to select. Problems found before the start show here with the exact fix: an old Node, another `conquistador` command on your `PATH`, or a newer version on npm.
-2. **Options.** The scope (project or global), hooks on or off, and the other options in the table above. Choose each MCP app in its own selection screen. Choose npm or Bun to keep the CLI command. The arrow keys change a value.
+1. **Agents.** All supported agents are visible. Select several with checkboxes. Space toggles one agent, `a` toggles detected agents, `A` selects all, and `n` clears the selection. Search with `/`, press Enter to finish typing, then Space to toggle a result. Other choices stay. Problems found before the start show here with the exact fix: an old Node, another `conquistador` command on your `PATH`, or a newer version on npm.
+2. **Options.** The scope (project or global), hooks on or off, and the other options in the table above. The MCP app picker also supports multiple checkboxes. Choose npm or Bun to keep the CLI command. The arrow keys change a value.
 3. **Review.** Every change, with paths and commands, what stays unchanged, and how to undo it (`conquistador remove`). Press Enter to install.
 4. **Install and verify.** One progress line for each step. If one option fails, the others continue. Then the installer runs the [doctor](/install/update-remove#check-the-install) checks for each option it installed.
 5. **Done.** The command to type in each agent: `/conquistador init` in a project without `GROWTH.md`, otherwise `/conquistador`. Enter opens the manager. `q` exits and leaves the summary in your terminal.
@@ -60,6 +61,10 @@ Run `conquistador` again to manage agents, project skills, MCP servers, hooks, a
 **Installed items** screen shows each path and scope. Select an item to update or remove it.
 Shared skill folders name every affected agent before removal. Updates, repairs, and removal
 show their result inside the TUI. Use `--plain`, or `TERM=dumb`, for line prompts.
+
+Wide terminals show details and a selection summary beside the list. Compact terminals keep
+one column with a selection count. Search, Back, and resizing preserve your choices. The TUI
+chooses your installation targets. Your coding agent controls the AI model.
 
 ## Install without questions
 

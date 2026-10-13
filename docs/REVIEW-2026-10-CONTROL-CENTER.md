@@ -11,6 +11,14 @@ search, selects MCP apps, manages project skills and hooks, shows each install's
 and displays maintenance results inside the TUI. Enter on Done opens the manager; `q` exits.
 Removal requires `y` after a review, including every agent affected by a shared skill folder.
 
+The visual follow-up preserves the orange/yellow wordmark and uses orange rows for keyboard
+focus. Wide terminals put the focused choice's explanation and selection summary beside the
+list. Compact terminals use one column and keep the controls visible at 60×24. Checkboxes
+distinguish selected agents and MCP apps from the keyboard cursor. Multiple selections survive
+search, Back, resize, and installation. Space toggles one choice; `A` selects every agent, `a`
+toggles detected agents, and `n` clears the list. Toggling detected agents keeps manual choices.
+The TUI selects installation targets. Each coding agent owns its AI model settings.
+
 `tools/onboard.mjs` owns the shared plan and verification flow. `tools/cli-install.mjs` installs
 the permanent command with npm or Bun, checks its version and PATH, and reports a usable retry.
 `tools/installer-operation.mjs` runs existing host adapters in child processes. This keeps their
@@ -60,9 +68,18 @@ save screen transcripts and a gallery. The report records source hashes. Iris ca
 before/after terminal cells, with synthetic host fixtures; screenshots are attached to the PR
 and kept in the project's Drive evidence folder, outside Git.
 
-Local results: 940 product tests, 56 terminal scenarios, 44 copy-check scenarios, and 11 social
+Local results: 940 product tests, 59 terminal scenarios, 44 copy-check scenarios, and 11 social
 style checks pass. Build and type checks pass. The new installer modules pass configured lint.
 The existing broader tooling lint baseline is outside this change's validation claim.
+The two modified TUI/E2E files have no configured lint findings on changed lines. Their existing
+baseline decreases from 344 findings to 340; this pass does not claim those files are lint-clean.
+
+The visual follow-up first recorded three failing E2E cases, then passes the full 59-scenario
+terminal suite. After shortening a clipped help sentence and fixing spacing, the final five
+affected cases pass again. Existing host/launch checks pass 19/19. The Impeccable detector
+reports no findings, but it has limited coverage of an Ink TUI. Iris before/after captures use
+the same three-agent fixture. The MCP capture selects Claude Desktop and Zed together. These
+figures show real terminal cells; host adapters in these cases are explicitly synthetic.
 
 Exact-package checks at `2c89d3e` pass 50/50 applicable cases, including 21 native terminal
 checks. The Node 22.18 run is explicitly not run. A real Bun global install of the same tarball
