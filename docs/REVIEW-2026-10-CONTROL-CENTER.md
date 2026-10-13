@@ -130,6 +130,13 @@ connection. These checks prove the local handoff and record preservation, not li
 The repeatable E2E report includes source hashes for the source adapter and contract fixture.
 Iris captures the renamed client picker with Claude Desktop and Zed both selected.
 
+The exact package at `d5b04bd` passes 50/50 applicable acceptance checks, including 21 native
+terminal checks. A real Bun global installation of the same package passes 7/7. Package
+integrity hashes match across the acceptance run and saved Bun candidate. Its SHA-256 is
+`1c02d494354f15c44e1a0e16665357597d523fa49a9d07220e71ac44836a210b`.
+Node 22.18 acceptance remains explicitly not run. The following documentation commit records
+these results without changing the package files.
+
 ## Limits and release
 
 The source is under review. npm `latest` remains 0.5.1. Native Windows interactive installation,
