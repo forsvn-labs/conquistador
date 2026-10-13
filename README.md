@@ -41,7 +41,7 @@ full-screen installer takes about a minute, and nothing changes until you confir
    Desktop, VS Code, Windsurf, Zed, Cursor), **Executor**, **chat bot files**, or **Hosted MCP**
    for deployed agents. Choose npm or Bun to keep the permanent `conquistador` command.
 3. **Review.** Every change, what stays unchanged, and how to undo it.
-4. **Install.** Each agent installs with its own plugin manager, then each install is checked.
+4. **Install.** Installs the plugin or skill for each selected agent, then checks each install.
 5. **Done.** The exact start command for each selected agent. Initialize the project with
    Conquistador there. Enter opens the manager. `q` exits with a saved terminal summary.
 
