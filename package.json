@@ -1,9 +1,9 @@
 {
   "name": "@forsvn/conquistador",
-  "version": "0.5.1",
-  "description": "A project operator for growth, GTM, sales, marketing, product, and knowledge work.",
+  "version": "0.6.0",
+  "description": "A free, open source marketing toolstack for your coding agents. Skills, playbooks, copy checks, and MCP.",
   "license": "MIT",
-  "homepage": "https://forsvn.com",
+  "homepage": "https://conquistador.app",
   "repository": {
     "type": "git",
     "url": "https://github.com/forsvn-labs/conquistador"
@@ -90,5 +90,19 @@
   "devDependencies": {
     "@oxlint/plugins": "1.82.0",
     "oxlint": "1.82.0"
-  }
+  },
+  "keywords": [
+    "marketing",
+    "growth",
+    "gtm",
+    "launch",
+    "sales",
+    "copywriting",
+    "coding-agents",
+    "agent-skills",
+    "mcp",
+    "claude-code",
+    "codex",
+    "cursor"
+  ]
 }

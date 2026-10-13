@@ -43,7 +43,7 @@ takes about a minute, and nothing changes until you confirm the review.
 2. **Options.** All projects or only this project, prompt hooks on or off, and more places for
    Conquistador: MCP clients, Executor, chat bot files, Hosted MCP, and a permanent CLI command installed
    with npm or Bun. The arrow keys change a value. The MCP client picker also supports multiple
-   checkboxes: Space toggles an app, `a` selects all, and `n` clears the selection.
+   checkboxes: Space toggles a client, `a` selects all, and `n` clears the selection.
 3. **Review.** Every change with its path or command, what stays unchanged, and how to undo it.
 4. **Install**, one line per step. A step that fails does not stop the others. Then a verify pass
    runs the `conquistador doctor` checks for each surface and one MCP handshake.
@@ -192,8 +192,8 @@ Notes:
 ### Exact version
 
 ```sh
-npm install -g @forsvn/conquistador@0.5.1
-npm install -g --ignore-scripts --install-links git+https://github.com/forsvn-labs/conquistador.git#v0.5.1
+npm install -g @forsvn/conquistador@0.6.0
+npm install -g --ignore-scripts --install-links git+https://github.com/forsvn-labs/conquistador.git#v0.6.0
 ```
 
 `--ignore-scripts` skips npm lifecycle scripts. `--install-links` copies the checkout out of npm's

@@ -2,7 +2,13 @@
 
 ## Current handoff
 
-Last verified: 2026-10-13. Source merged and ready for the next npm release.
+Last verified: 2026-10-13. Source merged; 0.6.0 release preparation is active.
+
+The release branch updates the product and plugin identities, npm metadata, and the shared npm/GitHub
+README. It moves install commands and the full agent list above the catalog, links the live docs,
+and uses the existing verified TUI capture. Validate the exact clean package, obtain approval
+for the version-bump merge, then tag the merged source and publish its release assets through
+OIDC. Verify registry bytes and both public pages before recording shipment.
 
 [PR #75](https://github.com/forsvn-labs/conquistador/pull/75) merged at `0cefef32ae734bc6199efd1d08fe8b4310d73e59` on 2026-10-13. The accepted source implements the full agent catalog and search, permanent npm/Bun
 CLI installation, project skills, explicit MCP client selection, hook controls, in-TUI maintenance,
