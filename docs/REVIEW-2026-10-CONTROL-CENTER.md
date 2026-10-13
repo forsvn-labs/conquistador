@@ -81,12 +81,14 @@ reports no findings, but it has limited coverage of an Ink TUI. Iris before/afte
 the same three-agent fixture. The MCP capture selects Claude Desktop and Zed together. These
 figures show real terminal cells; host adapters in these cases are explicitly synthetic.
 
-Exact-package checks at `2c89d3e` pass 50/50 applicable cases, including 21 native terminal
+Exact-package checks at `6661cea` pass 50/50 applicable cases, including 21 native terminal
 checks. The Node 22.18 run is explicitly not run. A real Bun global install of the same tarball
 passes 7/7 checks, including startup of the complete catalog. Tarball SHA-256 is
-`9c588c602da21b0be21e79bb8a24e46e7f4a6c2a093d730cdc5c7be12190a760`.
-Node 24/26 product CI, Linux/Windows package CI, and optional integration checks pass for that
-head. [PR #75](https://github.com/forsvn-labs/conquistador/pull/75) contains the review and captures.
+`0d0a7f881f5f43acb660139aeb61303e1ef639d8ca5d7e00f36adf09094cca5c`.
+Node 24/26 product CI, Linux/Windows package CI, and optional integration checks passed for the
+earlier `2c89d3e` code. [PR #75](https://github.com/forsvn-labs/conquistador/pull/75) contains the
+current CI results, review, and captures. The following documentation commit records this
+acceptance and does not change the candidate's package files.
 
 ## Limits and release
 
