@@ -36,8 +36,9 @@ full-screen installer takes about a minute, and nothing changes until you confir
 1. **Agents.** All 16 supported agents are visible. Select several with checkboxes; detected
    agents start selected. Search with `/`, toggle with Space, select all with `A`, or clear with
    `n`. It also reports an older CLI on your PATH or a newer npm release.
-2. **Options.** All projects (plugin with prompt hooks and the MCP server) or only this project
-   (one skill folder you can commit). Turn on more places if you want them: **MCP clients** (Claude
+2. **Options.** All projects or only this project. Global installs use a plugin with hooks and
+   MCP for agents that support the plugin; other agents get a skill folder. Project installs copy
+   one skill folder you can commit. Turn on more places if you want them: **MCP clients** (Claude
    Desktop, VS Code, Windsurf, Zed, Cursor), **Executor**, **chat bot files**, or **Hosted MCP**
    for deployed agents. Choose npm or Bun to keep the permanent `conquistador` command.
 3. **Review.** Every change, what stays unchanged, and how to undo it.
