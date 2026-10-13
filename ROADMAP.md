@@ -11,10 +11,13 @@ Active on 2026-10-14: make npm/Bun install-and-open commands the primary setup p
 candidate in [PR #78](https://github.com/forsvn-labs/conquistador/pull/78) changes the README, docs,
 and CLI option wording. The matching landing and crawl changes are in
 [landing PR #27](https://github.com/forsvn-labs/conquistador-landing/pull/27).
-All 940 product checks, 64 terminal scenarios, 50 package checks, and six real npm/Bun
-install-and-open checks pass. The landing passes 422 full E2E checks and focused native-disclosure
-checks. Merge approval and publication remain pending. npm remains at 0.6.0 until this patch ships.
-Deploy the landing only after npm delivers 0.6.1.
+The earlier candidate passed 940 product checks, 64 terminal scenarios, 50 package checks, and
+six real npm/Bun install-and-open checks. The expanded setup chooser now covers the homepage
+and /install in English and Vietnamese, with independent agent and MCP client selections.
+Its focused setup checks pass 198; the refreshed docs checks pass 19. Verify the expanded
+package and final-source CI before publication. Hung approved both PR merges and landing
+deployment on 2026-10-14. npm remains at 0.6.0 until this patch ships. Deploy the landing only
+after npm delivers 0.6.1.
 
 Use `npx @forsvn/conquistador@latest` when an older global install exists. An unversioned `npx`
 can reuse that install; the live check verifies that `@latest` opens 0.6.0 instead.

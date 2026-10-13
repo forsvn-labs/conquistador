@@ -5,6 +5,12 @@ This file is the full install reference that ships in the npm package.
 
 ## Before you start
 
+The [setup chooser](https://conquistador.app/install) and the homepage expose coding agents,
+native plugins, project skills, local MCP, hosted MCP, chat bot files, and GitHub downloads.
+Both agent and MCP client selections support multiple choices. Generated commands open the
+existing TUI for review. Executor 2 has a manual handoff; hosted MCP uses bearer-token headers.
+OAuth-only browser connectors are not supported yet.
+
 - Node 22.18 or later: `node --version`
 - A coding agent from the table below, logged in through its own instructions
 

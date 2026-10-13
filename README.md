@@ -11,7 +11,7 @@ Hermes Agent, Antigravity CLI, Kiro CLI, Mistral Vibe, Qoder, Rovo Dev, Trae, an
 
 ## Install
 
-You need Node 22.18 or later and a coding agent. In your project folder, install and open Conquistador:
+You need Node 22.18 or later. To set up coding agents, run this in your project folder:
 
 ```sh
 # npm
@@ -36,6 +36,26 @@ pnpm dlx @forsvn/conquistador@latest
 These commands open the TUI directly. Choose **Keep the CLI installed** there to keep the command
 with npm or Bun. You can also run `conquistador install-cli --package-manager=bun`.
 Package installation runs no interactive lifecycle script, so CI and dependency installs finish normally.
+
+### Choose another setup path
+
+The [setup chooser](https://conquistador.app/install) also appears on the homepage. Select several
+agents or MCP clients and copy the command for your setup. The TUI shows every change for review.
+
+| Setup | Use it for | Guide |
+|---|---|---|
+| Coding-agent installer | All 16 agents, with npm, Bun, npx, bunx, or pnpm dlx | [Coding agents](https://conquistador.app/docs/install/coding-agents) |
+| Native plugin | Install inside Claude Code; use the global installer for Codex, Cursor, Copilot CLI, and Grok CLI | [Plugin setup](INSTALL.md#install-from-inside-claude-code) |
+| Project skill | One skill folder per selected agent, without hooks or MCP | [Project scope](INSTALL.md#options) |
+| Local MCP | Claude Desktop, VS Code, Windsurf, Zed, and Cursor | [MCP clients](https://conquistador.app/docs/install/mcp-apps) |
+| Hosted MCP | Remote clients that support a personal bearer-token header | [Hosted server](https://conquistador.app/docs/install/hosted-mcp) |
+| Chat bot files | ChatGPT GPTs, Claude Projects, Grok projects, and Gemini Gems | [Bot export](https://conquistador.app/docs/install/chat-bots) |
+| GitHub | A pinned Git install or prepared skill/plugin ZIPs | [Release assets](https://github.com/forsvn-labs/conquistador/releases) |
+| Executor | The manual Executor 2 handoff | [Executor setup](https://conquistador.app/docs/install/executor) |
+
+Hosted MCP uses bearer tokens. OAuth-only browser connectors are not supported yet.
+
+### Use the TUI
 
 The terminal only installs Conquistador. The work happens inside your coding agent. The
 full-screen installer takes about a minute. Agent configuration changes only after you confirm

@@ -11,7 +11,9 @@ Research, creative work, engineering, and review support that mission.
 
 ## Make the first task easy
 
-The terminal installs; the agent works. Acquisition leads with npm or Bun global installation
+The terminal installs; the agent works. The homepage and a dedicated setup page show the same
+installation choices: coding agents, native plugins, project skills, local and hosted MCP, bot
+files, GitHub downloads, and the manual Executor 2 handoff. Acquisition leads with npm or Bun global installation
 followed by `conquistador`, so the command stays available for later management. A run-once
 `npx @forsvn/conquistador@latest` stays available as a secondary path. The first `conquistador`
 run opens one full-screen installer that is pleasant to use: the detected
