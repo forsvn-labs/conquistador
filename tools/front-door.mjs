@@ -15,11 +15,11 @@ const dim = text => (process.stdout.isTTY ? `\x1b[2m${text}\x1b[22m` : text);
 // The terminal installs Conquistador; the work happens inside the agent. Commands an agent runs
 // print context and change nothing.
 export const HELP = `Conquistador ${version}
-Growth and marketing playbooks for your coding agent. The terminal installs
-Conquistador; the work happens inside your agent.
+Growth and marketing playbooks. Install here; work in your coding agent.
 
   conquistador                Install into your agents, or manage the installs
-  conquistador add            Add agents, MCP apps, Executor, or chat bots
+  conquistador add            Add agents, MCP clients, Executor, or chat bots
+  conquistador install-cli    Keep the CLI command with npm or Bun
   conquistador update         Update the CLI and every install
   conquistador doctor         Find and repair install and project drift
   conquistador remove         Remove Conquistador from your agents
@@ -41,13 +41,14 @@ Install
   conquistador                      First run: the installer (agents, options, review, install, verify)
                                     Later runs: the installs, with add, update, repair, and remove
   conquistador add                  Open the installer again
-    --surface=NAME[,NAME]           ${['agents', 'mcp-apps', 'hosted', 'executor', 'bot'].join(', ')}
+    --surface=NAME[,NAME]           ${['agents', 'mcp-apps', 'hosted', 'executor', 'bot', 'cli'].join(', ')}
     --providers=NAME[,NAME]         Install for these agents: ${AGENTS.map(agent => agent.id).join(', ')}
     --in AGENT                      Install for this agent
     --scope=project|global          Project skill folder, or global (plugin with hooks and MCP)
-    --apps=NAME[,NAME]              MCP apps: claude-desktop, vscode, windsurf, zed, cursor
+    --apps=NAME[,NAME]              MCP clients: claude-desktop, vscode, windsurf, zed, cursor
     --executor-name=NAME            Source name in Executor (default conquistador)
     --bot-out=DIR                   Folder for the chat bot files (default ./conquistador-bot)
+    --package-manager=npm|bun       Package manager for --surface=cli (default npm)
     -y, --yes                       Accept the defaults and install; without a terminal, install
     --no-hooks                      Install without prompt hooks
     --dry-run                       Show the plan; change nothing
@@ -66,6 +67,7 @@ Context for your agent (prints; changes nothing)
   conquistador bot [--out DIR]      Write a system prompt and knowledge files for chat bots
 
 Maintain
+  conquistador install-cli         Install the permanent command, with npm or Bun
   conquistador update [--dry-run]   Update the CLI, plugin installs, and skill copies
   conquistador doctor [--fix]       Report (and repair) drift in installs, hooks, and project context
   conquistador remove [AGENT...]    Remove installs (--scope=project|global; default both)
@@ -178,7 +180,7 @@ export function runUpdate(args) {
   const ids = Object.keys(state.agents ?? {});
   const folders = projectFolders(root).filter(folder => existsSync(join(folder.path, OWNED)));
   const apps = Object.keys(state.mcpApps ?? {}).filter(appById);
-  if (!ids.length && !folders.length && !apps.length && !state.executor) { console.log(`Conquistador is not installed into any agent yet. Run: ${self}`); return 1; }
+  if (!ids.length && !folders.length && !apps.length && !state.executor && !state.cli) { console.log(`Conquistador is not installed into any agent yet. Run: ${self}`); return 1; }
   const log = line => console.log(dim(`  $ ${line}`));
   // A newer registry version installs itself and registers with the agents; this copy stops here.
   const handedOff = selfUpdate(args, { dryRun, log });
@@ -189,12 +191,16 @@ export function runUpdate(args) {
   const source = plugins.length || apps.length || state.executor ? stageSource({ dryRun }) : pluginHome();
   if (!source) return 1;
   const done = new Set();
-  // MCP apps and Executor run this Node and the plugin copy; refresh their entries too.
+  // MCP clients and Executor run this Node and the plugin copy; refresh their entries too.
   const server = localServer();
   const results = [
     ...tracked.map(agent => ({ agent, result: applyAgent(agent, !dryRun && !agent.installed() ? 'install' : 'update', { source, dryRun, log, done }) })),
     ...folders.map(folder => ({ agent: { label: `${tilde(folder.path)} (project)` }, result: applyAgent(folder.agents[0], 'update', { scope: 'project', root, dryRun, log, done }) })),
-    ...apps.map(id => { log(`update "conquistador" in ${tilde(state.mcpApps[id].path ?? id)}`); return { agent: { label: `${appById(id).label} (MCP app)` }, result: dryRun ? { ok: true } : applyApp(id, server) }; }),
+    ...apps.map(id => {
+      log(`update "conquistador" in ${tilde(state.mcpApps[id].path ?? id)}`);
+
+      return { agent: { label: `${appById(id).label} (MCP client)` }, result: dryRun ? { ok: true } : applyApp(id, server) };
+    }),
     ...(state.executor ? [{ agent: { label: `Executor source "${state.executor.slug}"` }, result: dryRun ? { ok: true } : registerSource(state.executor.name ?? state.executor.slug, server) }] : []),
   ];
   const failed = report(results);
@@ -225,7 +231,7 @@ export function runRemove(args) {
   // Hosts that share a project folder share one copy; removing one host removes that copy.
   const folders = scope === 'global' ? [] : projectFolders(root, names.length ? AGENTS.filter(agent => names.includes(agent.id)) : AGENTS).filter(folder => existsSync(join(folder.path, OWNED)));
 
-  // A full removal also takes out the MCP app entries and the Executor source.
+  // A full removal also takes out the MCP client entries and the Executor source.
   const everything = !names.length && scope !== 'project';
   const apps = everything ? Object.keys(state.mcpApps ?? {}).filter(appById) : [];
   const executor = everything ? state.executor ?? null : null;
@@ -241,7 +247,8 @@ export function runRemove(args) {
     ...folders.map(folder => ({ agent: { label: `${tilde(folder.path)} (project)` }, result: applyAgent(folder.agents[0], 'remove', { scope: 'project', root, dryRun, log, done }) })),
     ...apps.map(id => {
       log(`remove "conquistador" from ${tilde(state.mcpApps[id].path ?? id)}`);
-      return { agent: { label: `${appById(id).label} (MCP app)`, app: id }, result: dryRun ? { ok: true } : removeApp(id) };
+
+      return { agent: { label: `${appById(id).label} (MCP client)`, app: id }, result: dryRun ? { ok: true } : removeApp(id) };
     }),
     ...(executor ? [(() => {
       log(`executor call executor coreTools integrations remove '{"slug":"${executor.slug}"}'`);
@@ -350,8 +357,8 @@ export function runPlaybooks(args) {
 }
 
 // Explicit task supports one-word prompts without taking reserved runtime commands. Install flags start the flow too.
-const START_FLAGS = ['task', '--in', '--no-open', '--providers', '--scope', '-y', '--yes', '--no-hooks', '--dry-run', '--surface', '--apps', '--json', '--plain', '--executor-name', '--bot-out', ...Object.keys(LEGACY)];
-export const isStart = args => args.length > 0 && (/\s/.test(args[0]) || START_FLAGS.includes(args[0]) || /^--(?:in|providers|scope|surface|apps|executor-name|bot-out)=/.test(args[0]));
+const START_FLAGS = ['task', '--in', '--no-open', '--providers', '--scope', '-y', '--yes', '--no-hooks', '--dry-run', '--surface', '--apps', '--json', '--plain', '--executor-name', '--bot-out', '--package-manager', ...Object.keys(LEGACY)];
+export const isStart = args => args.length > 0 && (/\s/.test(args[0]) || START_FLAGS.includes(args[0]) || /^--(?:in|providers|scope|surface|apps|executor-name|bot-out|package-manager)=/.test(args[0]));
 
 export async function runFrontDoor(args) {
   const [command, ...rest] = args;
@@ -369,9 +376,17 @@ export async function runFrontDoor(args) {
   if (command === '--help' || command === '-h' || command === 'help') { console.log(rest.includes('--all') || args.includes('--all') ? HELP_ALL : HELP); return 0; }
   // `conquistador add` with nothing else opens the installer in a terminal.
   if (command === 'add' && !rest.length && process.stdin.isTTY && process.stdout.isTTY) return (await import('./launch.mjs')).runStart([], { installer: true });
+  if (command === 'install-cli') {
+    if (rest.includes('--help') || rest.includes('-h')) { console.log('Usage: conquistador install-cli [--package-manager=npm|bun] [--yes] [--dry-run] [--plain]'); return 0; }
+    return (await import('./launch.mjs')).runStart(['--surface=cli', ...rest], { installer: true });
+  }
+  if (command === 'add' && rest.some(arg => /^--(?:surface|providers|scope|apps|plain|json|package-manager|executor-name|bot-out)(?:=|$)/.test(arg))) {
+    const names = rest.filter((arg, index) => !arg.startsWith('-') && agentId(arg) && !/^--(?:surface|providers|scope|apps|package-manager|executor-name|bot-out|in)$/.test(rest[index - 1] ?? ''));
+    return (await import('./launch.mjs')).runStart([...rest.filter(arg => !names.includes(arg)), ...(names.length ? [`--providers=${names.join(',')}`] : [])], { installer: true });
+  }
   if (command === 'add') return runAdd(rest);
   // `update` keeps its per-project operator meaning until you install into an agent.
-  const installed = () => Object.keys(readState().agents ?? {}).length || projectFolders(projectRoot()).some(folder => existsSync(join(folder.path, OWNED)));
+  const installed = () => { const state = readState(); return Object.keys(state.agents ?? {}).length || Object.keys(state.mcpApps ?? {}).length || state.executor || state.cli || projectFolders(projectRoot()).some(folder => existsSync(join(folder.path, OWNED))); };
   if (command === 'update' && installed() && !rest.some(arg => arg.startsWith('--project') || arg.startsWith('--path'))) return runUpdate(rest);
   if (command === 'remove') return runRemove(rest);
   if (command === 'agents') return runAgents(rest);

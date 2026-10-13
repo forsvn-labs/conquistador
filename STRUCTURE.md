@@ -13,7 +13,7 @@ skills/conquistador/ owns command and play methods. runtime/ owns the CLI and ru
 | Path | Purpose |
 |---|---|
 | `VISION.md` | Why this exists, how it plays, and its boundaries |
-| `ROADMAP.md` | What will ship, in order |
+| `ROADMAP.md` | Priorities, live handoff, ready-to-ship work, and remaining acceptance |
 | `CHANGELOG.md` | What has shipped, by date |
 | `skills/conquistador/` | The one host skill: `SKILL.md`, `commands/<command>/COMMAND.md`, `plays/<command>.md`, and shared playbooks |
 | `runtime/` | Runner, CLI entry (`runtime/bin/conquistador.js`), and maintained `runtime/lib` output |
@@ -47,7 +47,15 @@ skills/conquistador/ owns command and play methods. runtime/ owns the CLI and ru
 
 ## Working commands
 
-- From `.`, run `bun install` before package work. Available commands: `bun run build`, `bun run test`.
+From the full source checkout, run `bun install`. Use `bun run bootstrap` for the module lockfiles,
+`bun run build` for maintained runtime output and type checks, and `bun run test` for product checks.
+`node tools/e2e/installer.mjs --out dist/e2e/installer` records terminal screens and source hashes.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for focused checks and package verification.
+
+The terminal front door uses `tools/launch.mjs` and `tools/front-door.mjs`. The Ink UI in
+`tools/installer-tui.mjs` and the line flow in `tools/onboard.mjs` build the same installation plan.
+`tools/installer-operation.mjs` runs host changes in child processes. `tools/mcp-apps.mjs` manages
+client config; `tools/executor-source.mjs` guards the legacy adapter on Executor 2.
 
 Use [README.md](README.md) for setup details and project-specific validation. This record migration does not re-run application release or deployment gates.
 

@@ -2,7 +2,7 @@
 name: social
 description: "Write channel-native posts for X, LinkedIn, Reddit, Product Hunt, and communities."
 metadata:
-  version: 2.3.0
+  version: 2.4.0
 ---
 
 # Write social and community marketing
@@ -23,6 +23,8 @@ Core:
 - [method](references/method.md): Method: `social`. Turn one brief into a complete social or community artifact for one platform and market.…
 - [photo-slideshows](references/photo-slideshows.md): Photo slideshows. Use for a photo slideshow or swipeable image sequence on TikTok, Instagram, or a similar…
 - [rubric](references/rubric.md): Social copy critic rubric. Score five dimensions from 0 to 10. Scores are local review conventions, not…
+- [ai-patterns](../../references/ai-patterns.md): 47 patterns across 8 categories. Each pattern includes severity: - Hard Tell — Immediately flags content…
+- [human-writing-stylebook](../../references/human-writing-stylebook.md): The 47-pattern catalog tells you what AI writing looks like and how to strip it. This stylebook tells you…
 
 Platform packs (read the one for each platform in the task): [facebook](references/platform-intelligence/facebook.md), [founder-demo](references/platform-intelligence/founder-demo.md), [linkedin-launch](references/platform-intelligence/linkedin-launch.md), [linkedin](references/platform-intelligence/linkedin.md), [motion-background](references/platform-intelligence/motion-background.md), [newsletter](references/platform-intelligence/newsletter.md), [producthunt](references/platform-intelligence/producthunt.md), [reddit](references/platform-intelligence/reddit.md), [reels](references/platform-intelligence/reels.md), [shorts](references/platform-intelligence/shorts.md), [showhn](references/platform-intelligence/showhn.md), [tiktok](references/platform-intelligence/tiktok.md), [ugc](references/platform-intelligence/ugc.md), [x-launch](references/platform-intelligence/x-launch.md), [x](references/platform-intelligence/x.md), [youtube](references/platform-intelligence/youtube.md).
 
@@ -33,6 +35,22 @@ Worked examples: [launch-walkthrough](references/examples/launch-walkthrough.md)
 Output formats and fallbacks: [sequential](fallbacks/sequential.md), [format-conventions](references/format-conventions.md), [legibility-convention](references/legibility-convention.md), [why-this-works-convention](references/why-this-works-convention.md).
 
 <!-- playbooks:end -->
+
+## Core writing checks
+
+Read [AI patterns](../../references/ai-patterns.md) and the
+[human writing stylebook](../../references/human-writing-stylebook.md) in full before drafting or
+editing. These are required core reads. Check the native post body before handoff. A banned writing
+pattern forces `fail`, regardless of the numeric score. Optional editorial polish does not replace
+this check.
+
+## Edit mode
+
+When the user supplies a draft, default to edit mode. Preserve their wording, voice, order, and
+rhythm. Change only a specific check failure, a factual error, or a change they requested. Name each
+change and its reason. Keep a clean original as written. Do not add product claims, proof numbers,
+new angles, or hook variants unless the user asks. If a supplied hard limit requires a larger edit,
+explain the constraint and show the smallest compliant change.
 
 ## Establish channel fit
 
@@ -160,4 +178,8 @@ Fail closed and say which stop fired:
 - **Critic failure:** FORMAT_FAIL, a critic score below pass, or SKILL Unverified first-person /
   Internal jargon triggered on the native body → return the failure honestly; never polish or
   ship a failed draft as ready.
+- **Banned writing pattern:** a prohibited AI frame in the native post body forces `fail`. This
+  includes rhetorical negative parallelism, colon labels in prose, and false ranges. Cite the
+  offending passage. Literal prices, times, URLs, factual alternatives, and meaningful ranges are
+  allowed. A clean rule-based check does not replace the critic's judgment.
 - **Human verdict:** readiness is advisory; a human decides whether and where to post.

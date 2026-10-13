@@ -6,7 +6,7 @@
 import { existsSync, readdirSync } from 'node:fs';
 import { homedir } from 'node:os';
 import { join, resolve } from 'node:path';
-import { AGENTS, OWNED, agentId, detectAgents, payloadCurrent, pluginHome, projectFolders, projectRoot, readState, self, version } from './agents.mjs';
+import { AGENTS, OWNED, agentId, home, payloadCurrent, pluginHome, projectFolders, projectRoot, readState, self, skillCurrent, version } from './agents.mjs';
 import { installWithoutTerminal, parseOnboard, printPlan, runInstaller } from './onboard.mjs';
 import { plainUi } from './onboard-ui.mjs';
 
@@ -59,10 +59,10 @@ export function installRows(root) {
   return [
     ...here.global.map(agent => {
       const recorded = state.agents[agent.id]?.version ?? null;
-      const stale = recorded !== version || (agent.how !== 'skill' && !current);
+      const stale = recorded !== version || (agent.how === 'skill' ? !agent.healthy() : !current || agent.healthy && !agent.healthy());
       return { agent, where: 'all projects', recorded, stale };
     }),
-    ...here.project.map(folder => ({ agent: folder.agents[0], label: folder.agents.map(agent => agent.label).join(', '), where: 'this project', recorded: null, stale: false })),
+    ...here.project.map(folder => ({ agent: folder.agents[0], label: folder.agents.map(agent => agent.label).join(', '), where: 'this project', recorded: null, stale: !skillCurrent(folder.path) })),
   ];
 }
 
@@ -89,8 +89,13 @@ function printStatus(options, cwd, root) {
   const rows = installRows(root);
   console.log(`${options.dryRun ? 'Dry run. ' : ''}Conquistador ${version}`);
   for (const row of rows) console.log(`  ${row.label ?? row.agent.label}: ${row.where}${row.stale ? `; run ${self} update` : ''}`);
-  const agent = rows.map(row => row.agent).find(item => item.slash) ?? rows[0].agent;
-  console.log(`In your agent, type: ${nextStep(agent, cwd)}`);
+  const agent = rows.map(row => row.agent).find(item => item.slash) ?? rows[0]?.agent;
+  if (agent) console.log(`In your agent, type: ${nextStep(agent, cwd)}`);
+  const state = readState();
+
+  for (const id of Object.keys(state.mcpApps ?? {})) console.log(`  MCP client: ${id}`);
+  if (state.executor) console.log(`  Executor: ${state.executor.name ?? state.executor.slug}`);
+  if (state.cli) console.log(`  CLI command: ${state.cli.manager}, ${state.cli.version}`);
   console.log(`Change installs: ${self} add. No files changed, commands executed, or agent opened.`);
   return 0;
 }
@@ -101,7 +106,7 @@ async function plainStart(ui, options, cwd, install, root) {
     ui.intro(`Conquistador ${version}`);
     ui.note(installRows(root).map(row => `${row.label ?? row.agent.label}: ${row.where}${row.stale ? `; run ${self} update` : ''}`).join('\n'), 'Installed');
     const agent = installsHere(root).agents.find(item => item.slash) ?? installsHere(root).agents[0];
-    ui.outro(`In your agent, type: ${nextStep(agent, cwd)}\nChange installs: ${self} add · Repair: ${self} doctor · Update: ${self} update`);
+    ui.outro(`${agent ? `In your agent, type: ${nextStep(agent, cwd)}\n` : ''}Change installs: ${self} add · Repair: ${self} doctor · Update: ${self} update`);
     return 0;
   }
   const outcome = await runInstaller(options, { cwd, ui, updateCheck: !options.suppliedUi });
@@ -129,13 +134,15 @@ export async function runStart(args = [], { cwd = process.cwd(), tty = process.s
   if (options.notice) process.stderr.write(`Note: ${options.notice}\n`);
   const root = projectRoot(cwd);
   const here = installsHere(root);
+  const state = readState();
+  const hasInstall = here.agents.length || Object.keys(state.mcpApps ?? {}).length || state.executor || state.cli || existsSync(join(home(), 'mcp-token')) || state.botExports?.length;
   // --in names the agent to install. One that is not installed here opens the installer.
   if (options.wanted && !options.providers) {
     const missing = !here.agents.some(agent => agent.id === options.wanted);
     options = { ...options, providers: [options.wanted], ...(missing ? { surfaces: options.surfaces ?? ['agents'], surfacesFrom: options.surfacesFrom ?? 'implied' } : {}) };
   }
   // Flags, --yes, `conquistador add`, a first run, or an agent that is not installed here open the installer.
-  const install = installer || options.installer || Boolean(options.surfacesFrom) || Boolean(options.scope) || !options.hooks || options.yes || !here.agents.length;
+  const install = installer || options.installer || Boolean(options.surfacesFrom) || Boolean(options.scope) || !options.hooks || options.yes || !hasInstall;
 
   if (options.json || options.dryRun || (!tty && !options.yes)) {
     if (!install && !options.json) return printStatus(options, cwd, root);

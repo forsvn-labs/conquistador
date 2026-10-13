@@ -14,7 +14,7 @@ const squash = text => text.replace(/[\s│]+/g, '');
 const python3 = (process.env.PATH ?? '').split(delimiter).map(folder => join(folder, 'python3')).find(existsSync) ?? 'python3';
 
 export function session(command, args, { cwd, env, columns = 80, rows = 40, python = process.env.CONQUISTADOR_E2E_PYTHON || python3 } = {}) {
-  const child = spawn(python, ['-I', bridge, String(columns), String(rows), '--', command, ...args], { cwd, env, stdio: ['pipe', 'pipe', 'pipe'] });
+  const child = spawn(python, ['-I', bridge, String(columns), String(rows), '--', command, ...args], { cwd, env, stdio: ['pipe', 'pipe', 'pipe', 'pipe'] });
   const screen = new Screen(columns, rows);
   let raw = '';
   let stderr = '';
@@ -65,6 +65,11 @@ export function session(command, args, { cwd, env, columns = 80, rows = 40, pyth
       }
     },
     async type(text) { child.stdin.write(text); await new Promise(resolve => setTimeout(resolve, 60)); },
+    async resize(columns, rows) {
+      screen.resize(columns, rows);
+      child.stdio[3].write(`${JSON.stringify({ columns, rows })}\n`);
+      await new Promise(resolve => setTimeout(resolve, 200));
+    },
     async snap(name) {
       await api.settle();
       const item = { name, text: screen.text(), html: screen.html({ title: name }), styled: screen.styled() };

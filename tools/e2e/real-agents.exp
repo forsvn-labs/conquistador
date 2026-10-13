@@ -90,7 +90,7 @@ record "first run installs every kept agent" [expr {[has "✓ Claude Code"] || [
 record "first run checks the installs" [has "checks passed"] ""
 record "the last screen says /conquistador init (no GROWTH.md yet)" [has "/conquistador init"] ""
 record "no agent opened" [expr {![launched "/conquistador init"]}] ""
-send "\r"
+send "q"
 step {Summary}
 set code1 [finish]
 record "first run exits 0 and leaves the summary" [expr {$code1 == 0 && [has "conquistador doctor"]}] "exit $code1"
@@ -106,7 +106,7 @@ step {Conquistador is installed}
 drain
 record "second run shows the installs, not the installer" [expr {![has "Which agents"] && ![has "Review the changes"]}] ""
 record "second run never asks for a task" [expr {![has "What should we work on"]}] ""
-record "second run says what to type in the agent" [has "In your agent, type: /conquistador"] ""
+record "second run says what to type in the agent" [expr {[has "In Claude Code:"] && [has "/conquistador"]}] ""
 send "q"
 set code2 [finish]
 record "q on the home screen exits 0" [expr {$code2 == 0}] "exit $code2"
@@ -128,7 +128,7 @@ record "--scope skips the options" [expr {![has "Choose options"]}] ""
 send "\r"
 step {Conquistador is ready|Installed with problems}
 drain
-send "\r"
+send "q"
 finish
 record "project scope copies one skill into .claude/skills and .agents/skills" [expr {[file exists $project2/.claude/skills/conquistador/SKILL.md] && [file exists $project2/.agents/skills/conquistador/SKILL.md]}] ""
 record "the second project says /conquistador init" [has "/conquistador init"] ""

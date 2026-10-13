@@ -1,6 +1,6 @@
 ---
 title: "Install options"
-description: "Choose where Conquistador runs: coding agents, MCP apps, hosted MCP, Executor, or chat bots. Learn how the options overlap."
+description: "Choose where Conquistador runs: coding agents, MCP clients, hosted MCP, Executor, or chat bots. Learn how the options overlap."
 ---
 
 One installer configures every option. Run it in your project folder:
@@ -9,21 +9,35 @@ One installer configures every option. Run it in your project folder:
 npx @forsvn/conquistador@latest
 ```
 
-The first question is **Where do you want Conquistador?** You can choose more than one place. The installer preselects what it finds on your computer.
+The first screen lists all 16 supported agents with independent checkboxes. It preselects detected
+agents. Search with `/` and toggle with Space. Select several agents in one install. Options then
+control project skills, hooks, MCP clients, Hosted MCP, Executor, chat
+bot files, and the permanent CLI command. Every change appears in the review before installation.
+
+Install the permanent CLI and open the TUI in one command:
+
+```sh
+npm install -g @forsvn/conquistador && conquistador
+bun add --global @forsvn/conquistador && conquistador
+```
+
+An `npx` or `bunx` run opens the TUI directly. Choose npm or Bun under **CLI command** to keep
+`conquistador` installed. You can also run `conquistador install-cli --package-manager=bun`.
 
 | Option | What it installs | Use it when |
 |---|---|---|
 | [Coding agents](/install/coding-agents) (recommended) | The plugin (skill, hooks, local MCP server) for agents with a plugin manager. A skill copy for the other agents. | You work in Claude Code, Codex, Cursor, or another coding agent. |
-| [MCP apps](/install/mcp-apps) | The local MCP server, `conquistador mcp`, in apps that do not get the plugin. | You use Claude Desktop, VS Code, Windsurf, Zed, or a similar app. |
+| [MCP clients](/install/mcp-apps) | The local MCP server, `conquistador mcp`, in apps that do not get the plugin. | You use Claude Desktop, VS Code, Windsurf, Zed, or a similar app. |
 | [Hosted MCP](/install/hosted-mcp) | A personal access token and the client config for the hosted server. | Your agent runs on a server, or your app connects only to remote MCP servers. |
 | [Executor](/install/executor) | Conquistador as a source in Executor. | Your agents reach their tools through Executor. |
 | [Chat bots](/install/chat-bots) | A system prompt and knowledge files. | You use ChatGPT GPTs, Claude Projects, Grok projects, or Gemini Gems. |
+| CLI command | A permanent global command installed with npm or Bun. | You want to run `conquistador` after `npx` or `bunx` exits. |
 
 ## How the options overlap
 
 The installer never configures two options for the same app.
 
-- **The plugin includes the MCP server.** An agent that gets the plugin already has the `conquistador` MCP server. The MCP apps step lists only apps that do not get the plugin.
+- **The plugin includes the MCP server.** An agent that gets the plugin already has the `conquistador` MCP server. The MCP clients step lists only apps that do not get the plugin.
 - **Skills only is a subset of the plugin.** Agents without a plugin manager (Gemini CLI, OpenCode, Pi, Hermes Agent, Antigravity CLI, Kiro CLI, Mistral Vibe, Qoder, Rovo Dev, Trae, Trae CN) get the skill folder only: no hooks and no MCP server. A project-scope install gives every agent the skill folder only.
 - **Local MCP and hosted MCP serve the same tools.** Use the local server on your computer. Use the hosted server where your agent cannot run a local process.
 - **Executor is a second path to the same server.** Choose it only for agents that do not get the plugin or a direct MCP config.
@@ -35,15 +49,22 @@ The installer never configures two options for the same app.
   From 0.5.0 the installer is a full-screen terminal UI, and it never opens an agent or asks for a task: the terminal only installs Conquistador, and the work happens inside your agent. In 0.4.0 the installer used line prompts and could open your agent with a first task. In 0.3.0 it asked only for the coding agents and the scope.
 </Note>
 
-1. **Agents.** The coding agents found on your computer are chosen. Press Space to change a choice. Problems found before the start show here with the exact fix: an old Node, another `conquistador` command on your `PATH`, or a newer version on npm.
-2. **Options.** The scope (project or global), hooks on or off, and the other options in the table above: MCP apps, Executor, chat bot files, and Hosted MCP. The arrow keys change a value.
+1. **Agents.** All supported agents are visible. Select several with checkboxes. Space toggles one agent, `a` toggles detected agents, `A` selects all, and `n` clears the selection. Search with `/`, press Enter to finish typing, then Space to toggle a result. Other choices stay. Problems found before the start show here with the exact fix: an old Node, another `conquistador` command on your `PATH`, or a newer version on npm.
+2. **Options.** The scope (project or global), hooks on or off, and the other options in the table above. The MCP client picker also supports multiple checkboxes. Choose npm or Bun to keep the CLI command. The arrow keys change a value.
 3. **Review.** Every change, with paths and commands, what stays unchanged, and how to undo it (`conquistador remove`). Press Enter to install.
 4. **Install and verify.** One progress line for each step. If one option fails, the others continue. Then the installer runs the [doctor](/install/update-remove#check-the-install) checks for each option it installed.
-5. **Done.** The command to type in each agent: `/conquistador init` in a project without `PRODUCT.md` and `GROWTH.md`, otherwise `/conquistador`. When you exit, the summary stays in your terminal.
+5. **Done.** The command to type in each agent: `/conquistador init` in a project without `GROWTH.md`, otherwise `/conquistador`. Enter opens the manager. `q` exits and leaves the summary in your terminal.
 
 Press Escape, `q`, or Ctrl-C to cancel. Before the install starts, the installer prints "Cancelled. No files changed." Ctrl-C during the install does not stop a step half way. After the install, the parts that finished stay; run `conquistador remove` to undo them.
 
-Run `conquistador` again to see what is installed. That screen adds or changes agents, updates, checks and repairs, or removes Conquistador. Use `--plain`, or `TERM=dumb`, for line prompts instead of the full screen.
+Run `conquistador` again to manage agents, project skills, MCP connections, hooks, and the CLI. The
+**Installed items** screen shows each path and scope. Select an item to update or remove it.
+Shared skill folders name every affected agent before removal. Updates, repairs, and removal
+show their result inside the TUI. Use `--plain`, or `TERM=dumb`, for line prompts.
+
+Wide terminals show details and a selection summary beside the list. Compact terminals keep
+one column with a selection count. Search, Back, and resizing preserve your choices. The TUI
+chooses your installation targets. Your coding agent controls the AI model.
 
 ## Install without questions
 
@@ -57,11 +78,12 @@ npx @forsvn/conquistador@latest --dry-run --json   # Print the plan as JSON
 
 | Flag | Does |
 |---|---|
-| `--surface=LIST` | From 0.4.0. Choose the options: `agents`, `mcp-apps`, `hosted`, `executor`, `bot` |
+| `--surface=LIST` | Choose the options: `agents`, `mcp-apps`, `hosted`, `executor`, `bot`, `cli` |
 | `--providers=LIST` | Install for these agents. See [Coding agents](/install/coding-agents#agents-and-folders) |
-| `--apps=LIST` | From 0.4.0. Configure these MCP apps: `claude-desktop`, `vscode`, `windsurf`, `zed`, `cursor` |
+| `--apps=LIST` | From 0.4.0. Configure these MCP clients: `claude-desktop`, `vscode`, `windsurf`, `zed`, `cursor` |
 | `--executor-name=NAME` | From 0.4.0. The source name in Executor. Default: `conquistador` |
 | `--bot-out=DIR` | From 0.4.0. The folder for the chat bot files. Default: `./conquistador-bot` |
+| `--package-manager=npm\|bun` | Install the permanent CLI with npm or Bun. Default: npm. Requires the `cli` option |
 | `--scope=project` or `--scope=global` | Install for this project or for all projects |
 | `--no-hooks` | Install without the prompt, stop, and check hooks |
 | `-y`, `--yes` | Accept the defaults. Without `--surface`, only coding agents. In a terminal, the installer goes straight to the install and closes by itself. With `--yes`, the installer exits with code 1 when a step or a check failed |
@@ -74,4 +96,8 @@ From 0.4.0 the old flags still work. `--mcp`, `--plugin`, `--skills`, `--bot`, a
 
 ## Why there is no install-time setup
 
-`npm install` runs no setup script. npm hides the output of install scripts, CI and Docker installs have no terminal, and an install-time prompt is a supply-chain risk. Setup starts when you run `conquistador`, or `npx @forsvn/conquistador@latest` without an install.
+Package installation runs no interactive setup script. npm runs lifecycle scripts in the
+background, and Bun restricts package lifecycle scripts. Use the install-and-launch commands
+above to open the TUI as soon as installation succeeds. CI and dependency installation stay
+non-interactive. See [npm scripts](https://docs.npmjs.com/misc/scripts/) and
+[Bun lifecycle scripts](https://bun.com/docs/pm/lifecycle).

@@ -2,7 +2,7 @@
 
 The current public alpha is **0.5.1**; `0.2.0` was the first public alpha. The repository
 and npm package are public.
-Unshipped source changes are listed in [PROGRESS.md](../PROGRESS.md); they do not change what a
+Unshipped source changes are listed in [ROADMAP.md](../ROADMAP.md); they do not change what a
 registry installation of 0.5.1 does. See [shipped release records](../CHANGELOG.md).
 
 Use exact release bytes and one real task in your actual host. A passing install, synthetic test,

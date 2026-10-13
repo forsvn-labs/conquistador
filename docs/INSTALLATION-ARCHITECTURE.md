@@ -2,7 +2,7 @@
 
 Conquistador separates package acquisition, owned file installation, host activation, and task
 execution. One successful step does not certify the next. This document specifies the installer;
-unshipped validation belongs in PROGRESS.md, and shipped release evidence in CHANGELOG.md.
+unshipped validation belongs in ROADMAP.md, and shipped release evidence in CHANGELOG.md.
 
 ## Entry points
 
@@ -11,7 +11,7 @@ importing the optional runtime. Bare `conquistador` (first run), `conquistador a
 the one installer through `tools/launch.mjs`. In a terminal it is the full-screen Ink UI in
 `tools/installer-tui.mjs` (Ink and React are bundled into `tools/vendor/ink.mjs`); `--plain` and `TERM=dumb`
 use the line flow in `tools/onboard.mjs`. Both build one plan in `tools/onboard.mjs`: preflight
-(`tools/preflight.mjs`), surfaces (coding agents, MCP apps in `tools/mcp-apps.mjs`, Hosted MCP through
+(`tools/preflight.mjs`), surfaces (coding agents, MCP clients in `tools/mcp-apps.mjs`, Hosted MCP through
 `tools/login.mjs` when it exists, Executor in `tools/executor-source.mjs`, chat bots), details, review,
 install with a verify pass, and a summary that says what to type in each agent. The installer never
 opens an agent; `conquistador "TASK"` prints the task's reading list. `--bot`, `--skills`, `--plugin`, `--mcp`, and `--advanced` without a

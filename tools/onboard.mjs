@@ -1,5 +1,5 @@
 // The installer's plan and steps, and its line flow. `conquistador` (first run), `conquistador add`,
-// and the install flags all come here. Five surfaces: coding agents, MCP apps, Hosted MCP, Executor,
+// and the install flags all come here. Five surfaces: coding agents, MCP clients, Hosted MCP, Executor,
 // and chat bots. Steps: preflight, welcome, surfaces, details, review, install with a verify pass,
 // summary. Nothing changes before the user confirms the review. A terminal gets the full-screen
 // installer (installer-tui.mjs), which builds the same plan; --plain and TERM=dumb get the line
@@ -8,16 +8,19 @@ import { spawn } from 'node:child_process';
 import { existsSync, realpathSync } from 'node:fs';
 import { homedir } from 'node:os';
 import { join, relative, resolve } from 'node:path';
-import { AGENTS, OWNED, agentId, detectAgents, home, installOne, payloadCurrent, pluginHome, productRoot, projectFolders, projectRoot, readState,
+import { AGENTS, OWNED, agentId, detectAgents, home, payloadCurrent, pluginHome, productRoot, projectFolders, projectRoot, readState,
   self, setHooks, skillCurrent, stageTargets, version, writeState } from './agents.mjs';
 import { MCP_APPS, appById, applyApp, checkApp, detectApps, inspectApp } from './mcp-apps.mjs';
-import { checkSource, executorStatus, manualSteps, registerSource, slugFor } from './executor-source.mjs';
+import { executorStatus, manualSteps, slugFor, executorHandoff } from './executor-source.mjs';
 import { reachable, shadowProblem, startUpdateCheck, updateNotice } from './preflight.mjs';
 import { paint, plainUi, stepLabel, wordmark, wrapText } from './onboard-ui.mjs';
 import { channel } from './self-update.mjs';
+import { CLI_MANAGERS, cliInstallCommand, installCli } from './cli-install.mjs';
+import { installerOperation } from './installer-operation.mjs';
 
-export const SURFACE_IDS = ['agents', 'mcp-apps', 'hosted', 'executor', 'bot'];
-export const SURFACE_LABELS = { agents: 'Coding agents', 'mcp-apps': 'MCP apps', hosted: 'Hosted MCP', executor: 'Executor', bot: 'Chat bots' };
+export const SURFACE_IDS = ['agents', 'mcp-apps', 'hosted', 'executor', 'bot', 'cli'];
+
+export const SURFACE_LABELS = { agents: 'Coding agents', 'mcp-apps': 'MCP clients', hosted: 'Hosted MCP', executor: 'Executor', bot: 'Chat bots', cli: 'CLI command' };
 const SURFACE_ALIASES = { agent: 'agents', plugin: 'agents', skills: 'agents', mcp: 'mcp-apps', apps: 'mcp-apps', 'mcp-app': 'mcp-apps', remote: 'hosted', bots: 'bot' };
 const DEFAULT_HOSTED_URL = 'https://mcp.forsvn.com/mcp';
 const DOCS = 'https://github.com/forsvn-labs/conquistador#readme';
@@ -54,7 +57,7 @@ const list = (value, name, known, aliases = {}) => {
 // Validate every flag before detecting anything, opening a UI, or writing state.
 export function parseOnboard(args) {
   const options = { wanted: null, dryRun: false, noOpen: false, yes: false, task: '', providers: null, scope: null, hooks: true,
-    surfaces: null, surfacesFrom: null, apps: null, json: false, plain: false, executorName: null, botOut: null, installer: false, notice: null };
+    surfaces: null, surfacesFrom: null, apps: null, json: false, plain: false, executorName: null, botOut: null, installer: false, notice: null, packageManager: null };
   const words = [];
   let legacy = null;
   const value = (arg, name, index) => (arg === name ? args[index + 1] : arg.slice(name.length + 1));
@@ -98,6 +101,10 @@ export function parseOnboard(args) {
       options.botOut = String(value(arg, '--bot-out', index) ?? '').trim();
       if (arg === '--bot-out') index += 1;
       if (!options.botOut || options.botOut.startsWith('-')) throw Error('--bot-out needs a folder. Example: --bot-out=./conquistador-bot');
+    } else if (valued(arg, '--package-manager')) {
+      options.packageManager = value(arg, '--package-manager', index);
+      if (arg === '--package-manager') index += 1;
+      if (!CLI_MANAGERS.includes(options.packageManager)) throw Error('--package-manager must be npm or bun.');
     } else if (Object.hasOwn(LEGACY, arg)) legacy = LEGACY[arg];
     else if (arg === '--dry-run') options.dryRun = true;
     else if (arg === '--no-open') options.noOpen = true;
@@ -116,7 +123,7 @@ export function parseOnboard(args) {
   }
   if (!options.surfaces) {
     // Answers given by flags imply their surface, so the surfaces question is skipped.
-    const implied = [...(options.providers ? ['agents'] : []), ...(options.apps ? ['mcp-apps'] : []), ...(options.executorName ? ['executor'] : []), ...(options.botOut ? ['bot'] : [])];
+    const implied = [...(options.providers ? ['agents'] : []), ...(options.apps ? ['mcp-apps'] : []), ...(options.executorName ? ['executor'] : []), ...(options.botOut ? ['bot'] : []), ...(options.packageManager ? ['cli'] : [])];
     if (implied.length) { options.surfaces = implied; options.surfacesFrom = 'implied'; }
   }
   options.task = words.join(' ').trim();
@@ -129,7 +136,7 @@ const tilde = path => {
   for (const base of [homedir(), realHome()]) if (path === base || path.startsWith(`${base}/`) || path.startsWith(`${base}\\`)) return `~${path.slice(base.length)}`;
   return path;
 };
-// The local MCP server every MCP app and Executor runs: this Node and the stable plugin copy.
+// The local MCP server every MCP client and Executor runs: this Node and the stable plugin copy.
 export const localServer = () => ({ command: process.execPath, args: [join(pluginHome(), 'mcp', 'server.mjs')] });
 
 // tools/login.mjs comes from the hosted sign-up work. The surface exists only when it does.
@@ -172,7 +179,7 @@ export function defaultChoices(options, ctx, { interactive = false } = {}) {
       surfaces = [...(agents.length ? ['agents'] : []), ...(appsFound.length ? ['mcp-apps'] : []), ...(ctx.executor.installed ? ['executor'] : [])];
     }
   }
-  const choices = { surfaces, agents, scope, hooks: options.hooks, apps: [], executorName: options.executorName ?? 'conquistador', botOut: resolve(ctx.cwd, options.botOut ?? 'conquistador-bot') };
+  const choices = { surfaces, agents, scope, hooks: options.hooks, apps: [], packageManager: options.packageManager ?? 'npm', executorName: options.executorName ?? 'conquistador', botOut: resolve(ctx.cwd, options.botOut ?? 'conquistador-bot') };
   const skip = duplicateApps(choices, ctx);
   choices.apps = options.apps ?? ctx.apps.filter(app => app.found && !skip.includes(app.id)).map(app => app.id);
   return choices;
@@ -225,7 +232,7 @@ export function buildPlan(choices, ctx) {
       return { app: id, label: appById(id).label, action: inspected.action, target: inspected.path, ...(inspected.reason ? { reason: inspected.reason } : {}) };
     });
     surfaces.push({ id: 'mcp-apps', label: SURFACE_LABELS['mcp-apps'], server: { command: server.command, args: server.args }, steps,
-      notes: steps.length ? [] : [`No MCP app found. Name one: --apps=${MCP_APPS.map(app => app.id).join(',')}`] });
+      notes: steps.length ? [] : [`No MCP client found. Name one: --apps=${MCP_APPS.map(app => app.id).join(',')}`] });
   }
   if (choices.surfaces.includes('hosted')) {
     surfaces.push({ id: 'hosted', label: SURFACE_LABELS.hosted, steps: ctx.login
@@ -236,6 +243,7 @@ export function buildPlan(choices, ctx) {
     const name = choices.executorName;
     const steps = !ctx.executor.installed
       ? [{ action: 'manual', reason: 'Executor is not installed. Install it (npm i -g executor), then run conquistador --surface=executor.' }]
+      : executorHandoff(ctx.executor.version) ? [{ action: 'manual', reason: executorHandoff(ctx.executor.version) }]
       : [...(ctx.executor.running === false ? [{ action: 'start', detail: 'Executor is not running. This step starts it: executor daemon run' }] : []),
         { action: 'add', name, slug: slugFor(name), detail: `Add the source "${name}": executor call executor mcp addServer\n  Executor asks to approve it. Conquistador says yes for this one change.` }];
     surfaces.push({ id: 'executor', label: SURFACE_LABELS.executor, version: ctx.executor.version, steps, notes: [] });
@@ -243,11 +251,16 @@ export function buildPlan(choices, ctx) {
   if (choices.surfaces.includes('bot')) {
     surfaces.push({ id: 'bot', label: SURFACE_LABELS.bot, steps: [{ action: existsSync(choices.botOut) ? 'update' : 'write', target: choices.botOut, detail: 'SYSTEM-PROMPT.md, knowledge files, and README.md with steps for each chat app' }], notes: [] });
   }
+  if (choices.surfaces.includes('cli')) {
+    const manager = choices.packageManager ?? 'npm';
+    surfaces.push({ id: 'cli', label: SURFACE_LABELS.cli, manager, steps: [{ action: 'install', detail: cliInstallCommand(manager) }],
+      notes: ['Keeps the conquistador command after npx or bunx exits. Uses your package manager global folder.'] });
+  }
   return {
     version, root: ctx.root, scope: choices.scope, surfaces, warnings,
     unchanged: ['Your project files' + (choices.surfaces.includes('agents') && choices.scope === 'project' ? ', except the skill folders above' : ''),
       'Other MCP servers and settings in each app config', 'Agent settings outside the Conquistador plugin', 'Personal playbooks and config in ~/.conquistador'],
-    undo: `${self} remove`,
+    undo: `${self} remove${choices.surfaces.includes('cli') ? `; ${choices.packageManager === 'bun' ? 'bun remove --global' : 'npm uninstall --global'} @forsvn/conquistador` : ''}`,
   };
 }
 
@@ -297,7 +310,7 @@ export async function applyPlan(plan, choices, { ui, progress, login, signal }) 
   const results = [];
   const record = item => { results.push(item); return item; };
   const agents = plan.surfaces.find(surface => surface.id === 'agents');
-  const needsPayload = plan.surfaces.some(surface => ['mcp-apps', 'executor'].includes(surface.id));
+  const needsPayload = plan.surfaces.some(surface => surface.id === 'mcp-apps' || surface.id === 'executor' && surface.steps.some(step => step.action === 'add'));
   const runnable = agents?.steps.filter(step => step.action !== 'blocked') ?? [];
   for (const step of agents?.steps.filter(item => item.action === 'blocked') ?? []) record({ surface: 'agents', label: step.label, ok: false, error: step.reason, agent: step.agent });
   if (runnable.length || needsPayload) {
@@ -313,7 +326,8 @@ export async function applyPlan(plan, choices, { ui, progress, login, signal }) 
     const done = new Set();
     for (const step of runnable) {
       const agent = AGENTS.find(item => item.id === (step.agent ?? step.agents[0]));
-      const result = await progress(step.label, () => installOne(agent, { scope: plan.scope, root: plan.root, done }));
+      const result = await progress(step.label, () => installerOperation('agent-install', { agent: agent.id, scope: plan.scope, root: plan.root, done: [...done] }));
+      for (const path of result.done ?? []) done.add(path);
       record({ surface: 'agents', label: step.label, agent: agent.id, agents: step.agents, ok: result.ok, error: result.error, retry: result.ok ? null : retryFor('agents', step, plan) });
     }
   }
@@ -333,7 +347,7 @@ export async function applyPlan(plan, choices, { ui, progress, login, signal }) 
     if (!add) record({ surface: 'executor', label: 'Executor', ok: false, manual: true, error: executor.steps[0].reason });
     else {
       const server = localServer();
-      const result = await progress('Executor', () => registerSource(add.name, server, { start: executor.steps.some(step => step.action === 'start') }));
+      const result = await progress('Executor', () => installerOperation('executor-add', { name: add.name, server, start: executor.steps.some(step => step.action === 'start') }));
       if (result.ok) writeState({ ...readState(), executor: { slug: add.slug, name: add.name, version, at: new Date().toISOString() } });
       record({ surface: 'executor', label: 'Executor', ok: result.ok, manual: result.status === 'manual', slug: add.slug, status: result.status,
         error: result.status === 'manual' ? `${result.error}\n${manualSteps(add.name, server).join('\n')}` : result.error, retry: result.ok || result.status === 'manual' ? null : retryFor('executor') });
@@ -356,6 +370,12 @@ export async function applyPlan(plan, choices, { ui, progress, login, signal }) 
       try { const { buildBotPack } = await import('./bot-pack.mjs'); const pack = buildBotPack(target, { includeUser: true }); return { ok: true, files: pack.files.length }; } catch (failure) { return { ok: false, error: failure.message }; }
     });
     record({ surface: 'bot', label: 'Chat bots', ok: result.ok, error: result.error, target, files: result.files, retry: result.ok ? null : `${self} bot --out ${target}` });
+    if (result.ok) { const state = readState(); writeState({ ...state, botExports: [...new Set([...(state.botExports ?? []), target])] }); }
+  }
+  const cli = plan.surfaces.find(surface => surface.id === 'cli');
+  if (cli) {
+    const result = await progress('CLI command', () => installCli(cli.manager));
+    record({ surface: 'cli', label: 'CLI command', ...result });
   }
   return results;
 }
@@ -401,10 +421,7 @@ export async function verifyResults(results, plan, { progress }) {
         continue;
       }
       const agent = AGENTS.find(item => item.id === result.agent);
-      const outcome = await progress(`Checking ${agent.label}`, () => {
-        const registered = agent.installed(), healthy = agent.healthy?.() ?? true;
-        return { registered, healthy };
-      }, { quiet: true });
+      const outcome = await progress(`Checking ${agent.label}`, () => installerOperation('agent-check', { agent: agent.id }), { quiet: true });
       const ok = outcome.registered && outcome.healthy && (agent.how === 'skill' || payloadCurrent(pluginHome()));
       add(agent.label, ok, ok ? (agent.how === 'skill' ? 'skill copy is complete' : 'plugin is registered') : !outcome.registered ? 'not registered with the agent' : 'installed files are damaged', ok ? null : `${self} doctor --fix`);
       continue;
@@ -415,12 +432,13 @@ export async function verifyResults(results, plan, { progress }) {
       continue;
     }
     if (result.surface === 'executor') {
-      const check = await progress('Checking Executor', () => checkSource(result.slug), { quiet: true });
+      const check = await progress('Checking Executor', () => installerOperation('executor-check', { slug: result.slug }), { quiet: true });
       add('Executor', check.ok, check.detail, check.ok ? null : retryFor('executor'));
       continue;
     }
     if (result.surface === 'bot') add('Chat bots', existsSync(join(result.target, 'SYSTEM-PROMPT.md')), `${result.files} knowledge files in ${tilde(result.target)}`);
     if (result.surface === 'hosted') add('Hosted MCP', true, `signed in as ${result.login}`);
+    if (result.surface === 'cli') add('CLI command', true, `${result.manager}: ${result.path}`);
   }
   if (results.some(item => item.ok && item.surface === 'mcp-apps' && !item.skipped) || results.some(item => item.ok && item.surface === 'executor')) {
     const ok = await progress('Checking the MCP server', () => handshake(localServer()), { quiet: true });
@@ -440,7 +458,7 @@ export function summaryLines({ results, checks, plan, notice, p }) {
     lines.push(p.bold('Installed'));
     for (const item of done) {
       const where = item.surface === 'agents' ? (plan.scope === 'global' ? 'all projects' : 'this project') : item.surface === 'mcp-apps' ? 'local MCP server'
-        : item.surface === 'executor' ? `source "${item.slug}"` : item.surface === 'bot' ? tilde(item.target) : `signed in as ${item.login}`;
+        : item.surface === 'executor' ? `source "${item.slug}"` : item.surface === 'bot' ? tilde(item.target) : item.surface === 'cli' ? `${item.manager}, ${item.path}` : `signed in as ${item.login}`;
       lines.push(`  ${p.ok('✓')} ${item.label}: ${where}`);
     }
   }
@@ -468,8 +486,6 @@ export function summaryLines({ results, checks, plan, notice, p }) {
 }
 
 // --- The terminal flow -------------------------------------------------------------------------------
-const PREFLIGHT_TITLE = 'Before you start';
-
 export function preflightNotes(update) {
   const notes = [];
   const problem = shadowProblem({ self: { root: realpathSync(productRoot), version } });
@@ -481,6 +497,14 @@ export function preflightNotes(update) {
 
 // Ask, or return the cancel symbol. Clack and the plain UI share this API.
 async function ask(ui, kind, options) { return ui[kind](options); }
+
+function executorSummary(executor) {
+  if (!executor.installed) return 'not installed';
+
+  const status = executorHandoff(executor.version) ? ', source setup paused' : executor.running ? ', running' : ', not running';
+
+  return `${executor.version ?? 'found'}${status}`;
+}
 
 // The line installer. Returns { code } on cancel, or { code, ready, finish, ... } after the install.
 export async function runInstaller(options, { cwd = process.cwd(), ui, width, interactive = true, updateCheck = true } = {}) {
@@ -501,18 +525,19 @@ export async function runInstaller(options, { cwd = process.cwd(), ui, width, in
   if (!options.yes && options.surfacesFrom !== 'flag' && options.surfacesFrom !== 'implied') {
     const found = [
       ['Agents', ctx.found.map(agent => agent.label).join(', ') || 'none found'],
-      ['MCP apps', ctx.apps.filter(app => app.found).map(app => app.label).join(', ') || 'none found'],
-      ['Executor', ctx.executor.installed ? `${ctx.executor.version ?? 'found'}${ctx.executor.running ? ', running' : ', not running'}` : 'not installed'],
+      ['MCP clients', ctx.apps.filter(app => app.found).map(app => app.label).join(', ') || 'none found'],
+      ['Executor', executorSummary(ctx.executor)],
     ];
     ui.log.message(wrap(`Found on this computer\n${found.map(([name, value]) => `  ${name.padEnd(9)} ${value}`).join('\n')}`));
     if (!ctx.found.length) ui.log.warn(wrap('No coding agent found on PATH or in your home folder.'));
     if (ctx.login && ctx.online === false) ui.log.warn(wrap('Hosted MCP needs a network connection. It is not offered now.'));
     const surfaceOptions = [
       { value: 'agents', label: 'Coding agents', hint: ctx.found.length ? 'recommended; plugin or skill in each agent' : 'No coding agent found' },
-      { value: 'mcp-apps', label: 'MCP apps', hint: 'local server in Claude Desktop, VS Code, Zed, and more' },
+      { value: 'mcp-apps', label: 'MCP clients', hint: 'local server in Claude Desktop, VS Code, Zed, and more' },
       ...(ctx.login && ctx.online !== false ? [{ value: 'hosted', label: 'Hosted MCP', hint: 'deployed agents and remote apps; sign in with GitHub' }] : []),
       { value: 'executor', label: 'Executor', hint: 'one source for every Executor-connected agent' },
       { value: 'bot', label: 'Chat bots', hint: 'prompt and files for GPTs, Claude Projects, Gems' },
+      { value: 'cli', label: 'CLI command', hint: 'keep conquistador installed with npm or Bun' },
     ];
     const picked = await ask(ui, 'multiselect', { message: `${stepLabel(p, 1, TOTAL)}Where do you want Conquistador?`, options: surfaceOptions,
       initialValues: choices.surfaces.filter(id => surfaceOptions.some(item => item.value === id)), required: true });
@@ -551,7 +576,8 @@ export async function runInstaller(options, { cwd = process.cwd(), ui, width, in
     const skip = duplicateApps(choices, ctx);
     for (const id of skip) if (ctx.apps.find(app => app.id === id)?.found) ui.log.message(wrap(dedupeNote(id)));
     const available = MCP_APPS.filter(app => !skip.includes(app.id));
-    const apps = await ask(ui, 'multiselect', { message: `${detail()}Which MCP apps?`, required: true,
+
+    const apps = await ask(ui, 'multiselect', { message: `${detail()}Which MCP clients?`, required: true,
       initialValues: available.filter(app => ctx.apps.find(item => item.id === app.id)?.found).map(app => app.id),
       options: available.map(app => ({ value: app.id, label: app.label, hint: ctx.apps.find(item => item.id === app.id)?.found ? 'found' : 'not found' })) });
     if (ui.isCancel(apps)) return cancelled();
@@ -566,6 +592,13 @@ export async function runInstaller(options, { cwd = process.cwd(), ui, width, in
     const out = await ask(ui, 'text', { message: `${detail()}Folder for the bot files`, initialValue: `./${relative(ctx.cwd, choices.botOut) || '.'}`, placeholder: './conquistador-bot' });
     if (ui.isCancel(out)) return cancelled();
     choices.botOut = resolve(ctx.cwd, String(out || 'conquistador-bot').replace(/^~(?=$|[\\/])/, homedir()));
+  }
+
+  if (choices.surfaces.includes('cli') && !options.packageManager && !options.yes) {
+    const manager = await ask(ui, 'select', { message: `${detail()}Install the permanent CLI with`, initialValue: choices.packageManager,
+      options: CLI_MANAGERS.map(value => ({ value, label: value === 'bun' ? 'Bun' : 'npm' })) });
+    if (ui.isCancel(manager)) return cancelled();
+    choices.packageManager = manager;
   }
 
   // 4. Review.
@@ -617,11 +650,13 @@ export async function printPlan(options, { cwd = process.cwd(), launchLine = nul
   const problem = shadowProblem({ self: { root: realpathSync(productRoot), version } });
   if (problem) process.stderr.write(`${wrapText([problem.message, ...problem.fix].join('\n'), width)}\n`);
   const detected = ctx.found.map(agent => agent.label).join(', ') || 'no agent';
-  const lines = [`${options.dryRun ? 'Dry run. ' : ''}Conquistador ${version} install plan`, `Detected: ${detected}. MCP apps: ${ctx.apps.filter(app => app.found).map(app => app.label).join(', ') || 'none'}. Executor: ${ctx.executor.installed ? `${ctx.executor.version ?? 'found'}${ctx.executor.running ? ', running' : ', not running'}` : 'not installed'}.`, '',
+
+  const lines = [`${options.dryRun ? 'Dry run. ' : ''}Conquistador ${version} install plan`, `Detected: ${detected}. MCP clients: ${ctx.apps.filter(app => app.found).map(app => app.label).join(', ') || 'none'}. Executor: ${executorSummary(ctx.executor)}.`, '',
     'Plan:', ...planLines(plan)];
   if (launchLine) lines.push(...launchLine);
   const flags = [`--surface=${choices.surfaces.join(',')}`, ...(choices.surfaces.includes('agents') ? [`--providers=${choices.agents.join(',') || 'NAME'}`, `--scope=${choices.scope}`] : []),
-    ...(choices.surfaces.includes('mcp-apps') && choices.apps.length ? [`--apps=${choices.apps.join(',')}`] : []), ...(choices.hooks ? [] : ['--no-hooks'])];
+    ...(choices.surfaces.includes('mcp-apps') && choices.apps.length ? [`--apps=${choices.apps.join(',')}`] : []),
+    ...(choices.surfaces.includes('cli') ? [`--package-manager=${choices.packageManager}`] : []), ...(choices.hooks ? [] : ['--no-hooks'])];
   lines.push('', `To install: ${self} ${flags.join(' ')} --yes`, 'No files changed, commands executed, or agent opened.');
   console.log(wrapText(lines.join('\n'), width));
   return options.dryRun ? 0 : 2;

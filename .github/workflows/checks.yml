@@ -21,3 +21,14 @@ jobs:
       - run: npm run build
       - run: npm test
       - run: git diff --exit-code -- runtime/lib
+      - name: Terminal and writing E2E
+        if: matrix.node == '24'
+        run: |
+          node tools/e2e/installer.mjs
+          node tools/e2e/check.mjs
+          node tools/e2e/social-style.mjs
+      - uses: actions/upload-artifact@v4
+        if: always() && matrix.node == '24'
+        with:
+          name: terminal-and-writing-e2e
+          path: dist/e2e

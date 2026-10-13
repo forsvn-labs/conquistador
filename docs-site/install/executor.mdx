@@ -1,16 +1,36 @@
 ---
 title: "Executor"
-description: "Use Conquistador with Executor: add Conquistador as a source, and connect analytics, CRM, ads, and email through Executor."
+description: "Connect your agent to Executor's MCP endpoint. Keep service accounts in Executor and distinguish the current flow from the legacy Conquistador source adapter."
 ---
 
-[Executor](https://executor.sh/) connects agents to tools and services. Conquistador uses Executor in two ways. Do not confuse them.
+[Executor](https://executor.sh/docs) connects agents to tools and services. Its current setup uses
+apps, reusable accounts, and one MCP endpoint for your agent.
+
+## Current Executor flow
+
+1. Add an app or MCP server in Executor.
+2. Connect the app's accounts in Executor. Keep provider credentials there.
+3. Use **Connect an agent** to configure your coding agent with the Executor MCP endpoint.
+4. Sign in through the browser and choose the connection's organization and access scope.
+5. Reconnect your agent, read the app's skills, discover tools, inspect their schemas, and call
+   the tools you need. Answer approvals where you configured them.
+
+Follow [Executor's client setup](https://executor.sh/docs/mcp-clients),
+[MCP discovery](https://executor.sh/docs/mcp), and
+[approval guidance](https://executor.sh/docs/concepts/tools-and-approvals).
+
+<Note>
+  The automatic Conquistador source adapter below uses Executor 1 commands. On Executor 2 the
+  installer shows a setup handoff and leaves the source unverified. Native v2 app installation
+  and the legacy readiness CLI have not passed live compatibility checks.
+</Note>
 
 | Use | What it does | Version |
 |---|---|---|
-| Conquistador as an Executor source | Every agent connected to Executor gets the Conquistador MCP tools. | From 0.4.0 |
-| `conquistador connect` | Conquistador reads your analytics, ads, CRM, email, and other services through Executor. | 0.3.0 |
+| Conquistador as an Executor 1 source | Agents connected to that server get the Conquistador MCP tools. | From 0.4.0; checked with Executor 1.5.40 and 1.6.8 |
+| `conquistador connect` | Checks analytics, ads, CRM, email, and other capabilities through the legacy Executor interface. | From 0.3.0; v2 compatibility remains open |
 
-## Add Conquistador as a source
+## Add Conquistador to Executor 1
 
 <Note>
   From 0.4.0.
@@ -28,7 +48,9 @@ Choose this option only for agents that do not get the plugin or a direct MCP co
 
 ## Connect services with `conquistador connect`
 
-`conquistador connect` shows 22 capabilities, for example "read the CRM" or "send email". Each one is missing, connected, or verified through Executor. Any provider that Executor reaches works.
+`conquistador connect` shows 22 capabilities, for example "read the CRM" or "send email". Each one
+is missing, connected, or verified through the legacy interface. For Executor 2, use its MCP
+discovery flow; this CLI does not establish v2 provider readiness.
 
 ```sh
 conquistador connect                    # Show every capability

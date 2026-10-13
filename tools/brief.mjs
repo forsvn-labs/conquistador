@@ -312,7 +312,11 @@ function coreKeys(packageRoot, commandPath, libraryRoot) {
   const directory = posix.dirname(commandPath.slice(libraryRoot.length + 1));
   return lines.slice(0, end < 0 ? undefined : end).flatMap(line => {
     const link = line.match(/^- \[[^\]]+\]\(([^)#\s]+)\)/)?.[1];
-    return link && !link.includes('..') ? [posix.join(directory, link)] : [];
+    if (!link || /^[a-z]+:|^[/\\]/i.test(link)) return [];
+    const key = posix.normalize(posix.join(directory, link));
+    // Shared core references may use ../ inside this library. The index below resolves only
+    // contained library documents, and a link cannot escape the parent package directory.
+    return key.startsWith(`${directory.split('/')[0]}/`) ? [key] : [];
   });
 }
 

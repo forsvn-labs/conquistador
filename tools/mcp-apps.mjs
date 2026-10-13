@@ -1,4 +1,4 @@
-// MCP apps: desktop and editor apps that run the local Conquistador MCP server from their own
+// MCP clients: desktop and editor apps that run the local Conquistador MCP server from their own
 // config file. Only apps without the plugin are configured here; an agent with the plugin already
 // has the server (see onboard.mjs). Each change keeps the app's other settings and writes a backup
 // first. A file that is not plain JSON (for example JSON with comments) is never rewritten.

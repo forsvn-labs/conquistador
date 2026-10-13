@@ -55,7 +55,7 @@ else if (args[0]==='plugin' && args[1]!=='marketplace') {
 }
 
 // Answers are keyed by a phrase in each question. `questions` records the phrase of every question asked.
-const QUESTIONS = ['Where do you want', 'Which agents', 'or only this one', 'Turn on prompt hooks', 'Which MCP apps', 'Install now'];
+const QUESTIONS = ['Where do you want', 'Which agents', 'or only this one', 'Turn on prompt hooks', 'Which MCP clients', 'Install now'];
 
 function ui({ surfaces = ['agents'], scope = 'global', ids = ['codex'], hooks = true, consent = true } = {}) {
   const messages = [], questions = [];

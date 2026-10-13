@@ -13,12 +13,18 @@ Research, creative work, engineering, and review support that mission.
 
 The terminal installs; the agent works. `npx @forsvn/conquistador` (or `bunx`, `pnpm dlx`, or the
 first `conquistador` run) opens one full-screen installer that is pleasant to use: the detected
-coding agents already chosen, a few options (scope, hooks, and more places such as MCP apps,
-Hosted MCP, Executor, and chat bots), and every change, what stays unchanged, and the exact undo
-command before anything changes. Then it installs, checks each install, and ends by saying exactly
+coding agents already chosen and the full supported-agent catalog visible. Search and installed
+status distinguish support from detection. Agent and MCP client pickers use independent checkboxes,
+preserve multiple selections, and fit wide or compact terminals. Options control scope, hooks,
+MCP clients, Hosted MCP, Executor, chat bots, and a permanent CLI command through npm or Bun.
+Show every change and the exact undo
+command before anything changes. Then it installs, checks each install, and shows exactly
 what to type in each agent: `/conquistador init` in a project without `GROWTH.md`. The terminal
 never opens an agent, never asks for a task, and never runs marketing work; the smart model in the
-agent does that. Never configure two surfaces for one app, never prompt during `npm install`, and
+agent does that. The TUI manages skills, MCP servers, hooks, updates, repairs, and each installed
+item. Installation and verification leave its progress animation responsive. Enter on Done opens
+the manager. A documented npm or Bun install-and-launch command opens the TUI after successful
+package installation. Never configure two surfaces for one app, never prompt during `npm install`, and
 say so when another copy of the command would run instead. Never add hosts that the user did not
 choose. Support every agent whose skill path the agent's own documentation confirms.
 

@@ -44,7 +44,7 @@ validation. Maintained runtime output and diff whitespace checks are clean. Root
 still reports existing debt, with **zero introduced/changed-line diagnostics** across the 21-file
 reviewed scope (710 current versus 809 baseline); all five new code/test files lint clean.
 Independent read-only review cleared the requested scope. CI results belong to the exact
-submitted commit and are reported on the pull request. See [PROGRESS](../PROGRESS.md).
+submitted commit and are reported on the pull request. See [current handoff](../ROADMAP.md).
 Checks distinguish these layers:
 
 | Layer | Coverage in this change |

@@ -1,16 +1,67 @@
-# conquistador roadmap
+# Product roadmap
 
 ## Current handoff
 
-Record consolidation: 13 October 2026. Delivery dates below retain the source record's dates. This migration does not verify a new release.
+Last verified: 2026-10-13. Hung approved integration. Review fixes are verified locally; CI must pass before merge. No npm release.
 
-State: Ready to ship, recorded 12 October.
+[PR #75](https://github.com/forsvn-labs/conquistador/pull/75), on `feat/control-center`, implements the full agent catalog and search, permanent npm/Bun
+CLI installation, project skills, explicit MCP client selection, hook controls, in-TUI maintenance,
+and individual install update/removal. Plugin and Executor operations run in child processes so
+the progress animation remains responsive. MCP-only installs reopen the manager. Installation
+status reports damaged project and global skill copies.
 
-PR #72 merged documentation-link changes at 9b2acca. The handoff records them as unreleased. Package version remains 0.5.1.
+The design follow-up keeps the orange/yellow identity and adds wide detail columns, explicit
+multi-selection checkboxes, live selection counts, and consistent focus rows. Both agent and
+MCP client pickers have select-all and clear controls. Toggling detected agents preserves a manual
+choice, and shrinking an unfiltered catalog to 60×24 keeps the controls visible.
 
-Next action: Preserve the new social-copy priorities below. Verify the merged link changes in the next package release. Gemini hooks, synchronous prompt work, resize checks, and untested platform builds remain open.
+The MCP flow review corrects "MCP apps" to "MCP clients" and the manager action to "MCP
+connections". Public flags and saved state stay compatible. Executor 2 detection and source
+operations now show a setup handoff instead of calling removed Executor 1 commands or claiming
+a connection. Native v2 integration and capability discovery remain pending; the official flow
+and implementation gap are recorded in the review document.
 
-## High priority: social copy reads as AI slop
+Social 2.4.0 makes the writing references required, preserves a supplied draft in edit mode, and
+fails banned writing patterns regardless of score. Shared core references remain inside the
+owned library and survive contract regeneration. Exact original/rewrite fixtures are in
+`tools/e2e/fixtures/social-style.json`. `doctor` also reports older registry releases.
+
+Verified locally on macOS arm64, Node 26.9.0:
+
+- Product checks: 940 pass, including build and type checks.
+- Terminal installer: 64/64 scenarios pass, including multi-selection, resize, live progress, per-item removal,
+  MCP-only state, Executor 2 handoff, npm/Bun contracts, failure recovery, old flags, and non-interactive defaults.
+- Review regressions cover copied npm/Bun choices, failed CLI records and first use, version
+  detection failures, and Executor versions printed to stderr. Existing host/launch checks: 19 pass.
+- Iris captures cover the picker, manager, MCP multi-selection, and 60×24 layout.
+- Copy-check E2E: 44/44 pass. Social-style E2E: 15/15 pass. Original tweet passes unchanged.
+- New installer modules pass their configured lint checks.
+- Exact-package installation at `ba7cd9e` passes 50/50 applicable checks, including 21 native
+  terminal checks. The Node 22.18 run is explicitly not run. A real Bun global install of the
+  same context-aligned candidate passes 7/7 checks. The package integrity hashes match.
+- Project context: 6/6 checks pass. The live handoff is here; STRUCTURE maps source and commands,
+  and DRIVE resolves approved materials. Root INDEX and PROGRESS are retired. Historical links
+  point to dated Git records. This branch includes the context migration from PR #76.
+- Node 24/26 product CI, Linux/Windows package CI, and optional integration checks pass at `2c89d3e`.
+- Live docs canonical and `og:url` both point to `https://conquistador.app/docs`.
+
+Clean-package verification and PR evidence are recorded in
+[REVIEW-2026-10-CONTROL-CENTER.md](docs/REVIEW-2026-10-CONTROL-CENTER.md).
+The branch is not merged or published. Tests use synthetic host fixtures where stated and do
+not establish model quality, native MCP client loading, or human acceptance.
+
+Merged, not released: [#72](https://github.com/forsvn-labs/conquistador/pull/72) (`9b2acca`, 2026-10-12) moves
+every link to `conquistador.app`. Four changed files ship in the npm package (`INSTALL.md`, `docs/CHECK.md`,
+`hooks/README.md`, `skills/conquistador/commands/check/COMMAND.md`) and two release manifests; npm users get them
+with the next release. 0.5.1 is `latest` on npm (2026-10-10); see [CHANGELOG.md](CHANGELOG.md).
+Gemini CLI hooks are not built.
+
+Open: interactive Windows installation and Linux/Windows ARM remain untested. Native MCP client
+loading, the five live Executor cases, marketplace listings, hosted OAuth, and real writing
+quality acceptance remain on the roadmap. The spinner and resize gaps are fixed on the review branch.
+
+
+## Social quality acceptance
 
 Found on 2026-10-13 during a critique of the launch tweet. The `social` method rewrote Hung's draft
 into copy with a colon label ("Conquistador: a free…"), negative parallelism ("a real playbook, not
@@ -19,30 +70,26 @@ concerns", and `conquistador check --channel x` passed it. The check also passed
 post. The session ran a stale global install (product 0.0.13, installed 2026-09-25), but the gaps
 below are also in 0.5.1.
 
-Write the failing evals first: Hung's original tweet and the three bad drafts as fixtures. The bad
-drafts must fail. The original must pass or get only minimal edits.
-
-1. Add `references/ai-patterns.md` and `references/human-writing-stylebook.md` to the core reads of
-   `commands/social`, and make the copywriter scan its own draft before handoff. Now they are reached
-   only through the optional `editorial-polish` pass.
-2. Make a banned pattern in the post body a hard failure in the `social` rubric and critic. The five
-   dimensions do not check AI tells now.
-3. Add checker rules for "X, not Y" negative parallelism, colon labels in short copy, and false
-   "from X to Y" ranges. Only "Not just X, it's Y" is caught now.
-4. Add an edit mode: when the user supplies a draft, keep the user's wording and change only what
-   fails a check.
-5. (Separate PR) Make `doctor` warn when the installed skill is older than the npm release.
+Run a real social task and correction with the new reads and critic gate. Confirm that the agent
+keeps the supplied draft's voice, catches a weak draft, and does not treat deterministic checks
+as proof of useful writing. The remaining third historical rewrite was not supplied; do not
+claim the synthetic fixture reproduces its exact text.
 
 ## Public alpha follow-up
 
+0. Migrate the Executor source and capability adapters to the current v2 apps/MCP contract.
+   The present adapter supports Executor 1 and now gives a v2 handoff without removed CLI calls.
+   Follow the official Connect flow: accounts in Executor, a scoped endpoint for the agent,
+   skills and schema discovery, and per-operation approvals. Verify actual v2 install, read,
+   approval, correction, update, and removal before advertising v2 support.
 1. Run the five live Executor cases (first run and connect) that 0.3.0 shipped without. They need
    a responding Executor.app.
 2. List the plugin in the agent marketplaces, then check each listing installs 0.4.x.
 3. Test the interactive installer on Windows (a pseudo-terminal harness), and Linux and Windows
    on ARM. `tools/e2e/installer.mjs` needs a Windows pseudo-terminal bridge first.
-4. Check the docs canonical after Mintlify's next rebuild: `conquistador.app` with base path `/docs` was
-   added as the custom domain on 2026-10-12, but `/docs` still declares `forsvn.mintlify.dev/docs`.
-5. Open each MCP app (Claude Desktop, VS Code, Windsurf, Zed, Cursor) after the installer writes
+4. Keep the docs canonical and `og:url` check in release acceptance; its latest result is in the
+   current handoff.
+5. Open each MCP client (Claude Desktop, VS Code, Windsurf, Zed, Cursor) after the installer writes
    its entry, and check that the app lists the Conquistador tools. Only the config file and an MCP
    handshake are checked now.
 
@@ -134,8 +181,4 @@ acceptance on its exact candidate bytes. Keep CLI checks, native host observatio
 and human verdicts distinct. Publish the exact reviewed package only with explicit authorization;
 then verify registry identity and the deployed landing page's release/access/setup/removal copy.
 Source edits alone do not close a deployed-site finding. Marketplace listings and other external
-distribution remain explicit decisions. See [ROADMAP.md](ROADMAP.md) for unshipped work.
-
-## Earlier implementation evidence
-
-The exact dated handoff and its verification details remain in [Git history](https://github.com/forsvn-labs/conquistador/blob/8b0d40011e07da4996642f883dbe4ab3613db3d3/PROGRESS.md). Recheck recorded branch work before promoting it to active or shipped.
+distribution remain explicit decisions. See the [current handoff](#current-handoff) for unshipped work.

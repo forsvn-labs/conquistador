@@ -70,7 +70,11 @@ export function mapFor(target) {
   const ranked = purpose ? searchKnowledge([purpose.label, purpose.description, ...purpose.intents].join(' '), { root, playbooks: [], limit: 600 })
     .filter(hit => hit.path.startsWith(`skills/${prefix}/`) && hit.kind === 'playbook').map(hit => hit.path.slice(`skills/${prefix}/`.length))
     .filter(key => !skip(key)).slice(0, 3) : [];
-  const core = entries.filter(item => (item.kind === 'playbook' || item.kind === 'checklist') && (required.has(item.key) || ranked.includes(item.key) || item.kind === 'checklist'));
+  const sharedCore = (method?.requiredResources ?? []).filter(path => !path.startsWith(`skills/${prefix}/`)).map(path => {
+    const info = describe(readFileSync(join(root, path), 'utf8'));
+    return { key: posix.relative(`skills/${prefix}`, path), kind: 'playbook', summary: clip(clean(info.summary || info.title)) };
+  });
+  const core = [...entries.filter(item => (item.kind === 'playbook' || item.kind === 'checklist') && (required.has(item.key) || ranked.includes(item.key) || item.kind === 'checklist')), ...sharedCore];
   const playbooks = entries.filter(item => item.kind === 'playbook' && !core.includes(item));
   const group = kind => entries.filter(item => item.kind === kind);
   const href = key => (linkBase ? `${linkBase}/${key}` : key).replace(/ /g, '%20');
