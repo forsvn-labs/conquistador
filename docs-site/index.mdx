@@ -9,7 +9,7 @@ Conquistador gives your agent the playbook for a growth or marketing task. The a
 It is one skill, `/conquistador`, with 35 commands and 21 plays. It also has a rule-based copy checker and an MCP server. Conquistador is open source under the MIT license. The npm package is `@forsvn/conquistador`.
 
 <Note>
-  Conquistador is a public alpha. Install the latest npm release with `npx @forsvn/conquistador` or `bunx @forsvn/conquistador`. See [the changelog](/changelog) for release details.
+  Conquistador is a public alpha. Install the latest npm release with `npx @forsvn/conquistador@latest` or `bunx @forsvn/conquistador`. See [the changelog](/changelog) for release details.
 </Note>
 
 ## What you get
@@ -21,7 +21,7 @@ It is one skill, `/conquistador`, with 35 commands and 21 plays. It also has a r
 | Plays | A play runs commands in order. For example, `launch` runs positioning, the campaign plan, launch posts, launch copy, an audit, and a measurement plan. |
 | Copy check | `conquistador check` finds unsupported claims, AI-writing tells, vague calls to action, channel limits, email compliance gaps, and bad links. It uses no model. |
 | MCP server | `conquistador_brief` returns the playbooks for a task. Other tools search, read, check, and verify. |
-| Hooks | In Claude Code, Codex, and Cursor, hooks add the must-read list to marketing prompts and send the agent back once if it skipped those files. |
+| Hooks | Copy-check hooks run in Claude Code, Codex, Cursor, Copilot CLI, and Grok CLI. Claude Code, Codex, and Cursor also get playbook-reading checks. |
 
 ## Where it runs
 

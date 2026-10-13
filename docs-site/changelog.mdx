@@ -6,6 +6,15 @@ rss: true
 
 This page lists the changes that users see. The full record, with pull requests, commits, and verification, is [CHANGELOG.md](https://github.com/forsvn-labs/conquistador/blob/main/CHANGELOG.md) in the repository.
 
+<Update label="0.6.0" description="2026-10-13">
+  - All 16 supported agents appear in a searchable picker. Select several with checkboxes, select all, or clear the selection.
+  - The TUI manages project and global skills, MCP client connections, hooks, the permanent npm or Bun CLI, updates, repairs, and removal.
+  - `npx @forsvn/conquistador@latest` opens the installer. To install a permanent command and open it immediately, run `npm install -g @forsvn/conquistador && conquistador` or `bun add --global @forsvn/conquistador && conquistador`.
+  - Social drafts must use the writing references and preserve a supplied draft's voice. The copy checker rejects the recorded colon labels, negative parallelism, and false ranges.
+  - MCP clients connect to the local Conquistador server. Executor 2 shows its manual setup flow; automatic v2 setup remains pending.
+  - npm and GitHub have the current TUI preview, all 16 agent names, and links to conquistador.app.
+</Update>
+
 <Update label="0.5.1" description="2026-10-10">
   - `conquistador add` now tells each agent how to start: `/conquistador` in Claude Code, `/skill:conquistador` in Pi, and "Use Conquistador: your task" in agents without that slash command, such as Codex and Cursor.
 </Update>

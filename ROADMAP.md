@@ -2,31 +2,16 @@
 
 ## Current handoff
 
-Last verified: 2026-10-13. GitHub release 0.6.0 is available; npm availability verification is pending.
+Last verified: 2026-10-13. Release 0.6.0 is available on
+[npm](https://www.npmjs.com/package/@forsvn/conquistador) and
+[GitHub](https://github.com/forsvn-labs/conquistador/releases/tag/v0.6.0). The public pages and the
+live `npx` TUI are checked. [CHANGELOG.md](CHANGELOG.md) owns the release identity and validation.
 
-[PR #77](https://github.com/forsvn-labs/conquistador/pull/77) merged with Hung's approval at
-`246c52f1d4c79f883abdc24c18e15a58ef783e7d`. [v0.6.0](https://github.com/forsvn-labs/conquistador/releases/tag/v0.6.0)
-contains six checked assets. The tagged npm tarball matches the accepted candidate byte for byte.
-[Trusted publish run 38424309576](https://github.com/forsvn-labs/conquistador/actions/runs/38424309576)
-succeeded and npm accepted 0.6.0 with provenance. npm reported that the package was being processed.
-The public registry still returns `latest: 0.5.1` and 404 for 0.6.0 at the current check. Do not
-record npm delivery or advertise a working 0.6.0 registry install until availability is verified.
+Use `npx @forsvn/conquistador@latest` when an older global install exists. An unversioned `npx`
+can reuse that install; the live check verifies that `@latest` opens 0.6.0 instead.
 
-Next: verify npm `latest`, the registry tarball, provenance, the fresh `npx` TUI, and the npm page.
-Expected tarball SHA-256: `e3878d65662c5cb6b58d1c4da6bda9c14da47e8ce69e9b5563d4291dd449b9e5`.
-Then record npm delivery, remove this pending item, and clean the release checkout and branch.
-GitHub's description, homepage, README, TUI preview, and release page are updated.
-
-Validation on the final source `9afcb2d` passes 940 product checks, 64 terminal scenarios,
-44 copy checks, 15 social checks, 50 exact-package checks including 21 native terminal checks,
-and 7 real Bun global-install checks. Node 24/26, Linux/Windows package CI, and optional integration
-checks pass. The global-scope documentation finding is fixed and its review thread is resolved.
-CodeRabbit rate-limited the final revision. Package and terminal fixtures do not establish model
-quality or native MCP client loading. The Node 22.18 acceptance run remains not run.
-
-The release includes the full 16-agent catalog with multi-selection, project/global skills,
-MCP clients, hooks, npm/Bun CLI setup, in-TUI maintenance, and Social 2.4.0. Executor 2 setup gives
-a manual handoff; native v2 source integration and capability discovery remain pending. See
+Next: migrate the Executor source and capability adapters to v2, then run the live cases below.
+The current TUI gives a manual setup handoff. See
 [the control-center review](docs/REVIEW-2026-10-CONTROL-CENTER.md) for the accepted source work.
 
 Open: interactive Windows installation, Linux/Windows ARM, native MCP client loading, the five
@@ -56,7 +41,7 @@ claim the synthetic fixture reproduces its exact text.
    approval, correction, update, and removal before advertising v2 support.
 1. Run the five live Executor cases (first run and connect) that 0.3.0 shipped without. They need
    a responding Executor.app.
-2. List the plugin in the agent marketplaces, then check each listing installs 0.4.x.
+2. List the plugin in the agent marketplaces, then check each listing installs the current release.
 3. Test the interactive installer on Windows (a pseudo-terminal harness), and Linux and Windows
    on ARM. `tools/e2e/installer.mjs` needs a Windows pseudo-terminal bridge first.
 4. Keep the docs canonical and `og:url` check in release acceptance; its latest result is in the

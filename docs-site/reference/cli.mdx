@@ -32,6 +32,28 @@ Print the playbooks a task needs, and the command to type in the agent. A first 
 
 ## Maintain
 
+### `conquistador install-cli`
+
+```sh
+conquistador install-cli [--package-manager=npm|bun] [--yes] [--dry-run] [--plain]
+```
+
+From 0.6.0. Open the installer with the permanent CLI command selected. Choose npm or Bun,
+review the plan, and install. `--yes` accepts the plan without questions. `--dry-run` prints
+the install command without running it.
+
+### `conquistador hooks`
+
+```sh
+conquistador hooks on
+conquistador hooks off
+conquistador hooks status
+```
+
+From 0.5.0. Turn plugin hooks on or off for Claude Code, Codex, Cursor, Copilot CLI, and Grok CLI.
+The change applies to the next prompt or edit. `CONQUISTADOR_HOOKS=off` overrides the saved setting.
+The older project operator uses `conquistador hooks enable --project ABS`.
+
 ### `conquistador update`
 
 ```sh
@@ -232,14 +254,6 @@ conquistador route --prompt TEXT
 ```
 
 Explain which command or play a prompt routes to.
-
-### `conquistador hooks`
-
-```sh
-conquistador hooks enable --project ABS
-```
-
-Manage the hooks of a per-project operator install.
 
 ### `conquistador runtime`
 

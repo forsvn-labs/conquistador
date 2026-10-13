@@ -22,8 +22,8 @@ node tools/e2e/docs-site.mjs --live http://localhost:3000 # also every page in a
 ```
 
 The report is `dist/e2e/docs-site/report.md`. The test fails when a CLI command, an MCP tool or
-field, or a check rule is missing from the site, when a feature newer than npm 0.3.0 is not marked
-"from 0.4.0", or when a page uses AI-writing tells.
+field, or a check rule is missing from the site, when a feature newer than npm 0.3.0 has no
+release-version note, or when a page uses AI-writing tells.
 
 ## Rules for editing
 
@@ -31,8 +31,8 @@ field, or a check rule is missing from the site, when a feature newer than npm 0
   and reference. `docs/CHECK.md` only points here. `INSTALL.md` stays the full install reference,
   because it ships in the npm package for offline readers; keep the install pages and INSTALL.md
   in step.
-- Mark a feature that is on `main` but not in the current npm release with "from 0.6.0" (the
-  next version). Keep the mark after the release: it tells readers of older installs what they lack.
+- Mark a feature that is on `main` but not in the current npm release with its planned release
+  version. Keep the mark after release: it tells readers of older installs what they lack.
 - Write plain, short sentences: one idea per sentence, active voice, no hype.
 
 ## Set up hosting (one time, by the owner)

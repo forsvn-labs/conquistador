@@ -4,7 +4,7 @@
 versions. Verification establishes the stated local scope; native host behavior, useful model
 output, human acceptance and rights disposition require separate evidence.
 
-## 2026-10-13, 0.6.0 GitHub release
+## 2026-10-13, 0.6.0 public alpha
 
 - [PR #77](https://github.com/forsvn-labs/conquistador/pull/77) merged at
   `246c52f1d4c79f883abdc24c18e15a58ef783e7d` with Hung's approval. The public
@@ -17,15 +17,26 @@ output, human acceptance and rights disposition require separate evidence.
 - The tagged tarball is byte-identical to the candidate that passed 50 package and 7 Bun checks.
   SHA-256: `e3878d65662c5cb6b58d1c4da6bda9c14da47e8ce69e9b5563d4291dd449b9e5`.
   Final-source CI passes Node 24/26 product, terminal/writing, Linux/Windows package, and optional
-  integration checks. The documented acceptance limits remain open.
+  integration checks. Product checks pass 940, terminal scenarios 64, copy checks 44, and social
+  checks 15. CodeRabbit rate-limited the final revision; the reported documentation finding is
+  fixed and resolved. The documented acceptance limits remain open.
 - [Publish run 38424309576](https://github.com/forsvn-labs/conquistador/actions/runs/38424309576)
-  succeeded and npm accepted 0.6.0 with provenance. npm is processing the version; registry
-  availability and the npm page update are not yet verified. ROADMAP owns the remaining handoff.
+  published [@forsvn/conquistador@0.6.0](https://www.npmjs.com/package/@forsvn/conquistador/v/0.6.0)
+  as `latest` with provenance. After npm finished processing, all 9 live registry checks passed:
+  metadata, provenance, exact tarball bytes, integrity, version output, the full agent picker,
+  and cancellation. The public npm and GitHub pages show the new README and loaded TUI image.
+- A fresh unversioned `npx` starts 0.6.0. Where 0.5.1 is installed globally, npm can reuse it.
+  The live check confirms `npx @forsvn/conquistador@latest` starts 0.6.0 in that environment.
+  Repeatable reports and Iris captures are in the approved project verification folder; see
+  [DRIVE.md](DRIVE.md). No npm publisher sign-in was needed for publication or public verification.
+- The follow-up documentation records `install-cli`, the 0.6.0 copy-rule markers, and recovery
+  for an older global `npx` selection. The docs checker preserves hyphenated command names and
+  accepts valid release-version notes. All 19 docs checks and the Mintlify build pass.
 
 ## 2026-10-13, accepted control-center source
 
 [PR #75](https://github.com/forsvn-labs/conquistador/pull/75) merged at
-`0cefef32ae734bc6199efd1d08fe8b4310d73e59` after Hung approved integration. npm release is pending.
+`0cefef32ae734bc6199efd1d08fe8b4310d73e59` after Hung approved integration. Released in 0.6.0 above.
 
 - The TUI exposes all 16 supported agents with searchable multi-selection and controls skills,
   MCP client connections, hooks, npm/Bun CLI installation, updates, repairs, and individual removal.

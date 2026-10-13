@@ -2,7 +2,7 @@
 // E2E for the Mintlify docs site in docs-site/. Offline unless --live is given. No model.
 // Checks that the site is complete and that it says only what the code does: navigation and
 // files match, internal links resolve, the CLI, MCP, and check references match the shipped
-// code, features newer than npm 0.3.0 are marked "from 0.4.0", moved repository files point to
+// code, features newer than npm 0.3.0 have release-version notes, moved repository files point to
 // the site, and context7.json indexes docs-site/. With --live URL it also requests every page
 // from a running `mint dev` and expects HTTP 200.
 // Report: dist/e2e/docs-site/report.json and report.md.
@@ -89,10 +89,10 @@ record('internal links resolve', !broken.length, list(broken));
 
 // F5. The CLI reference covers every command in `help --all`, and names no command the CLI lacks.
 const help = cli(['help', '--all']).stdout;
-const helpCommands = [...new Set([...help.matchAll(/^ {2}conquistador ([a-z]+)/gm)].map(match => match[1]))];
-const dispatcher = new Set([...read('runtime/bin/conquistador.js').matchAll(/["']([a-z]+)["']/g)].map(match => match[1]));
+const helpCommands = [...new Set([...help.matchAll(/^ {2}conquistador ([a-z]+(?:-[a-z]+)*)/gm)].map(match => match[1]))];
+const dispatcher = new Set([...read('runtime/bin/conquistador.js').matchAll(/["']([a-z]+(?:-[a-z]+)*)["']/g)].map(match => match[1]));
 const cliPage = page('reference/cli');
-const documented = [...new Set([...cliPage.matchAll(/^#{2,3} `conquistador ([a-z]+)/gm)].map(match => match[1]))];
+const documented = [...new Set([...cliPage.matchAll(/^#{2,3} `conquistador ([a-z]+(?:-[a-z]+)*)/gm)].map(match => match[1]))];
 const required = [...helpCommands, 'check', 'connect', 'review', 'pin', 'unpin', 'login', 'logout', 'whoami'];
 const undocumentedCommands = required.filter(name => !documented.includes(name));
 record('CLI reference documents every command', !undocumentedCommands.length, undocumentedCommands.length ? list(undocumentedCommands) : `${documented.length} commands`);
@@ -132,15 +132,21 @@ record('check page lists every rule', !missingRules.length, missingRules.length 
 const unknownRules = tableRules.filter(id => !rules.includes(id) && id !== contextRule);
 record('check page names only real rules', !unknownRules.length, list(unknownRules));
 
-// F8. Everything on main that npm 0.3.0 lacks is marked "from 0.4.0" where it is listed.
+// F8. Everything newer than npm 0.3.0 names a release version where it is listed.
+const currentVersion = JSON.parse(read('package.json')).version.split('.').map(Number);
+const compareVersion = (a, b) => a[0] - b[0] || a[1] - b[1] || a[2] - b[2];
+const hasReleaseNote = text => [...text.matchAll(/\bfrom (\d+\.\d+\.\d+)\b/gi)].some(([, version]) => {
+  const parts = version.split('.').map(Number);
+  return compareVersion(parts, [0, 3, 0]) > 0 && compareVersion(parts, currentVersion) <= 0;
+});
 const rules030 = [...at030('tools/check/rules.mjs').matchAll(/id: '([a-z0-9-]+)'/g)].map(match => match[1]);
 const newRules = rules.filter(id => !rules030.includes(id));
-const unmarkedRules = newRules.filter(id => !checkPage.split('\n').some(line => line.includes(`\`${id}\``) && /0\.4\.0/.test(line)));
-record('rules newer than 0.3.0 are marked from 0.4.0', newRules.length > 0 && !unmarkedRules.length, unmarkedRules.length ? list(unmarkedRules) : newRules.join(', '));
+const unmarkedRules = newRules.filter(id => !checkPage.split('\n').some(line => line.includes(`\`${id}\``) && hasReleaseNote(line)));
+record('rules newer than 0.3.0 have release-version notes', newRules.length > 0 && !unmarkedRules.length, unmarkedRules.length ? list(unmarkedRules) : newRules.join(', '));
 const tools030 = [...at030('tools/skills-mcp.mjs').matchAll(/name: '(conquistador_[a-z]+)'/g)].map(match => match[1]);
 const newTools = tools.map(tool => tool.name).filter(name => !tools030.includes(name));
-const unmarkedTools = newTools.filter(name => !/0\.4\.0/.test(section(mcpPage, `## \`${name}\``)));
-record('MCP tools newer than 0.3.0 are marked from 0.4.0', newTools.length > 0 && !unmarkedTools.length, unmarkedTools.length ? list(unmarkedTools) : newTools.join(', '));
+const unmarkedTools = newTools.filter(name => !hasReleaseNote(section(mcpPage, `## \`${name}\``)));
+record('MCP tools newer than 0.3.0 have release-version notes', newTools.length > 0 && !unmarkedTools.length, unmarkedTools.length ? list(unmarkedTools) : newTools.join(', '));
 
 // F9. Repository files whose content moved point to the site and keep only what tests and
 // offline readers need.
