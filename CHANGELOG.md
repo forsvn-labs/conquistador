@@ -127,7 +127,7 @@ Still a public alpha. Merged through [#60](https://github.com/forsvn-labs/conqui
 - **Hosted tokens from the CLI.** `conquistador login` signs in with GitHub (device flow) and saves
   a personal `cq_` token; `whoami` shows its owner; `logout` revokes it. An existing admin token is
   moved to `mcp-token.previous`, not overwritten. The hosted Worker for these commands deploys
-  separately (see [PROGRESS.md](PROGRESS.md)).
+  separately (see [PROGRESS.md](https://github.com/forsvn-labs/conquistador/blob/90c8d7baed6135a68db54cb844d833b094e31950/PROGRESS.md)).
 - **From the 2026-10-07 hosted deployment:** the distilled playbooks and `outreach` 2.4.0; rubric
   gates; briefs that start with the route and inline each command's Core list; the email rules
   `email-presumed-pain`, `email-relative-time`, and `email-merge-tag` and the reply-question call to
@@ -152,7 +152,7 @@ Still a public alpha. Merged through [#60](https://github.com/forsvn-labs/conqui
 ## 2026-10-07, hosted MCP server deployment
 
 A deployment, not an npm release: `@forsvn/conquistador` stays at 0.3.0, and installed users get
-these changes only with the next release (see [PROGRESS.md](PROGRESS.md)). Deployed the Cloudflare
+these changes only with the next release (see [PROGRESS.md](https://github.com/forsvn-labs/conquistador/blob/90c8d7baed6135a68db54cb844d833b094e31950/PROGRESS.md)). Deployed the Cloudflare
 Worker `conquistador-mcp` from `main` commit `90c8d7baed6135a68db54cb844d833b094e31950` (Worker
 version `8b099e63-c4d1-44a2-b90f-e549cba933ad`) to <https://mcp.forsvn.com/mcp>, with
 <https://conquistador-mcp.levinhhungg.workers.dev/mcp> as a second address. Every MCP request needs a
