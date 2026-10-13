@@ -185,5 +185,5 @@ The full terminal suite passes 64/64; product checks pass 940, copy checks 44, a
 The source is merged. The package version remains 0.5.1; a new npm release is pending. Native Windows interactive installation,
 ARM platform coverage, native MCP client loading, live Executor cases, real writing quality, and
 human acceptance remain separate checks. Package verification tests installation bytes and
-local host registration; it does not establish an agent's output quality. Merge and release
-require their recorded acceptance. No new npm release or hosted server deployment occurred in this task.
+local host registration; it does not establish an agent's output quality. A new npm release or
+hosted deployment requires Hung's approval. No new npm release or hosted server deployment occurred in this task.
