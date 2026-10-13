@@ -27,7 +27,7 @@ SDK using explicitly synthetic fixtures, with no model or network. See each modu
 Edit authored source in `runtime/src/`, `catalog/src/`, or `evals/src/`; runtime/lib is maintained
 build output. Skills are editable Markdown with contained resources and metadata versions. Preserve
 frontmatter names and parent routing. An isolated skill must not depend on sibling or private files.
-Record unshipped behavior changes and checks in PROGRESS.md. CHANGELOG.md contains shipped work only. Do not add private issue exports,
+Record active work, ready-to-ship behavior changes, and checks in ROADMAP.md. CHANGELOG.md contains shipped work only. Do not add private issue exports,
 source history, raw provider receipts, customer content, or credentials to a pull request.
 
 After intentional skill, supporting-resource, or plugin payload edits (including hooks,
