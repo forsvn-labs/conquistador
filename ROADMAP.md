@@ -49,6 +49,13 @@ claim the synthetic fixture reproduces its exact text.
 5. Open each MCP client (Claude Desktop, VS Code, Windsurf, Zed, Cursor) after the installer writes
    its entry, and check that the app lists the Conquistador tools. Only the config file and an MCP
    handshake are checked now.
+6. Update the optional Promptfoo evaluation dependencies. On 2026-10-13, GitHub reports critical
+   alerts [#50](https://github.com/forsvn-labs/conquistador/security/dependabot/50),
+   [#49](https://github.com/forsvn-labs/conquistador/security/dependabot/49), and
+   [#45](https://github.com/forsvn-labs/conquistador/security/dependabot/45) for
+   `@simple-git/argv-parser`, `simple-git`, and `proxy-addr` in
+   `evals/promptfoo-isolated/package-lock.json`. Verify patched versions and the evaluation
+   adapter before enabling live evaluations. The published 0.6.0 npm tarball contains no `evals/`.
 
 ## Next acceptance
 
