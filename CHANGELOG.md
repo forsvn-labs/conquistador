@@ -4,6 +4,24 @@
 versions. Verification establishes the stated local scope; native host behavior, useful model
 output, human acceptance and rights disposition require separate evidence.
 
+## 2026-10-13, 0.6.0 GitHub release
+
+- [PR #77](https://github.com/forsvn-labs/conquistador/pull/77) merged at
+  `246c52f1d4c79f883abdc24c18e15a58ef783e7d` with Hung's approval. The public
+  [v0.6.0 release](https://github.com/forsvn-labs/conquistador/releases/tag/v0.6.0) has six checked
+  assets, including the npm tarball, prepared skill/plugin ZIPs, checksums, and source identity.
+- The release ships the accepted control-center and writing fixes below. The shared npm/GitHub
+  README leads with all 16 supported agents, npm/Bun install-and-launch commands, the current
+  color TUI, and live documentation links. Package/plugin metadata uses conquistador.app.
+  Global-scope wording distinguishes plugins with hooks/MCP from skill-only agents.
+- The tagged tarball is byte-identical to the candidate that passed 50 package and 7 Bun checks.
+  SHA-256: `e3878d65662c5cb6b58d1c4da6bda9c14da47e8ce69e9b5563d4291dd449b9e5`.
+  Final-source CI passes Node 24/26 product, terminal/writing, Linux/Windows package, and optional
+  integration checks. The documented acceptance limits remain open.
+- [Publish run 38424309576](https://github.com/forsvn-labs/conquistador/actions/runs/38424309576)
+  succeeded and npm accepted 0.6.0 with provenance. npm is processing the version; registry
+  availability and the npm page update are not yet verified. ROADMAP owns the remaining handoff.
+
 ## 2026-10-13, accepted control-center source
 
 [PR #75](https://github.com/forsvn-labs/conquistador/pull/75) merged at

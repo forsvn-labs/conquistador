@@ -2,71 +2,36 @@
 
 ## Current handoff
 
-Last verified: 2026-10-13. Source merged; 0.6.0 release preparation is active.
+Last verified: 2026-10-13. GitHub release 0.6.0 is available; npm availability verification is pending.
 
-[PR #77](https://github.com/forsvn-labs/conquistador/pull/77) updates the product and plugin identities, npm metadata, and the shared npm/GitHub
-README. It moves install commands and the full agent list above the catalog, links the live docs,
-and uses a capture of the verified 0.6.0 npm installation. Validate the exact clean package, obtain approval
-for the version-bump merge, then tag the merged source and publish its release assets through
-OIDC. Verify registry bytes and both public pages before recording shipment.
+[PR #77](https://github.com/forsvn-labs/conquistador/pull/77) merged with Hung's approval at
+`246c52f1d4c79f883abdc24c18e15a58ef783e7d`. [v0.6.0](https://github.com/forsvn-labs/conquistador/releases/tag/v0.6.0)
+contains six checked assets. The tagged npm tarball matches the accepted candidate byte for byte.
+[Trusted publish run 38424309576](https://github.com/forsvn-labs/conquistador/actions/runs/38424309576)
+succeeded and npm accepted 0.6.0 with provenance. npm reported that the package was being processed.
+The public registry still returns `latest: 0.5.1` and 404 for 0.6.0 at the current check. Do not
+record npm delivery or advertise a working 0.6.0 registry install until availability is verified.
 
-[PR #75](https://github.com/forsvn-labs/conquistador/pull/75) merged at `0cefef32ae734bc6199efd1d08fe8b4310d73e59` on 2026-10-13. The accepted source implements the full agent catalog and search, permanent npm/Bun
-CLI installation, project skills, explicit MCP client selection, hook controls, in-TUI maintenance,
-and individual install update/removal. Plugin and Executor operations run in child processes so
-the progress animation remains responsive. MCP-only installs reopen the manager. Installation
-status reports damaged project and global skill copies.
+Next: verify npm `latest`, the registry tarball, provenance, the fresh `npx` TUI, and the npm page.
+Expected tarball SHA-256: `e3878d65662c5cb6b58d1c4da6bda9c14da47e8ce69e9b5563d4291dd449b9e5`.
+Then record npm delivery, remove this pending item, and clean the release checkout and branch.
+GitHub's description, homepage, README, TUI preview, and release page are updated.
 
-The design follow-up keeps the orange/yellow identity and adds wide detail columns, explicit
-multi-selection checkboxes, live selection counts, and consistent focus rows. Both agent and
-MCP client pickers have select-all and clear controls. Toggling detected agents preserves a manual
-choice, and shrinking an unfiltered catalog to 60×24 keeps the controls visible.
+Validation on the final source `9afcb2d` passes 940 product checks, 64 terminal scenarios,
+44 copy checks, 15 social checks, 50 exact-package checks including 21 native terminal checks,
+and 7 real Bun global-install checks. Node 24/26, Linux/Windows package CI, and optional integration
+checks pass. The global-scope documentation finding is fixed and its review thread is resolved.
+CodeRabbit rate-limited the final revision. Package and terminal fixtures do not establish model
+quality or native MCP client loading. The Node 22.18 acceptance run remains not run.
 
-The MCP flow review corrects "MCP apps" to "MCP clients" and the manager action to "MCP
-connections". Public flags and saved state stay compatible. Executor 2 detection and source
-operations now show a setup handoff instead of calling removed Executor 1 commands or claiming
-a connection. Native v2 integration and capability discovery remain pending; the official flow
-and implementation gap are recorded in the review document.
+The release includes the full 16-agent catalog with multi-selection, project/global skills,
+MCP clients, hooks, npm/Bun CLI setup, in-TUI maintenance, and Social 2.4.0. Executor 2 setup gives
+a manual handoff; native v2 source integration and capability discovery remain pending. See
+[the control-center review](docs/REVIEW-2026-10-CONTROL-CENTER.md) for the accepted source work.
 
-Social 2.4.0 makes the writing references required, preserves a supplied draft in edit mode, and
-fails banned writing patterns regardless of score. Shared core references remain inside the
-owned library and survive contract regeneration. Exact original/rewrite fixtures are in
-`tools/e2e/fixtures/social-style.json`. `doctor` also reports older registry releases.
-
-Verified locally on macOS arm64, Node 26.9.0:
-
-- Product checks: 940 pass, including build and type checks.
-- Terminal installer: 64/64 scenarios pass, including multi-selection, resize, live progress, per-item removal,
-  MCP-only state, Executor 2 handoff, npm/Bun contracts, failure recovery, old flags, and non-interactive defaults.
-- Review regressions cover copied npm/Bun choices, failed CLI records and first use, version
-  detection failures, and Executor versions printed to stderr. Existing host/launch checks: 19 pass.
-- Iris captures cover the picker, manager, MCP multi-selection, and 60×24 layout.
-- Copy-check E2E: 44/44 pass. Social-style E2E: 15/15 pass. Original tweet passes unchanged.
-- New installer modules pass their configured lint checks.
-- Exact-package installation at `c4175ff` passes 50/50 applicable checks, including 21 native
-  terminal checks. The Node 22.18 run is explicitly not run. A real Bun global install of the
-  same reviewed candidate passes 7/7 checks. The package integrity hashes match.
-- Project context: 6/6 checks pass. The live handoff is here; STRUCTURE maps source and commands,
-  and DRIVE resolves approved materials. Root INDEX and PROGRESS are retired. Historical links
-  point to dated Git records. This branch includes the context migration from PR #76.
-- Node 24/26 product CI, Linux/Windows package CI, optional integration checks, and CodeRabbit
-  pass at `c4175ff`. All four inline review threads are resolved.
-- Live docs canonical and `og:url` both point to `https://conquistador.app/docs`.
-
-Clean-package verification and PR evidence are recorded in
-[REVIEW-2026-10-CONTROL-CENTER.md](docs/REVIEW-2026-10-CONTROL-CENTER.md).
-The source is merged; npm release remains pending. Tests use synthetic host fixtures where stated and do
-not establish model quality, native MCP client loading, or human acceptance.
-
-Merged, not released: [#72](https://github.com/forsvn-labs/conquistador/pull/72) (`9b2acca`, 2026-10-12) moves
-every link to `conquistador.app`. Four changed files ship in the npm package (`INSTALL.md`, `docs/CHECK.md`,
-`hooks/README.md`, `skills/conquistador/commands/check/COMMAND.md`) and two release manifests; npm users get them
-with the next release. 0.5.1 is `latest` on npm (2026-10-10); see [CHANGELOG.md](CHANGELOG.md).
+Open: interactive Windows installation, Linux/Windows ARM, native MCP client loading, the five
+live Executor cases, marketplace listings, hosted OAuth, and real writing-quality acceptance.
 Gemini CLI hooks are not built.
-
-Open: interactive Windows installation and Linux/Windows ARM remain untested. Native MCP client
-loading, the five live Executor cases, marketplace listings, hosted OAuth, and real writing
-quality acceptance remain on the roadmap. The spinner and resize gaps are fixed on the review branch.
-
 
 ## Social quality acceptance
 
