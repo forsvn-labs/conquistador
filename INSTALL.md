@@ -12,26 +12,37 @@ You do not need a marketing-service account to draft from facts you supply.
 
 ## Install
 
-Run the installer in your project folder, with the package manager you use:
+In your project folder, install and open Conquistador with npm or Bun:
 
 ```sh
-npx @forsvn/conquistador
-bunx @forsvn/conquistador
-pnpm dlx @forsvn/conquistador
+# npm
+npm i -g @forsvn/conquistador@latest && conquistador
+
+# Bun
+bun add --global @forsvn/conquistador@latest && conquistador
 ```
 
-The terminal only installs Conquistador into your coding agents. The work happens inside the agent:
-you type `/conquistador` there. The CLI never opens an agent and never runs a task.
+This installs the permanent `conquistador` command and opens the TUI after installation succeeds.
+Run `conquistador` later to manage agents, skills, MCP connections, hooks, and updates.
+Use `-g` with npm. Without it, npm installs into the current project.
 
-Or install the CLI and open the TUI in one command:
+To run the installer once without a permanent CLI install:
 
 ```sh
-npm install -g @forsvn/conquistador && conquistador
-bun add --global @forsvn/conquistador && conquistador
+npx @forsvn/conquistador@latest
+bunx @forsvn/conquistador@latest
+pnpm dlx @forsvn/conquistador@latest
 ```
+
+These commands open the TUI directly. Choose **Keep the CLI installed** there to keep the command
+with npm or Bun. You can also run `conquistador install-cli --package-manager=bun`.
+Package installation runs no interactive lifecycle script, so CI and dependency installs finish normally.
+
+The terminal installs Conquistador into your coding agents. The work happens inside the agent.
+The CLI never opens an agent and never runs a task.
 
 `conquistador` runs the installer the first time: a full-screen terminal UI with five steps. It
-takes about a minute, and nothing changes until you confirm the review.
+takes about a minute. Agent configuration changes only after you confirm the review.
 
 1. **Agents.** All 16 supported agents are listed. Select one or more with checkboxes. Detected
    agents start selected. Space toggles one agent; `a` toggles detected agents, `A` selects all,
@@ -117,11 +128,11 @@ with code 2. With `--yes`, it installs, runs the verify pass, prints the summary
 code 1 when a step or a check failed.
 
 ```sh
-npx @forsvn/conquistador --providers=claude,codex --scope=project -y
-npx @forsvn/conquistador --surface=agents,mcp-apps --apps=claude-desktop -y
-npx @forsvn/conquistador --providers=pi,hermes --scope=global --dry-run
-npx @forsvn/conquistador --surface=agents,executor --json
-npx @forsvn/conquistador --surface=agents,cli --package-manager=bun --yes
+npx @forsvn/conquistador@latest --providers=claude,codex --scope=project -y
+npx @forsvn/conquistador@latest --surface=agents,mcp-apps --apps=claude-desktop -y
+npx @forsvn/conquistador@latest --providers=pi,hermes --scope=global --dry-run
+npx @forsvn/conquistador@latest --surface=agents,executor --json
+npx @forsvn/conquistador@latest --surface=agents,cli --package-manager=bun --yes
 conquistador install-cli --package-manager=npm
 conquistador add --surface=mcp-apps --apps=claude-desktop,vscode
 conquistador add codex --scope=project --yes
@@ -192,8 +203,8 @@ Notes:
 ### Exact version
 
 ```sh
-npm install -g @forsvn/conquistador@0.6.0
-npm install -g --ignore-scripts --install-links git+https://github.com/forsvn-labs/conquistador.git#v0.6.0
+npm install -g @forsvn/conquistador@0.6.1
+npm install -g --ignore-scripts --install-links git+https://github.com/forsvn-labs/conquistador.git#v0.6.1
 ```
 
 `--ignore-scripts` skips npm lifecycle scripts. `--install-links` copies the checkout out of npm's
@@ -213,7 +224,7 @@ conquistador remove --scope=project
 npm uninstall -g @forsvn/conquistador
 ```
 
-Without a global CLI, put `npx @forsvn/conquistador` in front of each command.
+Without a global CLI, put `npx @forsvn/conquistador@latest` in front of each command.
 
 `remove` keeps your playbooks, `~/.conquistador/config.json`, bot exports, project deliverables,
 `PRODUCT.md`, and `GROWTH.md`. It deletes only folders that hold `.conquistador-owned.json`.
@@ -465,7 +476,7 @@ and the Docker images stay in the [repository](https://github.com/forsvn-labs/co
 | No agent is found | Install a supported agent, or name one: `--providers=claude`. You can still install MCP clients, Executor, or chat bots |
 | `The conquistador command on your PATH is version …` | An older copy runs instead of the one you installed. Run `npm i -g @forsvn/conquistador@latest`, or remove the old copy with the command the warning prints |
 | `npx` opens an older version | An unversioned `npx` can reuse a global install. Run `npx @forsvn/conquistador@latest` to fetch the current release |
-| `npm i @forsvn/conquistador` (without `-g`) gives no `conquistador` command | That puts the package in `./node_modules`. Use `npm i -g @forsvn/conquistador`, or run `npx @forsvn/conquistador` |
+| `npm i @forsvn/conquistador` (without `-g`) gives no `conquistador` command | That puts the package in `./node_modules`. Use `npm i -g @forsvn/conquistador`, or run `npx @forsvn/conquistador@latest` |
 | An MCP client config `is not plain JSON` | The installer left it unchanged. Add the entry it printed by hand, or remove the comments and run `conquistador add` |
 | Executor `cannot add a source from the command line` | Update Executor (`npm i -g executor`), or add the source by hand with the printed steps |
 | `Not found on PATH` for a global install | Install that agent's CLI, or use `--scope=project` |

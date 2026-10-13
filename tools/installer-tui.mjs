@@ -172,8 +172,8 @@ function optionRows(ctx, choices, options) {
   list.push({ id: 'bot', label: 'Chat bot files', toggle: true, hint: () => `Writes a system prompt and knowledge files to ${tilde(choices.botOut)} for GPTs, Claude Projects, and Gems. Folder: --bot-out.` });
   if (ctx.login && ctx.online !== false) list.push({ id: 'hosted', label: 'Hosted MCP', toggle: true, hint: () => 'Sign in with GitHub to get a token for deployed agents and remote apps.' });
   else if (ctx.login) notes.push('Hosted MCP needs a network connection. It is not offered now.');
-  list.push({ id: 'cli', label: 'CLI command', values: ['off', 'npm', 'bun'], names: { off: 'Off', npm: 'npm', bun: 'Bun' },
-    hint: value => value === 'off' ? 'Keep using npx or bunx, or choose npm or Bun to install the permanent conquistador command.' : `Install the permanent conquistador command with ${value === 'bun' ? 'Bun' : 'npm'}. The exact command appears in the review.` });
+  list.push({ id: 'cli', label: 'Keep the CLI installed', values: ['off', 'npm', 'bun'], names: { off: 'Skip', npm: 'npm', bun: 'Bun' },
+    hint: value => value === 'off' ? 'Skip CLI installation. An existing command stays installed. Choose npm or Bun to keep the command after a run-once install.' : `Install the permanent conquistador command with ${value === 'bun' ? 'Bun' : 'npm'}. The exact command appears in the review.` });
   return { list, notes };
 }
 
@@ -393,7 +393,7 @@ function App({ options: initialOptions, cwd, first, update, warnings, onExit, mo
     { id: 'skills', label: 'Skills in this project', hint: 'Copy the Conquistador skill into selected agent folders in this project.' },
     { id: 'mcp', label: 'MCP connections', hint: 'Choose local MCP clients, Hosted MCP, Executor, or chat bot files.' },
     { id: 'hooks', label: 'Hooks', hint: 'Turn prompt and copy-check hooks on or off. Changes apply on the next prompt.' },
-    { id: 'cli', label: 'Install CLI command', hint: 'Keep conquistador on PATH with npm or Bun, including after an npx run.' },
+    { id: 'cli', label: 'Keep the CLI installed', hint: 'Keep conquistador on PATH with npm or Bun, including after an npx run.' },
     { id: 'installed', label: 'Installed items', hint: 'See the scope and path of each install. Update or remove one selected item.' },
     { id: 'update', label: 'Update', hint: `Get the newest version and refresh every install (${self} update).` },
     { id: 'doctor', label: 'Check and repair', hint: `Find and repair install and project drift (${self} doctor --fix).` },

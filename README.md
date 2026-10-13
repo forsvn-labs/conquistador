@@ -11,27 +11,35 @@ Hermes Agent, Antigravity CLI, Kiro CLI, Mistral Vibe, Qoder, Rovo Dev, Trae, an
 
 ## Install
 
-You need Node 22.18 or later and a coding agent. Run the installer with your package manager:
+You need Node 22.18 or later and a coding agent. In your project folder, install and open Conquistador:
 
 ```sh
-npx @forsvn/conquistador
-bunx @forsvn/conquistador
-pnpm dlx @forsvn/conquistador
+# npm
+npm i -g @forsvn/conquistador@latest && conquistador
+
+# Bun
+bun add --global @forsvn/conquistador@latest && conquistador
 ```
 
-To install the CLI and open the TUI in one command:
+This installs the permanent `conquistador` command and opens the TUI after installation succeeds.
+Run `conquistador` later to manage agents, skills, MCP connections, hooks, and updates.
+Use `-g` with npm. Without it, npm installs into the current project.
+
+To run the installer once without a permanent CLI install:
 
 ```sh
-npm install -g @forsvn/conquistador && conquistador
-bun add --global @forsvn/conquistador && conquistador
+npx @forsvn/conquistador@latest
+bunx @forsvn/conquistador@latest
+pnpm dlx @forsvn/conquistador@latest
 ```
 
-An `npx` or `bunx` run opens the TUI directly. The **CLI command** option keeps the command installed
-with npm or Bun. You can also run `conquistador install-cli --package-manager=bun`. Package
-installation alone runs no interactive lifecycle script, so CI and dependency installs finish normally.
+These commands open the TUI directly. Choose **Keep the CLI installed** there to keep the command
+with npm or Bun. You can also run `conquistador install-cli --package-manager=bun`.
+Package installation runs no interactive lifecycle script, so CI and dependency installs finish normally.
 
 The terminal only installs Conquistador. The work happens inside your coding agent. The
-full-screen installer takes about a minute, and nothing changes until you confirm the review.
+full-screen installer takes about a minute. Agent configuration changes only after you confirm
+the review.
 
 1. **Agents.** All 16 supported agents are visible. Select several with checkboxes; detected
    agents start selected. Search with `/`, toggle with Space, select all with `A`, or clear with
@@ -52,10 +60,10 @@ stay inside the TUI. Use `--plain` or `TERM=dumb` for line prompts. `conquistado
 installer again. Skip the questions in scripts:
 
 ```sh
-npx @forsvn/conquistador --providers=claude,codex --scope=project -y
-npx @forsvn/conquistador --surface=agents,mcp-apps -y
-npx @forsvn/conquistador --dry-run          # Show the plan; change nothing
-npx @forsvn/conquistador --json             # The plan as JSON
+npx @forsvn/conquistador@latest --providers=claude,codex --scope=project -y
+npx @forsvn/conquistador@latest --surface=agents,mcp-apps -y
+npx @forsvn/conquistador@latest --dry-run          # Show the plan; change nothing
+npx @forsvn/conquistador@latest --json             # The plan as JSON
 ```
 
 Without a terminal and without `-y`, the installer prints the plan and exits with code 2.

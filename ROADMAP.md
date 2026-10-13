@@ -7,6 +7,11 @@ Last verified: 2026-10-13. Release 0.6.0 is available on
 [GitHub](https://github.com/forsvn-labs/conquistador/releases/tag/v0.6.0). The public pages and the
 live `npx` TUI are checked. [CHANGELOG.md](CHANGELOG.md) owns the release identity and validation.
 
+Active on 2026-10-14: make npm/Bun install-and-open commands the primary setup path. The 0.6.1
+candidate changes the README, docs, and CLI option wording. Matching landing and crawl changes
+are prepared in the landing repository. npm remains at 0.6.0 until this patch is reviewed,
+merged with Hung's approval, and published. Verify the exact package and phone/desktop copy flow.
+
 Use `npx @forsvn/conquistador@latest` when an older global install exists. An unversioned `npx`
 can reuse that install; the live check verifies that `@latest` opens 0.6.0 instead.
 
@@ -137,7 +142,7 @@ human acceptance and release authority remain separate evidence classes.
 
 ## Release follow-through
 
-Public alpha began at `0.2.0`; `0.5.1` is the current release. The historical private
+Public alpha began at `0.2.0`; the current release is recorded in CHANGELOG.md. The historical private
 `0.1.0` tag is not the public-alpha milestone; see [version policy](VERSIONS.md).
 
 Before the next release, repeat first-use installation, update, removal, task, and correction

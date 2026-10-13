@@ -1,14 +1,22 @@
 ---
 title: "Coding agents"
-description: "Install the Conquistador plugin or skill in Claude Code, Codex, Cursor, Copilot CLI, Grok CLI, and seven skill-only agents."
+description: "Install the Conquistador plugin or skill in Claude Code, Codex, Cursor, Copilot CLI, Grok CLI, and the other supported skill agents."
 ---
 
 This is the recommended option. You need Node 22.18 or later and a supported agent, signed in.
 
+Install and open Conquistador:
+
 ```sh
-npx @forsvn/conquistador@latest
-# or: bunx @forsvn/conquistador, pnpm dlx @forsvn/conquistador
+# npm
+npm i -g @forsvn/conquistador@latest && conquistador
+
+# Bun
+bun add --global @forsvn/conquistador@latest && conquistador
 ```
+
+To run the installer once, use `npx @forsvn/conquistador@latest`.
+Choose **Keep the CLI installed** in the TUI if you want a permanent command later.
 
 The installer shows the agents it found, already chosen. Keep that set or change it. Then choose the scope and the hooks, review, and install. The last screen shows what to type in each agent. The terminal only installs Conquistador; you do the work in the agent.
 
@@ -77,8 +85,8 @@ Sources: [Claude Code](https://code.claude.com/docs/en/skills), [Codex](https://
 ## Install an exact version
 
 ```sh
-npm install -g @forsvn/conquistador@0.6.0
-npm install -g --ignore-scripts --install-links git+https://github.com/forsvn-labs/conquistador.git#v0.6.0
+npm install -g @forsvn/conquistador@0.6.1
+npm install -g --ignore-scripts --install-links git+https://github.com/forsvn-labs/conquistador.git#v0.6.1
 ```
 
 `--ignore-scripts` skips npm lifecycle scripts. `--install-links` copies the checkout out of the temporary storage of npm.

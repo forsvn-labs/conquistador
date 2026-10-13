@@ -18,10 +18,10 @@ test('package acquisition has no automatic install or publication hooks', () => 
 });
 
 test('README and INSTALL advertise the npm package, and the Git route copies out of npm storage', () => {
-  const expected = 'npm install -g @forsvn/conquistador';
+  const expected = /npm (?:i|install) -g @forsvn\/conquistador/;
   for (const file of ['README.md', 'INSTALL.md']) {
     const contents = readFileSync(join(root, file), 'utf8');
-    assert.match(contents, new RegExp(expected.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
+    assert.match(contents, expected);
     assert.doesNotMatch(contents, /npm install -g --ignore-scripts github:forsvn-labs\/conquistador/);
   }
   const version = JSON.parse(readFileSync(join(root, 'package.json'), 'utf8')).version;
