@@ -1,0 +1,45 @@
+{
+  "source": "Original tweet and rewrites A and B supplied by Hung on 2026-10-13. The third pattern fixture is synthetic.",
+  "cases": [
+    {
+      "id": "original",
+      "text": "So you vibecoded your app in a weekend? No user?\n\nMarketing shouldn’t be that hard. We make it slightly easier for you.\n\nIntroducing Conquistador. A free and open source marketing toolstack for your coding agents.\n\nDistribution is, indeed, the moat.\n\nnpx forsvn/conquistador",
+      "styleRules": []
+    },
+    {
+      "id": "rewrite-a",
+      "text": "So you vibecoded your app in a weekend? No users?\n\nMarketing shouldn't be that hard. We make it slightly easier for you.\n\nConquistador: a free, open source marketing toolstack for your coding agent. Ask for a launch plan, get a real playbook, not vibes.\n\nnpx @forsvn/conquistador",
+      "styleRules": ["ai-colon-label", "ai-negative-parallelism"]
+    },
+    {
+      "id": "rewrite-b",
+      "text": "So you vibecoded your app in a weekend? No users?\n\nDistribution is, indeed, the moat. Marketing shouldn't be that hard.\n\nConquistador gives your coding agent 35 marketing commands and 21 plays, from positioning to launch posts. Free and open source.\n\nnpx @forsvn/conquistador",
+      "styleRules": ["ai-false-range"]
+    },
+    {
+      "id": "synthetic-negative-parallelism",
+      "text": "Give your coding agent a real playbook, not vibes.",
+      "styleRules": ["ai-negative-parallelism"]
+    },
+    {
+      "id": "literal-range",
+      "text": "The workshop runs from 9am to 5pm. Tickets cost from $10 to $20. Teams with from 2 to 10 people can join.",
+      "styleRules": []
+    },
+    {
+      "id": "literal-directions",
+      "text": "Walk from London to Paris. Move a file from the downloads folder to the archive. Export from CSV to JSON.",
+      "styleRules": []
+    },
+    {
+      "id": "colon-time-and-url",
+      "text": "Join at 9:30. Read https://conquistador.app/docs. Run npm install -g @forsvn/conquistador.",
+      "styleRules": []
+    },
+    {
+      "id": "factual-negation",
+      "text": "Use this account, not the other one. This plan includes email, not phone support.",
+      "styleRules": []
+    }
+  ]
+}

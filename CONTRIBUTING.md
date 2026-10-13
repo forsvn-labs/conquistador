@@ -127,3 +127,15 @@ project/native-skill ownership, migration, mixed installation plans, cancellatio
 partial failures, and the guided flow separately from native host acceptance. A guide plan is not
 a global transaction. The operator and its native skills transact together; completed independent
 plugin/connector/squad installations must stay owned and be reported when a later step fails.
+
+For terminal control-center or writing-check changes, also run:
+
+```sh
+node tools/e2e/installer.mjs
+node tools/e2e/check.mjs
+node tools/e2e/social-style.mjs
+```
+
+The installer report includes source hashes, transcripts, and a screen gallery. The social-style
+report keeps the supplied draft fixtures separate from synthetic cases. Neither proves model
+quality or human acceptance.

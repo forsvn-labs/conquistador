@@ -10,7 +10,26 @@ PR #72 merged documentation-link changes at 9b2acca. The handoff records them as
 
 Next action: Preserve the new social-copy priorities below. Verify the merged link changes in the next package release. Gemini hooks, synchronous prompt work, resize checks, and untested platform builds remain open.
 
-## High priority: social copy reads as AI slop
+## Implemented, awaiting review and release
+
+The control-center work now lists all 16 supported agents, supports search, manages project
+skills and MCP apps, changes hooks, installs the permanent CLI with npm or Bun, and keeps
+update, repair, and removal inside the TUI. Each installed item has a scope and path. Slow
+plugin managers leave progress responsive. Resize and MCP-only first-use checks are covered.
+The CLI and install docs include one-command npm and Bun installation followed by TUI launch.
+Package lifecycle scripts remain non-interactive.
+
+The social fixes below are implemented locally. Exact fixtures contain Hung's original tweet
+and the two supplied rewrites. A third negative-parallelism case is explicitly synthetic.
+The original passes unchanged; the rewrites fail. Core reads include the shared AI-pattern
+reference and human writing stylebook. A banned pattern overrides the self-score, and a
+supplied draft defaults to edit mode. `doctor` warns about older registry versions when online.
+
+See [PROGRESS.md](PROGRESS.md) and [the review record](docs/REVIEW-2026-10-CONTROL-CENTER.md).
+Release acceptance still needs the exact candidate package and approval. A real-agent task and
+human verdict remain separate from deterministic style checks.
+
+## Social quality acceptance
 
 Found on 2026-10-13 during a critique of the launch tweet. The `social` method rewrote Hung's draft
 into copy with a colon label ("Conquistador: a free…"), negative parallelism ("a real playbook, not
@@ -19,19 +38,10 @@ concerns", and `conquistador check --channel x` passed it. The check also passed
 post. The session ran a stale global install (product 0.0.13, installed 2026-09-25), but the gaps
 below are also in 0.5.1.
 
-Write the failing evals first: Hung's original tweet and the three bad drafts as fixtures. The bad
-drafts must fail. The original must pass or get only minimal edits.
-
-1. Add `references/ai-patterns.md` and `references/human-writing-stylebook.md` to the core reads of
-   `commands/social`, and make the copywriter scan its own draft before handoff. Now they are reached
-   only through the optional `editorial-polish` pass.
-2. Make a banned pattern in the post body a hard failure in the `social` rubric and critic. The five
-   dimensions do not check AI tells now.
-3. Add checker rules for "X, not Y" negative parallelism, colon labels in short copy, and false
-   "from X to Y" ranges. Only "Not just X, it's Y" is caught now.
-4. Add an edit mode: when the user supplies a draft, keep the user's wording and change only what
-   fails a check.
-5. (Separate PR) Make `doctor` warn when the installed skill is older than the npm release.
+Run a real social task and correction with the new reads and critic gate. Confirm that the agent
+keeps the supplied draft's voice, catches a weak draft, and does not treat deterministic checks
+as proof of useful writing. The remaining third historical rewrite was not supplied; do not
+claim the synthetic fixture reproduces its exact text.
 
 ## Public alpha follow-up
 
@@ -40,8 +50,8 @@ drafts must fail. The original must pass or get only minimal edits.
 2. List the plugin in the agent marketplaces, then check each listing installs 0.4.x.
 3. Test the interactive installer on Windows (a pseudo-terminal harness), and Linux and Windows
    on ARM. `tools/e2e/installer.mjs` needs a Windows pseudo-terminal bridge first.
-4. Check the docs canonical after Mintlify's next rebuild: `conquistador.app` with base path `/docs` was
-   added as the custom domain on 2026-10-12, but `/docs` still declares `forsvn.mintlify.dev/docs`.
+4. Docs canonical verified on 2026-10-13: `/docs` now declares `https://conquistador.app/docs`
+   in both the canonical link and `og:url`. Keep this check in release acceptance.
 5. Open each MCP app (Claude Desktop, VS Code, Windsurf, Zed, Cursor) after the installer writes
    its entry, and check that the app lists the Conquistador tools. Only the config file and an MCP
    handshake are checked now.

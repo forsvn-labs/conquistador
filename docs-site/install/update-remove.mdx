@@ -13,19 +13,26 @@ conquistador remove               # Remove every install, global and in this pro
 conquistador remove codex         # Remove one agent
 conquistador remove --scope=project
 npm uninstall -g @forsvn/conquistador
+bun remove --global @forsvn/conquistador
 ```
 
 Without a global CLI, replace `conquistador` with `npx @forsvn/conquistador@latest`, for example `npx @forsvn/conquistador@latest update`.
 
 ## Check the install
 
-`conquistador doctor` checks three areas:
+`conquistador doctor` checks local files and installation records:
 
 - **Install**: the plugin copy, each global install, and each project skill copy match this version.
 - **Hooks**: each plugin manifest names a hook file that exists, and each script that the file runs exists. It also reports when hooks are off.
 - **Project**: `PRODUCT.md` and `GROWTH.md` exist, `GROWTH.md` covers its sections, and `.gitignore` has an entry for `.conquistador/`. Run `/conquistador init` to fix these.
+- **Release**: when the configured npm registry answers, warn if the CLI or an installed skill is older than its latest release. Offline checks still report local results. `CONQUISTADOR_NO_UPDATE_CHECK=1` disables the registry request.
 
 `doctor --fix` repairs what a new copy or an agent command can repair. It never writes `PRODUCT.md` or `GROWTH.md`; `/conquistador init` owns them. Add `--json` for machine-readable output.
+
+The TUI has the same update and repair controls. **Installed items** shows each scope and path.
+Choose an item, then press `u` to update it or `r` to review its removal. Press `y` to remove the
+selected item. Other installs remain. Removing a shared skill folder affects every agent named
+in that row.
 
 ## Remove
 
@@ -35,6 +42,6 @@ Without a global CLI, replace `conquistador` with `npx @forsvn/conquistador@late
 - `~/.conquistador/config.json`.
 - Bot exports.
 - Project deliverables, `PRODUCT.md`, and `GROWTH.md`.
-- The npm CLI. Remove it with `npm uninstall -g @forsvn/conquistador`.
+- The CLI package. Remove it with `npm uninstall -g @forsvn/conquistador` or `bun remove --global @forsvn/conquistador`, using the package manager that installed it.
 
 The installer never overwrites a folder that it did not create.

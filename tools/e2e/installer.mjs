@@ -33,15 +33,15 @@
 //       restores the normal screen and cursor, and closes the pending network request.
 //   L1 --yes never asks a line-fallback question, including TERM=dumb and an omitted scope.
 //   S1 Scroll reaches the final recovery line without exceeding its allocated row count.
-//   T20 The agents screen lists the agents it found, then one row for the agents not found. That row
-//       opens the full list; a not-found skill agent can still be chosen and reaches the review. The
-//       folded screen fits 24 rows. With no agent found, the full list shows at once (T5).
+//   T20 The complete catalog includes agents not found here. Search reaches an undetected skill
+//       agent, preserves selection, and includes it in the review, within a 24-row terminal.
 //   C1  All supported agents appear without opening a hidden list. Search keeps selection intact.
 //   C2  The home screen has direct controls for skills, MCP, hooks, and a permanent CLI command.
 //   C3  An MCP-only install opens the manager on the next run and preserves other servers.
 //   C4  A slow plugin manager does not freeze the progress animation.
 //   C5  Resizing keeps the selected agent and final review/undo text reachable.
 //   C6  npm and Bun CLI installs are explicit, checked, and recover from missing PATH or permissions.
+//   C7  Removing one MCP app keeps another app, the agent, and all other server entries.
 import { spawnSync } from 'node:child_process';
 import { runCommand } from '../process-run.mjs';
 import { createHash } from 'node:crypto';
@@ -63,7 +63,10 @@ const version = JSON.parse(readFileSync(join(root, 'package.json'), 'utf8')).ver
 const keep = argv.includes('--keep');
 const commit = spawnSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).stdout.trim();
 const dirty = Boolean(spawnSync('git', ['status', '--porcelain'], { cwd: root, encoding: 'utf8' }).stdout.trim());
-const sourceHashes = Object.fromEntries(['tools/installer-tui.mjs', 'tools/onboard.mjs', 'tools/login.mjs', 'tools/e2e/installer.mjs']
+const sourceHashes = Object.fromEntries(['runtime/bin/conquistador.js', 'tools/agents.mjs', 'tools/installer-tui.mjs', 'tools/onboard.mjs', 'tools/login.mjs',
+  'tools/cli-install.mjs', 'tools/installer-operation.mjs', 'tools/process-run.mjs', 'tools/managed-installs.mjs', 'tools/launch.mjs',
+  'tools/front-door.mjs', 'tools/doctor.mjs', 'tools/self-update.mjs', 'tools/mcp-apps.mjs', 'tools/vendor/ink.mjs',
+  'release/completeness.json', 'release/plugin-completeness.json', 'tools/e2e/installer.mjs']
   .map(path => [path, createHash('sha256').update(readFileSync(join(root, path))).digest('hex')]));
 
 // --- Local servers: a fake npm registry, a fake hosted MCP endpoint, a hanging server, a closed port.
@@ -1065,6 +1068,8 @@ scenario('old-flags', ['F18'], async ({ expect, transcript }) => {
   const f = fixture('old-flags', { agents: ['claude'], apps: { 'claude-desktop': null } });
   try {
     const s = f.term(['--mcp']);
+    await s.waitFor('Which MCP apps?');
+    await s.press('enter');
     await s.waitFor(TITLE.options);
     await s.snap('old-flag-mcp');
     expect(has(s.screen.text(), '--surface=mcp-apps'), '--mcp does not print the new flag');

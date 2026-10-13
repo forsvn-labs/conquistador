@@ -109,21 +109,22 @@ npx @forsvn/conquistador        # or: bunx @forsvn/conquistador, pnpm dlx @forsv
 The terminal only installs Conquistador. The work happens inside your coding agent. The
 full-screen installer takes about a minute, and nothing changes until you confirm the review.
 
-1. **Agents.** The agents it found are chosen for you. It warns you when an older `conquistador`
+1. **Agents.** All 16 supported agents are visible. Detected agents are chosen for you. Search
+   with `/`, select with Space. It warns you when an older `conquistador`
    on your PATH would run instead, or when npm has a newer version.
 2. **Options.** All projects (plugin with prompt hooks and the MCP server) or only this project
    (one skill folder you can commit). Turn on more places if you want them: **MCP apps** (Claude
    Desktop, VS Code, Windsurf, Zed, Cursor), **Executor**, **chat bot files**, or **Hosted MCP**
-   for deployed agents.
+   for deployed agents. Choose npm or Bun to keep the permanent `conquistador` command.
 3. **Review.** Every change, what stays unchanged, and how to undo it.
 4. **Install.** Each agent installs with its own plugin manager, then each install is checked.
 5. **Done.** The exact command to type in each agent: `/conquistador init` in a project without
-   `GROWTH.md`, otherwise `/conquistador`. The installer never opens an agent.
+   `GROWTH.md`, otherwise `/conquistador`. Enter opens the manager. `q` exits with a saved terminal summary.
 
-Run `conquistador` again to see what is installed and to add, update, repair, or remove. Use
-`--plain` (or `TERM=dumb`) for line prompts without the full screen. Skip the questions in scripts:
-
-Run `conquistador add` to open the installer again. Skip the questions in scripts:
+Run `conquistador` again to manage agents, project skills, MCP apps, hooks, and the CLI. Installed
+items show each scope and path, with controls to update or remove one item. Updates and repairs
+stay inside the TUI. Use `--plain` or `TERM=dumb` for line prompts. `conquistador add` opens the
+installer again. Skip the questions in scripts:
 
 ```sh
 npx @forsvn/conquistador --providers=claude,codex --scope=project -y
@@ -139,12 +140,16 @@ Pi, Hermes Agent, Antigravity CLI, Kiro CLI, Mistral Vibe, Qoder, Rovo Dev, Trae
 [Coding agents](https://conquistador.app/docs/install/coding-agents) lists the folder each
 one uses.
 
-To keep the `conquistador` command, install it globally:
+To install the CLI and open the TUI in one command:
 
 ```sh
-npm install -g @forsvn/conquistador
-conquistador
+npm install -g @forsvn/conquistador && conquistador
+bun add --global @forsvn/conquistador && conquistador
 ```
+
+An `npx` or `bunx` run opens the TUI directly. The **CLI command** option keeps the command installed
+with npm or Bun. You can also run `conquistador install-cli --package-manager=bun`. Package
+installation alone runs no interactive lifecycle script, so CI and dependency installs finish normally.
 
 Keep it current and healthy:
 

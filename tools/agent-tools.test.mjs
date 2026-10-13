@@ -4,7 +4,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { join } from 'node:path';
+import { join, posix } from 'node:path';
 import { createMcpHandler, LIMITS } from './skills-mcp.mjs';
 import { briefFiles } from './operator-package.mjs';
 import { createBrief, formatBriefPack, LIMITS as BRIEF_LIMITS } from './brief.mjs';
@@ -128,7 +128,7 @@ const coreOf = name => {
   const lines = text.split(/^Core:\s*$/m)[1]?.split('\n') ?? [];
   const end = lines.findIndex(line => line.trim() && !line.startsWith('- '));
   const block = lines.slice(0, end < 0 ? undefined : end).join('\n');
-  const paths = [...block.matchAll(/^- \[[^\]]+\]\(([^)]+)\)/gm)].map(match => `skills/conquistador/commands/${name}/${match[1]}`);
+  const paths = [...block.matchAll(/^- \[[^\]]+\]\(([^)]+)\)/gm)].map(match => posix.normalize(`skills/conquistador/commands/${name}/${match[1]}`));
   assert.ok(paths.length > 0, `${name} has a core list`);
   return paths;
 };

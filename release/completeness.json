@@ -188,8 +188,8 @@
     },
     {
       "name": "social",
-      "version": "2.3.0",
-      "sha256": "788b46dd9a75905a04fbd85d194ba757754c0e3eae6bcfccfbe2743ba99ce45b"
+      "version": "2.4.0",
+      "sha256": "0243678720ed32f8b84e8d470288f6ebd2bfd3475e8a6bf6a2b61456a19e6fd5"
     },
     {
       "name": "ui",
@@ -3271,11 +3271,11 @@
     },
     {
       "path": "conquistador/commands/social/agents/copywriter-agent.md",
-      "sha256": "c68090fa799d35fb37ab2e68352e1325889fa3874264b01f0fdd7657666972fb"
+      "sha256": "9c91fb5b08fc63dd5cd9002e669ccd7811889d63cc554c295bda30f84ee9aa79"
     },
     {
       "path": "conquistador/commands/social/agents/critic-agent.md",
-      "sha256": "b3d1a3decf49e6745d15b0f71abb490f7c14d398aec5dd234fbbe30ae193eeda"
+      "sha256": "ca00fcbe7125056581f25b33927ffd3fd4d60354434fe4d8fe93002fe30bc976"
     },
     {
       "path": "conquistador/commands/social/agents/format-checker-agent.md",
@@ -3331,7 +3331,7 @@
     },
     {
       "path": "conquistador/commands/social/references/method.md",
-      "sha256": "d9e4c5f21021bafaa2584f3d3d0a2cd20be1a14ea2afab94097e03dc0505bc1e"
+      "sha256": "73d514d54ac601481f1357215604708f14c9b1ec480d7f5979e1ca52f9e4755f"
     },
     {
       "path": "conquistador/commands/social/references/photo-slideshows.md",
@@ -3403,7 +3403,7 @@
     },
     {
       "path": "conquistador/commands/social/references/rubric.md",
-      "sha256": "6ce046fa8fa0b845473036a5ee35de38c292b423b06c62f20884e0eace0a949b"
+      "sha256": "f9370cd1bf772f4bb3aaad0be3612930765993e7867fb2c8582eb0fe2b0eb090"
     },
     {
       "path": "conquistador/commands/social/references/why-this-works-convention.md",
@@ -4695,11 +4695,11 @@
     },
     {
       "path": "conquistador/routing-contract.json",
-      "sha256": "feba3e36aab365421ab3b2cdfb531e29fe8929362f1171afa6279efc00fd9e7b"
+      "sha256": "8c8fc5ce13ef35a2b53382ab8f8dc8acc45ff625dabc0fdf69d34de81c8b5886"
     },
     {
       "path": "conquistador/routing-overlay.json",
-      "sha256": "f067cc911650132f3dcd782a7e1692cf7385486975efe768cd3b8dd354c136d0"
+      "sha256": "a7ca00e4aba9dc113b3afa9c80b5aa1adf971ae9c8e1e46a4f4abda5b9ec4933"
     },
     {
       "path": "conquistador/rubrics/composition.md",
@@ -4833,7 +4833,7 @@
     },
     {
       "path": "tools/routing-contract.mjs",
-      "sha256": "1f0d4f6b821e0dc3357aa0b1987857e53d24d9acb836a8427198355416c9e289"
+      "sha256": "6851f0021284e10a1cf2063903515be91a4d2e43504099a6c91d73b4ada748cf"
     },
     {
       "path": "tools/module-root.mjs",
@@ -4849,7 +4849,7 @@
     },
     {
       "path": "tools/brief.mjs",
-      "sha256": "a4621ea42ec049ab5849631c82d0cb0c9037c512d10daf055259ca3c83ddcba7"
+      "sha256": "cdfc1262e17f13a6b862ce1e72b474229eb5f47342ecf240476867130f550db7"
     },
     {
       "path": "tools/context-files.mjs",

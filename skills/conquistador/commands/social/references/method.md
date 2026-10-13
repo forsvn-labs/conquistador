@@ -5,13 +5,17 @@ The reader should recognize the task, receive the promised answer and have a usa
 
 ## Decision and production method
 
+Read the parent AI-patterns reference and human writing stylebook before drafting. For a supplied
+draft, use edit mode and preserve its wording unless a specific check or user request requires a
+change. Scan the native body before format review. A banned writing pattern forces `fail`.
+
 1. Establish actor, audience, goal, supported product facts and brand mode. Use the existing
    cold-start/needs-context route for material omissions. Do not fabricate experience or proof.
 2. Read the matching platform-intelligence pack. §0 determines fit/defer; §1 supplies opening
    choices; §2 lists task-local format checks; §3 defines observable measures; §4 checks
    anti-patterns; §5 specifies a bounded test; §6 uses operator capacity for timing; §7 defines
    the CTA path; §8 records unknowns; §9 records method changes.
-3. Produce one to three opening variants that change a meaningful entry point, with a complete
+3. For new copy, produce one to three opening variants that change a meaningful entry point, with a complete
    body and CTA. Use `hook-archetypes.md` for task, decision, bounded-evidence and answer choices.
    A label is descriptive. It does not establish quality or a platform preference.
    When the operator supplies posts they admire, break each into opening move, body pattern and

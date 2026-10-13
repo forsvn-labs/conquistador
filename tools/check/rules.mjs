@@ -81,6 +81,20 @@ const ctaLinks = context => context.document.lines.flatMap(line => line.links.fi
 const marketingLinks = context => context.document.lines.flatMap(line => line.links.filter(link => /^https?:/i.test(link.href) && !footerLink(link)).map(link => ({ ...link, n: line.n })));
 
 const campaignChannels = new Set(['email', 'x', 'linkedin', 'social', 'google-ads', 'meta-ads']);
+const socialChannels = ['x', 'linkedin', 'social'];
+
+// Only predictable rhetorical frames can be checked without a model. Literal numeric,
+// place, format-conversion, and ordered process ranges remain valid.
+function falseRange(sentence) {
+  const match = /\b(?:everything|anything|covers?|handles?|supports?|offers?|includes?|commands?|plays?|playbooks?|workflows?)\b[^.!?]{0,70}?\bfrom\s+([^,;.!?]{1,55}?)\s+to\s+([^,;.!?]{1,55})/i.exec(sentence);
+  if (!match) return null;
+  const [, start, end] = match;
+  if (/\d/.test(start + end)) return null;
+  if (/^[A-Z]/.test(start) && /^[A-Z]/.test(end)) return null;
+  if (/^(?:draft|drafting|ideation|idea|research|brief|input|beginning|start)\b/i.test(start) && /^(?:publication|publishing|launch|output|finish|end|delivery|review|approval)\b/i.test(end)) return null;
+  if (/^(?:small|smaller|low|lower|basic|beginner|cold|light|young|first)\b/i.test(start) && /^(?:large|larger|high|higher|advanced|expert|hot|heavy|old|last)\b/i.test(end)) return null;
+  return match[0];
+}
 
 const vagueLabel = /^(?:learn more|read more|more|find out more|more info(?:rmation)?|details|go|submit|click|continue|ok|here|this link|link|click here|see more)\s*[→>»›.!]*$/i;
 
@@ -148,6 +162,23 @@ export const rules = [
   phrase({ id: 'ai-not-just', family: 'ai-tells', severity: 'warning', name: '"Not just X, it\'s Y"',
     message: '"It\'s not just X, it\'s Y" contrast frame, a common AI-writing pattern.', fix: 'State Y directly.' },
   /\b(?:it'?s|this is|that'?s|this isn'?t|it isn'?t|isn'?t|is) (?:not )?(?:just|only|merely) (?:a |an |about )?[^.;!?]{1,60}?[,;—–-]+\s*(?:it'?s|this is|that'?s|but)\b|\bnot (?:just|only|merely) [^.;!?]{1,60}?,? but (?:also )?/i),
+  phrase({ id: 'ai-negative-parallelism', family: 'ai-tells', severity: 'warning', name: 'Rhetorical "X, not Y" frame', channels: socialChannels,
+    message: 'Rhetorical contrast against a vague alternative such as "vibes" or "fluff".', fix: 'Keep the concrete positive claim and remove the rhetorical alternative.' },
+  /[,;—–]\s*not\s+(?:just\s+)?(?:vibes|hype|fluff|noise|buzzwords|guesswork|guessing|magic|promises|platitudes|theory|vague advice|generic advice|empty words)\b/i),
+  documentRule({ id: 'ai-colon-label', family: 'ai-tells', severity: 'warning', name: 'Colon label in social copy', channels: socialChannels,
+    message: 'A short prose label introduces the post with a colon.', fix: 'Turn the label into a sentence. Keep colons in URLs, times, or factual metadata.' },
+  context => context.document.lines.flatMap(line => {
+    const match = /^([A-Za-z][\w .'’"()-]{0,38})\s*:\s+(?=\S)/.exec(line.text);
+    if (!match || /^(?:price|cost|time|when|where|date|location|speaker|host|venue|duration|start|end|subject|preheader|alt text)$/i.test(match[1].trim())) return [];
+    if (/^(?:https?:\/\/|mailto:)/i.test(line.text.slice(match[0].length))) return [];
+    return [{ line: line.n, snippet: clip(line.text), match: match[0] }];
+  })),
+  documentRule({ id: 'ai-false-range', family: 'ai-tells', severity: 'warning', name: 'Feature list disguised as a range', channels: socialChannels,
+    message: 'A feature list uses "from X to Y" without a clear scale or process.', fix: 'Name the capabilities directly. Keep a literal range when its endpoints share a scale.' },
+  context => context.document.lines.flatMap(line => sentences(line.text).flatMap(sentence => {
+    const match = falseRange(sentence);
+    return match ? [{ line: line.n, snippet: clip(sentence), match }] : [];
+  }))),
   phrase({ id: 'ai-buzzword', family: 'ai-tells', severity: 'warning', name: 'Corporate buzzword',
     message: 'Buzzword that readers skip.', fix: 'Replace it with the plain verb or the concrete feature.' },
   /\b(?:leverag(?:e|es|ed|ing)|synerg(?:y|ies|istic)|cutting[- ]edge|empower(?:s|ed|ing)?|supercharg(?:e|es|ed|ing)|harness(?:es|ed|ing)? the power|next[- ]level|transformative|holistic|state[- ]of[- ]the[- ]art|frictionless|turnkey|mission[- ]critical|best[- ]of[- ]breed|robust solution|innovative solution|unleash(?:es|ed|ing)?)\b/i),

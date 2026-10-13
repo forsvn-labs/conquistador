@@ -1,8 +1,8 @@
 ---
 type: rubric
 skill: social
-version: "0.2"
-method_updated: 2026-09-15
+version: "0.3"
+method_updated: 2026-10-13
 last_verified: null
 verifier: none
 status: draft
@@ -40,7 +40,10 @@ Run both checks before scoring and cite each failure under the dimension it weak
 
 ## Verdict
 
-1. SKILL stops for Unverified first-person or Internal jargon in native copy force `fail`.
+1. SKILL stops for Unverified first-person, Internal jargon, or a banned AI-writing pattern in
+   native copy force `fail`. Read the required writing resources and cite the offending passage.
+   The total cannot override this gate. Literal times, prices, URLs, factual alternatives, and
+   meaningful ranges are allowed.
 2. A known hard constraint violation or unusable required action forces `fail`.
 3. Total below 25 is `fail`.
 4. Total 25–34, any dimension below 4, or a material task-local verification gap is `done_with_concerns`.
@@ -62,6 +65,7 @@ Label both simulated comparisons and review scores as synthetic evaluation, not 
 | Version | Date | Change |
 |---|---|---|
 | 0.2 | 2026-09-15 | Replaced inherited performance gates with task, evidence, reading and delivery checks. |
+| 0.3 | 2026-10-13 | Added the AI-writing hard failure and preserved supplied-draft voice in edit mode. |
 
 ## Machine-readable gate
 
@@ -77,6 +81,6 @@ hard fails.
   "variants": {
     "default": { "minTotal": 25, "doneAt": 35, "concernsBelowEach": 4 }
   },
-  "hardFails": ["unverified-first-person", "internal-jargon", "hard-constraint-violation", "unusable-required-action"]
+  "hardFails": ["unverified-first-person", "internal-jargon", "hard-constraint-violation", "unusable-required-action", "ai-writing-pattern"]
 }
 ```

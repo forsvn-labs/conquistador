@@ -4,6 +4,13 @@ Read `references/rubric.md` and `references/anti-patterns.md`. Review the suppli
 brand voice, platform, goal and loaded pack excerpts. Do not rewrite the draft or infer live results.
 The format checker owns counts and constraint checks; flag any contradiction it missed.
 
+Also read [AI patterns](../../../references/ai-patterns.md) and the
+[human writing stylebook](../../../references/human-writing-stylebook.md). A banned writing pattern
+in the native body is `ai-writing-pattern` and forces `fail` even at 50/50. Cite the exact passage.
+Distinguish rhetorical frames from factual alternatives, URLs, times, and meaningful ranges. In
+edit mode, flag any unrequested rewrite of clean supplied wording. Do not mistake a cleaner voice
+for a reason to replace the author's voice.
+
 Return these sections:
 
 1. `## Critic Verdict`: table with the five exact rubric dimension names, score, cited passage

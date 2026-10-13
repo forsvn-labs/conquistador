@@ -137,7 +137,9 @@ export function buildRoutingContract(root = moduleRoot) {
     const spec = overlay.methods?.[name] ?? { kind: 'meta', explicitOnly: true, intents: [], aliases: [], exclusions: [], requiredResources: [], conditionalResources: [], optionalResources: [] };
     const resourcePath = value => {
       if (typeof value !== 'string' || value.startsWith('/') || value.split('/').some(part => !part || part === '..' || part === '.')) fail(`Invalid resource declaration: ${name}`);
-      const target = posix.join(posix.dirname(path), value);
+      // Explicit @parent resources reuse shared references without copying a second library.
+      // The remaining path is still validated and read through the contained-file boundary.
+      const target = value.startsWith('@parent/') ? posix.join(parentPath, value.slice('@parent/'.length)) : posix.join(posix.dirname(path), value);
       readContained(root, target);
       return target;
     };
@@ -375,7 +377,7 @@ export function loadAssignmentResource(root, methodName, path) {
   const method = contract.methods[methodName];
   if (!method) fail('Unknown method resource owner.');
   const owner = posix.dirname(method.path);
-  if (!path.startsWith(`${owner}/`) || path.split('/').includes('..')) fail('Resource is outside the assigned method.');
+  if ((!path.startsWith(`${owner}/`) && !method.requiredResources.includes(path)) || path.split('/').includes('..')) fail('Resource is outside the assigned method.');
   return loadBoundedDocuments(root, [path]);
 }
 
