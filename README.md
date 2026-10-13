@@ -80,7 +80,7 @@ conquistador doctor     # Find drift; add --fix to repair it
 conquistador remove     # Remove Conquistador from your agents
 ```
 
-![Conquistador installer with all 16 agents visible and independent checkboxes](https://github.com/user-attachments/assets/3744ad23-2869-4ad6-a6c2-700b233c55b8)
+![Conquistador installer with all 16 agents visible and independent checkboxes](https://github.com/user-attachments/assets/488400c3-d2da-4211-b2c2-f30e9cdc8812)
 
 ## Why Conquistador
 

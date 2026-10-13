@@ -8,7 +8,7 @@ Last verified: 2026-10-13. Release 0.6.0 is available on
 live `npx` TUI are checked. [CHANGELOG.md](CHANGELOG.md) owns the release identity and validation.
 
 Active on 2026-10-14: make npm/Bun install-and-open commands the primary setup path. The 0.6.1
-candidate changes the README, docs, and CLI option wording. Matching landing and crawl changes
+candidate in [PR #78](https://github.com/forsvn-labs/conquistador/pull/78) changes the README, docs, and CLI option wording. Matching landing and crawl changes
 are prepared in the landing repository. npm remains at 0.6.0 until this patch is reviewed,
 merged with Hung's approval, and published. Verify the exact package and phone/desktop copy flow.
 
