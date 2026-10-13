@@ -64,6 +64,13 @@ Local results: 940 product tests, 56 terminal scenarios, 44 copy-check scenarios
 style checks pass. Build and type checks pass. The new installer modules pass configured lint.
 The existing broader tooling lint baseline is outside this change's validation claim.
 
+Exact-package checks at `2c89d3e` pass 50/50 applicable cases, including 21 native terminal
+checks. The Node 22.18 run is explicitly not run. A real Bun global install of the same tarball
+passes 7/7 checks, including startup of the complete catalog. Tarball SHA-256 is
+`9c588c602da21b0be21e79bb8a24e46e7f4a6c2a093d730cdc5c7be12190a760`.
+Node 24/26 product CI, Linux/Windows package CI, and optional integration checks pass for that
+head. [PR #75](https://github.com/forsvn-labs/conquistador/pull/75) contains the review and captures.
+
 ## Limits and release
 
 The source is under review. npm `latest` remains 0.5.1. Native Windows interactive installation,
