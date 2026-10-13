@@ -4,9 +4,9 @@
 
 Last verified: 2026-10-13. Source merged; 0.6.0 release preparation is active.
 
-The release branch updates the product and plugin identities, npm metadata, and the shared npm/GitHub
+[PR #77](https://github.com/forsvn-labs/conquistador/pull/77) updates the product and plugin identities, npm metadata, and the shared npm/GitHub
 README. It moves install commands and the full agent list above the catalog, links the live docs,
-and uses the existing verified TUI capture. Validate the exact clean package, obtain approval
+and uses a capture of the verified 0.6.0 npm installation. Validate the exact clean package, obtain approval
 for the version-bump merge, then tag the merged source and publish its release assets through
 OIDC. Verify registry bytes and both public pages before recording shipment.
 
