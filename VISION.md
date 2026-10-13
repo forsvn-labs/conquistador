@@ -11,8 +11,12 @@ Research, creative work, engineering, and review support that mission.
 
 ## Make the first task easy
 
-The terminal installs; the agent works. `npx @forsvn/conquistador` (or `bunx`, `pnpm dlx`, or the
-first `conquistador` run) opens one full-screen installer that is pleasant to use: the detected
+The terminal installs; the agent works. The homepage and a dedicated setup page show the same
+installation choices: coding agents, native plugins, project skills, local and hosted MCP, bot
+files, GitHub downloads, and the manual Executor 2 handoff. Acquisition leads with npm or Bun global installation
+followed by `conquistador`, so the command stays available for later management. A run-once
+`npx @forsvn/conquistador@latest` stays available as a secondary path. The first `conquistador`
+run opens one full-screen installer that is pleasant to use: the detected
 coding agents already chosen and the full supported-agent catalog visible. Search and installed
 status distinguish support from detection. Agent and MCP client pickers use independent checkboxes,
 preserve multiple selections, and fit wide or compact terminals. Options control scope, hooks,
@@ -53,8 +57,7 @@ read at each step. The user's own playbooks rank first, read in place. Coding pr
 unsupported claims, AI-writing tells, vague calls to action, channel limits, email compliance,
 and link hygiene. A clean check is evidence, not proof of quality.
 
-The public npm package `@forsvn/conquistador` leads acquisition: `npx @forsvn/conquistador` or a
-global install. Pinned Git tags stay available for exact versions. List the same plugin in the
+The public npm package `@forsvn/conquistador` leads acquisition with an install-and-open global command. The run-once installer remains available. Pinned Git tags stay available for exact versions. List the same plugin in the
 agent marketplaces. Advertise a version only after its exact package is on the registry and a
 clean global lifecycle passes.
 

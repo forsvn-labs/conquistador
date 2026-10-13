@@ -537,7 +537,7 @@ export async function runInstaller(options, { cwd = process.cwd(), ui, width, in
       ...(ctx.login && ctx.online !== false ? [{ value: 'hosted', label: 'Hosted MCP', hint: 'deployed agents and remote apps; sign in with GitHub' }] : []),
       { value: 'executor', label: 'Executor', hint: 'one source for every Executor-connected agent' },
       { value: 'bot', label: 'Chat bots', hint: 'prompt and files for GPTs, Claude Projects, Gems' },
-      { value: 'cli', label: 'CLI command', hint: 'keep conquistador installed with npm or Bun' },
+      { value: 'cli', label: 'Keep the CLI installed', hint: 'install the permanent command with npm or Bun' },
     ];
     const picked = await ask(ui, 'multiselect', { message: `${stepLabel(p, 1, TOTAL)}Where do you want Conquistador?`, options: surfaceOptions,
       initialValues: choices.surfaces.filter(id => surfaceOptions.some(item => item.value === id)), required: true });

@@ -3,28 +3,38 @@ title: "Install options"
 description: "Choose where Conquistador runs: coding agents, MCP clients, hosted MCP, Executor, or chat bots. Learn how the options overlap."
 ---
 
-One installer configures every option. Run it in your project folder:
+Install and open Conquistador in your project folder with npm or Bun:
+
+```sh
+# npm
+npm i -g @forsvn/conquistador@latest && conquistador
+
+# Bun
+bun add --global @forsvn/conquistador@latest && conquistador
+```
+
+The command stays installed. Run `conquistador` later to manage your agents, skills, MCP
+connections, hooks, and updates. Use `-g` with npm to install the global command.
+
+The [setup chooser](https://conquistador.app/install) also appears on the homepage. It lists native
+plugins, project skills, local and hosted MCP, chat bot exports, and GitHub downloads. Select
+several agents or MCP clients and copy a command; review its changes in the TUI. Hosted MCP uses
+bearer tokens. OAuth-only browser connectors are not supported yet.
+
+To run the installer once without a permanent CLI install:
 
 ```sh
 npx @forsvn/conquistador@latest
+bunx @forsvn/conquistador@latest
+pnpm dlx @forsvn/conquistador@latest
 ```
+
+Choose **Keep the CLI installed** in the TUI to keep the command with npm or Bun.
+You can also run `conquistador install-cli --package-manager=bun`.
 
 The first screen lists all 16 supported agents with independent checkboxes. It preselects detected
-agents. Search with `/` and toggle with Space. Select several agents in one install. Options then
-control project skills, hooks, MCP clients, Hosted MCP, Executor, chat
-bot files, and the permanent CLI command. Every change appears in the review before installation.
-
-Install the permanent CLI and open the TUI in one command:
-
-```sh
-npm install -g @forsvn/conquistador && conquistador
-bun add --global @forsvn/conquistador && conquistador
-```
-
-An `npx` or `bunx` run opens the TUI directly. Choose npm or Bun under **CLI command** to keep
-`conquistador` installed. You can also run `conquistador install-cli --package-manager=bun`.
-
-If an unversioned `npx` opens an older global install, run `npx @forsvn/conquistador@latest`.
+agents. Search with `/` and toggle with Space. Select several agents in one install. Every change
+appears in the review before installation.
 
 | Option | What it installs | Use it when |
 |---|---|---|
@@ -33,7 +43,7 @@ If an unversioned `npx` opens an older global install, run `npx @forsvn/conquist
 | [Hosted MCP](/install/hosted-mcp) | A personal access token and the client config for the hosted server. | Your agent runs on a server, or your app connects only to remote MCP servers. |
 | [Executor](/install/executor) | Conquistador as a source in Executor. | Your agents reach their tools through Executor. |
 | [Chat bots](/install/chat-bots) | A system prompt and knowledge files. | You use ChatGPT GPTs, Claude Projects, Grok projects, or Gemini Gems. |
-| CLI command | A permanent global command installed with npm or Bun. | You want to run `conquistador` after `npx` or `bunx` exits. |
+| Keep the CLI installed | A permanent global command installed with npm or Bun. | You want to run `conquistador` after `npx` or `bunx` exits. |
 
 ## How the options overlap
 

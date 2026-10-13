@@ -2,10 +2,22 @@
 
 ## Current handoff
 
-Last verified: 2026-10-13. Release 0.6.0 is available on
+Last verified: 2026-10-14. Release 0.6.0 is available on
 [npm](https://www.npmjs.com/package/@forsvn/conquistador) and
 [GitHub](https://github.com/forsvn-labs/conquistador/releases/tag/v0.6.0). The public pages and the
 live `npx` TUI are checked. [CHANGELOG.md](CHANGELOG.md) owns the release identity and validation.
+
+Active on 2026-10-14: make npm/Bun install-and-open commands the primary setup path. The 0.6.1
+candidate in [PR #78](https://github.com/forsvn-labs/conquistador/pull/78) changes the README, docs,
+and CLI option wording. The matching landing and crawl changes are in
+[landing PR #27](https://github.com/forsvn-labs/conquistador-landing/pull/27).
+The earlier candidate passed 940 product checks, 64 terminal scenarios, 50 package checks, and
+six real npm/Bun install-and-open checks. The expanded setup chooser now covers the homepage
+and /install in English and Vietnamese, with independent agent and MCP client selections.
+Its focused setup checks pass 198; the refreshed docs checks pass 19. Verify the expanded
+package and final-source CI before publication. Hung approved both PR merges and landing
+deployment on 2026-10-14. npm remains at 0.6.0 until this patch ships. Deploy the landing only
+after npm delivers 0.6.1.
 
 Use `npx @forsvn/conquistador@latest` when an older global install exists. An unversioned `npx`
 can reuse that install; the live check verifies that `@latest` opens 0.6.0 instead.
@@ -137,7 +149,7 @@ human acceptance and release authority remain separate evidence classes.
 
 ## Release follow-through
 
-Public alpha began at `0.2.0`; `0.5.1` is the current release. The historical private
+Public alpha began at `0.2.0`; the current release is recorded in CHANGELOG.md. The historical private
 `0.1.0` tag is not the public-alpha milestone; see [version policy](VERSIONS.md).
 
 Before the next release, repeat first-use installation, update, removal, task, and correction

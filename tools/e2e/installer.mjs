@@ -468,9 +468,9 @@ scenario('picker-layout', ['M4', 'T7', 'T8'], async ({ expect, transcript }) => 
       await manager.waitFor(TITLE.home); await manager.snap('manager-wide');
 
       for (const label of ['Add or change agents', 'Installed items', 'Check and repair', 'Remove', 'Quit', '16 supported agents']) expect(has(manager.screen.text(), label), `wide manager hides ${label}`);
-      await moveTo(manager, 'Install CLI command'); await manager.snap('manager-cli-focus');
+      await moveTo(manager, 'Keep the CLI installed'); await manager.snap('manager-cli-focus');
       await manager.resize(60, 24); await manager.snap('manager-compact');
-      expect(has(manager.screen.text(), 'Install CLI command') && has(manager.screen.text(), 'enter'), 'compact manager loses focus or keys');
+      expect(has(manager.screen.text(), 'Keep the CLI installed') && has(manager.screen.text(), 'enter'), 'compact manager loses focus or keys');
       await manager.press('q'); await manager.exit();
 
       return [...s.snaps, ...manager.snaps];
@@ -487,7 +487,7 @@ scenario('control-center', ['C2', 'T10'], async ({ expect }) => {
     await s.waitFor(TITLE.home); await s.snap('home');
     const text = s.screen.text();
 
-    for (const label of ['16 supported agents', 'Claude Code', 'Codex', 'Cursor', 'Skills', 'MCP connections', 'Hooks', 'Install CLI command']) expect(has(text, label), `home lacks ${label} (C2)`);
+    for (const label of ['16 supported agents', 'Claude Code', 'Codex', 'Cursor', 'Skills', 'MCP connections', 'Hooks', 'Keep the CLI installed']) expect(has(text, label), `home lacks ${label} (C2)`);
     await s.press('q'); expect(await s.exit() === 0, 'home did not quit');
     return s.snaps;
   } finally { if (s) s.kill(); f.cleanup(); }

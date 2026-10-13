@@ -12,27 +12,34 @@ This page uses a coding agent, for example Claude Code or Codex. For other place
 
 You do not need an account for a marketing service. The agent drafts from the facts that you give it.
 
-## 1. Run the installer
+## 1. Install and open Conquistador
 
-In your project folder, run the installer with your package manager:
+In your project folder, choose npm or Bun:
+
+```sh
+# npm
+npm i -g @forsvn/conquistador@latest && conquistador
+
+# Bun
+bun add --global @forsvn/conquistador@latest && conquistador
+```
+
+This installs the permanent command and opens the full-screen TUI. It finds your agents,
+shows the plan, and changes no agent configuration until you confirm. It ends with the command
+to type in each agent. The terminal installs Conquistador; the work happens inside your agent.
+See [Coding agents](/install/coding-agents) for the steps.
+
+Run `conquistador` later to manage your installs. To run the installer once instead:
 
 ```sh
 npx @forsvn/conquistador@latest
-# or: bunx @forsvn/conquistador, pnpm dlx @forsvn/conquistador
+bunx @forsvn/conquistador@latest
+pnpm dlx @forsvn/conquistador@latest
 ```
 
-A full-screen installer finds your agents, shows the plan, and changes nothing until you confirm. It ends with the command to type in each agent. The terminal only installs Conquistador; the work happens inside your agent. For the steps, see [Coding agents](/install/coding-agents).
-
-To keep the `conquistador` command, install it globally. Use `-g`:
-
-```sh
-npm install -g @forsvn/conquistador
-conquistador
-```
-
-<Warning>
-  `npm install @forsvn/conquistador` without `-g` puts the package in a `node_modules` folder that is not on your `PATH`. The `conquistador` command then runs an older copy, or nothing. See [Troubleshooting](/troubleshooting#npm-install-without-g).
-</Warning>
+You can keep the command later with **Keep the CLI installed** in the TUI.
+Use `-g` with npm. Without it, npm installs into the current project. See
+[Troubleshooting](/troubleshooting#npm-install-without-g) if an older command runs.
 
 ## 2. Record your product
 
