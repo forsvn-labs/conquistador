@@ -7,6 +7,7 @@ command's status (128 + signal when a signal ended it). The onboarding E2E drive
 bridge from Node, because Node has no built-in pseudo-terminal.
 """
 import fcntl
+import json
 import os
 import pty
 import select
@@ -23,10 +24,16 @@ if pid == 0:
 fcntl.ioctl(master, termios.TIOCSWINSZ, struct.pack('HHHH', rows, columns, 0, 0))
 os.kill(pid, signal.SIGWINCH)
 stdin, stdout = sys.stdin.fileno(), sys.stdout.fileno()
+try:
+    os.fstat(3)
+    control = 3
+except OSError:
+    control = None
+pending_control = b''
 open_input = True
 status = None
 while True:
-    readers = [master] + ([stdin] if open_input else [])
+    readers = [master] + ([stdin] if open_input else []) + ([control] if control is not None else [])
     ready, _, _ = select.select(readers, [], [], 0.05)
     if master in ready:
         try:
@@ -43,6 +50,18 @@ while True:
             os.write(master, data)
         else:
             open_input = False
+    if control is not None and control in ready:
+        data = os.read(control, 4096)
+        if not data:
+            control = None
+        else:
+            pending_control += data
+            while b'\n' in pending_control:
+                line, pending_control = pending_control.split(b'\n', 1)
+                size = json.loads(line)
+                columns, rows = size['columns'], size['rows']
+                fcntl.ioctl(master, termios.TIOCSWINSZ, struct.pack('HHHH', rows, columns, 0, 0))
+                os.kill(pid, signal.SIGWINCH)
     if status is None:
         done, code = os.waitpid(pid, os.WNOHANG)
         if done:

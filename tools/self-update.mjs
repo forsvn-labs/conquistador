@@ -2,9 +2,9 @@
 // with every agent. Case IDs (U1–U13) are in docs/REVIEW-2026-09-SURFACES.md, Part 5.
 import { spawnSync } from 'node:child_process';
 import { spawnCommand } from './spawn.mjs';
-import { existsSync } from 'node:fs';
+import { existsSync, realpathSync } from 'node:fs';
 import { basename, dirname, join } from 'node:path';
-import { productRoot, tilde, version } from './agents.mjs';
+import { productRoot, readState, tilde, version } from './agents.mjs';
 
 export const PACKAGE = '@forsvn/conquistador';
 const windows = process.platform === 'win32';
@@ -39,6 +39,10 @@ export function channel(root = productRoot) {
   if (/[\\/]_npx[\\/]/.test(root)) return { kind: 'npx' };
   const modules = dirname(dirname(root));
   if (basename(root) === 'conquistador' && basename(dirname(root)) === '@forsvn' && basename(modules) === 'node_modules') {
+    const installed = readState().cli;
+    let recordedBun = false;
+    try { recordedBun = installed?.manager === 'bun' && realpathSync(installed.path) === join(root, 'runtime/bin/conquistador.js'); } catch { /* No installed command. */ }
+    if (recordedBun || /[\\/]\.bun[\\/]install[\\/]global[\\/]/.test(root)) return { kind: 'global', manager: 'bun' };
     const prefix = windows ? dirname(modules) : basename(dirname(modules)) === 'lib' ? dirname(dirname(modules)) : null;
     if (prefix && existsSync(windows ? join(prefix, 'conquistador.cmd') : join(prefix, 'bin', 'conquistador'))) return { kind: 'global', prefix };
   }
@@ -91,7 +95,7 @@ export function selfUpdate(args, { dryRun = false, log = console.log } = {}) {
   const env = { ...process.env, CONQUISTADOR_UPDATED_FROM: version };
   // npm replaces this package in place, so the new version starts from the same path.
   const steps = how.kind === 'global'
-    ? [[npm, ['install', '--global', '--prefix', how.prefix, '--ignore-scripts', '--no-audit', '--no-fund', `${PACKAGE}@${found.version}`]], [process.execPath, [join(productRoot, 'runtime', 'bin', 'conquistador.js'), 'update', ...forward]]]
+    ? [[how.manager === 'bun' ? 'bun' : npm, how.manager === 'bun' ? ['add', '--global', '--ignore-scripts', `${PACKAGE}@${found.version}`] : ['install', '--global', '--prefix', how.prefix, '--ignore-scripts', '--no-audit', '--no-fund', `${PACKAGE}@${found.version}`]], [process.execPath, [join(productRoot, 'runtime', 'bin', 'conquistador.js'), 'update', ...forward]]]
     : [[npx, ['--yes', `${PACKAGE}@${found.version}`, 'update', ...forward]]];
   console.log(`Updating ${version} to ${found.version}${dryRun ? ' (dry run)' : ''}`);
   if (dryRun) { for (const item of steps) log(shown(item)); return 0; }

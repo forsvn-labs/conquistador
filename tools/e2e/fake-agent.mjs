@@ -15,6 +15,7 @@ const save = () => writeFileSync(stateFile, `${JSON.stringify(state, null, 2)}\n
 if (process.env.FAKE_AGENT_LOG) appendFileSync(process.env.FAKE_AGENT_LOG, `${JSON.stringify({ name, args })}\n`);
 const failing = (process.env.FAKE_AGENT_FAIL ?? '').split(',').includes(name);
 const plugin = args[0] === 'plugin';
+if (plugin && ['install', 'add'].includes(args[1]) && process.env.FAKE_AGENT_DELAY) await new Promise(done => setTimeout(done, Number(process.env.FAKE_AGENT_DELAY)));
 const installed = Boolean(state[name]?.installed) && !(process.env.FAKE_AGENT_NOREG ?? '').split(',').includes(name);
 
 if (args[0] === '--version') { console.log(name === 'claude' ? '2.1.300 (Claude Code)' : `${name} 1.0.0`); process.exit(0); }

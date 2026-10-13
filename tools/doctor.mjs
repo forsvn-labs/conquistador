@@ -8,6 +8,8 @@ import { isProject } from './launch.mjs';
 import { localServer } from './onboard.mjs';
 import { appById, applyApp, checkApp } from './mcp-apps.mjs';
 import { checkSource, registerSource } from './executor-source.mjs';
+import { startUpdateCheck } from './preflight.mjs';
+import { newer } from './self-update.mjs';
 
 const MANIFESTS = ['.claude-plugin/plugin.json', '.codex-plugin/plugin.json', '.cursor-plugin/plugin.json'];
 // GROWTH.md topics from the overhaul spec (D4). A heading that names the topic counts.
@@ -119,16 +121,22 @@ export function inspect(cwd = process.cwd()) {
   return checks;
 }
 
-export function runDoctor(args) {
+export async function runDoctor(args) {
   const unknown = args.filter(arg => !['--fix', '--json'].includes(arg));
   if (unknown.length) { console.error('Usage: conquistador doctor [--fix] [--json]'); return 2; }
   let checks = inspect();
+  const update = startUpdateCheck({ file: join(home(), 'update-check.json') });
+  const latest = await update.latest(1500);
+  if (latest) {
+    const older = Object.entries(readState().agents ?? {}).filter(([, installed]) => newer(latest, installed.version)).map(([id, installed]) => `${AGENTS.find(agent => agent.id === id)?.label ?? id} ${installed.version ?? 'unknown'}`);
+    if (newer(latest, version) || older.length) checks.push({ area: 'release', status: 'warn', detail: `Latest npm release is ${latest}. CLI is ${version}.${older.length ? ` Older installed copies: ${older.join(', ')}.` : ''} Run ${self} update.` });
+  }
   const fixed = [];
   if (args.includes('--fix')) {
     for (const check of checks.filter(item => item.status === 'fail' && item.fix)) {
       try { check.fix(); fixed.push(check.detail); } catch (error) { check.detail += ` (repair failed: ${error.message})`; }
     }
-    if (fixed.length) checks = inspect();
+    if (fixed.length) checks = [...inspect(), ...checks.filter(check => check.area === 'release')];
   }
   const failed = checks.filter(item => item.status === 'fail');
   if (args.includes('--json')) {
@@ -136,7 +144,7 @@ export function runDoctor(args) {
     return failed.length ? 1 : 0;
   }
   console.log(`Conquistador ${version} on Node ${process.versions.node}`);
-  for (const area of ['install', 'hooks', 'project']) {
+  for (const area of ['install', 'hooks', 'project', ...(checks.some(check => check.area === 'release') ? ['release'] : [])]) {
     console.log(`\n${area[0].toUpperCase()}${area.slice(1)}`);
     for (const item of checks.filter(check => check.area === area)) console.log(`  ${{ ok: '✓', warn: '!', fail: '✗' }[item.status]} ${item.detail}`);
   }

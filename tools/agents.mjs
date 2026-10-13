@@ -331,9 +331,9 @@ function applySteps(agent, action, { source, dryRun = false, log = () => {}, sco
       const target = (item.skill ?? item.unskill)();
       // Hosts that read the same folder share one copy.
       if (shared.has(target)) continue;
-      shared.add(target);
       log(`${item.skill ? 'copy skill' : 'remove'} → ${tilde(target)}`);
       if (!dryRun) { if (item.skill) copySkill(target); else removePayload(target); }
+      shared.add(target);
       continue;
     }
     if (item.copy) {

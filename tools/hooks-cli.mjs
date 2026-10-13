@@ -9,7 +9,7 @@ const USAGE = 'Usage: conquistador hooks on|off|status';
 const HOOKED = ['claude-code', 'codex', 'cursor', 'copilot', 'grok'];
 
 // Where the hooks setting comes from: the environment wins over ~/.conquistador/config.json.
-function hooksState() {
+export function hooksState() {
   const flag = String(process.env.CONQUISTADOR_HOOKS ?? '').toLowerCase();
   if (['0', 'off', 'false', 'no', 'disabled'].includes(flag)) return { on: false, why: `CONQUISTADOR_HOOKS=${process.env.CONQUISTADOR_HOOKS} is set in this environment` };
   const file = join(home(), 'config.json');

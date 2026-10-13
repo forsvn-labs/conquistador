@@ -26,6 +26,21 @@ export class Screen {
     this.normal = null;
   }
 
+  resize(columns, rows) {
+    const resized = grid => Array.from({ length: rows }, (_, row) => Array.from({ length: columns }, (_, column) => grid[row]?.[column] ?? blank()));
+    this.grid = resized(this.grid);
+    this.row = Math.min(this.row, rows - 1);
+    this.column = Math.min(this.column, columns - 1);
+    this.wrap = false;
+    if (this.normal) {
+      this.normal.grid = resized(this.normal.grid);
+      this.normal.row = Math.min(this.normal.row, rows - 1);
+      this.normal.column = Math.min(this.normal.column, columns - 1);
+    }
+    this.columns = columns;
+    this.rows = rows;
+  }
+
   write(chunk) {
     const text = this.pending + chunk;
     this.pending = '';
