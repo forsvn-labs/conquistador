@@ -7,19 +7,19 @@
   "plugins": [
     {
       "name": "conquistador",
-      "description": "Growth, GTM, launch, marketing, and sales playbooks for your agent: 1 skill, 63 commands, a playbook MCP server, and hooks that make the agent read them.",
-      "version": "0.5.1",
+      "description": "Growth, marketing, sales, and product playbooks for your coding agent. One skill, 35 commands, 21 plays, copy checks, hooks, and MCP.",
+      "version": "0.6.0",
       "author": {
         "name": "FORSVN",
         "url": "https://forsvn.com"
       },
       "source": "./",
       "category": "productivity",
-      "homepage": "https://forsvn.com"
+      "homepage": "https://conquistador.app"
     }
   ],
   "metadata": {
-    "version": "0.5.1",
+    "version": "0.6.0",
     "description": "Conquistador growth, GTM, and marketing playbooks."
   }
 }

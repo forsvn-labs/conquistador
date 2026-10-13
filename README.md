@@ -1,13 +1,78 @@
 # Conquistador
 
-Growth, marketing, sales, and product playbooks for AI coding agents. One skill, 35 commands, 21
-plays that chain them, and a rule-based checker for marketing copy.
+A free, open source marketing toolstack for your coding agents. One skill, 35 commands, 21 plays,
+and a rule-based copy checker. Your agent supplies the model and runs the work.
 
-> **Quick start:** In your project folder, run `npx @forsvn/conquistador`. Then type
-> `/conquistador init` in your agent.
->
-> **Documentation:** <https://conquistador.app/docs>, [INSTALL.md](INSTALL.md) and
-> [docs-site/](docs-site/).
+[Documentation](https://conquistador.app/docs) · [npm](https://www.npmjs.com/package/@forsvn/conquistador) · [Releases](https://github.com/forsvn-labs/conquistador/releases)
+
+Works with **Claude Code, Codex, Cursor, GitHub Copilot CLI, Grok CLI, Gemini CLI, OpenCode, Pi,
+Hermes Agent, Antigravity CLI, Kiro CLI, Mistral Vibe, Qoder, Rovo Dev, Trae, and Trae CN**.
+[Check what each agent installs](https://conquistador.app/docs/install/coding-agents).
+
+## Install
+
+You need Node 22.18 or later and a coding agent. Run the installer with your package manager:
+
+```sh
+npx @forsvn/conquistador
+bunx @forsvn/conquistador
+pnpm dlx @forsvn/conquistador
+```
+
+To install the CLI and open the TUI in one command:
+
+```sh
+npm install -g @forsvn/conquistador && conquistador
+bun add --global @forsvn/conquistador && conquistador
+```
+
+An `npx` or `bunx` run opens the TUI directly. The **CLI command** option keeps the command installed
+with npm or Bun. You can also run `conquistador install-cli --package-manager=bun`. Package
+installation alone runs no interactive lifecycle script, so CI and dependency installs finish normally.
+
+The terminal only installs Conquistador. The work happens inside your coding agent. The
+full-screen installer takes about a minute, and nothing changes until you confirm the review.
+
+1. **Agents.** All 16 supported agents are visible. Select several with checkboxes; detected
+   agents start selected. Search with `/`, toggle with Space, select all with `A`, or clear with
+   `n`. It also reports an older CLI on your PATH or a newer npm release.
+2. **Options.** All projects or only this project. Global installs use a plugin with hooks and
+   MCP for agents that support the plugin; other agents get a skill folder. Project installs copy
+   one skill folder you can commit. Turn on more places if you want them: **MCP clients** (Claude
+   Desktop, VS Code, Windsurf, Zed, Cursor), **Executor**, **chat bot files**, or **Hosted MCP**
+   for deployed agents. Choose npm or Bun to keep the permanent `conquistador` command.
+3. **Review.** Every change, what stays unchanged, and how to undo it.
+4. **Install.** Installs the plugin or skill for each selected agent, then checks each install.
+5. **Done.** The exact start command for each selected agent. Initialize the project with
+   Conquistador there. Enter opens the manager. `q` exits with a saved terminal summary.
+
+Run `conquistador` again to manage agents, project skills, MCP clients, hooks, and the CLI. Installed
+items show each scope and path, with controls to update or remove one item. Updates and repairs
+stay inside the TUI. Use `--plain` or `TERM=dumb` for line prompts. `conquistador add` opens the
+installer again. Skip the questions in scripts:
+
+```sh
+npx @forsvn/conquistador --providers=claude,codex --scope=project -y
+npx @forsvn/conquistador --surface=agents,mcp-apps -y
+npx @forsvn/conquistador --dry-run          # Show the plan; change nothing
+npx @forsvn/conquistador --json             # The plan as JSON
+```
+
+Without a terminal and without `-y`, the installer prints the plan and exits with code 2.
+
+MCP clients connect to the local Conquistador server. Executor 2 uses its own app/account setup
+and **Connect an agent** flow. Automatic Conquistador setup on Executor 2 is pending; the TUI
+shows the manual steps. See [MCP setup](https://conquistador.app/docs/install/mcp-apps).
+
+Keep it current and healthy:
+
+```sh
+conquistador update     # Update the CLI and every install
+conquistador doctor     # Find drift; add --fix to repair it
+conquistador remove     # Remove Conquistador from your agents
+```
+
+![Conquistador installer with all 16 agents visible and independent checkboxes](https://github.com/user-attachments/assets/3744ad23-2869-4ad6-a6c2-700b233c55b8)
 
 ## Why Conquistador
 
@@ -92,73 +157,11 @@ Make a shortcut for a command you use often: `/conquistador pin outreach` create
 - `conquistador check FILE|FOLDER|URL`: rule-based checks for marketing text. JSON output with
   `--json`. Exit code 0 is clean, 2 is findings, 1 is a scan failure. A hook runs it after the agent
   edits a marketing file.
-- `conquistador connect`: shows which capabilities (analytics, ads, CRM, email, social, search,
-  payments) are connected through [Executor](https://executor.sh/), and adds the
-  ones a task needs. Any provider that Executor reaches works.
+- `conquistador connect`: checks capabilities through the legacy Executor 1 adapter. For
+  Executor 2, use its [Connect an agent flow](https://executor.sh/docs/mcp-clients). Native v2
+  capability discovery is pending.
 - `conquistador review FILE`: opens a deliverable for human review. Markdown opens in Proof for
   comments and suggestions. HTML opens in Lavish.
-
-## Install
-
-You need Node 22.18 or later and a coding agent. Run the installer with your package manager:
-
-```sh
-npx @forsvn/conquistador        # or: bunx @forsvn/conquistador, pnpm dlx @forsvn/conquistador
-```
-
-The terminal only installs Conquistador. The work happens inside your coding agent. The
-full-screen installer takes about a minute, and nothing changes until you confirm the review.
-
-1. **Agents.** All 16 supported agents are visible. Select several with checkboxes; detected
-   agents start selected. Search with `/`, toggle with Space, select all with `A`, or clear with
-   `n`. It warns you when an older `conquistador`
-   on your PATH would run instead, or when npm has a newer version.
-2. **Options.** All projects (plugin with prompt hooks and the MCP server) or only this project
-   (one skill folder you can commit). Turn on more places if you want them: **MCP clients** (Claude
-   Desktop, VS Code, Windsurf, Zed, Cursor), **Executor**, **chat bot files**, or **Hosted MCP**
-   for deployed agents. Choose npm or Bun to keep the permanent `conquistador` command.
-3. **Review.** Every change, what stays unchanged, and how to undo it.
-4. **Install.** Each agent installs with its own plugin manager, then each install is checked.
-5. **Done.** The exact command to type in each agent: `/conquistador init` in a project without
-   `GROWTH.md`, otherwise `/conquistador`. Enter opens the manager. `q` exits with a saved terminal summary.
-
-Run `conquistador` again to manage agents, project skills, MCP clients, hooks, and the CLI. Installed
-items show each scope and path, with controls to update or remove one item. Updates and repairs
-stay inside the TUI. Use `--plain` or `TERM=dumb` for line prompts. `conquistador add` opens the
-installer again. Skip the questions in scripts:
-
-```sh
-npx @forsvn/conquistador --providers=claude,codex --scope=project -y
-npx @forsvn/conquistador --surface=agents,mcp-apps -y
-npx @forsvn/conquistador --dry-run          # Show the plan; change nothing
-npx @forsvn/conquistador --json             # The plan as JSON
-```
-
-Without a terminal and without `-y`, the installer prints the plan and exits with code 2.
-
-Supported agents: Claude Code, Codex, Cursor, GitHub Copilot CLI, Grok CLI, Gemini CLI, OpenCode,
-Pi, Hermes Agent, Antigravity CLI, Kiro CLI, Mistral Vibe, Qoder, Rovo Dev, Trae, and Trae CN.
-[Coding agents](https://conquistador.app/docs/install/coding-agents) lists the folder each
-one uses.
-
-To install the CLI and open the TUI in one command:
-
-```sh
-npm install -g @forsvn/conquistador && conquistador
-bun add --global @forsvn/conquistador && conquistador
-```
-
-An `npx` or `bunx` run opens the TUI directly. The **CLI command** option keeps the command installed
-with npm or Bun. You can also run `conquistador install-cli --package-manager=bun`. Package
-installation alone runs no interactive lifecycle script, so CI and dependency installs finish normally.
-
-Keep it current and healthy:
-
-```sh
-conquistador update     # Update the CLI and every install
-conquistador doctor     # Find drift; add --fix to repair it
-conquistador remove     # Remove Conquistador from your agents
-```
 
 ## Usage examples
 
@@ -211,9 +214,9 @@ what each agent gets.
 ## More information
 
 - [Documentation](https://conquistador.app/docs): install options, use, copy check,
-  deployed agents, troubleshooting, and reference. Source: [`docs-site/`](docs-site/)
+  deployed agents, troubleshooting, and reference. Source: [docs source](https://github.com/forsvn-labs/conquistador/tree/main/docs-site)
 - [Install, update, and remove](https://conquistador.app/docs/install/overview)
-- [Old skill names and their commands](MIGRATION.md)
-- [What shipped](CHANGELOG.md)
+- [Old skill names and their commands](https://github.com/forsvn-labs/conquistador/blob/main/MIGRATION.md)
+- [What shipped](https://github.com/forsvn-labs/conquistador/blob/main/CHANGELOG.md)
 
 Conquistador is open source under the MIT license. The npm package is `@forsvn/conquistador`.

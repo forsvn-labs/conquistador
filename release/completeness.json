@@ -4813,7 +4813,7 @@
     },
     {
       "path": "hosts/coding-agent/host.json",
-      "sha256": "401858aac354fa32299b619e09678d565b85e9d19963879237f9f81e2f9acd9e"
+      "sha256": "6f95d8b690067ada045a843e0edb44079170c44987d40d1f1a4cfd661f16cbd6"
     },
     {
       "path": "hosts/coding-agent/README.md",
@@ -4861,19 +4861,19 @@
     },
     {
       "path": "agents/conquistador/agent.json",
-      "sha256": "068c7d6de14c577dc60514e34664ad2516d242eb9ade88a6b023ae11eef6e83c"
+      "sha256": "eabb8c2dff4e219182995d1fbfe65c3ac56e73e232ad2bdda121c5efd132e4a8"
     },
     {
       "path": "agents/conquistador/compatibility/v1.json",
-      "sha256": "10fb1c5e158d0b8aaae84f82225d2f83ba7c4c54ce6093b126a5d103e45b6dbe"
+      "sha256": "9c8c8ef753be33d1396ae18082150763cf0a29de8296534bf21be08c0289c55e"
     },
     {
       "path": "agents/agent-package.schema.json",
-      "sha256": "c279477a2d9c1871c7bdc48e473fdfd7affc16af5ccf5b8ae2e181a8442df26f"
+      "sha256": "bff3984f61c9cc376717a1e7be089d8127591562546aa7212322a3eddcdabd48"
     },
     {
       "path": "agents/agent-package-v2.schema.json",
-      "sha256": "21c0be20241a99aa0f6c599781f4f53ebb82bb541077980b1b4997481ea87f2c"
+      "sha256": "61e55baa5f06fa28cb1a45f21adddd6c2d7daffc17c285cc43de3803743a14b8"
     },
     {
       "path": "agents/operator-profile.schema.json",

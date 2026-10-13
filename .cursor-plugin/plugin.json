@@ -1,13 +1,13 @@
 {
   "name": "conquistador",
   "displayName": "Conquistador",
-  "version": "0.5.1",
-  "description": "Growth, GTM, launch, marketing, and sales playbooks for your agent: 1 skill, 63 commands, a playbook MCP server, and hooks that make the agent read them.",
+  "version": "0.6.0",
+  "description": "Growth, marketing, sales, and product playbooks for your coding agent. One skill, 35 commands, 21 plays, copy checks, hooks, and MCP.",
   "author": {
     "name": "FORSVN",
     "url": "https://forsvn.com"
   },
-  "homepage": "https://forsvn.com",
+  "homepage": "https://conquistador.app",
   "repository": "https://github.com/forsvn-labs/conquistador",
   "license": "MIT",
   "keywords": [
