@@ -4,6 +4,25 @@
 versions. Verification establishes the stated local scope; native host behavior, useful model
 output, human acceptance and rights disposition require separate evidence.
 
+## 2026-10-13, accepted control-center source
+
+[PR #75](https://github.com/forsvn-labs/conquistador/pull/75) merged at
+`0cefef32ae734bc6199efd1d08fe8b4310d73e59` after Hung approved integration. npm release is pending.
+
+- The TUI exposes all 16 supported agents with searchable multi-selection and controls skills,
+  MCP client connections, hooks, npm/Bun CLI installation, updates, repairs, and individual removal.
+  Host operations keep progress responsive. Copied install commands preserve the package manager,
+  and CLI state is recorded only after verification.
+- Social 2.4.0 requires the writing references, preserves supplied drafts, and rejects banned
+  patterns regardless of score. Each candidate range gets its own exception. Hung's exact original
+  tweet passes unchanged; the two supplied rewrites fail their recorded style patterns.
+- Executor 2 and unknown versions receive a setup handoff. Legacy source operations require a
+  confirmed pre-2 version. Current project records own the handoff and approved material locations.
+- Verification passes 940 product checks, 64 terminal scenarios, 44 copy checks, 15 social checks,
+  50 exact-package checks including 21 native terminal checks, and 7 real Bun checks. Node 24/26 and
+  Linux/Windows package CI pass. Native v2 integration, native MCP client loading, interactive
+  Windows, Node 22.18 acceptance, and model-quality acceptance remain open.
+
 ## 2026-10-10, 0.5.1 patch
 
 Merged through [#70](https://github.com/forsvn-labs/conquistador/pull/70) at `901118b`.

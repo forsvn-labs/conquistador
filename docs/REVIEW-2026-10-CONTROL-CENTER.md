@@ -167,10 +167,23 @@ pseudo-terminal. The full 64-scenario terminal suite, 940 product checks, 44 cop
 terminal transcripts are kept in the project's approved verification folder. Negative Executor
 fixtures prove the guard, not live v2 connectivity. npm release and native v2 migration remain open.
 
+## Accepted source integration
+
+Hung approved integration on 2026-10-13. The five review findings are fixed and all four inline
+threads are resolved. The reviewed commit `c4175ff` passes Node 24/26 product CI, Linux/Windows
+package CI, optional integration checks, CodeRabbit, and the docs deployment check.
+[PR #75](https://github.com/forsvn-labs/conquistador/pull/75) merged at
+`0cefef32ae734bc6199efd1d08fe8b4310d73e59` on 2026-10-13.
+
+The exact reviewed package passes 50/50 applicable installation checks, including 21 native
+terminal checks. A real Bun global installation of identical bytes passes 7/7. Its SHA-256 is
+`a4ed2cf644762d8469e54011671876eb7c727bca30020e74dc7a562485e4f430`.
+The full terminal suite passes 64/64; product checks pass 940, copy checks 44, and social checks 15.
+
 ## Limits and release
 
-The source is under review. npm `latest` remains 0.5.1. Native Windows interactive installation,
+The source is merged. The package version remains 0.5.1; a new npm release is pending. Native Windows interactive installation,
 ARM platform coverage, native MCP client loading, live Executor cases, real writing quality, and
 human acceptance remain separate checks. Package verification tests installation bytes and
 local host registration; it does not establish an agent's output quality. Merge and release
-require Hung's approval. No npm release or hosted server deployment occurred in this task.
+require their recorded acceptance. No new npm release or hosted server deployment occurred in this task.

@@ -2,9 +2,9 @@
 
 ## Current handoff
 
-Last verified: 2026-10-13. Hung approved integration. Review fixes are verified locally; CI must pass before merge. No npm release.
+Last verified: 2026-10-13. Source merged and ready for the next npm release.
 
-[PR #75](https://github.com/forsvn-labs/conquistador/pull/75), on `feat/control-center`, implements the full agent catalog and search, permanent npm/Bun
+[PR #75](https://github.com/forsvn-labs/conquistador/pull/75) merged at `0cefef32ae734bc6199efd1d08fe8b4310d73e59` on 2026-10-13. The accepted source implements the full agent catalog and search, permanent npm/Bun
 CLI installation, project skills, explicit MCP client selection, hook controls, in-TUI maintenance,
 and individual install update/removal. Plugin and Executor operations run in child processes so
 the progress animation remains responsive. MCP-only installs reopen the manager. Installation
@@ -36,18 +36,19 @@ Verified locally on macOS arm64, Node 26.9.0:
 - Iris captures cover the picker, manager, MCP multi-selection, and 60×24 layout.
 - Copy-check E2E: 44/44 pass. Social-style E2E: 15/15 pass. Original tweet passes unchanged.
 - New installer modules pass their configured lint checks.
-- Exact-package installation at `ba7cd9e` passes 50/50 applicable checks, including 21 native
+- Exact-package installation at `c4175ff` passes 50/50 applicable checks, including 21 native
   terminal checks. The Node 22.18 run is explicitly not run. A real Bun global install of the
-  same context-aligned candidate passes 7/7 checks. The package integrity hashes match.
+  same reviewed candidate passes 7/7 checks. The package integrity hashes match.
 - Project context: 6/6 checks pass. The live handoff is here; STRUCTURE maps source and commands,
   and DRIVE resolves approved materials. Root INDEX and PROGRESS are retired. Historical links
   point to dated Git records. This branch includes the context migration from PR #76.
-- Node 24/26 product CI, Linux/Windows package CI, and optional integration checks pass at `2c89d3e`.
+- Node 24/26 product CI, Linux/Windows package CI, optional integration checks, and CodeRabbit
+  pass at `c4175ff`. All four inline review threads are resolved.
 - Live docs canonical and `og:url` both point to `https://conquistador.app/docs`.
 
 Clean-package verification and PR evidence are recorded in
 [REVIEW-2026-10-CONTROL-CENTER.md](docs/REVIEW-2026-10-CONTROL-CENTER.md).
-The branch is not merged or published. Tests use synthetic host fixtures where stated and do
+The source is merged; npm release remains pending. Tests use synthetic host fixtures where stated and do
 not establish model quality, native MCP client loading, or human acceptance.
 
 Merged, not released: [#72](https://github.com/forsvn-labs/conquistador/pull/72) (`9b2acca`, 2026-10-12) moves
