@@ -221,6 +221,11 @@ if (cq) {
       const listed = await fetch(`${url}/mcp`, { method: 'POST', headers: { authorization: `Bearer ${token}`, 'content-type': 'application/json', accept: 'application/json, text/event-stream' }, body: JSON.stringify(rpc('tools/list')) });
       assert.equal((await listed.json()).result.tools.length, 8);
       assert.equal((await fetch(`${url}/api/check`, { method: 'POST', body: '{}' })).status, 401);
+      // The sample must finish its error response before closing an oversized upload.
+      const oversized = await fetch(`${url}/api/check`, { method: 'POST', headers: { authorization: `Bearer ${token}`, 'content-type': 'application/json' }, body: 'x'.repeat(70_000) });
+      assert.equal(oversized.status, 413);
+      assert.deepEqual(await oversized.json(), { error: 'Request too large.' });
+      assert.equal((await fetch(url)).status, 200);
     } finally {
       example.closeAllConnections();
       await new Promise(done => example.close(done));

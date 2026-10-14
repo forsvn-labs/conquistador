@@ -41,7 +41,6 @@ Install
   conquistador                      First run: the installer (agents, options, review, install, verify)
                                     Later runs: the installs, with add, update, repair, and remove
   conquistador add                  Open the installer again
-  conquistador app                  Show app dependency and deployed MCP setup
     --surface=NAME[,NAME]           ${['agents', 'mcp-apps', 'hosted', 'executor', 'bot', 'cli'].join(', ')}
     --providers=NAME[,NAME]         Install for these agents: ${AGENTS.map(agent => agent.id).join(', ')}
     --in AGENT                      Install for this agent
@@ -57,6 +56,7 @@ Install
     --plain                         Line prompts without color (also TERM=dumb)
   Without a terminal and without --yes, the plan prints and the exit code is 2.
   The installer never opens an agent. It ends with what to type in each one.
+  conquistador app                  Show app dependency and deployed MCP setup
 
 Context for your agent (prints; changes nothing)
   conquistador "TASK"               The playbooks this task needs (also: conquistador task WORD)

@@ -20,6 +20,8 @@ or import time.
 - Missing authentication exposes the library; a failed custom access check grants access.
 - A browser Origin, unsupported protocol version, invalid JSON, batch, or oversized streamed
   request bypasses the HTTP checks.
+- An example closes an oversized upload before its 413 response finishes, or retains the
+  CI checkout credential while running package-controlled code.
 - Fetch and Node handlers disagree, or the official MCP clients cannot use the mounted server.
 - Published examples use internal package paths, unshipped imports, browser code, or a runtime
   that cannot read the packaged library.
