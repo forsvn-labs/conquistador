@@ -2,25 +2,22 @@
 
 ## Current handoff
 
-Last verified: 2026-10-14. Release 0.6.0 is available on
-[npm](https://www.npmjs.com/package/@forsvn/conquistador) and
-[GitHub](https://github.com/forsvn-labs/conquistador/releases/tag/v0.6.0). The public pages and the
-live `npx` TUI are checked. [CHANGELOG.md](CHANGELOG.md) owns the release identity and validation.
+Last verified: 2026-10-14. Release 0.6.1 is available on
+[npm](https://www.npmjs.com/package/@forsvn/conquistador/v/0.6.1) and
+[GitHub](https://github.com/forsvn-labs/conquistador/releases/tag/v0.6.1). The primary npm/Bun
+commands install the permanent CLI and open the TUI. Nine live registry checks, six real
+npm/Bun checks, and 32 CLI/MCP cases on Node 22.18.0 pass. [CHANGELOG.md](CHANGELOG.md) owns
+release identity, validation, and scope.
 
-Active on 2026-10-14: make npm/Bun install-and-open commands the primary setup path. The 0.6.1
-candidate in [PR #78](https://github.com/forsvn-labs/conquistador/pull/78) changes the README, docs,
-and CLI option wording. The matching landing and crawl changes are in
-[landing PR #27](https://github.com/forsvn-labs/conquistador-landing/pull/27).
-The earlier candidate passed 940 product checks, 64 terminal scenarios, 50 package checks, and
-six real npm/Bun install-and-open checks. The expanded setup chooser now covers the homepage
-and /install in English and Vietnamese, with independent agent and MCP client selections.
-Its focused setup checks pass 198; the refreshed docs checks pass 19. Verify the expanded
-package and final-source CI before publication. Hung approved both PR merges and landing
-deployment on 2026-10-14. npm remains at 0.6.0 until this patch ships. Deploy the landing only
-after npm delivers 0.6.1.
+[PR #78](https://github.com/forsvn-labs/conquistador/pull/78) and
+[landing PR #27](https://github.com/forsvn-labs/conquistador-landing/pull/27) are merged with
+Hung's approval. The expanded chooser is live on the homepage and `/install`, in English and
+Vietnamese. It has eight setup paths, all 16 supported agents, and independent multiple-agent
+and MCP-client selections. The full landing suite passes 628 checks; live setup passes 198 and
+production HTTP passes 60. Hosted MCP uses bearer tokens; Executor 2 still has a manual handoff.
 
 Use `npx @forsvn/conquistador@latest` when an older global install exists. An unversioned `npx`
-can reuse that install; the live check verifies that `@latest` opens 0.6.0 instead.
+can reuse that install; explicit `@latest` opens 0.6.1 in the live acceptance run.
 
 Next: migrate the Executor source and capability adapters to v2, then run the live cases below.
 The current TUI gives a manual setup handoff. See

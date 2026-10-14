@@ -4,6 +4,39 @@
 versions. Verification establishes the stated local scope; native host behavior, useful model
 output, human acceptance and rights disposition require separate evidence.
 
+## 2026-10-14, 0.6.1 public alpha
+
+- [PR #78](https://github.com/forsvn-labs/conquistador/pull/78) merged with Hung's approval at
+  `9f0e50de14fe427ccce53f5c124426ddfe264457`. The
+  [v0.6.1 release](https://github.com/forsvn-labs/conquistador/releases/tag/v0.6.1) has six checked
+  assets. Its npm tarball matches the accepted candidate at `5b2ff11233d219ba38df6615cec553f57a915daa`.
+  SHA-256: `8aa3e7fc581d4eaa514f12b2830f89ec8f8241829ab2785919574c4e75b10c4b`.
+- npm and Bun global install-and-open commands lead setup. They keep `conquistador` available and
+  open the TUI after installation. Explicit `@latest` run-once commands remain available. The TUI
+  labels its CLI option "Keep the CLI installed". npm installation has no interactive lifecycle prompt.
+- The shared npm/GitHub README shows all 16 agents and eight setup choices: coding agents, native
+  plugins, project skills, local MCP, hosted MCP, chat bot files, GitHub, and Executor. It links the
+  [live chooser](https://conquistador.app/install). Hosted MCP uses bearer tokens; OAuth-only
+  connectors are unsupported. Executor 2 setup is a manual handoff.
+- [Publish run 38498628864](https://github.com/forsvn-labs/conquistador/actions/runs/38498628864)
+  published [@forsvn/conquistador@0.6.1](https://www.npmjs.com/package/@forsvn/conquistador/v/0.6.1)
+  as `latest` with provenance. After npm processing finished, all nine live registry checks and
+  six real npm/Bun install-and-open checks passed. They verify exact bytes, integrity, version,
+  the full agent picker, cancellation, and the permanent CLI. Public npm/GitHub pages show the
+  current commands, setup table, and loaded TUI image.
+- Verification passes 940 product checks, 64 terminal scenarios, 44 copy checks, 15 social checks,
+  50 exact-package checks including 21 native terminal checks, and 19 docs checks. Final-source
+  CI passes Node 24/26, Linux/Windows package, optional integration, and CodeRabbit checks.
+  The Mintlify Deployment check was skipped after merge. A separate isolated run of the existing
+  CLI/MCP contract passes all 32 cases on Node 22.18.0 using the installed registry tarball.
+- The matching homepage and `/install` chooser shipped through
+  [landing PR #27](https://github.com/forsvn-labs/conquistador-landing/pull/27) after npm delivery
+  was verified. Its full browser suite passes 628 checks; live setup passes 198 and production
+  HTTP passes 60. The landing repository owns its deployment identity and remaining browser limits.
+- Reports, repeatable runners, and Iris captures are in the approved project verification folder;
+  see [DRIVE.md](DRIVE.md). Native MCP client loading, Executor 2 automatic integration,
+  interactive Windows, ARM platforms, and real writing-quality acceptance remain open.
+
 ## 2026-10-13, 0.6.0 public alpha
 
 - [PR #77](https://github.com/forsvn-labs/conquistador/pull/77) merged at
