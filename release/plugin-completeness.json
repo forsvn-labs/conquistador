@@ -1,6 +1,6 @@
 {
   "schemaVersion": "conquistador.plugin-completeness/v1",
-  "version": "0.6.1",
+  "version": "0.7.0",
   "files": [
     {
       "path": ".agents/plugins/marketplace.json",
@@ -8,15 +8,15 @@
     },
     {
       "path": ".claude-plugin/marketplace.json",
-      "sha256": "d00fdf9ca1383e7c4669188da23d5a8807b9000da0510fa01b625d33f5a7712f"
+      "sha256": "36a9c27582529aec6bed7a774a2d4bd56dcc8f47e587f85515b0ca0596804d6f"
     },
     {
       "path": ".claude-plugin/plugin.json",
-      "sha256": "d707bce01d2480bacd96d06a542e43d35ae9f67b41a42bab41df9f5a568ffed8"
+      "sha256": "a8376d1609fd359e2499825562671231d539a66f493bfc6ed9fae58a71908554"
     },
     {
       "path": ".codex-plugin/plugin.json",
-      "sha256": "17fb7d047e7473c860a150d853749e38a82e2b95507251db191ef9682faf7f9c"
+      "sha256": "3212512bfbae74b2ef8478e3f2f8c81f7537dccae0796401c5972ecffcba4896"
     },
     {
       "path": ".cursor-plugin/marketplace.json",
@@ -24,7 +24,7 @@
     },
     {
       "path": ".cursor-plugin/plugin.json",
-      "sha256": "46f97f93dcfd50db0f47aa9eb93312c203fae30d55ba48ddc8be247497c854e4"
+      "sha256": "7b004a6b6ffde1f241c63c8647b17374b68dc56f4d8b1899e90b722b74225ceb"
     },
     {
       "path": "agents/conquistador.md",
@@ -84,15 +84,15 @@
     },
     {
       "path": "package.json",
-      "sha256": "ace194d39be5e36efda53dd603c74d02f912a91e5ed6d54c81710f32a7aec94d"
+      "sha256": "dc92344f54e36edf1f6d2ca90cdcce24aa519b4fb61f525a9d0a83958788f055"
     },
     {
       "path": "plugin.json",
-      "sha256": "25908f52acffb2f982b8f96b65483e0772fe33b1a6a7331fc05328e5a150e0ac"
+      "sha256": "8968038b10009a2e78329a387aa0c9c377b1d329956caaad81d2d86c06d3538a"
     },
     {
       "path": "README.md",
-      "sha256": "01f6467fbb509d7c2c74358c1b381f94861ea0bac5161cf65f96781298a9990a"
+      "sha256": "83f0504b71874c1c1b002e226215dcb38c19b94461f3f0a6d771e0905e772663"
     },
     {
       "path": "SKILL.md",
@@ -4840,7 +4840,7 @@
     },
     {
       "path": "tools/brief.mjs",
-      "sha256": "cdfc1262e17f13a6b862ce1e72b474229eb5f47342ecf240476867130f550db7"
+      "sha256": "865140714bd375eba1bc30faca4bcb718a6bc25f53855c364576f51daa8b5356"
     },
     {
       "path": "tools/check-receipt.mjs",
@@ -4880,7 +4880,7 @@
     },
     {
       "path": "tools/mcp-http.mjs",
-      "sha256": "8a247e8c94374ad743a471497e4fc96d808ddfa6d6564e1a406ce36ae43fdb71"
+      "sha256": "2757c7b803f9641f25ed7985971ded7aaa067758b35fa56bddb3f4901ca6e977"
     },
     {
       "path": "tools/method-library.mjs",
@@ -4908,7 +4908,7 @@
     },
     {
       "path": "tools/skills-mcp.mjs",
-      "sha256": "a5a4a84157dc96a051a8c4de4ffc00ce0d15690359ca312fd9ec35d459b9f4a4"
+      "sha256": "f6eb080922ce477e454f77d27e4a77b47c78da427cdf1400fa265e9283dd252b"
     }
   ]
 }

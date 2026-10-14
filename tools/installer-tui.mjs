@@ -19,6 +19,7 @@ import { productRoot } from './agents.mjs';
 import { managedInstalls } from './managed-installs.mjs';
 import { installerOperation } from './installer-operation.mjs';
 import { executorHandoff } from './executor-source.mjs';
+import { APP_GUIDE } from './app-guide.mjs';
 
 // Brand colors from conquistador-landing src/styles/tokens.css. NO_COLOR and dumb terminals get none.
 const COLORS = { brand: '#FF6B2C', ember: '#FF8A4C', sticky: '#FFE45C', sky: '#BFE0FF', ok: '#7FD18B', bad: '#FF7A6B', line: '#81756C', ink: '#1A100A' };
@@ -392,6 +393,7 @@ function App({ options: initialOptions, cwd, first, update, warnings, onExit, mo
     { id: 'add', label: 'Add or change agents', hint: `Choose from all ${AGENTS.length} supported agents. Search with /. Only selected agents install.` },
     { id: 'skills', label: 'Skills in this project', hint: 'Copy the Conquistador skill into selected agent folders in this project.' },
     { id: 'mcp', label: 'MCP connections', hint: 'Choose local MCP clients, Hosted MCP, Executor, or chat bot files.' },
+    { id: 'app', label: 'Use in an app', hint: 'Add Conquistador as a production dependency. Call its tools in your agent and mount MCP beside the app.' },
     { id: 'hooks', label: 'Hooks', hint: 'Turn prompt and copy-check hooks on or off. Changes apply on the next prompt.' },
     { id: 'cli', label: 'Keep the CLI installed', hint: 'Keep conquistador on PATH with npm or Bun, including after an npx run.' },
     { id: 'installed', label: 'Installed items', hint: 'See the scope and path of each install. Update or remove one selected item.' },
@@ -468,6 +470,7 @@ function App({ options: initialOptions, cwd, first, update, warnings, onExit, mo
         else if (choice === 'add') openInstaller({ surfaces: ['agents'] });
         else if (choice === 'skills') openInstaller({ surfaces: ['agents'], scope: 'project' });
         else if (choice === 'mcp') openInstaller({ surfaces: ['mcp-apps'] });
+        else if (choice === 'app') { setActivity({ title: 'Use in an app' }); setReport({ status: 0, guide: true, output: APP_GUIDE }); go('report'); }
         else if (choice === 'cli') openInstaller({ surfaces: ['cli'] });
         else if (choice === 'hooks') { setHookSetting(hooksState()); go('hooks'); }
         else if (choice === 'installed') go('installed');
@@ -621,7 +624,7 @@ function App({ options: initialOptions, cwd, first, update, warnings, onExit, mo
 
   if (screen === 'maintenance' || screen === 'report') {
     const lines = rows(report.output || 'Waiting for the command...', inner).map(text => ({ text }));
-    return frame(h(Card, { c, width, title: activity.title, subtitle: screen === 'maintenance' ? 'Running. Completed changes stay if a later check fails.' : report.status ? 'Needs attention. Review the result and recovery steps.' : 'Complete. Review the result.' },
+    return frame(h(Card, { c, width, title: activity.title, subtitle: report.guide ? 'Project dependency setup. Copy a command and follow the guide.' : screen === 'maintenance' ? 'Running. Completed changes stay if a later check fails.' : report.status ? 'Needs attention. Review the result and recovery steps.' : 'Complete. Review the result.' },
       screen === 'maintenance' ? h(Text, null, h(Spinner, { color: c.brand }), ` ${activity.args.join(' ')}`) : null,
       h(Scroll, { c, lines, offset, height: room(1), limit })),
     screen === 'maintenance' ? [['↑↓', 'scroll'], ['…', 'running']] : [['enter', 'back'], ['↑↓', 'scroll'], ['q', 'quit']]);

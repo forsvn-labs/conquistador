@@ -17,7 +17,8 @@ const bundledRoot = join(packageRootOf(import.meta.url), 'skills');
 const decoder = new TextDecoder('utf-8', { fatal: true });
 const extensions = new Set(['.md', '.json', '.yaml', '.yml', '.txt', '.csv', '.tsv', '.py', '.sh', '.swift', '.pbxproj', '.xcworkspacedata']);
 const segment = /^[A-Za-z0-9](?:[A-Za-z0-9._ -]*[A-Za-z0-9_-])?$/;
-const protocolVersions = new Set(['2024-11-05', '2025-03-26', '2025-06-18', '2025-11-25']);
+export const SUPPORTED_PROTOCOL_VERSIONS = Object.freeze(['2024-11-05', '2025-03-26', '2025-06-18', '2025-11-25']);
+const protocolVersions = new Set(SUPPORTED_PROTOCOL_VERSIONS);
 const methodPattern = /^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$/;
 const object = value => value !== null && typeof value === 'object' && !Array.isArray(value);
 const schema = properties => ({ type: 'object', properties, required: Object.keys(properties), additionalProperties: false });
@@ -223,13 +224,16 @@ function readFailure(failure) {
 }
 
 // One JSON-RPC handler shared by stdio and HTTP. It returns the response object, or null for notifications.
-export function createMcpHandler({ root = bundledRoot, requireInitialize = true, hosted = false, receiptKey = process.env.CONQUISTADOR_RECEIPT_KEY } = {}) {
+export function createMcpHandler({ root = bundledRoot, requireInitialize = true, hosted = false, bundledOnly = false, receiptKey = process.env.CONQUISTADOR_RECEIPT_KEY } = {}) {
   let access;
   let initialized = !requireInitialize;
   let ready = !requireInitialize;
   const error = (id, code, message) => ({ jsonrpc: '2.0', id, error: { code, message } });
   const ok = (id, result) => ({ jsonrpc: '2.0', id, result });
   const packageRoot = () => dirname(realpathSync(root));
+  // An app dependency receives context from its caller. Never discover the operator's files,
+  // home playbooks, or disk cache while serving another user's task.
+  const knowledgeOptions = bundledOnly ? { playbooks: [], persistCache: false, cwd: null } : {};
   return function handle(message) {
     if (!object(message) || message.jsonrpc !== '2.0' || typeof message.method !== 'string' || (Object.hasOwn(message, 'id') && !(typeof message.id === 'string' && message.id.length <= 128 || typeof message.id === 'number' && Number.isFinite(message.id)))) return error(null, -32600, 'Invalid request');
     const { id, method } = message;
@@ -271,7 +275,7 @@ export function createMcpHandler({ root = bundledRoot, requireInitialize = true,
         if (!args.task.trim() || args.task.length > 8000) throw new Error('Invalid task');
         if ((args.context?.length ?? 0) > LIMITS.context) throw usageError(`Context is over ${LIMITS.context} characters. Keep the facts that matter for this task.`);
         if (args.size !== undefined && !['full', 'compact'].includes(args.size)) throw usageError('Use size full or compact.');
-        const pack = packBrief(createBrief(args.task, { root: packageRoot(), force: true }), { callerContext: args.context?.trim(), hosted, compact: args.size === 'compact' });
+        const pack = packBrief(createBrief(args.task, { root: packageRoot(), force: true, ...knowledgeOptions }), { callerContext: args.context?.trim(), hosted, compact: args.size === 'compact' });
         value = pack.text;
         structured = pack.structured;
       } else if (params.name === 'conquistador_score') {
@@ -289,7 +293,7 @@ export function createMcpHandler({ root = bundledRoot, requireInitialize = true,
         value = verifyReceipt(args.text, args.receipt, receiptKey, { context: args.context, channel: args.channel === undefined ? undefined : normalizeChannel(args.channel) ?? args.channel });
       } else if (params.name === 'conquistador_search') {
         if (!args.query.trim() || args.query.length > 400) throw new Error('Invalid query');
-        value = searchKnowledge(args.query, { root: packageRoot() });
+        value = searchKnowledge(args.query, { root: packageRoot(), ...knowledgeOptions });
       } else {
         access ??= createMethodAccess(root);
         value = params.name === 'conquistador_methods' ? access.methods() : params.name === 'conquistador_files' ? access.files(args.method) : access.read(libraryPath(args.path, args.from));

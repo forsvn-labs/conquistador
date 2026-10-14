@@ -1,0 +1,40 @@
+name: Installed app integration
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  node:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: ['22.18.0', '24', '26']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+      - run: node tools/e2e/app-integration.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: app-node-${{ matrix.node }}
+          path: dist/e2e/app-integration
+  bun:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: '1.4.3'
+      - run: node tools/e2e/app-integration.mjs --installer bun --runtime bun
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: app-bun
+          path: dist/e2e/app-integration

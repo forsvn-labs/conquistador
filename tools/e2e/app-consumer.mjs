@@ -53,7 +53,7 @@ if (cq) {
     assert.ok(JSON.parse(cq.callTool('conquistador_methods').content[0].text).methods.length > 30);
     const files = JSON.parse(cq.callTool('conquistador_files', { method: 'outreach' }).content[0].text).files;
     assert.ok(files.length > 10);
-    assert.match(cq.callTool('conquistador_read', { path: 'ctas.md', from: 'conquistador/commands/outreach/references/frameworks/aida.md' }).content[0].text, /CTA|call.to.action/i);
+    assert.match(cq.callTool('conquistador_read', { path: 'ctas.md', from: 'conquistador/commands/outreach/references/frameworks/structures.md' }).content[0].text, /Define the next decision/);
     const found = cq.callTool('conquistador_search', { query: 'revenue outreach cold email' });
     assert.doesNotMatch(found.content[0].text, /PRIVATE_|"source":"user"/);
   });
@@ -208,6 +208,24 @@ if (cq) {
     server.closeAllConnections();
     await new Promise(done => server.close(done));
   }
+  await test('the packaged app example serves a direct check and MCP on one port', async () => {
+    const { createAppServer } = await import('./server-example.mjs');
+    const example = createAppServer({ token, receiptKey: key });
+    await new Promise(done => example.listen(0, '127.0.0.1', done));
+    const url = `http://127.0.0.1:${example.address().port}`;
+    try {
+      assert.equal((await fetch(url)).status, 200);
+      const check = await fetch(`${url}/api/check`, { method: 'POST', headers: { authorization: `Bearer ${token}`, 'content-type': 'application/json' }, body: JSON.stringify({ text: draft, channel: 'email', context }) });
+      assert.equal(check.status, 200);
+      assert.deepEqual((await check.json()).structuredContent, checked);
+      const listed = await fetch(`${url}/mcp`, { method: 'POST', headers: { authorization: `Bearer ${token}`, 'content-type': 'application/json', accept: 'application/json, text/event-stream' }, body: JSON.stringify(rpc('tools/list')) });
+      assert.equal((await listed.json()).result.tools.length, 8);
+      assert.equal((await fetch(`${url}/api/check`, { method: 'POST', body: '{}' })).status, 401);
+    } finally {
+      example.closeAllConnections();
+      await new Promise(done => example.close(done));
+    }
+  });
 }
 writeFileSync(process.argv[2], `${JSON.stringify({ runtime: process.versions, checks }, null, 2)}\n`);
 if (checks.some(item => !item.passed)) process.exitCode = 1;

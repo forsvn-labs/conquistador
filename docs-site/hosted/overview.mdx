@@ -5,6 +5,9 @@ description: "Use Conquistador from an agent that runs on a server: the brief, c
 
 A deployed agent has no plugin, no hooks, and often no repository. It connects to the MCP server over HTTP: the [hosted server](/install/hosted-mcp) or [your own](/hosted/self-host). The server only reads playbooks and checks text. It never sends, publishes, or spends.
 
+An app with its own agent can also [add Conquistador as a dependency](/install/app). Call the
+same tools in the app server, then mount `/mcp` beside the app when other clients need it.
+
 ## The loop
 
 <Steps>

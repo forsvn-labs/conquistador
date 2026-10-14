@@ -16,10 +16,10 @@ const dim = text => (process.stdout.isTTY ? `\x1b[2m${text}\x1b[22m` : text);
 // print context and change nothing.
 export const HELP = `Conquistador ${version}
 Growth and marketing playbooks. Install here; work in your coding agent.
-
   conquistador                Install into your agents, or manage the installs
   conquistador add            Add agents, MCP clients, Executor, or chat bots
   conquistador install-cli    Keep the CLI command with npm or Bun
+  conquistador app            Use the tools as an app dependency
   conquistador update         Update the CLI and every install
   conquistador doctor         Find and repair install and project drift
   conquistador remove         Remove Conquistador from your agents
@@ -41,6 +41,7 @@ Install
   conquistador                      First run: the installer (agents, options, review, install, verify)
                                     Later runs: the installs, with add, update, repair, and remove
   conquistador add                  Open the installer again
+  conquistador app                  Show app dependency and deployed MCP setup
     --surface=NAME[,NAME]           ${['agents', 'mcp-apps', 'hosted', 'executor', 'bot', 'cli'].join(', ')}
     --providers=NAME[,NAME]         Install for these agents: ${AGENTS.map(agent => agent.id).join(', ')}
     --in AGENT                      Install for this agent
@@ -374,6 +375,7 @@ export async function runFrontDoor(args) {
   }
   if (isStart(args)) return start();
   if (command === '--help' || command === '-h' || command === 'help') { console.log(rest.includes('--all') || args.includes('--all') ? HELP_ALL : HELP); return 0; }
+  if (command === 'app') return (await import('./app-guide.mjs')).runAppGuide(rest);
   // `conquistador add` with nothing else opens the installer in a terminal.
   if (command === 'add' && !rest.length && process.stdin.isTTY && process.stdout.isTTY) return (await import('./launch.mjs')).runStart([], { installer: true });
   if (command === 'install-cli') {

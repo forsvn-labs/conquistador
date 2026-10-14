@@ -1,0 +1,104 @@
+---
+title: "Use in your app"
+description: "Add Conquistador as a production dependency. Call its tools from your agent and deploy MCP beside your app."
+---
+
+Your app can use Conquistador as a server dependency. Your existing agent supplies the model.
+Conquistador supplies the same eight tools and playbooks as its MCP server. The public imports
+require version **0.7.0 or later**.
+
+## Add the dependency
+
+```sh
+npm i @forsvn/conquistador@^0.7.0
+# Or:
+bun add @forsvn/conquistador@^0.7.0
+```
+
+Run in your app folder and keep the package in `dependencies`. Commit the manifest and lockfile.
+Installation and import open no TUI or listener. You need server-side Node 22.18 or later, or Bun.
+You do not need a global CLI.
+
+## Add the tools to your agent
+
+```js
+import { createConquistador } from '@forsvn/conquistador';
+
+const cq = createConquistador({ receiptKey: process.env.CONQUISTADOR_RECEIPT_KEY });
+const marketingTools = cq.tools.map(tool => ({
+  name: tool.name,
+  description: tool.description,
+  inputSchema: tool.inputSchema,
+  execute: args => cq.callTool(tool.name, args),
+}));
+```
+
+Add `cq.instructions` to your agent's instructions. Register these tools in its tool-calling
+layer and adapt `inputSchema` to your model SDK's field name. `execute` runs the real packaged
+tool. There is no model or provider dependency in this interface.
+
+Send the correct user's product facts in `context` on each brief and check. The app imports
+read only bundled playbooks. They never discover home playbooks, `PRODUCT.md`, `GROWTH.md`, or
+a disk cache. Calls retain no user context. The app owns tenant access and the truth of its data.
+
+Follow [the deployed-agent loop](/hosted/overview): brief, required reads, draft, check, score,
+and host verification. Set a server-only receipt key and require `valid`, `clean`, and `signed`
+before handover. A check receipt proves fixed-rule results, not writing quality or permission
+to send. See [the tool arguments](/reference/mcp-tools) and [receipts](/hosted/receipts).
+
+## Deploy MCP beside the app
+
+```js
+import { createServer } from 'node:http';
+import { createMcpRequestHandler } from '@forsvn/conquistador/mcp';
+
+const mcp = createMcpRequestHandler({
+  token: process.env.CONQUISTADOR_MCP_TOKEN,
+  receiptKey: process.env.CONQUISTADOR_RECEIPT_KEY,
+});
+const server = createServer((request, response) => {
+  const path = (request.url ?? '/').split('?')[0];
+  if (path === '/mcp' || path === '/health') {
+    void mcp(request, response);
+    return;
+  }
+  response.end('App running'); // Replace with your app's routes.
+});
+server.listen(Number(process.env.PORT ?? 8787), '127.0.0.1');
+```
+
+The app and MCP share a port. Creating the handler starts no server. The app owns routing and
+shutdown. Mount it before middleware reads the body. In production, use your hosting platform's
+network binding, port, and HTTPS. Keep the installed package and its `skills/` files in the
+server build. Keep the bearer token separate from the receipt signing key.
+
+Instead of a shared token, pass `authorize: async request => boolean` to use the app's access
+check. Only `true` grants access. Exceptions deny access. Without a token or callback, MCP
+returns 503. Browser Origins are denied by default; `allowedOrigins` permits exact origins.
+The app owns CORS, rate limits, and any OAuth flow.
+
+For a server with Fetch requests, import `createMcpFetchHandler` from the same `/mcp` entry.
+It takes the same options, with a Fetch `Request` in `authorize`, and returns a `Response`.
+Both adapters require a server that can read the Node filesystem library. Use
+[hosted MCP](/install/hosted-mcp) when the runtime cannot ship and read it.
+
+## Run MCP separately
+
+An app dependency also includes the local executable. Add an npm script:
+
+```json
+{ "scripts": { "mcp": "conquistador mcp --http --host 0.0.0.0" } }
+```
+
+Set `CONQUISTADOR_MCP_TOKEN`, `CONQUISTADOR_RECEIPT_KEY`, and `PORT`, then run `npm run mcp`
+or `bun run mcp`. A public binding requires the token. The CLI retains personal playbook
+support; the app imports always use the bundled library.
+
+## Runnable example and full contract
+
+The [app example](https://github.com/forsvn-labs/conquistador/tree/main/examples/app-integration)
+provides direct brief, check, and verify routes beside MCP. It has no model. The npm package
+contains the example, so you can copy it into your app after installation.
+
+The [app integration contract](https://github.com/forsvn-labs/conquistador/blob/main/docs/APP-INTEGRATION.md)
+owns the import signatures, errors, mounting rules, verification code, and repeatable E2E command.

@@ -57,6 +57,11 @@ try {
   check('the package has no install lifecycle', !['preinstall', 'install', 'postinstall', 'prepare'].some(name => pkg.scripts?.[name]));
   const deps = run('npm', ['install', '--save-dev', '--ignore-scripts', '--no-audit', '--no-fund', '@modelcontextprotocol/client@2.3.1', 'mcp-client-v1@npm:@modelcontextprotocol/sdk@1.32.1', 'typescript@7.0.2', '@types/node@24.13.3']);
   check('official MCP clients and the TypeScript compiler install', deps.status === 0);
+  const example = join(app, 'node_modules/@forsvn/conquistador/examples/app-integration/server.mjs');
+  check('the npm package contains the runnable app example', existsSync(example));
+  if (existsSync(example)) cpSync(example, join(app, 'server-example.mjs'));
+  const guide = run(runtime, [join(app, 'node_modules/@forsvn/conquistador/runtime/bin/conquistador.js'), 'app']);
+  check('the local CLI explains dependency setup without opening the TUI', guide.status === 0 && /npm i @forsvn\/conquistador/.test(guide.stdout) && /bun add @forsvn\/conquistador/.test(guide.stdout) && /createConquistador/.test(guide.stdout));
   cpSync(join(root, 'tools/e2e/app-consumer.mjs'), join(app, 'consumer.mjs'));
   const consumer = run(runtime, ['consumer.mjs', join(out, 'consumer.json')]);
   if (existsSync(join(out, 'consumer.json'))) checks.push(...JSON.parse(readFileSync(join(out, 'consumer.json'))).checks);

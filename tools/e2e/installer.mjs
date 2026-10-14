@@ -54,6 +54,8 @@
 //       version detection reads stderr too; a confirmed v1 retains its supported source path.
 //   C8  A copied CLI install command keeps the package manager. An unverified CLI installation
 //       creates no install record or home-screen shortcut and preserves a previous record.
+//   A1  The app dependency guide is reachable from the manager, fits compact terminals, preserves
+//       installs on Back/quit, and prints local npm/Bun commands without adding a dependency itself.
 import { spawnSync } from 'node:child_process';
 import { runCommand } from '../process-run.mjs';
 import { createHash } from 'node:crypto';
@@ -489,6 +491,29 @@ scenario('control-center', ['C2', 'T10'], async ({ expect }) => {
 
     for (const label of ['16 supported agents', 'Claude Code', 'Codex', 'Cursor', 'Skills', 'MCP connections', 'Hooks', 'Keep the CLI installed']) expect(has(text, label), `home lacks ${label} (C2)`);
     await s.press('q'); expect(await s.exit() === 0, 'home did not quit');
+    return s.snaps;
+  } finally { if (s) s.kill(); f.cleanup(); }
+});
+
+scenario('app-dependency-guide', ['A1', 'T7'], async ({ expect, transcript }) => {
+  const f = fixture('app-dependency-guide', { agents: ['claude'] });
+  let s;
+  try {
+    expect(f.run(['--providers=claude', '--yes']).status === 0, 'fixture install failed');
+    const before = JSON.stringify(f.tree());
+    const guide = f.run(['app']);
+    expect(guide.status === 0 && /npm i @forsvn\/conquistador/.test(guide.stdout) && /bun add @forsvn\/conquistador/.test(guide.stdout), 'CLI guide lacks local dependency commands');
+    transcript('cli-guide', guide.stdout);
+    s = f.term([], { columns: 60, rows: 24 });
+    await s.waitFor(TITLE.home); await moveTo(s, 'Use in an app'); await s.snap('app-menu'); await s.press('enter');
+    await s.waitFor('Use in an app'); await s.settle(100); await s.snap('app-guide');
+    expect(/npm i @forsvn\/conquistador/.test(s.screen.text()), 'TUI guide lacks the project command');
+    await s.press(...Array(24).fill('down')); await s.snap('app-guide-bottom');
+    expect(has(s.screen.text(), 'docs/install/app'), 'the guide cannot reach its app documentation');
+    expect(s.screen.text().split('\n').length <= 24, 'guide exceeds compact terminal height');
+    await s.press('escape'); await s.waitFor(TITLE.home); await s.press('q');
+    expect(await s.exit() === 0, 'guide did not quit cleanly');
+    expect(JSON.stringify(f.tree()) === before, 'opening the guide changed an install or dependency');
     return s.snaps;
   } finally { if (s) s.kill(); f.cleanup(); }
 });

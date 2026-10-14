@@ -23,16 +23,19 @@ skills/conquistador/ owns command and play methods. runtime/ owns the CLI and ru
 | `agents/` | Portable agent, squad, and receipt schemas and packages |
 | `hooks/` | Plugin hooks that add the playbook brief (command or play) to prompts |
 | `mcp/`, `mcp.json` | Playbook MCP server |
+| `api/` | Public npm app imports and TypeScript declarations: `createConquistador`, and the Node/Fetch MCP mounts |
 | `worker.mjs`, `wrangler.toml` | Hosted MCP server as a Cloudflare Worker |
 | `examples/verify-gate/` | Host gate that accepts drafts only after `conquistador_verify` (repository only, not in the npm package) |
+| `examples/app-integration/` | Runnable app and MCP on one port, included in the npm package |
 | `kit/` | HTML templates for visual review in Lavish |
 | `tools/` | Installer, start flow, packaging, and development helpers; `tools/e2e/` holds the E2E tests |
 | `release/` | `completeness.json`, the hash list the installer and doctor check |
 | `docs/MASTER-AGENT.md` | Execution modes and the full operating contract |
 | `docs/` | Install references, architecture, integrations, and working review documents |
+| `docs/APP-INTEGRATION.md` | Canonical app dependency contract, tool calls, host verification, and deployment guidance |
 | `assets/` | Plugin icon |
 | `.claude-plugin/`, `.codex-plugin/`, `.cursor-plugin/`, `.agents/`, `plugin.json` | Per-agent plugin manifests and marketplaces |
-| `.github/workflows/` | CI (`checks.yml`), integration checks, and npm publishing (`publish.yml`) |
+| `.github/workflows/` | CI (`checks.yml`), installed app E2E (`app-e2e.yml`), integration checks, and npm publishing (`publish.yml`) |
 | `Dockerfile`, `.dockerignore` | Runtime container image; its build runs the public runtime tests |
 | `README.md` | Product overview and install line |
 | `INSTALL.md` | Short install commands; points to the docs site |
@@ -56,6 +59,12 @@ The terminal front door uses `tools/launch.mjs` and `tools/front-door.mjs`. The 
 `tools/installer-tui.mjs` and the line flow in `tools/onboard.mjs` build the same installation plan.
 `tools/installer-operation.mjs` runs host changes in child processes. `tools/mcp-apps.mjs` manages
 client config; `tools/executor-source.mjs` guards the legacy adapter on Executor 2.
+
+`api/` reuses `tools/skills-mcp.mjs` and `tools/mcp-http.mjs`. It exposes the packaged library
+without home playbooks or project context discovery. `tools/app-guide.mjs` owns the shared CLI
+and TUI app setup text. `tools/e2e/app-integration.mjs --package /path/package.tgz` tests public
+imports from an actual installed app and writes repeatable receipts. Use `--installer bun`
+and `--runtime /path/to/node` for separate supported-toolchain runs.
 
 Use [README.md](README.md) for setup details and project-specific validation. This record migration does not re-run application release or deployment gates.
 
