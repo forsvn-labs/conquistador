@@ -27,9 +27,13 @@ export function createAppServer({ token, receiptKey } = {}) {
       if (request.method !== 'POST') { reply(405, { error: 'Use POST.' }); return; }
       const chunks = [];
       let bytes = 0;
-      for await (const chunk of request) {
+      for await (const chunk of request.iterator({ destroyOnReturn: false })) {
         bytes += chunk.length;
-        if (bytes > 65_536) { reply(413, { error: 'Request too large.' }); return; }
+        if (bytes > 65_536) {
+          response.once('finish', () => request.destroy());
+          reply(413, { error: 'Request too large.' });
+          return;
+        }
         chunks.push(chunk);
       }
       const result = cq.callTool(routes[path], JSON.parse(Buffer.concat(chunks).toString('utf8')));
