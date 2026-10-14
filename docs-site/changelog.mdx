@@ -6,6 +6,14 @@ rss: true
 
 This page lists the changes that users see. The full record, with pull requests, commits, and verification, is [CHANGELOG.md](https://github.com/forsvn-labs/conquistador/blob/main/CHANGELOG.md) in the repository.
 
+<Update label="0.7.0" description="2026-10-14">
+  - Add Conquistador to your app with `npm i @forsvn/conquistador@^0.7.0` or `bun add @forsvn/conquistador@^0.7.0`. The typed library exposes all eight tools. Your app supplies the model and context.
+  - Mount MCP beside your app on the same port with the Node or Fetch handler. The [app guide](/install/app) includes the public imports and a runnable example.
+  - Run `conquistador app` or select **Use in an app** in the TUI for dependency setup. Installation and imports do not start a model or server.
+  - Public HTTP bindings require a token. MCP handlers check authentication, Origins, protocol headers, and request size.
+  - The homepage and [setup page](https://conquistador.app/install) start with one command. Other methods are collapsed; all 16 agents and multiple selections remain available.
+</Update>
+
 <Update label="0.6.1" description="2026-10-14">
   - Install and open the TUI with `npm i -g @forsvn/conquistador@latest && conquistador` or `bun add --global @forsvn/conquistador@latest && conquistador`. The CLI stays available for updates and removal.
   - The homepage and [setup page](https://conquistador.app/install) have eight installation and connection paths, all 16 agents, and multiple-agent and MCP-client selections.

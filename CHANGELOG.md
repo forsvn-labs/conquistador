@@ -4,6 +4,41 @@
 versions. Verification establishes the stated local scope; native host behavior, useful model
 output, human acceptance and rights disposition require separate evidence.
 
+## 2026-10-14, 0.7.0 public alpha
+
+- [PR #79](https://github.com/forsvn-labs/conquistador/pull/79) merged with Hung's approval at
+  `d4e401cb1530c2460141999d58fb217e841fd7e7`. The
+  [v0.7.0 release](https://github.com/forsvn-labs/conquistador/releases/tag/v0.7.0) has six checked
+  assets. Its npm tarball matches the accepted candidate at `6b1bea94aaa868d5637de5e7d9e2c757b67d2b05`.
+  SHA-256: `2142e3ac5c1adf4968afe3354907dc3b6142b6f4762f3c1c52a0148bb18b6ba5`.
+- Apps can install Conquistador as a production dependency. `createConquistador` exposes eight
+  typed tools. `@forsvn/conquistador/mcp` mounts the same engine on a Node server or Fetch handler.
+  Bundled playbooks and caller context stay separate from local user files. The app owns its model,
+  authentication, context, and approval flow. The packaged example serves app routes and MCP on one port.
+- `conquistador app` and the TUI's **Use in an app** guide show local npm/Bun commands and public
+  imports. Dependency installation and import start no TUI, agent, or listener. HTTP handlers require
+  configured authentication and check Origins, protocol versions, batches, and request size.
+  Public CLI HTTP bindings now require a token.
+- [Publish run 38521804010](https://github.com/forsvn-labs/conquistador/actions/runs/38521804010)
+  published [@forsvn/conquistador@0.7.0](https://www.npmjs.com/package/@forsvn/conquistador/v/0.7.0)
+  as `latest` with provenance. All nine live registry checks pass. All six public npm/Bun dependency
+  checks pass. The downloaded registry tarball passes all 36 installed-app checks on each of
+  Node 22.18.0 and Bun 1.4.3, including official MCP clients 1.32.1/2.3.1 and strict TypeScript.
+- Source checks pass 940 product cases and 65 terminal scenarios. The accepted tarball passes
+  three 36-check runs with npm, Bun, and Node 22.18.0. Final-source CI at
+  `24ddbb262dc7a5f8429d02df3e8e684452341e4a` passes all ten functional jobs, including Linux/Windows
+  installation and the four app toolchains. Four automated review findings were fixed and resolved;
+  the final automatic re-review was rate limited. The optional Mintlify PR check was skipped.
+- The shared npm/GitHub README and repository description include deployed agents and app tools.
+  Iris captures show the public npm page on 0.7.0 with the new description and all 16 agents.
+  The minimal landing page shipped through
+  [landing PR #28](https://github.com/forsvn-labs/conquistador-landing/pull/28) after npm delivery.
+  Its accepted suite passes 648 browser checks; live setup passes 224 and production HTTP passes 63.
+- The [app guide](https://conquistador.app/docs/install/app), repeatable reports, release identity,
+  and Iris captures are verified. Resolve private evidence through [DRIVE.md](DRIVE.md).
+  Server-side Node and Bun are covered. Browser/Edge runtimes, native MCP client loading, hosted OAuth,
+  and useful live model output need separate acceptance. The hosted product MCP Worker was not deployed.
+
 ## 2026-10-14, 0.6.1 public alpha
 
 - [PR #78](https://github.com/forsvn-labs/conquistador/pull/78) merged with Hung's approval at

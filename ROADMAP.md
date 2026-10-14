@@ -2,50 +2,33 @@
 
 ## Current handoff
 
-Active: the 0.7.0 candidate is in [PR #79](https://github.com/forsvn-labs/conquistador/pull/79)
-on `feat/app-integration`, after Hung requested Conquistador as an app dependency. The candidate
-adds public typed imports for the eight tools, direct server calls, and Node/Fetch MCP mounts
-that share the app's port. App calls use only bundled playbooks and caller context. HTTP checks
-authentication, Origins, request size, and protocol headers. The CLI now requires a token for
-public HTTP bindings. A packaged app example, `conquistador app`, and the TUI's **Use in an app**
-guide show the setup. No model or agent starts at install/import time.
+Last verified: 2026-10-14. Release 0.7.0 is available as `latest` on
+[npm](https://www.npmjs.com/package/@forsvn/conquistador/v/0.7.0) and
+[GitHub](https://github.com/forsvn-labs/conquistador/releases/tag/v0.7.0).
+[PR #79](https://github.com/forsvn-labs/conquistador/pull/79) merged with Hung's approval.
+The typed app dependency exposes all eight tools and Node/Fetch MCP handlers. The app can
+mount MCP on its existing port. It supplies the model, context, access rules, and approval flow.
+The CLI and TUI include **Use in an app**. Adding the app dependency and importing it start
+no model or TUI.
+See [the app contract](docs/APP-INTEGRATION.md) and
+[its acceptance review](docs/REVIEW-2026-10-APP-INTEGRATION.md).
 
-The failure contract was committed before implementation. The first installed-package baseline
-fails its public imports and export declarations. All 36 app checks pass separately on the exact npm tarball with npm, Bun 1.4.3, and Node
-22.18.0. They include official MCP clients 1.32.1 and 2.3.1, mounted app routes, signed receipts,
-context isolation, and strict TypeScript. All 65 terminal scenarios pass. The 416 root checks,
-294 runtime checks, 167 catalog checks, and 63 evaluation checks pass. All ten functional CI jobs pass at `6b1bea94aaa868d5637de5e7d9e2c757b67d2b05`, including
-Linux/Windows installation and the four installed-app toolchains. The accepted npm tarball
-SHA-256 is `2142e3ac5c1adf4968afe3354907dc3b6142b6f4762f3c1c52a0148bb18b6ba5`.
-Four automated review findings were checked and fixed: retained checkout credentials, upload
-response completion, the exact distribution-version assertion, and CLI help grouping. The
-latest automatic re-review was rate limited. This record update changes no package payload.
-Merge approval remains the next decision. The candidate is not published.
-The app contract and scope are in [docs/APP-INTEGRATION.md](docs/APP-INTEGRATION.md) and
-[the acceptance review](docs/REVIEW-2026-10-APP-INTEGRATION.md).
+The published tarball matches the accepted candidate. All nine live registry checks, six
+public npm/Bun dependency checks, and 36 installed-app checks on each of Node 22.18.0 and Bun
+pass. They cover official MCP clients, app routes, signed receipts, context isolation, and
+strict TypeScript. Final-source CI passes all ten functional jobs. Source validation passes
+940 product checks and 65 terminal scenarios. [CHANGELOG.md](CHANGELOG.md) owns release identity
+and the verification limits.
 
-[Landing PR #28](https://github.com/forsvn-labs/conquistador-landing/pull/28) keeps one homepage
-command and a collapsed setup chooser. Its ninth method adds the app dependency commands.
-Deploy that candidate only after npm serves 0.7.0 and its pinned GitHub assets exist. Both new
-product work and the landing PR require merge approval. npm publication and landing deployment
-have prior authorization. Current production remains 0.6.1 below.
-
-Last verified: 2026-10-14. Release 0.6.1 is available on
-[npm](https://www.npmjs.com/package/@forsvn/conquistador/v/0.6.1) and
-[GitHub](https://github.com/forsvn-labs/conquistador/releases/tag/v0.6.1). The primary npm/Bun
-commands install the permanent CLI and open the TUI. Nine live registry checks, six real
-npm/Bun checks, and 32 CLI/MCP cases on Node 22.18.0 pass. [CHANGELOG.md](CHANGELOG.md) owns
-release identity, validation, and scope.
-
-[PR #78](https://github.com/forsvn-labs/conquistador/pull/78) and
-[landing PR #27](https://github.com/forsvn-labs/conquistador-landing/pull/27) are merged with
-Hung's approval. The expanded chooser is live on the homepage and `/install`, in English and
-Vietnamese. It has eight setup paths, all 16 supported agents, and independent multiple-agent
-and MCP-client selections. The full landing suite passes 628 checks; live setup passes 198 and
-production HTTP passes 60. Hosted MCP uses bearer tokens; Executor 2 still has a manual handoff.
+[Landing PR #28](https://github.com/forsvn-labs/conquistador-landing/pull/28) is merged and
+live after verified npm delivery. The homepage has one command and a setup-page link.
+`/install` and `/vi/install` keep all nine setup methods inside a collapsed disclosure.
+All 16 agents and independent multiple-agent and MCP-client selections remain available. The chooser includes
+the app dependency path. The landing suite passes 648 checks; live setup passes 224 and
+production HTTP passes 63. The landing repository owns deployment identity and browser limits.
 
 Use `npx @forsvn/conquistador@latest` when an older global install exists. An unversioned `npx`
-can reuse that install; explicit `@latest` opens 0.6.1 in the live acceptance run.
+can reuse that install; explicit `@latest` opens 0.7.0 in the live acceptance run.
 
 Next: migrate the Executor source and capability adapters to v2, then run the live cases below.
 The current TUI gives a manual setup handoff. See
@@ -53,7 +36,7 @@ The current TUI gives a manual setup handoff. See
 
 Open: interactive Windows installation, Linux/Windows ARM, native MCP client loading, the five
 live Executor cases, marketplace listings, hosted OAuth, and real writing-quality acceptance.
-Gemini CLI hooks are not built.
+Gemini CLI hooks are not built. Browser and Edge app runtimes are not verified.
 
 ## Social quality acceptance
 
