@@ -2,7 +2,8 @@
 
 ## Current handoff
 
-Active: prepare 0.7.0 after Hung requested Conquistador as an app dependency. The candidate
+Active: the 0.7.0 candidate is in [PR #79](https://github.com/forsvn-labs/conquistador/pull/79)
+on `feat/app-integration`, after Hung requested Conquistador as an app dependency. The candidate
 adds public typed imports for the eight tools, direct server calls, and Node/Fetch MCP mounts
 that share the app's port. App calls use only bundled playbooks and caller context. HTTP checks
 authentication, Origins, request size, and protocol headers. The CLI now requires a token for
@@ -10,10 +11,11 @@ public HTTP bindings. A packaged app example, `conquistador app`, and the TUI's 
 guide show the setup. No model or agent starts at install/import time.
 
 The failure contract was committed before implementation. The first installed-package baseline
-fails its public imports and export declarations. The current local npm run passes all 36 app
-checks, including official MCP clients 1.32.1 and 2.3.1, mounted app routes, signed receipts,
-context isolation, and strict TypeScript. The compact TUI guide and 80 existing tool/transport
-checks pass. Full product/terminal checks and final archive verification are in progress.
+fails its public imports and export declarations. All 36 app checks pass separately on the exact npm tarball with npm, Bun 1.4.3, and Node
+22.18.0. They include official MCP clients 1.32.1 and 2.3.1, mounted app routes, signed receipts,
+context isolation, and strict TypeScript. All 65 terminal scenarios pass. The 416 root checks,
+294 runtime checks, 167 catalog checks, and 63 evaluation checks pass. Full CI and the refreshed
+archive identity for the npm description update are in progress.
 The app contract and scope are in [docs/APP-INTEGRATION.md](docs/APP-INTEGRATION.md) and
 [the acceptance review](docs/REVIEW-2026-10-APP-INTEGRATION.md).
 

@@ -1,7 +1,8 @@
 # Conquistador
 
-A free, open source marketing toolstack for your coding agents. One skill, 35 commands, 21 plays,
-and a rule-based copy checker. Your agent supplies the model and runs the work.
+A free, open source marketing toolstack for coding and deployed agents. One skill, 35 commands,
+21 plays, and a rule-based copy checker. Use it in your agent or add it as an app dependency.
+Your agent supplies the model and runs the work.
 
 [Documentation](https://conquistador.app/docs) · [npm](https://www.npmjs.com/package/@forsvn/conquistador) · [Releases](https://github.com/forsvn-labs/conquistador/releases)
 

@@ -1,7 +1,7 @@
 {
   "name": "@forsvn/conquistador",
   "version": "0.7.0",
-  "description": "A free, open source marketing toolstack for your coding agents. Skills, playbooks, copy checks, and MCP.",
+  "description": "A free, open source marketing toolstack for coding and deployed agents. Skills, playbooks, draft checks, app tools, and MCP.",
   "license": "MIT",
   "homepage": "https://conquistador.app",
   "repository": {
@@ -109,6 +109,8 @@
     "copywriting",
     "coding-agents",
     "agent-skills",
+    "agent-tools",
+    "sdk",
     "mcp",
     "claude-code",
     "codex",
