@@ -44,7 +44,7 @@ const preflight = helpOrVersion || supportedNode || !onboarding ? null : await (
 // A first argument with a space is a task: `conquistador "plan our launch"`. The front door decides
 // every flag-first call; it returns null for flags it does not own (they keep the routes below).
 const task = args.length > 0 && (/\s/.test(args[0]) || args[0] === 'task' || args[0].startsWith('-'));
-const frontDoor = preflight === null && (args.length === 0 || task || ['add', 'install-cli', 'update', 'remove', 'agents', 'doctor', 'brief', 'playbooks', 'bot', 'tour', 'help', '--help', '-h'].includes(args[0]))
+const frontDoor = preflight === null && (args.length === 0 || task || ['add', 'install-cli', 'app', 'update', 'remove', 'agents', 'doctor', 'brief', 'playbooks', 'bot', 'tour', 'help', '--help', '-h'].includes(args[0]))
   ? await (await import('../../tools/front-door.mjs')).runFrontDoor(args) : null;
 if (preflight !== null) {
   process.exitCode = preflight;

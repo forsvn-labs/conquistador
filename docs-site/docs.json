@@ -31,6 +31,7 @@
         "pages": [
           "install/overview",
           "install/coding-agents",
+          "install/app",
           "install/mcp-apps",
           "install/hosted-mcp",
           "install/executor",

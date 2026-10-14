@@ -1,7 +1,8 @@
 # Conquistador
 
-A free, open source marketing toolstack for your coding agents. One skill, 35 commands, 21 plays,
-and a rule-based copy checker. Your agent supplies the model and runs the work.
+A free, open source marketing toolstack for coding and deployed agents. One skill, 35 commands,
+21 plays, and a rule-based copy checker. Use it in your agent or add it as an app dependency.
+Your agent supplies the model and runs the work.
 
 [Documentation](https://conquistador.app/docs) · [npm](https://www.npmjs.com/package/@forsvn/conquistador) · [Releases](https://github.com/forsvn-labs/conquistador/releases)
 
@@ -39,7 +40,7 @@ Package installation runs no interactive lifecycle script, so CI and dependency 
 
 ### Choose another setup path
 
-The [setup chooser](https://conquistador.app/install) also appears on the homepage. Select several
+The homepage keeps one install command. Open [Other setup methods](https://conquistador.app/install) to select several
 agents or MCP clients and copy the command for your setup. The TUI shows every change for review.
 
 | Setup | Use it for | Guide |
@@ -47,6 +48,7 @@ agents or MCP clients and copy the command for your setup. The TUI shows every c
 | Coding-agent installer | All 16 agents, with npm, Bun, npx, bunx, or pnpm dlx | [Coding agents](https://conquistador.app/docs/install/coding-agents) |
 | Native plugin | Install inside Claude Code; use the global installer for Codex, Cursor, Copilot CLI, and Grok CLI | [Plugin setup](INSTALL.md#install-from-inside-claude-code) |
 | Project skill | One skill folder per selected agent, without hooks or MCP | [Project scope](INSTALL.md#options) |
+| App dependency | Call the tools in your app's agent and deploy MCP beside the app | [App integration](docs/APP-INTEGRATION.md) |
 | Local MCP | Claude Desktop, VS Code, Windsurf, Zed, and Cursor | [MCP clients](https://conquistador.app/docs/install/mcp-apps) |
 | Hosted MCP | Remote clients that support a personal bearer-token header | [Hosted server](https://conquistador.app/docs/install/hosted-mcp) |
 | Chat bot files | ChatGPT GPTs, Claude Projects, Grok projects, and Gemini Gems | [Bot export](https://conquistador.app/docs/install/chat-bots) |
@@ -54,6 +56,28 @@ agents or MCP clients and copy the command for your setup. The TUI shows every c
 | Executor | The manual Executor 2 handoff | [Executor setup](https://conquistador.app/docs/install/executor) |
 
 Hosted MCP uses bearer tokens. OAuth-only browser connectors are not supported yet.
+
+### Use inside your app
+
+From 0.7.0, install the server dependency in your app folder:
+
+```sh
+npm i @forsvn/conquistador@^0.7.0
+# Or: bun add @forsvn/conquistador@^0.7.0
+```
+
+```js
+import { createConquistador } from '@forsvn/conquistador';
+import { createMcpRequestHandler } from '@forsvn/conquistador/mcp';
+const cq = createConquistador({ receiptKey: process.env.CONQUISTADOR_RECEIPT_KEY });
+const brief = cq.callTool('conquistador_brief', { task: 'Write a cold email.', context: productFacts });
+```
+
+Your existing agent gets the tool definitions and executes them in the app server. Mount MCP
+on the app's port or run it as a separate service. Imports use only bundled playbooks and caller
+context. See [the app guide](docs/APP-INTEGRATION.md) and
+[runnable example](examples/app-integration/README.md). Run `conquistador app`, or choose
+**Use in an app** in the TUI manager, for the setup commands.
 
 ### Use the TUI
 

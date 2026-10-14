@@ -11,8 +11,9 @@ Research, creative work, engineering, and review support that mission.
 
 ## Make the first task easy
 
-The terminal installs; the agent works. The homepage and a dedicated setup page show the same
-installation choices: coding agents, native plugins, project skills, local and hosted MCP, bot
+The terminal installs; the agent works. The homepage shows one npm command and links to `/install`.
+The setup page starts with that command and keeps other methods in a closed native disclosure:
+coding agents, native plugins, project skills, app dependencies, local and hosted MCP, bot
 files, GitHub downloads, and the manual Executor 2 handoff. Acquisition leads with npm or Bun global installation
 followed by `conquistador`, so the command stays available for later management. A run-once
 `npx @forsvn/conquistador@latest` stays available as a secondary path. The first `conquistador`
@@ -78,6 +79,14 @@ daemon, watcher, or schedule. Hooks are read-only, fast, never block unrelated w
 turned off. Public labels stay visible; prompts, routing scores, and chain-of-thought stay private.
 
 ## Serve deployed agents as tools
+
+An app can add Conquistador as a production npm or Bun dependency and call its tools directly
+in the app server. Public imports provide the same tool definitions, briefing engine, checks,
+and receipts as MCP. The app supplies its existing model, each user's context, and access rules.
+Imports and dependency installation start no UI, agent configuration, or listener. App calls
+read only the packaged playbooks and supplied context, never the server operator's home or
+project files. The app may mount MCP beside its routes on the same port or run it as a separate
+service. Package the library with the deployment and keep receipt signing keys server-only.
 
 Agents that run outside a coding repository reach the same library through a hosted MCP server. A
 few tools carry the loop, not one tool per command: a brief built from the caller's facts, a

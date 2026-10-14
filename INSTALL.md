@@ -1,12 +1,17 @@
 # Install Conquistador
 
+To use Conquistador as a production dependency in an app, see
+[App integration](docs/APP-INTEGRATION.md). That path adds no agent skill or hook. The app can
+call the marketing tools directly and mount MCP on its own server. Run `conquistador app` or
+choose **Use in an app** in the TUI manager for the setup commands.
+
 The docs site has this guide with more detail: <https://conquistador.app/docs/install/overview>.
 This file is the full install reference that ships in the npm package.
 
 ## Before you start
 
-The [setup chooser](https://conquistador.app/install) and the homepage expose coding agents,
-native plugins, project skills, local MCP, hosted MCP, chat bot files, and GitHub downloads.
+The homepage keeps one command. [Other setup methods](https://conquistador.app/install) lists
+coding agents, native plugins, project skills, app dependencies, local MCP, hosted MCP, chat bot files, and GitHub downloads.
 Both agent and MCP client selections support multiple choices. Generated commands open the
 existing TUI for review. Executor 2 has a manual handoff; hosted MCP uses bearer-token headers.
 OAuth-only browser connectors are not supported yet.
@@ -210,7 +215,7 @@ Notes:
 
 ```sh
 npm install -g @forsvn/conquistador@0.6.1
-npm install -g --ignore-scripts --install-links git+https://github.com/forsvn-labs/conquistador.git#v0.6.1
+npm install -g --ignore-scripts --install-links git+https://github.com/forsvn-labs/conquistador.git#v0.7.0
 ```
 
 `--ignore-scripts` skips npm lifecycle scripts. `--install-links` copies the checkout out of npm's

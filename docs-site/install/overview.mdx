@@ -16,8 +16,8 @@ bun add --global @forsvn/conquistador@latest && conquistador
 The command stays installed. Run `conquistador` later to manage your agents, skills, MCP
 connections, hooks, and updates. Use `-g` with npm to install the global command.
 
-The [setup chooser](https://conquistador.app/install) also appears on the homepage. It lists native
-plugins, project skills, local and hosted MCP, chat bot exports, and GitHub downloads. Select
+The homepage keeps one command. [Other setup methods](https://conquistador.app/install) lists native
+plugins, project skills, app dependencies, local and hosted MCP, chat bot exports, and GitHub downloads. Select
 several agents or MCP clients and copy a command; review its changes in the TUI. Hosted MCP uses
 bearer tokens. OAuth-only browser connectors are not supported yet.
 
@@ -40,6 +40,7 @@ appears in the review before installation.
 |---|---|---|
 | [Coding agents](/install/coding-agents) (recommended) | The plugin (skill, hooks, local MCP server) for agents with a plugin manager. A skill copy for the other agents. | You work in Claude Code, Codex, Cursor, or another coding agent. |
 | [MCP clients](/install/mcp-apps) | The local MCP server, `conquistador mcp`, in apps that do not get the plugin. | You use Claude Desktop, VS Code, Windsurf, Zed, or a similar app. |
+| [App dependency](/install/app) | The server-side library and an optional MCP mount. | Your app has an agent and should deploy Conquistador with it. |
 | [Hosted MCP](/install/hosted-mcp) | A personal access token and the client config for the hosted server. | Your agent runs on a server, or your app connects only to remote MCP servers. |
 | [Executor](/install/executor) | Conquistador as a source in Executor. | Your agents reach their tools through Executor. |
 | [Chat bots](/install/chat-bots) | A system prompt and knowledge files. | You use ChatGPT GPTs, Claude Projects, Grok projects, or Gemini Gems. |
@@ -71,6 +72,7 @@ Press Escape, `q`, or Ctrl-C to cancel. Before the install starts, the installer
 
 Run `conquistador` again to manage agents, project skills, MCP connections, hooks, and the CLI. The
 **Installed items** screen shows each path and scope. Select an item to update or remove it.
+Choose **Use in an app** for local npm/Bun dependency commands and the app integration guide.
 Shared skill folders name every affected agent before removal. Updates, repairs, and removal
 show their result inside the TUI. Use `--plain`, or `TERM=dumb`, for line prompts.
 

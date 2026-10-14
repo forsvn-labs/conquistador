@@ -16,10 +16,10 @@ const dim = text => (process.stdout.isTTY ? `\x1b[2m${text}\x1b[22m` : text);
 // print context and change nothing.
 export const HELP = `Conquistador ${version}
 Growth and marketing playbooks. Install here; work in your coding agent.
-
   conquistador                Install into your agents, or manage the installs
   conquistador add            Add agents, MCP clients, Executor, or chat bots
   conquistador install-cli    Keep the CLI command with npm or Bun
+  conquistador app            Use the tools as an app dependency
   conquistador update         Update the CLI and every install
   conquistador doctor         Find and repair install and project drift
   conquistador remove         Remove Conquistador from your agents
@@ -56,6 +56,7 @@ Install
     --plain                         Line prompts without color (also TERM=dumb)
   Without a terminal and without --yes, the plan prints and the exit code is 2.
   The installer never opens an agent. It ends with what to type in each one.
+  conquistador app                  Show app dependency and deployed MCP setup
 
 Context for your agent (prints; changes nothing)
   conquistador "TASK"               The playbooks this task needs (also: conquistador task WORD)
@@ -374,6 +375,7 @@ export async function runFrontDoor(args) {
   }
   if (isStart(args)) return start();
   if (command === '--help' || command === '-h' || command === 'help') { console.log(rest.includes('--all') || args.includes('--all') ? HELP_ALL : HELP); return 0; }
+  if (command === 'app') return (await import('./app-guide.mjs')).runAppGuide(rest);
   // `conquistador add` with nothing else opens the installer in a terminal.
   if (command === 'add' && !rest.length && process.stdin.isTTY && process.stdout.isTTY) return (await import('./launch.mjs')).runStart([], { installer: true });
   if (command === 'install-cli') {

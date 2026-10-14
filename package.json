@@ -1,7 +1,7 @@
 {
   "name": "@forsvn/conquistador",
-  "version": "0.6.1",
-  "description": "A free, open source marketing toolstack for your coding agents. Skills, playbooks, copy checks, and MCP.",
+  "version": "0.7.0",
+  "description": "A free, open source marketing toolstack for coding and deployed agents. Skills, playbooks, draft checks, app tools, and MCP.",
   "license": "MIT",
   "homepage": "https://conquistador.app",
   "repository": {
@@ -21,6 +21,12 @@
   "bin": {
     "conquistador": "runtime/bin/conquistador.js"
   },
+  "exports": {
+    ".": { "types": "./api/index.d.mts", "default": "./api/index.mjs" },
+    "./mcp": { "types": "./api/mcp.d.mts", "default": "./api/mcp.mjs" },
+    "./package.json": "./package.json"
+  },
+  "types": "./api/index.d.mts",
   "files": [
     "SKILL.md",
     "INSTALL.md",
@@ -35,6 +41,8 @@
     "plugin.json",
     "mcp.json",
     "mcp/server.mjs",
+    "api",
+    "examples/app-integration",
     "hooks",
     "skills",
     "assets",
@@ -63,6 +71,7 @@
     "docs/CHECK.md",
     "docs/CONTEXT.md",
     "docs/INTEGRATIONS.md",
+    "docs/APP-INTEGRATION.md",
     "!**/*.test.mjs",
     "!**/*.test.js",
     "!tools/e2e",
@@ -100,6 +109,8 @@
     "copywriting",
     "coding-agents",
     "agent-skills",
+    "agent-tools",
+    "sdk",
     "mcp",
     "claude-code",
     "codex",

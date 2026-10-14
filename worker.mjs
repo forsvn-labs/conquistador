@@ -21,7 +21,7 @@ export default {
     const respond = responderFor(env.CONQUISTADOR_RECEIPT_KEY ?? '');
     const authorize = async header => (await authenticate(env, ctx, header, url.origin)).refusal ?? null;
     // Stop reading once the body passes MAX_BODY; a client can omit Content-Length.
-    const result = await respond({ method: request.method, path: url.pathname, authorization: request.headers.get('authorization'), readBody: () => readBounded(request, MAX_BODY), authorize });
+    const result = await respond({ method: request.method, path: url.pathname, authorization: request.headers.get('authorization'), origin: request.headers.get('origin'), protocolVersion: request.headers.get('mcp-protocol-version'), readBody: () => readBounded(request, MAX_BODY), authorize });
     return new Response(result.body || null, { status: result.status, headers: result.headers });
   },
 };

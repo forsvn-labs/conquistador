@@ -2,6 +2,34 @@
 
 ## Current handoff
 
+Active: the 0.7.0 candidate is in [PR #79](https://github.com/forsvn-labs/conquistador/pull/79)
+on `feat/app-integration`, after Hung requested Conquistador as an app dependency. The candidate
+adds public typed imports for the eight tools, direct server calls, and Node/Fetch MCP mounts
+that share the app's port. App calls use only bundled playbooks and caller context. HTTP checks
+authentication, Origins, request size, and protocol headers. The CLI now requires a token for
+public HTTP bindings. A packaged app example, `conquistador app`, and the TUI's **Use in an app**
+guide show the setup. No model or agent starts at install/import time.
+
+The failure contract was committed before implementation. The first installed-package baseline
+fails its public imports and export declarations. All 36 app checks pass separately on the exact npm tarball with npm, Bun 1.4.3, and Node
+22.18.0. They include official MCP clients 1.32.1 and 2.3.1, mounted app routes, signed receipts,
+context isolation, and strict TypeScript. All 65 terminal scenarios pass. The 416 root checks,
+294 runtime checks, 167 catalog checks, and 63 evaluation checks pass. All ten functional CI jobs pass at `6b1bea94aaa868d5637de5e7d9e2c757b67d2b05`, including
+Linux/Windows installation and the four installed-app toolchains. The accepted npm tarball
+SHA-256 is `2142e3ac5c1adf4968afe3354907dc3b6142b6f4762f3c1c52a0148bb18b6ba5`.
+Four automated review findings were checked and fixed: retained checkout credentials, upload
+response completion, the exact distribution-version assertion, and CLI help grouping. The
+latest automatic re-review was rate limited. This record update changes no package payload.
+Merge approval remains the next decision. The candidate is not published.
+The app contract and scope are in [docs/APP-INTEGRATION.md](docs/APP-INTEGRATION.md) and
+[the acceptance review](docs/REVIEW-2026-10-APP-INTEGRATION.md).
+
+[Landing PR #28](https://github.com/forsvn-labs/conquistador-landing/pull/28) keeps one homepage
+command and a collapsed setup chooser. Its ninth method adds the app dependency commands.
+Deploy that candidate only after npm serves 0.7.0 and its pinned GitHub assets exist. Both new
+product work and the landing PR require merge approval. npm publication and landing deployment
+have prior authorization. Current production remains 0.6.1 below.
+
 Last verified: 2026-10-14. Release 0.6.1 is available on
 [npm](https://www.npmjs.com/package/@forsvn/conquistador/v/0.6.1) and
 [GitHub](https://github.com/forsvn-labs/conquistador/releases/tag/v0.6.1). The primary npm/Bun

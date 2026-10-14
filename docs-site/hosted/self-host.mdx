@@ -12,10 +12,14 @@ CONQUISTADOR_MCP_TOKEN=choose-a-secret conquistador mcp --http --host 0.0.0.0 --
 - Endpoint: `POST /mcp`. Health check: `GET /health`.
 - Send `Authorization: Bearer <token>` when `CONQUISTADOR_MCP_TOKEN` is set.
 - The default host is `127.0.0.1` and the default port is `8787`. When `PORT` is set, the server uses it and listens on `0.0.0.0`.
-- On a host other than `127.0.0.1` or `localhost` without `CONQUISTADOR_MCP_TOKEN`, the server prints a warning and serves anyway. Always set a token on a public interface.
+- From 0.7.0, a public network binding requires `CONQUISTADOR_MCP_TOKEN`. The server refuses to start without it. Loopback addresses remain available for local use.
+- Browser requests with an Origin are denied by default. Set `CONQUISTADOR_MCP_ORIGINS` to a comma-separated list of exact permitted origins when needed. Unsupported MCP protocol headers and JSON-RPC batches return 400.
 - Anyone with the URL and the token can read the playbooks.
 - The server serves the playbooks that you added on that computer. To serve only the bundled library, set `CONQUISTADOR_HOME` to an empty folder.
 - Set `CONQUISTADOR_RECEIPT_KEY` to sign check receipts. See [Receipts and verify](/hosted/receipts).
+
+To mount MCP on the same port as an existing app, use the [app dependency](/install/app)
+and its public Node or Fetch handler. It uses only packaged playbooks and caller context.
 
 ## Deploy to Cloudflare Workers
 

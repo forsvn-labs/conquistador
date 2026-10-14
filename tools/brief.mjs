@@ -175,9 +175,9 @@ const revive = doc => ({ ...doc, tf: new Map(doc.tf), nameTerms: new Set(doc.nam
 
 // Index every knowledge file. The on-disk cache is keyed by each file's path, size, and mtime,
 // so an edited playbook or a plugin update rebuilds it. Hooks run per prompt and need this.
-export function knowledgeIndex(root = moduleRoot, { playbooks = userPlaybookRoots() } = {}) {
+export function knowledgeIndex(root = moduleRoot, { playbooks = userPlaybookRoots(), persistCache = true } = {}) {
   const packageRoot = realpathSync(resolve(root));
-  const cacheKey = `${packageRoot}\0${playbooks.join('\0')}`;
+  const cacheKey = `${packageRoot}\0${playbooks.join('\0')}\0${persistCache}`;
   if (cache.has(cacheKey)) return cache.get(cacheKey);
   const contract = loadRoutingContract(packageRoot);
   const libraryRoot = posix.dirname(contract.parentPath);
@@ -206,13 +206,13 @@ export function knowledgeIndex(root = moduleRoot, { playbooks = userPlaybookRoot
   })])).digest('hex');
   const cacheFile = join(cacheDirectory(), `index-${signature.slice(0, 32)}.json`);
   let all;
-  try {
+  if (persistCache) try {
     const stored = JSON.parse(readFileSync(cacheFile, 'utf8'));
     if (stored.signature === signature) all = stored.docs.map(revive);
   } catch { /* Build below. */ }
   if (!all) {
     all = planned.map(item => document(item.absolute, item.key, item)).filter(Boolean);
-    try {
+    if (persistCache) try {
       mkdirSync(cacheDirectory(), { recursive: true, mode: 0o700 });
       const temporary = `${cacheFile}.${process.pid}.tmp`;
       writeFileSync(temporary, JSON.stringify({ signature, docs: all.map(serialize) }), { mode: 0o600 });
@@ -320,7 +320,7 @@ function coreKeys(packageRoot, commandPath, libraryRoot) {
   });
 }
 
-export function createBrief(input, { root = moduleRoot, playbooks, force = false, cwd = process.cwd() } = {}) {
+export function createBrief(input, { root = moduleRoot, playbooks, persistCache = true, force = false, cwd = process.cwd() } = {}) {
   if (typeof input !== 'string' || !input.trim()) throw Error('Describe the task.');
   // "Use Conquistador:" asks for Conquistador by name, so it counts as an explicit invocation.
   const invoked = START_LEAD.test(input);
@@ -337,7 +337,7 @@ export function createBrief(input, { root = moduleRoot, playbooks, force = false
   if (routed.action !== 'route' && !explicit && !force && !platformNamed && !business) {
     return { schema: BRIEF_SCHEMA, action: 'none', reason: routed.reason ?? 'no-relevant-capability', methods: [], must: [], situational: [], platforms: [], packageRoot };
   }
-  const index = knowledgeIndex(packageRoot, playbooks ? { playbooks } : undefined);
+  const index = knowledgeIndex(packageRoot, { playbooks, persistCache });
   const { contract, libraryRoot } = index;
   let methods = routed.action === 'route' ? routed.selected.map(item => contract.methods[item.name]).filter(Boolean) : [];
   let playName = routed.action === 'route' ? routed.play?.name : null;
@@ -477,7 +477,7 @@ export function createBrief(input, { root = moduleRoot, playbooks, force = false
     situational: situational.map(view),
     standards: ['quality.md', 'safety.md'].map(name => `${contract.parentPath}/standards/${name}`).map(path => ({ path, absolute: join(packageRoot, path) })),
     // The project's PRODUCT.md and GROWTH.md come before any playbook (standards/context.md).
-    context: contextFiles(cwd).map(({ kind, path }) => ({ kind, path })),
+    context: cwd === null ? [] : contextFiles(cwd).map(({ kind, path }) => ({ kind, path })),
   };
 }
 
@@ -650,8 +650,8 @@ export function packBrief(brief, { limit = LIMITS.packBytes, callerContext, host
 }
 
 // Search the whole library, not only the selected methods.
-export function searchKnowledge(query, { root = moduleRoot, playbooks, limit = 12 } = {}) {
-  const index = knowledgeIndex(root, playbooks ? { playbooks } : undefined);
+export function searchKnowledge(query, { root = moduleRoot, playbooks, persistCache = true, limit = 12 } = {}) {
+  const index = knowledgeIndex(root, { playbooks, persistCache });
   const words = terms(query);
   return [...index.docs, ...index.users].filter(doc => doc.kind !== 'process')
     .map(doc => ({ doc, score: bm25(doc, words, index) * (priorWeight[doc.kind] ?? 1) }))
