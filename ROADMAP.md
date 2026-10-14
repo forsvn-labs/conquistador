@@ -14,8 +14,13 @@ The failure contract was committed before implementation. The first installed-pa
 fails its public imports and export declarations. All 36 app checks pass separately on the exact npm tarball with npm, Bun 1.4.3, and Node
 22.18.0. They include official MCP clients 1.32.1 and 2.3.1, mounted app routes, signed receipts,
 context isolation, and strict TypeScript. All 65 terminal scenarios pass. The 416 root checks,
-294 runtime checks, 167 catalog checks, and 63 evaluation checks pass. Full CI and the refreshed
-archive identity for the npm description update are in progress.
+294 runtime checks, 167 catalog checks, and 63 evaluation checks pass. All ten functional CI jobs pass at `6b1bea94aaa868d5637de5e7d9e2c757b67d2b05`, including
+Linux/Windows installation and the four installed-app toolchains. The accepted npm tarball
+SHA-256 is `2142e3ac5c1adf4968afe3354907dc3b6142b6f4762f3c1c52a0148bb18b6ba5`.
+Four automated review findings were checked and fixed: retained checkout credentials, upload
+response completion, the exact distribution-version assertion, and CLI help grouping. The
+latest automatic re-review was rate limited. This record update changes no package payload.
+Merge approval remains the next decision. The candidate is not published.
 The app contract and scope are in [docs/APP-INTEGRATION.md](docs/APP-INTEGRATION.md) and
 [the acceptance review](docs/REVIEW-2026-10-APP-INTEGRATION.md).
 
