@@ -48,8 +48,10 @@ The fix allows only GitHub and the provider-validated callback in the consent fo
 The workerd runner now includes real Chromium Allow/Cancel flows and passes all 27 cases.
 All 13 CI checks at `633e367` passed before this focused browser correction. The initial Worker
 source is deployed at version `a0fa5787-c040-4ec6-a3c8-da0d3f7270c7`; discovery and the existing
-API key work. Executor v2 imports the app at the hosted organization URL. Account sign-in
-acceptance is still in progress; the installation page remains undeployed.
+API key work. Executor v2 imports the app at the hosted organization URL. GitHub app configuration now uses the exact HTTPS `/signup/callback` URI, replacing the
+old HTTP `/signup` value. Real GitHub sign-in completed in hosted Executor v2. The account
+shows Working, all eight tools are listed, and `conquistador_methods` returned the live library.
+The installation page remains undeployed.
 
 ## Live release context
 

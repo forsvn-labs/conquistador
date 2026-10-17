@@ -16,10 +16,10 @@ You need Node 22.18 or later. To set up coding agents, run this in your project 
 
 ```sh
 # npm
-npm i -g conquistador@latest && conquistador
+npm i -g @forsvn/conquistador@latest && conquistador
 
 # Bun
-bun add --global conquistador@latest && conquistador
+bun add --global @forsvn/conquistador@latest && conquistador
 ```
 
 This installs the permanent `conquistador` command and opens the TUI after installation succeeds.

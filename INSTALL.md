@@ -41,10 +41,10 @@ In your project folder, install and open Conquistador with npm or Bun:
 
 ```sh
 # npm
-npm i -g conquistador@latest && conquistador
+npm i -g @forsvn/conquistador@latest && conquistador
 
 # Bun
-bun add --global conquistador@latest && conquistador
+bun add --global @forsvn/conquistador@latest && conquistador
 ```
 
 This installs the permanent `conquistador` command and opens the TUI after installation succeeds.
@@ -522,7 +522,7 @@ and the Docker images stay in the [repository](https://github.com/forsvn-labs/co
 | Symptom | Fix |
 |---|---|
 | No agent is found | Install a supported agent, or name one: `--providers=claude`. You can still install MCP clients, Executor, or chat bots |
-| `The conquistador command on your PATH is version …` | An older copy runs instead of the one you installed. Run `npm i -g conquistador@latest`, or remove the old copy with the command the warning prints |
+| `The conquistador command on your PATH is version …` | An older copy runs instead of the one you installed. Run `npm i -g @forsvn/conquistador@latest`, or remove the old copy with the command the warning prints |
 | `npx` opens an older version | An unversioned `npx` can reuse a global install. Run `npx conquistador@latest` to fetch the current release |
 | `npm i @forsvn/conquistador` (without `-g`) gives no `conquistador` command | That puts the package in `./node_modules`. Use `npm i -g @forsvn/conquistador`, or run `npx conquistador@latest` |
 | An MCP client config `is not plain JSON` | The installer left it unchanged. Add the entry it printed by hand, or remove the comments and run `conquistador add` |
