@@ -784,6 +784,10 @@ export async function runTui(options, { cwd = process.cwd(), screen = 'install' 
   // Done: the summary stays on the normal screen.
   console.log(`${p.bold('Summary')}\n${summaryLines({ results: result.results, checks: result.checks, plan: result.plan, notice: result.notice, p }).join('\n')}`);
   const lead = result.ready.find(agent => agent.slash) ?? result.ready[0];
-  if (lead) console.log(`\n→ Open ${lead.label} in this project and type:\n  ${p.brand(nextStep(lead, cwd, options.task))}`);
+  if (lead) {
+    const width = Math.max(40, process.stdout.columns || 80) - 2;
+    const prompt = wrapText(nextStep(lead, cwd, options.task), width).split('\n').map(line => `  ${p.brand(line)}`).join('\n');
+    console.log(`\n→ Open ${lead.label} in this project and type:\n${prompt}`);
+  }
   return result.code;
 }
