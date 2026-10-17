@@ -544,7 +544,7 @@ scenario('in-app-management', ['C2', 'C3'], async ({ expect, transcript }) => {
     await moveTo(s, 'Hooks'); await s.press('enter'); await s.waitFor('Hooks are on'); await s.press('space'); await s.waitFor('Hooks are off'); await s.snap('hooks-off');
     expect(f.json(config)?.hooks === false && f.json(config)?.keep === 'existing', 'hooks toggle lost another setting');
     await s.press('enter'); await moveTo(s, 'Check and repair'); await s.press('enter'); await s.waitFor('Complete. Review the result.'); await s.snap('doctor-report'); await s.press('enter');
-    await s.settle(120); expect(has(s.screen.text(), TITLE.home), 'doctor left the TUI');
+    await s.waitFor(TITLE.home); expect(has(s.screen.text(), TITLE.home), 'doctor left the TUI');
     await moveTo(s, 'MCP connections'); await s.press('enter'); await s.waitFor('Which MCP clients?');
     await moveTo(s, 'Zed'); await s.press('space'); await s.snap('mcp-app-choice'); await s.press('enter'); await s.waitFor(TITLE.options); await s.press('enter'); await s.waitFor(TITLE.review); await s.press('enter');
     await s.waitFor(TITLE.done); await s.snap('mcp-done'); await s.press('enter'); await s.waitFor(TITLE.home); await s.snap('home-after-mcp');

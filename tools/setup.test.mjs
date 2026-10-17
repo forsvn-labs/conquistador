@@ -279,7 +279,7 @@ test('short operator commands default to the current project and preserve the co
     assert.equal(result.status, 0, result.stdout + result.stderr);
     return result.stdout;
   };
-  assert.match(ok('install'), /Prepared locally/);
+  assert.match(ok('operator', 'install'), /Prepared locally/);
   const installed = join(project, '.conquistador');
   const report = JSON.parse(ok('operator', 'doctor', '--json'));
   assert.equal(report.library.available, N);
