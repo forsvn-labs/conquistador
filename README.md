@@ -64,8 +64,8 @@ and Worker rollout remain tracked in [ROADMAP.md](https://github.com/forsvn-labs
 From 0.7.0, install the server dependency in your app folder:
 
 ```sh
-npm i @forsvn/conquistador@^0.7.0
-# Or: bun add @forsvn/conquistador@^0.7.0
+npm i @forsvn/conquistador@^0.8.0
+# Or: bun add @forsvn/conquistador@^0.8.0
 ```
 
 ```js

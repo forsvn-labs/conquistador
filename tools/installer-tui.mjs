@@ -498,12 +498,12 @@ function App({ options: initialOptions, cwd, first, update, warnings, onExit, mo
       else if (input === ' ') {
         const id = visible[cursor]?.id;
         if (!id) return;
-        setChoices(value => ({ ...value, agents: AGENTS.map(agent => agent.id).filter(item => (item === id ? !value.agents.includes(id) : value.agents.includes(item))) }));
+        setChoices(value => ({ ...value, agents: order.map(agent => agent.id).filter(item => (item === id ? !value.agents.includes(id) : value.agents.includes(item))) }));
       } else if (input === 'a') {
         const found = order.filter(agent => agent.found).map(agent => agent.id);
-        setChoices(value => ({ ...value, agents: found.every(id => value.agents.includes(id)) ? value.agents.filter(id => !found.includes(id)) : AGENTS.map(agent => agent.id).filter(id => found.includes(id) || value.agents.includes(id)) }));
+        setChoices(value => ({ ...value, agents: found.every(id => value.agents.includes(id)) ? value.agents.filter(id => !found.includes(id)) : order.map(agent => agent.id).filter(id => found.includes(id) || value.agents.includes(id)) }));
       } else if (input === 'A') {
-        setChoices(value => ({ ...value, agents: AGENTS.map(agent => agent.id) }));
+        setChoices(value => ({ ...value, agents: order.map(agent => agent.id) }));
       } else if (input === 'n') {
         setChoices(value => ({ ...value, agents: [] }));
       } else if (key.return) go(shown.options ? 'options' : 'review');

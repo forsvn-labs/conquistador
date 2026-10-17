@@ -1,7 +1,7 @@
 // OAuth 2.1 for hosted MCP. The pinned provider owns protocol validation and token storage.
 // This module runs only in workerd; local CLI and app imports do not load cloudflare:workers.
 import OAuthProvider, { authorizationErrorRedirect, OAuthError } from './vendor/oauth-provider.mjs';
-import { exchangeCode, hashToken, identify, readBounded, revokeGithubToken, sameSecret, signupConfig } from './hosted-auth.mjs';
+import { exchangeCode, GitHubError, hashToken, identify, readBounded, revokeGithubToken, sameSecret, signupConfig } from './hosted-auth.mjs';
 import { createMcpResponder, MAX_BODY } from './mcp-http.mjs';
 
 const SCOPE = 'mcp:read';
@@ -63,6 +63,7 @@ async function authorize(request, env, ctx) {
       const code = url.searchParams.get('code'); if (!code || code.length > 2048) return errorPage(400, 'GitHub did not return a valid sign-in code.', upstream.headers);
       let accessToken, identity;
       try { accessToken = await exchangeCode(gh, code, `${issuerFor(env)}/signup/callback`, upstream.data.verifier); identity = await identify(gh, accessToken); }
+      catch (error) { if (error instanceof GitHubError) return errorPage(502, `${error.message} No connection was made.`, upstream.headers); throw error; }
       finally { if (accessToken) ctx.waitUntil(revokeGithubToken(gh, accessToken)); }
       if (!identity) return errorPage(502, 'GitHub did not confirm this sign-in.', upstream.headers);
       const previous = await env.TOKENS.get(`user:${identity.githubId}`, 'json');

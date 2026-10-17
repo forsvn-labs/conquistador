@@ -13,7 +13,7 @@ const out = resolve(option('--out') ?? join(root, 'dist/e2e/installation-package
 const temp = mkdtempSync(join(tmpdir(), 'cq-package-methods-'));
 const env = { ...process.env, HOME: temp, USERPROFILE: temp, CONQUISTADOR_HOME: join(temp, '.conquistador'), DISABLE_TELEMETRY: '1', NO_COLOR: '1', npm_config_cache: join(temp, 'npm-cache') };
 mkdirSync(out, { recursive: true });
-const steps = [], logs = [];
+const steps = [], logs = [], packedFiles = [];
 const run = (command, args, cwd = temp, input) => {
   const result = spawnSync(command, args, { cwd, env, encoding: 'utf8', timeout: 180_000, input });
   logs.push(`$ ${command} ${args.join(' ')}\n${result.stdout}\n${result.stderr}`);
@@ -28,6 +28,7 @@ try {
   });
   const mainPack = JSON.parse(run('npm', ['pack', '--ignore-scripts', '--json', '--pack-destination', out], root))[0];
   const aliasPack = JSON.parse(run('npm', ['pack', '--ignore-scripts', '--json', '--pack-destination', out], join(root, 'packages/conquistador')))[0];
+  packedFiles.push(mainPack.filename, aliasPack.filename);
   const app = join(temp, 'app'); mkdirSync(app); writeFileSync(join(app, 'package.json'), '{"private":true}');
   run('npm', ['install', '--ignore-scripts', '--no-audit', '--no-fund', join(out, mainPack.filename), join(out, aliasPack.filename)], app);
   const bin = join(app, 'node_modules/conquistador/bin/conquistador.js');
@@ -47,13 +48,15 @@ try {
     check(`Skills CLI 1.7.2 installs ${name} as a copy with all resources`, () => {
       run('npx', ['--yes', 'skills@1.7.2', 'add', source, '--skill', 'conquistador', '--agent', 'codex', '--copy', '--yes', '--json'], project);
       const folder = join(project, '.agents/skills/conquistador'); assert.ok(!lstatSync(folder).isSymbolicLink());
-      assert.equal(readFileSync(join(folder, 'commands/social/COMMAND.md'), 'utf8'), readFileSync(join(root, 'skills/conquistador/commands/social/COMMAND.md'), 'utf8'));
+      const command = readFileSync(join(folder, 'commands/social/COMMAND.md'), 'utf8');
+      if (source.startsWith('https://')) assert.ok(command.trim().length > 100, 'Remote main must contain the complete resource; its bytes can differ from a PR checkout.');
+      else assert.equal(command, readFileSync(join(root, 'skills/conquistador/commands/social/COMMAND.md'), 'utf8'));
       assert.ok(!existsSync(join(folder, 'node_modules'))); assert.ok(!existsSync(join(folder, '.git')));
     });
   }
 } catch (error) { steps.push({ name: 'E2E completion', passed: false, error: error.message }); console.error(error.stack); }
 finally {
-  const packages = ['forsvn-conquistador-0.7.0.tgz', 'conquistador-0.7.0.tgz'].filter(file => existsSync(join(out, file))).map(file => ({ file, sha256: createHash('sha256').update(readFileSync(join(out, file))).digest('hex') }));
+  const packages = packedFiles.filter(file => existsSync(join(out, file))).map(file => ({ file, sha256: createHash('sha256').update(readFileSync(join(out, file))).digest('hex') }));
   writeFileSync(join(out, 'report.json'), JSON.stringify({ mode: 'real npm tarball installs and external Skills CLI; unpublished alias', packages, steps }, null, 2) + '\n');
   writeFileSync(join(out, 'transcript.log'), logs.join('\n').replaceAll(temp, '<temporary-home>').replaceAll(realpathSync(temp), '<temporary-home>'));
   rmSync(temp, { recursive: true, force: true });

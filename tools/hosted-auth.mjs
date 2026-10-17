@@ -125,7 +125,7 @@ export function signupConfig(env) {
   return { id: env.GITHUB_CLIENT_ID, secret: env.GITHUB_CLIENT_SECRET, web, api };
 }
 
-class GitHubError extends Error {}
+export class GitHubError extends Error {}
 
 async function github(url, init = {}) {
   let response;

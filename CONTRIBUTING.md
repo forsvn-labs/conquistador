@@ -64,7 +64,7 @@ npm run package
 ```
 
 The command requires a clean Git checkout. It reads tracked files from the exact HEAD commit and
-writes `dist/<commit>/conquistador-<version>.zip`, an npm tarball, prepared one-parent skill and plugin ZIPs, `SHA256SUMS`, and `assembly.json`.
+writes `dist/<commit>/conquistador-<version>.zip`, the main and CLI-alias npm tarballs, prepared one-parent skill and plugin ZIPs, `SHA256SUMS`, and `assembly.json`.
 The ZIP uses stable paths, modes, timestamps and ordering. Repeated ZIP packaging of the same commit
 is byte-identical. npm tarball bytes are recorded with npm/Node/platform versions; cross-toolchain
 reproducibility is not claimed. Existing output is never overwritten. Choose another output root
@@ -85,7 +85,7 @@ of `@forsvn/conquistador` (trusted publishing through OIDC). No npm token or 2FA
 
 1. Merge the version bump into `main`, then tag the merge commit `vX.Y.Z` and push the tag.
 2. In a clean clone at the tag, run `npm run bootstrap` and `npm run package`.
-3. Create the GitHub release with the six assets from `dist/<commit>/`:
+3. Create the GitHub release with the seven assets from `dist/<commit>/`:
    `gh release create vX.Y.Z --verify-tag --title "..." --notes-file NOTES.md dist/<commit>/*`.
    Add `--prerelease` to publish under the npm `next` dist-tag instead of `latest`.
 4. The workflow downloads the release tarball and checks it against `SHA256SUMS`. It also checks
@@ -95,6 +95,14 @@ of `@forsvn/conquistador` (trusted publishing through OIDC). No npm token or 2FA
 To retry, run the workflow by hand with the tag: `gh workflow run publish.yml -f tag=vX.Y.Z`.
 If the version is already on npm, the workflow publishes nothing and only checks that the npm
 OIDC token exchange works.
+
+The `conquistador` CLI alias pins the same exact `@forsvn/conquistador` version. Its first
+publication uses the checked alias tarball from that release after the main package is live.
+Configure its npm trusted publisher as `forsvn-labs/conquistador`, workflow `publish.yml`,
+then set the GitHub repository variable `CLI_NPM_PUBLISH_ENABLED=true`. Later releases publish
+both checked tarballs, in order, with provenance. A manual workflow retry also verifies each
+package's OIDC trust when that version already exists. Never publish an alias against an
+unavailable main-package version.
 Historical `test:source`, candidate, live-evidence and inventory-maintenance pipelines retain their
 own private authority requirements and are not part of `npm test` or the public setup path.
 

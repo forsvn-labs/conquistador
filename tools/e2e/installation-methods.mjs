@@ -43,6 +43,14 @@ try {
   check('skills rejects a conflicting surface', () => {
     const result = cli(['skills', '--surface=cli', '--yes']); assert.equal(result.status, 2);
   });
+  check('fixed methods reject ignored selections and legacy type overrides', () => {
+    for (const args of [
+      ['skills', '--apps=zed'], ['plugins', '--apps', 'zed'],
+      ['mcp', 'install', '--providers=codex'], ['mcp', 'install', '--in', 'codex'],
+      ['mcp', 'install', '--no-hooks'], ['plugins', '--skills'], ['skills', '--plugin'],
+      ['plugins', '--package-manager=bun'], ['skills', '--executor-name=other'], ['mcp', 'install', '--bot-out=other'],
+    ]) assert.equal(cli([...args, '--json']).status, 2, args.join(' '));
+  });
   check('plugins rejects agents without a plugin contract', () => {
     const result = cli(['plugins', '--providers=hermes', '--dry-run']); assert.equal(result.status, 2);
   });

@@ -21,6 +21,12 @@ are options inside those paths. ROADMAP.md owns delivery state.
 - The four choices are hidden, cannot be selected with a keyboard, break direct links, or overflow a phone.
 - English, Vietnamese, Markdown, README, and CLI instructions disagree.
 - Plugin metadata claims universal compatibility without a documented client contract.
+- The plain plugin picker or its terminal select-all action includes a skill-only client.
+- A method accepts a client-selection flag it ignores, or lets a legacy flag change its fixed type.
+- GitHub refuses a code and leaves the upstream browser cookie active or hides the specific failure.
+- Release packaging omits the paired CLI tarball or records a stale version or checksum.
+- The OAuth runner leaves child processes or fixture connections open, hangs on HTTP, or
+  exits before it writes a failure report. CI must have a bounded run time.
 
 ## Repeatable evidence
 

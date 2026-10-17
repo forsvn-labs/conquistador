@@ -2,7 +2,7 @@
 // Real workerd + OAuth provider + KV + HTTP MCP. GitHub identity is an explicit local fixture.
 // Failure contract: docs/INSTALLATION-ACCEPTANCE.md. No live credentials are used or recorded.
 import assert from 'node:assert/strict';
-import { spawn } from 'node:child_process';
+import { spawn, spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { createServer } from 'node:http';
@@ -16,6 +16,8 @@ const out = resolve(option('--out') ?? join(root, 'dist/e2e/oauth'));
 const state = mkdtempSync(join(tmpdir(), 'cq-oauth-'));
 mkdirSync(out, { recursive: true });
 const steps = [];
+let rejectGithubCode = false;
+let caller = 1;
 let child, log = '';
 const pause = ms => new Promise(done => setTimeout(done, ms));
 const port = async () => {
@@ -29,12 +31,12 @@ const fixture = createServer(async (request, response) => {
     const target = new URL(url.searchParams.get('redirect_uri'));
     target.searchParams.set('code', 'fixture-code'); target.searchParams.set('state', url.searchParams.get('state'));
     response.writeHead(302, { location: target.href }); response.end();
-  } else if (url.pathname === '/login/oauth/access_token') json(response, { access_token: 'fixture-github-token' });
+  } else if (url.pathname === '/login/oauth/access_token') json(response, rejectGithubCode ? { error: 'bad_verification_code' } : { access_token: 'fixture-github-token' });
   else if (request.method === 'POST' && url.pathname === '/applications/fixture-client/token') json(response, { user: { id: 73, login: 'fixture-user' } });
   else if (request.method === 'DELETE') { response.writeHead(204); response.end(); }
   else { response.writeHead(404); response.end(); }
 });
-const check = async (name, run) => { await run(); steps.push({ name, passed: true }); console.log(`pass ${name}`); };
+const check = async (name, run) => { caller++; await run(); steps.push({ name, passed: true }); console.log(`pass ${name}`); };
 const cookieJar = new Map();
 function cookies(response) {
   for (const cookie of response.headers.getSetCookie()) {
@@ -48,16 +50,19 @@ try {
   const base = `http://127.0.0.1:${await port()}`;
   const vars = { OAUTH_ISSUER: base, GITHUB_CLIENT_ID: 'fixture-client', GITHUB_CLIENT_SECRET: 'fixture-secret', GITHUB_URL: gh, GITHUB_API_URL: gh, CONQUISTADOR_MCP_TOKEN: 'fixture-api-key', CONQUISTADOR_RECEIPT_KEY: 'fixture-receipt-key' };
   const args = ['dev', '--port', new URL(base).port, '--ip', '127.0.0.1', '--local-upstream', base.slice(7), '--persist-to', state, '--show-interactive-dev-session=false', ...Object.entries(vars).flatMap(([key, value]) => ['--var', `${key}:${value}`])];
-  child = spawn(process.env.WRANGLER_BIN ?? 'npx', process.env.WRANGLER_BIN ? args : ['--yes', 'wrangler@4.148.0', ...args], { cwd: root, env: { ...process.env, WRANGLER_SEND_METRICS: 'false', NO_COLOR: '1' }, stdio: ['ignore', 'pipe', 'pipe'] });
+  const command = process.env.WRANGLER_BIN ?? process.execPath;
+  const commandArgs = process.env.WRANGLER_BIN ? args : [join(root, 'node_modules/wrangler/bin/wrangler.js'), ...args];
+  child = spawn(command, commandArgs, { cwd: root, detached: process.platform !== 'win32', env: { ...process.env, WRANGLER_SEND_METRICS: 'false', NO_COLOR: '1' }, stdio: ['ignore', 'pipe', 'pipe'] });
   child.stdout.on('data', chunk => { log += chunk; }); child.stderr.on('data', chunk => { log += chunk; });
   let ready = false;
   for (let attempt = 0; attempt < 100; attempt++) {
     if (child.exitCode !== null) break;
-    try { if ((await fetch(`${base}/health`)).ok) { ready = true; break; } } catch { /* Starting. */ }
+    try { if ((await fetch(`${base}/health`, { signal: AbortSignal.timeout(1000) })).ok) { ready = true; break; } } catch { /* Starting. */ }
     await pause(400);
   }
   assert.ok(ready, 'Worker must start; see worker.log');
-  const req = (path, init = {}) => fetch(new URL(path, base), { redirect: 'manual', ...init, headers: { 'cf-connecting-ip': '192.0.2.1', ...init.headers } });
+  // Independent cases have independent callers. The rate-limit case supplies one fixed IP.
+  const req = (path, init = {}) => fetch(new URL(path, base), { redirect: 'manual', signal: AbortSignal.timeout(15_000), ...init, headers: { 'cf-connecting-ip': `192.0.2.${caller}`, ...init.headers } });
   const form = body => ({ method: 'POST', headers: { 'content-type': 'application/x-www-form-urlencoded' }, body: new URLSearchParams(body) });
   const mcp = (token, message = { method: 'initialize', params: { protocolVersion: '2025-06-18', capabilities: {}, clientInfo: { name: 'oauth-e2e', version: '1' } } }) => req('/mcp', { method: 'POST', headers: { 'content-type': 'application/json', ...(token ? { authorization: `Bearer ${token}` } : {}) }, body: JSON.stringify({ jsonrpc: '2.0', id: 1, ...message }) });
   await check('anonymous initialize advertises protected resource metadata', async () => {
@@ -98,6 +103,18 @@ try {
     return /name="handle" value="([^"]+)"/.exec(html)?.[1];
   }
   let handle = await begin(); assert.ok(handle);
+  await check('refused GitHub code clears upstream browser state and reports the specific failure', async () => {
+    const init = form({ handle, action: 'allow' }); init.headers.cookie = cookieHeader();
+    const upstream = await req('/authorize', init); cookies(upstream);
+    const github = await req(upstream.headers.get('location'));
+    rejectGithubCode = true;
+    let failed;
+    try { failed = await req(github.headers.get('location'), { headers: { cookie: cookieHeader() } }); }
+    finally { rejectGithubCode = false; }
+    assert.equal(failed.status, 502); assert.match(await failed.text(), /GitHub refused/);
+    assert.ok(failed.headers.getSetCookie().some(cookie => /Max-Age=0/i.test(cookie)));
+  });
+  handle = await begin();
   await check('forged consent without its browser cookie is refused', async () => { const response = await req('/authorize', form({ handle, action: 'allow' })); assert.ok(response.status >= 400); });
   handle = await begin();
   await check('deny returns the client state and creates no grant', async () => {
@@ -154,7 +171,11 @@ try {
 } catch (error) {
   steps.push({ name: 'E2E completion', passed: false, error: error.message }); console.error(error.stack);
 } finally {
-  child?.kill('SIGTERM'); await new Promise(done => fixture.close(done));
+  if (child?.pid) {
+    if (process.platform === 'win32') spawnSync('taskkill', ['/pid', String(child.pid), '/T', '/F'], { stdio: 'ignore', timeout: 5000 });
+    else { try { process.kill(-child.pid, 'SIGTERM'); } catch (error) { if (error.code !== 'ESRCH') steps.push({ name: 'Worker cleanup', passed: false, error: error.message }); } }
+  }
+  fixture.closeAllConnections(); await new Promise(done => fixture.close(done));
   writeFileSync(join(out, 'worker.log'), log.replace(/fixture-(?:secret|api-key|github-token|receipt-key)/g, '<fixture-secret>'));
   const source = ['worker.mjs', 'tools/hosted-oauth.mjs', 'tools/vendor/oauth-provider.mjs'].map(path => { try { return { path, sha256: createHash('sha256').update(readFileSync(join(root, path))).digest('hex') }; } catch { return { path, sha256: null }; } });
   const report = { mode: 'workerd, real OAuth provider and MCP; local GitHub identity fixture', source, passed: steps.filter(s => s.passed).length, steps };

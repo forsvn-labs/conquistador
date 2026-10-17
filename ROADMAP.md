@@ -2,7 +2,8 @@
 
 ## Current handoff
 
-2026-10-17 source work; not released or deployed. The live npm release remains 0.7.0 below.
+2026-10-17: Hung authorized shipment. Version 0.8.0 is being prepared; the last verified
+live npm release remains 0.7.0 below. No 0.8.0 publication or deployment is claimed yet.
 
 - Four public methods: Skills, CLI, MCP, Plugins. `skills` installs project skills; `install`
   opens the current installer; `plugins` restricts its picker to native plugin clients;
@@ -28,11 +29,19 @@
   live GitHub/Executor and Windows interactive acceptance retain their existing limits.
   Dated reports and Iris captures resolve through DRIVE.md.
 
-Before rollout: obtain merge approval, set matching new release versions (0.7.0 is immutable),
-publish the main package, configure and publish its exact-version short alias, deploy the MCP
+Rollout in progress: merge the approved 0.8.0 release source, publish the main package,
+configure and publish its exact-version short alias, deploy the MCP
 Worker, and verify real GitHub sign-in and Executor import. Then update the landing version,
 merge its [draft PR #29](https://github.com/forsvn-labs/conquistador-landing/pull/29), and deploy.
 No npm publication, Worker deployment, or live account change was performed in this work.
+
+Release preparation closes the PR review findings: both plugin pickers and select-all use
+the native catalog; fixed methods reject ignored/legacy selection flags; refused GitHub codes
+clear the upstream cookie and show the specific error. The regression cases reproduced each
+failure before the fixes. Current checks pass 13 CLI cases, 25 workerd OAuth cases, and the
+new real-terminal plugin boundary scenario. The full product run passes 940 checks. Packaging
+now includes the paired alias tarball and its checksum. Wrangler is pinned, OAuth HTTP calls
+are bounded, and runner cleanup terminates the whole test process group.
 
 ## Live release context
 

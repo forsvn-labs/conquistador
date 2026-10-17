@@ -4,18 +4,17 @@ Add Conquistador as a production dependency when your app already has an agent. 
 provides eight marketing tools and their playbooks. Your app supplies the model, each user's
 context, authentication, and decisions to send, publish, or spend.
 
-The public imports below require **0.7.0 or later**. They are part of the 0.7.0 release candidate
-until that version is published. Earlier versions provide the CLI and MCP server, with no
-public app import.
+The public imports below require **0.7.0 or later**. The commands below target 0.8.0.
+Versions before 0.7.0 provide the CLI and MCP server, with no public app import.
 
 ## Add the dependency
 
 Run in your app folder:
 
 ```sh
-npm i @forsvn/conquistador@^0.7.0
+npm i @forsvn/conquistador@^0.8.0
 # Or:
-bun add @forsvn/conquistador@^0.7.0
+bun add @forsvn/conquistador@^0.8.0
 ```
 
 Keep the package in `dependencies`, so a production install includes it. Commit the updated

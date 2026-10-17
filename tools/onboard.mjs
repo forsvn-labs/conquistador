@@ -552,9 +552,9 @@ export async function runInstaller(options, { cwd = process.cwd(), ui, width, in
   if (choices.surfaces.includes('agents')) {
     if (!options.yes && !options.providers && !options.wanted) {
       const ids = await ask(ui, 'multiselect', { message: `${detail()}Which agents?`, required: true, initialValues: choices.agents,
-        options: AGENTS.map(agent => { const found = ctx.agents.find(item => item.id === agent.id)?.found; return { value: agent.id, label: agent.label, hint: `${agent.how === 'skill' ? 'skill copy' : 'plugin'}${found ? '' : '; not found'}` }; }) });
+        options: ctx.agents.map(agent => ({ value: agent.id, label: agent.label, hint: `${agent.how === 'skill' ? 'skill copy' : 'plugin'}${agent.found ? '' : '; not found'}` })) });
       if (ui.isCancel(ids)) return cancelled();
-      choices.agents = AGENTS.filter(agent => ids.includes(agent.id)).map(agent => agent.id);
+      choices.agents = ctx.agents.filter(agent => ids.includes(agent.id)).map(agent => agent.id);
     }
     if (!options.yes && !options.scope) {
       const scope = await ask(ui, 'select', { message: `${detail()}All projects, or only this one?`, initialValue: choices.scope, options: [

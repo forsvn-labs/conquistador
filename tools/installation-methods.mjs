@@ -38,8 +38,10 @@ export async function runInstallationMethod(command, args) {
   try {
     if (command === 'skills' && rest.includes('--no-hooks')) throw Error('Skills have no hooks. Omit --no-hooks; it controls hooks in installed plugins.');
     if (command !== 'install') {
+      const allowed = new Set(['--yes', '--dry-run', '--json', '--plain', '--no-open', ...(command === 'mcp' ? ['--apps'] : ['--providers', '--in', ...(command === 'plugins' ? ['--hooks', '--no-hooks'] : [])])]);
       for (const arg of rest) {
         if (/^--(?:surface|scope)(?:=|$)/.test(arg)) throw Error(`${command} chooses its own installation type. Omit ${arg}. Use conquistador install for advanced choices.`);
+        if (arg.startsWith('--') && !allowed.has(arg.split('=')[0])) throw Error(`${command} cannot use ${arg.split('=')[0]}. Use conquistador install for advanced choices.`);
       }
     }
     if (command === 'plugins') {
