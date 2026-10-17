@@ -1,6 +1,6 @@
 {
   "schemaVersion": "conquistador.plugin-completeness/v1",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "files": [
     {
       "path": ".agents/plugins/marketplace.json",
@@ -8,15 +8,15 @@
     },
     {
       "path": ".claude-plugin/marketplace.json",
-      "sha256": "36a9c27582529aec6bed7a774a2d4bd56dcc8f47e587f85515b0ca0596804d6f"
+      "sha256": "b8a0c936ea2c8d199e1de97e4754237fe85f2a0b7cfb1a8b6385d6892c96be0a"
     },
     {
       "path": ".claude-plugin/plugin.json",
-      "sha256": "a8376d1609fd359e2499825562671231d539a66f493bfc6ed9fae58a71908554"
+      "sha256": "c1477792d751caf0cc4c7aaf0a845db0c9a3ad2d56d522a91be1f089b188027f"
     },
     {
       "path": ".codex-plugin/plugin.json",
-      "sha256": "3212512bfbae74b2ef8478e3f2f8c81f7537dccae0796401c5972ecffcba4896"
+      "sha256": "eaf3d3e61ad70d883cb112ef9821e8e5ece3df10e45483827375426ad0083957"
     },
     {
       "path": ".cursor-plugin/marketplace.json",
@@ -24,7 +24,7 @@
     },
     {
       "path": ".cursor-plugin/plugin.json",
-      "sha256": "7b004a6b6ffde1f241c63c8647b17374b68dc56f4d8b1899e90b722b74225ceb"
+      "sha256": "7ead4eafe1008a410a2b30d8665214cb4fa33414c18fff2b9a45f4de86449cc1"
     },
     {
       "path": "agents/conquistador.md",
@@ -80,19 +80,19 @@
     },
     {
       "path": "NOTICE.md",
-      "sha256": "1975b640f5451e286f09a4a65c0ce0f4ec58007b2bef686283ac116c2300006c"
+      "sha256": "8c7234e1ca1caf825fb4d6d071ae2d2d379bd0a087c87f3e2b8785172ac8a76d"
     },
     {
       "path": "package.json",
-      "sha256": "bba38587c9ed8c07ec6eec5210cbcaa139840b026e25161f3167b2ad183b115a"
+      "sha256": "9855f426ecf597b21096bb5cfcc3cdce358f59d6b1699e87aecc0c7568a789ae"
     },
     {
       "path": "plugin.json",
-      "sha256": "8968038b10009a2e78329a387aa0c9c377b1d329956caaad81d2d86c06d3538a"
+      "sha256": "4bf52967ebc95f5c2b71e17fc7aa1112ee96c2511260a6c16bb8a8c2f7ac153e"
     },
     {
       "path": "README.md",
-      "sha256": "98caf8799255fad8ed50fdb5765ee82552796369178a243651ad0bbc04e0ccf5"
+      "sha256": "d78bbbbaf89123d2899058846c500021f0e4ed0b05386da3fe9e77de8583cf9a"
     },
     {
       "path": "SKILL.md",

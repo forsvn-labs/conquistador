@@ -15,6 +15,10 @@ const responderFor = receiptKey => {
 
 export default {
   async fetch(request, env, ctx) {
+    if (env.OAUTH_KV) {
+      const oauth = await (await import('./tools/hosted-oauth.mjs')).handleOAuth(request, env, ctx);
+      if (oauth) return oauth;
+    }
     const page = await handleAuthRoute(request, env, ctx);
     if (page) return page;
     const url = new URL(request.url);

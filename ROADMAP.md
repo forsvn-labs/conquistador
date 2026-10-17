@@ -2,6 +2,61 @@
 
 ## Current handoff
 
+2026-10-17: Hung authorized shipment. Version 0.8.0 is being prepared; the last verified
+live npm release remains 0.7.0 below. No 0.8.0 publication or deployment is claimed yet.
+
+- Four public methods: Skills, CLI, MCP, Plugins. `skills` installs project skills; `install`
+  opens the current installer; `plugins` restricts its picker to native plugin clients;
+  `mcp` serves stdio and `mcp install` configures chosen desktop clients. Explicit old operator
+  routes remain; use `operator install` and `skills --list` for that workflow.
+- `packages/conquistador` prepares the short npm name and pins the exact main-package version.
+  No short-name package is published. Keep scoped commands until publication is verified.
+- Hosted OAuth uses Cloudflare's provider 1.2.3 with browser-bound consent, GitHub identity,
+  S256 PKCE, DCR/CIMD discovery, resource-bound tokens, refresh and revocation. API keys retain
+  their own lifecycle. Both KV bindings use the existing approved namespace. The GitHub app
+  callback stays `/signup/callback`. CIMD requires `global_fetch_strictly_public`.
+- The sibling landing repository owns the bilingual four-choice page and browser evidence.
+  Its deployment must follow the matching package and Worker deployment. No live OAuth or
+  Executor acceptance is claimed from local fixtures.
+- Repeatable checks and sources: [installation acceptance](docs/INSTALLATION-ACCEPTANCE.md).
+  [Core PR #80](https://github.com/forsvn-labs/conquistador/pull/80) contains this source.
+  The full product run passes 940 checks (416 tools, 294 runtime, 167 catalog, 63 evals).
+  Later boundary/auth changes pass 12 isolated CLI cases, 24 workerd OAuth cases, and focused
+  bootstrap/Worker regressions. Six real npm/Skills installs and all 19 docs checks pass.
+  The 65-case terminal run passed 63; its doctor wait and compact prompt were corrected,
+  and both failed scenarios pass on recheck. Builds, plugin contracts and Worker dry run pass.
+  The OAuth identity provider in workerd is a labeled local fixture. Native client activation,
+  live GitHub/Executor and Windows interactive acceptance retain their existing limits.
+  Dated reports and Iris captures resolve through DRIVE.md.
+
+Rollout in progress: merge the approved 0.8.0 release source, publish the main package,
+configure and publish its exact-version short alias, deploy the MCP
+Worker, and verify real GitHub sign-in and Executor import. Then update the landing version,
+merge its [draft PR #29](https://github.com/forsvn-labs/conquistador-landing/pull/29), and deploy.
+No npm publication, Worker deployment, or live account change was performed in this work.
+
+Release preparation closes the PR review findings: both plugin pickers and select-all use
+the native catalog; fixed methods reject ignored/legacy selection flags; refused GitHub codes
+clear the upstream cookie and show the specific error. The regression cases reproduced each
+failure before the fixes. Current checks pass 13 CLI cases, 25 workerd OAuth cases, and the
+new real-terminal plugin boundary scenario. The full product run passes 940 checks. Packaging
+now includes the paired alias tarball and its checksum. Wrangler is pinned, OAuth HTTP calls
+are bounded, and runner cleanup terminates the whole test process group.
+
+Live acceptance found and reproduced a browser CSP failure on the OAuth consent redirect.
+The browser handoff starts a new document before following the provider-validated redirect.
+The consent form keeps `form-action self`; client callbacks can then reach their own frontend.
+The workerd runner includes real Chromium Allow/Cancel flows without JavaScript, across
+separate callback/frontend origins, and passes all 27 cases.
+All 13 CI checks at `633e367` passed before this focused browser correction. The initial Worker
+source is deployed at version `a0fa5787-c040-4ec6-a3c8-da0d3f7270c7`; discovery and the existing
+API key work. Executor v2 imports the app at the hosted organization URL. GitHub app configuration now uses the exact HTTPS `/signup/callback` URI, replacing the
+old HTTP `/signup` value. Real GitHub sign-in completed in hosted Executor v2. The account
+shows Working, all eight tools are listed, and `conquistador_methods` returned the live library.
+The installation page remains undeployed.
+
+## Live release context
+
 Last verified: 2026-10-14. Release 0.7.0 is available as `latest` on
 [npm](https://www.npmjs.com/package/@forsvn/conquistador/v/0.7.0) and
 [GitHub](https://github.com/forsvn-labs/conquistador/releases/tag/v0.7.0).
@@ -30,7 +85,7 @@ production HTTP passes 63. The landing repository owns deployment identity and b
 Use `npx @forsvn/conquistador@latest` when an older global install exists. An unversioned `npx`
 can reuse that install; explicit `@latest` opens 0.7.0 in the live acceptance run.
 
-Next: migrate the Executor source and capability adapters to v2, then run the live cases below.
+After the installation rollout above, migrate the Executor source and capability adapters to v2, then run the live cases below.
 The current TUI gives a manual setup handoff. See
 [the control-center review](docs/REVIEW-2026-10-CONTROL-CENTER.md) for the accepted source work.
 

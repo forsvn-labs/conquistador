@@ -1,6 +1,6 @@
 {
   "name": "@forsvn/conquistador",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "A free, open source marketing toolstack for coding and deployed agents. Skills, playbooks, draft checks, app tools, and MCP.",
   "license": "MIT",
   "homepage": "https://conquistador.app",
@@ -22,8 +22,14 @@
     "conquistador": "runtime/bin/conquistador.js"
   },
   "exports": {
-    ".": { "types": "./api/index.d.mts", "default": "./api/index.mjs" },
-    "./mcp": { "types": "./api/mcp.d.mts", "default": "./api/mcp.mjs" },
+    ".": {
+      "types": "./api/index.d.mts",
+      "default": "./api/index.mjs"
+    },
+    "./mcp": {
+      "types": "./api/mcp.d.mts",
+      "default": "./api/mcp.mjs"
+    },
     "./package.json": "./package.json"
   },
   "types": "./api/index.d.mts",
@@ -97,8 +103,11 @@
     "integrations:updates": "node tools/integration-releases.mjs check-updates"
   },
   "devDependencies": {
+    "@cloudflare/workers-oauth-provider": "1.2.3",
     "@oxlint/plugins": "1.82.0",
-    "oxlint": "1.82.0"
+    "oxlint": "1.82.0",
+    "playwright": "1.64.0",
+    "wrangler": "4.148.0"
   },
   "keywords": [
     "marketing",

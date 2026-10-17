@@ -29,41 +29,43 @@ Use `-g` with npm. Without it, npm installs into the current project.
 To run the installer once without a permanent CLI install:
 
 ```sh
-npx @forsvn/conquistador@latest
-bunx @forsvn/conquistador@latest
-pnpm dlx @forsvn/conquistador@latest
+npx conquistador@latest
+bunx conquistador@latest
+pnpm dlx conquistador@latest
 ```
 
 These commands open the TUI directly. Choose **Keep the CLI installed** there to keep the command
 with npm or Bun. You can also run `conquistador install-cli --package-manager=bun`.
 Package installation runs no interactive lifecycle script, so CI and dependency installs finish normally.
 
-### Choose another setup path
+### Choose an installation method
 
-The homepage keeps one install command. Open [Other setup methods](https://conquistador.app/install) to select several
-agents or MCP clients and copy the command for your setup. The TUI shows every change for review.
+[Choose Skills, CLI, MCP, or Plugins](https://conquistador.app/install). Each path uses the same
+playbooks. Client names and package managers are options inside those four paths.
 
-| Setup | Use it for | Guide |
+| Method | Start here | What it adds |
 |---|---|---|
-| Coding-agent installer | All 16 agents, with npm, Bun, npx, bunx, or pnpm dlx | [Coding agents](https://conquistador.app/docs/install/coding-agents) |
-| Native plugin | Install inside Claude Code; use the global installer for Codex, Cursor, Copilot CLI, and Grok CLI | [Plugin setup](INSTALL.md#install-from-inside-claude-code) |
-| Project skill | One skill folder per selected agent, without hooks or MCP | [Project scope](INSTALL.md#options) |
-| App dependency | Call the tools in your app's agent and deploy MCP beside the app | [App integration](docs/APP-INTEGRATION.md) |
-| Local MCP | Claude Desktop, VS Code, Windsurf, Zed, and Cursor | [MCP clients](https://conquistador.app/docs/install/mcp-apps) |
-| Hosted MCP | Remote clients that support a personal bearer-token header | [Hosted server](https://conquistador.app/docs/install/hosted-mcp) |
-| Chat bot files | ChatGPT GPTs, Claude Projects, Grok projects, and Gemini Gems | [Bot export](https://conquistador.app/docs/install/chat-bots) |
-| GitHub | A pinned Git install or prepared skill/plugin ZIPs | [Release assets](https://github.com/forsvn-labs/conquistador/releases) |
-| Executor | The manual Executor 2 handoff | [Executor setup](https://conquistador.app/docs/install/executor) |
+| Skills | `npx skills add https://github.com/forsvn-labs/conquistador/tree/main/skills/conquistador --skill conquistador` | One skill folder. No hooks or MCP server |
+| CLI | `npx conquistador@latest install` | Reviewed coding-agent setup. Apps use the dependency below |
+| MCP | `npx conquistador@latest mcp` | Local stdio server. [Hosted MCP](https://conquistador.app/docs/install/hosted-mcp) accepts OAuth or API keys when the matching Worker is deployed |
+| Plugins | `npx conquistador@latest plugins` | Native installation for Claude Code, Codex, Grok, Cursor, and Copilot CLI |
 
-Hosted MCP uses bearer tokens. OAuth-only browser connectors are not supported yet.
+`conquistador skills` installs a project skill with the same review and ownership checks.
+`conquistador mcp install` configures chosen desktop clients. Compatible plugin clients can load
+[the prepared plugin bundle](https://github.com/forsvn-labs/conquistador/releases) with their own
+installer. Features depend on the client; a shared format does not establish universal support.
+
+From 0.8.0, the short-name `conquistador` CLI package pins the exact matching
+`@forsvn/conquistador` release. App imports use the scoped package. Delivery and Worker
+rollout are tracked in [ROADMAP.md](https://github.com/forsvn-labs/conquistador/blob/main/ROADMAP.md).
 
 ### Use inside your app
 
 From 0.7.0, install the server dependency in your app folder:
 
 ```sh
-npm i @forsvn/conquistador@^0.7.0
-# Or: bun add @forsvn/conquistador@^0.7.0
+npm i @forsvn/conquistador@^0.8.0
+# Or: bun add @forsvn/conquistador@^0.8.0
 ```
 
 ```js
@@ -104,10 +106,10 @@ stay inside the TUI. Use `--plain` or `TERM=dumb` for line prompts. `conquistado
 installer again. Skip the questions in scripts:
 
 ```sh
-npx @forsvn/conquistador@latest --providers=claude,codex --scope=project -y
-npx @forsvn/conquistador@latest --surface=agents,mcp-apps -y
-npx @forsvn/conquistador@latest --dry-run          # Show the plan; change nothing
-npx @forsvn/conquistador@latest --json             # The plan as JSON
+npx conquistador@latest --providers=claude,codex --scope=project -y
+npx conquistador@latest --surface=agents,mcp-apps -y
+npx conquistador@latest --dry-run          # Show the plan; change nothing
+npx conquistador@latest --json             # The plan as JSON
 ```
 
 Without a terminal and without `-y`, the installer prints the plan and exits with code 2.

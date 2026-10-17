@@ -10,11 +10,25 @@ This file is the full install reference that ships in the npm package.
 
 ## Before you start
 
-The homepage keeps one command. [Other setup methods](https://conquistador.app/install) lists
-coding agents, native plugins, project skills, app dependencies, local MCP, hosted MCP, chat bot files, and GitHub downloads.
-Both agent and MCP client selections support multiple choices. Generated commands open the
-existing TUI for review. Executor 2 has a manual handoff; hosted MCP uses bearer-token headers.
-OAuth-only browser connectors are not supported yet.
+Choose one of four methods at [the installation page](https://conquistador.app/install).
+Client and transport variants stay inside these methods:
+
+| Method | Command or connection | Use it for |
+|---|---|---|
+| Skills | `npx skills add https://github.com/forsvn-labs/conquistador/tree/main/skills/conquistador --skill conquistador` | A single Agent Skills folder; add `--global` for all projects |
+| CLI | `npx conquistador@latest install` | The reviewed coding-agent installer; apps can use [direct imports](docs/APP-INTEGRATION.md) |
+| MCP | `npx conquistador@latest mcp` or `https://mcp.forsvn.com/mcp` | Local stdio or remote Streamable HTTP with OAuth/API keys |
+| Plugins | `npx conquistador@latest plugins` | Native plugin clients or the prepared portable plugin bundle |
+
+`conquistador skills` installs project skills only. `conquistador skills --list` retains the old
+project-operator browser. `conquistador install --project PATH` retains the old operator route;
+prefer `conquistador operator install --project PATH` for that workflow.
+`conquistador mcp install --apps=zed,vscode` previews desktop client setup. A bridge such as
+mcporter is optional; the server already speaks MCP over stdio.
+
+The short `npx conquistador@latest ...` CLI alias pins the matching main package from 0.8.0.
+The scoped `npx @forsvn/conquistador@latest ...` name remains available. Hosted OAuth needs
+the matching Worker deployment; [ROADMAP.md](https://github.com/forsvn-labs/conquistador/blob/main/ROADMAP.md) records rollout state.
 
 - Node 22.18 or later: `node --version`
 - A coding agent from the table below, logged in through its own instructions
@@ -40,9 +54,9 @@ Use `-g` with npm. Without it, npm installs into the current project.
 To run the installer once without a permanent CLI install:
 
 ```sh
-npx @forsvn/conquistador@latest
-bunx @forsvn/conquistador@latest
-pnpm dlx @forsvn/conquistador@latest
+npx conquistador@latest
+bunx conquistador@latest
+pnpm dlx conquistador@latest
 ```
 
 These commands open the TUI directly. Choose **Keep the CLI installed** there to keep the command
@@ -139,11 +153,11 @@ with code 2. With `--yes`, it installs, runs the verify pass, prints the summary
 code 1 when a step or a check failed.
 
 ```sh
-npx @forsvn/conquistador@latest --providers=claude,codex --scope=project -y
-npx @forsvn/conquistador@latest --surface=agents,mcp-apps --apps=claude-desktop -y
-npx @forsvn/conquistador@latest --providers=pi,hermes --scope=global --dry-run
-npx @forsvn/conquistador@latest --surface=agents,executor --json
-npx @forsvn/conquistador@latest --surface=agents,cli --package-manager=bun --yes
+npx conquistador@latest --providers=claude,codex --scope=project -y
+npx conquistador@latest --surface=agents,mcp-apps --apps=claude-desktop -y
+npx conquistador@latest --providers=pi,hermes --scope=global --dry-run
+npx conquistador@latest --surface=agents,executor --json
+npx conquistador@latest --surface=agents,cli --package-manager=bun --yes
 conquistador install-cli --package-manager=npm
 conquistador add --surface=mcp-apps --apps=claude-desktop,vscode
 conquistador add codex --scope=project --yes
@@ -215,7 +229,7 @@ Notes:
 
 ```sh
 npm install -g @forsvn/conquistador@0.6.1
-npm install -g --ignore-scripts --install-links git+https://github.com/forsvn-labs/conquistador.git#v0.7.0
+npm install -g --ignore-scripts --install-links git+https://github.com/forsvn-labs/conquistador.git#v0.8.0
 ```
 
 `--ignore-scripts` skips npm lifecycle scripts. `--install-links` copies the checkout out of npm's
@@ -235,7 +249,7 @@ conquistador remove --scope=project
 npm uninstall -g @forsvn/conquistador
 ```
 
-Without a global CLI, put `npx @forsvn/conquistador@latest` in front of each command.
+Without a global CLI, put `npx conquistador@latest` in front of each command.
 
 `remove` keeps your playbooks, `~/.conquistador/config.json`, bot exports, project deliverables,
 `PRODUCT.md`, and `GROWTH.md`. It deletes only folders that hold `.conquistador-owned.json`.
@@ -296,8 +310,29 @@ VS Code uses a `servers` key in `.vscode/mcp.json` with `"type": "stdio"`.
 
 ## Hosted server
 
+### OAuth sign-in
+
+Add `https://mcp.forsvn.com/mcp` in your client. In Executor 2, use **Connect a service** and
+choose OAuth. The server advertises protected-resource metadata in its 401 challenge. The
+client discovers registration and sign-in, requests `mcp:read` with S256 PKCE, then opens a
+consent page and GitHub sign-in. No pasted API key is needed.
+
+OAuth uses the maintained Cloudflare provider pinned to 1.2.3. Access tokens last one hour;
+refresh credentials last 30 days. Revoke the connection from the client. Each connection is
+separate from your personal API key: OAuth sign-in does not rotate that key. GitHub confirms
+identity only; its temporary token is revoked and is never passed to the MCP client.
+
+OAuth requires the deployed Worker, both KV bindings and the existing GitHub secrets. Client metadata discovery uses
+`global_fetch_strictly_public` to reject private-network destinations. OAuth grant revocation
+uses KV and can take up to 60 seconds across locations. The
+same GitHub app callback `/signup/callback` serves both flows. When OAuth configuration is
+incomplete, discovery fails closed and existing API keys keep their behavior. Check
+[ROADMAP.md](https://github.com/forsvn-labs/conquistador/blob/main/ROADMAP.md) before treating source support as live Executor acceptance.
+
+### API key
+
 The hosted server at `https://mcp.forsvn.com/mcp` serves the bundled playbooks, the brief, and the
-check over Streamable HTTP. Each request needs a personal token. Sign in with GitHub to get one. You
+check over Streamable HTTP. Choose OAuth in your client, or send a personal API key. You
 do not need anyone's approval.
 
 In a browser, open <https://mcp.forsvn.com/signup> and sign in with GitHub. The next page shows your
@@ -343,7 +378,8 @@ To delete your record, run `conquistador logout`, or send:
 curl -X POST https://mcp.forsvn.com/api/logout -H "Authorization: Bearer YOUR_TOKEN"
 ```
 
-Both revoke the token and delete your record at once. If you lost the token, sign in again, then
+Both revoke the personal API key and delete its user record. OAuth grants are separate; revoke
+the connection in your MCP client. If you lost the token, sign in again, then
 log out. To remove the app from your GitHub account too, open GitHub, Settings, Applications,
 Authorized OAuth Apps.
 
@@ -372,7 +408,8 @@ npx wrangler@4.148.0 kv namespace create conquistador-tokens
 ```
 
 Copy the `id` that the last command prints into `wrangler.toml`, under `[[kv_namespaces]]` with
-`binding = "TOKENS"`. Then deploy:
+`binding = "TOKENS"` and `binding = "OAUTH_KV"`. Both use the same namespace with separate
+key prefixes. Keep `global_fetch_strictly_public` enabled for public client metadata. Then deploy:
 
 ```sh
 npx wrangler@4.148.0 deploy
@@ -486,8 +523,8 @@ and the Docker images stay in the [repository](https://github.com/forsvn-labs/co
 |---|---|
 | No agent is found | Install a supported agent, or name one: `--providers=claude`. You can still install MCP clients, Executor, or chat bots |
 | `The conquistador command on your PATH is version …` | An older copy runs instead of the one you installed. Run `npm i -g @forsvn/conquistador@latest`, or remove the old copy with the command the warning prints |
-| `npx` opens an older version | An unversioned `npx` can reuse a global install. Run `npx @forsvn/conquistador@latest` to fetch the current release |
-| `npm i @forsvn/conquistador` (without `-g`) gives no `conquistador` command | That puts the package in `./node_modules`. Use `npm i -g @forsvn/conquistador`, or run `npx @forsvn/conquistador@latest` |
+| `npx` opens an older version | An unversioned `npx` can reuse a global install. Run `npx conquistador@latest` to fetch the current release |
+| `npm i @forsvn/conquistador` (without `-g`) gives no `conquistador` command | That puts the package in `./node_modules`. Use `npm i -g @forsvn/conquistador`, or run `npx conquistador@latest` |
 | An MCP client config `is not plain JSON` | The installer left it unchanged. Add the entry it printed by hand, or remove the comments and run `conquistador add` |
 | Executor `cannot add a source from the command line` | Update Executor (`npm i -g executor`), or add the source by hand with the printed steps |
 | `Not found on PATH` for a global install | Install that agent's CLI, or use `--scope=project` |

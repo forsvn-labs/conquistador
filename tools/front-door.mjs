@@ -15,18 +15,17 @@ const dim = text => (process.stdout.isTTY ? `\x1b[2m${text}\x1b[22m` : text);
 // The terminal installs Conquistador; the work happens inside the agent. Commands an agent runs
 // print context and change nothing.
 export const HELP = `Conquistador ${version}
-Growth and marketing playbooks. Install here; work in your coding agent.
-  conquistador                Install into your agents, or manage the installs
-  conquistador add            Add agents, MCP clients, Executor, or chat bots
-  conquistador install-cli    Keep the CLI command with npm or Bun
-  conquistador app            Use the tools as an app dependency
-  conquistador update         Update the CLI and every install
-  conquistador doctor         Find and repair install and project drift
-  conquistador remove         Remove Conquistador from your agents
+Growth and marketing playbooks. Install here; work in your agent.
+  conquistador skills         Install the project skill only
+  conquistador install        Install for coding agents; app imports: conquistador app
+  conquistador mcp            Serve stdio tools; mcp install connects desktop clients
+  conquistador plugins        Install native plugins for supported clients
+  conquistador                Open the installer or manage installed items
+  conquistador update | doctor | remove
 
 In your agent
-  /conquistador init          Record PRODUCT.md and GROWTH.md for this project
-  /conquistador               Show the menu, or ask for an outcome
+  /conquistador init          Record PRODUCT.md and GROWTH.md
+  /conquistador               Show the menu or ask for an outcome
 
 Context for your agent (prints; changes nothing)
   conquistador "TASK"         The playbooks this task needs
@@ -38,6 +37,11 @@ All commands: conquistador help --all`;
 export const HELP_ALL = `Conquistador ${version}: all commands
 
 Install
+  conquistador skills               Project skill only; external Skills CLI supports global skills
+  conquistador install              Current installer for coding agents
+  conquistador plugins              Native plugin clients only
+  conquistador mcp install          Desktop MCP client setup; bare mcp serves stdio
+  conquistador skills --list        Older project-operator capability browser
   conquistador                      First run: the installer (agents, options, review, install, verify)
                                     Later runs: the installs, with add, update, repair, and remove
   conquistador add                  Open the installer again

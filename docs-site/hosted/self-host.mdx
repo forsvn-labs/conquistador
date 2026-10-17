@@ -23,17 +23,31 @@ and its public Node or Fetch handler. It uses only packaged playbooks and caller
 
 ## Deploy to Cloudflare Workers
 
-From the repository root, sign in once, set the secrets, and deploy:
+From the repository root, sign in and create a KV namespace:
 
 ```sh
 npx wrangler@4.148.0 login
+npx wrangler@4.148.0 kv namespace create conquistador-tokens
+```
+
+Set the returned namespace ID on both `TOKENS` and `OAUTH_KV` in `wrangler.toml`. Replace the
+route and `OAUTH_ISSUER` with your HTTPS hostname. Keep `global_fetch_strictly_public` enabled
+so client metadata cannot fetch private-network addresses. Then set the access secrets:
+
+```sh
 openssl rand -hex 32 | npx wrangler@4.148.0 secret put CONQUISTADOR_MCP_TOKEN
 openssl rand -hex 32 | npx wrangler@4.148.0 secret put CONQUISTADOR_RECEIPT_KEY
 npx wrangler@4.148.0 deploy
 ```
 
 - `wrangler.toml` uploads `worker.mjs`, the server modules, `package.json`, and `skills/` without bundling. The server reads the library from the Worker bundle with `node:fs`. It never uploads your own playbooks.
-- The Worker refuses every MCP request with 503 until the token is set.
+- API-key requests fail closed until an admin token or the token store is configured.
+- To enable OAuth and self-serve API keys, configure a GitHub OAuth App with callback
+  `https://YOUR_HOST/signup/callback`. Enable Device Flow and set `GITHUB_CLIENT_ID` and
+  `GITHUB_CLIENT_SECRET` with `wrangler secret put`. OAuth requires both KV bindings and the
+  existing signup/MCP rate limiters. It stays unavailable when these are incomplete.
+- OAuth uses the canonical `OAUTH_ISSUER` hostname. Alternate Worker hostnames remain useful
+  for API-key requests; do not use them as OAuth resource aliases.
 - Run it locally with `npx wrangler@4.148.0 dev --var CONQUISTADOR_MCP_TOKEN:local-test`.
 - `wrangler.toml` serves the Worker at `mcp.forsvn.com`. Replace the route with your own hostname.
 - On `mcp.forsvn.com`, a zone configuration rule turns off the Cloudflare browser integrity check, so any HTTP client works. The `workers.dev` address stays on, but Cloudflare refuses the default `Python-urllib` User-Agent there with error 1010.

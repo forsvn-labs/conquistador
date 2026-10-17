@@ -232,7 +232,7 @@ Usage:
   conquistador operator --help         Manage and verify a project operator
   conquistador setup doctor --path ABS [--json]  Check installed files; no host activation proof
   conquistador start                   Show the installed skill and first task
-  conquistador skills                  Browse installed capabilities
+  conquistador skills --list           Browse an older project operator
   conquistador setup                   Recommended complete installation; setup list shows routes
   conquistador connections --help      Inspect Executor, help install it, connect accounts
   conquistador jobs --help             Prepare a host for explicit durable jobs

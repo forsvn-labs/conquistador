@@ -289,7 +289,7 @@ function App({ options: initialOptions, cwd, first, update, warnings, onExit, mo
     let live = true;
     (async () => {
       await sleep(20);
-      const found = await detect({ cwd });
+      const found = await detect({ cwd, method: options.method });
       if (!live) return;
       const base = defaultChoices(options, found);
       const fromFlags = options.surfacesFrom === 'flag' || options.surfacesFrom === 'implied';
@@ -498,12 +498,12 @@ function App({ options: initialOptions, cwd, first, update, warnings, onExit, mo
       else if (input === ' ') {
         const id = visible[cursor]?.id;
         if (!id) return;
-        setChoices(value => ({ ...value, agents: AGENTS.map(agent => agent.id).filter(item => (item === id ? !value.agents.includes(id) : value.agents.includes(item))) }));
+        setChoices(value => ({ ...value, agents: order.map(agent => agent.id).filter(item => (item === id ? !value.agents.includes(id) : value.agents.includes(item))) }));
       } else if (input === 'a') {
         const found = order.filter(agent => agent.found).map(agent => agent.id);
-        setChoices(value => ({ ...value, agents: found.every(id => value.agents.includes(id)) ? value.agents.filter(id => !found.includes(id)) : AGENTS.map(agent => agent.id).filter(id => found.includes(id) || value.agents.includes(id)) }));
+        setChoices(value => ({ ...value, agents: found.every(id => value.agents.includes(id)) ? value.agents.filter(id => !found.includes(id)) : order.map(agent => agent.id).filter(id => found.includes(id) || value.agents.includes(id)) }));
       } else if (input === 'A') {
-        setChoices(value => ({ ...value, agents: AGENTS.map(agent => agent.id) }));
+        setChoices(value => ({ ...value, agents: order.map(agent => agent.id) }));
       } else if (input === 'n') {
         setChoices(value => ({ ...value, agents: [] }));
       } else if (key.return) go(shown.options ? 'options' : 'review');
@@ -659,7 +659,7 @@ function App({ options: initialOptions, cwd, first, update, warnings, onExit, mo
 
     const bodyHeight = Math.min(capacity, Math.max(10, list.shown.length + Number(Boolean(list.above)) + Number(Boolean(list.below))));
     return frame(h(Card, { c, width, title: 'Which agents?', subtitle },
-      h(Text, null, h(Text, { color: c.sky }, `${AGENTS.length} supported agents`), h(Text, { dimColor: true }, ` · ${ctx.found.length} found · `), h(Text, { bold: true, color: c.ok }, `${choices.agents.length} selected`)),
+      h(Text, null, h(Text, { color: c.sky }, `${order.length} supported agents`), h(Text, { dimColor: true }, ` · ${ctx.found.length} found · `), h(Text, { bold: true, color: c.ok }, `${choices.agents.length} selected`)),
       query || searching ? h(Text, { color: c.brand }, `Search: ${query}${searching ? '▎' : ''}`) : null,
       ...notes.map((text, index) => h(Text, { key: `w${index}`, color: c.sticky }, text)),
       wide ? h(Columns, { c, mainWidth, sideWidth, height: bodyHeight, main: listRows,
@@ -784,6 +784,10 @@ export async function runTui(options, { cwd = process.cwd(), screen = 'install' 
   // Done: the summary stays on the normal screen.
   console.log(`${p.bold('Summary')}\n${summaryLines({ results: result.results, checks: result.checks, plan: result.plan, notice: result.notice, p }).join('\n')}`);
   const lead = result.ready.find(agent => agent.slash) ?? result.ready[0];
-  if (lead) console.log(`\n→ Open ${lead.label} in this project and type:\n  ${p.brand(nextStep(lead, cwd, options.task))}`);
+  if (lead) {
+    const width = Math.max(40, process.stdout.columns || 80) - 2;
+    const prompt = wrapText(nextStep(lead, cwd, options.task), width).split('\n').map(line => `  ${p.brand(line)}`).join('\n');
+    console.log(`\n→ Open ${lead.label} in this project and type:\n${prompt}`);
+  }
   return result.code;
 }

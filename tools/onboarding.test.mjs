@@ -106,7 +106,8 @@ test('mixed shortcut and command flags fail with exit 2 before writes', t => {
 
 test('bare mcp remains the protocol server and does not open setup', t => {
   const result = spawnSync(process.execPath, [cli, 'mcp', '--help'], { encoding: 'utf8' });
-  assert.notEqual(result.status, 0);
+  assert.equal(result.status, 0);
+  assert.match(result.stdout, /stdio/);
   assert.doesNotMatch(result.stdout + result.stderr, /Set up Conquistador/);
 });
 
@@ -452,7 +453,7 @@ test('skills manager failure preserves staging and retry succeeds without switch
 
 test('skills wrapper refuses existing native copies, links, and overlapping staging paths', async t => {
   const project = fixture(t);
-  assert.equal(invoke(project, ['install']).status, 0);
+  assert.equal(invoke(project, ['operator', 'install']).status, 0);
   const before = treeDigest(join(project, '.agents/skills/conquistador'));
   let spawned = false;
   assert.equal(await runOnboarding(['--skills', '--host', 'codex', '--yes'], { cwd: project, tty: false, spawn: () => { spawned = true; } }), 1);

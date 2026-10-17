@@ -247,6 +247,26 @@ async function finish(s, { snap = true } = {}) {
   await s.waitFor('Summary'); if (snap) await s.snap('summary');
 }
 
+// I1: fixed Plugins method filters both plain choices and the terminal's select-all action.
+scenario('plugin-method-boundary', ['I1'], async ({ expect }) => {
+  const f = fixture('plugin-method-boundary', { agents: ['claude', 'codex'] });
+  let s;
+  try {
+    s = f.term(['plugins'], { rows: 50 });
+    await s.waitFor(TITLE.agents); await s.snap('native-choices');
+    expect(!has(s.screen.text(), 'Hermes') && !has(s.screen.text(), 'Gemini'), 'skill-only agent is visible in Plugins');
+    await s.press('A'); await s.press('enter'); await s.waitFor(TITLE.review); await s.snap('native-review');
+    const text = s.screen.text();
+    for (const label of ['Claude Code', 'Codex', 'Cursor', 'Copilot', 'Grok']) expect(has(text, label), `native select-all omits ${label}`);
+    for (const label of ['Hermes', 'Gemini', 'OpenCode']) expect(!has(text, label), `native select-all includes ${label}`);
+    await s.press('q'); expect(await s.exit() === 130, 'plugin review did not cancel');
+    s = f.term(['plugins', '--plain'], { rows: 50 });
+    await s.waitFor('Which agents?'); await s.snap('plain-native-choices');
+    expect(has(s.screen.text(), 'Grok') && !has(s.screen.text(), 'Hermes') && !has(s.screen.text(), 'Gemini'), 'plain picker is not limited to native plugins');
+    return s.snaps;
+  } finally { if (s) { s.kill(); await s.exit({ timeout: 1000 }); } f.cleanup(); }
+});
+
 // --- T1, T2, T13, F21, F24, F26, F27, F29: the happy path ------------------------------------------
 scenario('happy', ['T1', 'T2', 'T13', 'F21', 'F24', 'F26', 'F27', 'F29'], async ({ expect, keepSnaps }) => {
   const f = fixture('happy', { agents: ['claude', 'codex'], executor: 'running',
@@ -544,7 +564,7 @@ scenario('in-app-management', ['C2', 'C3'], async ({ expect, transcript }) => {
     await moveTo(s, 'Hooks'); await s.press('enter'); await s.waitFor('Hooks are on'); await s.press('space'); await s.waitFor('Hooks are off'); await s.snap('hooks-off');
     expect(f.json(config)?.hooks === false && f.json(config)?.keep === 'existing', 'hooks toggle lost another setting');
     await s.press('enter'); await moveTo(s, 'Check and repair'); await s.press('enter'); await s.waitFor('Complete. Review the result.'); await s.snap('doctor-report'); await s.press('enter');
-    await s.settle(120); expect(has(s.screen.text(), TITLE.home), 'doctor left the TUI');
+    await s.waitFor(TITLE.home); expect(has(s.screen.text(), TITLE.home), 'doctor left the TUI');
     await moveTo(s, 'MCP connections'); await s.press('enter'); await s.waitFor('Which MCP clients?');
     await moveTo(s, 'Zed'); await s.press('space'); await s.snap('mcp-app-choice'); await s.press('enter'); await s.waitFor(TITLE.options); await s.press('enter'); await s.waitFor(TITLE.review); await s.press('enter');
     await s.waitFor(TITLE.done); await s.snap('mcp-done'); await s.press('enter'); await s.waitFor(TITLE.home); await s.snap('home-after-mcp');

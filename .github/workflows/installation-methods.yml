@@ -1,0 +1,31 @@
+name: Installation methods
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  installation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install --frozen-lockfile --ignore-scripts
+      - run: node node_modules/playwright/cli.js install --with-deps chromium
+      - run: node tools/e2e/installation-methods.mjs
+      - run: node tools/e2e/installation-packages.mjs
+      - run: node tools/e2e/oauth.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: installation-methods
+          path: |
+            dist/e2e/installation-methods
+            dist/e2e/installation-packages/report.json
+            dist/e2e/installation-packages/transcript.log
+            dist/e2e/oauth

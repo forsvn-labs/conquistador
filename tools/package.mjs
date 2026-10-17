@@ -111,6 +111,15 @@ export function packageSource(root, outputRoot = join(root, 'dist')) {
     const zip = sourceZip(files), tarball = readFileSync(join(temp, npmName));
     const checksums = { [zipName]: hash(zip), [npmName]: hash(tarball) };
     const prepared = {};
+    if (files['packages/conquistador/package.json']) {
+      const alias = JSON.parse(files['packages/conquistador/package.json'].bytes.toString());
+      if (alias.name !== 'conquistador' || alias.version !== manifest.version || alias.dependencies?.[manifest.name] !== manifest.version || alias.scripts || alias.private || alias.publishConfig?.access !== 'public') throw new Error('CLI alias must pin the matching public product release with no lifecycle scripts');
+      const aliasRoot = join(temp, 'packages/conquistador');
+      const packedAlias = JSON.parse(execFileSync(npm, ['pack', '--offline', '--ignore-scripts', '--json'], { cwd: aliasRoot, encoding: 'utf8', timeout: 120_000 }));
+      if (packedAlias.length !== 1 || packedAlias[0].filename !== `conquistador-${manifest.version}.tgz`) throw new Error('Unexpected CLI alias artifact identity');
+      prepared[packedAlias[0].filename] = readFileSync(join(aliasRoot, packedAlias[0].filename));
+      checksums[packedAlias[0].filename] = hash(prepared[packedAlias[0].filename]);
+    }
     if (files['tools/install.mjs']) {
       const staging = realpathSync(mkdtempSync(join(tmpdir(), 'conquistador-prepared-')));
       try {

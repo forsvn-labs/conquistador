@@ -149,10 +149,10 @@ async function loadLogin() {
 const hostedUrl = login => process.env.CONQUISTADOR_HOSTED_URL || login?.HOSTED_URL || DEFAULT_HOSTED_URL;
 
 // What is on this computer. Previews run no agent command; Executor gets read-only status calls.
-export async function detect({ cwd = process.cwd(), probe = true } = {}) {
+export async function detect({ cwd = process.cwd(), probe = true, method = null } = {}) {
   const root = projectRoot(cwd);
   const state = readState();
-  const agents = detectAgents();
+  const agents = detectAgents().filter(agent => method !== 'plugins' || agent.how !== 'skill');
   const login = await loadLogin();
   const online = login && probe ? await reachable(hostedUrl(login)) : null;
   const project = projectFolders(root).filter(folder => existsSync(join(folder.path, OWNED)));
@@ -518,7 +518,7 @@ export async function runInstaller(options, { cwd = process.cwd(), ui, width, in
   ui.intro(wordmark(p, version));
   ui.log.message(wrap('Growth, marketing, and sales playbooks for your AI agents.\nAbout a minute. Nothing changes until you confirm.'));
   for (const note of preflightNotes(update)) ui.log.warn(wrap(note));
-  const ctx = await detect({ cwd });
+  const ctx = await detect({ cwd, method: options.method });
   const choices = defaultChoices(options, ctx, { interactive: !options.yes });
 
   // 2. Surfaces.
@@ -552,9 +552,9 @@ export async function runInstaller(options, { cwd = process.cwd(), ui, width, in
   if (choices.surfaces.includes('agents')) {
     if (!options.yes && !options.providers && !options.wanted) {
       const ids = await ask(ui, 'multiselect', { message: `${detail()}Which agents?`, required: true, initialValues: choices.agents,
-        options: AGENTS.map(agent => { const found = ctx.agents.find(item => item.id === agent.id)?.found; return { value: agent.id, label: agent.label, hint: `${agent.how === 'skill' ? 'skill copy' : 'plugin'}${found ? '' : '; not found'}` }; }) });
+        options: ctx.agents.map(agent => ({ value: agent.id, label: agent.label, hint: `${agent.how === 'skill' ? 'skill copy' : 'plugin'}${agent.found ? '' : '; not found'}` })) });
       if (ui.isCancel(ids)) return cancelled();
-      choices.agents = AGENTS.filter(agent => ids.includes(agent.id)).map(agent => agent.id);
+      choices.agents = ctx.agents.filter(agent => ids.includes(agent.id)).map(agent => agent.id);
     }
     if (!options.yes && !options.scope) {
       const scope = await ask(ui, 'select', { message: `${detail()}All projects, or only this one?`, initialValue: choices.scope, options: [
@@ -642,7 +642,7 @@ export async function runInstaller(options, { cwd = process.cwd(), ui, width, in
 
 // --- Without a terminal --------------------------------------------------------------------------------
 export async function printPlan(options, { cwd = process.cwd(), launchLine = null } = {}) {
-  const ctx = await detect({ cwd, probe: false });
+  const ctx = await detect({ cwd, probe: false, method: options.method });
   const choices = defaultChoices(options, ctx);
   const plan = buildPlan(choices, ctx);
   if (options.json) { process.stdout.write(planJson(plan)); return 0; }
@@ -666,7 +666,7 @@ export async function printPlan(options, { cwd = process.cwd(), launchLine = nul
 export async function installWithoutTerminal(options, { cwd = process.cwd() } = {}) {
   const ui = plainUi();
   const p = paint('none');
-  const ctx = await detect({ cwd });
+  const ctx = await detect({ cwd, method: options.method });
   const choices = defaultChoices(options, ctx);
   if (choices.surfaces.includes('agents') && !choices.agents.length) { console.error(`No supported agent found. Name one: ${self} --providers=claude -y`); return 1; }
   const plan = buildPlan(choices, ctx);

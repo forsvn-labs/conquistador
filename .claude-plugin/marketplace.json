@@ -8,7 +8,7 @@
     {
       "name": "conquistador",
       "description": "Growth, marketing, sales, and product playbooks for your coding agent. One skill, 35 commands, 21 plays, copy checks, hooks, and MCP.",
-      "version": "0.7.0",
+      "version": "0.8.0",
       "author": {
         "name": "FORSVN",
         "url": "https://forsvn.com"
@@ -19,7 +19,7 @@
     }
   ],
   "metadata": {
-    "version": "0.7.0",
+    "version": "0.8.0",
     "description": "Conquistador growth, GTM, and marketing playbooks."
   }
 }
