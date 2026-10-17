@@ -53,7 +53,7 @@ fallthrough = false
 
 [[rules]]
 type = "Text"
-globs = ["package.json", "skills/**/*.md", "skills/**/*.json", "skills/**/*.yaml", "skills/**/*.py", "skills/**/*.sh", "skills/**/*.swift", "skills/**/*.pbxproj", "skills/**/*.xcworkspacedata"]
+globs = ["package.json", "tools/vendor/OAUTH-PROVIDER-LICENSE", "skills/**/*.md", "skills/**/*.json", "skills/**/*.yaml", "skills/**/*.py", "skills/**/*.sh", "skills/**/*.swift", "skills/**/*.pbxproj", "skills/**/*.xcworkspacedata"]
 fallthrough = false
 
 # Turn off Wrangler's default rules (for example **/*.wasm, **/*.js), which would upload files
