@@ -1,6 +1,6 @@
 # Product roadmap
 
-## Installation hardening in review
+## Current handoff
 
 2026-10-17 source work; not released or deployed. The live npm release remains 0.7.0 below.
 
@@ -18,9 +18,23 @@
   Its deployment must follow the matching package and Worker deployment. No live OAuth or
   Executor acceptance is claimed from local fixtures.
 - Repeatable checks and sources: [installation acceptance](docs/INSTALLATION-ACCEPTANCE.md).
-  Final counts, PRs and remaining rollout steps will be recorded here before handoff.
+  [Core PR #80](https://github.com/forsvn-labs/conquistador/pull/80) contains this source.
+  The full product run passes 940 checks (416 tools, 294 runtime, 167 catalog, 63 evals).
+  Later boundary/auth changes pass 12 isolated CLI cases, 24 workerd OAuth cases, and focused
+  bootstrap/Worker regressions. Six real npm/Skills installs and all 19 docs checks pass.
+  The 65-case terminal run passed 63; its doctor wait and compact prompt were corrected,
+  and both failed scenarios pass on recheck. Builds, plugin contracts and Worker dry run pass.
+  The OAuth identity provider in workerd is a labeled local fixture. Native client activation,
+  live GitHub/Executor and Windows interactive acceptance retain their existing limits.
+  Dated reports and Iris captures resolve through DRIVE.md.
 
-## Current handoff
+Before rollout: obtain merge approval, set matching new release versions (0.7.0 is immutable),
+publish the main package, configure and publish its exact-version short alias, deploy the MCP
+Worker, and verify real GitHub sign-in and Executor import. Then update the landing version,
+merge its [draft PR #29](https://github.com/forsvn-labs/conquistador-landing/pull/29), and deploy.
+No npm publication, Worker deployment, or live account change was performed in this work.
+
+## Live release context
 
 Last verified: 2026-10-14. Release 0.7.0 is available as `latest` on
 [npm](https://www.npmjs.com/package/@forsvn/conquistador/v/0.7.0) and
@@ -50,7 +64,7 @@ production HTTP passes 63. The landing repository owns deployment identity and b
 Use `npx @forsvn/conquistador@latest` when an older global install exists. An unversioned `npx`
 can reuse that install; explicit `@latest` opens 0.7.0 in the live acceptance run.
 
-Next: migrate the Executor source and capability adapters to v2, then run the live cases below.
+After the installation rollout above, migrate the Executor source and capability adapters to v2, then run the live cases below.
 The current TUI gives a manual setup handoff. See
 [the control-center review](docs/REVIEW-2026-10-CONTROL-CENTER.md) for the accepted source work.
 
