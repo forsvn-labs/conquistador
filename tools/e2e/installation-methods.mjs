@@ -46,6 +46,10 @@ try {
   check('plugins rejects agents without a plugin contract', () => {
     const result = cli(['plugins', '--providers=hermes', '--dry-run']); assert.equal(result.status, 2);
   });
+  check('plugin selection aliases cannot bypass the native-client boundary', () => {
+    for (const args of [['--in=hermes'], ['--in', 'hermes']]) assert.equal(cli(['plugins', ...args, '--json']).status, 2);
+    assert.equal(cli(['plugins', '--in=codex', '--json']).status, 0);
+  });
   check('plugins previews the native global path', () => {
     const result = cli(['plugins', '--providers=codex', '--json']); assert.equal(result.status, 0);
     assert.equal(JSON.parse(result.text).scope, 'global');

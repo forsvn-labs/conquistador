@@ -1,5 +1,6 @@
 // Four public installation paths. Reuse the owned installer and its preview/undo contract.
 import { AGENTS, agentId } from './agents.mjs';
+import { parseOnboard } from './onboard.mjs';
 
 const HELP = {
   skills: `Usage: conquistador skills [--providers=AGENT,...] [--yes] [--dry-run] [--json] [--plain]
@@ -42,13 +43,10 @@ export async function runInstallationMethod(command, args) {
       }
     }
     if (command === 'plugins') {
-      for (let i = 0; i < rest.length; i++) {
-        const arg = rest[i];
-        const value = arg.startsWith('--providers=') ? arg.slice(12) : ['--providers', '--in'].includes(arg) ? rest[++i] : null;
-        for (const name of value?.split(',') ?? []) {
-          const agent = AGENTS.find(item => item.id === agentId(name));
-          if (!agent || agent.how === 'skill') throw Error(`${name} has no native plugin adapter. Use conquistador skills for Agent Skills clients.`);
-        }
+      const selected = parseOnboard(rest);
+      for (const name of selected.providers ?? (selected.wanted ? [selected.wanted] : [])) {
+        const agent = AGENTS.find(item => item.id === agentId(name));
+        if (!agent || agent.how === 'skill') throw Error(`${name} has no native plugin adapter. Use conquistador skills for Agent Skills clients.`);
       }
     }
     const defaults = { skills: ['--surface=agents', '--scope=project'], plugins: ['--surface=agents', '--scope=global'], mcp: ['--surface=mcp-apps'], install: [] }[command];
