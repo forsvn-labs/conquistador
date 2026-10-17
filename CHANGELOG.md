@@ -4,6 +4,50 @@
 versions. Verification establishes the stated local scope; native host behavior, useful model
 output, human acceptance and rights disposition require separate evidence.
 
+## 2026-10-17, 0.8.0 public alpha
+
+- [PR #80](https://github.com/forsvn-labs/conquistador/pull/80) merged under Hung's shipment
+  authorization at `ac79282597bea9026cf3653974fe3e8590dc69cd`. The
+  [v0.8.0 release](https://github.com/forsvn-labs/conquistador/releases/tag/v0.8.0) contains seven
+  checked assets, including both npm tarballs. The main tarball SHA-256 is
+  `cc370a68030ec2e366bff140a85167b4559590f914c3c10202b99667ba94f6c1`; the short CLI tarball is
+  `cd81577cfd95c2a751546ac2c02c53e0f2647a59001795570234cc066b316c15`.
+- Four public methods are Skills, CLI, MCP, and Plugins. `skills` installs an owned project
+  skill; `install` opens the current agent installer; `mcp` serves clean stdio and `mcp install`
+  configures chosen clients. `plugins` offers only clients with native plugin contracts.
+  Existing operator routes and advanced exports remain available. No MCP bridge is required.
+- [@forsvn/conquistador@0.8.0](https://www.npmjs.com/package/@forsvn/conquistador/v/0.8.0)
+  is published with provenance by [run 39011216818](https://github.com/forsvn-labs/conquistador/actions/runs/39011216818).
+  [conquistador@0.8.0](https://www.npmjs.com/package/conquistador/v/0.8.0) is the short CLI name
+  and pins the main dependency to exactly 0.8.0. Its first publication used npm security-key
+  authentication and has no provenance. Both future GitHub trusted publishers are enabled and
+  pass [run 39011698976](https://github.com/forsvn-labs/conquistador/actions/runs/39011698976).
+  All eight live registry/install checks pass: exact release bytes, SHA-512 integrity, package
+  identity, skill installation, installer/plugin dispatch, MCP stdio, and Bun execution.
+  Permanent global installs and app imports keep the canonical scoped package.
+- The production MCP Worker at `https://mcp.forsvn.com/mcp` is version
+  `95d7cf29-8ff6-4eef-a703-b7478712b55f`, from the same Git tree as the release. It supports
+  personal API keys and OAuth through Cloudflare's provider 1.2.3. Discovery, S256 PKCE,
+  registered redirects, browser-bound consent, GitHub public identity, refresh, and revocation
+  are covered. Access tokens last one hour and refresh credentials last 30 days. API keys keep
+  their separate lifecycle. The GitHub app now has the exact HTTPS `/signup/callback` URI.
+- Real hosted Executor v2 import and GitHub sign-in pass. The account shows Working and lists
+  eight tools; `conquistador_methods` returned the live library. Cancel returns to Executor
+  without adding an account. The existing personal API key still initializes 0.8.0; all five
+  read-only production discovery/API-key checks pass. A new handoff document fixes browser CSP
+  redirects while retaining `form-action self` and a no-JavaScript Continue link.
+- Final merged-source CI passes product checks on Node 24/26, installed-app integration, and
+  installation methods. Local evidence includes 940 product checks, 13 CLI cases, six real
+  npm/Skills installs, 19 docs checks, and 27 real workerd/OAuth/browser cases. Earlier complete
+  candidate CI passed 66 terminal scenarios and Linux/Windows package checks. Chromium consent
+  tests cover Allow/Cancel without JavaScript across separate callback/frontend origins.
+- The matching four-choice page is merged in
+  [landing PR #29](https://github.com/forsvn-labs/conquistador-landing/pull/29). The landing
+  repository owns its deployment identity and live page acceptance. Resolve repeatable reports,
+  source hashes, logs, and captures through [DRIVE.md](DRIVE.md).
+  Native client activation, Windows interactive/ARM, additional OAuth clients, the separate
+  Executor v2 adapter migration, and useful writing output retain their stated limits.
+
 ## 2026-10-14, 0.7.0 public alpha
 
 - [PR #79](https://github.com/forsvn-labs/conquistador/pull/79) merged with Hung's approval at

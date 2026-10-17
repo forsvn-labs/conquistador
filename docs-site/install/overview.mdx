@@ -11,7 +11,7 @@ Choose how you want to reach Conquistador. All four methods use the same playboo
 ```sh
 npx skills add https://github.com/forsvn-labs/conquistador/tree/main/skills/conquistador --skill conquistador
 # Or the Conquistador project installer:
-npx @forsvn/conquistador@latest skills
+npx conquistador@latest skills
 ```
 
 One skill folder, without hooks or MCP. Add `--global` to the Skills CLI command for a user-wide
@@ -20,7 +20,7 @@ install. The Conquistador installer supports agent selection and previews every 
 ## CLI
 
 ```sh
-npx @forsvn/conquistador@latest install
+npx conquistador@latest install
 ```
 
 Choose coding agents, review changes, then install. Use `--providers=claude,codex` to preselect
@@ -35,7 +35,7 @@ Connect to `https://mcp.forsvn.com/mcp` with [OAuth or an API key](/install/host
 For local stdio clients:
 
 ```sh
-npx @forsvn/conquistador@latest mcp
+npx conquistador@latest mcp
 ```
 
 `conquistador mcp install --apps=zed,vscode` configures selected desktop clients after review.
@@ -44,7 +44,7 @@ No HTTP bridge is required. Local and hosted MCP expose the same tools.
 ## Plugins
 
 ```sh
-npx @forsvn/conquistador@latest plugins
+npx conquistador@latest plugins
 ```
 
 Choose Claude Code, Codex, Grok, Cursor, or Copilot CLI. Each uses its own plugin mechanism.

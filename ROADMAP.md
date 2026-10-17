@@ -2,96 +2,55 @@
 
 ## Current handoff
 
-2026-10-17: Hung authorized shipment. Version 0.8.0 is being prepared; the last verified
-live npm release remains 0.7.0 below. No 0.8.0 publication or deployment is claimed yet.
+2026-10-17: Hung authorized and shipped product 0.8.0 through
+[PR #80](https://github.com/forsvn-labs/conquistador/pull/80). The
+[release](https://github.com/forsvn-labs/conquistador/releases/tag/v0.8.0) has seven checked assets.
+Both `@forsvn/conquistador@0.8.0` and the exact-version `conquistador@0.8.0` CLI alias are public
+as latest. All eight real registry/install checks pass against the tagged hashes. The main
+publication has provenance. The first alias publication used npm security-key authentication;
+both future GitHub trusted publishers now pass. Permanent global installs and app imports use
+the scoped package. Run-once commands can use `npx conquistador@latest`.
 
-- Four public methods: Skills, CLI, MCP, Plugins. `skills` installs project skills; `install`
-  opens the current installer; `plugins` restricts its picker to native plugin clients;
-  `mcp` serves stdio and `mcp install` configures chosen desktop clients. Explicit old operator
-  routes remain; use `operator install` and `skills --list` for that workflow.
-- `packages/conquistador` prepares the short npm name and pins the exact main-package version.
-  No short-name package is published. Keep scoped commands until publication is verified.
-- Hosted OAuth uses Cloudflare's provider 1.2.3 with browser-bound consent, GitHub identity,
-  S256 PKCE, DCR/CIMD discovery, resource-bound tokens, refresh and revocation. API keys retain
-  their own lifecycle. Both KV bindings use the existing approved namespace. The GitHub app
-  callback stays `/signup/callback`. CIMD requires `global_fetch_strictly_public`.
-- The sibling landing repository owns the bilingual four-choice page and browser evidence.
-  Its deployment must follow the matching package and Worker deployment. No live OAuth or
-  Executor acceptance is claimed from local fixtures.
-- Repeatable checks and sources: [installation acceptance](docs/INSTALLATION-ACCEPTANCE.md).
-  [Core PR #80](https://github.com/forsvn-labs/conquistador/pull/80) contains this source.
-  The full product run passes 940 checks (416 tools, 294 runtime, 167 catalog, 63 evals).
-  Later boundary/auth changes pass 12 isolated CLI cases, 24 workerd OAuth cases, and focused
-  bootstrap/Worker regressions. Six real npm/Skills installs and all 19 docs checks pass.
-  The 65-case terminal run passed 63; its doctor wait and compact prompt were corrected,
-  and both failed scenarios pass on recheck. Builds, plugin contracts and Worker dry run pass.
-  The OAuth identity provider in workerd is a labeled local fixture. Native client activation,
-  live GitHub/Executor and Windows interactive acceptance retain their existing limits.
-  Dated reports and Iris captures resolve through DRIVE.md.
+Four public methods are Skills, CLI, MCP, and Plugins. `skills` installs project skills;
+`install` opens the agent installer; `plugins` offers native plugin clients; `mcp` serves clean
+stdio and `mcp install` configures chosen desktop clients. Explicit old operator routes remain
+under `operator install` and `skills --list`. Client and package-manager options stay within
+these methods. A bridge is optional client tooling, not a dependency.
 
-Rollout in progress: merge the approved 0.8.0 release source, publish the main package,
-configure and publish its exact-version short alias, deploy the MCP
-Worker, and verify real GitHub sign-in and Executor import. Then update the landing version,
-merge its [draft PR #29](https://github.com/forsvn-labs/conquistador-landing/pull/29), and deploy.
-No npm publication, Worker deployment, or live account change was performed in this work.
+The production Worker supports OAuth and existing API keys at `https://mcp.forsvn.com/mcp`.
+Cloudflare's provider 1.2.3 supplies discovery, S256 PKCE, DCR/CIMD, resource-bound tokens,
+refresh, and revocation. Consent is browser-bound. Access tokens last one hour; refresh
+credentials last 30 days. API keys have a separate lifecycle. The existing approved KV
+namespace serves both bindings with separate prefixes. The GitHub app uses the exact HTTPS
+`/signup/callback` URI and public identity only. The browser handoff starts a new document
+before the provider-validated redirect, preserving `form-action self` and a no-JavaScript link.
 
-Release preparation closes the PR review findings: both plugin pickers and select-all use
-the native catalog; fixed methods reject ignored/legacy selection flags; refused GitHub codes
-clear the upstream cookie and show the specific error. The regression cases reproduced each
-failure before the fixes. Current checks pass 13 CLI cases, 25 workerd OAuth cases, and the
-new real-terminal plugin boundary scenario. The full product run passes 940 checks. Packaging
-now includes the paired alias tarball and its checksum. Wrangler is pinned, OAuth HTTP calls
-are bounded, and runner cleanup terminates the whole test process group.
+Real hosted Executor v2 import and GitHub sign-in pass. The account shows Working, lists all
+eight tools, and `conquistador_methods` returns the live library. Cancel returns without a new
+account. All five production discovery/API-key checks pass. This closes the MCP import failure;
+the separate Executor source/capability adapter migration remains open.
 
-Live acceptance found and reproduced a browser CSP failure on the OAuth consent redirect.
-The browser handoff starts a new document before following the provider-validated redirect.
-The consent form keeps `form-action self`; client callbacks can then reach their own frontend.
-The workerd runner includes real Chromium Allow/Cancel flows without JavaScript, across
-separate callback/frontend origins, and passes all 27 cases.
-All 13 CI checks at `633e367` passed before this focused browser correction. The initial Worker
-source is deployed at version `a0fa5787-c040-4ec6-a3c8-da0d3f7270c7`; discovery and the existing
-API key work. Executor v2 imports the app at the hosted organization URL. GitHub app configuration now uses the exact HTTPS `/signup/callback` URI, replacing the
-old HTTP `/signup` value. Real GitHub sign-in completed in hosted Executor v2. The account
-shows Working, all eight tools are listed, and `conquistador_methods` returned the live library.
-The installation page remains undeployed.
+Final merged-source CI passes Node 24/26 product checks, installed-app integration, and the
+installation suite. Evidence includes 940 product checks, 13 CLI cases, six npm/Skills installs,
+19 docs checks, and 27 workerd/OAuth/browser cases. Chromium Allow/Cancel runs without JavaScript
+across separate callback/frontend origins. Complete earlier candidate CI also passed 66 terminal
+scenarios and Linux/Windows package checks. The labeled identity fixture covers protocol failures;
+real GitHub/Executor acceptance is recorded separately. [CHANGELOG.md](CHANGELOG.md) owns exact
+release/Worker identity; [installation acceptance](docs/INSTALLATION-ACCEPTANCE.md) owns the
+repeatable failure contract. DRIVE.md resolves reports, hashes, and Iris captures.
 
-## Live release context
+The bilingual four-choice page shipped through
+[landing PR #29](https://github.com/forsvn-labs/conquistador-landing/pull/29), after both package
+publications and the MCP deployment. Its repository owns the site deployment and live browser
+acceptance. The page keeps app dependencies under CLI and OAuth/API keys under MCP.
 
-Last verified: 2026-10-14. Release 0.7.0 is available as `latest` on
-[npm](https://www.npmjs.com/package/@forsvn/conquistador/v/0.7.0) and
-[GitHub](https://github.com/forsvn-labs/conquistador/releases/tag/v0.7.0).
-[PR #79](https://github.com/forsvn-labs/conquistador/pull/79) merged with Hung's approval.
-The typed app dependency exposes all eight tools and Node/Fetch MCP handlers. The app can
-mount MCP on its existing port. It supplies the model, context, access rules, and approval flow.
-The CLI and TUI include **Use in an app**. Adding the app dependency and importing it start
-no model or TUI.
-See [the app contract](docs/APP-INTEGRATION.md) and
-[its acceptance review](docs/REVIEW-2026-10-APP-INTEGRATION.md).
+## Remaining installation acceptance
 
-The published tarball matches the accepted candidate. All nine live registry checks, six
-public npm/Bun dependency checks, and 36 installed-app checks on each of Node 22.18.0 and Bun
-pass. They cover official MCP clients, app routes, signed receipts, context isolation, and
-strict TypeScript. Final-source CI passes all ten functional jobs. Source validation passes
-940 product checks and 65 terminal scenarios. [CHANGELOG.md](CHANGELOG.md) owns release identity
-and the verification limits.
-
-[Landing PR #28](https://github.com/forsvn-labs/conquistador-landing/pull/28) is merged and
-live after verified npm delivery. The homepage has one command and a setup-page link.
-`/install` and `/vi/install` keep all nine setup methods inside a collapsed disclosure.
-All 16 agents and independent multiple-agent and MCP-client selections remain available. The chooser includes
-the app dependency path. The landing suite passes 648 checks; live setup passes 224 and
-production HTTP passes 63. The landing repository owns deployment identity and browser limits.
-
-Use `npx @forsvn/conquistador@latest` when an older global install exists. An unversioned `npx`
-can reuse that install; explicit `@latest` opens 0.7.0 in the live acceptance run.
-
-After the installation rollout above, migrate the Executor source and capability adapters to v2, then run the live cases below.
-The current TUI gives a manual setup handoff. See
-[the control-center review](docs/REVIEW-2026-10-CONTROL-CENTER.md) for the accepted source work.
-
-Open: interactive Windows installation, Linux/Windows ARM, native MCP client loading, the five
-live Executor cases, marketplace listings, hosted OAuth, and real writing-quality acceptance.
-Gemini CLI hooks are not built. Browser and Edge app runtimes are not verified.
+Migrate the Executor source and capability adapters to v2, then run the five live cases below.
+Native plugin activation in additional clients, native MCP loading, interactive Windows,
+Linux/Windows ARM, marketplace listings, additional OAuth clients, and real writing-quality
+acceptance remain open. Gemini CLI hooks are not built. Browser and Edge app runtimes are not
+verified. The product and method versions remain independent; see [VERSIONS.md](VERSIONS.md).
 
 ## Social quality acceptance
 
@@ -153,27 +112,18 @@ claim the synthetic fixture reproduces its exact text.
 
 ## Hosted server access
 
-1. Sign in once at `https://mcp.forsvn.com/signup` in a browser with a real GitHub account, and
-   check that the page shows a `cq_` token and the client setup text. Only terminal sign-in
-   (`conquistador login`) has passed live.
-2. Phase 2: MCP authorization, so claude.ai, Claude Desktop connectors, and other MCP clients sign
-   in without a copied token. Design:
-   - The Worker becomes an OAuth 2.1 authorization server for MCP clients, with
-     `@cloudflare/workers-oauth-provider`. It serves `/.well-known/oauth-authorization-server`,
-     `/.well-known/oauth-protected-resource`, dynamic client registration (`/register`),
-     `/authorize`, and `/token`, with PKCE required.
-   - `/authorize` sends the person to GitHub (the same OAuth App, a second callback path on the
-     same host) and then shows a consent page that names the MCP client.
-   - The provider stores grants and tokens in KV (`OAUTH_KV`). Each grant carries the GitHub id, so
-     the per-token rate limit, the blocked status, and `conquistador logout` apply to OAuth grants
-     too.
-   - `cq_` tokens and the admin token keep working as plain bearer tokens beside OAuth, for CLIs,
-     bots, and tests.
-   - Acceptance: claude.ai adds `https://mcp.forsvn.com/mcp` as a custom connector and calls the
-     brief and the check; Claude Code connects with `/mcp` and no header; a revoked grant stops
-     working; the sign-up E2E gains an OAuth client that registers, authorizes, and refreshes.
-   - Open questions: consent-page wording; whether to keep the 365-day expiry for OAuth refresh
-     tokens; whether a GitHub org allowlist is needed if abuse appears.
+OAuth and API keys are live. Real hosted Executor v2 import, GitHub sign-in, read-only tool
+execution, and Cancel pass. The workerd suite covers token refresh/replay, revocation, blocked
+users, limits, and forged requests with a labeled local identity provider. These fixtures do
+not establish native acceptance in other clients.
+
+1. Verify the browser API-key sign-up page shows its one-time `cq_` token and client setup text.
+   Terminal sign-in and an existing production key have passed; avoid rotating that key just
+   to repeat OAuth acceptance.
+2. Connect additional OAuth clients, including Claude connectors and Claude Code. Verify tools,
+   expiry/refresh, client revocation, and return navigation in each native client.
+3. Observe Cloudflare KV revocation propagation at multiple locations before making a stronger
+   guarantee than the documented delay. Keep OAuth grants and personal API-key revocation separate.
 
 ## Private-alpha follow-up
 
