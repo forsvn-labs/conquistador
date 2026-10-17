@@ -37,7 +37,7 @@ function shortcut(arg) {
 const helpOrVersion = args.includes('--help') || args.includes('-h') || args.includes('--version') || (args.length === 1 && args[0] === 'version');
 const [major, minor] = process.versions.node.split('.').map(Number);
 const supportedNode = major > 22 || (major === 22 && minor >= 18);
-const onboarding = args.length === 0 || args[0].startsWith('-') || args[0] === 'project';
+const onboarding = args.length === 0 || args[0].startsWith('-') || ['project', 'install', 'skills', 'plugins', 'plugin'].includes(args[0]);
 const preflight = helpOrVersion || supportedNode || !onboarding ? null : await (await import('../../tools/node-preflight.mjs')).nodePreflight();
 
 // The start flow, installer, and playbook commands come first; older per-project routes follow.
@@ -46,8 +46,12 @@ const preflight = helpOrVersion || supportedNode || !onboarding ? null : await (
 const task = args.length > 0 && (/\s/.test(args[0]) || args[0] === 'task' || args[0].startsWith('-'));
 const frontDoor = preflight === null && (args.length === 0 || task || ['add', 'install-cli', 'app', 'update', 'remove', 'agents', 'doctor', 'brief', 'playbooks', 'bot', 'tour', 'help', '--help', '-h'].includes(args[0]))
   ? await (await import('../../tools/front-door.mjs')).runFrontDoor(args) : null;
+const methodRoute = preflight === null && (['install', 'skills', 'plugins', 'plugin'].includes(args[0]) || (args[0] === 'mcp' && ['install', '--help', '-h'].includes(args[1])))
+  ? await (await import('../../tools/installation-methods.mjs')).runInstallationMethod(args[0], args.slice(1)) : null;
 if (preflight !== null) {
   process.exitCode = preflight;
+} else if (methodRoute !== null) {
+  process.exitCode = methodRoute;
 } else if (frontDoor !== null) {
   process.exitCode = frontDoor;
 } else if (args[0] === 'project') {

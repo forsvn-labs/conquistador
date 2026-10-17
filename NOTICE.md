@@ -1,14 +1,14 @@
 # Notices
 
-Copyright (c) 2026 forsvn. This Conquistador 0.1.0 distribution is licensed under MIT.
+Copyright (c) 2026 forsvn. Conquistador is licensed under MIT.
 
 The complete distribution includes portable skills and host/agent contracts, the optional runtime,
 typed tool catalog, and Eval Lab. The portable ZIP excludes the runtime, catalog, Eval Lab, and install
 helper. Installing a portable package starts no service and invokes no provider. Individual outcomes
 can require tools or external model access when invoked, as declared in their instructions.
 
-Public package version 0.1.0 is separate from internal module, skill, schema, and projector versions.
-Historical 1.0.0 records are not evidence for this unpublished candidate.
+CHANGELOG.md records public releases. Product versions are separate from internal module, skill,
+schema, and projector versions.
 
 The public methods operate without private course records or practitioner source collections.
 Technical provider and platform names identify compatibility or documented interfaces; they do not
@@ -30,3 +30,9 @@ The optional interactive setup bundles Clack prompts and its MIT-licensed depend
 Exact versions are pinned in tools/tui/package-lock.json. Their notices are retained in
 `tools/vendor/NOTICE.txt` in the complete source distribution. The bundle runs locally and is loaded only
 for the terminal guide.
+
+Hosted OAuth includes `@cloudflare/workers-oauth-provider` 1.2.3, copyright (c) 2025 Cloudflare,
+Inc., under the MIT license. Its unmodified distribution is `tools/vendor/oauth-provider.mjs`.
+The full license is retained in `tools/vendor/OAUTH-PROVIDER-LICENSE`. The upstream source is
+https://github.com/cloudflare/workers-oauth-provider. Local skill installs and app imports do
+not load this Worker-only module.

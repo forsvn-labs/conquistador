@@ -1,5 +1,25 @@
 # Product roadmap
 
+## Installation hardening in review
+
+2026-10-17 source work; not released or deployed. The live npm release remains 0.7.0 below.
+
+- Four public methods: Skills, CLI, MCP, Plugins. `skills` installs project skills; `install`
+  opens the current installer; `plugins` restricts its picker to native plugin clients;
+  `mcp` serves stdio and `mcp install` configures chosen desktop clients. Explicit old operator
+  routes remain; use `operator install` and `skills --list` for that workflow.
+- `packages/conquistador` prepares the short npm name and pins the exact main-package version.
+  No short-name package is published. Keep scoped commands until publication is verified.
+- Hosted OAuth uses Cloudflare's provider 1.2.3 with browser-bound consent, GitHub identity,
+  S256 PKCE, DCR/CIMD discovery, resource-bound tokens, refresh and revocation. API keys retain
+  their own lifecycle. Both KV bindings use the existing approved namespace. The GitHub app
+  callback stays `/signup/callback`. CIMD requires `global_fetch_strictly_public`.
+- The sibling landing repository owns the bilingual four-choice page and browser evidence.
+  Its deployment must follow the matching package and Worker deployment. No live OAuth or
+  Executor acceptance is claimed from local fixtures.
+- Repeatable checks and sources: [installation acceptance](docs/INSTALLATION-ACCEPTANCE.md).
+  Final counts, PRs and remaining rollout steps will be recorded here before handoff.
+
 ## Current handoff
 
 Last verified: 2026-10-14. Release 0.7.0 is available as `latest` on

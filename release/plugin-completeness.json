@@ -80,11 +80,11 @@
     },
     {
       "path": "NOTICE.md",
-      "sha256": "1975b640f5451e286f09a4a65c0ce0f4ec58007b2bef686283ac116c2300006c"
+      "sha256": "8c7234e1ca1caf825fb4d6d071ae2d2d379bd0a087c87f3e2b8785172ac8a76d"
     },
     {
       "path": "package.json",
-      "sha256": "bba38587c9ed8c07ec6eec5210cbcaa139840b026e25161f3167b2ad183b115a"
+      "sha256": "ec75e37603040786b0eff21d68b13c10fe60633b2e9242110415227146912530"
     },
     {
       "path": "plugin.json",
@@ -92,7 +92,7 @@
     },
     {
       "path": "README.md",
-      "sha256": "98caf8799255fad8ed50fdb5765ee82552796369178a243651ad0bbc04e0ccf5"
+      "sha256": "79bd344c1d785075fc871927983d483eec9016640a4419a5eeb83f1e76309fcd"
     },
     {
       "path": "SKILL.md",

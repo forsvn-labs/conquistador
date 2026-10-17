@@ -117,7 +117,7 @@ const allowedBase = value => {
   } catch { return false; }
 };
 
-function signupConfig(env) {
+export function signupConfig(env) {
   const web = (env.GITHUB_URL || 'https://github.com').replace(/\/+$/, '');
   const api = (env.GITHUB_API_URL || 'https://api.github.com').replace(/\/+$/, '');
   if (!env.GITHUB_CLIENT_ID || !env.GITHUB_CLIENT_SECRET || !env.TOKENS || !env.SIGNUP_LIMITER || !env.MCP_LIMITER) return null;
@@ -144,11 +144,11 @@ const appHeaders = gh => ({
   'x-github-api-version': '2022-11-28',
 });
 
-async function exchangeCode(gh, code, redirectUri) {
+export async function exchangeCode(gh, code, redirectUri, verifier) {
   const { body } = await github(`${gh.web}/login/oauth/access_token`, {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({ client_id: gh.id, client_secret: gh.secret, code, redirect_uri: redirectUri }),
+    body: JSON.stringify({ client_id: gh.id, client_secret: gh.secret, code, redirect_uri: redirectUri, ...(verifier ? { code_verifier: verifier } : {}) }),
   });
   if (!body?.access_token) throw new GitHubError(`GitHub refused the sign-in code (${body?.error ?? 'no access token'}).`);
   return body.access_token;
@@ -156,7 +156,7 @@ async function exchangeCode(gh, code, redirectUri) {
 
 // GitHub's application token API answers only for tokens that this OAuth App issued, and needs
 // the client secret. So a token from another app, or a made-up one, is refused here.
-async function identify(gh, accessToken) {
+export async function identify(gh, accessToken) {
   const { status, body } = await github(`${gh.api}/applications/${encodeURIComponent(gh.id)}/token`, { method: 'POST', headers: appHeaders(gh), body: JSON.stringify({ access_token: accessToken }) });
   if (status === 404 || status === 422) return null;
   if (status !== 200 || !Number.isInteger(body?.user?.id) || typeof body.user.login !== 'string') throw new GitHubError(`GitHub could not confirm the sign-in (HTTP ${status}).`);
@@ -164,7 +164,7 @@ async function identify(gh, accessToken) {
 }
 
 // The Worker needs only the user id and login, so it revokes the GitHub token at once.
-const revokeGithubToken = (gh, accessToken) => github(`${gh.api}/applications/${encodeURIComponent(gh.id)}/token`, { method: 'DELETE', headers: appHeaders(gh), body: JSON.stringify({ access_token: accessToken }) }).catch(() => {});
+export const revokeGithubToken = (gh, accessToken) => github(`${gh.api}/applications/${encodeURIComponent(gh.id)}/token`, { method: 'DELETE', headers: appHeaders(gh), body: JSON.stringify({ access_token: accessToken }) }).catch(() => {});
 
 // Issues a new token and replaces the user's previous one. Returns null for a blocked user.
 async function issue(env, { githubId, login }) {

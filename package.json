@@ -97,6 +97,7 @@
     "integrations:updates": "node tools/integration-releases.mjs check-updates"
   },
   "devDependencies": {
+    "@cloudflare/workers-oauth-provider": "1.2.3",
     "@oxlint/plugins": "1.82.0",
     "oxlint": "1.82.0"
   },

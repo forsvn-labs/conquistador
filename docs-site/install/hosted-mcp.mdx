@@ -9,9 +9,25 @@ The hosted server runs the same tools as the local server, at:
 https://mcp.forsvn.com/mcp
 ```
 
-Every request needs a personal token. Sign in with GitHub to get one. You do not need anyone's approval. The hosted server runs the code on `main`, so it has `conquistador_check`, `conquistador_verify`, and `conquistador_score` before they are in an npm release. It signs check receipts. See [Receipts and verify](/hosted/receipts).
+Choose OAuth sign-in or a personal API key. Both authenticate the same read-only playbook tools.
+The server signs check receipts. See [Receipts and verify](/hosted/receipts).
 
-## Get a token
+## Sign in with OAuth
+
+1. Add the server URL to your MCP client. In Executor 2, use **Connect a service**.
+2. Choose OAuth. The client discovers sign-in through the server’s protected-resource metadata.
+3. Check the client name and return address on the consent page. Select **Allow and sign in**.
+4. Sign in with GitHub, then return to the client and check that the Conquistador tools appear.
+
+OAuth uses authorization codes with S256 PKCE, resource-bound tokens and dynamic client
+registration and public Client ID Metadata Documents. Access tokens last one hour. Refresh credentials last 30 days. Revoke the
+connection from your MCP client. OAuth does not replace an existing personal API key.
+
+This flow requires the matching Worker deployment. The
+[project handoff](https://github.com/forsvn-labs/conquistador/blob/main/ROADMAP.md) distinguishes
+source checks from live GitHub and Executor acceptance.
+
+## Get an API key
 
 <Tabs>
   <Tab title="Browser">
@@ -35,7 +51,7 @@ Every request needs a personal token. Sign in with GitHub to get one. You do not
   </Tab>
 </Tabs>
 
-## Token rules
+## API key rules
 
 - Each GitHub account has one active token. When you sign in again, you get a new token, and the old one stops working.
 - Each token can send 60 requests per minute. Over the limit, the server answers 429 and says how many seconds to wait (`retry-after`).
@@ -75,6 +91,8 @@ The server stores this for each person who signs in:
 - a SHA-256 hash of the token, not the token itself;
 - when the token was made, when it was last used, and its status (active or blocked).
 
+OAuth stores client grants, the GitHub user id, encrypted connection properties, token hashes and expiries. Revocation uses Cloudflare KV; other locations can take up to 60 seconds to see it.
+
 The server does not store your GitHub access token, email address, or repositories. It asks GitHub only for your public profile, and it revokes the GitHub access token as soon as it reads your user id. The server does not log the text of your requests.
 
 To delete your record, run `conquistador logout`, or send:
@@ -83,7 +101,7 @@ To delete your record, run `conquistador logout`, or send:
 curl -X POST https://mcp.forsvn.com/api/logout -H "Authorization: Bearer YOUR_TOKEN"
 ```
 
-Both revoke the token and delete your record at once. If you lost the token, sign in again, then log out. To remove the app from your GitHub account too, open GitHub, **Settings**, **Applications**, **Authorized OAuth Apps**.
+Both revoke the personal API key and delete its user record. OAuth connections have their own grants and are revoked separately in the client. If you lost the token, sign in again, then log out. To remove the app from your GitHub account too, open GitHub, **Settings**, **Applications**, **Authorized OAuth Apps**.
 
 ## Next
 

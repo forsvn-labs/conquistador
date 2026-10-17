@@ -12,11 +12,15 @@ Research, creative work, engineering, and review support that mission.
 ## Make the first task easy
 
 The terminal installs; the agent works. The homepage shows one npm command and links to `/install`.
-The setup page starts with that command and keeps other methods in a closed native disclosure:
-coding agents, native plugins, project skills, app dependencies, local and hosted MCP, bot
-files, GitHub downloads, and the manual Executor 2 handoff. Acquisition leads with npm or Bun global installation
-followed by `conquistador`, so the command stays available for later management. A run-once
-`npx @forsvn/conquistador@latest` stays available as a secondary path. The first `conquistador`
+The setup page presents four visible choices: Skills, CLI, MCP, and Plugins.
+Skills installs one Agent Skills folder, through the external Skills CLI or `conquistador skills`.
+CLI covers coding-agent setup through `conquistador install` and production app imports.
+MCP covers local stdio and hosted Streamable HTTP with OAuth sign-in or API-key headers.
+Plugins covers native clients and a portable bundle for compatible plugin loaders. Client,
+transport and package-manager choices belong inside these four methods. Legacy flags and
+bot exports stay in the advanced reference. The short npm alias must resolve the exact paired
+main package version and must not be advertised before registry verification.
+The first `conquistador`
 run opens one full-screen installer that is pleasant to use: the detected
 coding agents already chosen and the full supported-agent catalog visible. Search and installed
 status distinguish support from detection. Agent and MCP client pickers use independent checkboxes,
@@ -93,7 +97,9 @@ few tools carry the loop, not one tool per command: a brief built from the calle
 rule-based check, a rubric gate, and verification. The host still supplies the model. Because a
 model can skip the check or misreport it, the server signs each check receipt with a key callers
 never hold, and the host, not the agent, decides whether a draft is ready to hand over. Access is
-self-serve: a GitHub sign-in gives each person a personal token, so nobody has to ask the owner.
+self-serve: clients can sign in with OAuth, and deployed agents can use a personal API key.
+GitHub confirms identity. The MCP server issues its own resource-bound credentials; it never
+passes the GitHub token to a client. OAuth connections and personal API keys have separate lifecycles.
 
 ## Connect only what the task needs
 

@@ -117,11 +117,12 @@ async function plainStart(ui, options, cwd, install, root) {
   return outcome.code;
 }
 
-export async function runStart(args = [], { cwd = process.cwd(), tty = process.stdin.isTTY && process.stdout.isTTY, ui: suppliedUi, installer = false } = {}) {
+export async function runStart(args = [], { cwd = process.cwd(), tty = process.stdin.isTTY && process.stdout.isTTY, ui: suppliedUi, installer = false, method = null } = {}) {
   let options;
 
   try {
     options = parseOnboard(args);
+    options.method = method;
   } catch (error) {
     console.error(error.message);
 

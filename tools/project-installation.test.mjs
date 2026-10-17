@@ -12,7 +12,7 @@ const root = fileURLToPath(new URL('../', import.meta.url));
 const N = commandNames(join(root, 'skills')).length;
 const cli = join(root, 'runtime/bin/conquistador.js');
 function fixture(t) { const project = realpathSync(mkdtempSync(join(tmpdir(), 'conquistador project '))); t.after(() => rmSync(project, { recursive: true, force: true })); return project; }
-function run(project, ...args) { return spawnSync(process.execPath, [cli, ...args], { cwd: project, encoding: 'utf8' }); }
+function run(project, ...args) { return spawnSync(process.execPath, [cli, ...(args[0] === 'install' ? ['operator', ...args] : args)], { cwd: project, encoding: 'utf8' }); }
 function ok(project, ...args) { const result = run(project, ...args); assert.equal(result.status, 0, result.stdout + result.stderr); return result.stdout; }
 
 test('complete operator installs an obvious parent and each selected native skill with one owned lifecycle', t => {
@@ -28,7 +28,7 @@ test('complete operator installs an obvious parent and each selected native skil
     const doctor = JSON.parse(ok(project, 'operator', 'doctor', '--json'));
     assert.equal(doctor.library.available, N); assert.equal(doctor.bbAdapterPresent, true); assert.equal(doctor.discovery.count, 1);
     assert.match(ok(project, 'start'), /first|launch plan/);
-    assert.match(ok(project, 'skills'), /Write product or campaign copy/);
+    assert.match(ok(project, 'skills', '--list'), /Write product or campaign copy/);
     ok(project, 'operator', 'update'); ok(project, 'operator', 'uninstall');
     if (host === 'hermes') rmSync(join(project, '.git'), { recursive: true });
     assert.deepEqual(readdirSync(project), []);

@@ -289,7 +289,7 @@ function App({ options: initialOptions, cwd, first, update, warnings, onExit, mo
     let live = true;
     (async () => {
       await sleep(20);
-      const found = await detect({ cwd });
+      const found = await detect({ cwd, method: options.method });
       if (!live) return;
       const base = defaultChoices(options, found);
       const fromFlags = options.surfacesFrom === 'flag' || options.surfacesFrom === 'implied';
@@ -659,7 +659,7 @@ function App({ options: initialOptions, cwd, first, update, warnings, onExit, mo
 
     const bodyHeight = Math.min(capacity, Math.max(10, list.shown.length + Number(Boolean(list.above)) + Number(Boolean(list.below))));
     return frame(h(Card, { c, width, title: 'Which agents?', subtitle },
-      h(Text, null, h(Text, { color: c.sky }, `${AGENTS.length} supported agents`), h(Text, { dimColor: true }, ` · ${ctx.found.length} found · `), h(Text, { bold: true, color: c.ok }, `${choices.agents.length} selected`)),
+      h(Text, null, h(Text, { color: c.sky }, `${order.length} supported agents`), h(Text, { dimColor: true }, ` · ${ctx.found.length} found · `), h(Text, { bold: true, color: c.ok }, `${choices.agents.length} selected`)),
       query || searching ? h(Text, { color: c.brand }, `Search: ${query}${searching ? '▎' : ''}`) : null,
       ...notes.map((text, index) => h(Text, { key: `w${index}`, color: c.sticky }, text)),
       wide ? h(Columns, { c, mainWidth, sideWidth, height: bodyHeight, main: listRows,

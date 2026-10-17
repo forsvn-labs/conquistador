@@ -114,7 +114,7 @@ export function operatorNextSteps(path, hosts, cwd = process.cwd(), task = {
     `If discovery fails: refresh the host session, run ${doctor}, or ask the host to read ${join(display, 'SKILL.md')} and follow it.`);
 
   if (hosts.includes('codex')) lines.push(`Hook trust: if prompt routing is enabled, review the project and exact hook in Codex; run ${doctor} to check registration. Registration does not prove delivery.`);
-  lines.push(`Run ${shellCommand(['conquistador', 'start', '--task', 'ID', '--project', dirname(path)])} to choose another first task; conquistador skills lists the capabilities. Use conquistador --help for other integration forms and their owners.`,
+  lines.push(`Run ${shellCommand(['conquistador', 'start', '--task', 'ID', '--project', dirname(path)])} to choose another first task; conquistador skills --list lists the capabilities. Use conquistador --help for other integration forms and their owners.`,
     ...['doctor', 'update', 'uninstall'].map(action => shellCommand(['conquistador', 'operator', action, '--path', path])));
   return lines.join('\n');
 }
