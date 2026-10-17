@@ -47,7 +47,7 @@ source checks from live GitHub and Executor acceptance.
     `conquistador login` shows a code and a GitHub address. Enter the code there. The command saves the token to `~/.conquistador/mcp-token`, which only you can read, and prints the client configuration. If that file held another token, for example a server admin token, `login` moves it to `mcp-token.previous`. To use another deployment, set `CONQUISTADOR_MCP_URL` or pass `--server URL`.
   </Tab>
   <Tab title="Installer">
-    From 0.4.0, run `npx @forsvn/conquistador@latest` and choose **Hosted MCP**. The installer runs the same GitHub sign-in as `conquistador login`. It shows this option only when it is online.
+    From 0.4.0, run `npx conquistador@latest` and choose **Hosted MCP**. The installer runs the same GitHub sign-in as `conquistador login`. It shows this option only when it is online.
   </Tab>
 </Tabs>
 
