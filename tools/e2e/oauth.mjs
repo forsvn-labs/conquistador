@@ -26,6 +26,7 @@ const port = async () => {
   const value = server.address().port; await new Promise(done => server.close(done)); return value;
 };
 const json = (response, body) => { response.writeHead(200, { 'content-type': 'application/json' }); response.end(JSON.stringify(body)); };
+const frontend = createServer((_request, response) => { response.writeHead(200, { 'content-type': 'text/plain' }); response.end('Local OAuth client frontend'); });
 const fixture = createServer(async (request, response) => {
   const url = new URL(request.url, 'http://fixture');
   if (url.pathname === '/login/oauth/authorize') {
@@ -35,7 +36,7 @@ const fixture = createServer(async (request, response) => {
   } else if (url.pathname === '/login/oauth/access_token') json(response, rejectGithubCode ? { error: 'bad_verification_code' } : { access_token: 'fixture-github-token' });
   else if (request.method === 'POST' && url.pathname === '/applications/fixture-client/token') json(response, { user: { id: 73, login: 'fixture-user' } });
   else if (request.method === 'DELETE') { response.writeHead(204); response.end(); }
-  else if (url.pathname === '/client/callback') { response.writeHead(200, { 'content-type': 'text/plain' }); response.end('Local OAuth client fixture'); }
+  else if (url.pathname === '/client/callback') { response.writeHead(302, { location: `http://127.0.0.1:${frontend.address().port}/client/callback${url.search}` }); response.end(); }
   else { response.writeHead(404); response.end(); }
 });
 const check = async (name, run) => { caller++; await run(); steps.push({ name, passed: true }); console.log(`pass ${name}`); };
@@ -47,6 +48,7 @@ function cookies(response) {
 }
 const cookieHeader = () => [...cookieJar].map(([key, value]) => `${key}=${value}`).join('; ');
 try {
+  await new Promise(done => frontend.listen(0, '127.0.0.1', done));
   await new Promise(done => fixture.listen(0, '127.0.0.1', done));
   const gh = `http://127.0.0.1:${fixture.address().port}`;
   const base = `http://127.0.0.1:${await port()}`;
@@ -103,14 +105,14 @@ try {
   const browserRegistration = await req(metadata.registration_endpoint, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ client_name: 'Browser E2E', redirect_uris: [browserRedirect], token_endpoint_auth_method: 'none', grant_types: ['authorization_code'], response_types: ['code'] }) });
   assert.equal(browserRegistration.status, 201); const browserClient = await browserRegistration.json();
   for (const action of ['allow', 'deny']) {
-    await check(`real browser follows ${action} through the consent form CSP`, async () => {
+    await check(`real browser without JavaScript follows ${action} across client origins`, async () => {
       const browser = await chromium.launch();
       try {
-        const context = await browser.newContext({ extraHTTPHeaders: { 'cf-connecting-ip': `192.0.2.${action === 'allow' ? 252 : 253}` } });
+        const context = await browser.newContext({ javaScriptEnabled: false, extraHTTPHeaders: { 'cf-connecting-ip': `192.0.2.${action === 'allow' ? 252 : 253}` } });
         const page = await context.newPage();
         await page.goto(authorize({ client_id: browserClient.client_id, redirect_uri: browserRedirect }));
         await page.getByRole('button', { name: action === 'allow' ? 'Allow and sign in' : 'Cancel', exact: true }).click();
-        await page.waitForURL(url => url.origin === gh && url.pathname === '/client/callback', { timeout: 15_000 });
+        await page.waitForURL(url => url.origin === `http://127.0.0.1:${frontend.address().port}` && url.pathname === '/client/callback', { timeout: 15_000 });
         const target = new URL(page.url()); assert.equal(target.searchParams.get('state'), 'client-state');
         if (action === 'allow') assert.ok(target.searchParams.get('code'));
         else assert.equal(target.searchParams.get('error'), 'access_denied');
@@ -139,11 +141,11 @@ try {
   handle = await begin();
   await check('deny returns the client state and creates no grant', async () => {
     const init = form({ handle, action: 'deny' }); init.headers.cookie = cookieHeader();
-    const response = await req('/authorize', init); assert.equal(response.status, 302); assert.equal(new URL(response.headers.get('location')).searchParams.get('error'), 'access_denied');
+    const response = await req('/authorize', init); assert.equal(response.status, 200); assert.equal(new URL(response.headers.get('location')).searchParams.get('error'), 'access_denied');
   });
   async function grant() {
     const handle = await begin(); const init = form({ handle, action: 'allow' }); init.headers.cookie = cookieHeader();
-    const upstream = await req('/authorize', init); assert.equal(upstream.status, 302); cookies(upstream);
+    const upstream = await req('/authorize', init); assert.equal(upstream.status, 200); cookies(upstream);
     const github = await req(upstream.headers.get('location')); const callback = github.headers.get('location');
     const forged = await req(callback); assert.ok(forged.status >= 400);
     const completed = await req(callback, { headers: { cookie: cookieHeader() } }); assert.equal(completed.status, 302); cookies(completed);
@@ -196,6 +198,7 @@ try {
     else { try { process.kill(-child.pid, 'SIGTERM'); } catch (error) { if (error.code !== 'ESRCH') steps.push({ name: 'Worker cleanup', passed: false, error: error.message }); } }
   }
   fixture.closeAllConnections(); await new Promise(done => fixture.close(done));
+  frontend.closeAllConnections(); await new Promise(done => frontend.close(done));
   writeFileSync(join(out, 'worker.log'), log.replace(/fixture-(?:secret|api-key|github-token|receipt-key)/g, '<fixture-secret>'));
   const source = ['worker.mjs', 'tools/hosted-oauth.mjs', 'tools/vendor/oauth-provider.mjs'].map(path => { try { return { path, sha256: createHash('sha256').update(readFileSync(join(root, path))).digest('hex') }; } catch { return { path, sha256: null }; } });
   const report = { mode: 'workerd, real OAuth provider and MCP; local GitHub identity fixture', source, passed: steps.filter(s => s.passed).length, steps };

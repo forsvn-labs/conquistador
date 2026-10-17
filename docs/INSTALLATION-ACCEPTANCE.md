@@ -26,6 +26,8 @@ are options inside those paths. ROADMAP.md owns delivery state.
 - GitHub refuses a code and leaves the upstream browser cookie active or hides the specific failure.
 - A real browser blocks the consent form's redirect to GitHub or the validated client callback.
   Verify both Allow and Cancel with browser CSP enforcement; HTTP-only checks do not cover it.
+- A validated OAuth callback redirects to a second client origin and the original form's CSP
+  blocks that navigation. Keep a no-JavaScript fallback for the browser handoff.
 - Release packaging omits the paired CLI tarball or records a stale version or checksum.
 - The OAuth runner leaves child processes or fixture connections open, hangs on HTTP, or
   exits before it writes a failure report. CI must have a bounded run time.

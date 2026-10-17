@@ -13,11 +13,18 @@ const responderFor = key => {
 };
 const escape = value => String(value).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 const json = (status, body, headers = {}) => Response.json(body, { status, headers: { 'cache-control': 'no-store', ...headers } });
-const page = (status, content, headers = new Headers(), formActions = ["'self'"]) => {
-  for (const [key, value] of Object.entries({ 'content-type': 'text/html; charset=utf-8', 'cache-control': 'no-store', 'referrer-policy': 'no-referrer', 'x-content-type-options': 'nosniff', 'x-frame-options': 'DENY', 'content-security-policy': `default-src 'none'; style-src 'unsafe-inline'; form-action ${[...new Set(formActions)].join(' ')}; frame-ancestors 'none'; base-uri 'none'` })) headers.set(key, value);
+const page = (status, content, headers = new Headers()) => {
+  for (const [key, value] of Object.entries({ 'content-type': 'text/html; charset=utf-8', 'cache-control': 'no-store', 'referrer-policy': 'no-referrer', 'x-content-type-options': 'nosniff', 'x-frame-options': 'DENY', 'content-security-policy': "default-src 'none'; style-src 'unsafe-inline'; form-action 'self'; frame-ancestors 'none'; base-uri 'none'" })) headers.set(key, value);
   return new Response(`<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Connect Conquistador</title><style>body{font:17px/1.6 system-ui;max-width:38rem;margin:4rem auto;padding:0 24px;color:#eee;background:#100d13}h1{line-height:1.2}p{color:#c5b9c9}button{font:inherit;padding:12px 24px;margin:12px 12px 0 0;border:1px solid #b9a4c7;border-radius:8px;cursor:pointer}button[value=allow]{background:#ffbf41;color:#100d13}code{overflow-wrap:anywhere}</style>${content}</html>`, { status, headers });
 };
 const errorPage = (status, text, headers) => page(status, `<h1>Could not connect</h1><p>${escape(text)}</p><p>Return to your MCP client and try again.</p>`, headers);
+// Start a new document before following the validated OAuth redirect. Browsers apply
+// form-action to the entire HTTP redirect chain, including a client's later frontend hop.
+// Meta refresh works without JavaScript; the link also supports manual navigation.
+const redirectPage = (target, headers, title = 'Continue sign-in') => {
+  headers.set('location', target);
+  return page(200, `<meta http-equiv="refresh" content="0;url=${escape(target)}"><h1>${escape(title)}</h1><p><a href="${escape(target)}">Continue</a></p>`, headers);
+};
 const issuerFor = env => {
   const url = new URL(env.OAUTH_ISSUER || 'https://mcp.forsvn.com');
   if ((url.protocol !== 'https:' && !(url.protocol === 'http:' && ['127.0.0.1', 'localhost', '[::1]'].includes(url.hostname))) || url.username || url.password || url.search || url.hash || url.pathname !== '/') throw Error('OAUTH_ISSUER must be an HTTPS origin (HTTP loopback is allowed for local tests).');
@@ -32,20 +39,15 @@ async function authorize(request, env, ctx) {
       if (auth.scope.some(scope => ![SCOPE, 'offline_access'].includes(scope))) return errorPage(400, 'Request the mcp:read scope.');
       if (!auth.scope.includes(SCOPE)) auth.scope = [SCOPE, ...auth.scope];
       const description = await oauth.describeConsent(auth); const consent = await oauth.beginConsent(auth);
-      // Browsers enforce form-action on redirects too. Permit only the upstream and
-      // the provider-validated callback, including a registered native URI scheme.
-      const callback = new URL(auth.redirectUri);
-      const callbackSource = ['https:', 'http:'].includes(callback.protocol) ? callback.origin : callback.protocol;
-      const formActions = ["'self'", new URL(gh.web).origin, callbackSource];
-      return page(200, `<h1>Connect to Conquistador</h1><p><strong>${escape(description.clientName)}</strong> wants to read marketing playbooks and run checks.</p>${description.clientDomain ? `<p>Client domain: <strong>${escape(description.clientDomain)}</strong>.</p>` : '<p>The client supplied this name. Check the return address before you allow access.</p>'}<p>Return address: <code>${escape(description.redirectHost)}</code>.</p>${description.redirectIsLoopback ? '<p>This connects to a local app. Check which app you started.</p>' : ''}<p>Your client can stay connected for up to 30 days. Remove the connection in your client to revoke access.</p><p>This grants access to Conquistador tools. It does not grant access to your GitHub repositories or permission to publish.</p><form method="post" action="/authorize"><input type="hidden" name="handle" value="${escape(consent.handle)}"><button name="action" value="allow">Allow and sign in</button><button name="action" value="deny">Cancel</button></form>`, consent.headers, formActions);
+      return page(200, `<h1>Connect to Conquistador</h1><p><strong>${escape(description.clientName)}</strong> wants to read marketing playbooks and run checks.</p>${description.clientDomain ? `<p>Client domain: <strong>${escape(description.clientDomain)}</strong>.</p>` : '<p>The client supplied this name. Check the return address before you allow access.</p>'}<p>Return address: <code>${escape(description.redirectHost)}</code>.</p>${description.redirectIsLoopback ? '<p>This connects to a local app. Check which app you started.</p>' : ''}<p>Your client can stay connected for up to 30 days. Remove the connection in your client to revoke access.</p><p>This grants access to Conquistador tools. It does not grant access to your GitHub repositories or permission to publish.</p><form method="post" action="/authorize"><input type="hidden" name="handle" value="${escape(consent.handle)}"><button name="action" value="allow">Allow and sign in</button><button name="action" value="deny">Cancel</button></form>`, consent.headers);
     }
     if (url.pathname === '/authorize' && request.method === 'POST') {
       if (!request.headers.get('content-type')?.startsWith('application/x-www-form-urlencoded')) return errorPage(415, 'Submit the connection form.');
       const text = await readBounded(request, 4096); if (text === null) return errorPage(413, 'The form is too large.');
       const form = new URLSearchParams(text); const handle = form.get('handle') || '';
       if (form.get('action') === 'deny') {
-        const denied = await oauth.denyConsent(request, handle); denied.headers.set('location', denied.redirectTo);
-        return new Response(null, { status: 302, headers: denied.headers });
+        const denied = await oauth.denyConsent(request, handle);
+        return redirectPage(denied.redirectTo, denied.headers, 'Connection cancelled');
       }
       if (form.get('action') !== 'allow') return errorPage(400, 'Choose Allow or Cancel.');
       const approved = await oauth.approveConsent(request, handle);
@@ -56,7 +58,7 @@ async function authorize(request, env, ctx) {
       const challenge = btoa(String.fromCharCode(...bytes)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
       // Reuse the existing GitHub OAuth App callback. The marker keeps API-key signup separate.
       target.search = new URLSearchParams({ client_id: gh.id, redirect_uri: `${issuerFor(env)}/signup/callback`, state: `oauth.${upstream.state}`, code_challenge: challenge, code_challenge_method: 'S256' });
-      upstream.headers.set('location', target.href); return new Response(null, { status: 302, headers: upstream.headers });
+      return redirectPage(target.href, upstream.headers);
     }
     if (url.pathname === '/signup/callback' && request.method === 'GET') {
       url.searchParams.set('state', (url.searchParams.get('state') || '').slice(6));

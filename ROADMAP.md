@@ -44,8 +44,10 @@ now includes the paired alias tarball and its checksum. Wrangler is pinned, OAut
 are bounded, and runner cleanup terminates the whole test process group.
 
 Live acceptance found and reproduced a browser CSP failure on the OAuth consent redirect.
-The fix allows only GitHub and the provider-validated callback in the consent form policy.
-The workerd runner now includes real Chromium Allow/Cancel flows and passes all 27 cases.
+The browser handoff starts a new document before following the provider-validated redirect.
+The consent form keeps `form-action self`; client callbacks can then reach their own frontend.
+The workerd runner includes real Chromium Allow/Cancel flows without JavaScript, across
+separate callback/frontend origins, and passes all 27 cases.
 All 13 CI checks at `633e367` passed before this focused browser correction. The initial Worker
 source is deployed at version `a0fa5787-c040-4ec6-a3c8-da0d3f7270c7`; discovery and the existing
 API key work. Executor v2 imports the app at the hosted organization URL. GitHub app configuration now uses the exact HTTPS `/signup/callback` URI, replacing the
