@@ -30,7 +30,7 @@ export const newToken = () => `cq_${base64url(crypto.getRandomValues(new Uint8Ar
 export const hashToken = async token => toHex(await digest(token));
 
 // Compares the digests, so the time does not depend on where the strings differ or on their length.
-async function sameSecret(a, b) {
+export async function sameSecret(a, b) {
   const [x, y] = await Promise.all([digest(a), digest(b)]);
   let difference = 0;
   for (let index = 0; index < x.length; index += 1) difference |= x[index] ^ y[index];

@@ -1,7 +1,7 @@
 // OAuth 2.1 for hosted MCP. The pinned provider owns protocol validation and token storage.
 // This module runs only in workerd; local CLI and app imports do not load cloudflare:workers.
 import OAuthProvider, { authorizationErrorRedirect, OAuthError } from './vendor/oauth-provider.mjs';
-import { exchangeCode, hashToken, identify, readBounded, revokeGithubToken, signupConfig } from './hosted-auth.mjs';
+import { exchangeCode, hashToken, identify, readBounded, revokeGithubToken, sameSecret, signupConfig } from './hosted-auth.mjs';
 import { createMcpResponder, MAX_BODY } from './mcp-http.mjs';
 
 const SCOPE = 'mcp:read';
@@ -116,7 +116,8 @@ export async function handleOAuth(request, env, ctx) {
   const oauthRoute = oauthCallback || path === '/authorize' || path.startsWith('/oauth/') || path.startsWith('/.well-known/oauth-');
   if (!env.OAUTH_KV || !signupConfig(env)) return oauthRoute ? json(503, { error: 'OAuth is not configured on this server.' }) : null;
   const header = request.headers.get('authorization') || '';
-  if (path === '/mcp' && (/^Bearer +cq_/i.test(header) || (env.CONQUISTADOR_MCP_TOKEN && /^Bearer +(\S+)$/i.exec(header)?.[1] === env.CONQUISTADOR_MCP_TOKEN))) return null;
+  const token = /^Bearer +(\S+)$/i.exec(header)?.[1];
+  if (path === '/mcp' && (/^Bearer +cq_/i.test(header) || (token && env.CONQUISTADOR_MCP_TOKEN && await sameSecret(token, env.CONQUISTADOR_MCP_TOKEN)))) return null;
   if (!oauthRoute && path !== '/mcp') return null;
   if (oauthRoute && !path.startsWith('/.well-known/') && !(await env.SIGNUP_LIMITER.limit({ key: request.headers.get('cf-connecting-ip') || 'unknown' })).success) return json(429, { error: 'Too many sign-in requests.' }, { 'retry-after': '60' });
   if (oauthRoute && Number(request.headers.get('content-length') || 0) > 16_384) return json(413, { error: 'Request too large.' });
