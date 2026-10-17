@@ -1,10 +1,11 @@
 # Versions
 
-Product, plugin, host, and portable-agent manifests identify the `0.8.0` release candidate.
-The latest verified npm release is `0.7.0`; 0.8.0 publication is pending. [CHANGELOG.md](CHANGELOG.md) records its delivery and verification. The first public alpha
-was `0.2.0`. Each public release is tagged `vX.Y.Z` and published to npm as
-`@forsvn/conquistador` by the release workflow (see CONTRIBUTING.md). Install it with
-`npm install -g @forsvn/conquistador` or run it with `npx @forsvn/conquistador`.
+Product, plugin, host, and portable-agent manifests identify version `0.8.0`.
+[ROADMAP.md](ROADMAP.md) owns current rollout state; [CHANGELOG.md](CHANGELOG.md) records
+shipped releases and verification. The first public alpha was `0.2.0`. Each public release
+is tagged `vX.Y.Z`. The release workflow publishes `@forsvn/conquistador` and its exact-version
+`conquistador` CLI alias (see CONTRIBUTING.md). Run `npx conquistador@latest` for the CLI;
+apps install `@forsvn/conquistador` as a production dependency.
 
 The public alpha is `0.2.0`, not `0.1.0`, because the tag `v0.1.0` already names a private dogfood
 release from 2026-09-15 (`dea03b3`). No historical tag moves. Public releases continue from

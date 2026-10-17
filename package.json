@@ -106,6 +106,7 @@
     "@cloudflare/workers-oauth-provider": "1.2.3",
     "@oxlint/plugins": "1.82.0",
     "oxlint": "1.82.0",
+    "playwright": "1.64.0",
     "wrangler": "4.148.0"
   },
   "keywords": [

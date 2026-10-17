@@ -16,6 +16,7 @@ jobs:
           node-version: '24'
       - uses: oven-sh/setup-bun@v2
       - run: bun install --frozen-lockfile --ignore-scripts
+      - run: node node_modules/playwright/cli.js install --with-deps chromium
       - run: node tools/e2e/installation-methods.mjs
       - run: node tools/e2e/installation-packages.mjs
       - run: node tools/e2e/oauth.mjs

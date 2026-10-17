@@ -24,6 +24,8 @@ are options inside those paths. ROADMAP.md owns delivery state.
 - The plain plugin picker or its terminal select-all action includes a skill-only client.
 - A method accepts a client-selection flag it ignores, or lets a legacy flag change its fixed type.
 - GitHub refuses a code and leaves the upstream browser cookie active or hides the specific failure.
+- A real browser blocks the consent form's redirect to GitHub or the validated client callback.
+  Verify both Allow and Cancel with browser CSP enforcement; HTTP-only checks do not cover it.
 - Release packaging omits the paired CLI tarball or records a stale version or checksum.
 - The OAuth runner leaves child processes or fixture connections open, hangs on HTTP, or
   exits before it writes a failure report. CI must have a bounded run time.

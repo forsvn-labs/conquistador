@@ -84,7 +84,7 @@
     },
     {
       "path": "package.json",
-      "sha256": "c34132e1c923c1f298218bf16e733ce016e4a8a672ac2fec8c439de9e6fa64c5"
+      "sha256": "9855f426ecf597b21096bb5cfcc3cdce358f59d6b1699e87aecc0c7568a789ae"
     },
     {
       "path": "plugin.json",
@@ -92,7 +92,7 @@
     },
     {
       "path": "README.md",
-      "sha256": "90e3c9c44b3bd1cf33beb4c026846d6f8caa87a10dc6bb02edfbbfea635bd68a"
+      "sha256": "19863936f5ccdf16995b37a2fa119659fb714e08a3fefc3b7d11fdc7e840e865"
     },
     {
       "path": "SKILL.md",

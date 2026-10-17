@@ -9,6 +9,7 @@ import { createServer } from 'node:http';
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { chromium } from 'playwright';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const option = name => process.argv.includes(name) ? process.argv[process.argv.indexOf(name) + 1] : undefined;
@@ -34,6 +35,7 @@ const fixture = createServer(async (request, response) => {
   } else if (url.pathname === '/login/oauth/access_token') json(response, rejectGithubCode ? { error: 'bad_verification_code' } : { access_token: 'fixture-github-token' });
   else if (request.method === 'POST' && url.pathname === '/applications/fixture-client/token') json(response, { user: { id: 73, login: 'fixture-user' } });
   else if (request.method === 'DELETE') { response.writeHead(204); response.end(); }
+  else if (url.pathname === '/client/callback') { response.writeHead(200, { 'content-type': 'text/plain' }); response.end('Local OAuth client fixture'); }
   else { response.writeHead(404); response.end(); }
 });
 const check = async (name, run) => { caller++; await run(); steps.push({ name, passed: true }); console.log(`pass ${name}`); };
@@ -96,6 +98,24 @@ try {
   });
   for (const [name, changes] of [['unregistered redirect', { redirect_uri: 'https://attacker.example/callback' }], ['missing PKCE', { code_challenge: '' }], ['plain PKCE', { code_challenge_method: 'plain' }], ['wrong resource', { resource: 'https://attacker.example/mcp' }], ['unknown scope', { scope: 'admin' }], ['private-network client metadata', { client_id: 'https://127.0.0.1/client.json' }]]) {
     await check(`authorization refuses ${name}`, async () => { const response = await req(authorize(changes)); assert.ok(response.status >= 400); assert.equal(response.headers.get('location'), null); });
+  }
+  const browserRedirect = `${gh}/client/callback`;
+  const browserRegistration = await req(metadata.registration_endpoint, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ client_name: 'Browser E2E', redirect_uris: [browserRedirect], token_endpoint_auth_method: 'none', grant_types: ['authorization_code'], response_types: ['code'] }) });
+  assert.equal(browserRegistration.status, 201); const browserClient = await browserRegistration.json();
+  for (const action of ['allow', 'deny']) {
+    await check(`real browser follows ${action} through the consent form CSP`, async () => {
+      const browser = await chromium.launch();
+      try {
+        const context = await browser.newContext({ extraHTTPHeaders: { 'cf-connecting-ip': `192.0.2.${action === 'allow' ? 252 : 253}` } });
+        const page = await context.newPage();
+        await page.goto(authorize({ client_id: browserClient.client_id, redirect_uri: browserRedirect }));
+        await page.getByRole('button', { name: action === 'allow' ? 'Allow and sign in' : 'Cancel', exact: true }).click();
+        await page.waitForURL(url => url.origin === gh && url.pathname === '/client/callback', { timeout: 15_000 });
+        const target = new URL(page.url()); assert.equal(target.searchParams.get('state'), 'client-state');
+        if (action === 'allow') assert.ok(target.searchParams.get('code'));
+        else assert.equal(target.searchParams.get('error'), 'access_denied');
+      } finally { await browser.close(); }
+    });
   }
   async function begin() {
     const page = await req(authorize()); assert.equal(page.status, 200); cookies(page); const html = await page.text();

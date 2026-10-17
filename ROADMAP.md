@@ -43,6 +43,14 @@ new real-terminal plugin boundary scenario. The full product run passes 940 chec
 now includes the paired alias tarball and its checksum. Wrangler is pinned, OAuth HTTP calls
 are bounded, and runner cleanup terminates the whole test process group.
 
+Live acceptance found and reproduced a browser CSP failure on the OAuth consent redirect.
+The fix allows only GitHub and the provider-validated callback in the consent form policy.
+The workerd runner now includes real Chromium Allow/Cancel flows and passes all 27 cases.
+All 13 CI checks at `633e367` passed before this focused browser correction. The initial Worker
+source is deployed at version `a0fa5787-c040-4ec6-a3c8-da0d3f7270c7`; discovery and the existing
+API key work. Executor v2 imports the app at the hosted organization URL. Account sign-in
+acceptance is still in progress; the installation page remains undeployed.
+
 ## Live release context
 
 Last verified: 2026-10-14. Release 0.7.0 is available as `latest` on
