@@ -2,6 +2,18 @@
 
 ## Current handoff
 
+2026-10-19 progress review: both npm packages still resolve to 0.8.0 as `latest`.
+Reviewed source `e930af17a4ee616146b48ea1302742ab198b7b62` matches GitHub `main`; its only
+change after the release tag records delivery. The latest
+[product checks](https://github.com/forsvn-labs/conquistador/actions/runs/39012614307),
+[installed-app integration](https://github.com/forsvn-labs/conquistador/actions/runs/39012614291),
+and [installation methods](https://github.com/forsvn-labs/conquistador/actions/runs/39012614286)
+pass. Dependency maintenance remains open in public-alpha follow-up items 6 and 7 below.
+The next product acceptance is a real social task and correction with Hung's verdict, followed
+by the Executor v2 adapter and live cases. This review checked existing CI, registry metadata,
+and GitHub alerts; it did not rerun E2E tests or extend native-client, hosted, or writing-quality
+acceptance. The verified 0.8.0 delivery record follows.
+
 2026-10-17: Hung authorized and shipped product 0.8.0 through
 [PR #80](https://github.com/forsvn-labs/conquistador/pull/80). The
 [release](https://github.com/forsvn-labs/conquistador/releases/tag/v0.8.0) has seven checked assets.
@@ -83,13 +95,22 @@ claim the synthetic fixture reproduces its exact text.
 5. Open each MCP client (Claude Desktop, VS Code, Windsurf, Zed, Cursor) after the installer writes
    its entry, and check that the app lists the Conquistador tools. Only the config file and an MCP
    handshake are checked now.
-6. Update the optional Promptfoo evaluation dependencies. On 2026-10-13, GitHub reports critical
-   alerts [#50](https://github.com/forsvn-labs/conquistador/security/dependabot/50),
+6. Update the optional Promptfoo evaluation dependencies. On 2026-10-19, GitHub reports 52 open
+   dependency alerts: 3 critical, 24 high, 21 medium, and 4 low. All are in
+   `evals/promptfoo-isolated/package-lock.json`. The critical alerts are
+   [#50](https://github.com/forsvn-labs/conquistador/security/dependabot/50),
    [#49](https://github.com/forsvn-labs/conquistador/security/dependabot/49), and
    [#45](https://github.com/forsvn-labs/conquistador/security/dependabot/45) for
-   `@simple-git/argv-parser`, `simple-git`, and `proxy-addr` in
-   `evals/promptfoo-isolated/package-lock.json`. Verify patched versions and the evaluation
+   `@simple-git/argv-parser`, `simple-git`, and `proxy-addr`. Verify patched versions and the evaluation
    adapter before enabling live evaluations. The published 0.6.0 npm tarball contains no `evals/`.
+7. Review optional Eve and Executor dependency updates. The
+   [2026-10-18 release-watch report](https://github.com/forsvn-labs/conquistador/actions/runs/39113277632/artifacts/12131227490)
+   marks seven pins `review-required`: `@types/node`, `ai`, `eve`, `just-bash`, `typescript`,
+   `@modelcontextprotocol/sdk`, and `executor`. The watcher exits with code 1 when a pin differs
+   from npm `latest`; this result requests review and does not test runtime compatibility.
+   Review exact candidates against the deployed account, approval, cancellation, and recovery
+   paths before changing pins. Repeat with `node tools/integration-releases.mjs check-updates`;
+   it reads public metadata and changes no files. CI report artifacts expire after 14 days.
 
 ## Next acceptance
 
