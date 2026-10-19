@@ -22,7 +22,7 @@ export const OFFICIAL_INSTALL = Object.freeze({
 export const CONNECT_AGENT = 'npx add-mcp http://127.0.0.1:4788/mcp --transport http --name executor';
 
 function firstLine(text) {
-  return String(text ?? '').split(/\r?\n/, 1)[0].trim().slice(0, 64);
+  return /\bv?(\d+\.\d+\.\d+(?:-[A-Za-z0-9.-]+)?)/.exec(String(text ?? '').split(/\r?\n/, 1)[0])?.[1] ?? '';
 }
 
 function versionFromError(error) {

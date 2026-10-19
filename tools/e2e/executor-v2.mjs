@@ -6,9 +6,10 @@ import { mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import { createServer, createConnection } from 'node:net';
 import { createServer as httpServer } from 'node:http';
 import { tmpdir } from 'node:os';
-import { dirname, join, resolve } from 'node:path';
+import { delimiter, dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createExecutorClient, createExecutorGithubRepositoryRead } from '../../hosts/executor/client.mjs';
+import { inspectExecutor, setupGuide } from '../../hosts/executor/setup.mjs';
 import { createMcpRequestHandler } from '../../api/mcp.mjs';
 import { executorV2Connection, createExecutorV2Api, executorV2SourceFiles, openExecutorV2Mcp, registerExecutorV2Source, checkExecutorV2Source, removeExecutorV2Source } from '../executor-v2.mjs';
 import { readiness, verify } from '../connect.mjs';
@@ -72,6 +73,12 @@ try {
     await pause(500);
   }
   check(ready, 'NATIVE_START_TIMEOUT');
+  await record('setup recognizes the actual native CLI version and uses v2 instructions', async () => {
+    const inspect = await inspectExecutor({ env: { ...env, PATH: [dirname(binary), env.PATH].join(delimiter) } });
+    check(inspect.version === '2.0.0-beta.25' && inspect.generation === 2, 'V2_NATIVE_VERSION_UNRECOGNIZED');
+    check(JSON.stringify(setupGuide(inspect).startLocal) === '["executor serve"]', 'V2_SETUP_USED_REMOVED_COMMAND');
+    return { version: inspect.version };
+  });
   const config = { schema: 'conquistador.executor-connection/v1', endpoint: `${env.EXECUTOR_HOST}/mcp`,
     uiUrl: `${env.EXECUTOR_HOST}/`, authEnv: 'CONQUISTADOR_EXECUTOR_NATIVE' };
   await record('actual v2 MCP discovery includes the direct-call and describe tools', async () => {

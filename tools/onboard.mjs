@@ -461,6 +461,7 @@ export function summaryLines({ results, checks, plan, notice, p }) {
       const where = item.surface === 'agents' ? (plan.scope === 'global' ? 'all projects' : 'this project') : item.surface === 'mcp-apps' ? 'local MCP server'
         : item.surface === 'executor' ? `source "${item.slug}"` : item.surface === 'bot' ? tilde(item.target) : item.surface === 'cli' ? `${item.manager}, ${item.path}` : `signed in as ${item.login}`;
       lines.push(`  ${p.ok('✓')} ${item.label}: ${where}`);
+      if (item.note) lines.push(`    ${item.note}`);
     }
   }
   for (const item of results.filter(entry => entry.skipped && entry.note)) lines.push(`  ${p.dim('-')} ${item.note}`);

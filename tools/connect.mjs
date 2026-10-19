@@ -77,7 +77,8 @@ function generation(env, executor = findExecutor(env)) {
   if (!executor) return 1;
   const { file, args, options } = spawnCommand(executor, ['--version'], env);
   const result = spawnSync(file, args, { ...options, env: { ...env, EXECUTOR_NO_UPDATE_CHECK: '1' }, encoding: 'utf8', timeout: 4000, maxBuffer: 4096 });
-  return result.status === 0 && Number.parseInt(String(result.stdout).trim(), 10) >= 2 ? 2 : 1;
+  const major = /\bv?(\d+)\.\d+\.\d+/.exec(`${result.stdout ?? ''}\n${result.stderr ?? ''}`)?.[1];
+  return result.status === 0 && Number(major) >= 2 ? 2 : 1;
 }
 
 // Executor writes daemon-<host>-<port>.json for each daemon and daemon-active-<host>-<hash>.json

@@ -93,6 +93,13 @@ test('v2 setup uses serve on port 4312 and never suggests removed v1 commands', 
   assert.match(guide.next.join(' '), /accounts|account/);
 });
 
+test('the native v2 version prefix cannot select legacy setup instructions', async () => {
+  const inspect = await inspectExecutor({ env: {}, execFile: async () => ({ stdout: 'executor v2.0.0-beta.25\n' }) });
+  assert.equal(inspect.version, '2.0.0-beta.25');
+  assert.equal(inspect.generation, 2);
+  assert.deepEqual(setupGuide(inspect).startLocal, ['executor serve']);
+});
+
 test('prepare can explicitly select the v2 hosted connection contract without credentials', async () => {
   const result = await capture(['prepare', '--generation', '2', '--endpoint', 'https://mcp.executor.sh/org/personal/mcp',
     '--ui-url', 'https://app.executor.sh/', '--auth-env', 'CONQUISTADOR_EXECUTOR_ACCESS']);
