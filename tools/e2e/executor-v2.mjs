@@ -107,7 +107,8 @@ try {
   playbooks = httpServer(handler);
   await new Promise(done => playbooks.listen(0, '127.0.0.1', done));
   const sourceUrl = `http://127.0.0.1:${playbooks.address().port}/mcp`;
-  const options = { env: { ...env, CONQUISTADOR_EXECUTOR_URL: env.EXECUTOR_HOST }, sourceUrl };
+  const options = { env: { ...env, CONQUISTADOR_EXECUTOR_URL: env.EXECUTOR_HOST,
+    CONQUISTADOR_EXECUTOR_AUTH_ENV: 'EXECUTOR_API_KEY' }, sourceUrl };
   await record('public source commands honor configured v2 even with a legacy global CLI', async () => {
     const script = 'import {registerSource,checkSource,removeSource} from "./tools/executor-source.mjs";\n' +
       'import {readState,writeState} from "./tools/agents.mjs";\n' +

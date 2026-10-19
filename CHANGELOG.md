@@ -19,6 +19,10 @@ output, human acceptance and rights disposition require separate evidence.
   sharp/basic-ftp overrides and the authenticated runtime verifier pass. The
   required graph has zero audit findings; three high findings remain in the
   optional, unpatched node-forge/jks-js chain. Live evaluations still default to deny.
+- Bind the provider cell to the exact adapter file digest. Eve reads complete UTF-8
+  skill references within 64 KiB and rejects symlink escapes. Read Executor.app
+  version metadata without running its CLI; a legacy credential variable alone
+  no longer selects v2. Exact-version install examples keep the published 0.8.0 tag.
 - Hung accepted the minimally corrected launch draft after a focused correction
   opportunity. The weak comparison fails editorial review even though the
   deterministic checker passes it. This verdict covers the supplied draft's voice;

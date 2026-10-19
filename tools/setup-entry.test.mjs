@@ -24,8 +24,11 @@ test('README and INSTALL advertise the npm package, and the Git route copies out
     assert.match(contents, expected);
     assert.doesNotMatch(contents, /npm install -g --ignore-scripts github:forsvn-labs\/conquistador/);
   }
-  const version = JSON.parse(readFileSync(join(root, 'package.json'), 'utf8')).version;
-  assert.match(readFileSync(join(root, 'INSTALL.md'), 'utf8'), new RegExp(`--install-links git\\+https://github\\.com/forsvn-labs/conquistador\\.git#v${version.replaceAll('.', '\\.')}`));
+  const published = /latest published release remains `([0-9.]+)`/.exec(readFileSync(join(root, 'VERSIONS.md'), 'utf8'))?.[1];
+  assert.ok(published, 'VERSIONS.md must identify the published release separately from the source candidate');
+  const install = readFileSync(join(root, 'INSTALL.md'), 'utf8');
+  assert.match(install, new RegExp(`--install-links git\\+https://github\\.com/forsvn-labs/conquistador\\.git#v${published.replaceAll('.', '\\.')}`));
+  assert.ok(install.includes(`npm install -g @forsvn/conquistador@${published}`));
 });
 
 test('the installed setup command works before runtime libraries or dependencies are present', () => {

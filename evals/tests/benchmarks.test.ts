@@ -1,4 +1,5 @@
 import { readFileSync } from "node:fs";
+import { createHash } from "node:crypto";
 import { resolve } from "node:path";
 
 import { describe, expect, it } from "vitest";
@@ -87,6 +88,7 @@ describe("immutable benchmark partitions", () => {
       },
     });
     expect(JSON.stringify(cell)).not.toMatch(/sk-(?:proj-)?[A-Za-z0-9_-]{20,}/);
-
+    const adapterBytes = readFileSync(resolve(root, `adapters/${cell.adapter.name}-${cell.adapter.version}.json`));
+    expect(cell.adapter.digest).toBe(`sha256:${createHash("sha256").update(adapterBytes).digest("hex")}`);
   });
 });

@@ -17,7 +17,7 @@ import { homedir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { onPath as onPathDefault, run as runCommand, readState, writeState } from './agents.mjs';
-import { executorV2Connection } from './executor-v2.mjs';
+import { configuredExecutorV2, executorV2Connection } from './executor-v2.mjs';
 
 // The Executor CLI: `executor` on PATH, else the CLI inside the macOS app (Executor.app bundles one).
 // CONQUISTADOR_EXECUTOR_APP=off skips the app, so tests with an isolated HOME never reach a real one.
@@ -33,9 +33,7 @@ export const slugFor = name => String(name ?? '').trim().toLowerCase().replace(/
 
 // Executor 2 removed the v1 CLI source API. Do not start a daemon or replay those commands.
 export const usesExecutor2 = version => Number.parseInt(version, 10) >= 2;
-const configuredV2 = () => Boolean(process.env.CONQUISTADOR_EXECUTOR_AUTH_ENV ||
-  process.env.CONQUISTADOR_EXECUTOR_ORGANIZATION || process.env.EXECUTOR_API_KEY ||
-  process.env.CONQUISTADOR_EXECUTOR_ACCESS);
+const configuredV2 = () => configuredExecutorV2();
 const trackedV2 = name => {
   const previous = readState().executor;
   return Boolean(previous?.binding && [previous.name, previous.slug].includes(name));

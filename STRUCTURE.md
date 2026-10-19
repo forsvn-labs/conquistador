@@ -60,7 +60,8 @@ The terminal front door uses `tools/launch.mjs` and `tools/front-door.mjs`. The 
 `tools/installer-tui.mjs` and the line flow in `tools/onboard.mjs` build the same installation plan.
 `tools/installer-operation.mjs` runs host changes in child processes. `tools/mcp-apps.mjs` manages
 client config. `tools/executor-source.mjs` selects the legacy v1 or configured v2
-source adapter. `tools/executor-v2.mjs` owns bounded app lifecycle and MCP requests;
+source adapter. `tools/executor-v2.mjs` owns gateway selection, bounded app lifecycle and MCP requests;
+`tools/connect.mjs` reads npm or desktop-app version metadata without invoking the CLI;
 `tools/executor-capabilities.mjs` owns v2 capability discovery and read verification.
 `tools/e2e/executor-v2.mjs` tests the pinned actual native runtime with isolated
 state and writes a repeatable report. `hosts/executor/` holds the optional SDK

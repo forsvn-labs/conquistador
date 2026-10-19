@@ -11,6 +11,12 @@ const slug = value => String(value).trim().toLowerCase().replace(/[^a-z0-9]+/g, 
 const fail = code => { throw Object.assign(new Error(code), { code }); };
 const requireValue = (value, code) => { if (!value) fail(code); };
 
+// Credentials can also belong to a v1 endpoint. Select v2 from gateway settings
+// or a known v2 API origin, never from a credential variable's presence alone.
+export const configuredExecutorV2 = (env = process.env) => Boolean(
+  env.CONQUISTADOR_EXECUTOR_AUTH_ENV || env.CONQUISTADOR_EXECUTOR_ORGANIZATION ||
+  /^(?:https:\/\/api\.executor\.sh|http:\/\/(?:127\.0\.0\.1|\[::1\]):4312)\/?$/.test(env.CONQUISTADOR_EXECUTOR_URL ?? ''));
+
 export function executorV2Connection(env = process.env) {
   let origin;
   try { origin = new URL(env.CONQUISTADOR_EXECUTOR_URL ?? 'http://127.0.0.1:4312'); }

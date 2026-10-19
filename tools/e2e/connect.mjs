@@ -55,6 +55,7 @@ function isolatedEnv(name, extra = {}) {
     HOME: home,
     USERPROFILE: home,
     CONQUISTADOR_HOME: join(home, '.conquistador'),
+    CONQUISTADOR_EXECUTOR_APP: 'off',
     ...(process.env.SystemRoot ? { SystemRoot: process.env.SystemRoot } : {}),
     ...extra,
   };
@@ -173,6 +174,40 @@ record('not-running-starts-nothing', () => {
   return { problems, facts: { checked: report.executor.server.checked } };
 });
 if (await listening(port)) cases.find(item => item.id === 'not-running-starts-nothing')?.problems.push(`something listens on ${port}`);
+
+// Real installed v1 CLIs remain v1 when only a legacy credential variable is set.
+record('legacy-access-variable', () => {
+  if (!executorPath) return { notRun: 'executor is not installed on this machine' };
+  const env = isolatedEnv('legacy-access-variable', { PATH: process.env.PATH,
+    CONQUISTADOR_EXECUTOR_URL: `http://127.0.0.1:${port}`,
+    CONQUISTADOR_EXECUTOR_ACCESS: 'synthetic-legacy-access-variable' });
+  const run = conquistador(['connect', '--json', 'crm.read'], env);
+  const report = json(run.stdout);
+  const baseline = json(conquistador(['connect', '--json', 'crm.read'], { ...env, CONQUISTADOR_EXECUTOR_ACCESS: '' }).stdout);
+  // This case also runs on machines whose installed CLI is v2; the variable must
+  // leave the metadata-based selection unchanged in either generation.
+  const problems = [];
+  if (!report || !baseline || run.status !== 0) problems.push('readiness did not return JSON');
+  else if (report.executor.server.state !== baseline.executor.server.state) problems.push('credential name changed generation');
+  if (existsSync(join(env.HOME, '.executor'))) problems.push('discovery wrote Executor user data');
+  return { problems, facts: { state: report?.executor?.server?.state } };
+});
+
+record('native-macos-v1-app-discovery', () => {
+  const folder = '/Applications/Executor.app/Contents/Resources/executor';
+  if (process.platform !== 'darwin' || !existsSync(join(folder, 'executor'))) return { notRun: 'the real macOS Executor app is not installed' };
+  const plist = readFileSync('/Applications/Executor.app/Contents/Info.plist', 'utf8');
+  if (!/<key>CFBundleShortVersionString<\/key>\s*<string>1\./.test(plist)) return { notRun: 'the installed app is not a v1 XML-metadata bundle' };
+  const env = isolatedEnv('native-macos-v1-app', { PATH: folder,
+    CONQUISTADOR_EXECUTOR_URL: `http://127.0.0.1:${port}` });
+  const run = conquistador(['connect', '--json', 'crm.read'], env);
+  const report = json(run.stdout);
+  const problems = [];
+  if (run.status !== 0 || !report) problems.push('native bundled CLI readiness did not return JSON');
+  else if (report.executor.server.state !== 'not-running') problems.push(`bundled v1 state: ${report.executor.server.state}`);
+  if (existsSync(join(env.HOME, '.executor'))) problems.push('bundle discovery wrote user data');
+  return { problems, facts: { state: report?.executor?.server?.state } };
+});
 
 // 4. Guards: writes are never verified, and bad input is a usage error.
 record('verify-guards', () => {

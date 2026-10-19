@@ -8,20 +8,24 @@ Both published packages remain 0.8.0. The progress review merged in
 [PR #82](https://github.com/forsvn-labs/conquistador/pull/82); it did not ship these changes.
 
 The candidate implements managed Executor v2 apps and capability verification, keeps
-v1 compatibility, and reviews all seven optional integration pins. Fourteen actual
+v1 compatibility, and reviews all seven optional integration pins. Fifteen actual
 native-v2 cases pass: app lifecycle and ownership, direct reads, the public source
 commands, standard OAuth-source installation without a local plugin or false read
-check, capability/organization binding, and approval/cancel/resume. A separate
-public GitHub repository read passed with the same callback code; its latest repeat
-was blocked by an exhausted public API quota (HTTP 403, remaining 0). The failed
-repeat is retained. The default native suite records this external test as not run;
+check, capability/organization binding, approval/cancel/resume, and the fixed public
+GitHub repository callback. The latest public read passes after the API quota reset;
+the earlier HTTP 403 repeat remains in evidence. The default native suite records this external test as not run;
 `--public-github` opts in. The hosted personal account separately returns the live Conquistador library
 through its existing linked account. Browser credentials remain in the browser;
 this is not a hosted API-key lifecycle test. Eve type checks, local contracts,
 prepared-app build and native HTTP authorization/recovery checks pass without a
-model job. All 942 product checks, 66 installer scenarios, 44 checker cases,
-15 social-style cases, four offline connection cases, and 31 optional Executor
-contracts pass locally. The paired package assembly passes. Final-head CI and exact
+model job. All 942 product checks, the 66-scenario installer baseline, 44 checker cases,
+15 social-style cases, six offline connection cases, and 31 optional Executor
+contracts pass locally. Four focused installer regressions also pass, including
+the added legacy-credential case. All five review findings have fixes: the provider
+digest matches its adapter bytes, Eve returns complete bounded references, the Git
+example uses the published tag, and Executor keeps v1 bundle and credential compatibility.
+Eve's 21 local checks include the real pinned sandbox's exact-text and symlink guards.
+The paired package assembly passes. Final-head CI and exact
 package identity are merge gates; their current outputs resolve through the PR
 and DRIVE.md. Iris before/after captures are attached to the PR and kept outside Git.
 

@@ -8,7 +8,7 @@
 // daemon does not show the user's integrations. So this file never runs an executor command
 // until a server already answers /api/health, and it always passes that server's --base-url.
 // Only an explicit, confirmed `connect` step installs or starts Executor.
-import { spawn } from 'node:child_process';
+import { spawn, spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { existsSync, mkdirSync, readdirSync, readFileSync, realpathSync, renameSync, statSync, writeFileSync } from 'node:fs';
 import { homedir } from 'node:os';
@@ -17,6 +17,7 @@ import { createInterface } from 'node:readline/promises';
 import { fileURLToPath } from 'node:url';
 import { spawnCommand } from './spawn.mjs';
 import { readinessV2, verifyV2, v2ToolPath } from './executor-capabilities.mjs';
+import { configuredExecutorV2 } from './executor-v2.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const SKILL = 'skills/conquistador';
@@ -72,17 +73,30 @@ export function findExecutor(env = process.env) {
 // Read installed package metadata without invoking the CLI: even --version on
 // legacy Executor can write a cache. Hosted v2 also works without a local CLI.
 function generation(env, executor = findExecutor(env)) {
-  if (env.CONQUISTADOR_EXECUTOR_AUTH_ENV || env.CONQUISTADOR_EXECUTOR_ORGANIZATION || env.EXECUTOR_API_KEY ||
-      env.CONQUISTADOR_EXECUTOR_ACCESS || /^(?:https:\/\/api\.executor\.sh|http:\/\/(?:127\.0\.0\.1|\[::1\]):4312)\/?$/.test(env.CONQUISTADOR_EXECUTOR_URL ?? '')) return 2;
+  if (configuredExecutorV2(env)) return 2;
   if (!executor) return 1;
   try {
-    let directory = dirname(realpathSync(executor));
+    const binary = realpathSync(executor);
+    let directory = dirname(binary);
     for (let depth = 0; depth < 5; depth++, directory = dirname(directory)) {
       const path = join(directory, 'package.json');
       if (!existsSync(path) || statSync(path).size > 65536) continue;
       const manifest = JSON.parse(readFileSync(path, 'utf8'));
       if (manifest.name !== 'executor' && !/^@executor-js\/executor-[a-z0-9-]+$/.test(manifest.name ?? '')) continue;
       const major = /^(\d+)\.\d+\.\d+/.exec(manifest.version ?? '')?.[1];
+      return Number(major) >= 2 ? 2 : Number(major) === 1 ? 1 : 0;
+    }
+    // Desktop bundles do not ship npm metadata. Read the app's version,
+    // including binary plists, without running its CLI or touching user data.
+    if (process.platform === 'darwin' && binary.endsWith('/Executor.app/Contents/Resources/executor/executor')) {
+      const plist = join(dirname(binary), '..', '..', 'Info.plist');
+      if (statSync(plist).size > 65536) return 0;
+      const result = spawnSync('/usr/bin/plutil', ['-convert', 'json', '-o', '-', plist],
+        { encoding: 'utf8', timeout: 1000, maxBuffer: 65536 });
+      if (result.status !== 0) return 0;
+      const manifest = JSON.parse(result.stdout);
+      if (manifest.CFBundleIdentifier !== 'sh.executor.desktop') return 0;
+      const major = /^(\d+)\.\d+\.\d+(?:[-+][A-Za-z0-9.-]+)?$/.exec(manifest.CFBundleShortVersionString ?? '')?.[1];
       return Number(major) >= 2 ? 2 : Number(major) === 1 ? 1 : 0;
     }
   } catch { /* Unrecognized installs require a configured gateway. */ }
