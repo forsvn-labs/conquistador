@@ -59,7 +59,12 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for focused checks and package verificati
 The terminal front door uses `tools/launch.mjs` and `tools/front-door.mjs`. The Ink UI in
 `tools/installer-tui.mjs` and the line flow in `tools/onboard.mjs` build the same installation plan.
 `tools/installer-operation.mjs` runs host changes in child processes. `tools/mcp-apps.mjs` manages
-client config; `tools/executor-source.mjs` guards the legacy adapter on Executor 2.
+client config. `tools/executor-source.mjs` selects the legacy v1 or configured v2
+source adapter. `tools/executor-v2.mjs` owns bounded app lifecycle and MCP requests;
+`tools/executor-capabilities.mjs` owns v2 capability discovery and read verification.
+`tools/e2e/executor-v2.mjs` tests the pinned actual native runtime with isolated
+state and writes a repeatable report. `hosts/executor/` holds the optional SDK
+probe and fixed GitHub metadata callback. These clients do not read browser credentials.
 
 The four public command routes are in `tools/installation-methods.mjs`. They reuse the owned
 installer in `tools/launch.mjs` and `tools/onboard.mjs`. Hosted OAuth is isolated in

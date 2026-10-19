@@ -157,7 +157,8 @@ upstream rights. The operator secret must never enter the coding agent environme
 
 The 2026-10-19 migration uses Eve's built-in `eve__skill`, the native read-file
 tool, the exported Just Bash sandbox environment, and the current ask-question
-factory. Type checks, local contracts and the native build pass. These checks do
+factory. Type checks, local contracts, the prepared-app build, and native HTTP
+authorization/missing-session checks pass. These checks do
 not prove a credentialed model job, human approval in a live session, or recovery
 of production jobs. No durable job is started by installation or a release check.
 

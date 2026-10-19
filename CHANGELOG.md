@@ -4,6 +4,28 @@
 versions. Verification establishes the stated local scope; native host behavior, useful model
 output, human acceptance and rights disposition require separate evidence.
 
+## Unreleased, 0.9.0 candidate
+
+- Executor v2 uses bounded app APIs and MCP discovery/direct calls. Managed source
+  install, update and removal preserve app identity and connected accounts, refuse
+  unowned or edited source, and never fall back to removed v1 commands. Capability
+  verification binds the current credential, target and tool description. The
+  optional GitHub callback pins the reviewed v2 signature and repository list.
+- Review optional dependencies against current pins: Executor 2.0.0-beta.25 and
+  SDK 1.32.1; Eve 0.80.1, AI SDK 7.0.143, Just Bash 3.6.0, TypeScript 7.0.2 and
+  Node types 26.6.5. The release watcher reads Executor's beta tag explicitly.
+  Eve's sandbox, skill loading and question tool use the current native APIs.
+- Promptfoo 0.124.1 removes the old ONNX/Transformers dependency graph. Updated
+  sharp/basic-ftp overrides and the authenticated runtime verifier pass. The
+  required graph has zero audit findings; three high findings remain in the
+  optional, unpatched node-forge/jks-js chain. Live evaluations still default to deny.
+- Hung accepted the minimally corrected launch draft after a focused correction
+  opportunity. The weak comparison fails editorial review even though the
+  deterministic checker passes it. This verdict covers the supplied draft's voice;
+  it grants no publication permission or general writing-quality claim.
+- Release verification and delivery are tracked in ROADMAP.md. This candidate is
+  not yet merged or published; 0.8.0 remains the delivered release.
+
 ## 2026-10-17, 0.8.0 public alpha
 
 - [PR #80](https://github.com/forsvn-labs/conquistador/pull/80) merged under Hung's shipment

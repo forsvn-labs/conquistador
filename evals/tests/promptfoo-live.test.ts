@@ -119,9 +119,9 @@ function candidateFixture(maxCostUsd = 0.01): CandidateFixture {
         resolved: "https://registry.npmjs.org/hoisted-provider-client/-/hoisted-provider-client-1.0.0.tgz",
         integrity: "sha512-BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB==",
       },
-      "node_modules/adm-zip": {
-        version: "0.6.1",
-        resolved: "https://registry.npmjs.org/adm-zip/-/adm-zip-0.6.1.tgz",
+      "node_modules/basic-ftp": {
+        version: "6.2.3",
+        resolved: "https://registry.npmjs.org/basic-ftp/-/basic-ftp-6.2.3.tgz",
         integrity: "sha512-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC==",
       },
       "node_modules/sharp": {

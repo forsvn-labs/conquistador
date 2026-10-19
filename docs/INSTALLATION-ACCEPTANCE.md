@@ -34,6 +34,9 @@ are options inside those paths. ROADMAP.md owns delivery state.
 
 ## Dependency and Executor v2 failure modes (2026-10-19)
 
+A configured v2 API must take precedence over an unrelated v1 binary on PATH. A
+tracked v2 app must never fall back to v1 source commands after credentials are removed.
+
 Record these cases before changing the adapters or dependency pins:
 
 - The v2 path calls removed v1 CLI commands or starts a folder-scoped daemon.

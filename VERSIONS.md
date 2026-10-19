@@ -1,6 +1,8 @@
 # Versions
 
-Product, plugin, host, and portable-agent manifests identify version `0.8.0`.
+The source candidate's product, plugin, host, and portable-agent manifests identify
+version `0.9.0`. The latest published release remains `0.8.0` until the candidate is
+approved, merged, packaged, and published.
 [ROADMAP.md](ROADMAP.md) owns current rollout state; [CHANGELOG.md](CHANGELOG.md) records
 shipped releases and verification. The first public alpha was `0.2.0`. Each public release
 is tagged `vX.Y.Z`. The release workflow publishes `@forsvn/conquistador` and its exact-version

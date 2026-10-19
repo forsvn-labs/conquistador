@@ -134,7 +134,7 @@ try {
         return { providerCalls: 0 };
       } finally { await session.close(); }
     });
-    await record('capability verification reads real playbooks and invalidates changed schemas and credentials', async () => {
+    await record('capability verification reads real playbooks and rejects changed descriptor fingerprints and credentials', async () => {
       const nativeEnv = { ...options.env, CONQUISTADOR_HOME: join(work, 'cq') };
       const tool = `tools[${JSON.stringify(installed.slug)}].conquistador_read`;
       const result = await verify({ capability: 'docs.read', tool, args: JSON.stringify({ path: 'conquistador/SKILL.md' }), env: nativeEnv });
@@ -143,6 +143,14 @@ try {
       const report = await readiness({ names: ['docs.read'], env: nativeEnv });
       check(report.executor.generation === 2, 'V2_CAPABILITY_WRONG_GENERATION');
       check(report.capabilities[0].state === 'verified', 'V2_READ_NOT_RECORDED');
+      const recordPath = join(nativeEnv.CONQUISTADOR_HOME, 'connections.json');
+      const saved = await readFile(recordPath, 'utf8');
+      const modified = JSON.parse(saved);
+      modified.verified['docs.read'].descriptionDigest = '0'.repeat(64);
+      await writeFile(recordPath, JSON.stringify(modified));
+      const drift = await readiness({ names: ['docs.read'], env: nativeEnv });
+      check(drift.capabilities[0].state !== 'verified', 'V2_STALE_DESCRIPTION_VERIFIED');
+      await writeFile(recordPath, saved);
       const denied = await verify({ capability: 'docs.read', tool: `tools[${JSON.stringify(installed.slug)}].delete`, args: '{}', env: nativeEnv }).catch(() => ({ status: 'failed' }));
       check(denied.status !== 'verified', 'V2_WRITE_VERIFY_ALLOWED');
       const changed = await readiness({ names: ['docs.read'], env: { ...nativeEnv, EXECUTOR_API_KEY: 'invalid-credential-for-isolated-acceptance' } });
@@ -155,6 +163,11 @@ try {
       await request(`/apps/${installed.appId}/commits`, { method: 'POST', body: { expected: source.revision.commit, files: edited, message: 'Acceptance: preserve a user edit' } });
       const refused = await registerExecutorV2Source('Conquistador acceptance', bound).catch(error => error.code);
       check(refused === 'EXECUTOR_APP_MODIFIED', 'V2_USER_EDIT_OVERWRITTEN');
+      const refusedRemoval = await removeExecutorV2Source('Conquistador acceptance', bound).catch(error => error.code);
+      check(refusedRemoval === 'EXECUTOR_APP_MODIFIED', 'V2_USER_EDIT_REMOVED');
+      const wrongTarget = await checkExecutorV2Source('Conquistador acceptance', { ...bound,
+        binding: { ...bound.binding, origin: 'https://unrelated.invalid' } }).catch(error => error.code);
+      check(wrongTarget === 'EXECUTOR_TARGET_CHANGED', 'V2_TARGET_BINDING_IGNORED');
       const current = await request(`/apps/${installed.appId}/workspace`);
       const marker = source.files.map(file => file.path === 'conquistador.json' ? { ...file, content: JSON.stringify({ ...JSON.parse(file.content), productVersion: '0.0.0' }) + '\n' } : file);
       await request(`/apps/${installed.appId}/commits`, { method: 'POST', body: { expected: current.revision.commit, files: marker, message: 'Acceptance: previous managed release' } });
@@ -184,6 +197,9 @@ try {
         const deployed = await request(`/apps/${app.id}/deploy`, { method: 'POST', body: { commit: source.revision.commit }, timeout: 120000 });
         const tool = `tools[${JSON.stringify(deployed.app.slug)}].conquistador_read`;
         session = await openExecutorV2Mcp(connection);
+        const verification = await verify({ capability: 'docs.read', tool, args: JSON.stringify({ path: 'conquistador/SKILL.md' }), env: options.env });
+        check(verification.status === 'paused' && verification.requestId, 'V2_VERIFY_PAUSE_MISREPORTED');
+        await session.call('resume', { requestId: verification.requestId, response: { action: 'cancel' } });
         const paused = await session.call('call', { calls: { path: tool, input: { path: 'conquistador/SKILL.md' } } });
         await writeFile(join(out, 'approval-paused.json'), JSON.stringify(paused, null, 2) + '\n');
         check(paused.status === 'approval-required', 'V2_APPROVAL_DID_NOT_PAUSE');
@@ -191,12 +207,16 @@ try {
         check(typeof requestId === 'string', 'V2_APPROVAL_ID_MISSING');
         const cancelled = await session.call('resume', { requestId, response: { action: 'cancel' } });
         await writeFile(join(out, 'approval-cancelled.json'), JSON.stringify(cancelled, null, 2) + '\n');
-        check(!JSON.stringify(cancelled).includes('# Product'), 'V2_CANCEL_EXECUTED_READ');
+        check(cancelled.status === 'completed' && cancelled.execution?.value?.ok === false &&
+          cancelled.execution.value.error?.message === 'ApprovalCancelled', 'V2_CANCEL_EXECUTED_READ');
         const second = await session.call('call', { calls: { path: tool, input: { path: 'conquistador/SKILL.md' } } });
         check(second.status === 'approval-required', 'V2_NEW_READ_NOT_PAUSED');
         const accepted = await session.call('resume', { requestId: second.requestId ?? second.request?.requestId, response: { action: 'accept' } });
         await writeFile(join(out, 'approval-accepted.json'), JSON.stringify(accepted, null, 2) + '\n');
-        check(accepted.status === 'completed' && JSON.stringify(accepted).includes('conquistador'), 'V2_APPROVAL_RESUME_FAILED');
+        check(accepted.status === 'completed' && accepted.execution?.ok === true && accepted.execution.value?.ok === true &&
+          accepted.execution.value.value?.content?.some(item => item.type === 'text' && item.text.includes('name: conquistador')), 'V2_APPROVAL_RESUME_FAILED');
+        const replay = await session.call('resume', { requestId: second.requestId, response: { action: 'accept' } });
+        check(replay.status !== 'completed', 'V2_APPROVAL_RESULT_REPLAYED');
         return { externalWrites: 0, approvalAuthority: 'explicit test of an isolated read policy; no human or live-account verdict' };
       } finally {
         await session?.close();
@@ -232,6 +252,10 @@ try {
         const host = createExecutorGithubRepositoryRead(config, { env: { CONQUISTADOR_EXECUTOR_NATIVE: env.EXECUTOR_API_KEY },
           connection: account, allowedRepositories: ['forsvn-labs/conquistador'], binding: { protocol: 'executor-v2', toolId, inputSignature: descriptor.signature } });
         const options = { connection: account, credential: host.credential, deadlineAt: new Date(Date.now() + 10000).toISOString() };
+        const mismatched = createExecutorGithubRepositoryRead(config, { env: { CONQUISTADOR_EXECUTOR_NATIVE: env.EXECUTOR_API_KEY },
+          connection: account, allowedRepositories: ['forsvn-labs/conquistador'], binding: { protocol: 'executor-v2', toolId, inputSignature: descriptor.signature + ' ' } });
+        const rejected = await mismatched.readRepository({ owner: 'forsvn-labs', repository: 'conquistador' }, { ...options, credential: mismatched.credential }).catch(error => error.code);
+        check(rejected === 'TOOL_BINDING_MISMATCH', 'V2_GITHUB_SIGNATURE_DRIFT_IGNORED');
         const denied = await host.readRepository({ owner: 'other', repository: 'repo' }, options).catch(error => error.code);
         check(denied === 'REPOSITORY_DENIED', 'V2_REPOSITORY_ALLOWLIST_BYPASSED');
         const result = await host.readRepository({ owner: 'forsvn-labs', repository: 'conquistador' }, options);
