@@ -8,7 +8,7 @@
 // daemon does not show the user's integrations. So this file never runs an executor command
 // until a server already answers /api/health, and it always passes that server's --base-url.
 // Only an explicit, confirmed `connect` step installs or starts Executor.
-import { spawn } from 'node:child_process';
+import { spawn, spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { existsSync, mkdirSync, readdirSync, readFileSync, renameSync, statSync, writeFileSync } from 'node:fs';
 import { homedir } from 'node:os';
@@ -16,6 +16,7 @@ import { delimiter, dirname, join, resolve } from 'node:path';
 import { createInterface } from 'node:readline/promises';
 import { fileURLToPath } from 'node:url';
 import { spawnCommand } from './spawn.mjs';
+import { readinessV2, verifyV2, v2ToolPath } from './executor-capabilities.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const SKILL = 'skills/conquistador';
@@ -66,6 +67,17 @@ export function findExecutor(env = process.env) {
     }
   }
   return null;
+}
+
+// Version inspection cannot start Executor. Explicit v2 credentials also support
+// hosted access without a locally installed CLI.
+function generation(env, executor = findExecutor(env)) {
+  if (env.CONQUISTADOR_EXECUTOR_AUTH_ENV || env.CONQUISTADOR_EXECUTOR_ORGANIZATION || env.EXECUTOR_API_KEY ||
+      env.CONQUISTADOR_EXECUTOR_ACCESS || /^(?:https:\/\/api\.executor\.sh|http:\/\/(?:127\.0\.0\.1|\[::1\]):4312)\/?$/.test(env.CONQUISTADOR_EXECUTOR_URL ?? '')) return 2;
+  if (!executor) return 1;
+  const { file, args, options } = spawnCommand(executor, ['--version'], env);
+  const result = spawnSync(file, args, { ...options, env: { ...env, EXECUTOR_NO_UPDATE_CHECK: '1' }, encoding: 'utf8', timeout: 4000, maxBuffer: 4096 });
+  return result.status === 0 && Number.parseInt(String(result.stdout).trim(), 10) >= 2 ? 2 : 1;
 }
 
 // Executor writes daemon-<host>-<port>.json for each daemon and daemon-active-<host>-<hash>.json
@@ -252,6 +264,7 @@ export async function readiness({ names = [], env = process.env, fetchImpl = fet
   const map = loadCapabilities(directory);
   const ids = selectCapabilities(names, map);
   const executor = findExecutor(env);
+  if (generation(env, executor) === 2) return readinessV2({ map, ids, env, fetchImpl, records: readConnections(env).verified, classify: toolClass });
   const server = executor ? await findServer({ env, fetchImpl }) : { state: 'not-installed' };
   const records = readConnections(env).verified;
   const report = {
@@ -315,13 +328,25 @@ export async function verify({ capability, tool, args, env = process.env, fetchI
   const spec = map.capabilities[capability];
   if (!spec) throw new UsageError(`Unknown capability: ${capability}.`);
   if (spec.class !== 'read') throw new UsageError(`${capability} is a write capability. verify runs read-class tools only.`);
-  if (typeof tool !== 'string' || !/^[A-Za-z0-9_$-]+(?:[./][A-Za-z0-9_$-]+)+$/.test(tool)) throw new UsageError('Give --tool as the tool path from executor tools search, for example hubspot.contacts.search.');
+  if (typeof tool !== 'string' || (!v2ToolPath(tool) && !/^[A-Za-z0-9_$-]+(?:[./][A-Za-z0-9_$-]+)+$/.test(tool))) throw new UsageError('Give --tool as an exact tool path from Executor search.');
   const kind = toolClass(tool);
   if (kind !== 'read') throw new UsageError(`${tool} does not read (its name says ${kind === 'write' ? 'it changes data' : 'nothing about what it does'}). Pick a tool whose name starts or ends with get, list, search, or query.`);
   let input;
   try { input = JSON.parse(args ?? '{}'); } catch { throw new UsageError('--args must be JSON.'); }
   if (input === null || typeof input !== 'object' || Array.isArray(input)) throw new UsageError('--args must be a JSON object.');
   const executor = findExecutor(env);
+  if (generation(env, executor) === 2) {
+    if (!v2ToolPath(tool)) throw new UsageError('Executor v2 requires the exact tools.<app> path from search.');
+    const result = await verifyV2({ capability, tool, input, env, fetchImpl });
+    if (result.record) {
+      const data = readConnections(env);
+      data.verified[capability] = result.record;
+      writeConnections(data, env);
+      delete result.record;
+      result.recordedIn = connectionsPath(env);
+    }
+    return result;
+  }
   if (!executor) return { status: 'failed', capability, tool, reason: 'Executor is not installed.' };
   const server = await findServer({ env, fetchImpl });
   if (server.state !== 'running') return { status: 'failed', capability, tool, reason: 'Executor is not running. Open Executor.app, or run executor web.' };
@@ -422,7 +447,8 @@ const STATE_ORDER = { verified: 0, connected: 1, unknown: 2, missing: 3 };
 export function renderReport(report) {
   const lines = [];
   const { executor } = report;
-  if (!executor.installed) lines.push('Executor: not installed');
+  if (executor.generation === 2) lines.push(`Executor v2: ${executor.server.state}${executor.server.origin ? ` at ${executor.server.origin}` : ''}`);
+  else if (!executor.installed) lines.push('Executor: not installed');
   else if (executor.server.state !== 'running') lines.push('Executor: not running');
   else lines.push(`Executor: running at ${executor.server.origin}`);
   if (report.integrations.length) lines.push(`Integrations: ${report.integrations.map(item => (item.tools === null ? item.slug : `${item.slug} (${item.tools} tools)`)).join(', ')}`);
@@ -460,6 +486,7 @@ export async function runConnect(argv, { stdin = process.stdin, stdout = process
   try {
     if (argv.some(arg => ['--help', '-h', 'help'].includes(arg))) { stdout.write(HELP); return 0; }
     const [action] = argv;
+    const v2 = generation(env) === 2;
     if (action === 'verify') {
       const { flags, rest } = parseFlags(argv.slice(1), ['--tool', '--args']);
       if (rest.length !== 1 || !flags.tool) throw new UsageError('Usage: conquistador connect verify CAPABILITY --tool PATH --args JSON');
@@ -472,6 +499,10 @@ export async function runConnect(argv, { stdin = process.stdin, stdout = process
     if (action === 'add') {
       const { rest } = parseFlags(argv.slice(1), []);
       if (rest.length) throw new UsageError('Usage: conquistador connect add');
+      if (v2) {
+        stdout.write('Open Executor’s Connect page in your signed-in browser. Link only the accounts this task needs and review app policies. Then run conquistador connect.\n');
+        return 0;
+      }
       let executor = findExecutor(env) ?? await offerInstall(io, env);
       if (!executor) return 0;
       let server = await findServer({ env, fetchImpl });
@@ -484,9 +515,9 @@ export async function runConnect(argv, { stdin = process.stdin, stdout = process
     const { flags, rest } = parseFlags(argv, []);
     const names = rest;
     selectCapabilities(names);
-    if (!flags.json && !findExecutor(env)) {
+    if (!v2 && !flags.json && !findExecutor(env)) {
       await offerInstall(io, env);
-    } else if (!flags.json && interactive(io)) {
+    } else if (!v2 && !flags.json && interactive(io)) {
       const executor = findExecutor(env);
       const server = await findServer({ env, fetchImpl });
       if (server.state !== 'running') await offerStart(io, executor, env, fetchImpl);

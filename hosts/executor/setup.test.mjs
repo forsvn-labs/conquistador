@@ -92,3 +92,11 @@ test('v2 setup uses serve on port 4312 and never suggests removed v1 commands', 
   assert.doesNotMatch(JSON.stringify(guide), /executor install|executor web|4788|toolkits/);
   assert.match(guide.next.join(' '), /accounts|account/);
 });
+
+test('prepare can explicitly select the v2 hosted connection contract without credentials', async () => {
+  const result = await capture(['prepare', '--generation', '2', '--endpoint', 'https://mcp.executor.sh/org/personal/mcp',
+    '--ui-url', 'https://app.executor.sh/', '--auth-env', 'CONQUISTADOR_EXECUTOR_ACCESS']);
+  assert.equal(result.code, 0);
+  assert.equal(JSON.parse(result.output).schema, 'conquistador.executor-connection/v2');
+  assert.equal(result.output.includes(credential), false);
+});

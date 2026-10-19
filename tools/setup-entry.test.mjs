@@ -36,7 +36,7 @@ test('the installed setup command works before runtime libraries or dependencies
       'tools/install-paths.mjs', 'tools/setup-routes.mjs', 'tools/method-library.mjs', 'tools/stage-method-library.mjs', 'tools/setup-guide.mjs', 'tools/setup-mcp.mjs', 'tools/operator-package.mjs', 'tools/project-installation.mjs', 'tools/setup-surfaces.mjs', 'tools/operator-profile.mjs',
       'tools/conquistador-mode.mjs', 'tools/proactive.mjs', 'tools/context-selection.mjs', 'tools/routing-contract.mjs', 'tools/module-root.mjs', 'tools/request-text.mjs', 'tools/plugin-contracts.mjs',
       'tools/onboarding-safety.mjs', 'tools/onboarding-ui.mjs', 'tools/onboarding.mjs', 'tools/onboarding-recovery.mjs', 'tools/onboarding-parse.mjs', 'tools/onboarding-hosts.mjs', 'tools/onboarding-routes.mjs', 'tools/vendor/clack.mjs', 'tools/front-door.mjs', 'tools/installation-methods.mjs', 'tools/self-update.mjs', 'tools/spawn.mjs', 'tools/agents.mjs', 'tools/plugin-payload.mjs',
-      'tools/onboard.mjs', 'tools/onboard-ui.mjs', 'tools/mcp-apps.mjs', 'tools/executor-source.mjs', 'tools/preflight.mjs',
+      'tools/onboard.mjs', 'tools/onboard-ui.mjs', 'tools/mcp-apps.mjs', 'tools/executor-source.mjs', 'tools/executor-v2.mjs', 'tools/preflight.mjs',
       'tools/cli-install.mjs', 'tools/process-run.mjs', 'tools/installer-operation.mjs']) {
       const target = join(source, file);
       mkdirSync(dirname(target), { recursive: true });

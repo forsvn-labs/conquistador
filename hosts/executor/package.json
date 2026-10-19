@@ -12,9 +12,14 @@
     "test:native": "node native-smoke.mjs"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "1.31.0"
+    "@modelcontextprotocol/sdk": "1.32.1"
   },
   "devDependencies": {
-    "executor": "1.6.8"
+    "executor": "2.0.0-beta.25"
+  },
+  "conquistador": {
+    "releaseTags": {
+      "executor": "beta"
+    }
   }
 }

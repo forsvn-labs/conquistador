@@ -3,7 +3,7 @@ import { ExecutorError, requireCondition, validateConfig } from './config.mjs';
 
 const MAX_BYTES = 262144;
 const TIMEOUT_MS = 10000;
-const KNOWN_TOOLS = new Set(['execute', 'search', 'invoke', 'integrations', 'skills', 'resume']);
+const KNOWN_TOOLS = new Set(['execute', 'search', 'describe', 'call', 'invoke', 'integrations', 'skills', 'resume']);
 
 // This is a transport guard, not an alternate MCP implementation. The installed
 // SDK owns negotiation, protocol validation and sessions.
@@ -113,6 +113,7 @@ function digest(value) { return createHash('sha256').update(JSON.stringify(canon
 /** Host-only callback for createExecutorGithubRepositoryAdapter. Never expose to a model as a tool. */
 export function createExecutorGithubRepositoryRead(config, { env = process.env, connection, allowedRepositories, binding }) {
   const checked = validateConfig(config);
+  if (checked.schema === 'conquistador.executor-connection/v2') return createV2GithubRepositoryRead(checked, { env, connection, allowedRepositories, binding });
   requireCondition(connection?.provider === 'github' && connection.state === 'active' &&
     connection.allowedOperationIds?.includes('github.repository.get'), 'BINDING_INVALID');
   const connectionDigest = digest(connection);
@@ -188,4 +189,64 @@ export function createExecutorGithubRepositoryRead(config, { env = process.env, 
       } finally { await session?.close(); }
     },
   });
+}
+
+// v2 returns TypeScript signatures instead of v1 JSON schemas and annotations.
+// A trusted host must review and pin the exact read operation before binding it.
+function createV2GithubRepositoryRead(config, { env, connection, allowedRepositories, binding }) {
+  requireCondition(connection?.provider === 'github' && connection.state === 'active' &&
+    connection.allowedOperationIds?.includes('github.repository.get'), 'BINDING_INVALID');
+  const connectionDigest = digest(connection), initialBearer = env[config.authEnv];
+  requireCondition(typeof initialBearer === 'string' && initialBearer.length >= 16, 'AUTH_REQUIRED');
+  const bearerDigest = digest(initialBearer);
+  requireCondition(Array.isArray(allowedRepositories) && allowedRepositories.length > 0 &&
+    allowedRepositories.every(id => /^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/.test(id)), 'BINDING_INVALID');
+  const allowed = new Set(allowedRepositories);
+  requireCondition(binding && Object.keys(binding).sort().join(',') === 'inputSignature,protocol,toolId' &&
+    binding.protocol === 'executor-v2' && typeof binding.toolId === 'string' && binding.toolId.length <= 400 &&
+    /^tools(?:\.[A-Za-z_][A-Za-z0-9_-]*|\["[A-Za-z0-9_-]+"\])+\.getRepository$/.test(binding.toolId) &&
+    !/(?:__proto__|constructor|prototype)/.test(binding.toolId) && typeof binding.inputSignature === 'string' &&
+    binding.inputSignature.length <= 65536 && /\bowner\s*:\s*string\b/.test(binding.inputSignature) &&
+    /\brepo\s*:\s*string\b/.test(binding.inputSignature), 'BINDING_INVALID');
+  const bound = structuredClone(binding), credential = Object.freeze(Object.create(null));
+  return Object.freeze({ credential, async readRepository(input, options) {
+    requireCondition(options?.credential === credential && digest(options.connection) === connectionDigest, 'CONNECTION_BINDING_MISMATCH');
+    requireCondition(!options.connection.expiresAt || Date.parse(options.connection.expiresAt) > Date.now(), 'CONNECTION_EXPIRED');
+    requireCondition(input && Object.keys(input).sort().join(',') === 'owner,repository' && allowed.has(`${input.owner}/${input.repository}`), 'REPOSITORY_DENIED');
+    const remaining = Date.parse(options.deadlineAt) - Date.now();
+    requireCondition(Number.isFinite(remaining) && remaining > 0 && !options.signal?.aborted, 'DEADLINE_EXPIRED');
+    const signal = AbortSignal.any([AbortSignal.timeout(Math.min(10000, Math.ceil(remaining))), ...(options.signal ? [options.signal] : [])]);
+    const bearer = env[config.authEnv];
+    requireCondition(typeof bearer === 'string' && digest(bearer) === bearerDigest, 'AUTH_BINDING_MISMATCH');
+    let session;
+    try {
+      session = await openSession(config, { env: { [config.authEnv]: bearer }, signal });
+      const requestOptions = { timeout: Math.min(10000, remaining), signal: session.signal };
+      const described = await session.client.callTool({ name: 'describe', arguments: { paths: [bound.toolId] } }, undefined, requestOptions);
+      const items = described.structuredContent?.items;
+      requireCondition(!described.isError && Array.isArray(items) && items.length === 1 &&
+        !described.structuredContent.missing?.length && items[0].path === bound.toolId &&
+        items[0].signature === bound.inputSignature, 'TOOL_BINDING_MISMATCH');
+      signal.throwIfAborted();
+      const result = await session.client.callTool({ name: 'call', arguments: { calls: { path: bound.toolId,
+        input: { owner: input.owner, repo: input.repository } } } }, undefined, requestOptions);
+      const response = result.structuredContent, call = response?.execution?.value;
+      requireCondition(!result.isError && response?.status === 'completed' && response.execution.ok === true &&
+        call?.ok === true && call.path === bound.toolId, 'PROVIDER_READ_FAILED');
+      const body = call.value;
+      requireCondition(body && body.full_name === `${input.owner}/${input.repository}` && body.name === input.repository &&
+        Number.isSafeInteger(body.id) && body.id > 0 && typeof body.private === 'boolean' && !JSON.stringify(body).includes(bearer), 'PROVIDER_RESPONSE_INVALID');
+      const fields = ['id', 'name', 'full_name', 'description', 'default_branch', 'archived', 'disabled', 'fork',
+        'html_url', 'visibility', 'private', 'topics', 'created_at', 'updated_at', 'pushed_at'];
+      const metadata = Object.fromEntries(fields.filter(key => Object.hasOwn(body, key)).map(key => [key, body[key]]));
+      for (const [key, value] of Object.entries(metadata)) {
+        if (key === 'id') continue;
+        if (key === 'topics') requireCondition(Array.isArray(value) && value.length <= 50 && value.every(topic => typeof topic === 'string' && topic.length <= 100), 'PROVIDER_RESPONSE_INVALID');
+        else if (['private', 'archived', 'disabled', 'fork'].includes(key)) requireCondition(typeof value === 'boolean', 'PROVIDER_RESPONSE_INVALID');
+        else requireCondition(value === null || typeof value === 'string' && value.length <= 2048, 'PROVIDER_RESPONSE_INVALID');
+      }
+      return { status: 200, headers: {}, body: metadata };
+    } catch (error) { throw new ExecutorError(error instanceof ExecutorError ? error.code : 'REPOSITORY_READ_FAILED'); }
+    finally { await session?.close(); }
+  } });
 }

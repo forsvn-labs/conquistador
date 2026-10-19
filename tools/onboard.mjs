@@ -11,7 +11,7 @@ import { join, relative, resolve } from 'node:path';
 import { AGENTS, OWNED, agentId, detectAgents, home, payloadCurrent, pluginHome, productRoot, projectFolders, projectRoot, readState,
   self, setHooks, skillCurrent, stageTargets, version, writeState } from './agents.mjs';
 import { MCP_APPS, appById, applyApp, checkApp, detectApps, inspectApp } from './mcp-apps.mjs';
-import { executorStatus, manualSteps, slugFor, executorHandoff } from './executor-source.mjs';
+import { executorStatus, manualSteps, slugFor, executorHandoff, usesExecutor2 } from './executor-source.mjs';
 import { reachable, shadowProblem, startUpdateCheck, updateNotice } from './preflight.mjs';
 import { paint, plainUi, stepLabel, wordmark, wrapText } from './onboard-ui.mjs';
 import { channel } from './self-update.mjs';
@@ -244,6 +244,7 @@ export function buildPlan(choices, ctx) {
     const steps = !ctx.executor.installed
       ? [{ action: 'manual', reason: 'Executor is not installed. Install it (npm i -g executor), then run conquistador --surface=executor.' }]
       : executorHandoff(ctx.executor.version) ? [{ action: 'manual', reason: executorHandoff(ctx.executor.version) }]
+      : usesExecutor2(ctx.executor.version) ? [{ action: 'add', name, slug: slugFor(name), detail: `Create and deploy the owned Conquistador app through Executor v2 at ${process.env.CONQUISTADOR_EXECUTOR_URL ?? 'http://127.0.0.1:4312'}. It connects to https://mcp.forsvn.com/mcp. Link your Conquistador account in Executor after deployment.` }]
       : [...(ctx.executor.running === false ? [{ action: 'start', detail: 'Executor is not running. This step starts it: executor daemon run' }] : []),
         { action: 'add', name, slug: slugFor(name), detail: `Add the source "${name}": executor call executor mcp addServer\n  Executor asks to approve it. Conquistador says yes for this one change.` }];
     surfaces.push({ id: 'executor', label: SURFACE_LABELS.executor, version: ctx.executor.version, steps, notes: [] });
@@ -348,8 +349,8 @@ export async function applyPlan(plan, choices, { ui, progress, login, signal }) 
     else {
       const server = localServer();
       const result = await progress('Executor', () => installerOperation('executor-add', { name: add.name, server, start: executor.steps.some(step => step.action === 'start') }));
-      if (result.ok) writeState({ ...readState(), executor: { slug: add.slug, name: add.name, version, at: new Date().toISOString() } });
-      record({ surface: 'executor', label: 'Executor', ok: result.ok, manual: result.status === 'manual', slug: add.slug, status: result.status,
+      if (result.ok) writeState({ ...readState(), executor: { slug: result.slug ?? add.slug, name: add.name, version, at: new Date().toISOString(), ...(result.binding ? { binding: result.binding } : {}) } });
+      record({ surface: 'executor', label: 'Executor', ok: result.ok, manual: result.status === 'manual', slug: result.slug ?? add.slug, status: result.status, note: result.next,
         error: result.status === 'manual' ? `${result.error}\n${manualSteps(add.name, server).join('\n')}` : result.error, retry: result.ok || result.status === 'manual' ? null : retryFor('executor') });
     }
   }
@@ -501,7 +502,7 @@ async function ask(ui, kind, options) { return ui[kind](options); }
 function executorSummary(executor) {
   if (!executor.installed) return 'not installed';
 
-  const status = executorHandoff(executor.version) ? ', source setup paused' : executor.running ? ', running' : ', not running';
+  const status = executorHandoff(executor.version) ? ', source setup paused' : usesExecutor2(executor.version) ? ', app access checked during setup' : executor.running ? ', running' : ', not running';
 
   return `${executor.version ?? 'found'}${status}`;
 }

@@ -8,9 +8,9 @@ import { createServer as httpServer } from 'node:http';
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { createExecutorClient } from '../../hosts/executor/client.mjs';
+import { createExecutorClient, createExecutorGithubRepositoryRead } from '../../hosts/executor/client.mjs';
 import { createMcpRequestHandler } from '../../api/mcp.mjs';
-import { executorV2Connection, createExecutorV2Api, openExecutorV2Mcp, registerExecutorV2Source, checkExecutorV2Source, removeExecutorV2Source } from '../executor-v2.mjs';
+import { executorV2Connection, createExecutorV2Api, executorV2SourceFiles, openExecutorV2Mcp, registerExecutorV2Source, checkExecutorV2Source, removeExecutorV2Source } from '../executor-v2.mjs';
 import { readiness, verify } from '../connect.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
@@ -41,6 +41,17 @@ function cli(args) {
   const result = spawnSync(binary, args, { cwd: work, env, encoding: 'utf8', timeout: 90000, maxBuffer: 1024 * 1024 });
   check(!result.error && result.status === 0, 'EXECUTOR_COMMAND_FAILED');
   try { return JSON.parse(result.stdout); } catch { throw Object.assign(Error(), { code: 'EXECUTOR_JSON_REQUIRED' }); }
+}
+async function sourceCli(script, extraEnv) {
+  const child = spawn(process.execPath, ['--input-type=module', '-e', script], { cwd: root,
+    env: { ...env, ...extraEnv }, stdio: ['ignore', 'pipe', 'ignore'] });
+  let output = '';
+  child.stdout.on('data', chunk => { if (output.length < 65536) output += chunk; });
+  const timer = setTimeout(() => child.kill(), 150000);
+  const status = await new Promise(done => child.once('close', done));
+  clearTimeout(timer);
+  check(status === 0, 'V2_PUBLIC_SOURCE_CLI_FAILED');
+  try { return JSON.parse(output); } catch { throw Object.assign(Error(), { code: 'V2_PUBLIC_SOURCE_JSON_REQUIRED' }); }
 }
 try {
   port = await freePort();
@@ -79,6 +90,19 @@ try {
   await new Promise(done => playbooks.listen(0, '127.0.0.1', done));
   const sourceUrl = `http://127.0.0.1:${playbooks.address().port}/mcp`;
   const options = { env: { ...env, CONQUISTADOR_EXECUTOR_URL: env.EXECUTOR_HOST }, sourceUrl };
+  await record('public source commands honor configured v2 even with a legacy global CLI', async () => {
+    const script = 'import {registerSource,checkSource,removeSource} from "./tools/executor-source.mjs";\n' +
+      'import {readState,writeState} from "./tools/agents.mjs";\n' +
+      'const name="CLI acceptance", server={url:process.env.CQ_ACCEPTANCE_SOURCE};\n' +
+      'const added=registerSource(name,server);\n' +
+      'if(!added.ok)throw Error("register failed");\n' +
+      'writeState({...readState(),executor:{name,slug:added.slug,binding:added.binding}});\n' +
+      'const checked=checkSource(added.slug), again=registerSource(name,server), removed=removeSource(added.slug);\n' +
+      'if(!checked.ok||again.status!=="unchanged"||!removed.ok)throw Error("lifecycle failed");\n' +
+      'console.log(JSON.stringify({added:added.status,checked:checked.ok,repeat:again.status,removed:removed.removed}));';
+    return sourceCli(script, { CONQUISTADOR_EXECUTOR_URL: env.EXECUTOR_HOST,
+      CONQUISTADOR_EXECUTOR_AUTH_ENV: 'EXECUTOR_API_KEY', CQ_ACCEPTANCE_SOURCE: sourceUrl });
+  });
   let installed;
   await record('install an owned app from the real bundled Conquistador service', async () => {
     installed = await registerExecutorV2Source('Conquistador acceptance', options);
@@ -146,6 +170,74 @@ try {
         check(removal === 'EXECUTOR_APP_UNOWNED', 'V2_UNOWNED_APP_REMOVED');
       } finally { await request(`/apps/${unowned.id}`, { method: 'DELETE', sdk: true }); }
       return { status: updated.status, identityPreserved: true };
+    });
+    await record('actual v2 policy pauses a read; cancellation does not replay it; explicit acceptance resumes once', async () => {
+      const connection = executorV2Connection(options.env), request = createExecutorV2Api(connection);
+      const framework = await request('/framework/release');
+      const files = executorV2SourceFiles('Approval acceptance', framework.version, sourceUrl)
+        .filter(file => file.path !== 'conquistador.json').map(file => file.path === 'index.ts' ?
+          { ...file, content: file.content.replace('tool => toolAnnotations(tool)?.destructiveHint === true ? always() : undefined', '() => always()') } : file);
+      const app = await request('/apps', { method: 'POST', body: { name: 'Approval acceptance', files } });
+      let session;
+      try {
+        const source = await request(`/apps/${app.id}/workspace`);
+        const deployed = await request(`/apps/${app.id}/deploy`, { method: 'POST', body: { commit: source.revision.commit }, timeout: 120000 });
+        const tool = `tools[${JSON.stringify(deployed.app.slug)}].conquistador_read`;
+        session = await openExecutorV2Mcp(connection);
+        const paused = await session.call('call', { calls: { path: tool, input: { path: 'conquistador/SKILL.md' } } });
+        await writeFile(join(out, 'approval-paused.json'), JSON.stringify(paused, null, 2) + '\n');
+        check(paused.status === 'approval-required', 'V2_APPROVAL_DID_NOT_PAUSE');
+        const requestId = paused.requestId ?? paused.request?.requestId;
+        check(typeof requestId === 'string', 'V2_APPROVAL_ID_MISSING');
+        const cancelled = await session.call('resume', { requestId, response: { action: 'cancel' } });
+        await writeFile(join(out, 'approval-cancelled.json'), JSON.stringify(cancelled, null, 2) + '\n');
+        check(!JSON.stringify(cancelled).includes('# Product'), 'V2_CANCEL_EXECUTED_READ');
+        const second = await session.call('call', { calls: { path: tool, input: { path: 'conquistador/SKILL.md' } } });
+        check(second.status === 'approval-required', 'V2_NEW_READ_NOT_PAUSED');
+        const accepted = await session.call('resume', { requestId: second.requestId ?? second.request?.requestId, response: { action: 'accept' } });
+        await writeFile(join(out, 'approval-accepted.json'), JSON.stringify(accepted, null, 2) + '\n');
+        check(accepted.status === 'completed' && JSON.stringify(accepted).includes('conquistador'), 'V2_APPROVAL_RESUME_FAILED');
+        return { externalWrites: 0, approvalAuthority: 'explicit test of an isolated read policy; no human or live-account verdict' };
+      } finally {
+        await session?.close();
+        await request(`/apps/${app.id}`, { method: 'DELETE', sdk: true });
+      }
+    });
+    await record('the fixed GitHub callback uses actual v2 describe and call for one public repository', async () => {
+      const connection = executorV2Connection(options.env), request = createExecutorV2Api(connection);
+      const framework = await request('/framework/release');
+      const app = await request('/apps', { method: 'POST', body: { name: 'GitHub acceptance', files: [
+        { path: 'index.ts', content: 'import { defineApp, router, query, object, string } from "apps";\n' +
+          'export default defineApp({}, async () => ({ tools: router({ getRepository: query({ description: "Read public GitHub repository metadata", input: object({ owner: string(), repo: string() }) }, async (_ctx, input) => {\n' +
+          'if (input.owner !== "forsvn-labs" || input.repo !== "conquistador") throw new Error("Repository denied");\n' +
+          'const response = await fetch("https://api.github.com/repos/forsvn-labs/conquistador", { headers: { "user-agent": "Conquistador-acceptance", accept: "application/vnd.github+json" } });\n' +
+          'if (!response.ok) throw new Error("GitHub unavailable"); return response.json(); }) }) }));\n' },
+        { path: 'package.json', content: JSON.stringify({ private: true, type: 'module', dependencies: { apps: framework.version } }) },
+      ] } });
+      let session;
+      try {
+        const source = await request(`/apps/${app.id}/workspace`);
+        const deployed = await request(`/apps/${app.id}/deploy`, { method: 'POST', body: { commit: source.revision.commit }, timeout: 120000 });
+        session = await openExecutorV2Mcp(connection);
+        const searched = await session.call('search', { query: 'getRepository', limit: 8 });
+        await writeFile(join(out, 'github-search.json'), JSON.stringify(searched, null, 2) + '\n');
+        const toolId = searched.items.find(item => item.path.endsWith('.getRepository'))?.path;
+        check(toolId, 'V2_GITHUB_TOOL_MISSING');
+        const described = await session.call('describe', { paths: [toolId] });
+        await writeFile(join(out, 'github-description.json'), JSON.stringify(described, null, 2) + '\n');
+        const descriptor = described.items.find(item => item.path === toolId);
+        check(descriptor, 'V2_GITHUB_DESCRIPTOR_MISSING');
+        const config = { schema: 'conquistador.executor-connection/v2', endpoint: `${env.EXECUTOR_HOST}/mcp`, uiUrl: `${env.EXECUTOR_HOST}/`, authEnv: 'CONQUISTADOR_EXECUTOR_NATIVE' };
+        const account = { provider: 'github', state: 'active', allowedOperationIds: ['github.repository.get'], id: 'isolated-public-github-read', revision: 1 };
+        const host = createExecutorGithubRepositoryRead(config, { env: { CONQUISTADOR_EXECUTOR_NATIVE: env.EXECUTOR_API_KEY },
+          connection: account, allowedRepositories: ['forsvn-labs/conquistador'], binding: { protocol: 'executor-v2', toolId, inputSignature: descriptor.signature } });
+        const options = { connection: account, credential: host.credential, deadlineAt: new Date(Date.now() + 10000).toISOString() };
+        const denied = await host.readRepository({ owner: 'other', repository: 'repo' }, options).catch(error => error.code);
+        check(denied === 'REPOSITORY_DENIED', 'V2_REPOSITORY_ALLOWLIST_BYPASSED');
+        const result = await host.readRepository({ owner: 'forsvn-labs', repository: 'conquistador' }, options);
+        check(result.status === 200 && result.body.full_name === 'forsvn-labs/conquistador' && result.body.private === false, 'V2_GITHUB_READ_FAILED');
+        return { provider: 'public GitHub API; no linked provider account', repository: 'forsvn-labs/conquistador', resultFields: Object.keys(result.body) };
+      } finally { await session?.close(); await request(`/apps/${app.id}`, { method: 'DELETE', sdk: true }); }
     });
     await record('removal affects only the owned app and is verified', async () => {
       check((await removeExecutorV2Source('Conquistador acceptance', bound)).removed, 'V2_REMOVE_FAILED');

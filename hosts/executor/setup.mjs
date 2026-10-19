@@ -8,7 +8,7 @@ export const DEFAULT_LOCAL_UI = 'http://127.0.0.1:4788/';
 
 export const OFFICIAL_DOCS = Object.freeze({
   intro: 'https://executor.sh/docs',
-  cli: 'https://executor.sh/docs/local/cli',
+  cli: 'https://executor.sh/docs/run/cli',
   cloud: 'https://executor.sh/docs/hosted/cloud',
 });
 
@@ -60,8 +60,9 @@ export async function inspectExecutor({ env = process.env, execFile = defaultExe
     schema: 'conquistador.executor-status/v1',
     installed,
     version,
-    defaultEndpoint: DEFAULT_LOCAL_ENDPOINT,
-    defaultUiUrl: DEFAULT_LOCAL_UI,
+    generation: Number.parseInt(version, 10) >= 2 ? 2 : 1,
+    defaultEndpoint: Number.parseInt(version, 10) >= 2 ? 'http://127.0.0.1:4312/mcp' : DEFAULT_LOCAL_ENDPOINT,
+    defaultUiUrl: Number.parseInt(version, 10) >= 2 ? 'http://127.0.0.1:4312/' : DEFAULT_LOCAL_UI,
     authEnvPresent,
     docs: OFFICIAL_DOCS,
     connectionVerified: false,
@@ -70,6 +71,17 @@ export async function inspectExecutor({ env = process.env, execFile = defaultExe
 }
 
 export function setupGuide(inspect) {
+  if (Number.parseInt(inspect.version, 10) >= 2) return Object.freeze({
+    ...inspect, schema: 'conquistador.executor-setup/v1', status: 'executor-installed',
+    next: Object.freeze([
+      'Start the local service only when needed: executor serve. The default port is 4312.',
+      'Connect accounts and set app policies in Executor. Keep provider credentials there.',
+      'Connect the agent through Executor’s Connect page. For the Conquistador CLI, set CONQUISTADOR_EXECUTOR_URL to the API origin and name the access-credential environment variable with CONQUISTADOR_EXECUTOR_AUTH_ENV. Hosted access also needs CONQUISTADOR_EXECUTOR_ORGANIZATION.',
+      'Run conquistador connect, inspect the exact tool signature, and verify one read. Discovery does not prove provider access.',
+    ]),
+    officialInstall: Object.freeze({ npm: 'npm install -g executor@beta', bun: 'bun add -g executor@beta' }),
+    startLocal: Object.freeze(['executor serve']), connectAgent: 'Use the Executor Connect page for this account and agent.',
+  });
   const next = inspect.installed
     ? Object.freeze([
       'If the local service is not running: executor install && executor web',

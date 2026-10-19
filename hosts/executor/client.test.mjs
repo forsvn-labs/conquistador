@@ -16,6 +16,16 @@ const env = { [authEnv]: credential };
 const config = endpoint => ({ schema: 'conquistador.executor-connection/v1', endpoint,
   uiUrl: new URL(endpoint).origin + '/', authEnv });
 
+test('v2 config accepts only named connection scopes and the official hosted origin pair', () => {
+  const value = { schema: 'conquistador.executor-connection/v2', endpoint: 'https://mcp.executor.sh/org/personal/mcp?connection=con_example', uiUrl: 'https://app.executor.sh/', authEnv };
+  assert.deepEqual(validateConfig(value), value);
+  for (const endpoint of ['https://mcp.executor.sh/org/personal/mcp?token=secret', 'https://mcp.executor.sh/org/personal/mcp?connection=a&connection=b']) {
+    assert.throws(() => validateConfig({ ...value, endpoint }), /INVALID_CONFIG/);
+  }
+  assert.throws(() => validateConfig({ ...value, uiUrl: 'https://unrelated.example/' }), /INVALID_CONFIG/);
+  assert.throws(() => validateConfig({ ...value, schema: 'conquistador.executor-connection/v1' }), /INVALID_CONFIG/);
+});
+
 async function fixture(t, listing, intercept, callHandler) {
   const sdk = new Server({ name: 'synthetic-local-server', version: '1' }, { capabilities: { tools: {} } });
   let calls = 0;
