@@ -2,19 +2,27 @@
 
 ## Current handoff
 
-2026-10-19: source candidate 0.9.0 is in `feat/finish-alpha-acceptance`.
+2026-10-19: source candidate 0.9.0 is in
+[PR #83](https://github.com/forsvn-labs/conquistador/pull/83), branch `feat/finish-alpha-acceptance`.
 Both published packages remain 0.8.0. The progress review merged in
 [PR #82](https://github.com/forsvn-labs/conquistador/pull/82); it did not ship these changes.
 
 The candidate implements managed Executor v2 apps and capability verification, keeps
-v1 compatibility, and reviews all seven optional integration pins. Twelve actual
+v1 compatibility, and reviews all seven optional integration pins. Thirteen actual
 native-v2 cases pass: app lifecycle and ownership, direct reads, the public source
-commands, capability binding, approval/cancel/resume, and one public GitHub repository
-read. The hosted personal account separately returns the live Conquistador library
+commands, capability/organization binding, and approval/cancel/resume. A separate
+public GitHub repository read passed with the same callback code; its latest repeat
+was blocked by an exhausted public API quota (HTTP 403, remaining 0). The failed
+repeat is retained. The default native suite records this external test as not run;
+`--public-github` opts in. The hosted personal account separately returns the live Conquistador library
 through its existing linked account. Browser credentials remain in the browser;
 this is not a hosted API-key lifecycle test. Eve type checks, local contracts,
 prepared-app build and native HTTP authorization/recovery checks pass without a
-model job. Final package and CI verification are in progress.
+model job. All 942 product checks, 66 installer scenarios, 44 checker cases,
+15 social-style cases, four offline connection cases, and 31 optional Executor
+contracts pass locally. The paired package assembly passes. Final-head CI and
+the final package identity check are in progress; Iris before/after captures are
+attached to the PR and kept outside Git.
 
 Promptfoo 0.124.1 runtime compatibility and the public Eval Lab checks pass. The
 required graph has zero audit findings. Three high findings remain in the optional
@@ -27,7 +35,7 @@ correction after the focused opportunity. Editorial review rejects the deliberat
 weak comparison although the deterministic checker passes it. The verdict covers
 this supplied draft's voice, not general output quality or publication authority.
 
-Next: complete final verification, push the candidate PR, and obtain merge approval.
+Next: finish final-head verification and obtain merge approval.
 Do not tag or publish before that approval. Reports and the accepted text resolve
 through DRIVE.md. The verified 0.8.0 delivery record follows.
 

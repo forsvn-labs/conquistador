@@ -16,8 +16,10 @@ import { readiness, verify } from '../connect.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const argv = process.argv.slice(2);
-if (argv.some((word, index) => word !== '--out' && argv[index - 1] !== '--out') ||
-    argv.filter(word => word === '--out').length > 1 || argv.at(-1) === '--out') throw Error('Use --out DIR.');
+if (argv.some((word, index) => !['--out', '--public-github'].includes(word) && argv[index - 1] !== '--out') ||
+    argv.filter(word => word === '--out').length > 1 || argv.filter(word => word === '--public-github').length > 1 ||
+    argv.at(-1) === '--out' || argv.includes('--out') && argv[argv.indexOf('--out') + 1].startsWith('--')) throw Error('Use --out DIR and optional --public-github.');
+const publicGithub = argv.includes('--public-github');
 const out = resolve(argv.includes('--out') ? argv[argv.indexOf('--out') + 1] : join(root, 'dist/e2e/executor-v2'));
 const work = await mkdtemp(join(tmpdir(), 'cq-executor-v2-'));
 const binary = join(root, 'hosts/executor/node_modules/.bin/executor');
@@ -73,6 +75,15 @@ try {
     await pause(500);
   }
   check(ready, 'NATIVE_START_TIMEOUT');
+  await record('configured organization and credential identity remain bound before requests', async () => {
+    const selected = { ...env, CONQUISTADOR_EXECUTOR_URL: env.EXECUTOR_HOST, CONQUISTADOR_EXECUTOR_ORGANIZATION: 'selected-organization' };
+    const connection = executorV2Connection(selected);
+    check(connection.headers()['x-executor-organization'] === 'selected-organization', 'V2_MCP_ORGANIZATION_UNBOUND');
+    selected.EXECUTOR_API_KEY = 'changed-native-key-for-acceptance';
+    let rejected = false;
+    try { connection.headers(); } catch (error) { rejected = error.code === 'EXECUTOR_CREDENTIAL_CHANGED'; }
+    check(rejected, 'V2_CREDENTIAL_IDENTITY_UNBOUND');
+  });
   await record('setup recognizes the actual native CLI version and uses v2 instructions', async () => {
     const inspect = await inspectExecutor({ env: { ...env, PATH: [dirname(binary), env.PATH].join(delimiter) } });
     check(inspect.version === '2.0.0-beta.25' && inspect.generation === 2, 'V2_NATIVE_VERSION_UNRECOGNIZED');
@@ -230,7 +241,7 @@ try {
         await request(`/apps/${app.id}`, { method: 'DELETE', sdk: true });
       }
     });
-    await record('the fixed GitHub callback uses actual v2 describe and call for one public repository', async () => {
+    if (publicGithub) await record('the fixed GitHub callback uses actual v2 describe and call for one public repository', async () => {
       const connection = executorV2Connection(options.env), request = createExecutorV2Api(connection);
       const framework = await request('/framework/release');
       const app = await request('/apps', { method: 'POST', body: { name: 'GitHub acceptance', files: [
@@ -270,6 +281,7 @@ try {
         return { provider: 'public GitHub API; no linked provider account', repository: 'forsvn-labs/conquistador', resultFields: Object.keys(result.body) };
       } finally { await session?.close(); await request(`/apps/${app.id}`, { method: 'DELETE', sdk: true }); }
     });
+    else results.push({ name: 'public GitHub API read', pass: null, notRun: 'Opt in with --public-github. This external availability check is subject to the public API quota.' });
     await record('removal affects only the owned app and is verified', async () => {
       check((await removeExecutorV2Source('Conquistador acceptance', bound)).removed, 'V2_REMOVE_FAILED');
       check((await removeExecutorV2Source('Conquistador acceptance', bound)).removed === false, 'V2_REMOVE_NOT_IDEMPOTENT');
@@ -298,9 +310,10 @@ const sourceHashes = Object.fromEntries(await Promise.all(['tools/e2e/executor-v
   'tools/connect.mjs', 'tools/onboard.mjs'].map(async path => [path, createHash('sha256').update(await readFile(join(root, path))).digest('hex')])));
 const report = { schema: 'conquistador.executor-v2-acceptance/v1', checkedAt: new Date().toISOString(),
   nativeRuntime: '2.0.0-beta.25', evidence: 'real-isolated-native-runtime', sourceHashes,
-  total: results.length, passed: results.filter(result => result.pass).length, results };
+  total: results.filter(result => result.pass !== null).length, passed: results.filter(result => result.pass === true).length,
+  notRun: results.filter(result => result.pass === null).length, failed: results.filter(result => result.pass === false).length, results };
 await mkdir(out, { recursive: true });
 await writeFile(join(out, 'report.json'), JSON.stringify(report, null, 2) + '\n');
-for (const result of results) console.log(`${result.pass ? 'pass' : 'FAIL'} ${result.name}${result.error ? ` (${result.error})` : ''}`);
-console.log(`${report.passed}/${report.total} pass. ${join(out, 'report.json')}`);
-process.exitCode = report.passed === report.total ? 0 : 1;
+for (const result of results) console.log(`${result.pass === null ? 'not run' : result.pass ? 'pass' : 'FAIL'} ${result.name}${result.error ? ` (${result.error})` : ''}`);
+console.log(`${report.passed}/${report.total} pass; ${report.notRun} external check not run. ${join(out, 'report.json')}`);
+process.exitCode = report.failed === 0 ? 0 : 1;

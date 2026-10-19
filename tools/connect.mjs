@@ -274,7 +274,12 @@ export async function readiness({ names = [], env = process.env, fetchImpl = fet
   const ids = selectCapabilities(names, map);
   const executor = findExecutor(env);
   const major = generation(env, executor);
-  if (major === 2) return readinessV2({ map, ids, env, fetchImpl, records: readConnections(env).verified, classify: toolClass });
+  if (major === 2) {
+    const report = await readinessV2({ map, ids, env, fetchImpl, records: readConnections(env).verified, classify: toolClass });
+    report.executor.installed = Boolean(executor);
+    report.executor.path = executor;
+    return report;
+  }
   if (major === 0) return { schema: 'conquistador.connect/v1', checkedAt: new Date().toISOString(),
     executor: { installed: true, path: executor, server: { state: 'unknown' } }, integrations: [],
     capabilities: ids.map(id => ({ id, class: map.capabilities[id].class, description: map.capabilities[id].description,

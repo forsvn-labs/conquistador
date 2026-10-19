@@ -49,6 +49,9 @@ variable with `CONQUISTADOR_EXECUTOR_AUTH_ENV`, and set
 `CONQUISTADOR_EXECUTOR_ORGANIZATION` for hosted access. Local native access can use
 `EXECUTOR_API_KEY`. Do not put credential values in flags or project files.
 No local CLI is required for a configured hosted connection.
+The selected organization is also sent with MCP requests using the documented
+[organization header](https://executor.sh/docs/api-keys), so a full-account token
+cannot silently use a different default organization.
 
 Discovery reports candidate capabilities; names do not establish tool semantics.
 An explicitly selected read is described and called once under Executor policy.
@@ -229,8 +232,10 @@ From the full source checkout, `bun run test:native --out /absolute/evidence-dir
 runs `tools/e2e/executor-v2.mjs`. It starts the pinned actual v2 binary with
 temporary native state, uses its newly minted local credential only in memory,
 and records source hashes and results outside Git. It tests real bundled
-Conquistador reads, managed app lifecycle, policy approval/cancel/resume, and one
-public GitHub repository read without a linked GitHub account. Cleanup stops the
+Conquistador reads, managed app lifecycle, and policy approval/cancel/resume.
+Add `--public-github` to include one public GitHub repository read without a
+linked GitHub account; this separate external check uses the public API quota.
+Omitted external checks are recorded as not run. Cleanup stops the
 native process and removes task-owned state. No user profile or provider
 credentials are copied. This is separate from the default tests and CI; it is
 not evidence for a paid Eve job or every hosted Executor deployment.

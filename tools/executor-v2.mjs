@@ -33,7 +33,7 @@ export function executorV2Connection(env = process.env) {
     identity: hash({ origin: origin.origin, organization, authEnv, credential }),
     headers() {
       requireValue(env[authEnv] === credential, 'EXECUTOR_CREDENTIAL_CHANGED');
-      return { authorization: `Bearer ${credential}` };
+      return { authorization: `Bearer ${credential}`, ...(organization ? { 'x-executor-organization': organization } : {}) };
     },
     containsCredential(value) { return JSON.stringify(value).includes(credential); },
   });

@@ -36,6 +36,8 @@ are options inside those paths. ROADMAP.md owns delivery state.
 
 A configured v2 API must take precedence over an unrelated v1 binary on PATH. A
 tracked v2 app must never fall back to v1 source commands after credentials are removed.
+Version discovery must not invoke a legacy CLI that writes a cache. Full-account
+access must explicitly bind the selected organization on both app and MCP requests.
 
 Record these cases before changing the adapters or dependency pins:
 
