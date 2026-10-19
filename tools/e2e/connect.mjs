@@ -196,8 +196,12 @@ record('legacy-access-variable', () => {
 record('native-macos-v1-app-discovery', () => {
   const folder = '/Applications/Executor.app/Contents/Resources/executor';
   if (process.platform !== 'darwin' || !existsSync(join(folder, 'executor'))) return { notRun: 'the real macOS Executor app is not installed' };
-  const plist = readFileSync('/Applications/Executor.app/Contents/Info.plist', 'utf8');
-  if (!/<key>CFBundleShortVersionString<\/key>\s*<string>1\./.test(plist)) return { notRun: 'the installed app is not a v1 XML-metadata bundle' };
+  const plist = spawnSync('/usr/bin/plutil', ['-convert', 'json', '-o', '-', '/Applications/Executor.app/Contents/Info.plist'],
+    { encoding: 'utf8', timeout: 1000, maxBuffer: 65536 });
+  if (plist.status !== 0) return { notRun: 'the installed app plist could not be converted to JSON' };
+  let metadata;
+  try { metadata = JSON.parse(plist.stdout); } catch { return { notRun: 'the installed app plist was not valid JSON' }; }
+  if (!/^1\./.test(metadata.CFBundleShortVersionString ?? '')) return { notRun: 'the installed app is not a v1 bundle' };
   const env = isolatedEnv('native-macos-v1-app', { PATH: folder,
     CONQUISTADOR_EXECUTOR_URL: `http://127.0.0.1:${port}` });
   const run = conquistador(['connect', '--json', 'crm.read'], env);

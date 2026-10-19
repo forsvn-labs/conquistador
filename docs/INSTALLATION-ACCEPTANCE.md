@@ -48,6 +48,8 @@ Record these cases before changing the adapters or dependency pins:
   drops content after 2,000 lines. Oversized files and symlink escapes must fail.
 - The exact-version Git install example points to an unpublished candidate tag.
 - A supported Executor.app v1 binary has no npm manifest and becomes unrecognized.
+  The native test must accept XML and binary plist metadata, skip unreadable or
+  invalid metadata explicitly, and leave the installed app and user data unchanged.
 - A legacy access-credential variable alone selects v2, or explicit v2 configuration
   loses precedence over an installed v1 binary. Discovery must leave user data unchanged.
 - The v2 path calls removed v1 CLI commands or starts a folder-scoped daemon.
