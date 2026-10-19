@@ -2,47 +2,46 @@
 
 ## Current handoff
 
-2026-10-19: source candidate 0.9.0 is in
-[PR #83](https://github.com/forsvn-labs/conquistador/pull/83), branch `feat/finish-alpha-acceptance`.
-Both published packages remain 0.8.0. The progress review merged in
-[PR #82](https://github.com/forsvn-labs/conquistador/pull/82); it did not ship these changes.
+2026-10-19: Hung approved the merge of
+[PR #83](https://github.com/forsvn-labs/conquistador/pull/83) at
+`e918104025002f4d46c3db4b30893d6a24a06d06`. Product 0.9.0 is shipped. The
+[release](https://github.com/forsvn-labs/conquistador/releases/tag/v0.9.0) has seven checked assets.
+Both `@forsvn/conquistador@0.9.0` and its exact-version `conquistador@0.9.0` CLI alias
+are public as latest, with provenance from
+[run 39215909721](https://github.com/forsvn-labs/conquistador/actions/runs/39215909721).
+npm processed the main publication before exposing it; retrying the failed alias job
+after registry visibility completed the paired publication. CONTRIBUTING.md records that recovery.
 
-The candidate implements managed Executor v2 apps and capability verification, keeps
-v1 compatibility, and reviews all seven optional integration pins. Fifteen actual
-native-v2 cases pass: app lifecycle and ownership, direct reads, the public source
-commands, standard OAuth-source installation without a local plugin or false read
-check, capability/organization binding, approval/cancel/resume, and the fixed public
-GitHub repository callback. The latest public read passes after the API quota reset;
-the earlier HTTP 403 repeat remains in evidence. The default native suite records this external test as not run;
-`--public-github` opts in. The hosted personal account separately returns the live Conquistador library
-through its existing linked account. Browser credentials remain in the browser;
-this is not a hosted API-key lifecycle test. Eve type checks, local contracts,
-prepared-app build and native HTTP authorization/recovery checks pass without a
-model job. All 942 product checks, the 66-scenario installer baseline, 44 checker cases,
-15 social-style cases, six offline connection cases, and 31 optional Executor
-contracts pass locally. Four focused installer regressions also pass, including
-the added legacy-credential case. All five review findings have fixes: the provider
-digest matches its adapter bytes, Eve returns complete bounded references, the Git
-example uses the published tag, and Executor keeps v1 bundle and credential compatibility.
-Eve's 21 local checks include the real pinned sandbox's exact-text and symlink guards.
-The paired package assembly passes. Final-head CI and exact
-package identity are merge gates; their current outputs resolve through the PR
-and DRIVE.md. Iris before/after captures are attached to the PR and kept outside Git.
+All 12 PR checks and the merged-source product, app-integration and installation workflows pass.
+Evidence includes 942 product checks, 67 installer scenarios, 44 checker cases,
+15 social-style cases, six offline connection cases and 31 optional Executor contracts.
+All eight real public registry/install checks pass: exact release bytes, integrity,
+both packages' provenance, the pinned alias, Skills, installer/plugin plans, MCP stdio,
+`npx` and Bun. The five payload archives match the approved candidate bytes.
+CHANGELOG.md owns exact release identity; DRIVE.md resolves reports and Iris captures.
 
-Promptfoo 0.124.1 runtime compatibility and the public Eval Lab checks pass. The
-required graph has zero audit findings. Three high findings remain in the optional
-unpatched node-forge/jks-js chain; the adapter record and eval README own the exact
-risk and repeatable checks. Live model execution remains denied by default.
+Managed Executor v2 apps and capability verification now ship with v1 compatibility.
+Fifteen real isolated native-v2 cases pass: ownership and app lifecycle, public source
+commands, both generated app variants, capability/organization binding, reviewed reads,
+and approval/cancel/resume. The fixed public GitHub callback passes after the quota reset;
+the earlier HTTP 403 repeat remains in evidence. The default suite keeps that external
+read opt-in. The existing personal Conquistador account separately returns the live library
+in the signed-in browser. Credentials stay there. This does not certify hosted API-key
+lifecycle or a linked GitHub account. Eve's 21 local checks include exact reference text
+and symlink guards in the real pinned sandbox; a prepared app passes install/check/build
+and native HTTP authorization/recovery checks without a paid model job.
 
-Hung approved the minimal launch-post correction on 2026-10-19. The two changes
-are plural “users” and the verified CLI install command. He requested no further
-correction after the focused opportunity. Editorial review rejects the deliberately
-weak comparison although the deterministic checker passes it. The verdict covers
-this supplied draft's voice, not general output quality or publication authority.
+All seven optional Eve/Executor pins were reviewed. Promptfoo 0.124.1 compatibility passes.
+Its required graph has zero audit findings. Three high findings remain in the optional,
+unpatched node-forge/jks-js chain; GitHub's earlier 52-alert baseline now has one open high
+node-forge advisory. The adapter record and eval README own its scope and repeatable checks.
+Live model execution remains denied by default.
 
-Next: finish final-head verification and obtain merge approval.
-Do not tag or publish before that approval. Reports and the accepted text resolve
-through DRIVE.md. The verified 0.8.0 delivery record follows.
+Hung approved the minimal launch-draft correction on 2026-10-19: plural “users” and the
+verified CLI install command. The critic rejects the weak comparison despite a clean
+deterministic check. This verdict covers the supplied draft's voice and grants no posting authority.
+
+Release delivery is complete. Remaining product acceptance is listed below.
 
 2026-10-17: Hung authorized and shipped product 0.8.0 through
 [PR #80](https://github.com/forsvn-labs/conquistador/pull/80). The
@@ -88,7 +87,7 @@ acceptance. The page keeps app dependencies under CLI and OAuth/API keys under M
 
 ## Remaining installation acceptance
 
-The v2 adapter candidate and native evidence are described in the current handoff.
+The shipped v2 adapter and native evidence are described in the current handoff.
 Native plugin activation in additional clients, native MCP loading, interactive Windows,
 Linux/Windows ARM, marketplace listings, additional OAuth clients, and real writing-quality
 acceptance remain open. Gemini CLI hooks are not built. Browser and Edge app runtimes are not
@@ -111,10 +110,6 @@ historical rewrite was not supplied; the synthetic fixtures do not reproduce it.
 
 ## Public alpha follow-up
 
-0. Merge and release the verified v2 candidate after approval. Its actual native
-   runtime tests cover source/capability install, read, approval, cancellation,
-   update and removal. The hosted linked Conquistador account passes a separate
-   browser read. These results do not certify every hosted deployment.
 1. Extend hosted source API lifecycle and linked-provider GitHub acceptance with
    an explicitly configured scoped credential and reviewed provider binding. The
    present callback acceptance reads the public GitHub API through an isolated
@@ -127,11 +122,11 @@ historical rewrite was not supplied; the synthetic fixtures do not reproduce it.
 5. Open each MCP client (Claude Desktop, VS Code, Windsurf, Zed, Cursor) after the installer writes
    its entry, and check that the app lists the Conquistador tools. Only the config file and an MCP
    handshake are checked now.
-6. Merge the Promptfoo refresh, then let GitHub reconcile its earlier 52-alert
-   baseline. The candidate audit has zero critical and three high findings in the
-   unpatched optional node-forge/jks-js chain; the required graph has zero findings.
+6. Monitor the remaining optional node-forge advisory. GitHub reconciled the earlier
+   52-alert baseline to one open high eval alert on 2026-10-19. The isolated npm audit
+   counts three high findings in the optional chain; the required graph has zero.
    Follow the adapter's risk disposition and keep live execution denied by default.
-7. The candidate reviews all seven optional Eve/Executor pins; release metadata
+7. Release 0.9.0 reviews all seven optional Eve/Executor pins; release metadata
    reports each current on 2026-10-19. Executor follows the explicit `beta` tag.
    Repeat with `node tools/integration-releases.mjs check-updates`. This read-only
    check establishes version freshness, not runtime or live-job compatibility.

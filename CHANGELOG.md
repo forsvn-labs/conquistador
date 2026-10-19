@@ -4,7 +4,19 @@
 versions. Verification establishes the stated local scope; native host behavior, useful model
 output, human acceptance and rights disposition require separate evidence.
 
-## Unreleased, 0.9.0 candidate
+## 2026-10-19, 0.9.0 public alpha
+
+- [PR #83](https://github.com/forsvn-labs/conquistador/pull/83) merged with Hung's approval
+  at `e918104025002f4d46c3db4b30893d6a24a06d06`. The
+  [v0.9.0 release](https://github.com/forsvn-labs/conquistador/releases/tag/v0.9.0) has seven
+  checked assets. All five payload archives match the approved candidate bytes. The main npm
+  tarball SHA-256 is `ec7eaed303c19ea25be1166c1614c81a35f9c35f1e3f137246cbf45846be09af`;
+  the CLI alias is `89bcd08bb9014420496fecee867c817c8e362660ad58deb6eb60b73b46485b48`.
+- Both `@forsvn/conquistador@0.9.0` and `conquistador@0.9.0` are public as latest, with
+  provenance from [run 39215909721](https://github.com/forsvn-labs/conquistador/actions/runs/39215909721).
+  npm processed the main package after accepting it, so the first alias lookup returned 404.
+  Retrying only the failed alias job after registry visibility completed publication. The
+  release tag and checked assets stayed unchanged.
 
 - Executor v2 uses bounded app APIs and MCP discovery/direct calls. Managed source
   install, update and removal preserve app identity and connected accounts, refuse
@@ -22,13 +34,15 @@ output, human acceptance and rights disposition require separate evidence.
 - Bind the provider cell to the exact adapter file digest. Eve reads complete UTF-8
   skill references within 64 KiB and rejects symlink escapes. Read Executor.app
   version metadata without running its CLI; a legacy credential variable alone
-  no longer selects v2. Exact-version install examples keep the published 0.8.0 tag.
+  no longer selects v2. Exact-version install examples select the published 0.9.0 tag.
 - Hung accepted the minimally corrected launch draft after a focused correction
   opportunity. The weak comparison fails editorial review even though the
   deterministic checker passes it. This verdict covers the supplied draft's voice;
   it grants no publication permission or general writing-quality claim.
-- Release verification and delivery are tracked in ROADMAP.md. This candidate is
-  not yet merged or published; 0.8.0 remains the delivered release.
+- Merged-source product, app-integration and installation workflows pass. Evidence includes
+  942 product checks, 67 installer scenarios, 44 checker cases and 15 social-style cases.
+  All eight real registry/install checks pass, including both packages' provenance and exact
+  tagged bytes. ROADMAP.md owns the current handoff; DRIVE.md resolves the reports.
 
 ## 2026-10-17, 0.8.0 public alpha
 

@@ -96,6 +96,12 @@ To retry, run the workflow by hand with the tag: `gh workflow run publish.yml -f
 If the version is already on npm, the workflow publishes nothing and only checks that the npm
 OIDC token exchange works.
 
+npm can accept a signed publication before the version appears in its registry. If the CLI
+job receives a 404 for the main version after the main job succeeds, wait until
+`npm view @forsvn/conquistador@X.Y.Z version` returns the expected version. Then retry only
+the failed job with `gh run rerun RUN_ID --failed`. Preserve the tag and checked release assets
+while npm processes the publication.
+
 The `conquistador` CLI alias pins the same exact `@forsvn/conquistador` version. Its first
 publication uses the checked alias tarball from that release after the main package is live.
 Configure its npm trusted publisher as `forsvn-labs/conquistador`, workflow `publish.yml`,
