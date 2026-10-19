@@ -66,7 +66,7 @@ describe("immutable benchmark partitions", () => {
     expect(adapter.knownRisk.status).toBe("isolated-live-environment-required");
     expect(adapter.knownRisk.npmAudit).toMatchObject({ high: 0, critical: 0 });
     expect(isolatedPackage.dependencies).toEqual({ promptfoo: "0.124.1" });
-    expect(isolatedPackage.overrides).toEqual({ "adm-zip": "0.6.1", sharp: "0.35.5" });
+    expect(isolatedPackage.overrides).toEqual({ sharp: "0.35.5", "basic-ftp": "6.2.3" });
     expect(integrity.installedDependencyTreeDigest).toMatch(/^sha256:[0-9a-f]{64}$/);
     expect(packageJson.dependencies).toBeUndefined();
     expect(packageJson.devDependencies.promptfoo).toBeUndefined();

@@ -83,3 +83,12 @@ test('help lists setup before prepare', async () => {
   assert.match(help.output, /prepare/);
   assert.ok(help.output.indexOf('setup') < help.output.indexOf('prepare'));
 });
+
+test('v2 setup uses serve on port 4312 and never suggests removed v1 commands', async () => {
+  const inspect = await inspectExecutor({ env: {}, execFile: async () => ({ stdout: '2.0.0-beta.25\n' }) });
+  const guide = setupGuide(inspect);
+  assert.equal(inspect.defaultEndpoint, 'http://127.0.0.1:4312/mcp');
+  assert.deepEqual(guide.startLocal, ['executor serve']);
+  assert.doesNotMatch(JSON.stringify(guide), /executor install|executor web|4788|toolkits/);
+  assert.match(guide.next.join(' '), /accounts|account/);
+});

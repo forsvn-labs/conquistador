@@ -95,7 +95,7 @@ function candidateFixture(maxCostUsd = 0.01): CandidateFixture {
     version: "1.0.0",
     private: true,
     dependencies: { promptfoo: "0.124.1" },
-    overrides: { "adm-zip": "0.6.1", sharp: "0.35.5" },
+    overrides: { sharp: "0.35.5", "basic-ftp": "6.2.3" },
   });
   const packageLock = json({
     name: "@forsvn/conquistador-promptfoo-isolated",
