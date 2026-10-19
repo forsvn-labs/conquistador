@@ -121,6 +121,23 @@ try {
     return sourceCli(script, { CONQUISTADOR_EXECUTOR_URL: env.EXECUTOR_HOST,
       CONQUISTADOR_EXECUTOR_AUTH_ENV: 'EXECUTOR_API_KEY', CQ_ACCEPTANCE_SOURCE: sourceUrl });
   });
+  await record('the standard hosted-source installer deploys OAuth code without a local plugin or false tool-read check', async () => {
+    const script = 'import {applyPlan,verifyResults} from "./tools/onboard.mjs";\n' +
+      'import {pluginHome} from "./tools/agents.mjs"; import {existsSync} from "node:fs";\n' +
+      'import {removeSource} from "./tools/executor-source.mjs";\n' +
+      'const plan={scope:"global",root:process.cwd(),warnings:[],surfaces:[{id:"executor",label:"Executor",version:"2.0.0",steps:[{action:"add",name:"Hosted source acceptance",slug:"hosted-source-acceptance"}]}]};\n' +
+      'const progress=async(_label,run)=>run();\n' +
+      'const results=await applyPlan(plan,{}, {ui:{},progress});\n' +
+      'if(results.length!==1||!results[0].ok)throw Error("standard app install failed");\n' +
+      'if(existsSync(pluginHome()))throw Error("unnecessary local payload staged");\n' +
+      'const checks=await verifyResults(results,plan,{progress});\n' +
+      'if(checks.length!==1||!checks[0].ok||!checks[0].detail.includes("separately"))throw Error("false read verification");\n' +
+      'if(!results[0].note.includes("link your Conquistador account"))throw Error("account handoff missing");\n' +
+      'if(!removeSource(results[0].slug).ok)throw Error("standard app removal failed");\n' +
+      'console.log(JSON.stringify({deployed:true,localPayload:false,accountReadVerified:false,accountLinking:"required"}));';
+    return sourceCli(script, { CONQUISTADOR_EXECUTOR_URL: env.EXECUTOR_HOST,
+      CONQUISTADOR_EXECUTOR_AUTH_ENV: 'EXECUTOR_API_KEY', CONQUISTADOR_HOME: join(work, 'cq-standard-installer') });
+  });
   let installed;
   await record('install an owned app from the real bundled Conquistador service', async () => {
     installed = await registerExecutorV2Source('Conquistador acceptance', options);

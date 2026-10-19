@@ -67,7 +67,8 @@ It deploys source against the host's exact framework version, keeps the app ID o
 update, refuses unowned or edited source, and verifies removal. Connected accounts
 remain in Executor. A stored binding prevents silent target or deployment changes.
 The standard app connects to `https://mcp.forsvn.com/mcp`; link its Conquistador
-account in Executor after deployment. Deployment alone does not prove a tool read.
+account in Executor after deployment. Source-only v2 installation stages no local
+plugin and runs no unrelated stdio handshake. Deployment alone does not prove a tool read.
 
 For the host-only GitHub callback, v2 config uses
 `schema: conquistador.executor-connection/v2`. The reviewed binding has exactly

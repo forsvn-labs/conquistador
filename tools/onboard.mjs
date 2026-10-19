@@ -311,7 +311,8 @@ export async function applyPlan(plan, choices, { ui, progress, login, signal }) 
   const results = [];
   const record = item => { results.push(item); return item; };
   const agents = plan.surfaces.find(surface => surface.id === 'agents');
-  const needsPayload = plan.surfaces.some(surface => surface.id === 'mcp-apps' || surface.id === 'executor' && surface.steps.some(step => step.action === 'add'));
+  const needsPayload = plan.surfaces.some(surface => surface.id === 'mcp-apps' ||
+    surface.id === 'executor' && !usesExecutor2(surface.version) && surface.steps.some(step => step.action === 'add'));
   const runnable = agents?.steps.filter(step => step.action !== 'blocked') ?? [];
   for (const step of agents?.steps.filter(item => item.action === 'blocked') ?? []) record({ surface: 'agents', label: step.label, ok: false, error: step.reason, agent: step.agent });
   if (runnable.length || needsPayload) {
@@ -350,7 +351,7 @@ export async function applyPlan(plan, choices, { ui, progress, login, signal }) 
       const server = localServer();
       const result = await progress('Executor', () => installerOperation('executor-add', { name: add.name, server, start: executor.steps.some(step => step.action === 'start') }));
       if (result.ok) writeState({ ...readState(), executor: { slug: result.slug ?? add.slug, name: add.name, version, at: new Date().toISOString(), ...(result.binding ? { binding: result.binding } : {}) } });
-      record({ surface: 'executor', label: 'Executor', ok: result.ok, manual: result.status === 'manual', slug: result.slug ?? add.slug, status: result.status, note: result.next,
+      record({ surface: 'executor', label: 'Executor', generation: usesExecutor2(executor.version) ? 2 : 1, ok: result.ok, manual: result.status === 'manual', slug: result.slug ?? add.slug, status: result.status, note: result.next,
         error: result.status === 'manual' ? `${result.error}\n${manualSteps(add.name, server).join('\n')}` : result.error, retry: result.ok || result.status === 'manual' ? null : retryFor('executor') });
     }
   }
@@ -441,7 +442,7 @@ export async function verifyResults(results, plan, { progress }) {
     if (result.surface === 'hosted') add('Hosted MCP', true, `signed in as ${result.login}`);
     if (result.surface === 'cli') add('CLI command', true, `${result.manager}: ${result.path}`);
   }
-  if (results.some(item => item.ok && item.surface === 'mcp-apps' && !item.skipped) || results.some(item => item.ok && item.surface === 'executor')) {
+  if (results.some(item => item.ok && item.surface === 'mcp-apps' && !item.skipped) || results.some(item => item.ok && item.surface === 'executor' && item.generation !== 2)) {
     const ok = await progress('Checking the MCP server', () => handshake(localServer()), { quiet: true });
     add('MCP server', ok, ok ? 'answers and lists its tools' : 'did not answer an MCP handshake', ok ? null : `${self} doctor --fix`);
   }

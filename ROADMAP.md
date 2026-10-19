@@ -8,9 +8,10 @@ Both published packages remain 0.8.0. The progress review merged in
 [PR #82](https://github.com/forsvn-labs/conquistador/pull/82); it did not ship these changes.
 
 The candidate implements managed Executor v2 apps and capability verification, keeps
-v1 compatibility, and reviews all seven optional integration pins. Thirteen actual
+v1 compatibility, and reviews all seven optional integration pins. Fourteen actual
 native-v2 cases pass: app lifecycle and ownership, direct reads, the public source
-commands, capability/organization binding, and approval/cancel/resume. A separate
+commands, standard OAuth-source installation without a local plugin or false read
+check, capability/organization binding, and approval/cancel/resume. A separate
 public GitHub repository read passed with the same callback code; its latest repeat
 was blocked by an exhausted public API quota (HTTP 403, remaining 0). The failed
 repeat is retained. The default native suite records this external test as not run;
@@ -20,9 +21,9 @@ this is not a hosted API-key lifecycle test. Eve type checks, local contracts,
 prepared-app build and native HTTP authorization/recovery checks pass without a
 model job. All 942 product checks, 66 installer scenarios, 44 checker cases,
 15 social-style cases, four offline connection cases, and 31 optional Executor
-contracts pass locally. The paired package assembly passes. Final-head CI and
-the final package identity check are in progress; Iris before/after captures are
-attached to the PR and kept outside Git.
+contracts pass locally. The paired package assembly passes. Final-head CI and exact
+package identity are merge gates; their current outputs resolve through the PR
+and DRIVE.md. Iris before/after captures are attached to the PR and kept outside Git.
 
 Promptfoo 0.124.1 runtime compatibility and the public Eval Lab checks pass. The
 required graph has zero audit findings. Three high findings remain in the optional
