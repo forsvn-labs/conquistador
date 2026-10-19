@@ -112,9 +112,10 @@ is a Markdown recipe, not code. Start with supplied context; connect only what t
 
 Reads run within host policy. Every send, publish, spend, or other write shows its exact payload
 and needs the user's approval each time. Credentials stay in Executor, never in chat. Conquistador
-never starts an Executor server as a side effect: Executor's CLI starts a folder-scoped daemon
-when none answers, and that daemon hides the user's integrations. Only an explicit, confirmed
-`connect` step may start Executor.
+never starts an Executor server as a side effect. V2 uses apps, linked accounts, and MCP
+discovery and direct calls. Its managed app updates and removal preserve account custody and
+refuse edited source. Legacy v1 calls require an already responding server because its CLI can
+otherwise start a folder-scoped daemon. Only an explicit, confirmed `connect` step may start v1.
 
 Eve is for explicitly requested jobs that outlast the coding session. Each job has one coordinating
 parent and a named owner. Keep exact dependency pins and review upgrades against the deployed

@@ -32,6 +32,47 @@ are options inside those paths. ROADMAP.md owns delivery state.
 - The OAuth runner leaves child processes or fixture connections open, hangs on HTTP, or
   exits before it writes a failure report. CI must have a bounded run time.
 
+## Dependency and Executor v2 failure modes (2026-10-19)
+
+A configured v2 API must take precedence over an unrelated v1 binary on PATH. A
+tracked v2 app must never fall back to v1 source commands after credentials are removed.
+Version discovery must not invoke a legacy CLI that writes a cache. Full-account
+access must explicitly bind the selected organization on both app and MCP requests.
+Source-only v2 setup must not stage a local plugin or treat a local stdio handshake
+as evidence that the hosted account's tools work. Test both generated app variants.
+
+Record these cases before changing the adapters or dependency pins:
+
+- A provider cell names the new adapter but retains the digest of an older adapter file.
+- A skill reference gains line numbers, loses a long line or final newline, or silently
+  drops content after 2,000 lines. Oversized files and symlink escapes must fail.
+- The exact-version Git install example points to an unpublished candidate tag.
+- A supported Executor.app v1 binary has no npm manifest and becomes unrecognized.
+  The native test must accept XML and binary plist metadata, skip unreadable or
+  invalid metadata explicitly, and leave the installed app and user data unchanged.
+- A legacy access-credential variable alone selects v2, or explicit v2 configuration
+  loses precedence over an installed v1 binary. Discovery must leave user data unchanged.
+- The v2 path calls removed v1 CLI commands or starts a folder-scoped daemon.
+- Setup advertises the v1 port, install command, authentication model, or source format for v2.
+- A valid scoped or organization MCP URL is rejected, or an unsafe URL leaks a credential.
+- A cross-origin UI, redirected transport, wrong organization, or changed credential gains access.
+- The adapter assumes v1 tool names, account selection, schemas, or result envelopes on v2.
+- A schema or identity change turns the fixed repository read into arbitrary code or a write.
+- A source is registered twice, an unowned app is overwritten, or removal deletes another app.
+- A cancelled or denied operation changes a live account or leaves an approval unresolved.
+- An update loses the app identity, selected account, policies, or verified removal path.
+- An unsupported client is labeled verified after only a protocol fixture passes.
+- An upgraded dependency breaks the supported Node floor, build output, evaluation adapter,
+  approval handling, cancellation, or saved-state recovery.
+- The evaluation installation retains known high or critical advisories, or an override hides
+  a version mismatch that prevents the real Promptfoo runtime from loading.
+- A release watcher treats the intentionally selected v2 beta channel as the v1 stable channel.
+- A social draft changes the supplied voice or facts, invents outcomes, or treats a clean
+  deterministic check as human acceptance. A correction must preserve the other accepted facts.
+
+Native runtime observations, protocol fixtures, and Hung's writing verdict require separate
+records. Save repeatable reports and private account captures through DRIVE.md.
+
 ## Repeatable evidence
 
 Use `node tools/e2e/installation-methods.mjs` for command dispatch and skill ownership.

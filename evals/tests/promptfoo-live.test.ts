@@ -83,7 +83,7 @@ function candidateFixture(maxCostUsd = 0.01): CandidateFixture {
   const adapter = json({
     schemaVersion: "conquistador.promptfoo-adapter/v1",
     adapterVersion: "1.0.0",
-    upstream: { name: "promptfoo", version: "0.122.0" },
+    upstream: { name: "promptfoo", version: "0.124.1" },
     executionDefault: "deny",
   });
   const toolManifest = json({ schemaVersion: "conquistador.eval-tool-manifest/v1", tools: [], externalActions: "deny" });
@@ -94,8 +94,8 @@ function candidateFixture(maxCostUsd = 0.01): CandidateFixture {
     name: "@forsvn/conquistador-promptfoo-isolated",
     version: "1.0.0",
     private: true,
-    dependencies: { promptfoo: "0.122.0" },
-    overrides: { "adm-zip": "0.6.1", sharp: "0.35.4" },
+    dependencies: { promptfoo: "0.124.1" },
+    overrides: { sharp: "0.35.5", "basic-ftp": "6.2.3" },
   });
   const packageLock = json({
     name: "@forsvn/conquistador-promptfoo-isolated",
@@ -106,11 +106,11 @@ function candidateFixture(maxCostUsd = 0.01): CandidateFixture {
       "": {
         name: "@forsvn/conquistador-promptfoo-isolated",
         version: "1.0.0",
-        dependencies: { promptfoo: "0.122.0" },
+        dependencies: { promptfoo: "0.124.1" },
       },
       "node_modules/promptfoo": {
-        version: "0.122.0",
-        resolved: "https://registry.npmjs.org/promptfoo/-/promptfoo-0.122.0.tgz",
+        version: "0.124.1",
+        resolved: "https://registry.npmjs.org/promptfoo/-/promptfoo-0.124.1.tgz",
         integrity: "sha512-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
         dependencies: { "hoisted-provider-client": "1.0.0" },
       },
@@ -119,21 +119,21 @@ function candidateFixture(maxCostUsd = 0.01): CandidateFixture {
         resolved: "https://registry.npmjs.org/hoisted-provider-client/-/hoisted-provider-client-1.0.0.tgz",
         integrity: "sha512-BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB==",
       },
-      "node_modules/adm-zip": {
-        version: "0.6.1",
-        resolved: "https://registry.npmjs.org/adm-zip/-/adm-zip-0.6.1.tgz",
+      "node_modules/basic-ftp": {
+        version: "6.2.3",
+        resolved: "https://registry.npmjs.org/basic-ftp/-/basic-ftp-6.2.3.tgz",
         integrity: "sha512-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC==",
       },
       "node_modules/sharp": {
-        version: "0.35.4",
-        resolved: "https://registry.npmjs.org/sharp/-/sharp-0.35.4.tgz",
+        version: "0.35.5",
+        resolved: "https://registry.npmjs.org/sharp/-/sharp-0.35.5.tgz",
         integrity: "sha512-DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD==",
       },
     },
   });
   const installedManifest = json({
     name: "promptfoo",
-    version: "0.122.0",
+    version: "0.124.1",
     bin: { promptfoo: "dist/src/entrypoint.js" },
     dependencies: { "hoisted-provider-client": "1.0.0" },
   });
@@ -153,7 +153,7 @@ function candidateFixture(maxCostUsd = 0.01): CandidateFixture {
   symlinkSync("../promptfoo/dist/src/entrypoint.js", promptfooBinary);
   const integrity = json({
     schemaVersion: "conquistador.promptfoo-installation-integrity/v1",
-    promptfooVersion: "0.122.0",
+    promptfooVersion: "0.124.1",
     packageManifestDigest: digestBytes(packageManifest),
     packageLockDigest: digestBytes(packageLock),
     entrypointPath: "dist/src/entrypoint.js",
@@ -164,11 +164,11 @@ function candidateFixture(maxCostUsd = 0.01): CandidateFixture {
 
   const provider = json({
     schemaVersion: "conquistador.provider-cell/v1",
-    id: "openai.test-model.promptfoo-0.122.0",
+    id: "openai.test-model.promptfoo-0.124.1",
     provider: "openai",
     model: "test-model",
     modelVersion: "2026-08-28",
-    adapter: { name: "promptfoo", version: "0.122.0", digest: digestBytes(adapter) },
+    adapter: { name: "promptfoo", version: "0.124.1", digest: digestBytes(adapter) },
     promptTemplateDigest: digestBytes(template),
     toolManifestDigest: digestBytes(toolManifest),
     settingsDigest: digestValue(settings),
@@ -212,7 +212,7 @@ function candidateFixture(maxCostUsd = 0.01): CandidateFixture {
   write(resolve(productRoot, skillPath), skill);
   write(resolve(evalRoot, "benchmarks/inventory-preflight-v1.json"), json(inventory));
   write(resolve(evalRoot, providerPath), provider);
-  write(resolve(evalRoot, "adapters/promptfoo-0.122.0.json"), adapter);
+  write(resolve(evalRoot, "adapters/promptfoo-0.124.1.json"), adapter);
   write(resolve(evalRoot, "templates/candidate-outcome-v1.txt"), template);
   write(resolve(evalRoot, "manifests/no-tools-v1.json"), toolManifest);
   write(resolve(evalRoot, "benchmarks/calibration-v1.json"), calibration);
@@ -260,7 +260,7 @@ function fixtureProcess(prepared: PreparedExecution, costs: Array<string | numbe
   const seenEnvironments: NodeJS.ProcessEnv[] = [];
   const process: RunProcess = (_command, args, options): ProcessResult => {
     seenEnvironments.push({ ...options.env });
-    if (args.includes("--version")) return { status: 0, stdout: "promptfoo 0.122.0\n", stderr: "" };
+    if (args.includes("--version")) return { status: 0, stdout: "promptfoo 0.124.1\n", stderr: "" };
     expect(options.env.OPENAI_API_KEY).toBe(TEST_ONLY_PROVIDER_CREDENTIAL);
     const outputPath = args[args.indexOf("--output") + 1];
     const cost = costs[evalCalls] ?? costs.at(-1) ?? 0;
@@ -294,7 +294,7 @@ describe("Promptfoo live execution", () => {
     write(providerWorktreePath, json({ malicious: "uncommitted provider substitution" }));
     write(templateWorktreePath, "UNCOMMITTED PROMPT SUBSTITUTION\n");
     for (const path of [
-      "evals/adapters/promptfoo-0.122.0.json",
+      "evals/adapters/promptfoo-0.124.1.json",
       "evals/manifests/no-tools-v1.json",
       "evals/benchmarks/calibration-v1.json",
       "evals/promptfoo-isolated/package.json",
@@ -330,7 +330,7 @@ describe("Promptfoo live execution", () => {
     const process: RunProcess = (_command, args, options) => {
       expect(args).toContain("--version");
       versionEnvironment = options.env;
-      return { status: 0, stdout: "0.122.0\n", stderr: "" };
+      return { status: 0, stdout: "0.124.1\n", stderr: "" };
     };
     const result = preflightPromptfooExecution({
       prepared: fixture.prepared,
@@ -349,9 +349,9 @@ describe("Promptfoo live execution", () => {
     const spoofRoot = mkdtempSync(resolve(tmpdir(), "conquistador-spoof-"));
     temporaryRoots.push(spoofRoot);
     const spoofBinary = resolve(spoofRoot, "promptfoo");
-    write(spoofBinary, "#!/bin/sh\necho 0.122.0\n");
+    write(spoofBinary, "#!/bin/sh\necho 0.124.1\n");
     let calls = 0;
-    const process: RunProcess = () => { calls += 1; return { status: 0, stdout: "0.122.0\n", stderr: "" }; };
+    const process: RunProcess = () => { calls += 1; return { status: 0, stdout: "0.124.1\n", stderr: "" }; };
     expect(() => preflightPromptfooExecution({
       prepared: spoofFixture.prepared,
       promptfooBinary: spoofBinary,
@@ -362,7 +362,7 @@ describe("Promptfoo live execution", () => {
     expect(calls).toBe(0);
 
     const packageFixture = candidateFixture();
-    write(packageFixture.entrypointPath, "#!/usr/bin/env node\nconsole.log('spoofed 0.122.0')\n");
+    write(packageFixture.entrypointPath, "#!/usr/bin/env node\nconsole.log('spoofed 0.124.1')\n");
     expect(() => preflightPromptfooExecution({
       prepared: packageFixture.prepared,
       promptfooBinary: packageFixture.promptfooBinary,
@@ -394,7 +394,7 @@ describe("Promptfoo live execution", () => {
       processCalls += 1;
       if (args.includes("--version")) {
         expect(options.env).not.toHaveProperty("OPENAI_API_KEY");
-        return { status: 0, stdout: "promptfoo 0.122.0\n", stderr: "" };
+        return { status: 0, stdout: "promptfoo 0.124.1\n", stderr: "" };
       }
       credentialedCalls += 1;
       return { status: 1, stdout: "", stderr: "must not dispatch" };
@@ -453,7 +453,7 @@ describe("Promptfoo live execution", () => {
     const process: RunProcess = (_command, args, options) => {
       seen.push({ ...options.env });
       return args.includes("--version")
-        ? { status: 0, stdout: "0.122.0\n", stderr: "" }
+        ? { status: 0, stdout: "0.124.1\n", stderr: "" }
         : { status: 1, stdout: "", stderr: "unexpected" };
     };
     expect(() => executePromptfoo({
@@ -528,7 +528,7 @@ describe("Promptfoo live execution", () => {
     const below = candidateFixture(0.001479);
     let evalCalls = 0;
     const process: RunProcess = (_command, args) => {
-      if (args.includes("--version")) return { status: 0, stdout: "0.122.0\n", stderr: "" };
+      if (args.includes("--version")) return { status: 0, stdout: "0.124.1\n", stderr: "" };
       evalCalls += 1;
       return { status: 1, stdout: "", stderr: "must not dispatch" };
     };
@@ -598,7 +598,7 @@ describe("Promptfoo live execution", () => {
     const fixture = candidateFixture();
     let evalCalls = 0;
     const process: RunProcess = (_command, args) => {
-      if (args.includes("--version")) return { status: 0, stdout: "0.122.0\n", stderr: "" };
+      if (args.includes("--version")) return { status: 0, stdout: "0.124.1\n", stderr: "" };
       evalCalls += 1;
       return { status: 1, stdout: "", stderr: "provider rejected request without echoing credentials" };
     };

@@ -2,7 +2,7 @@
 
 Execute only the durable job explicitly assigned by the existing coding-agent parent.
 You are the single parent for this job. Do not create another coordinator or delegate.
-Load the canonical conquistador skill first, then the smallest relevant outcome skills.
+Load the canonical conquistador skill first with eve__skill, then the smallest relevant outcome skills.
 Use read_skill_file for contained references. Use the installed methods without inventing replacement methods. Return the completed
 work, source limitations, review findings, and remaining human decisions to the caller.
 

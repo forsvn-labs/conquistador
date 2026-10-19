@@ -229,6 +229,7 @@ function doneLines({ results, checks, plan, ready, cwd, task, notice }, width) {
   if (bot) { add(''); add(`Chat bots: follow ${tilde(join(bot.target, 'README.md'))} for each chat app.`); }
 
   if (results.some(item => item.surface === 'mcp-apps' && item.ok && !item.skipped)) { add(''); add('MCP clients: restart each app to load the Conquistador server.'); }
+  for (const item of results.filter(result => result.surface === 'executor' && result.ok && result.note)) { add(''); add(item.note, { tone: 'sky' }); }
   if (results.some(item => item.surface === 'hosted' && item.ok)) { add(''); add('Hosted MCP: the client config prints when you exit. The token is secret.', { tone: 'sky' }); }
   if (problems) {
     add('');

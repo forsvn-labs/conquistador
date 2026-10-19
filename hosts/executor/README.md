@@ -14,12 +14,74 @@ npm run check
 npm test
 ```
 
-The exact npm versions checked on 2026-09-16 are MCP SDK `1.30.0` and Executor
-`1.6.8`. `bun.lock` records the resolved packages. The Executor CLI is a development
+The reviewed pins are MCP SDK `1.32.1` and Executor `2.0.0-beta.25` (2026-10-19).
+The release watcher checks Executor's `beta` tag separately from stable v1.
+`bun.lock` records the resolved packages. The Executor CLI is a development
 dependency for explicit operator use and version monitoring. The ordinary client never
 starts it. The explicit native smoke command below starts one temporary process. Root build and tests do not import this optional package.
 
-## CLI contract
+## Executor v2
+
+V2 uses apps, linked accounts, and MCP `search`, `describe`, `call`, and `resume`.
+The local default is port 4312 and the explicit start command is `executor serve`.
+The removed v1 `install`, `web`, `tools`, and `call` CLI commands must not run on v2.
+`setup` chooses instructions from the installed major version.
+
+Prepare a v2 probe configuration without putting a credential in the command:
+
+```sh
+node hosts/executor/cli.mjs prepare --generation 2 \
+  --endpoint https://mcp.executor.sh/org/ORGANIZATION/mcp \
+  --ui-url https://app.executor.sh/ \
+  --auth-env CONQUISTADOR_EXECUTOR_ACCESS
+```
+
+V2 accepts `/mcp` and `/org/<id>/mcp`, with one optional `connection=<id>` query.
+The official hosted MCP/UI origin pair is allowed; other hosts require the same
+origin. A personal access token or local key can retain account-wide authority even
+when the URL has a connection parameter. Review the credential's actual scope in
+Executor. Interactive OAuth credentials stay in their host; this CLI does not read
+browser cookies or borrow a signed-in browser session.
+
+The public `conquistador connect` route uses `tools/executor-capabilities.mjs`.
+Configure the API origin with `CONQUISTADOR_EXECUTOR_URL`, name the access-credential
+variable with `CONQUISTADOR_EXECUTOR_AUTH_ENV`, and set
+`CONQUISTADOR_EXECUTOR_ORGANIZATION` for hosted access. Local native access can use
+`EXECUTOR_API_KEY`. Do not put credential values in flags or project files.
+No local CLI is required for a configured hosted connection.
+The selected organization is also sent with MCP requests using the documented
+[organization header](https://executor.sh/docs/api-keys), so a full-account token
+cannot silently use a different default organization.
+
+Discovery reports candidate capabilities; names do not establish tool semantics.
+An explicitly selected read is described and called once under Executor policy.
+A verified record binds the credential identity, API origin, organization, exact
+tool description, and input digest. It expires after 24 hours and is invalidated
+when discovery or the description changes. The record stores no result or inputs.
+An approval/input pause returns its request ID. Continue that request through a
+compatible connected agent and `resume`; do not repeat the call or auto-approve it.
+Writes remain outside the verification command.
+
+The installer uses `tools/executor-v2.mjs` to create an owned Conquistador app.
+It deploys source against the host's exact framework version, keeps the app ID on
+update, refuses unowned or edited source, and verifies removal. Connected accounts
+remain in Executor. A stored binding prevents silent target or deployment changes.
+The standard app connects to `https://mcp.forsvn.com/mcp`; link its Conquistador
+account in Executor after deployment. Source-only v2 installation stages no local
+plugin and runs no unrelated stdio handshake. Deployment alone does not prove a tool read.
+
+For the host-only GitHub callback, v2 config uses
+`schema: conquistador.executor-connection/v2`. The reviewed binding has exactly
+`protocol: executor-v2`, the discovered `toolId` ending in `.getRepository`, and
+`inputSignature` copied verbatim from `describe`. The operator must confirm that
+the tool reads GitHub metadata with `{ owner, repo }` inputs. V2 does not return
+the old JSON schema/annotation fields. The callback pins the complete signature,
+allows only the host's repository list, and calls that exact operation once.
+Changed credentials, Connection snapshots, signatures, expired deadlines, approval
+pauses, wrong repositories, and credential echoes fail closed. No generic model
+execution API is exposed. Other GitHub argument layouts require a reviewed adapter.
+
+## Shared CLI and legacy v1 contract
 
 The parent can route `conquistador connections` arguments to
 `await run(argv, { stdout, stderr, env })` from `cli.mjs`. The optional streams
@@ -86,7 +148,7 @@ session termination within the same lifetime and then closes local transport.
 An unreachable endpoint can leave a server-side session until Executor expires it.
 The public client has no generic `callTool`, `execute`, or `invoke` API. The separate host-only callback below owns one fixed invocation.
 
-### GitHub metadata callback
+### Legacy v1 GitHub metadata callback
 
 `createExecutorGithubRepositoryRead(config, { env, connection,
 allowedRepositories, binding })` returns `{ readRepository, credential }`.
@@ -167,17 +229,19 @@ source research does not establish compatibility of every deployed Executor vers
 
 ## Explicit native smoke
 
-`npm run test:native` starts the installed Executor `web --foreground` on numeric
-loopback with a new temporary data and scope directory. It passes no provider
-credentials and disables telemetry, catalog fetching and update checks through
-Executor's documented environment controls. It suppresses native startup logs,
-which otherwise contain a login token. The script reads only Executor's freshly
-minted local bearer in memory and runs our client's MCP discovery. It performs no
-provider/tool calls. Cleanup terminates the process group, removes task-owned
-state, and checks that the TCP endpoint has closed. This script supports POSIX
-hosts and is separate from the default tests and CI.
+From the full source checkout, `bun run test:native --out /absolute/evidence-dir`
+runs `tools/e2e/executor-v2.mjs`. It starts the pinned actual v2 binary with
+temporary native state, uses its newly minted local credential only in memory,
+and records source hashes and results outside Git. It tests real bundled
+Conquistador reads, managed app lifecycle, and policy approval/cancel/resume.
+Add `--public-github` to include one public GitHub repository read without a
+linked GitHub account; this separate external check uses the public API quota.
+Omitted external checks are recorded as not run. Cleanup stops the
+native process and removes task-owned state. No user profile or provider
+credentials are copied. This is separate from the default tests and CI; it is
+not evidence for a paid Eve job or every hosted Executor deployment.
 
-Observed on 2026-09-16 on macOS arm64 with Node 24.21.0 and installed Executor 1.6.8: native
+Historical v1 result, 2026-09-16 on macOS arm64 with Node 24.21.0 and installed Executor 1.6.8: native
 startup and authenticated MCP discovery succeeded, listing seven tools. Known
 entrypoints were `execute`, `resume`, and `skills`. The process stopped and its
 temporary state was removed. This is native local connection evidence, not a

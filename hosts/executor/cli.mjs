@@ -7,7 +7,7 @@ import { inspectExecutor, setupGuide } from './setup.mjs';
 const HELP = `Conquistador Executor connections
   setup
   status
-  prepare --endpoint URL --ui-url URL --auth-env ENV_NAME
+  prepare --endpoint URL --ui-url URL --auth-env ENV_NAME [--generation 1|2]
   login --config PATH
   probe --config PATH
 
@@ -35,15 +35,17 @@ export async function run(argv, { stdout = process.stdout, stderr = process.stde
       result = action === 'setup' ? setupGuide(inspect) : inspect;
     } else {
       requireCondition(['prepare', 'login', 'probe'].includes(action) && rest.length % 2 === 0, 'INVALID_ARGUMENTS');
-      const allowed = action === 'prepare' ? ['--endpoint', '--ui-url', '--auth-env'] : ['--config'];
+      const required = action === 'prepare' ? ['--endpoint', '--ui-url', '--auth-env'] : ['--config'];
+      const allowed = action === 'prepare' ? [...required, '--generation'] : required;
       const flags = {};
       for (let i = 0; i < rest.length; i += 2) {
         requireCondition(allowed.includes(rest[i]) && !Object.hasOwn(flags, rest[i]) && typeof rest[i + 1] === 'string', 'INVALID_ARGUMENTS');
         flags[rest[i]] = rest[i + 1];
       }
-      requireCondition(Object.keys(flags).length === allowed.length, 'INVALID_ARGUMENTS');
+      requireCondition(required.every(name => Object.hasOwn(flags, name)), 'INVALID_ARGUMENTS');
       if (action === 'prepare') {
-        result = validateConfig({ schema: 'conquistador.executor-connection/v1', endpoint: flags['--endpoint'], uiUrl: flags['--ui-url'], authEnv: flags['--auth-env'] });
+        requireCondition(!flags['--generation'] || ['1', '2'].includes(flags['--generation']), 'INVALID_ARGUMENTS');
+        result = validateConfig({ schema: `conquistador.executor-connection/v${flags['--generation'] ?? '1'}`, endpoint: flags['--endpoint'], uiUrl: flags['--ui-url'], authEnv: flags['--auth-env'] });
       } else {
         let config;
         try {

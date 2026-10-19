@@ -1249,6 +1249,20 @@ scenario('executor-1.5', ['F30'], async ({ expect, transcript }) => {
   } finally { f.cleanup(); }
 });
 
+scenario('executor-v1-access-variable', ['E3'], async ({ expect, transcript }) => {
+  const f = fixture('executor-v1-access-variable', { agents: [], executor: 'v1.5',
+    env: { CONQUISTADOR_EXECUTOR_ACCESS: 'synthetic-legacy-access-variable' } });
+  try {
+    const result = f.run(['--surface=executor', '--yes']);
+    transcript('legacy-access-install', `${result.stdout}${result.stderr}`);
+    expect(result.status === 0 && f.json(join(f.home, '.conquistador/installs.json'))?.executor,
+      'a credential variable alone rerouted the confirmed v1 installation');
+    expect(f.calls().some(call => call.name === 'executor' && call.args.includes('addServer')),
+      'the confirmed legacy source path was not used');
+    return [];
+  } finally { f.cleanup(); }
+});
+
 for (const mode of ['v2', 'stderr-v2', 'unknown', 'version-failed']) scenario(`executor-${mode === 'v2' ? 'v2-handoff' : mode}`, ['E2', 'E3'], async ({ expect, transcript }) => {
   const f = fixture(`executor-${mode}`, { agents: [], executor: mode });
   const message = mode.includes('v2') ? 'Executor 2' : 'Could not verify the Executor version';

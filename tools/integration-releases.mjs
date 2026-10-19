@@ -19,20 +19,26 @@ export function integrationPins(directory = root) {
     if (manifest.private !== true) throw new Error('Optional integration packages must remain private.');
     const dependencies = { ...manifest.dependencies, ...manifest.devDependencies };
     if (!Object.hasOwn(dependencies, module.package)) throw new Error(`Missing ${module.id} dependency.`);
+    const tags = manifest.conquistador?.releaseTags ?? {};
+    if (!tags || typeof tags !== 'object' || Array.isArray(tags) ||
+        Object.entries(tags).some(([name, tag]) => !Object.hasOwn(dependencies, name) ||
+          typeof tag !== 'string' || !/^[a-z][a-z0-9-]{0,31}$/.test(tag))) {
+      throw new Error('Release tags must name a declared dependency and a registry channel.');
+    }
     const packages = Object.entries(dependencies).map(([name, version]) => {
       if (!packagePattern.test(name) || typeof version !== 'string' || !versionPattern.test(version)) {
         throw new Error('Integration dependencies require exact package versions.');
       }
-      return { name, version };
+      return { name, version, tag: tags[name] ?? 'latest' };
     }).sort((a, b) => a.name.localeCompare(b.name));
     const lock = readFileSync(join(directory, module.directory, 'bun.lock'));
     return { ...module, packages, manifestDigest: digest(bytes), lockDigest: digest(lock) };
   });
 }
 
-async function releaseMetadata(name, fetchImpl, signal) {
+async function releaseMetadata(name, tag, fetchImpl, signal) {
   // Only public package names from the reviewed manifests leave this process.
-  const response = await fetchImpl(`https://registry.npmjs.org/${encodeURIComponent(name)}/latest`, {
+  const response = await fetchImpl(`https://registry.npmjs.org/${encodeURIComponent(name)}/${tag}`, {
     signal, redirect: 'error', headers: { accept: 'application/json' },
   });
   if (!response.ok || !response.body) throw new Error('Registry unavailable.');
@@ -52,30 +58,31 @@ async function releaseMetadata(name, fetchImpl, signal) {
 }
 
 export async function checkIntegrationReleases(pins, { fetchImpl = fetch, timeoutMs = 15_000 } = {}) {
-  const packages = new Map(pins.flatMap(module => module.packages).map(pkg => [pkg.name, pkg]));
+  const packages = new Map(pins.flatMap(module => module.packages).map(pkg => [`${pkg.name}@${pkg.tag ?? 'latest'}`, pkg]));
   const releases = new Map();
   // Keep concurrency bounded even when a host package adds dependencies.
-  const names = [...packages.keys()];
-  for (let index = 0; index < names.length; index += 4) {
-    await Promise.all(names.slice(index, index + 4).map(async name => {
+  const keys = [...packages.keys()];
+  for (let index = 0; index < keys.length; index += 4) {
+    await Promise.all(keys.slice(index, index + 4).map(async key => {
+      const { name, tag = 'latest' } = packages.get(key);
       const controller = new AbortController();
       let timer;
       try {
         const timeout = new Promise((_, reject) => {
           timer = setTimeout(() => { controller.abort(); reject(new Error('Registry deadline exceeded.')); }, timeoutMs);
         });
-        const release = await Promise.race([releaseMetadata(name, fetchImpl, controller.signal), timeout]);
-        releases.set(name, release);
+        const release = await Promise.race([releaseMetadata(name, tag, fetchImpl, controller.signal), timeout]);
+        releases.set(key, release);
       } catch {
         // Fetch errors may include URLs or proxy headers. Keep report errors fixed and non-secret.
-        releases.set(name, { error: 'registry-check-failed' });
+        releases.set(key, { error: 'registry-check-failed' });
       } finally { clearTimeout(timer); }
     }));
   }
   return pins.map(module => ({
     ...module,
     packages: module.packages.map(pkg => {
-      const release = releases.get(pkg.name);
+      const release = releases.get(`${pkg.name}@${pkg.tag ?? 'latest'}`);
       return release.error ? { ...pkg, state: 'unknown', error: release.error }
         : { ...pkg, latest: release.version, integrity: release.integrity,
           state: pkg.version === release.version ? 'current' : 'review-required' };

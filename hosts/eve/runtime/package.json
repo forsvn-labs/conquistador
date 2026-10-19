@@ -14,13 +14,13 @@
     "jobs": "node client.mjs"
   },
   "dependencies": {
-    "eve": "0.55.0",
-    "ai": "7.0.102",
-    "just-bash": "3.4.2"
+    "eve": "0.80.1",
+    "ai": "7.0.143",
+    "just-bash": "3.6.0"
   },
   "devDependencies": {
-    "typescript": "5.9.3",
-    "@types/node": "24.10.1"
+    "typescript": "7.0.2",
+    "@types/node": "26.6.5"
   },
   "overrides": {
     "undici": "8.11.2"

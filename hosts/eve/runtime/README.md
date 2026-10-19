@@ -1,6 +1,6 @@
 # Optional native Eve runtime
 
-This private package pins `eve` to **0.55.0**. It is separate from the zero-runtime
+This private package pins `eve` to **0.80.1**. It is separate from the zero-runtime
 portable Eve host contract. `ai` and `just-bash` are exact direct dependencies; `bun.lock`
 pins the full install. Node 24 is required. This is an optional native integration,
 not a claim of credentialed provider execution or deployment acceptance.
@@ -155,6 +155,13 @@ upstream rights. The operator secret must never enter the coding agent environme
 
 ## Development and evidence
 
+The 2026-10-19 migration uses Eve's built-in `eve__skill`, the native read-file
+tool, the exported Just Bash sandbox environment, and the current ask-question
+factory. Type checks, local contracts, the prepared-app build, and native HTTP
+authorization/missing-session checks pass. These checks do
+not prove a credentialed model job, human approval in a live session, or recovery
+of production jobs. No durable job is started by installation or a release check.
+
 ```sh
 bun install --frozen-lockfile --ignore-scripts
 npm run check
@@ -175,7 +182,7 @@ recovery. Keep `.eve/`, `.output/`, dependencies, and private prepared apps out 
 
 ## Official API references
 
-These were checked against npm `eve@0.55.0` and current official documentation. Installed
+These were checked against npm `eve@0.80.1` and its packaged documentation. Installed
 `node_modules/eve/docs/` is authoritative for this pin when eve.dev advances.
 
 - [Getting started](https://eve.dev/docs/getting-started.md)

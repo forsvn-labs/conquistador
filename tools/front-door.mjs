@@ -256,7 +256,7 @@ export function runRemove(args) {
       return { agent: { label: `${appById(id).label} (MCP client)`, app: id }, result: dryRun ? { ok: true } : removeApp(id) };
     }),
     ...(executor ? [(() => {
-      log(`executor call executor coreTools integrations remove '{"slug":"${executor.slug}"}'`);
+      log(executor.binding ? `Remove the managed Executor v2 app "${executor.slug}"; keep its connected accounts.` : `executor call executor coreTools integrations remove '{"slug":"${executor.slug}"}'`);
       return { agent: { label: `Executor source "${executor.slug}"`, executor: true }, result: dryRun ? { ok: true } : removeSource(executor.slug) };
     })()] : []),
   ];

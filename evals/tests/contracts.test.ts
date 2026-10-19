@@ -14,7 +14,7 @@ describe("exact candidate selection", () => {
       provider: "example",
       model: "model-2026-08-11",
       modelVersion: "2026-08-11",
-      adapterVersion: "0.122.0",
+      adapterVersion: "0.124.1",
     });
     expect(selection.toolModuleDigest).toMatch(/^sha256:/);
     expect(selection.promptTemplateDigest).toMatch(/^sha256:/);
@@ -65,7 +65,7 @@ describe("exact candidate selection", () => {
   it("rejects any unpinned Promptfoo adapter", () => {
     const cell = provider();
     cell.adapter.version = "0.121.0";
-    expect(() => createPromptfooPlan(candidate(), evalCase(), cell)).toThrow(/exactly 0.122.0/);
+    expect(() => createPromptfooPlan(candidate(), evalCase(), cell)).toThrow(/exactly 0.124.1/);
   });
 
   it("does not expose the test-only process seam through the CLI", () => {

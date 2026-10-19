@@ -83,3 +83,27 @@ test('help lists setup before prepare', async () => {
   assert.match(help.output, /prepare/);
   assert.ok(help.output.indexOf('setup') < help.output.indexOf('prepare'));
 });
+
+test('v2 setup uses serve on port 4312 and never suggests removed v1 commands', async () => {
+  const inspect = await inspectExecutor({ env: {}, execFile: async () => ({ stdout: '2.0.0-beta.25\n' }) });
+  const guide = setupGuide(inspect);
+  assert.equal(inspect.defaultEndpoint, 'http://127.0.0.1:4312/mcp');
+  assert.deepEqual(guide.startLocal, ['executor serve']);
+  assert.doesNotMatch(JSON.stringify(guide), /executor install|executor web|4788|toolkits/);
+  assert.match(guide.next.join(' '), /accounts|account/);
+});
+
+test('the native v2 version prefix cannot select legacy setup instructions', async () => {
+  const inspect = await inspectExecutor({ env: {}, execFile: async () => ({ stdout: 'executor v2.0.0-beta.25\n' }) });
+  assert.equal(inspect.version, '2.0.0-beta.25');
+  assert.equal(inspect.generation, 2);
+  assert.deepEqual(setupGuide(inspect).startLocal, ['executor serve']);
+});
+
+test('prepare can explicitly select the v2 hosted connection contract without credentials', async () => {
+  const result = await capture(['prepare', '--generation', '2', '--endpoint', 'https://mcp.executor.sh/org/personal/mcp',
+    '--ui-url', 'https://app.executor.sh/', '--auth-env', 'CONQUISTADOR_EXECUTOR_ACCESS']);
+  assert.equal(result.code, 0);
+  assert.equal(JSON.parse(result.output).schema, 'conquistador.executor-connection/v2');
+  assert.equal(result.output.includes(credential), false);
+});

@@ -1,4 +1,5 @@
 import { readFileSync } from "node:fs";
+import { createHash } from "node:crypto";
 import { resolve } from "node:path";
 
 import { describe, expect, it } from "vitest";
@@ -57,16 +58,17 @@ describe("immutable benchmark partitions", () => {
   });
 
   it("pins Promptfoo compatibility without installing it into the lab or product", () => {
-    const adapter = json("adapters/promptfoo-0.122.0.json");
+    const adapter = json("adapters/promptfoo-0.124.1.json");
     const packageJson = json("package.json");
     const isolatedPackage = json("promptfoo-isolated/package.json");
     const integrity = json("promptfoo-isolated/integrity-v1.json");
-    expect(adapter.upstream.version).toBe("0.122.0");
+    expect(adapter.upstream.version).toBe("0.124.1");
     expect(adapter.executionDefault).toBe("deny");
     expect(adapter.knownRisk.status).toBe("isolated-live-environment-required");
-    expect(adapter.knownRisk.npmAudit).toMatchObject({ high: 0, critical: 0 });
-    expect(isolatedPackage.dependencies).toEqual({ promptfoo: "0.122.0" });
-    expect(isolatedPackage.overrides).toEqual({ "adm-zip": "0.6.1", sharp: "0.35.4" });
+    expect(adapter.knownRisk.npmAudit).toMatchObject({ high: 3, critical: 0, requiredGraph: { high: 0, critical: 0 } });
+    expect(adapter.knownRisk.npmAudit.unpatchedOptional).toContain("GHSA-86w9-cpqp-85rv");
+    expect(isolatedPackage.dependencies).toEqual({ promptfoo: "0.124.1" });
+    expect(isolatedPackage.overrides).toEqual({ sharp: "0.35.5", "basic-ftp": "6.2.3" });
     expect(integrity.installedDependencyTreeDigest).toMatch(/^sha256:[0-9a-f]{64}$/);
     expect(packageJson.dependencies).toBeUndefined();
     expect(packageJson.devDependencies.promptfoo).toBeUndefined();
@@ -86,6 +88,7 @@ describe("immutable benchmark partitions", () => {
       },
     });
     expect(JSON.stringify(cell)).not.toMatch(/sk-(?:proj-)?[A-Za-z0-9_-]{20,}/);
-
+    const adapterBytes = readFileSync(resolve(root, `adapters/${cell.adapter.name}-${cell.adapter.version}.json`));
+    expect(cell.adapter.digest).toBe(`sha256:${createHash("sha256").update(adapterBytes).digest("hex")}`);
   });
 });

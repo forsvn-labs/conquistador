@@ -24,8 +24,11 @@ test('README and INSTALL advertise the npm package, and the Git route copies out
     assert.match(contents, expected);
     assert.doesNotMatch(contents, /npm install -g --ignore-scripts github:forsvn-labs\/conquistador/);
   }
-  const version = JSON.parse(readFileSync(join(root, 'package.json'), 'utf8')).version;
-  assert.match(readFileSync(join(root, 'INSTALL.md'), 'utf8'), new RegExp(`--install-links git\\+https://github\\.com/forsvn-labs/conquistador\\.git#v${version.replaceAll('.', '\\.')}`));
+  const published = /latest published release remains `([0-9.]+)`/.exec(readFileSync(join(root, 'VERSIONS.md'), 'utf8'))?.[1];
+  assert.ok(published, 'VERSIONS.md must identify the published release separately from the source candidate');
+  const install = readFileSync(join(root, 'INSTALL.md'), 'utf8');
+  assert.match(install, new RegExp(`--install-links git\\+https://github\\.com/forsvn-labs/conquistador\\.git#v${published.replaceAll('.', '\\.')}`));
+  assert.ok(install.includes(`npm install -g @forsvn/conquistador@${published}`));
 });
 
 test('the installed setup command works before runtime libraries or dependencies are present', () => {
@@ -36,7 +39,7 @@ test('the installed setup command works before runtime libraries or dependencies
       'tools/install-paths.mjs', 'tools/setup-routes.mjs', 'tools/method-library.mjs', 'tools/stage-method-library.mjs', 'tools/setup-guide.mjs', 'tools/setup-mcp.mjs', 'tools/operator-package.mjs', 'tools/project-installation.mjs', 'tools/setup-surfaces.mjs', 'tools/operator-profile.mjs',
       'tools/conquistador-mode.mjs', 'tools/proactive.mjs', 'tools/context-selection.mjs', 'tools/routing-contract.mjs', 'tools/module-root.mjs', 'tools/request-text.mjs', 'tools/plugin-contracts.mjs',
       'tools/onboarding-safety.mjs', 'tools/onboarding-ui.mjs', 'tools/onboarding.mjs', 'tools/onboarding-recovery.mjs', 'tools/onboarding-parse.mjs', 'tools/onboarding-hosts.mjs', 'tools/onboarding-routes.mjs', 'tools/vendor/clack.mjs', 'tools/front-door.mjs', 'tools/installation-methods.mjs', 'tools/self-update.mjs', 'tools/spawn.mjs', 'tools/agents.mjs', 'tools/plugin-payload.mjs',
-      'tools/onboard.mjs', 'tools/onboard-ui.mjs', 'tools/mcp-apps.mjs', 'tools/executor-source.mjs', 'tools/preflight.mjs',
+      'tools/onboard.mjs', 'tools/onboard-ui.mjs', 'tools/mcp-apps.mjs', 'tools/executor-source.mjs', 'tools/executor-v2.mjs', 'tools/preflight.mjs',
       'tools/cli-install.mjs', 'tools/process-run.mjs', 'tools/installer-operation.mjs']) {
       const target = join(source, file);
       mkdirSync(dirname(target), { recursive: true });

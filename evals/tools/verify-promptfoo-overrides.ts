@@ -28,36 +28,24 @@ const runtime = verifyPromptfooInstallation({
 });
 
 const requireFromInstall = createRequire(resolve(installationRoot, "package.json"));
-const onnx = resolveContainedPackage({
-  resolvedEntrypoint: requireFromInstall.resolve("onnxruntime-node"),
-  nodeModulesRoot,
-  expectedName: "onnxruntime-node",
-});
-const transformers = resolveContainedPackage({
-  resolvedEntrypoint: requireFromInstall.resolve("@huggingface/transformers"),
-  nodeModulesRoot,
-  expectedName: "@huggingface/transformers",
-});
 const promptfoo = resolveContainedPackage({
   resolvedEntrypoint: runtime.entrypoint,
   nodeModulesRoot,
   expectedName: "promptfoo",
 });
-const requireFromOnnx = createRequire(onnx.packageJson);
-const requireFromTransformers = createRequire(transformers.packageJson);
-const admZip = resolveContainedPackage({
-  resolvedEntrypoint: requireFromOnnx.resolve("adm-zip"),
+const ftp = resolveContainedPackage({
+  resolvedEntrypoint: requireFromInstall.resolve("basic-ftp"),
   nodeModulesRoot,
-  expectedName: "adm-zip",
+  expectedName: "basic-ftp",
 });
 const sharp = resolveContainedPackage({
-  resolvedEntrypoint: requireFromTransformers.resolve("sharp"),
+  resolvedEntrypoint: requireFromInstall.resolve("sharp"),
   nodeModulesRoot,
   expectedName: "sharp",
 });
 
-invariant(admZip.version === "0.6.1", "onnxruntime-node does not resolve adm-zip 0.6.1");
-invariant(sharp.version === "0.35.4", "Transformers does not resolve sharp 0.35.4");
+invariant(ftp.version === "6.2.3", "basic-ftp is not 6.2.3");
+invariant(sharp.version === "0.35.5", "sharp is not 0.35.5");
 invariant(promptfoo.version === PROMPTFOO_VERSION, `Promptfoo package is not ${PROMPTFOO_VERSION}`);
 
 const stateDirectory = mkdtempSync(resolve(tmpdir(), "conquistador-promptfoo-compatibility-"));
@@ -66,10 +54,8 @@ try {
   const compatibility = runCredentialFreeNode({
     script: resolve(import.meta.dirname, "promptfoo-override-compatibility-child.mjs"),
     args: [JSON.stringify({
-      admZipEntrypoint: admZip.entrypoint,
-      onnxEntrypoint: onnx.entrypoint,
+      ftpEntrypoint: ftp.entrypoint,
       sharpEntrypoint: sharp.entrypoint,
-      transformersEntrypoint: transformers.entrypoint,
     })],
     stateDirectory,
   });
@@ -89,10 +75,17 @@ try {
     `${version.stdout}${version.stderr}`.match(/\b\d+\.\d+\.\d+\b/)?.[0] === PROMPTFOO_VERSION,
     `Promptfoo version command did not report ${PROMPTFOO_VERSION}`,
   );
+  const help = runCredentialFreeNode({
+    script: promptfoo.entrypoint,
+    args: ["eval", "--help"],
+    stateDirectory,
+    workingDirectory: installationRoot,
+  });
+  invariant(help.status === 0 && help.stdout.includes("--config"), "credential-free Promptfoo eval help failed");
 } finally {
   rmSync(stateDirectory, { recursive: true, force: true });
 }
 
 process.stdout.write(
-  `[promptfoo-overrides] PASS authenticated ${runtime.identity.installedDependencyTreeDigest}; promptfoo ${PROMPTFOO_VERSION}; adm-zip 0.6.1; sharp 0.35.4; credential-free child checks passed\n`,
+  `[promptfoo-overrides] PASS authenticated ${runtime.identity.installedDependencyTreeDigest}; promptfoo ${PROMPTFOO_VERSION}; basic-ftp 6.2.3; sharp 0.35.5; credential-free child checks passed\n`,
 );

@@ -5,26 +5,29 @@ export function requireCondition(value, code) {
   if (!value) throw new ExecutorError(code);
 }
 
-function safeUrl(value, endpoint) {
+function safeUrl(value, endpoint, v2 = false) {
   requireCondition(typeof value === 'string' && value.length <= 512, 'INVALID_CONFIG');
   let url;
   try { url = new URL(value); } catch { throw new ExecutorError('INVALID_CONFIG'); }
-  requireCondition(!url.username && !url.password && !url.hash && !url.search, 'INVALID_CONFIG');
+  requireCondition(!url.username && !url.password && !url.hash && (!url.search || v2 && endpoint &&
+    [...url.searchParams.keys()].length === 1 && /^[A-Za-z0-9_-]{1,128}$/.test(url.searchParams.get('connection') ?? '')), 'INVALID_CONFIG');
   requireCondition(url.protocol === 'https:' || (url.protocol === 'http:' &&
     ['127.0.0.1', '[::1]'].includes(url.hostname)), 'INVALID_CONFIG');
   // Explicit known routes prevent credential-bearing arbitrary paths in output.
-  requireCondition(endpoint ? /^\/mcp(?:\/toolkits\/[a-z0-9-]{1,64})?$/.test(url.pathname) : url.pathname === '/', 'INVALID_CONFIG');
+  requireCondition(endpoint ? (v2 ? /^\/(?:org\/[A-Za-z0-9_-]{1,128}\/)?mcp$/.test(url.pathname) : /^\/mcp(?:\/toolkits\/[a-z0-9-]{1,64})?$/.test(url.pathname)) : url.pathname === '/', 'INVALID_CONFIG');
   return url.href;
 }
 
 export function validateConfig(value) {
   requireCondition(value && typeof value === 'object' && !Array.isArray(value), 'INVALID_CONFIG');
   requireCondition(Object.keys(value).sort().join(',') === 'authEnv,endpoint,schema,uiUrl', 'INVALID_CONFIG');
-  requireCondition(value.schema === 'conquistador.executor-connection/v1', 'INVALID_CONFIG');
+  requireCondition(['conquistador.executor-connection/v1', 'conquistador.executor-connection/v2'].includes(value.schema), 'INVALID_CONFIG');
+  const v2 = value.schema === 'conquistador.executor-connection/v2';
   requireCondition(typeof value.authEnv === 'string' && /^CONQUISTADOR_EXECUTOR_[A-Z][A-Z0-9_]{0,63}$/.test(value.authEnv), 'INVALID_CONFIG');
-  const endpoint = safeUrl(value.endpoint, true);
+  const endpoint = safeUrl(value.endpoint, true, v2);
   const uiUrl = safeUrl(value.uiUrl, false);
-  requireCondition(new URL(endpoint).origin === new URL(uiUrl).origin, 'INVALID_CONFIG');
+  requireCondition(new URL(endpoint).origin === new URL(uiUrl).origin || v2 &&
+    new URL(endpoint).origin === 'https://mcp.executor.sh' && new URL(uiUrl).origin === 'https://app.executor.sh', 'INVALID_CONFIG');
   return Object.freeze({ schema: value.schema, endpoint, uiUrl, authEnv: value.authEnv });
 }
 

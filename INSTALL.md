@@ -228,12 +228,14 @@ Notes:
 ### Exact version
 
 ```sh
-npm install -g @forsvn/conquistador@0.6.1
+npm install -g @forsvn/conquistador@0.8.0
 npm install -g --ignore-scripts --install-links git+https://github.com/forsvn-labs/conquistador.git#v0.8.0
 ```
 
 `--ignore-scripts` skips npm lifecycle scripts. `--install-links` copies the checkout out of npm's
 temporary storage.
+These commands use the published release. The `0.9.0` source candidate is not available
+as a release tag until it is approved and published.
 
 ## Update, check, and remove
 

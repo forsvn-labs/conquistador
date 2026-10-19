@@ -176,8 +176,8 @@ export function validatePromptfooLock(packageManifestBytes: Buffer, packageLockB
   invariant(packageManifest.private === true, "isolated Promptfoo package must be private");
   invariant(packageManifest.dependencies?.promptfoo === PROMPTFOO_VERSION, `isolated package must depend on exact Promptfoo ${PROMPTFOO_VERSION}`);
   invariant(
-    JSON.stringify(packageManifest.overrides) === JSON.stringify({ "adm-zip": "0.6.1", sharp: "0.35.4" }),
-    "isolated package must use only the approved adm-zip and sharp overrides",
+    JSON.stringify(packageManifest.overrides) === JSON.stringify({ sharp: "0.35.5", "basic-ftp": "6.2.3" }),
+    "isolated package must use only the approved sharp and basic-ftp overrides",
   );
   invariant(packageLock.lockfileVersion === 3, "isolated Promptfoo lock must use lockfileVersion 3");
   invariant(packageLock.packages?.[""]?.dependencies?.promptfoo === PROMPTFOO_VERSION, "Promptfoo lock root dependency differs");
@@ -188,10 +188,10 @@ export function validatePromptfooLock(packageManifestBytes: Buffer, packageLockB
     "Promptfoo lock uses an unexpected package source",
   );
   invariant(typeof lockedPromptfoo.integrity === "string" && SHA512.test(lockedPromptfoo.integrity), "Promptfoo lock has no exact registry integrity");
-  invariant(packageLock.packages?.["node_modules/adm-zip"]?.version === "0.6.1", "Promptfoo lock must resolve adm-zip 0.6.1");
+  invariant(packageLock.packages?.["node_modules/basic-ftp"]?.version === "6.2.3", "Promptfoo lock must resolve basic-ftp 6.2.3");
   const lockedSharp = Object.entries(packageLock.packages as Record<string, any>)
     .filter(([path]) => path === "node_modules/sharp" || path.endsWith("/node_modules/sharp"));
-  invariant(lockedSharp.length > 0 && lockedSharp.every(([, entry]) => entry.version === "0.35.4"), "Promptfoo lock must resolve every sharp package to 0.35.4");
+  invariant(lockedSharp.length > 0 && lockedSharp.every(([, entry]) => entry.version === "0.35.5"), "Promptfoo lock must resolve every sharp package to 0.35.5");
   for (const [path, entry] of Object.entries(packageLock.packages as Record<string, any>)) {
     if (!path || entry.link) continue;
     invariant(typeof entry.version === "string" && entry.version.length > 0, `Promptfoo lock entry ${path} has no exact version`);
