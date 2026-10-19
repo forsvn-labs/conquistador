@@ -1,8 +1,4 @@
-import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, symlinkSync, rmSync } from "node:fs";
-import { join } from "node:path";
-import { tmpdir } from "node:os";
 import { createRequire } from "node:module";
-import { pathToFileURL } from "node:url";
 
 function invariant(condition, message) {
   if (!condition) throw new Error(`[promptfoo-overrides-child] ${message}`);
@@ -28,28 +24,13 @@ const payload = JSON.parse(process.argv[2] ?? "null");
 invariant(payload && typeof payload === "object", "compatibility payload is required");
 const requireFromChild = createRequire(import.meta.url);
 
-const AdmZip = requireFromChild(payload.admZipEntrypoint);
-const archive = new AdmZip();
-archive.addFile("compatibility.txt", Buffer.from("conquistador\n"));
-const reopened = new AdmZip(archive.toBuffer());
-invariant(
-  reopened.readAsText("compatibility.txt") === "conquistador\n",
-  "adm-zip failed the ZIP round trip",
-);
-
-const extraction = mkdtempSync(join(tmpdir(), "conquistador-zip-regression-"));
-try {
-  const target = join(extraction, "target");
-  const outside = join(extraction, "outside");
-  mkdirSync(target); mkdirSync(outside);
-  writeFileSync(join(outside, "protected.txt"), "original");
-  symlinkSync(outside, join(target, "link"));
-  const malicious = new AdmZip();
-  malicious.addFile("link/protected.txt", Buffer.from("overwrite"));
-  let rejected = false;
-  try { malicious.extractAllTo(target, true); } catch { rejected = true; }
-  invariant(rejected && readFileSync(join(outside, "protected.txt"), "utf8") === "original", "ZIP extraction followed a destination symlink");
-} finally { rmSync(extraction, { recursive: true, force: true }); }
+// Promptfoo 0.124 removed the ONNX/Transformers ZIP extraction graph. Exercise the
+// patched dependencies that are still present, without opening network sockets.
+const ftp = requireFromChild(payload.ftpEntrypoint);
+const client = new ftp.Client(1000);
+invariant(typeof client.access === "function", "basic-ftp API failed to load");
+client.close();
+invariant(client.closed, "basic-ftp client did not close");
 
 const sharp = requireFromChild(payload.sharpEntrypoint);
 const image = sharp(Buffer.from([255, 0, 0]), {
@@ -58,10 +39,5 @@ const image = sharp(Buffer.from([255, 0, 0]), {
 const png = await image.png().toBuffer();
 const metadata = await sharp(png).metadata();
 invariant(metadata.format === "png" && metadata.width === 1 && metadata.height === 1, "sharp image round trip failed");
-
-const onnx = requireFromChild(payload.onnxEntrypoint);
-invariant(typeof onnx.InferenceSession?.create === "function", "onnxruntime-node native module failed to load");
-const transformers = await import(pathToFileURL(payload.transformersEntrypoint).href);
-invariant(typeof transformers.pipeline === "function", "Transformers failed to import");
 
 process.stdout.write("compatibility imports passed\n");

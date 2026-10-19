@@ -1,1 +1,2 @@
-export { default } from 'eve/tools/ask_question';
+import { askQuestion } from 'eve/tools/ask_question';
+export default askQuestion();

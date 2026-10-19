@@ -1,0 +1,40 @@
+{
+  "schemaVersion": "conquistador.promptfoo-adapter/v1",
+  "adapterVersion": "1.1.0",
+  "upstream": {
+    "name": "promptfoo",
+    "version": "0.124.1",
+    "package": "https://www.npmjs.com/package/promptfoo/v/0.124.1",
+    "documentation": "https://www.promptfoo.dev/docs/configuration/reference/"
+  },
+  "node": ">=22.22.0",
+  "sharing": false,
+  "cache": false,
+  "executionDefault": "deny",
+  "requiredBindings": [
+    "Candidate Build",
+    "Eval Case",
+    "Provider Cell",
+    "provider",
+    "model",
+    "model version",
+    "adapter version",
+    "prompt template digest",
+    "tool manifest digest",
+    "settings digest",
+    "calibration digest"
+  ],
+  "knownRisk": {
+    "checkedAt": "2026-10-19",
+    "status": "isolated-live-environment-required",
+    "npmAudit": {
+      "critical": 0,
+      "high": 3,
+      "moderate": 0,
+      "low": 0,
+      "requiredGraph": { "critical": 0, "high": 0, "moderate": 0, "low": 0 },
+      "unpatchedOptional": "node-forge <=1.4.0 through jks-js; GHSA-86w9-cpqp-85rv"
+    },
+    "reason": "Authenticated Promptfoo 0.124.1 installation, sharp 0.35.5 image round trip, basic-ftp 6.2.3 import/close, CLI version and eval help pass without credentials. npm audit reports three high dependency findings in the optional node-forge/jks-js chain; no patched node-forge release is available. npm audit --omit=optional reports zero findings. Do not use the Java keystore feature with untrusted input. Live model execution retains its existing authority gates and defaults to deny."
+  }
+}

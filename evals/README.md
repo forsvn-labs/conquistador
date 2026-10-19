@@ -56,3 +56,14 @@ Promptfoo remains an optional isolated dependency graph under `promptfoo-isolate
 default module installation. Its pinned packages and safety verifiers do not authorize execution.
 Do not install or run that graph just to use the public SDK. A genuine live host integration must
 supply its own scoped Executor connection and explicit authority; local tests never grant either.
+
+The reviewed isolated pin is Promptfoo 0.124.1 with sharp 0.35.5 and basic-ftp
+6.2.3 overrides. The 2026-10-19 full audit reports zero critical and three high
+findings, all in the optional node-forge/jks-js Java keystore chain
+([GHSA-86w9-cpqp-85rv](https://github.com/advisories/GHSA-86w9-cpqp-85rv)). No patched
+node-forge release is available. `npm audit --omit=optional` reports zero findings;
+this does not clear the full graph or authorize untrusted keystore input.
+The adapter record owns this risk disposition. `promptfoo:integrity:verify` checks
+the complete installed tree; `promptfoo:overrides:verify` exercises the image and
+FTP dependencies and CLI help in a credential-free child process. These are
+runtime compatibility checks. Live model execution still defaults to deny.

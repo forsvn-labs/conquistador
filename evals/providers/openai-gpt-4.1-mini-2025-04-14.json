@@ -1,12 +1,12 @@
 {
   "schemaVersion": "conquistador.provider-cell/v1",
-  "id": "openai.gpt-4.1-mini-2025-04-14.promptfoo-0.122.0",
+  "id": "openai.gpt-4.1-mini-2025-04-14.promptfoo-0.124.1",
   "provider": "openai",
   "model": "gpt-4.1-mini-2025-04-14",
   "modelVersion": "2025-04-14",
   "adapter": {
     "name": "promptfoo",
-    "version": "0.122.0",
+    "version": "0.124.1",
     "digest": "sha256:1b078ed094e4c50f7003f60caba8db483d0a087d32e40c8a341106d7fc25fdd5"
   },
   "promptTemplateDigest": "sha256:03be58336a36624591131742bb834635bc4fc2af1d4afd1514cdd69e3205dba0",
