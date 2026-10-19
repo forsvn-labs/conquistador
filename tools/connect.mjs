@@ -8,9 +8,9 @@
 // daemon does not show the user's integrations. So this file never runs an executor command
 // until a server already answers /api/health, and it always passes that server's --base-url.
 // Only an explicit, confirmed `connect` step installs or starts Executor.
-import { spawn, spawnSync } from 'node:child_process';
+import { spawn } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { existsSync, mkdirSync, readdirSync, readFileSync, renameSync, statSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readdirSync, readFileSync, realpathSync, renameSync, statSync, writeFileSync } from 'node:fs';
 import { homedir } from 'node:os';
 import { delimiter, dirname, join, resolve } from 'node:path';
 import { createInterface } from 'node:readline/promises';
@@ -69,16 +69,24 @@ export function findExecutor(env = process.env) {
   return null;
 }
 
-// Version inspection cannot start Executor. Explicit v2 credentials also support
-// hosted access without a locally installed CLI.
+// Read installed package metadata without invoking the CLI: even --version on
+// legacy Executor can write a cache. Hosted v2 also works without a local CLI.
 function generation(env, executor = findExecutor(env)) {
   if (env.CONQUISTADOR_EXECUTOR_AUTH_ENV || env.CONQUISTADOR_EXECUTOR_ORGANIZATION || env.EXECUTOR_API_KEY ||
       env.CONQUISTADOR_EXECUTOR_ACCESS || /^(?:https:\/\/api\.executor\.sh|http:\/\/(?:127\.0\.0\.1|\[::1\]):4312)\/?$/.test(env.CONQUISTADOR_EXECUTOR_URL ?? '')) return 2;
   if (!executor) return 1;
-  const { file, args, options } = spawnCommand(executor, ['--version'], env);
-  const result = spawnSync(file, args, { ...options, env: { ...env, EXECUTOR_NO_UPDATE_CHECK: '1' }, encoding: 'utf8', timeout: 4000, maxBuffer: 4096 });
-  const major = /\bv?(\d+)\.\d+\.\d+/.exec(`${result.stdout ?? ''}\n${result.stderr ?? ''}`)?.[1];
-  return result.status === 0 && Number(major) >= 2 ? 2 : 1;
+  try {
+    let directory = dirname(realpathSync(executor));
+    for (let depth = 0; depth < 5; depth++, directory = dirname(directory)) {
+      const path = join(directory, 'package.json');
+      if (!existsSync(path) || statSync(path).size > 65536) continue;
+      const manifest = JSON.parse(readFileSync(path, 'utf8'));
+      if (manifest.name !== 'executor' && !/^@executor-js\/executor-[a-z0-9-]+$/.test(manifest.name ?? '')) continue;
+      const major = /^(\d+)\.\d+\.\d+/.exec(manifest.version ?? '')?.[1];
+      return Number(major) >= 2 ? 2 : Number(major) === 1 ? 1 : 0;
+    }
+  } catch { /* Unrecognized installs require a configured gateway. */ }
+  return 0;
 }
 
 // Executor writes daemon-<host>-<port>.json for each daemon and daemon-active-<host>-<hash>.json
@@ -265,7 +273,13 @@ export async function readiness({ names = [], env = process.env, fetchImpl = fet
   const map = loadCapabilities(directory);
   const ids = selectCapabilities(names, map);
   const executor = findExecutor(env);
-  if (generation(env, executor) === 2) return readinessV2({ map, ids, env, fetchImpl, records: readConnections(env).verified, classify: toolClass });
+  const major = generation(env, executor);
+  if (major === 2) return readinessV2({ map, ids, env, fetchImpl, records: readConnections(env).verified, classify: toolClass });
+  if (major === 0) return { schema: 'conquistador.connect/v1', checkedAt: new Date().toISOString(),
+    executor: { installed: true, path: executor, server: { state: 'unknown' } }, integrations: [],
+    capabilities: ids.map(id => ({ id, class: map.capabilities[id].class, description: map.capabilities[id].description,
+      recipe: `integrations/${id}.md`, state: 'unknown', integrations: [], tools: [] })),
+    next: ['Executor version is unverified. Configure the v2 API origin and named access-credential variable, or inspect the installed package before using its CLI. No command was run.'] };
   const server = executor ? await findServer({ env, fetchImpl }) : { state: 'not-installed' };
   const records = readConnections(env).verified;
   const report = {
@@ -336,7 +350,9 @@ export async function verify({ capability, tool, args, env = process.env, fetchI
   try { input = JSON.parse(args ?? '{}'); } catch { throw new UsageError('--args must be JSON.'); }
   if (input === null || typeof input !== 'object' || Array.isArray(input)) throw new UsageError('--args must be a JSON object.');
   const executor = findExecutor(env);
-  if (generation(env, executor) === 2) {
+  const major = generation(env, executor);
+  if (major === 0) return { status: 'failed', capability, tool, reason: 'Executor version is unverified. Configure the gateway before running a read.' };
+  if (major === 2) {
     if (!v2ToolPath(tool)) throw new UsageError('Executor v2 requires the exact tools.<app> path from search.');
     const result = await verifyV2({ capability, tool, input, env, fetchImpl });
     if (result.record) {
@@ -487,7 +503,7 @@ export async function runConnect(argv, { stdin = process.stdin, stdout = process
   try {
     if (argv.some(arg => ['--help', '-h', 'help'].includes(arg))) { stdout.write(HELP); return 0; }
     const [action] = argv;
-    const v2 = generation(env) === 2;
+    const guardedGateway = generation(env) !== 1;
     if (action === 'verify') {
       const { flags, rest } = parseFlags(argv.slice(1), ['--tool', '--args']);
       if (rest.length !== 1 || !flags.tool) throw new UsageError('Usage: conquistador connect verify CAPABILITY --tool PATH --args JSON');
@@ -500,7 +516,7 @@ export async function runConnect(argv, { stdin = process.stdin, stdout = process
     if (action === 'add') {
       const { rest } = parseFlags(argv.slice(1), []);
       if (rest.length) throw new UsageError('Usage: conquistador connect add');
-      if (v2) {
+      if (guardedGateway) {
         stdout.write('Open Executor’s Connect page in your signed-in browser. Link only the accounts this task needs and review app policies. Then run conquistador connect.\n');
         return 0;
       }
@@ -516,9 +532,9 @@ export async function runConnect(argv, { stdin = process.stdin, stdout = process
     const { flags, rest } = parseFlags(argv, []);
     const names = rest;
     selectCapabilities(names);
-    if (!v2 && !flags.json && !findExecutor(env)) {
+    if (!guardedGateway && !flags.json && !findExecutor(env)) {
       await offerInstall(io, env);
-    } else if (!v2 && !flags.json && interactive(io)) {
+    } else if (!guardedGateway && !flags.json && interactive(io)) {
       const executor = findExecutor(env);
       const server = await findServer({ env, fetchImpl });
       if (server.state !== 'running') await offerStart(io, executor, env, fetchImpl);
