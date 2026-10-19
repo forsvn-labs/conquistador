@@ -93,3 +93,36 @@ test('help and invalid arguments do not require optional packages or read a supp
   assert.equal(await runIntegrationReleases(['check-updates', '--url', 'https://example.invalid'], io), 2);
   assert.ok(!errors.includes('example.invalid'));
 });
+
+// The selected v2 beta must be checked against its own registry channel.
+test('release checking honors an exact reviewed beta pin without comparing it with v1 latest', async () => {
+  const f = fixture();
+  try {
+    writeFileSync(join(f.directory, 'hosts/executor/package.json'), JSON.stringify({
+      private: true, devDependencies: { executor: '2.0.0-beta.25' },
+      conquistador: { releaseTags: { executor: 'beta' } },
+    }));
+    const calls = [];
+    const pins = integrationPins(f.directory);
+    const report = await checkIntegrationReleases(pins, { fetchImpl: async url => {
+      calls.push(url);
+      const [name, tag] = new URL(url).pathname.slice(1).split('/').map(decodeURIComponent);
+      return metadata(name, tag === 'beta' ? '2.0.0-beta.25' : '1.2.3');
+    } });
+    assert.equal(report[1].packages[0].state, 'current');
+    assert.equal(report[1].packages[0].tag, 'beta');
+    assert.ok(calls.some(url => url.endsWith('/executor/beta')));
+  } finally { f.close(); }
+});
+
+test('release tags reject undeclared packages and unsafe registry paths', () => {
+  const f = fixture();
+  try {
+    for (const releaseTags of [{ executor: '../latest' }, { missing: 'beta' }]) {
+      writeFileSync(join(f.directory, 'hosts/executor/package.json'), JSON.stringify({
+        private: true, dependencies: { executor: '2.0.0-beta.25' }, conquistador: { releaseTags },
+      }));
+      assert.throws(() => integrationPins(f.directory));
+    }
+  } finally { f.close(); }
+});

@@ -11,7 +11,7 @@ import readSkillFile from '../agent/tools/read_skill_file.ts';
 
 test('actual pinned Eve imports build native agent, connection, channel, and client definitions', async () => {
   const require = createRequire(import.meta.url);
-  assert.equal(JSON.parse(await readFile(require.resolve('eve/package.json'), 'utf8')).version, '0.55.0');
+  assert.equal(JSON.parse(await readFile(require.resolve('eve/package.json'), 'utf8')).version, '0.80.1');
   assert.equal(agent.defaultTools, false);
   assert.equal(connection.kind, 'eve:dynamic');
   assert.equal(typeof connection.events['turn.started'], 'function');

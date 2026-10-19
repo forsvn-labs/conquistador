@@ -15,7 +15,7 @@ test('prepare copies canonical bytes and pinned lock into an unstarted private n
   const destination = join(parent, 'app');
   const result = await prepareJob({ ...baseOptions, destination });
   assert.equal(result.started, false);
-  assert.equal(result.eve, '0.55.0');
+  assert.equal(result.eve, '0.80.1');
   const skill = 'agent/skills/conquistador/SKILL.md';
   assert.deepEqual(await readFile(join(destination, skill)), await readFile(join(source, 'skills/conquistador/SKILL.md')));
   assert.deepEqual(await readFile(join(destination, 'bun.lock')), await readFile(new URL('../bun.lock', import.meta.url)));
