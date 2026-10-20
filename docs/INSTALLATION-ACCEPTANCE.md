@@ -71,7 +71,7 @@ Record these cases before changing the adapters or dependency pins:
   deterministic check as human acceptance. A correction must preserve the other accepted facts.
 
 Native runtime observations, protocol fixtures, and Hung's writing verdict require separate
-records. Save repeatable reports and private account captures through DRIVE.md.
+records. Save repeatable reports and private account captures through BRAIN.md.
 
 ## Repeatable evidence
 
@@ -80,7 +80,7 @@ Use `node tools/e2e/installation-packages.mjs` for real npm tarballs, the short-
 and the pinned external Skills CLI. Use `node tools/e2e/oauth.mjs` for the real Worker, OAuth provider, local KV, and MCP calls.
 The OAuth runner labels its local GitHub identity fixture; it does not prove real GitHub or
 Executor acceptance. Each runner writes a JSON report with source hashes outside Git.
-The landing repository owns browser checks and before/after captures. DRIVE.md locates evidence.
+The landing repository owns browser checks and before/after captures. BRAIN.md locates evidence.
 
 ## Sources checked on 2026-10-17
 

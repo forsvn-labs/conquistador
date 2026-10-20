@@ -18,7 +18,7 @@ Evidence includes 942 product checks, 67 installer scenarios, 44 checker cases,
 All eight real public registry/install checks pass: exact release bytes, integrity,
 both packages' provenance, the pinned alias, Skills, installer/plugin plans, MCP stdio,
 `npx` and Bun. The five payload archives match the approved candidate bytes.
-CHANGELOG.md owns exact release identity; DRIVE.md resolves reports and Iris captures.
+CHANGELOG.md owns exact release identity; BRAIN.md resolves reports and Iris captures.
 
 Managed Executor v2 apps and capability verification now ship with v1 compatibility.
 Fifteen real isolated native-v2 cases pass: ownership and app lifecycle, public source
@@ -78,7 +78,7 @@ across separate callback/frontend origins. Complete earlier candidate CI also pa
 scenarios and Linux/Windows package checks. The labeled identity fixture covers protocol failures;
 real GitHub/Executor acceptance is recorded separately. [CHANGELOG.md](CHANGELOG.md) owns exact
 release/Worker identity; [installation acceptance](docs/INSTALLATION-ACCEPTANCE.md) owns the
-repeatable failure contract. DRIVE.md resolves reports, hashes, and Iris captures.
+repeatable failure contract. BRAIN.md resolves reports, hashes, and Iris captures.
 
 The bilingual four-choice page shipped through
 [landing PR #29](https://github.com/forsvn-labs/conquistador-landing/pull/29), after both package

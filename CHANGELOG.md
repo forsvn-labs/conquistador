@@ -42,7 +42,7 @@ output, human acceptance and rights disposition require separate evidence.
 - Merged-source product, app-integration and installation workflows pass. Evidence includes
   942 product checks, 67 installer scenarios, 44 checker cases and 15 social-style cases.
   All eight real registry/install checks pass, including both packages' provenance and exact
-  tagged bytes. ROADMAP.md owns the current handoff; DRIVE.md resolves the reports.
+  tagged bytes. ROADMAP.md owns the current handoff; BRAIN.md resolves the reports.
 
 ## 2026-10-17, 0.8.0 public alpha
 
@@ -84,7 +84,7 @@ output, human acceptance and rights disposition require separate evidence.
 - The matching four-choice page is merged in
   [landing PR #29](https://github.com/forsvn-labs/conquistador-landing/pull/29). The landing
   repository owns its deployment identity and live page acceptance. Resolve repeatable reports,
-  source hashes, logs, and captures through [DRIVE.md](DRIVE.md).
+  source hashes, logs, and captures through [BRAIN.md](BRAIN.md).
   Native client activation, Windows interactive/ARM, additional OAuth clients, the separate
   Executor v2 adapter migration, and useful writing output retain their stated limits.
 
@@ -119,7 +119,7 @@ output, human acceptance and rights disposition require separate evidence.
   [landing PR #28](https://github.com/forsvn-labs/conquistador-landing/pull/28) after npm delivery.
   Its accepted suite passes 648 browser checks; live setup passes 224 and production HTTP passes 63.
 - The [app guide](https://conquistador.app/docs/install/app), repeatable reports, release identity,
-  and Iris captures are verified. Resolve private evidence through [DRIVE.md](DRIVE.md).
+  and Iris captures are verified. Resolve private evidence through [BRAIN.md](BRAIN.md).
   Server-side Node and Bun are covered. Browser/Edge runtimes, native MCP client loading, hosted OAuth,
   and useful live model output need separate acceptance. The hosted product MCP Worker was not deployed.
 
@@ -153,7 +153,7 @@ output, human acceptance and rights disposition require separate evidence.
   was verified. Its full browser suite passes 628 checks; live setup passes 198 and production
   HTTP passes 60. The landing repository owns its deployment identity and remaining browser limits.
 - Reports, repeatable runners, and Iris captures are in the approved project verification folder;
-  see [DRIVE.md](DRIVE.md). Native MCP client loading, Executor 2 automatic integration,
+  see [BRAIN.md](BRAIN.md). Native MCP client loading, Executor 2 automatic integration,
   interactive Windows, ARM platforms, and real writing-quality acceptance remain open.
 
 ## 2026-10-13, 0.6.0 public alpha
@@ -180,7 +180,7 @@ output, human acceptance and rights disposition require separate evidence.
 - A fresh unversioned `npx` starts 0.6.0. Where 0.5.1 is installed globally, npm can reuse it.
   The live check confirms `npx @forsvn/conquistador@latest` starts 0.6.0 in that environment.
   Repeatable reports and Iris captures are in the approved project verification folder; see
-  [DRIVE.md](DRIVE.md). No npm publisher sign-in was needed for publication or public verification.
+  [BRAIN.md](BRAIN.md). No npm publisher sign-in was needed for publication or public verification.
 - The follow-up documentation records `install-cli`, the 0.6.0 copy-rule markers, and recovery
   for an older global `npx` selection. The docs checker preserves hyphenated command names and
   accepts valid release-version notes. All 19 docs checks and the Mintlify build pass.
