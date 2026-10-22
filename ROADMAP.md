@@ -20,9 +20,10 @@ owns the repeatable commands, full measurements and limits. It makes no general 
 The three private test graphs now pin Vite 8.3.3 and Vitest 4.1.12 for verified
 development advisories. Fresh npm audits report zero findings in each graph, and
 all 524 affected runtime/catalog/eval tests pass on Node 24. The separate optional
-Promptfoo/node-forge advisory remains unpatched. Final-head remote CI and package
-assembly are pending. This review uses isolated homes and fixture identities and
-authorizes no production write, release or merge.
+Promptfoo/node-forge advisory remains unpatched. Remote CI and clean-commit package
+assembly remain merge/release gates; the draft PR owns the latest check results.
+This review uses isolated homes and fixture identities and authorizes no production
+write, release or merge.
 
 2026-10-19: Hung approved the merge of
 [PR #83](https://github.com/forsvn-labs/conquistador/pull/83) at
