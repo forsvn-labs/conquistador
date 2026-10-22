@@ -5,8 +5,8 @@ import { copyFileSync, cpSync, existsSync, mkdirSync, mkdtempSync, rmSync, symli
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { PassThrough, Writable } from 'node:stream';
-import { createMethodAccess, runSkillsMcp, LIMITS } from './skills-mcp.mjs';
+import { PassThrough, Readable, Writable } from 'node:stream';
+import { createMcpHandler, createMethodAccess, runSkillsMcp, LIMITS } from './skills-mcp.mjs';
 import { briefFiles } from './operator-package.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
@@ -92,6 +92,48 @@ test('contained reads refuse traversal, symlinks, hidden files, binary and overs
   assert.throws(() => access.read('conquistador/commands/test/references/outside.md'));
 });
 
+// Failure modes: a long-lived app indexes a valid playbook, then that file or an ancestor
+// becomes a symlink, binary, invalid UTF-8, or oversized. Brief packing must enforce the
+// same boundary as conquistador_read, including when the ranking index is already warm.
+test('warm briefs refuse resources that cease to be bounded regular text files', async t => {
+  for (const kind of ['file-symlink', 'directory-symlink', 'binary', 'invalid-utf8', 'oversized']) {
+    await t.test(kind, t => {
+      const path = cold(t);
+      const handle = createMcpHandler({ root: join(path, 'skills'), requireInitialize: false, hosted: true, bundledOnly: true });
+      const brief = () => handle(call(1, 'conquistador_brief', { task: 'Write the first cold email to RevOps leads at B2B SaaS companies.' })).result;
+      const before = brief();
+      assert.ok(!before.isError);
+      const selected = before.structuredContent.inlined.find(item => item.path.includes('/references/'));
+      assert.ok(selected, 'The fixture must inline a real selected playbook.');
+      const target = join(path, selected.path);
+      const outside = join(path, 'outside');
+      mkdirSync(outside);
+      const canary = 'PRIVATE_OUTSIDE_BUNDLE_CANARY';
+      if (kind === 'file-symlink') {
+        const secret = join(outside, 'secret.md');
+        writeFileSync(secret, canary);
+        rmSync(target);
+        symlinkSync(secret, target);
+      } else if (kind === 'directory-symlink') {
+        cpSync(dirname(target), outside, { recursive: true });
+        writeFileSync(join(outside, target.split(/[\\/]/).at(-1)), canary);
+        rmSync(dirname(target), { recursive: true });
+        symlinkSync(outside, dirname(target), process.platform === 'win32' ? 'junction' : 'dir');
+      } else {
+        writeFileSync(target, kind === 'binary' ? `${canary}\0binary` : kind === 'invalid-utf8' ? Buffer.from([0xc3, 0x28]) : 'x'.repeat(LIMITS.file + 1));
+      }
+      const read = handle(call(2, 'conquistador_read', { path: selected.path })).result;
+      assert.equal(read.isError, true, 'Direct reads must refuse this resource.');
+      const after = brief();
+      assert.doesNotMatch(JSON.stringify(after), new RegExp(canary));
+      assert.ok(!after.isError, 'Other safe playbooks must remain usable.');
+      assert.ok(after.structuredContent.readNow.includes(selected.path));
+      assert.ok(!after.structuredContent.inlined.some(item => item.path === selected.path));
+      assert.ok(after.content[0].text.includes(JSON.stringify({ id: selected.path, status: 'unavailable' })));
+    });
+  }
+});
+
 test('protocol errors are bounded and do not echo supplied paths, secrets, or invalid IDs', async t => {
   const path = cold(t);
   const result = await run(path, lines([
@@ -158,6 +200,57 @@ test('fragmented UTF8 requests and output closure complete without background wo
   closedInput.write(lines(start));
   await closed;
   assert.equal(closedInput.destroyed, true);
+});
+
+// Failure mode: a valid near-limit frame arrives one byte at a time. Re-copying the
+// accumulated prefix on every chunk makes a 64 KiB request copy about 2 GiB.
+test('fragmented near-limit frames require only linear copying and preserve UTF8', async t => {
+  const bytes = Buffer.from(lines([rpc('fragmented', 'ping', { padding: 'é'.repeat(30_000) })]));
+  assert.ok(bytes.length < LIMITS.request);
+  const input = Readable.from((function* () {
+    for (let i = 0; i < bytes.length; i++) yield bytes.subarray(i, i + 1);
+  })());
+  let copied = 0;
+  const concat = Buffer.concat;
+  t.mock.method(Buffer, 'concat', function(chunks, length) {
+    copied += length ?? chunks.reduce((total, chunk) => total + chunk.length, 0);
+    return concat(chunks, length);
+  });
+  const output = [];
+  await runSkillsMcp({ input, output: new Writable({ write(chunk, encoding, callback) { output.push(chunk.toString()); callback(); } }) });
+  assert.deepEqual(JSON.parse(output.join('')), { jsonrpc: '2.0', id: 'fragmented', result: {} });
+  assert.ok(copied <= bytes.length * 2, `${bytes.length} input bytes caused ${copied} copied bytes`);
+});
+
+test('framing preserves message boundaries, byte limits, and incomplete EOF errors', async t => {
+  const collect = async (bytes, size) => {
+    const input = Readable.from((function* () {
+      for (let offset = 0; offset < bytes.length; offset += size) yield bytes.subarray(offset, offset + size);
+    })());
+    const output = [];
+    await runSkillsMcp({ input, output: new Writable({ write(chunk, encoding, done) { output.push(chunk.toString()); done(); } }) });
+    return output.join('').trim().split('\n').map(JSON.parse);
+  };
+  for (const size of [1, 7, 65_536]) await t.test(`multiple frames in ${size}-byte chunks`, async () => {
+    const result = await collect(Buffer.from(lines([...start, rpc('Tiếng Việt', 'ping'), rpc(4, 'ping')])), size);
+    assert.deepEqual(result.map(item => item.id), [1, 'Tiếng Việt', 4]);
+    assert.deepEqual(result.at(-1).result, {});
+  });
+  await t.test('the exact byte limit is accepted and the next byte stops the stream', async () => {
+    const empty = JSON.stringify(rpc(7, 'ping', { padding: '' }));
+    const padding = 'x'.repeat(LIMITS.request - Buffer.byteLength(empty));
+    const exact = JSON.stringify(rpc(7, 'ping', { padding }));
+    assert.equal(Buffer.byteLength(exact), LIMITS.request);
+    assert.deepEqual(await collect(Buffer.from(`${exact}\n`), 64), [{ jsonrpc: '2.0', id: 7, result: {} }]);
+    const over = await collect(Buffer.from(`${exact} \n${lines([rpc(8, 'ping')])}`), 64);
+    assert.equal(over.length, 1);
+    assert.equal(over[0].error.code, -32600);
+  });
+  await t.test('incomplete fragmented EOF stays an error', async () => {
+    const result = await collect(Buffer.from(JSON.stringify(rpc(8, 'ping'))), 1);
+    assert.equal(result.length, 1);
+    assert.equal(result[0].error.code, -32700);
+  });
 });
 
 test('resource enumeration and encoded responses enforce their own limits', async t => {

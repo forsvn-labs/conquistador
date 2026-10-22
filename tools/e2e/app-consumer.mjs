@@ -2,7 +2,9 @@
 import assert from 'node:assert/strict';
 import { randomBytes } from 'node:crypto';
 import { createServer } from 'node:http';
-import { writeFileSync } from 'node:fs';
+import { readFileSync, rmSync, symlinkSync, writeFileSync } from 'node:fs';
+import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 const checks = [];
 const test = async (name, action) => {
   try { await action(); checks.push({ name, passed: true }); }
@@ -201,6 +203,24 @@ if (cq) {
       assert.equal((await appAuth(new Request('https://app.example/mcp', { method: 'POST', headers: { 'x-app-user': 'allowed' }, body: JSON.stringify(rpc('tools/list')) }))).status, 200);
       assert.equal((await appAuth(new Request('https://app.example/mcp', { method: 'POST', body: '{}' }))).status, 401);
     });
+    await test('Fetch body errors and cancellation failures return bounded errors and permit retry', async () => {
+      const handle = mcp.createMcpFetchHandler({ token });
+      for (const oversized of [false, true]) {
+        const body = new ReadableStream({
+          start(controller) {
+            if (oversized) controller.enqueue(new Uint8Array(65_537));
+            else controller.error(Error('PRIVATE_STREAM_CANARY'));
+          },
+          cancel() { throw Error('PRIVATE_CANCEL_CANARY'); },
+        });
+        const response = await handle(new Request('https://app.example/mcp', { method: 'POST', headers: { authorization: `Bearer ${token}` }, body, duplex: 'half' }));
+        assert.equal(response.status, oversized ? 413 : 400);
+        assert.doesNotMatch(await response.text(), /PRIVATE_/);
+        assert.equal(body.locked, false);
+      }
+      const retry = await handle(new Request('https://app.example/mcp', { method: 'POST', headers: { authorization: `Bearer ${token}` }, body: JSON.stringify(rpc('tools/list')) }));
+      assert.equal(retry.status, 200);
+    });
     await test('the mounted app still answers after clients close', async () => {
       assert.equal((await fetch(`${base}/app`)).status, 200);
     });
@@ -229,6 +249,28 @@ if (cq) {
     } finally {
       example.closeAllConnections();
       await new Promise(done => example.close(done));
+    }
+  });
+  await test('a warm installed-app brief cannot follow a replaced bundled playbook', () => {
+    const selected = brief.structuredContent.inlined.find(item => item.path.includes('/references/'));
+    assert.ok(selected);
+    const packageRoot = fileURLToPath(new URL('../', import.meta.resolve('@forsvn/conquistador')));
+    const target = join(packageRoot, selected.path);
+    const original = readFileSync(target);
+    const secret = join(process.env.CONQUISTADOR_HOME, 'outside-package.md');
+    writeFileSync(secret, 'PRIVATE_REPLACED_PLAYBOOK_CANARY');
+    try {
+      rmSync(target);
+      symlinkSync(secret, target);
+      assert.equal(cq.callTool('conquistador_read', { path: selected.path }).isError, true);
+      const result = cq.callTool('conquistador_brief', { task, context });
+      assert.ok(!result.isError);
+      assert.doesNotMatch(JSON.stringify(result), /PRIVATE_REPLACED_PLAYBOOK_CANARY/);
+      assert.ok(result.structuredContent.readNow.includes(selected.path));
+    } finally {
+      rmSync(target, { force: true });
+      writeFileSync(target, original);
+      rmSync(secret, { force: true });
     }
   });
 }

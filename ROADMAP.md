@@ -2,6 +2,15 @@
 
 ## Current handoff
 
+2026-10-22 review in progress (unreleased): the MCP changes enforce contained
+brief reads after a playbook changes, assemble fragmented stdio frames with linear
+copying, and contain streamed-upload errors and failed or stalled cancellation.
+Failing fixture regressions were recorded before each fix. Local Node 26 build,
+type checks and 963 product tests pass; installed npm and Bun consumers each pass
+38 checks. Terminal multi-selection and local Worker startup are under investigation;
+full installation acceptance, repeated performance evidence and remote CI remain pending.
+This review uses isolated homes and local identity fixtures and authorizes no release.
+
 2026-10-19: Hung approved the merge of
 [PR #83](https://github.com/forsvn-labs/conquistador/pull/83) at
 `e918104025002f4d46c3db4b30893d6a24a06d06`. Product 0.9.0 is shipped. The

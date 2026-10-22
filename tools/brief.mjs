@@ -562,7 +562,7 @@ export const formatBriefPack = (brief, options) => packBrief(brief, options).tex
 
 // The brief as text plus the same lists in structured form, so an agent can see what is inlined
 // and what it still has to read without parsing prose. `hosted` marks a caller with no repository.
-export function packBrief(brief, { limit = LIMITS.packBytes, callerContext, hosted = false, compact = false } = {}) {
+export function packBrief(brief, { limit = LIMITS.packBytes, callerContext, hosted = false, compact = false, readBundled } = {}) {
   if (brief.action !== 'brief') {
     return { structured: { action: 'none', inlined: [], readNow: [], readAtStep: [], situational: [] }, text: 'No Conquistador method matches this task. For growth, GTM, marketing, sales, or product work, restate the outcome and channel (for example "write a win-back email flow", "get recommended by ChatGPT", or "plan a TikTok series") or call conquistador_search.' };
   }
@@ -610,7 +610,11 @@ export function packBrief(brief, { limit = LIMITS.packBytes, callerContext, host
   const entries = [...(brief.play ? [{ item: brief.play, heading: `Play: ${brief.play.label}` }] : []), ...brief.methods.map(item => ({ item, heading: `Command: ${item.label}` })),
     ...inlineMust.map(item => ({ item, heading: `${item.source === 'user' ? 'Your playbook' : 'Playbook'}: ${item.title || posix.basename(item.path)}` }))]
     .map(({ item, heading }) => {
-      const body = readText(item.absolute);
+      // A transport can require its contained reader here. Recheck at packing time:
+      // a cached ranking record does not prove that this is still a safe file.
+      let body;
+      try { body = readBundled && item.source !== 'user' ? readBundled(item) : readText(item.absolute); }
+      catch { body = null; }
       const evidence = knowledgeFileEvidence(item, body);
       const status = body === null ? 'unavailable' : 'omitted';
       const fallback = `\n${evidenceMarker({ id: item.path, status })}\n(${item.path} ${status}: ${status === 'omitted' ? 'response budget reached' : 'file could not be read'}. Read it separately.)\n`;
