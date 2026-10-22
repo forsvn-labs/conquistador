@@ -80,6 +80,12 @@ and TUI app setup text. `tools/e2e/app-integration.mjs --package /path/package.t
 imports from an actual installed app and writes repeatable receipts. Use `--installer bun`
 and `--runtime /path/to/node` for separate supported-toolchain runs.
 
+`tools/e2e/performance.mjs` measures deterministic app calls and fragmented stdio
+frames without a model, network or home discovery. `--source-root` selects a clean
+comparison checkout; `--reference` checks output equality. Reports contain source
+hashes, raw timing samples and variance. [The October MCP review](docs/MCP-REVIEW-2026-10.md)
+records scope, regressions, measured tradeoffs and acceptance limits.
+
 Use [README.md](README.md) for setup details and project-specific validation. This record migration does not re-run application release or deployment gates.
 
 ## Record history

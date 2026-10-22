@@ -2,14 +2,27 @@
 
 ## Current handoff
 
-2026-10-22 review in progress (unreleased): the MCP changes enforce contained
-brief reads after a playbook changes, assemble fragmented stdio frames with linear
-copying, and contain streamed-upload errors and failed or stalled cancellation.
-Failing fixture regressions were recorded before each fix. Local Node 26 build,
-type checks and 963 product tests pass; installed npm and Bun consumers each pass
-38 checks. Terminal multi-selection and local Worker startup are under investigation;
-full installation acceptance, repeated performance evidence and remote CI remain pending.
-This review uses isolated homes and local identity fixtures and authorizes no release.
+2026-10-22: [draft PR #84](https://github.com/forsvn-labs/conquistador/pull/84) contains
+unreleased application review fixes: contained brief reads after a playbook changes,
+linear stdio frame assembly, and bounded streamed-upload failure/cancellation recovery.
+Each fix has a recorded failing regression. Local Node 26 build/type checks and 963
+product tests pass; actual npm and Bun consumers each pass 38 checks. The unchanged
+terminal suite passes 67/67 sequentially on Node 24 after an initial concurrent 65/67;
+both selection cases also pass their focused rerun. Local fixture OAuth/workerd/browser
+checks pass 27/27 on Node 24 and 26 after installing the pinned temporary test browser.
+
+Five alternating before/after rounds (35 samples per version) reduce a 64 KB one-byte
+fragmented frame from median 179.9 ms to 43.1 ms; SD is 22.4 / 6.5 ms. All framing
+and six app-workload outputs match. Small frames show no speed benefit, and bounded
+brief reads retain their validation cost. [The review record](docs/MCP-REVIEW-2026-10.md)
+owns the repeatable commands, full measurements and limits. It makes no general task-speed claim.
+
+The three private test graphs now pin Vite 8.3.3 and Vitest 4.1.12 for verified
+development advisories. Fresh npm audits report zero findings in each graph, and
+all 524 affected runtime/catalog/eval tests pass on Node 24. The separate optional
+Promptfoo/node-forge advisory remains unpatched. Final-head remote CI and package
+assembly are pending. This review uses isolated homes and fixture identities and
+authorizes no production write, release or merge.
 
 2026-10-19: Hung approved the merge of
 [PR #83](https://github.com/forsvn-labs/conquistador/pull/83) at
