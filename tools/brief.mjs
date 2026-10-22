@@ -613,8 +613,10 @@ export function packBrief(brief, { limit = LIMITS.packBytes, callerContext, host
       // A transport can require its contained reader here. Recheck at packing time:
       // a cached ranking record does not prove that this is still a safe file.
       let body;
+
       try { body = readBundled && item.source !== 'user' ? readBundled(item) : readText(item.absolute); }
       catch { body = null; }
+
       const evidence = knowledgeFileEvidence(item, body);
       const status = body === null ? 'unavailable' : 'omitted';
       const fallback = `\n${evidenceMarker({ id: item.path, status })}\n(${item.path} ${status}: ${status === 'omitted' ? 'response budget reached' : 'file could not be read'}. Read it separately.)\n`;

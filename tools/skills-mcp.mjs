@@ -277,10 +277,12 @@ export function createMcpHandler({ root = bundledRoot, requireInitialize = true,
         if (args.size !== undefined && !['full', 'compact'].includes(args.size)) throw usageError('Use size full or compact.');
         access ??= createMethodAccess(root);
         const bundle = realpathSync(root);
+
         const pack = packBrief(createBrief(args.task, { root: packageRoot(), force: true, ...knowledgeOptions }), {
           callerContext: args.context?.trim(), hosted, compact: args.size === 'compact',
           readBundled: item => access.read(relative(bundle, item.absolute).split(sep).join('/')),
         });
+
         value = pack.text;
         structured = pack.structured;
       } else if (params.name === 'conquistador_score') {
@@ -359,9 +361,11 @@ export async function runSkillsMcp({ input = process.stdin, output = process.std
       while (start < bytes.length && !stopped) {
         const newline = bytes.indexOf(10, start);
         const end = newline < 0 ? bytes.length : newline;
+
         if (size + end - start > LIMITS.request) { await error(null, -32600, 'Request limit exceeded'); stop(); break; }
         // Hold bounded slices until the frame is complete. Concatenating every prefix
         // makes fragmented input quadratic in both copying and allocation work.
+
         if (end > start) { chunks.push(bytes.subarray(start, end)); size += end - start; }
         if (newline < 0) break;
         await handle(chunks.length === 1 ? chunks[0] : Buffer.concat(chunks, size));
@@ -370,6 +374,7 @@ export async function runSkillsMcp({ input = process.stdin, output = process.std
         start = newline + 1;
       }
     }
+
     if (!stopped && size) await error(null, -32700, 'Incomplete JSONL frame');
   } catch { stop(); }
   finally {

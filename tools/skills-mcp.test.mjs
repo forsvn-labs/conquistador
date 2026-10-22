@@ -109,6 +109,7 @@ test('warm briefs refuse resources that cease to be bounded regular text files',
       const outside = join(path, 'outside');
       mkdirSync(outside);
       const canary = 'PRIVATE_OUTSIDE_BUNDLE_CANARY';
+
       if (kind === 'file-symlink') {
         const secret = join(outside, 'secret.md');
         writeFileSync(secret, canary);
@@ -122,6 +123,7 @@ test('warm briefs refuse resources that cease to be bounded regular text files',
       } else {
         writeFileSync(target, kind === 'binary' ? `${canary}\0binary` : kind === 'invalid-utf8' ? Buffer.from([0xc3, 0x28]) : 'x'.repeat(LIMITS.file + 1));
       }
+
       const read = handle(call(2, 'conquistador_read', { path: selected.path })).result;
       assert.equal(read.isError, true, 'Direct reads must refuse this resource.');
       const after = brief();
@@ -207,13 +209,16 @@ test('fragmented UTF8 requests and output closure complete without background wo
 test('fragmented near-limit frames require only linear copying and preserve UTF8', async t => {
   const bytes = Buffer.from(lines([rpc('fragmented', 'ping', { padding: 'é'.repeat(30_000) })]));
   assert.ok(bytes.length < LIMITS.request);
+
   const input = Readable.from((function* () {
     for (let i = 0; i < bytes.length; i++) yield bytes.subarray(i, i + 1);
   })());
+
   let copied = 0;
   const concat = Buffer.concat;
   t.mock.method(Buffer, 'concat', function(chunks, length) {
     copied += length ?? chunks.reduce((total, chunk) => total + chunk.length, 0);
+
     return concat(chunks, length);
   });
   const output = [];
@@ -227,10 +232,13 @@ test('framing preserves message boundaries, byte limits, and incomplete EOF erro
     const input = Readable.from((function* () {
       for (let offset = 0; offset < bytes.length; offset += size) yield bytes.subarray(offset, offset + size);
     })());
+
     const output = [];
     await runSkillsMcp({ input, output: new Writable({ write(chunk, encoding, done) { output.push(chunk.toString()); done(); } }) });
+
     return output.join('').trim().split('\n').map(JSON.parse);
   };
+
   for (const size of [1, 7, 65_536]) await t.test(`multiple frames in ${size}-byte chunks`, async () => {
     const result = await collect(Buffer.from(lines([...start, rpc('Tiếng Việt', 'ping'), rpc(4, 'ping')])), size);
     assert.deepEqual(result.map(item => item.id), [1, 'Tiếng Việt', 4]);

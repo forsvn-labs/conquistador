@@ -4840,7 +4840,7 @@
     },
     {
       "path": "tools/brief.mjs",
-      "sha256": "d05cda171c4373ac68a4f3b8844d306b7c011209184ae761e430e42ee9d0bd74"
+      "sha256": "fc00923847f23d2c35550d5294c7031849317a9d47b0fd1dd53d56c2d88c4226"
     },
     {
       "path": "tools/check-receipt.mjs",
@@ -4880,7 +4880,7 @@
     },
     {
       "path": "tools/mcp-http.mjs",
-      "sha256": "002abdb645119c01520b653a558515e919ea364704de52defbb9ac60b75f69a6"
+      "sha256": "7765e3a47341ee94650c540d3d93a970f7abbdfcefffede5d0b6b19ce01341eb"
     },
     {
       "path": "tools/method-library.mjs",
@@ -4908,7 +4908,7 @@
     },
     {
       "path": "tools/skills-mcp.mjs",
-      "sha256": "a760cb8e8253ffab397e60bfb50876fcbfd2359bb540db56fb365e09b3aeaf97"
+      "sha256": "7d748b6e30fac6c0791b07873acb87d06c40351b69938b0d6272c348ebf9acdc"
     }
   ]
 }

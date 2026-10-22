@@ -67,6 +67,7 @@ test('Fetch upload failures are contained and oversized cancellation still retur
     app: createMcpFetchHandler({ token: 'fixture-token' }),
     worker: request => worker.fetch(request, { CONQUISTADOR_MCP_TOKEN: 'fixture-token' }),
   };
+
   for (const [adapter, handle] of Object.entries(adapters)) for (const mode of ['read-error', 'cancel-error', 'cancel-stall']) await t.test(`${adapter}: ${mode}`, async () => {
     const body = new ReadableStream({
       start(controller) {
@@ -78,20 +79,25 @@ test('Fetch upload failures are contained and oversized cancellation still retur
         throw Error('PRIVATE_BODY_CANCEL_CANARY');
       },
     });
+
     let timer;
     let response;
+
     try {
       response = await Promise.race([
         handle(new Request('https://app.example/mcp', { method: 'POST', headers: { authorization: 'Bearer fixture-token' }, body, duplex: 'half' })),
         new Promise((resolve, reject) => { timer = setTimeout(() => reject(Error('Transport waited for body cancellation.')), 2000); }),
       ]);
     } finally { clearTimeout(timer); }
+
     assert.equal(response.status, mode === 'read-error' ? 400 : 413);
     assert.doesNotMatch(await response.text(), /PRIVATE_|CANARY/);
     assert.equal(body.locked, false, 'The transport must release the stream reader.');
+
     const retry = await handle(new Request('https://app.example/mcp', {
       method: 'POST', headers: { authorization: 'Bearer fixture-token' }, body: JSON.stringify(list),
     }));
+
     assert.equal(retry.status, 200);
     assert.equal((await retry.json()).result.tools.length, 8);
   });

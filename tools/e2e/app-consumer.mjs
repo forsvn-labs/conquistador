@@ -205,6 +205,7 @@ if (cq) {
     });
     await test('Fetch body errors and cancellation failures return bounded errors and permit retry', async () => {
       const handle = mcp.createMcpFetchHandler({ token });
+
       for (const oversized of [false, true]) {
         const body = new ReadableStream({
           start(controller) {
@@ -213,11 +214,13 @@ if (cq) {
           },
           cancel() { throw Error('PRIVATE_CANCEL_CANARY'); },
         });
+
         const response = await handle(new Request('https://app.example/mcp', { method: 'POST', headers: { authorization: `Bearer ${token}` }, body, duplex: 'half' }));
         assert.equal(response.status, oversized ? 413 : 400);
         assert.doesNotMatch(await response.text(), /PRIVATE_/);
         assert.equal(body.locked, false);
       }
+
       const retry = await handle(new Request('https://app.example/mcp', { method: 'POST', headers: { authorization: `Bearer ${token}` }, body: JSON.stringify(rpc('tools/list')) }));
       assert.equal(retry.status, 200);
     });
@@ -259,6 +262,7 @@ if (cq) {
     const original = readFileSync(target);
     const secret = join(process.env.CONQUISTADOR_HOME, 'outside-package.md');
     writeFileSync(secret, 'PRIVATE_REPLACED_PLAYBOOK_CANARY');
+
     try {
       rmSync(target);
       symlinkSync(secret, target);

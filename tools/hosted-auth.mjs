@@ -49,7 +49,12 @@ export async function readBounded(request, limit) {
       const { done, value } = await reader.read();
       if (done) break;
       size += value.byteLength;
-      if (size > limit) { void reader.cancel().catch(() => {}); return null; }
+
+      if (size > limit) {
+        void reader.cancel().catch(() => {});
+
+        return null;
+      }
       chunks.push(value);
     }
     const bytes = new Uint8Array(size);
@@ -309,6 +314,7 @@ export async function handleAuthRoute(request, env, ctx) {
     try { githubToken = JSON.parse(text).githubToken; } catch { return json(400, { error: 'Send JSON: {"githubToken": "..."}.' }); }
     if (typeof githubToken !== 'string' || !githubToken || githubToken.length > 255) return json(400, { error: 'Send JSON: {"githubToken": "..."}.' });
     let identity;
+
     try {
       identity = await identify(gh, githubToken);
     } catch (error) {

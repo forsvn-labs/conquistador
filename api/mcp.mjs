@@ -28,7 +28,12 @@ async function readBody(request) {
       size += value.byteLength;
       // The limit is already known. A broken or stalled cancellation must not
       // delay the 413 response or expose the underlying stream's error.
-      if (size > MAX_BODY) { void reader.cancel().catch(() => {}); return null; }
+
+      if (size > MAX_BODY) {
+        void reader.cancel().catch(() => {});
+
+        return null;
+      }
       chunks.push(value);
     }
     return Buffer.concat(chunks).toString('utf8');

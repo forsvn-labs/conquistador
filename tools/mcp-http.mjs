@@ -36,6 +36,7 @@ export function createMcpResponder({ token = process.env.CONQUISTADOR_MCP_TOKEN,
     if (method === 'DELETE') return reply(200, {});
     if (method !== 'POST') return reply(405, { error: 'This server answers POST requests with JSON.' }, { allow: 'POST' });
     let text;
+
     try { text = await readBody(); }
     catch { return reply(400, { error: 'Cannot read request body.' }); }
     if (text === null) return reply(413, { error: 'Request too large.' });
