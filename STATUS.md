@@ -39,6 +39,13 @@ and the optional Promptfoo/node-forge findings remain open.
 
 ## Current installation work
 
+Release 0.10.1 is being prepared from merged PR #89. The release is authorized;
+publication and authenticated hosted acceptance must be verified before marking it shipped.
+The existing Executor account returned the method catalog on 2026-10-23; the deployed
+Worker is still 0.8.0. Composio uses a documented runnable API example; at the user’s request, no live
+Composio account is required for this release. Live acceptance is not claimed.
+
+
 The installation candidate makes `npx conquistador@latest` the primary entry,
 adds an Executor-only MCP setup shortcut, and documents standalone MCP in coding
 agents, desktop clients, Executor, and Composio. It is not a new npm release.
