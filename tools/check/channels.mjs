@@ -97,23 +97,13 @@ const sitePage = /\.(?:html?|mdx)$|(?:^|\/)pages\/(?:.*\/)?[^/]+\.astro$/i;
 
 // The hook and signals stay silent unless a file looks like marketing copy. Code, docs, and agent files never qualify.
 // document is the parsed file ({ data: { channel } }); signals passes only the front matter channel.
-export function isMarketingFile(file, document) {
-  const path = file.split(/[\\/]/).join('/');
-  const parts = path.split('/');
-  const channel = normalizeChannel(document?.data?.channel);
-
+export function isMarketingFile(file, document, { admitted = false } = {}) {
+  const parts = file.split(/[\\/]/);
   if (parts.slice(0, -1).some(part => skippedFolders.has(part))) return false;
-
-  if (parts.slice(0, -1).some(part => docFolders.has(part)) && !channel) return false;
-
-  // Site pages count first, so index.html is a landing page, not the INDEX.md project file.
-  if (channel || sitePage.test(path)) return true;
-
-  if (projectFiles.test(basename(file).replace(/\.[^.]+$/, '').replace(/\.[^.]+$/, ''))) return false;
-
-  if (channelFromName(basename(file))) return true;
-
-  return parts.slice(-4, -1).some(part => marketingWords.has(part.toLowerCase()) || channelFromName(part));
+  if (normalizeChannel(document?.data?.channel)) return true;
+  if (!admitted || parts.slice(0, -1).some(part => docFolders.has(part))) return false;
+  if (projectFiles.test(basename(file).replace(/\.[^.]+$/, ''))) return false;
+  return Boolean(channelFromName(basename(file))) || parts.slice(-4, -1).some(part => marketingWords.has(part.toLowerCase()));
 }
 
 // X weighting from the counting-characters guide: URLs count 23, CJK and emoji count 2.

@@ -59,7 +59,8 @@
         "google ads",
         "linkedin ads",
         "tiktok ads",
-        "paid-media"
+        "paid-media",
+        "apple ads"
       ],
       "aliases": [
         "create-paid-campaign",
@@ -343,7 +344,8 @@
       "intents": [
         "audit marketing",
         "pre-ship marketing audit",
-        "audit this marketing package"
+        "audit this marketing package",
+        "audit our marketing package"
       ],
       "aliases": [
         "audit-marketing"
@@ -397,7 +399,8 @@
         "brand voice",
         "visual identity",
         "naming direction",
-        "create a brand"
+        "create a brand",
+        "brand identity"
       ],
       "aliases": [
         "create-brand"
@@ -468,7 +471,8 @@
         "allocate marketing budget",
         "budget allocation",
         "spend scenario",
-        "channel floors"
+        "channel floors",
+        "marketing budget"
       ],
       "aliases": [
         "allocate-marketing-budget"
@@ -1038,7 +1042,8 @@
         "creative brief",
         "production brief",
         "design brief",
-        "brief the designer"
+        "brief the designer",
+        "brief a ugc creator"
       ],
       "aliases": [
         "brief-creative"
@@ -1528,7 +1533,8 @@
         "source audit",
         "conflicting evidence",
         "authority and freshness",
-        "factual-claim check"
+        "factual-claim check",
+        "fact check the claims"
       ],
       "aliases": [
         "knowledge-review"
@@ -1595,7 +1601,8 @@
         "user flow",
         "map the journey",
         "screen transitions",
-        "recovery states"
+        "recovery states",
+        "first-value flow"
       ],
       "aliases": [
         "map-user-flow"
@@ -1670,7 +1677,9 @@
         "growth funnel model",
         "unit economics",
         "numeric funnel",
-        "revenue funnel"
+        "revenue funnel",
+        "model what it takes",
+        "mrr"
       ],
       "aliases": [
         "model-growth-funnel"
@@ -2028,7 +2037,8 @@
         "icp research",
         "competitor analysis",
         "market research",
-        "who we should serve"
+        "who we should serve",
+        "define our icp"
       ],
       "aliases": [
         "research-positioning"
@@ -2212,7 +2222,9 @@
       "intents": [
         "prioritize opportunities",
         "force-rank",
-        "proceed park stop"
+        "proceed park stop",
+        "rank them",
+        "growth ideas"
       ],
       "aliases": [
         "prioritize-opportunities"
@@ -2307,7 +2319,9 @@
         "paid-media performance",
         "evaluate short-form",
         "published short-form",
-        "short-form results"
+        "short-form results",
+        "evaluate last week's outbound",
+        "evaluate our tiktok videos"
       ],
       "aliases": [
         "evaluate-outreach",

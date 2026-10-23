@@ -7,8 +7,9 @@
 // Turn it off with CONQUISTADOR_HOOKS=off or {"hooks": false} in ~/.conquistador/config.json.
 import { createHash } from 'node:crypto';
 import { existsSync, mkdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
-import { homedir, tmpdir } from 'node:os';
+import { tmpdir } from 'node:os';
 import { extname, isAbsolute, join, relative, resolve } from 'node:path';
+import { activeMarketingTask, hooksEnabled } from '../tools/prompt-advice.mjs';
 import { detectChannel, isMarketingFile } from '../tools/check/channels.mjs';
 import { extractDocument, scannableExtensions } from '../tools/check/extract.mjs';
 import { checkDocument, counted, globToRegExp, loadConfig } from '../tools/check/index.mjs';
@@ -17,18 +18,6 @@ import { checkDocument, counted, globToRegExp, loadConfig } from '../tools/check
 const [client = 'claude'] = process.argv.slice(2);
 
 const maxFindings = 12;
-
-function disabled() {
-  const flag = String(process.env.CONQUISTADOR_HOOKS ?? '').toLowerCase();
-
-  if (['0', 'off', 'false', 'no', 'disabled'].includes(flag)) return true;
-
-  try {
-    const config = JSON.parse(readFileSync(join(process.env.CONQUISTADOR_HOME || join(homedir(), '.conquistador'), 'config.json'), 'utf8'));
-
-    return config.hooks === false;
-  } catch { return false; }
-}
 
 function readInput() {
   return new Promise(done => {
@@ -125,7 +114,7 @@ function payload(text) {
 const emit = value => new Promise(done => (value ? process.stdout.write(`${JSON.stringify(value)}\n`, () => done()) : done()));
 
 async function main() {
-  if (disabled()) return;
+  if (!hooksEnabled()) return;
   const input = await readInput();
 
   if (!input || (input.tool_response && input.tool_response.success === false)) return;
@@ -143,7 +132,7 @@ async function main() {
     const display = relative(root, file).startsWith('..') ? file : relative(root, file);
     const document = extractDocument(readFileSync(file, 'utf8'), extname(file));
 
-    if (!isMarketingFile(display, document)) continue;
+    if (!isMarketingFile(display, document, { admitted: activeMarketingTask(input) })) continue;
 
     if (config.ignoreFiles.some(glob => globToRegExp(glob).test(display.split('\\').join('/')))) continue;
     const channel = detectChannel(display, document, null);

@@ -57,7 +57,8 @@ const brief = cq.callTool('conquistador_brief', {
   size: 'compact',
 });
 if (brief.isError) throw new Error(brief.content[0].text);
-// Give the whole brief to the agent, then read its readNow files before drafting.
+// Use the bounded current-stage guidance. Expand situational files only when needed.
+// If action is none, continue without Conquistador. readNow is an empty compatibility field.
 ```
 
 | Tool | Purpose |

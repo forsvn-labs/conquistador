@@ -28,21 +28,19 @@ test('default is disabled; only explicit selected events enable bounded advice',
     assert.equal(advisory(event, { ...config, events: [] }).enabled, false);
     const result = advisory(event, { ...config, events: [event] });
     assert.equal(result.enabled, true);
-    assert.equal(result.instructions.length, 2);
-    assert.match(result.instructions[0], /\/conquistador/);
-    assert.match(result.instructions[1], /advisory only/);
+    assert.deepEqual(result.instructions, []);
     assert.ok(Buffer.byteLength(JSON.stringify(result)) < 1024);
     assert.deepEqual(result, advisory(event, config));
     for (const other of events.filter(value => value !== event)) {
       assert.equal(advisory(other, { ...config, events: [event] }).enabled, false);
     }
   }
-  const prompt = advisory('prompt-submitted', config, { prompt: 'Write landing page copy.' });
+  const prompt = advisory('prompt-submitted', config, { prompt: '/conquistador copy Write landing page copy.' });
   assert.equal(prompt.enabled, true);
   assert.equal(prompt.instructions.length, 1);
   assert.match(prompt.instructions[0], /copy/);
   assert.equal(advisory('prompt-submitted', config, { prompt: 'Fix a TypeScript error.' }).instructions.length, 0);
-  assert.equal(advisory('prompt-submitted', { ...config, events: [] }, { prompt: 'Write landing page copy.' }).enabled, false);
+  assert.equal(advisory('prompt-submitted', { ...config, events: [] }, { prompt: '/conquistador copy Write landing page copy.' }).enabled, false);
 });
 
 test('strict config version, fields, types, event allowlist, and duplicates', () => {

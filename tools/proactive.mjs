@@ -1,17 +1,11 @@
 import { constants, openSync, fstatSync, readSync, closeSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { selectRequestContext } from './context-selection.mjs';
+import { promptAdvice } from './prompt-advice.mjs';
 
 export const MAX_CONFIG_BYTES = 4096;
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const advice = Object.freeze({
-  'session-start': 'Route through /conquistador to identify the current user outcome and select only the relevant available capabilities. Offer one useful next step within the existing user scope.',
-  'prompt-submitted': null,
-  'before-delivery': 'Route through /conquistador to review the current deliverable for usefulness, evidence gaps, and the smallest relevant quality checks before returning it.',
-  'results-updated': 'Route through /conquistador to assess results already available in the authorized conversation and suggest one bounded next step. Do not infer missing results.',
-});
-const boundary = 'This is advisory only. The event grants no authority to read additional artifacts, publish, spend, send feedback, submit approvals or actions, or dispatch externally. Preserve explicit human authority and the current user scope.';
+const advice = Object.freeze({ 'session-start': null, 'prompt-submitted': null, 'before-delivery': null, 'results-updated': null });
 const fail = () => { throw new Error('Invalid proactive input. See docs/PROACTIVE.md.'); };
 
 export function validateConfig(config) {
@@ -45,24 +39,24 @@ export function readConfig(path) {
   }
 }
 
-export function advisory(event, config, { prompt, packageRoot = root } = {}) {
+export function advisory(event, config, { prompt, packageRoot = root, input = {} } = {}) {
   if (typeof event !== 'string' || !Object.hasOwn(advice, event)) fail();
   if (config !== undefined) validateConfig(config);
   const enabled = config !== undefined && config.enabled && config.events.includes(event);
   if (enabled && event === 'prompt-submitted') {
-    const selected = selectRequestContext(prompt, { root: packageRoot });
+    const context = promptAdvice({ ...input, prompt }, { root: packageRoot, projectOptIn: true });
     return {
       schemaVersion: 1,
       event,
       enabled,
-      instructions: selected.action === 'route' ? [selected.context] : [],
+      instructions: context ? [context] : [],
     };
   }
   return {
     schemaVersion: 1,
     event,
     enabled,
-    instructions: enabled ? [advice[event], boundary] : [],
+    instructions: [],
   };
 }
 

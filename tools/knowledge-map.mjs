@@ -19,7 +19,7 @@ function files(directory, prefix = '') {
   return readdirSync(join(directory, prefix)).sort().filter(name => !name.startsWith('.')).flatMap(name => {
     const key = prefix ? `${prefix}/${name}` : name;
     const stat = lstatSync(join(directory, key));
-    return stat.isDirectory() ? files(directory, key) : stat.isFile() && key.endsWith('.md') && key !== 'COMMAND.md' ? [key] : [];
+    return stat.isDirectory() ? files(directory, key) : stat.isFile() && key.endsWith('.md') && !['COMMAND.md', 'ENTRY.md'].includes(key) ? [key] : [];
   });
 }
 const exists = path => { try { return lstatSync(path).isDirectory(); } catch { return false; } };
@@ -80,7 +80,7 @@ export function mapFor(target) {
   const href = key => (linkBase ? `${linkBase}/${key}` : key).replace(/ /g, '%20');
   const links = list => list.map(item => `[${label(item.key)}](${href(item.key)})`).join(', ');
   const lines = [START, `## Playbooks for this ${target.play ? 'play' : target.mode ? 'mode' : 'method'}`, ''];
-  lines.push('Read the core files in full before you draft; read the others when their step or platform comes up. Cite what you used under "Playbooks applied".', '');
+  lines.push('Use the brief to select current-stage resources. Read additional files only when their step or platform applies. Core files are references, not a mandatory reading list.', '');
   if (core.length) {
     lines.push('Core:', '');
     for (const item of core) lines.push(`- [${label(item.key)}](${href(item.key)}): ${item.summary || 'Check the draft against these before you answer.'}`);

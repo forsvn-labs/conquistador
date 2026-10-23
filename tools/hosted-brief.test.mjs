@@ -40,7 +40,8 @@ test('the brief returns structured lists that match the pack text', () => {
   const text = response.result.content[0].text;
   assert.equal(brief.action, 'brief');
   assert.equal(brief.command, 'outreach');
-  assert.ok(brief.inlined.length >= 5);
+  assert.ok(brief.inlined.length >= 2);
+  assert.ok(Buffer.byteLength(text) <= 16000);
   for (const item of brief.inlined) assert.ok(text.includes(`File: ${item.path}`), item.path);
   for (const path of brief.readNow) assert.ok(!text.includes(`File: ${path}`), path);
   assert.ok(Array.isArray(brief.situational) && Array.isArray(brief.readAtStep));

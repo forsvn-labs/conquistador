@@ -17,6 +17,14 @@ function temporary(run) {
   try { run(join(parent, 'owned')); } finally { rmSync(parent, { recursive: true, force: true }); }
 }
 
+// Failure mode: staged entry points can restore full-library obligations after bounded routing.
+test('installed entry points preserve advisory, current-stage guidance', () => temporary(target => {
+  install('install', 'conquistador', target);
+  const entry = readFileSync(join(target, 'SKILL.md'), 'utf8');
+  assert.doesNotMatch(entry, /Read every listed|every Core file|end with \*\*Playbooks applied/);
+  assert.match(entry, /Reuse guidance already available/);
+}));
+
 test('one entry point contains every method and upgrades without losing user changes', () => temporary(target => {
   install('install', 'conquistador', target);
   assert.match(readFileSync(join(target, 'SKILL.md'), 'utf8'), /library\/conquistador\/METHOD.md/);
@@ -36,7 +44,7 @@ test('one entry point contains every method and upgrades without losing user cha
 test('portable master contains specialist contracts, declared outcomes and its canonical parent', () => temporary(target => {
   install('install', 'single-agent', target);
   const agent = JSON.parse(readFileSync(join(target, 'agent/agent.json')));
-  assert.equal(agent.pluginVersion, '0.9.1');
+  assert.equal(agent.pluginVersion, '0.10.0');
   assert.equal(agent.kind, 'master-agent');
   assert.equal(agent.role, 'orchestrator');
   assert.equal(agent.schemaVersion, 'conquistador.agent-package/v2');
@@ -78,7 +86,7 @@ test('host and squad declarations resolve inside each staged package', () => {
       }
     } else {
       const host = JSON.parse(readFileSync(join(target, 'host.json')));
-      assert.equal(host.pluginVersion, '0.9.1');
+      assert.equal(host.pluginVersion, '0.10.0');
       assert.deepEqual(readdirSync(join(target, host.canonicalSkillsRoot)).sort(), skills);
     }
     install('remove', mode, target);

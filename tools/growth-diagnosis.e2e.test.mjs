@@ -99,7 +99,7 @@ test('installed growth route, first task, hook context, and removal work togethe
   });
 
   checked(printedUpdateResult, 'printed other-project update');
-  assert.equal(JSON.parse(readFileSync(selectedReceiptPath, 'utf8')).productVersion, '0.9.1');
+  assert.equal(JSON.parse(readFileSync(selectedReceiptPath, 'utf8')).productVersion, '0.10.0');
   assert.equal(readFileSync(join(project, '.conquistador/.conquistador-install.json'), 'utf8'), callerReceipt);
   const otherDoctor = JSON.parse(checked(run(cli, project, 'operator', 'doctor', '--project', otherProject, '--json'), 'other-project doctor'));
   assert.equal(otherDoctor.path, join(otherProject, '.conquistador'));
@@ -276,10 +276,11 @@ test('installed growth route, first task, hook context, and removal work togethe
   const context = JSON.parse(checked(handled, 'installed hook')).hookSpecificOutput.additionalContext;
   assert.match(context, /Diagnose a growth problem \[diagnose\]/);
   assert.doesNotMatch(context, /Shape an ambiguous initiative/);
-  const methodPath = /Full method: ([^\n]+)/.exec(context)?.[1];
-  assert.equal(methodPath, 'library/conquistador/commands/diagnose/COMMAND.md');
-  const resources = /Required resources: ([^\n]+)/.exec(context)?.[1].split(', ');
-  assert.ok(resources.length >= 3);
+  const methodPath = /Entry: ([^\n]+)/.exec(context)?.[1];
+  assert.equal(methodPath, 'library/conquistador/commands/diagnose/ENTRY.md');
+  const resources = [];
+  assert.ok(context.length <= 1500);
+  assert.doesNotMatch(context, /Required resources:/);
 
   const sourceReads = [methodPath, ...resources].map(path => {
     const location = join(project, '.conquistador', path);
@@ -295,7 +296,7 @@ test('installed growth route, first task, hook context, and removal work togethe
 
   const reviewContext = JSON.parse(checked(reviewHandled, 'review growth hook')).hookSpecificOutput.additionalContext;
   assert.match(reviewContext, /Learn from aggregate growth results \[measure\]/);
-  assert.match(reviewContext, /Full method: library\/conquistador\/commands\/measure\/COMMAND.md/);
+  assert.match(reviewContext, /Entry: library\/conquistador\/commands\/measure\/ENTRY.md/);
 
   const namedHandled = spawnSync(process.execPath, [handler, '--handle', '--host', 'codex', '--event', 'prompt-submitted',
     '--config', config], {

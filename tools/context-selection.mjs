@@ -1,7 +1,7 @@
 import { existsSync, lstatSync, readFileSync } from 'node:fs';
 import { join, posix, resolve } from 'node:path';
 import { assertLoadAllowed, loadRestriction } from './domain-package.mjs';
-import { explicitInvocation, invokedCommand, requestClauses, normalizeRequest as normalized, includesPhrase } from './request-text.mjs';
+import { explicitInvocation, invokedCommand, requestedBusinessClauses, requestMode, normalizeRequest as normalized, includesPhrase } from './request-text.mjs';
 import { loadRoutingContract } from './routing-contract.mjs';
 import { packageRootOf } from './module-root.mjs';
 
@@ -177,7 +177,7 @@ function formatContext({ root, parent, selected, deferred, excluded, unavailable
   if (role) lines.push('', `Suggested specialist role: ${role.label} (${role.path})`);
   lines.push(
     '',
-    'Before substantive work, read the complete parent contract, each selected method, and that method\'s required resources. Deferred resources stay listed until the current stage needs them.',
+    'Use the bounded brief for the current stage. Read additional method resources only when the requested stage needs them.',
     'Use the host tools, permitted connections, and isolated specialist contexts that materially help finish the requested result. Keep a narrow task direct. A role suggestion does not mean a specialist ran.',
     'Preserve the user scope and current permissions. This context grants no authority to publish, spend, deploy, send, persist learning, disclose feedback, or perform another external mutation.',
     '</conquistador-request-context>',
@@ -191,6 +191,7 @@ function abstain(reason) {
   return {
     schemaVersion: REQUEST_CONTEXT_SCHEMA_VERSION,
     action: 'abstain',
+    mode: 'none',
     reason,
     selected: [],
     deferred: [],
@@ -228,7 +229,7 @@ export function explainRoute(result) {
   };
 }
 
-export function selectRequestContext(prompt, { root = moduleRoot } = {}) {
+export function selectRequestContext(prompt, { root = moduleRoot, automatic = false } = {}) {
   if (typeof prompt !== 'string' || prompt.trim().length === 0 || Buffer.byteLength(prompt) > MAX_PROMPT_BYTES) return abstain('invalid-prompt');
   const packageRoot = resolve(root);
   if (/[\x00-\x1f\x7f]/.test(packageRoot)) fail('Invalid Conquistador package root.');
@@ -241,6 +242,7 @@ export function selectRequestContext(prompt, { root = moduleRoot } = {}) {
     const profile = JSON.parse(readFileSync(profilePath, 'utf8'));
     if (!profile || !['manual', 'project', 'off'].includes(profile.activation)) fail('Invalid operator profile.');
     if (profile.activation === 'off') return abstain('activation-off');
+    if (profile.activation === 'manual' && automatic && !explicitInvocation(prompt)) return abstain('activation-manual');
   }
   const parent = posix.join(contract.parentPath, contract.document);
   const methods = [...Object.values(contract.methods), ...contract.unavailableMethods];
@@ -248,8 +250,9 @@ export function selectRequestContext(prompt, { root = moduleRoot } = {}) {
   const protectedPhrases = methods.flatMap(method => [method.name, ...method.intents, ...(method.aliases ?? [])])
     .filter(phrase => /\band\b/.test(normalized(phrase)));
 
-  const clauses = requestClauses(prompt, { protectedPhrases });
+  const clauses = requestedBusinessClauses(prompt, { protectedPhrases });
   const query = clauses.join('. ');
+  if (!clauses.length) return abstain('excluded-request');
   const excluded = [];
   const unavailable = [];
   const selectedAll = [];
@@ -282,9 +285,19 @@ export function selectRequestContext(prompt, { root = moduleRoot } = {}) {
 
     const technicalStage = technicalNoun.test(clause);
 
-    for (const item of matchingMethods(clause, contract, { permitGrowthInference: !codingAction || (businessDiagnosisRequested && !technicalStage) })) consider(item);
+    for (const item of matchingMethods(clause.replace(/^\s*(?:for|about)\s+/i, '').split(/\b(?:for|about|announcing)\b/i)[0], contract, { permitGrowthInference: !codingAction || (businessDiagnosisRequested && !technicalStage) })) consider(item);
   }
 
+  const productSpec = /\b(?:product requirements document|product requirements|prd)\b/i.test(query);
+  if (!selectedAll.length && !productSpec && /\b(?:write|draft|create|plan|improve|review|evaluate|shorten|rewrite)\b/i.test(query)) {
+    const hints = [
+      ['outreach', /\b(?:outreach|cold (?:email|sequence)|email sequence|prospect|follow up)\b/i],
+      ['social', /\b(?:post|thread|linkedin|tiktok|reddit)\b/i],
+      ['copy', /\b(?:copy|headline|landing page|email|newsletter)\b/i],
+    ];
+    const hit = hints.find(([, pattern]) => pattern.test(query));
+    if (hit && contract.methods[hit[0]]) consider({ ...contract.methods[hit[0]], score: 1, matchKind: 'intent', matchPhrase: 'requested-deliverable' });
+  }
   const invoked = resolveCommand(invokedCommand(prompt), contract);
   if (invoked?.kind === 'command') consider({ ...contract.methods[invoked.name], score: 100, matchKind: 'name', matchPhrase: invoked.name });
 
@@ -295,7 +308,9 @@ export function selectRequestContext(prompt, { root = moduleRoot } = {}) {
   }
   if (!clauses.some(clause => feedbackOptIn.test(clause))) excluded.push({ name: 'feedback', reason: 'explicit-only' });
   // An explicit command stays a command. Otherwise a matching play brings its first step.
-  const play = invoked?.kind === 'command' ? null : selectPlay(query, selectedAll, contract, restriction, invoked?.name);
+  const requestedOutcome = clauses.map(clause => clause.replace(/^\s*(?:for|about)\s+/i, '').split(/\b(?:for|about|announcing)\b/i)[0]).join('. ');
+  const play = invoked?.kind === 'command' ? null : selectPlay(productSpec ? 'product spec' : requestedOutcome, selectedAll, contract, restriction, invoked?.name);
+  if (productSpec && play?.name === 'spec') selectedAll.length = 0;
   const first = play?.chain.find(step => step.command && !step.when) ?? play?.chain.find(step => step.command);
   if (first && contract.methods[first.command] && !selectedAll.some(item => item.name === first.command)) {
     selectedAll.unshift({ ...contract.methods[first.command], score: 0, matchKind: 'play-step', matchPhrase: play.name });
@@ -336,6 +351,8 @@ export function selectRequestContext(prompt, { root = moduleRoot } = {}) {
   return {
     schemaVersion: REQUEST_CONTEXT_SCHEMA_VERSION,
     action: 'route',
+    mode: requestMode(query, play),
+    query,
     reason: parentMethod && !selected.length ? 'parent-method' : 'relevant-capability',
     selected: selected.map(({ name, label, path, resources, deferredResources }) => ({ name, label, path, resources, deferredResources })),
     deferred: deferred.map(({ name, label, path }) => ({ name, label, path })),

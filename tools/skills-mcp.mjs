@@ -24,13 +24,18 @@ const object = value => value !== null && typeof value === 'object' && !Array.is
 const schema = properties => ({ type: 'object', properties, required: Object.keys(properties), additionalProperties: false });
 const readOnly = { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false };
 const TOOLS = [
-  { name: 'conquistador_brief', description: 'Call this FIRST for any growth, GTM, launch, marketing, sales, pricing, positioning, copy, content, SEO, ads, outreach, or product-marketing task. Describe the task in plain words. Returns the selected command, or the play (its steps in order) for a multi-step outcome, with the full text of the playbooks to read now, the playbooks to read at later steps, and the rules for using them. Read the whole response before drafting.', inputSchema: { type: 'object', properties: { task: { type: 'string', minLength: 1, maxLength: 8000, description: 'The user request, including product, audience, channel, and goal when known.' }, context: { type: 'string', maxLength: 8000, description: 'Optional facts you already hold: product, audience, proof points, voice, and constraints. The brief carries them as the product truth for this task, so a drafting step can work from the brief alone.' }, size: { type: 'string', enum: ['full', 'compact'], description: 'compact inlines only the command and its core files and lists the rest, for models with a small context. Default full.' } }, required: ['task'], additionalProperties: false },
+  { name: 'conquistador_brief', description: 'Select bounded guidance for a requested marketing, growth, sales, or product deliverable. Engineering about those topics alone returns no guidance. Reuse guidance already present in context. Describe the task in plain words. Returns the selected command, or the play (its steps in order) for a multi-step outcome, with current-stage guidance and optional resources for later expansion. Keep the requested scope.', inputSchema: { type: 'object', properties: { task: { type: 'string', minLength: 1, maxLength: 8000, description: 'The user request, including product, audience, channel, and goal when known.' }, context: { type: 'string', maxLength: 8000, description: 'Optional facts you already hold: product, audience, proof points, voice, and constraints. The brief carries them as the product truth for this task, so a drafting step can work from the brief alone.' }, size: { type: 'string', enum: ['full', 'compact'], description: 'compact inlines the short command entry with an 8000-byte text ceiling. Full adds selected current-stage resources up to 16000 bytes. Small edits use at most 4000 bytes. Deferred resources are not mandatory reads.' } }, required: ['task'], additionalProperties: false },
     outputSchema: { type: 'object', properties: {
       action: { type: 'string', enum: ['brief', 'none'] },
+      mode: { type: 'string', enum: ['none', 'assist', 'command', 'workflow'] },
+      reason: { type: 'string' },
+      provenance: { type: 'array', items: { type: 'object' } },
+      budgetBytes: { type: 'integer' },
+      callerContextStatus: { type: 'string', enum: ['absent', 'included', 'retained-by-caller'] },
       command: { type: ['string', 'null'], description: 'The command to run first.' },
       play: { type: ['string', 'null'] },
       inlined: { type: 'array', description: 'Files whose full text is in this response.', items: { type: 'object', properties: { path: { type: 'string' }, title: { type: 'string' } } } },
-      readNow: { type: 'array', description: 'Required files left out for space. Read each with conquistador_read before drafting.', items: { type: 'string' } },
+      readNow: { type: 'array', description: 'Reserved compatibility field. Budget omissions are deferred, never mandatory reads.', items: { type: 'string' } },
       readAtStep: { type: 'array', description: 'Files to read when a play reaches that step.', items: { type: 'object', properties: { step: { type: 'integer' }, path: { type: 'string' } } } },
       situational: { type: 'array', description: 'Files to read only when the task reaches their topic.', items: { type: 'string' } },
     }, required: ['action', 'inlined', 'readNow', 'readAtStep', 'situational'] } },
@@ -72,7 +77,7 @@ const PROMPTS = [
   { name: 'copy', title: 'Write marketing copy', description: 'Write landing page, email, or ad copy.', text: 'Write marketing copy for {{product}}. Use conquistador_brief first and follow its playbooks.' },
   { name: 'review-results', title: 'Review campaign results', description: 'Decide what to keep, drop, and test next.', text: 'Review these results and tell me what to keep, drop, and test: {{product}}. Use conquistador_brief first and follow its playbooks.' },
 ].map(prompt => ({ ...prompt, arguments: [{ name: 'product', description: 'Product, audience, goal, and any facts or numbers you have.', required: true }] }));
-export const SERVER_INSTRUCTIONS = 'Conquistador supplies field-tested playbooks for growth, GTM, launch, marketing, sales, pricing, positioning, copy, content, SEO, ads, and outreach work. For any such task, call conquistador_brief with the task before you draft, read the whole result, apply its specific rules, run conquistador_check on the draft, check any rubric self-score with conquistador_score, and end your answer with "Playbooks applied": each file and the rule you took from it. Never invent metrics, quotes, or customer facts. Ask the user before publishing, spending, or sending. Your host supplies the model, tools, and permissions; this server only reads playbooks.';
+export const SERVER_INSTRUCTIONS = 'Conquistador supplies methods for requested growth, marketing, sales, and product deliverables. Engineering about these topics alone does not qualify. Use conquistador_brief only when relevant guidance is needed; reuse guidance already in context. A none result means continue without Conquistador. Use conquistador_check for substantial marketing text and conquistador_score only for a rubric verdict. Keep small edits small. Never invent facts. Follow host permissions for external actions.';
 const packageVersion = (() => { try { return JSON.parse(readFileSync(join(packageRootOf(import.meta.url), 'package.json'), 'utf8')).version; } catch { return '0.0.0'; } })();
 
 // The caller controls only relative names, never the bundle root. Reject every symlink
@@ -278,7 +283,7 @@ export function createMcpHandler({ root = bundledRoot, requireInitialize = true,
         access ??= createMethodAccess(root);
         const bundle = realpathSync(root);
 
-        const pack = packBrief(createBrief(args.task, { root: packageRoot(), force: true, ...knowledgeOptions }), {
+        const pack = packBrief(createBrief(args.task, { root: packageRoot(), ...knowledgeOptions }), {
           callerContext: args.context?.trim(), hosted, compact: args.size === 'compact',
           readBundled: item => access.read(relative(bundle, item.absolute).split(sep).join('/')),
         });

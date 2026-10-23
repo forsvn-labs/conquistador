@@ -28,8 +28,7 @@ Keep short answers in chat. Do not open a review for a draft that the user only 
 - Markdown: write the deliverable to a `.md` file. Add front matter `channel:` with `x`,
   `linkedin`, `email`, `search`, or `ad` so the reviewer sees the channel preview. Add other keys
   the frame uses when you have them: `subject`, `preheader`, `from`, `title`, `description`,
-  `url`, `headline`, `cta`, `author`, `brand`. End the file with a `## Playbooks applied` section
-  that lists each playbook you used, one per line, as `- name: what it changed`.
+  `url`, `headline`, `cta`, `author`, `brand`. Include source attribution when it helps the human review a consequential choice.
 - HTML: run `conquistador review kit` to list the templates. Copy one with
   `conquistador review kit <template> <destination.html>`. Set the brand variables from the
   customer's design system, `PRODUCT.md`, or `GROWTH.md`. Replace every bracketed placeholder.

@@ -43,15 +43,22 @@ learn the product again on each task. Init asks only about real gaps and never o
 that another tool wrote. A repository and connected accounts are not prerequisites for a first
 draft.
 
-The playbooks are the product. An agent that answers from general knowledge while the right
-playbook sits unread is a product failure, not a style choice. So one briefing engine decides
-what each task must read; the MCP tool returns those playbooks inline; plugin hooks add the
-reading list to relevant prompts and send the agent back once when it skipped them; and every
-deliverable ends with the playbooks it applied. A play returns its steps and the playbooks to
-read at each step. The user's own playbooks rank first, read in place. Coding prompts get nothing.
-`conquistador check` and its edit hook check marketing text against fixed rules with no model:
-unsupported claims, AI-writing tells, vague calls to action, channel limits, email compliance,
-and link hygiene. A clean check is evidence, not proof of quality.
+Relevant playbooks guide the requested result. One admission decision distinguishes unrelated work,
+small assistance, one deliverable, and a multi-stage workflow. Engineering about a marketing system
+alone receives no marketing guidance. Quoted and negated requests cannot reactivate through retrieval.
+Off profiles remain off. Manual profiles require an explicit invocation or an explicit project-hook opt-in; project profiles allow relevant
+advice. Native and project hooks share the same decision and context reuse policy.
+
+Briefs use short command entries and selected current-stage resources. Core collections are references,
+not mandatory reading lists. Total tool context, including provenance, is bounded. Files that do not
+fit remain optional until their stage is requested. The host may reject an irrelevant suggestion.
+Automatic hooks never block completion. They do not add static start or stop advice. Applied-method
+attribution belongs in an answer when it helps the user review a decision or the user asks for it.
+
+The user's own relevant playbooks compete within the same resource budget. Context reuse requires
+current digests and verified successful reads after an intact transcript boundary. A disk marker alone
+is insufficient. Marketing text checks remain available manually; automatic edit checks require a
+channel declaration or an admitted marketing task. A clean check is evidence, not proof of quality.
 
 The public npm package `@forsvn/conquistador` leads acquisition with an install-and-open global command. The run-once installer remains available. Pinned Git tags stay available for exact versions. List the same plugin in the
 agent marketplaces. Advertise a version only after its exact package is on the registry and a

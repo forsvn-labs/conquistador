@@ -11,6 +11,11 @@ export interface Receipt {
 }
 export interface BriefResult {
   action: 'brief' | 'none';
+  mode: 'none' | 'assist' | 'command' | 'workflow';
+  reason?: string;
+  budgetBytes?: number;
+  callerContextStatus?: 'absent' | 'included' | 'retained-by-caller';
+  provenance?: Array<{ path: string; reason: string; bytes: number; sha256: string | null; status: 'included' | 'deferred' | 'unavailable' }>;
   command?: string | null;
   play?: string | null;
   inlined: Array<{ path: string; title: string }>;

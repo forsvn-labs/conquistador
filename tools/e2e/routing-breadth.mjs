@@ -21,15 +21,17 @@ export async function loadCases() {
     const { AREAS } = await import('../tour.mjs');
     for (const area of AREAS) for (const example of area.examples) cases.push({ area: `tour:${area.id}`, task: example.prompt, any: example.any, none: example.none, platforms: example.platforms });
   }
-  // The start picker's tasks, as the full prompt the agent receives (in and outside a project).
-  if (existsSync(join(root, 'tools/launch.mjs'))) {
-    const { STARTS, promptFor } = await import('../launch.mjs');
-    const expect = [['copy'], ['diagnose'], ['flow']];
-
-    if (STARTS.length !== expect.length) throw Error('Update first-use routing expectations when changing starter tasks.');
-    const agent = { slash: '/conquistador ' };
-    const tasks = [...STARTS.map((task, index) => [task, expect[index]]), ['Plan marketing and growth for my product', ['campaign']]];
-    for (const [task, any] of tasks) for (const cwd of [root, dirname(root)]) cases.push({ area: 'start', task: promptFor(agent, task, cwd), any });
+  // Verify the current launcher text rather than the retired task picker API.
+  const { nextStep } = await import('../launch.mjs');
+  for (const [task, any] of [
+    ['Write landing page copy', ['copy']],
+    ['Diagnose our conversion funnel', ['diagnose']],
+    ['Improve onboarding', ['convert']],
+    ['Plan marketing and growth for my product', ['plan']],
+  ]) {
+    for (const cwd of [root, dirname(root)]) {
+      cases.push({ area: 'start', task: nextStep({ slash: '/conquistador ' }, cwd, task), any });
+    }
   }
   return cases;
 }
@@ -65,15 +67,15 @@ async function tourChecks() {
   const known = new Set([...Object.keys(contract.methods), ...(contract.plays ?? []).map(item => item.name)]);
   const unknown = AREAS.flatMap(area => area.methods.filter(name => !known.has(name) || !SPECIALISTS[name]));
   const fresh = existsSync(welcomePath()) && readFileSync(welcomePath(), 'utf8') === await welcomeMarkdown();
-  const readme = readFileSync(join(root, 'README.md'), 'utf8');
-  // The README's Commands and Plays tables list exactly the commands and plays that route.
+  const readme = readFileSync(join(root, 'docs/README-REFERENCE.md'), 'utf8');
+  // The command reference's Commands and Plays tables list exactly the commands and plays that route.
   const listed = new Set([...readme.matchAll(/`([a-z]+)`/g)].map(match => match[1]));
-  const missing = [...known].filter(name => !listed.has(name)).map(name => `README does not list ${name}`);
+  const missing = [...known].filter(name => !listed.has(name)).map(name => `Command reference does not list ${name}`);
   const row = (task, problems) => ({ area: 'tour', task, pass: !problems.length, problems, methods: [], must: [] });
   return [
     row('Tour names only real commands and plays', unknown.map(name => `unknown command ${name}`)),
     row('welcome.md matches tools/tour.mjs', fresh ? [] : ['stale: run node tools/tour.mjs --write (O6)']),
-    row('README lists every command and play', missing),
+    row('Command reference lists every command and play', missing),
   ];
 }
 

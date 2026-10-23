@@ -1,6 +1,8 @@
 import { existsSync, lstatSync, mkdirSync, readFileSync, renameSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname, isAbsolute, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { hooksEnabled } from './prompt-advice.mjs';
+import { loadRoutingContract } from './routing-contract.mjs';
 import { advisory, readConfig } from './proactive.mjs';
 
 export const MODE_SCHEMA_VERSION = 'conquistador.mode/v1';
@@ -238,8 +240,24 @@ export function inspectMode({ host, project, config, scriptPath = script } = {})
       state = enabled ? 'enabled' : 'registered-disabled';
     }
   }
+  const eventSources = (current.hooks?.UserPromptSubmit ?? []).flatMap(group => group?.hooks ?? [])
+    .filter(item => /(?:conquistador-hook|conquistador-mode)\.mjs/.test(item.command ?? ''))
+    .map(item => ({ kind: item.command.includes('conquistador-hook.mjs') ? 'native-plugin' : 'project-mode', command: item.command }));
+  let activationMode = 'unknown';
+  try {
+    const packageRoot = resolve(dirname(scriptPath), '..');
+    const contract = loadRoutingContract(packageRoot);
+    activationMode = readJsonFile(join(packageRoot, contract.parentPath, 'operator-profile.json'))?.activation ?? 'project';
+  } catch { /* A moved or incomplete package has no verified policy. */ }
   return {
     state,
+    activationMode,
+    effectiveAutomaticAdvice: enabled && promptEnabled && ['manual', 'project'].includes(activationMode) && hooksEnabled(),
+    activationReason: enabled && promptEnabled ? 'explicit-project-hook-opt-in' : 'installed-profile',
+    eventSources,
+    duplicatePromptSources: eventSources.length > 1,
+    nativePluginDiscovery: 'Host-managed plugin registrations outside these settings are not inspected.',
+    disableCommand: `conquistador hooks disable --host ${host} --project ${quote(project)} --config ${bound ? quote(bound) : '<CONFIG>'}`,
     host,
     settings,
     config: bound,
@@ -331,6 +349,7 @@ export function handleHostEvent({ host, event, config, input } = {}) {
   if (event === 'before-delivery' && payload.stop_hook_active !== false) return {};
   const result = advisory(event, config ? readConfig(config) : undefined, {
     prompt: event === 'prompt-submitted' ? payload.prompt : undefined,
+    input: payload,
   });
   if (!result.enabled || result.instructions.length === 0) return {};
   const instructions = result.instructions.join('\n');

@@ -1,36 +1,41 @@
-# Plugin reading-list hooks
+# Advisory plugin hooks
 
-`conquistador-hook.mjs` runs the prompt, stop, and Cursor start hooks. `check-hook.mjs` runs
-`conquistador check` after the agent writes or edits a marketing file and returns the findings to
-the agent; see [Edit hook](https://conquistador.app/docs/check#edit-hook). Set `CONQUISTADOR_HOOKS=off` or
-`{"hooks": false}` in the user config to disable them.
+Native plugin prompt hooks call `tools/prompt-advice.mjs`. Project-mode hooks use the same
+helper. Both respect the global hook switch and the installed operator profile.
 
-A relevant prompt starts a new reading requirement; every new nonempty prompt first clears
-prior state, including coding requests and short clarification replies. A short clarifying
-question can stop before reading. A missing-read correction is issued at most once per task;
-recursive stop events are ignored. Hooks make no network calls.
+- `manual`, the default, requires an explicit invocation or an explicitly enabled project prompt event.
+- `project` permits advice for a requested business or product deliverable.
+- `off` suppresses selection, including explicit requests.
 
-## What the evidence means
+Engineering about an outreach system does not request outreach copy. Quoted examples,
+negative instructions, and uncertain topic matches stay silent. A relevant prompt receives
+at most 1,500 characters of optional advice. Stop and session-start hooks return no advice
+and never block completion. No hook runs a workflow or starts a specialist.
 
-The guard checks whether the current task's successful, ID-paired tool results returned each
-selected file's complete normalized text. It does not establish model attention, correct
-application, answer quality, or human acceptance.
+Use `conquistador hooks off` or `CONQUISTADOR_HOOKS=off` to disable both adapters. See
+[project configuration](../docs/PROACTIVE.md) for the additional project event configuration.
+A configured hook is not proof that the host trusts or runs it.
 
-- Scope uses the transcript byte boundary captured at prompt time and verifies its prefix digest.
-  Without that boundary, only an exact human prompt timestamped at or after the saved task start
-  establishes scope. A previous identical prompt does not qualify.
-- Adapters understand Claude `tool_use`/`tool_result` messages and Codex-style
-  `response_item` function calls/outputs, plus explicitly recognized direct call/result forms.
-  File reads, MCP reads, and simple shell reads need exact file identity and full matching text.
-  Host line endings and outer whitespace are normalized; all internal text must match.
-- Brief results carry file IDs, UTF-8 byte lengths, SHA-256 digests, and end markers. Only verified
-  complete blocks qualify. An earlier complete block can qualify when a later block is truncated.
-  Budget omissions and unavailable files remain explicit; tool-name mentions never qualify.
-- Unverified files are labeled `missing`, `failed`, `omitted`, `truncated`, `incomplete`, or
-  `unavailable` when the transcript provides that distinction. Partial chunks are not combined
-  into an inferred full read. Unknown formats do not count as evidence.
-- Missing, rotated, unscoped, or over-32-MiB transcripts fail open without claiming coverage.
-  Unexpected hook errors also exit successfully without blocking unrelated host work.
+The shared helper suppresses an identical event only when the session, project, prompt,
+resource digests, and transcript boundary match. It reuses complete resources only when paired
+successful tool results after a verified transcript boundary contain their current full bytes.
+A changed or rotated transcript invalidates reuse. Missing transcript evidence never counts
+as a read. Stored state expires after twelve hours. It contains hashes and task state, not
+prompt text or transcript content. Source and project hooks share this state.
 
-`node --test tools/conquistador-hook.test.mjs tools/skills-mcp.test.mjs` exercises synthetic,
-offline transcript and protocol fixtures. This is not live compatibility evidence for any host.
+The edit hook checks only a declared `channel` or a marketing-shaped file in an active
+marketing task. A directory named `outreach` and an arbitrary HTML file no longer suffice.
+The checker keeps its per-file duplicate-finding suppression. Manual checks remain available.
+
+`tools/read-evidence.mjs` retains the full-file evidence checks used for resource reuse.
+Evidence establishes returned bytes, not attention, applicability, quality, or approval.
+
+Verify with:
+
+```sh
+node --test tools/behavior-contract.test.mjs tools/conquistador-hook.test.mjs
+node docs/behavior-review-2026-10.mjs --strict
+```
+
+These are offline checks against real modules and hook processes. They do not certify native
+host activation or the quality of a generated marketing deliverable.

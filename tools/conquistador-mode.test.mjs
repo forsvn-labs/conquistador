@@ -95,7 +95,7 @@ test('Codex mode writes owned project hooks and preserves unrelated handlers', t
   assert.equal(owned.additionalContextLimit, 0);
   const routed = handleHostEvent({
     host: 'codex', event: 'prompt-submitted', config,
-    input: { hook_event_name: 'UserPromptSubmit', prompt: 'Write a LinkedIn DM sequence for founders.' },
+    input: { hook_event_name: 'UserPromptSubmit', prompt: '/conquistador outreach Write a LinkedIn DM sequence for founders.' },
   });
   assert.match(routed.hookSpecificOutput.additionalContext, /outreach/);
   const removed = applyMode('remove', { host: 'codex', project: dir });
@@ -184,14 +184,12 @@ test('handle ignores recursive stop hooks and returns additionalContext for Clau
   const { config } = project(t);
   assert.deepEqual(handleHostEvent({ host: 'claude-code', event: 'before-delivery', config, input: { hook_event_name: 'Stop', stop_hook_active: true } }), {});
   const live = handleHostEvent({ host: 'claude-code', event: 'session-start', config, input: { hook_event_name: 'SessionStart' } });
-  assert.equal(live.hookSpecificOutput.hookEventName, 'SessionStart');
-  assert.match(live.hookSpecificOutput.additionalContext, /\/conquistador/);
+  assert.deepEqual(live, {});
   const stop = handleHostEvent({ host: 'claude-code', event: 'before-delivery', config, input: { hook_event_name: 'Stop', stop_hook_active: false } });
-  assert.equal(stop.hookSpecificOutput.hookEventName, 'Stop');
-  assert.match(stop.hookSpecificOutput.additionalContext, /review the current deliverable/);
+  assert.deepEqual(stop, {});
   const routed = handleHostEvent({
     host: 'claude-code', event: 'prompt-submitted', config,
-    input: { hook_event_name: 'UserPromptSubmit', prompt: 'Write a LinkedIn DM sequence for founders.' },
+    input: { hook_event_name: 'UserPromptSubmit', prompt: '/conquistador outreach Write a LinkedIn DM sequence for founders.' },
   });
   assert.equal(routed.hookSpecificOutput.hookEventName, 'UserPromptSubmit');
   assert.match(routed.hookSpecificOutput.additionalContext, /outreach/);
@@ -212,7 +210,7 @@ test('CLI status and handle emit JSON; unsupported hosts fail closed', t => {
   assert.match(blocked.stderr, /Invalid Conquistador mode input/);
   const handled = invoke(['--handle', '--host', 'claude-code', '--event', 'session-start', '--config', config], { input: '{"hook_event_name":"SessionStart"}' });
   assert.equal(handled.status, 0);
-  assert.equal(JSON.parse(handled.stdout).hookSpecificOutput.hookEventName, 'SessionStart');
+  assert.deepEqual(JSON.parse(handled.stdout), {});
   assert.equal(inspectMode({ host: 'cursor', project: dir }).state, 'unsupported');
 });
 
@@ -293,7 +291,7 @@ test('hook CLI accepts complete chunked input and bounds a producer that leaves 
   const complete = await run(true);
   assert.equal(complete.code, 0);
   assert.equal(complete.stderr, '');
-  assert.equal(JSON.parse(complete.stdout).hookSpecificOutput.hookEventName, 'SessionStart');
+  assert.deepEqual(JSON.parse(complete.stdout), {});
   const unclosed = await run(false);
   assert.equal(unclosed.code, 0);
   assert.equal(unclosed.stderr, '');
@@ -327,4 +325,17 @@ test('an enabled session event does not imply prompt routing is enabled', t => {
   const state = applyMode('enable', { host: 'codex', project: dir, config });
   assert.equal(state.enabled, true);
   assert.equal(state.routingAvailable, false);
+});
+
+test('status reports competing prompt handlers and a concrete disable command', t => {
+  const { dir, config } = project(t);
+  const settings = join(dir, '.codex/hooks.json');
+  mkdirSync(join(dir, '.codex'), { recursive: true });
+  writeFileSync(settings, JSON.stringify({ hooks: { UserPromptSubmit: [{ hooks: [{ type: 'command', command: 'node /another/hooks/conquistador-hook.mjs codex prompt' }] }] } }));
+  const status = applyMode('enable', { host: 'codex', project: dir, config, events: 'prompt-submitted' });
+  assert.equal(status.duplicatePromptSources, true);
+  assert.equal(status.eventSources.length, 2);
+  assert.equal(status.activationMode, 'manual');
+  assert.equal(status.effectiveAutomaticAdvice, true);
+  assert.match(status.disableCommand, /hooks disable --host codex/);
 });
