@@ -24,8 +24,10 @@ test('README and INSTALL advertise the npm package, and the Git route copies out
     assert.match(contents, expected);
     assert.doesNotMatch(contents, /npm install -g --ignore-scripts github:forsvn-labs\/conquistador/);
   }
-  const published = /latest published release remains `([0-9.]+)`/.exec(readFileSync(join(root, 'VERSIONS.md'), 'utf8'))?.[1];
-  assert.ok(published, 'VERSIONS.md must identify the published release separately from the source candidate');
+  const status = readFileSync(join(root, 'STATUS.md'), 'utf8');
+  const published = /Both `@forsvn\/conquistador@([0-9.]+)` and `conquistador@\1` are verified as npm/.exec(status)?.[1];
+  assert.ok(published, 'STATUS.md must identify the verified paired npm release');
+  assert.match(readFileSync(join(root, 'VERSIONS.md'), 'utf8'), /\[STATUS\.md\]\(STATUS\.md\) owns current rollout state/);
   const install = readFileSync(join(root, 'INSTALL.md'), 'utf8');
   assert.match(install, new RegExp(`--install-links git\\+https://github\\.com/forsvn-labs/conquistador\\.git#v${published.replaceAll('.', '\\.')}`));
   assert.ok(install.includes(`npm install -g @forsvn/conquistador@${published}`));
