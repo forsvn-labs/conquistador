@@ -4,6 +4,36 @@
 versions. Verification establishes the stated local scope; native host behavior, useful model
 output, human acceptance and rights disposition require separate evidence.
 
+## 2026-10-23, 0.9.1 patch
+
+- [PR #84](https://github.com/forsvn-labs/conquistador/pull/84) merged with Hung's shipment
+  authorization at `d812ca5a2b46f17e05aab8058141b3ac14c45ef6`. The
+  [v0.9.1 release](https://github.com/forsvn-labs/conquistador/releases/tag/v0.9.1) has seven
+  artifacts assembled from that exact tagged commit. All downloaded assets match the
+  tested local bytes. Main npm tarball SHA-256:
+  `a12b66d8e9a7fa1c8c48b74dd41fe8703904b353134130ea95567ad2e88f305b`;
+  CLI alias: `ee693016b9fb7ec1f047a8cdad814bf7136d20fca65367b5cfcb80a33c12afa2`.
+- Both `@forsvn/conquistador@0.9.1` and `conquistador@0.9.1` are verified public as latest,
+  with provenance from [run 39899101398](https://github.com/forsvn-labs/conquistador/actions/runs/39899101398).
+  npm reported processing the accepted main package; the alias's initial lookup returned 404.
+  After the main version became visible, retrying only the failed alias job completed
+  publication. The main publication, tag and checked assets were preserved.
+- Brief packing now uses contained, bounded reads after the ranking cache is warm,
+  rejecting replaced symlinks, binary/invalid UTF-8 files and oversized files. Fragmented
+  stdio input assembles each bounded frame once. Fetch upload errors return generic 400;
+  oversized uploads return 413 without waiting for stalled cancellation, and healthy retries work.
+- Add 21 regression tests and a repeatable benchmark. Across five paired rounds (35 samples
+  per version), the 64 KB one-byte-chunk median falls from 179.91 ms to 43.08 ms (76.1%);
+  standard deviation falls from 22.36 ms to 6.46 ms. Small frames show no speed benefit,
+  and safer brief validation adds filesystem work. No overall task-speed claim is made.
+- Patch development-only Vite/Vitest dependencies. All eleven candidate CI jobs and seven
+  merged-source jobs pass, as do 963 clean tagged-source tests, 38 npm and 38 Bun tarball
+  checks, eight release/registry checks and six real registry-install checks including
+  npm signature/provenance verification. The [review record](docs/MCP-REVIEW-2026-10.md)
+  records terminal/browser coverage and limits. The hosted Worker remains unchanged because
+  the existing credential was refused before deployment; live authenticated acceptance could
+  not run. Existing lint diagnostics and optional Promptfoo/node-forge findings remain.
+
 ## 2026-10-19, 0.9.0 public alpha
 
 - [PR #83](https://github.com/forsvn-labs/conquistador/pull/83) merged with Hung's approval

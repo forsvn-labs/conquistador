@@ -1,9 +1,9 @@
 # Versions
 
-Product, plugin, host, and portable-agent manifests identify candidate version `0.9.1`.
-The latest published release remains `0.9.0` until the approved patch release
-passes its tagged-archive and paired npm publication checks. Both npm package names
-use the same exact product version.
+Product, plugin, host, and portable-agent manifests identify release version `0.9.1`.
+The latest published release remains `0.9.1`. Both npm package names are verified as
+`latest`, with provenance and exact bytes matching the checked tagged archives.
+The CLI alias pins the same exact main-package version.
 [ROADMAP.md](ROADMAP.md) owns current rollout state; [CHANGELOG.md](CHANGELOG.md) records
 shipped releases and verification. The first public alpha was `0.2.0`. Each public release
 is tagged `vX.Y.Z`. The release workflow publishes `@forsvn/conquistador` and its exact-version

@@ -2,16 +2,34 @@
 
 ## Current handoff
 
-2026-10-23: Hung authorized shipping after verification. PR #84 is being prepared
-for patch release 0.9.1 through the existing merge, tag, seven-asset GitHub release
-and trusted paired npm publication workflow. The original reviewed head `6e76d9b`
-has seven passing CI jobs; the versioned candidate must pass fresh checks and review
-before normal merge. Production credentials, infrastructure scope and user-installed
-agent state are unchanged. Release identity and publication evidence will be recorded
-after the remote results are verified.
+2026-10-23: Hung authorized shipment and cleanup after verification.
+[PR #84](https://github.com/forsvn-labs/conquistador/pull/84) merged normally at
+`d812ca5a2b46f17e05aab8058141b3ac14c45ef6`, tagged `v0.9.1`. All eleven candidate CI
+jobs and seven merged-source CI jobs pass. Both actionable review threads are resolved;
+the later bot status reports a rate-limited re-review, not a fresh approval.
+The [release](https://github.com/forsvn-labs/conquistador/releases/tag/v0.9.1) has seven
+assets matching the tested tagged-source assembly. All 963 tagged-source tests and
+38 npm / 38 Bun consumer checks pass. Linux installation passes 50 checks; Windows
+passes 47 with four explicitly unrun terminal/alternate-runtime cases.
 
-2026-10-22: [draft PR #84](https://github.com/forsvn-labs/conquistador/pull/84) contains
-unreleased application review fixes: contained brief reads after a playbook changes,
+Both `@forsvn/conquistador@0.9.1` and its exact-version `conquistador@0.9.1` alias
+are verified as public `latest`, with matching release bytes, integrity and provenance.
+[Publication run 39899101398](https://github.com/forsvn-labs/conquistador/actions/runs/39899101398)
+succeeded after retrying only the failed alias job once the main version became visible.
+npm explicitly reported processing both accepted packages before exposing them.
+The successful main job, tag and seven assets were preserved. Eight registry/release
+checks and six isolated registry-install checks pass, including `npm audit signatures`.
+Exact-version install examples now select the verified 0.9.1 release.
+
+The hosted Worker remains at version `95d7cf29-8ff6-4eef-a703-b7478712b55f`:
+the existing credential returned HTTP 401 before any deployment, so authenticated
+production acceptance could not run. Public health/OAuth metadata and a Wrangler dry run
+pass. Credentials, infrastructure scope and user-installed agent state are unchanged.
+Optional Promptfoo/node-forge findings, existing repository-wide lint diagnostics,
+live-provider acceptance and native host/model acceptance remain outside the verified scope.
+
+2026-10-22 review, shipped through PR #84 on 2026-10-23: application fixes include
+contained brief reads after a playbook changes,
 linear stdio frame assembly, and bounded streamed-upload failure/cancellation recovery.
 Each fix has a recorded failing regression. Local Node 26 build/type checks and 963
 product tests pass; actual npm and Bun consumers each pass 38 checks. The unchanged
@@ -28,10 +46,10 @@ owns the repeatable commands, full measurements and limits. It makes no general 
 The three private test graphs now pin Vite 8.3.3 and Vitest 4.1.12 for verified
 development advisories. Fresh npm audits report zero findings in each graph, and
 all 524 affected runtime/catalog/eval tests pass on Node 24. The separate optional
-Promptfoo/node-forge advisory remains unpatched. Remote CI and clean-commit package
-assembly remain merge/release gates; the draft PR owns the latest check results.
-This review uses isolated homes and fixture identities and authorizes no production
-write, release or merge.
+Promptfoo/node-forge advisory remains unpatched. The later shipment record above owns
+remote CI, clean tagged-source assembly and publication status. These review checks use
+isolated homes and fixture identities; live-provider and production OAuth acceptance
+remain separate checks.
 
 2026-10-19: Hung approved the merge of
 [PR #83](https://github.com/forsvn-labs/conquistador/pull/83) at
