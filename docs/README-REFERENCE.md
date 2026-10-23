@@ -5,26 +5,22 @@
 You need Node 22.18 or later. To set up coding agents, run this in your project folder:
 
 ```sh
-# npm
-npm i -g @forsvn/conquistador@latest && conquistador
-
-# Bun
-bun add --global @forsvn/conquistador@latest && conquistador
+npx conquistador@latest
 ```
 
-This installs the permanent `conquistador` command and opens the TUI after installation succeeds.
-Run `conquistador` later to manage agents, skills, MCP connections, hooks, and updates.
-Use `-g` with npm. Without it, npm installs into the current project.
+The installer detects available clients and lets you review the selected changes.
+It can configure coding agents and standalone MCP clients. No global install is required.
+Bun and pnpm users can run `bunx conquistador@latest` or `pnpm dlx conquistador@latest`.
 
-To run the installer once without a permanent CLI install:
+To keep the CLI available for later management:
 
 ```sh
-npx conquistador@latest
-bunx conquistador@latest
-pnpm dlx conquistador@latest
+npm i -g conquistador
+# Or: bun add --global conquistador
+conquistador
 ```
 
-These commands open the TUI directly. Choose **Keep the CLI installed** there to keep the command
+The installer opens the TUI directly. Choose **Keep the CLI installed** there to keep the command
 with npm or Bun. You can also run `conquistador install-cli --package-manager=bun`.
 Package installation runs no interactive lifecycle script, so CI and dependency installs finish normally.
 
@@ -35,13 +31,13 @@ playbooks. Client names and package managers are options inside those four paths
 
 | Method | Start here | What it adds |
 |---|---|---|
-| Skills | `npx skills add https://github.com/forsvn-labs/conquistador/tree/main/skills/conquistador --skill conquistador` | One skill folder. No hooks or MCP server |
+| Skills | `npx conquistador@latest skills` | One skill folder. No hooks or MCP server |
 | CLI | `npx conquistador@latest install` | Reviewed coding-agent setup. Apps use the dependency below |
 | MCP | `npx conquistador@latest mcp` | Local stdio server. [Hosted MCP](https://conquistador.app/docs/install/hosted-mcp) accepts OAuth or API keys when the matching Worker is deployed |
 | Plugins | `npx conquistador@latest plugins` | Native installation for Claude Code, Codex, Grok, Cursor, and Copilot CLI |
 
 `conquistador skills` installs a project skill with the same review and ownership checks.
-`conquistador mcp install` configures chosen desktop clients. Compatible plugin clients can load
+`conquistador mcp install` configures chosen desktop clients. See [standalone MCP](../INSTALL.md#standalone-mcp) for coding agents, Executor, and Composio. Compatible plugin clients can load
 [the prepared plugin bundle](https://github.com/forsvn-labs/conquistador/releases) with their own
 installer. Features depend on the client; a shared format does not establish universal support.
 

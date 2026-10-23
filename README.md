@@ -3,11 +3,18 @@
 Marketing and growth playbooks for coding and deployed agents. Your agent
 supplies the model and runs the work.
 
-With Node 22.18 or later, install and open the CLI:
+With Node 22.18 or later, start the installer:
 
 ```sh
-npm i -g @forsvn/conquistador@latest && conquistador
+npx conquistador@latest
 ```
+
+Choose your agents and connections, review the changes, then install. Bun users can run
+`bunx conquistador@latest`. To keep the CLI, run `npm i -g conquistador`.
+
+For standalone MCP, use `npx conquistador@latest mcp` as the server command.
+[Connect coding agents, MCP apps, Executor, or Composio](INSTALL.md#standalone-mcp).
+Apps that import the tools use `npm i @forsvn/conquistador`.
 
 [Choose an installation method](https://conquistador.app/install), read the
 [usage guide](https://github.com/forsvn-labs/conquistador/blob/main/docs/USAGE.md)

@@ -1,73 +1,79 @@
 ---
-title: "MCP clients"
-description: "Run the Conquistador MCP server locally in Claude Desktop, VS Code, Windsurf, Zed, Cursor, and other MCP clients."
+title: "Standalone MCP"
+description: "Connect coding agents, desktop clients, Executor, and Composio without installing skills or hooks."
 ---
 
-An MCP client is the app that connects to the Conquistador server, such as Claude Desktop,
-VS Code, or Zed. Select several clients in the installer. **MCP Apps** is a separate
-[protocol extension](https://modelcontextprotocol.io/extensions/apps/overview) for interactive
-interfaces inside an AI conversation. This page configures client connections.
+Use MCP alone when you want tools without installing skills or activating hooks.
+Do not add a second MCP connection if your Conquistador plugin already supplies one.
+The client needs Node 22.18 or later and npm on its PATH.
 
-The CLI flag `--surface=mcp-apps` and this page's URL remain available for compatibility.
+## Coding agents
 
-Use this option for apps that connect to a local MCP server but do not get the plugin. An agent that has the plugin already has this server. Do not add it twice.
-
-## Use the installer
-
-<Note>
-  From 0.4.0. The installer finds the config files of MCP clients and lists only apps without the plugin. In 0.3.0, use `conquistador --mcp`, or add the config by hand as below.
-</Note>
-
-Run `npx @forsvn/conquistador@latest` and choose **MCP clients**. Choose the apps: Claude Desktop, VS Code, Windsurf, Zed, or Cursor (`--apps=claude-desktop,vscode,windsurf,zed,cursor`). The plan review shows each config file and the entry that the installer adds. Cursor is left out when Cursor gets the plugin.
-
-The entry is named `conquistador`. It runs `~/.conquistador/plugin/mcp/server.mjs` with the Node that ran the installer.
-
-- Before the installer changes a config file, it saves a copy next to it (`FILE.conquistador-backup`).
-- It keeps every other server and setting in the file.
-- It never rewrites a file that is not plain JSON, for example a Zed `settings.json` with comments. It shows the entry to add by hand instead.
-- `conquistador remove` removes the entry, and `conquistador doctor` checks it.
-
-## Add the server by hand
-
-The server command is:
+Register the local server with the host's own command:
 
 ```sh
-conquistador mcp
+# Codex
+codex mcp add conquistador -- npx -y conquistador@latest mcp
+# Claude Code (all projects)
+claude mcp add --transport stdio --scope user conquistador -- npx -y conquistador@latest mcp
 ```
 
-After a global install, point the app at the stable copy of the server, so the entry does not depend on where npm put the package. The examples below start `node` from PATH, so the app needs Node 22.18 or later on its PATH.
+Check the connection with `codex mcp list` or `claude mcp list`, then open a new
+session and ask the agent to list Conquistador's tools. Remove these registrations
+with `codex mcp remove conquistador` or `claude mcp remove --scope user conquistador`.
+The `-y` flag accepts npm's package download prompt; host trust settings still apply.
+See the [Codex](https://developers.openai.com/codex/mcp) and
+[Claude Code](https://code.claude.com/docs/en/mcp) MCP references.
+
+## Desktop clients
+
+Review and install only the selected MCP connections:
+
+```sh
+npx conquistador@latest mcp install --apps=zed,vscode
+```
+
+The installer stages a stable server copy and preserves other client settings.
+It does not register skills or hooks. Run `npx conquistador@latest doctor` to check
+managed entries and `npx conquistador@latest remove` to review their removal.
+
+For another stdio client, use its MCP configuration format. A common format is:
 
 ```json
 {
   "mcpServers": {
     "conquistador": {
-      "command": "node",
-      "args": ["/Users/YOU/.conquistador/plugin/mcp/server.mjs"]
+      "command": "npx",
+      "args": ["-y", "conquistador@latest", "mcp"]
     }
   }
 }
 ```
 
-In both examples, replace `/Users/YOU` with your home folder. On Windows, use forward slashes, for example `C:/Users/YOU/.conquistador/plugin/mcp/server.mjs`, because a single backslash is not valid in JSON. VS Code uses a `servers` key in `.vscode/mcp.json` with `"type": "stdio"`:
+VS Code uses `servers` instead of `mcpServers`, with `"type": "stdio"` in the entry.
+A global npm install alone does not create the installer's stable server copy.
+For repeatable deployments, replace `@latest` with a verified release version.
 
-```json
-{
-  "servers": {
-    "conquistador": {
-      "type": "stdio",
-      "command": "node",
-      "args": ["/Users/YOU/.conquistador/plugin/mcp/server.mjs"]
-    }
-  }
-}
-```
+## Remote apps: Executor and Composio
 
-## What the server does
+Remote apps need a public HTTPS MCP endpoint. They cannot run a local `npx` command.
+Use your own [HTTP deployment](/install/hosted-mcp), or the hosted endpoint
+`https://mcp.forsvn.com/mcp` after verifying its version and authentication.
+[Release status](https://github.com/forsvn-labs/conquistador/blob/main/STATUS.md) owns current hosted acceptance; npm publication does not update it.
 
-The server only reads. It serves the bundled playbooks and the playbooks that you added on that computer. It has no access to your project files, credentials, or runtime state. For the tools, see [MCP tools](/reference/mcp-tools).
+In Executor, use **Connect a service** to import the MCP URL, then complete OAuth
+and connect the account. The current `tools.executor.apps.importCustom` MCP import
+supports OAuth or no-auth servers; API-key-only imports require a separate app setup.
+The optional managed route is `npx conquistador@latest mcp install --executor`.
+It previews only Executor and uses the existing version-aware adapter. See
+[Executor setup](/install/executor).
 
-<Note>
-  In 0.3.0 the local server has five tools: `conquistador_brief`, `conquistador_search`, `conquistador_methods`, `conquistador_files`, and `conquistador_read`. From 0.4.0 it also has `conquistador_check`, `conquistador_verify`, and `conquistador_score`.
-</Note>
+For Composio, follow its experimental [Custom MCP toolkit API](https://docs.composio.dev/docs/extending-sessions/custom-mcp):
+register the public URL with the matching authentication scheme, connect an account,
+sync tools, and enable the returned toolkit slug in your agent session. Keep secrets
+in Composio's account settings. A local stdio config is not a Composio toolkit.
 
-The server also gives four prompts: `growth-plan`, `diagnose`, `copy`, and `review-results`.
+After connection, discover the tools and call `conquistador_methods`, then
+`conquistador_brief` for a real task. A successful import alone does not establish
+that authentication or tool calls work. These instructions do not claim live
+Executor or Composio acceptance.

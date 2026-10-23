@@ -91,3 +91,36 @@ The landing repository owns browser checks and before/after captures. BRAIN.md l
 - [Grok plugins](https://docs.x.ai/build/features/skills-plugins-marketplaces)
 
 MCP stdio needs no HTTP bridge. `mcporter` is a client option, not an installation dependency.
+
+## Simplified installation candidate (2026-10-23)
+
+The failure cases for this change are hidden standalone setup, unrelated surfaces in
+Executor setup, conflicting client flags, protocol output corrupted by CLI text,
+and host configuration written by standalone server startup. Cases were recorded
+in the process runner before their implementation or verification changes.
+
+Reproduce from the candidate checkout:
+
+```sh
+node tools/e2e/installation-methods.mjs
+node tools/e2e/installation-packages.mjs
+node --test tools/setup-entry.test.mjs tools/skills-mcp.test.mjs tools/executor-source.test.mjs
+cd docs-site
+bun install --ignore-scripts
+bun run validate
+```
+
+The process report is `dist/e2e/installation-methods/report.json` (17/17).
+It includes source hashes, real stdio initialization, eight-tool discovery, a method
+catalog call, and absence of agent/skill/hook configuration after server startup.
+The package report is `dist/e2e/installation-packages/report.json` (6/6), with package
+digests and a transcript. It checks real local tarball installation through the
+short-name CLI and MCP startup. Focused checks pass 28/28, with 29/29 additional onboarding checks. Documentation
+build and link validation pass.
+
+Coding-agent registration commands follow their official MCP references linked in
+[INSTALL.md](../INSTALL.md#standalone-mcp). Executor import behavior was checked
+against the connected server's `tools.executor.apps.importCustom` schema; Composio's
+experimental Custom MCP instructions follow its linked official API documentation.
+No live remote app was created. These checks do not establish native client activation,
+OAuth account acceptance, the public hosted version, or Composio tool execution.
