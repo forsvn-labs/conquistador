@@ -1,7 +1,7 @@
 # Versions
 
-Product, plugin, host, and portable-agent manifests identify candidate release version `0.10.0`.
-The latest published release remains `0.9.1`. Both npm package names are verified as
+Product, plugin, host, and portable-agent manifests identify release version `0.10.0`. The GitHub release is available.
+The latest verified npm release remains `0.9.1`; the 0.10.0 registry rollout is pending. Both npm package names are verified as
 `latest`, with provenance and exact bytes matching the checked tagged archives.
 The CLI alias pins the same exact main-package version.
 [STATUS.md](STATUS.md) owns current rollout state; [CHANGELOG.md](CHANGELOG.md) records

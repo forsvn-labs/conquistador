@@ -6,6 +6,7 @@ distinguishes product versions from method versions.
 
 | Date | Release | Delivered change |
 | --- | --- | --- |
+| 2026-10-23 | [0.10.0](https://github.com/forsvn-labs/conquistador/releases/tag/v0.10.0) | Task-scoped selection, bounded guidance, advisory hooks, verified context reuse, and installed-template correction. GitHub archives verified; npm rollout state is in STATUS.md. [PR #86](https://github.com/forsvn-labs/conquistador/pull/86), `ba4d078`. |
 | 2026-10-23 | [0.9.1](https://github.com/forsvn-labs/conquistador/releases/tag/v0.9.1) | Bounded brief reads, linear stdio frame assembly, streamed-upload recovery, and development dependency fixes. Both npm packages published with provenance. [PR #84](https://github.com/forsvn-labs/conquistador/pull/84), tag commit `d812ca5`. |
 | 2026-10-19 | [0.9.0](https://github.com/forsvn-labs/conquistador/releases/tag/v0.9.0) | Managed Executor v2 source/capability support, reviewed integration pins, and paired npm publication. [PR #83](https://github.com/forsvn-labs/conquistador/pull/83), `e918104`. |
 | 2026-10-17 | [0.8.0](https://github.com/forsvn-labs/conquistador/releases/tag/v0.8.0) | Skills, CLI, MCP, and Plugins installation routes; paired CLI package. Hosted OAuth and API-key support deployed separately. [PR #80](https://github.com/forsvn-labs/conquistador/pull/80), `ac79282`. |
