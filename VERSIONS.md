@@ -1,8 +1,6 @@
 # Versions
 
-Product, plugin, host, and portable-agent manifests identify release version `0.10.0`. The GitHub release is available.
-Both npm packages are verified as `0.10.0` and `latest`, with provenance and registry
-archive bytes matching the checked release assets.
+Product, plugin, host, and portable-agent manifests share one product version.
 The CLI alias pins the same exact main-package version.
 [STATUS.md](STATUS.md) owns current rollout state; [CHANGELOG.md](CHANGELOG.md) records
 shipped releases and verification. The first public alpha was `0.2.0`. Each public release
