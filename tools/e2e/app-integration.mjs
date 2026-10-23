@@ -55,7 +55,11 @@ try {
   const pkg = JSON.parse(readFileSync(join(app, 'node_modules/@forsvn/conquistador/package.json')));
   check('the package publishes root and MCP exports with declarations', Boolean(pkg.exports?.['.']?.types && pkg.exports?.['./mcp']?.types));
   check('the package has no install lifecycle', !['preinstall', 'install', 'postinstall', 'prepare'].some(name => pkg.scripts?.[name]));
-  const deps = run('npm', ['install', '--save-dev', '--ignore-scripts', '--no-audit', '--no-fund', '@modelcontextprotocol/client@2.3.1', 'mcp-client-v1@npm:@modelcontextprotocol/sdk@1.32.1', 'typescript@7.0.2', '@types/node@24.13.3']);
+  const devPackages = ['@modelcontextprotocol/client@2.3.1', 'mcp-client-v1@npm:@modelcontextprotocol/sdk@1.32.1', 'typescript@7.0.2', '@types/node@24.13.3'];
+
+  const deps = installer === 'bun'
+    ? run('bun', ['add', '--dev', '--ignore-scripts', ...devPackages])
+    : run('npm', ['install', '--save-dev', '--ignore-scripts', '--no-audit', '--no-fund', ...devPackages]);
   check('official MCP clients and the TypeScript compiler install', deps.status === 0);
   const example = join(app, 'node_modules/@forsvn/conquistador/examples/app-integration/server.mjs');
   check('the npm package contains the runnable app example', existsSync(example));

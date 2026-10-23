@@ -262,6 +262,7 @@ test('capability catalog routes to bounded command entries', () => {
   const library = join(root, 'skills');
   const names = commandNames(library);
   const catalog = capabilityCatalog(library, names);
+
   for (const name of names) {
     assert.ok(catalog.includes(`](commands/${name}/ENTRY.md)`));
     assert.ok(existsSync(join(library, 'conquistador/commands', name, 'ENTRY.md')));

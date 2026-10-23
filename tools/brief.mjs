@@ -135,7 +135,9 @@ function document(absolute, key, { source, method }, prepared) {
   // Callers pass planned entries; only these fields matter.
   let raw;
   try { raw = readFileSync(absolute, 'utf8'); } catch { return null; }
+
   const digest = createHash('sha256').update(raw).digest('hex');
+
   if (prepared?.digest === digest && prepared.source === source && prepared.method === method) return { ...revive(prepared), absolute };
   if (raw.includes('\0')) return null;
   const info = describe(raw);
@@ -212,13 +214,17 @@ export function knowledgeIndex(root = moduleRoot, { playbooks = userPlaybookRoot
     // The shipped snapshot contains only derived bundled data. Validate each source digest
     // before reuse: local edits, renamed documents and domain subsets remain authoritative.
     let prepared = new Map();
+
     if (packagedIndex) try {
       const path = join(packageRoot, 'tools/search-index.json');
       const stat = lstatSync(path);
+
       if (!stat.isFile() || stat.size > 8 * 1024 * 1024) throw Error('Invalid search snapshot.');
       const snapshot = JSON.parse(readFileSync(path, 'utf8'));
+
       if (snapshot.version === INDEX_VERSION && Array.isArray(snapshot.docs)) prepared = new Map(snapshot.docs.map(doc => [doc.key, doc]));
     } catch { /* Optional optimization; source files always remain sufficient. */ }
+
     all = planned.map(item => {
       try { return document(item.absolute, item.key, item, item.source === 'user' ? undefined : prepared.get(item.key)); }
       catch { return document(item.absolute, item.key, item); }
@@ -243,8 +249,10 @@ export function knowledgeIndex(root = moduleRoot, { playbooks = userPlaybookRoot
 // Maintainer-only generation. Never discover user playbooks or include checkout paths.
 export function buildSearchSnapshot(root = moduleRoot) {
   const index = knowledgeIndex(root, { playbooks: [], persistCache: false, packagedIndex: false });
+
   return { version: INDEX_VERSION, docs: index.docs.map(doc => {
-    const { absolute, ...portable } = serialize(doc);
+    const { absolute: _absolute, ...portable } = serialize(doc);
+
     return portable;
   }) };
 }
@@ -257,14 +265,18 @@ function rankQuery(query, index) {
     named: !GENERIC.has(word) && !['dev', 'developer', 'saas', 'ios', 'mobile'].includes(word),
     idf: Math.log(1 + (index.total - (index.df.get(word) ?? 0) + 0.5) / ((index.df.get(word) ?? 0) + 0.5)),
   }));
+
   return doc => {
     let score = words.filter(({ word, named }) => named && doc.nameTerms.has(word)).length * 3;
     const sizeFactor = doc.bytes > 16_000 ? 0.6 : 1;
+
     for (const { word, idf } of words) {
       const frequency = doc.tf.get(word);
+
       if (!frequency) continue;
       score += idf * (frequency * 2.2) / (frequency + 1.2 * (0.25 + 0.75 * doc.length / index.averageLength));
     }
+
     return Math.round(score * sizeFactor * 1e4) / 1e4;
   };
 }
@@ -323,6 +335,7 @@ export function createBrief(input, { root = moduleRoot, playbooks, persistCache 
     const lead = play.chain[firstStep]?.command;
     if (lead && contract.methods[lead]) methods = [contract.methods[lead]];
   }
+
   const rank = rankQuery(expand(terms(prompt)), index);
   const selectedNames = new Set(methods.map(item => item.name));
   if (!methods.length && !play && !platforms.length && !(explicit || force)) {

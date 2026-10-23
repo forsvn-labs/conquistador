@@ -86,9 +86,9 @@ async function main() {
 
     const brief = await rpc('tools/call', { name: 'conquistador_brief', arguments: { task, context } });
     const text = brief.body.result?.content[0].text ?? '';
-    const command = text.match(/^Commands: (.*)$/m)?.[1];
+    const command = brief.body.result?.structuredContent?.command;
     const files = [...text.matchAll(/^File: (.*)$/gm)].map(match => match[1]);
-    record('brief routes to outreach, carries the context, and requires the check', /\[outreach\]/.test(command ?? '') && text.includes('Ledgerline') && /conquistador_check/.test(text), { command, files, bytes: Buffer.byteLength(text), ms: brief.ms });
+    record('brief routes to outreach, carries the context, and requires the check', command === 'outreach' && text.includes('Ledgerline') && /conquistador_check/.test(text), { command, files, bytes: Buffer.byteLength(text), ms: brief.ms });
     const structured = brief.body.result?.structuredContent ?? {};
     record('the hosted brief leads with the route, knows it has no repository, and lists its files', /^Start here: .*\[outreach\]/m.test(text) && /no repository/i.test(text) && structured.command === 'outreach' && structured.inlined?.length >= 2 && Array.isArray(structured.readNow),
       { inlined: structured.inlined?.length, readNow: structured.readNow?.length, situational: structured.situational?.length });

@@ -1,0 +1,115 @@
+{
+  "schema": "conquistador.e2e.agent-loop/v1",
+  "url": "loopback (hosted handler, token required)",
+  "date": "2026-10-23T12:39:34.097Z",
+  "passed": true,
+  "steps": [
+    {
+      "name": "request without a token is refused",
+      "passed": true,
+      "status": 401
+    },
+    {
+      "name": "initialize names the loop in its instructions",
+      "passed": true,
+      "status": 200,
+      "ms": 2
+    },
+    {
+      "name": "tools/list offers brief and check",
+      "passed": true,
+      "tools": [
+        "conquistador_brief",
+        "conquistador_check",
+        "conquistador_verify",
+        "conquistador_score",
+        "conquistador_search",
+        "conquistador_methods",
+        "conquistador_files",
+        "conquistador_read"
+      ],
+      "ms": 1
+    },
+    {
+      "name": "brief routes to outreach, carries the context, and requires the check",
+      "passed": true,
+      "command": "outreach",
+      "files": [
+        "skills/conquistador/commands/outreach/ENTRY.md",
+        "skills/conquistador/commands/outreach/references/frameworks/cold-email-frameworks.md",
+        "skills/conquistador/commands/outreach/references/channels/email.md",
+        "skills/conquistador/commands/outreach/references/modes/early-stage.md"
+      ],
+      "bytes": 11330,
+      "ms": 114
+    },
+    {
+      "name": "the hosted brief leads with the route, knows it has no repository, and lists its files",
+      "passed": true,
+      "inlined": 4,
+      "readNow": 0,
+      "situational": 8
+    },
+    {
+      "name": "methods, files, read, and search answer from the bundled library",
+      "passed": true,
+      "commands": 41,
+      "plays": 21,
+      "outreachFiles": 50,
+      "readBytes": 1280,
+      "ms": 9
+    },
+    {
+      "name": "the first draft fails the check",
+      "passed": true,
+      "blocking": 10,
+      "rules": [
+        "ai-exclamation",
+        "ai-fast-paced-world",
+        "ai-game-changer",
+        "ai-seamless",
+        "ai-unlock",
+        "claim-guarantee",
+        "cta-click-here",
+        "cta-missing",
+        "email-address-missing",
+        "email-preheader-missing",
+        "email-subject-shouting",
+        "email-unsubscribe-missing"
+      ],
+      "ms": 10
+    },
+    {
+      "name": "with the context, the check flags an invented number and customer",
+      "passed": true,
+      "flagged": [
+        "40%",
+        "Acme"
+      ],
+      "ms": 3
+    },
+    {
+      "name": "the score gate fails a dimension below its floor, and a compact brief is smaller",
+      "passed": true,
+      "verdict": "fail",
+      "compactBytes": 2208,
+      "fullBytes": 11330
+    },
+    {
+      "name": "the revision passes the check",
+      "passed": true,
+      "blocking": 0,
+      "rules": [
+        "email-preheader-missing (advisory)"
+      ],
+      "ms": 1
+    },
+    {
+      "name": "the host verifies a signed clean receipt and rejects edited text",
+      "passed": true,
+      "signed": true,
+      "verifyReason": "The text matches a clean check.",
+      "editedReason": "The text changed after the check. Check the final text again."
+    }
+  ]
+}

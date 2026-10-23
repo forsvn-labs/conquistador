@@ -5004,7 +5004,7 @@
     },
     {
       "path": "tools/brief.mjs",
-      "sha256": "f12bd295999900241ab231fc8cedf2e9cc1ae8395e984a2c9f8aaed8ca67874f"
+      "sha256": "ea1830100e0cf666273e0e7a1445eadc7d837c9d588b17b1c0cdd453ba88f03d"
     },
     {
       "path": "tools/check-receipt.mjs",
@@ -5048,7 +5048,7 @@
     },
     {
       "path": "tools/method-library.mjs",
-      "sha256": "7f1063225e057cb797a5d33a31211395bb97aa6eac2dccbfc17aa431cb5eec23"
+      "sha256": "3bc7a32d1fb4d3ad66ed24ddcf525cdad560494cfbe41459e46f59281ad9af05"
     },
     {
       "path": "tools/module-root.mjs",

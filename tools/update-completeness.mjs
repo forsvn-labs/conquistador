@@ -14,6 +14,7 @@ import { buildPluginManifest, pluginManifestPath } from './plugin-payload.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 writeRoutingContract(root);
+
 writeFileSync(join(root, 'tools/search-index.json'), JSON.stringify(buildSearchSnapshot(root)) + '\n');
 const skills = join(root, 'skills');
 const digest = path => createHash('sha256').update(readFileSync(join(skills, path))).digest('hex');
