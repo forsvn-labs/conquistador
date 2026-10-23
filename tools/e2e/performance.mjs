@@ -125,7 +125,11 @@ if (args.includes('--child')) {
     }
   }
 
-  const git = (...argv) => spawnSync('git', argv, { cwd: root, encoding: 'utf8' }).stdout.trim();
+  const git = (...argv) => {
+    const result = spawnSync('git', argv, { cwd: root, encoding: 'utf8' });
+
+    return result.status === 0 ? (result.stdout ?? '').trim() : '';
+  };
 
   const ownsGit = git('rev-parse', '--show-toplevel') === root;
   const report = {

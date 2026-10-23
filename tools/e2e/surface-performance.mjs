@@ -18,7 +18,11 @@ const out = resolve(option('--out', 'dist/e2e/surface-performance/report.json'))
 
 const reference = option('--reference') ? JSON.parse(readFileSync(option('--reference'), 'utf8')) : null;
 
-const git = (...argv) => spawnSync('git', argv, { cwd: root, encoding: 'utf8' }).stdout.trim();
+const git = (...argv) => {
+  const result = spawnSync('git', argv, { cwd: root, encoding: 'utf8' });
+
+  return result.status === 0 ? (result.stdout ?? '').trim() : '';
+};
 
 const ownsGit = git('rev-parse', '--show-toplevel') === root;
 

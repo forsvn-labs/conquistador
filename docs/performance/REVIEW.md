@@ -124,3 +124,8 @@ harnesses match the preceding API, stdio, CLI, and hook output hashes. Cold full
 briefs remain about 129 ms; fresh CLI and hook briefs remain about 200–204 ms.
 Repeat the two performance commands above with output paths under `dist/e2e/`
 to check later cleanups without replacing the original before/after evidence.
+
+Both benchmark scripts also pass with Git absent from `PATH`, with identical output
+hashes and `source: null` in their reports. To reproduce, invoke Node by its absolute
+path with `PATH=/nonexistent` and the same reference arguments. Failed Git commands
+omit optional revision metadata instead of preventing the benchmark from running.
