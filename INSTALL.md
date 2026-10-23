@@ -350,6 +350,10 @@ The optional managed route is `npx conquistador@latest mcp install --executor`.
 It previews only Executor and uses the existing version-aware adapter. See
 [Executor setup](https://conquistador.app/docs/install/executor).
 
+Use the [runnable Composio setup example](https://github.com/forsvn-labs/conquistador/tree/main/examples/composio) for previewed registration,
+OAuth or API-key connection, discovery, resync, and a method-catalog read check.
+It uses Composio API v3.1 and the pinned SDK; live account acceptance is separate.
+
 For Composio, follow its experimental [Custom MCP toolkit API](https://docs.composio.dev/docs/extending-sessions/custom-mcp):
 register the public URL with the matching authentication scheme, connect an account,
 sync tools, and enable the returned toolkit slug in your agent session. Keep secrets

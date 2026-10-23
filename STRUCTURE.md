@@ -20,6 +20,7 @@ hooks/                   Host prompt hooks
 hosts/                   Host-specific integration contracts
 agents/                  Portable roles and schemas
 packages/conquistador/   Exact-version short CLI alias
+examples/composio/       Remote MCP registration and scoped account verification
 release/                 Generated payload integrity manifests
 docs/                    Product and contributor references
 docs-site/               Published documentation source
