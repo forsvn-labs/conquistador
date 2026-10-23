@@ -1,0 +1,68 @@
+{
+  "verifiedAt": "2026-10-23T11:14:14.238Z",
+  "sourceCommit": "bd0f4c279650ca2eb14a2d32016d4d2cef80f323",
+  "release": "https://github.com/forsvn-labs/conquistador/releases/tag/v0.10.2",
+  "publicationRun": "https://github.com/forsvn-labs/conquistador/actions/runs/39944022729",
+  "checks": [
+    {
+      "name": "@forsvn/conquistador",
+      "version": "0.10.2",
+      "sha256": "ab658cee48a9ae71e6df1cfef6ce3645b458e224f5cc0db6a837dcd035767f0a",
+      "tarball": "https://registry.npmjs.org/@forsvn/conquistador/-/conquistador-0.10.2.tgz",
+      "provenance": "https://registry.npmjs.org/-/npm/v1/attestations/@forsvn%2fconquistador@0.10.2",
+      "exactAliasPin": null
+    },
+    {
+      "name": "conquistador",
+      "version": "0.10.2",
+      "sha256": "8be5e1c898987106da9ef7918a140b1a897082d2cfe6ae2c0a8ff90aa8765bda",
+      "tarball": "https://registry.npmjs.org/conquistador/-/conquistador-0.10.2.tgz",
+      "provenance": "https://registry.npmjs.org/-/npm/v1/attestations/conquistador@0.10.2",
+      "exactAliasPin": "0.10.2"
+    }
+  ],
+  "installedSmoke": {
+    "mode": "fresh npm registry installation with isolated home and cache",
+    "checks": [
+      {
+        "name": "fresh registry install of short alias",
+        "passed": true
+      },
+      {
+        "name": "installed CLI version",
+        "passed": true
+      },
+      {
+        "name": "published Executor-only shortcut",
+        "passed": true
+      },
+      {
+        "name": "published Composio example previews OAuth without credentials",
+        "passed": true
+      },
+      {
+        "name": "published standalone MCP handshake version",
+        "passed": true
+      },
+      {
+        "name": "preview and MCP startup create no Conquistador home",
+        "passed": true
+      }
+    ]
+  },
+  "transcripts": {
+    "commit": "bd0f4c279650ca2eb14a2d32016d4d2cef80f323",
+    "version": "0.10.2",
+    "dirty": false,
+    "total": 3,
+    "passed": 3,
+    "node": "v26.9.0",
+    "platform": "darwin"
+  },
+  "screenHeadings": [
+    "Which agents?",
+    "Review the changes",
+    "Installing",
+    "Done"
+  ]
+}
