@@ -1,0 +1,24 @@
+{
+  "verifiedAt": "2026-10-23T08:54:49.427Z",
+  "sourceCommit": "ba4d0782b67a17d89dd58c57dbe8a28e9ea695c9",
+  "release": "https://github.com/forsvn-labs/conquistador/releases/tag/v0.10.0",
+  "publicationRun": "https://github.com/forsvn-labs/conquistador/actions/runs/39926746714",
+  "checks": [
+    {
+      "name": "@forsvn/conquistador",
+      "version": "0.10.0",
+      "sha256": "f900bb3abf7941072f213c531ec8d5b4715ebc4c898a3ab31b0843f94acb22a8",
+      "tarball": "https://registry.npmjs.org/@forsvn/conquistador/-/conquistador-0.10.0.tgz",
+      "provenance": "https://registry.npmjs.org/-/npm/v1/attestations/@forsvn%2fconquistador@0.10.0",
+      "exactAliasPin": null
+    },
+    {
+      "name": "conquistador",
+      "version": "0.10.0",
+      "sha256": "0908ea39c749295333c276b80993fefe53de8006b637a37dea4609943c7fd362",
+      "tarball": "https://registry.npmjs.org/conquistador/-/conquistador-0.10.0.tgz",
+      "provenance": "https://registry.npmjs.org/-/npm/v1/attestations/conquistador@0.10.0",
+      "exactAliasPin": "0.10.0"
+    }
+  ]
+}

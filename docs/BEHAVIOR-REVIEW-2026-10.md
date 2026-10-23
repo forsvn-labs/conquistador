@@ -337,3 +337,17 @@ installations. Its old mandatory Core reads and appendix could override the boun
 A failing installed-entry regression test was added before this correction; all 40 targeted
 installer, integrity, and installed growth-workflow tests then pass. The parent method version
 is 3.1.0. Product, native plugin, host, portable-role, and CLI-alias versions are 0.10.0.
+
+### Tagged release
+
+PR #86 is merged at `ba4d0782b67a17d89dd58c57dbe8a28e9ea695c9`, tagged `v0.10.0`.
+All twelve candidate checks and all seven merged-source CI jobs pass, including the full
+Node 24 installer suite. The GitHub release contains seven assets; downloaded archives match
+all five checksums. Six direct archive checks pass for identity, routing, context budget,
+and staged/npm skill entry points. STATUS.md owns the live npm rollout state.
+
+Both npm packages are now verified as 0.10.0/latest, with provenance and exact tarball
+bytes matching the release. The [registry evidence](release-0.10.0-verification.json)
+records those checks. Fresh registry installs verify API imports, engineering silence,
+outreach selection, the CLI dependency pin, and CLI version. The CLI publication job
+succeeded on retry after npm exposed the already accepted main package.

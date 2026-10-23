@@ -1,24 +1,29 @@
 # Conquistador status
 
-Updated 2026-10-23. Release evidence comes from [PR #84](https://github.com/forsvn-labs/conquistador/pull/84),
-[v0.9.1](https://github.com/forsvn-labs/conquistador/releases/tag/v0.9.1),
-and [publication run 39899101398](https://github.com/forsvn-labs/conquistador/actions/runs/39899101398).
-This documentation update does not repeat product acceptance.
+Updated 2026-10-23. Release evidence comes from [PR #86](https://github.com/forsvn-labs/conquistador/pull/86),
+[v0.10.0](https://github.com/forsvn-labs/conquistador/releases/tag/v0.10.0),
+and [publication run 39926746714](https://github.com/forsvn-labs/conquistador/actions/runs/39926746714).
 
 ## Shipped
 
-Product 0.9.1 is tagged at `d812ca5a2b46f17e05aab8058141b3ac14c45ef6`.
-Both `@forsvn/conquistador@0.9.1` and the paired `conquistador@0.9.1`
-package are published with checked release bytes and provenance.
-The release contains bounded brief reads, linear stdio frame assembly,
-and streamed-upload failure and cancellation fixes.
+Product 0.10.0 is tagged at `ba4d0782b67a17d89dd58c57dbe8a28e9ea695c9`.
+The GitHub release has seven assets. All five downloaded archives match SHA256SUMS.
+The release adds task-aware admission, bounded current-stage briefs, advisory hooks,
+verified context reuse, and scoped edit checks. Installed skill entries no longer
+require every Core reference or an appendix.
 
-Recorded checks pass: eleven candidate CI jobs, seven merged-source jobs,
-963 tagged-source tests, 38 npm and 38 Bun consumer checks, eight
-release/registry checks, and six registry-install checks.
-[The MCP review](docs/MCP-REVIEW-2026-10.md) owns exact commands,
-measurements, and coverage limits. Frame benchmarks do not establish a
-general task-speed improvement.
+All twelve candidate CI checks and all seven merged-source jobs pass. Six direct release-archive checks verify the
+version, engineering silence, assist mode and total budget, and both npm and staged
+skill entry points. The [behavior review](docs/BEHAVIOR-REVIEW-2026-10.md) contains
+local regression evidence and its limits.
+
+Both `@forsvn/conquistador@0.10.0` and `conquistador@0.10.0` are verified as npm
+latest. Registry tarball bytes match the checked release archives; both packages have
+provenance and signatures, and the CLI alias pins the exact main-package version.
+Fresh registry installs pass the API routing smoke checks and CLI version check.
+[The registry evidence](docs/release-0.10.0-verification.json) records source identity,
+archive digests, and provenance links. The initial CLI publication retry was needed
+because npm had accepted the main package before making it visible in the registry.
 
 ## Held and unverified
 
@@ -33,21 +38,6 @@ human task-quality acceptance remain unverified. Existing lint diagnostics
 and the optional Promptfoo/node-forge findings remain open.
 
 ## Planned and next steps
-
-The [2026-10 behavior review](docs/BEHAVIOR-REVIEW-2026-10.md) and its implementation
-are on [PR #86](https://github.com/forsvn-labs/conquistador/pull/86).
-The candidate adds shared admission, bounded current-stage briefs, advisory hooks,
-verified context reuse, and scoped edit checks. The strict thirteen-prompt audit and
-142-case routing suite pass. Build, all 969 source tests, 44 checker cases, 15 social
-style cases, and 38 installed Bun consumer checks pass. The installer run passed
-64/67 cases on Node 26; all three failed cases pass on Node 24 reruns. The review
-records the runtime error and exact candidate package evidence. This is unmerged source,
-not a release or an update to the installed or hosted product.
-
-Shipping is authorized for candidate 0.10.0. Release preparation also corrected the
-staged skill template so installation cannot restore mandatory Core reads or an
-appendix. All 40 targeted installer, integrity, and growth-workflow tests pass.
-The candidate awaits final CI and review before merge, tagging, and publication.
 
 1. Resolve the existing hosted-access blocker through its authorized owner,
    then verify the exact candidate and hosted behavior.
