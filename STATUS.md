@@ -1,73 +1,63 @@
 # Conquistador status
 
-Updated 2026-10-23. Release evidence comes from [PR #86](https://github.com/forsvn-labs/conquistador/pull/86),
-[v0.10.0](https://github.com/forsvn-labs/conquistador/releases/tag/v0.10.0),
-and [publication run 39926746714](https://github.com/forsvn-labs/conquistador/actions/runs/39926746714).
+Updated 2026-10-23. Release evidence: [PR #90](https://github.com/forsvn-labs/conquistador/pull/90),
+[v0.10.1](https://github.com/forsvn-labs/conquistador/releases/tag/v0.10.1), and
+[publication run 39935303698](https://github.com/forsvn-labs/conquistador/actions/runs/39935303698).
 
 ## Shipped
 
-Product 0.10.0 is tagged at `ba4d0782b67a17d89dd58c57dbe8a28e9ea695c9`.
-The GitHub release has seven assets. All five downloaded archives match SHA256SUMS.
-The release adds task-aware admission, bounded current-stage briefs, advisory hooks,
-verified context reuse, and scoped edit checks. Installed skill entries no longer
-require every Core reference or an appendix.
+Product 0.10.1 is tagged at `95aca7f2122d6dbd94937ac588646619e422cb11`.
+The seven release assets bind the tagged source; all five downloaded archives match
+SHA256SUMS. The release makes `npx conquistador@latest` the primary setup command,
+adds the Executor-only MCP shortcut, and includes a runnable Composio Custom MCP
+example. Standalone MCP does not activate skills or hooks.
 
-All twelve candidate CI checks and all seven merged-source jobs pass. Six direct release-archive checks verify the
-version, engineering silence, assist mode and total budget, and both npm and staged
-skill entry points. The [behavior review](docs/BEHAVIOR-REVIEW-2026-10.md) contains
-local regression evidence and its limits.
+Both `@forsvn/conquistador@0.10.1` and `conquistador@0.10.1` are verified as npm
+latest. Their tarballs match the release bytes, have provenance and signatures,
+and the alias pins the exact main-package version. Fresh registry installation
+verifies the CLI, Executor-only plan, Composio preview, and standalone MCP handshake.
+[Registry evidence](docs/release-0.10.1-verification.json) records identities and digests.
+The CLI job was retried after the main package became visible in npm's registry.
 
-Both `@forsvn/conquistador@0.10.0` and `conquistador@0.10.0` are verified as npm
-latest. Registry tarball bytes match the checked release archives; both packages have
-provenance and signatures, and the CLI alias pins the exact main-package version.
-Fresh registry installs pass the API routing smoke checks and CLI version check.
-[The registry evidence](docs/release-0.10.0-verification.json) records source identity,
-archive digests, and provenance links. The initial CLI publication retry was needed
-because npm had accepted the main package before making it visible in the registry.
+All release-candidate CI checks pass, including installation on Linux and Windows.
+The final release archive passes 38 app-integration checks. Local installation cases
+pass 17/17; focused installation/hosted tests pass 63/63; Composio preview checks pass
+5/5. Documentation build and link validation pass.
 
-## Held and unverified
+The hosted Worker serves 0.10.1 at `https://mcp.forsvn.com/mcp`. Existing secrets,
+OAuth settings, and token storage were retained. Public health and OAuth metadata
+return 200; unauthenticated MCP requests return 401. Real authenticated Executor
+calls verify that email-system engineering gets no marketing brief, while outreach
+copy gets its 552-byte command entry within the 8,000-byte compact budget.
+[Hosted evidence](docs/hosted-0.10.1-verification.json) records the deployment and results.
 
-The hosted service has not received the 0.9.1 update. Existing authenticated
-access returned HTTP 401 before deployment, so current authenticated hosted
-acceptance remains blocked. Package publication does not close that gap.
-Public health and OAuth metadata checks passed.
+The 0.10.0 task-scoped behavior remains included: bounded current-stage guidance,
+advisory hooks, verified context reuse, and scoped edit checks. See the
+[behavior review](docs/BEHAVIOR-REVIEW-2026-10.md) for its evidence and limits.
 
-Native activation in additional clients, interactive Windows and ARM,
-additional OAuth clients, linked-provider lifecycle, and broader model and
-human task-quality acceptance remain unverified. Existing lint diagnostics
-and the optional Promptfoo/node-forge findings remain open.
+## Verification limits
 
-## Current installation work
+Composio follows its documented API v3.1 and pinned SDK 0.27.0. At the user's request,
+this release includes a runnable setup example and offline checks, without creating
+or testing a live Composio account. The example distinguishes registration, consent,
+discovery, sync, and tool execution. Local checks are not live account acceptance.
 
-Release 0.10.1 is being prepared from merged PR #89. The release is authorized;
-publication and authenticated hosted acceptance must be verified before marking it shipped.
-The existing Executor account returned the method catalog on 2026-10-23; the deployed
-Worker is still 0.8.0. Composio uses a documented runnable API example; at the user’s request, no live
-Composio account is required for this release. Live acceptance is not claimed.
+The hosted check uses an existing Executor account. Fresh OAuth consent in additional
+clients, native activation in additional clients, interactive Windows and ARM,
+linked-provider lifecycle, and broader model/human task-quality acceptance remain
+unverified. Existing lint diagnostics and optional Promptfoo/node-forge findings
+remain open. They are not represented as release verification.
 
+## Next steps
 
-The installation candidate makes `npx conquistador@latest` the primary entry,
-adds an Executor-only MCP setup shortcut, and documents standalone MCP in coding
-agents, desktop clients, Executor, and Composio. It is not a new npm release.
-Local process checks pass 17/17, packaged installation checks pass 6/6, and
-focused setup/MCP/Executor checks pass 28/28. Another 29 onboarding checks pass. Documentation build and link validation pass.
-[Installation acceptance](docs/INSTALLATION-ACCEPTANCE.md) records repeatable commands
-and the limits of this evidence. Live remote account acceptance remains open.
+1. Complete additional native-client, OAuth, ARM, and linked-provider acceptance
+   before extending support claims.
+2. Evaluate real tasks and corrections across methods. Keep deterministic checks,
+   model judgments, human verdicts, and audience outcomes distinct.
+3. Verify marketplace listings when those distribution actions are approved.
 
-## Planned and next steps
-
-1. Resolve the existing hosted-access blocker through its authorized owner,
-   then verify the exact candidate and hosted behavior.
-2. Complete native client, Windows/ARM, OAuth, and linked-provider
-   acceptance before extending support claims.
-3. Evaluate real tasks and corrections across methods. Keep deterministic
-   checks, model judgments, human verdicts, and audience outcomes distinct.
-4. Verify marketplace listings and current-release installation when those
-   distribution actions are approved.
-
-Gemini CLI hooks are not built. Browser and Edge app runtimes are not
-certified. Consent-bound memory, expanded capability readiness, and
-method-specific quality evaluations remain planned work. The
-[public-alpha checklist](docs/PUBLIC-ALPHA.md),
+Gemini CLI hooks are not built. Browser and Edge app runtimes are not certified.
+Consent-bound memory and expanded method-quality evaluations remain planned work.
+The [public-alpha checklist](docs/PUBLIC-ALPHA.md),
 [installation acceptance](docs/INSTALLATION-ACCEPTANCE.md), and
-[version policy](VERSIONS.md) supply the technical detail.
+[version policy](VERSIONS.md) supply technical detail.
