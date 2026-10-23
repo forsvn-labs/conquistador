@@ -5004,7 +5004,7 @@
     },
     {
       "path": "tools/brief.mjs",
-      "sha256": "144c0befe6aaf8ffa2d6e514d14a6a80a54b86b11ac7d13c253b5c2f3dc94f73"
+      "sha256": "f12bd295999900241ab231fc8cedf2e9cc1ae8395e984a2c9f8aaed8ca67874f"
     },
     {
       "path": "tools/check-receipt.mjs",
@@ -5048,7 +5048,7 @@
     },
     {
       "path": "tools/method-library.mjs",
-      "sha256": "ecf5fd0d2caf18260accf0914216444f84fd50e0567fdf3af5f24841c84d4317"
+      "sha256": "7f1063225e057cb797a5d33a31211395bb97aa6eac2dccbfc17aa431cb5eec23"
     },
     {
       "path": "tools/module-root.mjs",
@@ -5077,6 +5077,10 @@
     {
       "path": "tools/rubric-gate.mjs",
       "sha256": "31fa58c36e764d824dd7e33ab6cfd5566f145850773bc4f4a63f6b58bdb5e1d2"
+    },
+    {
+      "path": "tools/search-index.json",
+      "sha256": "0d6322c44b580cb66e46ca3e4277a230e9424dd42be5707af2df62276e44f0cb"
     },
     {
       "path": "tools/skills-mcp.mjs",

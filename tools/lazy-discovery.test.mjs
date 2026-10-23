@@ -7,7 +7,7 @@ import { copyFileSync, existsSync, mkdirSync, mkdtempSync, readFileSync, realpat
 import { tmpdir } from 'node:os';
 import { dirname, join, posix } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { canonicalText, commandNames, internalPath, methodLibrary, regularFiles, skillDiscovery } from './method-library.mjs';
+import { capabilityCatalog, canonicalText, commandNames, internalPath, methodLibrary, regularFiles, skillDiscovery } from './method-library.mjs';
 import { shouldStageSkillPath, resolveDomainSelection } from './domain-package.mjs';
 import { loadOperatorProfile } from '../hosts/coding-agent/operator.mjs';
 
@@ -250,4 +250,20 @@ test('doctor rejects stale SKILL links or an added specialist entry even without
   const report = JSON.parse(missing.stdout);
   assert.equal(report.library.layout, null);
   assert.ok(report.issues.some(issue => issue.includes('Cannot identify')));
+});
+
+test('entrypoint directs command expansion to the existing COMMAND.md procedure', () => {
+  assert.match(template, /Start with its ENTRY\.md; read the complete COMMAND\.md/);
+  assert.doesNotMatch(template, /read the complete METHOD\.md/);
+});
+
+
+test('capability catalog routes to bounded command entries', () => {
+  const library = join(root, 'skills');
+  const names = commandNames(library);
+  const catalog = capabilityCatalog(library, names);
+  for (const name of names) {
+    assert.ok(catalog.includes(`](commands/${name}/ENTRY.md)`));
+    assert.ok(existsSync(join(library, 'conquistador/commands', name, 'ENTRY.md')));
+  }
 });
