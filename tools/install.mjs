@@ -136,15 +136,16 @@ function stage(mode, target, selection) {
   copy('docs/MASTER-AGENT.md');
   copy('docs/USAGE.md');
   copy('docs/PROACTIVE.md');
+  const sharedAdviceFiles = ['prompt-advice.mjs', 'read-evidence.mjs', 'brief.mjs', 'context-files.mjs', 'context-selection.mjs', 'domain-package.mjs', 'method-library.mjs', 'plugin-contracts.mjs', 'routing-contract.mjs', 'request-text.mjs', 'module-root.mjs'].map(file => `tools/${file}`);
   if (['conquistador', 'plugin', 'single-agent'].includes(mode)) {
     copy('release/completeness.json');
     copy('tools/proactive.mjs');
     copy('tools/conquistador-mode.mjs');
-    for (const file of ['prompt-advice.mjs', 'read-evidence.mjs', 'brief.mjs', 'context-files.mjs', 'context-selection.mjs', 'domain-package.mjs', 'method-library.mjs', 'plugin-contracts.mjs', 'routing-contract.mjs', 'request-text.mjs', 'module-root.mjs']) copy(`tools/${file}`);
+    for (const file of sharedAdviceFiles) copy(file);
   }
   if (['plugin', 'single-agent'].includes(mode)) {
     for (const file of operatorFiles) {
-      if (!['tools/domain-package.mjs', 'tools/method-library.mjs', 'tools/plugin-contracts.mjs', 'tools/routing-contract.mjs', 'tools/request-text.mjs', 'tools/context-selection.mjs', 'tools/module-root.mjs'].includes(file)) copy(file);
+      if (!sharedAdviceFiles.includes(file)) copy(file);
     }
   }
   if (mode === 'conquistador') {
