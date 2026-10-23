@@ -1,7 +1,7 @@
 #!/usr/bin/expect -f
 # The installer with real agents in an isolated home. No model is called and no agent opens.
 #   1. `conquistador --surface=agents` opens the full-screen installer with the detected agents
-#      chosen, installs into real Claude Code and Codex, checks the installs, and ends by saying
+#      chosen, goes directly to Review, installs into real Claude Code and Codex, and ends by saying
 #      what to type in each agent (/conquistador init, no GROWTH.md yet). No agent opens (T13).
 #   2. With GROWTH.md, bare `conquistador` shows the home screen, not the installer (T10).
 #   2b. `conquistador --scope=project --surface=agents` in a second project: one skill copy per folder.
@@ -77,9 +77,8 @@ set altScreen [format "%c%s" 27 {[?1049h}]
 record "first run opens the full-screen installer" [expr {[string first $altScreen $transcript] >= 0}] ""
 record "first run shows the detected agents" [expr {[has "Which agents"] && [has "Claude Code"]}] ""
 send "\r"
-step {Choose options}
-send "\r"
 step {Review the changes}
+record "first run skips optional settings" [expr {![has "Choose options"]}] ""
 send "\r"
 # Every detected plugin manager runs now; that can take a few minutes.
 set timeout 600
