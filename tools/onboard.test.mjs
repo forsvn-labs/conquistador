@@ -87,8 +87,8 @@ test('the shadow check names both copies, both versions, and the exact fix (F15)
 test('the update notice compares versions and names the right command', () => {
   assert.equal(updateNotice('0.3.0', '0.3.0', 'global'), null);
   assert.equal(updateNotice('0.2.9', '0.3.0', 'global'), null);
-  assert.match(updateNotice('0.4.0', '0.3.0', 'global'), /npm i -g @forsvn\/conquistador@latest/);
-  assert.match(updateNotice('0.4.0', '0.3.0', 'npx'), /npx @forsvn\/conquistador@latest/);
+  assert.match(updateNotice('0.4.0', '0.3.0', 'global'), /conquistador update/);
+  assert.match(updateNotice('0.4.0', '0.3.0', 'npx'), /npx conquistador@latest/);
 });
 
 test('flags: --surface, --apps, --json, and old aliases (F18)', () => {

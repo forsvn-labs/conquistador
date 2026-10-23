@@ -28,8 +28,8 @@ const LOGO = [
   ['▀▄▄', '▀▄▀', '█ ▀█', '▀▄█', '▀▄▀', '█', '▄▄▀', ' █ ', '█▀█', '█▄▀', '▀▄▀', '█▀▄'],
 ];
 const LOGO_WIDTH = LOGO[0].join(' ').length;
-const STEPS = ['Agents', 'Options', 'Review', 'Install', 'Done'];
-const STEP_OF = { agents: 0, options: 1, review: 2, install: 3, done: 4 };
+const STEPS = ['Agents', 'Review', 'Install', 'Done'];
+const STEP_OF = { agents: 0, options: 1, apps: 1, review: 1, install: 2, done: 3 };
 const SPINNER = ['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏'];
 const sleep = ms => new Promise(done => setTimeout(done, ms));
 const realHome = () => { try { return realpathSync(homedir()); } catch { return homedir(); } };
@@ -190,10 +190,15 @@ function finalChoices(choices, toggles, agentsOn, ctx) {
 }
 
 // Review lines with a tone for each kind of line.
-function reviewLines(plan, width) {
+function reviewLines(plan, width, details) {
   if (!plan.surfaces.length) return [{ text: 'Nothing to install. Go back and choose an agent or an option.', tone: 'sticky' }];
   let warning = false;
-  return planLines(plan).flatMap(line => {
+  const agents = plan.surfaces.find(surface => surface.id === 'agents');
+  const names = agents?.steps.map(step => step.label) ?? [];
+  const summary = names.length ? `Adds Conquistador to ${new Intl.ListFormat('en', { type: 'conjunction' }).format(names)} for ${agents.scope === 'global' ? 'all projects' : 'this project'}.` : 'Connects Conquistador to the apps selected below.';
+  const commands = new Set(plan.surfaces.flatMap(surface => surface.steps.flatMap(step => step.commands ?? [])));
+  const lines = planLines(plan).filter(line => details || !commands.has(line.trim()));
+  return [summary, '', ...lines].flatMap(line => {
     if (line === 'Warning') warning = true;
     const tone = warning && line.startsWith('  ') ? 'sticky' : undefined;
     const style = !line.startsWith(' ') && line && !/^(?:Unchanged|Undo):/.test(line) ? { bold: true } : /^ {4}|^(?:Unchanged|Undo):/.test(line) ? { dim: true } : {};
@@ -253,6 +258,8 @@ function App({ options: initialOptions, cwd, first, update, warnings, onExit, mo
   const wide = inner >= 80 && !compact;
   const sideWidth = Math.min(38, Math.floor(inner * 0.4));
   const mainWidth = wide ? inner - sideWidth - 5 : inner;
+  const [showKeys, setShowKeys] = useState(false);
+  const [showDetails, setShowDetails] = useState(false);
   const [screen, setScreen] = useState(first === 'home' ? 'home' : 'loading');
   const [options, setOptions] = useState(initialOptions);
   const [ctx, setCtx] = useState(null);
@@ -280,6 +287,7 @@ function App({ options: initialOptions, cwd, first, update, warnings, onExit, mo
   const quit = () => finish(outcome ? { kind: 'done', ...outcome } : { kind: 'quit', code: report?.status ?? 0, output: report?.output });
   const openInstaller = overrides => {
     setOptions({ ...initialOptions, providers: null, wanted: null, scope: null, surfaces: null, surfacesFrom: null, apps: null, yes: false, ...overrides });
+    setShowDetails(false); setShowKeys(false);
     setQuery(''); setSearching(false); setProgress([]); setMessage(null); setStatus(null); go('loading');
   };
   const maintain = (title, args, operation = null, payload = null) => { setOutcome(null); setActivity({ title, args, operation, payload }); setReport({ status: null, output: '' }); go('maintenance'); };
@@ -293,18 +301,17 @@ function App({ options: initialOptions, cwd, first, update, warnings, onExit, mo
       const found = await detect({ cwd, method: options.method });
       if (!live) return;
       const base = defaultChoices(options, found);
-      const fromFlags = options.surfacesFrom === 'flag' || options.surfacesFrom === 'implied';
       const agentsOn = !options.surfaces || options.surfaces.includes('agents');
       const next = { ...base, agents: agentsOn ? base.agents : [], appsFromFlag: options.apps ?? null };
       setToggles({ 'mcp-apps': Boolean(options.surfaces?.includes('mcp-apps')), hosted: Boolean(options.surfaces?.includes('hosted') && found.login), executor: Boolean(options.surfaces?.includes('executor')), bot: Boolean(options.surfaces?.includes('bot')),
-        cli: Boolean(options.surfaces?.includes('cli') || !options.yes && !options.surfaces && channel().kind === 'npx' && !found.state.cli) });
-      // Keep the public support list in registry order, even when an agent is not detected.
-      setOrder(found.agents);
+        cli: Boolean(options.surfaces?.includes('cli')) });
+      // Show detected agents first, retaining the complete catalog.
+      setOrder([...found.agents].sort((a, b) => Number(b.found) - Number(a.found)));
       setCtx(found);
       setChoices(next);
       // --yes answers every question with its default.
       const askAgents = !options.yes && agentsOn && !options.providers && !options.wanted;
-      const askOptions = !options.yes && (!fromFlags || (agentsOn && next.agents.length > 0 && !options.scope) || options.surfaces?.includes('cli') && !options.packageManager);
+      const askOptions = !options.yes && options.surfaces?.includes('cli') && !options.packageManager;
       setShown({ agents: askAgents, options: askOptions });
       go(askAgents ? 'agents' : !options.yes && options.surfaces?.includes('mcp-apps') && !options.apps ? 'apps' : askOptions ? 'options' : options.yes ? 'install' : 'review');
     })();
@@ -313,7 +320,7 @@ function App({ options: initialOptions, cwd, first, update, warnings, onExit, mo
 
   const agentsOn = !options.surfaces || options.surfaces.includes('agents') || shown.agents;
   const visible = order.filter(agent => `${agent.label} ${agent.id}`.toLowerCase().includes(query.toLowerCase()));
-  const opts = useMemo(() => (ctx && choices ? optionRows(ctx, choices, options) : { list: [], notes: [] }), [ctx, choices]);
+  const opts = useMemo(() => (ctx && choices ? optionRows(ctx, choices, options) : { list: [], notes: [] }), [ctx, choices, options]);
   const final = useMemo(() => (ctx && choices ? finalChoices(choices, toggles, agentsOn, ctx) : null), [ctx, choices, toggles, agentsOn]);
   const plan = useMemo(() => (final ? buildPlan(final, ctx) : null), [final]);
   const appChoices = ctx ? ctx.apps.filter(app => !duplicateApps({ ...choices, surfaces: ['agents'] }, ctx).includes(app.id)) : [];
@@ -389,24 +396,34 @@ function App({ options: initialOptions, cwd, first, update, warnings, onExit, mo
     return () => clearTimeout(timer);
   }, [screen]);
 
-  const homeRows = useMemo(() => (screen === 'home' ? installRows(projectRoot(cwd)) : []), [screen]);
-  const MENU = [
-    { id: 'add', label: 'Add or change agents', hint: `Choose from all ${AGENTS.length} supported agents. Search with /. Only selected agents install.` },
-    { id: 'skills', label: 'Skills in this project', hint: 'Copy the Conquistador skill into selected agent folders in this project.' },
-    { id: 'mcp', label: 'MCP connections', hint: 'Choose local MCP clients, Hosted MCP, Executor, or chat bot files.' },
-    { id: 'app', label: 'Use in an app', hint: 'Add Conquistador as a production dependency. Call its tools in your agent and mount MCP beside the app.' },
-    { id: 'hooks', label: 'Hooks', hint: 'Turn prompt and copy-check hooks on or off. Changes apply on the next prompt.' },
-    { id: 'cli', label: 'Keep the CLI installed', hint: 'Keep conquistador on PATH with npm or Bun, including after an npx run.' },
-    { id: 'installed', label: 'Installed items', hint: 'See the scope and path of each install. Update or remove one selected item.' },
-    { id: 'update', label: 'Update', hint: `Get the newest version and refresh every install (${self} update).` },
-    { id: 'doctor', label: 'Check and repair', hint: `Find and repair install and project drift (${self} doctor --fix).` },
-    { id: 'remove', label: 'Remove', hint: `Remove Conquistador from your agents (${self} remove). Your playbooks and config stay.` },
+  const homeRows = useMemo(() => (['home', 'settings', 'connections'].includes(screen) ? installRows(projectRoot(cwd)) : []), [screen]);
+  const SETTINGS = [
+    { id: 'skills', label: 'Skills in this project', hint: 'Add a skill folder for the agents in this project.' },
+    { id: 'hooks', label: 'Hooks', hint: 'Turn guidance for relevant prompts and copy checks on or off.' },
+    { id: 'cli', label: 'Keep the CLI installed', hint: 'Keep the conquistador command with npm or Bun.' },
+    { id: 'installed', label: 'Installed items', hint: 'Inspect, update, or remove one installation.' },
+  ];
+  const CONNECTIONS = [
+    { id: 'mcp', label: 'MCP clients', hint: 'Choose desktop and coding apps to connect.' },
+    { id: 'executor', label: 'Executor', hint: 'Connect Conquistador to Executor.' },
+    { id: 'hosted', label: 'Hosted MCP', hint: 'Sign in for remote apps.' },
+    { id: 'bot', label: 'Chat bot files', hint: 'Export files for GPTs, Claude Projects, and Gems.' },
+    { id: 'app', label: 'Use in an app', hint: 'Use the library in your own app.' },
+  ];
+  const MENU = screen === 'settings' ? SETTINGS : screen === 'connections' ? CONNECTIONS : [
+    { id: 'add', label: 'Add or change agents', hint: `Choose from all ${AGENTS.length} supported agents.` },
+    { id: 'connections', label: 'Connect apps', hint: 'MCP clients, Executor, remote apps, and chat bots. Nothing connects automatically.' },
+    { id: 'doctor', label: 'Check and repair', hint: 'Check your installations and repair drift.' },
+    { id: 'update', label: 'Update', hint: 'Get the newest version and refresh your installations.' },
+    { id: 'settings', label: 'Settings', hint: 'Skills, hooks, installed items, and keeping the CLI.' },
+    { id: 'remove', label: 'Remove', hint: 'Remove Conquistador from your agents. Your playbooks and config stay.' },
     { id: 'quit', label: 'Quit', hint: 'Close this screen.' },
   ];
 
   useInput((input, key) => {
     const ctrlC = key.ctrl && input === 'c';
     const up = key.upArrow || input === 'k', down = key.downArrow || input === 'j';
+    if (screen === 'agents' && showKeys) { if (key.escape || key.return || input === '?') setShowKeys(false); else if (ctrlC || input === 'q') cancel(); return; }
     if (screen === 'agents' && searching) {
       if (key.escape || key.return) { setSearching(false); return; }
       if (ctrlC) { cancel(); return; }
@@ -457,17 +474,22 @@ function App({ options: initialOptions, cwd, first, update, warnings, onExit, mo
     if (screen === 'done') {
       if (up) setOffset(value => Math.max(0, value - 1));
       else if (down) setOffset(value => Math.min(limit.current, value + 1));
+      else if (input === 'm') go('connections');
       else if (key.return) go('home');
       else if (ctrlC || key.escape || input === 'q') finish({ kind: 'done', ...outcome });
       return;
     }
-    if (screen === 'home') {
+    if (['home', 'settings', 'connections'].includes(screen)) {
+      if (key.escape && screen !== 'home') { go('home'); return; }
+      if (input === 'm' && screen === 'home') { go('connections'); return; }
       if (ctrlC || key.escape || input === 'q') { quit(); return; }
       if (up) setCursor(value => (value + MENU.length - 1) % MENU.length);
       else if (down) setCursor(value => (value + 1) % MENU.length);
       else if (key.return) {
         const choice = MENU[cursor].id;
         if (choice === 'quit') quit();
+        else if (choice === 'settings' || choice === 'connections') go(choice);
+        else if (['executor', 'hosted', 'bot'].includes(choice)) openInstaller({ surfaces: [choice] });
         else if (choice === 'add') openInstaller({ surfaces: ['agents'] });
         else if (choice === 'skills') openInstaller({ surfaces: ['agents'], scope: 'project' });
         else if (choice === 'mcp') openInstaller({ surfaces: ['mcp-apps'] });
@@ -493,6 +515,7 @@ function App({ options: initialOptions, cwd, first, update, warnings, onExit, mo
     if (screen === 'agents') {
       if (key.escape && query) { setQuery(''); setCursor(0); }
       else if (key.escape) cancel();
+      else if (input === '?') setShowKeys(true);
       else if (input === '/') setSearching(true);
       else if (up && visible.length) setCursor(value => (value + visible.length - 1) % visible.length);
       else if (down && visible.length) setCursor(value => (value + 1) % visible.length);
@@ -526,7 +549,7 @@ function App({ options: initialOptions, cwd, first, update, warnings, onExit, mo
     }
     if (screen === 'options') {
       const list = opts.list;
-      if (key.escape) { if (shown.agents) go('agents'); else cancel(); }
+      if (key.escape) go('review');
       else if (up) setCursor(value => (value + list.length - 1) % list.length);
       else if (down) setCursor(value => (value + 1) % list.length);
       else if (key.leftArrow || key.rightArrow || input === ' ') {
@@ -544,6 +567,8 @@ function App({ options: initialOptions, cwd, first, update, warnings, onExit, mo
       return;
     }
     if (screen === 'review') {
+      if (input === 'o') { go('options'); return; }
+      if (input === 'd') { setShowDetails(value => !value); setOffset(0); return; }
       if (key.escape) { if (shown.options) go('options'); else if (shown.agents) go('agents'); else cancel(); }
       else if (up) setOffset(value => Math.max(0, value - 1));
       else if (down) setOffset(value => Math.min(limit.current, value + 1));
@@ -562,18 +587,17 @@ function App({ options: initialOptions, cwd, first, update, warnings, onExit, mo
       h(Text, null, h(Spinner, { color: c.brand }), ' Detecting')), [['esc', 'quit']]);
   }
 
-  if (screen === 'home') {
+  if (['home', 'settings', 'connections'].includes(screen)) {
     const here = installsHere(projectRoot(cwd));
     const lead = here.agents.find(agent => agent.slash) ?? here.agents[0];
     const notice = updateNotice(update.cached, version, channel().kind);
     const state = readState();
     const appLabels = Object.keys(state.mcpApps ?? {}).map(id => appById(id)?.label).filter(Boolean);
     const subtitle = `${AGENTS.length} supported agents · Manage your installs.`;
-    const support = compact ? [] : rows('Claude Code · Codex · Cursor · Copilot · Gemini · OpenCode', inner).slice(0, 2);
     const installedLabels = [...new Set(homeRows.map(row => row.label ?? row.agent.label)), ...appLabels, ...(state.executor ? ['Executor'] : []), ...(state.cli ? ['CLI command'] : [])];
     const installed = wide ? [] : rows(`Installed: ${installedLabels.join(', ') || 'choose an option below'}`, inner).slice(0, compact ? 1 : 2);
     const hints = wide ? [] : rows(MENU[cursor].hint, inner).slice(0, compact ? 1 : 2);
-    const capacity = room(support.length + installed.length + 1 + (lead ? 1 : 0) + (notice ? 1 : 0) + hints.length + (hints.length && !compact ? 1 : 0), subtitle);
+    const capacity = room(installed.length + 1 + (lead ? 1 : 0) + (notice ? 1 : 0) + hints.length + (hints.length && !compact ? 1 : 0), subtitle);
     const menu = windowed(MENU, cursor, capacity);
 
     const menuRows = [
@@ -583,8 +607,7 @@ function App({ options: initialOptions, cwd, first, update, warnings, onExit, mo
     ];
 
     const bodyHeight = menu.shown.length + Number(Boolean(menu.above)) + Number(Boolean(menu.below));
-    return frame(h(Card, { c, width, title: 'Conquistador is installed', subtitle },
-      ...support.map((text, index) => h(Text, { key: `support${index}`, color: c.sky }, text)),
+    return frame(h(Card, { c, width, title: screen === 'settings' ? 'Settings' : screen === 'connections' ? 'Connect apps' : 'Conquistador is installed', subtitle },
       ...installed.map((text, index) => h(Text, { key: `installed${index}`, dimColor: true }, text)),
       h(Text, { color: homeRows.some(row => row.stale) ? c.sticky : c.ok, wrap: 'truncate-end' }, homeRows.some(row => row.stale) ? '! An installed copy needs update or repair.' : `${here.agents.length} ${here.agents.length === 1 ? 'agent' : 'agents'} installed · ${appLabels.length} MCP clients · hooks ${hooksState().on ? 'on' : 'off'}`),
       lead ? h(Text, { color: c.brand, wrap: 'truncate-end' }, `In ${lead.label}: ${nextStep(lead, cwd)}`) : null,
@@ -592,7 +615,7 @@ function App({ options: initialOptions, cwd, first, update, warnings, onExit, mo
       wide ? h(Columns, { c, mainWidth, sideWidth, height: bodyHeight, main: menuRows,
         side: h(Detail, { c, width: sideWidth, height: bodyHeight, title: MENU[cursor].label, description: MENU[cursor].hint, selected: installedLabels, selectionTitle: 'Installed here' }) }) : menuRows,
       hints.length && !compact ? h(Text, { key: 'gap' }, ' ') : null,
-      ...hints.map((text, index) => h(Text, { key: `hint${index}`, dimColor: true, wrap: 'truncate-end' }, text))), [['↑↓', 'move'], ['enter', 'choose'], ['q', 'quit']]);
+      ...hints.map((text, index) => h(Text, { key: `hint${index}`, dimColor: true, wrap: 'truncate-end' }, text))), [['↑↓', 'move'], ['enter', 'choose'], ...(screen === 'home' ? [] : [['esc', 'back']]), ['q', 'quit']]);
   }
 
   if (screen === 'hooks') {
@@ -639,22 +662,29 @@ function App({ options: initialOptions, cwd, first, update, warnings, onExit, mo
     [['y', 'remove'], ['n', 'back']]);
   }
 
+  if (screen === 'agents' && showKeys) {
+    return frame(h(Card, { c, width, title: 'Keyboard shortcuts' },
+      ...['↑↓ or j/k  Move', 'space  Select an agent', '/  Search', 'a  Toggle found agents', 'A  Select all agents', 'n  Clear selection', 'enter  Continue', 'esc  Clear search or cancel', 'q / ctrl-c  Cancel'].map(text => h(Text, { key: text }, text))), [['esc', 'back']]);
+  }
   if (screen === 'agents') {
-    const notes = [...warnings, ...(ctx.found.length ? [] : ['No coding agent found on PATH or in your home folder. A skill-format agent still installs; or turn on an option on the next screen.'])].flatMap(text => rows(`! ${text}`, inner));
+    const notes = [...warnings, ...(ctx.found.length ? [] : ['No coding agent found on PATH or in your home folder. You can still select an agent, or connect an app from More options on Review.'])].flatMap(text => rows(`! ${text}`, inner));
     const detail = visible[Math.min(cursor, visible.length - 1)];
     const describe = !detail ? 'No matching agent. Clear the search with Escape.' : detail.found
-      ? detail.how === 'skill' ? 'Copies the Conquistador skill folder into your agent.' : 'Global installs include the skill, hooks, and MCP. Project installs copy one skill folder.'
-      : detail.how === 'skill' ? 'Not found. The skill folder still installs; the agent reads it after you install the agent.' : `Not found. Install ${detail.label} first, or choose This project on the next screen.`;
+      ? detail.how === 'skill' ? 'Copies the Conquistador skill folder into your agent.' : 'Adds Conquistador to this agent.'
+      : detail.how === 'skill' ? 'Not found. The skill folder still installs; the agent reads it after you install the agent.' : `Not found. Install ${detail.label} first, or choose This project in More options.`;
 
     const hints = wide ? [] : rows(describe, inner).slice(0, 2);
     const subtitle = 'Select one or more agents. Nothing changes until you confirm.';
-    const capacity = room(notes.length + hints.length + (hints.length ? 1 : 0) + 1 + (query || searching ? 1 : 0), subtitle);
+    const capacity = room(notes.length + hints.length + (hints.length ? 1 : 0) + 2 + (query || searching ? 1 : 0), subtitle);
     const list = windowed(visible, cursor, capacity);
 
     const listRows = [
       list.above ? h(Text, { key: 'above', dimColor: true }, `↑ ${list.above} more`) : null,
-      ...list.shown.map((agent, index) => h(FocusRow, { key: agent.id, c, width: mainWidth, label: agent.label,
-        focused: list.start + index === cursor, selected: choices.agents.includes(agent.id), status: agent.found ? 'found' : 'not found' })),
+      ...list.shown.flatMap((agent, index) => [
+        !agent.found && (index === 0 || list.shown[index - 1].found) ? h(Text, { key: 'undetected', dimColor: true }, 'Not on this computer') : null,
+        h(FocusRow, { key: agent.id, c, width: mainWidth, label: agent.label,
+          focused: list.start + index === cursor, selected: choices.agents.includes(agent.id), status: agent.found ? 'found' : '' }),
+      ]),
       list.below ? h(Text, { key: 'below', dimColor: true }, `↓ ${list.below} more`) : null,
     ];
 
@@ -668,7 +698,7 @@ function App({ options: initialOptions, cwd, first, update, warnings, onExit, mo
           selected: AGENTS.filter(agent => choices.agents.includes(agent.id)).map(agent => agent.label), selectionTitle: 'Selected agents' }) }) : listRows,
       hints.length ? h(Text, { key: 'gap' }, ' ') : null,
       ...hints.map((text, index) => h(Text, { key: `h${index}`, dimColor: true }, text))),
-    searching ? [['type', 'search'], ['enter', 'finish search'], ['esc', 'stop search']] : [['↑↓', 'move'], ['space', 'toggle'], ['/', 'search'], ['a', 'found'], ['A', 'all'], ['n', 'clear'], ['enter', 'continue'], ['esc', query ? 'clear search' : 'quit']]);
+    searching ? [['type', 'search'], ['enter', 'finish search'], ['esc', 'stop search']] : [['space', 'select'], ['enter', 'continue'], ['/', 'search'], ['?', 'keys']]);
   }
 
   if (screen === 'apps') {
@@ -728,11 +758,11 @@ function App({ options: initialOptions, cwd, first, update, warnings, onExit, mo
   }
 
   if (screen === 'review') {
-    const lines = reviewLines(plan, inner);
+    const lines = reviewLines(plan, inner, showDetails);
     const subtitle = plan.surfaces.length ? 'Nothing changes until you press Enter.' : 'Nothing to install yet.';
     return frame(h(Card, { c, width, title: 'Review the changes', subtitle },
       h(Scroll, { c, lines, offset, height: room(0, subtitle), limit })),
-    plan.surfaces.length ? [['enter', 'install'], ['↑↓', 'scroll'], ['esc', 'back'], ['q', 'quit']] : [['esc', 'back'], ['q', 'quit']]);
+    plan.surfaces.length ? [['enter', 'install'], ['o', 'more options'], ['d', showDetails ? 'hide details' : 'details'], ['↑↓', 'scroll'], ['esc', 'back']] : [['o', 'more options'], ['esc', 'back'], ['q', 'quit']]);
   }
 
   if (screen === 'install') {
@@ -751,10 +781,14 @@ function App({ options: initialOptions, cwd, first, update, warnings, onExit, mo
 
   // Done.
   const lines = doneLines({ ...outcome, cwd, task: options.task }, inner);
+  const connected = new Set([...Object.keys(ctx.state.mcpApps ?? {}), ...outcome.results.filter(item => item.ok).map(item => item.app)]);
+  const extras = ctx.apps.filter(app => app.found && !connected.has(app.id) && !duplicateApps(final, ctx).includes(app.id)).map(app => app.label);
+  if (ctx.executor.installed && !ctx.state.executor && !outcome.results.some(item => item.surface === 'executor' && item.ok)) extras.push('Executor');
+  if (extras.length) lines.splice(2, 0, ...rows(`Also found: ${extras.join(', ')}. Press m to connect.`, inner).map(text => ({ text, dim: true })), { text: '' });
   const subtitle = 'Conquistador works inside your agent. The terminal only installs it.';
   return frame(h(Card, { c, width, title: outcome.code ? 'Done, with problems' : 'Done', subtitle },
     h(Scroll, { c, lines, offset, height: room(0, subtitle), limit })),
-  [['enter', 'manage installs'], ['↑↓', 'scroll'], ['q', 'exit']]);
+  [['enter', 'manage installs'], ['m', 'connect apps'], ['↑↓', 'scroll'], ['q', 'exit']]);
 }
 
 // Run the installer ('install') or the home screen ('home'). Returns the exit code.

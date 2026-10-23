@@ -1,13 +1,13 @@
 {
   "name": "conquistador",
-  "version": "0.10.1",
+  "version": "0.10.2",
   "description": "The Conquistador CLI: skills, agent installation, MCP, and plugins.",
   "license": "MIT",
   "type": "module",
   "bin": { "conquistador": "bin/conquistador.js" },
   "files": ["bin", "README.md", "LICENSE"],
   "engines": { "node": ">=22.18" },
-  "dependencies": { "@forsvn/conquistador": "0.10.1" },
+  "dependencies": { "@forsvn/conquistador": "0.10.2" },
   "publishConfig": { "access": "public" },
   "repository": { "type": "git", "url": "https://github.com/forsvn-labs/conquistador", "directory": "packages/conquistador" }
 }

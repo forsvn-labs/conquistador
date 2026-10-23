@@ -23,7 +23,7 @@ export const SURFACE_IDS = ['agents', 'mcp-apps', 'hosted', 'executor', 'bot', '
 export const SURFACE_LABELS = { agents: 'Coding agents', 'mcp-apps': 'MCP clients', hosted: 'Hosted MCP', executor: 'Executor', bot: 'Chat bots', cli: 'CLI command' };
 const SURFACE_ALIASES = { agent: 'agents', plugin: 'agents', skills: 'agents', mcp: 'mcp-apps', apps: 'mcp-apps', 'mcp-app': 'mcp-apps', remote: 'hosted', bots: 'bot' };
 const DEFAULT_HOSTED_URL = 'https://mcp.forsvn.com/mcp';
-const DOCS = 'https://github.com/forsvn-labs/conquistador#readme';
+const DOCS = 'https://conquistador.app/docs';
 const TOTAL = 4;
 
 // Old install flags. Each preselects a surface and prints one line about the new flag.
@@ -168,17 +168,10 @@ export function duplicateApps(choices, ctx) {
 export const dedupeNote = id => `${appById(id).label} gets the plugin, which includes the MCP server. It is not configured twice.`;
 
 // Answers from flags and detection. Interactive questions start from these.
-export function defaultChoices(options, ctx, { interactive = false } = {}) {
+export function defaultChoices(options, ctx) {
   const agents = options.providers ?? (options.wanted ? [options.wanted] : ctx.found.map(agent => agent.id));
   const scope = options.scope ?? (ctx.project.length ? 'project' : 'global');
-  let surfaces = options.surfaces;
-  if (!surfaces) {
-    if (!interactive) surfaces = ['agents'];
-    else {
-      const appsFound = ctx.apps.filter(app => app.found && !duplicateApps({ surfaces: ['agents'], scope, agents }, ctx).includes(app.id));
-      surfaces = [...(agents.length ? ['agents'] : []), ...(appsFound.length ? ['mcp-apps'] : []), ...(ctx.executor.installed ? ['executor'] : [])];
-    }
-  }
+  const surfaces = options.surfaces ?? ['agents'];
   const choices = { surfaces, agents, scope, hooks: options.hooks, apps: [], packageManager: options.packageManager ?? 'npm', executorName: options.executorName ?? 'conquistador', botOut: resolve(ctx.cwd, options.botOut ?? 'conquistador-bot') };
   const skip = duplicateApps(choices, ctx);
   choices.apps = options.apps ?? ctx.apps.filter(app => app.found && !skip.includes(app.id)).map(app => app.id);
@@ -522,7 +515,7 @@ export async function runInstaller(options, { cwd = process.cwd(), ui, width, in
   ui.log.message(wrap('Growth, marketing, and sales playbooks for your AI agents.\nAbout a minute. Nothing changes until you confirm.'));
   for (const note of preflightNotes(update)) ui.log.warn(wrap(note));
   const ctx = await detect({ cwd, method: options.method });
-  const choices = defaultChoices(options, ctx, { interactive: !options.yes });
+  const choices = defaultChoices(options, ctx);
 
   // 2. Surfaces.
   if (!options.yes && options.surfacesFrom !== 'flag' && options.surfacesFrom !== 'implied') {

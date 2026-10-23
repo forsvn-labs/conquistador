@@ -48,6 +48,14 @@ linked-provider lifecycle, and broader model/human task-quality acceptance remai
 unverified. Existing lint diagnostics and optional Promptfoo/node-forge findings
 remain open. They are not represented as release verification.
 
+## Current work
+
+A simpler installer is prepared for 0.10.2: Agents → Review → Install → Done, optional
+extras, commands behind Details, and grouped management controls. This is not yet a
+published release. The 68 installer E2E cases passed across the full run and focused
+correction runs; 75 focused contract tests passed. These use isolated fixtures, not
+live provider acceptance. Website changes are owned in the separate landing-page repository.
+
 ## Next steps
 
 1. Complete additional native-client, OAuth, ARM, and linked-provider acceptance
