@@ -6,6 +6,14 @@ rss: true
 
 This page lists the changes that users see. The full record, with pull requests, commits, and verification, is [CHANGELOG.md](https://github.com/forsvn-labs/conquistador/blob/main/CHANGELOG.md) in the repository.
 
+<Update label="0.10.1" description="2026-10-23">
+  - Start setup with `npx conquistador@latest`. Global installation is optional.
+  - Use [standalone MCP](/install/mcp-apps) in coding agents, desktop clients, and remote apps without activating skills or hooks.
+  - Configure only Executor with `npx conquistador@latest mcp install --executor`.
+  - Use the [Composio example](https://github.com/forsvn-labs/conquistador/tree/main/examples/composio) for previewed registration, connection, discovery, resync, and read verification. Live Composio acceptance is not claimed.
+  - Hosted MCP is updated. Real Executor calls verify engineering-task silence and focused outreach guidance.
+</Update>
+
 <Update label="0.7.0" description="2026-10-14">
   - Add Conquistador to your app with `npm i @forsvn/conquistador@^0.7.0` or `bun add @forsvn/conquistador@^0.7.0`. The typed library exposes all eight tools. Your app supplies the model and context.
   - Mount MCP beside your app on the same port with the Node or Fetch handler. The [app guide](/install/app) includes the public imports and a runnable example.

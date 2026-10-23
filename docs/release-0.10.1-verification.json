@@ -1,0 +1,53 @@
+{
+  "verifiedAt": "2026-10-23T10:03:01.117Z",
+  "sourceCommit": "95aca7f2122d6dbd94937ac588646619e422cb11",
+  "release": "https://github.com/forsvn-labs/conquistador/releases/tag/v0.10.1",
+  "publicationRun": "https://github.com/forsvn-labs/conquistador/actions/runs/39935303698",
+  "checks": [
+    {
+      "name": "@forsvn/conquistador",
+      "version": "0.10.1",
+      "sha256": "33f7fa70863ece869a7c9e06d3544ef9669879e1914113b2c0eabd201b7b9b4c",
+      "tarball": "https://registry.npmjs.org/@forsvn/conquistador/-/conquistador-0.10.1.tgz",
+      "provenance": "https://registry.npmjs.org/-/npm/v1/attestations/@forsvn%2fconquistador@0.10.1",
+      "exactAliasPin": null
+    },
+    {
+      "name": "conquistador",
+      "version": "0.10.1",
+      "sha256": "a3e6300dc8c70fdbc642cef8b3d0f1d340126b1c9a2f688569d6f7de0dc29f72",
+      "tarball": "https://registry.npmjs.org/conquistador/-/conquistador-0.10.1.tgz",
+      "provenance": "https://registry.npmjs.org/-/npm/v1/attestations/conquistador@0.10.1",
+      "exactAliasPin": "0.10.1"
+    }
+  ],
+  "installedSmoke": {
+    "mode": "fresh npm registry installation with isolated home and cache",
+    "checks": [
+      {
+        "name": "fresh registry install of short alias",
+        "passed": true
+      },
+      {
+        "name": "installed CLI version",
+        "passed": true
+      },
+      {
+        "name": "published Executor-only shortcut",
+        "passed": true
+      },
+      {
+        "name": "published Composio example previews OAuth without credentials",
+        "passed": true
+      },
+      {
+        "name": "published standalone MCP handshake version",
+        "passed": true
+      },
+      {
+        "name": "preview and MCP startup create no Conquistador home",
+        "passed": true
+      }
+    ]
+  }
+}

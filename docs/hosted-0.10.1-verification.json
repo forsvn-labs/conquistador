@@ -1,0 +1,96 @@
+{
+  "checkedAt": "2026-10-23T09:42:14.407Z",
+  "version": "0.10.1",
+  "candidateCommit": "b408efc792ef41a9a334b2913da11a510783808c",
+  "endpoint": "https://mcp.forsvn.com/mcp",
+  "workerVersion": "e396a5e3-b83f-4c5d-8771-d92ed260503d",
+  "mode": "Live authenticated Executor MCP calls; existing account credentials retained",
+  "results": [
+    {
+      "case": "engineering-email-delivery",
+      "transportOk": true,
+      "action": "none",
+      "mode": "none",
+      "reason": "no-relevant-capability",
+      "inlined": [],
+      "readNow": [],
+      "readAtStep": [],
+      "situational": []
+    },
+    {
+      "case": "outreach-copy",
+      "transportOk": true,
+      "action": "brief",
+      "mode": "command",
+      "reason": "relevant-capability",
+      "command": "outreach",
+      "play": null,
+      "inlined": [
+        {
+          "path": "skills/conquistador/commands/outreach/ENTRY.md",
+          "title": "Write direct outreach"
+        }
+      ],
+      "readNow": [],
+      "readAtStep": [],
+      "situational": [
+        "skills/conquistador/commands/outreach/references/frameworks/cold-email-frameworks.md",
+        "skills/conquistador/commands/outreach/references/modes/early-stage.md",
+        "skills/conquistador/commands/outreach/references/anti-patterns.md",
+        "skills/conquistador/commands/outreach/references/frameworks/personalization-signals.md",
+        "skills/conquistador/commands/outreach/references/modes/services.md",
+        "skills/conquistador/commands/outreach/references/channels/email.md",
+        "skills/conquistador/commands/outreach/references/frameworks/outreach-decisions.md",
+        "skills/conquistador/commands/outreach/references/frameworks/structures.md",
+        "skills/conquistador/commands/outreach/references/examples/saas-sequence-no-proof.md",
+        "skills/conquistador/commands/outreach/references/proof-types.md",
+        "skills/conquistador/commands/outreach/references/frameworks/sequences.md"
+      ],
+      "provenance": [
+        {
+          "path": "skills/conquistador/commands/outreach/ENTRY.md",
+          "reason": "selected command entry",
+          "bytes": 552,
+          "sha256": "352ea3c4c38b60346d5510ff8b37c6c4faf4a25cfbf72b22af3bba04a7ded3d9",
+          "status": "included"
+        }
+      ],
+      "callerContextStatus": "absent",
+      "budgetBytes": 8000
+    }
+  ],
+  "composio": "Documented API implementation and offline checks only, as requested; no live account test",
+  "releaseCommit": "95aca7f2122d6dbd94937ac588646619e422cb11",
+  "sourceParity": "The only change from deployed candidate b408efc to the release commit is examples/composio/setup.mjs, which is not included in Worker deployment.",
+  "publicEndpoints": [
+    {
+      "path": "/health",
+      "status": 200,
+      "ok": true,
+      "issuer": null,
+      "resource": null,
+      "registration_endpoint": null
+    },
+    {
+      "path": "/.well-known/oauth-authorization-server",
+      "status": 200,
+      "ok": null,
+      "issuer": "https://mcp.forsvn.com",
+      "resource": null,
+      "registration_endpoint": "https://mcp.forsvn.com/oauth/register"
+    },
+    {
+      "path": "/.well-known/oauth-protected-resource",
+      "status": 200,
+      "ok": null,
+      "issuer": null,
+      "resource": "https://mcp.forsvn.com/mcp",
+      "registration_endpoint": null
+    },
+    {
+      "path": "/mcp",
+      "unauthenticatedStatus": 401,
+      "challenge": "Bearer realm=\"OAuth\", resource_metadata=\"https://mcp.forsvn.com/.well-known/oauth-protected-resource/mcp\", scope=\"mcp:read\""
+    }
+  ]
+}
