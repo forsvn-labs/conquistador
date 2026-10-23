@@ -5029,7 +5029,7 @@
     },
     {
       "path": "tools/context-selection.mjs",
-      "sha256": "5f2f919406e8fd9dd389a97f1c77883c4384987b55224237c99e1a38fa751742"
+      "sha256": "bc2013ff7c652b52d2bdaea0f529c0b7b5d8b417bd500c85acb9c62df0d26898"
     },
     {
       "path": "agents/conquistador/agent.json",

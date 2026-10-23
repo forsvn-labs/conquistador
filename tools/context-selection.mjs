@@ -285,7 +285,7 @@ export function selectRequestContext(prompt, { root = moduleRoot, automatic = fa
 
     const technicalStage = technicalNoun.test(clause);
 
-    for (const item of matchingMethods(clause.split(/\b(?:for|about|announcing)\b/i)[0], contract, { permitGrowthInference: !codingAction || (businessDiagnosisRequested && !technicalStage) })) consider(item);
+    for (const item of matchingMethods(clause.replace(/^\s*(?:for|about)\s+/i, '').split(/\b(?:for|about|announcing)\b/i)[0], contract, { permitGrowthInference: !codingAction || (businessDiagnosisRequested && !technicalStage) })) consider(item);
   }
 
   const productSpec = /\b(?:product requirements document|product requirements|prd)\b/i.test(query);
@@ -308,7 +308,7 @@ export function selectRequestContext(prompt, { root = moduleRoot, automatic = fa
   }
   if (!clauses.some(clause => feedbackOptIn.test(clause))) excluded.push({ name: 'feedback', reason: 'explicit-only' });
   // An explicit command stays a command. Otherwise a matching play brings its first step.
-  const requestedOutcome = clauses.map(clause => clause.split(/\b(?:for|about|announcing)\b/i)[0]).join('. ');
+  const requestedOutcome = clauses.map(clause => clause.replace(/^\s*(?:for|about)\s+/i, '').split(/\b(?:for|about|announcing)\b/i)[0]).join('. ');
   const play = invoked?.kind === 'command' ? null : selectPlay(productSpec ? 'product spec' : requestedOutcome, selectedAll, contract, restriction, invoked?.name);
   if (productSpec && play?.name === 'spec') selectedAll.length = 0;
   const first = play?.chain.find(step => step.command && !step.when) ?? play?.chain.find(step => step.command);
