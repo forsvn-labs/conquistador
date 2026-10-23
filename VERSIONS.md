@@ -1,7 +1,7 @@
 # Versions
 
 Product, plugin, host, and portable-agent manifests identify candidate version `0.9.1`.
-The latest verified published release remains `0.9.0` until the approved patch release
+The latest published release remains `0.9.0` until the approved patch release
 passes its tagged-archive and paired npm publication checks. Both npm package names
 use the same exact product version.
 [ROADMAP.md](ROADMAP.md) owns current rollout state; [CHANGELOG.md](CHANGELOG.md) records
