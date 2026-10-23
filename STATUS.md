@@ -34,6 +34,12 @@ and the optional Promptfoo/node-forge findings remain open.
 
 ## Planned and next steps
 
+The [2026-10 behavior review](docs/BEHAVIOR-REVIEW-2026-10.md) reproduces unrelated
+engineering-task activation, fallback bypass of an off profile, and excessive required
+reading. Its offline audit records five admission failures in thirteen synthetic prompts;
+83 existing focused tests pass. Fix shared admission and automatic hook enforcement before
+expanding proactive guidance. The review changes no runtime behavior or release status.
+
 1. Resolve the existing hosted-access blocker through its authorized owner,
    then verify the exact candidate and hosted behavior.
 2. Complete native client, Windows/ARM, OAuth, and linked-provider
