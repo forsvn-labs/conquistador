@@ -3,7 +3,8 @@
 This review covers the application repository at baseline `8d40f9841088fc7f73039890a950483b9669342d`:
 the CLI and terminal installer, public npm imports, stdio/HTTP MCP, and the runtime,
 catalog and eval contracts. The landing site and separate desktop repository are outside
-this checkout. Changes are unreleased in [draft PR #84](https://github.com/forsvn-labs/conquistador/pull/84).
+this checkout. Changes belong to [PR #84](https://github.com/forsvn-labs/conquistador/pull/84).
+ROADMAP.md and VERSIONS.md own the current release and publication status.
 
 ## Verified defects and changes
 

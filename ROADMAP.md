@@ -2,6 +2,14 @@
 
 ## Current handoff
 
+2026-10-23: Hung authorized shipping after verification. PR #84 is being prepared
+for patch release 0.9.1 through the existing merge, tag, seven-asset GitHub release
+and trusted paired npm publication workflow. The original reviewed head `6e76d9b`
+has seven passing CI jobs; the versioned candidate must pass fresh checks and review
+before normal merge. Production credentials, infrastructure scope and user-installed
+agent state are unchanged. Release identity and publication evidence will be recorded
+after the remote results are verified.
+
 2026-10-22: [draft PR #84](https://github.com/forsvn-labs/conquistador/pull/84) contains
 unreleased application review fixes: contained brief reads after a playbook changes,
 linear stdio frame assembly, and bounded streamed-upload failure/cancellation recovery.
