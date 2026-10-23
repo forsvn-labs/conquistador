@@ -2,7 +2,7 @@
 // Failure modes: engineering false positives, quoted/negated activation, disabled-profile
 // bypass, excessive context for small tasks, repeated injection, stop enforcement, and
 // loss of legitimate marketing routes. --strict fails on the proposed admission contract.
-import { cpSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { cpSync, mkdtempSync, readFileSync, realpathSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -10,7 +10,7 @@ import { spawnSync } from 'node:child_process';
 import assert from 'node:assert/strict';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const temporary = mkdtempSync(join(tmpdir(), 'conquistador-behavior-'));
+const temporary = realpathSync(mkdtempSync(join(tmpdir(), 'conquistador-behavior-')));
 const keys = ['CONQUISTADOR_HOME', 'CONQUISTADOR_CACHE', 'CONQUISTADOR_STATE', 'CONQUISTADOR_PLAYBOOKS', 'CONQUISTADOR_HOOKS', 'GROK_HOOK_EVENT'];
 const previous = Object.fromEntries(keys.map(key => [key, process.env[key]]));
 Object.assign(process.env, {
@@ -41,13 +41,18 @@ try {
     ['Write a cold email and implement its retry handler', true],
   ];
   const hook = (event, input) => {
-    const child = spawnSync(process.execPath, [join(root, 'hooks/conquistador-hook.mjs'), 'codex', event], {
+    const child = spawnSync(process.execPath, [join(projectPackage, 'hooks/conquistador-hook.mjs'), 'codex', event], {
       cwd: temporary, env: process.env, input: JSON.stringify(input), encoding: 'utf8', timeout: 15000,
     });
     assert.equal(child.status, 0, child.stderr);
     assert.equal(child.stderr, '');
     return child.stdout.trim() ? JSON.parse(child.stdout) : null;
   };
+  // Automatic behavior is exercised with an explicit project profile, not the manual default.
+  const projectPackage = join(temporary, 'project-package');
+  for (const directory of ['skills', 'tools', 'hooks']) cpSync(join(root, directory), join(projectPackage, directory), { recursive: true });
+  cpSync(join(root, 'package.json'), join(projectPackage, 'package.json'));
+  writeFileSync(join(projectPackage, 'skills/conquistador/operator-profile.json'), JSON.stringify({ activation: 'project' }));
   const rows = cases.map(([prompt, expectedAutoBrief]) => {
     const route = selectRequestContext(prompt, { root });
     const brief = createBrief(prompt, { root, playbooks: [], persistCache: false, cwd: null });
@@ -82,11 +87,28 @@ try {
   writeFileSync(transcript, JSON.stringify({ type: 'assistant', message: { content: 'Here is the system design.' } }) + '\n');
   const stop = hook('stop', { ...input, stop_hook_active: false, last_assistant_message: 'Here is the system design.' });
   const repeatStop = hook('stop', { ...input, stop_hook_active: false });
+  const reuseInput = { prompt: 'Write a cold email', session_id: 'review-reuse', transcript_path: transcript };
+  writeFileSync(transcript, '');
+  hook('prompt', reuseInput);
+  const selected = createBrief(reuseInput.prompt, { root: projectPackage, playbooks: [], persistCache: false, cwd: null });
+  const readEvents = [...selected.methods, ...selected.must].flatMap((item, index) => [
+    { type: 'assistant', message: { role: 'assistant', content: [{ type: 'tool_use', id: `read-${index}`, name: 'Read', input: { file_path: item.absolute } }] } },
+    { type: 'user', message: { role: 'user', content: [{ type: 'tool_result', tool_use_id: `read-${index}`, content: readFileSync(item.absolute, 'utf8') }] } },
+  ]);
+  writeFileSync(transcript, readEvents.map(event => JSON.stringify(event)).join('\n') + '\n');
+  const verifiedReadsSuppressAdvice = hook('prompt', reuseInput) === null;
+  writeFileSync(transcript, 'rotated context\n');
+  const rotatedContextRestoresAdvice = hook('prompt', reuseInput) !== null;
+  const entry = selected.methods[0].absolute;
+  writeFileSync(entry, readFileSync(entry, 'utf8') + '\nUpdated synthetic method rule.\n');
+  const changedResourceRestoresAdvice = hook('prompt', reuseInput) !== null;
   const api = createConquistador();
   const apiResult = api.callTool('conquistador_brief', { task: cases[1][0] });
   const config = { schemaVersion: 1, enabled: true, events: ['before-delivery'] };
   const report = {
+    hookProfile: 'project',
     node: process.version, rows, disabled,
+    reuse: { verifiedReadsSuppressAdvice, rotatedContextRestoresAdvice, changedResourceRestoresAdvice },
     lifecycle: {
       repeatedPromptSameContext: JSON.stringify(first) === JSON.stringify(second),
       engineeringStopDecision: stop?.decision ?? null, repeatedStopDecision: repeatStop?.decision ?? null,
@@ -99,7 +121,7 @@ try {
     admissionFailures: rows.filter(row => !row.admissionPass).length,
   };
   console.log(JSON.stringify(report, null, 2));
-  if (process.argv.includes('--strict') && (report.admissionFailures || disabled.brief !== 'none' || stop?.decision === 'block')) process.exitCode = 1;
+  if (process.argv.includes('--strict') && (report.admissionFailures || disabled.brief !== 'none' || stop?.decision === 'block' || !verifiedReadsSuppressAdvice || !rotatedContextRestoresAdvice || !changedResourceRestoresAdvice)) process.exitCode = 1;
 } finally {
   rmSync(temporary, { recursive: true, force: true });
   for (const [key, value] of Object.entries(previous)) {

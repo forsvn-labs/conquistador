@@ -129,9 +129,9 @@ test('warm briefs refuse resources that cease to be bounded regular text files',
       const after = brief();
       assert.doesNotMatch(JSON.stringify(after), new RegExp(canary));
       assert.ok(!after.isError, 'Other safe playbooks must remain usable.');
-      assert.ok(after.structuredContent.readNow.includes(selected.path));
+      assert.ok(after.structuredContent.provenance.some(item => item.path === selected.path && item.status === 'unavailable'));
       assert.ok(!after.structuredContent.inlined.some(item => item.path === selected.path));
-      assert.ok(after.content[0].text.includes(JSON.stringify({ id: selected.path, status: 'unavailable' })));
+      assert.equal(after.structuredContent.readNow.length, 0);
     });
   }
 });

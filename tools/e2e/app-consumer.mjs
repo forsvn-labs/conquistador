@@ -48,7 +48,8 @@ if (cq) {
   await test('compact briefs preserve required reads and a second caller has no first-caller context', () => {
     const second = cq.callTool('conquistador_brief', { task, context: 'Product: Cedar helps independent designers.', size: 'compact' });
     assert.ok(second.content[0].text.length < brief.content[0].text.length);
-    assert.ok(second.structuredContent.readNow.length > 0);
+    assert.equal(second.structuredContent.readNow.length, 0);
+    assert.ok(second.structuredContent.situational.length > 0);
     assert.doesNotMatch(second.content[0].text, /Ledgerline|PRIVATE_/);
   });
   await test('methods, files, search, and relative reads use the packaged library', () => {
@@ -270,7 +271,7 @@ if (cq) {
       const result = cq.callTool('conquistador_brief', { task, context });
       assert.ok(!result.isError);
       assert.doesNotMatch(JSON.stringify(result), /PRIVATE_REPLACED_PLAYBOOK_CANARY/);
-      assert.ok(result.structuredContent.readNow.includes(selected.path));
+      assert.ok(result.structuredContent.provenance.some(item => item.path === selected.path && item.status === 'unavailable'));
     } finally {
       rmSync(target, { force: true });
       writeFileSync(target, original);

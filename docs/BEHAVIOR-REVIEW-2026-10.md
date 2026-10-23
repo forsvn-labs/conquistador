@@ -33,7 +33,7 @@ node docs/behavior-review-2026-10.mjs --strict
 ```
 
 The first command records current behavior and exits successfully if execution succeeds.
-The strict command exits 1 on this source. It checks the proposed admission expectations,
+At the reviewed baseline, the strict command exited 1. The implementation below now passes it. It checks the proposed admission expectations,
 disabled-profile behavior, and unrelated-task stop enforcement. Those failures are findings,
 not a claim that the product has been fixed. It does not judge the quality of generated work.
 
@@ -262,3 +262,27 @@ protocol handling, and hosted briefing behavior. They did not catch the new cros
 The local run used Node v26.9.0, not the documented Node 24 baseline. No native host session,
 installed-package version, live hosted deployment, or model quality was certified by this review.
 Production behavior is unchanged. This report and its reproducer are the review deliverables.
+
+
+## Implementation candidate
+
+Draft PR #86 implements the review across the shared selector, brief engine, native hooks,
+project helper, and app tools. It changes automatic enforcement to advisory guidance and adds
+short command entries. Detailed procedures and the full library remain available on demand.
+The [candidate output](behavior-review-2026-10.after.json) uses the same thirteen requests with
+an explicit project profile for automatic-hook checks. The baseline JSON remains unchanged.
+The updated script also verifies read-based reuse, transcript rotation, and resource changes.
+
+Both global off and an off profile remain final. Manual is the installed default. Explicit
+project-hook enablement is a supported opt-in for automatic advice without editing managed
+package files. Status distinguishes configured activation, effective advice, observed event
+sources, and possible duplicate registration. Native registrations outside project settings
+remain host-managed and are not claimed as inspected.
+
+The total public tool result includes provenance within its budget. Assistance uses 4,000 bytes,
+compact commands use 8,000 bytes, and commands and workflows use 16,000 bytes. Full resources
+are included only when they fit. Deferred resources do not become required reads. Oversized
+caller context remains with the caller and receives an explicit status.
+
+Verification is local and deterministic. No model quality, native host activation, deployment,
+or production audience outcome is established. STATUS.md owns current check and release state.

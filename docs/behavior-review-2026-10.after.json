@@ -1,0 +1,258 @@
+{
+  "hookProfile": "project",
+  "node": "v26.9.0",
+  "rows": [
+    {
+      "prompt": "Help me engineer a mail outreach system",
+      "expectedAutoBrief": false,
+      "route": "abstain",
+      "routeReason": "excluded-request",
+      "brief": "none",
+      "commands": [],
+      "play": null,
+      "files": 0,
+      "sourceBytes": 0,
+      "fullBytes": 0,
+      "compactBytes": 0,
+      "compactRequiredReads": 0,
+      "hookBytes": 0,
+      "admissionPass": true
+    },
+    {
+      "prompt": "Implement the API handler for cold email retries",
+      "expectedAutoBrief": false,
+      "route": "abstain",
+      "routeReason": "excluded-request",
+      "brief": "none",
+      "commands": [],
+      "play": null,
+      "files": 0,
+      "sourceBytes": 0,
+      "fullBytes": 0,
+      "compactBytes": 0,
+      "compactRequiredReads": 0,
+      "hookBytes": 0,
+      "admissionPass": true
+    },
+    {
+      "prompt": "Debug the outreach webhook",
+      "expectedAutoBrief": false,
+      "route": "abstain",
+      "routeReason": "excluded-request",
+      "brief": "none",
+      "commands": [],
+      "play": null,
+      "files": 0,
+      "sourceBytes": 0,
+      "fullBytes": 0,
+      "compactBytes": 0,
+      "compactRequiredReads": 0,
+      "hookBytes": 0,
+      "admissionPass": true
+    },
+    {
+      "prompt": "Design the database schema for a sales pipeline",
+      "expectedAutoBrief": false,
+      "route": "abstain",
+      "routeReason": "excluded-request",
+      "brief": "none",
+      "commands": [],
+      "play": null,
+      "files": 0,
+      "sourceBytes": 0,
+      "fullBytes": 0,
+      "compactBytes": 0,
+      "compactRequiredReads": 0,
+      "hookBytes": 0,
+      "admissionPass": true
+    },
+    {
+      "prompt": "Do not write cold email copy",
+      "expectedAutoBrief": false,
+      "route": "abstain",
+      "routeReason": "excluded-request",
+      "brief": "none",
+      "commands": [],
+      "play": null,
+      "files": 0,
+      "sourceBytes": 0,
+      "fullBytes": 0,
+      "compactBytes": 0,
+      "compactRequiredReads": 0,
+      "hookBytes": 0,
+      "admissionPass": true
+    },
+    {
+      "prompt": "Explain the string \"write a cold email\" in this fixture",
+      "expectedAutoBrief": false,
+      "route": "abstain",
+      "routeReason": "excluded-request",
+      "brief": "none",
+      "commands": [],
+      "play": null,
+      "files": 0,
+      "sourceBytes": 0,
+      "fullBytes": 0,
+      "compactBytes": 0,
+      "compactRequiredReads": 0,
+      "hookBytes": 0,
+      "admissionPass": true
+    },
+    {
+      "prompt": "Fix a TypeScript compile error",
+      "expectedAutoBrief": false,
+      "route": "abstain",
+      "routeReason": "excluded-request",
+      "brief": "none",
+      "commands": [],
+      "play": null,
+      "files": 0,
+      "sourceBytes": 0,
+      "fullBytes": 0,
+      "compactBytes": 0,
+      "compactRequiredReads": 0,
+      "hookBytes": 0,
+      "admissionPass": true
+    },
+    {
+      "prompt": "What does outreach mean?",
+      "expectedAutoBrief": false,
+      "route": "abstain",
+      "routeReason": "excluded-request",
+      "brief": "none",
+      "commands": [],
+      "play": null,
+      "files": 0,
+      "sourceBytes": 0,
+      "fullBytes": 0,
+      "compactBytes": 0,
+      "compactRequiredReads": 0,
+      "hookBytes": 0,
+      "admissionPass": true
+    },
+    {
+      "prompt": "Write a cold email to a qualified prospect",
+      "expectedAutoBrief": true,
+      "route": "route",
+      "routeReason": "relevant-capability",
+      "brief": "brief",
+      "commands": [
+        "outreach"
+      ],
+      "play": null,
+      "files": 4,
+      "sourceBytes": 4988,
+      "fullBytes": 7221,
+      "compactBytes": 1677,
+      "compactRequiredReads": 0,
+      "hookBytes": 584,
+      "admissionPass": true
+    },
+    {
+      "prompt": "Shorten the subject line of this cold email",
+      "expectedAutoBrief": true,
+      "route": "route",
+      "routeReason": "relevant-capability",
+      "brief": "brief",
+      "commands": [
+        "outreach"
+      ],
+      "play": null,
+      "files": 2,
+      "sourceBytes": 1352,
+      "fullBytes": 1676,
+      "compactBytes": 1676,
+      "compactRequiredReads": 0,
+      "hookBytes": 583,
+      "admissionPass": true
+    },
+    {
+      "prompt": "Plan our go-to-market strategy",
+      "expectedAutoBrief": true,
+      "route": "route",
+      "routeReason": "relevant-capability",
+      "brief": "brief",
+      "commands": [
+        "position"
+      ],
+      "play": "gtm",
+      "files": 5,
+      "sourceBytes": 11756,
+      "fullBytes": 12429,
+      "compactBytes": 1741,
+      "compactRequiredReads": 0,
+      "hookBytes": 613,
+      "admissionPass": true
+    },
+    {
+      "prompt": "Draft a product requirements document for an outreach system",
+      "expectedAutoBrief": true,
+      "route": "route",
+      "routeReason": "relevant-capability",
+      "brief": "brief",
+      "commands": [
+        "flow"
+      ],
+      "play": "spec",
+      "files": 4,
+      "sourceBytes": 12436,
+      "fullBytes": 11928,
+      "compactBytes": 1708,
+      "compactRequiredReads": 0,
+      "hookBytes": 577,
+      "admissionPass": true
+    },
+    {
+      "prompt": "Write a cold email and implement its retry handler",
+      "expectedAutoBrief": true,
+      "route": "route",
+      "routeReason": "relevant-capability",
+      "brief": "brief",
+      "commands": [
+        "outreach"
+      ],
+      "play": null,
+      "files": 4,
+      "sourceBytes": 4988,
+      "fullBytes": 7221,
+      "compactBytes": 1677,
+      "compactRequiredReads": 0,
+      "hookBytes": 584,
+      "admissionPass": true
+    }
+  ],
+  "disabled": {
+    "routeReason": "activation-off",
+    "brief": "none"
+  },
+  "reuse": {
+    "verifiedReadsSuppressAdvice": true,
+    "rotatedContextRestoresAdvice": true,
+    "changedResourceRestoresAdvice": true
+  },
+  "lifecycle": {
+    "repeatedPromptSameContext": true,
+    "engineeringStopDecision": null,
+    "repeatedStopDecision": null,
+    "staticBeforeDeliveryInstructions": 0
+  },
+  "api": {
+    "engineeringCommand": null,
+    "isError": false
+  },
+  "fileClassification": [
+    {
+      "file": "outreach/architecture.md",
+      "marketing": false
+    },
+    {
+      "file": "docs/architecture.md",
+      "marketing": false
+    },
+    {
+      "file": "admin/index.html",
+      "marketing": false
+    }
+  ],
+  "admissionFailures": 0
+}

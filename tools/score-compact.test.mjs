@@ -123,7 +123,7 @@ test('every rubric gate in the library parses and names only its own dimensions'
   assert.ok(gates > 1, `${gates} gates`);
 });
 
-test('a compact brief inlines only the command and its core files, and keeps the rules', () => {
+test('a compact brief inlines the entry and defers expansion without required reads', () => {
   const task = 'Draft a 3-email cold sequence to RevOps leads at B2B SaaS companies';
   const full = call('conquistador_brief', { task });
   const compact = call('conquistador_brief', { task, size: 'compact', context: 'Product: Ledgerline.' });
@@ -132,10 +132,10 @@ test('a compact brief inlines only the command and its core files, and keeps the
   assert.ok(Buffer.byteLength(text) < Buffer.byteLength(fullText) * 0.5, `${Buffer.byteLength(text)} vs ${Buffer.byteLength(fullText)}`);
   for (const marker of ['Start here:', 'Caller context', 'Rules for this task:', 'conquistador_check']) assert.ok(text.includes(marker), marker);
   const structured = compact.result.structuredContent;
-  assert.ok(structured.inlined.some(item => item.path.endsWith('outreach/COMMAND.md')));
+  assert.ok(structured.inlined.some(item => item.path.endsWith('outreach/ENTRY.md')));
   assert.ok(structured.situational.length > full.result.structuredContent.situational.length);
-  assert.ok(structured.readNow.some(path => path.endsWith('copy-validation-rubric.md')), 'core files become required reads');
-  assert.match(text, /Read now, one file per conquistador_read call/);
+  assert.equal(structured.readNow.length, 0);
+  assert.match(text, /Deferred files are optional/);
   assert.equal(call('conquistador_brief', { task, size: 'tiny' }).result.isError, true);
 });
 

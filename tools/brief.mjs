@@ -15,13 +15,13 @@ import { packageRootOf } from './module-root.mjs';
 
 export const BRIEF_SCHEMA = 'conquistador.brief/v1';
 export const LIMITS = Object.freeze({
-  mustFiles: 10,
-  mustBytes: 110_000,
+  mustFiles: 3,
+  mustBytes: 10_000,
   situationalFiles: 8,
   userFiles: 4000,
   userFileBytes: 262_144,
   userDepth: 8,
-  packBytes: 160_000,
+  packBytes: 16_000,
 });
 const moduleRoot = packageRootOf(import.meta.url);
 
@@ -67,9 +67,6 @@ const STOP = new Set(('a an and are as at be but by can do for from get give hel
   + 'cannot cant find found ask asked tell know learn look see show thing things something anything everything folder first only just also about go going got like really sure try work way lot some any all more most very much one now today still again back here not no yes am was were been being has have had does did done could may might must shall able sort kind well okay ok thanks thank hi hello').split(' '));
 const PROCESS = /(?:^|\/)fallbacks\/|(?:^|\/|-)(?:format-conventions|legibility-convention|why-this-works-convention|inputs-and-outputs)\.md$|\.ya?ml$/;
 const text = value => normalizeRequest(value);
-// Implicit prompts reach the lexical fallback only with business vocabulary and no coding vocabulary.
-const BUSINESS = /\b(?:launch|campaign|marketing|growth|gtm|go to market|pricing|price|positioning|brand|audience|icp|persona|copy|copywriting|headline|landing page|seo|aeo|ads?|advertis\w*|funnel|churn|retention|activation|emails?|drip|lifecycle|nurture|newsletter|referral|affiliate|influencer|creator|ugc|content|social|post|outreach|cold email|sales|pipeline|leads?|conversion|signups?|waitlist|press|pr|community|virality|viral|offer|messaging|competitor|market)\b/;
-const CODING = /\b(?:bug|fix|crash|sdk|api|webhook|component|handler|bot|integration|upload|render|button|font|css|server|database|test|tests|stack trace|exception|compile|refactor|lint|typecheck|function|class|endpoint|migration|schema migration|deploy|dockerfile|kubernetes|regex|null pointer|segfault|merge conflict|pull request|git)\b/;
 const stem = word => word.length > 4 && word.endsWith('ies') ? `${word.slice(0, -3)}y`
   : word.length > 5 && word.endsWith('ing') ? word.slice(0, -3)
     : word.length > 3 && word.endsWith('s') && !word.endsWith('ss') ? word.slice(0, -1) : word;
@@ -187,7 +184,7 @@ export function knowledgeIndex(root = moduleRoot, { playbooks = userPlaybookRoot
   // One tree: shared parent files, commands/<name>/ (source "method"), and plays/<name>[.md|/] (source "play").
   for (const absolute of walkMarkdown(parentDir, { limitFiles: 6000, limitBytes: 1_000_000, depth: 10 })) {
     const inner = relative(parentDir, absolute).split(sep).join('/');
-    if (inner === entryName || inner === 'SKILL.md' || inner === 'METHOD.md' || /^commands\/[^/]+\/COMMAND\.md$/.test(inner)) continue;
+    if (inner === entryName || inner === 'SKILL.md' || inner === 'METHOD.md' || /^commands\/[^/]+\/(?:COMMAND|ENTRY)\.md$/.test(inner)) continue;
     const key = `conquistador/${inner}`;
     const owner = methodOwner(key);
     planned.push({ absolute, key, source: owner ? (inner.startsWith('plays/') ? 'play' : 'method') : 'shared', method: owner });
@@ -263,30 +260,6 @@ export function namedPlatforms(prompt) {
 const SYNONYMS = Object.freeze({ onboard: ['lifecycle', 'activation'], welcome: ['lifecycle'], drip: ['lifecycle'], nurture: ['lifecycle'], winback: ['lifecycle'], churn: ['retention'], refer: ['referral'], affiliate: ['referral'], seo: ['search'], aeo: ['search', 'answer'], geo: ['answer', 'visibility'], ad: ['paid'], cold: ['outreach'], dm: ['outreach'], hook: ['opening'], tagline: ['copy', 'headline'], gtm: ['launch', 'campaign'], pmf: ['positioning'] });
 export const expand = words => [...new Set(words.flatMap(word => [word, ...(SYNONYMS[word] ?? [])]))];
 const GENERIC = new Set(['marketing', 'market', 'app', 'product', 'tool', 'company', 'startup', 'business', 'team', 'user', 'customer', 'brand', 'new', 'good', 'best', 'idea', 'help', 'program']);
-function lexicalMethods(prompt, index, platforms, limit = 2) {
-  const query = expand(terms(prompt)).filter(word => !GENERIC.has(word));
-  if (!query.length) return [];
-  // Commands and plays compete on the same words; a play keeps its own playbook folder.
-  const candidates = [
-    // Meta commands (init, check, connect, ...) run only when invoked by name, never by word overlap.
-    ...Object.values(index.contract.methods).filter(method => !method.explicitOnly).map(method => ({ method, words: [method.label, method.description, ...method.intents, ...(method.aliases ?? [])] })),
-    ...(index.contract.plays ?? []).map(play => ({ method: { ...play, play: true }, words: [play.label, play.description, ...play.intents] })),
-  ];
-  const scoredMethods = candidates.map(({ method, words: source }) => {
-    const words = new Set(terms(source.join(' ')));
-    const own = index.docs.filter(doc => doc.method === method.name && doc.source === (method.play ? 'play' : 'method') && doc.kind !== 'process');
-    const pathWords = new Set(own.flatMap(doc => [...doc.nameTerms]));
-    const hasPlatform = platforms.some(item => own.some(doc => doc.kind === 'platform' && posix.basename(doc.key, '.md') === item));
-    const nameHit = query.filter(word => terms(method.name).includes(word)).length;
-    const score = query.filter(word => words.has(word)).length + nameHit + 0.75 * query.filter(word => pathWords.has(word)).length + (hasPlatform ? 1 : 0);
-    return { method, score };
-  }).sort((a, b) => b.score - a.score || a.method.name.localeCompare(b.method.name));
-  // Two matching words place a method. One strong word places only the single best method.
-  const strong = ranked => ranked.filter(item => item.score >= 2).slice(0, limit);
-  const placed = strong(scoredMethods);
-  return (placed.length ? placed : scoredMethods.filter(item => item.score >= 1).slice(0, 1)).map(item => item.method);
-}
-
 const reasonFor = (doc, platforms) => {
   if (doc.kind === 'user') return `Your playbook${doc.summary ? `: ${doc.summary}` : ''}`;
   if ((doc.kind === 'platform' || doc.kind === 'channel') && platforms.some(item => posix.basename(doc.key, '.md') === item)) return `You named this platform. ${doc.summary}`.trim();
@@ -303,55 +276,24 @@ export const START_CONTEXT = Object.freeze({
 const START_LEAD = /^\s*Use Conquistador:\s*/i;
 export const taskOf = prompt => Object.values(START_CONTEXT).reduce((rest, sentence) => rest.split(sentence).join(' '), prompt).replace(START_LEAD, '').trim();
 
-// Library keys of the "Core:" links in a command's generated playbook map.
-function coreKeys(packageRoot, commandPath, libraryRoot) {
-  const text = readText(join(packageRoot, commandPath));
-  if (!text) return [];
-  const lines = text.split(/^Core:\s*$/m)[1]?.split('\n') ?? [];
-  const end = lines.findIndex(line => line.trim() && !line.startsWith('- '));
-  const directory = posix.dirname(commandPath.slice(libraryRoot.length + 1));
-  return lines.slice(0, end < 0 ? undefined : end).flatMap(line => {
-    const link = line.match(/^- \[[^\]]+\]\(([^)#\s]+)\)/)?.[1];
-    if (!link || /^[a-z]+:|^[/\\]/i.test(link)) return [];
-    const key = posix.normalize(posix.join(directory, link));
-    // Shared core references may use ../ inside this library. The index below resolves only
-    // contained library documents, and a link cannot escape the parent package directory.
-    return key.startsWith(`${directory.split('/')[0]}/`) ? [key] : [];
-  });
-}
-
-export function createBrief(input, { root = moduleRoot, playbooks, persistCache = true, force = false, cwd = process.cwd() } = {}) {
+export function createBrief(input, { root = moduleRoot, playbooks, persistCache = true, force = false, automatic = false, cwd = process.cwd() } = {}) {
   if (typeof input !== 'string' || !input.trim()) throw Error('Describe the task.');
-  // "Use Conquistador:" asks for Conquistador by name, so it counts as an explicit invocation.
-  const invoked = START_LEAD.test(input);
-  const prompt = taskOf(input) || input;
   const packageRoot = realpathSync(resolve(root));
-  const routed = selectRequestContext(prompt, { root: packageRoot });
-  const explicit = invoked || explicitInvocation(prompt);
+  const routed = selectRequestContext(input, { root: packageRoot, automatic });
+  if (routed.action !== 'route') return { schema: BRIEF_SCHEMA, action: 'none', mode: 'none', reason: routed.reason, methods: [], must: [], situational: [], platforms: [], packageRoot };
+  const prompt = routed.query;
   const platforms = namedPlatforms(prompt);
-  const coding = CODING.test(text(prompt));
-  const business = BUSINESS.test(text(prompt)) && !coding;
-  // A bare platform name engages the brief only outside coding work ("App Store Connect upload").
-  const platformNamed = platforms.length > 0 && !coding;
-  // Skip the index for prompts that are clearly not Conquistador work; hooks run on every prompt.
-  if (routed.action !== 'route' && !explicit && !force && !platformNamed && !business) {
-    return { schema: BRIEF_SCHEMA, action: 'none', reason: routed.reason ?? 'no-relevant-capability', methods: [], must: [], situational: [], platforms: [], packageRoot };
-  }
   const index = knowledgeIndex(packageRoot, { playbooks, persistCache });
   const { contract, libraryRoot } = index;
-  let methods = routed.action === 'route' ? routed.selected.map(item => contract.methods[item.name]).filter(Boolean) : [];
-  let playName = routed.action === 'route' ? routed.play?.name : null;
-  if (!methods.length && (explicit || force || platformNamed || business)) {
-    const lexical = lexicalMethods(prompt, index, platforms);
-    if (lexical[0]?.play) playName = lexical[0].name;
-    methods = lexical.filter(item => !item.play);
-  }
+  let methods = routed.selected.map(item => contract.methods[item.name]).filter(Boolean);
+  const playName = routed.play?.name;
+  const explicit = explicitInvocation(input);
   const play = playName ? (contract.plays ?? []).find(item => item.name === playName) : null;
   // A play starts at its first unconditional command step; later steps are read when reached.
   const firstStep = play ? Math.max(0, play.chain.findIndex(step => step.command && !step.when)) : -1;
   if (play) {
     const lead = play.chain[firstStep]?.command;
-    if (lead && contract.methods[lead]) methods = [contract.methods[lead], ...methods.filter(item => item.name !== lead)];
+    if (lead && contract.methods[lead]) methods = [contract.methods[lead]];
   }
   const query = expand(terms(prompt));
   const selectedNames = new Set(methods.map(item => item.name));
@@ -388,34 +330,29 @@ export function createBrief(input, { root = moduleRoot, playbooks, persistCache 
 
   const must = [];
   let bytes = 0;
-  // A command's Core files are required reading, so they are not limited by the file count.
-  const take = (item, why, core = false) => {
+  const fileBudget = routed.mode === 'assist' ? 1 : 3;
+  const byteBudget = routed.mode === 'assist' ? 1800 : 10000;
+  // Every resource shares the task's count and byte budget.
+  const take = (item, why) => {
     if (item.sibling || must.some(entry => entry.doc.digest === item.doc.digest)) return;
-    if (!core && (must.length >= LIMITS.mustFiles || (bytes + item.doc.bytes > LIMITS.mustBytes && must.length >= 3))) return;
+    if (must.length >= fileBudget || bytes + item.doc.bytes > byteBudget) return;
     must.push({ ...item, why });
     bytes += item.doc.bytes;
   };
+  // 2. The user's own playbooks outrank generic method knowledge.
+  // Keep only strong matches: within 60% of the best user playbook for this task.
+  const userHits = scored.filter(entry => entry.doc.kind === 'user');
+  for (const item of userHits.filter(entry => entry.score >= (userHits[0]?.score ?? 0) * 0.6).slice(0, 1)) take(item);
   // 1. Platform packs and channel guides the user named.
   for (const item of scored.filter(entry => entry.doc.kind === 'platform' || entry.doc.kind === 'channel')) {
     const inPrimary = item.doc.method === methods[0]?.name || item.doc.kind === 'channel';
     if (inPrimary || !scored.some(entry => entry.doc.kind === 'platform' && entry.doc.method === methods[0]?.name && posix.basename(entry.doc.key) === posix.basename(item.doc.key))) take(item);
     if (must.length >= 3) break;
   }
-  // 2. The user's own playbooks outrank generic method knowledge.
-  // Keep only strong matches: within 60% of the best user playbook for this task.
-  const userHits = scored.filter(entry => entry.doc.kind === 'user');
-  for (const item of userHits.filter(entry => entry.score >= (userHits[0]?.score ?? 0) * 0.6).slice(0, 3)) take(item);
   // 3. A play's own playbooks (its recovered method folder) come first among method knowledge.
   if (play) scored.filter(entry => entry.owner === play.name && entry.doc.source === 'play' && entry.doc.kind === 'playbook').slice(0, 2).forEach(item => take(item));
   // 4. The primary command's declared Core list, in its order: the files COMMAND.md tells the
   // agent to read in full before drafting. Then the strongest playbooks of each selected method.
-  if (methods[0]) {
-    const byKey = new Map(index.docs.map(doc => [doc.key, doc]));
-    for (const key of coreKeys(packageRoot, methods[0].path, libraryRoot)) {
-      const doc = byKey.get(key);
-      if (doc) take(scored.find(entry => entry.doc === doc) ?? { doc, score: 0, lexical: 0, sibling: false, owner: methods[0].name }, 'core file of this command', true);
-    }
-  }
   methods.forEach((method, position) => {
     const quota = position === 0 ? 3 : 1;
     // The strongest two always count; a third needs its own lexical match, not only membership.
@@ -467,11 +404,12 @@ export function createBrief(input, { root = moduleRoot, playbooks, persistCache 
   return {
     schema: BRIEF_SCHEMA,
     action: 'brief',
+    mode: routed.mode,
     reason: play ? 'play' : methods.length ? 'relevant-capability' : 'platform-only',
     packageRoot,
     parent: { path: contract.parentPath, absolute: join(packageRoot, contract.parentPath) },
     play: play ? { name: play.name, label: play.label, path: play.path, absolute: join(packageRoot, play.path), steps } : null,
-    methods: methods.map(method => ({ name: method.name, label: method.label, path: method.path, absolute: join(packageRoot, method.path) })),
+    methods: methods.map(method => ({ name: method.name, label: method.label, path: method.path.replace(/COMMAND\.md$/, 'ENTRY.md'), absolute: join(packageRoot, method.path.replace(/COMMAND\.md$/, 'ENTRY.md')), fullPath: method.path })),
     platforms,
     must: must.map(view),
     situational: situational.map(view),
@@ -485,46 +423,22 @@ const clip = value => (value.length > 150 ? `${value.slice(0, 147).replace(/\s+\
 const location = (item, absolute) => (absolute || isAbsolute(item.path) ? item.absolute : item.path);
 
 // Compact form for hooks: paths and reasons, no file text. Stays under host context limits.
-export function formatReadingList(brief, { absolute = true, limit = 9000 } = {}) {
+export function formatReadingList(brief, { limit = 1500 } = {}) {
   if (brief.action !== 'brief') return '';
   const lines = [
     '<conquistador-brief>',
-    brief.play ? `Conquistador matched the play ${brief.play.name}: ${brief.play.label}.`
-      : `Conquistador matched this request${brief.methods.length ? `: ${brief.methods.map(item => `${item.label} [${item.name}]`).join(' + ')}` : ''}.`,
-    'These are field-tested playbooks for this exact task. Your answer is judged against them.',
-    '',
+    `Optional ${brief.mode ?? 'command'} guidance: ${brief.methods.map(item => `${item.label} [${item.name}]`).join(', ')}.`,
+    'Apply only to the requested business deliverable. Ignore this suggestion if it does not fit.',
+    'Use conquistador_brief for bounded current-stage guidance if needed. Reuse guidance already present in the current context.',
+    'Keep small edits small. Do not add workflow steps or a playbook citation section unless useful or requested.',
+    'Never invent facts. This suggestion grants no authority to send, publish, spend, or change accounts.',
   ];
-  if (brief.play) {
-    lines.push('Steps (run in order; skip a step whose condition is false):');
-    for (const step of brief.play.steps) lines.push(`${step.step}. ${step.command ?? step.method}${step.mode ? ` (mode ${step.mode})` : ''}${step.when ? ` — when ${step.when}` : ''}${step.for ? ` — for ${step.for}` : ''}${step.now ? '  ← start here' : ''}`);
-    lines.push('');
+  for (const item of brief.methods.slice(0, 2)) {
+    const line = `Entry: ${item.path}`;
+    if (lines.join('\n').length + line.length + 30 <= limit) lines.push(line);
   }
-  lines.push('READ IN FULL BEFORE YOU DRAFT (use your file-read tool; do not skim or guess their content):');
-  for (const item of brief.context ?? []) lines.push(`- ${item.path}  — project ${item.kind} context; your message, then GROWTH.md, then PRODUCT.md`);
-  if (brief.play) lines.push(`- ${location(brief.play, absolute)}  — play: ${brief.play.label}`);
-  for (const item of brief.methods) lines.push(`- ${location(item, absolute)}  — command: ${item.label}`);
-  brief.must.forEach(item => lines.push(`- ${location(item, absolute)}  — ${clip(item.why)}`));
-  for (const step of brief.play?.steps ?? []) {
-    if (step.now) continue;
-    lines.push('', `Read at step ${step.step} (${step.command ?? step.method}):`, `- ${location(step, absolute)}  — ${step.command ? 'command' : 'method'}: ${step.label}`);
-    for (const item of step.playbooks) lines.push(`- ${location(item, absolute)}  — ${clip(item.why)}`);
-  }
-  if (brief.situational.length) {
-    lines.push('', 'Read when the task reaches that step:');
-    for (const item of brief.situational.slice(0, 6)) lines.push(`- ${location(item, absolute)}  — ${clip(item.why)}`);
-  }
-  lines.push(
-    '',
-    'Then:',
-    '1. Apply the specific rules from these files. Where you deviate, say why.',
-    '2. End the answer with "Playbooks applied": each file you used and the rule you took from it.',
-    '3. Never invent metrics, quotes, or customer facts. Mark assumptions.',
-    'If conquistador_brief is available, it returns selected files inline and labels omissions or unavailable files that still need a separate read.',
-    '</conquistador-brief>',
-  );
-  let output = lines.join('\n');
-  if (output.length > limit) output = `${output.slice(0, limit - 40)}\n…\n</conquistador-brief>`;
-  return output;
+  lines.push('</conquistador-brief>');
+  return lines.join('\n').slice(0, limit);
 }
 
 function readText(path) {
@@ -562,100 +476,79 @@ export const formatBriefPack = (brief, options) => packBrief(brief, options).tex
 
 // The brief as text plus the same lists in structured form, so an agent can see what is inlined
 // and what it still has to read without parsing prose. `hosted` marks a caller with no repository.
-export function packBrief(brief, { limit = LIMITS.packBytes, callerContext, hosted = false, compact = false, readBundled } = {}) {
-  if (brief.action !== 'brief') {
-    return { structured: { action: 'none', inlined: [], readNow: [], readAtStep: [], situational: [] }, text: 'No Conquistador method matches this task. For growth, GTM, marketing, sales, or product work, restate the outcome and channel (for example "write a win-back email flow", "get recommended by ChatGPT", or "plan a TikTok series") or call conquistador_search.' };
-  }
-
-  limit = Number.isFinite(limit) ? Math.max(0, Math.floor(limit)) : LIMITS.packBytes;
-
-  const lead = brief.play?.steps.find(step => step.now);
+export function packBrief(brief, { limit, callerContext, hosted = false, compact = false, readBundled } = {}) {
+  if (brief.action !== 'brief') return { structured: { action: 'none', mode: 'none', reason: brief.reason, inlined: [], readNow: [], readAtStep: [], situational: [] }, text: 'No Conquistador method matches this task. Continue with the user request without marketing guidance.' };
+  const budget = brief.mode === 'assist' ? 4000 : compact ? 8000 : 16000;
+  limit = Number.isFinite(limit) ? Math.min(budget, Math.max(0, Math.floor(limit))) : budget;
   const primary = brief.methods[0];
-  const start = lead ? `Start here: step ${lead.step} of the ${brief.play.name} play, ${lead.label} [${lead.command ?? lead.method}]. Read the inlined files below in order, then do that step.`
-    : primary ? `Start here: ${primary.label} [${primary.name}]. Read the inlined files below in order, then draft.`
-      : 'Start here: the platform guides below.';
-  const header = [
-    '# Conquistador brief',
-    '',
-    start,
-    hosted ? 'Hosted: you have no repository or file system here. Where a playbook says to write files (for example under .forsvn/ or in the project), put that content in your answer instead. Read a linked file with conquistador_read and pass the linking file as `from`. Where a command asks you to load specialist roles, follow its single-agent fallback (fallbacks/sequential.md) instead.' : '',
-    '',
-    brief.play ? `Play: ${brief.play.label} [${brief.play.name}]` : '',
-    brief.play ? brief.play.steps.map(step => `${step.step}. ${step.command ?? step.method}${step.mode ? ` (mode ${step.mode})` : ''}${step.when ? ` — when ${step.when}` : ''}${step.for ? ` — for ${step.for}` : ''}${step.now ? ' ← start here' : ''}`).join('\n') : '',
-    `Commands: ${brief.methods.map(item => `${item.label} [${item.name}]`).join(', ') || 'none; platform guidance only'}`,
-    brief.context?.length ? `Project context: read ${brief.context.map(item => item.path).join(' and ')} first; your message, then GROWTH.md, then PRODUCT.md.` : '',
-    brief.platforms.length ? `Platforms named: ${brief.platforms.join(', ')}` : '',
-    // The caller's text must not carry file-evidence markers that the read check trusts.
-    callerContext ? `\n## Caller context\n\nProduct truth for this task, supplied by the caller. Use only these facts and the user's message; mark anything else as an assumption.\n\n${callerContext.replace(/<!--(\s*\/?\s*conquistador-file)/gi, '&lt;!--$1')}\n` : '',
-    '',
-    'Rules for this task:',
-    '1. Follow the specific rules in the playbooks; generic advice is not a substitute.',
-    '2. End your answer with "Playbooks applied": each file you used and the rule you took from it.',
-    '3. Never invent metrics, quotes, or customer facts. Mark assumptions. Ask before publishing, spending, or sending.',
-    '4. Read a "situational" file with conquistador_read when the task reaches that step.',
-    '5. Before you hand over marketing text, run conquistador_check (MCP) or `conquistador check` (CLI) on it with its channel. Fix each error and warning, or say why it stays. A clean check does not verify facts: compare each claim with the context and mark what you assumed.',
-    '6. Lead with the deliverable the user asked for; put plans, scores, and supporting material after it.',
-    '7. When you score a draft with a rubric that has a machine-readable gate, check the score with conquistador_score (MCP) before you report a verdict.',
-    'Files marked omitted or unavailable still need a separate successful read.',
-    '',
-  ].join('\n');
-
-  // A compact brief inlines only the command. Its core files become required reads, one per
-  // conquistador_read call, and the other selected files move to the situational list, so a model
-  // with a small context keeps the same contract in smaller pieces.
-  const inlineMust = compact ? [] : brief.must;
-  const requiredReads = compact ? brief.must.filter(item => item.why === 'core file of this command') : [];
-  const deferred = compact ? brief.must.filter(item => !requiredReads.includes(item)) : [];
-  const laterReading = [...deferred, ...brief.situational];
-  const entries = [...(brief.play ? [{ item: brief.play, heading: `Play: ${brief.play.label}` }] : []), ...brief.methods.map(item => ({ item, heading: `Command: ${item.label}` })),
-    ...inlineMust.map(item => ({ item, heading: `${item.source === 'user' ? 'Your playbook' : 'Playbook'}: ${item.title || posix.basename(item.path)}` }))]
-    .map(({ item, heading }) => {
-      // A transport can require its contained reader here. Recheck at packing time:
-      // a cached ranking record does not prove that this is still a safe file.
-      let body;
-
-      try { body = readBundled && item.source !== 'user' ? readBundled(item) : readText(item.absolute); }
-      catch { body = null; }
-
-      const evidence = knowledgeFileEvidence(item, body);
-      const status = body === null ? 'unavailable' : 'omitted';
-      const fallback = `\n${evidenceMarker({ id: item.path, status })}\n(${item.path} ${status}: ${status === 'omitted' ? 'response budget reached' : 'file could not be read'}. Read it separately.)\n`;
-      const block = body === null ? null : `\n---\n\n## ${heading}\n\nFile: ${item.path}\n${item.why ? `\nWhy: ${item.why}\n` : ''}\n${evidenceMarker(evidence)}\n${normalizeKnowledgeText(body)}\n${fileEnd}\n`;
-
-      return { block, fallback, path: item.path, title: item.title ?? item.label ?? posix.basename(item.path) };
-    });
-
-  const later = (brief.play?.steps ?? []).filter(step => !step.now)
-    .map(step => `\nStep ${step.step} (${step.command ?? step.method}):\n- ${step.path} — ${step.label}${step.playbooks.map(item => `\n- ${item.path} — ${item.why}`).join('')}`).join('\n');
-  const required = requiredReads.length ? `\n---\n\n## Read now, one file per conquistador_read call, before you draft\n${requiredReads.map(item => `- ${item.path} — ${item.why}`).join('\n')}\n` : '';
-  const situational = required + (later ? `\n---\n\n## Read at that step (conquistador_read when the play reaches it)\n${later}\n` : '')
-    + (laterReading.length ? `\n---\n\n## Situational (read with conquistador_read when needed)\n${laterReading.map(item => `- ${item.path} — ${item.why}`).join('\n')}\n` : '');
-  // Reserve the exact status text for every remaining required file before adding a body.
-  let remaining = entries.reduce((sum, entry) => sum + Buffer.byteLength(entry.fallback), 0);
-  let output = header;
-  const inlined = [];
-  const readNow = [];
-
-  for (const entry of entries) {
-    remaining -= Buffer.byteLength(entry.fallback);
-    const fits = entry.block && Buffer.byteLength(output) + Buffer.byteLength(entry.block) + remaining <= limit;
-    output += fits ? entry.block : entry.fallback;
-    (fits ? inlined : readNow).push(fits ? { path: entry.path, title: entry.title } : entry.path);
+  const lead = brief.play?.steps.find(step => step.now);
+  const start = lead ? `Start here: step ${lead.step} of ${brief.play.name}, ${lead.label} [${lead.command ?? lead.method}].`
+    : `Start here: ${primary?.label ?? 'Selected guidance'} [${primary?.name ?? 'guidance'}].`;
+  const lines = [
+    '# Conquistador brief', '', start,
+    `Scope: ${brief.mode ?? 'command'}. Apply only to the requested deliverable.`,
+    hosted ? 'Hosted: you have no repository here. Return requested artifacts in the answer instead of .forsvn/ files. If specialist support is unavailable, use fallbacks/sequential.md when needed.' : '',
+    '', 'Rules for this task:',
+    'Follow relevant method rules. Keep small edits small. Expand only the stage the user requested.',
+    'Never invent metrics, quotes, or product facts. Mark assumptions. Preserve host permissions for sending, publishing, spending, and account changes.',
+    'Lead with the deliverable the user asked for. Name sources when they help a decision; no mandatory playbook appendix.',
+    'Use conquistador_check for substantial marketing text, and conquistador_score only when reporting a rubric verdict. Neither proves factual accuracy or quality.',
+    'Deferred files are optional until their stage is needed. Use conquistador_read to expand one, or reuse complete guidance still present in the host context.',
+  ];
+  let callerContextStatus = 'absent';
+  if (callerContext) {
+    const context = callerContext.replace(/<!--(\s*\/?\s*conquistador-file)/gi, '&lt;!--$1');
+    if (Buffer.byteLength(context) < limit / 2) {
+      lines.push('', '## Caller context', '', context);
+      callerContextStatus = 'included';
+    } else {
+      lines.push('', 'Caller context remains with the caller. It exceeds this guidance budget; use those supplied facts directly. No facts were inferred.');
+      callerContextStatus = 'retained-by-caller';
+    }
   }
-
+  const entries = [...brief.methods, ...(compact ? [] : brief.must)];
+  let output = lines.filter(line => line !== undefined).join('\n') + '\n';
+  const inlined = [];
+  const includedBlocks = [];
+  const deferred = [...(compact ? brief.must : []), ...brief.situational].map(item => item.path);
+  const provenance = [];
+  for (const item of entries) {
+    let body;
+    try { body = readBundled && item.source !== 'user' ? readBundled(item) : readText(item.absolute); }
+    catch { body = null; }
+    const evidence = knowledgeFileEvidence(item, body);
+    const block = body === null ? null : `\n## ${item.title ?? item.label ?? 'Guidance'}\nFile: ${item.path}\n${evidenceMarker(evidence)}\n${normalizeKnowledgeText(body)}\n${fileEnd}\n`;
+    const fits = block !== null && Buffer.byteLength(output) + Buffer.byteLength(block) <= limit;
+    provenance.push({ path: item.path, reason: item.why ?? 'selected command entry', bytes: evidence.bytes ?? 0, sha256: evidence.sha256 ?? null, status: fits ? 'included' : body === null ? 'unavailable' : 'deferred' });
+    if (fits) { output += block; includedBlocks.push(block); inlined.push({ path: item.path, title: item.title ?? item.label }); }
+    else deferred.push(item.path);
+  }
+  const later = (brief.play?.steps ?? []).filter(step => !step.now).map(step => ({ step: step.step, path: step.path }));
   const structured = {
-    action: 'brief',
-    command: primary?.name ?? null,
-    play: brief.play?.name ?? null,
-    inlined,
-    readNow: [...readNow, ...requiredReads.map(item => item.path)],
-    readAtStep: (brief.play?.steps ?? []).filter(step => !step.now).flatMap(step => [step.path, ...step.playbooks.map(item => item.path)].map(path => ({ step: step.step, path }))),
-    situational: laterReading.map(item => item.path),
+    action: 'brief', mode: brief.mode ?? 'command', reason: brief.reason, command: primary?.name ?? null,
+    play: brief.play?.name ?? null, inlined, readNow: [], readAtStep: later,
+    situational: [...new Set(deferred)], provenance, callerContextStatus, budgetBytes: limit,
   };
-  return { structured, text: clipUtf8(output + situational, limit) };
+  const encodedBytes = () => Buffer.byteLength(JSON.stringify({ content: [{ type: 'text', text: output }], structuredContent: structured }));
+  // Budget the complete public tool result, including provenance and deferred resource paths.
+  // Drop whole blocks only; never claim a partial body was inlined.
+  if (limit >= 2000) {
+    while (encodedBytes() > limit && includedBlocks.length) {
+      const block = includedBlocks.pop();
+      const item = inlined.pop();
+      output = output.slice(0, output.length - block.length);
+      structured.situational.unshift(item.path);
+      provenance.find(record => record.path === item.path).status = 'deferred';
+    }
+    if (encodedBytes() > limit && callerContextStatus === 'included') {
+      output = output.split('\n## Caller context')[0] + '\nCaller context remains with the caller; use the supplied facts directly.\n';
+      structured.callerContextStatus = 'retained-by-caller';
+    }
+    while (encodedBytes() > limit && structured.situational.length) structured.situational.pop();
+  }
+  return { structured, text: clipUtf8(output, limit) };
 }
 
-// Search the whole library, not only the selected methods.
 export function searchKnowledge(query, { root = moduleRoot, playbooks, persistCache = true, limit = 12 } = {}) {
   const index = knowledgeIndex(root, { playbooks, persistCache });
   const words = terms(query);

@@ -36,7 +36,7 @@ test('a multi-stage request selects a bounded composition', () => {
   assert.ok(result.selected.every(item => Array.isArray(item.resources) && item.resources.every(path => path.startsWith('skills/'))));
   assert.ok(result.context.length <= MAX_CONTEXT_CHARACTERS);
   assert.match(result.context, /Partial purpose:/);
-  assert.match(result.context, /read the complete parent contract/);
+  assert.match(result.context, /bounded brief for the current stage/);
   assert.match(result.context, /isolated specialist contexts/);
 });
 

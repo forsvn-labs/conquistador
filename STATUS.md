@@ -34,11 +34,13 @@ and the optional Promptfoo/node-forge findings remain open.
 
 ## Planned and next steps
 
-The [2026-10 behavior review](docs/BEHAVIOR-REVIEW-2026-10.md) reproduces unrelated
-engineering-task activation, fallback bypass of an off profile, and excessive required
-reading. Its offline audit records five admission failures in thirteen synthetic prompts;
-83 existing focused tests pass. Fix shared admission and automatic hook enforcement before
-expanding proactive guidance. The review changes no runtime behavior or release status.
+The [2026-10 behavior review](docs/BEHAVIOR-REVIEW-2026-10.md) and its implementation
+are on [draft PR #86](https://github.com/forsvn-labs/conquistador/pull/86).
+The candidate adds shared admission, bounded current-stage briefs, advisory hooks,
+verified context reuse, and scoped edit checks. The strict thirteen-prompt audit and
+110-case routing corpus pass. Build and focused integration checks pass; final full
+suite and installed-package validation are in progress. This is unmerged source,
+not a release or an update to the installed or hosted product.
 
 1. Resolve the existing hosted-access blocker through its authorized owner,
    then verify the exact candidate and hosted behavior.

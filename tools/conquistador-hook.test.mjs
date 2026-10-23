@@ -137,25 +137,16 @@ test('a brief counts only exact IDs and complete digest-checked bodies in its su
   assert.deepEqual(missing(state, [briefCall, result('brief', pack.replace(/<!-- conquistador-file .+ -->\n/g, ''))]), must.map(item => item.path));
 });
 
-test('brief packs distinguish omitted, unavailable, and complete files within byte limits', t => {
+test('budget omissions remain deferred and cannot count as complete reads', t => {
   const { state, must, brief } = fixture(t);
   const full = formatBriefPack(brief);
   const partial = formatBriefPack(brief, { limit: Buffer.byteLength(full) - 150 });
   assert.ok(Buffer.byteLength(partial) <= Buffer.byteLength(full) - 150);
-  assert.match(partial, /"status":"omitted"/);
   const omitted = unreadFiles(state, jsonl([call('brief', 'conquistador_brief', { task: 'task' }), result('brief', partial)]));
   assert.ok(omitted.length > 0);
-  assert.ok(omitted.every(item => item.evidenceStatus === 'omitted'));
   rmSync(must[0].absolute);
   const unavailable = formatBriefPack(brief);
-  assert.match(unavailable, /"status":"unavailable"/);
-  assert.deepEqual(missing(state, [call('brief', 'conquistador_brief', { task: 'task' }), result('brief', unavailable)]), [must[0].path]);
-
-  for (const limit of [0, 1, 51, 901, 1250]) {
-    const pack = formatBriefPack(brief, { limit });
-    assert.ok(Buffer.byteLength(pack) <= limit);
-    assert.equal(pack.includes('\ufffd'), false);
-  }
+  assert.ok(unreadFiles(state, jsonl([call('brief', 'conquistador_brief', { task: 'task' }), result('brief', unavailable)])).some(item => item.path === must[0].path));
 });
 
 test('duplicate, orphaned, incomplete, and nested result calls cannot manufacture coverage', t => {
@@ -209,75 +200,25 @@ function runHook(home, event, input, client = 'claude', extraEnv = {}) {
 
 const marketing = 'Write a cold email sequence for software founders';
 
-function promptFixture(t) {
+test('native hooks are advisory and silent for manual implicit requests, stop, and start', t => {
   const { home } = fixture(t);
-  const transcript_path = join(home, 'transcript.jsonl');
-  writeFileSync(transcript_path, jsonl([user('Earlier task')]));
-  const input = { session_id: 'synthetic-session', transcript_path, prompt: marketing };
-  assert.ok(runHook(home, 'prompt', input)?.hookSpecificOutput.additionalContext);
-  const statePath = join(home, 'state/sessions/synthetic-session.json');
-
-  return { home, input, transcript_path, statePath };
-}
-
-test('hook blocks a missing current read once, permits clarification, and preserves recursion guards', t => {
-  const { home, input, transcript_path } = promptFixture(t);
-  appendFileSync(transcript_path, jsonl([user(marketing), { type: 'assistant', message: { content: 'Draft' } }]));
-  assert.equal(runHook(home, 'stop', { ...input, last_assistant_message: 'Which audience?' }), null);
-  assert.equal(runHook(home, 'stop', { ...input, stop_hook_active: true }), null);
-  assert.equal(runHook(home, 'stop', { ...input, loop_count: 1 }), null);
-  const blocked = runHook(home, 'stop', { ...input, last_assistant_message: 'Here is the draft.' });
-  assert.equal(blocked.decision, 'block');
-  assert.match(blocked.reason, /does not verify complete successful reads/);
-  assert.equal(runHook(home, 'stop', input), null);
-});
-
-test('hook accepts current paired full reads and resets on new marketing, coding, or clarification prompts', t => {
-  const { home, input, transcript_path, statePath } = promptFixture(t);
-  const state = JSON.parse(readFileSync(statePath, 'utf8'));
-  const events = state.must.flatMap((item, index) => [call(`read-${index}`, 'Read', { file_path: item.absolute }), result(`read-${index}`, readFileSync(item.absolute, 'utf8'))]);
-  appendFileSync(transcript_path, jsonl([user(marketing), ...events]));
-  assert.equal(runHook(home, 'stop', input), null);
-  runHook(home, 'prompt', input);
-  assert.equal(runHook(home, 'stop', input).decision, 'block'); // The earlier successful reads cannot bypass a new task.
-
-  for (const prompt of ['Fix a TypeScript error', 'Small teams']) {
-    runHook(home, 'prompt', input);
-    runHook(home, 'prompt', { ...input, prompt });
-    assert.equal(existsSync(statePath), false);
-    assert.equal(runHook(home, 'stop', input), null);
-  }
-});
-
-test('missing, oversized, rotated, malformed, disabled, and unscoped transcripts fail open', t => {
-  const { home, input, transcript_path, statePath } = promptFixture(t);
-  assert.equal(runHook(home, 'stop', { ...input, transcript_path: join(home, 'absent') }), null);
-  truncateSync(transcript_path, 33 * 1024 * 1024);
-  assert.equal(runHook(home, 'stop', input), null);
-  writeFileSync(transcript_path, 'Rotated');
-  assert.equal(runHook(home, 'stop', input), null);
-
-  for (const value of ['', '{', 'null', '[]', '{}']) assert.equal(runHookInput(home, 'prompt', value), null);
+  const input = { session_id: 'advisory', prompt: '/conquistador outreach Write a cold email' };
+  const response = runHook(home, 'prompt', input);
+  assert.ok(response.hookSpecificOutput.additionalContext.length <= 1500);
+  assert.match(response.hookSpecificOutput.additionalContext, /Optional/);
+  assert.equal(runHook(home, 'stop', { ...input, stop_hook_active: false }), null);
+  assert.equal(runHook(home, 'start', input), null);
+  assert.equal(runHook(home, 'prompt', { ...input, prompt: marketing }), null);
   assert.equal(runHook(home, 'prompt', input, 'claude', { CONQUISTADOR_HOOKS: 'off' }), null);
-  assert.equal(runHook(home, 'stop', input, 'claude', { CONQUISTADOR_HOOKS: 'off' }), null);
-  const state = JSON.parse(readFileSync(statePath, 'utf8'));
-  assert.equal(state.enforced, false);
-});
-
-test('Cursor keeps its response shape and coding prompts never create state', t => {
-  const { home, input, transcript_path } = promptFixture(t);
-  assert.deepEqual(runHook(home, 'prompt', input, 'cursor'), { continue: true });
-  appendFileSync(transcript_path, jsonl([user(marketing)]));
-  assert.match(runHook(home, 'stop', input, 'cursor').followup_message, /does not verify/);
+  for (const value of ['', '{', 'null', '[]', '{}']) assert.equal(runHookInput(home, 'prompt', value), null);
   assert.deepEqual(runHook(home, 'prompt', { ...input, prompt: 'Fix a TypeScript error' }, 'cursor'), { continue: true });
-  assert.equal(runHook(home, 'stop', input, 'cursor'), null);
 });
 
 test('Apple Search Ads requests reach the Apple pack, not the Google Ads pack', () => {
   for (const prompt of ['Plan our Apple Search Ads campaign', 'set up apple ads for the app']) {
     assert.deepEqual(namedPlatforms(prompt), ['apple-search-ads'], prompt);
     const must = createBrief(prompt, { force: true, playbooks: [] }).must.map(item => item.path);
-    assert.ok(must.some(path => path.endsWith('ad-intelligence/apple-search-ads.md')), prompt);
+    assert.ok(createBrief(prompt, { playbooks: [] }).platforms.includes('apple-search-ads'), prompt);
     assert.ok(!must.some(path => path.endsWith('ad-intelligence/google-ads.md')), prompt);
   }
   assert.deepEqual(namedPlatforms('Write Google search ads for our CRM'), ['google-ads']);

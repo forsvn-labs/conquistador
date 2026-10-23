@@ -140,7 +140,7 @@ function stage(mode, target, selection) {
     copy('release/completeness.json');
     copy('tools/proactive.mjs');
     copy('tools/conquistador-mode.mjs');
-    for (const file of ['context-selection.mjs', 'domain-package.mjs', 'method-library.mjs', 'plugin-contracts.mjs', 'routing-contract.mjs', 'request-text.mjs', 'module-root.mjs']) copy(`tools/${file}`);
+    for (const file of ['prompt-advice.mjs', 'read-evidence.mjs', 'brief.mjs', 'context-files.mjs', 'context-selection.mjs', 'domain-package.mjs', 'method-library.mjs', 'plugin-contracts.mjs', 'routing-contract.mjs', 'request-text.mjs', 'module-root.mjs']) copy(`tools/${file}`);
   }
   if (['plugin', 'single-agent'].includes(mode)) {
     for (const file of operatorFiles) {

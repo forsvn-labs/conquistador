@@ -29,7 +29,8 @@ function runSwitch(action) {
   const lines = [`Hooks are ${state.on ? 'on' : 'off'}${state.why ? ` (${state.why})` : ''}.`];
   if (action === 'on' && !state.on) lines.push('The environment still turns them off. Unset CONQUISTADOR_HOOKS to turn them on.');
   lines.push(`Agents with Conquistador hooks: ${labels.join(', ')}.${installed.length ? '' : ' None of them has a Conquistador install yet.'}`);
-  lines.push('They give the agent the right playbooks for growth, marketing, and sales prompts and check marketing copy after each edit.');
+  lines.push('Native plugin hooks offer bounded advice. Manual profiles require an explicit invocation; project profiles allow relevant automatic advice. Stop and session-start hooks are silent.');
+  lines.push('The same switch also disables project-mode advice. Inspect project registrations with conquistador hooks status --host HOST --project ABS --config ABS. Host-managed plugin registrations require the host plugin manager.');
   lines.push(state.on ? 'Turn them off: conquistador hooks off (in your agent: /conquistador hooks off).' : 'Turn them on: conquistador hooks on (in your agent: /conquistador hooks on).');
   if (action !== 'status') lines.push('The change applies from the next prompt; no agent needs a restart.');
   console.log(lines.join('\n'));

@@ -106,13 +106,12 @@ test('the Copilot hooks file ships in the plugin payload, and no shared hooks/ho
   assert.ok(!paths.includes('hooks/hooks.json'));
 });
 
-test('Copilot gets top-level additionalContext for start and a marketing prompt, and no stop gate', t => {
+test('Copilot gets top-level advisory context for explicit prompts and silent lifecycle events', t => {
   const state = temp(t);
   const env = { CONQUISTADOR_STATE: state, CONQUISTADOR_HOME: temp(t) };
   const start = hook('conquistador-hook.mjs', ['copilot', 'start'], { sessionId: 's1', cwd: state }, env);
-  assert.equal(typeof start.json?.additionalContext, 'string');
-  assert.match(start.json.additionalContext, /conquistador_brief/);
-  const prompt = hook('conquistador-hook.mjs', ['copilot', 'prompt'], { sessionId: 's1', cwd: state, prompt: 'Write three cold emails for our accounting app launch' }, env);
+  assert.equal(start.text, '');
+  const prompt = hook('conquistador-hook.mjs', ['copilot', 'prompt'], { sessionId: 's1', cwd: state, prompt: '/conquistador outreach Write three cold emails for our accounting app launch' }, env);
   assert.equal(typeof prompt.json?.additionalContext, 'string');
   assert.equal(prompt.json.hookSpecificOutput, undefined);
   const transcript = join(state, 'events.jsonl');
@@ -240,7 +239,7 @@ test('hooks status names an environment override, and bad input exits 2', t => {
 test('the legacy project hooks command still reaches the project operator', t => {
   const home = temp(t);
   const legacy = run(['hooks', 'status'], home, {});
-  assert.doesNotMatch(legacy.out, /--project/, 'plain status is the new switch');
+  assert.match(legacy.out, /Native plugin hooks offer bounded advice/);
   const project = run(['hooks', 'enable', '--project', temp(t)], home);
   assert.match(project.out, /Install this project operator before enabling hooks/);
 });

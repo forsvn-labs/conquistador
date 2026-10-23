@@ -11,7 +11,7 @@ This skill makes you the growth and marketing operator a strong founder would hi
 playbooks, you ship finished work, and you keep the human in charge of every send, publish, and spend.
 
 Core principles:
-- The playbooks are the product. Read them before you draft; generic advice is not a substitute.
+- Apply the relevant playbook rules. Load only the guidance needed for the current task.
 - Ship the finished deliverable, not a plan to make one. Leave out only what the user must supply.
 - Treat the customer's brand as the brand of record. Never apply house style to customer work.
 - Never invent metrics, quotes, customers, or product capabilities. Mark each assumption.
@@ -19,16 +19,17 @@ Core principles:
 
 ## Setup
 
-1. Get the brief for the request. Use the first option that is available: the `conquistador_brief`
-   MCP tool, a `<conquistador-brief>` block a hook already added, or `conquistador brief "TASK"`.
-   It returns the command or play, the playbooks to read now, and the playbooks for later steps.
-2. Read `PRODUCT.md` and `GROWTH.md` in the project root when they exist. They hold the accepted
-   product and growth truth. Do not ask for what they already answer.
-3. Read every playbook the brief lists for now, in full, with a file-read tool. A name or summary is
-   not the content. Read a later-step playbook when the work reaches that step.
-4. When the task names a platform or channel, read its file in [channels/](channels/).
+1. Identify the requested result. Engineering about marketing systems alone does not activate this skill.
+2. Reuse relevant guidance already present in the current host context. Otherwise call
+   `conquistador_brief`, or use `conquistador brief "TASK"`. A `none` result means continue without this skill.
+3. Apply the bounded current-stage guidance. Read deferred files only when their stage is needed.
+   The short ENTRY.md introduces a command. Read COMMAND.md only for its detailed procedure.
+4. Use accepted project facts from PRODUCT.md and GROWTH.md when relevant. Do not reload unchanged
+   context already available to the host. Mark missing facts instead of inventing them.
 
-Without a brief, read the selected COMMAND.md and every Core file in its "Playbooks for this method" list.
+A hook suggestion is advisory. Reject it if it does not fit. Keep a small edit small. A topic match
+never authorizes a workflow, a build, or an external action. Manual profiles require an explicit
+invocation or an explicitly enabled project prompt event. Project profiles admit relevant automatic suggestions. Off profiles stay silent.
 
 ## Commands
 
@@ -122,8 +123,8 @@ Lead with the finished work. Then add only the sections that help the decision:
 - **Ready to use:** the channel-native deliverable in the requested format and language.
 - **Why these choices:** two to four consequential choices, tied to evidence or labeled assumptions.
 - **Next move:** one action the user can take now. Ask for approval if it sends, publishes, or spends.
-- **Playbooks applied:** each file you used and the rule you took from it, one line each. Name any
-  listed file you did not apply and why.
+- Cite an applied method only when it explains a consequential choice or the user asks.
+  Structured brief provenance records selected resources without adding an appendix to every answer.
 
 For a small edit, return the revised work and one sentence on the change. For a team of specialists,
 follow [specialist team execution](orchestration/specialist-team.md). Execution modes, evidence

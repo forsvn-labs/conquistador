@@ -71,3 +71,22 @@ export function normalizeRequest(value) {
 export function includesPhrase(text, phrase) {
   return (` ${text} `).includes(` ${normalizeRequest(phrase)} `);
 }
+
+// Admission runs before phrase matching or retrieval. Topic words alone are not a task.
+export function requestedBusinessClauses(prompt, options) {
+  return requestClauses(prompt, options).filter(clause => {
+    const text = normalizeRequest(clause);
+    if (/\b(?:what does|what is|meaning of)\b/.test(text)) return false;
+    const productBuild = /\b(?:responsive web app|approved flow|product experience|product requirements|product spec|feature spec|in product ui)\b/.test(text);
+    const operation = text.split(/\b(?:for|about|after)\b/)[0];
+    const engineering = /\b(?:engineer|engineering|debug|refactor|compile|typecheck|implement|fix|patch|design|build|write|create)\b/.test(operation)
+      && /\b(?:system|queue|api|handler|webhook|database|schema|code|function|component|server|typescript|retry|retries|middleware|test|tests|bug|error|endpoint|migration|integration)\b/.test(operation);
+    const technicalSubject = /\b(?:code|handlers?|middleware|ci pipeline|typescript|stack trace)\b/.test(operation);
+    return (!engineering && !technicalSubject) || productBuild;
+  });
+}
+
+export function requestMode(query, play) {
+  if (/\b(?:shorten|trim|rephrase|subject line|one headline|single headline|small edit|proofread)\b/i.test(query)) return 'assist';
+  return play ? 'workflow' : 'command';
+}
