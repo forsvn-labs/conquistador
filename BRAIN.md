@@ -1,13 +1,22 @@
-# External materials
+# External knowledge
 
+Provider: Google Drive.
 Project key: `forsvn/conquistador`.
 
-Resolve this key in the authorized personal Drive registry owned by the private tools repository. The local command is `python3 drive_projects.py forsvn/conquistador` from that repository. The registry stores account scope, folder path, related folders, and available folder IDs.
+Resolve this stable key through the authorized private project
+registry in the personal tools repository. From that checkout,
+run `python3 drive_projects.py forsvn/conquistador`. The private lookup owns
+the verified folder identity, access scope, and navigation map.
+If you lack access, request the project folder from its owner.
+A locator does not grant permission.
 
-Store source media, office files, private planning that cannot enter this repository, and review captures in the project folder. Use `sources/`, `references/`, `exports/`, or dated `verification/` folders when needed. Keep one original; link related material instead of making a second copy.
+Drive owns rich project knowledge, research, private planning,
+original media, exports, and review captures. Follow its navigation
+map to the existing original; link rather than duplicate it.
+Git owns code, build configuration, required runtime assets,
+licenses, and code-dependent documentation.
 
-Git owns authoring text that fits this repository's audience, code, asset recipes, and required build assets. Generated runtime images and licensed fonts stay in Git when the build requires them. Do not commit guest data, local databases, screenshots, master artwork, or raw video just to make navigation easier.
-
-For remote access, use the personal Executor v2 profile identified by the private registry and verify its current account. The registry records the dated folder and sharing checks. Put access blockers in the owning work record. Do not change folder sharing to resolve access.
-
-Keep this public guide limited to the project key and storage rules. Exact folder IDs, account details, mount paths, and private file names belong in the private lookup. A Drive URL is a locator, not access permission.
+Keep private folder IDs, paths, accounts, discussions, and
+credentials out of this public repository. Record access blockers
+in the authorized private work record. [STRUCTURE.md](STRUCTURE.md)
+maps code ownership; [STATUS.md](STATUS.md) owns public current state.
