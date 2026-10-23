@@ -37,6 +37,16 @@ additional OAuth clients, linked-provider lifecycle, and broader model and
 human task-quality acceptance remain unverified. Existing lint diagnostics
 and the optional Promptfoo/node-forge findings remain open.
 
+## Current installation work
+
+The installation candidate makes `npx conquistador@latest` the primary entry,
+adds an Executor-only MCP setup shortcut, and documents standalone MCP in coding
+agents, desktop clients, Executor, and Composio. It is not a new npm release.
+Local process checks pass 17/17, packaged installation checks pass 6/6, and
+focused setup/MCP/Executor checks pass 28/28. Another 29 onboarding checks pass. Documentation build and link validation pass.
+[Installation acceptance](docs/INSTALLATION-ACCEPTANCE.md) records repeatable commands
+and the limits of this evidence. Live remote account acceptance remains open.
+
 ## Planned and next steps
 
 1. Resolve the existing hosted-access blocker through its authorized owner,

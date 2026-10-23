@@ -190,17 +190,13 @@ is claimed by the current receipt schema.
 
 ## Public registry installation
 
-Private `0.0.x` releases use authenticated GitHub acquisition. Public alpha should publish
-`@forsvn/conquistador` to npm and make `npm i -g @forsvn/conquistador` the primary command. A
-registry install copies the published package into npm's global prefix, so the private-Git
-`--install-links` workaround is not part of that command.
-
-Keep `private: true` until the public release is approved. Before removing it, verify control of the
-`@forsvn` scope, release authentication and provenance, exact package contents, license files, and
-the registry tarball digest. Test the published version from an empty cache and a user-writable
-prefix through version, setup, doctor, start, update, and uninstall. The project must still receive
-no `package.json`, `node_modules`, or lockfile. Do not document the short command as available until
-`npm view @forsvn/conquistador` returns the intended release.
+The primary entry is `npx conquistador@latest`. The short-name CLI package pins the exact
+matching `@forsvn/conquistador` release. Optional global installation uses
+`npm i -g conquistador`; application imports use `@forsvn/conquistador`.
+All routes consume the same packaged methods. Local MCP can run directly from npm without
+registering skills or hooks. Remote clients require an HTTPS deployment and separate
+connection acceptance. [INSTALL.md](../INSTALL.md#standalone-mcp) owns setup instructions;
+[STATUS.md](../STATUS.md) owns current registry and deployment evidence.
 
 ## Future standalone installer
 

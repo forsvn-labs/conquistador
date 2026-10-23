@@ -6,16 +6,22 @@ description: "Choose Skills, CLI, MCP, or Plugins."
 Choose how you want to reach Conquistador. All four methods use the same playbooks.
 [The installation page](https://conquistador.app/install) offers the same choices.
 
+Start the reviewed installer with Node 22.18 or later:
+
+```sh
+npx conquistador@latest
+```
+
+Use `bunx conquistador@latest` or `pnpm dlx conquistador@latest` if preferred.
+For a permanent command, run `npm i -g conquistador`.
+
 ## Skills
 
 ```sh
-npx skills add https://github.com/forsvn-labs/conquistador/tree/main/skills/conquistador --skill conquistador
-# Or the Conquistador project installer:
 npx conquistador@latest skills
 ```
 
-One skill folder, without hooks or MCP. Add `--global` to the Skills CLI command for a user-wide
-install. The Conquistador installer supports agent selection and previews every change.
+One project skill folder, without hooks or MCP. The Conquistador installer supports agent selection and previews every change.
 
 ## CLI
 
@@ -31,7 +37,6 @@ agent, or listener. Your app owns the model, user context, and access rules.
 
 ## MCP
 
-Connect to `https://mcp.forsvn.com/mcp` with [OAuth or an API key](/install/hosted-mcp).
 For local stdio clients:
 
 ```sh
@@ -39,7 +44,8 @@ npx conquistador@latest mcp
 ```
 
 `conquistador mcp install --apps=zed,vscode` configures selected desktop clients after review.
-No HTTP bridge is required. Local and hosted MCP expose the same tools.
+No HTTP bridge is required. See [standalone MCP](/install/mcp-apps) for coding agents,
+Executor, and Composio. Remote apps need a public HTTPS deployment with verified authentication.
 
 ## Plugins
 

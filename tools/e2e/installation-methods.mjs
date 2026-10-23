@@ -12,7 +12,7 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const work = mkdtempSync(join(tmpdir(), 'cq-install-methods-'));
 const out = resolve((process.argv.includes('--out') ? process.argv[process.argv.indexOf('--out') + 1] : null) || join(root, 'dist/e2e/installation-methods'));
 const steps = [];
-const env = { ...process.env, HOME: work, USERPROFILE: work, CONQUISTADOR_HOME: join(work, '.conquistador'), CODEX_HOME: join(work, '.codex'), NO_COLOR: '1', CI: '1' };
+const env = { ...process.env, CONQUISTADOR_EXECUTOR_APP: 'off', HOME: work, USERPROFILE: work, CONQUISTADOR_HOME: join(work, '.conquistador'), CODEX_HOME: join(work, '.codex'), NO_COLOR: '1', CI: '1' };
 mkdirSync(out, { recursive: true });
 writeFileSync(join(work, 'package.json'), '{"private":true}');
 const cli = args => {
@@ -25,6 +25,26 @@ function check(name, run) {
   catch (error) { steps.push({ name, passed: false, error: error.message }); }
 }
 try {
+  // Failure modes: CLI logs corrupt JSON-RPC, no tools are exposed, or server startup installs host configuration.
+  check('standalone MCP serves real stdio tools without installing host configuration', () => {
+    const messages = [
+      { jsonrpc: '2.0', id: 1, method: 'initialize', params: { protocolVersion: '2025-11-25', capabilities: {}, clientInfo: { name: 'install-e2e', version: '1' } } },
+      { jsonrpc: '2.0', method: 'notifications/initialized' },
+      { jsonrpc: '2.0', id: 2, method: 'tools/list' },
+      { jsonrpc: '2.0', id: 3, method: 'tools/call', params: { name: 'conquistador_methods', arguments: {} } },
+    ];
+    const result = spawnSync(process.execPath, [join(root, 'runtime/bin/conquistador.js'), 'mcp'], {
+      cwd: work, env, encoding: 'utf8', timeout: 30_000,
+      input: messages.map(message => JSON.stringify(message)).join('\n') + '\n',
+    });
+    assert.equal(result.status, 0, result.stderr);
+    const replies = result.stdout.trim().split('\n').map(line => JSON.parse(line));
+    assert.equal(replies.length, 3);
+    assert.equal(replies.find(reply => reply.id === 2).result.tools.length, 8);
+    const methods = JSON.parse(replies.find(reply => reply.id === 3).result.content[0].text);
+    assert.ok(methods.methods.length > 0);
+    for (const folder of ['.agents', '.claude', '.codex', '.conquistador']) assert.equal(existsSync(join(work, folder)), false, folder);
+  });
   check('help exposes all four methods', () => {
     const result = cli(['--help']); assert.equal(result.status, 0);
     for (const command of ['skills', 'install', 'mcp', 'plugins']) assert.match(result.text, new RegExp(`conquistador ${command}`));
@@ -78,12 +98,25 @@ try {
   check('MCP help is readable without starting a server', () => {
     const result = cli(['mcp', '--help']); assert.equal(result.status, 0); assert.match(result.text, /stdio/); assert.match(result.text, /mcp install/);
   });
+  // Failure modes: MCP setup hides coding-agent routes or bundles unrelated surfaces.
+  check('MCP help exposes standalone coding-agent and remote-app paths', () => {
+    const result = cli(['mcp', '--help']);
+    for (const text of ['codex mcp add', 'claude mcp add', 'Executor', 'Composio', 'No skills or hooks']) assert.ok(result.text.includes(text), text);
+  });
+  check('Executor shortcut previews only the existing Executor surface', () => {
+    const result = cli(['mcp', 'install', '--executor', '--json']);
+    assert.equal(result.status, 0, result.text);
+    assert.deepEqual(JSON.parse(result.text).surfaces.map(s => s.id), ['executor']);
+  });
+  check('Executor shortcut rejects ambiguous desktop and agent selections', () => {
+    for (const flag of ['--apps=zed', '--providers=codex']) assert.equal(cli(['mcp', 'install', '--executor', flag, '--json']).status, 2);
+  });
   check('MCP client setup previews only chosen clients', () => {
     const result = cli(['mcp', 'install', '--apps=zed', '--json']); assert.equal(result.status, 0);
     assert.deepEqual(JSON.parse(result.text).surfaces.map(s => s.id), ['mcp-apps']);
   });
 } finally {
-  const source = ['runtime/bin/conquistador.js', 'tools/installation-methods.mjs'].map(path => ({ path, sha256: existsSync(join(root, path)) ? createHash('sha256').update(readFileSync(join(root, path))).digest('hex') : null }));
+  const source = ['runtime/bin/conquistador.js', 'tools/installation-methods.mjs', 'tools/e2e/installation-methods.mjs'].map(path => ({ path, sha256: existsSync(join(root, path)) ? createHash('sha256').update(readFileSync(join(root, path))).digest('hex') : null }));
   const report = { mode: 'isolated CLI processes; no native host acceptance', source, passed: steps.filter(s => s.passed).length, steps };
   writeFileSync(join(out, 'report.json'), JSON.stringify(report, null, 2) + '\n');
   rmSync(work, { recursive: true, force: true });

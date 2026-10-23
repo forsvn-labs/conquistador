@@ -17,29 +17,18 @@ You do not need an account for a marketing service. The agent drafts from the fa
 In your project folder, choose npm or Bun:
 
 ```sh
-# npm
-npm i -g @forsvn/conquistador@latest && conquistador
-
-# Bun
-bun add --global @forsvn/conquistador@latest && conquistador
+npx conquistador@latest
+# Or: bunx conquistador@latest
 ```
 
-This installs the permanent command and opens the full-screen TUI. It finds your agents,
+This opens the full-screen installer without a global install. It finds your agents,
 shows the plan, and changes no agent configuration until you confirm. It ends with the command
 to type in each agent. The terminal installs Conquistador; the work happens inside your agent.
 See [Coding agents](/install/coding-agents) for the steps.
 
-Run `conquistador` later to manage your installs. To run the installer once instead:
-
-```sh
-npx @forsvn/conquistador@latest
-bunx @forsvn/conquistador@latest
-pnpm dlx @forsvn/conquistador@latest
-```
-
-You can keep the command later with **Keep the CLI installed** in the TUI.
-Use `-g` with npm. Without it, npm installs into the current project. See
-[Troubleshooting](/troubleshooting#npm-install-without-g) if an older command runs.
+Run `npx conquistador@latest` again to manage installs. For a permanent command,
+run `npm i -g conquistador`, then use `conquistador`. You can also run the installer
+with `bunx conquistador@latest` or `pnpm dlx conquistador@latest`.
 
 ## 2. Record your product
 

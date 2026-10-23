@@ -19,47 +19,28 @@ Follow [Executor's client setup](https://executor.sh/docs/mcp-clients),
 [MCP discovery](https://executor.sh/docs/mcp), and
 [approval guidance](https://executor.sh/docs/concepts/tools-and-approvals).
 
-<Note>
-  The automatic Conquistador source adapter below uses Executor 1 commands. On Executor 2 the
-  installer shows a setup handoff and leaves the source unverified. Native v2 app installation
-  and the legacy readiness CLI have not passed live compatibility checks.
-</Note>
+## Install Conquistador alone
 
-| Use | What it does | Version |
-|---|---|---|
-| Conquistador as an Executor 1 source | Agents connected to that server get the Conquistador MCP tools. | From 0.4.0; checked with Executor 1.5.40 and 1.6.8 |
-| `conquistador connect` | Checks analytics, ads, CRM, email, and other capabilities through the legacy Executor interface. | From 0.3.0; v2 compatibility remains open |
+Import `https://mcp.forsvn.com/mcp` through **Connect a service**, then complete OAuth.
+Alternatively, import your own public HTTPS deployment. Current MCP import supports
+OAuth and no-auth servers; an API-key-only server needs a separate app setup.
 
-## Add Conquistador to Executor 1
-
-<Note>
-  From 0.4.0.
-</Note>
-
-1. Run `npx @forsvn/conquistador@latest` and choose **Executor**.
-2. Enter a source name, or keep the default `conquistador` (`--executor-name=NAME`).
-3. Confirm the plan.
-
-The installer runs `executor call executor mcp addServer`. Executor asks to approve the change, and the installer says yes for that one change, because you approved it in the review. When Executor is installed but not running, the review says so, and the step starts it with `executor daemon run`. An Executor version without `mcp.addServer` gets the steps to add the source by hand.
-
-Executor 1.5.40 can add a source but cannot remove or replace one from the command line. With that version, `conquistador remove` tells you to remove the source in the Executor app (`executor web`).
-
-Choose this option only for agents that do not get the plugin or a direct MCP config. An agent that has both gets the same tools twice.
-
-## Connect services with `conquistador connect`
-
-`conquistador connect` shows 22 capabilities, for example "read the CRM" or "send email". Each one
-is missing, connected, or verified through the legacy interface. For Executor 2, use its MCP
-discovery flow; this CLI does not establish v2 provider readiness.
+For the managed, version-aware installer:
 
 ```sh
-conquistador connect                    # Show every capability
-conquistador connect launch             # Only the capabilities that the launch command uses
-conquistador connect add                # Open the Executor web UI to add an integration
-conquistador connect verify crm.read --tool hubspot.contacts.search --args '{}'
+npx conquistador@latest mcp install --executor
 ```
 
-- `verify` runs one read tool and records the result in `~/.conquistador/connections.json`.
-- Set `CONQUISTADOR_EXECUTOR_URL` to check one Executor server only.
-- Reads run without a prompt. Sends, publishing, and spend need your approval each time.
-- Conquistador does not start an Executor daemon by accident.
+Review the plan before applying it. It selects only Executor, without installing
+coding-agent plugins or desktop connections. Executor 2 uses the existing owned-app
+adapter with the configured connection; Executor 1 uses its legacy source adapter.
+These adapters have local contract coverage, which does not establish live acceptance.
+
+The hosted deployment and authentication still need verification. Check the
+[current status](https://github.com/forsvn-labs/conquistador/blob/main/STATUS.md)
+before relying on the public endpoint. After connecting, discover Conquistador's
+tools and call `conquistador_methods` and `conquistador_brief`.
+
+Do not also register direct MCP in the same agent if Executor already supplies these tools.
+The legacy `conquistador connect` capability checker does not establish Executor 2
+provider readiness; use Executor's own discovery and account flow.
