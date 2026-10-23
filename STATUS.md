@@ -38,8 +38,10 @@ The [2026-10 behavior review](docs/BEHAVIOR-REVIEW-2026-10.md) and its implement
 are on [draft PR #86](https://github.com/forsvn-labs/conquistador/pull/86).
 The candidate adds shared admission, bounded current-stage briefs, advisory hooks,
 verified context reuse, and scoped edit checks. The strict thirteen-prompt audit and
-110-case routing corpus pass. Build and focused integration checks pass; final full
-suite and installed-package validation are in progress. This is unmerged source,
+142-case routing suite pass. Build, all 969 source tests, 44 checker cases, 15 social
+style cases, and 38 installed Bun consumer checks pass. The installer run passed
+64/67 cases on Node 26; all three failed cases pass on Node 24 reruns. The review
+records the runtime error and exact candidate package evidence. This is unmerged source,
 not a release or an update to the installed or hosted product.
 
 1. Resolve the existing hosted-access blocker through its authorized owner,
