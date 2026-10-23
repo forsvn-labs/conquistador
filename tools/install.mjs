@@ -136,7 +136,7 @@ function stage(mode, target, selection) {
   copy('docs/MASTER-AGENT.md');
   copy('docs/USAGE.md');
   copy('docs/PROACTIVE.md');
-  const sharedAdviceFiles = ['prompt-advice.mjs', 'read-evidence.mjs', 'brief.mjs', 'context-files.mjs', 'context-selection.mjs', 'domain-package.mjs', 'method-library.mjs', 'plugin-contracts.mjs', 'routing-contract.mjs', 'request-text.mjs', 'module-root.mjs'].map(file => `tools/${file}`);
+  const sharedAdviceFiles = ['prompt-advice.mjs', 'read-evidence.mjs', 'brief.mjs', 'search-index.json', 'context-files.mjs', 'context-selection.mjs', 'domain-package.mjs', 'method-library.mjs', 'plugin-contracts.mjs', 'routing-contract.mjs', 'request-text.mjs', 'module-root.mjs'].map(file => `tools/${file}`);
   if (['conquistador', 'plugin', 'single-agent'].includes(mode)) {
     copy('release/completeness.json');
     copy('tools/proactive.mjs');

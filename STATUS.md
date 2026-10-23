@@ -4,6 +4,18 @@ Updated 2026-10-23. Release evidence: [PR #92](https://github.com/forsvn-labs/co
 [v0.10.2](https://github.com/forsvn-labs/conquistador/releases/tag/v0.10.2), and
 [publication run 39944022729](https://github.com/forsvn-labs/conquistador/actions/runs/39944022729).
 
+## In review: agent surface performance
+
+The performance branch adds a portable search snapshot with source-digest checks,
+per-query scoring setup, and short-entry catalog routing for all 41 commands.
+[Review and repeatable evidence](docs/performance/REVIEW.md) cover the API, CLI,
+hooks, skills/plugins, stdio, HTTP, packaging, and hosted configuration.
+Local validation: build/type checks, 980 product tests, 142 routing cases,
+38 installed-app checks, and 11 loopback HTTP workflow steps pass.
+The cleanup removes unused selection fields, redundant retries, stale comments,
+and duplicate rendered reports; raw verification JSON remains.
+This is source verification, not a new release, deployment, or live model-quality verdict.
+
 ## Shipped
 
 Product 0.10.2 is tagged at `bd0f4c279650ca2eb14a2d32016d4d2cef80f323`.

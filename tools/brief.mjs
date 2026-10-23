@@ -131,10 +131,16 @@ function walkMarkdown(root, { limitFiles, limitBytes, depth, followRoot = false 
   return found;
 }
 
-function document(absolute, key, { source, method }) {
-  // Callers pass planned entries; only these fields matter.
+function document(absolute, key, { source, method }, prepared) {
   let raw;
   try { raw = readFileSync(absolute, 'utf8'); } catch { return null; }
+
+  const digest = createHash('sha256').update(raw).digest('hex');
+
+  if (prepared?.digest === digest && prepared.source === source && prepared.method === method) {
+    try { return { ...revive(prepared), absolute }; }
+    catch { /* Rebuild malformed cached terms from the source text. */ }
+  }
   if (raw.includes('\0')) return null;
   const info = describe(raw);
   const pathTerms = terms(key.replace(/\.[a-z]+$/i, '').replace(/[/_.-]/g, ' '));
@@ -147,7 +153,6 @@ function document(absolute, key, { source, method }) {
   add(terms(info.summary), 2);
   add(bodyTerms, 1);
   const kind = source === 'user' ? 'user' : classify(key);
-  const digest = createHash('sha256').update(raw).digest('hex');
   const nameTerms = new Set(terms(posix.basename(key).replace(/\.[a-z]+$/i, '').replace(/[_.-]/g, ' ')));
   return { key, absolute, source, method, kind, digest, nameTerms, title: info.title, summary: info.summary, bytes: Buffer.byteLength(raw), tf, length: bodyTerms.length + pathTerms.length * 4 + titleTerms.length * 2 };
 }
@@ -172,9 +177,9 @@ const revive = doc => ({ ...doc, tf: new Map(doc.tf), nameTerms: new Set(doc.nam
 
 // Index every knowledge file. The on-disk cache is keyed by each file's path, size, and mtime,
 // so an edited playbook or a plugin update rebuilds it. Hooks run per prompt and need this.
-export function knowledgeIndex(root = moduleRoot, { playbooks = userPlaybookRoots(), persistCache = true } = {}) {
+export function knowledgeIndex(root = moduleRoot, { playbooks = userPlaybookRoots(), persistCache = true, packagedIndex = true } = {}) {
   const packageRoot = realpathSync(resolve(root));
-  const cacheKey = `${packageRoot}\0${playbooks.join('\0')}\0${persistCache}`;
+  const cacheKey = `${packageRoot}\0${playbooks.join('\0')}\0${persistCache}\0${packagedIndex}`;
   if (cache.has(cacheKey)) return cache.get(cacheKey);
   const contract = loadRoutingContract(packageRoot);
   const libraryRoot = posix.dirname(contract.parentPath);
@@ -208,7 +213,21 @@ export function knowledgeIndex(root = moduleRoot, { playbooks = userPlaybookRoot
     if (stored.signature === signature) all = stored.docs.map(revive);
   } catch { /* Build below. */ }
   if (!all) {
-    all = planned.map(item => document(item.absolute, item.key, item)).filter(Boolean);
+    // The shipped snapshot contains only derived bundled data. Validate each source digest
+    // before reuse: local edits, renamed documents and domain subsets remain authoritative.
+    let prepared = new Map();
+
+    if (packagedIndex) try {
+      const path = join(packageRoot, 'tools/search-index.json');
+      const stat = lstatSync(path);
+
+      if (!stat.isFile() || stat.size > 8 * 1024 * 1024) throw Error('Invalid search snapshot.');
+      const snapshot = JSON.parse(readFileSync(path, 'utf8'));
+
+      if (snapshot.version === INDEX_VERSION && Array.isArray(snapshot.docs)) prepared = new Map(snapshot.docs.map(doc => [doc.key, doc]));
+    } catch { /* Optional optimization; source files always remain sufficient. */ }
+
+    all = planned.map(item => document(item.absolute, item.key, item, item.source === 'user' ? undefined : prepared.get(item.key))).filter(Boolean);
     if (persistCache) try {
       mkdirSync(cacheDirectory(), { recursive: true, mode: 0o700 });
       const temporary = `${cacheFile}.${process.pid}.tmp`;
@@ -226,19 +245,38 @@ export function knowledgeIndex(root = moduleRoot, { playbooks = userPlaybookRoot
   return value;
 }
 
-function bm25(doc, query, index) {
-  // A file named after the request ("hooks" → hook-archetypes.md) is a strong signal on its own.
-  let score = [...new Set(query)].filter(word => !GENERIC.has(word) && !['dev', 'developer', 'saas', 'ios', 'mobile'].includes(word) && doc.nameTerms.has(word)).length * 3;
-  // Long schemas and contracts crowd out playbooks; keep them available but lower.
-  const sizeFactor = doc.bytes > 16_000 ? 0.6 : 1;
-  for (const word of new Set(query)) {
-    const frequency = doc.tf.get(word);
-    if (!frequency) continue;
-    const idf = Math.log(1 + (index.total - (index.df.get(word) ?? 0) + 0.5) / ((index.df.get(word) ?? 0) + 0.5));
-    score += idf * (frequency * 2.2) / (frequency + 1.2 * (0.25 + 0.75 * doc.length / index.averageLength));
-  }
-  // Round so that last-digit floating-point differences between Node versions cannot reorder ties.
-  return Math.round(score * sizeFactor * 1e4) / 1e4;
+// Maintainer-only generation. Never discover user playbooks or include checkout paths.
+export function buildSearchSnapshot(root = moduleRoot) {
+  const index = knowledgeIndex(root, { playbooks: [], persistCache: false, packagedIndex: false });
+
+  return { version: INDEX_VERSION, docs: index.docs.map(doc => {
+    const { absolute: _absolute, ...portable } = serialize(doc);
+
+    return portable;
+  }) };
+}
+
+function rankQuery(query, index) {
+  // Preserve term order and arithmetic so cached query weights do not change scores.
+  const words = [...new Set(query)].map(word => ({
+    word,
+    named: !GENERIC.has(word) && !['dev', 'developer', 'saas', 'ios', 'mobile'].includes(word),
+    idf: Math.log(1 + (index.total - (index.df.get(word) ?? 0) + 0.5) / ((index.df.get(word) ?? 0) + 0.5)),
+  }));
+
+  return doc => {
+    let score = words.filter(({ word, named }) => named && doc.nameTerms.has(word)).length * 3;
+    const sizeFactor = doc.bytes > 16_000 ? 0.6 : 1;
+
+    for (const { word, idf } of words) {
+      const frequency = doc.tf.get(word);
+
+      if (!frequency) continue;
+      score += idf * (frequency * 2.2) / (frequency + 1.2 * (0.25 + 0.75 * doc.length / index.averageLength));
+    }
+
+    return Math.round(score * sizeFactor * 1e4) / 1e4;
+  };
 }
 
 export function namedPlatforms(prompt) {
@@ -295,7 +333,8 @@ export function createBrief(input, { root = moduleRoot, playbooks, persistCache 
     const lead = play.chain[firstStep]?.command;
     if (lead && contract.methods[lead]) methods = [contract.methods[lead]];
   }
-  const query = expand(terms(prompt));
+
+  const rank = rankQuery(expand(terms(prompt)), index);
   const selectedNames = new Set(methods.map(item => item.name));
   if (!methods.length && !play && !platforms.length && !(explicit || force)) {
     return { schema: BRIEF_SCHEMA, action: 'none', reason: routed.reason ?? 'no-relevant-capability', methods: [], must: [], situational: [], platforms: [], packageRoot };
@@ -315,7 +354,7 @@ export function createBrief(input, { root = moduleRoot, playbooks, persistCache 
     if (!owned && !shared && doc.source !== 'user' && !platformHit) return null;
     if (doc.kind === 'platform' && !platformHit) return null;
     if (doc.kind === 'channel' && !platformHit) return null;
-    const lexical = bm25(doc, query, index) * (priorWeight[doc.kind] ?? 1);
+    const lexical = rank(doc) * (priorWeight[doc.kind] ?? 1);
     let score = lexical;
     if (owned) score += 2;
     if (required.has(doc.key)) score += 3;
@@ -333,38 +372,37 @@ export function createBrief(input, { root = moduleRoot, playbooks, persistCache 
   const fileBudget = routed.mode === 'assist' ? 1 : 3;
   const byteBudget = routed.mode === 'assist' ? 1800 : 10000;
   // Every resource shares the task's count and byte budget.
-  const take = (item, why) => {
+  const take = item => {
     if (item.sibling || must.some(entry => entry.doc.digest === item.doc.digest)) return;
     if (must.length >= fileBudget || bytes + item.doc.bytes > byteBudget) return;
-    must.push({ ...item, why });
+    must.push(item);
     bytes += item.doc.bytes;
   };
-  // 2. The user's own playbooks outrank generic method knowledge.
+  // The user's own playbooks outrank generic method knowledge.
   // Keep only strong matches: within 60% of the best user playbook for this task.
   const userHits = scored.filter(entry => entry.doc.kind === 'user');
   for (const item of userHits.filter(entry => entry.score >= (userHits[0]?.score ?? 0) * 0.6).slice(0, 1)) take(item);
-  // 1. Platform packs and channel guides the user named.
+  // Platform packs and channel guides the user named.
   for (const item of scored.filter(entry => entry.doc.kind === 'platform' || entry.doc.kind === 'channel')) {
     const inPrimary = item.doc.method === methods[0]?.name || item.doc.kind === 'channel';
     if (inPrimary || !scored.some(entry => entry.doc.kind === 'platform' && entry.doc.method === methods[0]?.name && posix.basename(entry.doc.key) === posix.basename(item.doc.key))) take(item);
     if (must.length >= 3) break;
   }
-  // 3. A play's own playbooks (its recovered method folder) come first among method knowledge.
+  // A play's own playbooks (its recovered method folder) come first among method knowledge.
   if (play) scored.filter(entry => entry.owner === play.name && entry.doc.source === 'play' && entry.doc.kind === 'playbook').slice(0, 2).forEach(item => take(item));
-  // 4. The primary command's declared Core list, in its order: the files COMMAND.md tells the
-  // agent to read in full before drafting. Then the strongest playbooks of each selected method.
+  // Prefer the strongest playbooks owned by each selected command.
   methods.forEach((method, position) => {
     const quota = position === 0 ? 3 : 1;
     // The strongest two always count; a third needs its own lexical match, not only membership.
     scored.filter(entry => entry.owner === method.name && entry.doc.source === 'method' && entry.doc.kind === 'playbook')
       .filter((entry, rank) => rank < Math.min(quota, 2) || entry.lexical >= 3).slice(0, quota).forEach(item => take(item));
   });
-  // 5. Anti-patterns of the primary method: the final check.
+  // Anti-patterns of the primary method: the final check.
   const checklist = scored.find(entry => entry.owner === methods[0]?.name && entry.doc.source === 'method' && entry.doc.kind === 'checklist');
   if (checklist) take(checklist);
-  // 6. Fill any remaining room with the strongest remaining matches.
+  // Fill any remaining room with the strongest remaining matches.
   // Shared parent files stay situational unless the user named their platform.
-  for (const item of scored) if (must.length < Math.min(LIMITS.mustFiles, 6) && !['example', 'checklist'].includes(item.doc.kind) && item.owner) take(item);
+  for (const item of scored) if (must.length < LIMITS.mustFiles && !['example', 'checklist'].includes(item.doc.kind) && item.owner) take(item);
 
   // Nothing matched: say so instead of returning an empty reading list.
   if (!methods.length && !play && !must.length) {
@@ -378,7 +416,7 @@ export function createBrief(input, { root = moduleRoot, playbooks, persistCache 
     source: item.doc.source,
     kind: item.doc.kind,
     title: item.doc.title,
-    why: item.why ?? reasonFor(item.doc, platforms),
+    why: reasonFor(item.doc, platforms),
     bytes: item.doc.bytes,
     score: Number(item.score.toFixed(3)),
   });
@@ -392,9 +430,9 @@ export function createBrief(input, { root = moduleRoot, playbooks, persistCache 
     if (!now && step.command) {
       playbooks = index.docs.filter(doc => doc.source === 'method' && doc.method === step.command && doc.kind === 'playbook'
         && (!step.mode || !doc.key.includes('/references/modes/') || doc.key.includes(`/references/modes/${step.mode}`)))
-        .map(doc => ({ doc, score: bm25(doc, query, index) + (record.requiredResources ?? []).includes(`${libraryRoot}/${doc.key}`) * 3 }))
+        .map(doc => ({ doc, score: rank(doc) + (record.requiredResources ?? []).includes(`${libraryRoot}/${doc.key}`) * 3 }))
         .sort((a, b) => b.score - a.score || a.doc.key.localeCompare(b.doc.key)).slice(0, 2)
-        .filter(item => !seen.has(item.doc.digest)).map(item => view({ ...item, lexical: item.score }));
+        .filter(item => !seen.has(item.doc.digest)).map(view);
     }
     return { step: position + 1, ...(step.command ? { command: step.command } : { method: step.method }), label, path: step.path, absolute: join(packageRoot, step.path),
       ...(step.mode ? { mode: step.mode } : {}), ...(step.when ? { when: step.when } : {}), ...(step.for ? { for: step.for } : {}), now, playbooks };
@@ -551,9 +589,9 @@ export function packBrief(brief, { limit, callerContext, hosted = false, compact
 
 export function searchKnowledge(query, { root = moduleRoot, playbooks, persistCache = true, limit = 12 } = {}) {
   const index = knowledgeIndex(root, { playbooks, persistCache });
-  const words = terms(query);
+  const rank = rankQuery(terms(query), index);
   return [...index.docs, ...index.users].filter(doc => doc.kind !== 'process')
-    .map(doc => ({ doc, score: bm25(doc, words, index) * (priorWeight[doc.kind] ?? 1) }))
+    .map(doc => ({ doc, score: rank(doc) * (priorWeight[doc.kind] ?? 1) }))
     .filter(item => item.score > 0.5)
     .sort((a, b) => b.score - a.score || a.doc.key.localeCompare(b.doc.key))
     .slice(0, limit)

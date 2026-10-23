@@ -58,7 +58,8 @@ export function capabilityCatalog(source, names) {
   const labels = new Map(Object.values(contract.methods).map(method => [method.name, method.label]));
   const rows = names.filter(name => name !== 'conquistador').sort().map(name => {
     if (!labels.has(name)) throw Error(`Missing public capability label: ${name}`);
-    return `| ${labels.get(name)} | [${name}](commands/${name}/${commandDocument}) |`;
+
+    return `| ${labels.get(name)} | [${name}](commands/${name}/ENTRY.md) |`;
   });
   return '# Available capabilities\n\nSelect only the methods needed for this request. Show the relevant public capability and specialist\nlabels during work. Load a method and its resources only after routing. This catalog lists only the\nmethods included in this package; it grants no permission beyond its domain restriction or host.\n\n| Public capability | Internal method |\n| --- | --- |\n' + rows.join('\n') + '\n';
 }

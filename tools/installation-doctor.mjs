@@ -25,7 +25,7 @@ function bytesAt(root, path) {
     current = join(current, part);
     const stat = lstatSync(current);
     if (stat.isSymbolicLink() || (index < parts.length - 1 ? !stat.isDirectory() : !stat.isFile())) throw Error(`Not a regular resource: ${path}`);
-    if (index === parts.length - 1 && stat.size > 262144) throw Error(`Resource exceeds diagnostic limit: ${path}`);
+    if (index === parts.length - 1 && stat.size > (path === 'tools/search-index.json' ? 8 * 1024 * 1024 : 262144)) throw Error(`Resource exceeds diagnostic limit: ${path}`);
   }
   return readFileSync(current);
 }

@@ -4,8 +4,8 @@
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
-import { dirname, join, resolve } from 'node:path';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { performance } from 'node:perf_hooks';
 import { Readable, Writable } from 'node:stream';
@@ -125,15 +125,20 @@ if (args.includes('--child')) {
     }
   }
 
-  const git = (...argv) => spawnSync('git', argv, { cwd: root, encoding: 'utf8' }).stdout.trim();
+  const git = (...argv) => {
+    const result = spawnSync('git', argv, { cwd: root, encoding: 'utf8' });
 
+    return result.status === 0 ? (result.stdout ?? '').trim() : '';
+  };
+
+  const ownsGit = git('rev-parse', '--show-toplevel') === root;
   const report = {
     schema: 'conquistador.e2e.performance/v1', date: new Date().toISOString(),
-    source: git('rev-parse', 'HEAD'), dirty: Boolean(git('status', '--porcelain')),
-    sourceHashes: Object.fromEntries(['api/index.mjs', 'tools/brief.mjs', 'tools/skills-mcp.mjs'].map(path => [path, digest(readFileSync(join(root, path)))])),
+    source: option('--source-revision', ownsGit ? git('rev-parse', 'HEAD') : null), dirty: ownsGit ? Boolean(git('status', '--porcelain')) : null,
+    sourceHashes: Object.fromEntries(['api/index.mjs', 'tools/brief.mjs', 'tools/skills-mcp.mjs', 'tools/search-index.json'].filter(path => existsSync(join(root, path))).map(path => [path, digest(readFileSync(join(root, path)))])),
     harnessSha256: digest(readFileSync(fileURLToPath(import.meta.url))),
     node: process.version, platform: process.platform, arch: process.arch,
-    reference: referencePath ? resolve(referencePath) : null,
+    reference: referencePath ? relative(root, resolve(referencePath)) : null,
     limits: 'Fixed app workloads on this machine. No network, model, send, publication, or production writes. Compare repeated runs on the same idle machine.',
     measurements, framing,
   };

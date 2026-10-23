@@ -4993,7 +4993,7 @@
     },
     {
       "path": "tools/method-library.mjs",
-      "sha256": "ecf5fd0d2caf18260accf0914216444f84fd50e0567fdf3af5f24841c84d4317"
+      "sha256": "3bc7a32d1fb4d3ad66ed24ddcf525cdad560494cfbe41459e46f59281ad9af05"
     },
     {
       "path": "tools/routing-contract.mjs",
@@ -5013,7 +5013,11 @@
     },
     {
       "path": "tools/brief.mjs",
-      "sha256": "144c0befe6aaf8ffa2d6e514d14a6a80a54b86b11ac7d13c253b5c2f3dc94f73"
+      "sha256": "d9c6062e014fc216de4ce8491adc3cdb4f13f01b951ea9af42175649169516d0"
+    },
+    {
+      "path": "tools/search-index.json",
+      "sha256": "0d6322c44b580cb66e46ca3e4277a230e9424dd42be5707af2df62276e44f0cb"
     },
     {
       "path": "tools/prompt-advice.mjs",

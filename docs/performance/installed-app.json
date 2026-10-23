@@ -1,0 +1,164 @@
+{
+  "schema": "conquistador.e2e.app-integration/v1",
+  "date": "2026-10-23T12:36:02.473Z",
+  "source": "8322889467e54b4a5a1e2a11a34baf8130281fdf",
+  "dirty": true,
+  "sha256": "54064f79b03694a08d27c4ede388284d2ad246e55bd56642f506d2f62a25b534",
+  "installer": "bun",
+  "platform": "darwin",
+  "passed": true,
+  "checks": [
+    {
+      "name": "bun adds the tarball as a production dependency",
+      "passed": true
+    },
+    {
+      "name": "dependency installation starts no TUI or agent setup",
+      "passed": true
+    },
+    {
+      "name": "the package publishes root and MCP exports with declarations",
+      "passed": true
+    },
+    {
+      "name": "the package has no install lifecycle",
+      "passed": true
+    },
+    {
+      "name": "official MCP clients and the TypeScript compiler install",
+      "passed": true
+    },
+    {
+      "name": "the npm package contains the runnable app example",
+      "passed": true
+    },
+    {
+      "name": "the local CLI explains dependency setup without opening the TUI",
+      "passed": true
+    },
+    {
+      "name": "the installed root and MCP imports load",
+      "passed": true
+    },
+    {
+      "name": "all eight tool definitions and agent instructions are available without a CLI",
+      "passed": true
+    },
+    {
+      "name": "tool definitions cannot mutate the shared engine",
+      "passed": true
+    },
+    {
+      "name": "a brief routes the task and carries only the supplied caller context",
+      "passed": true
+    },
+    {
+      "name": "compact briefs preserve required reads and a second caller has no first-caller context",
+      "passed": true
+    },
+    {
+      "name": "methods, files, search, and relative reads use the packaged library",
+      "passed": true
+    },
+    {
+      "name": "library reads reject escaping paths and do not execute scripts",
+      "passed": true
+    },
+    {
+      "name": "invalid arguments and unknown tools have bounded caller errors",
+      "passed": true
+    },
+    {
+      "name": "the check rejects weak writing and invented proof",
+      "passed": true
+    },
+    {
+      "name": "the final draft gets a signed check receipt",
+      "passed": true
+    },
+    {
+      "name": "the host verifies the exact draft, context, and channel",
+      "passed": true
+    },
+    {
+      "name": "edited text, changed context, changed channel, and forged receipts are refused",
+      "passed": true
+    },
+    {
+      "name": "an unsigned check cannot become signed evidence",
+      "passed": true
+    },
+    {
+      "name": "the existing rubric gate enforces dimension floors",
+      "passed": true
+    },
+    {
+      "name": "MCP mounts beside the app on the same port",
+      "passed": true
+    },
+    {
+      "name": "MCP authentication fails closed without configuration or credentials",
+      "passed": true
+    },
+    {
+      "name": "app-owned authentication can grant or deny a request without a shared token",
+      "passed": true
+    },
+    {
+      "name": "HTTP validates Origins and permits only an explicit browser origin",
+      "passed": true
+    },
+    {
+      "name": "HTTP accepts initialize and initialized notification without leaking user state",
+      "passed": true
+    },
+    {
+      "name": "HTTP refuses unsupported versions, bad JSON, batches, and oversized streamed input",
+      "passed": true
+    },
+    {
+      "name": "HTTP and direct tool calls share checks and receipt signatures",
+      "passed": true
+    },
+    {
+      "name": "the official v1 MCP client completes tool discovery and a signed check",
+      "passed": true
+    },
+    {
+      "name": "the official current MCP client can use the advertised protocol",
+      "passed": true
+    },
+    {
+      "name": "Fetch handlers provide the same tool engine with the app request type",
+      "passed": true
+    },
+    {
+      "name": "Fetch body errors and cancellation failures return bounded errors and permit retry",
+      "passed": true
+    },
+    {
+      "name": "the mounted app still answers after clients close",
+      "passed": true
+    },
+    {
+      "name": "the packaged app example serves a direct check and MCP on one port",
+      "passed": true
+    },
+    {
+      "name": "a warm installed-app brief cannot follow a replaced bundled playbook",
+      "passed": true
+    },
+    {
+      "name": "the installed consumer completes without a background process",
+      "passed": true
+    },
+    {
+      "name": "a strict TypeScript consumer resolves both public imports and rejects invalid calls",
+      "passed": true
+    },
+    {
+      "name": "the app tools create no home state or disk cache",
+      "passed": true
+    }
+  ]
+}

@@ -27,13 +27,17 @@ SDK using explicitly synthetic fixtures, with no model or network. See each modu
 Edit authored source in `runtime/src/`, `catalog/src/`, or `evals/src/`; runtime/lib is maintained
 build output. Skills are editable Markdown with contained resources and metadata versions. Preserve
 frontmatter names and parent routing. An isolated skill must not depend on sibling or private files.
-Record active work, ready-to-ship behavior changes, and checks in ROADMAP.md. CHANGELOG.md contains shipped work only. Do not add private issue exports,
+Record active work, ready-to-ship behavior changes, and checks in STATUS.md. CHANGELOG.md contains shipped work only. Do not add private issue exports,
 source history, raw provider receipts, customer content, or credentials to a pull request.
 
 After intentional skill, supporting-resource, or plugin payload edits (including hooks,
 briefing helpers, and README), run `node tools/update-completeness.mjs`. Review both
 `release/completeness.json` and the plugin-specific `release/plugin-completeness.json` with the
-source changes. It records exact method versions and
+source changes. The same command regenerates `tools/search-index.json` from bundled
+methods only. This portable search snapshot stores no checkout paths or user playbooks.
+`node --test tools/search-index.test.mjs` verifies parity and fallback behavior;
+[the performance review](docs/performance/REVIEW.md) gives repeatable latency checks.
+The manifests record exact method versions and
 content hashes for the complete library. The installation-doctor tests reject missing or stale
 manifest entries. Use `node runtime/bin/conquistador.js operator doctor --path /absolute/install`
 to check local files without starting a host or service. This does not establish host activation,
