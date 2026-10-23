@@ -7,7 +7,6 @@ import { methodIdentity } from './installation-doctor.mjs';
 import { commandNames, methodPath } from './method-library.mjs';
 
 import { buildSearchSnapshot } from './brief.mjs';
-
 import { operatorFiles } from './operator-package.mjs';
 import { writeRoutingContract } from './routing-contract.mjs';
 import { buildPluginManifest, pluginManifestPath } from './plugin-payload.mjs';

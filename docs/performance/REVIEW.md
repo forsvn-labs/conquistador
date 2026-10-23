@@ -16,13 +16,6 @@ HTTP MCP, and hosted Worker. Measurements are local; no release or deployment is
 - A skill entry sends an agent to a nonexistent procedure or unnecessary full-library read.
 - Packaging or hosted upload omits a runtime dependency.
 
-## Baseline
-
-`node tools/e2e/performance.mjs --out docs/performance/baseline.json`
-records six API workloads and six fragmented stdio workloads. Each API workload includes
-cold processes and 60 warm samples. Output hashes must match after implementation.
-First brief/search: approximately 263–269 ms. Warm calls: 0.36–2.80 ms median.
-
 ## Surface findings and changes
 
 - **Search and briefs:** 1,084 bundled resources were tokenized again on each fresh
@@ -92,7 +85,7 @@ normalizes only source/home paths before comparing output hashes. It starts no a
 
 The main file is this review. `baseline.json` and `after.json` contain API and framing
 samples; `surfaces-*.json` contain CLI/hook samples. `agent-loop/report.json` records the
-local HTTP workflow; its Markdown companion presents those same results.
+local HTTP workflow.
 
 ## Verification results
 
@@ -118,4 +111,16 @@ at 263.49 → 120.30 ms, warm search at 0.39 → 0.20 ms, CLI briefs at
 347.95 → 201.39 ms, and relevant prompt hooks at 343.68 → 199.22 ms.
 All compared output hashes match. Fragmented transport and checks remain effectively
 unchanged; the change targets retrieval and agent reading costs.
-`results.html` is a generated visual summary of the checked timing JSON and test results.
+
+## Cleanup verification
+
+The follow-up cleanup removes unused selection fields, a redundant file-read retry,
+stale comments, and duplicate HTML/Markdown reports. Raw measurement and workflow
+JSON remains the evidence source. Fallback handling now surrounds only cached-term
+revival; unrelated indexing failures are not retried or hidden.
+
+Cleanup checks: 71 focused tests and 142 routing cases pass. Both performance
+harnesses match the preceding API, stdio, CLI, and hook output hashes. Cold full
+briefs remain about 129 ms; fresh CLI and hook briefs remain about 200–204 ms.
+Repeat the two performance commands above with output paths under `dist/e2e/`
+to check later cleanups without replacing the original before/after evidence.

@@ -12,6 +12,8 @@ per-query scoring setup, and short-entry catalog routing for all 41 commands.
 hooks, skills/plugins, stdio, HTTP, packaging, and hosted configuration.
 Local validation: build/type checks, 980 product tests, 142 routing cases,
 38 installed-app checks, and 11 loopback HTTP workflow steps pass.
+The cleanup removes unused selection fields, redundant retries, stale comments,
+and duplicate rendered reports; raw verification JSON remains.
 This is source verification, not a new release, deployment, or live model-quality verdict.
 
 ## Shipped

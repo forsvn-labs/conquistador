@@ -132,13 +132,15 @@ function walkMarkdown(root, { limitFiles, limitBytes, depth, followRoot = false 
 }
 
 function document(absolute, key, { source, method }, prepared) {
-  // Callers pass planned entries; only these fields matter.
   let raw;
   try { raw = readFileSync(absolute, 'utf8'); } catch { return null; }
 
   const digest = createHash('sha256').update(raw).digest('hex');
 
-  if (prepared?.digest === digest && prepared.source === source && prepared.method === method) return { ...revive(prepared), absolute };
+  if (prepared?.digest === digest && prepared.source === source && prepared.method === method) {
+    try { return { ...revive(prepared), absolute }; }
+    catch { /* Rebuild malformed cached terms from the source text. */ }
+  }
   if (raw.includes('\0')) return null;
   const info = describe(raw);
   const pathTerms = terms(key.replace(/\.[a-z]+$/i, '').replace(/[/_.-]/g, ' '));
@@ -225,10 +227,7 @@ export function knowledgeIndex(root = moduleRoot, { playbooks = userPlaybookRoot
       if (snapshot.version === INDEX_VERSION && Array.isArray(snapshot.docs)) prepared = new Map(snapshot.docs.map(doc => [doc.key, doc]));
     } catch { /* Optional optimization; source files always remain sufficient. */ }
 
-    all = planned.map(item => {
-      try { return document(item.absolute, item.key, item, item.source === 'user' ? undefined : prepared.get(item.key)); }
-      catch { return document(item.absolute, item.key, item); }
-    }).filter(Boolean);
+    all = planned.map(item => document(item.absolute, item.key, item, item.source === 'user' ? undefined : prepared.get(item.key))).filter(Boolean);
     if (persistCache) try {
       mkdirSync(cacheDirectory(), { recursive: true, mode: 0o700 });
       const temporary = `${cacheFile}.${process.pid}.tmp`;
@@ -258,8 +257,7 @@ export function buildSearchSnapshot(root = moduleRoot) {
 }
 
 function rankQuery(query, index) {
-  // Query invariants belong outside the document loop. Preserve term order and the
-  // original arithmetic so scores and tie-breaking remain byte-for-byte stable.
+  // Preserve term order and arithmetic so cached query weights do not change scores.
   const words = [...new Set(query)].map(word => ({
     word,
     named: !GENERIC.has(word) && !['dev', 'developer', 'saas', 'ios', 'mobile'].includes(word),
@@ -374,38 +372,37 @@ export function createBrief(input, { root = moduleRoot, playbooks, persistCache 
   const fileBudget = routed.mode === 'assist' ? 1 : 3;
   const byteBudget = routed.mode === 'assist' ? 1800 : 10000;
   // Every resource shares the task's count and byte budget.
-  const take = (item, why) => {
+  const take = item => {
     if (item.sibling || must.some(entry => entry.doc.digest === item.doc.digest)) return;
     if (must.length >= fileBudget || bytes + item.doc.bytes > byteBudget) return;
-    must.push({ ...item, why });
+    must.push(item);
     bytes += item.doc.bytes;
   };
-  // 2. The user's own playbooks outrank generic method knowledge.
+  // The user's own playbooks outrank generic method knowledge.
   // Keep only strong matches: within 60% of the best user playbook for this task.
   const userHits = scored.filter(entry => entry.doc.kind === 'user');
   for (const item of userHits.filter(entry => entry.score >= (userHits[0]?.score ?? 0) * 0.6).slice(0, 1)) take(item);
-  // 1. Platform packs and channel guides the user named.
+  // Platform packs and channel guides the user named.
   for (const item of scored.filter(entry => entry.doc.kind === 'platform' || entry.doc.kind === 'channel')) {
     const inPrimary = item.doc.method === methods[0]?.name || item.doc.kind === 'channel';
     if (inPrimary || !scored.some(entry => entry.doc.kind === 'platform' && entry.doc.method === methods[0]?.name && posix.basename(entry.doc.key) === posix.basename(item.doc.key))) take(item);
     if (must.length >= 3) break;
   }
-  // 3. A play's own playbooks (its recovered method folder) come first among method knowledge.
+  // A play's own playbooks (its recovered method folder) come first among method knowledge.
   if (play) scored.filter(entry => entry.owner === play.name && entry.doc.source === 'play' && entry.doc.kind === 'playbook').slice(0, 2).forEach(item => take(item));
-  // 4. The primary command's declared Core list, in its order: the files COMMAND.md tells the
-  // agent to read in full before drafting. Then the strongest playbooks of each selected method.
+  // Prefer the strongest playbooks owned by each selected command.
   methods.forEach((method, position) => {
     const quota = position === 0 ? 3 : 1;
     // The strongest two always count; a third needs its own lexical match, not only membership.
     scored.filter(entry => entry.owner === method.name && entry.doc.source === 'method' && entry.doc.kind === 'playbook')
       .filter((entry, rank) => rank < Math.min(quota, 2) || entry.lexical >= 3).slice(0, quota).forEach(item => take(item));
   });
-  // 5. Anti-patterns of the primary method: the final check.
+  // Anti-patterns of the primary method: the final check.
   const checklist = scored.find(entry => entry.owner === methods[0]?.name && entry.doc.source === 'method' && entry.doc.kind === 'checklist');
   if (checklist) take(checklist);
-  // 6. Fill any remaining room with the strongest remaining matches.
+  // Fill any remaining room with the strongest remaining matches.
   // Shared parent files stay situational unless the user named their platform.
-  for (const item of scored) if (must.length < Math.min(LIMITS.mustFiles, 6) && !['example', 'checklist'].includes(item.doc.kind) && item.owner) take(item);
+  for (const item of scored) if (must.length < LIMITS.mustFiles && !['example', 'checklist'].includes(item.doc.kind) && item.owner) take(item);
 
   // Nothing matched: say so instead of returning an empty reading list.
   if (!methods.length && !play && !must.length) {
@@ -419,7 +416,7 @@ export function createBrief(input, { root = moduleRoot, playbooks, persistCache 
     source: item.doc.source,
     kind: item.doc.kind,
     title: item.doc.title,
-    why: item.why ?? reasonFor(item.doc, platforms),
+    why: reasonFor(item.doc, platforms),
     bytes: item.doc.bytes,
     score: Number(item.score.toFixed(3)),
   });
@@ -435,7 +432,7 @@ export function createBrief(input, { root = moduleRoot, playbooks, persistCache 
         && (!step.mode || !doc.key.includes('/references/modes/') || doc.key.includes(`/references/modes/${step.mode}`)))
         .map(doc => ({ doc, score: rank(doc) + (record.requiredResources ?? []).includes(`${libraryRoot}/${doc.key}`) * 3 }))
         .sort((a, b) => b.score - a.score || a.doc.key.localeCompare(b.doc.key)).slice(0, 2)
-        .filter(item => !seen.has(item.doc.digest)).map(item => view({ ...item, lexical: item.score }));
+        .filter(item => !seen.has(item.doc.digest)).map(view);
     }
     return { step: position + 1, ...(step.command ? { command: step.command } : { method: step.method }), label, path: step.path, absolute: join(packageRoot, step.path),
       ...(step.mode ? { mode: step.mode } : {}), ...(step.when ? { when: step.when } : {}), ...(step.for ? { for: step.for } : {}), now, playbooks };
