@@ -62,26 +62,26 @@ Package installation runs no interactive lifecycle script, so CI and dependency 
 The terminal installs Conquistador into your coding agents. The work happens inside the agent.
 The CLI never opens an agent and never runs a task.
 
-`conquistador` runs the installer the first time: a full-screen terminal UI with five steps. It
-takes about a minute. Agent configuration changes only after you confirm the review.
+`npx conquistador@latest` opens a full-screen installer with four steps. Agent
+configuration changes only after you confirm the review. Plugin-manager speed varies.
 
-1. **Agents.** All 16 supported agents are listed. Select one or more with checkboxes. Detected
-   agents start selected. Space toggles one agent; `a` toggles detected agents, `A` selects all,
-   and `n` clears the selection. Press `/` to search, Enter to finish typing, then Space to toggle
-   a result. Escape clears the search. Other selections stay.
-   Problems found before
-   the start show here: another `conquistador` earlier on your PATH (or with another version), or a
-   newer version on npm, each with the exact fix.
-2. **Options.** All projects or only this project, prompt hooks on or off, and more places for
-   Conquistador: MCP clients, Executor, chat bot files, Hosted MCP, and a permanent CLI command installed
-   with npm or Bun. The arrow keys change a value. The MCP client picker also supports multiple
-   checkboxes: Space toggles a client, `a` selects all, and `n` clears the selection.
-3. **Review.** Every change with its path or command, what stays unchanged, and how to undo it.
-4. **Install**, one line per step. A step that fails does not stop the others. Then a verify pass
-   runs the `conquistador doctor` checks for each surface and one MCP handshake.
-5. **Done.** What to type in each agent: `/conquistador init` in a project without `GROWTH.md`,
-   otherwise `/conquistador`. Enter opens the manager. `q` exits and leaves the summary in your terminal.
+1. **Agents.** Detected agents appear first and start selected. The full catalog remains
+   available below **Not on this computer**. Space selects an agent, Enter continues,
+   `/` searches, and `?` shows all keys.
+2. **Review.** A plain summary explains the selected agents and scope. **Unchanged** and
+   **Undo** remain visible; `d` shows commands. Press `o` for **More options**: project
+   scope, hooks, MCP clients, Executor, chat bot files, Hosted MCP, or keeping the CLI
+   with npm or Bun. New installations default to all projects, hooks on, and extras off.
+   Existing project installations keep their scope. Explicit flags override defaults.
+3. **Install.** Each step reports progress. A failed step does not stop the others.
+   Verification runs doctor checks for each surface and one MCP handshake.
+4. **Done.** Follow the command shown for your agent. Enter opens the manager; `q` exits
+   and leaves the summary in your terminal. Detected extra apps are optional: `m` opens
+   **Connect apps** without changing their settings.
 
+The manager has **Add or change agents**, **Connect apps**, **Check and repair**,
+**Update**, **Settings**, **Remove**, and **Quit**. Settings contains project skills,
+hooks, the permanent CLI command, and installed items.
 Escape, `q`, or Ctrl-C before the install changes nothing. Ctrl-C during the install does not stop a
 step half way. Run `conquistador` again to manage agents, project skills, MCP connections, hooks, and
 the CLI. **Installed items** shows each scope and path, with update and removal controls for one

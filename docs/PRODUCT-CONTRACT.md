@@ -5,7 +5,7 @@
 The terminal installs; the agent works. The homepage shows one npm command and links to `/install`.
 The setup page presents four visible choices: Skills, CLI, MCP, and Plugins.
 Skills installs one Agent Skills folder, through the external Skills CLI or `conquistador skills`.
-CLI covers coding-agent setup through `conquistador install` and production app imports.
+CLI covers coding-agent setup through `npx conquistador@latest` and production app imports.
 MCP covers local stdio and hosted Streamable HTTP with OAuth sign-in or API-key headers.
 Plugins covers native clients and a portable bundle for compatible plugin loaders. Client,
 transport and package-manager choices belong inside these four methods. Legacy flags and
@@ -15,10 +15,13 @@ The first `conquistador`
 run opens one full-screen installer that is pleasant to use: the detected
 coding agents already chosen and the full supported-agent catalog visible. Search and installed
 status distinguish support from detection. Agent and MCP client pickers use independent checkboxes,
-preserve multiple selections, and fit wide or compact terminals. Options control scope, hooks,
+preserve multiple selections, and fit wide or compact terminals. First run follows Agents →
+Review → Install → Done. Detected extra apps never opt themselves in. More options on
+Review controls scope, hooks,
 MCP clients, Hosted MCP, Executor, chat bots, and a permanent CLI command through npm or Bun.
-Show every change and the exact undo
-command before anything changes. Then it installs, checks each install, and shows exactly
+Lead Review with a plain summary and keep commands behind Details. Keep warnings, unchanged
+items, and the exact undo command visible before anything changes. Home groups skills, hooks,
+CLI retention, and installed items under Settings; Connect apps owns extra integrations. Then it installs, checks each install, and shows exactly
 what to type in each agent: `/conquistador init` in a project without `GROWTH.md`. The terminal
 never opens an agent, never asks for a task, and never runs marketing work; the smart model in the
 agent does that. The TUI manages skills, MCP servers, hooks, updates, repairs, and each installed

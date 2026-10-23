@@ -69,9 +69,9 @@ export function shadowCheck(copies, self) {
 
 export function updateNotice(latest, current, channel) {
   if (!latest || !newer(latest, current)) return null;
-  return channel === 'npx'
-    ? `Conquistador ${latest} is out. You ran ${current}.\nNext time run: npx ${PACKAGE}@latest`
-    : `Conquistador ${latest} is out. You have ${current}.\nUpdate: npm i -g ${PACKAGE}@latest`;
+  return channel !== 'global'
+    ? `Conquistador ${latest} is out. You ran ${current}.\nNext time run: npx conquistador@latest`
+    : `Conquistador ${latest} is out. You have ${current}.\nUpdate: conquistador update`;
 }
 
 // Ask the configured registry for `latest`. Resolves to a version or null; never throws.
