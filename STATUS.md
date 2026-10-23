@@ -1,30 +1,38 @@
 # Conquistador status
 
-Updated 2026-10-23. Release evidence: [PR #90](https://github.com/forsvn-labs/conquistador/pull/90),
-[v0.10.1](https://github.com/forsvn-labs/conquistador/releases/tag/v0.10.1), and
-[publication run 39935303698](https://github.com/forsvn-labs/conquistador/actions/runs/39935303698).
+Updated 2026-10-23. Release evidence: [PR #92](https://github.com/forsvn-labs/conquistador/pull/92),
+[v0.10.2](https://github.com/forsvn-labs/conquistador/releases/tag/v0.10.2), and
+[publication run 39944022729](https://github.com/forsvn-labs/conquistador/actions/runs/39944022729).
 
 ## Shipped
 
-Product 0.10.1 is tagged at `95aca7f2122d6dbd94937ac588646619e422cb11`.
+Product 0.10.2 is tagged at `bd0f4c279650ca2eb14a2d32016d4d2cef80f323`.
 The seven release assets bind the tagged source; all five downloaded archives match
-SHA256SUMS. The release makes `npx conquistador@latest` the primary setup command,
-adds the Executor-only MCP shortcut, and includes a runnable Composio Custom MCP
-example. Standalone MCP does not activate skills or hooks.
+SHA256SUMS. Start with `npx conquistador@latest`.
 
-Both `@forsvn/conquistador@0.10.1` and `conquistador@0.10.1` are verified as npm
+The first-run TUI follows Agents → Review → Install → Done. Options are available
+from Review; detected desktop apps, Executor, and permanent CLI installation are
+opt-in. Found agents appear first; the full catalog and keyboard shortcuts remain
+available. Review leads with a plain summary and puts commands behind Details.
+Home groups advanced controls under Settings and extra integrations under Connect apps.
+
+Both `@forsvn/conquistador@0.10.2` and `conquistador@0.10.2` are verified as npm
 latest. Their tarballs match the release bytes, have provenance and signatures,
 and the alias pins the exact main-package version. Fresh registry installation
 verifies the CLI, Executor-only plan, Composio preview, and standalone MCP handshake.
-[Registry evidence](docs/release-0.10.1-verification.json) records identities and digests.
+[Registry evidence](docs/release-0.10.2-verification.json) records identities and digests.
 The CLI job was retried after the main package became visible in npm's registry.
 
-All release-candidate CI checks pass, including installation on Linux and Windows.
-The final release archive passes 38 app-integration checks. Local installation cases
-pass 17/17; focused installation/hosted tests pass 63/63; Composio preview checks pass
-5/5. Documentation build and link validation pass.
+Release-candidate CI passed on Linux and Windows, with product checks on Node 24/26
+and installed app checks on Node 22.18/24/26 and Bun. Local installed-package checks
+passed 50/50 executed cases, including 22 interactive checks with real agent plugin
+managers in isolated homes. The tagged archive passes 38 app-integration checks.
+Three tagged-source transcript scenarios pass. Fixture tests do not establish live
+provider acceptance. The installed-package Expect driver now verifies the direct
+Agents → Review flow; failed fixture assertions close their terminal processes.
 
-The hosted Worker serves 0.10.1 at `https://mcp.forsvn.com/mcp`. Existing secrets,
+The hosted Worker remains on 0.10.1 at `https://mcp.forsvn.com/mcp`.
+This installer release does not redeploy it. Existing secrets,
 OAuth settings, and token storage were retained. Public health and OAuth metadata
 return 200; unauthenticated MCP requests return 401. Real authenticated Executor
 calls verify that email-system engineering gets no marketing brief, while outreach
@@ -47,14 +55,6 @@ clients, native activation in additional clients, interactive Windows and ARM,
 linked-provider lifecycle, and broader model/human task-quality acceptance remain
 unverified. Existing lint diagnostics and optional Promptfoo/node-forge findings
 remain open. They are not represented as release verification.
-
-## Current work
-
-A simpler installer is prepared for 0.10.2: Agents → Review → Install → Done, optional
-extras, commands behind Details, and grouped management controls. This is not yet a
-published release. The 68 installer E2E cases passed across the full run and focused
-correction runs; 75 focused contract tests passed. These use isolated fixtures, not
-live provider acceptance. Website changes are owned in the separate landing-page repository.
 
 ## Next steps
 

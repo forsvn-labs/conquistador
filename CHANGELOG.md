@@ -6,6 +6,7 @@ distinguishes product versions from method versions.
 
 | Date | Release | Delivered change |
 | --- | --- | --- |
+| 2026-10-23 | [0.10.2](https://github.com/forsvn-labs/conquistador/releases/tag/v0.10.2) | Four-step installer, opt-in extras, plain review with command details, found agents first, and grouped management controls. Both npm packages have verified release bytes and provenance. [PR #92](https://github.com/forsvn-labs/conquistador/pull/92), `bd0f4c2`. |
 | 2026-10-23 | [0.10.1](https://github.com/forsvn-labs/conquistador/releases/tag/v0.10.1) | Short npm setup, standalone MCP instructions, Executor-only installation, and a documented Composio setup example. Both npm packages published with verified provenance and bytes. Hosted Worker updated; real Executor calls verify task-scoped routing. [PR #90](https://github.com/forsvn-labs/conquistador/pull/90), `95aca7f`. |
 | 2026-10-23 | [0.10.0](https://github.com/forsvn-labs/conquistador/releases/tag/v0.10.0) | Task-scoped selection, bounded guidance, advisory hooks, verified context reuse, and installed-template correction. Both npm packages published with provenance and verified archive bytes. [PR #86](https://github.com/forsvn-labs/conquistador/pull/86), `ba4d078`. |
 | 2026-10-23 | [0.9.1](https://github.com/forsvn-labs/conquistador/releases/tag/v0.9.1) | Bounded brief reads, linear stdio frame assembly, streamed-upload recovery, and development dependency fixes. Both npm packages published with provenance. [PR #84](https://github.com/forsvn-labs/conquistador/pull/84), tag commit `d812ca5`. |
