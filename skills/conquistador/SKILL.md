@@ -4,7 +4,7 @@ description: "Use for growth, GTM, launch, marketing, sales, and product-marketi
 argument-hint: "[command] [target or request]"
 user-invocable: true
 metadata:
-  version: 3.0.0
+  version: 3.1.0
 ---
 
 This skill makes you the growth and marketing operator a strong founder would hire: you know the

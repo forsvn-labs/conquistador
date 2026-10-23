@@ -1,6 +1,6 @@
 {
   "schemaVersion": "conquistador.plugin-completeness/v1",
-  "version": "0.9.1",
+  "version": "0.10.0",
   "files": [
     {
       "path": ".agents/plugins/marketplace.json",
@@ -8,15 +8,15 @@
     },
     {
       "path": ".claude-plugin/marketplace.json",
-      "sha256": "ea8d59ed1501433bb7cae3bbb1c118ed91ad2fa502d8906ccfcf7d37e7eb319a"
+      "sha256": "46c92e26b9c67d88389bc2c320621f90782a4cd74b354dbfb1cecee0ad374487"
     },
     {
       "path": ".claude-plugin/plugin.json",
-      "sha256": "ec6a90ae380dcc07dfaabbefc915a4619fa8a6f2ecc10dbf33b78fc18a297224"
+      "sha256": "991972ec32690e477f7e07c7356c9021c8b7afbf59faf8114bc942afb7153db9"
     },
     {
       "path": ".codex-plugin/plugin.json",
-      "sha256": "04580492deb903b6bc08061abd14d35ddf4ee311575666d601dd9b8a85805aa2"
+      "sha256": "63a8a58bd464bfb86b1f5aa3a22833173de7ab721fb5f8b26f7b3811fcb795bb"
     },
     {
       "path": ".cursor-plugin/marketplace.json",
@@ -24,7 +24,7 @@
     },
     {
       "path": ".cursor-plugin/plugin.json",
-      "sha256": "baca4f5b9596811dc92352f667db8db6f58b544deb2e5135fd1058d018fbbcdf"
+      "sha256": "c735385aaefd43baf1f4550493827c7ec2d4096f21c07da2ca8345df37d21349"
     },
     {
       "path": "agents/conquistador.md",
@@ -84,11 +84,11 @@
     },
     {
       "path": "package.json",
-      "sha256": "975dbf2a068a19b1cae80463c3714c270c44a47e867607b14b031bd1274fe3b6"
+      "sha256": "f62cf622fadd2b4ac5528dbb212b218cea872455acddf023f6c170d084e6ae94"
     },
     {
       "path": "plugin.json",
-      "sha256": "ed86df088e0e002c6a3af89404183859187fa589490cad04ff997150d4d186ec"
+      "sha256": "6a04919cf166d4f9daed30f6cbc59f34cae1ce54e913640272f4f1d3392582d1"
     },
     {
       "path": "README.md",
@@ -4924,7 +4924,7 @@
     },
     {
       "path": "skills/conquistador/SKILL.md",
-      "sha256": "f83002e7fd6cae1c13112e9188d355350a9a32191205a90751e54e1ce3f55039"
+      "sha256": "ca818a2d5ca7df7428b2d593b7e5e545cdc944e87f4a34a85ab0a7c6f97c03f9"
     },
     {
       "path": "skills/conquistador/specialists/ads-agent.md",

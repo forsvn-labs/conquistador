@@ -329,3 +329,11 @@ The broad installer run passes 64/67; the third failure is `update` (exit 1), wh
 in an isolated Node 24 rerun. The broad installer run began before the final source commit;
 its mixed-run evidence is not a clean 67/67 certification of that commit. Before release, run
 the full installer suite on the supported Node 24 runtime with unchanged source.
+
+### Release preparation
+
+The 0.10.0 candidate also corrects `tools/entrypoint/SKILL.md`, the template used by staged
+installations. Its old mandatory Core reads and appendix could override the bounded brief.
+A failing installed-entry regression test was added before this correction; all 40 targeted
+installer, integrity, and installed growth-workflow tests then pass. The parent method version
+is 3.1.0. Product, native plugin, host, portable-role, and CLI-alias versions are 0.10.0.

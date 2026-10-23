@@ -35,7 +35,7 @@ and the optional Promptfoo/node-forge findings remain open.
 ## Planned and next steps
 
 The [2026-10 behavior review](docs/BEHAVIOR-REVIEW-2026-10.md) and its implementation
-are on [draft PR #86](https://github.com/forsvn-labs/conquistador/pull/86).
+are on [PR #86](https://github.com/forsvn-labs/conquistador/pull/86).
 The candidate adds shared admission, bounded current-stage briefs, advisory hooks,
 verified context reuse, and scoped edit checks. The strict thirteen-prompt audit and
 142-case routing suite pass. Build, all 969 source tests, 44 checker cases, 15 social
@@ -43,6 +43,11 @@ style cases, and 38 installed Bun consumer checks pass. The installer run passed
 64/67 cases on Node 26; all three failed cases pass on Node 24 reruns. The review
 records the runtime error and exact candidate package evidence. This is unmerged source,
 not a release or an update to the installed or hosted product.
+
+Shipping is authorized for candidate 0.10.0. Release preparation also corrected the
+staged skill template so installation cannot restore mandatory Core reads or an
+appendix. All 40 targeted installer, integrity, and growth-workflow tests pass.
+The candidate awaits final CI and review before merge, tagging, and publication.
 
 1. Resolve the existing hosted-access blocker through its authorized owner,
    then verify the exact candidate and hosted behavior.

@@ -2,8 +2,8 @@
   "schemaVersion": "conquistador.install-completeness/v1",
   "parent": {
     "name": "conquistador",
-    "version": "3.0.0",
-    "sha256": "f83002e7fd6cae1c13112e9188d355350a9a32191205a90751e54e1ce3f55039"
+    "version": "3.1.0",
+    "sha256": "ca818a2d5ca7df7428b2d593b7e5e545cdc944e87f4a34a85ab0a7c6f97c03f9"
   },
   "outcomes": [
     {
@@ -4977,7 +4977,7 @@
     },
     {
       "path": "hosts/coding-agent/host.json",
-      "sha256": "80be78ca273468bd3c732535746e40cb4a7b11b0f1621772e37e66ecf4a2f188"
+      "sha256": "ac2696be3a2d3b539b4ca66ac529c3dba837ec390ee5d4b1267b42051549f5f9"
     },
     {
       "path": "hosts/coding-agent/README.md",
@@ -5033,19 +5033,19 @@
     },
     {
       "path": "agents/conquistador/agent.json",
-      "sha256": "f721b637dcd97ea107a954e88f3325da48f3b28798ca3a248b0a5ee72fdc40c8"
+      "sha256": "be187e373935495df2af214421f8d60f7330f54a68ba9cef68d0f62e9d4689b6"
     },
     {
       "path": "agents/conquistador/compatibility/v1.json",
-      "sha256": "c8eb2c7891dfe2e1401c23665d6c49171d819cecce468273627f733085c48609"
+      "sha256": "5a96df9644010bbbd56c0e5a9314859d7d88e3a63c1c06155b7d9a1c76489bbc"
     },
     {
       "path": "agents/agent-package.schema.json",
-      "sha256": "f6039b29349729ebf11e8a59afd51782a9f1474d54ae6c7d4845519205f8a644"
+      "sha256": "a38e15fac4a621d6035b7d8019839219f48f02a6153b2acb2c5bbf0aa0063697"
     },
     {
       "path": "agents/agent-package-v2.schema.json",
-      "sha256": "b39c57a16126650295edc708e9d74e1e2ade0d00bd7ffeee848f28d2fbc683cc"
+      "sha256": "9aa7ff7bba5551d58fc513f2b572712be9fc2da3070b5164562cb4eaea241a89"
     },
     {
       "path": "agents/operator-profile.schema.json",

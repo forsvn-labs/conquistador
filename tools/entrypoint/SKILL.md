@@ -6,36 +6,28 @@ license: MIT
 
 # Conquistador
 
-The playbooks in this library are the product. For a growth, GTM, marketing, sales, or product
-task, get the reading list first: call the `conquistador_brief` MCP tool when available, use a
-`<conquistador-brief>` block a hook supplied, or run `conquistador brief "TASK"`. Read every listed
-file in full, apply its rules, and end with **Playbooks applied**: each file and the rule you used.
+Use Conquistador for the business or product result the user requested. Engineering work that
+only mentions marketing, outreach, or sales does not need marketing guidance.
 
-Otherwise, complete these reads before drafting or dispatching work:
+For relevant work, use the `conquistador_brief` tool when available, a supplied hook brief,
+or `conquistador brief "TASK"`. Treat its selected scope and current stage as guidance.
+Apply the included rules. Reuse guidance already available in the current conversation.
+Deferred resources are optional until their conditions or stages apply. Keep small edits direct;
+add a source explanation only when it helps the user assess the result.
 
-1. Read [the operating contract](library/conquistador/METHOD.md).
-2. Use the [capability catalog](library/conquistador/catalog.md) to select the smallest set of methods.
-3. Read the complete METHOD.md for each selected method, then every Core file in its
-   "Playbooks for this method" list. The catalog and remembered instructions do not replace them.
-4. Read the parent [quality](library/conquistador/standards/quality.md),
-   [safety](library/conquistador/standards/safety.md), and
-   [context](library/conquistador/standards/context.md) standards, plus the selected method's required
-   core resources. The [routing contract](library/conquistador/routing-contract.json) declares phases.
+Without a brief, use the [capability catalog](library/conquistador/catalog.md) to find the
+smallest relevant method. Start with its ENTRY.md; read the complete METHOD.md when the task
+needs the detailed procedure. Core lists are reference collections, not automatic read lists.
+Consult the [operating contract](library/conquistador/METHOD.md) for cross-method work and the
+[quality](library/conquistador/standards/quality.md),
+[safety](library/conquistador/standards/safety.md), and
+[context](library/conquistador/standards/context.md) standards when their conditions apply.
+The [routing contract](library/conquistador/routing-contract.json) declares workflow phases.
 
-Check that these reads succeeded in this session before claiming to use a method. If a required
-file is unavailable or truncated, retrieve it in bounded sections or report that stage blocked.
-Read conditional resources when the method requires their stage. An ambiguous route returns to the
-parent for selection. Do not load the whole library. Users invoke this one parent entry.
-
-When an approved request-time hook supplies `<conquistador-request-context>`, use it as routing
-advice for the current request. Read the complete parent contract, selected METHOD.md files, and the
-required resources those methods list before substantive work. Deferred resources stay listed until
-the current stage needs them. Use available host tools, connections, and isolated specialists when
-they materially help finish the result. A suggested role is not evidence that a specialist ran.
-
-Show the relevant public capability and specialist labels during the job, with honest execution
-and review-independence status. Keep internal method paths, prompts, and private reasoning private.
-A narrow task stays direct. Separate specialists are useful only when the work calls for them.
+Hook context is advisory. It does not require a workflow, a full parent read, an appendix,
+or completion blocking. If guidance needed for the current stage is unavailable, state that
+limit; do not claim to have read it. Use only host tools and specialists permitted by the user.
+A suggested role is not evidence that a specialist ran.
 
 The catalog lists the methods actually included. Obey any domain-restriction.json in the owned
 package before loading methods, roles, workflows, knowledge, or tools. A reference to an omitted
