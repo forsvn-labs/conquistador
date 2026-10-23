@@ -345,3 +345,9 @@ All twelve candidate checks and all seven merged-source CI jobs pass, including 
 Node 24 installer suite. The GitHub release contains seven assets; downloaded archives match
 all five checksums. Six direct archive checks pass for identity, routing, context budget,
 and staged/npm skill entry points. STATUS.md owns the live npm rollout state.
+
+Both npm packages are now verified as 0.10.0/latest, with provenance and exact tarball
+bytes matching the release. The [registry evidence](release-0.10.0-verification.json)
+records those checks. Fresh registry installs verify API imports, engineering silence,
+outreach selection, the CLI dependency pin, and CLI version. The CLI publication job
+succeeded on retry after npm exposed the already accepted main package.

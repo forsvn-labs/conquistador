@@ -17,12 +17,13 @@ version, engineering silence, assist mode and total budget, and both npm and sta
 skill entry points. The [behavior review](docs/BEHAVIOR-REVIEW-2026-10.md) contains
 local regression evidence and its limits.
 
-Both npm publication jobs succeeded with signed provenance. The main package resolves
-as `@forsvn/conquistador@0.10.0` and npm latest. A fresh registry install passes public
-import, engineering-silence, and outreach-route checks. The CLI alias was accepted but
-its registry latest is still 0.9.1 during processing. Final paired-registry byte and
-alias-pin verification remain pending. A successful publish job does not establish
-registry availability.
+Both `@forsvn/conquistador@0.10.0` and `conquistador@0.10.0` are verified as npm
+latest. Registry tarball bytes match the checked release archives; both packages have
+provenance and signatures, and the CLI alias pins the exact main-package version.
+Fresh registry installs pass the API routing smoke checks and CLI version check.
+[The registry evidence](docs/release-0.10.0-verification.json) records source identity,
+archive digests, and provenance links. The initial CLI publication retry was needed
+because npm had accepted the main package before making it visible in the registry.
 
 ## Held and unverified
 
