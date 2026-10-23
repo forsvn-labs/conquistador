@@ -41,6 +41,7 @@
 //   U2  Review hides commands until d; o opens options without losing agent selection.
 //   U3  Found agents sort first; the full catalog, search, keyboard help and compact layout remain usable.
 //   U4  Extras remain opt-in from Done/Home; update and docs links use the canonical entry points.
+//   U5  A failed assertion must close its fixture terminal, not leave the test runner hanging.
 //   C3  An MCP-only install opens the manager on the next run and preserves other servers.
 //   C4  A slow plugin manager does not freeze the progress animation.
 //   C5  Resizing keeps the selected agent and final review/undo text reachable.
@@ -165,6 +166,7 @@ function fixture(name, { agents = ['claude', 'codex'], apps = {}, executor = nul
   };
   for (const key of Object.keys(env)) if (env[key] === undefined) delete env[key];
   const cli = join(login ? packageWithLogin(work) : root, 'runtime/bin/conquistador.js');
+  const terminals = [];
   const IGNORE = /(?:^|[\\/])\.fake-(?:agents|executor)\.json$/;
   return {
     work, home, project, bin, env, cli,
@@ -173,7 +175,11 @@ function fixture(name, { agents = ['claude', 'codex'], apps = {}, executor = nul
     tree: () => readdirSync(home, { recursive: true, withFileTypes: true }).filter(entry => entry.isFile() || entry.isSymbolicLink())
       .map(entry => join(entry.parentPath, entry.name)).filter(path => !IGNORE.test(path)).sort()
       .map(path => `${relative(home, path)} ${createHash('sha1').update(readFileSync(path)).digest('hex').slice(0, 10)}`),
-    term: (args, { columns = 80, rows = 50, env: more = {} } = {}) => session(process.execPath, [cli, ...args], { cwd: project, env: { ...env, ...more }, columns, rows }),
+    term: (args, { columns = 80, rows = 50, env: more = {} } = {}) => {
+      const terminal = session(process.execPath, [cli, ...args], { cwd: project, env: { ...env, ...more }, columns, rows });
+      terminals.push(terminal);
+      return terminal;
+    },
     run: (args, { env: more = {}, cwd = project } = {}) => {
       const result = spawnSync(process.execPath, [cli, ...args], { cwd, env: { ...env, ...more }, encoding: 'utf8', timeout: 60_000 });
       return { status: result.status, stdout: result.stdout ?? '', stderr: result.stderr ?? '' };
@@ -181,7 +187,10 @@ function fixture(name, { agents = ['claude', 'codex'], apps = {}, executor = nul
     runAsync: (args, { env: more = {}, cwd = project } = {}) => runCommand(process.execPath, [cli, ...args], { cwd, env: { ...env, ...more }, timeout: 60_000 }),
     read: path => { try { return readFileSync(path, 'utf8'); } catch { return null; } },
     json: path => { try { return JSON.parse(readFileSync(path, 'utf8')); } catch { return null; } },
-    cleanup: () => { if (!keep) rmSync(work, { recursive: true, force: true }); },
+    cleanup: () => {
+      for (const terminal of terminals) terminal.kill();
+      if (!keep) rmSync(work, { recursive: true, force: true });
+    },
   };
 }
 
