@@ -70,7 +70,7 @@ async function main() {
     console.log(JSON.stringify(result, null, 2));
   } else {
     const result = await session.execute(plan.tool, {}, undefined, { signal: AbortSignal.timeout(30000) });
-    if (result.error || result.data?.isError) throw Error('The methods read failed. Check the selected connection and sync state.');
+    if (result.resultType !== 'completed' || result.error || result.data?.isError) throw Error('The methods read failed. Check the selected connection and sync state.');
     console.log(JSON.stringify({ tool: plan.tool, result: result.data }, null, 2));
   }
 }
