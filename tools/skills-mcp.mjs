@@ -1,5 +1,5 @@
 import { constants, openSync, closeSync, readSync, fstatSync, lstatSync, realpathSync, opendirSync, readFileSync } from 'node:fs';
-import { dirname, join, extname, posix } from 'node:path';
+import { dirname, join, extname, posix, relative, sep } from 'node:path';
 import { createBrief, packBrief, searchKnowledge } from './brief.mjs';
 import { checkDocument, counted } from './check/index.mjs';
 import { channels, detectChannel, normalizeChannel } from './check/channels.mjs';
@@ -275,7 +275,14 @@ export function createMcpHandler({ root = bundledRoot, requireInitialize = true,
         if (!args.task.trim() || args.task.length > 8000) throw new Error('Invalid task');
         if ((args.context?.length ?? 0) > LIMITS.context) throw usageError(`Context is over ${LIMITS.context} characters. Keep the facts that matter for this task.`);
         if (args.size !== undefined && !['full', 'compact'].includes(args.size)) throw usageError('Use size full or compact.');
-        const pack = packBrief(createBrief(args.task, { root: packageRoot(), force: true, ...knowledgeOptions }), { callerContext: args.context?.trim(), hosted, compact: args.size === 'compact' });
+        access ??= createMethodAccess(root);
+        const bundle = realpathSync(root);
+
+        const pack = packBrief(createBrief(args.task, { root: packageRoot(), force: true, ...knowledgeOptions }), {
+          callerContext: args.context?.trim(), hosted, compact: args.size === 'compact',
+          readBundled: item => access.read(relative(bundle, item.absolute).split(sep).join('/')),
+        });
+
         value = pack.text;
         structured = pack.structured;
       } else if (params.name === 'conquistador_score') {
@@ -344,7 +351,8 @@ export async function runSkillsMcp({ input = process.stdin, output = process.std
   output.on('close', stop);
   process.on('SIGINT', stop);
   process.on('SIGTERM', stop);
-  let buffer = Buffer.alloc(0);
+  let chunks = [];
+  let size = 0;
   try {
     for await (const chunk of input) {
       if (stopped) break;
@@ -353,15 +361,21 @@ export async function runSkillsMcp({ input = process.stdin, output = process.std
       while (start < bytes.length && !stopped) {
         const newline = bytes.indexOf(10, start);
         const end = newline < 0 ? bytes.length : newline;
-        if (buffer.length + end - start > LIMITS.request) { await error(null, -32600, 'Request limit exceeded'); stop(); break; }
-        buffer = Buffer.concat([buffer, bytes.subarray(start, end)]);
+
+        if (size + end - start > LIMITS.request) { await error(null, -32600, 'Request limit exceeded'); stop(); break; }
+        // Hold bounded slices until the frame is complete. Concatenating every prefix
+        // makes fragmented input quadratic in both copying and allocation work.
+
+        if (end > start) { chunks.push(bytes.subarray(start, end)); size += end - start; }
         if (newline < 0) break;
-        await handle(buffer);
-        buffer = Buffer.alloc(0);
+        await handle(chunks.length === 1 ? chunks[0] : Buffer.concat(chunks, size));
+        chunks = [];
+        size = 0;
         start = newline + 1;
       }
     }
-    if (!stopped && buffer.length) await error(null, -32700, 'Incomplete JSONL frame');
+
+    if (!stopped && size) await error(null, -32700, 'Incomplete JSONL frame');
   } catch { stop(); }
   finally {
     process.removeListener('SIGINT', stop);

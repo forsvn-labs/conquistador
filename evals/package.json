@@ -26,6 +26,9 @@
   },
   "devDependencies": {
     "ajv": "8.20.0",
-    "vitest": "4.1.11"
+    "vitest": "4.1.12"
+  },
+  "overrides": {
+    "vite": "8.3.3"
   }
 }
