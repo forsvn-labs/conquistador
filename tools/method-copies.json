@@ -1,0 +1,273 @@
+{
+  "schemaVersion": "conquistador.method-copies/v1",
+  "groups": [
+    {
+      "source": "skills/conquistador/commands/budget/references/examples/allocate-marketing-budget-walkthrough.md",
+      "sha256": "b3172d7ee1d2f827cfc2297e57c649f95db5be52ef803bfb10d53f48c99c7220",
+      "copies": [
+        "skills/conquistador/commands/budget/references/examples/plan-budget-walkthrough.md"
+      ]
+    },
+    {
+      "source": "skills/conquistador/commands/convert/references/hypothesis-framework.md",
+      "sha256": "6c95ec6bc7fade536fb13310afb97a7c89848e6e48ff401c05241ec80f7e815e",
+      "copies": [
+        "skills/conquistador/commands/diagnose/references/hypothesis-framework.md"
+      ]
+    },
+    {
+      "source": "skills/conquistador/commands/creative/references/realized-surface-grounding.md",
+      "sha256": "e14fb12cea58bf4dcb53a364a9f14c4989518cd0254fb5bc9928dd400e5df565",
+      "copies": [
+        "skills/conquistador/commands/ads/references/realized-surface-grounding.md"
+      ]
+    },
+    {
+      "source": "skills/conquistador/commands/creative/references/render-engines.md",
+      "sha256": "42ea04876e92b6803b5793f9a7f7469e4da4a116ca74698cbeb5a8296bf9e1c8",
+      "copies": [
+        "skills/conquistador/commands/video/references/render-engines.md"
+      ]
+    },
+    {
+      "source": "skills/conquistador/commands/ideas/references/clipping-and-live.md",
+      "sha256": "332813d4ed32a79f39b85dba3ea4625a9f87fefcd22e1954235c6b5bb1355c8b",
+      "copies": [
+        "skills/conquistador/commands/campaign/references/distribution-models/clipping-and-live.md"
+      ]
+    },
+    {
+      "source": "skills/conquistador/commands/measure/references/evaluation-loop-rubric.md",
+      "sha256": "7deb0998d61341af8c274608c6748b5c5024707859baa847b0d6ab8e005c8894",
+      "copies": [
+        "skills/conquistador/plays/qa/references/evaluation-loop-rubric.md",
+        "skills/conquistador/plays/report/references/evaluation-loop-rubric.md"
+      ]
+    },
+    {
+      "source": "skills/conquistador/commands/measure/references/platform-intelligence/founder-demo.md",
+      "sha256": "0bed2b15d2448cd75f1e49336bf5978ffb0422c9527546c9859f53c80d04c21f",
+      "copies": [
+        "skills/conquistador/commands/campaign/references/platform-intelligence/founder-demo.md",
+        "skills/conquistador/commands/results/references/modes/video/references/platform-intelligence/founder-demo.md"
+      ]
+    },
+    {
+      "source": "skills/conquistador/commands/measure/references/platform-intelligence/x-launch.md",
+      "sha256": "875019509d2d9deb3c74f79bc7170e596088630b49488789e9199ea9326f41a6",
+      "copies": [
+        "skills/conquistador/commands/campaign/references/platform-intelligence/x-launch.md",
+        "skills/conquistador/commands/results/references/modes/video/references/platform-intelligence/x-launch.md"
+      ]
+    },
+    {
+      "source": "skills/conquistador/commands/measure/references/platform-intelligence/youtube.md",
+      "sha256": "c79abaab8429a68773ac446b8007d0f9430a02d5b25ea6ec708bb7056bffeb09",
+      "copies": [
+        "skills/conquistador/commands/campaign/references/platform-intelligence/youtube.md",
+        "skills/conquistador/commands/results/references/modes/video/references/platform-intelligence/youtube.md"
+      ]
+    },
+    {
+      "source": "skills/conquistador/commands/prioritize/references/idea-ranking-core.md",
+      "sha256": "5557d3e39a37a6c073df813f5e4c4f4ac20d34fca48e87b08b16db9e315b871a",
+      "copies": [
+        "skills/conquistador/commands/decide/references/idea-ranking-core.md"
+      ]
+    },
+    {
+      "source": "skills/conquistador/commands/shape/agents/idea-critic-agent.md",
+      "sha256": "cac2d7c774d11c6536d84063dabea414bdaacd7d4a4a01d0170a70852bda703a",
+      "copies": [
+        "skills/conquistador/commands/shape/agents/idea-critic.md"
+      ]
+    },
+    {
+      "source": "skills/conquistador/commands/social/references/legibility-convention.md",
+      "sha256": "40978e01665af174e0aeba6b4a8f87aecddec87ebe73ef980d5f9f3ceb49ee35",
+      "copies": [
+        "skills/conquistador/commands/measure/references/legibility-convention.md"
+      ]
+    },
+    {
+      "source": "skills/conquistador/commands/video/references/examples/shortform-brief-walkthrough.md",
+      "sha256": "c67a955a5e9457e467f32fcc1a4279777e8d8b345b4f59151621bc13517c520c",
+      "copies": [
+        "skills/conquistador/commands/video/references/examples/brief-shortform-walkthrough.md"
+      ]
+    },
+    {
+      "source": "skills/conquistador/commands/video/references/hook-archetypes.md",
+      "sha256": "cd02ef4aee68eb4d1b9e3a336133bd996ea3e73fea2c64cc8517e8b96d6e9280",
+      "copies": [
+        "skills/conquistador/commands/results/references/modes/video/references/hook-archetypes.md"
+      ]
+    },
+    {
+      "source": "skills/conquistador/commands/video/references/legibility-convention.md",
+      "sha256": "6564453fb7ce7be63672a234afa4612090312f06ffb15a66dd7c82068084696c",
+      "copies": [
+        "skills/conquistador/commands/campaign/references/legibility-convention.md"
+      ]
+    },
+    {
+      "source": "skills/conquistador/commands/video/references/platform-intelligence/CONTRACT.md",
+      "sha256": "988ea2ca437a7bf456e0c3b68d362b9283a6bf3ba1bcff552f0550013db2615a",
+      "copies": [
+        "skills/conquistador/commands/measure/references/platform-intelligence/CONTRACT.md",
+        "skills/conquistador/commands/results/references/modes/video/references/platform-intelligence/CONTRACT.md"
+      ]
+    },
+    {
+      "source": "skills/conquistador/commands/video/references/platform-intelligence/facebook.md",
+      "sha256": "af0ecf6682ce92b68897a45824f6d871d8259219dd5b7161af06d6cdfbbddbbe",
+      "copies": [
+        "skills/conquistador/commands/campaign/references/platform-intelligence/facebook.md",
+        "skills/conquistador/commands/measure/references/platform-intelligence/facebook.md",
+        "skills/conquistador/commands/results/references/modes/video/references/platform-intelligence/facebook.md",
+        "skills/conquistador/commands/social/references/platform-intelligence/facebook.md"
+      ]
+    },
+    {
+      "source": "skills/conquistador/commands/video/references/platform-intelligence/founder-demo.md",
+      "sha256": "d33a298ecb6d6eaed5d4ff7a7b80484133995dc3ddb177e074445ffc9a8e05a6",
+      "copies": [
+        "skills/conquistador/commands/social/references/platform-intelligence/founder-demo.md"
+      ]
+    },
+    {
+      "source": "skills/conquistador/commands/video/references/platform-intelligence/linkedin-launch.md",
+      "sha256": "48fd8a254c0ea5a2ce9718c40b1fb10a0f4d00100aeb6247844404e99f2cafc3",
+      "copies": [
+        "skills/conquistador/commands/campaign/references/platform-intelligence/linkedin-launch.md",
+        "skills/conquistador/commands/measure/references/platform-intelligence/linkedin-launch.md",
+        "skills/conquistador/commands/results/references/modes/video/references/platform-intelligence/linkedin-launch.md",
+        "skills/conquistador/commands/social/references/platform-intelligence/linkedin-launch.md"
+      ]
+    },
+    {
+      "source": "skills/conquistador/commands/video/references/platform-intelligence/linkedin.md",
+      "sha256": "dc8c3747d86f9e12a6912c9ba9a1652837bc325d4c49de221e502b228621f83c",
+      "copies": [
+        "skills/conquistador/commands/campaign/references/platform-intelligence/linkedin.md",
+        "skills/conquistador/commands/measure/references/platform-intelligence/linkedin.md",
+        "skills/conquistador/commands/results/references/modes/video/references/platform-intelligence/linkedin.md",
+        "skills/conquistador/commands/social/references/platform-intelligence/linkedin.md"
+      ]
+    },
+    {
+      "source": "skills/conquistador/commands/video/references/platform-intelligence/motion-background.md",
+      "sha256": "eb819d7ede003b25278b13a3edfc1ba5dcade3bdc66b8b6fa50cb38b7aa0c8a3",
+      "copies": [
+        "skills/conquistador/commands/campaign/references/platform-intelligence/motion-background.md",
+        "skills/conquistador/commands/measure/references/platform-intelligence/motion-background.md",
+        "skills/conquistador/commands/results/references/modes/video/references/platform-intelligence/motion-background.md",
+        "skills/conquistador/commands/social/references/platform-intelligence/motion-background.md"
+      ]
+    },
+    {
+      "source": "skills/conquistador/commands/video/references/platform-intelligence/newsletter.md",
+      "sha256": "e67dac4b9f52e0ca2802639dcaf18c335e99906f78a1278c7facc5ff84d2ff06",
+      "copies": [
+        "skills/conquistador/commands/campaign/references/platform-intelligence/newsletter.md",
+        "skills/conquistador/commands/measure/references/platform-intelligence/newsletter.md",
+        "skills/conquistador/commands/results/references/modes/video/references/platform-intelligence/newsletter.md",
+        "skills/conquistador/commands/social/references/platform-intelligence/newsletter.md"
+      ]
+    },
+    {
+      "source": "skills/conquistador/commands/video/references/platform-intelligence/producthunt.md",
+      "sha256": "951fedfcbd32c605898a3be5a9467c661cda852685505d3718f9d06eb556b045",
+      "copies": [
+        "skills/conquistador/commands/campaign/references/platform-intelligence/producthunt.md",
+        "skills/conquistador/commands/measure/references/platform-intelligence/producthunt.md",
+        "skills/conquistador/commands/results/references/modes/video/references/platform-intelligence/producthunt.md",
+        "skills/conquistador/commands/social/references/platform-intelligence/producthunt.md"
+      ]
+    },
+    {
+      "source": "skills/conquistador/commands/video/references/platform-intelligence/reddit.md",
+      "sha256": "28a4da2031ecfd178c4c570a6470a686b48635b63778350d2581bd198c07c27f",
+      "copies": [
+        "skills/conquistador/commands/campaign/references/platform-intelligence/reddit.md",
+        "skills/conquistador/commands/measure/references/platform-intelligence/reddit.md",
+        "skills/conquistador/commands/results/references/modes/video/references/platform-intelligence/reddit.md",
+        "skills/conquistador/commands/social/references/platform-intelligence/reddit.md"
+      ]
+    },
+    {
+      "source": "skills/conquistador/commands/video/references/platform-intelligence/reels.md",
+      "sha256": "e95497fc68959942fbccb547dc608fdb8570ae2cf63712690aff0bffc46794d9",
+      "copies": [
+        "skills/conquistador/commands/campaign/references/platform-intelligence/reels.md",
+        "skills/conquistador/commands/measure/references/platform-intelligence/reels.md",
+        "skills/conquistador/commands/results/references/modes/video/references/platform-intelligence/reels.md",
+        "skills/conquistador/commands/social/references/platform-intelligence/reels.md"
+      ]
+    },
+    {
+      "source": "skills/conquistador/commands/video/references/platform-intelligence/shorts.md",
+      "sha256": "6deb63b610142ecf8af4120bc7f2368a4d1024c36bab9442e821115b7e26af02",
+      "copies": [
+        "skills/conquistador/commands/campaign/references/platform-intelligence/shorts.md",
+        "skills/conquistador/commands/measure/references/platform-intelligence/shorts.md",
+        "skills/conquistador/commands/results/references/modes/video/references/platform-intelligence/shorts.md",
+        "skills/conquistador/commands/social/references/platform-intelligence/shorts.md"
+      ]
+    },
+    {
+      "source": "skills/conquistador/commands/video/references/platform-intelligence/showhn.md",
+      "sha256": "f2cf60b9cbce67e024519eb7c742273b92ffdfd53322ad99011e3a289cd590a3",
+      "copies": [
+        "skills/conquistador/commands/campaign/references/platform-intelligence/showhn.md",
+        "skills/conquistador/commands/measure/references/platform-intelligence/showhn.md",
+        "skills/conquistador/commands/results/references/modes/video/references/platform-intelligence/showhn.md",
+        "skills/conquistador/commands/social/references/platform-intelligence/showhn.md"
+      ]
+    },
+    {
+      "source": "skills/conquistador/commands/video/references/platform-intelligence/tiktok.md",
+      "sha256": "6cfef4caf387ca673c47014ef08fc25265934760a76d58cacd41cca0ef46efaf",
+      "copies": [
+        "skills/conquistador/commands/campaign/references/platform-intelligence/tiktok.md",
+        "skills/conquistador/commands/measure/references/platform-intelligence/tiktok.md",
+        "skills/conquistador/commands/results/references/modes/video/references/platform-intelligence/tiktok.md",
+        "skills/conquistador/commands/social/references/platform-intelligence/tiktok.md"
+      ]
+    },
+    {
+      "source": "skills/conquistador/commands/video/references/platform-intelligence/ugc.md",
+      "sha256": "e681a393af375b152907046590a76a189b1072eefa762ccd73287e7c21a5d288",
+      "copies": [
+        "skills/conquistador/commands/campaign/references/platform-intelligence/ugc.md",
+        "skills/conquistador/commands/measure/references/platform-intelligence/ugc.md",
+        "skills/conquistador/commands/results/references/modes/video/references/platform-intelligence/ugc.md",
+        "skills/conquistador/commands/social/references/platform-intelligence/ugc.md"
+      ]
+    },
+    {
+      "source": "skills/conquistador/commands/video/references/platform-intelligence/x-launch.md",
+      "sha256": "d9a8388e9868052cbe02f5703b01c260e4a9fd8cbd04bae9a2c22f524f6bc726",
+      "copies": [
+        "skills/conquistador/commands/social/references/platform-intelligence/x-launch.md"
+      ]
+    },
+    {
+      "source": "skills/conquistador/commands/video/references/platform-intelligence/x.md",
+      "sha256": "725972b404723ebfb5fd8e011c2594fd1ee6a82f334a42e8c46db867b2ea0768",
+      "copies": [
+        "skills/conquistador/commands/campaign/references/platform-intelligence/x.md",
+        "skills/conquistador/commands/measure/references/platform-intelligence/x.md",
+        "skills/conquistador/commands/results/references/modes/video/references/platform-intelligence/x.md",
+        "skills/conquistador/commands/social/references/platform-intelligence/x.md"
+      ]
+    },
+    {
+      "source": "skills/conquistador/commands/video/references/platform-intelligence/youtube.md",
+      "sha256": "6b692f9f15d429bff3de288b4d7fee4502410673c1cc663006dd31d18969bf29",
+      "copies": [
+        "skills/conquistador/commands/social/references/platform-intelligence/youtube.md"
+      ]
+    }
+  ]
+}
