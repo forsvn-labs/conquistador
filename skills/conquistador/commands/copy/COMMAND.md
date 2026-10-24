@@ -2,7 +2,7 @@
 name: copy
 description: "Write paste-ready copy for pages, headlines, calls to action, emails, and launches."
 metadata:
-  version: 3.0.0
+  version: 4.0.0
 ---
 
 # Write product-marketing copy
@@ -16,82 +16,65 @@ Use the brief to select current-stage resources. Read additional files only when
 
 Core:
 
-- [anti-patterns](references/anti-patterns.md): Copy failures to catch before delivery. Editorial preference does not predict conversion. A PASS does not…
-- [copy-review](references/copy-review.md): Check the finished copy against the facts. Run this after the draft is written. It checks what the copy…
-- [headline-formulas](references/headline-formulas.md): Headline patterns. Use these for a landing page, product page, or offer page headline. Start from the…
-- [long-form-library](references/long-form-library.md): Long-form section library. Use this for long-form pages over about 150 words: sales pages, landing pages,…
-- [sales-argument](references/sales-argument.md): Sales argument: direct-response craft for sales pages and SaaS landing pages. Draft long-form copy from…
+- [copy-review](references/copy-review.md): Check the finished copy against the facts. Run this after a sales page or sales letter is drafted from the…
+- [headline-formulas](references/headline-formulas.md): Headline patterns. Use these for the headline of a sales page or sales letter. All other headlines are a…
+- [sales-argument](references/sales-argument.md): Sales argument: the long-form method for a sales page or sales letter. Draft a sales page or sales letter,…
 
-By step: [belief-disruption](references/belief-disruption.md), [discovery-story](references/discovery-story.md), [emotional-triggers](references/emotional-triggers.md), [lead-magnet-stack](references/lead-magnet-stack.md), [lifecycle-sequences](references/lifecycle-sequences.md), [research-workflow](references/research-workflow.md).
-
-Specialist roles: [body-agent](agents/body-agent.md), [critic-agent](agents/critic-agent.md), [cta-agent](agents/cta-agent.md), [hook-agent](agents/hook-agent.md), [psychology-agent](agents/psychology-agent.md), [social-proof-agent](agents/social-proof-agent.md), [variant-agent](agents/variant-agent.md), [voice-agent](agents/voice-agent.md), [zero-risk-agent](agents/zero-risk-agent.md).
+By step: [lifecycle-sequences](references/lifecycle-sequences.md).
 
 Worked examples: [direct-response-examples](references/examples/direct-response-examples.md).
-
-Output formats and fallbacks: [sequential](fallbacks/sequential.md), [format-conventions](references/format-conventions.md).
 
 <!-- playbooks:end -->
 
 ## Scope and handoffs
 
-This command owns the words.
+This command owns the copy block itself.
 
 Include:
 
-- landing, sales, offer, pricing, and product page copy;
-- headlines, leads, calls to action, and messaging variants;
+- landing and product page copy;
+- sales pages and sales letters;
+- headlines, CTAs, and messaging variants;
 - launch announcement copy;
-- a single behavior-triggered lifecycle email, and the copy for each touch of a lifecycle sequence
-  whose flow the `lifecycle` play owns.
+- single behavior-triggered lifecycle emails, and the copy layer of a lifecycle sequence
+  (one psychological job per touch; campaign design stays with `lifecycle`).
 
-Route instead:
+Exclude — route instead:
 
-- lifecycle flow design (trigger, timing, suppression, branches) → the `lifecycle` play;
-- cold or one-to-one outreach sequences → `outreach`;
+- multi-touch outreach sequences → `outreach`;
 - channel-native social posts → `social`;
 - long-form articles → `article`;
-- paid ad sets built from a plan → `ads` (this command writes standalone headline and CTA units);
-- diagnosing a live page that underperforms → `convert`;
-- measuring copy after launch → `measure`.
+- a full paid campaign buildout (ad sets per network from a plan) → `ads`;
+- measuring copy performance after launch → `measure`.
 
-## Pick the mode
+## Write the copy
 
-Pick the mode from the deliverable, not from the product or the buyer.
+Write the copy in your own judgment from the user's facts. This covers every unit this command
+owns except a sales page or sales letter: headlines, heroes, page sections, rewrites, lead magnet
+pages, app pages, comparison sections, sales arguments, emails, and launches. Load no other file
+for it. Then run only the facts check: remove claims the facts do not support, keep fair
+inferences, and add nothing (no hedges, no source text, no disclaimers). Return the copy.
 
-- **Short-form:** a headline or headline set, a hero section, a lead magnet page, an app or consumer
-  hero, and other copy under about 150 words.
-- **Long-form:** a sales page or its opening, a sales argument, a rewrite of an existing hero, a B2B
-  hero that has to argue (the buyer switches systems or books a demo, and the facts hold a measured
-  result), and anything over about 150 words.
+Ask at most one bundled question when a missing fact would change the copy materially. Otherwise
+label the assumption and continue.
 
-When one request holds both, write each unit in its own mode.
+## Sales page or sales letter
 
-## Short-form mode
-
-Write the copy in your own judgment from the user's facts. This mode adds no drafting rules,
-checklist, examples, or review roles, and it reads no other file in this method.
-
-Then run only the facts check: remove claims the facts do not support, keep fair inferences, and
-add nothing (no hedges, no source text, no disclaimers). Return the copy. Sending and publishing need
-the user's approval.
-
-## Anchor long-form work
+A sales page or sales letter, or its opening, uses the long-form method.
 
 Infer the audience and their costly moment, awareness level and traffic source, the outcome they
 want, why the problem persists and what the product does differently, the offer terms, the
-strongest proof, the main objection, the action, and the surface, voice, and language. Ask at most one bundled question
-when different answers would change the copy materially. Otherwise label the assumption and continue.
+strongest proof, the main objection, the action, and the voice and language.
 
-## Draft long-form copy from the craft
+Draft:
 
-1. Write the one-sentence promise and the two mechanism lines from
+1. Write the one-sentence promise and the two mechanism lines from the
    [sales argument](references/sales-argument.md).
 2. Select: pick one proof, one mechanism, and the two or three benefits that matter most to this
-   reader. The other facts stay out of the hero. Do not restate the audience unless it filters out
-   visitors the product cannot serve.
-3. Choose the argument order for the page type and the reader's awareness. Use the
-   section library (`references/long-form-library.md`) for page structures.
-4. Draft 5–10 headlines from different headline patterns (`references/headline-formulas.md`), each
+   reader. The other facts stay out of the opening. Do not restate the audience unless it filters
+   out visitors the product cannot serve.
+3. Use the full argument order in the sales argument, led by the reader's awareness.
+4. Draft 5–10 headlines from different [headline patterns](references/headline-formulas.md), each
    starting from the reader's want, pain, or identity, and keep the one that passes the tests.
    Choose the lead by awareness.
 5. Write the body in argument order, in the customer's words, with benefit bullets and rhythm. Put
@@ -99,49 +82,24 @@ when different answers would change the copy materially. Otherwise label the ass
    operator note.
 6. Build the offer and the call to action: what they get, terms, risk reversal, and what happens
    after the click.
-7. Compare doubtful units with the annotated examples (`references/examples/direct-response-examples.md`).
+7. Compare doubtful units with the [annotated examples](references/examples/direct-response-examples.md).
 
-Per surface:
+Check after drafting. The check removes unsupported claims and keeps fair inferences that follow
+directly from the facts. It does not set the voice, flatten the headline, or blur a sourced
+specific. It does not add disclaimers, hedges, or source text to the page.
 
-- **Landing or sales page:** the full or compressed argument from the sales argument file.
-- **Launch:** what changed, who it serves, why now, how it works, and how to try it.
-- **Lifecycle email (single send):** triggered by real behavior; one job and one next step.
-
-For larger pages, run the writing roles: [hook](agents/hook-agent.md), [body](agents/body-agent.md),
-[CTA](agents/cta-agent.md), and [social proof](agents/social-proof-agent.md) for the requested units,
-and [variant](agents/variant-agent.md) when alternatives test different strategic bets.
-
-## Check long-form copy after drafting
-
-The checks remove unsupported claims and keep fair inferences that follow directly from the facts.
-They do not set the voice, flatten the headline, or blur a sourced specific. They do not add
-disclaimers, hedges, or source text to the page.
-
-1. Run [copy review](references/copy-review.md) on the assembled draft and the
-   [failure list](references/anti-patterns.md).
-2. Run the later roles as passes: [voice](agents/voice-agent.md),
-   [psychology](agents/psychology-agent.md), [zero-risk](agents/zero-risk-agent.md), then
-   [critic](agents/critic-agent.md). Use [Discovery Story](references/discovery-story.md) and
-   [lifecycle sequences](references/lifecycle-sequences.md) when those surfaces apply.
-3. Run the competitor-swap test on the hero and read the first screen alone.
-4. Fix the weak unit; do not swap one vague synonym for another. Then confirm that names, numbers,
+1. Run [copy review](references/copy-review.md) on the assembled draft.
+2. Run the competitor-swap test on the headline and read the first screen alone.
+3. Fix the weak unit; do not swap one vague synonym for another. Then confirm that names, numbers,
    links, claims, and call-to-action strength did not regress, and that the headline still starts
    from the reader.
 
-If the host cannot run separate roles, use the [sequential fallback](fallbacks/sequential.md).
+Return paste-ready copy. Then give a short operator note under its own heading, never inside the
+copy: each number with its source, period, and scope, and permissions to confirm; facts left out on
+purpose and why; one recommended next action. If the user asked for the copy only, return the copy
+only.
 
-## Deliver
-
-In long-form mode, return paste-ready copy in the requested structure. Add variants only when each tests a different
-strategic bet, and name the bet instead of calling them A, B, and C.
-
-Then give a short operator note under its own heading, never inside the copy:
-
-- each number with its source, period, and scope, and permissions to confirm;
-- facts left out on purpose and why;
-- one or two consequential decisions and one recommended next action.
-
-If the user asked for the copy only, return the copy only.
+## Boundaries
 
 Never invent claims, quotes, metrics, customers, or consent. Keep sending, publishing, and external
 writes behind explicit approval.

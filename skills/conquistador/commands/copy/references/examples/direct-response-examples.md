@@ -6,8 +6,9 @@ its source, period, or scope recorded, an operator note follows the copy; it nev
 The craft is in the [sales argument](../sales-argument.md) and [headline patterns](../headline-formulas.md).
 
 The briefs below list everything true about each product. A strong page selects from them; it does
-not use every fact, and it never cuts the offer terms. Every unit here is long-form (`form: long`)
-and follows the sales argument. Short-form copy has no examples; see the [short-form mode](../../ENTRY.md).
+not use every fact, and it never cuts the offer terms. Every unit here is part of a sales page or
+sales letter and follows the sales argument. All other copy is a pass-through and has no examples;
+see the [copy entry](../../ENTRY.md).
 
 - **Rotawell:** shift scheduling software. Audience: dental clinics with 5 to 40 staff. Pain:
   practice managers rebuild the rota by hand, often on Sunday evening, after staff swap shifts by
@@ -16,12 +17,6 @@ and follows the sales argument. Short-form copy has no examples; see the [short-
   rota. Customer: Northpier Clinic. Its practice manager measured weekly rota work falling from 6
   hours to 40 minutes over four weeks in May 2026 (one clinic, 12 staff). 380 clinics use it.
   Offer terms: `14-day`, `$49 a month`.
-- **Auditrail:** access review software. Audience: IT teams at companies with 200 to 2,000 people.
-  It pulls every account from the identity provider and 40 connected apps into one list; managers
-  approve or revoke access in one pass. Sold by a 25-minute demo run on a sample of the buyer's own
-  accounts. Proof: across 31 customer teams, the median quarterly review took 3 days, down from 19
-  (usage data, Q2 2026). Customer: Halden Logistics. In its first review it found 212 open accounts
-  that belonged to people who had left. Offer terms: `25-minute demo`.
 - **Weeknight Kitchen:** a four-week online cooking course, $79, full refund on request within 30
   days. Audience: people who can cook but rarely do on weeknights. Creator: Dana Mercer, a nurse who
   worked 12-hour hospital shifts for three years and still cooked dinner five nights a week.
@@ -114,33 +109,6 @@ Enthusiasm with no content.
 
 People who already know the course want the date, the price, and the risk term. They get all three
 in two lines.
-
-## Hero sections
-
-### 10. Demo-led B2B hero
-
-**Weak**
-
-> Compliance, simplified.
->
-> Auditrail helps companies streamline access management with intelligent automation.
->
-> [Request a demo]
-
-"Simplified" and "intelligent automation" describe nothing. The demo has no stated value or length.
-
-**Strong** (check: landing; leads with: pain; form: long)
-
-> Find every account that should have been closed
->
-> Auditrail puts every account from your identity provider and 40 connected apps in one list, and managers approve or revoke in one pass. In its first review, Halden Logistics found 212 open accounts that belonged to people who had left.
->
-> Book a 25-minute demo on your own accounts
->
-> Bring an export from your identity provider, and we'll run Auditrail on a sample of it, live.
-
-The headline is the fear an IT lead carries into every audit. One striking proof point makes it
-concrete. The demo becomes an offer: their own data and a fixed length.
 
 ## A short sales argument
 

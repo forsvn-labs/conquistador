@@ -1,9 +1,10 @@
-# Sales argument: direct-response craft for sales pages and SaaS landing pages
+# Sales argument: the long-form method for a sales page or sales letter
 
-Draft long-form copy from this file: sales pages, landing pages, offer pages, and anything over about
-150 words. Headlines are in [headline patterns](headline-formulas.md); annotated pairs are in
-[examples](examples/direct-response-examples.md). Short units use the [short-form mode](../ENTRY.md).
-Run [copy review](copy-review.md) after the draft exists. It checks claims; it does not set the voice.
+Draft a sales page or sales letter, or its opening, from this file. Headlines are in
+[headline patterns](headline-formulas.md); annotated pairs are in
+[examples](examples/direct-response-examples.md). All other copy is a pass-through (see the
+[copy entry](../ENTRY.md)). Run [copy review](copy-review.md) after the draft exists. It checks
+claims; it does not set the voice.
 
 ## Start from the reader
 
@@ -29,7 +30,7 @@ cannot serve ("US agencies only").
 
 ## Argument order
 
-Each step answers the question the step before it raises. A long sales page uses all of them:
+Each step answers the question the step before it raises. A sales page or sales letter uses all of them:
 
 1. **Lead:** headline and opening, from the reader's want, pain, or situation.
 2. **Problem:** what the current way costs them, in their words.
@@ -41,11 +42,9 @@ Each step answers the question the step before it raises. A long sales page uses
 8. **Objections:** answered where they come up; the rest in a short FAQ.
 9. **Close:** outcome, offer, and one action.
 
-A SaaS landing page runs the same argument, compressed. Hero: a headline from the reader's want or
-pain; a subhead with the mechanism and one proof point; one call to action with what happens next.
-Then a proof strip, problem and mechanism in one section, "how it works" in three steps that end at
-the first useful result, the proof block, objections (setup time, integrations, data handling,
-switching), pricing, and a final call to action.
+Longer copy is fine when every section answers a real question. Cut any section that does not move
+the reader to the next decision. A list of features with a button at the end is not an argument;
+connect each feature to the outcome it produces ("which means…").
 
 ## Promise and outcome
 
@@ -99,6 +98,9 @@ Use the strongest proof the brief supplies: the product doing the job on screen;
 before-and-after; your own data; a testimonial in the customer's words; recognized logos; counts;
 ratings. One strong, specific proof point beats a wall of weak ones. Put it next to the claim it
 supports.
+
+Choosing testimonials: prefer a named person, a before-and-after in their own words, and a detail
+only a real customer would know. "Great product" proves nothing; leave it out.
 
 ### Keep a sourced number exact
 

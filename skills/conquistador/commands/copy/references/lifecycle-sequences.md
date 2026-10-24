@@ -2,7 +2,7 @@
 
 Copy patterns for post-action lifecycle sequences — abandoned cart, post-purchase, win-back, and re-engagement. Each sequence is a coordinated set of messages, not a single piece of copy. The composition rule is **one psychological job per message**; stacking jobs in a single touch dilutes every one of them.
 
-This file covers the *copy* layer. The `lifecycle` play owns the flow: trigger, timing, suppression, branches, and channel mix. Where a sequence links to a landing page, write that page with the [sales argument](sales-argument.md). Timings below are starting points to replace with the operator's own data.
+This file covers the *copy* layer. Timing windows, segmentation, and channel mix (email vs SMS vs in-app) are handled by `campaign` and the operator's lifecycle tool. Where a sequence ties into a landing page, use the private `landing` workflow after this copy layer.
 
 ---
 
@@ -14,9 +14,9 @@ A reader added to cart, did not complete checkout. They had intent. The job of t
 
 | Touch | Timing | Psychological Job | Copy Pattern |
 |---|---|---|---|
-| **Touch 1** | Starting point (Oct 2026): about 1 hour after abandon | Restore-the-state | "You left something" + direct return link |
-| **Touch 2** | Starting point (Oct 2026): about 12 hours after abandon | Validation via peer | One specific social-proof unit tied to the exact product in cart |
-| **Touch 3** | Starting point (Oct 2026): about 24 hours after abandon | Friction-removal nudge | Modest, time-bound incentive — only if the operator's margins allow it |
+| **Touch 1** | ~1h after abandon | Restore-the-state | "You left something" + direct return link |
+| **Touch 2** | ~12h after abandon | Validation via peer | One specific social-proof unit tied to the exact product in cart |
+| **Touch 3** | ~24h after abandon | Friction-removal nudge | Modest, time-bound incentive — only if the operator's margins allow it |
 
 Each touch does one job. Touch 1 is not "remind + social proof"; touch 3 is not "discount + urgency theater." Mixing jobs in a single touch is the most common failure.
 
@@ -46,7 +46,7 @@ Each touch does one job. Touch 1 is not "remind + social proof"; touch 3 is not 
 
 **Anti-patterns:**
 - Generic "loved by thousands" social proof. The reader already knows the brand has customers; they need to know if the product fits *them*.
-- Stacking several testimonials. One specific testimonial that matches the cart item is easier to believe than three generic ones.
+- Stacking 3+ testimonials. Reads as desperate; one specific testimonial outperforms three generic ones.
 - Re-introducing the product. They've seen the product page — don't re-pitch features here.
 
 ### Touch 3 — Friction-Removal Nudge
@@ -56,7 +56,7 @@ Each touch does one job. Touch 1 is not "remind + social proof"; touch 3 is not 
 **Copy pattern:**
 - Subject line: specific incentive in plain language. "{Specific discount} on your {item}, valid for {time window}"
 - Body: brief — restate the cart, name the incentive, name the expiration, single CTA.
-- CTA: "Use my {discount} now".
+- CTA: "Use my {discount} now" — first-person per CP-03.
 - The discount window must actually expire. A "24h discount" that's still valid 2 weeks later trains the audience to ignore the urgency forever.
 
 **Anti-patterns:**
@@ -66,7 +66,7 @@ Each touch does one job. Touch 1 is not "remind + social proof"; touch 3 is not 
 
 ### Sequence Anti-Patterns (Across All Three Touches)
 
-- **Four-touch or five-touch sequences.** Each extra touch about the same cart risks unsubscribes from the whole list. Add one only when the operator's data shows it recovers orders.
+- **Four-touch or five-touch sequences.** Diminishing returns past touch 3; touches 4+ mostly train unsubscribes.
 - **Same subject line across all three touches.** The mailbox preview collapses them; the reader sees one "didn't buy?" prompt three times and tunes out.
 - **No segmentation by abandon reason.** A reader who hit a shipping-cost surprise gets a discount that doesn't fix the actual friction. If the operator can segment (added-to-cart-then-saw-shipping vs added-to-cart-then-left-domain vs added-to-cart-then-checkout-error), the sequence should branch.
 - **No "stop receiving cart emails" link.** Annoyed readers unsubscribe from the whole list rather than just the cart sequence.
@@ -84,13 +84,13 @@ Same one-touch-one-job composition rule. The post-purchase sequence's first job 
 | Touch 3 | Within 7d | First-result prompt — surface the metric or moment that signals "this is working" |
 | Touch 4 (optional) | Within 14-30d | Upsell / cross-sell / referral ask, conditional on first-result confirmation |
 
-Write each touch with the same one-job rule. The `lifecycle` play decides timing and the event that ends the sequence.
+Detailed copy patterns for each touch belong in a future expansion — flagged as out-of-scope for the WS8 lifecycle-sequences addition.
 
 ---
 
 ## Win-Back — Pattern Shape
 
-For customers who have not purchased within an inactivity window the operator defines from their own purchase cycle. The sequence acknowledges the absence rather than pretending the gap doesn't exist.
+For customers who haven't purchased in a defined inactivity window (usually 3-6 months, varies by category). The sequence acknowledges the absence rather than pretending the gap doesn't exist.
 
 | Touch | Timing | Job |
 |---|---|---|
@@ -98,13 +98,12 @@ For customers who have not purchased within an inactivity window the operator de
 | Touch 2 | +7d | One updated proof or one new product/feature relevant to their prior purchase |
 | Touch 3 | +14d | Time-bound incentive OR graceful close ("we'll stop emailing — reply if you want to stay") |
 
-Again, one job per touch.
+Again — one job per touch. Detailed copy patterns deferred to a future expansion.
 
 ---
 
 ## Cross-References
 
-- Review every lifecycle subject line and CTA against the supplied facts, offer terms, and actual destination. Use [copy review](copy-review.md).
-- CTA copy follows the formula in `agents/cta-agent.md` — "Return to checkout" and "Use my 10% off" both score, "Submit order" does not.
-- Timing windows, suppression, and segmentation are not in this file; the `lifecycle` play owns them.
-- For a resource offered in exchange for an email address, describe the exchange with [lead magnet offers](lead-magnet-stack.md).
+- Check every lifecycle subject line and CTA against the supplied facts, offer terms, and actual destination: remove claims the facts do not support and add nothing.
+- A CTA names the action and what the reader gets: "Return to checkout" and "Use my 10% off" work; "Submit order" does not.
+- Timing windows and segmentation logic are NOT in this file; consult `campaign` for the campaign-level lifecycle planning.
