@@ -10,7 +10,7 @@ import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { createBrief } from '../brief.mjs';
+import { createBrief, LIMITS } from '../brief.mjs';
 import { evaluateGate, parseGate } from '../rubric-gate.mjs';
 
 const root = fileURLToPath(new URL('../../', import.meta.url));
@@ -33,7 +33,7 @@ try {
   }
   const brief = createBrief('Write a tweet announcing our product', { force: true, cwd: work, playbooks: [] });
   const paths = JSON.stringify(brief);
-  results.push({ name: 'bounded social guidance with optional writing references', pass: brief.methods[0]?.name === 'social' && brief.must.length <= 3 && paths.includes('ENTRY.md') && existsSync(join(root, 'skills/conquistador/references/human-writing-stylebook.md')) });
+  results.push({ name: 'bounded social guidance with optional writing references', pass: brief.methods[0]?.name === 'social' && brief.must.length <= LIMITS.mustFiles && paths.includes('ENTRY.md') && existsSync(join(root, 'skills/conquistador/references/writing-guide.md')) });
   const writer = readFileSync(join(root, 'skills/conquistador/commands/social/agents/copywriter-agent.md'), 'utf8');
   const method = readFileSync(join(root, 'skills/conquistador/commands/social/COMMAND.md'), 'utf8');
   results.push({ name: 'preserve supplied draft', pass: /edit mode/i.test(method) && /preserve.*wording/is.test(writer) });

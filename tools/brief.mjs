@@ -15,7 +15,8 @@ import { packageRootOf } from './module-root.mjs';
 
 export const BRIEF_SCHEMA = 'conquistador.brief/v1';
 export const LIMITS = Object.freeze({
-  mustFiles: 3,
+  // Up to 3 keyword-ranked files, plus the primary command's required files when they fit the bytes.
+  mustFiles: 5,
   mustBytes: 10_000,
   situationalFiles: 8,
   userFiles: 4000,
@@ -375,15 +376,18 @@ export function createBrief(input, { root = moduleRoot, playbooks, persistCache 
 
   const must = [];
   let bytes = 0;
-  const fileBudget = routed.mode === 'assist' ? 1 : 3;
-  const byteBudget = routed.mode === 'assist' ? 1800 : 10000;
-  // Every resource shares the task's count and byte budget.
-  const take = item => {
-    if (item.sibling || must.some(entry => entry.doc.digest === item.doc.digest)) return;
-    if (passThrough && item.doc.kind !== 'user') return;
-    if (must.length >= fileBudget || bytes + item.doc.bytes > byteBudget) return;
-    must.push(item);
+  const assist = routed.mode === 'assist';
+  const fileBudget = assist ? 1 : 3;
+  const byteBudget = assist ? 1800 : LIMITS.mustBytes;
+  // Every resource shares the task's byte budget. Required files do not use the 3 ranked slots.
+  const take = (item, required = false) => {
+    if (item.sibling || must.some(entry => entry.doc.digest === item.doc.digest)) return false;
+    if (passThrough && item.doc.kind !== 'user') return false;
+    if (must.length >= LIMITS.mustFiles || bytes + item.doc.bytes > byteBudget) return false;
+    if (!required && must.filter(entry => !entry.required).length >= fileBudget) return false;
+    must.push(required ? { ...item, required } : item);
     bytes += item.doc.bytes;
+    return true;
   };
   // The user's own playbooks outrank generic method knowledge.
   // Keep only strong matches: within 60% of the best user playbook for this task.
@@ -394,6 +398,18 @@ export function createBrief(input, { root = moduleRoot, playbooks, persistCache 
     const inPrimary = item.doc.method === methods[0]?.name || item.doc.kind === 'channel';
     if (inPrimary || !scored.some(entry => entry.doc.kind === 'platform' && entry.doc.method === methods[0]?.name && posix.basename(entry.doc.key) === posix.basename(item.doc.key))) take(item);
     if (must.length >= 3) break;
+  }
+  // The primary command's required files come before keyword-ranked extras. A small edit keeps
+  // its one-file budget. A required file that does not fit is named, never dropped silently.
+  const deferredRequired = [];
+  if (!assist) {
+    const byKey = new Map(scored.map(entry => [entry.doc.key, entry]));
+    for (const key of (methods[0]?.requiredResources ?? []).map(path => path.slice(libraryRoot.length + 1))) {
+      const doc = index.docs.find(item => item.key === key);
+      if (!doc || doc.kind === 'process') continue;
+      if (!take(byKey.get(key) ?? { doc, score: 0, lexical: 0, sibling: false, owner: methods[0].name }, true)
+        && !must.some(entry => entry.doc.digest === doc.digest)) deferredRequired.push(`${libraryRoot}/${key}`);
+    }
   }
   // A play's own playbooks (its recovered method folder) come first among method knowledge.
   if (play) scored.filter(entry => entry.owner === play.name && entry.doc.source === 'play' && entry.doc.kind === 'playbook').slice(0, 2).forEach(item => take(item));
@@ -409,7 +425,11 @@ export function createBrief(input, { root = moduleRoot, playbooks, persistCache 
   if (checklist) take(checklist);
   // Fill any remaining room with the strongest remaining matches.
   // Shared parent files stay situational unless the user named their platform.
-  for (const item of scored) if (must.length < LIMITS.mustFiles && !['example', 'checklist'].includes(item.doc.kind) && item.owner) take(item);
+  for (const item of scored) if (!['example', 'checklist'].includes(item.doc.kind) && item.owner) take(item);
+  // Reading order: required files, then guides for the platforms the user named, then extras.
+  // A pack inlines in this order, so a tight budget drops keyword extras first.
+  const lead = item => (item.required ? 0 : platforms.includes(posix.basename(item.doc.key, posix.extname(item.doc.key))) ? 1 : 2);
+  must.sort((a, b) => lead(a) - lead(b));
 
   // Nothing matched: say so instead of returning an empty reading list.
   if (!methods.length && !play && !must.length) {
@@ -426,6 +446,7 @@ export function createBrief(input, { root = moduleRoot, playbooks, persistCache 
     why: reasonFor(item.doc, platforms),
     bytes: item.doc.bytes,
     score: Number(item.score.toFixed(3)),
+    ...(item.required ? { required: true } : {}),
   });
   // Later play steps: each step's strongest playbooks, read when the work reaches that step.
   const steps = play ? play.chain.map((step, position) => {
@@ -445,6 +466,7 @@ export function createBrief(input, { root = moduleRoot, playbooks, persistCache 
       ...(step.mode ? { mode: step.mode } : {}), ...(step.when ? { when: step.when } : {}), ...(step.for ? { for: step.for } : {}), now, playbooks };
   }) : [];
   for (const step of steps) for (const item of step.playbooks) seen.add(createHash('sha256').update(readText(item.absolute) ?? '').digest('hex'));
+  for (const path of deferredRequired) seen.add(index.docs.find(doc => `${libraryRoot}/${doc.key}` === path).digest);
   const situational = passThrough ? [] : scored.filter(item => !seen.has(item.doc.digest) && seen.add(item.doc.digest)).slice(0, LIMITS.situationalFiles);
   return {
     schema: BRIEF_SCHEMA,
@@ -457,6 +479,7 @@ export function createBrief(input, { root = moduleRoot, playbooks, persistCache 
     methods: methods.map(method => ({ name: method.name, label: method.label, path: method.path.replace(/COMMAND\.md$/, 'ENTRY.md'), absolute: join(packageRoot, method.path.replace(/COMMAND\.md$/, 'ENTRY.md')), fullPath: method.path })),
     platforms,
     must: must.map(view),
+    deferredRequired,
     situational: situational.map(view),
     standards: ['quality.md', 'safety.md'].map(name => `${contract.parentPath}/standards/${name}`).map(path => ({ path, absolute: join(packageRoot, path) })),
     // The project's PRODUCT.md and GROWTH.md come before any playbook (standards/context.md).
@@ -540,6 +563,9 @@ export function packBrief(brief, { limit, callerContext, hosted = false, compact
     'Use conquistador_check for substantial marketing text, and conquistador_score only when reporting a rubric verdict. Neither proves factual accuracy or quality.',
     'Deferred files are optional until their stage is needed. Use conquistador_read to expand one, or reuse complete guidance still present in the host context.',
   ];
+  // Required files lead every list. A required file this pack does not inline is named before the
+  // file blocks, so the budget never drops it silently. It stays optional, not readNow (#86).
+  const required = [...brief.must.filter(item => item.required).map(item => item.path), ...(brief.deferredRequired ?? [])];
   let callerContextStatus = 'absent';
   if (callerContext) {
     const context = callerContext.replace(/<!--(\s*\/?\s*conquistador-file)/gi, '&lt;!--$1');
@@ -553,28 +579,38 @@ export function packBrief(brief, { limit, callerContext, hosted = false, compact
   }
   const entries = [...brief.methods, ...(compact ? [] : brief.must)];
   let output = lines.filter(line => line !== undefined).join('\n') + '\n';
+  let headerEnd = output.length;
   const inlined = [];
+  const note = () => {
+    const missing = required.filter(path => !inlined.some(item => item.path === path));
+    return missing.length ? `\nRequired references not inlined (budget): ${missing.join(', ')}. Expand them with conquistador_read before the stage that uses them.\n` : '';
+  };
+  const render = () => output.slice(0, headerEnd) + note() + output.slice(headerEnd);
   const includedBlocks = [];
-  const deferred = [...(compact ? brief.must : []), ...brief.situational].map(item => item.path);
-  const provenance = [];
+  const deferred = [...(brief.deferredRequired ?? []), ...(compact ? brief.must : []).map(item => item.path), ...brief.situational.map(item => item.path)];
+  const provenance = [...(brief.deferredRequired ?? []), ...(compact ? brief.must : []).filter(item => item.required).map(item => item.path)]
+    .map(path => ({ path, reason: 'required by the command', bytes: 0, sha256: null, status: 'deferred', required: true }));
   for (const item of entries) {
     let body;
     try { body = readBundled && item.source !== 'user' ? readBundled(item) : readText(item.absolute); }
     catch { body = null; }
     const evidence = knowledgeFileEvidence(item, body);
     const block = body === null ? null : `\n## ${item.title ?? item.label ?? 'Guidance'}\nFile: ${item.path}\n${evidenceMarker(evidence)}\n${normalizeKnowledgeText(body)}\n${fileEnd}\n`;
-    const fits = block !== null && Buffer.byteLength(output) + Buffer.byteLength(block) <= limit;
-    provenance.push({ path: item.path, reason: item.why ?? 'selected command entry', bytes: evidence.bytes ?? 0, sha256: evidence.sha256 ?? null, status: fits ? 'included' : body === null ? 'unavailable' : 'deferred' });
+    const fits = block !== null && Buffer.byteLength(render()) + Buffer.byteLength(block) <= limit;
+    provenance.push({ path: item.path, reason: item.why ?? 'selected command entry', bytes: evidence.bytes ?? 0, sha256: evidence.sha256 ?? null, status: fits ? 'included' : body === null ? 'unavailable' : 'deferred', ...(item.required ? { required: true } : {}) });
     if (fits) { output += block; includedBlocks.push(block); inlined.push({ path: item.path, title: item.title ?? item.label }); }
     else deferred.push(item.path);
   }
+  // A required file that is not inlined is listed before optional ones.
+  const isRequired = path => required.includes(path);
+  deferred.sort((a, b) => isRequired(b) - isRequired(a));
   const later = (brief.play?.steps ?? []).filter(step => !step.now).map(step => ({ step: step.step, path: step.path }));
   const structured = {
     action: 'brief', mode: brief.mode ?? 'command', reason: brief.reason, command: primary?.name ?? null,
     play: brief.play?.name ?? null, inlined, readNow: [], readAtStep: later,
     situational: [...new Set(deferred)], provenance, callerContextStatus, budgetBytes: limit,
   };
-  const encodedBytes = () => Buffer.byteLength(JSON.stringify({ content: [{ type: 'text', text: output }], structuredContent: structured }));
+  const encodedBytes = () => Buffer.byteLength(JSON.stringify({ content: [{ type: 'text', text: render() }], structuredContent: structured }));
   // Budget the complete public tool result, including provenance and deferred resource paths.
   // Drop whole blocks only; never claim a partial body was inlined.
   if (limit >= 2000) {
@@ -582,16 +618,17 @@ export function packBrief(brief, { limit, callerContext, hosted = false, compact
       const block = includedBlocks.pop();
       const item = inlined.pop();
       output = output.slice(0, output.length - block.length);
-      structured.situational.unshift(item.path);
+      structured.situational.splice(isRequired(item.path) ? 0 : structured.situational.filter(isRequired).length, 0, item.path);
       provenance.find(record => record.path === item.path).status = 'deferred';
     }
     if (encodedBytes() > limit && callerContextStatus === 'included') {
       output = output.split('\n## Caller context')[0] + '\nCaller context remains with the caller; use the supplied facts directly.\n';
+      headerEnd = output.length;
       structured.callerContextStatus = 'retained-by-caller';
     }
     while (encodedBytes() > limit && structured.situational.length) structured.situational.pop();
   }
-  return { structured, text: clipUtf8(output, limit) };
+  return { structured, text: clipUtf8(render(), limit) };
 }
 
 export function searchKnowledge(query, { root = moduleRoot, playbooks, persistCache = true, limit = 12 } = {}) {

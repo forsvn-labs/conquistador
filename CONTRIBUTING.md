@@ -37,6 +37,14 @@ source changes. The same command regenerates `tools/search-index.json` from bund
 methods only. This portable search snapshot stores no checkout paths or user playbooks.
 `node --test tools/search-index.test.mjs` verifies parity and fallback behavior;
 [the performance review](docs/performance/REVIEW.md) gives repeatable latency checks.
+
+Some method files are byte-identical copies, because each command must carry its own complete
+resources. `tools/method-copies.json` names the one editable source of each copy group. Edit only
+the source. `node tools/update-completeness.mjs` first runs `node tools/method-copies.mjs`, which
+copies an edited source to its copies and records the source hash. It refuses to overwrite a copy
+that was edited directly. `npm test` runs `node tools/method-copies.mjs --check`, which fails on
+drift, a missing copy, or a new byte-identical file that is not declared. To give a copy its own
+text, remove it from the manifest in the same change.
 The manifests record exact method versions and
 content hashes for the complete library. The installation-doctor tests reject missing or stale
 manifest entries. Use `node runtime/bin/conquistador.js operator doctor --path /absolute/install`
