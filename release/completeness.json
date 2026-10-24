@@ -144,7 +144,7 @@
     {
       "name": "outreach",
       "version": "3.0.0",
-      "sha256": "ffc6cedf019d136d772145d7994f5f0ee2659dde9e427e3b2dd4001648e6b3c7"
+      "sha256": "61cfbb9800c2e2e876853343609565d6a77777743b490bd21c0b723d3d8cbcdb"
     },
     {
       "name": "pin",
@@ -4855,11 +4855,11 @@
     },
     {
       "path": "conquistador/routing-contract.json",
-      "sha256": "f94425265383c611e6fa548730fa0163e0f9f573f7dff822471e0c9d02d86a81"
+      "sha256": "38caa67ee1eb9e9c92550c8ff15320f53c3eaecf805e62fbdfbb2da92f2f87e1"
     },
     {
       "path": "conquistador/routing-overlay.json",
-      "sha256": "05b394c1c300e33cd1a50824e91217876e856abffa7bf42166fe9090a2dc719d"
+      "sha256": "920091418117e8f4a34df9781672e7dd066efc5ce12b4dcab3663579c0167d2c"
     },
     {
       "path": "conquistador/rubrics/composition.md",
