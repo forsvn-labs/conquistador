@@ -104,14 +104,17 @@ test('copy drafting briefs carry the copy entry and nothing else', () => {
   }
 });
 
-test('a landing play brief carries no copy file and stages none', () => {
-  const brief = createBrief('Create a landing page for our SaaS', options);
-  assert.equal(brief.play?.name ?? packBrief(brief).structured.play, 'landing');
-  const { structured } = packBrief(brief);
-  const listed = [...structured.inlined, ...structured.situational].map(item => item.path ?? item);
-  assert.deepEqual(listed.filter(path => path.startsWith(COPY) && path !== ENTRY), [], JSON.stringify(listed));
-  for (const step of brief.steps ?? []) {
-    if (step.command === 'copy') assert.deepEqual(step.playbooks, [], 'the copy step stages no copy file');
+test('a play brief carries no copy file and its copy step stages none', () => {
+  // landing starts at its copy step; gtm reaches copy later and stages that step's files.
+  for (const [task, name] of [['Create a landing page for our SaaS', 'landing'], ['Plan our go-to-market for the new product', 'gtm']]) {
+    const brief = createBrief(task, options);
+    assert.equal(brief.play?.name, name, task);
+    const { structured } = packBrief(brief);
+    const listed = [...structured.inlined, ...structured.situational].map(item => item.path ?? item);
+    assert.deepEqual(listed.filter(path => path.startsWith(COPY) && path !== ENTRY), [], `${task}: ${JSON.stringify(listed)}`);
+    const step = brief.play.steps.find(item => item.command === 'copy');
+    assert.ok(step, `${task} has a copy step`);
+    assert.deepEqual(step.playbooks, [], `${task}: the copy step stages no copy file`);
   }
 });
 
