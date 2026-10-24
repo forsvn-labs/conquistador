@@ -8,10 +8,14 @@ The assignment packet must include the costly moment, desired outcome, offer ter
 objections, risk boundary, destination, and allowed call to action. Treat missing proof as a copy
 limit. Do not replace it with urgency, authority language, or decorative testimonials.
 
-Build the page in the order the buyer must understand and believe it. Make the outcome concrete,
-explain how the product produces it, resolve material objections, show real proof, state the terms,
-and make the next action clear. Specify the visual evidence and responsive behavior needed to support
-that argument. Finish with one test that can distinguish the main conversion hypothesis.
+Plan the page in the order the buyer must understand and believe it: the outcome, how the product
+produces it, material objections, real proof, the terms, and the next action. Specify the visual
+evidence and responsive behavior needed to support that argument. Finish with one test that can
+distinguish the main conversion hypothesis.
+
+Write the page copy in your own judgment from the user's facts, then run only the facts check: remove
+claims the facts do not support, keep fair inferences, and add nothing (no hedges, no source text, no
+disclaimers). When the page is a sales page or sales letter, `copy` uses its long-form method instead.
 
 Do not guarantee results, shame the buyer, hide terms, fabricate scarcity, or choose an implementation
 stack unless the assignment includes a verified stack and a build request. Deployment and publication
