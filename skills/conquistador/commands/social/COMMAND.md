@@ -23,8 +23,7 @@ Core:
 - [method](references/method.md): Method: `social`. Turn one brief into a complete social or community artifact for one platform and market.…
 - [photo-slideshows](references/photo-slideshows.md): Photo slideshows. Use for a photo slideshow or swipeable image sequence on TikTok, Instagram, or a similar…
 - [rubric](references/rubric.md): Social copy critic rubric. Score five dimensions from 0 to 10. Scores are local review conventions, not…
-- [ai-patterns](../../references/ai-patterns.md): 47 patterns across 8 categories. Each pattern includes severity: - Hard Tell — Immediately flags content…
-- [human-writing-stylebook](../../references/human-writing-stylebook.md): The 47-pattern catalog tells you what AI writing looks like and how to strip it. This stylebook tells you…
+- [writing-guide](../../references/writing-guide.md): How strong marketing writing reads. Draft for the reader first, then run After drafting. The customer's…
 
 Platform packs (read the one for each platform in the task): [facebook](references/platform-intelligence/facebook.md), [founder-demo](references/platform-intelligence/founder-demo.md), [linkedin-launch](references/platform-intelligence/linkedin-launch.md), [linkedin](references/platform-intelligence/linkedin.md), [motion-background](references/platform-intelligence/motion-background.md), [newsletter](references/platform-intelligence/newsletter.md), [producthunt](references/platform-intelligence/producthunt.md), [reddit](references/platform-intelligence/reddit.md), [reels](references/platform-intelligence/reels.md), [shorts](references/platform-intelligence/shorts.md), [showhn](references/platform-intelligence/showhn.md), [tiktok](references/platform-intelligence/tiktok.md), [ugc](references/platform-intelligence/ugc.md), [x-launch](references/platform-intelligence/x-launch.md), [x](references/platform-intelligence/x.md), [youtube](references/platform-intelligence/youtube.md).
 
@@ -38,10 +37,9 @@ Output formats and fallbacks: [sequential](fallbacks/sequential.md), [format-con
 
 ## Core writing checks
 
-Read [AI patterns](../../references/ai-patterns.md) and the
-[human writing stylebook](../../references/human-writing-stylebook.md) in full before drafting or
-editing. These are required core reads. Check the native post body before handoff. A banned writing
-pattern forces `fail`, regardless of the numeric score. Optional editorial polish does not replace
+Read the [writing guide](../../references/writing-guide.md) before drafting or editing. It is a
+required core read. Check the native post body before handoff. A tell from its "Fix every time"
+list forces `fail`, regardless of the numeric score. Optional editorial polish does not replace
 this check.
 
 ## Edit mode

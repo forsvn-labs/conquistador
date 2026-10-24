@@ -9,9 +9,8 @@ Change only a named check failure or requested correction. Keep the original ope
 variant unless the user asks for alternatives. Show the edited post and a small change log. A clean
 draft can remain unchanged.
 
-Read [AI patterns](../../../references/ai-patterns.md) and the
-[human writing stylebook](../../../references/human-writing-stylebook.md) before writing. Scan the
-native body for banned patterns before handoff. Fix a detected pattern without adding a new claim.
+Read the [writing guide](../../../references/writing-guide.md) before writing. Scan the native
+body for its "Fix every time" tells before handoff. Fix a detected pattern without adding a new claim.
 
 `pack_meta` contains id, method_updated, last_verified, verifier and status, or null when no pack
 was loaded. A draft pack is usable as a method. It supplies no live verification.
