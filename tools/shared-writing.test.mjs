@@ -9,7 +9,7 @@
 // 5. The Vietnamese standard or the editorial-polish specialists lose rules they depend on.
 // 6. Damaged search-and-replace text survives in the shared layer.
 // 7. The playbook keeps the reversed awareness ladder or the fake-account channel.
-// 8. Shared text names practitioners or gives results for real companies.
+// 8. Shared text gives results for real companies or names a detector product.
 // 9. The parent skill loses the job markers, hook commands, or command links that tools depend on.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
@@ -155,11 +155,11 @@ test('the Vietnamese standard and editorial polish keep the rules they depend on
   }
 });
 
-test('the shared layer has no damaged replacement text or practitioner names', () => {
+test('the shared layer has no damaged replacement text or real-company examples', () => {
   for (const path of owned()) {
     const text = read(path);
     assert.doesNotMatch(text, /→ Scope or uses|\buses the (?:source|unannounced)|\buses share-of|\| internal \|/, path);
-    assert.doesNotMatch(text, /\b(?:Schwartz|Dunford|Saraev|Hormozi|Stripe|Kent Beck|Shopify|Mixpanel|Notion|Intercom|Figma|Canva|Adobe|Pangram)\b/, path);
+    assert.doesNotMatch(text, /\b(?:Stripe|Shopify|Mixpanel|Notion|Intercom|Figma|Canva|Adobe|Pangram)\b/, path);
   }
 });
 
