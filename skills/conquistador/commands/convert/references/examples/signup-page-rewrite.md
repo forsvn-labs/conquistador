@@ -3,10 +3,11 @@
 The product, customers, people, traffic, and numbers on this page are invented for teaching. The
 method is in [page conversion craft](../page-conversion-craft.md).
 
-**Crewlog** (invented): daily site logs for small building contractors. Site leads take photos and
-a voice note; Crewlog drafts the log with date, crew, and work done for the client. 14-day trial
-with no card, then $29 per active site a month. Proof: Ridgeback Builders' site lead files each
-daily log in 6 minutes instead of about 30 at the end of the day (interview, August 2026).
+**Crewlog** (invented): daily site logs. Audience: small building contractors. Site leads take
+photos and a voice note; Crewlog drafts the log with date, crew, and work done for the client.
+14-day trial with no card, then $29 per active site a month; logs export as PDF.
+Customer: Ridgeback Builders. Its site lead files each daily log in 6 minutes instead of about 30 at the end
+of the day (interview, August 2026).
 
 Traffic: most visitors come from a social ad that says "Daily site logs from your phone." The page
 gets about 1,500 visitors a month, and 3% start a trial (analytics, September 2026).
@@ -43,11 +44,11 @@ Break ladder: Attention and Comprehension (match and clarity) come first, then F
 
 ## After
 
-**Strong** (check: landing)
+**Strong** (check: landing; leads with: want)
 
-> Daily site logs from your phone in 6 minutes
+> Daily site logs from your phone. Done before you leave the site.
 >
-> Take photos and a voice note on site. Crewlog drafts the daily log your client expects, with date, crew, and work done. Ridgeback Builders' site lead now files each log in 6 minutes instead of about 30 at the end of the day (interview, August 2026).
+> Snap a few photos, record a voice note, and Crewlog drafts the log your client expects. Ridgeback Builders' site lead files each one in 6 minutes instead of about 30 at the end of the day.
 >
 > Work email
 >
@@ -56,15 +57,17 @@ Break ladder: Attention and Comprehension (match and clarity) come first, then F
 > Start my 14-day trial
 >
 > No card. $29 per active site a month after the trial. Export every log as a PDF any time.
->
-> How it works: take photos and a voice note, check the drafted log, and send it to your client from the site.
+
+*Operator note:* "6 minutes instead of about 30" is one site lead at Ridgeback Builders, from an
+interview in August 2026. Confirm permission to name Ridgeback. Left out on purpose: a separate
+"how it works" line, because the subhead already carries it.
 
 ## Why each change
 
-- The headline repeats the ad's promise and adds the sourced time, so match, clarity, and value
-  land in one line.
-- The subhead carries the mechanism (photos and a voice note become a drafted log) and the one
-  strong proof point, exact, with its source beside it.
+- The headline repeats the ad's words, so the visitor knows they are in the right place, then adds
+  the want: the log is finished on site, not at night.
+- The subhead carries the mechanism and one proof point, exact. Its source goes in the operator
+  note, not on the page.
 - Two fields replace seven. The build-type question stays because onboarding uses it to pick a log
   template; the phone field goes, and with it the fear of a sales call.
 - The button says what the visitor gets. The line under it answers card, price, and lock-in.

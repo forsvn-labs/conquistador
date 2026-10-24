@@ -10,7 +10,7 @@ Answer these in order. The first "no" is usually where the page loses people.
 
 1. **Match:** Does the first screen repeat the words and offer of the ad, email, or search that
    brought them? A visitor who clicked "rota template" and lands on "workforce platform" leaves.
-2. **Clarity:** In five seconds, can a visitor say what it is, who it is for, and what they get?
+2. **Clarity:** In five seconds, can a visitor say what they get and why it matters to them?
 3. **Value:** Is the outcome concrete, and is the mechanism believable?
 4. **Proof:** Is the strongest proof next to the claim it supports, in the first screen when it is
    the best argument?
@@ -24,12 +24,16 @@ value and proof to Belief and Motivation; anxiety, friction, and distraction to 
 
 ## Rewrite the first screen first
 
-- **Headline:** the outcome the visitor wants, in their words, sized to the proof.
-- **Subhead:** who it is for, the mechanism, and the best proof point. Keep a sourced number exact,
-  with its source beside it.
+- **Headline:** the visitor's want, pain, or identity, in their words, sized to the proof. A
+  product description or an unknown customer's result is not a headline.
+- **Subhead:** the mechanism and one proof point. Keep a sourced number exact; its source, period,
+  and scope go in the operator note. Keep only the qualifier a reader needs ("across 31 teams").
+- **Bullets:** two or three benefits, not features. Leave the other facts lower on the page.
 - **Call to action:** a verb and what they get. Say what happens after the click.
 - **Line under the button:** the two or three fears from the anxiety question, answered with the
   offer's real terms.
+
+Do not restate the audience unless it filters out visitors the product cannot serve.
 
 Then move proof next to its claims, put objection answers beside the action they block, and cut
 sections that do not move the visitor to a decision.
@@ -71,5 +75,7 @@ step, or ship the fix on qualitative evidence and watch one guardrail.
 
 ## After the rewrite
 
-Check every claim against its source and keep sourced specifics exact. Remove invented proof.
+Check every claim against its source and keep sourced specifics exact. Remove invented proof and
+unsupported claims; keep fair inferences that follow directly from the facts. Do not add hedges or
+disclaimers. Give the sources in a short operator note after the page.
 Deploying the page or starting the test needs the owner's approval.

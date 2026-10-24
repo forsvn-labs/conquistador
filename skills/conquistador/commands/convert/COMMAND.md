@@ -101,11 +101,12 @@ When qualitative evidence is thin, collect it before you choose a cause:
 
 ## Draft the revision from the craft
 
-Rewrite the first screen first: an outcome headline sized to the proof; a subhead with who it is
-for, the mechanism, and the best proof point; a call to action that says what happens next; and the
-line under it that answers the real fears at the button. Then place proof beside its claims, put
-objection answers beside the action they block, cut what distracts, and reduce form fields to what
-the next step needs. Keep a sourced number exact, with its source beside it. For a full page
+Rewrite the first screen first: a headline from the visitor's want or pain, in the words of the
+ad or search that sent them; a subhead with the mechanism and one proof point; a call to action
+that says what happens next; and the line under it that answers the real fears at the button. Then
+place proof beside its claims, put objection answers beside the action they block, cut what
+distracts, and reduce form fields to what the next step needs. Keep a sourced number exact; its
+source goes in the operator note, and the check adds no hedges to the page. For a full page
 argument, use the craft in the `copy` command. See the
 signup page rewrite (`references/examples/signup-page-rewrite.md`) for a worked before and after.
 
