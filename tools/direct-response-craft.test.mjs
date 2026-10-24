@@ -155,7 +155,7 @@ test('no percentage or multiplier appears as an unlabeled fact in craft text', (
 
 test('sourced specifics stay specific, and their source goes in the operator note', () => {
   const rule = /keep (?:the|a) sourced (?:number|specific)[^\n]*exact/i;
-  const note = /operator note/i;
+  const note = /operator\s+note/i;
   for (const path of ['commands/copy/references/sales-argument.md', 'commands/copy/references/copy-review.md',
     'plays/landing/references/conversion/core-principles.md']) {
     assert.match(read(path), rule, path);
@@ -175,9 +175,9 @@ test('no rule puts the source on the page or pushes toward literal, hedged copy'
 });
 
 test('the craft starts from the reader, selects, and keeps compliance voice out of drafting', () => {
-  const reader = /want, pain, or identity/i;
-  const select = /one proof[^\n]{0,40}one mechanism/i;
-  const noHedge = /(?:do not|does not|never|must not) add disclaimers, hedges, or (?:source text|attributions)/i;
+  const reader = /want,\s+pain,\s+or\s+identity/i;
+  const select = /one\s+proof[\s\S]{0,40}?one\s+mechanism/i;
+  const noHedge = /(?:do\s+not|does\s+not|never|must\s+not)\s+add\s+disclaimers,\s+hedges,\s+or\s+(?:source\s+text|attributions)/i;
   for (const path of ['commands/copy/ENTRY.md', 'commands/copy/references/sales-argument.md', 'commands/copy/references/headline-formulas.md',
     'commands/copy/agents/hook-agent.md', 'commands/convert/references/page-conversion-craft.md', 'plays/landing/references/conversion/core-principles.md']) {
     assert.match(read(path), reader, path);
@@ -189,10 +189,10 @@ test('the craft starts from the reader, selects, and keeps compliance voice out 
     'commands/copy/agents/critic-agent.md', 'commands/copy/agents/cta-agent.md', 'commands/copy/agents/hook-agent.md',
     'plays/landing/references/conversion-principles.md']) assert.match(read(path), noHedge, path);
   for (const path of ['commands/copy/references/copy-review.md', 'commands/copy/agents/critic-agent.md',
-    'commands/copy/agents/psychology-agent.md', 'commands/copy/fallbacks/sequential.md']) assert.match(read(path), /fair inference/i, path);
+    'commands/copy/agents/psychology-agent.md', 'commands/copy/fallbacks/sequential.md']) assert.match(read(path), /fair\s+inference/i, path);
   for (const task of ['Write landing page copy for our SaaS', 'Write a headline for our product page']) {
     const pack = packBrief(createBrief(task, options));
-    for (const pattern of [reader, select, /operator note/i]) assert.match(pack.text, pattern, task);
+    for (const pattern of [reader, select, /operator\s+note/i]) assert.match(pack.text, pattern, task);
   }
 });
 
