@@ -13,6 +13,17 @@
 //  9. examples that reuse the blind-test fixture or invent results for real companies;
 // 10. long ENTRY files, or ENTRY files that do not point at the craft first;
 // 11. drafting rules placed after the facts check; broken links; private storage paths.
+// Round 2 (the owner preferred the bare draft in 5 of 8 blind pairs; the method copy was accurate but literal):
+// 12. source, period, or attribution text inside strong page copy (it belongs in the operator note);
+// 13. a strong headline that only describes the product, its category, or its features, or that leads
+//     with an unknown customer's result;
+// 14. disclaimers, hedges, or compliance voice in strong examples;
+// 15. strong examples that restate the audience definition, or a hero that uses every fact;
+// 16. rules that put the source beside the number on the page, ask the subhead for "who it is for",
+//     or push review roles toward literal description or added hedging;
+// 17. the reader-first, selection, operator-note, no-hedge, and fair-inference rules missing from the
+//     craft, the review roles, or the brief;
+// 18. the example set missing hero sections, headline sets, lead magnet pages, or consumer app pages.
 // Name lists are stored as hashes so this public file does not name the sources it excludes.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
@@ -71,6 +82,54 @@ const grams = (text, max = 4) => {
 };
 const hits = (text, hashes) => [...grams(text)].filter(gram => hashes.has(hash(gram)));
 
+// Every quoted block under a **Strong** label, with its channel, what its headline leads with, and its section.
+const strongFiles = [...examples, 'commands/copy/references/headline-formulas.md'];
+const strongBlocks = () => strongFiles.flatMap(path => {
+  const lines = read(path).split('\n');
+  const found = [];
+  let section = '';
+  lines.forEach((line, index) => {
+    if (/^## /.test(line)) section = line.slice(3);
+    const label = line.match(/^\*\*Strong\*\*.*\(check: ([a-z-]+)(?:; leads with: ([a-z]+))?\)/);
+    if (!label) return;
+    const block = [];
+    for (let at = index + 1; at < lines.length; at++) {
+      if (lines[at].startsWith('>')) block.push(lines[at].replace(/^>\s?/, ''));
+      else if (block.length || lines[at].trim()) break;
+    }
+    found.push({ where: `${path}:${index + 1}`, path, channel: label[1], lead: label[2], section, lines: block, text: block.join('\n') });
+  });
+  return found;
+});
+// Invented roster: product names, customer names, and audience definitions from the example files.
+const roster = () => {
+  const text = examples.map(read).join('\n');
+  const field = name => [...text.matchAll(new RegExp(`${name}: ([^.\\n]+)`, 'g'))].map(match => match[1].trim());
+  return {
+    products: [...text.matchAll(/^- \*\*([^:*]+):\*\*/gm)].map(match => match[1].trim()),
+    customers: field('Customer'),
+    audiences: field('Audience'),
+  };
+};
+const LEADS = new Set(['want', 'pain', 'identity', 'outcome', 'mechanism', 'offer', 'scene', 'set']);
+const SOURCE_TEXT = [
+  /\([^()]*\b(?:19|20)\d\d\)/,
+  /\b(?:January|February|March|April|May|June|July|August|September|October|November|December),? (?:19|20)\d\d\b/,
+  /\bQ[1-4],? (?:19|20)\d\d\b/,
+  /\b(?:according to|source:|sources:|measured (?:by|in|over)|usage data|survey of|in a survey|as of|interview(?:ed)?\b|analytics\b|data from)/i,
+  /^\*[^*]/m,
+];
+const HEDGES = /\bnot a promise\b|\bresults? (?:may|will|can) (?:vary|differ)\b|\bnot typical\b|\bindividual results\b|\b(?:is|are|was) (?:her|his|their|our|my) (?:own )?(?:result|experience)s?\b|\bno guarantee\b|\bcannot guarantee\b|\bnot a guarantee\b|\bdisclaimer\b|\b(?:may|might|could) help\b|\bpotentially\b|\bdesigned to help\b|\baims? to\b|\bin some cases\b|\bhopefully\b|\bwe think\b|\bmay differ\b/i;
+const AUDIENCE = [
+  /\b(?:for|built for|made for|designed for) [^.\n]{0,60}?\b(?:who|that) (?:live|keep|charge|run|want|use|have|are|work|own)\b/i,
+  /\b(?:of|with) \d+\s?(?:[–-]|to)\s?\d+ (?:people|staff|lawyers|engineers|therapists|employees|units|locations|seats|users)\b/i,
+  /\b(?:is|are) an? (?:[\w-]+ ){0,3}(?:app|tool|platform|course|service|software|sheet|spreadsheet)\b for\b/i,
+];
+const DESCRIPTIVE_HEADLINE = /^(?:the|a|an|meet|introducing|our)\b[^.!?]{0,50}\b(?:app|tool|platform|software|solution|course|sheet|spreadsheet|template|service|system|suite)s?\b|^(?:all-in-one|ai-powered|smart(?:er)?|modern|next-gen)\b|\b(?:software|platform|app|tool|solution) (?:for|with|that)\b|^the [\w-]+(?: [\w-]+){0,3} with (?:the |a |an )?[\w-]+|^\$\d|^rated \d/i;
+const headlinesOf = block => block.lead === 'set'
+  ? block.lines.filter(line => /^\d+\. /.test(line)).map(line => line.replace(/^\d+\. /, ''))
+  : [block.lines.find(line => line.trim())];
+
 test('craft files exist', () => {
   for (const path of craft) assert.ok(existsSync(join(library, path)), path);
 });
@@ -94,13 +153,47 @@ test('no percentage or multiplier appears as an unlabeled fact in craft text', (
   }
 });
 
-test('sourced specifics stay specific: the rule is in the craft, the check, and the brief', () => {
+test('sourced specifics stay specific, and their source goes in the operator note', () => {
   const rule = /keep (?:the|a) sourced (?:number|specific)[^\n]*exact/i;
+  const note = /operator note/i;
   for (const path of ['commands/copy/references/sales-argument.md', 'commands/copy/references/copy-review.md',
-    'plays/landing/references/conversion/core-principles.md']) assert.match(read(path), rule, path);
+    'plays/landing/references/conversion/core-principles.md']) {
+    assert.match(read(path), rule, path);
+    assert.match(read(path), note, path);
+  }
+  for (const path of ['commands/copy/ENTRY.md', 'commands/copy/COMMAND.md', 'commands/copy/fallbacks/sequential.md',
+    'commands/convert/ENTRY.md', 'commands/convert/references/page-conversion-craft.md', 'plays/landing.md']) assert.match(read(path), note, path);
   assert.doesNotMatch(read('commands/copy/references/copy-review.md'), /generali[sz]e (?:the|a) (?:number|result)|replace (?:the|a) number with/i);
   const pack = packBrief(createBrief('Write landing page copy for our SaaS', options));
   assert.match(pack.text, rule);
+  assert.match(pack.text, note);
+});
+
+test('no rule puts the source on the page or pushes toward literal, hedged copy', () => {
+  const banned = /source (?:and scope )?(?:beside|next to|directly under|right under)|source(?:, scope, and date)? beside|sits right under the headline|subhead (?:that )?carries who it is for|subhead with who it is for|\*\*Subhead:\*\* who it is for|who it is for, the mechanism|actual behavior supplied in the brief|preserve qualifications|keep qualifications close|intended visitor, and relevant limitation|intended task, relevant limitation|always give the date so the reader|explain the contents and limitations/i;
+  for (const path of owned) assert.doesNotMatch(read(path), banned, path);
+});
+
+test('the craft starts from the reader, selects, and keeps compliance voice out of drafting', () => {
+  const reader = /want, pain, or identity/i;
+  const select = /one proof[^\n]{0,40}one mechanism/i;
+  const noHedge = /(?:do not|does not|never|must not) add disclaimers, hedges, or (?:source text|attributions)/i;
+  for (const path of ['commands/copy/ENTRY.md', 'commands/copy/references/sales-argument.md', 'commands/copy/references/headline-formulas.md',
+    'commands/copy/agents/hook-agent.md', 'commands/convert/references/page-conversion-craft.md', 'plays/landing/references/conversion/core-principles.md']) {
+    assert.match(read(path), reader, path);
+  }
+  for (const path of ['commands/copy/ENTRY.md', 'commands/copy/references/sales-argument.md', 'commands/copy/agents/hook-agent.md',
+    'commands/copy/fallbacks/sequential.md']) assert.match(read(path), select, path);
+  for (const path of ['commands/copy/references/copy-review.md', 'commands/copy/COMMAND.md', 'commands/copy/fallbacks/sequential.md',
+    'commands/copy/agents/voice-agent.md', 'commands/copy/agents/psychology-agent.md', 'commands/copy/agents/zero-risk-agent.md',
+    'commands/copy/agents/critic-agent.md', 'commands/copy/agents/cta-agent.md', 'commands/copy/agents/hook-agent.md',
+    'plays/landing/references/conversion-principles.md']) assert.match(read(path), noHedge, path);
+  for (const path of ['commands/copy/references/copy-review.md', 'commands/copy/agents/critic-agent.md',
+    'commands/copy/agents/psychology-agent.md', 'commands/copy/fallbacks/sequential.md']) assert.match(read(path), /fair inference/i, path);
+  for (const task of ['Write landing page copy for our SaaS', 'Write a headline for our product page']) {
+    const pack = packBrief(createBrief(task, options));
+    for (const pattern of [reader, select, /operator note/i]) assert.match(pack.text, pattern, task);
+  }
 });
 
 test('approval boundaries remain in every entry', () => {
@@ -114,31 +207,66 @@ test('approval boundaries remain in every entry', () => {
 });
 
 test('strong examples pass the writing check on their channel', () => {
-  let checked = 0;
-  for (const path of [...examples, 'commands/copy/references/headline-formulas.md']) {
-    const lines = read(path).split('\n');
-    lines.forEach((line, index) => {
-      const label = line.match(/^\*\*Strong\*\*.*\(check: ([a-z-]+)\)/);
-      if (!label) return;
-      const block = [];
-      for (let at = index + 1; at < lines.length; at++) {
-        if (lines[at].startsWith('>')) block.push(lines[at].replace(/^>\s?/, ''));
-        else if (block.length || lines[at].trim()) break;
-      }
-      assert.ok(block.length, `${path}:${index + 1} strong label without a quoted block`);
-      const findings = checkText(block.join('\n'), { channel: label[1], file: `${path}:${index + 1}.md` }).filter(counted);
-      assert.deepEqual(findings.map(item => `${item.rule}: ${item.snippet}`), [], `${path}:${index + 1}`);
-      checked++;
-    });
+  const blocks = strongBlocks();
+  for (const block of blocks) {
+    assert.ok(block.lines.length, `${block.where} strong label without a quoted block`);
+    const findings = checkText(block.text, { channel: block.channel, file: `${block.where}.md` }).filter(counted);
+    assert.deepEqual(findings.map(item => `${item.rule}: ${item.snippet}`), [], block.where);
   }
-  assert.ok(checked >= 10, `only ${checked} strong examples are machine-checked`);
+  assert.ok(blocks.length >= 14, `only ${blocks.length} strong examples are machine-checked`);
+});
+
+test('strong page copy carries no source, period, or attribution text', () => {
+  for (const block of strongBlocks()) {
+    for (const pattern of SOURCE_TEXT) assert.doesNotMatch(block.text, pattern, block.where);
+  }
+});
+
+test('strong examples carry no disclaimers, hedges, or compliance voice', () => {
+  for (const block of strongBlocks()) assert.doesNotMatch(block.text, HEDGES, block.where);
+});
+
+test('strong examples do not restate the audience definition', () => {
+  const { audiences } = roster();
+  assert.ok(audiences.length >= 6, 'each invented product names its audience in the roster');
+  for (const block of strongBlocks()) {
+    for (const pattern of AUDIENCE) assert.doesNotMatch(block.text, pattern, block.where);
+    const copy = ` ${words(block.text).join(' ')} `;
+    for (const audience of audiences) {
+      const list = words(audience);
+      for (let at = 0; at + 4 <= list.length; at++) assert.ok(!copy.includes(` ${list.slice(at, at + 4).join(' ')} `), `${block.where} restates "${audience}"`);
+    }
+  }
+});
+
+test('strong headlines start from the reader, not the product or an unknown customer', () => {
+  const { products, customers } = roster();
+  assert.ok(products.length >= 8 && customers.length >= 3, 'roster names products and customers');
+  for (const block of strongBlocks()) {
+    assert.ok(LEADS.has(block.lead), `${block.where} must say what its headline leads with (${[...LEADS].join(', ')})`);
+    for (const headline of headlinesOf(block)) {
+      assert.ok(headline, `${block.where} has no headline`);
+      assert.doesNotMatch(headline, DESCRIPTIVE_HEADLINE, `${block.where} headline describes the product: ${headline}`);
+      for (const name of [...products, ...customers]) assert.ok(!headline.toLowerCase().startsWith(name.toLowerCase()), `${block.where} headline leads with ${name}`);
+    }
+  }
+});
+
+test('hero-sized strong examples select instead of using every fact', () => {
+  for (const block of strongBlocks().filter(block => /Hero|Lead magnet|Consumer app/.test(block.section))) {
+    const count = words(block.text).length;
+    assert.ok(count <= 90, `${block.where} hero runs ${count} words`);
+    const subhead = block.lines.filter(line => line.trim())[1] ?? '';
+    assert.ok((subhead.match(/[.!?](?=\s|$)/g) ?? []).length <= 2, `${block.where} subhead runs past two sentences`);
+  }
 });
 
 test('example set covers headlines, leads, heroes, a sales argument, and a before/after rewrite', () => {
   const copy = read('commands/copy/references/examples/direct-response-examples.md');
   const pairs = (copy.match(/^\*\*Weak\*\*/gm) ?? []).length + (read('commands/convert/references/examples/signup-page-rewrite.md').match(/^\*\*Weak\*\*/gm) ?? []).length;
   assert.ok(pairs >= 10 && pairs <= 20, `${pairs} annotated pairs`);
-  for (const heading of [/^## Headlines/m, /^## Leads/m, /^## Hero sections/m, /^## A short sales argument/m]) assert.match(copy, heading);
+  for (const heading of [/^## Headlines$/m, /^## Headline sets$/m, /^## Leads$/m, /^## Hero sections$/m, /^## Lead magnet pages$/m,
+    /^## Consumer app pages$/m, /^## A short sales argument$/m]) assert.match(copy, heading);
   assert.match(read('commands/convert/references/examples/signup-page-rewrite.md'), /^## Before/m);
   assert.match(read('commands/convert/references/examples/signup-page-rewrite.md'), /^## After/m);
 });
