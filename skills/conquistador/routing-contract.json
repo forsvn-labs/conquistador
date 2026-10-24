@@ -3973,8 +3973,7 @@
         "skills/conquistador/commands/social/references/critical-gates.md",
         "skills/conquistador/commands/social/fallbacks/sequential.md",
         "skills/conquistador/commands/social/references/hook-archetypes.md",
-        "skills/conquistador/references/ai-patterns.md",
-        "skills/conquistador/references/human-writing-stylebook.md"
+        "skills/conquistador/references/writing-guide.md"
       ],
       "conditionalResources": [
         "skills/conquistador/commands/social/agents/launch-copywriter-agent.md",

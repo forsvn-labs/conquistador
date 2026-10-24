@@ -2997,8 +2997,7 @@
         "references/critical-gates.md",
         "fallbacks/sequential.md",
         "references/hook-archetypes.md",
-        "@parent/references/ai-patterns.md",
-        "@parent/references/human-writing-stylebook.md"
+        "@parent/references/writing-guide.md"
       ],
       "conditionalResources": [
         {

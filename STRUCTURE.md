@@ -36,6 +36,8 @@ in [tools/brief.mjs](tools/brief.mjs) selects packaged methods and supplied
 context. `tools/context-selection.mjs` owns admission before retrieval.
 `tools/search-index.json` holds generated bundled search terms; the briefing engine
 checks source digests before reuse. `tools/update-completeness.mjs` regenerates it.
+`tools/method-copies.json` names the one editable source of each byte-identical method
+file group; `tools/method-copies.mjs` syncs the copies and checks them for drift.
 Commands have short `ENTRY.md` guides and detailed `COMMAND.md` procedures.
 `tools/prompt-advice.mjs` owns shared hook advice and transcript-scoped reuse;
 `tools/read-evidence.mjs` verifies returned resource bytes. The host runs the work and checks the result. The app API reads
