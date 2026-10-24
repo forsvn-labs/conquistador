@@ -51,7 +51,7 @@ test('every method prepares a bounded assignment without recursive overflow', as
 test('rebuilding the contract from overlay stays layout-faithful', () => {
   const built = buildRoutingContract(root);
   assert.equal(Object.keys(built.methods).length, outcomes.length);
-  assert.ok(built.methods['copy'].requiredResources.some(path => path.includes('fallbacks/')));
+  assert.ok(built.methods['convert'].requiredResources.some(path => path.includes('fallbacks/')));
 });
 
 test('all 35 commands load in fresh operator and plugin payloads with reachable deferred resources', async t => {

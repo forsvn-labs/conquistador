@@ -313,6 +313,9 @@ export const START_CONTEXT = Object.freeze({
   ask: 'First ask me what the product is, who it is for, and the goal.',
 });
 const START_LEAD = /^\s*Use Conquistador:\s*/i;
+// Copy is a pass-through except a sales page or sales letter. In blind tests every copy rule set made
+// a strong model's copy worse; only sales page openings improved. Other copy carries no copy file.
+const SALES_PAGE = /\bsales (?:pages?|letters?)\b/;
 export const taskOf = prompt => Object.values(START_CONTEXT).reduce((rest, sentence) => rest.split(sentence).join(' '), prompt).replace(START_LEAD, '').trim();
 
 export function createBrief(input, { root = moduleRoot, playbooks, persistCache = true, force = false, automatic = false, cwd = process.cwd() } = {}) {
@@ -341,9 +344,12 @@ export function createBrief(input, { root = moduleRoot, playbooks, persistCache 
     return { schema: BRIEF_SCHEMA, action: 'none', reason: routed.reason ?? 'no-relevant-capability', methods: [], must: [], situational: [], platforms: [], packageRoot };
   }
   const required = new Set(methods.flatMap(item => item.requiredResources ?? []).map(path => path.slice(libraryRoot.length + 1)));
+  const salesPage = SALES_PAGE.test(normalizeRequest(prompt));
+  const passThrough = !play && !salesPage && methods.length === 1 && methods[0].name === 'copy';
   const ownerOf = doc => (doc.source === 'method' && selectedNames.has(doc.method)) || (doc.source === 'play' && doc.method === play?.name) ? doc.method : null;
   const scoreDoc = (doc, owned) => {
     if (doc.kind === 'process' || doc.key === 'conquistador/welcome.md') return null;
+    if (!salesPage && doc.source === 'method' && doc.method === 'copy') return null;
     // Integration recipes join the brief only for the connect command.
     if (doc.kind === 'integration') { if (!selectedNames.has('connect')) return null; owned = 'connect'; }
     const shared = doc.source === 'shared';
@@ -376,6 +382,7 @@ export function createBrief(input, { root = moduleRoot, playbooks, persistCache 
   // Every resource shares the task's byte budget. Required files do not use the 3 ranked slots.
   const take = (item, required = false) => {
     if (item.sibling || must.some(entry => entry.doc.digest === item.doc.digest)) return false;
+    if (passThrough && item.doc.kind !== 'user') return false;
     if (must.length >= LIMITS.mustFiles || bytes + item.doc.bytes > byteBudget) return false;
     if (!required && must.filter(entry => !entry.required).length >= fileBudget) return false;
     must.push(required ? { ...item, required } : item);
@@ -448,7 +455,7 @@ export function createBrief(input, { root = moduleRoot, playbooks, persistCache 
     const label = record?.label ?? name.replaceAll('-', ' ');
     const now = position === firstStep;
     let playbooks = [];
-    if (!now && step.command) {
+    if (!now && step.command && (salesPage || step.command !== 'copy')) {
       playbooks = index.docs.filter(doc => doc.source === 'method' && doc.method === step.command && doc.kind === 'playbook'
         && (!step.mode || !doc.key.includes('/references/modes/') || doc.key.includes(`/references/modes/${step.mode}`)))
         .map(doc => ({ doc, score: rank(doc) + (record.requiredResources ?? []).includes(`${libraryRoot}/${doc.key}`) * 3 }))
@@ -460,7 +467,7 @@ export function createBrief(input, { root = moduleRoot, playbooks, persistCache 
   }) : [];
   for (const step of steps) for (const item of step.playbooks) seen.add(createHash('sha256').update(readText(item.absolute) ?? '').digest('hex'));
   for (const path of deferredRequired) seen.add(index.docs.find(doc => `${libraryRoot}/${doc.key}` === path).digest);
-  const situational = scored.filter(item => !seen.has(item.doc.digest) && seen.add(item.doc.digest)).slice(0, LIMITS.situationalFiles);
+  const situational = passThrough ? [] : scored.filter(item => !seen.has(item.doc.digest) && seen.add(item.doc.digest)).slice(0, LIMITS.situationalFiles);
   return {
     schema: BRIEF_SCHEMA,
     action: 'brief',

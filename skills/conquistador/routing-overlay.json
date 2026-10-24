@@ -986,7 +986,9 @@
         "product page copy",
         "launch announcement copy",
         "landing copy",
-        "draft a headline"
+        "draft a headline",
+        "sales page",
+        "sales letter"
       ],
       "aliases": [
         "write-copy",
@@ -1024,52 +1026,23 @@
         "cold email",
         "sales email"
       ],
-      "requiredResources": [
-        "references/sales-argument.md",
-        "references/copy-review.md",
-        "references/anti-patterns.md",
-        "fallbacks/sequential.md"
-      ],
+      "requiredResources": [],
       "conditionalResources": [
         {
-          "path": "agents/hook-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "references/sales-argument.md",
+          "when": "Load for a sales page or sales letter only. All other copy is a pass-through and loads no resource."
         },
         {
-          "path": "agents/body-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "references/headline-formulas.md",
+          "when": "Load for a sales page or sales letter only. All other copy is a pass-through and loads no resource."
         },
         {
-          "path": "agents/cta-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "references/examples/direct-response-examples.md",
+          "when": "Load for a sales page or sales letter only. All other copy is a pass-through and loads no resource."
         },
         {
-          "path": "agents/social-proof-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/variant-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/voice-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/psychology-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/zero-risk-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/critic-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/discovery-story.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "references/copy-review.md",
+          "when": "Load for a sales page or sales letter only. All other copy is a pass-through and loads no resource."
         },
         {
           "path": "references/lifecycle-sequences.md",

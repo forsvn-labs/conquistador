@@ -34,6 +34,9 @@ record the baseline and instrumentation needed before activation.
    [`../agents/conversion-critic-agent.md`](../agents/conversion-critic-agent.md) and
    [`../references/conversion-diagnosis-anti-patterns.md`](../references/conversion-diagnosis-anti-patterns.md).
 6. Produce Keep / Drop / Change / Test plus the ready-to-use revision from the front-door contract.
+   Write any revised copy in your own judgment from the user's facts, then run only the facts
+   check: remove claims the facts do not support, keep fair inferences, and add nothing (no hedges, no source text, no disclaimers). A revised
+   sales page or sales letter uses the `copy` command's long-form method instead.
 
 ## Landing eval lens (post-launch evidence → keep / discard / watch / blocked)
 

@@ -1306,7 +1306,9 @@
         "product page copy",
         "launch announcement copy",
         "landing copy",
-        "draft a headline"
+        "draft a headline",
+        "sales page",
+        "sales letter"
       ],
       "legacy": [
         "write-copy"
@@ -1353,65 +1355,30 @@
         "cold email",
         "sales email"
       ],
-      "requiredResources": [
-        "skills/conquistador/commands/copy/references/sales-argument.md",
-        "skills/conquistador/commands/copy/references/copy-review.md",
-        "skills/conquistador/commands/copy/references/anti-patterns.md",
-        "skills/conquistador/commands/copy/fallbacks/sequential.md"
-      ],
+      "requiredResources": [],
       "conditionalResources": [
-        "skills/conquistador/commands/copy/agents/hook-agent.md",
-        "skills/conquistador/commands/copy/agents/body-agent.md",
-        "skills/conquistador/commands/copy/agents/cta-agent.md",
-        "skills/conquistador/commands/copy/agents/social-proof-agent.md",
-        "skills/conquistador/commands/copy/agents/variant-agent.md",
-        "skills/conquistador/commands/copy/agents/voice-agent.md",
-        "skills/conquistador/commands/copy/agents/psychology-agent.md",
-        "skills/conquistador/commands/copy/agents/zero-risk-agent.md",
-        "skills/conquistador/commands/copy/agents/critic-agent.md",
-        "skills/conquistador/commands/copy/references/discovery-story.md",
+        "skills/conquistador/commands/copy/references/sales-argument.md",
+        "skills/conquistador/commands/copy/references/headline-formulas.md",
+        "skills/conquistador/commands/copy/references/examples/direct-response-examples.md",
+        "skills/conquistador/commands/copy/references/copy-review.md",
         "skills/conquistador/commands/copy/references/lifecycle-sequences.md"
       ],
       "resourceConditions": [
         {
-          "path": "skills/conquistador/commands/copy/agents/hook-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/copy/references/sales-argument.md",
+          "when": "Load for a sales page or sales letter only. All other copy is a pass-through and loads no resource."
         },
         {
-          "path": "skills/conquistador/commands/copy/agents/body-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/copy/references/headline-formulas.md",
+          "when": "Load for a sales page or sales letter only. All other copy is a pass-through and loads no resource."
         },
         {
-          "path": "skills/conquistador/commands/copy/agents/cta-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/copy/references/examples/direct-response-examples.md",
+          "when": "Load for a sales page or sales letter only. All other copy is a pass-through and loads no resource."
         },
         {
-          "path": "skills/conquistador/commands/copy/agents/social-proof-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "skills/conquistador/commands/copy/agents/variant-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "skills/conquistador/commands/copy/agents/voice-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "skills/conquistador/commands/copy/agents/psychology-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "skills/conquistador/commands/copy/agents/zero-risk-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "skills/conquistador/commands/copy/agents/critic-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "skills/conquistador/commands/copy/references/discovery-story.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/copy/references/copy-review.md",
+          "when": "Load for a sales page or sales letter only. All other copy is a pass-through and loads no resource."
         },
         {
           "path": "skills/conquistador/commands/copy/references/lifecycle-sequences.md",
