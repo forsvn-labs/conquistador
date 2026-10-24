@@ -53,7 +53,7 @@ const walk = path => {
 const links = text => [...text.matchAll(/\]\(([^)\s#]+)(?:#[^)]*)?\)/g)].map(match => match[1]);
 
 // Copy requests that draft marketing copy. Each must carry the copy entry and nothing else.
-const PASS_TASKS = ['Write five headline options for our product page', 'Rewrite this landing page to convert better',
+const PASS_TASKS = ['Write five headline options for our product page',
   'Write landing page copy for our SaaS', 'Write the app store description for our habit tracker',
   'Write a welcome email for new trial users'];
 const SALES_TASKS = ['Write the sales page for our course', 'Write a sales letter for our coaching program',
@@ -102,6 +102,16 @@ test('copy drafting briefs carry the copy entry and nothing else', () => {
     for (const rule of RULES) assert.doesNotMatch(text.replace(/\*\*Sales page or sales letter\*\*[^\n]*\n[^\n]*\n?/, ''), rule, `${task} brief carries ${rule}`);
     assert.match(text, /approval/i, `${task} keeps the approval boundary`);
   }
+});
+
+test('a conversion rewrite routes to convert and drafts through the copy pass-through', () => {
+  // Routing sends rewrite-to-convert requests to convert; its own diagnosis files may load, but no copy drafting file does.
+  const { structured } = pack('Rewrite this landing page to convert better');
+  assert.equal(structured.command, 'convert');
+  const inlined = structured.inlined.map(item => item.path);
+  assert.ok(inlined.includes(ENTRY), JSON.stringify(inlined));
+  const copyFiles = [...inlined, ...structured.situational].filter(path => path.includes('/commands/copy/') && path !== ENTRY);
+  assert.deepEqual(copyFiles, []);
 });
 
 test('a play brief carries no copy file and its copy step stages none', () => {

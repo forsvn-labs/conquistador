@@ -160,14 +160,12 @@ const order = (brief, path) => brief.must.findIndex(item => item.path === path);
 const listed = (pack, path) => pack.structured.inlined.some(item => item.path === path)
   || (pack.structured.situational.includes(path) && pack.text.includes(path));
 
-test('copy loads sales-argument before keyword matches such as lifecycle sequences', () => {
-  const brief = briefFor('/conquistador copy Landing page hero and a 3-email trial sequence for Ledgerly, a B2B SaaS');
+test('a sales page loads sales-argument before keyword matches such as lifecycle sequences', () => {
+  const brief = briefFor('/conquistador copy Sales page and a 3-email trial sequence for Ledgerly, a B2B SaaS');
   assert.equal(brief.methods[0].name, 'copy');
   const sales = 'skills/conquistador/commands/copy/references/sales-argument.md';
-  assert.ok(order(brief, sales) >= 0, JSON.stringify(brief.must.map(item => item.path)));
-  assert.equal(brief.must.find(item => item.path === sales).required, true);
-  const firstExtra = brief.must.findIndex(item => !item.required);
-  assert.ok(firstExtra === -1 || order(brief, sales) < firstExtra);
+  // Copy declares no required file; the sales argument loads as the sales page condition and leads the brief.
+  assert.equal(order(brief, sales), 0, JSON.stringify(brief.must.map(item => item.path)));
   assert.ok(brief.must.length <= LIMITS.mustFiles);
   assert.ok(brief.must.reduce((sum, item) => sum + item.bytes, 0) <= LIMITS.mustBytes);
 });
