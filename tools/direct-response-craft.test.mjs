@@ -69,7 +69,7 @@ const craft = [
   'commands/copy/ENTRY.md', 'commands/copy/COMMAND.md', 'commands/copy/fallbacks/sequential.md',
   'commands/copy/references/sales-argument.md', 'commands/copy/references/headline-formulas.md',
   'commands/copy/references/copy-review.md', 'commands/copy/references/anti-patterns.md',
-  'commands/copy/references/page-sections.md', 'commands/copy/references/lifecycle-sequences.md',
+  'commands/copy/references/long-form-library.md', 'commands/copy/references/lifecycle-sequences.md',
   'commands/copy/references/examples/direct-response-examples.md',
   'commands/copy/references/short-form-copy.md',
   'commands/copy/agents/body-agent.md', 'commands/copy/agents/cta-agent.md',
@@ -315,10 +315,12 @@ test('review leftovers are gone', () => {
 });
 
 test('ENTRY files stay short and point at the craft first', () => {
-  for (const [path, first] of [['commands/copy/ENTRY.md', 'references/sales-argument.md'], ['commands/convert/ENTRY.md', 'references/page-conversion-craft.md']]) {
+  // Copy has two modes; its first two links are the short-form checklist and the long-form sales argument.
+  for (const [path, first] of [['commands/copy/ENTRY.md', ['references/short-form-copy.md', 'references/sales-argument.md']],
+    ['commands/convert/ENTRY.md', ['references/page-conversion-craft.md']]]) {
     const text = read(path);
     assert.ok(Buffer.byteLength(text) <= 1400, `${path} is ${Buffer.byteLength(text)} bytes`);
-    assert.equal(text.match(/\]\(([^)]+)\)/)?.[1], first, path);
+    assert.deepEqual(links(text).slice(0, first.length), first, path);
   }
 });
 
@@ -366,7 +368,7 @@ test('no 8-word run is shared with the private craft sources', { skip: !process.
 const SHORT_TASKS = ['Write a headline for our product page', 'Write five headline options for our product page',
   'Write a lead magnet landing page for our free template', 'Write the hero headline, subheadline, and bullets for our app landing page'];
 const LONG_TASKS = ['Write landing page copy for our SaaS', 'Rewrite this landing page to convert better'];
-const LONG_FILES = /\/agents\/|\/fallbacks\/|references\/(?:sales-argument|copy-review|page-sections)\.md$|examples\/direct-response-examples\.md$/;
+const LONG_FILES = /\/agents\/|\/fallbacks\/|references\/(?:sales-argument|long-form-library)\.md$|examples\/direct-response-examples\.md$/;
 const ANGLES = new Set(['outcome', 'pain', 'proof', 'objection', 'identity']);
 // A concrete specific: a number, a price, a spelled number, or a named day or time.
 const SPECIFIC = /\d|\$|\b(?:one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|once|twice|monday|tuesday|wednesday|thursday|friday|saturday|sunday|weeknight|tonight|morning|evening|sunrise|a\.m\.|p\.m\.)\b/i;

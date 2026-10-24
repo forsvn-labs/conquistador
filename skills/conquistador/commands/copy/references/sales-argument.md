@@ -1,7 +1,8 @@
 # Sales argument: direct-response craft for sales pages and SaaS landing pages
 
-Draft landing page, sales page, and offer copy from this file. Headlines and leads are in
-[headline patterns](headline-formulas.md); annotated pairs are in [examples](examples/direct-response-examples.md).
+Draft long-form copy from this file: sales pages, landing pages, offer pages, and anything over about
+150 words. Headlines are in [headline patterns](headline-formulas.md); annotated pairs are in
+[examples](examples/direct-response-examples.md). Short units use the [short-form checklist](short-form-copy.md).
 Run [copy review](copy-review.md) after the draft exists. It checks claims; it does not set the voice.
 
 ## Start from the reader
@@ -72,7 +73,9 @@ lead with the mechanism instead of a bigger promise.
 | Your product, and trusts it | The offer and the action. |
 
 Cold social traffic is usually problem-aware; branded search is product-aware. In a market that has
-heard every promise, move from claims to mechanism, then to demonstration and identification.
+heard every promise, move from claims to mechanism, then to demonstration and identification. A
+skeptical reader can take a fact lead: one verified, surprising fact, stated plainly. Cut the
+warm-up: if the first paragraph can go without loss, cut it.
 
 ## Benefits, bullets, and rhythm
 

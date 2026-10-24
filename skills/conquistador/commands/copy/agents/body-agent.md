@@ -19,7 +19,7 @@ points inside the argument.
 | **brief** | string | Product, feature, or page to write body copy for |
 | **pre-writing** | object | Audience, awareness, current belief, outcome, problem and solution mechanisms, proof, traffic source |
 | **upstream** | null | Runs in parallel with hook, CTA, and social proof |
-| **references** | file paths[] | `references/sales-argument.md` and `references/page-sections.md`; `references/research-workflow.md` when context is thin |
+| **references** | file paths[] | `references/sales-argument.md` and `references/long-form-library.md`; `references/research-workflow.md` when context is thin |
 | **feedback** | string \| null | Rewrite instructions from the critic agent |
 
 ## Output Contract

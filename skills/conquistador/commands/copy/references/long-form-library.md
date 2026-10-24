@@ -1,5 +1,6 @@
-# Section library
+# Long-form section library
 
+Use this for long-form pages over about 150 words: sales pages, landing pages, and offer pages.
 Pick sections by the job they do in the [sales argument](sales-argument.md). Cut any section that
 does not move the reader to the next decision.
 
@@ -26,10 +27,8 @@ does not move the reader to the next decision.
   fine when every section answers a real question.
 - **Launch page:** what changed and what it means for the reader, a short demo, early proof if it
   exists, the launch terms with their real end date, one action.
-- **Lead magnet page:** a headline about the problem the resource solves, a subhead saying what it
-  is, three or four bullets on what the reader can do with it, and a button that names the thing.
-- **Consumer app page:** a headline in the user's life, not the app's features; the rating or one
-  review as proof; the price only if it removes a doubt; a store button.
+- **Units under about 150 words:** use the [short-form checklist](short-form-copy.md) instead of this
+  library.
 
 A list of features with a button at the end is not an argument. Connect each feature to the
 outcome it produces ("which means…").

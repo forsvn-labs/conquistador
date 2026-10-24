@@ -54,14 +54,39 @@ Route instead:
 - diagnosing a live page that underperforms → `convert`;
 - measuring copy after launch → `measure`.
 
-## Anchor the work
+## Pick the mode
+
+Pick the mode from the deliverable, not from the product or the buyer.
+
+- **Short-form:** a headline or headline set, a hero section, a lead magnet page, an app or consumer
+  hero, and other copy under about 150 words.
+- **Long-form:** a sales page or its opening, a sales argument, a rewrite of an existing hero, a B2B
+  hero that has to argue (the buyer switches systems or books a demo, and the facts hold a measured
+  result), and anything over about 150 words.
+
+When one request holds both, write each unit in its own mode.
+
+## Short-form mode
+
+Short copy wins on concrete, scannable specifics. Extra review passes tend to add words and strip them.
+
+1. Read the facts for the strongest specific, the offer terms, and the one piece of proof.
+2. Draft with the [short-form checklist](references/short-form-copy.md) in one pass.
+3. Run its facts check in the same context: remove unsupported claims, keep fair inferences, add
+   nothing.
+4. Deliver as below.
+
+Do not run the writing or review roles, the sequential fallback, or the long-form drafting steps for
+short-form work.
+
+## Anchor long-form work
 
 Infer the audience and their costly moment, awareness level and traffic source, the outcome they
 want, why the problem persists and what the product does differently, the offer terms, the
 strongest proof, the main objection, the action, and the surface, voice, and language. Ask at most one bundled question
 when different answers would change the copy materially. Otherwise label the assumption and continue.
 
-## Draft from the craft
+## Draft long-form copy from the craft
 
 1. Write the one-sentence promise and the two mechanism lines from
    [sales argument](references/sales-argument.md).
@@ -69,7 +94,7 @@ when different answers would change the copy materially. Otherwise label the ass
    reader. The other facts stay out of the hero. Do not restate the audience unless it filters out
    visitors the product cannot serve.
 3. Choose the argument order for the page type and the reader's awareness. Use the
-   section library (`references/page-sections.md`) for page structures.
+   section library (`references/long-form-library.md`) for page structures.
 4. Draft 5–10 headlines from different headline patterns (`references/headline-formulas.md`), each
    starting from the reader's want, pain, or identity, and keep the one that passes the tests.
    Choose the lead by awareness.
@@ -90,7 +115,7 @@ For larger pages, run the writing roles: [hook](agents/hook-agent.md), [body](ag
 [CTA](agents/cta-agent.md), and [social proof](agents/social-proof-agent.md) for the requested units,
 and [variant](agents/variant-agent.md) when alternatives test different strategic bets.
 
-## Check after drafting
+## Check long-form copy after drafting
 
 The checks remove unsupported claims and keep fair inferences that follow directly from the facts.
 They do not set the voice, flatten the headline, or blur a sourced specific. They do not add
@@ -111,7 +136,7 @@ If the host cannot run separate roles, use the [sequential fallback](fallbacks/s
 
 ## Deliver
 
-Return paste-ready copy in the requested structure. Add variants only when each tests a different
+In both modes, return paste-ready copy in the requested structure. Add variants only when each tests a different
 strategic bet, and name the bet instead of calling them A, B, and C.
 
 Then give a short operator note under its own heading, never inside the copy:

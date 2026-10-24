@@ -31,6 +31,10 @@ carries the promise and one proof point; a landing page carries the whole
 [sales argument](../commands/copy/references/sales-argument.md); an email carries the one step its
 reader is ready for. Do not change the promise, the number, or the terms between assets.
 
+Headlines, heroes, lead magnet pages, app pages, and other copy under about 150 words are
+short-form: write them in one pass with the
+[short-form checklist](../commands/copy/references/short-form-copy.md), with no review roles.
+
 ## Draft, then check
 
 Draft from the craft: select, start from the reader, and write with conviction. Then check every

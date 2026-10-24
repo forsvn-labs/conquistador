@@ -1,7 +1,9 @@
-# Headline and lead patterns
+# Headline patterns
 
 Use these for a landing page, product page, or offer page headline. Start from the reader's want,
-pain, or identity, in their words, not from the product. Pick the proof and mechanism first
+pain, or identity, in their words, not from the product. In short-form work, follow the
+[short-form checklist](short-form-copy.md): the most concrete specific goes in the headline, and each
+option in a set takes its own angle. In long-form work, pick the proof and mechanism first
 ([sales argument](sales-argument.md)), then draft 5–10 headlines from different patterns and keep
 the one that passes the tests below. Examples use invented products.
 
@@ -39,16 +41,3 @@ the headline, not in the headline.
 The headline carries the promise. The subhead carries the mechanism and one proof point. Read the
 headline and subhead together, then read the first screen alone.
 
-## Leads
-
-The lead is the first lines after the headline. It turns attention into reading. Choose by awareness:
-
-- **Offer lead** (knows and trusts you): the deal, terms, and action in the first lines.
-- **Promise lead** (knows the product category): the outcome and why it is believable.
-- **Problem lead** (knows the problem): their situation in their words, then the hidden cause.
-- **Mechanism lead** (has tried alternatives): the different way and why it works.
-- **Fact lead** (skeptical, crowded market): one verified, surprising fact, stated plainly; its
-  source goes in the operator note.
-- **Story lead** (does not know the problem yet): a short scene with someone like them.
-
-Cut the warm-up. If the first paragraph can be deleted without loss, delete it.
