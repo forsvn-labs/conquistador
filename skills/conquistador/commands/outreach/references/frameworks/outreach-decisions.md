@@ -1,7 +1,7 @@
 # Decide what makes this message worth reviewing
 
-Use this worksheet when a commercial message is proposed. It is a local drafting procedure, not a
-claim that a particular structure causes responses. Research follows its own intent boundary.
+Run this worksheet on a commercial draft after it exists. Structures and asks come from the craft
+reference; this file checks that the draft's exchange and claims hold up. Research follows its own intent boundary.
 
 ## 1. Test the selection explanation
 
@@ -29,10 +29,10 @@ Ask for the smallest answer that meaningfully advances the stated purpose. A mee
 reasonable request when discussion is needed; a short reply can be more suitable when one fact is
 missing. Neither is universally better. State the next commitment accurately and allow refusal.
 
-## 5. Draft and challenge the rationale
+## 5. Challenge the rationale
 
-Arrange the needed facts in a readable order. Ask: could a reasonable recipient understand why
-this arrived, what is claimed, and what happens if they answer? If not, revise the missing fact.
+Ask: could a reasonable recipient understand why this arrived, what is claimed, and what happens
+if they answer? If not, add the missing fact.
 Do not compensate with flattering language, pressure, or a longer sequence.
 
 Return selection rationale, proposed exchange, claim boundaries, one recipient decision, draft,

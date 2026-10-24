@@ -2067,12 +2067,26 @@
         "landing page copy"
       ],
       "requiredResources": [
-        "references/copy-validation-rubric.md",
-        "references/anti-patterns.md",
-        "fallbacks/sequential.md",
-        "references/frameworks/outreach-decisions.md"
+        "references/frameworks/cold-email-frameworks.md",
+        "references/method.md"
       ],
       "conditionalResources": [
+        {
+          "path": "references/frameworks/objections.md",
+          "when": "Load when the deliverable includes reply handling."
+        },
+        {
+          "path": "references/examples/pairs-relationships.md",
+          "when": "Load when drafting partnership, investor, intro-request, creator-sponsorship, or reply messages."
+        },
+        {
+          "path": "references/examples/pairs-sales.md",
+          "when": "Load when drafting sales outreach: SaaS, services, early stage, follow-up, or breakup."
+        },
+        {
+          "path": "references/channels/email.md",
+          "when": "Load when the channel is email."
+        },
         {
           "path": "references/modes/no-pitch-research.md",
           "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
@@ -2136,6 +2150,22 @@
         {
           "path": "references/examples/saas-sequence-no-proof.md",
           "when": "Load when drafting a multi-touch commercial sequence and the sender has no publishable proof yet."
+        },
+        {
+          "path": "references/copy-validation-rubric.md",
+          "when": "Load at the review step, after drafting."
+        },
+        {
+          "path": "references/anti-patterns.md",
+          "when": "Load at the review step, after drafting."
+        },
+        {
+          "path": "fallbacks/sequential.md",
+          "when": "Load when one agent runs the method roles in sequence."
+        },
+        {
+          "path": "references/frameworks/outreach-decisions.md",
+          "when": "Load when deciding whether a proposed commercial message is worth sending."
         }
       ],
       "optionalResources": [],
