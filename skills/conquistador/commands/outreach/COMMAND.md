@@ -36,15 +36,15 @@ Output formats and fallbacks: [sequential](fallbacks/sequential.md), [format-con
 
 ## 1. Draft from the craft
 
-Read [the craft reference](references/frameworks/cold-email-frameworks.md) first. Pick the structure
+Read the craft reference, `cold-email-frameworks` in the Core list above, first. Pick the structure
 for the situation: strong signal, no signal, credential-led, give-first, warm, follow-up, or breakup.
 Add the matching [channel](references/channels/) and [mode](references/modes/) file. Use
 [early-stage](references/modes/early-stage.md) and its
 [worked sequence](references/examples/saas-sequence-no-proof.md) when the sender has no publishable
 proof, and
 [sequences](references/frameworks/sequences.md) for more than one touch. Compare the draft with the
-annotated [sales pairs](references/examples/pairs-sales.md) and
-[partner, investor, and reply pairs](references/examples/pairs-relationships.md).
+annotated pairs in the worked examples above: `pairs-sales` for sales and `pairs-relationships` for
+partner, investor, and reply messages.
 
 Write from the facts the user supplied. If the strongest version needs a fact you do not have,
 leave that line out and list the fact as a question for the sender. A signal line at scale is a
@@ -54,11 +54,11 @@ For many accounts, channels, or senders, tier the accounts with the
 contact, use the [intro request](references/modes/intro-request.md) mode.
 
 Prepare short reply handling for interested, objection, not now, wrong person, proof question,
-unsubscribe, and ambiguous replies with [objections](references/frameworks/objections.md).
+unsubscribe, and ambiguous replies with the `objections` playbook listed above.
 
 ## 2. Check the finished draft
 
-Run [the check](references/method.md) on the draft: evidence sheet, route, claim boundaries,
+Run the check, `method` in the Core list above, on the draft: evidence sheet, route, claim boundaries,
 signal sources, stop rules, the [message decisions](references/frameworks/outreach-decisions.md),
 and the [review rubric](references/copy-validation-rubric.md). Repair a
 failed claim by narrowing or deleting it, never by inventing a fact. Then read the repaired draft

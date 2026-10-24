@@ -8,7 +8,8 @@
 // 7. the drafting files speak in readiness labels or uncertainty instead of craft;
 // 8. a numeric default in the craft files is not labeled as a starting point;
 // 9. the brief for a cold email sequence no longer inlines the craft reference within the byte budget;
-// 10. a relative link in the owned files is broken.
+// 10. a relative link in the owned files is broken;
+// 11. the method links a resource the routing overlay does not declare, so the manifests cannot regenerate.
 // Text copied from private sources is checked outside this repository, because those sources are private.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
@@ -18,6 +19,7 @@ import { dirname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
 import { createBrief, packBrief } from './brief.mjs';
+import { buildRoutingContract } from './routing-contract.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const library = join(root, 'skills/conquistador');
@@ -157,4 +159,8 @@ test('relative links in the outbound files resolve', () => {
       assert.ok(existsSync(join(dirname(path), target)), `${relative(root, path)} links to missing ${target}`);
     }
   }
+});
+
+test('the routing contract still builds from the outreach method', () => {
+  assert.doesNotThrow(() => buildRoutingContract(root));
 });
