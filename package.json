@@ -88,6 +88,8 @@
     "!**/bun.lock",
     "!tools/dev.mjs",
     "!tools/knowledge-map.mjs",
+    "!tools/method-copies.json",
+    "!tools/method-copies.mjs",
     "!tools/package.mjs",
     "!tools/package-boundary.mjs",
     "!tools/update-completeness.mjs",

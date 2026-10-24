@@ -4,11 +4,7 @@
 
 ### The Magic Formula
 
-```
-════════════════════════════════════════════════════════════════
-the Pledge → the Turn → the Prestige
-════════════════════════════════════════════════════════════════
-```
+Audience → Offer → Copy
 
 **40% Audience** (who you're selling to)  
 **40% Offer** (what you'll do for them)  
@@ -20,26 +16,15 @@ the Pledge → the Turn → the Prestige
 
 ### Awareness Ladder
 
-```mermaid
-graph TD
-    A["🎯 Most Aware<br/>Product already known"] 
-    B["📦 Product Aware<br/>Solutions exist"] 
-    C["💡 Solution Aware<br/>Your solution specifically"] 
-    D["😣 Problem Aware<br/>Feel pain, no answer"] 
-    E["😴 Unaware<br/>Don't know they need it"]
-    
-    A ---|CLOSEST TO SALE| B
-    B ---|EDUCATE| C
-    C ---|DIFFERENTIATE| D
-    D ---|AGITATE| E
-    E ---|EDUCATE FIRST| E
-    
-    style A fill:#90EE90
-    style B fill:#FFD700
-    style C fill:#FFA500
-    style D fill:#FF6B6B
-    style E fill:#808080
-```
+Buyers move up this ladder, from farthest to closest to a sale:
+
+| Stage | What the buyer knows | Message job |
+|---|---|---|
+| Unaware | Does not know they have the problem | Name the problem through a situation they recognize |
+| Problem aware | Feels the pain; does not know a fix exists | Make the cost of the problem concrete |
+| Solution aware | Knows solutions exist; does not know your product | Show why your approach fits them better |
+| Product aware | Knows your product; is not yet convinced | Answer objections with proof |
+| Most aware | Knows and wants your product | Remove friction and make the offer |
 
 ### The Seven Deadly Motivators
 ```
@@ -87,7 +72,7 @@ Search engines / Generative engines
 - Paid ads (Meta ads, X ads, etc.)
 - Organic content (brand, affiliates)
 - UGCs (influencers, creators)
-- Internal UGCs (mass accounts, clippings)
+- Clipping programs run from disclosed brand or creator accounts
 
 ### 🛍️ **Stores & Listings**
 - Store / Listing platforms

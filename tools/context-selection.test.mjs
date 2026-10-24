@@ -150,3 +150,48 @@ test('mixed work, conjunctions, negation, examples and unsupported languages pre
   assert.deepEqual(all('Research the Vietnamese market.'), []);
   assert.deepEqual(all('Draft a launch plan, social posts, landing page copy and measurement.'), ['campaign', 'social', 'copy', 'measure']);
 });
+
+// Plain-language corpus (tools/e2e/routing-plain-language.json): founders and growth marketers do not type
+// command names. Every marketing, growth, sales, and product-marketing command and play needs 8 requests;
+// engineering about the same topics and chit-chat must stay silent; CLI and MCP must agree on every route.
+test('plain-language requests reach their methods and engineering or chit-chat stays silent', async () => {
+  const { judge, loadCases, plainLanguageCases } = await import('./e2e/routing-breadth.mjs');
+  const { loadRoutingContract } = await import('./routing-contract.mjs');
+  const contract = loadRoutingContract(root);
+  const engineeringOnly = new Set(['architect', 'build', 'docs', 'ui', 'spec']);
+  const targets = [
+    ...Object.values(contract.methods).filter(item => !item.explicitOnly && item.kind !== 'meta').map(item => item.name),
+    ...contract.plays.map(item => item.name),
+  ].filter(name => !engineeringOnly.has(name));
+  const cases = plainLanguageCases();
+  const positives = cases.filter(item => item.target);
+  for (const name of targets) assert.ok(positives.filter(item => item.target === name).length >= 8, `${name} needs 8 plain-language requests`);
+  assert.ok(cases.filter(item => item.silent).length >= 40);
+  const failures = (await loadCases()).map(item => judge(item)).filter(item => !item.pass)
+    .map(item => `${item.area}: ${item.task} -> ${item.play ?? ''} ${item.methods.join(',')} ${item.problems.join('; ')}`);
+  assert.deepEqual(failures, []);
+});
+
+test('ambiguous requests pick one owner: position or campaign, channels or campaign, measure or diagnose', () => {
+  const route = prompt => { const result = selectRequestContext(prompt); return [result.play?.name, ...names(result)].filter(Boolean); };
+  assert.deepEqual(route('Position us against Mailchimp'), ['position']);
+  assert.equal(route('Position our product and run a first campaign')[0], 'gtm');
+  assert.ok(!route('Which channel should we try next?').includes('campaign'));
+  assert.equal(route('Pick a channel and launch a campaign on it')[0], 'expand');
+  assert.ok(route('Set up a measurement plan for the launch').includes('measure'));
+  assert.ok(!route('Set up a measurement plan for the launch').includes('diagnose'));
+  assert.deepEqual(route('Signups fell 20% this month; figure out why'), ['diagnose']);
+  assert.ok(!route('Should we raise prices for new customers only?').includes('decide'));
+});
+
+// A plain-language signal must not override a command's own first intent or old ID
+// (growth-diagnosis.e2e checks the same through the installed CLI, much slower).
+test('each command first intent still selects only that command', async () => {
+  const { loadRoutingContract } = await import('./routing-contract.mjs');
+  const contract = loadRoutingContract(root);
+  for (const [name, method] of Object.entries(contract.methods)) {
+    if (!method.intents.length) continue;
+    const route = selectRequestContext(`Use Conquistador to ${method.intents[0]}.`);
+    assert.deepEqual(names(route), [name], `${name}: ${method.intents[0]}`);
+  }
+});
