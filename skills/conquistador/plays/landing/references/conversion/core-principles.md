@@ -1,46 +1,60 @@
-# Build a page argument from known facts
+# Landing page craft: page type, first screen, and argument
 
-Start with the visitor's task, the offer that exists today, the source of traffic if known, and the
-one action the page supports. Keep observed audience evidence separate from a working assumption.
-If the request is bounded, a short inline brief can contain the full argument; volume is not depth.
+Build the page as one argument for one action. The `copy` command's
+[sales argument](../../../../commands/copy/references/sales-argument.md) holds the full craft
+(promise, mechanism, offer, proof, objections); this file sets the page-level decisions.
+
+## Choose the page type first
+
+| Page type | Next action | Argument emphasis |
+|---|---|---|
+| **SaaS trial** | Start a trial or a first useful action | The path to the first useful result; setup, integrations, data handling, and price near the button |
+| **Demo-led B2B** | Book a demo or a call | Outcome by role; security and integrations; the demo as an offer: on whose data, how long, with whom |
+| **Direct-response offer** | Buy, apply, or book | The full sequence: lead, problem, cause, mechanism, product, proof, offer, objections, close |
+| **Launch** | Try the new thing | What changed, who it is for, a short demo, real launch terms and end date |
+
+A software buyer who needs product and integration evidence should not get a long sales letter. A
+cold buyer of a course or service usually needs more argument than a three-section SaaS page.
+
+## Write the first screen
+
+The first screen must let a visitor say what it is, who it is for, and what they get:
+
+- **Eyebrow or audience line:** who it is for, when that is not obvious.
+- **Headline:** the outcome, sized to the proof, in the words of the ad or search that sent them.
+- **Subhead:** the mechanism and the strongest proof point.
+- **Call to action:** a verb and what they get; the commitment and next step under it.
+- **Visual:** the product doing the job, not a decorative scene.
+
+### Keep a sourced number exact
+
+Keep a sourced number exact, with its source and scope beside it, even in the headline. "Northpier
+Clinic cut weekly rota building from 6 hours to 40 minutes (practice manager, May 2026)" must not
+become "save hours every week". Scope words go beside the number, not into vaguer copy. (Invented
+example.)
+
+## Build the argument below the fold
+
+Assign each section one visitor question, in the order the argument needs them: does this fix my
+problem, how does it work, does it work for someone like me, what will it cost me, what happens
+after I click. Put proof next to the claim it supports. Put each objection answer beside the action
+it blocks. Cut sections that repeat a claim without moving the decision.
 
 ## Assemble an evidence sheet
 
-For each proposed claim, list source, scope, date, permission, and wording it can support. Product
-behavior can come from inspected implementation or supplied authoritative documentation. Mark
-unverified behavior as a gap. Do not turn a future feature into present-tense copy or use a layout
-placeholder as evidence that a customer, award, or certification exists.
-
-## Map questions to sections
-
-List questions the supplied evidence suggests the visitor needs answered. Examples include what
-is offered, whether a prerequisite applies, what a payment covers, and what happens after a form.
-These are task possibilities, not a universal sequence. Assign each necessary question to a section.
-Remove duplicate sections unless the second occurrence serves a different context or action.
-
-Write the answer before choosing its visual treatment. Record what supports the answer and what
-remains uncertain. A capability description can explain a concrete use without promising a business
-result. If the page cannot answer a material question, show the limitation or identify an owner;
-do not replace the missing answer with louder wording.
+For each claim, list source, scope, date, permission, and the wording it supports. Product behavior
+comes from inspected implementation or authoritative documentation. Mark unverified behavior as a
+gap. Do not turn a future feature into present-tense copy or a layout placeholder into a customer,
+award, or certification.
 
 ## Define the action honestly
 
-Name the destination, expected state change, material costs, and data collected. Use wording that
-matches those facts. A button leading to a sales form must not promise an immediate download.
-Nearby reassurance should answer a real uncertainty and be verified. Do not require badges,
-first-person phrasing, deadlines, or repeated closing blocks as universal conversion devices.
+Name the destination, the state change, material costs, and data collected. A button that leads to
+a sales form must not promise an immediate download. Reassurance must answer a real uncertainty and
+be verified.
 
-## Read the whole argument
+## Review and test
 
-Check whether each section supplies information needed for the next decision. Read it as a visitor
-with limited context, including a visitor who declines. Remove unexplained jargon and ambiguous
-commitments. Preserve necessary qualifications even when they make a sentence longer. Check mobile
-and assistive-technology reading order in the eventual implementation; a prose brief cannot prove it.
-
-## Deliver a bounded review
-
-Use the versioned [LP checks](../conversion-principles.md). Separate editorial confidence from
-observed behavior and human feedback. List assumptions, missing assets, and unrun checks. An
-implementation handoff needs acceptance criteria; a launch claim needs actual execution evidence.
-One proposed test should distinguish the most important remaining uncertainty without inventing
-a numerical improvement target or claiming that the test has already occurred.
+After the draft, run the versioned [LP checks](../conversion-principles.md). List assumptions,
+missing assets, and unrun checks. Propose one test that separates the most important open question,
+without a predicted lift. Implementation, publication, and deployment need explicit approval.

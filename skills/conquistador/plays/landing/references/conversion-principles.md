@@ -1,9 +1,9 @@
 # Landing-page review method
 
-Version: `landing-decision-review-v1`. This is an original local review procedure for evidence,
-visitor decisions, messages, actions, and readability. It claims no measured conversion advantage.
-The previous LP-series rubric is retired; do not reinterpret historical CP scores as these LP checks.
-Old briefs need a fresh review under this version.
+Version: `landing-decision-review-v1`. Run these checks after the page is drafted from the
+[landing page craft](conversion/core-principles.md). They catch false claims, misleading actions,
+and gaps in the argument; they do not choose the voice or predict conversion. Do not reinterpret
+historical CP scores as these LP checks; old briefs need a fresh review under this version.
 
 For each applicable check report PASS, FAIL, UNKNOWN, or N/A with a brief location and reason.
 Unsupported public claims and misleading actions block readiness. Missing inputs stay UNKNOWN;

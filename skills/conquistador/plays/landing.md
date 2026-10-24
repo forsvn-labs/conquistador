@@ -37,31 +37,36 @@ Output formats and fallbacks: [format-conventions](landing/references/format-con
 
 <!-- playbooks:end -->
 
+Draft from the craft first: [landing page craft](landing/references/conversion/core-principles.md)
+for page type, first screen, and argument order, and the `copy` command's sales argument for
+promise, mechanism, offer, proof, and objections. Run the [LP checks](landing/references/conversion-principles.md)
+after the draft exists.
+
 1. Use `position` when audience, costly moment, promise, mechanism, proof, objection, or
    alternatives remain unresolved.
-2. Use `copy` for the complete section argument and final copy.
+2. Use `copy` for the complete section argument and final copy. Load the
+   [SaaS landing specialist](../specialists/saas-landing-agent.md) for a trial or demo page and the
+   [direct-response landing specialist](../specialists/dr-landing-agent.md) for an offer page that
+   must carry a full sales argument.
 3. Use `creative` for hierarchy, real or labeled-representative asset slots, responsive behavior,
    states, accessibility, and build acceptance.
-4. Use `convert` to verify the decision path and define one discriminating test.
+4. Use `convert` to check the decision path and define one discriminating test.
 5. Use the [share-card-verification](../methods/share-card-verification.md) method when the live or staged page must render correctly when
    shared.
 
-Load the landing method under [landing/](landing/) (architecture,
-hypothesis, section spec, conversion critic, visitor decisions) and its versioned review contract.
-
-Match the method to the requested delivery mode. A bounded inline request may return the
-page argument, section copy, responsive build brief, claim boundary, and first test in the terminal
-Review Packet. It does not require project brand files, a 250-line artifact, companion handoff files,
+Match the method to the requested delivery mode. A bounded inline request may return the page
+argument, section copy, responsive build brief, claim boundary, and first test in the terminal
+Review Packet. It does not require project brand files, a long artifact, companion handoff files,
 or approval of intermediate hypotheses. Treat supplied brand facts and semantic token names as the
 available brand source; label missing visual values and real assets instead of inventing them. Use the
-full file-oriented method only when the user asks for persistent artifacts or an execution handoff.
-Use the evidence-bound page argument and one useful test in either mode. The retired formula-based
-rubric does not apply; use `landing-decision-review-v1` and preserve UNKNOWN checks.
-Do not choose a web framework, emit `index.html`, or write a companion implementation prompt. If a later
-implementation handoff is requested and no stack is verified, label the stack unresolved.
+full file-oriented method under [landing/](landing/) only when the user asks for persistent artifacts
+or an execution handoff. Do not choose a web framework, emit `index.html`, or write a companion
+implementation prompt. If a later implementation handoff is requested and no stack is verified,
+label the stack unresolved.
 
-Every section must advance the same decision spine. Do not invent customers, metrics, compatibility,
-product behavior, or decorative proof. Keep implementation and live deployment behind explicit scope.
+Every section must advance the same argument toward one action. Keep a sourced number exact, with
+its source beside it. Do not invent customers, metrics, compatibility, product behavior, or
+decorative proof. Keep implementation and live deployment behind explicit scope.
 
 Run `audit` on the finished package before the Review Packet.
 
