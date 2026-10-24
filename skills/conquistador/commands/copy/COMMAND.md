@@ -57,8 +57,8 @@ Route instead:
 ## Anchor the work
 
 Infer the audience and their costly moment, awareness level and traffic source, the outcome they
-want, the mechanism of the problem and of the solution, the offer terms, the strongest proof, the
-main objection, the action, and the surface, voice, and language. Ask at most one bundled question
+want, why the problem persists and what the product does differently, the offer terms, the
+strongest proof, the main objection, the action, and the surface, voice, and language. Ask at most one bundled question
 when different answers would change the copy materially. Otherwise label the assumption and continue.
 
 ## Draft from the craft
