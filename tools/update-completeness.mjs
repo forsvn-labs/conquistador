@@ -10,8 +10,11 @@ import { buildSearchSnapshot } from './brief.mjs';
 import { operatorFiles } from './operator-package.mjs';
 import { writeRoutingContract } from './routing-contract.mjs';
 import { buildPluginManifest, pluginManifestPath } from './plugin-payload.mjs';
+import { syncCopies } from './method-copies.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
+// Copy edited sources to their declared copies first, so the manifests hash the synced bytes.
+syncCopies(root);
 writeRoutingContract(root);
 
 writeFileSync(join(root, 'tools/search-index.json'), JSON.stringify(buildSearchSnapshot(root)) + '\n');
