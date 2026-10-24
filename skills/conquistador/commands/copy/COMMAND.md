@@ -66,14 +66,14 @@ when different answers would change the copy materially. Otherwise label the ass
 1. Write the one-sentence promise and the two mechanism lines from
    [sales argument](references/sales-argument.md).
 2. Choose the argument order for the page type and the reader's awareness. Use the
-   [section library](references/page-sections.md) for page structures.
-3. Draft 5–10 headlines from different [headline patterns](references/headline-formulas.md) and
+   section library (`references/page-sections.md`) for page structures.
+3. Draft 5–10 headlines from different headline patterns (`references/headline-formulas.md`) and
    keep the one that passes the tests. Choose the lead by awareness.
 4. Write the body in argument order, in the customer's words. Put proof next to the claim it
    supports. Keep a sourced number exact, with its source and scope beside it.
 5. Build the offer and the call to action: what they get, terms, risk reversal, and what happens
    after the click.
-6. Compare doubtful units with the [annotated examples](references/examples/direct-response-examples.md).
+6. Compare doubtful units with the annotated examples (`references/examples/direct-response-examples.md`).
 
 Per surface:
 

@@ -81,7 +81,7 @@ business performance.
 6. **Friction:** they wanted it but the next step was costly or broken.
 7. **Value:** they acted but the product or offer did not deliver.
 
-Read the page with the seven visitor questions in [page conversion craft](references/page-conversion-craft.md):
+Read the page with the seven visitor questions in page conversion craft (`references/page-conversion-craft.md`):
 match, clarity, value, proof, anxiety, friction, distraction. Break the drop-off down by acquisition
 source and device before you blame the page; the same page can convert very differently by channel.
 Treat co-timed movement as correlation until evidence distinguishes causes, and state the mechanism
@@ -107,7 +107,7 @@ line under it that answers the real fears at the button. Then place proof beside
 objection answers beside the action they block, cut what distracts, and reduce form fields to what
 the next step needs. Keep a sourced number exact, with its source beside it. For a full page
 argument, use the craft in the `copy` command. See the
-[signup page rewrite](references/examples/signup-page-rewrite.md) for a worked before and after.
+signup page rewrite (`references/examples/signup-page-rewrite.md`) for a worked before and after.
 
 ## Prioritize a discriminating test
 
@@ -129,7 +129,7 @@ cannot discriminate.
 
 ## Check after drafting
 
-Check the diagnosis and revision against [conversion rewrite failures](references/anti-patterns.md).
+Check the diagnosis and revision against conversion rewrite failures (`references/anti-patterns.md`).
 Check every claim in the revision against its source: remove invented proof, keep sourced specifics
 exact, and confirm that button labels, terms, and destinations match the real offer. Tie every
 recommendation to observed evidence, an explicit inference, or a labeled assumption. Do not claim
