@@ -2759,12 +2759,18 @@
         "landing page copy"
       ],
       "requiredResources": [
+        "skills/conquistador/commands/outreach/references/frameworks/cold-email-frameworks.md",
+        "skills/conquistador/commands/outreach/references/method.md",
         "skills/conquistador/commands/outreach/references/copy-validation-rubric.md",
         "skills/conquistador/commands/outreach/references/anti-patterns.md",
         "skills/conquistador/commands/outreach/fallbacks/sequential.md",
         "skills/conquistador/commands/outreach/references/frameworks/outreach-decisions.md"
       ],
       "conditionalResources": [
+        "skills/conquistador/commands/outreach/references/frameworks/objections.md",
+        "skills/conquistador/commands/outreach/references/examples/pairs-relationships.md",
+        "skills/conquistador/commands/outreach/references/examples/pairs-sales.md",
+        "skills/conquistador/commands/outreach/references/channels/email.md",
         "skills/conquistador/commands/outreach/references/modes/no-pitch-research.md",
         "skills/conquistador/commands/outreach/agents/signal-analyst.md",
         "skills/conquistador/commands/outreach/agents/strategist.md",
@@ -2783,6 +2789,22 @@
         "skills/conquistador/commands/outreach/references/examples/saas-sequence-no-proof.md"
       ],
       "resourceConditions": [
+        {
+          "path": "skills/conquistador/commands/outreach/references/frameworks/objections.md",
+          "when": "Load when the deliverable includes reply handling."
+        },
+        {
+          "path": "skills/conquistador/commands/outreach/references/examples/pairs-relationships.md",
+          "when": "Load when drafting partnership, investor, intro-request, creator-sponsorship, or reply messages."
+        },
+        {
+          "path": "skills/conquistador/commands/outreach/references/examples/pairs-sales.md",
+          "when": "Load when drafting sales outreach: SaaS, services, early stage, follow-up, or breakup."
+        },
+        {
+          "path": "skills/conquistador/commands/outreach/references/channels/email.md",
+          "when": "Load when the channel is email."
+        },
         {
           "path": "skills/conquistador/commands/outreach/references/modes/no-pitch-research.md",
           "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."

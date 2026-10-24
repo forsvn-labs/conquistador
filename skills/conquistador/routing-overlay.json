@@ -2067,12 +2067,30 @@
         "landing page copy"
       ],
       "requiredResources": [
+        "references/frameworks/cold-email-frameworks.md",
+        "references/method.md",
         "references/copy-validation-rubric.md",
         "references/anti-patterns.md",
         "fallbacks/sequential.md",
         "references/frameworks/outreach-decisions.md"
       ],
       "conditionalResources": [
+        {
+          "path": "references/frameworks/objections.md",
+          "when": "Load when the deliverable includes reply handling."
+        },
+        {
+          "path": "references/examples/pairs-relationships.md",
+          "when": "Load when drafting partnership, investor, intro-request, creator-sponsorship, or reply messages."
+        },
+        {
+          "path": "references/examples/pairs-sales.md",
+          "when": "Load when drafting sales outreach: SaaS, services, early stage, follow-up, or breakup."
+        },
+        {
+          "path": "references/channels/email.md",
+          "when": "Load when the channel is email."
+        },
         {
           "path": "references/modes/no-pitch-research.md",
           "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
