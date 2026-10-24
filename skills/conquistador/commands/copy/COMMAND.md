@@ -71,7 +71,7 @@ When one request holds both, write each unit in its own mode.
 Short copy wins on concrete, scannable specifics. Extra review passes tend to add words and strip them.
 
 1. Read the facts for the strongest specific, the offer terms, and the one piece of proof.
-2. Draft with the [short-form checklist](references/short-form-copy.md) in one pass.
+2. Draft with the short-form checklist (`references/short-form-copy.md`) in one pass.
 3. Run its facts check in the same context: remove unsupported claims, keep fair inferences, add
    nothing.
 4. Deliver as below.
