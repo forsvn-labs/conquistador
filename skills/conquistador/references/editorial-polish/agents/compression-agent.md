@@ -22,7 +22,7 @@ You will receive from the orchestrator:
 | **brief** | string | The original task context |
 | **pre-writing** | object | Content type (determines compression target) and any user directives |
 | **upstream** | markdown | Soul-injection-agent's output (the voice-injected text + change log) |
-| **references** | file paths[] | `references/conciseness-rules.md` — filler phrase table, paragraph rules, section rules, depth preservation rules; `references/human-writing-stylebook.md` — the no-generic-long-form gate + per-profile compression targets |
+| **references** | file paths[] | `../writing-guide.md` — filler, merge, and keep rules plus the long-form gate (`writing-guide.md` § Density) and per-format cut targets (`writing-guide.md` § Register by channel) |
 | **feedback** | string \| null | Rewrite instructions from critic agent. Null on first run. |
 
 ## Output Contract
@@ -116,7 +116,7 @@ Also target:
 
 **No-generic-long-form gate (self-applied, long-form content only):**
 
-Before returning, apply the gate from `human-writing-stylebook.md`: judge whether your compressed output could lose another 40% of its words without losing a unique idea, datum, example, or nuance. If it could, the output is still generic long-form — keep compressing. The 15% floor measures the cut from the original; this gate measures whether the *output* is dense. Applies to blog, docs, internal memo, white paper, and case study; not to forum comment, cold DM, ad, or landing-page section, where the content-type caps already govern.
+Before returning, apply the long-form gate from `writing-guide.md` § Density: judge whether your compressed output could lose another 40% of its words without losing a unique idea, datum, example, or nuance. If it could, the output is still generic long-form — keep compressing. The 15% floor measures the cut from the original; this gate measures whether the *output* is dense. Applies to blog, docs, internal memo, white paper, and case study; not to forum comment, cold DM, ad, or landing-page section, where the content-type caps already govern.
 
 **Content-type targets:**
 
@@ -137,14 +137,14 @@ Before returning, apply the gate from `human-writing-stylebook.md`: judge whethe
 **Input (from soul-injection):**
 > "SaaS companies with structured onboarding retain 50% more users. Yet most treat it as a product tour and stop there.
 >
-> Onboarding that works combines triggered emails based on usage gaps, in-app guidance tied to the user's workflow (not a generic checklist), and human support when activation stalls. Intercom's onboarding rebuild in 2024 cut their time-to-value from 14 days to 3 by replacing their 12-step tour with two targeted nudges.
+> Onboarding that works combines triggered emails based on usage gaps, in-app guidance tied to the user's workflow (not a generic checklist), and human support when activation stalls. Fernway's onboarding rebuild in 2024 cut its time-to-value from 14 days to 3 by replacing its 12-step tour with two targeted nudges.
 >
 > The key takeaway is that less coverage leads to more precision. The goal is to guide users to one aha-moment fast, then expand from there."
 
 **Compressed:**
 > "SaaS companies with structured onboarding retain 50% more users. Yet most treat it as a product tour and stop there.
 >
-> Onboarding that works combines triggered emails based on usage gaps, in-app guidance tied to the user's workflow (not a generic checklist), and human support when activation stalls. Intercom's onboarding rebuild in 2024 cut their time-to-value from 14 days to 3 by replacing their 12-step tour with two targeted nudges.
+> Onboarding that works combines triggered emails based on usage gaps, in-app guidance tied to the user's workflow (not a generic checklist), and human support when activation stalls. Fernway's onboarding rebuild in 2024 cut its time-to-value from 14 days to 3 by replacing its 12-step tour with two targeted nudges.
 >
 > Less coverage, more precision. Guide users to one aha-moment fast, then expand."
 

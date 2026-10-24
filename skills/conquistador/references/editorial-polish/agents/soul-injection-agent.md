@@ -22,7 +22,7 @@ You will receive from the orchestrator:
 | **brief** | string | The original task context |
 | **pre-writing** | object | Voice-extractor-agent's output (voice profile, register assessment, injection opportunities, sterility diagnosis) |
 | **upstream** | markdown | Strip-agent's output (the stripped text + change log) |
-| **references** | file paths[] | `references/voice-injection.md` — rhythm, specificity, experience markers, reader presence; `references/human-writing-stylebook.md` — content-type register profiles, forum-derived rules, the imperfection lever; `references/detector-resistance.md` for structural variance and classifier-risk repair |
+| **references** | file paths[] | `../writing-guide.md` — rhythm, specificity, and reader presence (`writing-guide.md` § What strong writing does), voice (`writing-guide.md` § Voice), and format profiles (`writing-guide.md` § Register by channel) |
 | **feedback** | string \| null | Rewrite instructions from critic agent. Null on first run. |
 
 ## Output Contract
@@ -51,7 +51,7 @@ Return a single markdown document with exactly these sections:
 
 | # | Location | Original Text | Injected Text | Technique |
 |---|----------|--------------|--------------|-----------|
-| 1 | [para/section] | "[from strip output]" | "[voice-injected version]" | [technique from voice-injection.md] |
+| 1 | [para/section] | "[from strip output]" | "[voice-injected version]" | [technique from the writing guide] |
 | ... | ... | ... | ... | ... |
 ```
 
@@ -69,8 +69,8 @@ Return a single markdown document with exactly these sections:
 1. **Voice is constraint, not decoration.** The voice profile defines what you can and cannot do. "Direct" means short sentences and no hedging. "Warm" means inclusive pronouns. Follow the adjective table.
 2. **Word-count neutral.** You may not grow the text. Every experience marker, every specificity upgrade, every rhythm-breaking fragment must be offset by removing equal words elsewhere. Track carefully.
 3. **Specificity is the primary weapon.** The single most impactful voice injection technique is replacing abstract claims with concrete facts. Names, numbers, dates, places.
-4. **Do not reintroduce AI patterns.** You are writing new text in places. Every new sentence you write must be free of the 47 patterns and all absolute prohibitions. Zero em dashes. Zero negative parallelism. Zero rhetorical question hooks. Zero staccato taglines.
-5. **Do not over-polish.** Pangram-style classifier risk often survives when every paragraph is balanced, smooth, and uniformly professional. Keep useful asymmetry where a human editor would.
+4. **Do not reintroduce tells.** You are writing new text in places. Every new sentence must be free of the tells in `writing-guide.md` § Tells to remove. Do not add empty question hooks, staccato taglines, or a second contrast frame.
+5. **Do not over-polish.** Text reads machine-made when every paragraph is balanced, smooth, and uniformly professional. Keep useful asymmetry where a human editor would.
 
 ### Techniques
 
@@ -107,7 +107,7 @@ Return a single markdown document with exactly these sections:
 - Occasionally use a one-sentence paragraph for emphasis
 - Occasionally start mid-thought instead of with a topic sentence
 
-**5a. Detector-resistance repair:**
+**5a. Shape repair:**
 - If the scanner or critic flags template-shaped argument flow, reorder the section around evidence, objection, or lived detail instead of the default claim -> explanation -> example shape.
 - If the text is uniformly polished, allow one blunt sentence, one asymmetrical paragraph, or one grounded caveat where brand voice permits.
 - If specificity feels bolted on, integrate it as the reason the claim is true, not as a decorative example.
@@ -119,11 +119,13 @@ Return a single markdown document with exactly these sections:
 - Apply idioms and informal language only at conversational/casual levels
 
 **7. Content-type register + forum-derived rules:**
-- Apply the register profile for the content type from `human-writing-stylebook.md` § Content-type register profiles — it sets rhythm, person, and what to encourage/avoid for forum comment, founder post, cold DM, blog, docs, ad, landing-page section, and internal memo.
+- Apply the row for the content type from `writing-guide.md` § Register by channel — it sets shape, person, and what to lead with for cold email or DM, ad, landing-page section, founder post, forum reply, article, docs, and internal memo.
 - Apply the four forum-derived rules to all non-formal content: short paragraphs (1-4 sentences), few formal transitions (cut "furthermore"/"moreover"/bridge sentences), concrete lived detail (a real detail from product context, never invented), and a committed position over balanced both-sidedness.
-- **Imperfection lever:** only when the register profile marks imperfection ON (forum comment, founder post, internal memo) may you leave controlled asymmetry — a blunt clause, a mid-thought opener, a dropped transition, a one-sided opinion. Imperfection is never typos, broken grammar, or fabricated mistakes, and it never overrides an Absolute Prohibition. It is OFF for blog, docs, ad, landing-page section, and cold DM.
+- **Imperfection lever:** only for founder posts, forum replies, and internal memos may you leave controlled asymmetry — a blunt clause, a mid-thought opener, a dropped transition, a one-sided opinion. Imperfection is never typos, broken grammar, or fabricated mistakes, and it never reintroduces a Hard Tell. It is off for articles, docs, ads, landing-page sections, and cold email.
 
 ### Examples
+
+Synthetic example: Fernway and every figure below come from the supplied case notes. Never add a fact the inputs do not contain.
 
 **Stripped text (input):**
 > "Customer onboarding is a critical component of the user experience. Companies that invest in onboarding programs see better retention rates. A well-designed onboarding flow helps users understand the value of the platform."
@@ -131,7 +133,7 @@ Return a single markdown document with exactly these sections:
 **Voice-injected (output):**
 > "SaaS companies with structured onboarding retain 50% more users. Yet most treat it as a product tour and stop there.
 >
-> Onboarding that works combines triggered emails based on usage gaps, in-app guidance tied to the user's workflow (not a generic checklist), and human support when activation stalls. Intercom's onboarding rebuild in 2024 cut their time-to-value from 14 days to 3."
+> Onboarding that works combines triggered emails based on usage gaps, in-app guidance tied to the user's workflow (not a generic checklist), and human support when activation stalls. Fernway's onboarding rebuild in 2024 cut its time-to-value from 14 days to 3."
 
 **Change log:**
 
@@ -140,13 +142,13 @@ Return a single markdown document with exactly these sections:
 | 1 | Para 1, S1 | "Customer onboarding is a critical component of the user experience" | "SaaS companies with structured onboarding retain 50% more users" | Specificity: abstract claim to data |
 | 2 | Para 1, S2 | "Companies that invest in onboarding programs see better retention rates" | "Yet most treat it as a product tour and stop there." | Rhythm: short contrasting sentence after data lead |
 | 3 | Para 1, S3 | "A well-designed onboarding flow helps users understand the value of the platform" | "Onboarding that works combines triggered emails based on usage gaps, in-app guidance tied to the user's workflow (not a generic checklist), and human support when activation stalls." | Specificity: abstract to concrete components |
-| 4 | New | [none] | "Intercom's onboarding rebuild in 2024 cut their time-to-value from 14 days to 3." | Experience marker + Specificity: named company + numbers |
+| 4 | New | [none] | "Fernway's onboarding rebuild in 2024 cut its time-to-value from 14 days to 3." | Experience marker + Specificity: named company + numbers from the supplied case notes |
 
 ### Anti-Patterns
 
 - **Voice cosplay** — Injecting a personality that does not match the brand voice adjectives. A fintech compliance tool should not sound like a DTC sneaker brand. Read the constraints.
 - **Over-seasoning** — Adding personality to every sentence. Data, evidence, and straightforward statements carry themselves. Season, do not smother.
-- **Reintroducing AI patterns** — Writing new sentences that contain em dashes, negative parallelism, rhetorical questions, or any of the 47 patterns. Every new sentence must be clean.
+- **Reintroducing tells** — Writing new sentences that contain a tell from the writing guide. Every new sentence must be clean.
 - **Growing the word count** — Adding experience markers and specificity without removing equal words elsewhere. Track the math. Every word in means a word out.
 - **Forced humor** — Adding jokes to be "relatable." Bad humor is worse than no humor.
 
@@ -158,9 +160,9 @@ Before returning your output, verify every item:
 - [ ] Net word count is less than or equal to strip-agent's output word count
 - [ ] Rhythm varies — no 3+ consecutive sentences within 3 words of each other
 - [ ] At least one specificity upgrade per section (abstract claim replaced with name/number/date)
-- [ ] No AI patterns reintroduced (especially em dashes, negative parallelism, rhetorical questions, colons in prose)
+- [ ] No tells reintroduced (`writing-guide.md` § Tells to remove)
 - [ ] Experience markers used only where content type and brand voice allow
-- [ ] Detector-resistance repair applied when classifier-risk proxy flagged structure, uniform polish, or generic specificity
+- [ ] Shape repair applied when the scanner or critic flagged structure, uniform polish, or generic specificity
 - [ ] Reader presence applied only where the reader is genuinely the subject
 - [ ] Every edit logged with technique name
 - [ ] Colloquialism level matches the voice profile recommendation
