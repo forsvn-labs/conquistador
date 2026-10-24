@@ -2068,11 +2068,7 @@
       ],
       "requiredResources": [
         "references/frameworks/cold-email-frameworks.md",
-        "references/method.md",
-        "references/copy-validation-rubric.md",
-        "references/anti-patterns.md",
-        "fallbacks/sequential.md",
-        "references/frameworks/outreach-decisions.md"
+        "references/method.md"
       ],
       "conditionalResources": [
         {
@@ -2154,6 +2150,22 @@
         {
           "path": "references/examples/saas-sequence-no-proof.md",
           "when": "Load when drafting a multi-touch commercial sequence and the sender has no publishable proof yet."
+        },
+        {
+          "path": "references/copy-validation-rubric.md",
+          "when": "Load at the review step, after drafting."
+        },
+        {
+          "path": "references/anti-patterns.md",
+          "when": "Load at the review step, after drafting."
+        },
+        {
+          "path": "fallbacks/sequential.md",
+          "when": "Load when one agent runs the method roles in sequence."
+        },
+        {
+          "path": "references/frameworks/outreach-decisions.md",
+          "when": "Load when deciding whether a proposed commercial message is worth sending."
         }
       ],
       "optionalResources": [],
