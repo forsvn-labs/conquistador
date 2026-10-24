@@ -14,6 +14,54 @@ const feedbackOptIn = /\b(?:submit|share|send)\s+(?:product\s+)?feedback\b|\brep
 const connectionSetup = /\b(?:set\s*up|setup|install|connect|wire|configure)\b[\s\S]{0,80}\b(?:executor|hubspot|salesforce|pipedrive|crm|ads account)\b/i;
 
 const technicalNoun = /\b(?:code|functions?|handlers?|middleware|components?|modules?|files?|tests?|validation)\b/i;
+// Engineering about marketing systems (email queues, ad SDKs, event pipelines, deploys) is not a
+// marketing deliverable. Only build-kind methods may route such a clause.
+const engineeringWork = /\b(?:sdks?|api (?:keys?|rate|errors?|calls?|clients?|auth\w*|limits?|integration)|(?:the|an?|via) api|endpoints?|webhooks?|callbacks?|backend|frontend|cron|queues?|database|sql|dbt|etl|bigquery|snowflake|postgres|redis|docker|kubernetes|deploy\w*|vercel|netlify|github|pull requests?|repo|codebase|regex|typescript|javascript|python|swift|kotlin|react (?:components?|native|app)|in react|backoff|rate limits?|pixel|instrument\w*|postbacks?|skadnetwork|dkim|spf|dmarc|columns?|stack trace|exceptions?|bugs?|crash\w*|unit tests?|refactor\w*|debug\w*)\b/;
+// Personal errands are not business deliverables, whatever the verb.
+const personalTask = /\bmy (?:landlord|mom|mother|dad|father|wife|husband|partner|girlfriend|boyfriend|friends?|teacher|doctor|neighbou?r|family|kids?|son|daughter|roommate|wedding|vacation|trip|birthday)\b/;
+
+// Routing words match their plural forms; a trailing * matches any ending (pric* matches price and pricing).
+const tokenMatches = (pattern, token) => (pattern.endsWith('*') ? token.startsWith(pattern.slice(0, -1))
+  : token === pattern || token === `${pattern}s` || token === `${pattern}es` || (pattern.endsWith('y') && token === `${pattern.slice(0, -1)}ies`));
+
+function contains(tokens, words) {
+  outer: for (let start = 0; start + words.length <= tokens.length; start++) {
+    for (let offset = 0; offset < words.length; offset++) if (!tokenMatches(words[offset], tokens[start + offset])) continue outer;
+    return true;
+  }
+  return false;
+}
+
+const phraseWords = phrase => normalized(phrase).split(' ').filter(Boolean);
+const hasPhrase = (tokens, phrase) => contains(tokens, phraseWords(phrase));
+
+// A signal is word slots joined by "&": every slot must appear, in any order. "|" separates
+// alternatives inside a slot, and a slot that starts with "!" vetoes the signal. Its score is the
+// length of the longest alternative matched in each slot, so specific words outrank generic ones.
+const parsedSignals = new Map();
+function parseSignal(source) {
+  if (!parsedSignals.has(source)) {
+    parsedSignals.set(source, source.split('&').map(slot => slot.trim()).filter(Boolean).map(slot => ({
+      veto: slot.startsWith('!'),
+      alternatives: slot.replace(/^!/, '').split('|').map(item => item.trim().toLowerCase().split(/\s+/).filter(Boolean)).filter(item => item.length),
+    })));
+  }
+  return parsedSignals.get(source);
+}
+
+export function signalScore(tokens, signals = []) {
+  let best = 0;
+  for (const source of signals) {
+    let score = 0;
+    for (const slot of parseSignal(source)) {
+      const hit = Math.max(0, ...slot.alternatives.filter(words => contains(tokens, words)).map(words => words.join(' ').replaceAll('*', '').length));
+      if (slot.veto ? hit > 0 : hit === 0) { score = 0; break; }
+      score += hit;
+    }
+    best = Math.max(best, score);
+  }
+  return best;
+}
 function allowedKind(restriction, kind, name) {
   if (!restriction) return true;
   try {
@@ -34,10 +82,12 @@ function parentMatch(query, contract, restriction) {
   return null;
 }
 
-function matchingMethods(query, contract, { permitGrowthInference = true } = {}) {
+function matchingMethods(query, contract, { permitGrowthInference = true, signals = true } = {}) {
   const text = normalized(query).replace(/\bposts\b/g, 'post');
+  const tokens = text.split(' ');
   const inspect = /\b(?:evaluate|audit|results|performance)\b/i.test(query);
   const matches = [];
+  const signalled = [];
   for (const method of [...Object.values(contract.methods), ...contract.unavailableMethods]) {
     if (method.explicitOnly && !feedbackOptIn.test(query)) continue;
     // A one-word command name selects only through explicit invocation (see resolveCommand).
@@ -45,15 +95,23 @@ function matchingMethods(query, contract, { permitGrowthInference = true } = {})
     const legacy = new Set(method.legacy ?? []);
     const intents = [...(method.legacy ?? []), ...method.intents, ...(method.aliases ?? []).filter(alias => !legacy.has(alias))];
 
-    const hit = intents.flatMap(intent => includesPhrase(text, intent)
+    const hit = intents.flatMap(intent => hasPhrase(tokens, intent)
       ? [{ phrase: intent, kind: legacy.has(intent) ? 'name' : 'intent', score: normalized(intent).length }]
       : [])
       .sort((a, b) => (b.kind === 'name') - (a.kind === 'name') || b.score - a.score)[0];
 
-    if (!hit || method.exclusions.some(phrase => includesPhrase(text, phrase))) continue;
-    if (inspect && method.kind === 'create' && hit.kind !== 'name' && !/\b(?:write|create|draft)\b/i.test(query)) continue;
-    matches.push({ ...method, score: hit.score, matchKind: hit.kind, matchPhrase: hit.phrase });
+    if (method.exclusions.some(phrase => hasPhrase(tokens, phrase))) continue;
+    const signal = signals ? signalScore(tokens, method.signals) : 0;
+    if (!hit && !signal) continue;
+    if (inspect && method.kind === 'create' && hit?.kind !== 'name' && !/\b(?:write|create|draft)\b/i.test(query)) continue;
+    // A phrase match also records its signal, so a play phrase must beat the method's full evidence.
+    if (hit) matches.push({ ...method, score: hit.score, signal, matchKind: hit.kind, matchPhrase: hit.phrase });
+    else signalled.push({ ...method, score: signal, matchKind: 'signal', matchPhrase: 'signal' });
   }
+  // A signal stands in for a missing phrase. Only the strongest signal joins, and only when it
+  // outscores every phrase match, so one plain-language request gets one owner.
+  const strongest = Math.max(0, ...signalled.map(item => item.score));
+  if (strongest > Math.max(0, ...matches.map(item => item.score))) matches.push(...signalled.filter(item => item.score === strongest));
   return finishMatches(query, text, matches, contract, { permitGrowthInference, inspect });
 }
 
@@ -67,7 +125,11 @@ function finishMatches(query, text, matches, contract, { permitGrowthInference, 
   if (permitGrowthInference && growthMetric && adverseChange && (!creationRequest || asksForDiagnosis) && !matches.some(item => item.name === 'diagnose')) {
     const method = contract.methods['diagnose'] ?? contract.unavailableMethods.find(item => item.name === 'diagnose');
 
-    if (method && !method.exclusions.some(phrase => includesPhrase(text, phrase))) matches.push({ ...method, score: 30, matchKind: 'inferred-growth' });
+    if (method && !method.exclusions.some(phrase => includesPhrase(text, phrase))) {
+      // Diagnosis comes before prescriptions: a falling metric outranks a plain-language tactic guess.
+      for (let i = matches.length - 1; i >= 0; i--) if (matches[i].matchKind === 'signal') matches.splice(i, 1);
+      matches.push({ ...method, score: 30, matchKind: 'inferred-growth' });
+    }
   }
 
   const growthResults = /\bgrowth\b(?:\s+\w+){0,3}\s+\b(?:results|performance)\b/.test(text);
@@ -98,19 +160,28 @@ function finishMatches(query, text, matches, contract, { permitGrowthInference, 
 // A play wins over single commands when the request names the play, matches one of its intents at
 // least as specifically as the best command phrase, or selects two or more commands it chains
 // (and at least half of its unconditional commands).
-export function selectPlay(query, selected, contract, restriction, invoked = null) {
+export function selectPlay(query, selected, contract, restriction, invoked = null, { signals = true } = {}) {
   const text = normalized(query);
-  const names = new Set(selected.map(item => item.name));
-  const best = Math.max(0, ...selected.filter(item => item.matchKind === 'intent').map(item => item.score));
+  const tokens = text.split(' ');
+  // A chain counts phrase-matched commands only. A plain-language signal names one owner, not a chain.
+  const names = new Set(selected.filter(item => item.matchKind !== 'signal').map(item => item.name));
+  const best = Math.max(0, ...selected.filter(item => item.matchKind === 'intent').map(item => Math.max(item.score, item.signal ?? 0)));
+  const bestSignal = Math.max(0, ...selected.filter(item => item.matchKind === 'signal').map(item => item.score));
+  const bestCommand = Math.max(best, bestSignal);
   const ranked = (contract.plays ?? []).map(play => {
     if (!allowedKind(restriction, 'workflow', play.name)) return null;
     if (invoked === play.name) return { play, named: 1, intent: 0, hits: 0, coverage: 0 };
-    const intent = [...play.intents, ...(play.legacy ?? [])].filter(phrase => includesPhrase(text, phrase))
-      .reduce((longest, phrase) => Math.max(longest, normalized(phrase).length), 0);
+    const phrase = [...play.intents, ...(play.legacy ?? [])].filter(item => hasPhrase(tokens, item))
+      .reduce((longest, item) => Math.max(longest, normalized(item).length), 0);
+    // A plain-language signal selects a play only when it outscores every command match.
+    const signal = signals ? signalScore(tokens, play.signals) : 0;
+    // A play phrase must match the best command phrase and hold unless a command signal outscores
+    // it by more than a quarter (a phrase is exact; a signal is loose). A play signal must beat both.
+    const intent = Math.max(phrase >= best && phrase * 1.25 >= bestSignal ? phrase : 0, signal > bestCommand ? signal : 0);
     const hits = play.dependencies.filter(name => names.has(name)).length;
     const core = new Set(play.chain.filter(step => step.command && !step.when).map(step => step.command));
     const coreHits = [...core].filter(name => names.has(name)).length;
-    const byIntent = intent > 0 && intent >= best;
+    const byIntent = intent > 0;
     const byChain = hits >= 2 && coreHits * 2 >= core.size;
     if (!byIntent && !byChain) return null;
     return { play, named: 0, intent: byIntent ? intent : 0, hits, coverage: hits / play.dependencies.length };
@@ -247,7 +318,7 @@ export function selectRequestContext(prompt, { root = moduleRoot, automatic = fa
   const parent = posix.join(contract.parentPath, contract.document);
   const methods = [...Object.values(contract.methods), ...contract.unavailableMethods];
 
-  const protectedPhrases = methods.flatMap(method => [method.name, ...method.intents, ...(method.aliases ?? [])])
+  const protectedPhrases = [...methods, ...(contract.plays ?? [])].flatMap(method => [method.name, ...method.intents, ...(method.aliases ?? [])])
     .filter(phrase => /\band\b/.test(normalized(phrase)));
 
   const clauses = requestedBusinessClauses(prompt, { protectedPhrases });
@@ -280,16 +351,41 @@ export function selectRequestContext(prompt, { root = moduleRoot, automatic = fa
     if (existing === -1) selectedAll.push(item);
     else if (strength(item) > strength(selectedAll[existing])) selectedAll[existing] = item;
   };
+  const engineering = clause => engineeringWork.test(normalized(clause)) || personalTask.test(normalized(clause));
+  const business = clauses.filter(clause => !engineering(clause));
+  // A "for" or "about" tail is context ("a post for our launch"). "For each", "for every", and
+  // "for search" still describe the deliverable ("pages for each competitor").
+  const stage = clause => clause.replace(/^\s*(?:for|about)\s+/i, '').split(/\b(?:for(?! (?:each|every|all|search|seo|organic)\b)|about|announcing)\b/i)[0];
   for (const clause of clauses) {
     parentMethod ??= parentMatch(clause, contract, restriction);
 
     const technicalStage = technicalNoun.test(clause);
+    const marketing = !engineering(clause);
 
-    for (const item of matchingMethods(clause.replace(/^\s*(?:for|about)\s+/i, '').split(/\b(?:for|about|announcing)\b/i)[0], contract, { permitGrowthInference: !codingAction || (businessDiagnosisRequested && !technicalStage) })) consider(item);
+    for (const item of matchingMethods(stage(clause), contract, { permitGrowthInference: !codingAction || (businessDiagnosisRequested && !technicalStage), signals: marketing })) {
+      if (marketing || item.kind === 'build') consider(item);
+    }
+  }
+  // The whole request is read too: a clause split ("this page, email, and ad set for problems before
+  // we ship") or a "for" tail ("plan the segments for our Twitter Space") can hold the words that
+  // name the owner. When the stages matched nothing, any whole-request match counts. Otherwise a
+  // whole-request signal leads only when it outscores every phrase the stages matched.
+  if (business.length > 1 || stage(business[0] ?? '') !== business[0]) {
+    const empty = !selectedAll.length;
+    const strongest = Math.max(0, ...selectedAll.map(item => item.score ?? 0));
+    const lead = matchingMethods(business.join('. '), contract, { permitGrowthInference: false })
+      .filter(item => contract.methods[item.name] && (empty || (item.matchKind === 'signal' && item.score > strongest)))
+      // A phrase found only in the context tail names the subject, not a stage, so it does not outrank a play.
+      .map(item => (item.matchKind === 'signal' ? item : { ...item, matchKind: 'context' }));
+    for (const item of lead.reverse()) {
+      const existing = selectedAll.findIndex(value => value.name === item.name);
+      if (existing !== -1) selectedAll.splice(existing, 1);
+      selectedAll.unshift(item);
+    }
   }
 
   const productSpec = /\b(?:product requirements document|product requirements|prd)\b/i.test(query);
-  if (!selectedAll.length && !productSpec && /\b(?:write|draft|create|plan|improve|review|evaluate|shorten|rewrite)\b/i.test(query)) {
+  if (!selectedAll.length && !productSpec && business.length === clauses.length && /\b(?:write|draft|create|plan|improve|review|evaluate|shorten|rewrite)\b/i.test(query)) {
     const hints = [
       ['outreach', /\b(?:outreach|cold (?:email|sequence)|email sequence|prospect|follow up)\b/i],
       ['social', /\b(?:post|thread|linkedin|tiktok|reddit)\b/i],
@@ -308,7 +404,7 @@ export function selectRequestContext(prompt, { root = moduleRoot, automatic = fa
   }
   if (!clauses.some(clause => feedbackOptIn.test(clause))) excluded.push({ name: 'feedback', reason: 'explicit-only' });
   // An explicit command stays a command. Otherwise a matching play brings its first step.
-  const requestedOutcome = clauses.map(clause => clause.replace(/^\s*(?:for|about)\s+/i, '').split(/\b(?:for|about|announcing)\b/i)[0]).join('. ');
+  const requestedOutcome = business.map(stage).join('. ');
   const play = invoked?.kind === 'command' ? null : selectPlay(productSpec ? 'product spec' : requestedOutcome, selectedAll, contract, restriction, invoked?.name);
   if (productSpec && play?.name === 'spec') selectedAll.length = 0;
   const first = play?.chain.find(step => step.command && !step.when) ?? play?.chain.find(step => step.command);
