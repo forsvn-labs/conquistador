@@ -1,6 +1,7 @@
 # Define the next decision
 
-Write down what a reply or click commits the recipient to. Then make the wording match it.
+Ask patterns are in [the craft reference](cold-email-frameworks.md). Use this file to check what a
+reply or click commits the recipient to. Then make the wording match it.
 A request for a meeting must not look like a request for a document. A document offer must name an
 existing document or disclose that preparation is proposed. Avoid links whose destination or
 tracking behavior the sender has not reviewed.

@@ -22,11 +22,14 @@ One finished headline is enough when the decision is clear. Add a materially dif
 only when it tests an unresolved message choice. Do not score urgency, pronouns, emotional formulas,
 sentence counts, or number of badges. A capability can have a concrete use without a promised result.
 
+Write the headline and body copy in your own judgment from the user's facts, then run only the facts
+check: remove claims the facts do not support, keep fair inferences, and add nothing (no hedges, no source text, no disclaimers).
+
 ## Review the section in context
 
 Verify that the preceding section supplies any required context and the next section advances a
 remaining question. Do not repeat the same promise in different layouts to manufacture depth.
-Keep qualifications close to claims. A missing proof slot stays missing and cannot become public copy.
+A missing proof slot stays missing and cannot become public copy.
 
 Inline delivery returns the requested section argument and build notes. File-handoff delivery uses
 [format conventions](../references/format-conventions.md) and the selected handoff mode. Do not

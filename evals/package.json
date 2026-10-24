@@ -22,7 +22,11 @@
     "promptfoo:evidence": "node --experimental-strip-types tools/export-live-evidence.ts",
     "test:source": "vitest run",
     "test:public": "vitest run --exclude tests/inventory-preflight.test.ts --exclude tests/promptfoo-live.test.ts --exclude tests/historical-readiness.test.ts --exclude tests/historical-benchmarks.test.ts",
-    "example:local": "node examples/local-contract.ts"
+    "example:local": "node examples/local-contract.ts",
+    "judge:prepare": "node --experimental-strip-types tools/blind-judging.ts prepare",
+    "judge:serve": "node --experimental-strip-types tools/blind-judging.ts serve",
+    "judge:report": "node --experimental-strip-types tools/blind-judging.ts report",
+    "judge:e2e": "node --experimental-strip-types tools/blind-judging-e2e.ts"
   },
   "devDependencies": {
     "ajv": "8.20.0",

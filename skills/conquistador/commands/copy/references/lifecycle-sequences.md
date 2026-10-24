@@ -104,7 +104,6 @@ Again — one job per touch. Detailed copy patterns deferred to a future expansi
 
 ## Cross-References
 
-- Review every lifecycle subject line and CTA against the supplied facts, offer terms, and actual destination. Use [copy review](copy-review.md).
-- CTA copy follows the formula in `agents/cta-agent.md` — "Return to checkout" and "Use my 10% off" both score, "Submit order" does not.
+- Check every lifecycle subject line and CTA against the supplied facts, offer terms, and actual destination: remove claims the facts do not support and add nothing.
+- A CTA names the action and what the reader gets: "Return to checkout" and "Use my 10% off" work; "Submit order" does not.
 - Timing windows and segmentation logic are NOT in this file; consult `campaign` for the campaign-level lifecycle planning.
-- For lead-magnet sequences (post-opt-in nurture, not post-purchase), see `lead-magnet-stack.md` § DM-Capture Mechanics for the 24h follow-up rule.

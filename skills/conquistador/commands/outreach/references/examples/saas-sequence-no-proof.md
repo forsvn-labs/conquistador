@@ -29,7 +29,7 @@ plus [early-stage](../modes/early-stage.md) mode. Confirmed stage: users, but no
 
 | Touch | New element | Proof substitute and its input | Ask | Subject |
 |---|---|---|---|---|
-| 1 | Who, why this reader, what the product does, its stage | Founder's reason (supplied, with permission) | One line on current practice | New |
+| 1 | The reader's question, what the product does, its stage | Founder's reason (supplied, with permission) | Interest | New |
 | 2 | What the output looks like | Sample from made-up reports (supplied lines, with permission) | The inspection they chase most | Reply in thread 1 |
 | 3 | A pilot place | Design-partner offer: **held**, exit and data handling not supplied | None until the gap closes | New |
 
@@ -38,30 +38,31 @@ Spacing is the sender's decision. The copy contains no timing claim that depends
 ## Good version
 
 The checker skips fenced blocks. To check an email, save it as its own file and run
-`node runtime/bin/conquistador.js check FILE --channel email`. Each email below had no findings.
+`node runtime/bin/conquistador.js check FILE --channel email`. Each email below has no errors or
+warnings; the address merge-tag advisory remains.
 
 ### Email 1
 
 ```markdown
 ---
 subject: Inspection dates buried in contractor PDFs
-preheader: A new tool in an early pilot, and one question
+preheader: How does your team keep them current?
+touch: first
 ---
 Hi {{first_name}},
 
-I'm {{sender_name}}, and I'm building Plinthwise. I used to run facilities for a group of office buildings, and I copied every inspection date from contractor PDFs into a spreadsheet by hand.
+How does your team keep inspection dates current when they arrive inside contractor PDFs?
 
-Plinthwise reads those service reports and lists, for each building, which inspections are due or overdue. Each date shows the report it came from. Two facilities teams use it in an unpaid pilot, and we have not measured results yet.
+Plinthwise reads those service reports and lists, for each building, which inspections are due or overdue, with the report each date came from. It's new: two facilities teams use it in an unpaid pilot, and we haven't measured results yet.
 
-I'm writing to facilities managers who look after several commercial buildings. If contractor reports are not how you track inspections, tell me and I will not write again.
+I built it after copying every one of those dates into a spreadsheet by hand when I ran facilities for a group of office buildings.
 
-If they are, I'd like to know how your team keeps those dates current today.
-Reply with one line on how you track them.
+Worth a look?
 
 {{sender_name}}
-Plinthwise, {{company_address}}
 
-To unsubscribe, reply "unsubscribe" and I won't email you again.
+Plinthwise, {{company_address}}
+Reply "unsubscribe" and I won't email you again.
 ```
 
 ### Email 2 (reply in the email 1 thread; the sending tool sets the subject)
@@ -70,24 +71,22 @@ To unsubscribe, reply "unsubscribe" and I won't email you again.
 ---
 subject: Inspection dates buried in contractor PDFs
 preheader: Three lines from a run on made-up reports
+touch: follow-up
 ---
 Hi {{first_name}},
 
-A description is hard to judge, so here is the format. These three lines come from a Plinthwise run on made-up contractor reports, not from a pilot team or a real building:
+A description is hard to judge, so here is the format, from a run on made-up contractor reports:
 
 - Test Building A: fire alarm service overdue, per the last Contractor 1 report.
 - Test Building B: lift inspection due, per the last Contractor 2 report.
 - Test Building C: no boiler service report found.
 
-Each line in the real list names the report behind it.
-
-If your team keeps a list like this by hand, I'd like to know which inspection is hardest to keep current.
-Reply with the one you chase most often.
+Which inspection does your team chase most often?
 
 {{sender_name}}
-Plinthwise, {{company_address}}
 
-To unsubscribe, reply "unsubscribe" and I won't email you again.
+Plinthwise, {{company_address}}
+Reply "unsubscribe" and I won't email you again.
 ```
 
 ### Touch 3: pre-send gap (no email drafted)
@@ -110,8 +109,8 @@ sender cannot answer, end the sequence after email 2.
 |---|---|---|
 | Founder's reason, product description, sample lines | Supplied by the founder, with permission | Wording in copy matches the input |
 | "Two facilities teams use it in an unpaid pilot" | Supplied stage | Still true on the send date; no team named |
-| "We have not measured results yet" | Supplied stage | Still true on the send date |
-| The segment tracks inspections from contractor reports | Unverified | Email 1 states it conditionally and offers a way out |
+| "we haven't measured results yet" | Supplied stage | Still true on the send date |
+| The segment tracks inspections from contractor reports | Unverified | Email 1 asks how the reader does it; it claims nothing about them |
 | Spacing between touches | Sender's decision | Not in the copy |
 | `{{company_address}}` | Placeholder | Resolves to a real postal address |
 
@@ -128,7 +127,7 @@ facilities teams [3], and teams like yours use it to pass every audit. [4] Open 
 quick call this week? Here is my calendar, or let me know who owns this. [5]
 ```
 
-1. Stock opener that adds no context. Repair: start with who is writing and why.
+1. Stock opener that adds no context. Repair: start with the reader's situation or the strongest fact.
 2. Invented observation with no source. Repair: state the situation conditionally.
 3. Unsupported superlative. Repair: describe what the product does.
 4. Upgrades the stage: implied customers and a measured outcome the founder never gave. Repair:
@@ -168,11 +167,11 @@ discounted. [12] I'll assume this isn't a priority for you unless I hear back. [
 - **The stage** appears once, in email 1, exactly as confirmed: two pilot teams, unpaid, no
   measured results, no names. The copy neither calls them customers nor says no one uses the
   product, under [early-stage](../modes/early-stage.md).
-- **Email 1** uses the founder's reason because the founder supplied it and allowed it. Relevance
-  stays conditional and offers a way out, under
-  [cold email frameworks](../frameworks/cold-email-frameworks.md) and
-  [selection evidence](../frameworks/personalization-signals.md). The ask is about current
-  practice, which the reader can answer without trusting the product ([ctas](../frameworks/ctas.md)).
+- **Email 1** opens with the reader's own question, not the sender's name. It is the no-signal
+  structure in [the craft reference](../frameworks/cold-email-frameworks.md): the costly moment as a
+  question, what the product does in one line, then the founder's reason, which the founder
+  supplied and allowed. The question claims nothing about the reader, under
+  [selection evidence](../frameworks/personalization-signals.md).
 - **Email 2** adds one asset, the supplied sample, labelled as made-up data. It goes in the thread
   because it depends on email 1. The ask changes to the inspection the reader chases, under
   [sequence mechanics](../frameworks/sequences.md).

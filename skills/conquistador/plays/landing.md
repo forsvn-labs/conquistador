@@ -46,6 +46,11 @@ Output formats and fallbacks: [format-conventions](landing/references/format-con
 5. Use the [share-card-verification](../methods/share-card-verification.md) method when the live or staged page must render correctly when
    shared.
 
+Step 2 is a pass-through: write the copy in your own judgment from the user's facts, then run only
+the facts check: remove claims the facts do not support, keep fair inferences, and add nothing (no hedges, no source text, no disclaimers). A sales page or sales letter uses the `copy` long-form method instead. The
+landing method below shapes structure, the build brief, and the test. Its LP checks may remove an
+unsupported claim or fix a misleading action; they do not rewrite the copy or add text to it.
+
 Load the landing method under [landing/](landing/) (architecture,
 hypothesis, section spec, conversion critic, visitor decisions) and its versioned review contract.
 

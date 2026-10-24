@@ -132,6 +132,10 @@ Include the ready-to-use revision whenever the medium permits. Tie every recomme
 evidence, an explicit inference, or a labeled assumption. Do not claim causality or conversion lift
 without evidence.
 
+Write any revised copy in your own judgment from the user's facts, then run only the facts check:
+remove claims the facts do not support, keep fair inferences, and add nothing (no hedges, no source text, no disclaimers). A revised sales page or sales letter uses the
+`copy` command's long-form method instead.
+
 Keep deployments, experiment activation, spend, publishing, and other external writes behind explicit
 approval.
 

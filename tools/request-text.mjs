@@ -53,7 +53,8 @@ export function requestClauses(prompt, { protectedPhrases = [] } = {}) {
   const requested = [];
 
   for (const raw of clauses) {
-    const clause = raw.trim();
+    // "Test a price increase without upsetting customers": what follows "without" is a constraint.
+    const clause = raw.replace(/\bwithout\b[\s\S]*$/i, '').trim();
 
     if (!clause || /\b(?:do not|don't|dont|never|exclude|skip|without|not asking)\b/i.test(clause)
       || /\b(?:string|fixture|example)\b/i.test(clause)
@@ -76,11 +77,15 @@ export function includesPhrase(text, phrase) {
 export function requestedBusinessClauses(prompt, options) {
   return requestClauses(prompt, options).filter(clause => {
     const text = normalizeRequest(clause);
-    if (/\b(?:what does|what is|meaning of)\b/.test(text)) return false;
+    // Definitions are questions, not tasks. "What does it take" and "what is the plan" are tasks.
+    if (/\bwhat (?:is|are) (?:a|an)\b|\bwhat does(?: \w+){1,3} mean\b|\bmeaning of\b|\bwhat is the difference\b/.test(text)) return false;
     const productBuild = /\b(?:responsive web app|approved flow|product experience|product requirements|product spec|feature spec|in product ui)\b/.test(text);
     const operation = text.split(/\b(?:for|about|after)\b/)[0];
-    const engineering = /\b(?:engineer|engineering|debug|refactor|compile|typecheck|implement|fix|patch|design|build|write|create)\b/.test(operation)
-      && /\b(?:system|queue|api|handler|webhook|database|schema|code|function|component|server|typescript|retry|retries|middleware|test|tests|bug|error|endpoint|migration|integration)\b/.test(operation);
+    // "System" and "test" are also marketing words (a content system, a test budget). They mark
+    // engineering only with an engineering verb.
+    const engineering = (/\b(?:engineer|engineering|debug|refactor|compile|typecheck|implement|fix|patch|design|build|write|create)\b/.test(operation)
+      && /\b(?:queue|api|handler|webhook|database|schema|code|function|component|server|typescript|retry|retries|middleware|bug|error|endpoint|migration|integration)\b/.test(operation))
+      || (/\b(?:engineer|engineering|debug|refactor|compile|typecheck|implement|fix|patch)\b/.test(operation) && /\b(?:system|test|tests)\b/.test(operation));
     const technicalSubject = /\b(?:code|handlers?|middleware|ci pipeline|typescript|stack trace)\b/.test(operation);
     return (!engineering && !technicalSubject) || productBuild;
   });

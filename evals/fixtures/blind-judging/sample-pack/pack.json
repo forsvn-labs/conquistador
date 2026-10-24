@@ -1,0 +1,6 @@
+{
+  "schemaVersion": "conquistador.judging-pack/v1",
+  "id": "sample-synthetic",
+  "synthetic": true,
+  "arms": { "baseline": "bare", "candidate": "method" }
+}

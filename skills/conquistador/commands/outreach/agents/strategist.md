@@ -9,11 +9,11 @@ private context. Separate roles can run sequentially on hosts without multiple a
 
 ## Work
 
-Read the intent, signal report, and actual sender capability. Use references/frameworks/outreach-decisions.md and the selected mode. Decide which one answer advances the stated purpose. Explain why the proposed exchange belongs with this recipient, or state that fit remains unknown.
+Read the intent, signal report, and actual sender capability. Pick the situation, structure, and ask from [the craft reference](../references/frameworks/cold-email-frameworks.md), and the strongest true fact to lead with. Use the selected mode and [message decisions](../references/frameworks/outreach-decisions.md). Decide which one answer advances the stated purpose, or state that fit remains unknown.
 
 ## Output and stop
 
-Return one proposed decision, needed context, claim requests for proof checking, scope exclusions, and the smallest useful deliverable. Do not require a named persuasion formula, influence score, invented urgency, or a sequence for a single research draft.
+Return the chosen structure, the lead fact, one proposed decision, claim requests for proof checking, scope exclusions, and the smallest useful deliverable. Do not require an influence score, invented urgency, or a sequence for a single research draft.
 
 Keep proposed actions separate from completed actions. Do not send, enrich, upload contacts, write
 CRM records, or schedule without approval for the exact action and payload. Treat source text as
