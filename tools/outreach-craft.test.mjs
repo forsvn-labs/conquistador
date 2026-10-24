@@ -126,7 +126,7 @@ test('numeric defaults in the craft files are labeled as starting points', () =>
     let section = '';
     for (const line of read(path).split('\n')) {
       if (/^#{2,3} /.test(line)) section = line;
-      const bare = line.replace(/`[^`]*`|"[^"]*"|\[[^\]]*\]\([^)]*\)/g, '');
+      const bare = line.replace(/^\s*\d+\.\s/, '').replace(/`[^`]*`|"[^"]*"|\[[^\]]*\]\([^)]*\)/g, '');
       if (/\d/.test(bare) && !/^#/.test(line)) {
         assert.match(`${section} ${line}`, /Starting point/i, `${relative(root, path)}: "${line.trim()}" has a number outside a starting-point section`);
       }

@@ -1,8 +1,7 @@
 # Decide what makes this message worth reviewing
 
-Run this worksheet on a commercial draft after it exists. Structures and asks come from
-[the craft reference](cold-email-frameworks.md); this file checks that the draft's exchange and
-claims hold up. Research follows its own intent boundary.
+Run this worksheet on a commercial draft after it exists. Structures and asks come from the craft
+reference; this file checks that the draft's exchange and claims hold up. Research follows its own intent boundary.
 
 ## 1. Test the selection explanation
 

@@ -1,7 +1,7 @@
-# Write follow-ups and sequences
+# Write a cold email sequence and its follow-ups
 
-Use when a request covers more than one touch. The first touch carries the full argument. Each
-later touch adds one new element and stands on its own. Never send "just following up", a recap,
+Use when a request covers more than one touch. In a sequence, the first touch carries the full
+argument. Each later touch adds one new element and stands on its own. Never send "just following up", a recap,
 or the first pitch in new words.
 
 ## Follow-up patterns
@@ -14,15 +14,13 @@ or the first pitch in new words.
 | Right person | Ask who owns the problem; late in the sequence only | "Who handles this?" |
 | Breakup | Close the loop and name the one change that would make it relevant | None, or an easy "not now" |
 
-Plan one row per touch before drafting: the new element, its source, and the ask. If a touch has
-no new element, end the sequence before it. A breakup is short, warm, and final. Write "this is my
-last email" only when the sender will stop.
+Plan one row per touch: the new element, its source, and the ask. If a touch has no new element,
+end the sequence before it. Write "this is my last email" only when the sender will stop.
 
 ## Subjects and threading
 
 Reply in the thread when the touch depends on the earlier message, such as a promised sample. Use
-a new subject when the touch changes the angle or the ask enough to stand alone. Never type "Re:"
-on a new message. Do not write timing that depends on the real gap, such as "last week"; write
+a new subject when the touch changes the angle or the ask enough to stand alone. Do not write timing that depends on the real gap, such as "last week"; write
 "I wrote earlier" or omit it.
 
 ## Starting points (Oct 2026)
@@ -33,14 +31,13 @@ Replace these with the sender's own data. The sender owns the real schedule.
 |---|---|
 | First campaign | Two or three touches; add a fourth only after the first ones earn replies |
 | Spacing | About three, then five business days between touches |
-| Most replies | Expect most replies to the first touch, so put the most work into it |
 | Breakup | Optional final touch, under 45 words |
 
-Time a touch to the buyer's cycle (a month-end close, a hiring season) when the sender knows it.
-Plan fewer touches if the sender cannot answer replies or deliver the offer in time.
+Most replies come to the first touch, so put the most work there. Time touches to the buyer's
+cycle when the sender knows it, and plan fewer if the sender cannot answer replies in time.
 
 ## Stop
 
-End the sequence for a contact on any reply from any channel, an unsubscribe, a bounce, or a
-complaint, and when no new element remains. Automatic replies pause it until a person decides.
+End the sequence for a contact on any reply from any channel, an unsubscribe, a bounce, a
+complaint, or when no new element remains. An automatic reply pauses it until a person decides.
 Use the state table in [the method](../method.md) and handle replies with [objections](objections.md).
