@@ -167,7 +167,9 @@ export function selectPlay(query, selected, contract, restriction, invoked = nul
   const names = new Set(selected.filter(item => item.matchKind !== 'signal').map(item => item.name));
   const best = Math.max(0, ...selected.filter(item => item.matchKind === 'intent').map(item => Math.max(item.score, item.signal ?? 0)));
   const bestSignal = Math.max(0, ...selected.filter(item => item.matchKind === 'signal').map(item => item.score));
-  const bestCommand = Math.max(best, bestSignal);
+  // A play signal must also beat a command named by its old ID ("evaluate-outreach").
+  const named = Math.max(0, ...selected.filter(item => item.matchKind === 'name').map(item => item.score));
+  const bestCommand = Math.max(best, bestSignal, named);
   const ranked = (contract.plays ?? []).map(play => {
     if (!allowedKind(restriction, 'workflow', play.name)) return null;
     if (invoked === play.name) return { play, named: 1, intent: 0, hits: 0, coverage: 0 };

@@ -183,3 +183,15 @@ test('ambiguous requests pick one owner: position or campaign, channels or campa
   assert.deepEqual(route('Signups fell 20% this month; figure out why'), ['diagnose']);
   assert.ok(!route('Should we raise prices for new customers only?').includes('decide'));
 });
+
+// A plain-language signal must not override a command's own first intent or old ID
+// (growth-diagnosis.e2e checks the same through the installed CLI, much slower).
+test('each command first intent still selects only that command', async () => {
+  const { loadRoutingContract } = await import('./routing-contract.mjs');
+  const contract = loadRoutingContract(root);
+  for (const [name, method] of Object.entries(contract.methods)) {
+    if (!method.intents.length) continue;
+    const route = selectRequestContext(`Use Conquistador to ${method.intents[0]}.`);
+    assert.deepEqual(names(route), [name], `${name}: ${method.intents[0]}`);
+  }
+});
