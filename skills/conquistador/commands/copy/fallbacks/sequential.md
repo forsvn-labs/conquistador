@@ -1,18 +1,24 @@
 # Sequential fallback
 
-Use when the host cannot run hook, body, CTA, social-proof, variant, voice, psychology, zero-risk,
-and critic as separate agents.
+Use when the host cannot run the writing and review roles as separate agents. Keep the same method.
+Change only the machinery.
 
-Keep the same method. Change only the machinery.
+## Draft
 
-1. Anchor audience, costly moment, mechanism, proof, objection, action, surface, and language.
-2. Write the requested copy.
-3. Apply the relevant writing roles in this order, using the matching file as a sequential pass:
-   hook, body, CTA, and social-proof as needed; then variant on Route B; then voice, psychology,
-   zero-risk, critic.
-4. Review each material claim against supplied evidence and offer terms.
-5. Run [copy review](../references/copy-review.md).
-6. Re-work the named weak unit instead of swapping one vague synonym for another.
+1. Anchor the audience, costly moment, awareness, outcome, mechanism, offer, proof, objection,
+   action, surface, and language.
+2. Write the promise and mechanism lines, then draft from the
+   [sales argument](../references/sales-argument.md) and
+   [headline patterns](../references/headline-formulas.md).
+3. Apply the writing roles as passes for the requested units: hook, body, CTA, and social proof;
+   then variant when alternatives test different bets.
+
+## Check
+
+4. Run [copy review](../references/copy-review.md) on the finished draft. Keep sourced specifics
+   exact; add source and scope beside them instead of blurring them.
+5. Apply voice, psychology, zero-risk, and critic as passes.
+6. Rework the named weak unit instead of swapping one vague synonym for another.
 
 Label this single-context. Do not call it independent corroboration. Do not invent quotes, metrics,
 customers, or consent. Sending and publishing stay behind explicit human approval.

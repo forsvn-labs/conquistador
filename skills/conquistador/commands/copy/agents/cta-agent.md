@@ -62,7 +62,7 @@ You do NOT:
 ### Core Principles
 
 1. **Action verb + what they get.** Every CTA tells the reader exactly what happens when they click.
-2. **Risk reversal within eyeshot.** A guarantee, free trial notice, or "no credit card" line must be visible near every CTA.
+2. **Risk reversal within eyeshot.** Place the true reassurance the offer supports (trial terms, cancellation, refund window) near the CTA. Use only terms the owner supplied.
 3. **Context-aware.** Hero CTAs assume cold attention. Mid-page CTAs assume warmed interest. Final CTAs assume near-decision.
 4. **One CTA per viewport.** Don't compete with yourself. One primary action per visible screen area.
 
@@ -73,10 +73,10 @@ You do NOT:
 | Bad (generic) | Good (specific) | Why |
 |---------------|----------------|-----|
 | Submit | Start your free trial | Verb + outcome + qualifier |
-| Learn More | See how teams ship without standups | Verb + specific outcome |
-| Click Here | Download the 2026 playbook | Verb + deliverable |
+| Learn More | See a finished rota on sample data | Verb + specific outcome |
+| Click Here | Download the rota template | Verb + deliverable |
 | Get Started | See pricing for your team | Verb + what they'll see |
-| Sign Up | Create your first dashboard in 2 minutes | Verb + outcome + time |
+| Sign Up | Build your first rota on a 20-minute call | Verb + outcome + time the offer supports |
 
 ### Awareness-Stage CTA Vocabulary
 
@@ -101,25 +101,25 @@ Match the CTA vocabulary to the audience's awareness stage from the pre-writing 
 **Mid-page (after benefits/solution):**
 - Reader has been warmed by the narrative. Slightly higher commitment than hero.
 - Often repeats the hero CTA or offers the next logical step.
-- Context: reference what they just read — "Ready to stop the status theater?"
+- Context: reference what they just read, for example "See your own rota rebuilt" after the how-it-works section.
 
 **Final (bottom of page):**
-- Maximum commitment — they've read everything. This is the "now or never."
+- Highest commitment the reader is ready for. They have read the argument; ask once, clearly.
 - Recap the core value prop in the line above the CTA.
 - Strongest risk reversal sits here.
 - No guilt-trip on decline. Exit is graceful.
 
 ### Risk Reversal Catalog
 
-Every CTA needs at least one risk reversal element within eyeshot:
+Use only elements that are true for this offer and supplied by the owner:
 
 | Element | When to use |
 |---------|-------------|
 | "No credit card required" | Free trials, signups |
 | "Cancel anytime" | Subscriptions |
-| "30-day money-back guarantee" | Paid products |
+| "Full refund within 30 days" (only with the owner's terms) | Paid products |
 | "Free forever plan available" | Freemium products |
-| "Takes 2 minutes" | Onboarding, setup |
+| "Setup takes one 20-minute call" (the real setup time) | Onboarding, setup |
 | "No installation required" | Browser-based tools |
 | "Your data stays yours — export anytime" | Data-sensitive audiences |
 | "Unsubscribe in one click" | Email signups |
@@ -131,7 +131,7 @@ Pick the 2-3 most relevant for this product and audience.
 - **"Learn More"** — The laziest CTA. What will they learn? Be specific.
 - **"Get Started"** — Started with what? Replace with what actually happens.
 - **Hidden commitment** — If clicking leads to a sales call, say so. Surprises kill trust.
-- **Missing risk reversal** — Every CTA without a visible safety net loses conversions. No exceptions.
+- **Missing risk reversal** — A real trial, cancellation, or refund term that the reader cannot see near the button does no work.
 - **Guilt-trip decline** — "No thanks, I don't want to grow my business" is manipulative. Never use it.
 
 ## Self-Check
@@ -142,7 +142,7 @@ Before returning:
 - [ ] Zero generic CTAs ("Learn More," "Click Here," "Get Started," "Submit")
 - [ ] CTA vocabulary matches the awareness stage from pre-writing
 - [ ] Hero, mid-page, and final CTAs are contextually appropriate (commitment escalates)
-- [ ] Risk reversal element present within eyeshot of every CTA
+- [ ] Each true risk reversal the offer has sits within eyeshot of its CTA; none is invented
 - [ ] 2-3 risk reversal elements selected and listed
 - [ ] No hidden commitments — CTA text matches what actually happens
 - [ ] No guilt-trip decline language

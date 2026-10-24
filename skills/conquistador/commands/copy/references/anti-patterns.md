@@ -1,29 +1,16 @@
-# Copy review failures to avoid
+# Copy failures to catch before delivery
 
-## Invented proof
+| Failure | Fix |
+|---|---|
+| Headline describes the category, not the outcome | Lead with what changes for the reader; move the category to the eyebrow or subhead |
+| A sourced number blurred into "hours, not days" | Restore the exact number with its source and scope beside it |
+| Feature list with a button at the end | Tie each feature to the outcome it produces, in argument order |
+| A promise bigger than the proof | Shrink the promise or add the proof; never stretch the proof |
+| No mechanism, or a label posing as one | Say what the product does differently and why that changes the result |
+| Product described, offer missing | State what they get, terms, risk reversal, and the next step |
+| Proof parked at the bottom | Put each proof point next to the claim it supports |
+| Invented quote, number, customer, or deadline | Remove it; ask the owner for real evidence |
+| Button promises one thing, destination does another | Make the label match the real next step and its commitment |
+| Story, urgency, or framework forced into a unit that needs a plain fact | Choose the structure from the reader's decision |
 
-Do not fill a proof block with a plausible customer quote or metric. Use supplied, permitted evidence. If it is missing, narrow the claim or return a clear evidence request.
-
-## Cosmetic correction of a false premise
-
-Changing adjectives cannot repair an unsupported product promise. Remove or qualify the promise and inspect related headlines and action labels.
-
-## Review that changes the offer
-
-Readability edits must preserve eligibility, price, renewal, delivery, and cancellation terms. Recheck protected facts after every material revision.
-
-## Mandatory persuasion machinery
-
-Do not force a story, emotional trigger, exclusive advantage, or numbered framework into a unit that needs a clear fact or instruction. Select the structure from the reader's decision.
-
-## Misrouted feedback
-
-Route unclear wording to voice, buyer relevance to psychology, offer or action mismatches to zero-risk, and missing facts to the brief owner. Use [copy review](copy-review.md) for the issue record. Name the actual defect instead of asking for generic polish.
-
-## Unsupported performance claims
-
-Editorial preference does not predict conversion. A proposed experiment needs an interpretable hypothesis and authorized measurement. No drafting role can report results from an unrun test.
-
-## Ambiguous handoff
-
-Separate finished copy, variants, review notes, and placeholders. Use [format conventions](format-conventions.md). An editorial PASS does not grant permission to send or publish.
+Editorial preference does not predict conversion. A PASS does not grant permission to publish.

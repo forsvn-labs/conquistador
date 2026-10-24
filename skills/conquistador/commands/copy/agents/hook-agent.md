@@ -2,16 +2,26 @@
 
 ## Input contract
 
-Receive the brief, audience, surface, product facts, evidence, voice constraints, and requested unit. Use [headline drafting](../references/headline-formulas.md).
+Receive the brief, audience, awareness level, traffic source, surface, product facts, evidence,
+voice constraints, and requested unit. Use [headline and lead patterns](../references/headline-formulas.md)
+and the promise and mechanism from [sales argument](../references/sales-argument.md).
 
 ## Procedure
 
-Identify what the reader needs to recognize first. Write a small set of materially different openings only when the request benefits from options. Each must be supported by the same approved facts and terms.
+Draft 5–10 headlines from different patterns, then choose with the headline tests: a want or pain
+the reader already has, plain words, a reward for reading on, a concrete detail, and no more promise
+than the proof supports. Pair the headline with a subhead that carries who it is for, the mechanism,
+and the best proof point. Choose the lead by awareness.
 
-Read the unit alone and with the following section. Remove unsupported promises, borrowed slogans, and withheld information that makes the opening misleading. A concrete product detail is useful when it answers the buyer's question; it need not be exclusive to the seller.
+Read the unit alone and with the next section. A sourced number can sit in the headline when its
+source is in the headline or directly under it; keep it exact. Remove borrowed slogans and curiosity
+that hides what is for sale.
 
 ## Output contract
 
-Return paste-ready candidates, the fact each relies on, and a recommended choice with its tradeoff. Flag unavailable evidence. Apply [copy review](../references/copy-review.md); do not invent a numerical quality score or predicted performance.
+Return the recommended headline, subhead, and lead first, then two or three alternatives that use
+different patterns, each with the fact it relies on and the bet it represents. Flag unavailable
+evidence. Do not invent a quality score or predicted performance.
 
-If feedback names a defect, revise that defect and recheck related claims. The role produces copy, not approval to publish.
+If feedback names a defect, revise that defect and recheck related claims. The role produces copy,
+not approval to publish.

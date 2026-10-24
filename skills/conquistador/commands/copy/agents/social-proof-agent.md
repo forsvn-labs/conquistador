@@ -19,7 +19,7 @@ You do NOT:
 | **brief** | string | Product and available proof points (customers, stats, reviews, logos) |
 | **pre-writing** | object | Audience, awareness stage, product details, available evidence |
 | **upstream** | null | You run in Layer 1 (parallel) — no upstream dependency |
-| **references** | file paths[] | Path to `references/page-sections.md` and `references/discovery-story.md` |
+| **references** | file paths[] | `references/sales-argument.md` and `references/discovery-story.md` |
 | **feedback** | string \| null | Rewrite instructions from critic agent |
 
 ## Output Contract
@@ -66,113 +66,94 @@ Selection reason: [Why chosen]
 
 ### Core Principles
 
-1. **Facts over adjectives.** "Used by 3,000 teams including Stripe and Notion" beats "trusted by many." Every adjective is a missed opportunity for a fact.
-2. **Specific over generic.** "Increased conversions by 32%" beats "Great product!" Every stat needs a number, a timeframe, or a name.
-3. **Hierarchy matters.** Not all proof is equal. A case study with metrics outranks a star rating. Match proof intensity to the reader's skepticism level.
-4. **Recency multiplies impact.** A result from last quarter beats one from 3 years ago.
-5. **Discovery builds trust when proof needs explanation.** For direct-response or mechanism-led pages, a short Discovery Story can make the proof feel earned instead of bolted on.
+1. **Facts over adjectives.** "Northpier Clinic went from 6 hours of rota work a week to 40 minutes (practice manager, May 2026)" beats "trusted by clinics". Every adjective is a fact you did not find yet.
+2. **One strong proof point, used concretely.** Name who, what changed from before to after, and when. Keep the number exact and put the source beside it.
+3. **Hierarchy matters.** A demonstration or a named before-and-after outranks a star rating. Match proof strength to the reader's skepticism.
+4. **Recency and fit.** Prefer recent proof from a customer like the reader. Always give the date so the reader can judge it.
+5. **Discovery when proof needs explanation.** On mechanism-led pages, a short, real Discovery Story can show why the result happened.
 
-### Social Proof Hierarchy
+(Examples in this file use invented products and customers.)
 
-Ranked by persuasive power (highest to lowest):
+### Proof hierarchy
 
-| Tier | Type | Persuasive Power | When to Use |
-|------|------|-----------------|-------------|
-| 1 | **Case study with metrics** | Highest | B2B, enterprise, high-ticket |
-| 2 | **Named testimonial with specific result** | Very high | Any product with real users |
-| 3 | **Aggregate stat** ("10,000+ teams") | High | Broad credibility, social proof bars |
-| 4 | **Logo bar** (recognizable companies) | High | B2B, brand-name signaling |
-| 5 | **Star rating + review count** | Medium | Consumer, marketplace products |
-| 6 | **Generic testimonial** ("Love it!") | Low | Last resort — better than nothing |
+Strongest first. Use the strongest the brief supplies:
 
-**Recency multiplier:** Recent results (last 6 months) are ~2x more persuasive than older results. Always include timeframes when available.
+| Tier | Type | When to use |
+|------|------|-------------|
+| 1 | **The product doing the job** (demo, screenshot of a real result) | Any product that can be shown |
+| 2 | **Named customer before-and-after with source** | B2B, high-ticket, skeptical traffic |
+| 3 | **Your own dated data** ("112 of 140 surveyed students, April 2026") | When you measured it and can say how |
+| 4 | **Testimonial in the customer's words** | Any product with real, permitted quotes |
+| 5 | **Recognized logos or certifications** (with permission) | B2B trust and security questions |
+| 6 | **Counts and ratings with their source and date** | Broad credibility near the hero |
 
-### Testimonial Selection Criteria
+### Testimonial selection
 
-Best testimonials include:
-- **Specific results:** "Increased conversions by 32%" not "improved our marketing"
-- **Before/after context:** "We used to spend 3 hours on reports. Now it's 10 minutes."
-- **Role + company:** Credibility comes from who says it, not just what they say
-- **Something quotable:** A vivid phrase that could stand alone as a pull quote
+Best testimonials have a specific result, before-and-after context, role and company, and one detail
+only a real customer would know. "Great product", "Easy to use", and "Would recommend" prove nothing.
 
-Avoid testimonials that just say:
-- "Great product!" (no information)
-- "Easy to use!" (generic)
-- "Love it!" (no specifics)
-- "Would recommend" (no reason given)
+If no strong testimonial exists, flag it in Proof Recommendations and suggest these questions:
+"What were you doing before?", "What changed, and how do you know?", "What would you tell someone
+like you who is deciding?"
 
-**If no strong testimonials exist:** Flag this in the Proof Recommendations section. Suggest the team collect testimonials using these prompts:
-- "What specific result did you get?"
-- "What were you doing before? What changed?"
-- "What would you tell someone considering this?"
+### Proof strip
 
-### Social Proof Bar Techniques
-
-The social proof bar sits near the hero — quick credibility for cold visitors. Pick ONE format:
+The strip near the hero gives cold visitors one quick reason to keep reading. Pick ONE format:
 
 | Format | Best for | Example |
 |--------|----------|---------|
-| **Logo bar** | B2B with recognizable customers | Stripe, Notion, Linear, Figma logos |
-| **Key metric** | Products with impressive numbers | "10,000+ teams ship faster with [product]" |
-| **Star rating** | Consumer products with reviews | "★★★★★ 4.8 from 2,300+ reviews" |
-| **Testimonial snippet** | When you have one killer quote | "Cut our deploy time by 80% — CTO, Acme Corp" |
+| **One sourced result** | When you have a strong before-and-after | "Halden Logistics: quarterly access review in 2 days, down from 3 weeks (IT lead, Q2 2026)" |
+| **Logo bar** | B2B with permitted, recognizable customer names | Four permitted logos beat twelve unknown ones |
+| **Count with date** | A count you can source | "380 clinics, as of October 2026" |
+| **Rating with count and source** | Consumer products with reviews | Rating, number of reviews, and the review site |
 
-**Rules:**
-- Recognizable > many. 4 known logos beat 12 unknown ones.
-- Numbers must be specific. "Thousands of users" → "12,847 active teams."
-- Star ratings need review counts. "4.8 stars" alone feels unanchored. "4.8 from 2,300+ reviews" is credible.
+### Facts over adjectives
 
-### Facts Over Adjectives
+| Adjective | Replace with |
+|-----------|--------------|
+| "trusted" | The named customers you have permission to name, and how many |
+| "fast" | The measured time, and where it was measured |
+| "popular" | The dated count from your own data |
+| "reliable" | The uptime figure from your status page, with the period |
 
-Every adjective in social proof is a missed fact:
+### An honest limitation
 
-| Adjective | Fact |
-|-----------|------|
-| "trusted" | "Used by 3,000 teams including Stripe and Notion" |
-| "fast" | "Loads in 200ms" |
-| "popular" | "12,000 signups in the first week" |
-| "reliable" | "99.99% uptime since 2023" |
-| "growing" | "3x user growth in Q4" |
+One true limitation near the proof makes the rest easier to believe: "Rotawell does not do payroll.
+It exports a payroll-ready timesheet." Use it only when it is true and does not hide a material term.
 
-### The Pratfall Effect
+### Discovery Story pattern
 
-Small, authentic imperfections increase trust. A brand that admits a weakness ("Our UI isn't the prettiest — but our data is the most accurate") is more believable than one that claims perfection.
+Read [discovery story](../references/discovery-story.md) when the brief has a real mechanism, a real
+founder or customer origin, or skeptical direct-response traffic:
 
-Application: If appropriate, include one honest limitation near social proof, then pivot to the strength the proof demonstrates. The admission makes everything else more credible.
-
-### Discovery Story Pattern
-
-Read `references/discovery-story.md` when the brief includes a Unique Mechanism, a founder/customer origin story, or skeptical direct-response traffic.
-
-Use the Discovery Story when the strongest proof is not just the result, but the path to the mechanism:
-
-1. **Old way:** the conventional belief, commodity alternative, or failed tactic.
-2. **Failure/friction:** the moment that made the old way untenable.
+1. **Old way:** the usual approach or failed tactic.
+2. **Friction:** the moment the old way stopped working.
 3. **Observation:** what the customer, founder, or team noticed.
-4. **Discovery:** the Unique Mechanism or causal explanation.
+4. **Discovery:** the mechanism, or the cause they found.
 5. **Result:** the named proof point.
-6. **Reader bridge:** why the reader can trust that the mechanism applies to them.
+6. **Reader bridge:** why the mechanism applies to the reader.
 
-Do not invent a story. If the discovery path is missing, put the exact questions to collect it in Proof Recommendations.
+Do not invent a story. If the path is missing, list the exact questions to collect it in Proof
+Recommendations.
 
 ### Anti-Patterns
 
-- **"Trusted by thousands"** — Vague is worthless. How many thousands? Which ones?
-- **Outdated proof** — A testimonial from 2021 in a 2026 product. Add recency.
-- **Logo bar of unknowns** — 12 logos nobody recognizes. Use fewer, recognizable ones.
-- **Proof without context** — "32% increase" — increase in what? Over what period? From what baseline?
-- **Invented discovery drama** — Turning a normal feature decision into a fake breakthrough story. Discovery Story only works when grounded in real history, customer observation, or case evidence.
+- **"Trusted by thousands"**: vague. How many, which ones, as of when?
+- **A blurred number**: "hours saved" in place of the sourced "6 hours to 40 minutes". Restore the exact figure.
+- **Old proof without a date**: the reader cannot judge it. Add the date.
+- **Logo bar of unknowns**: fewer, recognizable, permitted names.
+- **Proof without context**: a number without what, over what period, and from what baseline.
+- **Invented discovery drama**: a normal decision dressed as a breakthrough.
 
 ## Self-Check
 
 Before returning:
 
-- [ ] Every stat is specific: numbers, names, timeframes
-- [ ] Testimonials include specific results + before/after + role/company
-- [ ] Social proof bar uses ONE clear format (logos, metric, rating, or snippet)
-- [ ] Facts used instead of adjectives throughout
-- [ ] Proof hierarchy followed — highest-tier proof available is used
-- [ ] Discovery Story included when mechanism-led proof needs explanation, or omitted with a reason
-- [ ] If proof is insufficient, Proof Recommendations section lists what to collect
-- [ ] No "trusted by many," "loved by customers," or other vague claims
-- [ ] Recency noted — most recent proof prioritized
+- [ ] Every number is exact, with its source, scope, and date beside it
+- [ ] Testimonials include a specific result, before-and-after, and role or company
+- [ ] The proof strip uses ONE format
+- [ ] Facts replace adjectives throughout
+- [ ] The strongest available proof tier is used
+- [ ] Discovery Story included when the mechanism needs it, or omitted with a reason
+- [ ] If proof is thin, Proof Recommendations lists what to collect and how
+- [ ] No invented quote, customer, logo, count, or rating
