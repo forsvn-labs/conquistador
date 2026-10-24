@@ -2,7 +2,7 @@
 
 Use for long-form copy when the host cannot run the writing and review roles as separate agents.
 Keep the same method. Change only the machinery. Short-form copy never uses the roles; it follows the
-[short-form checklist](../references/short-form-copy.md) in one pass.
+[short-form mode](../ENTRY.md) in one pass.
 
 ## Draft
 

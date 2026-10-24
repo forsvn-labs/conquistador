@@ -27,7 +27,7 @@ does not move the reader to the next decision.
   fine when every section answers a real question.
 - **Launch page:** what changed and what it means for the reader, a short demo, early proof if it
   exists, the launch terms with their real end date, one action.
-- **Units under about 150 words:** use the [short-form checklist](short-form-copy.md) instead of this
+- **Units under about 150 words:** use the [short-form mode](../ENTRY.md) instead of this
   library.
 
 A list of features with a button at the end is not an argument. Connect each feature to the

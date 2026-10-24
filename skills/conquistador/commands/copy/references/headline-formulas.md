@@ -1,9 +1,8 @@
 # Headline patterns
 
 Use these for a landing page, product page, or offer page headline. Start from the reader's want,
-pain, or identity, in their words, not from the product. In short-form work, follow the
-[short-form checklist](short-form-copy.md): the most concrete specific goes in the headline, and each
-option in a set takes its own angle. In long-form work, pick the proof and mechanism first
+pain, or identity, in their words, not from the product. Short-form work does not use this file; it
+follows the [short-form mode](../ENTRY.md). In long-form work, pick the proof and mechanism first
 ([sales argument](sales-argument.md)), then draft 5–10 headlines from different patterns and keep
 the one that passes the tests below. Examples use invented products.
 

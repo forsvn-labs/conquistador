@@ -2,7 +2,7 @@
 
 Draft long-form copy from this file: sales pages, landing pages, offer pages, and anything over about
 150 words. Headlines are in [headline patterns](headline-formulas.md); annotated pairs are in
-[examples](examples/direct-response-examples.md). Short units use the [short-form checklist](short-form-copy.md).
+[examples](examples/direct-response-examples.md). Short units use the [short-form mode](../ENTRY.md).
 Run [copy review](copy-review.md) after the draft exists. It checks claims; it does not set the voice.
 
 ## Start from the reader

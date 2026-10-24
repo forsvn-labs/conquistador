@@ -6,8 +6,8 @@ its source, period, or scope recorded, an operator note follows the copy; it nev
 The craft is in the [sales argument](../sales-argument.md) and [headline patterns](../headline-formulas.md).
 
 The briefs below list everything true about each product. A strong page selects from them; it does
-not use every fact, and it never cuts the offer terms. Units marked `form: short` follow the
-[short-form checklist](../short-form-copy.md); units marked `form: long` follow the sales argument.
+not use every fact, and it never cuts the offer terms. Every unit here is long-form (`form: long`)
+and follows the sales argument. Short-form copy has no examples; see the [short-form mode](../../ENTRY.md).
 
 - **Rotawell:** shift scheduling software. Audience: dental clinics with 5 to 40 staff. Pain:
   practice managers rebuild the rota by hand, often on Sunday evening, after staff swap shifts by
@@ -31,136 +31,12 @@ not use every fact, and it never cuts the offer terms. Units marked `form: short
   weeknight finishes. Proof: 112 of the 140 spring 2026 students who answered the week-four survey
   cook at least four dinners a week. The next group opens Monday, 3 November. Offer terms:
   `$79`, `30 days`.
-- **Inboxfix:** a fixed-scope email deliverability repair. Audience: online stores whose marketing
-  email lands in spam. It fixes DNS records and list problems, then proves the fix with an inbox
-  placement test. $1,500, 10 business days; the owner authorizes a full refund if the agreed test
-  still fails after the fix. Sold by a 15-minute fit call. Offer terms: `$1,500`,
-  `10 business days`.
-- **Tallyhand:** invoice reminders. Audience: freelancers who invoice clients directly. It sends
-  polite reminders from the freelancer's own email address at 3, 7, and 14 days overdue and stops
-  when the invoice is paid. $12 a month. Pain: chasing a client for money feels awkward.
-  Offer terms: `$12 a month`.
-- **Keyhold Repair Log:** a free spreadsheet from Keyhold, property management software. Audience:
-  landlords with 1 to 10 rental units. It logs each repair by unit with its cost, flags any repair
-  open longer than 14 days, builds a year-end repair cost summary, and comes with a 4-minute setup
-  video. Exchange: an email address. Offer terms: `free`.
-- **Kinroll:** an iOS app. Audience: parents of children aged 6 to 12. Kids see their chore list and
-  tick chores off; the allowance pays out to the child's own card every Friday. Free; Kinroll Plus
-  at $4.99 a month adds savings goals. 4.8 from 2,100 App Store ratings. Review, permission given:
-  "He asks me what chores are left now." Offer terms: `free`, `$4.99 a month`.
 - **Stride Nine:** a running app. Audience: adults who have never run. A 9-week plan of three
   30-minute sessions a week, from one minute of running and ninety seconds of walking in week one
   to 30 minutes of running without a break in week nine. An audio coach says when to run and when to
   walk. First week free, then $39.99 a year, renewing yearly; cancel any time in Settings. 4.7 from
   12,400 App Store ratings. Offer terms: `$39.99 a year`, `Renews yearly`,
   `Cancel any time in Settings`.
-- **Stillnight:** a contoured blackout sleep mask. Audience: people who sleep badly when it is
-  light. Deep cups curve away from the eyes, so nothing touches the eyelids. $29, a 60-night trial
-  with a full refund, and 4.6 from 5,200 reviews on its own store.
-  Offer terms: `$29`, `full refund`.
-
-## Headlines
-
-### 1. The product described, not the reader's want
-
-**Weak**
-
-> Automated invoice reminder software for freelancers
->
-> Tallyhand sends reminder emails at 3, 7, and 14 days overdue from your own email address.
-
-Accurate and lifeless. The headline is a directory listing: category, feature, audience. Nothing
-touches why a freelancer would pay: asking a client for money is awkward, so they put it off.
-
-**Strong** (check: web; leads with: want; form: short)
-
-> Get paid without chasing: reminders at 3, 7, and 14 days overdue
->
-> They go from your own email address and stop the moment the client pays. You never write "just following up" again.
-
-The want comes first; "without chasing" names the part they hate. The 3-7-14 schedule is the most
-concrete fact the brief holds, so it makes the promise real in the headline itself. The subhead is
-the mechanism. The last line is a fair inference (the tool sends the reminders, so the freelancer
-does not), and it is the line readers remember.
-
-### 2. An unknown customer's result as the headline
-
-**Weak**
-
-> Northpier Clinic cut rota work from 6 hours a week to 40 minutes
->
-> Northpier, a clinic with 12 staff, measured the change over four weeks. Rotawell is shift scheduling for dental clinics with 5 to 40 staff.
-
-The reader has never heard of Northpier, so the headline is about someone else. The subhead becomes
-a footnote, then restates the audience.
-
-**Strong** (check: web; leads with: want; form: short)
-
-> Get your Sunday evenings back
->
-> Staff swap shifts inside Rotawell, and the rota updates itself. Northpier Clinic went from 6 hours of rota work a week to 40 minutes.
-
-The headline is the evening the reader loses to the rota. The subhead gives the mechanism, then the
-same result as proof, where it supports the promise instead of replacing it. A name the reader knew
-would earn the headline; Northpier does not.
-
-*Operator note:* 6 hours to 40 minutes is Northpier Clinic (12 staff), measured by its practice
-manager over four weeks in May 2026. Confirm written permission to name the clinic.
-
-### 3. A number blurred, or printed like a footnote
-
-**Weak**
-
-> Run access reviews in days, not weeks
->
-> Median review time fell sharply across customer teams (Auditrail usage data, Q2 2026).
-
-Two opposite mistakes. The headline blurs an exact result into a slogan, and the subhead still
-prints the source like a footnote.
-
-**Strong** (check: web; leads with: outcome; form: short)
-
-> Finish the quarterly access review in 3 days, not 19
->
-> That's the median across 31 IT teams on Auditrail. Every account from your identity provider and 40 connected apps lands in one list, and managers approve or revoke access in one pass.
-
-The exact number leads. "Across 31 IT teams" is the only qualifier the reader needs to trust a
-median; the rest of the provenance moves off the page.
-
-*Operator note:* 19 days to 3 is the median quarterly review time across 31 customer teams, from
-Auditrail usage data for Q2 2026.
-
-## Headline sets
-
-### 4. Five headlines for a product page
-
-**Weak**
-
-> 1. Contoured blackout sleep mask with zero eyelid pressure
-> 2. The Stillnight 3D sleep mask
-> 3. Rated 4.6 stars from 5,200 reviews
-> 4. $29, with a 60-night trial
-> 5. Premium comfort for better sleep
-
-Four lines describe the product, its rating, or its price; the fifth is an empty adjective. A set
-should give the owner five different reasons to buy, not five spec lines.
-
-**Strong** (check: web; leads with: set; form: short; product: Stillnight; angles: outcome, pain, proof, objection, identity)
-
-> 1. Sleep through the sunrise
->    Total dark, and nothing touches your eyelids. $29.
-> 2. Hate the feel of a mask on your eyelids?
->    Deep cups curve away from your eyes, so you can blink and still see nothing.
-> 3. Why 5,200 reviews average 4.6 stars
->    The cups keep the light out and stay off your eyes.
-> 4. Sleep in it for 60 nights. Then decide.
->    If you don't love it, send it back for a full refund. $29.
-> 5. The sleep mask for people who hate sleep masks
->    The cups never touch your eyelids, so there is nothing to hate.
-
-Five different angles: the outcome, the pain, the proof, the price-and-risk objection, and an
-identity. Two options on one angle would waste a slot. Features sit in the subheads as reasons, and
-the price and refund appear where a buyer weighing the risk looks for them.
 
 ## Leads
 
@@ -241,37 +117,6 @@ in two lines.
 
 ## Hero sections
 
-### 9. SaaS trial hero
-
-**Weak**
-
-> AI-powered scheduling that revolutionizes your clinic
->
-> The all-in-one platform for modern healthcare teams.
->
-> [Get started]
-
-Labels and buzzwords, no outcome, no proof, and a button that does not say what happens next.
-
-**Strong** (check: landing; leads with: pain; form: short; product: Rotawell)
-
-> Stop spending Sunday evenings fixing the rota
->
-> Staff swap shifts in the app and the rota fixes itself. Northpier Clinic went from 6 hours of rota work a week to 40 minutes.
->
-> - Swaps: approved in one tap, not lost in a group chat
-> - One rota: everyone sees the same version on their phone
-> - Setup: your current rota imported on a 20-minute call
->
-> Start your 14-day free trial
->
-> No card. $49 a month per clinic after that.
-
-The headline is the pain, pinned to the evening it costs. The subhead is one mechanism and one
-proof. The bullets scan: a label, then what it saves. The trial and the price stay under the button,
-because a buyer needs both to click. Left out on purpose: the clinic count, the audience, and the
-provenance of the Northpier number.
-
 ### 10. Demo-led B2B hero
 
 **Weak**
@@ -296,135 +141,6 @@ provenance of the Northpier number.
 
 The headline is the fear an IT lead carries into every audit. One striking proof point makes it
 concrete. The demo becomes an offer: their own data and a fixed length.
-
-### 11. Offer page hero for a service
-
-**Weak**
-
-> Comprehensive Email Deliverability Audit for $1,500
->
-> We analyze 50+ factors affecting your sender reputation.
-
-It sells the activity, not the result. "50+ factors" is the seller's work, and there is no time
-frame or risk term.
-
-**Strong** (check: landing; leads with: want; form: short; product: Inboxfix)
-
-> Get your emails out of spam in 10 business days
->
-> We fix the DNS records and list problems that send your mail to spam, then prove it with an inbox placement test.
->
-> $1,500, fixed. If the test still fails after the fix, you get every dollar back.
->
-> Book a 15-minute fit call
-
-An audit became an offer: outcome and time in the headline, the mechanism and proof method in the
-subhead, and the risk reversal as a selling line, not fine print.
-
-## Lead magnet pages
-
-### 12. Free spreadsheet for landlords
-
-**Weak**
-
-> Track repairs across your rental units with a free spreadsheet
->
-> The Keyhold Repair Log is a free spreadsheet for landlords with 1 to 10 rental units, made by Keyhold, property management software. Enter your email address to get it.
->
-> - Repair log by unit
-> - 14-day overdue flag
-> - Year-end summary tab
-> - 4-minute setup video
->
-> [Get the free Repair Log]
-
-A literal description: the file, its maker, its audience, its tabs. The reader has to work out why
-any of it matters.
-
-**Strong** (check: landing; leads with: pain; form: short; product: Keyhold Repair Log)
-
-> No repair left open past 14 days without you knowing
->
-> A free spreadsheet that logs every repair by unit, flags the slow ones, and adds up the year for your accountant.
->
-> - Repair log: every open repair, in every unit, in one place
-> - 14-day flag: catch a slow fix before it becomes an angry tenant
-> - Year-end summary: one repair total, no digging through old invoices
-> - Setup video: 4 minutes, start to finish
->
-> Get the free Repair Log by email
-
-The headline is the pain, made concrete by the 14-day flag. Each bullet names what is inside, then
-what the landlord gets from it, so the list scans. "No digging through old invoices" is a fair
-inference: the sheet already holds each repair's cost. The subhead and button both say free. The
-maker and the unit range stay off the hero.
-
-## Consumer app pages
-
-### 13. App hero
-
-**Weak**
-
-> A chore and allowance app for families
->
-> Kinroll is an iOS app for parents of children aged 6 to 12. Kids tick off chores, and the allowance pays out every Friday. Rated 4.8 from 2,100 App Store ratings.
->
-> - Chore lists for each child
-> - Weekly allowance payouts
-> - Kinroll Plus adds savings goals for $4.99 a month
->
-> [Download Kinroll on the App Store]
-
-Category headline, restated audience, and bullets that list features without saying what a parent
-gets.
-
-**Strong** (check: landing; leads with: want; form: short; product: Kinroll)
-
-> Chores they actually do, because Friday pays
->
-> Kids tick off chores in Kinroll, and their allowance lands on their own card every Friday.
->
-> - Chore list: kids see what's left without you reminding them
-> - Friday payday: the allowance pays out on its own. No cash, no IOUs.
-> - 4.8 from 2,100 App Store ratings: "He asks me what chores are left now."
->
-> Get Kinroll free
->
-> Savings goals come with Kinroll Plus, $4.99 a month.
-
-The headline is what parents want, with Friday as the concrete reason. The rating and the review
-share one bullet, so the proof is one line in a parent's voice. The button says free, and the paid
-tier is a plain term under it, so no parent meets the price later as a surprise.
-
-### 14. Paywall after the free week
-
-**Weak**
-
-> Upgrade to Stride Nine Premium
->
-> Unlock all features, including the full 9-week plan and audio coaching. $39.99 per year. Subscription renews automatically unless cancelled.
->
-> [Subscribe]
-
-It sells "features" to someone who just finished their first week, and the renewal term reads like
-a warning.
-
-**Strong** (check: landing; leads with: identity; form: short; product: Stride Nine)
-
-> You ran week one. Eight to go.
->
-> Keep the plan and the coach that got you this far, all the way to 30 minutes without stopping.
->
-> - Three runs a week, 30 minutes each
-> - Your coach tells you when to run and when to walk
-> - Rated 4.7 from 12,400 App Store ratings
->
-> Start week two for $39.99 a year
->
-> That's about $3.33 a month. Renews yearly. Cancel any time in Settings.
-
-The headline speaks to who the user has just become. Renewal and cancellation are plain terms near
-the button, not warnings, and the per-month arithmetic frames the price.
 
 ## A short sales argument
 

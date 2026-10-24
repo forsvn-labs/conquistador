@@ -481,9 +481,9 @@ test('the short-form checklist and short-form examples are retired', () => {
 // Long-form files at fa868a5 (round 3). A change here needs its own blind test first.
 // Round 4 changed only the short-form link in sales-argument, long-form-library, headline-formulas, and sequential.
 const LONG_FILES = {
-  'commands/copy/references/sales-argument.md': '4c91b0baf343f4a4',
-  'commands/copy/references/long-form-library.md': 'f1003c270ab42367',
-  'commands/copy/references/headline-formulas.md': 'b7a02a65efe64a3c',
+  'commands/copy/references/sales-argument.md': '375a4fe87f23e61a',
+  'commands/copy/references/long-form-library.md': '36f30eb72627725d',
+  'commands/copy/references/headline-formulas.md': '8883a1cfbaa3caa8',
   'commands/copy/references/copy-review.md': 'cd69833a15e23077',
   'commands/copy/references/anti-patterns.md': 'aeb4d1e095bdef88',
   'commands/copy/references/belief-disruption.md': 'c73addbaed10cb3a',
@@ -502,7 +502,7 @@ const LONG_FILES = {
   'commands/copy/agents/variant-agent.md': 'fa0a4ab44792b0c1',
   'commands/copy/agents/voice-agent.md': 'fbcadfb8f7526d7e',
   'commands/copy/agents/zero-risk-agent.md': '11bfc849bedf0fce',
-  'commands/copy/fallbacks/sequential.md': 'b10b6b2456bb16d4',
+  'commands/copy/fallbacks/sequential.md': '2ba387345dc57311',
 };
 const LONG_SECTIONS = {
   'Anchor long-form work': 'c278bfca3b4c7c54',
