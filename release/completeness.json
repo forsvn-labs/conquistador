@@ -69,7 +69,7 @@
     {
       "name": "copy",
       "version": "3.0.0",
-      "sha256": "1dab5d7afa3dc359449cc1daa1a30027489294a73a85fadc8d7c77719b22b959"
+      "sha256": "55f4dac6b705afb6265d106a4a1cc181f40c5b8f48e635f875719b05fb524fd2"
     },
     {
       "name": "creative",
@@ -1295,7 +1295,7 @@
     },
     {
       "path": "conquistador/commands/convert/references/examples/signup-page-rewrite.md",
-      "sha256": "c1a5f45bf0c3a4e6c2dd263d2d50457fb6d8c7e4cbeb4bad7e0910b1eb067328"
+      "sha256": "e437ceeeb2489cff4b785d688da61725f62e0978d24b1ee1b36c974f170b9df3"
     },
     {
       "path": "conquistador/commands/convert/references/hypothesis-framework.md",
@@ -1327,11 +1327,11 @@
     },
     {
       "path": "conquistador/commands/copy/ENTRY.md",
-      "sha256": "03682c246b1c5228f0ddaee5ca07adbce975f09723e4f5e403d2f6165f5dfa9b"
+      "sha256": "70b9f1f1825cccda539a18c17902ae5cd46790d5c928951b02b159aaa8b1800e"
     },
     {
       "path": "conquistador/commands/copy/agents/body-agent.md",
-      "sha256": "5aae9fe12e57ed25a3e3530065893ae0d7922eaeb6909d01dc1eaba3021f564a"
+      "sha256": "e8b099c49cc5f73dd1504877456e50b23250f117fc67bab0ba711c362c185d90"
     },
     {
       "path": "conquistador/commands/copy/agents/critic-agent.md",
@@ -1371,11 +1371,11 @@
     },
     {
       "path": "conquistador/commands/copy/fallbacks/sequential.md",
-      "sha256": "e323ccaa84ede1eb38306df19c663380012e6362b6543f28cfe6054efabad559"
+      "sha256": "b10b6b2456bb16d49c2558b412446ec2c3314497c5b0df3b808598ed6999ce31"
     },
     {
       "path": "conquistador/commands/copy/references/anti-patterns.md",
-      "sha256": "a0e577999aea590d96e0ac7e095fcafe03779d90f87360f9b8ce68ec6355c0f1"
+      "sha256": "aeb4d1e095bdef88403b06f81defb235dde58d400a680643f8d8f3c6fce5eb0a"
     },
     {
       "path": "conquistador/commands/copy/references/belief-disruption.md",
@@ -1395,7 +1395,7 @@
     },
     {
       "path": "conquistador/commands/copy/references/examples/direct-response-examples.md",
-      "sha256": "b2114136723bb9a2ffc61785cc55946d2869482e995a8262d47d75936a5b0fea"
+      "sha256": "f3e17a45441ae1406d73ef2891cedaf874613e3a355db93eb98e1103b4da12b1"
     },
     {
       "path": "conquistador/commands/copy/references/format-conventions.md",
@@ -1403,19 +1403,19 @@
     },
     {
       "path": "conquistador/commands/copy/references/headline-formulas.md",
-      "sha256": "b5927821a0f6ea8709d26907b12ce99fbf57fddb09df849270ec291be4b7a772"
+      "sha256": "b7a02a65efe64a3cf6aabcca74d2f27880ee18a4d854c5856c31a82f52811e2a"
     },
     {
       "path": "conquistador/commands/copy/references/lead-magnet-stack.md",
-      "sha256": "3e4b0ca6ac6f28bb9b0d11061c6587f3cd7ae7721b4fce3f8e8d6d4687b6af2e"
+      "sha256": "8f4f8c1261927eaf9ff8d90ebf8a8cfb718b8537bfbdde54da154ebf1afa2a0a"
     },
     {
       "path": "conquistador/commands/copy/references/lifecycle-sequences.md",
       "sha256": "62e3142190511029cae41301137095cc2418ddf3a27bbfc603f037034824acfa"
     },
     {
-      "path": "conquistador/commands/copy/references/page-sections.md",
-      "sha256": "762243be88f252080ccd03bd31582068ddf6d56e79958d6fa253e7fde0f2038e"
+      "path": "conquistador/commands/copy/references/long-form-library.md",
+      "sha256": "f1003c270ab423675d7bbb18abf68ab032cf937e2317673172944f7795d7fc9c"
     },
     {
       "path": "conquistador/commands/copy/references/research-workflow.md",
@@ -1423,7 +1423,11 @@
     },
     {
       "path": "conquistador/commands/copy/references/sales-argument.md",
-      "sha256": "1b55a4877c79354577fe685b241b2ee7824a7969003f3841dd6f74e4c345133e"
+      "sha256": "4c91b0baf343f4a44bd6ed1f658df748997a53d14ef444c70fc34cd8d9ac811e"
+    },
+    {
+      "path": "conquistador/commands/copy/references/short-form-copy.md",
+      "sha256": "42ce8e66600f6f9f61554fe79c9ae513ec25affad69f39ea2c3319c98b41d032"
     },
     {
       "path": "conquistador/commands/creative/ENTRY.md",
@@ -4887,7 +4891,7 @@
     },
     {
       "path": "conquistador/specialists/copy-agent.md",
-      "sha256": "8fedb534d15fb95c512dc90d992b0234a0efe907b38ca1d777cc9e517b1a5c87"
+      "sha256": "0b6343085c12f45b6afbcb23d0db7e80965563f097481379839bb33c8ca1c2f9"
     },
     {
       "path": "conquistador/specialists/creative-assets-agent.md",
@@ -5021,7 +5025,7 @@
     },
     {
       "path": "tools/search-index.json",
-      "sha256": "b452fd0e2de30a127e5ceb9e0b49ce7e29681e1d712ab8cf004aea4b839b92ba"
+      "sha256": "450beffdae58b905c76539ee4d0031d30d34ef7460939a955bcdcd3dea064eb0"
     },
     {
       "path": "tools/prompt-advice.mjs",
