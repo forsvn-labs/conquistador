@@ -4,7 +4,7 @@ platform: founder-demo
 schema_version: 2
 pack_type: asset-format
 status: draft
-method_updated: 2026-09-15
+method_updated: 2026-10-07
 last_verified: null
 verifier: none
 source_basis: "Conquistador task specification; platform constraints require task-local verification."
@@ -31,6 +31,8 @@ Choose an opening by the evidence it can deliver. These choices have no performa
 
 Record the audience, desired decision, supported claim and visible evidence before drafting. Reject an opening whose promised answer the asset does not provide.
 
+Before scripting, answer three questions: how the product differs from the obvious alternative, which process the video can show as proof, and which single product moment will make a viewer react. If the third answer is empty, block the script. Open on that moment or on a verified result, then show the demonstration. Write around the viewer's desired outcome and start at the stakes.
+
 ## 2. Format constraints and production handoff
 
 Select the destination and specify its verified dimensions, duration constraints and accessibility requirements. Use a permission-cleared account, hide secrets and personal information, and record product version. Label edits, time compression or separate takes that affect interpretation.
@@ -45,7 +47,7 @@ For each selected measure, record its definition, numerator, denominator, observ
 
 ## 4. Anti-patterns
 
-Do not substitute animation for a live product result without labeling it. Do not make founder presence mandatory or imply a staged demonstration is a customer testimonial.
+Do not open with a logo animation, an establishing shot or a long founder introduction. Do not hold a static screenshot while narration talks; add a camera move or show the interaction. Replace slogans such as "save hours" with product behavior shown on screen. Do not substitute animation for a live product result without labeling it. Do not make founder presence mandatory or imply a staged demonstration is a customer testimonial.
 
 Do not call a draft published, a preview a platform receipt, or a method review a live test. Missing evidence remains unknown.
 
@@ -57,6 +59,8 @@ Do not call a draft published, a preview a platform receipt, or a method review 
 4. Write the comparison below as a test plan. Name the changed variable, comparison, observation window, resource cap and stop condition.
 5. Deliver the asset, production instructions and review packet. Publication or sending requires separate authorization for the exact action.
 6. If authorized results later arrive, compare them using the recorded metric definitions. Return keep, revise, stop or insufficient evidence, with the reason and next test.
+
+Keep one idea per scene and sync narration to the visuals so a muted viewer can follow. For animated or edited demos, make a style frame for every scene before animation and plan several full review rounds with viewers who do not know the product. Cut any scene a viewer cannot explain.
 
 Run the demonstrated task from the recorded starting state. Compare the visible output to the spoken claim. Then ask an unfamiliar reviewer to repeat or explain the task using only the demo. Repair the first missing step.
 
@@ -75,5 +79,7 @@ Record every step between the asset and the desired outcome. Distinguish attempt
 List unresolved account capabilities, audience fit, asset rights, exposure comparability and attribution gaps. For each gap, state whether it blocks production, blocks publication or only limits interpretation. Carry the result with its date and scope; a successful local test does not become a universal platform rule.
 
 ## 9. Changelog
+
+2026-10-07: added script prep questions, a payoff-first opening, one-idea scenes, a no-static-frame rule and style-frame review rounds.
 
 2026-09-15: replaced the research-derived pack with a Conquistador outcome, production and test specification. No external verification or live performance evidence was collected.
