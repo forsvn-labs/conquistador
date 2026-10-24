@@ -1,10 +1,25 @@
-# Conquistador structure
+# Structure navigation
+
+Routing authority: this repo record defines the current provider choice for this concern. A shared index is dated navigation only; it cannot override this file. Recheck the configured resource, approved account/scope, safe access route, and verification before use. If mapping or access is unresolved, report it without selecting another account or provider.
+
+Canonical providers: **Drive plus GitHub**.
+Project key: `forsvn/conquistador`.
+
+Code: [https://github.com/forsvn-labs/conquistador](https://github.com/forsvn-labs/conquistador). Local source observed at `7cf05341cd2f84ba93a286ae176d43c021a71f08` on 2026-10-24.
+
+Knowledge architecture: Resolve this neutral key in the authorized private tools `project-sources.json` navigation index. The exact Drive architecture document is **pending verification**. Confirm its account, identity, and current map. Structure does not create another Vision, Status, or Katalon Brain.
+
+## Retained local snapshot
+
+The following material was present before the 2026-10-24 vendor-policy refresh. It retains its original evidence dates and is not a second current authority. Vendor mapping, content migration, and current business state were not verified by retaining it. Preserve unique handoff and recovery material until its owning vendor content is verified.
+
+### Conquistador structure
 
 [forsvn-labs/conquistador](https://github.com/forsvn-labs/conquistador)
 owns the public product. The source has one method library, consumed by
 the CLI, app API, plugins, and MCP.
 
-## Selected tracked tree
+#### Selected tracked tree
 
 ```text
 skills/conquistador/      Parent skill, commands, plays, and playbooks
@@ -29,7 +44,7 @@ docs-site/               Published documentation source
 
 List tracked paths with `git ls-tree -r --name-only HEAD`.
 
-## Data and execution flow
+#### Data and execution flow
 
 A host request enters the parent skill or API/MCP tool. The briefing engine
 in [tools/brief.mjs](tools/brief.mjs) selects packaged methods and supplied
@@ -48,7 +63,7 @@ installation plans. [api/](api/) reuses the MCP engine.
 four installation routes. [CONTRIBUTING.md](CONTRIBUTING.md) owns build,
 test, packaging, and generated-manifest commands.
 
-## External knowledge
+#### External knowledge
 
 [BRAIN.md](BRAIN.md) resolves `forsvn/conquistador` through the authorized
 private Google Drive registry. Drive owns private planning, research,

@@ -1,10 +1,27 @@
-# Conquistador status
+# Status navigation
+
+Routing authority: this repo record defines the current provider choice for this concern. A shared index is dated navigation only; it cannot override this file. Recheck the configured resource, approved account/scope, safe access route, and verification before use. If mapping or access is unresolved, report it without selecting another account or provider.
+
+Canonical provider: **Linear**.
+Project key: `forsvn/conquistador`.
+
+Resolve this neutral key in the authorized private tools `project-sources.json` navigation index.
+
+Access: use the existing authorized personal Linear connection and verify the exact workspace, current issues, blockers, and handoff.
+
+Verification (2026-10-24): The private registry retains destination evidence and current mapping/migration limits. Keep private workspace and account identifiers out of this public repository.
+
+## Retained local snapshot
+
+The following material was present before the 2026-10-24 vendor-policy refresh. It retains its original evidence dates and is not a second current authority. Vendor mapping, content migration, and current business state were not verified by retaining it. Preserve unique handoff and recovery material until its owning vendor content is verified.
+
+### Conquistador status
 
 Updated 2026-10-23. Release evidence: [PR #92](https://github.com/forsvn-labs/conquistador/pull/92),
 [v0.10.2](https://github.com/forsvn-labs/conquistador/releases/tag/v0.10.2), and
 [publication run 39944022729](https://github.com/forsvn-labs/conquistador/actions/runs/39944022729).
 
-## In review: agent surface performance
+#### In review: agent surface performance
 
 The performance branch adds a portable search snapshot with source-digest checks,
 per-query scoring setup, and short-entry catalog routing for all 41 commands.
@@ -16,7 +33,7 @@ The cleanup removes unused selection fields, redundant retries, stale comments,
 and duplicate rendered reports; raw verification JSON remains.
 This is source verification, not a new release, deployment, or live model-quality verdict.
 
-## Shipped
+#### Shipped
 
 Product 0.10.2 is tagged at `bd0f4c279650ca2eb14a2d32016d4d2cef80f323`.
 The seven release assets bind the tagged source; all five downloaded archives match
@@ -55,7 +72,7 @@ The 0.10.0 task-scoped behavior remains included: bounded current-stage guidance
 advisory hooks, verified context reuse, and scoped edit checks. See the
 [behavior review](docs/BEHAVIOR-REVIEW-2026-10.md) for its evidence and limits.
 
-## Verification limits
+#### Verification limits
 
 Composio follows its documented API v3.1 and pinned SDK 0.27.0. At the user's request,
 this release includes a runnable setup example and offline checks, without creating
@@ -68,7 +85,7 @@ linked-provider lifecycle, and broader model/human task-quality acceptance remai
 unverified. Existing lint diagnostics and optional Promptfoo/node-forge findings
 remain open. They are not represented as release verification.
 
-## Next steps
+#### Next steps
 
 1. Complete additional native-client, OAuth, ARM, and linked-provider acceptance
    before extending support claims.
