@@ -1,107 +1,162 @@
 # Direct-response examples, annotated
 
 Every product, customer, person, and number on this page is invented for teaching. Each pair shows
-a weak version, a strong version, and why. Strong versions keep the source beside each number,
-because a real page must. The craft behind them is in the [sales argument](../sales-argument.md)
-and [headline patterns](../headline-formulas.md).
+a weak version, a strong version, and why. Strong versions are page copy only. Where a number needs
+its source, period, or scope recorded, an operator note follows the copy; it never goes on the page.
+The craft is in the [sales argument](../sales-argument.md) and [headline patterns](../headline-formulas.md).
 
-The invented products:
+The briefs below list everything true about each product. A strong page selects from them; it does
+not use every fact.
 
-- **Rotawell:** shift scheduling for dental clinics. $49 a month per clinic, 14-day trial with no
-  card, a 20-minute rota import call. Proof: Northpier Clinic's practice manager measured weekly
-  rota work falling from 6 hours to 40 minutes over four weeks in May 2026.
-- **Auditrail:** access reviews for companies with 200–2,000 people, sold by demo. Connects to the
-  identity provider and 40 apps. Proof: Halden Logistics finished its Q2 2026 review in 2 days; the
-  previous review took 3 weeks (Halden's IT lead).
+- **Rotawell:** shift scheduling software. Audience: dental clinics with 5 to 40 staff. Pain:
+  practice managers rebuild the rota by hand, often on Sunday evening, after staff swap shifts by
+  text. Staff see the rota and swap shifts on their phones; an approved swap updates the rota.
+  $49 a month per clinic, 14-day trial with no card, and a 20-minute call to import the current
+  rota. Customer: Northpier Clinic. Its practice manager measured weekly rota work falling from 6
+  hours to 40 minutes over four weeks in May 2026 (one clinic, 12 staff). 380 clinics use it.
+- **Auditrail:** access review software. Audience: IT teams at companies with 200 to 2,000 people.
+  It pulls every account from the identity provider and 40 connected apps into one list; managers
+  approve or revoke access in one pass. Sold by a 25-minute demo run on a sample of the buyer's own
+  accounts. Proof: across 31 customer teams, the median quarterly review took 3 days, down from 19
+  (usage data, Q2 2026). Customer: Halden Logistics. In its first review it found 212 open accounts
+  that belonged to people who had left.
 - **Weeknight Kitchen:** a four-week online cooking course, $79, full refund on request within 30
-  days. Proof: 112 of 140 spring 2026 students who answered the week-four survey said they cooked
-  at least four dinners a week.
-- **Inboxfix:** a fixed-scope email deliverability repair, $1,500, 10 business days. The owner
-  authorizes a full refund if the agreed inbox placement test still fails after the fix.
+  days. Audience: people who can cook but rarely do on weeknights. Creator: Dana Mercer, a nurse who
+  worked 12-hour hospital shifts for three years and still cooked dinner five nights a week.
+  Mechanism: three bases (roast vegetables, seasoned grains, one protein) cooked in about an hour
+  on Sunday; each weeknight dinner combines two bases
+  with a 15-minute finish. Includes short lessons, a printable Sunday plan for each week, and 20
+  weeknight finishes. Proof: 112 of the 140 spring 2026 students who answered the week-four survey
+  cook at least four dinners a week. The next group opens Monday, 3 November.
+- **Inboxfix:** a fixed-scope email deliverability repair. Audience: online stores whose marketing
+  email lands in spam. It fixes DNS records and list problems, then proves the fix with an inbox
+  placement test. $1,500, 10 business days; the owner authorizes a full refund if the agreed test
+  still fails after the fix. Sold by a 15-minute fit call.
+- **Tallyhand:** invoice reminders. Audience: freelancers who invoice clients directly. It sends
+  polite reminders from the freelancer's own email address at 3, 7, and 14 days overdue and stops
+  when the invoice is paid. $12 a month. Pain: chasing a client for money feels awkward.
+- **Keyhold Repair Log:** a free spreadsheet from Keyhold, property management software. Audience:
+  landlords with 1 to 10 rental units. It logs each repair by unit with its cost, flags any repair
+  open longer than 14 days, builds a year-end repair cost summary, and comes with a 4-minute setup
+  video. Exchange: an email address.
+- **Kinroll:** an iOS app. Audience: parents of children aged 6 to 12. Kids see their chore list and
+  tick chores off; the allowance pays out to the child's own card every Friday. Free; Kinroll Plus
+  at $4.99 a month adds savings goals. 4.8 from 2,100 App Store ratings. Review, permission given:
+  "He asks me what chores are left now."
+- **Stride Nine:** a running app. Audience: adults who have never run. A 9-week plan of three
+  30-minute sessions a week, from one minute of running and ninety seconds of walking in week one
+  to 30 minutes of running without a break in week nine. An audio coach says when to run and when to
+  walk. First week free, then $39.99 a year, renewing yearly; cancel any time in Settings. 4.7 from
+  12,400 App Store ratings.
+- **Stillnight:** a contoured blackout sleep mask. Audience: people who sleep badly when it is
+  light. Deep cups curve away from the eyes, so nothing touches the eyelids. $29, a 60-night trial
+  with a full refund, and 4.6 from 5,200 reviews on its own store.
 
 ## Headlines
 
-### 1. Category label against outcome
+### 1. The product described, not the reader's want
 
 **Weak**
 
-> Smarter scheduling for modern clinics
-
-Two empty adjectives and a category. Any rival could run it. No outcome, no detail.
-
-**Strong** (check: web)
-
-> Build next week's clinic rota in 40 minutes
+> Automated invoice reminder software for freelancers
 >
-> Northpier Clinic's practice manager went from 6 hours of rota work a week to 40 minutes with Rotawell (interview, May 2026).
+> Tallyhand sends reminder emails at 3, 7, and 14 days overdue from your own email address.
 
-An outcome with a time term the proof supports, and the source directly under it.
+Accurate and lifeless. The headline is a directory listing: category, feature, audience. Nothing
+touches why a freelancer would pay: asking a client for money is awkward, so they put it off.
 
-### 2. A sourced number blurred into a slogan
+**Strong** (check: web; leads with: want)
 
-**Weak**
-
-> Rotas in minutes, not hours
-
-The writer had an exact, sourced result and swapped it for a vaguer one to feel safe. The reader
-cannot tell what was measured, and the line now implies every clinic.
-
-**Strong** (check: web)
-
-> Northpier cut rota building from 6 hours a week to 40 minutes
+> Get paid without chasing
 >
-> One clinic with 12 staff, measured by its practice manager over four weeks in May 2026.
+> Tallyhand sends polite reminders from your own email until the client pays. You never write "just following up" again.
 
-The number stays exact. The scope sits beside it instead of being hidden in vaguer words.
+Four words, all about the reader's want; "without chasing" names the part they hate. The subhead is
+the mechanism. The last line is a fair inference (the tool sends the reminders, so the freelancer
+does not), and it is the line readers remember. The 3-7-14 schedule belongs lower on the page.
 
-### 3. Clever against clear
-
-**Weak**
-
-> Kitchen chaos, tamed.
-
-Wordplay with no promise. The reader has to guess what is for sale.
-
-**Strong** (check: web)
-
-> Five weeknight dinners from one hour of Sunday cooking
-
-A picture, a quantity, and an effort term. It hints at the mechanism, so the next line has a job.
-
-### 4. A promise bigger than the proof
+### 2. An unknown customer's result as the headline
 
 **Weak**
 
-> Pass every audit without lifting a finger
-
-An absolute promise. The product prepares access-review evidence; it does not pass audits.
-
-**Strong** (check: web)
-
-> Run your quarterly access review in two days
+> Northpier Clinic cut rota work from 6 hours a week to 40 minutes
 >
-> Halden Logistics finished its Q2 2026 review in 2 days. The review before took 3 weeks (Halden IT lead).
+> Northpier, a clinic with 12 staff, measured the change over four weeks. Rotawell is shift scheduling for dental clinics with 5 to 40 staff.
 
-The promise is sized to one sourced result, and the result is shown, not paraphrased.
+The reader has never heard of Northpier, so the headline is about someone else. The subhead becomes
+a footnote, then restates the audience.
 
-### 5. A crowded market: louder promise against the mechanism
+**Strong** (check: web; leads with: want)
+
+> Get your Sunday evenings back
+>
+> Staff swap shifts inside Rotawell, and the rota updates itself. Northpier Clinic went from 6 hours of rota work a week to 40 minutes.
+
+The headline is the evening the reader loses to the rota. The subhead gives the mechanism, then the
+same result as proof, where it supports the promise instead of replacing it. A name the reader knew
+would earn the headline; Northpier does not.
+
+*Operator note:* 6 hours to 40 minutes is Northpier Clinic (12 staff), measured by its practice
+manager over four weeks in May 2026. Confirm written permission to name the clinic.
+
+### 3. A number blurred, or printed like a footnote
 
 **Weak**
 
-> The ultimate deliverability solution for growing brands
+> Run access reviews in days, not weeks
+>
+> Median review time fell sharply across customer teams (Auditrail usage data, Q2 2026).
 
-The market has heard this promise many times. "Ultimate" adds noise, not belief.
+Two opposite mistakes. The headline blurs an exact result into a slogan, and the subhead still
+prints the source like a footnote.
 
-**Strong** (check: web)
+**Strong** (check: web; leads with: outcome)
 
-> Most spam problems start in your DNS records and your list. We fix both in 10 business days.
+> Finish the quarterly access review in 3 days, not 19
+>
+> That's the median across 31 IT teams on Auditrail. Every account from your identity provider and 40 connected apps lands in one list, and managers approve or revoke access in one pass.
 
-It names the cause of the problem and the fix. A buyer who has tried monitoring tools sees why this
-is different.
+The exact number leads. "Across 31 IT teams" is the only qualifier the reader needs to trust a
+median; the rest of the provenance moves off the page.
+
+*Operator note:* 19 days to 3 is the median quarterly review time across 31 customer teams, from
+Auditrail usage data for Q2 2026.
+
+## Headline sets
+
+### 4. Five headlines for a product page
+
+**Weak**
+
+> 1. Contoured blackout sleep mask with zero eyelid pressure
+> 2. The Stillnight 3D sleep mask
+> 3. Rated 4.6 stars from 5,200 reviews
+> 4. $29, with a 60-night trial
+> 5. Premium comfort for better sleep
+
+Four lines describe the product, its rating, or its price; the fifth is an empty adjective. A set
+should give the owner five different reasons to buy, not five spec lines.
+
+**Strong** (check: web; leads with: set)
+
+> 1. Total dark. Nothing on your eyelids.
+>    Deep cups curve away from your eyes, so you can blink and still see nothing.
+> 2. Sleep through the 5 a.m. sunrise
+>    Stillnight blocks the morning light that wakes you before your alarm.
+> 3. The sleep mask for people who hate sleep masks
+>    The cups never touch your eyelids, so there is nothing to hate.
+> 4. Wake up when you choose, not when the sun does
+>    Rated 4.6 from 5,200 reviews. $29.
+> 5. Sleep in it for 60 nights. Then decide.
+>    If you don't love it, send it back for a full refund.
+
+Five different bets: comfort and total dark, a moment, an identity, control, and the risk reversal.
+Features sit in the subheads as reasons. The rating supports from a subhead. Short parallel lines
+carry the first and the fifth.
 
 ## Leads
 
-### 6. Problem lead
+### 5. Problem lead
 
 **Weak**
 
@@ -109,65 +164,76 @@ is different.
 
 A stock opener with no scene and no reader in it.
 
-**Strong** (check: web)
+**Strong** (check: web; leads with: scene)
 
-> It is Sunday, 9 p.m. Two hygienists swapped Tuesday by text, reception was not told, and the rota you built on Thursday is wrong again.
+> It's Sunday, 9 p.m. Two hygienists swapped Tuesday by text, nobody told reception, and the rota you finished on Thursday is wrong again.
 >
-> The rota is not the problem. The swaps are. Every change happens outside the rota, so someone has to copy it back in by hand.
+> The rota isn't the problem. The swaps are. They happen in a group chat, so someone has to copy every change back in by hand. Usually you.
 
-A scene the reader has lived, in their words. The second paragraph names the cause, which sets up
-the product.
+A scene the reader has lived, in their words. The second paragraph names the cause and lands on the
+reader, which sets up the mechanism. The product has not appeared yet, and does not need to.
 
-### 7. Fact lead for a skeptical reader
+### 6. Creator lead: conviction, not compliance voice
 
 **Weak**
 
-> Studies show that most companies struggle with access reviews.
+> Dana Mercer cooked dinner five nights a week while working as a nurse. That is her experience, and your results may differ. Weeknight Kitchen is a four-week online course for people who can cook but rarely do on weeknights. In a survey of 140 students (April 2026), 112 reported cooking at least four dinners a week.
 
-An unnamed study and a claim about "most companies". The skeptical reader stops here.
+Every sentence is true, and the paragraph still loses. It apologizes for its own proof, restates the
+audience, and reads the survey out like a footnote.
 
-**Strong** (check: web)
+**Strong** (check: web; leads with: scene)
 
-> Halden Logistics found 212 active accounts that belonged to people who had left. That was its Q2 2026 access review, the first one run with Auditrail.
+> For three years, Dana Mercer worked 12-hour hospital shifts and still put dinner on the table five nights a week.
 >
-> None of those accounts appeared in the spreadsheet review the quarter before.
+> She didn't cook more. She cooked once. Every Sunday she made three bases, and every weeknight she turned two of them into dinner in 15 minutes.
+>
+> Weeknight Kitchen teaches you her system in four weeks. When we asked our spring students in week four, 112 of 140 were cooking at least four dinners a week.
 
-One verified, surprising fact with its source and date. It shows the cost without inventing a scare.
+The story is told with conviction because it is true. The student result follows as proof that the
+system transfers, with only the qualifier the reader needs. If a claim were unsupported, the check
+would remove it; it would not apologize for it.
 
-### 8. Story lead for a reader who has not named the problem
+*Operator note:* 112 of 140 are the spring 2026 students who answered the week-four survey in April
+2026.
+
+### 7. Story lead for a reader who has not named the problem
 
 **Weak**
 
-> Cooking at home is healthier and cheaper. Here is how to start.
+> Running is good for your health and easy to start. Here is how.
 
-The reader already knows this. It gives them nothing new.
+The reader already knows this, and it has never helped.
 
-**Strong** (check: web)
+**Strong** (check: web; leads with: scene)
 
-> At 6:40 p.m. Priya opens the fridge, sees a pepper, half an onion, and chicken that has to be cooked tonight, and orders takeaway again.
+> The last time you tried running, you went out too fast, ran out of breath in four minutes, and walked home deciding you're not a runner.
 >
-> She can cook. What she lacks at 6:40 is a starting point. Weeknight Kitchen gives her one: three bases cooked on Sunday that turn into five different dinners.
+> You were fine. The pace was wrong. Stride Nine starts you with one minute of running and ninety seconds of walking, and a coach in your ear tells you when to switch. By week nine, the plan has you running for 30 minutes straight.
 
-The reader recognizes the problem before the product appears. The cause ("no starting point") leads
-straight to the mechanism.
+The reader recognizes themselves before the product appears. The cause (the pace, not you) clears
+them and points straight at the mechanism.
 
-### 9. Offer lead for a warm list
+### 8. Offer lead for a warm list
 
 **Weak**
 
 > We have some exciting news to share with you!
 
-Enthusiasm with no content. The reader must keep reading to learn anything.
+Enthusiasm with no content.
 
-**Strong** (check: web)
+**Strong** (check: web; leads with: offer)
 
-> Weeknight Kitchen opens on Monday, 3 November. Four weeks, $79, and you can ask for a full refund until day 30.
+> Doors open Monday, 3 November.
+>
+> Four weeks of Weeknight Kitchen, $79, and you can ask for a full refund any time in the first 30 days.
 
-People who already know the course want the terms. Date, price, and risk term come first.
+People who already know the course want the date, the price, and the risk term. They get all three
+in two lines.
 
 ## Hero sections
 
-### 10. SaaS trial hero
+### 9. SaaS trial hero
 
 **Weak**
 
@@ -179,23 +245,25 @@ People who already know the course want the terms. Date, price, and risk term co
 
 Labels and buzzwords, no outcome, no proof, and a button that does not say what happens next.
 
-**Strong** (check: landing)
+**Strong** (check: landing; leads with: pain)
 
-> For dental clinics with 5–40 staff
+> Stop rebuilding the rota every time someone swaps a shift
 >
-> Build next week's clinic rota in 40 minutes
+> Staff swap shifts in the app and the rota fixes itself, so it's right before you open it. Northpier Clinic went from 6 hours of rota work a week to 40 minutes.
 >
-> Staff swap shifts inside Rotawell, so the rota stays correct without you copying changes. Northpier Clinic went from 6 hours of rota work a week to 40 minutes (practice manager, May 2026).
+> - Swaps approved in one tap, not lost in a group chat
+> - Everyone sees the same rota on their phone
+> - Your current rota imported for you on a 20-minute call
 >
 > Start your 14-day free trial
 >
-> No card needed. We import your current rota with you on a 20-minute call. Then $49 a month per clinic.
+> No card. $49 a month per clinic after that.
 
-The eyebrow sets the audience. The headline is the outcome. The subhead carries the mechanism and
-the exact sourced proof. The button says what they get. The line under it answers the three real
-objections: card, setup, and price.
+The headline is the pain in the reader's words. The subhead is one mechanism and one proof. Each
+bullet is a benefit that answers a fear: lost swaps, confused staff, setup effort. Left out on
+purpose: the clinic count, the audience, and the provenance of the Northpier number.
 
-### 11. Demo-led B2B hero
+### 10. Demo-led B2B hero
 
 **Weak**
 
@@ -207,22 +275,20 @@ objections: card, setup, and price.
 
 "Simplified" and "intelligent automation" describe nothing. The demo has no stated value or length.
 
-**Strong** (check: landing)
+**Strong** (check: landing; leads with: pain)
 
-> For IT teams that run quarterly access reviews
+> Find every account that should have been closed
 >
-> Run your quarterly access review in two days
+> Auditrail puts every account from your identity provider and 40 connected apps in one list, and managers approve or revoke in one pass. In its first review, Halden Logistics found 212 open accounts that belonged to people who had left.
 >
-> Auditrail pulls every account from your identity provider and 40 connected apps into one list, so managers approve or remove access in one pass. Halden Logistics finished its Q2 2026 review in 2 days; the one before took 3 weeks (Halden IT lead).
+> Book a 25-minute demo on your own accounts
 >
-> Book a 25-minute demo on a sample of your own accounts
->
-> A product specialist runs the call. Bring an export from your identity provider, or use our sample data.
+> Bring an export from your identity provider, and we'll run Auditrail on a sample of it, live.
 
-The demo becomes the offer: the buyer sees their own problem solved, and knows who they will talk
-to and for how long.
+The headline is the fear an IT lead carries into every audit. One striking proof point makes it
+concrete. The demo becomes an offer: their own data and a fixed length.
 
-### 12. Offer page hero for a service
+### 11. Offer page hero for a service
 
 **Weak**
 
@@ -230,49 +296,151 @@ to and for how long.
 >
 > We analyze 50+ factors affecting your sender reputation.
 
-It sells the activity, not the result. "50+ factors" is the seller's work. No time frame, no risk term.
+It sells the activity, not the result. "50+ factors" is the seller's work, and there is no time
+frame or risk term.
 
-**Strong** (check: landing)
+**Strong** (check: landing; leads with: want)
 
 > Get your emails out of spam in 10 business days
 >
-> We fix the DNS records and list problems that send your mail to spam, then prove the fix with an inbox placement test.
+> We fix the DNS records and list problems that send your mail to spam, then prove it with an inbox placement test.
 >
-> $1,500, fixed. If the agreed placement test still fails after the fix, we refund the full fee. Terms are under the form.
+> $1,500, fixed. If the test still fails after the fix, you get every dollar back.
 >
 > Book a 15-minute fit call
 
-An audit became an offer: outcome, time frame, mechanism, proof method, fixed price, risk term, and
-one next step.
+An audit became an offer: outcome and time in the headline, the mechanism and proof method in the
+subhead, and the risk reversal as a selling line, not fine print.
 
-## A short sales argument
+## Lead magnet pages
 
-### 13. Course offer, compressed
+### 12. Free spreadsheet for landlords
 
 **Weak**
 
-> Weeknight Kitchen includes 24 video lessons, 60 recipes, printable shopping lists, a private community, and lifetime access. Sign up today!
+> Track repairs across your rental units with a free spreadsheet
+>
+> The Keyhold Repair Log is a free spreadsheet for landlords with 1 to 10 rental units, made by Keyhold, property management software. Enter your email address to get it.
+>
+> - Repair log by unit
+> - 14-day overdue flag
+> - Year-end summary tab
+> - 4-minute setup video
+>
+> [Get the free Repair Log]
 
-A feature list. No reader, problem, cause, mechanism, proof, or terms, and a button with no stated
-commitment.
+A literal description: the file, its maker, its audience, its tabs. The reader has to work out why
+any of it matters.
 
-**Strong** (check: landing)
+**Strong** (check: landing; leads with: pain)
+
+> Stop keeping track of repairs in your head
+>
+> A free spreadsheet that logs every repair by unit, flags the ones that drag, and adds up the year for your accountant.
+>
+> - See every open repair, in every unit, in one place
+> - Get flagged when a repair has been open 14 days, before a slow fix becomes an angry tenant
+> - Hand your accountant a year-end repair total without digging through old invoices
+> - Set it up with a 4-minute walkthrough video
+>
+> Email me the Repair Log
+
+The headline is the pain. Each bullet turns a tab into what the landlord gets. "Without digging
+through old invoices" is a fair inference: the sheet already holds each repair's cost. The button
+names the thing. The maker and the unit range stay off the hero.
+
+## Consumer app pages
+
+### 13. App hero
+
+**Weak**
+
+> A chore and allowance app for families
+>
+> Kinroll is an iOS app for parents of children aged 6 to 12. Kids tick off chores, and the allowance pays out every Friday. Rated 4.8 from 2,100 App Store ratings.
+>
+> - Chore lists for each child
+> - Weekly allowance payouts
+> - Kinroll Plus adds savings goals for $4.99 a month
+>
+> [Download Kinroll on the App Store]
+
+Category headline, restated audience, feature bullets, and a price line that answers a question
+nobody asked yet.
+
+**Strong** (check: landing; leads with: want)
+
+> Chores they actually do, because Friday pays
+>
+> Kids tick off chores in Kinroll, and their allowance lands on their own card every Friday. Rated 4.8 from 2,100 App Store ratings.
+>
+> - Kids see what's left without you reminding them
+> - Allowance paid automatically. No cash, no IOUs.
+> - "He asks me what chores are left now."
+>
+> Get Kinroll free
+
+The headline is what parents want, with the mechanism as the reason. The review sits in the bullets
+because it says the headline's promise in a parent's voice. The paid tier stays off the hero; the
+free button already answers the cost question.
+
+### 14. Paywall after the free week
+
+**Weak**
+
+> Upgrade to Stride Nine Premium
+>
+> Unlock all features, including the full 9-week plan and audio coaching. $39.99 per year. Subscription renews automatically unless cancelled.
+>
+> [Subscribe]
+
+It sells "features" to someone who just finished their first week, and the renewal term reads like
+a warning.
+
+**Strong** (check: landing; leads with: identity)
+
+> You ran week one. Eight to go.
+>
+> Keep the plan and the coach that got you this far, all the way to 30 minutes without stopping.
+>
+> - Three runs a week, 30 minutes each
+> - Your coach tells you when to run and when to walk
+> - Rated 4.7 from 12,400 App Store ratings
+>
+> Start week two for $39.99 a year
+>
+> That's about $3.33 a month. Renews yearly. Cancel any time in Settings.
+
+The headline speaks to who the user has just become. Renewal and cancellation are plain terms near
+the button, not warnings, and the per-month arithmetic frames the price.
+
+## A short sales argument
+
+### 15. Course offer, compressed
+
+**Weak**
+
+> Weeknight Kitchen includes four weeks of short lessons, a printable Sunday plan for each week, and 20 weeknight finishes. Sign up today!
+
+A feature list. No reader, problem, cause, mechanism, proof, or terms.
+
+**Strong** (check: landing; leads with: want)
 
 > Five weeknight dinners from one hour of Sunday cooking
 >
-> You can cook. The hard part is 6:40 p.m. on a Tuesday, when you are tired, the fridge is half full, and every recipe starts from zero.
+> You can cook. The hard part is 6:40 on a Tuesday, when you're tired, the fridge is half full, and every recipe starts from zero.
 >
-> Recipes are written one meal at a time, so every night needs a new plan, a new shop, and a full hour. That is why the plan you make on Sunday is often gone by Wednesday.
+> Recipes are written one meal at a time, so every night needs a new plan, a new shop, and a full hour. That's why Sunday's good intentions are gone by Wednesday.
 >
-> Weeknight Kitchen works from three bases you cook on Sunday: a tray of roast vegetables, a pot of seasoned grains, and one protein. Each weeknight dinner combines two bases with a 15-minute finish.
+> Weeknight Kitchen works from three bases you cook on Sunday: a tray of roast vegetables, a pot of seasoned grains, and one protein. Each weeknight dinner takes two of them and a 15-minute finish.
 >
-> In the spring 2026 group, 112 of the 140 students who answered the week-four survey said they now cook at least four dinners a week (course survey, April 2026).
+> Four weeks in, 112 of the 140 students we asked were cooking at least four dinners a week.
 >
-> Four weeks of short lessons, a printable Sunday plan for each week, and 20 weeknight finishes. $79, paid once.
+> You get four weeks of short lessons, a printable Sunday plan for each week, and 20 weeknight finishes. $79, once.
 >
-> Cook along for 30 days. If it does not fit your kitchen, ask for a full refund within 30 days of joining.
+> Cook along. If it isn't for you, ask within 30 days and you get every dollar back.
 >
 > Join the next group on 3 November
 
-The order is lead, problem, cause, mechanism, proof, offer, risk reversal, and action. One exact
-proof point carries its source. The price sits next to what it buys.
+Lead, problem, cause, mechanism, proof, offer, risk reversal, action. One proof point, stated with
+the qualifier a reader needs. The price sits next to what it buys.
