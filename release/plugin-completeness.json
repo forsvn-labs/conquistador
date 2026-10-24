@@ -1180,11 +1180,11 @@
     },
     {
       "path": "skills/conquistador/commands/convert/COMMAND.md",
-      "sha256": "ae8b175e74d41af06a2ad9117f97246ac5a0ae3c72d70f400364911a9804de16"
+      "sha256": "7047ca86315cb9a70fdc7cfe169d4fedcd4b2526663efc68ece3b46b315ead91"
     },
     {
       "path": "skills/conquistador/commands/convert/ENTRY.md",
-      "sha256": "a04e5330ab3184051e3045eb7024f76bb08f30a64ccf444b5e2edce5e8268ba9"
+      "sha256": "b9998d9d6e56e0a6f3f35c04bc4056933fb209aa66bad7d1d4057562386cb8f8"
     },
     {
       "path": "skills/conquistador/commands/convert/fallbacks/sequential.md",
@@ -1192,7 +1192,7 @@
     },
     {
       "path": "skills/conquistador/commands/convert/references/anti-patterns.md",
-      "sha256": "4310cc36349dffa91990708a01747511c1e886756cb4b48d968d8ccf8c7eb340"
+      "sha256": "de9cc5b7317cef364051e924008d54e51afc77073c73fc3fe1b740316d3c5dee"
     },
     {
       "path": "skills/conquistador/commands/convert/references/anti-sycophancy.md",
@@ -1228,7 +1228,7 @@
     },
     {
       "path": "skills/conquistador/commands/convert/references/examples/signup-page-rewrite.md",
-      "sha256": "8ea1fdc0e889465465a31cb0e86a1294f811ec3aec737a25b71c9f7caa4865ae"
+      "sha256": "c1a5f45bf0c3a4e6c2dd263d2d50457fb6d8c7e4cbeb4bad7e0910b1eb067328"
     },
     {
       "path": "skills/conquistador/commands/convert/references/hypothesis-framework.md",
@@ -1256,23 +1256,23 @@
     },
     {
       "path": "skills/conquistador/commands/convert/references/page-conversion-craft.md",
-      "sha256": "1b858864cb22e6b148032aa660d668547291faa2cf1c412ba134e73150617470"
+      "sha256": "6091c0385cc21c860dd2fb73b7684d8b9f322678cae0a6afe4460a97cfb3046b"
     },
     {
       "path": "skills/conquistador/commands/copy/agents/body-agent.md",
-      "sha256": "9489cdae0a96db981e91774721503456ed0300113e051e0ee1c64af46ea2efce"
+      "sha256": "5aae9fe12e57ed25a3e3530065893ae0d7922eaeb6909d01dc1eaba3021f564a"
     },
     {
       "path": "skills/conquistador/commands/copy/agents/critic-agent.md",
-      "sha256": "b4b783c4226c9f658b8e805b40325c53e9481bbf345ca9b94fe30c5ed8ad0221"
+      "sha256": "d0692d14b2ae99eb087e9ec45a1475b490216f537d36fff2901e2b41e9b2eeb3"
     },
     {
       "path": "skills/conquistador/commands/copy/agents/cta-agent.md",
-      "sha256": "b929e81cbb209e53141c846d923cc461bb8bba2f992a0f72b51b57e7e342a4b1"
+      "sha256": "85998342b65dbb9e6c298361cefa4219f0d7c1cfa80875fc8f7b5fc6f1cf2466"
     },
     {
       "path": "skills/conquistador/commands/copy/agents/hook-agent.md",
-      "sha256": "3cfe24437e6fb6dec90390755a14f9d05786cb5b2ea2736a144529e2e53bb0c0"
+      "sha256": "5d37b1af0aa45e3c34495ea6f6df87f758015a9713e324c2e824967f90cc7552"
     },
     {
       "path": "skills/conquistador/commands/copy/agents/openai.yaml",
@@ -1280,11 +1280,11 @@
     },
     {
       "path": "skills/conquistador/commands/copy/agents/psychology-agent.md",
-      "sha256": "93b0fe06e97972e6a2c83871ebe2c8353f602f51861d9ebc5a163a15b088e9b9"
+      "sha256": "7e467920b5665868ca21328a421efa466e7bb6648f972a1e74b428bc3afdb21e"
     },
     {
       "path": "skills/conquistador/commands/copy/agents/social-proof-agent.md",
-      "sha256": "01a866bf27bf120c023c6acf8d05cd091c5215ab22e63798a5f34aff483bbabd"
+      "sha256": "e04be05c8844a730d3308de6caecc3f13b9843be852ff895dbba0631640cbd4f"
     },
     {
       "path": "skills/conquistador/commands/copy/agents/variant-agent.md",
@@ -1292,27 +1292,27 @@
     },
     {
       "path": "skills/conquistador/commands/copy/agents/voice-agent.md",
-      "sha256": "a7c149a3b9c96a7bc6c4172e831d61f99df547ff1b0bd70f10e63dfb6aafe4aa"
+      "sha256": "fbcadfb8f7526d7eaaa5bf0d4031a8c236e79575a5dd10b8f852f7b186b1a3c6"
     },
     {
       "path": "skills/conquistador/commands/copy/agents/zero-risk-agent.md",
-      "sha256": "f72fa285f8a7a6767a8da33957327402155c9f1c04488c51db4ba968f6f95bd9"
+      "sha256": "11bfc849bedf0fce2baa5bd15dc821dc9e1e2592f5e1cdf19dbc58114ca8f337"
     },
     {
       "path": "skills/conquistador/commands/copy/COMMAND.md",
-      "sha256": "79f6a12941abd0569405abd214dcb038be2f10c531e78c3f235b8c412835cbf3"
+      "sha256": "1dab5d7afa3dc359449cc1daa1a30027489294a73a85fadc8d7c77719b22b959"
     },
     {
       "path": "skills/conquistador/commands/copy/ENTRY.md",
-      "sha256": "7d3882f0d667b40f827c8ba1d68215fe9bdda1bf34106af0196a15f04e93a2c6"
+      "sha256": "03682c246b1c5228f0ddaee5ca07adbce975f09723e4f5e403d2f6165f5dfa9b"
     },
     {
       "path": "skills/conquistador/commands/copy/fallbacks/sequential.md",
-      "sha256": "b048414e1b4ea753b2911ecf4056c8405f3afca335c6a0f47506e97415721f4c"
+      "sha256": "e323ccaa84ede1eb38306df19c663380012e6362b6543f28cfe6054efabad559"
     },
     {
       "path": "skills/conquistador/commands/copy/references/anti-patterns.md",
-      "sha256": "f4477a3176315dcb2724b78dd99235e93862d3ffebf9a72954ebb2d7725c74f0"
+      "sha256": "a0e577999aea590d96e0ac7e095fcafe03779d90f87360f9b8ce68ec6355c0f1"
     },
     {
       "path": "skills/conquistador/commands/copy/references/belief-disruption.md",
@@ -1320,7 +1320,7 @@
     },
     {
       "path": "skills/conquistador/commands/copy/references/copy-review.md",
-      "sha256": "17182a5a5d9050117d8c8c2c4492b835c311c4d79cba2c47c8570bf50e926733"
+      "sha256": "cd69833a15e2307773a50291955e8f11c760f9a408aa89b56bc994b03bbc4b0e"
     },
     {
       "path": "skills/conquistador/commands/copy/references/discovery-story.md",
@@ -1332,7 +1332,7 @@
     },
     {
       "path": "skills/conquistador/commands/copy/references/examples/direct-response-examples.md",
-      "sha256": "e89a8c5e1d2fa0237b07891f0620adc8dd7783e874a3ec0a086e0f19c24ac67b"
+      "sha256": "b2114136723bb9a2ffc61785cc55946d2869482e995a8262d47d75936a5b0fea"
     },
     {
       "path": "skills/conquistador/commands/copy/references/format-conventions.md",
@@ -1340,11 +1340,11 @@
     },
     {
       "path": "skills/conquistador/commands/copy/references/headline-formulas.md",
-      "sha256": "576f86a385d19b385126e82e7ce1ea69b4bb395a9274c6121632d600315ec21f"
+      "sha256": "b5927821a0f6ea8709d26907b12ce99fbf57fddb09df849270ec291be4b7a772"
     },
     {
       "path": "skills/conquistador/commands/copy/references/lead-magnet-stack.md",
-      "sha256": "e25b944ca18c674ef2926c49e96d832a4377ab499c552a20f82852a95c2d1dc1"
+      "sha256": "3e4b0ca6ac6f28bb9b0d11061c6587f3cd7ae7721b4fce3f8e8d6d4687b6af2e"
     },
     {
       "path": "skills/conquistador/commands/copy/references/lifecycle-sequences.md",
@@ -1352,7 +1352,7 @@
     },
     {
       "path": "skills/conquistador/commands/copy/references/page-sections.md",
-      "sha256": "50a9f0749bedaa0fba59686903d2ef6ded0ab732cfce2ec867fe918c8b990f5a"
+      "sha256": "762243be88f252080ccd03bd31582068ddf6d56e79958d6fa253e7fde0f2038e"
     },
     {
       "path": "skills/conquistador/commands/copy/references/research-workflow.md",
@@ -1360,7 +1360,7 @@
     },
     {
       "path": "skills/conquistador/commands/copy/references/sales-argument.md",
-      "sha256": "f606767c2dffccc8ded73b45d16acce5c64889dff16a285983ea358bada7c8ca"
+      "sha256": "1b55a4877c79354577fe685b241b2ee7824a7969003f3841dd6f74e4c345133e"
     },
     {
       "path": "skills/conquistador/commands/creative/agents/asset-critic-agent.md",
@@ -4304,7 +4304,7 @@
     },
     {
       "path": "skills/conquistador/plays/landing.md",
-      "sha256": "723c67497164401c0aa60727c92c6ba1adce7da3a44ac43b8c1704b6963de431"
+      "sha256": "dd891689ef13599fc4564a6ea86e9255dd68674ac963f0145cff80ed01120980"
     },
     {
       "path": "skills/conquistador/plays/landing/agents/architecture-agent.md",
@@ -4340,7 +4340,7 @@
     },
     {
       "path": "skills/conquistador/plays/landing/agents/section-spec-agent.md",
-      "sha256": "6d88319563f70dc30fb6e766f2d7b5b9271024f9256e6fb9aa234f2e74d9ac76"
+      "sha256": "7d7c5af947c052625b1a5c5a171c5c142ce3159ec186da8b7826b32260d0abeb"
     },
     {
       "path": "skills/conquistador/plays/landing/references/anti-patterns.md",
@@ -4348,11 +4348,11 @@
     },
     {
       "path": "skills/conquistador/plays/landing/references/conversion-principles.md",
-      "sha256": "69a8ddd3b1164df88de73eea2c94f1b513e61d18ac1264d9f3bc097d3bfb3dee"
+      "sha256": "45782a7bbc1e5e8e7f05a0c694fd3e63f70d8eaef3b1229fc00e07f1ae48156a"
     },
     {
       "path": "skills/conquistador/plays/landing/references/conversion/core-principles.md",
-      "sha256": "71e5b39f57c5d0e2dd3bdb329a7774660a468ce7c34c06f1321a316c1a320c3b"
+      "sha256": "8e98d70aaf42b31bd0963dec54ddf7824b74b27f06acbeacb9215ae000a75629"
     },
     {
       "path": "skills/conquistador/plays/landing/references/conversion/implementation-checklist.md",
@@ -4360,7 +4360,7 @@
     },
     {
       "path": "skills/conquistador/plays/landing/references/conversion/social-proof-trust.md",
-      "sha256": "d5f696e9b777d2890cdaf9334be6165050f10f76f8a5bc1ad07ceb02f1ddf73e"
+      "sha256": "f88590febb3ae836eb40071984e14e968f4d8f4009a952118c6a4f4f692ac32b"
     },
     {
       "path": "skills/conquistador/plays/landing/references/conversion/testing-optimization.md",
@@ -4408,7 +4408,7 @@
     },
     {
       "path": "skills/conquistador/plays/landing/references/section-templates.md",
-      "sha256": "8879b425e705a590d238a718424eb6eef06c42a39945236bdb22d9de1ef78d07"
+      "sha256": "cbe7ea9efaebbe4a22b01f0a94e907d5e543a72f7b61758f1091a2abdd49455f"
     },
     {
       "path": "skills/conquistador/plays/landing/references/surface-rhythm.md",
@@ -4940,7 +4940,7 @@
     },
     {
       "path": "skills/conquistador/specialists/copy-agent.md",
-      "sha256": "d576f1e2be309121135f2664f7d23d67facd5231defc26989ceed1c8e3daafb6"
+      "sha256": "8fedb534d15fb95c512dc90d992b0234a0efe907b38ca1d777cc9e517b1a5c87"
     },
     {
       "path": "skills/conquistador/specialists/creative-assets-agent.md",
@@ -4956,7 +4956,7 @@
     },
     {
       "path": "skills/conquistador/specialists/dr-landing-agent.md",
-      "sha256": "60d0c4be1c8c3ce0489244c82f9028d8e6c937cd9cf5c0ffe7449cafc2153002"
+      "sha256": "4b54fd5edc4e3355896a69055b66040a27da051c48018d6ef0b3d90e8abe870d"
     },
     {
       "path": "skills/conquistador/specialists/roster.md",
@@ -4964,7 +4964,7 @@
     },
     {
       "path": "skills/conquistador/specialists/saas-landing-agent.md",
-      "sha256": "b6fa902b7bb3ac4938bc655bd2f0fdbf7a49c8fa8c97e3f8a75c2c4482bf2c36"
+      "sha256": "6a918c99ec1e68563689629c7380eca4799b9c4ac50c1b56d6b9cb4e18bd7eed"
     },
     {
       "path": "skills/conquistador/standards/context.md",
@@ -5084,7 +5084,7 @@
     },
     {
       "path": "tools/search-index.json",
-      "sha256": "4d99b87118c1e8cf93fd9ec71ea6f22acc2329512483abc87bd34ebc310c3911"
+      "sha256": "b452fd0e2de30a127e5ceb9e0b49ce7e29681e1d712ab8cf004aea4b839b92ba"
     },
     {
       "path": "tools/skills-mcp.mjs",
