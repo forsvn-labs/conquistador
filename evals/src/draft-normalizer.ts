@@ -33,7 +33,7 @@ export type NormalizeOptions = {
   stripHeadings?: string[];
 };
 
-const BUILTIN_LEAK_TOKENS = ["conquistador"];
+const BUILTIN_LEAKS = [/\bconquistador\w*/gi, /\b[a-z0-9]+(?:-[a-z0-9]+)*-agent\b/gi];
 const ARM_WORDS = "bare|method|baseline|candidate|control|treatment|without[- ]method|with[- ]method";
 
 const METHOD_SECTIONS = [
@@ -48,7 +48,8 @@ const METHOD_SECTIONS = [
   /^review (notes|pass|checklist|summary)\b/,
   /^anti[- ]?patterns?\b/,
   /^(swap|first[- ]screen|so[- ]what|squint|5[- ]second) test\b/,
-  /^(claims?|facts?) (to verify|check|audit|ledger|register)\b/,
+  /^(claims?|facts?) (to verify|check|audit|ledger|register|used|list)\b/,
+  /^(audit checklist|scope record)\b/,
   /^(verification|fact[- ]check|readiness)\b/,
   /^what i (changed|did|checked)\b/,
   /^(methods?|skills?|playbooks?|sources?|references?) (used|applied|read|loaded|consulted)\b/,
@@ -62,6 +63,7 @@ const METADATA_KEYS = new Set([
 const LABEL_KEY = String.raw`^\s*(?:[-*]\s+)?(?:\*\*|__)?\s*`;
 const READINESS_LINE = new RegExp(`${LABEL_KEY}(status|readiness|verdict|ready|grade|self[- ]?score|score|confidence|quality (gate|check))\\s*(?:\\*\\*|__)?\\s*[:：]`, "i");
 const METADATA_LINE = new RegExp(`${LABEL_KEY}(arm|variant|condition|skill|playbook|model|generated (by|with)|generator|run as|methods? used)\\s*(?:\\*\\*|__)?\\s*[:：]`, "i");
+const DATE_LINE = new RegExp(`${LABEL_KEY}date\\s*(?:\\*\\*|__)?\\s*[:：]\\s*(?:\\*\\*)?\\s*\\d{4}-\\d{2}-\\d{2}`, "i");
 const LENGTH_LINE = new RegExp(`${LABEL_KEY}(word count|character count|char count|length|reading time|words)\\s*(?:\\*\\*|__)?\\s*[:：]`, "i");
 const LABEL_WORDS = "PASS|PASSED|FAIL|FAILED|REVISE|READY|SHIP|SHIPPABLE|APPROVED|BLOCKED|DRAFT|NEEDS REVISION";
 const READINESS_ONLY = new RegExp(`^\\s*(?:[✅❌⚠️✔️]\\s*)?(?:\\*\\*)?[\\[(]?\\s*(?:${LABEL_WORDS})\\s*[\\])]?(?:\\*\\*)?\\.?\\s*$`);
@@ -71,7 +73,8 @@ const LENGTH_UNITS = String.raw`(?:words?|characters?|chars?|tokens?|min(?:ute)?
 const LENGTH_INLINE = new RegExp(String.raw`\s*[\[(]\s*~?\s*\d[\d,.]*\s*${LENGTH_UNITS}\s*[\])]`, "gi");
 const LENGTH_ONLY = new RegExp(String.raw`^\s*[\[(]?\s*[~≈]?\s*\d[\d,.]*\s*${LENGTH_UNITS}\s*[\])]?\.?\s*$`, "i");
 const PROVENANCE = [
-  /^(written|drafted|generated|produced|prepared|composed)\s+(after|from|using|with|following|as|via)\b/i,
+  /^(written|drafted|generated|produced|prepared|composed)\s+(after|before|without|from|using|with|following|as|via)\b/i,
+  /^(?:\*\*)?(routing notes?|chain applied|method rules|rules applied)\b/i,
   /^(run|ran|executed)\s+(as|with|via|using)\b/i,
   /^(single|multi)[- ]context review\b/i,
   /^(this|the) draft (was|is) (written|generated|produced|drafted)\b/i,
@@ -81,6 +84,7 @@ const PROVENANCE = [
 const FILE_NAME = String.raw`\x60?(?:[\w.-]+\/)*[\w.{},-]*\w\.(?:md|mdx|json|ya?ml|toml|txt|ts|mjs|js|py)\x60?(?![\w/])`;
 const FILE_PAREN = new RegExp(String.raw`\s*\([^()\n]*${FILE_NAME}[^()\n]*\)`, "g");
 const FILE_INLINE = new RegExp(FILE_NAME, "g");
+const LIST_LINE = /^\s*([-*+]|\d+[.)])\s+\S/;
 const FENCE_OPEN = /^\s{0,3}(`{3,}|~{3,})\s*([\w+-]*)/;
 
 type Item = { kind: "line"; text: string; level: number } | { kind: "fence"; info: string; lines: string[] };
@@ -186,11 +190,22 @@ function cleanPass(source: string, options: NormalizeOptions, removals: Removal[
           if (next.kind !== "line" || !next.text.trim() || next.level > 0) break;
           end += 1;
         }
+        // A provenance line that ends with a colon introduces a list of process notes; drop it too.
+        const last = items[end - 1]!;
+        if (last.kind === "line" && /:\s*(\*\*|__)?\s*$/.test(last.text)) {
+          let cursor = end;
+          while (cursor < items.length && items[cursor]!.kind === "line" && !(items[cursor] as { text: string }).text.trim()) cursor += 1;
+          const isListLine = (entry: Item | undefined) => entry?.kind === "line" && entry.level === 0 && (LIST_LINE.test(entry.text) || /^\s{2,}\S/.test(entry.text));
+          if (isListLine(items[cursor]) && LIST_LINE.test((items[cursor] as { text: string }).text)) {
+            while (isListLine(items[cursor])) cursor += 1;
+            end = cursor;
+          }
+        }
         remove("provenance", render(items.slice(index, end)));
         index = end - 1;
         continue;
       }
-      if (METADATA_LINE.test(trimmed)) { remove("metadata-line", trimmed); continue; }
+      if (METADATA_LINE.test(trimmed) || DATE_LINE.test(trimmed)) { remove("metadata-line", trimmed); continue; }
       if (trimmed && armLabel.test(trimmed)) { remove("arm-label", trimmed); continue; }
       if (READINESS_LINE.test(trimmed) || READINESS_ONLY.test(trimmed) || READY_BADGE_LINE.test(trimmed)) { remove("readiness-label", trimmed); continue; }
       if (LENGTH_LINE.test(trimmed) || (trimmed && LENGTH_ONLY.test(trimmed))) { remove("length-marker", trimmed); continue; }
@@ -233,8 +248,10 @@ export function normalizeDraft(source: string, options: NormalizeOptions): Norma
     removals.push({ rule: "wrapper-fence", excerpt: "```" + fence.info });
     text = tidy(fence.lines.join("\n"));
   }
-  const residualLeaks = [...new Set([...options.identityTokens, ...BUILTIN_LEAK_TOKENS].map((token) => token.toLowerCase()))]
-    .filter((token) => token && new RegExp(`\\b${escapeRegex(token)}\\b`, "i").test(text));
+  const residualLeaks = [...new Set([
+    ...options.identityTokens.filter((token) => token && new RegExp(`\\b${escapeRegex(token)}\\b`, "i").test(text)),
+    ...BUILTIN_LEAKS.flatMap((pattern) => text.match(pattern) ?? []),
+  ].map((token) => token.toLowerCase()))];
   const words = text.split(/\s+/).filter((word) => /[\p{L}\p{N}]/u.test(word)).length;
   return { text, removals, residualLeaks, words };
 }

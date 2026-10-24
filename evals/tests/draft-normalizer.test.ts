@@ -61,6 +61,36 @@ describe("draft normalizer: identity leaks through text", () => {
     expect(result.removals.map((removal) => removal.rule)).toEqual(["arm-label", "provenance", "provenance", "metadata-line"]);
   });
 
+  it("removes process preambles and dated header lines seen in real review samples", () => {
+    const source = [
+      "Written before reading any `flow` file. Facts from Brief B only.",
+      "",
+      "Routing note: the brief tool returned none for this request.",
+      "",
+      "**Method rules that changed this draft:**",
+      "- Lead with the buyer's moment.",
+      "",
+      "**Date:** 2026-10-24 | **Mode:** AI search",
+      "",
+      "## Plan",
+      "Ship the page.",
+    ].join("\n");
+    const result = normalizeDraft(source, { identityTokens: arms });
+    expect(result.text).toBe("## Plan\nShip the page.");
+    expect(result.removals.map((removal) => removal.rule)).toEqual(["provenance", "provenance", "provenance", "metadata-line"]);
+  });
+
+  it("removes the list that a provenance line introduces with a colon", () => {
+    const source = "Method rules that changed this draft:\n\n- ENTRY: one to four briefs.\n- Lead with the change.\n  More on that.\n\n## Ideas\n1. First idea.";
+    const result = normalizeDraft(source, { identityTokens: arms });
+    expect(result.text).toBe("## Ideas\n1. First idea.");
+    expect(result.removals.map((removal) => removal.rule)).toEqual(["provenance"]);
+  });
+
+  it("reports internal agent names as residual leaks", () => {
+    expect(normalizeDraft("## Content structure (ai-structure-agent)\nBody.", { identityTokens: arms }).residualLeaks).toEqual(["ai-structure-agent"]);
+  });
+
   it("removes typical rationale, self-score, and review sections with their subsections", () => {
     const source = [
       "## Hero",
