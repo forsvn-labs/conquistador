@@ -44,6 +44,72 @@ and tests for complete fields. The SDK validates declared bindings; valid object
 prove that an external action occurred. Run aggregation, calibration, and review helpers retain
 separate evidence and human authority requirements. Never label fixtures as live observations.
 
+## Run a blind judging session
+
+A craft rebuild ships only when the judge prefers the method draft in a blind pairwise comparison
+against a draft written without the method. These commands run that comparison. Drafts, keys, and
+verdicts are private: keep them in a private Drive folder. The commands refuse any output path
+inside a Git work tree.
+
+**1. Build a pack.** One folder per case. Each case has the brief both arms received and one draft per arm:
+
+```text
+my-pack/
+  pack.json        {"schemaVersion":"conquistador.judging-pack/v1","id":"wave1-copy","arms":{"baseline":"bare","candidate":"method"}}
+  copy-hero/
+    case.json      {"practice":"copy"}
+    brief.md       the task and facts given to both arms
+    bare.md        the draft written without the method
+    method.md      the draft written with the method
+```
+
+The default pass rule needs at least 6 decided pairs per practice, so plan at least 6 cases per
+practice. Case folder names must not contain an arm name. To strip an extra section heading from
+every draft, add `"normalize": {"stripHeadings": ["Anchor"]}` to `pack.json`.
+
+**2. Prepare.** From `evals/`:
+
+```sh
+npm run judge:prepare -- --pack "<pack folder>" --out "<private session folder>" --reviewer hung
+```
+
+This removes identity leaks from each draft (front matter, metadata headers and fences, arm labels,
+"written after reading" notes, rationale and self-score sections, readiness labels, word counts, and
+file names), then gives each pair a random A/B order. It stops if an arm name or product name is still
+visible; fix the draft or add a heading to strip, or pass `--allow-residual` after you check it.
+The `sealed/` folder holds the order key and an audit of every removal. Do not open it before you
+finish judging. Someone else can audit it first.
+
+**3. Judge.** About 2 minutes per pair:
+
+```sh
+npm run judge:serve -- --session "<private session folder>" --open
+```
+
+Read the brief, then both drafts. Press <kbd>A</kbd>, <kbd>B</kbd>, or <kbd>T</kbd> (tie) to choose
+and move on. To add a reason, press <kbd>R</kbd>, type one line, press <kbd>Enter</kbd>, then choose.
+<kbd>←</kbd> and <kbd>→</kbd> move between pairs; choosing again replaces your earlier verdict.
+Each choice is saved at once to `verdicts.json` in the session folder (or `--verdicts <file>`), so a
+reload or a closed browser resumes where you stopped. Press Ctrl+C in the terminal when you finish.
+You can also open `judge.html` directly from disk; then verdicts stay in that browser until you click
+**Export**, and you pass the exported file to the report with `--verdicts`.
+
+**4. Report.**
+
+```sh
+npm run judge:report -- --pack "<pack folder>" --session "<private session folder>"
+```
+
+For each practice it shows method wins, bare wins, ties, and PASS, FAIL, or INCOMPLETE. Ties are not
+wins and do not count as decided. A practice with an unjudged pair is INCOMPLETE, never PASS. Change
+the rule with `--min-decided 6 --min-win-rate 2/3`. `--json <file>` writes the full report. The
+report re-derives every pair from the pack and the sealed key, so it stops if a draft, brief, key, or
+verdict changed after prepare, or if a pair has two verdicts.
+
+`fixtures/blind-judging/sample-pack/` is a synthetic pack for tests only. `npm run judge:e2e` drives
+the page in Chromium through the Playwright install at the repository root and writes its checks and
+screenshots to `dist/e2e/blind-judging/`.
+
 ## Historical maintainer pipelines
 
 `test:source`, `inventory:*`, and candidate-bound `promptfoo:*` execution/export commands belong
