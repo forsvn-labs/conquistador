@@ -163,6 +163,8 @@ export function buildRoutingContract(root = moduleRoot) {
       legacy: [...(spec.legacy ?? [])],
       // Routing-only phrases: practitioner wording that selects the method but does not describe it.
       aliases: [...(spec.aliases ?? [])],
+      // Word-slot signals for plain-language requests that name no exact phrase (see context-selection.mjs).
+      signals: [...(spec.signals ?? [])],
       exclusions: [...(spec.exclusions ?? [])],
       requiredResources: required,
       conditionalResources: conditional.map(item => item.path),
@@ -206,6 +208,7 @@ export function buildRoutingContract(root = moduleRoot) {
         description: firstPurpose(markdown.replace(/^---\n[\s\S]*?\n---\n/, '')),
         path,
         intents: meta.intents,
+        signals: [...(overlay.plays?.[name]?.signals ?? [])],
         legacy: meta.legacy ? [meta.legacy] : [],
         chain: steps,
         dependencies,
@@ -262,7 +265,7 @@ export function buildRoutingContract(root = moduleRoot) {
     parentMethods,
     methods,
     unavailableMethods: expected.filter(name => !methods[name]).map(name => ({ name, kind: overlay.methods[name].kind,
-      intents: overlay.methods[name].intents, aliases: overlay.methods[name].aliases ?? [], exclusions: overlay.methods[name].exclusions,
+      intents: overlay.methods[name].intents, aliases: overlay.methods[name].aliases ?? [], signals: overlay.methods[name].signals ?? [], exclusions: overlay.methods[name].exclusions,
       explicitOnly: overlay.methods[name].explicitOnly === true || overlay.explicitOnly.includes(name) })),
     plays,
     roles,
@@ -282,6 +285,7 @@ export function validateRoutingContract(value) {
       if (!Array.isArray(method[field])) fail(`Invalid ${field} for ${name}`);
     }
     if (method.aliases !== undefined && !Array.isArray(method.aliases)) fail(`Invalid aliases for ${name}`);
+    if (method.signals !== undefined && (!Array.isArray(method.signals) || method.signals.some(item => typeof item !== 'string'))) fail(`Invalid signals for ${name}`);
   }
   return value;
 }

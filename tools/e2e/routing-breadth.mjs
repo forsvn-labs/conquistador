@@ -15,7 +15,7 @@ const out = resolve(option('--out', join(root, 'dist/e2e/routing-breadth')));
 
 export async function loadCases() {
   const corpus = JSON.parse(readFileSync(join(root, 'tools/e2e/routing-breadth.json'), 'utf8'));
-  const cases = [...corpus.cases];
+  const cases = [...corpus.cases, ...plainLanguageCases()];
   // Every example the onboarding tour advertises is also a case, so the tour cannot drift (O6).
   if (existsSync(join(root, 'tools/tour.mjs'))) {
     const { AREAS } = await import('../tour.mjs');
@@ -36,6 +36,20 @@ export async function loadCases() {
   return cases;
 }
 
+// Plain-language requests (no command names), ambiguous pairs, and engineering or chit-chat negatives.
+// Every case also runs without force, the way MCP and hooks call the router, and both routes must agree.
+export function plainLanguageCases() {
+  const corpus = JSON.parse(readFileSync(join(root, 'tools/e2e/routing-plain-language.json'), 'utf8'));
+
+  return [
+    ...corpus.positives.map(item => ({ area: `plain:${item.target}`, task: item.task, target: item.target, any: item.any ?? [item.target], none: item.none, parity: true })),
+    ...corpus.ambiguous.map(item => ({ area: 'plain:ambiguous', task: item.task, any: item.any, none: item.none, parity: true })),
+    ...corpus.negatives.map(item => ({ area: `plain:negative:${item.area}`, task: item.task, silent: true, parity: true })),
+  ];
+}
+
+const routeOf = brief => JSON.stringify([brief.action, brief.play?.name ?? null, brief.methods.map(method => method.name)]);
+
 export function judge(item, { playbooks = [] } = {}) {
   const brief = createBrief(item.task, { force: !item.silent, root, playbooks });
   const play = brief.play?.name ?? null;
@@ -54,6 +68,11 @@ export function judge(item, { playbooks = [] } = {}) {
     if (item.play && play !== item.play) problems.push(`expected play ${item.play}, got ${play ?? 'none'} (R5)`);
     if (item.play && brief.play && !brief.play.steps.some(step => step.now)) problems.push('play has no first step (R5)');
     if (item.noPlay && play) problems.push(`expected a single command, got play ${play} (R6)`);
+  }
+  if (item.parity) {
+    const other = createBrief(item.task, { force: Boolean(item.silent), root, playbooks });
+
+    if (routeOf(other) !== routeOf(brief)) problems.push(`CLI and MCP routes differ: ${routeOf(brief)} vs ${routeOf(other)} (R7)`);
   }
   return { ...item, pass: problems.length === 0, problems, methods, must, play };
 }
