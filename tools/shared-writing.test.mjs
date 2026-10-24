@@ -144,10 +144,11 @@ test('the Vietnamese standard and editorial polish keep the rules they depend on
   for (const heading of ['## Register by channel', '## Density', '### Fix every time', '### Judge in context', '## Voice', '## After drafting']) assert.ok(guide.includes(heading), heading);
   for (const profile of ['Cold email or DM', 'Ad', 'Landing-page section', 'Founder post', 'Forum reply', 'Article', 'Docs', 'Internal memo']) assert.match(guide, new RegExp(`\\| ${profile} \\|`), profile);
   assert.match(guide, /40%/, 'long-form density gate');
+  const headings = [...guide.matchAll(/^#{2,3} (.+)$/gm)].map(match => match[1]);
   for (const path of files(join(parent, 'references/editorial-polish'))) {
     const text = readFileSync(path, 'utf8');
     assert.doesNotMatch(text, /Absolute Prohibition|Pangram|detector_mode|47 patterns|47-pattern/i, relative(parent, path));
-    for (const [, section] of text.matchAll(/writing-guide\.md` § ([^,.;)\n]+)/g)) assert.ok(guide.includes(`# ${section.trim()}`) || guide.includes(`## ${section.trim()}`), `${relative(parent, path)} cites missing section ${section}`);
+    for (const [, section] of text.matchAll(/writing-guide\.md` § ([^,.;:)`\n]+)/g)) assert.ok(headings.some(heading => section.startsWith(heading)), `${relative(parent, path)} cites missing section ${section}`);
   }
   for (const name of readdirSync(join(parent, 'references/editorial-polish/agents'))) {
     assert.match(readFileSync(join(parent, 'references/editorial-polish/agents', name), 'utf8'), /writing-guide\.md/, name);
