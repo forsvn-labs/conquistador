@@ -1051,7 +1051,7 @@
     },
     {
       "path": "conquistador/commands/campaign/references/platform-intelligence/founder-demo.md",
-      "sha256": "0bed2b15d2448cd75f1e49336bf5978ffb0422c9527546c9859f53c80d04c21f"
+      "sha256": "d33a298ecb6d6eaed5d4ff7a7b80484133995dc3ddb177e074445ffc9a8e05a6"
     },
     {
       "path": "conquistador/commands/campaign/references/platform-intelligence/linkedin-launch.md",
@@ -1099,7 +1099,7 @@
     },
     {
       "path": "conquistador/commands/campaign/references/platform-intelligence/x-launch.md",
-      "sha256": "875019509d2d9deb3c74f79bc7170e596088630b49488789e9199ea9326f41a6"
+      "sha256": "d9a8388e9868052cbe02f5703b01c260e4a9fd8cbd04bae9a2c22f524f6bc726"
     },
     {
       "path": "conquistador/commands/campaign/references/platform-intelligence/x.md",
@@ -1107,7 +1107,7 @@
     },
     {
       "path": "conquistador/commands/campaign/references/platform-intelligence/youtube.md",
-      "sha256": "c79abaab8429a68773ac446b8007d0f9430a02d5b25ea6ec708bb7056bffeb09"
+      "sha256": "6b692f9f15d429bff3de288b4d7fee4502410673c1cc663006dd31d18969bf29"
     },
     {
       "path": "conquistador/commands/campaign/references/why-this-works-convention.md",
@@ -2339,7 +2339,7 @@
     },
     {
       "path": "conquistador/commands/measure/references/platform-intelligence/founder-demo.md",
-      "sha256": "0bed2b15d2448cd75f1e49336bf5978ffb0422c9527546c9859f53c80d04c21f"
+      "sha256": "d33a298ecb6d6eaed5d4ff7a7b80484133995dc3ddb177e074445ffc9a8e05a6"
     },
     {
       "path": "conquistador/commands/measure/references/platform-intelligence/linkedin-launch.md",
@@ -2387,7 +2387,7 @@
     },
     {
       "path": "conquistador/commands/measure/references/platform-intelligence/x-launch.md",
-      "sha256": "875019509d2d9deb3c74f79bc7170e596088630b49488789e9199ea9326f41a6"
+      "sha256": "d9a8388e9868052cbe02f5703b01c260e4a9fd8cbd04bae9a2c22f524f6bc726"
     },
     {
       "path": "conquistador/commands/measure/references/platform-intelligence/x.md",
@@ -2395,7 +2395,7 @@
     },
     {
       "path": "conquistador/commands/measure/references/platform-intelligence/youtube.md",
-      "sha256": "c79abaab8429a68773ac446b8007d0f9430a02d5b25ea6ec708bb7056bffeb09"
+      "sha256": "6b692f9f15d429bff3de288b4d7fee4502410673c1cc663006dd31d18969bf29"
     },
     {
       "path": "conquistador/commands/measure/references/rubric.md",
@@ -3043,7 +3043,7 @@
     },
     {
       "path": "conquistador/commands/results/references/modes/video/references/platform-intelligence/founder-demo.md",
-      "sha256": "0bed2b15d2448cd75f1e49336bf5978ffb0422c9527546c9859f53c80d04c21f"
+      "sha256": "d33a298ecb6d6eaed5d4ff7a7b80484133995dc3ddb177e074445ffc9a8e05a6"
     },
     {
       "path": "conquistador/commands/results/references/modes/video/references/platform-intelligence/linkedin-launch.md",
@@ -3091,7 +3091,7 @@
     },
     {
       "path": "conquistador/commands/results/references/modes/video/references/platform-intelligence/x-launch.md",
-      "sha256": "875019509d2d9deb3c74f79bc7170e596088630b49488789e9199ea9326f41a6"
+      "sha256": "d9a8388e9868052cbe02f5703b01c260e4a9fd8cbd04bae9a2c22f524f6bc726"
     },
     {
       "path": "conquistador/commands/results/references/modes/video/references/platform-intelligence/x.md",
@@ -3099,7 +3099,7 @@
     },
     {
       "path": "conquistador/commands/results/references/modes/video/references/platform-intelligence/youtube.md",
-      "sha256": "c79abaab8429a68773ac446b8007d0f9430a02d5b25ea6ec708bb7056bffeb09"
+      "sha256": "6b692f9f15d429bff3de288b4d7fee4502410673c1cc663006dd31d18969bf29"
     },
     {
       "path": "conquistador/commands/results/references/modes/video/references/rubric.md",
@@ -5005,7 +5005,7 @@
     },
     {
       "path": "tools/search-index.json",
-      "sha256": "35e545c414c0d8c79677d87920bc09387925171a4f8107f80e93ce814d3a8a36"
+      "sha256": "c3eb796d0d59afea2119b44966c09677df685229d7ed37804057f9be3f9b37c8"
     },
     {
       "path": "tools/prompt-advice.mjs",
