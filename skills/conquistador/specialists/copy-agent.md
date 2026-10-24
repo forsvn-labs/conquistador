@@ -32,8 +32,9 @@ carries the promise and one proof point; a landing page carries the whole
 reader is ready for. Do not change the promise, the number, or the terms between assets.
 
 Headlines, heroes, lead magnet pages, app pages, and other copy under about 150 words are
-short-form: write them in one pass with the
-[short-form checklist](../commands/copy/references/short-form-copy.md), with no review roles.
+short-form: write them in your own judgment from the user's facts, without the spine above, the
+draft rules below, or review roles. Then run only the facts check in the
+[copy entry](../commands/copy/ENTRY.md), which removes and adds nothing else.
 
 ## Draft, then check
 

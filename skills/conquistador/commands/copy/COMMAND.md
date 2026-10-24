@@ -18,11 +18,11 @@ Core:
 
 - [anti-patterns](references/anti-patterns.md): Copy failures to catch before delivery. Editorial preference does not predict conversion. A PASS does not…
 - [copy-review](references/copy-review.md): Check the finished copy against the facts. Run this after the draft is written. It checks what the copy…
+- [headline-formulas](references/headline-formulas.md): Headline patterns. Use these for a landing page, product page, or offer page headline. Start from the…
 - [long-form-library](references/long-form-library.md): Long-form section library. Use this for long-form pages over about 150 words: sales pages, landing pages,…
 - [sales-argument](references/sales-argument.md): Sales argument: direct-response craft for sales pages and SaaS landing pages. Draft long-form copy from…
-- [short-form-copy](references/short-form-copy.md): Short-form copy: headlines, hero sections, lead magnet pages, and app pages. This checklist is the whole…
 
-By step: [belief-disruption](references/belief-disruption.md), [discovery-story](references/discovery-story.md), [emotional-triggers](references/emotional-triggers.md), [headline-formulas](references/headline-formulas.md), [lead-magnet-stack](references/lead-magnet-stack.md), [lifecycle-sequences](references/lifecycle-sequences.md), [research-workflow](references/research-workflow.md).
+By step: [belief-disruption](references/belief-disruption.md), [discovery-story](references/discovery-story.md), [emotional-triggers](references/emotional-triggers.md), [lead-magnet-stack](references/lead-magnet-stack.md), [lifecycle-sequences](references/lifecycle-sequences.md), [research-workflow](references/research-workflow.md).
 
 Specialist roles: [body-agent](agents/body-agent.md), [critic-agent](agents/critic-agent.md), [cta-agent](agents/cta-agent.md), [hook-agent](agents/hook-agent.md), [psychology-agent](agents/psychology-agent.md), [social-proof-agent](agents/social-proof-agent.md), [variant-agent](agents/variant-agent.md), [voice-agent](agents/voice-agent.md), [zero-risk-agent](agents/zero-risk-agent.md).
 
@@ -68,16 +68,12 @@ When one request holds both, write each unit in its own mode.
 
 ## Short-form mode
 
-Short copy wins on concrete, scannable specifics. Extra review passes tend to add words and strip them.
+Write the copy in your own judgment from the user's facts. This mode adds no drafting rules,
+checklist, examples, or review roles, and it reads no other file in this method.
 
-1. Read the facts for the strongest specific, the offer terms, and the one piece of proof.
-2. Draft with the short-form checklist (`references/short-form-copy.md`) in one pass.
-3. Run its facts check in the same context: remove unsupported claims, keep fair inferences, add
-   nothing.
-4. Deliver as below.
-
-Do not run the writing or review roles, the sequential fallback, or the long-form drafting steps for
-short-form work.
+Then run only the facts check: remove claims the facts do not support, keep fair inferences, and
+add nothing (no hedges, no source text, no disclaimers). Return the copy. Sending and publishing need
+the user's approval.
 
 ## Anchor long-form work
 
@@ -136,7 +132,7 @@ If the host cannot run separate roles, use the [sequential fallback](fallbacks/s
 
 ## Deliver
 
-In both modes, return paste-ready copy in the requested structure. Add variants only when each tests a different
+In long-form mode, return paste-ready copy in the requested structure. Add variants only when each tests a different
 strategic bet, and name the bet instead of calling them A, B, and C.
 
 Then give a short operator note under its own heading, never inside the copy:
