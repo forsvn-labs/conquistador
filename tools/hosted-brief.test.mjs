@@ -147,7 +147,8 @@ test('a hosted brief points single agents to the sequential fallback, and cold e
 });
 
 // Required resources: a command's declared required files load before keyword matches, inside the
-// existing byte budgets. What does not fit is listed in readNow, never dropped silently.
+// existing byte budgets. What does not fit is named in the text and listed first in situational,
+// never dropped silently. readNow stays empty: budget omissions are not mandatory reads (#86).
 import { createBrief, LIMITS } from './brief.mjs';
 import { loadRoutingContract } from './routing-contract.mjs';
 import { writeFileSync } from 'node:fs';
@@ -156,62 +157,78 @@ const contract = loadRoutingContract();
 const requiredOf = name => contract.methods[name].requiredResources.filter(path => !/\/fallbacks\//.test(path));
 const briefFor = task => createBrief(task, { cwd: null, playbooks: [], persistCache: false });
 const order = (brief, path) => brief.must.findIndex(item => item.path === path);
+const listed = (pack, path) => pack.structured.inlined.some(item => item.path === path)
+  || (pack.structured.situational.includes(path) && pack.text.includes(path));
 
 test('copy loads sales-argument before keyword matches such as lifecycle sequences', () => {
   const brief = briefFor('/conquistador copy Landing page hero and a 3-email trial sequence for Ledgerly, a B2B SaaS');
   assert.equal(brief.methods[0].name, 'copy');
   const sales = 'skills/conquistador/commands/copy/references/sales-argument.md';
   assert.ok(order(brief, sales) >= 0, JSON.stringify(brief.must.map(item => item.path)));
+  assert.equal(brief.must.find(item => item.path === sales).required, true);
   const firstExtra = brief.must.findIndex(item => !item.required);
   assert.ok(firstExtra === -1 || order(brief, sales) < firstExtra);
+  assert.ok(brief.must.length <= LIMITS.mustFiles);
   assert.ok(brief.must.reduce((sum, item) => sum + item.bytes, 0) <= LIMITS.mustBytes);
 });
 
 test('outreach inlines its decision framework and rubric, not only small keyword files', () => {
   const pack = packBrief(briefFor('Write a 3-touch cold email sequence to COOs at 20-50 person agencies'));
   const inlined = pack.structured.inlined.map(item => item.path);
-  for (const path of requiredOf('outreach')) assert.ok(inlined.includes(path) || pack.structured.readNow.includes(path), path);
+  for (const path of requiredOf('outreach')) assert.ok(inlined.includes(path), path);
   assert.ok(inlined.some(path => path.endsWith('frameworks/outreach-decisions.md')), JSON.stringify(inlined));
+  assert.deepEqual(pack.structured.readNow, []);
 });
 
-test('every command lists each required resource as inlined or read-now, in full and compact packs', () => {
+test('every command lists each required resource as inlined or named, in full and compact packs', () => {
   for (const name of Object.keys(contract.methods)) {
     if (contract.methods[name].explicitOnly || !requiredOf(name).length) continue;
     const brief = briefFor(`/conquistador ${name} help with this task for our product`);
-    if (brief.action !== 'brief' || brief.methods[0]?.name !== name) continue;
+    if (brief.action !== 'brief' || brief.methods[0]?.name !== name || brief.mode === 'assist') continue;
     for (const compact of [false, true]) {
       const pack = packBrief(brief, { compact });
-      const listed = new Set([...pack.structured.inlined.map(item => item.path), ...pack.structured.readNow]);
-      for (const path of requiredOf(name)) assert.ok(listed.has(path), `${name} ${compact ? 'compact' : 'full'} dropped ${path}`);
+      for (const path of requiredOf(name)) assert.ok(listed(pack, path), `${name} ${compact ? 'compact' : 'full'} dropped ${path}`);
       assert.ok(Buffer.byteLength(pack.text) <= (compact ? 8000 : 16000), `${name} over budget`);
-      for (const path of pack.structured.readNow) assert.ok(pack.text.includes(path), `${name} read-now ${path} missing from text`);
+      assert.deepEqual(pack.structured.readNow, [], `${name} made a mandatory read`);
+      const firstOptional = pack.structured.situational.findIndex(path => !requiredOf(name).includes(path));
+      const lastRequired = pack.structured.situational.findLastIndex(path => requiredOf(name).includes(path));
+      assert.ok(firstOptional === -1 || lastRequired < firstOptional, `${name} required files are not listed first`);
     }
   }
 });
 
-test('a required resource larger than the budget moves to readNow; extras never displace it', () => {
+test('a required resource larger than the budget is named and listed first; extras never displace it', () => {
   const directory = mkdtempSync(join(tmpdir(), 'conquistador-required-'));
   const large = join(directory, 'large.md');
   const small = join(directory, 'small.md');
   writeFileSync(large, `# Large\n${'x'.repeat(9000)}\n`);
   writeFileSync(small, '# Small\nkeyword extra\n');
   const item = (path, required) => ({ path: `conquistador/${required ? 'large' : 'small'}.md`, absolute: path, source: 'method', kind: 'playbook', title: required ? 'Large' : 'Small', why: 'test', bytes: 0, required });
-  const brief = { action: 'brief', mode: 'command', reason: 'relevant-capability', methods: [], must: [item(large, true), item(small, false)], situational: [], readNow: [], play: null };
+  const brief = { action: 'brief', mode: 'command', reason: 'relevant-capability', methods: [], must: [item(large, true), item(small, false)], situational: [], deferredRequired: [], play: null };
   const compact = packBrief(brief, { compact: true });
-  assert.deepEqual(compact.structured.readNow, ['conquistador/large.md']);
+  assert.deepEqual(compact.structured.readNow, []);
+  assert.equal(compact.structured.situational[0], 'conquistador/large.md');
   assert.ok(!compact.structured.inlined.some(entry => entry.path === 'conquistador/small.md'));
   assert.ok(Buffer.byteLength(compact.text) <= 8000);
-  assert.match(compact.text, /conquistador\/large\.md/);
+  assert.match(compact.text, /required[^\n]*conquistador\/large\.md/i);
+  assert.equal(compact.structured.provenance.find(entry => entry.path === 'conquistador/large.md').required, true);
   const full = packBrief(brief);
   assert.deepEqual(full.structured.inlined.map(entry => entry.path), ['conquistador/large.md', 'conquistador/small.md']);
-  assert.deepEqual(full.structured.readNow, []);
+  const tight = packBrief(brief, { limit: 6000 });
+  assert.ok(!tight.structured.inlined.some(entry => entry.path === 'conquistador/large.md'));
+  assert.equal(tight.structured.situational[0], 'conquistador/large.md');
+  const overflow = packBrief({ ...brief, must: [item(small, false)], deferredRequired: ['conquistador/over-budget.md'] });
+  assert.equal(overflow.structured.situational[0], 'conquistador/over-budget.md');
+  assert.match(overflow.text, /conquistador\/over-budget\.md/);
 });
 
-test('a small edit stays small: assist mode adds no read-now list', () => {
+test('a small edit stays small: assist mode adds no read-now list or required note', () => {
   const brief = briefFor('/conquistador copy Shorten this headline: Close your books in 2 days');
   assert.equal(brief.mode, 'assist');
   const pack = packBrief(brief);
   assert.deepEqual(pack.structured.readNow, []);
+  assert.doesNotMatch(pack.text, /Required references/);
+  assert.ok(!brief.must.some(item => item.required));
   assert.ok(Buffer.byteLength(pack.text) <= 4000);
 });
 
