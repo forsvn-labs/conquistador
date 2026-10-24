@@ -2,7 +2,7 @@
 // Failure modes listed and covered before the method text was written:
 //  1. public text names a practitioner, course, book, or branded framework;
 //  2. text copied or closely paraphrased from private course transcripts or overlay notes
-//     (exact 8-word overlap; runs only when CONQUISTADOR_CRAFT_SOURCES names a private folder);
+//     (exact 8-word overlap, captions included; runs only when CONQUISTADOR_CRAFT_SOURCES names a private folder);
 //  3. an invented statistic or conversion benchmark stated as fact;
 //  4. a sourced specific claim blurred into vague language;
 //  5. a lost approval boundary;
@@ -201,8 +201,11 @@ test('no 8-word run is shared with the private craft sources', { skip: !process.
   const sources = new Set();
   const collect = path => {
     if (statSync(path).isDirectory()) return readdirSync(path).forEach(name => collect(join(path, name)));
-    if (!/\.(?:md|txt)$/.test(path)) return;
-    const list = words(readFileSync(path, 'utf8'));
+    if (!/\.(?:md|txt|vtt)$/.test(path)) return;
+    let text = readFileSync(path, 'utf8');
+    // Caption files: drop headers, cue numbers, timings, and inline tags so runs cross cue breaks.
+    if (path.endsWith('.vtt')) text = text.split('\n').filter(line => !/^(?:WEBVTT|Kind:|Language:|NOTE\b|\d+$)|-->/.test(line.trim())).join(' ').replace(/<[^>]+>/g, ' ');
+    const list = words(text);
     for (let at = 0; at + 8 <= list.length; at++) sources.add(list.slice(at, at + 8).join(' '));
   };
   for (const folder of process.env.CONQUISTADOR_CRAFT_SOURCES.split(':')) collect(folder);
