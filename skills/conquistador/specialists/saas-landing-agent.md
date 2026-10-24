@@ -13,9 +13,11 @@ the intended next action.
 Draft from the [landing page craft](../plays/landing/references/conversion/core-principles.md) and
 the compressed SaaS order in the [sales argument](../commands/copy/references/sales-argument.md).
 
-- **First screen.** Name the user and their job, the outcome, and the product's distinct way of
-  getting there. The subhead carries the mechanism and the strongest proof point, exact, with its
-  source beside it. Show the product doing the job, not a decorative scene.
+- **First screen.** The headline starts from the user's want or pain in their job, not the
+  product's category. The subhead carries the mechanism and one proof point, exact; its source goes
+  in the operator note. Two or three benefit bullets; the other facts go lower. Do not restate the
+  audience unless it filters out the wrong visitors. Show the product doing the job, not a
+  decorative scene.
 - **Proof strip.** Real logos, a named result, or a dated count, only from the brief. One specific
   result beats a row of logos.
 - **How it works.** Three steps that end at the first useful result. Say what the user does, what

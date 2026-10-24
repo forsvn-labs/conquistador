@@ -5,6 +5,9 @@ Version: `landing-decision-review-v1`. Run these checks after the page is drafte
 and gaps in the argument; they do not choose the voice or predict conversion. Do not reinterpret
 historical CP scores as these LP checks; old briefs need a fresh review under this version.
 
+These checks remove unsupported claims and misleading actions. They do not add disclaimers, hedges,
+or source text to the page, and they keep fair inferences that follow directly from the facts.
+
 For each applicable check report PASS, FAIL, UNKNOWN, or N/A with a brief location and reason.
 Unsupported public claims and misleading actions block readiness. Missing inputs stay UNKNOWN;
 a useful bounded draft can still be returned with visible gaps. N/A needs a scope reason.
@@ -19,7 +22,7 @@ Headlines and section titles identify the decision or information the section se
 
 Applies to: opening.
 
-The opening explains the actual offer, intended visitor, and relevant limitation. Do not promise instant comprehension; show the exact wording a reader would use to identify the offer.
+The opening starts from the reader's want or pain and makes clear what they get. Name the intended visitor only when it filters out visitors the product cannot serve. Material limits belong where they affect the decision, not in the headline. Do not promise instant comprehension; show the exact wording a reader would use to identify the offer.
 
 ## LP-03 — Accurate action
 
@@ -61,7 +64,7 @@ Connect a described capability to an observable use and its prerequisites. Disti
 
 Applies to: proof.
 
-Each quotation, measurement, logo, and endorsement has a source, scope, permission, and relevant date. Remove unsupported proof. A placeholder is an implementation gap and must never be presented as a real customer.
+Each quotation, measurement, logo, and endorsement has a source, scope, permission, and relevant date, recorded in the operator note or evidence sheet rather than printed on the page. Remove unsupported proof. A placeholder is an implementation gap and must never be presented as a real customer.
 
 ## LP-10 — Voluntary choice
 

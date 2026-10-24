@@ -19,9 +19,10 @@ changes the argument.
 
 Before the first asset, write five lines and reuse them in every asset:
 
-1. **Promise:** the outcome in the buyer's words, sized to the proof.
+1. **Promise:** the buyer's want, pain, or identity, in their words, sized to the proof.
 2. **Mechanism:** the one thing the product does differently, and why that produces the outcome.
-3. **Proof:** the strongest supplied proof point, exact, with its source and scope beside it.
+3. **Proof:** the one strongest supplied proof point, exact. Its source and scope go in the
+   operator note, not the copy.
 4. **Offer:** what they get, the terms, and the risk boundary the owner authorized.
 5. **Action:** one next step and what happens after it.
 
@@ -32,9 +33,11 @@ reader is ready for. Do not change the promise, the number, or the terms between
 
 ## Draft, then check
 
-Draft from the craft. Then check every claim against the brief: keep a sourced number exact, mark
-missing proof as a gap, and do not invent customer language, results, testimonials, urgency, or
-first-person experience.
+Draft from the craft: select, start from the reader, and write with conviction. Then check every
+claim against the brief: remove unsupported claims, keep fair inferences, keep a sourced number
+exact, and mark missing proof as a gap. Do not add disclaimers or hedges, and do not invent customer
+language, results, testimonials, urgency, or first-person experience.
 
-Return the finished native copy first, then the claim boundary and facts that still need proof.
+Return the finished native copy first, then a short operator note with sources, the claim boundary,
+and facts that still need proof.
 Sending and publishing remain human actions and need the owner's approval.

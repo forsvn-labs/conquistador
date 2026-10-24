@@ -26,7 +26,8 @@ sentence counts, or number of badges. A capability can have a concrete use witho
 
 Verify that the preceding section supplies any required context and the next section advances a
 remaining question. Do not repeat the same promise in different layouts to manufacture depth.
-Keep qualifications close to claims. A missing proof slot stays missing and cannot become public copy.
+Keep a claim only when the facts support it; do not soften it with hedges or source text, which go
+in the operator note. A missing proof slot stays missing and cannot become public copy.
 
 Inline delivery returns the requested section argument and build notes. File-handoff delivery uses
 [format conventions](../references/format-conventions.md) and the selected handoff mode. Do not

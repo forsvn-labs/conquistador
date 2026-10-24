@@ -64,9 +64,10 @@ or an execution handoff. Do not choose a web framework, emit `index.html`, or wr
 implementation prompt. If a later implementation handoff is requested and no stack is verified,
 label the stack unresolved.
 
-Every section must advance the same argument toward one action. Keep a sourced number exact, with
-its source beside it. Do not invent customers, metrics, compatibility, product behavior, or
-decorative proof. Keep implementation and live deployment behind explicit scope.
+Every section must advance the same argument toward one action. Start the first screen from the
+reader's want or pain, not the product. Keep a sourced number exact; its source goes in the
+operator note, not on the page. Do not invent customers, metrics, compatibility, product behavior,
+or decorative proof. Keep implementation and live deployment behind explicit scope.
 
 Run `audit` on the finished package before the Review Packet.
 

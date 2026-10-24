@@ -6,9 +6,9 @@ needs finished copy, its evidence boundary, and its relationship to the next dec
 
 | Section purpose | Information to specify | Common gap to catch |
 |---|---|---|
-| Introduce the offer | Actual product or service, intended task, relevant limitation, next action | A promise without a clear offer |
+| Introduce the offer | The reader's want or pain, the mechanism, one proof point, next action | A product description in place of a promise, or a promise without a clear offer |
 | Explain a use | Capability, observable use, prerequisites, limits | An invented business outcome |
-| Show evidence | Source, scope, permission, date, accurate representation | A placeholder presented as a customer |
+| Show evidence | The proof in plain words on the page; source, scope, permission, and date in the operator note | A placeholder presented as a customer, or source text printed on the page |
 | Answer a concern | Supplied concern or labeled assumption, supported answer, remaining limit | A made-up objection used to praise the product |
 | Explain terms | Price, currency, period, scope, exclusions, known conditions | A material charge hidden until after commitment |
 | Collect information | Field purpose, optionality, handling, validation, result, recovery | Unnecessary collection or false success state |

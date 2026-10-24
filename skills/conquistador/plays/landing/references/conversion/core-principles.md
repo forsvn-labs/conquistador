@@ -11,27 +11,32 @@ Build the page as one argument for one action. The `copy` command's
 | **SaaS trial** | Start a trial or a first useful action | The path to the first useful result; setup, integrations, data handling, and price near the button |
 | **Demo-led B2B** | Book a demo or a call | Outcome by role; security and integrations; the demo as an offer: on whose data, how long, with whom |
 | **Direct-response offer** | Buy, apply, or book | The full sequence: lead, problem, cause, mechanism, product, proof, offer, objections, close |
-| **Launch** | Try the new thing | What changed, who it is for, a short demo, real launch terms and end date |
+| **Launch** | Try the new thing | What changed and what it means for the reader, a short demo, real launch terms and end date |
 
 A software buyer who needs product and integration evidence should not get a long sales letter. A
 cold buyer of a course or service usually needs more argument than a three-section SaaS page.
 
 ## Write the first screen
 
-The first screen must let a visitor say what it is, who it is for, and what they get:
+The first screen must let a visitor say what they get and why it matters to them. Select first:
+one proof, one mechanism, and two or three benefits. The other facts go lower or nowhere.
 
-- **Eyebrow or audience line:** who it is for, when that is not obvious.
-- **Headline:** the outcome, sized to the proof, in the words of the ad or search that sent them.
-- **Subhead:** the mechanism and the strongest proof point.
+- **Headline:** the reader's want, pain, or identity, in the words of the ad or search that sent
+  them, sized to the proof. Not the product's category or features. A customer's result leads only
+  when the reader knows the customer.
+- **Subhead:** the mechanism and one proof point.
+- **Bullets:** two or three benefits, each led by what the reader gets.
 - **Call to action:** a verb and what they get; the commitment and next step under it.
+- **Small line above the headline:** the category, only when a visitor must first learn what it
+  is. Name the audience only when it filters out visitors the product cannot serve.
 - **Visual:** the product doing the job, not a decorative scene.
 
 ### Keep a sourced number exact
 
-Keep a sourced number exact, with its source and scope beside it, even in the headline. "Northpier
-Clinic cut weekly rota building from 6 hours to 40 minutes (practice manager, May 2026)" must not
-become "save hours every week". Scope words go beside the number, not into vaguer copy. (Invented
-example.)
+Keep a sourced number exact, even in the headline. "Northpier Clinic went from 6 hours of rota work
+a week to 40 minutes" must not become "save hours every week". The source, period, and scope go in
+the operator note, not on the page; keep only the qualifier a reader needs ("one clinic", "across
+31 teams"). Do not add disclaimers or hedges to the page. (Invented example.)
 
 ## Build the argument below the fold
 
@@ -42,7 +47,8 @@ it blocks. Cut sections that repeat a claim without moving the decision.
 
 ## Assemble an evidence sheet
 
-For each claim, list source, scope, date, permission, and the wording it supports. Product behavior
+For each claim, list source, scope, date, permission, and the wording it supports. This sheet is
+the operator note; it does not go on the page. Product behavior
 comes from inspected implementation or authoritative documentation. Mark unverified behavior as a
 gap. Do not turn a future feature into present-tense copy or a layout placeholder into a customer,
 award, or certification.

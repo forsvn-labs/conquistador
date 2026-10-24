@@ -17,8 +17,8 @@ full order: lead, problem, cause, mechanism, product, proof, offer, objections, 
 
 - **One idea.** Write the page's single idea in one sentence before the headline: the outcome joined
   to the mechanism that makes it believable. Every section either sets it up or proves it.
-- **Lead by awareness.** A cold reader gets a situation they recognize or the problem in their
-  words; a reader who has seen every competing promise gets the mechanism first. Name the product
+- **Lead by awareness.** Start from the reader's want, pain, or identity. A cold reader gets a
+  situation they recognize or the problem in their words; a reader who has seen every competing promise gets the mechanism first. Name the product
   only after the reader wants an answer.
 - **Cause before cure.** Explain why earlier attempts failed in a way that clears the reader and
   points at the mechanism. This is the step most drafts skip.
@@ -29,7 +29,10 @@ full order: lead, problem, cause, mechanism, product, proof, offer, objections, 
   cost of the problem with real arithmetic, then the risk term exactly as the owner authorized it,
   then what happens after payment.
 - **Proof beside claims.** Put the strongest proof next to the claim it supports. Keep a sourced
-  number exact, with its source and scope beside it.
+  number exact; its source and scope go in the operator note, not the page.
+- **Conviction.** A creator's or customer's true result is told plainly, then backed by results
+  from people like the reader. Do not apologize for proof with disclaimers or hedges; if a claim is
+  unsupported, remove it.
 - **Close.** Restate the outcome, the offer, and the one action. A short note after the close may
   restate the risk term or answer the last objection; it must not add a new promise.
 
