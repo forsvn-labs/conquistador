@@ -4,6 +4,7 @@
 //   J6     every saved verdict is bound to the pair that was on screen when it was chosen.
 //   J7     the report command accepts the finished session.
 //   J8-J9  opened from disk, the page keeps verdicts in the browser and exports a valid verdict file.
+//   J10    on a phone-width screen, the brief and both drafts show in full.
 //   node --experimental-strip-types tools/blind-judging-e2e.ts [OUT_DIR]
 // Uses the Playwright package and Chromium installed at the repository root. Writes OUT_DIR/report.json
 // and screenshots. Exit 1 when a check fails.
@@ -127,6 +128,22 @@ try {
   let valid = true;
   try { upsertVerdict(session, [], exported[0]!); } catch { valid = false; }
   check("J9", "the exported file is a valid HumanVerdict array for this session", exported.length === 1 && valid, JSON.stringify(exported));
+  await context.close();
+
+  context = await browser.newContext({ viewport: { width: 390, height: 844 } });
+  page = await context.newPage();
+  await page.goto(server.url);
+  await page.locator("main[data-pair-id]").waitFor();
+  const narrow = await page.evaluate(() => {
+    const clipped = [...document.querySelectorAll<HTMLElement>(".brief, article .doc")]
+      .filter((element) => element.scrollHeight > element.clientHeight + 1).map((element) => element.id || "brief");
+    const header = document.querySelector("header")!.getBoundingClientRect().height;
+    const exportButton = document.getElementById("export")!.getBoundingClientRect();
+    return { clipped, header, exportVisible: exportButton.width > 0 && exportButton.right <= innerWidth, overflow: document.documentElement.scrollWidth - innerWidth };
+  });
+  await page.screenshot({ path: join(out, "03-narrow.png"), fullPage: true });
+  check("J10", "on a phone-width screen the brief and both drafts show in full, with a compact header",
+    narrow.clipped.length === 0 && narrow.header <= 120 && narrow.exportVisible && narrow.overflow <= 0, JSON.stringify(narrow));
   await context.close();
 } catch (error) {
   check("J0", "the browser run completed", false, error instanceof Error ? error.stack : error);
