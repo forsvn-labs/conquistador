@@ -390,7 +390,7 @@
     { "target": "plan", "task": "Reach $1M ARR next year: what do we do first?" },
     { "target": "plan", "task": "Our board wants 3x growth. Turn that into a plan" },
     { "target": "plan", "task": "Make a growth plan to hit our signup target" },
-    { "target": "plan", "task": "Plan marketing and growth for my product" },
+    { "target": "plan", "task": "Plan our growth to reach 1,000 paying customers by next year" },
 
     { "target": "press", "task": "Get us press coverage for our funding announcement" },
     { "target": "press", "task": "Pitch journalists about our launch" },
@@ -467,7 +467,8 @@
     { "task": "What metrics should we watch for activation?", "any": ["measure"], "none": ["diagnose"] },
     { "task": "Activation dropped after the redesign; find the cause", "any": ["diagnose"], "none": ["measure"] },
     { "task": "Should we raise prices for new customers only?", "any": ["pricing"], "none": ["decide"] },
-    { "task": "Rank these five channel ideas and cut the weakest", "any": ["prioritize", "channels"], "none": ["campaign"] }
+    { "task": "Rank these five channel ideas and cut the weakest", "any": ["prioritize", "channels"], "none": ["campaign"] },
+    { "task": "Plan marketing and growth for my product", "any": ["campaign", "plan"], "note": "No target to model, so the plan play (target to plan) is not required; campaign owns the explicit phrase." }
   ],
   "negatives": [
     { "area": "engineering:email", "task": "Fix the retry logic in our email sending queue" },
