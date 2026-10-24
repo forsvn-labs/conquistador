@@ -22,7 +22,7 @@ Return:
 - status: keep | discard | watch | blocked
 - confidence: high | medium | low | blocked
 - decision_sentence:
-- next_route: convert-revision | copy | creative | campaign | eval-loop | none
+- next_route: lp-brief | copywriting | design-brief | campaign-plan | eval-loop | none
 
 ## Keep / Discard / Watch
 

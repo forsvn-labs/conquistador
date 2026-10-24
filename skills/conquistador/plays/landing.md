@@ -23,8 +23,8 @@ Use the brief to select current-stage resources. Read additional files only when
 Core:
 
 - [anti-patterns](landing/references/anti-patterns.md): Brief review failures. The section writer owns clear answers and claim boundaries. The conversion critic…
-- [core-principles](landing/references/conversion/core-principles.md): Landing page craft: page type, first screen, and argument. Build the page as one argument for one action.…
-- [conversion-principles](landing/references/conversion-principles.md): Landing-page review method. Version: landing-decision-review-v1. Run these checks after the page is…
+- [core-principles](landing/references/conversion/core-principles.md): Build a page argument from known facts. Start with the visitor's task, the offer that exists today, the…
+- [conversion-principles](landing/references/conversion-principles.md): Landing-page review method. Version: landing-decision-review-v1. This is an original local review…
 - [design-handoff-prompting](landing/references/design-handoff-prompting.md): Design-Handoff Prompting — Opening-Prompt Protocol. The opening prompt to a design tool sets the quality…
 
 By step: [implementation-checklist](landing/references/conversion/implementation-checklist.md), [social-proof-trust](landing/references/conversion/social-proof-trust.md), [testing-optimization](landing/references/conversion/testing-optimization.md), [ux-design](landing/references/conversion/ux-design.md), [visitor-decisions](landing/references/conversion/visitor-decisions.md), [failure-modes](landing/references/failure-modes.md), [handoff-formats](landing/references/handoff-formats.md), [hypothesis-rubric](landing/references/hypothesis-rubric.md), [section-templates](landing/references/section-templates.md), [surface-rhythm](landing/references/surface-rhythm.md).
@@ -37,37 +37,31 @@ Output formats and fallbacks: [format-conventions](landing/references/format-con
 
 <!-- playbooks:end -->
 
-Draft from the craft first: [landing page craft](landing/references/conversion/core-principles.md)
-for page type, first screen, and argument order, and the `copy` command's sales argument for
-promise, mechanism, offer, proof, and objections. Run the [LP checks](landing/references/conversion-principles.md)
-after the draft exists.
-
 1. Use `position` when audience, costly moment, promise, mechanism, proof, objection, or
    alternatives remain unresolved.
-2. Use `copy` for the complete section argument and final copy. Load the
-   [SaaS landing specialist](../specialists/saas-landing-agent.md) for a trial or demo page and the
-   [direct-response landing specialist](../specialists/dr-landing-agent.md) for an offer page that
-   must carry a full sales argument.
+2. Use `copy` for the complete section argument and final copy.
 3. Use `creative` for hierarchy, real or labeled-representative asset slots, responsive behavior,
    states, accessibility, and build acceptance.
-4. Use `convert` to check the decision path and define one discriminating test.
+4. Use `convert` to verify the decision path and define one discriminating test.
 5. Use the [share-card-verification](../methods/share-card-verification.md) method when the live or staged page must render correctly when
    shared.
 
-Match the method to the requested delivery mode. A bounded inline request may return the page
-argument, section copy, responsive build brief, claim boundary, and first test in the terminal
-Review Packet. It does not require project brand files, a long artifact, companion handoff files,
+Load the landing method under [landing/](landing/) (architecture,
+hypothesis, section spec, conversion critic, visitor decisions) and its versioned review contract.
+
+Match the method to the requested delivery mode. A bounded inline request may return the
+page argument, section copy, responsive build brief, claim boundary, and first test in the terminal
+Review Packet. It does not require project brand files, a 250-line artifact, companion handoff files,
 or approval of intermediate hypotheses. Treat supplied brand facts and semantic token names as the
 available brand source; label missing visual values and real assets instead of inventing them. Use the
-full file-oriented method under [landing/](landing/) only when the user asks for persistent artifacts
-or an execution handoff. Do not choose a web framework, emit `index.html`, or write a companion
-implementation prompt. If a later implementation handoff is requested and no stack is verified,
-label the stack unresolved.
+full file-oriented method only when the user asks for persistent artifacts or an execution handoff.
+Use the evidence-bound page argument and one useful test in either mode. The retired formula-based
+rubric does not apply; use `landing-decision-review-v1` and preserve UNKNOWN checks.
+Do not choose a web framework, emit `index.html`, or write a companion implementation prompt. If a later
+implementation handoff is requested and no stack is verified, label the stack unresolved.
 
-Every section must advance the same argument toward one action. Start the first screen from the
-reader's want or pain, not the product. Keep a sourced number exact; its source goes in the
-operator note, not on the page. Do not invent customers, metrics, compatibility, product behavior,
-or decorative proof. Keep implementation and live deployment behind explicit scope.
+Every section must advance the same decision spine. Do not invent customers, metrics, compatibility,
+product behavior, or decorative proof. Keep implementation and live deployment behind explicit scope.
 
 Run `audit` on the finished package before the Review Packet.
 

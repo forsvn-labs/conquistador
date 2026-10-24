@@ -1,13 +1,12 @@
 # Evidence a visitor can inspect
 
 Treat every customer name, quotation, number, certification, award, and logo as a claim. Record its
-source, scope, date, permission for public use, and the exact statement it supports in the evidence
-sheet or operator note. The page states the proof plainly, with only the qualifier a reader needs. A supplied
+source, scope, date, permission for public use, and the exact statement it supports. A supplied
 image does not by itself prove permission or endorsement. Private access does not imply public rights.
 
 A measured outcome needs its population, period, definition, and limitations. Do not turn one
-example into a typical result or imply causal attribution from a before/after anecdote. Replace stale
-proof rather than dating it on the page; no universal age cutoff makes evidence true or false.
+example into a typical result or imply causal attribution from a before/after anecdote. Use dates
+when they help interpret relevance; no universal age cutoff makes evidence true or false.
 
 A quotation must preserve meaning and permitted scope. Do not rewrite it into a stronger promise.
 When evidence is missing, remove the public claim or mark a clearly non-public asset slot for later
