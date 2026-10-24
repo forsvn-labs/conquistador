@@ -65,15 +65,20 @@ when different answers would change the copy materially. Otherwise label the ass
 
 1. Write the one-sentence promise and the two mechanism lines from
    [sales argument](references/sales-argument.md).
-2. Choose the argument order for the page type and the reader's awareness. Use the
+2. Select: pick one proof, one mechanism, and the two or three benefits that matter most to this
+   reader. The other facts stay out of the hero. Do not restate the audience unless it filters out
+   visitors the product cannot serve.
+3. Choose the argument order for the page type and the reader's awareness. Use the
    section library (`references/page-sections.md`) for page structures.
-3. Draft 5–10 headlines from different headline patterns (`references/headline-formulas.md`) and
-   keep the one that passes the tests. Choose the lead by awareness.
-4. Write the body in argument order, in the customer's words. Put proof next to the claim it
-   supports. Keep a sourced number exact, with its source and scope beside it.
-5. Build the offer and the call to action: what they get, terms, risk reversal, and what happens
+4. Draft 5–10 headlines from different headline patterns (`references/headline-formulas.md`), each
+   starting from the reader's want, pain, or identity, and keep the one that passes the tests.
+   Choose the lead by awareness.
+5. Write the body in argument order, in the customer's words, with benefit bullets and rhythm. Put
+   proof next to the claim it supports. Keep a sourced number exact; its source goes in the
+   operator note.
+6. Build the offer and the call to action: what they get, terms, risk reversal, and what happens
    after the click.
-6. Compare doubtful units with the annotated examples (`references/examples/direct-response-examples.md`).
+7. Compare doubtful units with the annotated examples (`references/examples/direct-response-examples.md`).
 
 Per surface:
 
@@ -87,8 +92,9 @@ and [variant](agents/variant-agent.md) when alternatives test different strategi
 
 ## Check after drafting
 
-The checks find false or unclear claims. They do not set the voice, flatten the headline, or blur a
-sourced specific.
+The checks remove unsupported claims and keep fair inferences that follow directly from the facts.
+They do not set the voice, flatten the headline, or blur a sourced specific. They do not add
+disclaimers, hedges, or source text to the page.
 
 1. Run [copy review](references/copy-review.md) on the assembled draft and the
    [failure list](references/anti-patterns.md).
@@ -98,7 +104,8 @@ sourced specific.
    [lifecycle sequences](references/lifecycle-sequences.md) when those surfaces apply.
 3. Run the competitor-swap test on the hero and read the first screen alone.
 4. Fix the weak unit; do not swap one vague synonym for another. Then confirm that names, numbers,
-   sources, links, claims, and call-to-action strength did not regress.
+   links, claims, and call-to-action strength did not regress, and that the headline still starts
+   from the reader.
 
 If the host cannot run separate roles, use the [sequential fallback](fallbacks/sequential.md).
 
@@ -107,12 +114,13 @@ If the host cannot run separate roles, use the [sequential fallback](fallbacks/s
 Return paste-ready copy in the requested structure. Add variants only when each tests a different
 strategic bet, and name the bet instead of calling them A, B, and C.
 
-Then give at most:
+Then give a short operator note under its own heading, never inside the copy:
 
-- the chosen audience, promise, and mechanism;
-- two or three consequential decisions;
-- factual claims that need verification;
-- one recommended next action.
+- each number with its source, period, and scope, and permissions to confirm;
+- facts left out on purpose and why;
+- one or two consequential decisions and one recommended next action.
+
+If the user asked for the copy only, return the copy only.
 
 Never invent claims, quotes, metrics, customers, or consent. Keep sending, publishing, and external
 writes behind explicit approval.

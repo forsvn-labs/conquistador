@@ -1,17 +1,24 @@
-# Describe a resource offer
+# Write a lead magnet page
 
-Use when the copy offers a guide, template, checklist, or other resource in exchange for an action. Inspect the resource or the supplied description before promising its contents.
+Use when the copy offers a guide, template, checklist, calculator, or other resource in exchange for
+an email address or another action. Draft from the [sales argument](sales-argument.md): the reader
+wants the result the resource gives, not the file.
 
-Record what the reader receives, the intended user, the task it supports, the delivery path, and any access requirement. If the resource does not yet exist, describe the offer as a draft and identify that dependency.
+- **Headline:** the problem the resource solves or the result it gives, in the reader's words.
+  "Stop keeping track of repairs in your head" beats "Track repairs with our free spreadsheet".
+- **Subhead:** what it is and the one thing that makes it worth an email, in one or two sentences.
+- **Bullets:** three or four things the reader can do with it, benefit first: "Hand your accountant
+  a year-end repair total" beats "Year-end summary tab". A short video or setup note can be the last
+  bullet.
+- **Button:** name the thing they get: "Email me the Repair Log".
 
-Write the offer around a concrete use. Explain the contents and limitations with enough detail for the reader to decide whether it is relevant. Do not replace that description with an unsupported result or an inflated value estimate.
+Leave the maker's company out of the hero unless the reader knows it. Do not restate the audience.
 
-Check the exchange. If delivery requires an email address, state that requirement. Separate receiving the resource from consenting to additional contact. Do not imply immediate access if fulfillment is manual or delayed.
+Then check the exchange. Describe only contents that exist; if the resource is not built yet, say
+so to the owner. If delivery needs an email address, the form makes that plain. Do not imply
+instant delivery if fulfillment is manual. Do not promise a saving or result the facts do not
+support; a benefit that follows directly from the contents is fair.
 
-Match the CTA to the actual mechanism. Avoid engagement instructions that have no role in delivery. If the host cannot deliver the resource, return the copy and a fulfillment requirement rather than claiming an automation exists.
-
-Return finished copy, the destination or pending destination, and unresolved fulfillment terms. A proposed experiment can compare descriptions of the resource, with an agreed useful action and measurement window. Do not import a promised engagement multiplier.
-
-Synthetic example: an expense-review checklist contains editable fields and an example review. Describe those contents and file format. Do not claim it saves a specified sum unless the supplied evidence establishes that result for the intended context.
-
-Apply [copy review](copy-review.md). Sending, collecting contacts, and publishing remain separate authorized actions.
+Return the copy, then an operator note with the destination, fulfillment terms, and anything to
+confirm. Apply [copy review](copy-review.md). Sending, collecting contacts, and publishing remain
+separate authorized actions.
