@@ -2,7 +2,8 @@
 
 Run this after a sales page or sales letter is drafted from the [sales argument](sales-argument.md).
 All other copy gets only the facts check in the [copy entry](../ENTRY.md). This review checks what
-the copy asks the reader to believe and do. It removes unsupported claims and nothing else. It does not choose the voice, flatten the headline, or
+the copy asks the reader to believe and do. It removes unsupported claims and nothing else. It does
+not choose the voice, flatten the headline, or
 blur a specific claim that has a source. It does not add disclaimers, hedges, or source text to the
 page.
 
