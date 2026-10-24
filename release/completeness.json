@@ -69,7 +69,7 @@
     {
       "name": "copy",
       "version": "3.0.0",
-      "sha256": "55f4dac6b705afb6265d106a4a1cc181f40c5b8f48e635f875719b05fb524fd2"
+      "sha256": "7ef204b6259cf8a89b9e3937ab492484aa9836828ad8a4e51b94b9572011f438"
     },
     {
       "name": "creative",
@@ -1327,7 +1327,7 @@
     },
     {
       "path": "conquistador/commands/copy/ENTRY.md",
-      "sha256": "70b9f1f1825cccda539a18c17902ae5cd46790d5c928951b02b159aaa8b1800e"
+      "sha256": "daa34aa19dcd5a5f0f5ea70e927e129eeddc2424d69a9cad4748a258fe2a14f8"
     },
     {
       "path": "conquistador/commands/copy/agents/body-agent.md",
@@ -1371,7 +1371,7 @@
     },
     {
       "path": "conquistador/commands/copy/fallbacks/sequential.md",
-      "sha256": "b10b6b2456bb16d49c2558b412446ec2c3314497c5b0df3b808598ed6999ce31"
+      "sha256": "2ba387345dc57311ce546441781e47757b04f72faf1c88fff7a006cc59c2befa"
     },
     {
       "path": "conquistador/commands/copy/references/anti-patterns.md",
@@ -1395,7 +1395,7 @@
     },
     {
       "path": "conquistador/commands/copy/references/examples/direct-response-examples.md",
-      "sha256": "f3e17a45441ae1406d73ef2891cedaf874613e3a355db93eb98e1103b4da12b1"
+      "sha256": "11e677a3a3dbcca9da223906425441059be97d2868a1dfe8d8189e3531817dc6"
     },
     {
       "path": "conquistador/commands/copy/references/format-conventions.md",
@@ -1403,11 +1403,11 @@
     },
     {
       "path": "conquistador/commands/copy/references/headline-formulas.md",
-      "sha256": "b7a02a65efe64a3cf6aabcca74d2f27880ee18a4d854c5856c31a82f52811e2a"
+      "sha256": "8883a1cfbaa3caa8ce5152e82fed7803e71896274de55f2a0cf882e748d1c18d"
     },
     {
       "path": "conquistador/commands/copy/references/lead-magnet-stack.md",
-      "sha256": "8f4f8c1261927eaf9ff8d90ebf8a8cfb718b8537bfbdde54da154ebf1afa2a0a"
+      "sha256": "202fcb1035644c7b5afba38993ef3eb7526be060acd02defa06854360883834c"
     },
     {
       "path": "conquistador/commands/copy/references/lifecycle-sequences.md",
@@ -1415,7 +1415,7 @@
     },
     {
       "path": "conquistador/commands/copy/references/long-form-library.md",
-      "sha256": "f1003c270ab423675d7bbb18abf68ab032cf937e2317673172944f7795d7fc9c"
+      "sha256": "36f30eb72627725dabd47cda9c5230fd5e0dc8e761103ebe4f8aaf1420f80fef"
     },
     {
       "path": "conquistador/commands/copy/references/research-workflow.md",
@@ -1423,11 +1423,7 @@
     },
     {
       "path": "conquistador/commands/copy/references/sales-argument.md",
-      "sha256": "4c91b0baf343f4a44bd6ed1f658df748997a53d14ef444c70fc34cd8d9ac811e"
-    },
-    {
-      "path": "conquistador/commands/copy/references/short-form-copy.md",
-      "sha256": "42ce8e66600f6f9f61554fe79c9ae513ec25affad69f39ea2c3319c98b41d032"
+      "sha256": "375a4fe87f23e61ab29eb615996d673ea6ac618aef5e4ce89481965791138f7a"
     },
     {
       "path": "conquistador/commands/creative/ENTRY.md",
@@ -4867,11 +4863,11 @@
     },
     {
       "path": "conquistador/routing-contract.json",
-      "sha256": "e5524cb349ab7f4714328db57daa36989c0af369b0f7485291d8e7be45dd2953"
+      "sha256": "85a78bd0bb041b385ceb7d22239243a6745919df52ef5714dc9fa0a37e9d0fe5"
     },
     {
       "path": "conquistador/routing-overlay.json",
-      "sha256": "cdaa6c04017922e755d8a27f2a6095f187c31b9e4f7da51e51bbce2ac9c8255a"
+      "sha256": "1c1671dfd465324a44a5c4f71058737340942af30bc9532456785b5ab06895b1"
     },
     {
       "path": "conquistador/rubrics/composition.md",
@@ -4891,7 +4887,7 @@
     },
     {
       "path": "conquistador/specialists/copy-agent.md",
-      "sha256": "0b6343085c12f45b6afbcb23d0db7e80965563f097481379839bb33c8ca1c2f9"
+      "sha256": "5af1575bc114bf03b3154be70d1edf87753fa8cec4e1eb2eccbeba525598ac4b"
     },
     {
       "path": "conquistador/specialists/creative-assets-agent.md",
@@ -5021,11 +5017,11 @@
     },
     {
       "path": "tools/brief.mjs",
-      "sha256": "d9c6062e014fc216de4ce8491adc3cdb4f13f01b951ea9af42175649169516d0"
+      "sha256": "151161ceb2798557493558ab578b120b920208e519c9f6012ca861516f17f28f"
     },
     {
       "path": "tools/search-index.json",
-      "sha256": "450beffdae58b905c76539ee4d0031d30d34ef7460939a955bcdcd3dea064eb0"
+      "sha256": "5716b423502aec86cd6821ae223a31f2df596dbb79e751203223e64a8bf19f53"
     },
     {
       "path": "tools/prompt-advice.mjs",
