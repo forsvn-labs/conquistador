@@ -312,6 +312,16 @@ export const START_CONTEXT = Object.freeze({
   ask: 'First ask me what the product is, who it is for, and the goal.',
 });
 const START_LEAD = /^\s*Use Conquistador:\s*/i;
+// Short-form copy is a pass-through. In blind tests every drafting rule set made a strong model's
+// headlines, heroes, and lead magnet pages worse, so those requests carry the copy entry alone.
+// A long-form signal wins when one request holds both.
+const SHORT_FORM_COPY = /\b(?:headlines?|subheadlines?|subheads?|taglines?|slogans?|hero|lead magnet)\b/;
+const LONG_FORM_COPY = /\b(?:sales (?:pages?|letters?|arguments?)|long form|rewrite|rewriting|landing page copy|full page|whole page)\b/;
+const shortFormCopy = prompt => {
+  const value = normalizeRequest(prompt);
+  return SHORT_FORM_COPY.test(value) && !LONG_FORM_COPY.test(value);
+};
+
 export const taskOf = prompt => Object.values(START_CONTEXT).reduce((rest, sentence) => rest.split(sentence).join(' '), prompt).replace(START_LEAD, '').trim();
 
 export function createBrief(input, { root = moduleRoot, playbooks, persistCache = true, force = false, automatic = false, cwd = process.cwd() } = {}) {
@@ -367,6 +377,7 @@ export function createBrief(input, { root = moduleRoot, playbooks, persistCache 
   const scored = [...index.docs, ...index.users].map(doc => scoreDoc(doc, ownerOf(doc)))
     .filter(item => item && item.score > 0.5).sort((a, b) => b.score - a.score || a.doc.key.localeCompare(b.doc.key));
 
+  const passThrough = !play && methods.length === 1 && methods[0].name === 'copy' && shortFormCopy(prompt);
   const must = [];
   let bytes = 0;
   const fileBudget = routed.mode === 'assist' ? 1 : 3;
@@ -374,6 +385,7 @@ export function createBrief(input, { root = moduleRoot, playbooks, persistCache 
   // Every resource shares the task's count and byte budget.
   const take = item => {
     if (item.sibling || must.some(entry => entry.doc.digest === item.doc.digest)) return;
+    if (passThrough && item.doc.kind !== 'user') return;
     if (must.length >= fileBudget || bytes + item.doc.bytes > byteBudget) return;
     must.push(item);
     bytes += item.doc.bytes;
@@ -438,7 +450,7 @@ export function createBrief(input, { root = moduleRoot, playbooks, persistCache 
       ...(step.mode ? { mode: step.mode } : {}), ...(step.when ? { when: step.when } : {}), ...(step.for ? { for: step.for } : {}), now, playbooks };
   }) : [];
   for (const step of steps) for (const item of step.playbooks) seen.add(createHash('sha256').update(readText(item.absolute) ?? '').digest('hex'));
-  const situational = scored.filter(item => !seen.has(item.doc.digest) && seen.add(item.doc.digest)).slice(0, LIMITS.situationalFiles);
+  const situational = passThrough ? [] : scored.filter(item => !seen.has(item.doc.digest) && seen.add(item.doc.digest)).slice(0, LIMITS.situationalFiles);
   return {
     schema: BRIEF_SCHEMA,
     action: 'brief',
