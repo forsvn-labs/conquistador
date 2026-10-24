@@ -133,7 +133,15 @@ footer{display:flex;gap:10px;align-items:center;padding:12px 20px;border-top:1px
 #reason{flex:1;min-width:220px;font:inherit;padding:9px 12px;border:1px solid var(--line);border-radius:8px}
 .hint{font-size:13px;color:var(--muted);width:100%}
 #done{background:#eef6ee;border:1px solid #b9d8b9;border-radius:10px;padding:10px 16px}
-@media (max-width:900px){.drafts{grid-template-columns:1fr}article .doc{max-height:none}}
+@media (max-width:900px){
+html,body{height:auto}body{display:block}
+header{flex-wrap:wrap;gap:6px 12px;padding:10px 16px}header h1{flex:1 1 calc(100% - 110px)}#export{order:1}
+.bar{order:2;flex:1 1 80px}#progress{order:3}#save-state{order:4;width:100%;margin-left:0;font-size:12px}
+main{padding:12px}.brief{max-height:none}.drafts{grid-template-columns:1fr}article .doc{overflow:visible;max-width:none;padding:4px 16px 14px}
+footer{position:sticky;bottom:0;padding:10px 12px;display:grid;grid-template-columns:repeat(6,1fr);grid-template-areas:"a a t t b b" "p r r r r n";gap:8px}
+.choice{min-width:0;padding:10px 4px;white-space:nowrap}#choose-A{grid-area:a}#choose-tie{grid-area:t}#choose-B{grid-area:b}#prev{grid-area:p}#next{grid-area:n}
+#reason{grid-area:r;min-width:0}.choice kbd,.hint{display:none}
+}
 `;
 
 const CLIENT = String.raw`
