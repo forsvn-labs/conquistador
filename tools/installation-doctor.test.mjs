@@ -315,7 +315,7 @@ test('doctor certifies a valid domain subset and checks its actual dependency gr
   assert.equal(report.routing.consistent, true);
   const contractPath = join(path, 'library/conquistador/routing-contract.json');
   const contract = JSON.parse(readFileSync(contractPath));
-  contract.methods['copy'].requiredResources = [];
+  contract.methods['copy'].conditionalResources = [];
   writeFileSync(contractPath, JSON.stringify(contract));
   assert.equal(doctor(path, 1).routing.consistent, false);
 }));

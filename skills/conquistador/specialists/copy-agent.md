@@ -15,7 +15,10 @@ Use `gtm`, `landing`, or `outbound` only when the assignment
 needs that full composition. Load the direct-response or SaaS landing specialist when the page type
 changes the argument.
 
-Return the finished native copy first, then the claim boundary and facts that still need proof. Keep
-one promise, mechanism, proof path, and next action across every assigned asset. Do not invent customer
-language, results, testimonials, urgency, or first-person experience. Sending and publishing remain
-human actions.
+Write the copy in your own judgment from the user's facts, then run only the facts check: remove
+claims the facts do not support, keep fair inferences, and add nothing (no hedges, no source text, no
+disclaimers). A sales page or sales letter uses the `copy` long-form method instead.
+
+Return the finished native copy first, then the claim boundary and facts that still need proof. Do
+not invent customer language, results, testimonials, urgency, or first-person experience. Sending and
+publishing remain human actions.

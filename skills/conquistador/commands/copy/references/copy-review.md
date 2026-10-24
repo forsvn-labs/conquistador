@@ -1,41 +1,54 @@
-# Review copy against the brief
+# Check the finished copy against the facts
 
-Use this procedure on the assembled draft. The purpose is to find a mismatch between what the copy asks the reader to believe or do and what the product can substantiate or deliver. Review depth follows the consequence of an error, not a fixed number of editing passes.
+Run this after a sales page or sales letter is drafted from the [sales argument](sales-argument.md).
+All other copy gets only the facts check in the [copy entry](../ENTRY.md). This review checks what
+the copy asks the reader to believe and do. It removes unsupported claims and nothing else. It does
+not choose the voice, flatten the headline, or
+blur a specific claim that has a source. It does not add disclaimers, hedges, or source text to the
+page.
 
-## Prepare the review record
+## Build the claim record
 
-Keep the approved brief, draft, evidence, and offer terms available together. Mark protected names, numbers, links, qualifications, and required disclosures. Identify the reader's decision and the requested action. If the brief lacks a fact necessary to write safely, omit the claim or request that fact.
+List each statement that could change the reader's decision. The record is the operator note; it
+does not go on the page.
 
-Create a claim record for statements that could change the reader's decision:
-
-| Draft location | Claim | Supporting evidence | Limits | Treatment |
+| Location | Claim as the reader understands it | Source | Scope (who, when, how many) | Action |
 |---|---|---|---|---|
-| Exact unit or line | What the reader would understand | Provided source or unknown | Audience, period, conditions | Keep, qualify, remove, or verify |
+| Hero subhead | "Northpier went from 6 hours of rota work a week to 40 minutes" | Practice manager interview | One clinic, four weeks | Keep |
 
-A plausible benefit is not evidence of a measured result. A customer's words remain a quote only when the supplied source supports them and their use is permitted. Never invent a testimonial to fill a section.
+Actions are: keep, narrow, remove, or ask the owner. Never invent a testimonial, number, customer, or
+deadline to fill a gap. A quote stays a quote only when the source supports the words and permits
+their use.
 
-## Inspect the reader's path
+## Unsupported claim or fair inference
 
-Read the draft in the order it will appear. Check whether the reader can identify the offer, understand the relevant product behavior, find support for material claims, and understand the next step. Move supporting detail to the point where it resolves a likely misunderstanding. Remove sections that repeat a claim without helping the decision.
+Remove or narrow an unsupported claim: a result, number, customer, guarantee, or capability the
+facts do not establish, or a single result widened into a general one. Keep a fair inference: a
+benefit that follows directly from a stated fact. If staff swap shifts inside the app, "no more
+chasing swaps by text" is a fair inference; keep it. "Every clinic cuts rota work to 40 minutes" from
+one clinic's result is unsupported; narrow it to that clinic. When in doubt, ask whether a reader
+who knew every fact would call the line false. If not, it stays.
 
-Check the actual action and destination together. A button that says download must not silently enroll the reader in a sales process. Price, eligibility, renewal, cancellation, and fulfillment conditions must match the approved offer. Do not invent a guarantee to reduce friction.
+## Keep a sourced specific exact
 
-## Assign a correction
+Keep a sourced specific exact. If a claim goes beyond its evidence, narrow it and keep the number:
+name the customer, or add a light qualifier the reader needs ("across 31 teams"). Do not swap a
+sourced number for vaguer language ("hours, not days") to feel safe. The source, period, and scope
+go in the operator note.
 
-Route an unclear sentence to the voice role, a missing benefit explanation to the psychology role, an offer or commitment mismatch to the zero-risk role, and a missing fact to the brief owner. These are review responsibilities; the host can perform them in one context. Their completion is not independent evidence.
+## Read the reader's path
 
-Fix the smallest unit that resolves the problem. If the premise is unsupported, changing adjectives will not repair it. Rewrite or remove the premise and inspect every dependent line.
+Read the page in order. Check that the reader can tell what the offer is, what backs each claim,
+and what the next step commits them to. A button that says "Download" must not start a sales
+process. Price, renewal, cancellation, and delivery terms must match the owner's terms. Do not
+invent a guarantee.
 
-## Verify the revision
+## Return the verdict
 
-Compare the revised draft with the protected facts and terms. Recheck any claim whose meaning changed. Read the first screen on its own, then follow the full path to the action. A concise line can still mislead when a qualification appears too late.
+Return PASS when no unsupported claim or offer mismatch remains. Return REVISE with the location,
+the likely misunderstanding, the evidence needed, and the smallest fix. Fix the unit, not the whole
+page. Do not REVISE a line for being confident, vivid, or selective. A PASS is an editorial
+verdict; it is not approval to publish and does not predict conversion.
 
-Return PASS only when no material mismatch remains. Otherwise return REVISE with the affected location, the reader's likely misunderstanding, evidence needed, and a specific correction. The verdict concerns the draft. It does not authorize publication or predict conversion.
-
-## Example, synthetic
-
-A supplied product specification says a report can be exported as CSV. The draft says it syncs automatically with every accounting tool. Remove that unsupported promise and describe the actual export behavior. After editing, inspect the headline and CTA for the same implied automation claim.
-
-## High-consequence copy
-
-For copy that makes a costly commitment or regulated claim, identify the responsible reviewer and the exact unresolved statement. Keep the draft pending that review. Additional model opinions cannot replace missing evidence or human authority.
+For a costly commitment or regulated claim, name the human reviewer and the exact open statement.
+More model opinions cannot replace missing evidence or human authority.

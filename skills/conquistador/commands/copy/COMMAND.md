@@ -2,7 +2,7 @@
 name: copy
 description: "Write paste-ready copy for pages, headlines, calls to action, emails, and launches."
 metadata:
-  version: 2.2.0
+  version: 4.0.0
 ---
 
 # Write product-marketing copy
@@ -16,46 +16,15 @@ Use the brief to select current-stage resources. Read additional files only when
 
 Core:
 
-- [anti-patterns](references/anti-patterns.md): Copy review failures to avoid. Do not fill a proof block with a plausible customer quote or metric. Use…
-- [copy-review](references/copy-review.md): Review copy against the brief. Use this procedure on the assembled draft. The purpose is to find a…
-- [headline-formulas](references/headline-formulas.md): Draft headlines from the decision brief. Use the headline to help the intended reader recognize the offer…
-- [lifecycle-sequences](references/lifecycle-sequences.md): Lifecycle Email/SMS Sequences. Copy patterns for post-action lifecycle sequences — abandoned cart,…
-- [page-sections](references/page-sections.md): Page Sections Reference. Landing page section types, page structure templates, and testimonial selection.
-- [sales-argument](references/sales-argument.md): Build a sales argument from supplied product facts. Use when the deliverable must help a reader decide…
+- [copy-review](references/copy-review.md): Check the finished copy against the facts. Run this after a sales page or sales letter is drafted from the…
+- [headline-formulas](references/headline-formulas.md): Headline patterns. Use these for the headline of a sales page or sales letter. All other headlines are a…
+- [sales-argument](references/sales-argument.md): Sales argument: the long-form method for a sales page or sales letter. Draft a sales page or sales letter,…
 
-By step: [belief-disruption](references/belief-disruption.md), [discovery-story](references/discovery-story.md), [emotional-triggers](references/emotional-triggers.md), [lead-magnet-stack](references/lead-magnet-stack.md), [research-workflow](references/research-workflow.md).
+By step: [lifecycle-sequences](references/lifecycle-sequences.md).
 
-Specialist roles: [body-agent](agents/body-agent.md), [critic-agent](agents/critic-agent.md), [cta-agent](agents/cta-agent.md), [hook-agent](agents/hook-agent.md), [psychology-agent](agents/psychology-agent.md), [social-proof-agent](agents/social-proof-agent.md), [variant-agent](agents/variant-agent.md), [voice-agent](agents/voice-agent.md), [zero-risk-agent](agents/zero-risk-agent.md).
-
-Worked examples: [copywriting-walkthrough](references/examples/copywriting-walkthrough.md).
-
-Output formats and fallbacks: [sequential](fallbacks/sequential.md), [format-conventions](references/format-conventions.md).
+Worked examples: [direct-response-examples](references/examples/direct-response-examples.md).
 
 <!-- playbooks:end -->
-
-## Anchor the work
-
-Infer:
-
-- audience and real moment;
-- product mechanism;
-- credible outcome;
-- proof;
-- main objection;
-- intended action;
-- surface, voice, language, and constraints.
-
-Ask at most one bundled question when different answers would change the copy materially. Otherwise
-label the assumption and continue.
-
-Match the sequence to audience awareness: do not lead a problem-unaware reader with product detail or
-ask a solution-aware reader to sit through generic education. Preserve one argument from costly moment
-through mechanism, proof, objection, and proportionate action.
-
-## Build the argument
-
-Use [sales argument](references/sales-argument.md) to connect the supplied product facts, buyer's
-situation, evidence, offer terms, and requested action.
 
 ## Scope and handoffs
 
@@ -64,6 +33,7 @@ This command owns the copy block itself.
 Include:
 
 - landing and product page copy;
+- sales pages and sales letters;
 - headlines, CTAs, and messaging variants;
 - launch announcement copy;
 - single behavior-triggered lifecycle emails, and the copy layer of a lifecycle sequence
@@ -77,62 +47,59 @@ Exclude — route instead:
 - a full paid campaign buildout (ad sets per network from a plan) → `ads`;
 - measuring copy performance after launch → `measure`.
 
-## Write from the product outward
+## Write the copy
 
-Prefer concrete nouns, active verbs, observable outcomes, and product details a competitor could not
-claim unchanged. Put proof next to the claim it supports. Match the CTA to current trust.
+Write the copy in your own judgment from the user's facts. This covers every unit this command
+owns except a sales page or sales letter: headlines, heroes, page sections, rewrites, lead magnet
+pages, app pages, comparison sections, sales arguments, emails, and launches. Load no other file
+for it. Then run only the facts check: remove claims the facts do not support, keep fair
+inferences, and add nothing (no hedges, no source text, no disclaimers). Return the copy.
 
-Review each headline, hook, CTA, tagline, and subject line in its actual context. Check its meaning
-against the product facts and approved terms. Use [copy review](references/copy-review.md) to record
-unsupported claims, unclear arguments, and misleading actions. No average score can excuse a
-materially false claim.
+Ask at most one bundled question when a missing fact would change the copy materially. Otherwise
+label the assumption and continue.
 
-Remove:
+## Sales page or sales letter
 
-- “all-in-one,” “seamless,” “revolutionary,” and other category filler without evidence;
-- empty setup, repeated summaries, generic AI cadence, and decorative jargon;
-- fake quotes, invented numbers, vague attribution, or unsupported superlatives;
-- forced urgency, engagement bait, false familiarity, and channel-inappropriate formatting.
+A sales page or sales letter, or its opening, uses the long-form method.
 
-Apply the surface:
+Infer the audience and their costly moment, awareness level and traffic source, the outcome they
+want, why the problem persists and what the product does differently, the offer terms, the
+strongest proof, the main objection, the action, and the voice and language.
 
-- **Landing page:** audience, costly moment, promise, mechanism, proof, objections, and next step in a
-  scan-friendly sequence.
-- **Lifecycle email (single send):** trigger from real behavior, give one useful next step; multi-touch
-  sequence design routes to `outreach`.
-- **Launch:** explain what changed, who it serves, why now, how it works, and how to try it.
+Draft:
 
-Ad copy inside a paid campaign belongs to `ads`; this command supplies headlines and
-CTA units only when asked for standalone blocks.
+1. Write the one-sentence promise and the two mechanism lines from the
+   [sales argument](references/sales-argument.md).
+2. Select: pick one proof, one mechanism, and the two or three benefits that matter most to this
+   reader. The other facts stay out of the opening. Do not restate the audience unless it filters
+   out visitors the product cannot serve.
+3. Use the full argument order in the sales argument, led by the reader's awareness.
+4. Draft 5–10 headlines from different [headline patterns](references/headline-formulas.md), each
+   starting from the reader's want, pain, or identity, and keep the one that passes the tests.
+   Choose the lead by awareness.
+5. Write the body in argument order, in the customer's words, with benefit bullets and rhythm. Put
+   proof next to the claim it supports. Keep a sourced number exact; its source goes in the
+   operator note.
+6. Build the offer and the call to action: what they get, terms, risk reversal, and what happens
+   after the click.
+7. Compare doubtful units with the [annotated examples](references/examples/direct-response-examples.md).
 
-## Deliver
+Check after drafting. The check removes unsupported claims and keeps fair inferences that follow
+directly from the facts. It does not set the voice, flatten the headline, or blur a sourced
+specific. It does not add disclaimers, hedges, or source text to the page.
 
-Return paste-ready copy in the requested structure. Add variants only when each represents a different
-strategic bet, and label the bet rather than calling them A/B/C.
+1. Run [copy review](references/copy-review.md) on the assembled draft.
+2. Run the competitor-swap test on the headline and read the first screen alone.
+3. Fix the weak unit; do not swap one vague synonym for another. Then confirm that names, numbers,
+   links, claims, and call-to-action strength did not regress, and that the headline still starts
+   from the reader.
 
-Then provide at most:
+Return paste-ready copy. Then give a short operator note under its own heading, never inside the
+copy: each number with its source, period, and scope, and permissions to confirm; facts left out on
+purpose and why; one recommended next action. If the user asked for the copy only, return the copy
+only.
 
-- the chosen audience, promise, and mechanism;
-- two or three consequential decisions;
-- factual claims that require verification;
-- one recommended next action.
-
-Before delivery, load the relevant writing and review contracts:
-
-- [hook](agents/hook-agent.md), [body](agents/body-agent.md), [CTA](agents/cta-agent.md), and
-  [social proof](agents/social-proof-agent.md) for the requested units;
-- [variant](agents/variant-agent.md) for high-leverage A/B alternatives on Route B pages;
-- [voice](agents/voice-agent.md), [psychology](agents/psychology-agent.md), and
-  [zero-risk](agents/zero-risk-agent.md) as later passes;
-- [critic](agents/critic-agent.md) for the final evidence and offer review;
-- [copy review](references/copy-review.md), [anti-patterns](references/anti-patterns.md),
-  [Discovery Story](references/discovery-story.md), and
-  [lifecycle sequences](references/lifecycle-sequences.md) when those surfaces apply.
-
-If the host cannot run those as separate agents, use [sequential fallback](fallbacks/sequential.md).
-Include the competitor-swap and first-screen tests. Revise the weak unit rather than swapping one
-vague synonym for another, then verify that names, numbers, links, claims, and CTA strength did not
-regress.
+## Boundaries
 
 Never invent claims, quotes, metrics, customers, or consent. Keep sending, publishing, and external
 writes behind explicit approval.

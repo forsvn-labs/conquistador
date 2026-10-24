@@ -1,33 +1,131 @@
-# Build a sales argument from supplied product facts
+# Sales argument: the long-form method for a sales page or sales letter
 
-Use when the deliverable must help a reader decide whether an offer fits their situation. Start with what the product actually does and what the seller can deliver. Do not require private course notes or a named marketing system.
+Draft a sales page or sales letter, or its opening, from this file. Headlines are in
+[headline patterns](headline-formulas.md); annotated pairs are in
+[examples](examples/direct-response-examples.md). All other copy is a pass-through (see the
+[copy entry](../ENTRY.md)). Run [copy review](copy-review.md) after the draft exists. It checks
+claims; it does not set the voice.
 
-## Establish the transaction
+## Start from the reader
 
-Write a plain description of the offer, eligible buyer, delivery, price or price-discovery step, and limits. Record what the reader gives up by accepting: money, time, access, migration effort, or an ongoing commitment. If the terms are not supplied, draft around known facts and identify the unresolved term.
+Open with the reader's want, pain, or identity, in the words they use about it, not with the
+product. "Stop rebuilding the rota every time someone swaps a shift" starts in the reader's week;
+"Shift scheduling with built-in swap requests" starts in the product spec. The product, its
+features, and its proof come second, as the reason the opening promise is believable.
 
-When the offer is a diagnostic (audit, review, or assessment), lead with what the buyer gets, the delivery time, and the risk term; describe the diagnostic activities as the delivery method. State a guarantee only when the offer owner supplies it, in one sentence with outcome, time window, and remedy, followed by its conditions. If the offer stays unclear after this step, say so and fix it before you recommend paid traffic to it.
+- **Headline:** what the reader wants, the pain they want gone, or who they are.
+- **Subhead:** the mechanism that makes it believable, plus one proof point.
+- **A customer's result** leads only when the reader knows that customer and the name does work.
+  An unknown customer's result supports from the subhead.
 
-## Explain the connection to the buyer's work
+## Select before you write
 
-Record two versions of the buyer's problem: the stated problem in the buyer's words, from supplied research, and the underlying cause the product addresses. Mark the underlying cause as an inference unless evidence supports it. Open with the stated problem so the reader recognizes the situation, explain the product mechanism against the underlying cause, and connect the two in one explicit sentence. If buyers do not yet connect the cause to the problem they state, mark an education need and give that connection its own section before the offer.
+The brief lists what is true. The page uses what sells. Before drafting, pick one proof, one
+mechanism, and the two or three benefits that matter most to this reader. Leave the rest out of the
+hero; use it lower on the page or not at all. A hero that uses every fact reads like a spec sheet.
 
-Choose a concrete situation from the brief. Describe how the current task works and which part the product changes. Connect the product behavior to a useful result without extending it into an unsupported business outcome. A faster export does not by itself prove higher revenue.
+Do not restate the audience on the page ("For teams of 5–40 who…"). The headline should make the
+right reader recognize themselves. Name the audience only when it filters out visitors the product
+cannot serve ("US agencies only").
 
-Use enough explanation for this audience to evaluate the claim. An informed buyer may need compatibility and limits first. A new reader may need the task and result explained before product terminology. Choose the order from their decision, not a mandatory story sequence.
+## Argument order
 
-## Place evidence where it is needed
+Each step answers the question the step before it raises. A sales page or sales letter uses all of them:
 
-Pair each material claim with supplied evidence or an explicit limitation. Examples, demonstrations, and customer accounts support different kinds of statements. Preserve their context. If no proof exists, describe the capability accurately and avoid quantified results or implied customer validation.
+1. **Lead:** headline and opening, from the reader's want, pain, or situation.
+2. **Problem:** what the current way costs them, in their words.
+3. **Cause:** why their earlier attempts failed. Put the fault in the method or conditions, not the reader.
+4. **Mechanism:** the one thing that works differently, and why it produces the outcome.
+5. **Product:** what they get and how it delivers the mechanism.
+6. **Proof:** placed next to each claim it supports.
+7. **Offer:** terms, price framed against the cost of the problem, risk reversal, next step.
+8. **Objections:** answered where they come up; the rest in a short FAQ.
+9. **Close:** outcome, offer, and one action.
 
-State objections as questions the buyer needs answered, such as implementation effort, suitability, delivery, or exit terms. Answer them with facts. Do not manufacture fear, scarcity, or a dramatic origin story to increase pressure.
+Longer copy is fine when every section answers a real question. Cut any section that does not move
+the reader to the next decision. A list of features with a button at the end is not an argument;
+connect each feature to the outcome it produces ("which means…").
 
-## Complete the requested unit
+## Promise and outcome
 
-For a page, arrange sections so each resolves a decision the previous section leaves open. For a short block, keep the most relevant product fact and proportionate next step; move nonessential detail to the linked destination. Give variants only when they test a different supported argument.
+Sell the outcome the buyer wants, not the product you want to sell. Describe the after-state: what
+they will do, see, and stop worrying about. Keep one main promise per page. A strong promise fits in
+one sentence, can be pictured, and carries a time, money, or effort term when the proof supports
+one. Size the promise to the proof, never the reverse.
 
-Return finished copy plus unresolved claims or terms. Apply [copy review](copy-review.md) before delivery. Publication, sending, charging, and changes to the offer require human authority.
+## Mechanism
 
-## Example, synthetic
+Write two lines before any copy: why the usual approach fails for this reader, and the one concrete
+thing the product does differently. A good mechanism can be pictured and checked, is new to this
+market, and answers "that will not work for me". "AI-powered" becomes a mechanism only when the copy
+says what it does and why that changes the result. When every competitor makes the same promise,
+lead with the mechanism instead of a bigger promise.
 
-For a scheduling product that detects overlapping appointments, explain the overlap check and show a permitted example. Do not promise that it eliminates missed meetings. A suitable next step can be viewing the supported calendar formats, especially when compatibility determines whether the buyer can use it.
+## Awareness sets the lead
+
+| The reader knows | Lead with |
+|---|---|
+| Nothing about the problem | A situation or story they recognize. Name the product late. |
+| The problem | The problem in their words, then its cause. |
+| That solutions exist | The mechanism: how this one differs from the category. |
+| Your product | What changed, the proof, the terms. |
+| Your product, and trusts it | The offer and the action. |
+
+Cold social traffic is usually problem-aware; branded search is product-aware. In a market that has
+heard every promise, move from claims to mechanism, then to demonstration and identification. A
+skeptical reader can take a fact lead: one verified, surprising fact, stated plainly. Cut the
+warm-up: if the first paragraph can go without loss, cut it.
+
+## Benefits, bullets, and rhythm
+
+Write bullets as benefits: what the reader gets or stops doing, with the feature as the reason.
+"Swaps approved in one tap, never lost in a group chat" beats "Shift swap requests". Short parallel
+lines are good copy: "Fewer reminders. More done." Vary sentence length; read it aloud.
+
+A benefit that follows directly from the facts is fair to write. If staff swap shifts inside the
+app, "no more chasing swaps by text" follows. Do not wait for the brief to state every consequence.
+
+## Offer
+
+The offer is what they get, the terms, the risk reversal, and the next step. The product is not the
+offer. An audit is a delivery method; offer its result, time frame, and risk term. Frame price
+against the cost of the problem or per unit of value, with real arithmetic. State risk reversal as a
+selling line, exactly as the owner authorized it: "If the test still fails, you get every dollar back."
+
+## Proof
+
+Use the strongest proof the brief supplies: the product doing the job on screen; a named customer's
+before-and-after; your own data; a testimonial in the customer's words; recognized logos; counts;
+ratings. One strong, specific proof point beats a wall of weak ones. Put it next to the claim it
+supports.
+
+Choosing testimonials: prefer a named person, a before-and-after in their own words, and a detail
+only a real customer would know. "Great product" proves nothing; leave it out.
+
+### Keep a sourced number exact
+
+Keep a sourced number exact: "from 6 hours a week to 40 minutes" stays as written. Do not widen it to
+"save hours every week". The source, period, and scope go in the operator note, not on the page. The
+page keeps a light qualifier only where the reader needs it to trust the number: "across 31 teams",
+"one clinic". A general claim ("teams cut rota time") needs evidence across customers.
+
+## Write with conviction
+
+Write as someone who believes the product works, because the facts say it does. Do not add
+disclaimers, hedges, or attributions to the page: no "results may vary", no "that is her result, not
+a promise", no "(source, date)". Unsupported claims are removed by the check after drafting; true
+claims are stated plainly. Material terms (price, renewal, cancellation) belong near the action as
+terms, not as warnings.
+
+## Objections and calls to action
+
+Collect objections from calls, tickets, reviews, and lost deals. Answer each where it arises, with a
+fact, and turn back to the outcome. A call to action is a verb and what they get: "Start your 14-day
+trial". Put the commitment and next step under the button. One primary action per screen.
+
+## Operator note
+
+Deliver a short operator note after the copy, under its own heading: each number with its source,
+period, and scope; permissions to confirm; and facts left out on purpose. If the user asked for the
+copy only, return the copy only. Publishing, sending, charging, and offer changes need the owner's
+approval.

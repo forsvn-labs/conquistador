@@ -1,12 +1,10 @@
 # Write product-marketing copy
 
-Produce the finished copy first. Use the customer's brand as the brand of record.
+Write the copy in your own judgment from the user's facts, in the customer's brand. Load no other
+file for it. Then run only the facts check: remove claims the facts do not support, keep fair
+inferences, and add nothing (no hedges, no source text, no disclaimers). Return the copy.
 
-## Use this method
+**Sales page or sales letter** (and its opening): use the long-form method in the
+[sales argument](references/sales-argument.md) and the [complete method](COMMAND.md).
 
-Apply the selected current-stage resources from the brief. Keep the requested output size and scope.
-For a small edit, return the edit and only the explanation it needs.
-
-Read the [complete method](COMMAND.md) when its detailed procedure is needed.
-Expand linked playbooks only when their condition or stage applies.
-The Core list is a reference collection, not an instruction to load every file.
+Keep small edits small. Sending and publishing need the user's approval.
