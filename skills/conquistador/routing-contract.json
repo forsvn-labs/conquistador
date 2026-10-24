@@ -2726,12 +2726,14 @@
         "landing page copy"
       ],
       "requiredResources": [
-        "skills/conquistador/commands/outreach/references/copy-validation-rubric.md",
-        "skills/conquistador/commands/outreach/references/anti-patterns.md",
-        "skills/conquistador/commands/outreach/fallbacks/sequential.md",
-        "skills/conquistador/commands/outreach/references/frameworks/outreach-decisions.md"
+        "skills/conquistador/commands/outreach/references/frameworks/cold-email-frameworks.md",
+        "skills/conquistador/commands/outreach/references/method.md"
       ],
       "conditionalResources": [
+        "skills/conquistador/commands/outreach/references/frameworks/objections.md",
+        "skills/conquistador/commands/outreach/references/examples/pairs-relationships.md",
+        "skills/conquistador/commands/outreach/references/examples/pairs-sales.md",
+        "skills/conquistador/commands/outreach/references/channels/email.md",
         "skills/conquistador/commands/outreach/references/modes/no-pitch-research.md",
         "skills/conquistador/commands/outreach/agents/signal-analyst.md",
         "skills/conquistador/commands/outreach/agents/strategist.md",
@@ -2747,9 +2749,29 @@
         "skills/conquistador/commands/outreach/references/modes/intro-request.md",
         "skills/conquistador/commands/outreach/references/modes/early-stage.md",
         "skills/conquistador/commands/outreach/references/frameworks/sequences.md",
-        "skills/conquistador/commands/outreach/references/examples/saas-sequence-no-proof.md"
+        "skills/conquistador/commands/outreach/references/examples/saas-sequence-no-proof.md",
+        "skills/conquistador/commands/outreach/references/copy-validation-rubric.md",
+        "skills/conquistador/commands/outreach/references/anti-patterns.md",
+        "skills/conquistador/commands/outreach/fallbacks/sequential.md",
+        "skills/conquistador/commands/outreach/references/frameworks/outreach-decisions.md"
       ],
       "resourceConditions": [
+        {
+          "path": "skills/conquistador/commands/outreach/references/frameworks/objections.md",
+          "when": "Load when the deliverable includes reply handling."
+        },
+        {
+          "path": "skills/conquistador/commands/outreach/references/examples/pairs-relationships.md",
+          "when": "Load when drafting partnership, investor, intro-request, creator-sponsorship, or reply messages."
+        },
+        {
+          "path": "skills/conquistador/commands/outreach/references/examples/pairs-sales.md",
+          "when": "Load when drafting sales outreach: SaaS, services, early stage, follow-up, or breakup."
+        },
+        {
+          "path": "skills/conquistador/commands/outreach/references/channels/email.md",
+          "when": "Load when the channel is email."
+        },
         {
           "path": "skills/conquistador/commands/outreach/references/modes/no-pitch-research.md",
           "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
@@ -2813,6 +2835,22 @@
         {
           "path": "skills/conquistador/commands/outreach/references/examples/saas-sequence-no-proof.md",
           "when": "Load when drafting a multi-touch commercial sequence and the sender has no publishable proof yet."
+        },
+        {
+          "path": "skills/conquistador/commands/outreach/references/copy-validation-rubric.md",
+          "when": "Load at the review step, after drafting."
+        },
+        {
+          "path": "skills/conquistador/commands/outreach/references/anti-patterns.md",
+          "when": "Load at the review step, after drafting."
+        },
+        {
+          "path": "skills/conquistador/commands/outreach/fallbacks/sequential.md",
+          "when": "Load when one agent runs the method roles in sequence."
+        },
+        {
+          "path": "skills/conquistador/commands/outreach/references/frameworks/outreach-decisions.md",
+          "when": "Load when deciding whether a proposed commercial message is worth sending."
         }
       ],
       "optionalResources": [],
@@ -5020,7 +5058,7 @@
     {
       "name": "outbound",
       "label": "Run an outbound sequence",
-      "description": "Use for founder, sales, partnership, or other direct outreach from creation through readout.",
+      "description": "Use for founder, sales, partnership, or other direct outreach from list to readout.",
       "path": "skills/conquistador/plays/outbound.md",
       "intents": [
         "outbound campaign",

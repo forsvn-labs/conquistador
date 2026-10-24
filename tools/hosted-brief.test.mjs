@@ -170,11 +170,12 @@ test('a sales page loads sales-argument before keyword matches such as lifecycle
   assert.ok(brief.must.reduce((sum, item) => sum + item.bytes, 0) <= LIMITS.mustBytes);
 });
 
-test('outreach inlines its decision framework and rubric, not only small keyword files', () => {
+test('outreach inlines its craft reference and facts check, not only small keyword files', () => {
   const pack = packBrief(briefFor('Write a 3-touch cold email sequence to COOs at 20-50 person agencies'));
   const inlined = pack.structured.inlined.map(item => item.path);
-  for (const path of requiredOf('outreach')) assert.ok(inlined.includes(path), path);
-  assert.ok(inlined.some(path => path.endsWith('frameworks/outreach-decisions.md')), JSON.stringify(inlined));
+  const named = [...inlined, ...pack.structured.situational];
+  for (const path of requiredOf('outreach')) assert.ok(named.includes(path), path);
+  assert.ok(inlined.some(path => path.endsWith('frameworks/cold-email-frameworks.md')), JSON.stringify(inlined));
   assert.deepEqual(pack.structured.readNow, []);
 });
 

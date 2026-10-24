@@ -64,12 +64,12 @@
     {
       "name": "convert",
       "version": "2.2.0",
-      "sha256": "f5e9c96a196dbc598361c4fb79e6932a991b0f3073c6bed81bdf689f8e7212e7"
+      "sha256": "ac5ae021ff06d8457999326666089754eba288243f0d9e9fb459440d0118439a"
     },
     {
       "name": "copy",
-      "version": "4.0.0",
-      "sha256": "995a4a40560021b149f845fd1132f72f00f6126a29fdfaf4ca07d5146318b18d"
+      "version": "2.2.0",
+      "sha256": "a85036ee97736a79b01541904c8670f18339722eca7c1e26d5e0ca374815b5ff"
     },
     {
       "name": "creative",
@@ -143,8 +143,8 @@
     },
     {
       "name": "outreach",
-      "version": "2.4.0",
-      "sha256": "35ee022e61c904b0af75a0e5d17a70c5f9f35f9723abb17422563046dce7ab5b"
+      "version": "3.0.0",
+      "sha256": "61cfbb9800c2e2e876853343609565d6a77777743b490bd21c0b723d3d8cbcdb"
     },
     {
       "name": "pin",
@@ -259,7 +259,7 @@
     },
     {
       "path": "conquistador/channels/email-newsletter.md",
-      "sha256": "b8edc267ac4c549720814cb9198e3d3cfe8e3d687749c2ff9d8067fd44528331"
+      "sha256": "4e8995b837a45fcaf69d102b204c1e0890ea3d96735c068ef09b6df1edcb82b8"
     },
     {
       "path": "conquistador/channels/facebook.md",
@@ -1207,7 +1207,7 @@
     },
     {
       "path": "conquistador/commands/convert/ENTRY.md",
-      "sha256": "8844cc1bf95e10beed40a9315f7a41d5003514a8bf5b665c1f48f28d0e1e1639"
+      "sha256": "44c143bf691fab43c13262f44f533562488e87d10ea4cea62047e104a6966336"
     },
     {
       "path": "conquistador/commands/convert/agents/conversion-critic-agent.md",
@@ -1255,7 +1255,7 @@
     },
     {
       "path": "conquistador/commands/convert/fallbacks/sequential.md",
-      "sha256": "255d1c656e027dcafc288c428c33cd354892c81fabaef4d2f22d4dd3bd646139"
+      "sha256": "1b579bc1b3035bcb944db8cf733fa8dde43d010e26f5c1eb0382280f903e798c"
     },
     {
       "path": "conquistador/commands/convert/references/anti-patterns.md",
@@ -1323,31 +1323,103 @@
     },
     {
       "path": "conquistador/commands/copy/ENTRY.md",
-      "sha256": "dff72cebc7e69ccf2e23860697ecd61264ae144cbad3a2d1f67a4af28cdf332c"
+      "sha256": "3d58cd49133da45764ed9cf48453559ed0e6d98e972ec91611790ec2f62664dd"
+    },
+    {
+      "path": "conquistador/commands/copy/agents/body-agent.md",
+      "sha256": "3f39abe54ade1ba2dded699ad6248902713387ba6df795498678f2e0456ccb5b"
+    },
+    {
+      "path": "conquistador/commands/copy/agents/critic-agent.md",
+      "sha256": "b4b783c4226c9f658b8e805b40325c53e9481bbf345ca9b94fe30c5ed8ad0221"
+    },
+    {
+      "path": "conquistador/commands/copy/agents/cta-agent.md",
+      "sha256": "cbe0773089333577a385525da9a4b56f85c900f41f034cc9f825a4f3c7436701"
+    },
+    {
+      "path": "conquistador/commands/copy/agents/hook-agent.md",
+      "sha256": "af466fc55eb91ba620d0b301433c48f045bdd29b1f21539468129f2ddb7bd76b"
     },
     {
       "path": "conquistador/commands/copy/agents/openai.yaml",
       "sha256": "3a41d950b5820a1c486ca07f370ec7517ab898f37e26168bc1ce3a166e4be616"
     },
     {
-      "path": "conquistador/commands/copy/references/copy-review.md",
-      "sha256": "31676100fab8c8ed50d1891453163b734b188050350029db4880e0a9be1aa169"
+      "path": "conquistador/commands/copy/agents/psychology-agent.md",
+      "sha256": "93b0fe06e97972e6a2c83871ebe2c8353f602f51861d9ebc5a163a15b088e9b9"
     },
     {
-      "path": "conquistador/commands/copy/references/examples/direct-response-examples.md",
-      "sha256": "003ed79a0119226411b5790c403861dc5213976fb5c8d3fe11dac48f046d8569"
+      "path": "conquistador/commands/copy/agents/social-proof-agent.md",
+      "sha256": "b58151ce3edcffbdf1cf6132ea9d345f37142e2f47cb65563e930db559a52f5b"
+    },
+    {
+      "path": "conquistador/commands/copy/agents/variant-agent.md",
+      "sha256": "fa0a4ab44792b0c1361bc0a9c23f947264d53725c70569d5f8370f6819cc7374"
+    },
+    {
+      "path": "conquistador/commands/copy/agents/voice-agent.md",
+      "sha256": "a7c149a3b9c96a7bc6c4172e831d61f99df547ff1b0bd70f10e63dfb6aafe4aa"
+    },
+    {
+      "path": "conquistador/commands/copy/agents/zero-risk-agent.md",
+      "sha256": "f72fa285f8a7a6767a8da33957327402155c9f1c04488c51db4ba968f6f95bd9"
+    },
+    {
+      "path": "conquistador/commands/copy/fallbacks/sequential.md",
+      "sha256": "2b95fbb6b9892dc26712d2bd07c1082ccfa711289a0e242512e603b097bad7c8"
+    },
+    {
+      "path": "conquistador/commands/copy/references/anti-patterns.md",
+      "sha256": "f00d478399b896c7fb1a4d1c59407fdd9677451a70adde406f6da79de4425d8f"
+    },
+    {
+      "path": "conquistador/commands/copy/references/belief-disruption.md",
+      "sha256": "c73addbaed10cb3a0358e1efa5387569264b8341367b155d85e142d7d0704cf2"
+    },
+    {
+      "path": "conquistador/commands/copy/references/copy-review.md",
+      "sha256": "c59dc0a28695f33f4609ecd727d5182116f0eb678a9a157b0b02090c8dd3ae06"
+    },
+    {
+      "path": "conquistador/commands/copy/references/discovery-story.md",
+      "sha256": "8a24406b99f5f480030ebbb487a5b231a80e7129703908ae13c9735836f9c681"
+    },
+    {
+      "path": "conquistador/commands/copy/references/emotional-triggers.md",
+      "sha256": "11e8e2605bcc752b5c5da155d1ecb8ad98eea2aff29a45135e13edfe01a605fc"
+    },
+    {
+      "path": "conquistador/commands/copy/references/examples/copywriting-walkthrough.md",
+      "sha256": "e145c70a5e21abb111ab0f75c7d3a7b1c9baab873fe146ddad3104f38b999cce"
+    },
+    {
+      "path": "conquistador/commands/copy/references/format-conventions.md",
+      "sha256": "1a0e3e124c12a6f9cb963a119869797ca55a5600928e8ceb21a6232f632fa363"
     },
     {
       "path": "conquistador/commands/copy/references/headline-formulas.md",
-      "sha256": "82e9ac86fc98a98bfacea857c4c6b0899931c3c55c3ca74d3d3bd82b7f61ba31"
+      "sha256": "12b4c29655d0ae0a348e613719defba6c3c1b78c4eb3ec4b492d5d3b0effded8"
+    },
+    {
+      "path": "conquistador/commands/copy/references/lead-magnet-stack.md",
+      "sha256": "e25b944ca18c674ef2926c49e96d832a4377ab499c552a20f82852a95c2d1dc1"
     },
     {
       "path": "conquistador/commands/copy/references/lifecycle-sequences.md",
-      "sha256": "24a7fbb87f5c860376828ec7cd5ea99cbaca7626dfc0b35686feb6d890eeae75"
+      "sha256": "a75ed6b22b922da0eb8f3850c8cf672bacfeb42123a434f368d5d42063ecd157"
+    },
+    {
+      "path": "conquistador/commands/copy/references/page-sections.md",
+      "sha256": "033ae70b45dda488345bc03cf83706396a08582c8119d4b80103fe499d01c667"
+    },
+    {
+      "path": "conquistador/commands/copy/references/research-workflow.md",
+      "sha256": "29ca965976bd0a02daeef70d22edc75895d96f374ce72e99cd8c6f9435216b24"
     },
     {
       "path": "conquistador/commands/copy/references/sales-argument.md",
-      "sha256": "64ada37804a93c4a8fe7a11016e193e40230ce489a15fd240713460318dc9b98"
+      "sha256": "780cf70544049133532edec8e5a749958180c5479b09754685a6cf0af9a1be2e"
     },
     {
       "path": "conquistador/commands/creative/ENTRY.md",
@@ -2331,11 +2403,11 @@
     },
     {
       "path": "conquistador/commands/outreach/ENTRY.md",
-      "sha256": "435a24a5a2d0cbeb6e0b04140ae58514779995f1d0c98c0ffe5a4769a7ced9e4"
+      "sha256": "cf9120d1833d15453bc0433ee5a12aa4677b44443bc3d836ebc0cc02d85d5da4"
     },
     {
       "path": "conquistador/commands/outreach/agents/composer.md",
-      "sha256": "93ed572ac2e0298d739376b64acc8756e93f7cad2cb96fe874dee84f395f50ac"
+      "sha256": "70973d187967de95f389436de37c4bab564eb9896cdedc6a2f6fa1215c8e429a"
     },
     {
       "path": "conquistador/commands/outreach/agents/critic.md",
@@ -2347,7 +2419,7 @@
     },
     {
       "path": "conquistador/commands/outreach/agents/proof-selector.md",
-      "sha256": "140ff93cec8dd2753dcf2cec34c690419bcf2c14bf1e71c8da3f1ebdcd8cbf19"
+      "sha256": "307870c1e4e00870248dfdaa94c12672f858fcdfe10afe9c9bb19cfd78d2c133"
     },
     {
       "path": "conquistador/commands/outreach/agents/reply-classifier.md",
@@ -2359,27 +2431,27 @@
     },
     {
       "path": "conquistador/commands/outreach/agents/signal-analyst.md",
-      "sha256": "84499aa70f3bbd2cf6feac5e6d973ef8107605a3402e23ea14acec9ee11aa240"
+      "sha256": "7eab55a382575006ac7b87e0bd9657b487a034764d06ffef224b5a24d7afc060"
     },
     {
       "path": "conquistador/commands/outreach/agents/strategist.md",
-      "sha256": "1ffb10736486ef9cfe9f4efc617d5ded499aadebd020a765d46ee5a8c128aa01"
+      "sha256": "2dc22e50d35d793526d5d80370aee889c5b6146c3fc0e862ccb1fd531e7d3305"
     },
     {
       "path": "conquistador/commands/outreach/agents/voice-auditor.md",
-      "sha256": "f824aaa46f346566da9cb7d4b8215cc09fb534d189da9d38be97a214fcd0d4af"
+      "sha256": "cdd055351d1178d60673193b243973a7dc4d1a9422b091edceb375e25bb1a317"
     },
     {
       "path": "conquistador/commands/outreach/fallbacks/sequential.md",
-      "sha256": "e3f51bc82a4e88a572d50d6dfaf104ad6eff8ac5fc9057185b6aba137fff8a7e"
+      "sha256": "600ca363505aff210b72155397e9b61d9143dca665a46be72737064b47c3705d"
     },
     {
       "path": "conquistador/commands/outreach/references/anti-patterns.md",
-      "sha256": "6292983e404027eac1f4e4d01a5b650b35db9724e96086842a70646a7f2de10e"
+      "sha256": "fb12eb180279ba004a72b9f32569290d564e4537cbb75531ba13691db1ce3816"
     },
     {
       "path": "conquistador/commands/outreach/references/channels/email.md",
-      "sha256": "10b839c0fd2eef8e3690f1a146fbdfadf54e9e5c27062d025357a8842a3b9313"
+      "sha256": "a8f315c230fef0a732f1f34397f25fc2e685e9411305c73f81cec4dc24199c1e"
     },
     {
       "path": "conquistador/commands/outreach/references/channels/imessage.md",
@@ -2399,7 +2471,7 @@
     },
     {
       "path": "conquistador/commands/outreach/references/copy-validation-rubric.md",
-      "sha256": "4eceaa13eeaa90c30adcaa03c64b17c287e8f68ece2ab58cfeca36875b1fa6ad"
+      "sha256": "ca2c04e415789b738374796b225d1890c88fb4fe91e1bddb7932c90e1bf02249"
     },
     {
       "path": "conquistador/commands/outreach/references/examples/critic-case-sourced-signal-no-pitch.md",
@@ -2434,8 +2506,16 @@
       "sha256": "ccfb6c424208b15ca30b74b153c8e0cf25892340ca6a6b6ae8a5b70e5a6deccb"
     },
     {
+      "path": "conquistador/commands/outreach/references/examples/pairs-relationships.md",
+      "sha256": "9f189dd2b89b87d838d80776bac7cc3d1d1796268c048931ab7919a4fcc38605"
+    },
+    {
+      "path": "conquistador/commands/outreach/references/examples/pairs-sales.md",
+      "sha256": "d7ee73cc43f253c69fb227c323f1e8fafb23c4c5f7b2e772aa2f3f463aa7516c"
+    },
+    {
       "path": "conquistador/commands/outreach/references/examples/saas-sequence-no-proof.md",
-      "sha256": "78498ba0fee2dee672043e6e48e62318c30ee242484379fddde46ded62c81d9f"
+      "sha256": "c25998d719bb579ce20ca623b0d50565ba0ca2c506588fbcec16d271ae605ba5"
     },
     {
       "path": "conquistador/commands/outreach/references/examples/sourced-signal-no-pitch.md",
@@ -2455,15 +2535,15 @@
     },
     {
       "path": "conquistador/commands/outreach/references/frameworks/account-program.md",
-      "sha256": "be9cc31126f85593b543efa1a793507b350a56b2cd96f2356805db1292edf2a8"
+      "sha256": "a92600ab0d1dcf71aa63774169b58100bc4a39527d82248e20482df130035d03"
     },
     {
       "path": "conquistador/commands/outreach/references/frameworks/cold-email-frameworks.md",
-      "sha256": "c5cc39cdd6e918099cb3ab8c36c31283825427c454e5035b560683018d6c34f2"
+      "sha256": "3dedb2942c57c3da87ad8ffbe979e6281e39c28484945b7c926f5e8bd4d87d61"
     },
     {
       "path": "conquistador/commands/outreach/references/frameworks/ctas.md",
-      "sha256": "db19319d10f038b157104fff3a288329a25239887504bbb1ec955cff23b92dc6"
+      "sha256": "5fe131d0dc697b45caa9ab71b962ee61e0fbdd9c7f90d709e8dbbd6926aca209"
     },
     {
       "path": "conquistador/commands/outreach/references/frameworks/objections.md",
@@ -2471,7 +2551,7 @@
     },
     {
       "path": "conquistador/commands/outreach/references/frameworks/outreach-decisions.md",
-      "sha256": "1a10e6306c7e60e8a57c1e25ea9755c9598ab32274c6fafa4889af9e8988c69d"
+      "sha256": "ffc6463e6a0310f6ed05bbc71b37a2e6fe8bd9d9de41fb48a91c8518a9674add"
     },
     {
       "path": "conquistador/commands/outreach/references/frameworks/personalization-signals.md",
@@ -2479,19 +2559,19 @@
     },
     {
       "path": "conquistador/commands/outreach/references/frameworks/sequences.md",
-      "sha256": "00e44b24c3a8c3d352a90f5f6dae75110e731486d5acdf2921aac00efd680557"
+      "sha256": "fcb4896c7db27f03448217e1d8a99ac540d849f5d562545e15625e62c6dbffa8"
     },
     {
       "path": "conquistador/commands/outreach/references/frameworks/structures.md",
-      "sha256": "8fe739c1f7a72f6c5e95efc844c1fe89659c648c4f1b5ab255e4cba771a5fba6"
+      "sha256": "827f66b0de1cbcade6e2a726db5c0cce5d50998234c9b87357eb502dfaa4c781"
     },
     {
       "path": "conquistador/commands/outreach/references/method.md",
-      "sha256": "59c35fbc488e29506074656f3212ac5934e53657f7badd425be023b8b88619d7"
+      "sha256": "1ed81680a0423e1f92960a9ddd99138d9c73a18b717dfcc1ef19d3a920c04879"
     },
     {
       "path": "conquistador/commands/outreach/references/modes/community.md",
-      "sha256": "594204e577e9206a94b20d631ec342ee5b6df800178d70a1321b70092464c8d6"
+      "sha256": "a635c3de89eaa1d05c08ca8bf24e20ad50493c2d38114b2200a92505a5673ded"
     },
     {
       "path": "conquistador/commands/outreach/references/modes/creator-sponsorship.md",
@@ -2511,15 +2591,15 @@
     },
     {
       "path": "conquistador/commands/outreach/references/modes/partnership.md",
-      "sha256": "62bf99f40278aeff3b30851f797b7689460628cccb6ad1d9385c7b9fa7272f34"
+      "sha256": "073d92d42d8dd99141802ec8793537f45e236b74200a8c22250ea67cdc9b2743"
     },
     {
       "path": "conquistador/commands/outreach/references/modes/saas.md",
-      "sha256": "8912b36f38b28a15b19b2261bf0d43ef09400b8730c9fa5e592fd1ac78505b2b"
+      "sha256": "9d807c5c2926587c0af3990c9b22ccd6c58dc8efffb0962e5a51773c1e4ebbb7"
     },
     {
       "path": "conquistador/commands/outreach/references/modes/services.md",
-      "sha256": "2fe44abd72e081b83eeb5e6d38ac37c517aaf0de427f5a5169d9d3e276973544"
+      "sha256": "6a1255569adc77325afc66f915850a6994fc57f011a6077f8497e336fdbf5e1a"
     },
     {
       "path": "conquistador/commands/outreach/references/proof-types.md",
@@ -4211,7 +4291,7 @@
     },
     {
       "path": "conquistador/plays/landing/agents/section-spec-agent.md",
-      "sha256": "2282f871dca2e07aac1fc6e1475c23b446fa531ce70e02c817bf6129c475015f"
+      "sha256": "6d88319563f70dc30fb6e766f2d7b5b9271024f9256e6fb9aa234f2e74d9ac76"
     },
     {
       "path": "conquistador/plays/landing/references/anti-patterns.md",
@@ -4287,7 +4367,7 @@
     },
     {
       "path": "conquistador/plays/landing.md",
-      "sha256": "2cc248114d48c7cbe4f2fd7fb19bf177fbd6024d62d8f9d223a788ff88c4745e"
+      "sha256": "0d775f09a4c87f2acdb499cc10d469b3ccde0956ab10bc7b0ba54d7a5b22cbc2"
     },
     {
       "path": "conquistador/plays/launch/agents/bundle-critic-agent.md",
@@ -4363,7 +4443,7 @@
     },
     {
       "path": "conquistador/plays/outbound.md",
-      "sha256": "979904b8dc31c00a7a6a27ebbb5aaa89629b45765612f5d0a2f21fe5b018e8d1"
+      "sha256": "c71b3c93ebc963d21f1f8ca28c9934aafd89a2ea70bf0656d67300f354a28513"
     },
     {
       "path": "conquistador/plays/paid.md",
@@ -4775,11 +4855,11 @@
     },
     {
       "path": "conquistador/routing-contract.json",
-      "sha256": "c8ba84eecf6821474a09a1f70f08b11d1e5a0d76360e16d8b970d013dc751ad7"
+      "sha256": "38caa67ee1eb9e9c92550c8ff15320f53c3eaecf805e62fbdfbb2da92f2f87e1"
     },
     {
       "path": "conquistador/routing-overlay.json",
-      "sha256": "9d8990b7c2a34c115793b965df49af88b825ae32b683a9c13f5aa3029b0793da"
+      "sha256": "920091418117e8f4a34df9781672e7dd066efc5ce12b4dcab3663579c0167d2c"
     },
     {
       "path": "conquistador/rubrics/composition.md",
@@ -4799,7 +4879,7 @@
     },
     {
       "path": "conquistador/specialists/copy-agent.md",
-      "sha256": "10db423e5a0a171fd1e98e06c8eaf2d5c27a1d00c935779e6a83ca815675ebb0"
+      "sha256": "a9482bf2c74f8053ec73b9a603666bb15bf09cd11d86e6c8a5df1d557b851e3e"
     },
     {
       "path": "conquistador/specialists/creative-assets-agent.md",
@@ -4815,7 +4895,7 @@
     },
     {
       "path": "conquistador/specialists/dr-landing-agent.md",
-      "sha256": "02a6fe52c42b5c2b1dc9473710e7801aaa537a49b5e6e588f46bdd7a447d409d"
+      "sha256": "34fa8fa9a7c24be4dbb552790fbc3e02f276152ede039f1e6d3a48b286d532f0"
     },
     {
       "path": "conquistador/specialists/roster.md",
@@ -4823,7 +4903,7 @@
     },
     {
       "path": "conquistador/specialists/saas-landing-agent.md",
-      "sha256": "697995b08c99df5fd3e7882a0a88876fd7674632f2937e734534982a4521ca8c"
+      "sha256": "b2ca85c7304c15f92e2aa9f2e5ff3d070d45e59e88b139f4b3291b56fae46bfe"
     },
     {
       "path": "conquistador/standards/context.md",
@@ -4929,11 +5009,11 @@
     },
     {
       "path": "tools/brief.mjs",
-      "sha256": "b8a3cec02e4f8f98378fd7168a1f4f99eaa9889e88d862ce6336f680362b0537"
+      "sha256": "9b6d029c389a87e3c5cda63495f0989733e7358c0865f4464196296fd0b6d6f4"
     },
     {
       "path": "tools/search-index.json",
-      "sha256": "98872dea1137c0b14e46318c254943bb15f2e88c1678b3a8b4fd415f855ef578"
+      "sha256": "e1281f4994169fd2393390ff15a14756cb7dadae883a4bed91c69e6f2f9ac7de"
     },
     {
       "path": "tools/prompt-advice.mjs",
