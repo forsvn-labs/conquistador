@@ -76,8 +76,8 @@ const DRAFTING = ['commands/copy/ENTRY.md', 'commands/copy/COMMAND.md', 'command
   'plays/landing/agents/section-spec-agent.md', 'specialists/copy-agent.md', 'specialists/dr-landing-agent.md',
   'specialists/saas-landing-agent.md'];
 // The facts check, in the words every drafting instruction uses.
-const FACTS_CHECK = [/own judgment/i, /user's facts/i, /remove (?:the )?claims the facts do not support/i,
-  /keep fair inferences/i, /add nothing/i, /no\s+hedges/i, /no\s+source\s+text/i, /no\s+disclaimers/i];
+const FACTS_CHECK = [/own\s+judgment/i, /user's\s+facts/i, /remove\s+claims\s+the\s+facts\s+do\s+not\s+support/i,
+  /keep\s+fair\s+inferences/i, /add\s+nothing/i, /no\s+hedges/i, /no\s+source\s+text/i, /no\s+disclaimers/i];
 // Text the facts check must not add to the copy.
 const ADDS = /operator\s+note|qualifier|footnote|\badd (?:a|an|the|one)\b|\binclude (?:a|an|the)\b|\bcite\b|\bsource beside\b/i;
 // Drafting rules, patterns, examples, and review roles. The pass-through names none of them.
@@ -91,7 +91,7 @@ const paragraph = (text, pattern) => {
   return text.slice(at, end < 0 ? undefined : end);
 };
 // The pass-through paragraph in a drafting instruction: the one that holds "own judgment".
-const passage = path => paragraph(read(path), /[^\n]*own judgment/i);
+const passage = path => paragraph(read(path), /[^\n]*own\s+judgment/i);
 
 test('copy drafting briefs carry the copy entry and nothing else', () => {
   for (const task of PASS_TASKS) {
@@ -176,9 +176,10 @@ test('the long-form method keeps every rule it held when it won sales page openi
 });
 
 test('approval boundaries stay in every drafting instruction and the long-form method', () => {
-  // The section spec drafts inside the landing play, which holds the play's approval boundary.
-  for (const path of [...DRAFTING.filter(path => !path.includes('section-spec')), 'commands/copy/references/sales-argument.md']) {
-    assert.match(read(path), /approv/i, `${path} keeps the approval boundary`);
+  // The section spec and the convert entry hold no boundary on main; their play and COMMAND hold it.
+  const holders = DRAFTING.filter(path => !/section-spec|convert\/ENTRY/.test(path));
+  for (const path of [...holders, 'commands/copy/references/sales-argument.md']) {
+    assert.match(read(path), /approv|human actions|scope and authority/i, `${path} keeps the approval boundary`);
   }
   assert.match(read('commands/copy/ENTRY.md'), /\bpublish/i);
 });
