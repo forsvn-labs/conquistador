@@ -1331,7 +1331,7 @@
     },
     {
       "path": "conquistador/commands/copy/references/copy-review.md",
-      "sha256": "1c0a1a962f192c207b96f5542c3addffbe86261f7f2bcc7672076d42fb34a471"
+      "sha256": "31676100fab8c8ed50d1891453163b734b188050350029db4880e0a9be1aa169"
     },
     {
       "path": "conquistador/commands/copy/references/examples/direct-response-examples.md",
@@ -4945,7 +4945,7 @@
     },
     {
       "path": "tools/search-index.json",
-      "sha256": "63be2e3a8ec7af676452229845db08ff81ceec3b807cf2d040abf17697de510c"
+      "sha256": "80a53ca7b0033a95f3d5adf3e5d36a53422bd5336628a32e8666753cf3266c85"
     },
     {
       "path": "tools/prompt-advice.mjs",
