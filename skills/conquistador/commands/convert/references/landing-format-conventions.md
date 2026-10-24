@@ -6,9 +6,9 @@ produced_by: convert
 load_class: PROCEDURE
 ---
 
-# Improve-conversion Format Conventions
+# Post-launch evaluation format
 
-> Format rules for the `convert` cycle artifact + results.tsv row + learnings.md promotion. Cited from COMMAND.md "Artifact Contract" + "Evaluation Artifact Template" + "Results Row Discipline" sections. Schema changes require atomic update across `references/landing-format-conventions.md` + lp-brief skill (which produces strategy/ artifacts read by `convert`) + eval-loop owner.
+> Format rules for the `convert` cycle artifact + results.tsv row + learnings.md promotion. Cited from COMMAND.md "Artifact Contract" + "Evaluation Artifact Template" + "Results Row Discipline" sections. Schema changes require one coordinated update of this file, the loop files, and their readers.
 
 ## Output locations
 
@@ -18,7 +18,7 @@ files and return artifacts inline using the same schema.
 | Path | Lifecycle | Behavior |
 |---|---|---|
 | `.forsvn/artifacts/mkt/improve-conversion/evals/YYYY-MM-DD-cycle-N.md` | evaluation | Primary artifact, one per cycle |
-| `.forsvn/artifacts/mkt/improve-conversion/results-ledger.md` | evaluation | Append exactly one row via `bun a Markdown ledger row on the evaluation artifact (no TypeScript helper)` (validated 8-column helper) |
+| `.forsvn/artifacts/mkt/improve-conversion/results-ledger.md` | evaluation | Append exactly one 8-column row in the format below |
 | `.forsvn/artifacts/mkt/improve-conversion/learnings.md` | learning | Update ONLY for high-confidence keep/discard lessons reusable beyond this exact page state; critic gates the promotion |
 
 ## File naming
@@ -41,7 +41,7 @@ lifecycle: evaluation
 use_when: "Deciding whether to keep, discard, watch, or block the current landing-page cycle"
 do_not_use_when: "Designing the next page revision without reading the latest loop context and results"
 upstream: ".forsvn/artifacts/mkt/improve-conversion/program.md, context.md, strategy/, execution/, metric source"
-downstream: "results.tsv, learnings.md, lp-brief next-cycle brief"
+downstream: "results.tsv, learnings.md, next diagnosis cycle"
 ---
 ```
 
@@ -74,7 +74,7 @@ lifecycle: evaluation
 use_when: "Deciding whether to keep, discard, watch, or block the current landing-page cycle"
 do_not_use_when: "Designing the next page revision without reading the latest loop context and results"
 upstream: ".forsvn/artifacts/mkt/improve-conversion/program.md, context.md, strategy/, execution/, metric source"
-downstream: "results.tsv, learnings.md, lp-brief next-cycle brief"
+downstream: "results.tsv, learnings.md, next diagnosis cycle"
 ---
 
 # [Page] Cycle N Evaluation
@@ -153,23 +153,17 @@ Rules:
 - `artifact` is relative to the loop folder, e.g. `evals/2026-05-13-cycle-2.md`
 - `status` must be `keep`, `discard`, `watch`, or `blocked` (Critic Hard Fail #6 otherwise)
 - `description` is one sentence without tabs
-- Use the validated helper to append:
+- Append the row in this order of fields:
 
-```bash
-bun a Markdown ledger row on the evaluation artifact (no TypeScript helper) "<loop slug>" \
-  --artifact evals/YYYY-MM-DD-cycle-N.md \
-  --metric "<primary metric>" \
-  --value "<current value>" \
-  --baseline "<baseline value>" \
-  --status "<keep|discard|watch|blocked>" \
-  --description "<one sentence without tabs>"
+```text
+cycle	date	evals/YYYY-MM-DD-cycle-N.md	<primary metric>	<current value>	<baseline value>	<keep|discard|watch|blocked>	<one sentence without tabs>
 ```
 
 - Do NOT append a row if the Critic verdict is FAIL. Return `BLOCKED`.
 
 ### Known limitation — custom schemas
 
-The validated helper enforces the 8-column standard schema. Loops with custom 10+ column schemas (e.g., multi-metric loops that include guardrail values in the row) currently require hand-edit. Schema migration is parked in the eval-loop owner's queue — flag affected loops to the eval-loop owner before manual append.
+The standard row has 8 columns. A loop with a custom schema (for example, guardrail values in each row) needs its own row format; ask the loop owner before appending, and never force a standard row into a custom ledger.
 
 ## Learning Promotion rules
 
@@ -195,19 +189,18 @@ Lesson format:
 ## Side effects (executed in order after critic PASS)
 
 1. **Write eval artifact** at `.forsvn/artifacts/mkt/improve-conversion/evals/YYYY-MM-DD-cycle-N.md` when the store exists; otherwise return inline
-2. **Append ledger row** via `bun a Markdown ledger row on the evaluation artifact (no TypeScript helper)` (validated helper, 8-column schema)
+2. **Append the ledger row** in the 8-column format
 3. **Update learnings.md** ONLY if critic approved promotion (high-confidence keep/discard reusable lesson)
-4. **Run manifest-sync** via `bun manual manifest note if needed (no TypeScript helper)` to refresh the manifest
 
-If critic FAIL after revision: skip all 4 side effects. Return BLOCKED with missing evidence.
+If critic FAIL after revision: skip all side effects. Return BLOCKED with missing evidence.
 
 ## Cross-stack contract
 
 This skill produces:
-- `evals/[date]-cycle-N.md` — consumed by future `convert` cycles (read prior cycles for trend), by lp-brief (`--rev=N+1` reads latest eval for hypothesis seeding), and by humans reviewing loop progress
+- `evals/[date]-cycle-N.md` — consumed by future `convert` cycles (read prior cycles for trend), by the next diagnosis cycle (which reads the latest evaluation for its hypothesis), and by humans reviewing loop progress
 - `results.tsv` row — appended to the loop's ledger; consumed by any skill reading the loop's status (dashboard skills, ledger-summary skills, downstream campaign-plan retrospectives)
-- `learnings.md` update — high-confidence lessons reusable beyond this page state; consumed by future lp-brief / campaign-plan cycles + by humans
+- `learnings.md` update — high-confidence lessons reusable beyond this page state; consumed by future diagnosis cycles, `campaign`, and humans
 
-This skill does NOT directly consume lp-brief output. lp-brief MIGHT be the strategy artifact for the eval-loop cycle (copied into `strategy/` directory); `convert` reads loop-local strategy/execution artifacts, not lp-brief artifacts directly. The coordination contract between lp-brief and `convert` is at the eval-loop boundary, not at the artifact-schema boundary.
+The evaluation reads loop-local strategy and execution artifacts. A page brief from `copy` or the `landing` play enters the loop only when it is copied into the loop's `strategy/` folder.
 
-Schema changes (frontmatter fields, body section structure, Evidence table columns, Results Row columns, learnings.md format) require atomic update of `format-conventions.md` + `references/landing-format-conventions.md` + downstream callers — never silently drift.
+Schema changes (frontmatter fields, body section structure, Evidence table columns, Results Row columns, learnings.md format) require one coordinated update of this file and its readers — never silently drift.

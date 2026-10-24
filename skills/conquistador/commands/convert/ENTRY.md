@@ -1,12 +1,14 @@
 # Improve conversion performance
 
-Return a diagnosis, revised work, and one discriminating test—not a decorative scorecard.
+Return a diagnosis, the revised page, and one discriminating test, not a decorative scorecard.
 
 ## Use this method
 
-Apply the selected current-stage resources from the brief. Keep the requested output size and scope.
-For a small edit, return the edit and only the explanation it needs.
+1. Read the page as a visitor and draft the rewrite from
+   [page conversion craft](references/page-conversion-craft.md): message match, first screen, proof,
+   fears at the button, forms, and whether a test can reach a result.
+2. Locate the break and choose one test with the [complete method](COMMAND.md).
+3. Then check claims in the revision. Keep a sourced number exact, with its source beside it.
 
-Read the [complete method](COMMAND.md) when its detailed procedure is needed.
-Expand linked playbooks only when their condition or stage applies.
-The Core list is a reference collection, not an instruction to load every file.
+Keep the requested size and scope. For a small edit, return the edit and only the explanation it
+needs. Deploying, publishing, and starting a test need the user's approval.

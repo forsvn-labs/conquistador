@@ -111,7 +111,7 @@ lifecycle: evaluation
 use_when: "Deciding whether to keep, discard, watch, or block the current landing-page cycle"
 do_not_use_when: "Designing the next page revision without reading the latest loop context and results"
 upstream: ".forsvn/loops/forsvn-home-cro/program.md, context.md, strategy/, execution/, GA4 + Hotjar export"
-downstream: "results.tsv, learnings.md, lp-brief next-cycle brief"
+downstream: "results.tsv, learnings.md, next diagnosis cycle"
 ---
 
 # forsvn.com/ Cycle 3 Evaluation
@@ -153,7 +153,7 @@ downstream: "results.tsv, learnings.md, lp-brief next-cycle brief"
 - Keep: the warm forest-shadow `#0A120D` canvas + single Leaf `#74B36B` anchor word (brand-correct, not implicated).
 - Discard: the blocking hero reveal in its current full-screen, paint-delaying form.
 - Watch: median scroll depth (warn) — re-check next window.
-- Route next work to: `improve-conversion --rev=4` with hypothesis "deferring/shortening the reveal so 'how it works' paints in the first viewport restores the 79% scroll-through."
+- Route next work to: `convert` conversion diagnosis with hypothesis "deferring/shortening the reveal so 'how it works' paints in the first viewport restores the 79% scroll-through."
 
 ## Results Row
 
@@ -171,14 +171,10 @@ cycle	date	artifact	primary_metric	value	baseline	status	description
 
 ## 5. The results.tsv row (exact column order)
 
-`cycle → date → artifact → primary_metric → value → baseline → status → description`, appended via the validated helper:
+`cycle → date → artifact → primary_metric → value → baseline → status → description`, appended as one tab-separated line:
 
-```bash
-bun a Markdown ledger row on the evaluation artifact (no TypeScript helper) "forsvn-home-cro" \
-  --artifact evals/2026-06-12-cycle-3.md \
-  --metric "CTA CTR to /signup" --value "3.1%" --baseline "4.4%" \
-  --status "discard" \
-  --description "Hero reveal pushed how-it-works below an attention cliff, cutting CTR 1.3pt."
+```tsv
+3	2026-06-12	evals/2026-06-12-cycle-3.md	CTA CTR to /signup	3.1%	4.4%	discard	Hero reveal pushed how-it-works below an attention cliff, cutting CTR 1.3pt.
 ```
 
 `status: discard` ∈ `keep|discard|watch|blocked`. Description is one sentence, no tabs.
@@ -198,7 +194,7 @@ bun a Markdown ledger row on the evaluation artifact (no TypeScript helper) "for
 
 Dimension check (each ≥ 7): Loop Fit 9 (writes inside `forsvn-home-cro`, evaluates its surface) · Metric Integrity 9 (value/baseline/window/source/units explicit) · Attribution Honesty 8 (sample, comparability, sampling caveat stated, no overclaim) · Decision Discipline 9 (`discard` follows the metric drop, not the diagnosis story) · **Boundary Control 9 — the domain gate: the recommendation isolates the bottleneck section and routes the fix to `convert`; it never specifies the replacement copy/layout.** · Ledger Correctness 8 (one valid row, no tabs, relative path). No Hard Fail tripped: real loop, real metric source-window, baseline present, evidence not a heuristic audit, no fabricated numbers, valid status, low-confidence learning correctly **not** promoted.
 
-PASS → side effects fire in order: write artifact → append row → (no learning promotion — correctly gated) → `bun manual manifest note if needed (no TypeScript helper)`.
+PASS → side effects fire in order: write artifact → append row → (no learning promotion — correctly gated).
 
 ## 7. FAIL → fix variant
 
@@ -216,7 +212,7 @@ Suppose the first Recommendation pass had set `status: keep` arguing "bounce imp
   - none
 ```
 
-Per the revision cycle, re-dispatch **recommendation-agent** (named in `required_fixes`) with the critic feedback appended. It corrects `keep → discard`, drops the aesthetic justification, and re-routes to `convert`. The re-scored artifact is the one shown in §4 → PASS. (Had it FAILed again, the rule is BLOCKED: **no** ledger row, **no** learning promotion, **no** manifest sync — all-or-nothing.)
+Per the revision cycle, re-dispatch **recommendation-agent** (named in `required_fixes`) with the critic feedback appended. It corrects `keep → discard`, drops the aesthetic justification, and re-routes to `convert`. The re-scored artifact is the one shown in §4 → PASS. (Had it FAILed again, the rule is BLOCKED: **no** ledger row, **no** learning promotion — all-or-nothing.)
 
 ## 8. Completion status
 

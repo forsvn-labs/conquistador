@@ -33,7 +33,10 @@ record the baseline and instrumentation needed before activation.
 5. Gate diagnosis with
    [`../agents/conversion-critic-agent.md`](../agents/conversion-critic-agent.md) and
    [`../references/conversion-diagnosis-anti-patterns.md`](../references/conversion-diagnosis-anti-patterns.md).
-6. Produce Keep / Drop / Change / Test plus the ready-to-use revision from the front-door contract.
+6. Draft the Change from [page conversion craft](../references/page-conversion-craft.md): first screen
+   first, proof beside its claims, fears answered at the button, fields cut to what the next step
+   needs. Check the revision's claims afterward and keep sourced specifics exact.
+7. Produce Keep / Drop / Change / Test from the front-door contract.
 
 ## Landing eval lens (post-launch evidence → keep / discard / watch / blocked)
 
