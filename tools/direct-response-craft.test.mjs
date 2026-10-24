@@ -23,17 +23,22 @@
 //     or push review roles toward literal description or added hedging;
 // 17. the reader-first, selection, operator-note, no-hedge, and fair-inference rules missing from the
 //     craft, the review roles, or the brief;
-// 18. the example set missing hero sections, headline sets, lead magnet pages, or consumer app pages.
+// 18. (retired in round 4: short-form has no examples) the example set missing heroes or a sales argument.
 // Round 3 (the method won long-form work and lost short-form work across 16 blind pairs; the owner split copy by length):
-// 19. a short-form request loading the long-form review roles or long-form files (brief, ENTRY, checklist, COMMAND);
-// 20. a short-form strong example missing offer terms that its product facts include;
-// 21. a headline set whose options share one angle;
-// 22. a short-form strong example with no concrete specific in the headline when its facts include one,
-//     or with a number in the headline that its facts do not contain;
-// 23. a short-form strong example dropping the social proof its facts include;
+// 19. (replaced by 27) a short-form request loading the long-form review roles or long-form files;
+// 20–23, 25. (retired in round 4) the short-form checklist and its strong examples: offer terms, angles,
+//     a headline specific, social proof, the checklist's rules and size;
 // 24. long-form requests losing their current method (sales argument, roles, review, examples);
-// 25. the short-form checklist missing one of its rules, or growing past its size budget;
 // 26. a short-form brief no smaller than the long-form brief.
+// Round 4 (the round-3 checklist lost 1–7; across 24 copy pairs every short-form rule set made the model worse;
+// the owner made short-form copy a pass-through):
+// 27. a short-form brief that carries any drafting rule, pattern, example, review role, or other copy file;
+// 28. a short-form mode (ENTRY, COMMAND, specialist) that links a file or names a drafting rule;
+// 29. a facts check that adds text (a hedge, source text, a disclaimer, a qualifier, or an operator note);
+// 30. the short-form checklist or a short-form example still present, or a lead magnet guide with drafting rules;
+// 31. a long-form file, a long-form COMMAND section, or a long-form example changed;
+// 32. a long-form request (including a sales page request) that routes to no method or loses its files;
+// 33. an approval boundary lost from ENTRY, the short-form mode, or the lead magnet guide.
 // Name lists are stored as hashes so this public file does not name the sources it excludes.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
@@ -71,7 +76,7 @@ const craft = [
   'commands/copy/references/copy-review.md', 'commands/copy/references/anti-patterns.md',
   'commands/copy/references/long-form-library.md', 'commands/copy/references/lifecycle-sequences.md',
   'commands/copy/references/examples/direct-response-examples.md',
-  'commands/copy/references/short-form-copy.md',
+  'commands/copy/references/lead-magnet-stack.md',
   'commands/copy/agents/body-agent.md', 'commands/copy/agents/cta-agent.md',
   'commands/copy/agents/social-proof-agent.md', 'commands/copy/agents/hook-agent.md',
   'commands/convert/ENTRY.md', 'commands/convert/COMMAND.md', 'commands/convert/fallbacks/sequential.md',
@@ -82,9 +87,10 @@ const craft = [
   'specialists/copy-agent.md', 'specialists/dr-landing-agent.md', 'specialists/saas-landing-agent.md',
 ];
 const examples = craft.filter(path => /\/examples\//.test(path));
+// Retired in round 4: short-form copy is a pass-through with no checklist.
 const SHORT = 'commands/copy/references/short-form-copy.md';
 // Files whose invented products carry a facts bullet ("- **Name:** …").
-const rosterFiles = [...examples, SHORT];
+const rosterFiles = examples;
 
 const words = text => text.toLowerCase().normalize('NFKD').replace(/[^a-z0-9 ]+/g, ' ').split(/\s+/).filter(Boolean);
 const hash = value => createHash('sha256').update(value).digest('hex').slice(0, 16);
@@ -97,7 +103,7 @@ const grams = (text, max = 4) => {
 const hits = (text, hashes) => [...grams(text)].filter(gram => hashes.has(hash(gram)));
 
 // Every quoted block under a **Strong** label, with its channel, what its headline leads with, and its section.
-const strongFiles = [...examples, 'commands/copy/references/headline-formulas.md', SHORT];
+const strongFiles = [...examples, 'commands/copy/references/headline-formulas.md'];
 const strongBlocks = () => strongFiles.flatMap(path => {
   const lines = read(path).split('\n');
   const found = [];
@@ -195,11 +201,12 @@ test('the craft starts from the reader, selects, and keeps compliance voice out 
   const reader = /want,\s+pain,\s+or\s+identity/i;
   const select = /one\s+proof[\s\S]{0,40}?one\s+mechanism/i;
   const noHedge = /(?:do\s+not|does\s+not|never|must\s+not)\s+add\s+disclaimers,\s+hedges,\s+or\s+(?:source\s+text|attributions)/i;
-  for (const path of ['commands/copy/ENTRY.md', 'commands/copy/references/sales-argument.md', 'commands/copy/references/headline-formulas.md',
+  // Round 4: ENTRY carries no drafting rule, because every copy brief inlines it; the long-form files hold them.
+  for (const path of ['commands/copy/references/sales-argument.md', 'commands/copy/references/headline-formulas.md',
     'commands/copy/agents/hook-agent.md', 'commands/convert/references/page-conversion-craft.md', 'plays/landing/references/conversion/core-principles.md']) {
     assert.match(read(path), reader, path);
   }
-  for (const path of ['commands/copy/ENTRY.md', 'commands/copy/references/sales-argument.md', 'commands/copy/agents/hook-agent.md',
+  for (const path of ['commands/copy/references/sales-argument.md', 'commands/copy/agents/hook-agent.md',
     'commands/copy/fallbacks/sequential.md']) assert.match(read(path), select, path);
   for (const path of ['commands/copy/references/copy-review.md', 'commands/copy/COMMAND.md', 'commands/copy/fallbacks/sequential.md',
     'commands/copy/agents/voice-agent.md', 'commands/copy/agents/psychology-agent.md', 'commands/copy/agents/zero-risk-agent.md',
@@ -207,14 +214,16 @@ test('the craft starts from the reader, selects, and keeps compliance voice out 
     'plays/landing/references/conversion-principles.md']) assert.match(read(path), noHedge, path);
   for (const path of ['commands/copy/references/copy-review.md', 'commands/copy/agents/critic-agent.md',
     'commands/copy/agents/psychology-agent.md', 'commands/copy/fallbacks/sequential.md']) assert.match(read(path), /fair\s+inference/i, path);
-  for (const task of ['Write landing page copy for our SaaS', 'Write a headline for our product page']) {
+  // Long-form briefs carry the rules; short-form briefs carry none (round 4, below).
+  for (const task of ['Write landing page copy for our SaaS', 'Write the sales page for our course']) {
     const pack = packBrief(createBrief(task, options));
     for (const pattern of [reader, select, /operator\s+note/i]) assert.match(pack.text, pattern, task);
   }
 });
 
 test('approval boundaries remain in every entry', () => {
-  for (const path of ['commands/copy/COMMAND.md', 'commands/copy/fallbacks/sequential.md', 'commands/convert/COMMAND.md',
+  for (const path of ['commands/copy/ENTRY.md', 'commands/copy/COMMAND.md', 'commands/copy/references/lead-magnet-stack.md',
+    'commands/copy/fallbacks/sequential.md', 'commands/convert/COMMAND.md',
     'commands/convert/fallbacks/sequential.md', 'plays/landing.md', 'specialists/copy-agent.md',
     'specialists/dr-landing-agent.md', 'specialists/saas-landing-agent.md']) {
     const text = read(path);
@@ -230,7 +239,7 @@ test('strong examples pass the writing check on their channel', () => {
     const findings = checkText(block.text, { channel: block.channel, file: `${block.where}.md` }).filter(counted);
     assert.deepEqual(findings.map(item => `${item.rule}: ${item.snippet}`), [], block.where);
   }
-  assert.ok(blocks.length >= 14, `only ${blocks.length} strong examples are machine-checked`);
+  assert.ok(blocks.length >= 7, `only ${blocks.length} strong examples are machine-checked`);
 });
 
 test('strong page copy carries no source, period, or attribution text', () => {
@@ -245,7 +254,7 @@ test('strong examples carry no disclaimers, hedges, or compliance voice', () => 
 
 test('strong examples do not restate the audience definition', () => {
   const { audiences } = roster();
-  assert.ok(audiences.length >= 6, 'each invented product names its audience in the roster');
+  assert.ok(audiences.length >= 4, 'each invented product names its audience in the roster');
   for (const block of strongBlocks()) {
     for (const pattern of AUDIENCE) assert.doesNotMatch(block.text, pattern, block.where);
     const copy = ` ${words(block.text).join(' ')} `;
@@ -258,7 +267,7 @@ test('strong examples do not restate the audience definition', () => {
 
 test('strong headlines start from the reader, not the product or an unknown customer', () => {
   const { products, customers } = roster();
-  assert.ok(products.length >= 8 && customers.length >= 3, 'roster names products and customers');
+  assert.ok(products.length >= 4 && customers.length >= 2, 'roster names products and customers');
   for (const block of strongBlocks()) {
     assert.ok(LEADS.has(block.lead), `${block.where} must say what its headline leads with (${[...LEADS].join(', ')})`);
     for (const headline of headlinesOf(block)) {
@@ -278,12 +287,13 @@ test('hero-sized strong examples select instead of using every fact', () => {
   }
 });
 
-test('example set covers headlines, leads, heroes, a sales argument, and a before/after rewrite', () => {
+test('example set covers leads, a hero that argues, a sales argument, and a before/after rewrite', () => {
   const copy = read('commands/copy/references/examples/direct-response-examples.md');
   const pairs = (copy.match(/^\*\*Weak\*\*/gm) ?? []).length + (read('commands/convert/references/examples/signup-page-rewrite.md').match(/^\*\*Weak\*\*/gm) ?? []).length;
-  assert.ok(pairs >= 10 && pairs <= 20, `${pairs} annotated pairs`);
-  for (const heading of [/^## Headlines$/m, /^## Headline sets$/m, /^## Leads$/m, /^## Hero sections$/m, /^## Lead magnet pages$/m,
-    /^## Consumer app pages$/m, /^## A short sales argument$/m]) assert.match(copy, heading);
+  assert.ok(pairs >= 6 && pairs <= 20, `${pairs} annotated pairs`);
+  for (const heading of [/^## Leads$/m, /^## Hero sections$/m, /^## A short sales argument$/m]) assert.match(copy, heading);
+  // Round 4: short-form copy has no examples.
+  for (const heading of [/^## Headlines$/m, /^## Headline sets$/m, /^## Lead magnet pages$/m, /^## Consumer app pages$/m]) assert.doesNotMatch(copy, heading);
   assert.match(read('commands/convert/references/examples/signup-page-rewrite.md'), /^## Before/m);
   assert.match(read('commands/convert/references/examples/signup-page-rewrite.md'), /^## After/m);
 });
@@ -292,7 +302,6 @@ test('the brief carries the craft within its budget', () => {
   for (const [task, path] of [
     ['Write landing page copy for our SaaS', 'skills/conquistador/commands/copy/references/sales-argument.md'],
     ['Rewrite this landing page to convert better', 'skills/conquistador/commands/copy/references/sales-argument.md'],
-    ['Write a headline for our product page', 'skills/conquistador/commands/copy/references/headline-formulas.md'],
     ['Create a landing page for our SaaS', 'skills/conquistador/plays/landing/references/conversion/core-principles.md'],
     ['Improve conversion on our signup page', 'skills/conquistador/commands/convert/references/page-conversion-craft.md'],
   ]) {
@@ -315,8 +324,8 @@ test('review leftovers are gone', () => {
 });
 
 test('ENTRY files stay short and point at the craft first', () => {
-  // Copy has two modes; its first two links are the short-form checklist and the long-form sales argument.
-  for (const [path, first] of [['commands/copy/ENTRY.md', ['references/short-form-copy.md', 'references/sales-argument.md']],
+  // Copy has two modes; short-form links nothing, so the first link is the long-form sales argument.
+  for (const [path, first] of [['commands/copy/ENTRY.md', ['references/sales-argument.md']],
     ['commands/convert/ENTRY.md', ['references/page-conversion-craft.md']]]) {
     const text = read(path);
     assert.ok(Buffer.byteLength(text) <= 1400, `${path} is ${Buffer.byteLength(text)} bytes`);
@@ -364,31 +373,13 @@ test('no 8-word run is shared with the private craft sources', { skip: !process.
   }
 });
 
-// Round 3: short-form and long-form modes.
+// Round 3: short-form and long-form modes. Round 4: short-form is a pass-through.
 const SHORT_TASKS = ['Write a headline for our product page', 'Write five headline options for our product page',
-  'Write a lead magnet landing page for our free template', 'Write the hero headline, subheadline, and bullets for our app landing page'];
-const LONG_TASKS = ['Write landing page copy for our SaaS', 'Rewrite this landing page to convert better'];
-const LONG_FILES = /\/agents\/|\/fallbacks\/|references\/(?:sales-argument|long-form-library)\.md$|examples\/direct-response-examples\.md$/;
-const ANGLES = new Set(['outcome', 'pain', 'proof', 'objection', 'identity']);
-// A concrete specific: a number, a price, a spelled number, or a named day or time.
-const SPECIFIC = /\d|\$|\b(?:one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|once|twice|monday|tuesday|wednesday|thursday|friday|saturday|sunday|weeknight|tonight|morning|evening|sunrise|a\.m\.|p\.m\.)\b/i;
-const numbers = text => (text.match(/\d[\d,.]*\d|\d/g) ?? []).map(value => value.replace(/,/g, '').replace(/\.$/, ''));
-// Each invented product's facts bullet, keyed by name.
-const productFacts = () => {
-  const facts = new Map();
-  for (const path of rosterFiles) {
-    let name = null;
-    for (const line of read(path).split('\n')) {
-      const start = line.match(/^- \*\*([^:*]+):\*\*/);
-      if (start) { name = start[1].trim(); facts.set(name, line); continue; }
-      if (name && /^\s{2,}\S/.test(line)) facts.set(name, `${facts.get(name)} ${line.trim()}`);
-      else name = null;
-    }
-  }
-  return facts;
-};
-const offerTerms = facts => [...(facts.match(/Offer terms: ([^\n]*?)(?:\.\s|\.$|$)/)?.[1] ?? '').matchAll(/`([^`]+)`/g)].map(match => match[1]);
-const shortBlocks = () => strongBlocks().filter(block => block.form === 'short');
+  'Write a lead magnet landing page for our free template', 'Write the hero headline, subheadline, and bullets for our app landing page',
+  'Write a tagline for our app'];
+const LONG_TASKS = ['Write landing page copy for our SaaS', 'Rewrite this landing page to convert better',
+  'Write the sales page for our course', 'Write five headline options and the sales page for our course'];
+const ENTRY = 'skills/conquistador/commands/copy/ENTRY.md';
 const paragraph = (text, start) => {
   const at = text.indexOf(start);
   if (at < 0) return '';
@@ -403,37 +394,149 @@ const section = (text, heading) => {
   return end < 0 ? rest : rest.slice(0, end);
 };
 const links = text => [...text.matchAll(/\]\(([^)]+)\)/g)].map(match => match[1]);
+// Drafting rules, patterns, examples, and review roles that a short-form brief or mode must not carry.
+const RULES = [
+  /want,\s+pain,\s+or\s+identity/i, /one\s+proof/i, /one\s+mechanism/i, /benefits?\b/i, /most concrete specific/i,
+  /\bnumber in the headline/i, /label,?\s+then/i, /offer terms/i, /social proof/i, /\bangles?\b/i, /\bbullets? (?:that|should|must)/i,
+  /cut adjectives/i, /\bpatterns?\b/i, /\*\*(?:Strong|Weak)\*\*/, /^>/m, /\bhook\b|\bvoice pass|\bpsychology\b|zero-risk|\bcritic\b/i,
+  /competitor-swap/i, /\bpromise\b/i, /\bawareness\b/i,
+];
+const FACTS_CHECK = [/remove claims the facts do not support/i, /keep fair inferences/i, /add nothing/i,
+  /no\s+hedges/i, /no\s+source\s+text/i, /no\s+disclaimers/i];
+// The facts check must not add text to the copy or after it.
+const ADDS = /operator\s+note|qualifier|footnote|\badd (?:a|an|the|one)\b|\binclude (?:a|an|the)\b|\bcite\b/i;
+// Every copy file except ENTRY, as 8-word runs, so a short-form brief cannot carry their text.
+const copyFiles = walk('commands/copy').filter(path => path !== 'commands/copy/ENTRY.md' && /\.(?:md|yaml)$/.test(path));
+const runs = text => {
+  const list = words(text);
+  const found = new Set();
+  for (let at = 0; at + 8 <= list.length; at++) found.add(list.slice(at, at + 8).join(' '));
+  return found;
+};
 
-test('every strong example names its mode, and the checklist examples are short-form', () => {
-  const blocks = strongBlocks();
-  for (const block of blocks) assert.ok(['short', 'long'].includes(block.form), `${block.where} needs form: short or form: long`);
-  const short = blocks.filter(block => block.path === SHORT);
-  assert.ok(short.length >= 1 && short.length <= 2, `the short-form checklist carries one or two examples, not ${short.length}`);
-  for (const block of short) assert.equal(block.form, 'short', block.where);
-  for (const block of blocks.filter(block => block.form === 'short' && block.section !== 'Headlines')) {
-    assert.ok(block.product && productFacts().has(block.product), `${block.where} must name a product from the roster (product: …)`);
+test('every strong example is long-form', () => {
+  for (const block of strongBlocks()) assert.equal(block.form, 'long', `${block.where} needs form: long; short-form copy has no examples`);
+});
+
+test('short-form briefs carry the copy entry and nothing else', () => {
+  const entry = read('commands/copy/ENTRY.md');
+  const fileRuns = new Map(copyFiles.map(path => [path, runs(read(path))]));
+  for (const task of SHORT_TASKS) {
+    const pack = packBrief(createBrief(task, options));
+    assert.equal(pack.structured.command, 'copy', `${task} routes to copy`);
+    assert.deepEqual(pack.structured.inlined.map(item => item.path), [ENTRY], task);
+    assert.deepEqual(pack.structured.situational, [], `${task} lists deferred files`);
+    // The packed text is the brief header plus ENTRY: no copy file's text, rule, pattern, example, or role.
+    const text = pack.text;
+    const own = runs(text);
+    for (const [path, found] of fileRuns) {
+      const shared = [...found].filter(run => own.has(run) && !runs(entry).has(run));
+      assert.deepEqual(shared, [], `${task} carries text from ${path}`);
+    }
+    for (const rule of RULES) assert.doesNotMatch(text, rule, `${task} brief carries ${rule}`);
+    assert.match(text, /approval/i, `${task} brief keeps the approval boundary`);
+    assert.match(text, /\bpublish/i, task);
   }
 });
 
-test('short-form requests load the short-form checklist, not the long-form roles or files', () => {
+test('the short-form mode links nothing and names no drafting rule', () => {
   const entry = read('commands/copy/ENTRY.md');
-  const shortLine = paragraph(entry, '**Short-form**');
-  assert.ok(shortLine, 'ENTRY names the short-form mode');
-  assert.deepEqual(links(shortLine), ['references/short-form-copy.md'], 'the short-form mode loads only the checklist');
-  assert.match(shortLine, /one pass/i);
-  assert.match(shortLine, /(?:do not|don't|never) (?:load|run|use) the review roles/i);
-  const checklist = read(SHORT);
-  for (const target of links(checklist)) assert.doesNotMatch(target, /agents\/|fallbacks\/|sales-argument|copy-review|page-sections|direct-response-examples/, `${SHORT} links ${target}`);
-  const command = section(read('commands/copy/COMMAND.md'), 'Short-form');
-  assert.ok(command, 'COMMAND.md has a short-form section');
-  assert.match(command, /one pass/i);
-  for (const target of links(command)) assert.doesNotMatch(target, /agents\/|fallbacks\/|sales-argument|page-sections/, `COMMAND short-form links ${target}`);
-  for (const task of SHORT_TASKS) {
-    const pack = packBrief(createBrief(task, options));
-    const inlined = pack.structured.inlined.map(item => item.path);
-    assert.ok(inlined.includes(`skills/conquistador/${SHORT}`), `${task}: ${JSON.stringify(inlined)}`);
-    for (const path of inlined) assert.doesNotMatch(path, LONG_FILES, `${task} inlines long-form ${path}`);
+  const short = paragraph(entry, '**Short-form**');
+  assert.ok(short, 'ENTRY names the short-form mode');
+  assert.deepEqual(links(short), [], 'the short-form mode loads no file');
+  assert.match(short, /own judgment/i);
+  assert.match(short, /user's facts/i);
+  for (const rule of RULES) assert.doesNotMatch(entry, rule, `ENTRY carries ${rule}`);
+  const command = section(read('commands/copy/COMMAND.md'), 'Short-form mode');
+  assert.ok(command, 'COMMAND.md has a short-form mode section');
+  assert.deepEqual(links(command), [], 'COMMAND short-form links nothing');
+  assert.doesNotMatch(command, /`?references\/|agents\/|fallbacks\//, 'COMMAND short-form names no file');
+  assert.match(command, /own judgment/i);
+  for (const rule of RULES) assert.doesNotMatch(command, rule, `COMMAND short-form carries ${rule}`);
+  const specialist = paragraph(read('specialists/copy-agent.md'), 'Headlines, heroes');
+  assert.ok(specialist, 'the copy specialist names the short-form mode');
+  assert.match(specialist, /own judgment/i);
+  for (const target of links(specialist)) assert.match(target, /copy\/ENTRY\.md$/, `copy specialist short-form links ${target}`);
+});
+
+test('the short-form facts check removes and adds nothing', () => {
+  const short = paragraph(read('commands/copy/ENTRY.md'), '**Short-form**');
+  const command = section(read('commands/copy/COMMAND.md'), 'Short-form mode');
+  for (const [where, text] of [['ENTRY', short], ['COMMAND', command]]) {
+    for (const rule of FACTS_CHECK) assert.match(text, rule, `${where} short-form facts check misses ${rule}`);
+    assert.doesNotMatch(text, ADDS, `${where} short-form facts check adds text`);
   }
+});
+
+test('the short-form checklist and short-form examples are retired', () => {
+  assert.ok(!existsSync(join(library, SHORT)), `${SHORT} still exists`);
+  for (const path of owned) assert.doesNotMatch(read(path), /short-form-copy\.md|short-form checklist/i, path);
+  const guide = read('commands/copy/references/lead-magnet-stack.md');
+  assert.doesNotMatch(guide, /\*\*(?:Headline|Subhead|Bullets?|Button):\*\*/, 'lead magnet guide drafts the page');
+  for (const rule of RULES) assert.doesNotMatch(guide, rule, `lead magnet guide carries ${rule}`);
+  assert.match(guide, /own judgment/i);
+  for (const target of links(guide)) assert.match(target, /ENTRY\.md$/, `lead magnet guide links ${target}`);
+});
+
+// Long-form files at fa868a5 (round 3). A change here needs its own blind test first.
+// Round 4 changed only the short-form link in sales-argument, long-form-library, headline-formulas, and sequential.
+const LONG_FILES = {
+  'commands/copy/references/sales-argument.md': '4c91b0baf343f4a4',
+  'commands/copy/references/long-form-library.md': 'f1003c270ab42367',
+  'commands/copy/references/headline-formulas.md': 'b7a02a65efe64a3c',
+  'commands/copy/references/copy-review.md': 'cd69833a15e23077',
+  'commands/copy/references/anti-patterns.md': 'aeb4d1e095bdef88',
+  'commands/copy/references/belief-disruption.md': 'c73addbaed10cb3a',
+  'commands/copy/references/discovery-story.md': '8a24406b99f5f480',
+  'commands/copy/references/emotional-triggers.md': '11e8e2605bcc752b',
+  'commands/copy/references/format-conventions.md': '1a0e3e124c12a6f9',
+  'commands/copy/references/lifecycle-sequences.md': '62e3142190511029',
+  'commands/copy/references/research-workflow.md': '29ca965976bd0a02',
+  'commands/copy/agents/body-agent.md': 'e8b099c49cc5f73d',
+  'commands/copy/agents/critic-agent.md': 'd0692d14b2ae99eb',
+  'commands/copy/agents/cta-agent.md': '85998342b65dbb9e',
+  'commands/copy/agents/hook-agent.md': '5d37b1af0aa45e3c',
+  'commands/copy/agents/openai.yaml': '3a41d950b5820a1c',
+  'commands/copy/agents/psychology-agent.md': '7e467920b5665868',
+  'commands/copy/agents/social-proof-agent.md': 'e04be05c8844a730',
+  'commands/copy/agents/variant-agent.md': 'fa0a4ab44792b0c1',
+  'commands/copy/agents/voice-agent.md': 'fbcadfb8f7526d7e',
+  'commands/copy/agents/zero-risk-agent.md': '11bfc849bedf0fce',
+  'commands/copy/fallbacks/sequential.md': 'b10b6b2456bb16d4',
+};
+const LONG_SECTIONS = {
+  'Anchor long-form work': 'c278bfca3b4c7c54',
+  'Draft long-form copy from the craft': '6495d4f5654e04a0',
+  'Check long-form copy after drafting': '585b1f6c05f806a5',
+};
+const LONG_UNITS = { 5: '6210ce21ab5c68f5', 6: '5d30dc534cfee9b3', 7: '294032aad10f8ce9', 8: '677bec632e4e0738', 10: '77c8dc8acc1ba7ba', 15: '81f40811eb2883f4' };
+const LONG_PRODUCTS = { Rotawell: '5b5284f5b199b7f8', Auditrail: 'b235796872bb999f', 'Weeknight Kitchen': '2739f045b301e48a', 'Stride Nine': 'f449344123ef1494' };
+
+test('long-form files, sections, and examples are unchanged', () => {
+  for (const [path, digest] of Object.entries(LONG_FILES)) assert.equal(hash(read(path)), digest, `${path} changed`);
+  const command = read('commands/copy/COMMAND.md');
+  for (const [title, digest] of Object.entries(LONG_SECTIONS)) {
+    const part = command.split(/^(?=## )/m).find(item => item.startsWith(`## ${title}\n`));
+    assert.ok(part, `COMMAND lost ## ${title}`);
+    assert.equal(hash(part.trimEnd()), digest, `COMMAND ## ${title} changed`);
+  }
+  const copy = read('commands/copy/references/examples/direct-response-examples.md');
+  const units = copy.split(/^(?=### |## )/m).filter(item => item.startsWith('### '));
+  for (const [number, digest] of Object.entries(LONG_UNITS)) {
+    const unit = units.find(item => item.startsWith(`### ${number}. `));
+    assert.ok(unit, `long-form example ${number} is missing`);
+    assert.equal(hash(unit.trimEnd()), digest, `long-form example ${number} changed`);
+  }
+  const bullets = new Map();
+  let name = null;
+  for (const line of copy.split('\n')) {
+    const start = line.match(/^- \*\*([^:*]+):\*\*/);
+    if (start) { name = start[1].trim(); bullets.set(name, line); continue; }
+    if (name && /^\s{2,}\S/.test(line)) bullets.set(name, `${bullets.get(name)}\n${line}`);
+    else name = null;
+  }
+  assert.deepEqual([...bullets.keys()].sort(), Object.keys(LONG_PRODUCTS).sort(), 'only long-form products remain');
+  for (const [product, digest] of Object.entries(LONG_PRODUCTS)) assert.equal(hash(bullets.get(product)), digest, `${product} facts changed`);
 });
 
 test('long-form requests keep the current method', () => {
@@ -441,16 +544,21 @@ test('long-form requests keep the current method', () => {
   const longLine = entry.slice(entry.indexOf('**Long-form**'));
   for (const target of ['references/sales-argument.md', 'references/headline-formulas.md', 'references/examples/direct-response-examples.md',
     'references/copy-review.md', 'COMMAND.md']) assert.ok(links(longLine).includes(target), `ENTRY long-form misses ${target}`);
+  assert.match(longLine, /operator\s+note/i);
+  assert.match(longLine, /sourced numbers exact/i);
   const command = read('commands/copy/COMMAND.md');
   for (const role of ['hook', 'body', 'cta', 'social-proof', 'variant', 'voice', 'psychology', 'zero-risk', 'critic']) {
     assert.match(command, new RegExp(`\\(agents/${role}-agent\\.md\\)`), `COMMAND long-form lost the ${role} role`);
   }
   for (const rule of [/Draft 5–10 headlines/, /competitor-swap test/, /copy review/, /sequential fallback/]) assert.match(command, rule);
+  assert.match(section(command, 'Deliver'), /operator note/i, 'long-form delivery keeps the operator note');
   for (const pass of ['hook, body, CTA, and social proof', 'voice, psychology, zero-risk, and critic']) assert.match(read('commands/copy/fallbacks/sequential.md'), new RegExp(pass));
   for (const task of LONG_TASKS) {
-    const inlined = packBrief(createBrief(task, options)).structured.inlined.map(item => item.path);
+    const pack = packBrief(createBrief(task, options));
+    assert.equal(pack.structured.command, 'copy', `${task} routes to copy`);
+    const inlined = pack.structured.inlined.map(item => item.path);
     assert.ok(inlined.includes('skills/conquistador/commands/copy/references/sales-argument.md'), `${task}: ${JSON.stringify(inlined)}`);
-    assert.ok(!inlined.includes(`skills/conquistador/${SHORT}`), `${task} inlines the short-form checklist`);
+    assert.ok(inlined.length >= 2, `${task} carries the craft, not ENTRY alone`);
   }
   const long = strongBlocks().filter(block => block.form === 'long').map(block => block.section);
   for (const name of ['Leads', 'Hero sections', 'A short sales argument']) assert.ok(long.includes(name), `no long-form example under ${name}`);
@@ -460,68 +568,4 @@ test('short-form briefs are smaller than long-form briefs', () => {
   const size = task => Buffer.byteLength(packBrief(createBrief(task, options)).text);
   const smallestLong = Math.min(...LONG_TASKS.map(size));
   for (const task of SHORT_TASKS) assert.ok(size(task) < smallestLong, `${task}: ${size(task)} bytes, long-form ${smallestLong}`);
-});
-
-test('the short-form checklist carries every rule and stays small', () => {
-  const text = read(SHORT);
-  assert.ok(Buffer.byteLength(text) <= 4000, `${SHORT} is ${Buffer.byteLength(text)} bytes`);
-  for (const rule of [
-    /most concrete specific[\s\S]{0,40}headline/i,
-    /label,?\s+then\s+the\s+benefit/i,
-    /offer terms/i, /\bprice\b/i, /\btrial\b/i, /\bfree\b/i, /waitlist/i,
-    /one piece of social proof/i,
-    /outcome,\s+pain,\s+proof,\s+objection,\s+(?:or\s+|and\s+)?identity/i,
-    /cut adjectives,\s+not facts/i,
-    /want,\s+pain,\s+or\s+identity/i,
-    /(?:do\s+not|never)\s+add\s+disclaimers,\s+hedges,\s+or\s+source\s+text/i,
-    /fair\s+inference/i,
-    /operator\s+note/i,
-  ]) assert.match(text, rule, `${SHORT} misses ${rule}`);
-  assert.match(text, /invented/i);
-});
-
-test('short-form strong examples keep the offer terms their facts include', () => {
-  const facts = productFacts();
-  for (const block of shortBlocks().filter(block => block.section !== 'Headlines')) {
-    const terms = offerTerms(facts.get(block.product) ?? '');
-    assert.ok(terms.length, `${block.product} facts need an "Offer terms:" list`);
-    for (const term of terms) assert.ok(block.text.toLowerCase().includes(term.toLowerCase()), `${block.where} drops the offer term "${term}"`);
-  }
-});
-
-test('short-form strong examples keep the social proof their facts include', () => {
-  const facts = productFacts();
-  for (const block of shortBlocks().filter(block => block.section !== 'Headlines')) {
-    const rating = (facts.get(block.product) ?? '').match(/\b(\d\.\d) from ([\d,]+)/);
-    if (rating) assert.ok(block.text.includes(rating[1]) && block.text.includes(rating[2]), `${block.where} drops the ${rating[0]} rating`);
-  }
-});
-
-test('short-form headlines carry a concrete specific from the facts', () => {
-  const facts = productFacts();
-  for (const block of shortBlocks()) {
-    const known = facts.get(block.product) ?? [...facts.values()].join(' ');
-    const headlines = headlinesOf(block);
-    if (/\d/.test(known)) {
-      const specific = headlines.filter(headline => SPECIFIC.test(headline)).length;
-      const needed = block.lead === 'set' ? 2 : 1;
-      assert.ok(specific >= needed, `${block.where}: ${specific} of ${headlines.length} headlines carry a specific`);
-    }
-    if (!block.product) continue;
-    const allowed = new Set(numbers(known));
-    for (const headline of headlines) for (const value of numbers(headline)) assert.ok(allowed.has(value), `${block.where} headline number ${value} is not in the ${block.product} facts`);
-  }
-});
-
-test('headline sets give each option a different angle', () => {
-  const sets = strongBlocks().filter(block => block.lead === 'set');
-  assert.ok(sets.length >= 2, 'at least two strong headline sets');
-  for (const block of sets) {
-    const headlines = headlinesOf(block);
-    assert.equal(block.angles.length, headlines.length, `${block.where} names one angle per option (angles: …)`);
-    for (const angle of block.angles) assert.ok(ANGLES.has(angle), `${block.where} angle ${angle}`);
-    assert.equal(new Set(block.angles).size, block.angles.length, `${block.where} repeats an angle`);
-    const openings = headlines.map(headline => words(headline).slice(0, 2).join(' '));
-    assert.equal(new Set(openings).size, openings.length, `${block.where} options share an opening`);
-  }
 });
