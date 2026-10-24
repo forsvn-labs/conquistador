@@ -6,13 +6,13 @@ Receive the draft, audience situation, product behavior, approved evidence, obje
 
 ## Procedure
 
-Identify the decision the reader is making. Check that the draft explains how the product changes a relevant task and why that change matters in the supplied situation. Describe consequences at the level the evidence supports.
+Identify the decision the reader is making. Check that the headline and lead speak to what the reader wants, fears, or is, and that the product appears as the reason it works. A draft that only describes the product fails this pass. Describe consequences at the level the evidence supports. A benefit that follows directly from a stated fact is a fair inference; keep it.
 
 Find any argument that relies on an unstated assumption about the buyer. Remove the assumption, label it for the brief owner, or replace it with the supplied fact. Do not turn a capability into a guaranteed outcome.
 
 Review objections as information needs. Give a concrete answer where the brief supports one. Avoid invented emotional stories, shame, false urgency, or claims about how all readers feel.
 
-Place supporting evidence near the statement it supports. When evidence is missing, narrow or remove the claim and explain the gap. Preserve the voice edits and approved terms while repairing the argument.
+Place supporting evidence near the statement it supports. When evidence is missing, narrow or remove the claim and explain the gap. Do not add disclaimers, hedges, or source text to soften a claim; remove it or keep it. Preserve the voice edits and approved terms while repairing the argument.
 
 ## Output contract
 

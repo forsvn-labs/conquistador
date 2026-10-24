@@ -66,10 +66,10 @@ Selection reason: [Why chosen]
 
 ### Core Principles
 
-1. **Facts over adjectives.** "Northpier Clinic went from 6 hours of rota work a week to 40 minutes (practice manager, May 2026)" beats "trusted by clinics". Every adjective is a fact you did not find yet.
-2. **One strong proof point, used concretely.** Name who, what changed from before to after, and when. Keep the number exact and put the source beside it.
+1. **Facts over adjectives.** "Northpier Clinic went from 6 hours of rota work a week to 40 minutes" beats "trusted by clinics". Every adjective is a fact you did not find yet.
+2. **One strong proof point, used concretely.** Name who and what changed from before to after. Keep the number exact. Its source, period, and scope go in the operator note; the page keeps only the qualifier a reader needs ("across 31 teams").
 3. **Hierarchy matters.** A demonstration or a named before-and-after outranks a star rating. Match proof strength to the reader's skepticism.
-4. **Recency and fit.** Prefer recent proof from a customer like the reader. Always give the date so the reader can judge it.
+4. **Recency and fit.** Prefer recent proof from a customer like the reader. Record the date in the operator note; replace stale proof instead of dating it on the page.
 5. **Discovery when proof needs explanation.** On mechanism-led pages, a short, real Discovery Story can show why the result happened.
 
 (Examples in this file use invented products and customers.)
@@ -81,11 +81,11 @@ Strongest first. Use the strongest the brief supplies:
 | Tier | Type | When to use |
 |------|------|-------------|
 | 1 | **The product doing the job** (demo, screenshot of a real result) | Any product that can be shown |
-| 2 | **Named customer before-and-after with source** | B2B, high-ticket, skeptical traffic |
-| 3 | **Your own dated data** ("112 of 140 surveyed students, April 2026") | When you measured it and can say how |
+| 2 | **Named customer before-and-after** | B2B, high-ticket, skeptical traffic |
+| 3 | **Your own data** ("112 of 140 students we asked") | When you measured it and can say how |
 | 4 | **Testimonial in the customer's words** | Any product with real, permitted quotes |
 | 5 | **Recognized logos or certifications** (with permission) | B2B trust and security questions |
-| 6 | **Counts and ratings with their source and date** | Broad credibility near the hero |
+| 6 | **Counts and ratings** | Broad credibility near the hero |
 
 ### Testimonial selection
 
@@ -102,24 +102,25 @@ The strip near the hero gives cold visitors one quick reason to keep reading. Pi
 
 | Format | Best for | Example |
 |--------|----------|---------|
-| **One sourced result** | When you have a strong before-and-after | "Halden Logistics: quarterly access review in 2 days, down from 3 weeks (IT lead, Q2 2026)" |
+| **One result** | When you have a strong before-and-after | "Halden Logistics: quarterly access review in 2 days, down from 3 weeks" |
 | **Logo bar** | B2B with permitted, recognizable customer names | Four permitted logos beat twelve unknown ones |
-| **Count with date** | A count you can source | "380 clinics, as of October 2026" |
-| **Rating with count and source** | Consumer products with reviews | Rating, number of reviews, and the review site |
+| **Count** | A count you can source | "380 clinics run their rota on Rotawell" |
+| **Rating with count** | Consumer products with reviews | "4.8 from 2,100 App Store ratings" |
 
 ### Facts over adjectives
 
 | Adjective | Replace with |
 |-----------|--------------|
 | "trusted" | The named customers you have permission to name, and how many |
-| "fast" | The measured time, and where it was measured |
-| "popular" | The dated count from your own data |
-| "reliable" | The uptime figure from your status page, with the period |
+| "fast" | The measured time |
+| "popular" | The count from your own data |
+| "reliable" | The uptime figure from your status page |
 
 ### An honest limitation
 
-One true limitation near the proof makes the rest easier to believe: "Rotawell does not do payroll.
-It exports a payroll-ready timesheet." Use it only when it is true and does not hide a material term.
+One true limitation, stated with confidence, can make the rest easier to believe: "Rotawell does
+not do payroll. It hands your payroll team a finished timesheet." Use it only to answer a real
+objection, never as a disclaimer.
 
 ### Discovery Story pattern
 
@@ -140,16 +141,16 @@ Recommendations.
 
 - **"Trusted by thousands"**: vague. How many, which ones, as of when?
 - **A blurred number**: "hours saved" in place of the sourced "6 hours to 40 minutes". Restore the exact figure.
-- **Old proof without a date**: the reader cannot judge it. Add the date.
+- **Source text on the page**: "(practice manager, May 2026)" reads like a footnote. Move it to the operator note.
 - **Logo bar of unknowns**: fewer, recognizable, permitted names.
-- **Proof without context**: a number without what, over what period, and from what baseline.
+- **Proof without context**: a number without what changed and from what baseline.
 - **Invented discovery drama**: a normal decision dressed as a breakthrough.
 
 ## Self-Check
 
 Before returning:
 
-- [ ] Every number is exact, with its source, scope, and date beside it
+- [ ] Every number is exact; its source, scope, and date are in the operator note, not on the page
 - [ ] Testimonials include a specific result, before-and-after, and role or company
 - [ ] The proof strip uses ONE format
 - [ ] Facts replace adjectives throughout

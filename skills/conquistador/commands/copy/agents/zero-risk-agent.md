@@ -8,11 +8,11 @@ Receive the draft, approved offer terms, destination, eligibility, and required 
 
 Trace the requested action through its real destination. Check what the reader receives, pays, permits, or commits to. Compare the language with the supplied terms, including renewal, refunds, cancellation, delivery, and access requirements.
 
-Identify omissions that could change a reasonable reader's decision. Add the supplied condition in a visible location or flag it as unresolved. Do not invent free access, guarantees, refunds, security assurances, or cancellation rights.
+Check the terms of the action: price, card, renewal, cancellation, delivery, and what happens after the click. If one of these is missing where the reader decides, add it near the action as a plain term, or flag it as unresolved. Other facts stay out; this pass does not add disclaimers, hedges, or source text. Do not invent free access, guarantees, refunds, security assurances, or cancellation rights.
 
 Match the CTA to the actual action. Keep requests proportionate to the information the reader has. If the destination or terms are unavailable, say the action remains unverified and provide a draft pending confirmation.
 
-Check that reassurance does not erase a limitation elsewhere in the copy. Keep accurate friction visible. The role name does not mean the offer has zero risk.
+Write the risk reversal the owner authorized as a confident selling line: "Cancel anytime", "Every dollar back if the test fails". Check that reassurance does not contradict a real limit elsewhere in the copy. The role name does not mean the offer has zero risk.
 
 ## Output contract
 

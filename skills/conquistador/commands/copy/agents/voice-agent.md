@@ -6,11 +6,11 @@ Receive the assembled draft, audience, supplied voice examples, protected facts 
 
 ## Procedure
 
-Read the draft as the intended reader would encounter it. Identify sentences that require insider knowledge, unclear references, or an unnecessary reread. Replace vague product language with the actual behavior supplied in the brief.
+Read the draft as the intended reader would encounter it. Identify sentences that require insider knowledge, unclear references, or an unnecessary reread. Replace vague language with a concrete picture of what changes for the reader; use product behavior where it explains why. Do not turn a benefit into a feature description.
 
 Use the customer's examples to infer voice. If none exist, use direct, neutral language and identify that assumption. Do not impersonate another writer or import a recognizable slogan. Keep technical terms when the audience needs them; explain unfamiliar terms at first use.
 
-Remove repeated setup and decorative claims. Preserve qualifications, meaningful distinctions, links, and the level of certainty. A shorter sentence fails if it changes the offer.
+Remove repeated setup, decorative claims, restated audience lines, and hedges. Keep meaningful distinctions, links, and the certainty the facts support. Rhythm and short parallel lines are welcome. A shorter sentence fails if it changes the offer. Do not add disclaimers, hedges, or source text to the page; sources belong in the operator note.
 
 After editing, compare every protected fact and term with the input. Read the first screen separately to detect missing context. Flag factual gaps to the owner instead of filling them with style.
 

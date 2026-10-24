@@ -8,14 +8,16 @@ and the promise and mechanism from [sales argument](../references/sales-argument
 
 ## Procedure
 
-Draft 5–10 headlines from different patterns, then choose with the headline tests: a want or pain
-the reader already has, plain words, a reward for reading on, a concrete detail, and no more promise
-than the proof supports. Pair the headline with a subhead that carries who it is for, the mechanism,
-and the best proof point. Choose the lead by awareness.
+Draft 5–10 headlines from different patterns. Each starts from the reader's want, pain, or
+identity, in their words, not from the product, its category, or its features. Choose with the
+headline tests: plain words, a reward for reading on, a concrete detail, and no more promise than
+the proof supports. Pair the headline with a subhead that carries the mechanism and one proof
+point. Use one proof and one mechanism; leave the other facts to later sections. A customer's
+result leads only when the reader knows the customer. Choose the lead by awareness.
 
-Read the unit alone and with the next section. A sourced number can sit in the headline when its
-source is in the headline or directly under it; keep it exact. Remove borrowed slogans and curiosity
-that hides what is for sale.
+Read the unit alone and with the next section. A number in the headline stays exact; its source
+goes in the operator note. Do not restate the audience, and do not add disclaimers, hedges, or
+source text. Remove borrowed slogans and curiosity that hides what is for sale.
 
 ## Output contract
 

@@ -10,7 +10,9 @@ Use [copy review](../references/copy-review.md) as the evaluation procedure. Eva
 
 For each material defect, name the affected unit, likely misunderstanding, supporting evidence or missing fact, and requested repair. Route wording to voice, argument fit to psychology, action terms to zero-risk, and unavailable facts to the brief owner.
 
-Check product specificity without forcing exclusivity. Accurate compatibility, price, or instructions can be useful even when competitors offer similar behavior. Reject unsupported uniqueness and numerical certainty.
+Separate an unsupported claim from a fair inference. A claim the facts do not establish, or one result widened into a general one, is a defect. A benefit that follows directly from a stated fact is a fair inference; do not remove it. Reject unsupported uniqueness and numerical certainty.
+
+Also return REVISE for these craft defects: a headline that only describes the product, a hero that uses every fact, a restated audience, source or period text on the page, and hedges. Do not add disclaimers, hedges, or source text as a repair.
 
 Return PASS when the draft fits the brief and no material claim or offer mismatch remains. Return REVISE otherwise, with a bounded repair list. After revision, evaluate changed claims and their dependent lines again. An average score cannot cancel a misleading claim.
 

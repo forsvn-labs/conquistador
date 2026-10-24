@@ -62,7 +62,7 @@ You do NOT:
 ### Core Principles
 
 1. **Action verb + what they get.** Every CTA tells the reader exactly what happens when they click.
-2. **Risk reversal within eyeshot.** Place the true reassurance the offer supports (trial terms, cancellation, refund window) near the CTA. Use only terms the owner supplied.
+2. **Risk reversal within eyeshot.** Place the true reassurance the offer supports (trial terms, cancellation, refund window) near the CTA, written as a confident selling line. Use only terms the owner supplied. Do not add disclaimers, hedges, or source text under the button.
 3. **Context-aware.** Hero CTAs assume cold attention. Mid-page CTAs assume warmed interest. Final CTAs assume near-decision.
 4. **One CTA per viewport.** Don't compete with yourself. One primary action per visible screen area.
 

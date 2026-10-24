@@ -71,9 +71,9 @@ the brief supplies; do not invent hours lost or competitor speed.
 ## Mechanism and benefits
 
 Bridge from the problem to the cause, then to the product's one different behavior. Pick the three
-to five benefits that answer the pains you named. Each gets an outcome-first line, one or two
-sentences on how it works, and proof when the brief has it. Use "which means" to connect a feature
-to its result: "Staff swap shifts inside the app, which means the rota is right when you open it on
+to five benefits that answer the pains you named; leave the facts that answer no pain out. Each gets an outcome-first line, one or two
+sentences on how it works, and proof when the brief has it. Lead with the benefit and give the feature as the
+reason; use "which means" to connect them: "Staff swap shifts inside the app, which means the rota is right when you open it on
 Monday." Never invent what the product does to complete a benefit.
 
 ## How it works
@@ -84,6 +84,8 @@ setup task: "Get a finished rota every Thursday," not "Configure your settings."
 ## Writing rules
 
 - One idea per paragraph; two to four sentences on the web, fewer on mobile.
+- Vary sentence length. Short parallel lines are good copy when the benefits carry equal weight.
+- Do not restate the audience, and do not add hedges or source text; sources go in the operator note.
 - Active voice; a clear referent for every "it" and "this".
 - Define any term an outsider would not know.
 - Cut "very", "really", "just", "actually", and "utilize".
@@ -96,5 +98,5 @@ setup task: "Get a finished rota every Thursday," not "Configure your settings."
 - [ ] Difference is shown before superiority is claimed
 - [ ] Each benefit answers a named pain; three to five at most
 - [ ] How it works ends on the reward
-- [ ] Sourced numbers kept exact, with source beside them
+- [ ] Sourced numbers kept exact; sources in the operator note, not the page
 - [ ] Nothing written in hook, CTA, or standalone proof territory
