@@ -2,6 +2,11 @@
 
 Disclose affiliation and any commercial interest. Offer a relevant contribution that exists or is clearly proposed. Membership, shared interests, or a public post do not authorize direct marketing. Read supplied community rules and mark missing rules unverified.
 
+## Craft
+
+Lead with the contribution itself, written for the thread, not a pitch with a link. Mention the
+product only where it answers the question asked.
+
 ## Choose the next step
 
 Choose a contribution or question relevant to the community. Do not disguise lead collection as peer help or imply moderator approval.

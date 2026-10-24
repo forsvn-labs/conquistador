@@ -9,7 +9,7 @@ private context. Separate roles can run sequentially on hosts without multiple a
 
 ## Work
 
-Use references/proof-types.md. For every proposed result, comparison, endorsement, or capability, inspect evidence and disclosure permission. Distinguish observed delivery from future expectation. Do not ask for seller proof when the route is explicit no-pitch research.
+Run after the first draft. Use references/proof-types.md. For every result, comparison, endorsement, or capability in the draft, inspect evidence and disclosure permission. Distinguish observed delivery from future expectation. Do not ask for seller proof when the route is explicit no-pitch research.
 
 ## Output and stop
 

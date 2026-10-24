@@ -5,10 +5,10 @@ Score the actual message with a cited phrase and a concrete repair for every wea
 
 | Dimension (0–10) | What to inspect |
 |---|---|
-| Peer voice | Clear, appropriate language; honest affiliation; no disguised commercial purpose |
+| Peer voice | Sounds like one person: plain, short, no pleasantries or buzzwords; affiliation honest and visible (a clause or the signature is enough); no disguised commercial purpose |
 | Signal connection | Observation matches its source; inference is limited; or conditional commercial relevance is explicit |
 | CTA friction | One understandable decision, with material commitments disclosed and refusal possible |
-| Recipient relevance | Context helps the recipient decide; no sender biography or irrelevant personal detail |
+| Recipient relevance | Subject and first line carry the reader's situation or the strongest fact, not the sender's introduction; no biography or irrelevant detail |
 | Specificity | Claims have bounded meaning and support; research questions distinguish actual behaviors |
 
 0–2: absent or misleading. 3–5: material repair needed. 6–7: usable with a stated limitation.
