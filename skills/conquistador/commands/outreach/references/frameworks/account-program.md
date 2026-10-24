@@ -1,8 +1,7 @@
 # Plan a multi-account program
 
-Use when outreach covers many accounts across more than one channel or sender. The other
-frameworks cover the honesty of one message or sequence; this file decides which accounts get
-which channels, and who owns each account.
+Use when outreach covers many accounts across more than one channel or sender. This file decides
+which accounts get which channels, and who owns each account.
 
 ## Score and tier the accounts
 

@@ -9,7 +9,7 @@ private context. Separate roles can run sequentially on hosts without multiple a
 
 ## Work
 
-Read the signal, strategy, and claim decisions. Load only the relevant mode and channel. Arrange the facts for comprehension with visible affiliation, an honest purpose, and one recipient decision. Use only approved claim scope; a proposed deliverable must not sound completed.
+Draft from [the craft reference](../references/frameworks/cold-email-frameworks.md) with the structure and ask the strategist chose. Load only the relevant mode and channel. Lead with the strongest true fact, cut what is not fact, offer, or ask, and ask once. Use only facts the user supplied; leave out a line that needs a missing fact and list that fact for the sender. A proposed deliverable must not sound completed. The claim check runs after this draft.
 
 ## Output and stop
 

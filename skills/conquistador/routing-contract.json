@@ -4816,7 +4816,7 @@
     {
       "name": "outbound",
       "label": "Run an outbound sequence",
-      "description": "Use for founder, sales, partnership, or other direct outreach from creation through readout.",
+      "description": "Use for founder, sales, partnership, or other direct outreach from list to readout.",
       "path": "skills/conquistador/plays/outbound.md",
       "intents": [
         "outbound campaign",

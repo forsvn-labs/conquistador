@@ -9,7 +9,7 @@ private context. Separate roles can run sequentially on hosts without multiple a
 
 ## Work
 
-Read the draft and its evidence sheet together. Find ambiguous commitments, disguised intent, irrelevant personal detail, needless setup, jargon, or stacked asks. Respect the actual sender voice; do not impose pronoun counts, arbitrary sentence caps, or mandatory casualness.
+Read the draft and its evidence sheet together. Check it against the craft: lead fact in the subject and first line, no sender-first opener, one ask, and the starting-point lengths in [the craft reference](../references/frameworks/cold-email-frameworks.md). Find ambiguous commitments, disguised intent, needless setup, jargon, or stacked asks. Report a departure from a starting point with its reason; do not force a cut that removes a needed fact or the sender's real voice.
 
 ## Output and stop
 

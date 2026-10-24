@@ -9,7 +9,7 @@ private context. Separate roles can run sequentially on hosts without multiple a
 
 ## Work
 
-Read the recipient scope and supplied sources. Separate direct observation from interpretation. Check identity match, source date, access class, contradictions, and disclosure sensitivity. A title alone is segment evidence, not an event.
+Read the recipient scope and supplied sources. Rank the signal (what the person said or did, then a company event, then segment only). Separate direct observation from interpretation. Check identity match, source date, access class, contradictions, and disclosure sensitivity. A title alone is segment evidence, not an event. After drafting, check each observation in the draft against its source.
 
 ## Output and stop
 
