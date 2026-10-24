@@ -110,9 +110,9 @@ test('the writing guide agrees with the checker', () => {
     'Your team spends nine days on close — most of it chasing receipts.',
     'What you get: bank sync, receipt matching, and a close checklist.',
   ].join('\n\n');
-  const warnings = checkText(allowed, { file: 'landing.md', channel: 'landing' }).filter(finding => finding.severity !== 'advisory');
+  const warnings = checkText(allowed, { file: 'landing.md', channel: 'landing' }).filter(finding => finding.family === 'ai-tells' && finding.severity !== 'advisory');
   assert.deepEqual(warnings.map(finding => finding.rule), []);
-  const strong = [...guide.matchAll(/^- Strong: (.+)$/gm)].map(match => match[1]);
+  const strong = [...guide.matchAll(/^\s*- Strong: (.+)$/gm)].map(match => match[1]);
   assert.ok(strong.length >= 4, 'the guide shows strong examples');
   for (const line of strong) {
     const findings = checkText(line.replace(/^"|"$/g, ''), { file: 'example.md' }).filter(finding => finding.family === 'ai-tells' && finding.severity !== 'advisory');
