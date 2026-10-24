@@ -44,7 +44,7 @@ Break ladder: Attention and Comprehension (match and clarity) come first, then F
 
 ## After
 
-**Strong** (check: landing; leads with: want)
+**Strong** (check: landing; leads with: want; form: long)
 
 > Daily site logs from your phone. Done before you leave the site.
 >
