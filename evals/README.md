@@ -168,10 +168,46 @@ the rule with `--min-decided 6 --min-win-rate 2/3`. `--json <file>` writes the f
 Below 6 decided pairs (for example, after ties), the result is EXTEND with the number of pairs to
 add. Between 7 and 9, the result is PASS when 8 wins are already reached, FAIL when 8 is out of
 reach, and EXTEND otherwise. Above 10, PASS needs at least 4 of 5 decided pairs. The rule reads
-counts, not judging order. For each practice the report prints the result and the next step. To
-extend, add new held-out cases to the pack, generate them, prepare a new session, and judge it: the
-report does not combine sessions. `--sequential` cannot be combined with `--min-decided` or
-`--min-win-rate`.
+counts, not judging order. For each practice the report prints the result and the next step.
+`--sequential` cannot be combined with `--min-decided` or `--min-win-rate`.
+
+**5. Extend (EXTEND only).** You judge only the new pairs. The first pairs keep their verdicts.
+
+1. Add the new held-out cases to the same pack folder. Do not change the existing cases.
+2. Generate their drafts: `npm run judge:generate -- --pack "<pack folder>" --commit <same sha> --cases <new cases>`.
+3. Seal only the new cases into a new session that links to the first one:
+
+   ```sh
+   npm run judge:prepare -- --pack "<pack folder>" --out "<new private session folder>" --reviewer hung \
+     --extend "<first session folder>"
+   ```
+
+4. Judge the new session with `judge:serve`.
+5. Report every session, oldest first:
+
+   ```sh
+   npm run judge:report -- --pack "<pack folder>" --session "<first session folder>" \
+     --session "<new session folder>" --sequential
+   ```
+
+The report re-derives each session from its own sealed key and reads `verdicts.json` in each session
+folder (or one `--verdicts` per `--session`, in the same order). If a later extension is necessary
+(for example, after ties), pass `--extend` once for each earlier session, oldest first.
+
+The commands stop when:
+
+- An earlier draft, brief, or practice changed, or the pack id or arms changed.
+- A case is in two sessions, or the sessions are not in order, oldest first.
+- A session is missing. The report needs every session of the test, and the pack must have no case
+  outside them.
+- The reviewer is different from the reviewer of the first session.
+- A verdict file belongs to a different session.
+- The report does not use `--sequential`. Only the sequential rule combines sessions.
+- A session was already extended. One test cannot become two different extensions. `judge:prepare`
+  writes `extended-by.json` into the earlier session folder.
+- Before you extend: a pair of that practice in the earlier sessions is not judged, the practice is
+  not in the earlier sessions, or the earlier result is already PASS or FAIL. The report applies the
+  same check again, so a pair you judge again later cannot change a result that was already decided.
 
 `practices.json` maps every command, play, channel, format, and specialist to one practice, with
 its judge (`human` for taste work, `pending-calibration` for decision work) and its latest status
