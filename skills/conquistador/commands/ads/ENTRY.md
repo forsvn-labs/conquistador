@@ -1,6 +1,6 @@
 # Create ads people stop for
 
-Give each variation its own angle, open it in the reader's situation, and cut what does not earn its place.
+Give each variation its own angle, open it in the reader's situation, and make each one stand alone.
 
 ## Use this method
 
@@ -14,8 +14,11 @@ The decisions that matter most:
 - Each variation tests a different angle: pain, outcome, proof, objection, identity, comparison, or offer.
 - The first line opens in the reader's situation or voice, or on a fact they did not expect. The
   product name leads one variation at most.
-- Proof leads one variation at most. Elsewhere it supports. Sources and periods go in a note, not the ad.
-- Keep offer terms that help a buyer act and strong customer quotes word for word.
+- Each variation stands alone; a person sees only one. The angle sets the opening and the order,
+  and every variation still says what the product does, gives one reason to believe, and states the
+  offer terms needed to act.
+- Proof leads one variation at most; elsewhere it supports. Keep strong customer quotes word for word.
+  Sources and periods go in a note, not the ad.
 - After drafting, check the facts: remove what the facts do not support and add nothing.
 
 Return the format and size the user asked for. Read the [complete method](COMMAND.md) for a campaign

@@ -14,7 +14,7 @@ passage and a concrete correction when needed.
 | Destination continuity | Do the promise, terms, CTA, and landing behavior agree? |
 | Angle distinctness | Does this variation test its own angle, with its own opening and visual, apart from the others? |
 | Evidence and rights | Are claims, depictions, permissions, and disclosures supported? |
-| Specificity | Does it use the one concrete fact or quote its angle needs, without generic praise or every fact at once? |
+| Specificity | Does it stand alone, with what the product does, one concrete reason to believe, and the offer terms, without generic praise or facts the angle does not need? |
 | Creative feasibility | Can the proposed asset show the evidence within rights, accessibility, and production limits? |
 
 Each variation totals /70. A variation needs

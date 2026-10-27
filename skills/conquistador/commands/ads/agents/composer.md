@@ -7,10 +7,12 @@ Compare the draft with the annotated pairs for the network:
 
 - Open each variation in the reader's moment, on a result they want, or on a fact they did not
   expect. Give each its own first line and its own visual.
+- Make each variation stand alone: a person sees only one. Under its angle, it says
+  what the product does, gives one reason to believe, and states the offer terms needed to act.
+  Cut other facts the angle does not need.
 - Let proof lead one variation at most. Keep a strong customer quote word for word.
-- Use the one fact each angle needs. Do not put every fact in every variation.
 - Make the headline a reason to click: the outcome, the offer, or the next step.
-- Include the offer terms a buyer needs to act, and match the call to action to the landing page.
+- Match the call to action to the landing page.
 - Write video as the first seconds (what is seen, said, and on screen), the demonstration, and the
   close. A creator speaks in their own words; script the angle and the facts.
 - A customer or creator on camera is real, consents, and is disclosed as paid when paid.

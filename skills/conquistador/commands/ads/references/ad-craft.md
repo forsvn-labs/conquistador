@@ -11,8 +11,10 @@ pairs. For account structure, testing, and kill rules, see [creative cadence](ad
    Name that moment in their words. A segment ("clinic owners") is not a moment.
 2. **One angle per variation.** Each variation is a separate bet on why this reader buys. Two
    variations on one angle are one test written twice, and ad systems group near-identical ads.
-3. **What each variation leaves out.** One angle, one proof, one mechanism. A fact that does not
-   serve this variation's angle waits for another variation.
+3. **What each variation carries.** A person sees one variation, so each stands alone. The angle
+   sets the first line and the order; under it, every variation says what the product does, gives
+   one reason to believe, and states the offer terms needed to act. Other facts go in only when the
+   angle needs them.
 
 | Angle | The variation opens on | Choose it when |
 |---|---|---|
@@ -36,13 +38,13 @@ Pick the three to five angles most likely to win for this product. Do not fill t
   Lines that assert the reader's health, finances, age, or similar traits break ad policy on Meta and
   elsewhere.
 - A question works only when the target reader's honest answer is yes.
-- Vary the shape across the set. A question, a statement, a quote, and a number should not all
-  appear in the same position in every variation.
+- Vary the shape across the set: a question, a statement, a quote, or a number, not one shape
+  in every opening.
 
 ## Proof leads once, then supports
 
 - Let proof lead in one variation at most: when the number surprises, or when a customer said it
-  better than you can. In the other variations it supports, in a later line or in the visual.
+  better than you can. In the other variations it supports the angle in a later line.
 - Put a number in the reader's terms: what they gain, save, or stop doing.
 - Keep a strong customer quote word for word. It often beats your own line.
 - The source, sample, period, and method of a number belong in the operator note, not on the ad.
@@ -52,8 +54,8 @@ Pick the three to five angles most likely to win for this product. Do not fill t
 
 - The headline gives a reason to click: the outcome, the offer, or the next step. It is not the
   product category or a description of features.
-- Include the terms a buyer needs to act (price, free trial, free scan, returns) where they remove
-  the last doubt. The action matches what the landing page asks for.
+- State the terms a buyer needs to act (price, free trial, free scan, returns) in every variation:
+  as the news in an offer variation, as support in the others. The action matches the landing page.
 
 ## The visual carries the angle
 
@@ -63,9 +65,10 @@ visual direction as one shot a designer or creator can make, with captions for s
 
 ## Cut before you deliver
 
-Cut product-description headlines, the audience definition restated on the ad, every fact in every
-variation, disclaimers in the drafting voice, and lines a competitor could run unchanged. Return the
-format the user asked for. Notes on sources or assumptions follow the ads, briefly, only when needed.
+Cut product-description headlines, the audience definition restated on the ad, facts the angle does
+not need, disclaimers in the drafting voice, and lines a competitor could run unchanged. Never cut
+below what each variation carries. Return the format the user asked for. Notes on sources or
+assumptions follow the ads, briefly, only when needed.
 
 ## Platform facts (checked Oct 2026; confirm in the current specs before launch)
 

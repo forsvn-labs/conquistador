@@ -1,7 +1,7 @@
 # Check the ad set after drafting
 
 Draft first from [the craft reference](ad-craft.md). Then read the finished set once against this
-list. Repair a failure by cutting or narrowing the line, not by adding words or disclaimers.
+list. Repair most failures by cutting or narrowing the line. Never repair with a disclaimer.
 
 ## The craft
 
@@ -10,7 +10,8 @@ list. Repair a failure by cutting or narrowing the line, not by adding words or 
 | Two variations share an angle, or open on the same proof point | Give one of them a different angle and a different first line |
 | The first line describes the product, not the reader's moment | Move the product to line two; open on the situation, result, or surprising fact |
 | The headline is the product category or a feature list | Make it the outcome, the offer, or the next step |
-| Every fact appears in every variation, or the audience definition is restated | Keep the one proof and mechanism this angle needs |
+| A variation omits what the product does, a reason to believe, or the offer terms | Add what is missing under the angle, after the first line |
+| Facts the angle does not need fill the variation, or the audience definition is restated | Cut them; keep the product, one reason to believe, and the offer |
 | A source, period, or method note sits in the ad copy | Move it to the operator note; keep only the qualifier truth needs |
 | A disclaimer or hedge speaks in the drafting voice | Delete it; if a claim needs a hedge to be true, choose a claim that does not |
 | Every variation has the same shape or the same visual | Change the opening shape and give each its own shot |
