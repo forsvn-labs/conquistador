@@ -20,6 +20,8 @@ import { loadAssignment } from '../hosts/coding-agent/contracts.mjs';
 import { runSpecialistTeam } from '../hosts/coding-agent/orchestrate.mjs';
 import { prepareAssignmentResources } from './routing-contract.mjs';
 import { createMethodAccess } from './skills-mcp.mjs';
+import { buildBotPack, GROUPS } from './bot-pack.mjs';
+import { loadRoutingContract } from './routing-contract.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const skills = join(root, 'skills');
@@ -136,6 +138,34 @@ test('MCP discovery advertises entry paths and hides archived files from default
   for (const name of kept) assert.equal(methods.find(item => item.method === name)?.path, `conquistador/commands/${name}/COMMAND.md`, name);
   // An explicit archive read remains available for an approved future craft test.
   assert.equal(access.read('conquistador/commands/pricing/COMMAND.md'), read('skills/conquistador/commands/pricing/COMMAND.md'));
+});
+
+// Export inventory found a further default loader: upload-only chat apps consume generated files.
+// Its short entries must not be followed by archived references or universal process instructions.
+test('bot knowledge exports thin entries and keeps sales-page craft in a conditional file', t => {
+  const temporary = realpathSync(mkdtempSync(join(tmpdir(), 'conquistador-thin-bot-')));
+  t.after(() => rmSync(temporary, { recursive: true, force: true }));
+  const out = join(temporary, 'pack');
+  buildBotPack(out, { root, includeUser: false });
+  const contract = loadRoutingContract(root);
+  for (const [file, names] of GROUPS) {
+    const text = readFileSync(join(out, 'knowledge', `${file}.md`), 'utf8');
+    for (const name of names.filter(name => thin.includes(name))) {
+      const section = text.split(`# METHOD: ${contract.methods[name].label}\n\n`)[1]?.split('\n\n# METHOD: ')[0];
+      assert.ok(section?.trim().startsWith(read(`skills/conquistador/commands/${name}/ENTRY.md`).trim()), name);
+      assert.doesNotMatch(section, /## PLAYBOOK:/, name);
+    }
+  }
+  const prompt = readFileSync(join(out, 'SYSTEM-PROMPT.md'), 'utf8');
+  assert.doesNotMatch(prompt, /End with "Playbooks applied"|Then give two to four reasons/);
+  assert.match(prompt, /sales page or sales letter/);
+  const sales = readFileSync(join(out, 'knowledge/12-sales-pages-and-letters.md'), 'utf8');
+  assert.ok(sales.includes(read('skills/conquistador/commands/copy/references/sales-argument.md')));
+  assert.doesNotMatch(sales, /## PLAYBOOK: .*lifecycle-sequences/);
+  const shared = readFileSync(join(out, 'knowledge/11-channels-standards-workflows.md'), 'utf8');
+  assert.doesNotMatch(shared, /## conquistador\/references\//);
+  assert.match(shared, /Spec play only: complete flow method/);
+  assert.ok(shared.includes(read('skills/conquistador/commands/flow/COMMAND.md')));
 });
 
 test('shared play steps retain factual checks and action boundaries without process output', () => {

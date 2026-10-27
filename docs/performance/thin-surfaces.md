@@ -17,6 +17,7 @@ files remain available for an explicit read or a future blind test.
 | MCP method and file discovery | Advertise procedures and list all supporting files | Advertise thin entries. Keep explicit archive reads available. |
 | Local, HTTP, and hosted MCP briefs | Shared briefing engine | Keep byte and route parity. The hosted Worker is not deployed by this work. |
 | Parent skills, plugins, and operator packages | Transformed complete library with one discoverable parent | Preserve library byte parity and include the shared policy dependency. |
+| Upload-only bot packs | Full command procedures and references, with mandatory process notes in every answer | Export thin entries alone. Put sales-page craft in a conditional file and keep the full flow method under the spec play. |
 | Shared play steps | Video production, artifact hygiene, and share-card procedures | Use short entries for these untested marketing steps and retain their detailed files. |
 
 ## Scope and checks
@@ -32,6 +33,11 @@ tests check library byte parity, links, domain restrictions, and callable loader
 Outbound, social, copy sales pages and letters, engineering commands, platform
 utilities, factcheck, Vietnamese, and the spec play keep their existing methods.
 The spec play retains the detailed flow method that it needs.
+
+Upload-only chat apps cannot remove already uploaded knowledge from a model's
+context. Their pack labels sales-page and spec-flow sections as conditional.
+Tests verify the exported bytes and instructions, not retrieval or compliance in
+those external apps.
 
 The three shared play steps belong to thin marketing plays. Their entries retain
 truthful capture, file preservation, actual-output checks, and approval rules.

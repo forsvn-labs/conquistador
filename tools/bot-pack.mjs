@@ -6,6 +6,7 @@ import { createHash } from 'node:crypto';
 import fs from 'node:fs';
 import { dirname, join, posix, resolve } from 'node:path';
 import { knowledgeIndex } from './brief.mjs';
+import { commandDocumentFor, isThinCommand, isThinPlay } from './method-policy.mjs';
 import { productRoot, version } from './agents.mjs';
 import { AREAS } from './tour.mjs';
 
@@ -25,16 +26,16 @@ export const GROUPS = [
 
 const SYSTEM_PROMPT = `You are Conquistador, a marketing and growth operator for any platform, any service, and growth inside the product: strategy, launches, social, search and AI answers, paid ads, email and outreach, in-product growth, content, and measurement.
 
-Your knowledge files are field-tested playbooks. They are the standard your answers are judged against.
+Use the matching method entry in the knowledge files. A thin entry asks you to work in your own judgment from the user's facts. Its archived method and reference files are not included.
 
 For every task:
-1. Find the matching playbook file with 00-index.md and read the relevant sections before you answer. Search the knowledge files for the platform, channel, or task the user names.
+1. Find the matching entry with 00-index.md. Read only that method's section and the resources it calls for. Shared standards and other method sections are not a universal reading list.
 2. If the user's own playbooks are attached (99-your-playbooks.md), apply them first; they outrank the built-in guidance.
 3. Ask at most one question, and only when a missing fact would change the plan. Otherwise state the assumption and continue.
-4. Lead with the finished work: the plan, the copy, the diagnosis. Then give two to four reasons tied to the playbooks or the user's facts, and one next step.
-5. End with "Playbooks applied": each file and section you used and the rule you took from it.
-6. Never invent metrics, customer quotes, testimonials, or product capabilities. Label assumptions.
-7. Never publish, send, spend, or change an external system. Draft it and ask the user to approve.
+4. Return only the requested deliverable. Approval rules govern actions and add nothing to the deliverable.
+5. For a sales page or sales letter, and only for that request, read 12-sales-pages-and-letters.md. Other copy uses its thin entry alone.
+6. Check the facts after drafting: remove unsupported claims, keep fair inferences, and add nothing. Never invent metrics, customer quotes, testimonials, or product capabilities.
+7. Nothing is published, sent, purchased, or changed externally without the user's approval for that exact action.
 8. Use the user's brand and voice, not yours.
 9. If the user has no task yet or asks what you do, list these areas in one short list, give three examples that fit their product, and ask what they are working on: ${AREAS.map(area => area.title).join('; ')}.`;
 
@@ -50,7 +51,7 @@ Load this pack into a chat app that supports custom instructions and knowledge f
 
 1. Paste SYSTEM-PROMPT.md into the app's instructions field.
 2. Upload only the knowledge files listed below (${files.length} files${userFiles ? ', including your private playbooks' : ''}).
-3. Test with two different jobs, for example: "Write a win-back email flow for churned subscribers" and "Get our product recommended by ChatGPT and Perplexity". Each answer should end with Playbooks applied.
+3. Test with two different jobs, for example: "Write a win-back email flow for churned subscribers" and "Get our product recommended by ChatGPT and Perplexity". Each answer uses its matching entry and contains only the requested work.
 
 ## Included knowledge files
 
@@ -101,7 +102,8 @@ function writeBotPack(out, index, includeUser) {
 
       if (!method) continue;
       lines.push(`- ${method.label}: ${method.description.split('. ')[0]}.`);
-      parts.push(`\n\n# METHOD: ${method.label}\n\n${read(method.path)}`);
+      parts.push(`\n\n# METHOD: ${method.label}\n\n${read(method.path.replace(/COMMAND\.md$/, commandDocumentFor(name)))}`);
+      if (isThinCommand(name)) continue;
 
       for (const doc of index.docs.filter(item => item.source === 'method' && item.method === name && keep(item)).sort((a, b) => a.key.localeCompare(b.key))) {
         if (seen.has(doc.digest)) { parts.push(`\n\n## PLAYBOOK: ${posix.basename(doc.key)} (same text as an earlier section)`); continue; }
@@ -116,11 +118,30 @@ function writeBotPack(out, index, includeUser) {
     lines.push('');
   }
 
-  // Shared channel guides, standards, and plays (with their playbooks) from the parent.
-  const shared = index.docs.filter(doc => (doc.source === 'shared' || doc.source === 'play') && ['channel', 'playbook', 'play', 'standard', 'checklist'].includes(doc.kind) && !seen.has(doc.digest));
-  write('knowledge/11-channels-standards-workflows.md', ['# Channels, standards, and plays', ...shared.map(doc => `\n\n## ${doc.key}\n\n${fs.readFileSync(doc.absolute, 'utf8')}`)].join('\n'));
+  // Shared entries are available by topic. Only kept plays retain their reference graph.
+  const shared = index.docs.filter(doc => ['channel', 'playbook', 'play', 'standard', 'checklist'].includes(doc.kind) && !seen.has(doc.digest)
+    && ((doc.source === 'play' && (!isThinPlay(doc.method) || doc.key === `conquistador/plays/${doc.method}.md`))
+      || (doc.source === 'shared' && /^conquistador\/(?:channels|standards|methods)\/[^/]+\.md$/.test(doc.key))));
+  const specFlow = methods.flow && index.contract.plays?.some(play => play.name === 'spec')
+    ? ['## Spec play only: complete flow method', 'Read this section only when the spec play calls for it. Standalone flow requests use their short entry.',
+      read(methods.flow.path), ...index.docs.filter(doc => doc.source === 'method' && doc.method === 'flow' && keep(doc))
+        .map(doc => `\n\n## PLAYBOOK: ${doc.key}\n\n${fs.readFileSync(doc.absolute, 'utf8')}`)] : [];
+  write('knowledge/11-channels-standards-workflows.md', ['# Channels, standards, and plays',
+    ...shared.map(doc => `\n\n## ${doc.key}\n\n${fs.readFileSync(doc.absolute, 'utf8')}`), ...specFlow].join('\n'));
   written.push('11-channels-standards-workflows.md');
   lines.push('## 11-channels-standards-workflows.md', '- Channel guides (Product Hunt, Reddit, LinkedIn, X, TikTok, YouTube, Instagram, Hacker News, newsletters), quality and safety standards, and plays (multi-step chains of commands).', '');
+
+  if (methods.copy) {
+    const salesPaths = new Set((methods.copy.resourceConditions ?? [])
+      .filter(item => /\bsales page or sales letter\b/i.test(item.when ?? '')).map(item => item.path));
+    const procedure = read(methods.copy.path).replace(/<!-- playbooks:start[\s\S]*?<!-- playbooks:end -->\n*/g, '');
+    const sales = index.docs.filter(doc => salesPaths.has(`${index.libraryRoot}/${doc.key}`));
+    write('knowledge/12-sales-pages-and-letters.md', ['# Sales pages and sales letters only',
+      'Read this file only when the user requests a sales page or sales letter. All other copy uses its short entry.', procedure,
+      ...sales.map(doc => `\n\n## PLAYBOOK: ${doc.key}\n\n${fs.readFileSync(doc.absolute, 'utf8')}`)].join('\n\n'));
+    written.push('12-sales-pages-and-letters.md');
+    lines.push('## 12-sales-pages-and-letters.md', '- Copy craft for a requested sales page or sales letter only. Never load for other copy.', '');
+  }
 
   if (users.length) {
     write('knowledge/99-your-playbooks.md', ['# Your playbooks (rank these first)', ...users.map(doc => `\n\n## ${doc.key}\n\n${fs.readFileSync(doc.absolute, 'utf8')}`)].join('\n'));
