@@ -232,8 +232,8 @@ test('doctor rejects stale SKILL links or an added specialist entry even without
   rmSync(join(path, '.conquistador-install.json'));
   const parent = join(path, 'library/conquistador/METHOD.md');
   const original = readFileSync(parent, 'utf8');
-  assert.ok(original.includes('](commands/copy/COMMAND.md)'));
-  writeFileSync(parent, original.replace('](commands/copy/COMMAND.md)', '](commands/copy/SKILL.md)'));
+  assert.ok(original.includes('](commands/copy/ENTRY.md)'));
+  writeFileSync(parent, original.replace('](commands/copy/ENTRY.md)', '](commands/copy/SKILL.md)'));
   const doctor = () => spawnSync(process.execPath, [cli, 'setup', 'doctor', '--path', path, '--json'], { encoding: 'utf8' });
   assert.equal(doctor().status, 1);
   writeFileSync(parent, original);
