@@ -23,6 +23,7 @@
     "test:source": "vitest run",
     "test:public": "vitest run --exclude tests/inventory-preflight.test.ts --exclude tests/promptfoo-live.test.ts --exclude tests/historical-readiness.test.ts --exclude tests/historical-benchmarks.test.ts",
     "example:local": "node examples/local-contract.ts",
+    "judge:generate": "node --experimental-strip-types tools/blind-judging.ts generate",
     "judge:prepare": "node --experimental-strip-types tools/blind-judging.ts prepare",
     "judge:serve": "node --experimental-strip-types tools/blind-judging.ts serve",
     "judge:report": "node --experimental-strip-types tools/blind-judging.ts report",
