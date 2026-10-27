@@ -34,7 +34,10 @@ export type NormalizeOptions = {
 };
 
 const BUILTIN_LEAKS = [/\bconquistador\w*/gi, /\b[a-z0-9]+(?:-[a-z0-9]+)*-agent\b/gi];
-const ARM_WORDS = "bare|method|baseline|candidate|control|treatment|without[- ]method|with[- ]method";
+const ARM_WORDS = "bare|method|without[- ]method|with[- ]method";
+// Role words that are also ordinary experiment vocabulary ("control arm", "treatment variant").
+// They identify an arm only next to a word that names a draft.
+const ROLE_WORDS = "baseline|candidate|control|treatment";
 
 const METHOD_SECTIONS = [
   /^why (these|this|the|it) (choices?|works?|structure|approach|version|order|wins?)\b/,
@@ -61,8 +64,14 @@ const METADATA_KEYS = new Set([
   "run", "practice", "command", "agent", "agents", "references", "sources", "word_count", "words", "length",
 ]);
 const LABEL_KEY = String.raw`^\s*(?:[-*]\s+)?(?:\*\*|__)?\s*`;
-const READINESS_LINE = new RegExp(`${LABEL_KEY}(status|readiness|verdict|ready|grade|self[- ]?score|score|confidence|quality (gate|check))\\s*(?:\\*\\*|__)?\\s*[:：]`, "i");
-const METADATA_LINE = new RegExp(`${LABEL_KEY}(arm|variant|condition|skill|playbook|model|generated (by|with)|generator|run as|methods? used)\\s*(?:\\*\\*|__)?\\s*[:：]`, "i");
+const READINESS_LINE = new RegExp(`${LABEL_KEY}(readiness|ready|grade|self[- ]?score|score|quality (gate|check))\\s*(?:\\*\\*|__)?\\s*[:：]`, "i");
+// Status, verdict, and confidence lines are often the deliverable's own answer. Remove them only when
+// the value is a readiness grade or a score, not a sentence.
+const GRADE_VALUE = String.raw`(?:PASS(?:ED)?|FAIL(?:ED)?|REVISE|READY|SHIP(?:PABLE)?|APPROVED|BLOCKED|DRAFT|NEEDS REVISION|HIGH|MEDIUM|LOW|\d+(?:\.\d+)?\s*(?:\/|out of)\s*\d+)\b`;
+const GRADED_LINE = new RegExp(`${LABEL_KEY}(status|verdict|confidence)\\s*(?:\\*\\*|__)?\\s*[:：]\\s*(?:\\*\\*|__)?\\s*${GRADE_VALUE}`, "i");
+const METADATA_LINE = new RegExp(`${LABEL_KEY}(skill|playbook|model|generated (by|with)|generator|run as|methods? used)\\s*(?:\\*\\*|__)?\\s*[:：]`, "i");
+// Arm, variant, and condition are experiment vocabulary; they are metadata only when the value names an arm.
+const ARM_KEY_LINE = (arms: string) => new RegExp(`${LABEL_KEY}(arm|variant|condition)\\s*(?:\\*\\*|__)?\\s*[:：]\\s*(?:\\*\\*|__)?\\s*(?:${arms})\\b`, "i");
 const DATE_LINE = new RegExp(`${LABEL_KEY}date\\s*(?:\\*\\*|__)?\\s*[:：]\\s*(?:\\*\\*)?\\s*\\d{4}-\\d{2}-\\d{2}`, "i");
 const LENGTH_LINE = new RegExp(`${LABEL_KEY}(word count|character count|char count|length|reading time|words)\\s*(?:\\*\\*|__)?\\s*[:：]`, "i");
 const LABEL_WORDS = "PASS|PASSED|FAIL|FAILED|REVISE|READY|SHIP|SHIPPABLE|APPROVED|BLOCKED|DRAFT|NEEDS REVISION";
@@ -153,7 +162,8 @@ function cleanPass(source: string, options: NormalizeOptions, removals: Removal[
   }
 
   const arms = [...new Set([...options.identityTokens.map(escapeRegex), ARM_WORDS])].join("|");
-  const armLabel = new RegExp(`\\b(${arms})\\b[\\s-]*(draft|arm|version|variant|output|run|condition)\\b|\\b(draft|arm|variant|condition)\\s*[:=]?\\s*(${options.identityTokens.map(escapeRegex).join("|") || "$^"})\\b`, "i");
+  const armLabel = new RegExp(`\\b(${arms})\\b[\\s-]*(draft|arm|version|variant|output|run|condition)\\b|\\b(${ROLE_WORDS})\\b[\\s-]*(draft|version|output|run)\\b|\\b(draft|arm|variant|condition)\\s*[:=]?\\s*(${options.identityTokens.map(escapeRegex).join("|") || "$^"})\\b`, "i");
+  const armKeyLine = ARM_KEY_LINE(arms);
   const extra = (options.stripHeadings ?? []).map((heading) => heading.trim().toLowerCase()).filter(Boolean);
   const isMethodSection = (text: string) => METHOD_SECTIONS.some((pattern) => pattern.test(text)) || extra.some((heading) => text.startsWith(heading));
 
@@ -205,9 +215,9 @@ function cleanPass(source: string, options: NormalizeOptions, removals: Removal[
         index = end - 1;
         continue;
       }
-      if (METADATA_LINE.test(trimmed) || DATE_LINE.test(trimmed)) { remove("metadata-line", trimmed); continue; }
+      if (METADATA_LINE.test(trimmed) || armKeyLine.test(trimmed) || DATE_LINE.test(trimmed)) { remove("metadata-line", trimmed); continue; }
       if (trimmed && armLabel.test(trimmed)) { remove("arm-label", trimmed); continue; }
-      if (READINESS_LINE.test(trimmed) || READINESS_ONLY.test(trimmed) || READY_BADGE_LINE.test(trimmed)) { remove("readiness-label", trimmed); continue; }
+      if (READINESS_LINE.test(trimmed) || GRADED_LINE.test(trimmed) || READINESS_ONLY.test(trimmed) || READY_BADGE_LINE.test(trimmed)) { remove("readiness-label", trimmed); continue; }
       if (LENGTH_LINE.test(trimmed) || (trimmed && LENGTH_ONLY.test(trimmed))) { remove("length-marker", trimmed); continue; }
       let text = item.text;
       text = text.replace(LENGTH_INLINE, (match) => { remove("length-marker", match); return ""; });
