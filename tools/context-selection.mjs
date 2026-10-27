@@ -1,7 +1,7 @@
 import { existsSync, lstatSync, readFileSync } from 'node:fs';
 import { join, posix, resolve } from 'node:path';
 import { assertLoadAllowed, loadRestriction } from './domain-package.mjs';
-import { explicitInvocation, invokedCommand, requestedBusinessClauses, requestMode, normalizeRequest as normalized, includesPhrase } from './request-text.mjs';
+import { explicitInvocation, invokedCommand, requestedBusinessClauses, requestFocus, requestMode, requestOperation, normalizeRequest as normalized, includesPhrase } from './request-text.mjs';
 import { loadRoutingContract } from './routing-contract.mjs';
 import { packageRootOf } from './module-root.mjs';
 
@@ -317,19 +317,48 @@ export function selectRequestContext(prompt, { root = moduleRoot, automatic = fa
     if (profile.activation === 'off') return abstain('activation-off');
     if (profile.activation === 'manual' && automatic && !explicitInvocation(prompt)) return abstain('activation-manual');
   }
-  const parent = posix.join(contract.parentPath, contract.document);
   const methods = [...Object.values(contract.methods), ...contract.unavailableMethods];
 
   const protectedPhrases = [...methods, ...(contract.plays ?? [])].flatMap(method => [method.name, ...method.intents, ...(method.aliases ?? [])])
     .filter(phrase => /\band\b/.test(normalized(phrase)));
+  const options = { packageRoot, restriction, contract, protectedPhrases };
+  // The deliverable the request names decides the command. Pasted context (facts, notes, lists,
+  // background) may not add or replace it; it can still supply named platforms to the brief.
+  // A loose signal in the request ("turn that into a plan") decides only when the whole prompt
+  // leads with the same owner, because the context may name what the plan is for. An engineering-only
+  // request stays silent whatever its context mentions. A request that names no deliverable keeps
+  // the whole-prompt route.
+  const focus = requestFocus(prompt);
+  const whole = () => routeRequest(prompt, prompt, options);
+  if (!focus) return whole().result;
+  const focused = routeRequest(focus, prompt, options);
+  if (focused.action !== 'route') return focused.engineeringOnly ? focused.result : whole().result;
+  const supported = { ...focused.result, supportingQuery: requestedBusinessClauses(prompt, { protectedPhrases }).join('. ') };
+  if (focused.named) return supported;
+  const routed = whole();
+  return routed.action === 'route' && !focused.owners.includes(routed.owners[0]) ? routed.result : supported;
+}
 
-  const clauses = requestedBusinessClauses(prompt, { protectedPhrases });
+const engineering = clause => engineeringWork.test(normalized(requestOperation(clause))) || personalTask.test(normalized(clause));
+
+// Route one request text. Explicit invocation is read from the original prompt.
+function routeRequest(request, prompt, { packageRoot, restriction, contract, protectedPhrases }) {
+  const parent = posix.join(contract.parentPath, contract.document);
+  const clauses = requestedBusinessClauses(request, { protectedPhrases });
   const query = clauses.join('. ');
-  if (!clauses.length) return abstain('excluded-request');
+  const declined = result => ({ action: result.action, engineeringOnly: !clauses.length || clauses.every(engineering), result });
+  if (!clauses.length) return declined(abstain('excluded-request'));
   const excluded = [];
   const unavailable = [];
   const selectedAll = [];
   let parentMethod = null;
+  const routed = result => ({
+    action: 'route',
+    // A phrase match, an old ID, an explicit command, or a channel lock names the deliverable; a signal is loose.
+    named: selectedAll.some(item => item.matchKind !== 'signal'),
+    owners: [result.play?.name, ...selectedAll.map(item => item.name)].filter(Boolean),
+    result,
+  });
 
   const codingAction = /\b(?:refactor|rewrite|debug|implement|patch)\b/i.test(query)
     && technicalNoun.test(query);
@@ -353,7 +382,6 @@ export function selectRequestContext(prompt, { root = moduleRoot, automatic = fa
     if (existing === -1) selectedAll.push(item);
     else if (strength(item) > strength(selectedAll[existing])) selectedAll[existing] = item;
   };
-  const engineering = clause => engineeringWork.test(normalized(clause)) || personalTask.test(normalized(clause));
   const business = clauses.filter(clause => !engineering(clause));
   // A "for" or "about" tail is context ("a post for our launch"). "For each", "for every", and
   // "for search" still describe the deliverable ("pages for each competitor").
@@ -416,7 +444,7 @@ export function selectRequestContext(prompt, { root = moduleRoot, automatic = fa
   if (!selectedAll.length && !parentMethod) {
     const result = abstain(explicitInvocation(prompt) ? 'parent-selection-required' : 'no-relevant-capability');
     result.unavailable = [...new Set(unavailable)];
-    return result;
+    return declined(result);
   }
   const expanded = [];
   const deferred = [];
@@ -446,7 +474,7 @@ export function selectRequestContext(prompt, { root = moduleRoot, automatic = fa
   context = formatContext({
     root: packageRoot, parent, selected, deferred, excluded, unavailable, play, role, parentMethod,
   });
-  return {
+  return routed({
     schemaVersion: REQUEST_CONTEXT_SCHEMA_VERSION,
     action: 'route',
     mode: requestMode(query, play),
@@ -460,5 +488,5 @@ export function selectRequestContext(prompt, { root = moduleRoot, automatic = fa
     role,
     parentMethod: parentMethod ? { name: parentMethod.name, label: parentMethod.label, path: parentMethod.path } : null,
     context,
-  };
+  });
 }
