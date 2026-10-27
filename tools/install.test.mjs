@@ -10,6 +10,7 @@ import { canonicalText } from './method-library.mjs';
 import { validatePluginContracts } from './plugin-contracts.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+const productVersion = JSON.parse(readFileSync(join(root, 'package.json'), 'utf8')).version;
 const skills = readdirSync(join(root, 'skills')).sort();
 const install = (...args) => execFileSync(process.execPath, [join(root, 'tools/install.mjs'), ...args], { stdio: 'pipe' });
 function temporary(run) {
@@ -44,7 +45,7 @@ test('one entry point contains every method and upgrades without losing user cha
 test('portable master contains specialist contracts, declared outcomes and its canonical parent', () => temporary(target => {
   install('install', 'single-agent', target);
   const agent = JSON.parse(readFileSync(join(target, 'agent/agent.json')));
-  assert.equal(agent.pluginVersion, '0.10.2');
+  assert.equal(agent.pluginVersion, productVersion);
   assert.equal(agent.kind, 'master-agent');
   assert.equal(agent.role, 'orchestrator');
   assert.equal(agent.schemaVersion, 'conquistador.agent-package/v2');
@@ -86,7 +87,7 @@ test('host and squad declarations resolve inside each staged package', () => {
       }
     } else {
       const host = JSON.parse(readFileSync(join(target, 'host.json')));
-      assert.equal(host.pluginVersion, '0.10.2');
+      assert.equal(host.pluginVersion, productVersion);
       assert.deepEqual(readdirSync(join(target, host.canonicalSkillsRoot)).sort(), skills);
     }
     install('remove', mode, target);

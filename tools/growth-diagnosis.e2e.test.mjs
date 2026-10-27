@@ -8,6 +8,7 @@ import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
+const productVersion = JSON.parse(readFileSync(join(root, 'package.json'), 'utf8')).version;
 // Commands in this checkout, including meta commands other slices add.
 const N = commandNames(join(root, 'skills')).length;
 
@@ -99,7 +100,7 @@ test('installed growth route, first task, hook context, and removal work togethe
   });
 
   checked(printedUpdateResult, 'printed other-project update');
-  assert.equal(JSON.parse(readFileSync(selectedReceiptPath, 'utf8')).productVersion, '0.10.2');
+  assert.equal(JSON.parse(readFileSync(selectedReceiptPath, 'utf8')).productVersion, productVersion);
   assert.equal(readFileSync(join(project, '.conquistador/.conquistador-install.json'), 'utf8'), callerReceipt);
   const otherDoctor = JSON.parse(checked(run(cli, project, 'operator', 'doctor', '--project', otherProject, '--json'), 'other-project doctor'));
   assert.equal(otherDoctor.path, join(otherProject, '.conquistador'));

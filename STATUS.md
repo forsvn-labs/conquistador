@@ -1,5 +1,22 @@
 # Conquistador status
 
+## Release candidate 0.11.0
+
+Prepared 2026-10-27 from [PR #109](https://github.com/forsvn-labs/conquistador/pull/109),
+merged at `b717e00`. This candidate includes the merged performance, routing,
+method, and evaluation changes since 0.10.2. Thin defaults now apply to the CLI,
+app prompts, installs, specialist assignments, MCP discovery, and bot exports.
+Outbound, social, sales-page copy, engineering, utilities, and kept plays retain
+their methods. Detailed files remain available for explicit reads and future tests.
+
+Before this version change, 1,179 tests, 721 routing cases, 38 installed-app checks,
+50 executed package checks, and all executable PR checks passed. The release
+candidate still requires its own package verification and publication evidence.
+These checks establish loading and installation, not model output quality.
+The hosted Worker is a separate deployment and is not part of this release.
+
+The last verified public release remains 0.10.2 until publication is checked.
+
 Updated 2026-10-23. Release evidence: [PR #92](https://github.com/forsvn-labs/conquistador/pull/92),
 [v0.10.2](https://github.com/forsvn-labs/conquistador/releases/tag/v0.10.2), and
 [publication run 39944022729](https://github.com/forsvn-labs/conquistador/actions/runs/39944022729).
