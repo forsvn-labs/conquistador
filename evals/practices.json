@@ -9,7 +9,8 @@
       "pr": 98,
       "members": [
         "commands/outreach",
-        "plays/outbound"
+        "plays/outbound",
+        "channels/email-newsletter"
       ]
     },
     {
@@ -29,11 +30,11 @@
     {
       "id": "ads",
       "judge": "human",
-      "status": "failed",
-      "commit": "5594fa7",
+      "status": "pass-through",
+      "commit": "bed6730",
       "date": "2026-10-27",
       "pr": 104,
-      "note": "Round 1 failed; round 2 is pending.",
+      "note": "Three blind tests, 6-12 in total. Ad drafting passes the request through; the campaign test keeps its method.",
       "members": [
         "commands/ads",
         "plays/paid",
@@ -44,10 +45,10 @@
       "id": "social",
       "judge": "human",
       "status": "passed",
-      "commit": "3a573a7",
+      "commit": "84ef79f",
       "date": "2026-10-27",
       "pr": 103,
-      "note": "Judged on the pull request branch commit; the pull request is not merged yet.",
+      "note": "Judged on the pull request; recorded at its merge commit on main.",
       "members": [
         "commands/social",
         "channels/facebook",
@@ -94,13 +95,12 @@
         "commands/article",
         "commands/ideas",
         "commands/vietnamese",
-        "plays/content",
-        "channels/email-newsletter"
+        "plays/content"
       ]
     },
     {
       "id": "seo",
-      "judge": "pending-calibration",
+      "judge": "human",
       "status": "untested",
       "members": [
         "commands/seo",
@@ -111,16 +111,22 @@
     },
     {
       "id": "pricing",
-      "judge": "pending-calibration",
-      "status": "untested",
+      "judge": "human",
+      "status": "failed",
+      "commit": "f449281",
+      "date": "2026-10-27",
+      "note": "Blind test of the method on main: 1-5 against the model with no method.",
       "members": [
         "commands/pricing"
       ]
     },
     {
       "id": "experiment",
-      "judge": "pending-calibration",
-      "status": "untested",
+      "judge": "human",
+      "status": "failed",
+      "commit": "f449281",
+      "date": "2026-10-27",
+      "note": "Blind test of the method on main: 1-5 against the model with no method.",
       "members": [
         "plays/experiment",
         "commands/convert",
@@ -130,8 +136,11 @@
     },
     {
       "id": "channels",
-      "judge": "pending-calibration",
-      "status": "untested",
+      "judge": "human",
+      "status": "failed",
+      "commit": "f449281",
+      "date": "2026-10-27",
+      "note": "Blind test of the method on main: 3-3 against the model with no method. A tie is not an edge, so it failed.",
       "members": [
         "commands/channels",
         "commands/budget",
@@ -140,7 +149,7 @@
     },
     {
       "id": "positioning",
-      "judge": "pending-calibration",
+      "judge": "human",
       "status": "untested",
       "members": [
         "commands/position",
@@ -149,7 +158,7 @@
     },
     {
       "id": "measurement",
-      "judge": "pending-calibration",
+      "judge": "human",
       "status": "untested",
       "members": [
         "commands/measure",
@@ -164,7 +173,7 @@
     },
     {
       "id": "launch",
-      "judge": "pending-calibration",
+      "judge": "human",
       "status": "untested",
       "members": [
         "plays/launch",
@@ -178,7 +187,7 @@
     },
     {
       "id": "product",
-      "judge": "pending-calibration",
+      "judge": "human",
       "status": "untested",
       "members": [
         "commands/flow",
@@ -189,7 +198,7 @@
     },
     {
       "id": "review",
-      "judge": "pending-calibration",
+      "judge": "human",
       "status": "untested",
       "members": [
         "commands/audit",
@@ -201,7 +210,7 @@
     },
     {
       "id": "engineering",
-      "judge": "pending-calibration",
+      "judge": "human",
       "status": "untested",
       "note": "Engineering and tooling commands stay as they are.",
       "members": [

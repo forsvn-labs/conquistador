@@ -19,8 +19,8 @@
         "properties": {
           "id": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
           "judge": {
-            "description": "human: the owner judges taste work blind. pending-calibration: decision work, judge not yet calibrated.",
-            "enum": ["human", "pending-calibration"]
+            "description": "human: the owner judges blind. Model judges failed calibration on 2026-10-27, so every practice is judged by the owner.",
+            "enum": ["human"]
           },
           "status": { "enum": ["untested", "baseline", "passed", "failed", "pass-through"] },
           "commit": { "description": "Commit the judged method drafts were written at.", "type": "string", "pattern": "^[0-9a-f]{7,40}$" },

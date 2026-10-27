@@ -9,7 +9,8 @@ import { join } from "node:path";
 export type PracticeStatus = "untested" | "baseline" | "passed" | "failed" | "pass-through";
 export type Practice = {
   id: string;
-  judge: "human" | "pending-calibration";
+  /** Model judges failed calibration (2026-10-27); the owner judges every practice. */
+  judge: "human";
   status: PracticeStatus;
   commit?: string;
   date?: string;

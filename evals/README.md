@@ -210,9 +210,11 @@ The commands stop when:
   same check again, so a pair you judge again later cannot change a result that was already decided.
 
 `practices.json` maps every command, play, channel, format, and specialist to one practice, with
-its judge (`human` for taste work, `pending-calibration` for decision work) and its latest status
-(`untested`, `baseline`, `passed`, `failed`, or `pass-through`). Record a result there after a
-report. `npm test` fails when a method file has no practice or a member names a missing file. The
+its judge and its latest status (`untested`, `baseline`, `passed`, `failed`, or `pass-through`).
+Record a result there after a report. The judge is always `human`: the owner judges every practice,
+taste work and decision work. Model judges failed calibration on 27 October 2026. On 18 decision
+pairs, model judges agreed with the owner on 28–33% of pairs. A judge given the owner's earlier verdicts
+agreed on 54% of 87 pairs, below the 80% bar set before the test. `npm test` fails when a method file has no practice or a member names a missing file. The
 report re-derives every pair from the pack and the sealed key, so it stops if a draft, brief, key, or
 verdict changed after prepare, or if a pair has two verdicts.
 

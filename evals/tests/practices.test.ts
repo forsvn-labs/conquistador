@@ -70,6 +70,7 @@ describe("practice registry", () => {
     const variants: Array<(value: PracticeRegistry) => void> = [
       (value) => { (value.practices[0] as { status: string }).status = "shipped"; },
       (value) => { (value.practices[0] as { judge: string }).judge = "model"; },
+      (value) => { (value.practices[0] as { judge: string }).judge = "pending-calibration"; },
       (value) => { value.practices[0]!.date = "27/10/2026"; },
       (value) => { value.practices[0]!.commit = "not-a-sha"; },
       (value) => { (value.practices[0] as Record<string, unknown>).verdicts = ["private"]; },
@@ -81,15 +82,28 @@ describe("practice registry", () => {
     }
   });
 
-  it("records the seeded results", () => {
+  it("records the owner's results of 27 October 2026", () => {
     const byId = new Map(registry().practices.map((entry) => [entry.id, entry]));
-    expect(byId.get("outbound")).toMatchObject({ status: "passed", judge: "human", pr: 98 });
-    expect(byId.get("copy")).toMatchObject({ status: "pass-through", judge: "human", pr: 99 });
-    expect(byId.get("social")).toMatchObject({ status: "passed", judge: "human", pr: 103, commit: "3a573a7", date: "2026-10-27" });
-    expect(byId.get("ads")).toMatchObject({ status: "failed", judge: "human", commit: "5594fa7", date: "2026-10-27" });
-    const seeded = new Set(["outbound", "copy", "social", "ads"]);
-    for (const entry of registry().practices.filter((item) => !seeded.has(item.id))) expect(entry.status).toBe("untested");
-    for (const id of ["copy", "ads", "social", "outbound", "video", "creative"]) expect(byId.get(id)?.judge).toBe("human");
+    expect(byId.get("outbound")).toMatchObject({ status: "passed", pr: 98 });
+    expect(byId.get("copy")).toMatchObject({ status: "pass-through", pr: 99 });
+    expect(byId.get("social")).toMatchObject({ status: "passed", pr: 103, commit: "84ef79f", date: "2026-10-27" });
+    expect(byId.get("ads")).toMatchObject({ status: "pass-through", pr: 104, commit: "bed6730", date: "2026-10-27" });
+    for (const id of ["pricing", "experiment", "channels"]) expect(byId.get(id)).toMatchObject({ status: "failed", commit: "f449281", date: "2026-10-27" });
+    const recorded = new Set(["outbound", "copy", "social", "ads", "pricing", "experiment", "channels"]);
+    for (const entry of registry().practices.filter((item) => !recorded.has(item.id))) expect(entry.status).toBe("untested");
+  });
+
+  it("has the owner judge every practice, because model judges failed calibration", () => {
+    for (const entry of registry().practices) expect(entry.judge).toBe("human");
+    expect(schema.properties.practices.items.properties.judge.enum).toEqual(["human"]);
+  });
+
+  it("keeps the newsletter channel with outbound, landing with copy, and the video channels with video", () => {
+    const owner = new Map(registry().practices.flatMap((entry) => entry.members.map((member) => [member, entry.id] as const)));
+    expect(owner.get("channels/email-newsletter")).toBe("outbound");
+    expect(owner.get("plays/landing")).toBe("copy");
+    expect(owner.get("channels/tiktok")).toBe("video");
+    expect(owner.get("channels/youtube")).toBe("video");
   });
 
   it("is public data only: no paths outside the skill tree and no Drive or private markers", () => {
