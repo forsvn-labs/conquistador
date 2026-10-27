@@ -174,8 +174,8 @@ function finishMatches(query, text, matches, contract, { permitGrowthInference, 
 }
 
 // The play that owns a decision ("design a test", "is the result real") when its decision signal
-// outscores every command decision. Each text is read on its own, so words from separate requests
-// do not combine.
+// outscores every command decision. Each text is read on its own: one per clause, and the whole
+// request only when it asks a question.
 function decisionPlay(texts, selected, contract, restriction) {
   const best = Math.max(0, ...selected.filter(item => item.matchKind === 'decision').map(item => item.decision));
   const ranked = (contract.plays ?? []).filter(play => play.decisions?.length && allowedKind(restriction, 'workflow', play.name))
