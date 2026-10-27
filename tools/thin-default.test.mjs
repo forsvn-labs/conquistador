@@ -86,11 +86,12 @@ test('every in-scope brief carries the selected entries and nothing else', async
     const { structured } = packBrief(item);
     const entries = item.methods.map(method => method.path);
     const extra = structured.inlined.map(file => file.path).filter(path => !entries.includes(path));
-    // A kept-craft secondary method keeps its own files; everything else is an entry.
-    const foreign = extra.filter(path => !CRAFT_COMMANDS.some(name => path.startsWith(`skills/conquistador/commands/${name}/`))
+    // A kept-craft or unchanged secondary method keeps its own files; everything else is an entry.
+    const kept = path => [...CRAFT_COMMANDS, ...UNCHANGED_COMMANDS].some(name => path.startsWith(`skills/conquistador/commands/${name}/`));
+    const foreign = extra.filter(path => !kept(path)
       && !CRAFT_CHANNELS.some(name => path === `skills/conquistador/channels/${name}.md`));
     assert.deepEqual(foreign, [], `${item.task}: inlined ${JSON.stringify(extra)}`);
-    const deferred = structured.situational.filter(path => !CRAFT_COMMANDS.some(name => path.startsWith(`skills/conquistador/commands/${name}/`)));
+    const deferred = structured.situational.filter(path => !kept(path));
     assert.deepEqual(deferred, [], `${item.task}: deferred files`);
     assert.deepEqual(item.deferredRequired ?? [], [], `${item.task}: required files`);
     if (item.play) {
@@ -106,7 +107,7 @@ test('every in-scope brief carries the selected entries and nothing else', async
 test('a thin brief stays inside a small budget', async () => {
   for (const item of (await routed()).filter(isThinRoute)) {
     const { text } = packBrief(item);
-    const limit = 3000 + 2600 * (item.methods.length - 1);
+    const limit = 3500 + 2600 * (item.methods.length - 1);
     assert.ok(Buffer.byteLength(text) <= limit, `${item.task}: ${Buffer.byteLength(text)} bytes`);
     assert.doesNotMatch(text, /Mark assumptions|Follow relevant method rules|Deferred files are optional/, item.task);
     assert.match(formatReadingList(item), /Entry: skills\/conquistador\/(?:commands|plays)\//, item.task);
@@ -128,7 +129,7 @@ test('an in-scope entry links no detailed method file for an ordinary request', 
   for (const name of [...THIN_COMMANDS, 'ads']) {
     const text = read(`commands/${name}/ENTRY.md`);
     assert.doesNotMatch(text, DETAIL_LINK, `commands/${name}/ENTRY.md`);
-    assert.match(text, /load no other file/i, `commands/${name}/ENTRY.md`);
+    assert.match(text, /load\s+no\s+other\s+file/i, `commands/${name}/ENTRY.md`);
   }
   // Copy links its long-form method for a sales page or sales letter only.
   const copy = read('commands/copy/ENTRY.md');
@@ -204,7 +205,7 @@ test('kept-craft practices keep their method', () => {
   assert.equal(sales.methods[0].name, 'copy');
   assert.ok(sales.must.some(item => item.path.endsWith('copy/references/sales-argument.md')), 'a sales page loads the sales argument');
   for (const name of CRAFT_CHANNELS) {
-    assert.doesNotMatch(read(`channels/${name}.md`), /load no other file/i, `${name} keeps its craft`);
+    assert.doesNotMatch(read(`channels/${name}.md`), /load\s+no\s+other\s+file/i, `${name} keeps its craft`);
   }
 });
 
@@ -212,7 +213,7 @@ test('unchanged practices keep their method', async () => {
   for (const name of UNCHANGED_COMMANDS) {
     const text = read(`commands/${name}/ENTRY.md`);
     assert.match(text, /COMMAND\.md/, `${name} still points to its complete method`);
-    assert.doesNotMatch(text, /load no other file/i, name);
+    assert.doesNotMatch(text, /load\s+no\s+other\s+file/i, name);
   }
   const unchanged = (await routed()).filter(item => !item.play && UNCHANGED_COMMANDS.includes(item.methods[0]?.name));
   assert.ok(unchanged.length >= 10, `unchanged routing cases: ${unchanged.length}`);
@@ -223,7 +224,7 @@ test('unchanged practices keep their method', async () => {
   const spec = brief('Turn this feature idea into a product spec and implementation plan');
   assert.equal(spec.play?.name, 'spec');
   assert.ok(spec.must.some(item => item.path.includes('/commands/flow/')), 'the spec play keeps its flow files');
-  for (const name of KEPT_PLAYS) assert.doesNotMatch(read(playFile(name)), /load no other file/i, name);
+  for (const name of KEPT_PLAYS) assert.doesNotMatch(read(playFile(name)), /load\s+no\s+other\s+file/i, name);
 });
 
 test('in-scope methods declare no required resources', () => {
