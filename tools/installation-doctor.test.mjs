@@ -5,7 +5,7 @@ import { createHash } from 'node:crypto';
 import { execFileSync, spawnSync } from 'node:child_process';
 import { chmodSync, cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, realpathSync, rmSync, symlinkSync, utimesSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { dirname, join } from 'node:path';
+import { dirname, join, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { operatorFiles } from './operator-package.mjs';
 import { methodIdentity } from './installation-doctor.mjs';
@@ -63,7 +63,8 @@ test('release manifest names every authored outcome, exact method contents, and 
     assert.equal(hash(text), method.sha256, method.name);
   }
   const resources = manifest.requiredResources.map(resource => resource.path);
-  const specialists = readdirSync(join(root, 'skills/conquistador/specialists')).map(name => `conquistador/specialists/${name}`);
+  const specialists = readdirSync(join(root, 'skills/conquistador/specialists'), { recursive: true }).filter(name => name.endsWith('.md'))
+    .map(name => `conquistador/specialists/${name.split(sep).join('/')}`);
   for (const required of [...specialists, 'conquistador/orchestration/specialist-team.md', 'conquistador/methods/connect-accounts.md', 'conquistador/methods/stack-setup.md', 'conquistador/standards/setup.md', 'conquistador/operator-profile.json']) assert.ok(resources.includes(required), required);
   assert.equal(new Set(resources).size, resources.length);
   // Compare the whole resource inventory, including references below individual outcomes.

@@ -1,12 +1,10 @@
 # Create a run of show
 
-Produce the cue sheet an event team can operate, not a promotional agenda.
+Create the run of show the user asked for in your own judgment from the user's facts. Load no other
+file for it. Then run only the facts check: remove claims the facts do not support, keep fair
+inferences, and add nothing (no hedges, no source text, no disclaimers). Return only what the user
+asked for.
 
-## Use this method
-
-Apply the selected current-stage resources from the brief. Keep the requested output size and scope.
-For a small edit, return the edit and only the explanation it needs.
-
-Read the [complete method](COMMAND.md) when its detailed procedure is needed.
-Expand linked playbooks only when their condition or stage applies.
-The Core list is a reference collection, not an instruction to load every file.
+Keep small edits small. Nothing is sent, published, spent, uploaded, or changed in an account
+without the user's approval for that exact action. This approval governs actions; it adds nothing to
+the deliverable.

@@ -190,7 +190,9 @@ export function knowledgeIndex(root = moduleRoot, { playbooks = userPlaybookRoot
   // One tree: shared parent files, commands/<name>/ (source "method"), and plays/<name>[.md|/] (source "play").
   for (const absolute of walkMarkdown(parentDir, { limitFiles: 6000, limitBytes: 1_000_000, depth: 10 })) {
     const inner = relative(parentDir, absolute).split(sep).join('/');
-    if (inner === entryName || inner === 'SKILL.md' || inner === 'METHOD.md' || /^commands\/[^/]+\/(?:COMMAND|ENTRY)\.md$/.test(inner)) continue;
+    // A COMMAND.md is a detailed procedure (a command's, or a thin play's, channel's, format's, or specialist's),
+    // read only when its entry sends the model there. It never joins a brief or a search on its own.
+    if (inner === entryName || inner === 'SKILL.md' || inner === 'METHOD.md' || /(?:^|\/)COMMAND\.md$|^commands\/[^/]+\/ENTRY\.md$/.test(inner)) continue;
     const key = `conquistador/${inner}`;
     const owner = methodOwner(key);
     planned.push({ absolute, key, source: owner ? (inner.startsWith('plays/') ? 'play' : 'method') : 'shared', method: owner });
@@ -322,6 +324,19 @@ const SALES_PAGE = /\bsales (?:pages?|letters?)\b/;
 // A headline or a platform name inside an ad request does not add copy or social, unless the request
 // also names one of their own deliverables.
 const OWN_DELIVERABLE = { copy: /\b(?:pages?|emails?|sales letters?|newsletters?|taglines?)\b/, social: /\b(?:posts?|captions?|threads?|tweets?)\b/ };
+// Thin by default (owner decision, 27 Oct 2026). Across about 100 blind pairs, a method beat the same model
+// alone only for outbound and social; copy, ads, and decision work lost or tied, and the method drafts added
+// process the user did not ask for. A practice whose method has not won a blind test is a pass-through: its
+// brief carries its entry alone, and its detailed files stay in the library, unlinked, until a blind test
+// brings the craft back. Kept: the winners (outreach and the outbound play, social, copy's sales page and
+// sales letter) and work that is not marketing craft (engineering, platform utilities, factcheck,
+// vietnamese, and the spec play).
+const CRAFT_METHODS = new Set(['outreach', 'social']);
+const UNCHANGED_METHODS = new Set(['architect', 'build', 'docs', 'ui', 'init', 'doctor', 'pin', 'connect', 'review', 'feedback',
+  'check', 'factcheck', 'vietnamese']);
+const KEEPS_METHOD = new Set([...CRAFT_METHODS, ...UNCHANGED_METHODS]);
+const KEEPS_PLAY = new Set(['outbound', 'spec']);
+const thinMethod = (name, salesPage) => !KEEPS_METHOD.has(name) && !(name === 'copy' && salesPage);
 const AD_CAMPAIGN = /\b(?:campaigns?|budgets?|kill (?:rules?|criteria)|(?:ads?|paid) tests?|test (?:plans?|structure|design)|account (?:structure|setup)|bids?|bidding|spend|optimi[sz]ation events?|scal(?:e|ing) rules?|media plan|turn (?:ads|it|them) off)\b/;
 export const taskOf = prompt => Object.values(START_CONTEXT).reduce((rest, sentence) => rest.split(sentence).join(' '), prompt).replace(START_LEAD, '').trim();
 
@@ -353,14 +368,24 @@ export function createBrief(input, { root = moduleRoot, playbooks, persistCache 
   if (!methods.length && !play && !platforms.length && !(explicit || force)) {
     return { schema: BRIEF_SCHEMA, action: 'none', reason: routed.reason ?? 'no-relevant-capability', methods: [], must: [], situational: [], platforms: [], packageRoot };
   }
-  const required = new Set(methods.flatMap(item => item.requiredResources ?? []).map(path => path.slice(libraryRoot.length + 1)));
   const salesPage = SALES_PAGE.test(normalizeRequest(prompt));
-  const passThrough = !play && methods.length === 1 && ((methods[0].name === 'copy' && !salesPage) || (methods[0].name === 'ads' && adDrafting));
+  // A resource whose stated condition the request meets ranks like a required file: the sales page method
+  // leads a sales page brief by rule, not by a keyword-score margin.
+  const required = new Set([...methods.flatMap(item => item.requiredResources ?? []),
+    ...(salesPage ? (methods[0]?.resourceConditions ?? []).filter(item => /\bsales page or sales letter\b/i.test(item.when)).map(item => item.path) : [])]
+    .map(path => path.slice(libraryRoot.length + 1)));
+  const passThrough = play ? !KEEPS_PLAY.has(play.name) : methods.length > 0 && thinMethod(methods[0].name, salesPage);
+  // A thin route inlines every selected entry. Only a utility the request also selected keeps its files
+  // ("write it in Vietnamese"); a craft secondary keeps its entry, which links its method.
+  const utilities = new Set(passThrough ? methods.filter(method => UNCHANGED_METHODS.has(method.name)).map(method => method.name) : []);
   const ownerOf = doc => (doc.source === 'method' && selectedNames.has(doc.method)) || (doc.source === 'play' && doc.method === play?.name) ? doc.method : null;
   const scoreDoc = (doc, owned) => {
     if (doc.kind === 'process' || doc.key === 'conquistador/welcome.md') return null;
     if (!salesPage && doc.source === 'method' && doc.method === 'copy') return null;
     if (adDrafting && doc.source === 'method' && doc.method === 'ads') return null;
+    if (passThrough && doc.kind !== 'user' && !(doc.source === 'method' && utilities.has(doc.method))) return null;
+    // A kept route reads no detailed file of a thin method it also selected; a kept play keeps its steps.
+    if (!passThrough && !play && doc.source === 'method' && doc.method !== methods[0]?.name && thinMethod(doc.method, salesPage)) return null;
     // Integration recipes join the brief only for the connect command.
     if (doc.kind === 'integration') { if (!selectedNames.has('connect')) return null; owned = 'connect'; }
     const shared = doc.source === 'shared';
@@ -393,7 +418,6 @@ export function createBrief(input, { root = moduleRoot, playbooks, persistCache 
   // Every resource shares the task's byte budget. Required files do not use the 3 ranked slots.
   const take = (item, required = false) => {
     if (item.sibling || must.some(entry => entry.doc.digest === item.doc.digest)) return false;
-    if (passThrough && item.doc.kind !== 'user') return false;
     if (must.length >= LIMITS.mustFiles || bytes + item.doc.bytes > byteBudget) return false;
     if (!required && must.filter(entry => !entry.required).length >= fileBudget) return false;
     must.push(required ? { ...item, required } : item);
@@ -413,7 +437,7 @@ export function createBrief(input, { root = moduleRoot, playbooks, persistCache 
   // The primary command's required files come before keyword-ranked extras. A small edit keeps
   // its one-file budget. A required file that does not fit is named, never dropped silently.
   const deferredRequired = [];
-  if (!assist) {
+  if (!assist && !passThrough) {
     const byKey = new Map(scored.map(entry => [entry.doc.key, entry]));
     for (const key of (methods[0]?.requiredResources ?? []).map(path => path.slice(libraryRoot.length + 1))) {
       const doc = index.docs.find(item => item.key === key);
@@ -466,14 +490,16 @@ export function createBrief(input, { root = moduleRoot, playbooks, persistCache 
     const label = record?.label ?? name.replaceAll('-', ' ');
     const now = position === firstStep;
     let playbooks = [];
-    if (!now && step.command && (salesPage || step.command !== 'copy')) {
+    if (!passThrough && !now && step.command && (salesPage || step.command !== 'copy')) {
       playbooks = index.docs.filter(doc => doc.source === 'method' && doc.method === step.command && doc.kind === 'playbook'
         && (!step.mode || !doc.key.includes('/references/modes/') || doc.key.includes(`/references/modes/${step.mode}`)))
         .map(doc => ({ doc, score: rank(doc) + (record.requiredResources ?? []).includes(`${libraryRoot}/${doc.key}`) * 3 }))
         .sort((a, b) => b.score - a.score || a.doc.key.localeCompare(b.doc.key)).slice(0, 2)
         .filter(item => !seen.has(item.doc.digest)).map(view);
     }
-    return { step: position + 1, ...(step.command ? { command: step.command } : { method: step.method }), label, path: step.path, absolute: join(packageRoot, step.path),
+    // A thin play's command step starts from that command's entry, not its detailed procedure.
+    const path = passThrough && step.command ? step.path.replace(/COMMAND\.md$/, 'ENTRY.md') : step.path;
+    return { step: position + 1, ...(step.command ? { command: step.command } : { method: step.method }), label, path, absolute: join(packageRoot, path),
       ...(step.mode ? { mode: step.mode } : {}), ...(step.when ? { when: step.when } : {}), ...(step.for ? { for: step.for } : {}), now, playbooks };
   }) : [];
   for (const step of steps) for (const item of step.playbooks) seen.add(createHash('sha256').update(readText(item.absolute) ?? '').digest('hex'));
@@ -483,6 +509,7 @@ export function createBrief(input, { root = moduleRoot, playbooks, persistCache 
     schema: BRIEF_SCHEMA,
     action: 'brief',
     mode: routed.mode,
+    ...(passThrough ? { passThrough: true } : {}),
     reason: play ? 'play' : methods.length ? 'relevant-capability' : 'platform-only',
     packageRoot,
     parent: { path: contract.parentPath, absolute: join(packageRoot, contract.parentPath) },
@@ -568,13 +595,20 @@ export function packBrief(brief, { limit, callerContext, hosted = false, compact
   const lines = [
     '# Conquistador brief', '', start,
     `Scope: ${brief.mode ?? 'command'}. Apply only to the requested deliverable.`,
-    hosted ? 'Hosted: you have no repository here. Return requested artifacts in the answer instead of .forsvn/ files. If specialist support is unavailable, use fallbacks/sequential.md when needed.' : '',
+    hosted ? `Hosted: you have no repository here. Return requested artifacts in the answer instead of .forsvn/ files.${brief.passThrough ? '' : ' If specialist support is unavailable, use fallbacks/sequential.md when needed.'}` : '',
     '', 'Rules for this task:',
-    'Follow relevant method rules. Keep small edits small. Expand only the stage the user requested.',
-    'Never invent metrics, quotes, or product facts. Mark assumptions. Preserve host permissions for sending, publishing, spending, and account changes.',
-    'Lead with the deliverable the user asked for. Name sources when they help a decision; no mandatory playbook appendix.',
-    'Use conquistador_check for substantial marketing text, and conquistador_score only when reporting a rubric verdict. Neither proves factual accuracy or quality.',
-    'Deferred files are optional until their stage is needed. Use conquistador_read to expand one, or reuse complete guidance still present in the host context.',
+    // A pass-through brief asks for the work alone: no method rules, labels, or review sections (thin by default).
+    ...(brief.passThrough ? [
+      'Do the requested work in your own judgment from the user\'s facts. Keep small edits small.',
+      'Never invent metrics, quotes, or product facts. Preserve host permissions for sending, publishing, spending, and account changes.',
+      'Return only the deliverable the user asked for.',
+    ] : [
+      'Follow relevant method rules. Keep small edits small. Expand only the stage the user requested.',
+      'Never invent metrics, quotes, or product facts. Mark assumptions. Preserve host permissions for sending, publishing, spending, and account changes.',
+      'Lead with the deliverable the user asked for. Name sources when they help a decision; no mandatory playbook appendix.',
+      'Use conquistador_check for substantial marketing text, and conquistador_score only when reporting a rubric verdict. Neither proves factual accuracy or quality.',
+      'Deferred files are optional until their stage is needed. Use conquistador_read to expand one, or reuse complete guidance still present in the host context.',
+    ]),
   ];
   // Required files lead every list. A required file this pack does not inline is named before the
   // file blocks, so the budget never drops it silently. It stays optional, not readNow (#86).
@@ -627,6 +661,9 @@ export function packBrief(brief, { limit, callerContext, hosted = false, compact
   // Budget the complete public tool result, including provenance and deferred resource paths.
   // Drop whole blocks only; never claim a partial body was inlined.
   if (limit >= 2000) {
+    // Optional deferred paths go before inlined guidance: a long path name must not push out a method file.
+    const optional = () => structured.situational.findLastIndex(path => !isRequired(path));
+    while (encodedBytes() > limit && optional() >= 0) structured.situational.splice(optional(), 1);
     while (encodedBytes() > limit && includedBlocks.length) {
       const block = includedBlocks.pop();
       const item = inlined.pop();

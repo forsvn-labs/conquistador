@@ -14,17 +14,18 @@ legacy: optimize-app-store-listing
 
 Use for App Store or marketplace listing search, conversion, and review intelligence.
 
-1. Use `seo` to inspect current store results, query intent, metadata constraints,
-   competitors, index/discovery evidence, review language, and measurement.
-2. Use `copy` for accurate name, subtitle, description, or equivalent listing copy.
-3. Use `creative` for a progressive screenshot or preview story grounded in real UI.
-4. Use `convert` to define one listing test and qualified activation guardrail.
+Do the work in your own judgment from the user's facts. Load no other file. Then run only the facts
+check: remove claims the facts do not support, keep fair inferences, and add nothing (no hedges, no
+source text, no disclaimers). Return only what the user asked for, as one finished piece of work.
 
-Do not invent keyword volume, rank, conversion, product behavior, compatibility, awards, or reviews.
-Keep metadata, media, product page, and activation promise congruent. Verify current store constraints
-when they affect the work.
+Steps, in order. Skip a step whose condition is false. Each step starts from its own entry.
 
-Run `audit` on the finished package before the Review Packet.
+1. `seo`.
+2. `copy`.
+3. `creative`.
+4. `convert`.
+5. `audit`.
 
-End with one terminal Review Packet for final human review: search diagnosis, finished metadata copy,
-media story, claim and platform boundary, test rule, and one next action.
+Keep small edits small. Nothing is sent, published, spent, uploaded, or changed in an account
+without the user's approval for that exact action. This approval governs actions; it adds nothing to
+the deliverable.

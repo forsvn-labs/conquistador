@@ -124,7 +124,7 @@ describe("Playbook Registry contract", () => {
     expect(record.executionStatus).toBe("executable");
     expect(record.notExecutableReason).toBeUndefined();
     expect(record.version).toBe("1.0.0");
-    expect(record.proseSource).toBe("skills/conquistador/plays/content.md");
+    expect(record.proseSource).toBe("skills/conquistador/plays/content/COMMAND.md");
     expect(record.stepGraph.nodes.map((node) => node.id)).toEqual([
       "load-context",
       "pull-signals",

@@ -14,18 +14,18 @@ legacy: earned-media-outreach
 
 Use for press, podcast, newsletter, analyst, creator, or other earned-media opportunities.
 
-1. Use `channels` to identify the communities, outlets, and people who actually reach the
-   intended audience.
-2. Use `position` for the newsworthy story, audience, proof, angle, and alternative
-   boundary.
-3. Use `outreach` for concise signal-led pitches and reply handling.
-4. Use `results` or `measure` only after real placement or response evidence exists.
+Do the work in your own judgment from the user's facts. Load no other file. Then run only the facts
+check: remove claims the facts do not support, keep fair inferences, and add nothing (no hedges, no
+source text, no disclaimers). Return only what the user asked for, as one finished piece of work.
 
-Require an observed relevance signal—something the person or outlet has actually covered—before
-pitching. Do not invent coverage, fabricate quotes, mass-personalize a list, or offer undisclosed
-incentives. Publishing, seeding, sending, and placed-content agreements remain human-owned.
+Steps, in order. Skip a step whose condition is false. Each step starts from its own entry.
 
-Run `audit` on the finished package before the Review Packet.
+1. `channels`.
+2. `position`.
+3. `outreach`.
+4. `audit`.
+5. `results`, when real placement or response evidence exists.
 
-End with one terminal Review Packet for final human review: opportunity set, selected angle, ready
-pitches, source and disclosure boundary, and one next action.
+Keep small edits small. Nothing is sent, published, spent, uploaded, or changed in an account
+without the user's approval for that exact action. This approval governs actions; it adds nothing to
+the deliverable.

@@ -13,12 +13,12 @@ Write the ads in your own judgment from the user's facts, within the dated platf
 `ads` entry, then run only the facts check: remove claims the facts do not support, keep fair
 inferences, and add nothing (no hedges, no source text, no disclaimers).
 
-For a campaign, add the creative and targeting payload, a test with labeled starting-point rules,
-and the measurement rule.
+Plan a campaign test (structure, budget, decision and kill rules) the same way, within the same
+platform facts.
 For an account handoff, specify the exact write payload and create new campaigns paused. Read reporting
 data from the warehouse or an owned export when available. Use the live platform interface only for
 provider-only reads or a human-approved write.
 
 Do not invent performance, audience consent, or account access. Never launch, publish, spend,
 upload an audience or asset, enable a campaign, or change a live budget without the user's approval
-for the exact account and payload.
+for the exact account and payload. This approval governs actions; it adds nothing to the ads.

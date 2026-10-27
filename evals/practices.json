@@ -63,7 +63,9 @@
     {
       "id": "video",
       "judge": "human",
-      "status": "untested",
+      "status": "pass-through",
+      "pr": 108,
+      "date": "2026-10-27",
       "members": [
         "commands/video",
         "commands/watch",
@@ -79,7 +81,9 @@
     {
       "id": "creative",
       "judge": "human",
-      "status": "untested",
+      "status": "pass-through",
+      "pr": 108,
+      "date": "2026-10-27",
       "members": [
         "commands/creative",
         "commands/brand",
@@ -90,7 +94,9 @@
     {
       "id": "content",
       "judge": "human",
-      "status": "untested",
+      "status": "pass-through",
+      "pr": 108,
+      "date": "2026-10-27",
       "members": [
         "commands/article",
         "commands/ideas",
@@ -101,7 +107,9 @@
     {
       "id": "seo",
       "judge": "human",
-      "status": "untested",
+      "status": "pass-through",
+      "pr": 108,
+      "date": "2026-10-27",
       "members": [
         "commands/seo",
         "plays/answers",
@@ -112,8 +120,8 @@
     {
       "id": "pricing",
       "judge": "human",
-      "status": "failed",
-      "commit": "f449281",
+      "status": "pass-through",
+      "pr": 108,
       "date": "2026-10-27",
       "note": "Blind test of the method on main: 1-5 against the model with no method.",
       "members": [
@@ -123,8 +131,8 @@
     {
       "id": "experiment",
       "judge": "human",
-      "status": "failed",
-      "commit": "f449281",
+      "status": "pass-through",
+      "pr": 108,
       "date": "2026-10-27",
       "note": "Blind test of the method on main: 1-5 against the model with no method.",
       "members": [
@@ -137,8 +145,8 @@
     {
       "id": "channels",
       "judge": "human",
-      "status": "failed",
-      "commit": "f449281",
+      "status": "pass-through",
+      "pr": 108,
       "date": "2026-10-27",
       "note": "Blind test of the method on main: 3-3 against the model with no method. A tie is not an edge, so it failed.",
       "members": [
@@ -150,7 +158,9 @@
     {
       "id": "positioning",
       "judge": "human",
-      "status": "untested",
+      "status": "pass-through",
+      "pr": 108,
+      "date": "2026-10-27",
       "members": [
         "commands/position",
         "plays/gtm"
@@ -159,7 +169,9 @@
     {
       "id": "measurement",
       "judge": "human",
-      "status": "untested",
+      "status": "pass-through",
+      "pr": 108,
+      "date": "2026-10-27",
       "members": [
         "commands/measure",
         "commands/results",
@@ -174,7 +186,9 @@
     {
       "id": "launch",
       "judge": "human",
-      "status": "untested",
+      "status": "pass-through",
+      "pr": 108,
+      "date": "2026-10-27",
       "members": [
         "plays/launch",
         "plays/press",

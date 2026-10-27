@@ -44,7 +44,10 @@ export function mapTargets() {
   for (const file of readdirSync(join(parent, 'plays')).sort()) {
     const name = file.replace(/\.md$/, '');
     if (!file.endsWith('.md') || !exists(join(parent, 'plays', name))) continue;
-    targets.push({ name, play: true, directory: join(parent, 'plays', name), document: join(parent, 'plays', file), prefix: `conquistador/plays/${name}`, linkBase: name });
+    // A thin play keeps its detailed text, and so its map, in plays/<name>/COMMAND.md.
+    const detailed = join(parent, 'plays', name, 'COMMAND.md');
+    targets.push({ name, play: true, directory: join(parent, 'plays', name), prefix: `conquistador/plays/${name}`,
+      ...(exists(join(parent, 'plays', name)) && lstatSync(detailed, { throwIfNoEntry: false })?.isFile() ? { document: detailed } : { document: join(parent, 'plays', file), linkBase: name }) });
   }
   return targets;
 }

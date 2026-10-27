@@ -181,7 +181,8 @@ test('the parent skill keeps what tools and installers read', () => {
   assert.match(skill, /\]\(references\/menu\.md\)/);
   assert.match(skill, /\]\(orchestration\/specialist-team\.md\)/);
   for (const name of readdirSync(join(parent, 'commands'))) {
-    if (existsSync(join(parent, 'commands', name, 'COMMAND.md'))) assert.ok(skill.includes(`](commands/${name}/COMMAND.md)`), name);
+    // Thin by default: a pass-through command is linked through its entry; a kept method through COMMAND.md.
+    if (existsSync(join(parent, 'commands', name, 'COMMAND.md'))) assert.ok(skill.includes(`](commands/${name}/COMMAND.md)`) || skill.includes(`](commands/${name}/ENTRY.md)`), name);
   }
   for (const name of readdirSync(join(parent, 'plays')).filter(name => name.endsWith('.md'))) assert.ok(skill.includes(`](plays/${name})`), name);
   assert.match(skill, /\]\(references\/writing-guide\.md\)/);

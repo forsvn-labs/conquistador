@@ -1,12 +1,26 @@
 # Optimize search and answer visibility
 
-Diagnose before prescribing.
+Do the search, AI-answer, or app-store work the user asked for in your own judgment from the user's
+facts. Load no other file for it. Then run only the facts check: remove claims the facts do not
+support, keep fair inferences, and add nothing (no hedges, no source text, no disclaimers). Return
+only what the user asked for.
 
-## Use this method
+## Platform facts (checked Oct 2026; confirm in the current specs before use)
 
-Apply the selected current-stage resources from the brief. Keep the requested output size and scope.
-For a small edit, return the edit and only the explanation it needs.
+- **AI crawlers (robots.txt user agents):** OpenAI `GPTBot` (training), `OAI-SearchBot` (ChatGPT
+  search), and `ChatGPT-User` (fetches a user asks for); Anthropic `ClaudeBot` (training),
+  `Claude-SearchBot` (search), and `Claude-User` (fetches a user asks for); `PerplexityBot` and
+  `Perplexity-User`; `Google-Extended` (Gemini training and grounding only; `Googlebot` still
+  indexes for Search and AI Overviews); `Applebot-Extended` (Apple training only); `CCBot` (Common
+  Crawl). Each name is a separate control. A directive is a policy, not proof that a page is
+  excluded or cited.
+- **Search snippets:** Google shows about 50–60 characters of a title and about 150–160 characters
+  of a meta description. The cut is by pixel width and varies.
+- **Apple App Store:** app name 30 characters, subtitle 30, keyword field 100 (comma-separated),
+  promotional text 170 (not indexed).
+- **Google Play:** title 30 characters, short description 80, full description 4,000. Play has no
+  keyword field; it indexes the description text.
 
-Read the [complete method](COMMAND.md) when its detailed procedure is needed.
-Expand linked playbooks only when their condition or stage applies.
-The Core list is a reference collection, not an instruction to load every file.
+Keep small edits small. Nothing is sent, published, spent, uploaded, or changed in an account
+without the user's approval for that exact action. This approval governs actions; it adds nothing to
+the deliverable.

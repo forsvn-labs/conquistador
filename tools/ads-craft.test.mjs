@@ -2,7 +2,7 @@
 // ads craft lost 6–12 to the same model with no craft: the old method lost 1–5, rebuilt craft round 1 tied
 // 3–3 (each variation too thin), and round 2 lost 2–4 (each variation too full). Each rule set created the
 // opposite fault; the bare model balances by judgment. The campaign test (structure, budget, kill rules) is
-// decision work, not drafting, and keeps its method.
+// decision work; under thin by default (27 Oct 2026) it is a pass-through too, and its method stays unlinked.
 // Failure modes, listed and checked before the change:
 //  1. an ad drafting brief (Meta, Facebook, Instagram, Google, LinkedIn, TikTok) that inlines, lists, or
 //     stages any ads file other than ENTRY;
@@ -15,8 +15,9 @@
 //  5. a lost approval boundary for launch, publish, spend, upload, or a live account change;
 //  6. a Meta, Facebook, Instagram, TikTok, LinkedIn, or Google ad request that reaches another command
 //     first, or an organic post request that reaches `ads`;
-//  7. a campaign test request (structure, budget, kill rules) that loses the campaign method, or the campaign
-//     method missing its structure, batch, decision, or optimization-event starting points;
+//  7. a campaign test request (structure, budget, kill rules) that reaches another command or loads a file
+//     (thin by default makes it a pass-through), or the kept campaign method missing its structure, batch,
+//     decision, or optimization-event starting points;
 //  8. `ads` declaring required resources, which an assignment loads for every ads task;
 //  9. a drafting instruction (ENTRY, COMMAND, the ads specialist, the paid play, the kept roles, the
 //     platform packs) that links a retired craft file or names a drafting rule;
@@ -174,15 +175,18 @@ test('ad requests reach ads first and organic post requests stay with social', (
   }
 });
 
-test('a campaign test request keeps the campaign method: structure, budget, and kill rules', () => {
+// Thin by default (owner decision, 27 Oct 2026): the campaign test never won a blind test either, so it is a
+// pass-through too. Its brief carries the ads entry alone; the campaign method stays in the library, unlinked.
+test('a campaign test request reaches ads as a pass-through, and the campaign method stays in the library', () => {
   for (const task of CAMPAIGN_TASKS) {
     const brief = createBrief(task, options);
     assert.equal(brief.methods[0]?.name, 'ads', task);
     const { structured } = packBrief(brief);
-    const listed = [...structured.inlined.map(item => item.path), ...structured.situational.map(item => item.path ?? item)];
-    assert.ok(listed.some(path => path.endsWith('ad-intelligence/creative-cadence.md')), `${task}: ${JSON.stringify(listed)}`);
+    assert.deepEqual(structured.inlined.map(item => item.path), [ENTRY], task);
+    assert.deepEqual(structured.situational, [], task);
   }
-  assert.match(read('commands/ads/ENTRY.md'), /campaign test[\s\S]{0,200}\(COMMAND\.md\)/i);
+  assert.match(read('commands/ads/ENTRY.md'), /campaign test[\s\S]{0,200}own\s+judgment/i);
+  assert.doesNotMatch(read('commands/ads/ENTRY.md'), /COMMAND\.md/);
   const command = read('commands/ads/COMMAND.md');
   for (const step of [/## Plan the test/, /creative-cadence\.md/, /optimization event/i, /kill and scale rules/i, /strategist/]) assert.match(command, step, `COMMAND: ${step}`);
   const cadence = read('commands/ads/references/ad-intelligence/creative-cadence.md');

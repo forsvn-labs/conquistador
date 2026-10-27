@@ -82,14 +82,17 @@ describe("practice registry", () => {
     }
   });
 
-  it("records the owner's results of 27 October 2026", () => {
+  it("records the owner's results and decisions of 27 October 2026", () => {
     const byId = new Map(registry().practices.map((entry) => [entry.id, entry]));
     expect(byId.get("outbound")).toMatchObject({ status: "passed", pr: 98 });
     expect(byId.get("copy")).toMatchObject({ status: "pass-through", pr: 99 });
     expect(byId.get("social")).toMatchObject({ status: "passed", pr: 103, commit: "84ef79f", date: "2026-10-27" });
     expect(byId.get("ads")).toMatchObject({ status: "pass-through", pr: 104, commit: "bed6730", date: "2026-10-27" });
-    for (const id of ["pricing", "experiment", "channels"]) expect(byId.get(id)).toMatchObject({ status: "failed", commit: "f449281", date: "2026-10-27" });
-    const recorded = new Set(["outbound", "copy", "social", "ads", "pricing", "experiment", "channels"]);
+    // Pricing, experiment, and channels failed their blind tests (1–5, 1–5, 3–3); the owner then made every
+    // practice without a blind-test win a pass-through (thin by default, PR #108).
+    const thin = ["video", "creative", "content", "seo", "pricing", "experiment", "channels", "positioning", "measurement", "launch"];
+    for (const id of thin) expect(byId.get(id)).toMatchObject({ status: "pass-through", pr: 108, date: "2026-10-27" });
+    const recorded = new Set(["outbound", "copy", "social", "ads", ...thin]);
     for (const entry of registry().practices.filter((item) => !recorded.has(item.id))) expect(entry.status).toBe("untested");
   });
 

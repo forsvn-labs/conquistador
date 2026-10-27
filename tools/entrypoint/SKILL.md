@@ -16,8 +16,9 @@ Deferred resources are optional until their conditions or stages apply. Keep sma
 add a source explanation only when it helps the user assess the result.
 
 Without a brief, use the [capability catalog](library/conquistador/catalog.md) to find the
-smallest relevant method. Start with its ENTRY.md; read the complete COMMAND.md when the task
-needs the detailed procedure. Core lists are reference collections, not automatic read lists.
+smallest relevant method. Start with its ENTRY.md; read the complete COMMAND.md only when that
+entry links it. Most entries are pass-throughs that load no other file. Core lists are reference
+collections, not automatic read lists.
 Consult the [operating contract](library/conquistador/METHOD.md) for cross-method work and the
 [quality](library/conquistador/standards/quality.md),
 [safety](library/conquistador/standards/safety.md), and

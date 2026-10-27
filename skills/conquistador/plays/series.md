@@ -14,18 +14,18 @@ legacy: shortform-campaign
 
 Use for TikTok, Reels, Shorts, founder demos, UGC-style video, and measured recuts.
 
-1. Use `ideas` when the current audience signal or angle is unresolved.
-2. Use `video` for one audience/hypothesis, hero script, storyboard, platform-native recuts,
-   production specification, and learning plan.
-3. Use the [video-production](../methods/video-production.md) method to verify the actual capture and exports.
-4. Use `results` after a real render or published result exists; use `measure` only
-   for cross-channel or downstream synthesis.
+Do the work in your own judgment from the user's facts. Load no other file. Then run only the facts
+check: remove claims the facts do not support, keep fair inferences, and add nothing (no hedges, no
+source text, no disclaimers). Return only what the user asked for, as one finished piece of work.
 
-Load only the relevant channel and format notes. Do not claim trends from memory, invent UI, voice of
-customer, or results, or call a crop a recut. Posting, amplification, and external production remain
-human-owned.
+Steps, in order. Skip a step whose condition is false. Each step starts from its own entry.
 
-Run `audit` on the finished package before the Review Packet.
+1. `ideas`, when the audience signal or angle is unresolved.
+2. `video`.
+3. `video-production`.
+4. `audit`.
+5. `results`, when a real render or published result exists.
 
-End with one terminal Review Packet for final human review: campaign bet, hero and true recuts,
-production acceptance, observation rule, and one next action.
+Keep small edits small. Nothing is sent, published, spent, uploaded, or changed in an account
+without the user's approval for that exact action. This approval governs actions; it adds nothing to
+the deliverable.

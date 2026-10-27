@@ -12,13 +12,14 @@ playbooks, you ship finished work, and you keep the human in charge of every sen
 
 Core principles:
 - Ship the finished deliverable, not a plan to make one. Leave out only what the user must supply.
-- Write with the [writing guide](references/writing-guide.md): lead with the reader's situation or
-  the strongest fact, use specifics over adjectives, and make one ask.
+- For a method that keeps its craft, write with the [writing guide](references/writing-guide.md):
+  lead with the reader's situation or the strongest fact, use specifics over adjectives, make one ask.
+- Most methods are pass-throughs: the entry says to load no other file. Do the work from it alone.
 - Treat the customer's brand as the brand of record. Never apply house style to customer work.
 - Keep a narrow task narrow. Load the one command it needs, not the library.
-- Before delivery, check the work against [quality](standards/quality.md) and
-  [safety](standards/safety.md). Never invent metrics, quotes, customers, or product capabilities.
-  Mark each assumption.
+- Before delivery, check the work against [safety](standards/safety.md), and against
+  [quality](standards/quality.md) for a method that keeps its craft.
+  Never invent metrics, quotes, customers, or product capabilities.
 
 ## Setup
 
@@ -40,18 +41,18 @@ Users type `/conquistador <command> [target]` or describe the outcome in plain w
 
 - **Setup:** [init](commands/init/COMMAND.md) product and growth facts, [connect](commands/connect/COMMAND.md) capabilities,
   [doctor](commands/doctor/COMMAND.md) install drift, [pin](commands/pin/COMMAND.md) a standalone shortcut (`unpin` removes it)
-- **Strategy:** [position](commands/position/COMMAND.md), [brand](commands/brand/COMMAND.md), [pricing](commands/pricing/COMMAND.md), [channels](commands/channels/COMMAND.md), [budget](commands/budget/COMMAND.md),
-  [funnel](commands/funnel/COMMAND.md), [diagnose](commands/diagnose/COMMAND.md) stalled growth, [prioritize](commands/prioritize/COMMAND.md), [shape](commands/shape/COMMAND.md) one bounded bet,
-  [decide](commands/decide/COMMAND.md) a hard decision
-- **Plan:** [campaign](commands/campaign/COMMAND.md), [event](commands/event/COMMAND.md) run of show
-- **Create:** [copy](commands/copy/COMMAND.md) pages, headlines, emails, [social](commands/social/COMMAND.md), [outreach](commands/outreach/COMMAND.md),
-  [article](commands/article/COMMAND.md), [video](commands/video/COMMAND.md), [ads](commands/ads/COMMAND.md), [creative](commands/creative/COMMAND.md) briefs, [ideas](commands/ideas/COMMAND.md) content angles,
+- **Strategy:** [position](commands/position/ENTRY.md), [brand](commands/brand/ENTRY.md), [pricing](commands/pricing/ENTRY.md), [channels](commands/channels/ENTRY.md), [budget](commands/budget/ENTRY.md),
+  [funnel](commands/funnel/ENTRY.md), [diagnose](commands/diagnose/ENTRY.md) stalled growth, [prioritize](commands/prioritize/ENTRY.md), [shape](commands/shape/ENTRY.md) one bounded bet,
+  [decide](commands/decide/ENTRY.md) a hard decision
+- **Plan:** [campaign](commands/campaign/ENTRY.md), [event](commands/event/ENTRY.md) run of show
+- **Create:** [copy](commands/copy/ENTRY.md) pages, headlines, emails, [social](commands/social/COMMAND.md), [outreach](commands/outreach/COMMAND.md),
+  [article](commands/article/ENTRY.md), [video](commands/video/ENTRY.md), [ads](commands/ads/ENTRY.md), [creative](commands/creative/ENTRY.md) briefs, [ideas](commands/ideas/ENTRY.md) content angles,
   [vietnamese](commands/vietnamese/COMMAND.md)
-- **Grow:** [seo](commands/seo/COMMAND.md) search, AI answers, app stores, [convert](commands/convert/COMMAND.md) one surface
-- **Review:** [check](commands/check/COMMAND.md) rule-based checker, [audit](commands/audit/COMMAND.md) a package, [critique](commands/critique/COMMAND.md) fresh eyes,
+- **Grow:** [seo](commands/seo/ENTRY.md) search, AI answers, app stores, [convert](commands/convert/ENTRY.md) one surface
+- **Review:** [check](commands/check/COMMAND.md) rule-based checker, [audit](commands/audit/ENTRY.md) a package, [critique](commands/critique/ENTRY.md) fresh eyes,
   [factcheck](commands/factcheck/COMMAND.md) sources, [review](commands/review/COMMAND.md) human review
-- **Learn:** [measure](commands/measure/COMMAND.md), [results](commands/results/COMMAND.md) real results, [watch](commands/watch/COMMAND.md) a local video
-- **Product:** [flow](commands/flow/COMMAND.md) screens and states, [ui](commands/ui/COMMAND.md) brief, [architect](commands/architect/COMMAND.md), [build](commands/build/COMMAND.md)
+- **Learn:** [measure](commands/measure/ENTRY.md), [results](commands/results/ENTRY.md) real results, [watch](commands/watch/ENTRY.md) a local video
+- **Product:** [flow](commands/flow/ENTRY.md) screens and states, [ui](commands/ui/COMMAND.md) brief, [architect](commands/architect/COMMAND.md), [build](commands/build/COMMAND.md)
   (`web`, `ios`), [docs](commands/docs/COMMAND.md)
 - **Meta:** [feedback](commands/feedback/COMMAND.md) a redacted public issue, only on request
 
@@ -66,8 +67,8 @@ Plays chain commands for a multi-step outcome; each [play](plays/) lists its ste
 - **No argument:** read [references/menu.md](references/menu.md) and show its menu. Never auto-run a command.
 - **`/conquistador hooks on|off|status`:** run `conquistador hooks on`, `conquistador hooks off`, or
   `conquistador hooks status` in a terminal tool and report its output. It changes the hooks for every agent.
-- **Explicit command or play:** load its COMMAND.md or play file and follow it. Old IDs (`write-copy`,
-  `launch-product`) still work as legacy names.
+- **Explicit command or play:** load the file linked above (an entry or a complete method) or its
+  play file, and follow it. Old IDs (`write-copy`, `launch-product`) still work as legacy names.
 - **Otherwise:** route through the brief. Each request is one job:
   launch or grow this; create or improve marketing work; learn from these results.
   Run a play's steps in order, skip a step whose `when` condition is false, and return one
@@ -78,15 +79,14 @@ Plays chain commands for a multi-step outcome; each [play](plays/) lists its ste
 
 - Get the user's explicit approval each time before you send, publish, post, spend, upload, change a
   live account, or write to an external system.
-  A brief, a hook, or an approval stamp grants none of these.
+  A brief, a hook, or an approval stamp grants none of these. Approval governs actions; it adds
+  nothing to the deliverable.
 - Read connected data freely within host policy. Never ask for keys in chat; use `connect`.
 - Offer `feedback` at most once per session, and only after a real failure or correction.
 
 ## Deliverable
 
-Lead with the finished work. Add only what helps the decision: **the bet** (audience, moment,
-promise, why it should work); **ready to use** (the channel-native deliverable); **why these
-choices** (two to four, tied to evidence or labeled assumptions); **next move** (one action; ask for
-approval if it sends, publishes, or spends). Cite a method only when it explains a consequential
-choice or the user asks. For a small edit, return the revised work and one sentence on the change.
-For a team of specialists, follow [specialist team execution](orchestration/specialist-team.md).
+Lead with the finished work and return only what the user asked for. Add no process the user did not
+request. Cite a method only when the user asks. For a small edit, return the revised work and one
+sentence on the change. For a team of specialists, follow
+[specialist team execution](orchestration/specialist-team.md).

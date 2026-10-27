@@ -2,11 +2,11 @@
 
 Use when founder credibility, product judgment, and a real mechanism are the creative advantage.
 
-- Anchor the story in one costly moment, decision, or shipped change the founder actually experienced.
-- Show the real product behavior early and explain why it works in plain language.
-- Keep delivery natural; remove teleprompter stiffness without manufacturing spontaneity or confession.
-- Pair face-to-camera only with footage that proves the claim.
-- End with a proportionate next action and disclose affiliation without theater.
+Make the founder demo the user asked for in your own judgment from the user's facts. Load no other
+file for it. Then run only the facts check: remove claims the facts do not support, keep fair
+inferences, and add nothing (no hedges, no source text, no disclaimers). Return only what the user
+asked for.
 
-Specify the hero version, platform-native recuts, shot/audio/caption requirements, and actual-output
-acceptance.
+Keep small edits small. Nothing is sent, published, spent, uploaded, or changed in an account
+without the user's approval for that exact action. This approval governs actions; it adds nothing to
+the deliverable.
