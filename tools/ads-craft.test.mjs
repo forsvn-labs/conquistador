@@ -167,7 +167,7 @@ test('every strong Google set passes the RSA checker without errors and repeats 
     const run = spawnSync(process.execPath, [join(root, 'runtime/bin/conquistador.js'), 'check', file, '--channel', 'google-ads', '--json'], { encoding: 'utf8' });
     const errors = JSON.parse(run.stdout || '[]').filter(item => item.severity === 'error');
     assert.deepEqual(errors.map(item => `${item.rule}: ${item.snippet}`), [], set.pair);
-    const headlines = [...(set.source.split(/^Headlines:/m)[1] ?? '').split(/^Descriptions:/m)[0].matchAll(/^\d+\.\s+(.+)$/gm)].map(match => match[1].toLowerCase());
+    const headlines = [...(set.source.split(/^#### Headlines$/m)[1] ?? '').split(/^#### Descriptions$/m)[0].matchAll(/^\d+\.\s+(.+)$/gm)].map(match => match[1].toLowerCase());
     assert.ok(headlines.length >= 8, `${set.pair}: ${headlines.length} headlines`);
     assert.equal(new Set(headlines).size, headlines.length, `${set.pair}: repeated headline`);
   });
