@@ -15,7 +15,11 @@
 // 13. "Write three Meta ads for our app" or a Facebook and Instagram ad request reaches `social` first,
 //     or an organic post request reaches `ads`;
 // 14. an ads brief drops the craft reference without naming it, or exceeds the byte budget;
-// 15. a relative link in the owned files is broken, or the routing contract no longer builds.
+// 15. a relative link in the owned files is broken, or the routing contract no longer builds;
+// 16. the craft tells the writer to leave facts for other variations, though a person sees only one;
+// 17. a strong Meta or TikTok variation does not stand alone: it omits the product, the offer terms
+//     the facts supply, or a reason to believe (quote, rating, or median result) the facts supply;
+// 18. an annotation still teaches that proof or a fact appears in only one variation.
 // Text copied from private sources is checked outside this repository, because those sources are private.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
@@ -48,9 +52,10 @@ const pairs = pairFiles.flatMap(path => read(path).split(/^## /m).slice(1).map(s
   path: relative(root, path),
   title: section.split('\n')[0].trim(),
   section,
+  facts: (section.match(/^Facts: ([\s\S]*?)\n\n/m)?.[1] ?? '').replace(/\s+/g, ' '),
   strong: [...section.matchAll(/```ad-(meta|google|linkedin|tiktok)\n([\s\S]*?)```/g)].map(match => ({ platform: match[1], source: match[2] })),
 })));
-const strongSets = pairs.flatMap(pair => pair.strong.map(set => ({ ...set, pair: `${pair.path} "${pair.title}"` })));
+const strongSets = pairs.flatMap(pair => pair.strong.map(set => ({ ...set, facts: pair.facts, pair: `${pair.path} "${pair.title}"` })));
 const field = (block, name) => {
   const lines = block.split('\n');
   const start = lines.findIndex(line => line.startsWith(`${name}:`));
@@ -68,6 +73,7 @@ const variations = set => set.source.split(/^### /m).slice(1).map(block => ({
   text: field(block, 'Primary text') ?? field(block, 'Intro text') ?? field(block, 'Ad text') ?? '',
   headline: field(block, 'Headline'),
   opening: field(block, 'Opening'),
+  body: field(block, 'Body'),
 }));
 const firstLine = text => text.split('\n').find(line => line.trim())?.trim() ?? '';
 const length = text => [...text].length;
@@ -124,6 +130,51 @@ test('strong sets give each variation its own angle and its own opening', () => 
     assert.ok(product, `${set.pair}: name the product on a "Product:" line`);
     assert.ok(openings.filter(line => line.startsWith(product)).length <= 1, `${set.pair}: opens with the product name more than once`);
   }
+});
+
+test('the craft makes each variation stand alone instead of leaving facts for other variations', () => {
+  const leaveForOthers = /waits for another variation|leaves out|one angle, one proof|the one fact each angle needs|one proof and mechanism|the one concrete fact or quote its angle needs/i;
+  for (const path of ['ENTRY.md', 'references/ad-craft.md', 'references/anti-patterns.md', 'references/rubric.md', 'agents/composer.md']) {
+    assert.doesNotMatch(read(join(ads, path)), leaveForOthers, path);
+  }
+  for (const path of ['ENTRY.md', 'references/ad-craft.md', 'agents/composer.md']) {
+    const text = read(join(ads, path));
+    assert.match(text, /stands? alone/i, `${path}: each variation stands alone`);
+    assert.match(text, /what the product does/i, `${path}: what the product does`);
+    assert.match(text, /reason to believe/i, `${path}: a reason to believe`);
+    assert.match(text, /offer terms/i, `${path}: the offer terms`);
+  }
+});
+
+test('every strong Meta and TikTok variation carries the product, the offer, and a reason to believe', () => {
+  const offer = /\$\d|\bfree\b|\btrial\b|\breturn|send (?:it|them) back/i;
+  const gaps = [];
+  for (const set of strongSets.filter(item => item.platform === 'meta' || item.platform === 'tiktok')) {
+    const { facts } = set;
+    assert.ok(facts, `${set.pair}: a "Facts:" paragraph`);
+    const product = set.source.match(/^Product: (.+)$/m)[1].trim();
+    const proof = [
+      ...[...facts.matchAll(/"([^"]{8,})"/g)].map(match => match[1].slice(0, 20)),
+      ...[...facts.matchAll(/\b\d\.\d(?= stars?\b| from\b)/g)].map(match => match[0]),
+      ...facts.split(/(?<=\.) /).filter(sentence => /median/i.test(sentence))
+        .flatMap(sentence => [...sentence.matchAll(/\b\d[\d,]* (?:minutes|hours|business days|days)\b/g)].map(match => match[0])),
+    ];
+    for (const item of variations(set)) {
+      const copy = [item.text, item.headline, item.opening, item.body].filter(Boolean).join('\n');
+      const where = `${set.pair} "${item.angle}"`;
+      if (!copy.includes(product)) gaps.push(`${where}: never names ${product}`);
+      if (offer.test(facts) && !offer.test(copy)) gaps.push(`${where}: no offer terms, though the facts supply them`);
+      if (proof.length && !proof.some(marker => copy.includes(marker))) gaps.push(`${where}: no reason to believe from ${proof.join(' | ')}`);
+    }
+  }
+  assert.deepEqual(gaps, []);
+});
+
+test('annotations do not teach that a fact appears in only one variation', () => {
+  for (const path of pairFiles) {
+    assert.doesNotMatch(read(path), /appears once|adds the one fact its video needs/i, relative(root, path));
+  }
+  assert.match(read(join(pairDir, 'ad-sets-social.md')), /sees only (?:one|this)/i, 'the social pairs explain why each variation stands alone');
 });
 
 test('strong ad copy carries no source text, no period text, and no hedges', () => {
