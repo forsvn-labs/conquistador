@@ -56,7 +56,7 @@ export function mapFor(target) {
   const { name, directory, prefix, skip = () => false, linkBase } = typeof target === 'string' ? mapTargets().find(item => item.name === target && !item.mode && !item.play) : target;
   const method = target.play ? null : contract.methods[name];
   // A split mode's required files are the merged command's conditions for that mode.
-  const modeRequired = target.mode ? (method?.resourceConditions ?? []).filter(item => item.when.startsWith(`Mode ${target.mode}:`)).map(item => item.path) : [];
+  const modeRequired = target.mode ? (method?.resourceConditions ?? []).filter(item => item.when?.startsWith(`Mode ${target.mode}:`)).map(item => item.path) : [];
   const required = new Set([...(method?.requiredResources ?? []), ...modeRequired].filter(path => path.startsWith(`skills/${prefix}/`)).map(path => path.slice(`skills/${prefix}/`.length)));
   const entries = files(directory).filter(key => !skip(key)).map(key => {
     const info = describe(readFileSync(join(directory, key), 'utf8'));

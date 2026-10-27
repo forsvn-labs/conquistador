@@ -7,6 +7,7 @@
     "skills/conquistador/standards/safety.md",
     "skills/conquistador/standards/context.md"
   ],
+  "defaultResourceCondition": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked.",
   "channelLocks": {
     "linkedin": {
       "ads": "ads",
@@ -132,64 +133,49 @@
       ],
       "resourceConditions": [
         {
-          "path": "skills/conquistador/commands/ads/references/earn-the-impression.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/ads/references/earn-the-impression.md"
         },
         {
-          "path": "skills/conquistador/commands/ads/agents/strategist.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/ads/agents/strategist.md"
         },
         {
-          "path": "skills/conquistador/commands/ads/agents/composer.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/ads/agents/composer.md"
         },
         {
-          "path": "skills/conquistador/commands/ads/agents/format-checker.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/ads/agents/format-checker.md"
         },
         {
-          "path": "skills/conquistador/commands/ads/agents/voice-auditor.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/ads/agents/voice-auditor.md"
         },
         {
-          "path": "skills/conquistador/commands/ads/agents/critic.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/ads/agents/critic.md"
         },
         {
-          "path": "skills/conquistador/commands/ads/references/ad-intelligence/meta-cold-traffic.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/ads/references/ad-intelligence/meta-cold-traffic.md"
         },
         {
-          "path": "skills/conquistador/commands/ads/references/ad-intelligence/meta-retargeting.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/ads/references/ad-intelligence/meta-retargeting.md"
         },
         {
-          "path": "skills/conquistador/commands/ads/references/ad-intelligence/google-ads.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/ads/references/ad-intelligence/google-ads.md"
         },
         {
-          "path": "skills/conquistador/commands/ads/references/ad-intelligence/linkedin-ads.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/ads/references/ad-intelligence/linkedin-ads.md"
         },
         {
-          "path": "skills/conquistador/commands/ads/references/ad-intelligence/tiktok-ads.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/ads/references/ad-intelligence/tiktok-ads.md"
         },
         {
-          "path": "skills/conquistador/commands/ads/references/ad-intelligence/creative-cadence.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/ads/references/ad-intelligence/creative-cadence.md"
         },
         {
-          "path": "skills/conquistador/commands/ads/references/format-spec.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/ads/references/format-spec.md"
         },
         {
-          "path": "skills/conquistador/commands/ads/references/policy-floor.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/ads/references/policy-floor.md"
         },
         {
-          "path": "skills/conquistador/commands/ads/references/message-transmutation.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/ads/references/message-transmutation.md"
         },
         {
           "path": "skills/conquistador/commands/ads/references/ad-intelligence/apple-search-ads.md",
@@ -260,84 +246,64 @@
       ],
       "resourceConditions": [
         {
-          "path": "skills/conquistador/commands/architect/agents/stack-selection-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/architect/agents/stack-selection-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/architect/agents/infrastructure-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/architect/agents/infrastructure-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/architect/agents/schema-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/architect/agents/schema-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/architect/agents/api-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/architect/agents/api-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/architect/agents/integration-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/architect/agents/integration-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/architect/agents/scaling-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/architect/agents/scaling-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/architect/agents/critic-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/architect/agents/critic-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/architect/references/report-template.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/architect/references/report-template.md"
         },
         {
-          "path": "skills/conquistador/commands/architect/references/dependency-classification.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/architect/references/dependency-classification.md"
         },
         {
-          "path": "skills/conquistador/commands/architect/references/intake-prompts.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/architect/references/intake-prompts.md"
         },
         {
-          "path": "skills/conquistador/commands/architect/references/tech-stack-patterns.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/architect/references/tech-stack-patterns.md"
         },
         {
-          "path": "skills/conquistador/commands/architect/references/tech-stack-matrix.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/architect/references/tech-stack-matrix.md"
         },
         {
-          "path": "skills/conquistador/commands/architect/references/file-structure-patterns.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/architect/references/file-structure-patterns.md"
         },
         {
-          "path": "skills/conquistador/commands/architect/references/database-patterns.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/architect/references/database-patterns.md"
         },
         {
-          "path": "skills/conquistador/commands/architect/references/api-patterns.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/architect/references/api-patterns.md"
         },
         {
-          "path": "skills/conquistador/commands/architect/references/auth-patterns.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/architect/references/auth-patterns.md"
         },
         {
-          "path": "skills/conquistador/commands/architect/references/deployment-patterns.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/architect/references/deployment-patterns.md"
         },
         {
-          "path": "skills/conquistador/commands/architect/references/failure-modes.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/architect/references/failure-modes.md"
         },
         {
-          "path": "skills/conquistador/commands/architect/references/interaction-edge-cases.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/architect/references/interaction-edge-cases.md"
         },
         {
-          "path": "skills/conquistador/commands/architect/references/security-patterns.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/architect/references/security-patterns.md"
         }
       ],
       "optionalResources": [],
@@ -404,32 +370,25 @@
       ],
       "resourceConditions": [
         {
-          "path": "skills/conquistador/commands/article/agents/research.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/article/agents/research.md"
         },
         {
-          "path": "skills/conquistador/commands/article/agents/outline.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/article/agents/outline.md"
         },
         {
-          "path": "skills/conquistador/commands/article/agents/draft.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/article/agents/draft.md"
         },
         {
-          "path": "skills/conquistador/commands/article/agents/critic.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/article/agents/critic.md"
         },
         {
-          "path": "skills/conquistador/commands/article/references/structure-patterns.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/article/references/structure-patterns.md"
         },
         {
-          "path": "skills/conquistador/commands/article/references/anti-collapse.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/article/references/anti-collapse.md"
         },
         {
-          "path": "skills/conquistador/commands/article/references/format-conventions.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/article/references/format-conventions.md"
         }
       ],
       "optionalResources": [],
@@ -481,32 +440,25 @@
       ],
       "resourceConditions": [
         {
-          "path": "skills/conquistador/commands/audit/references/audit-flow.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/audit/references/audit-flow.md"
         },
         {
-          "path": "skills/conquistador/commands/audit/references/noise-filter.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/audit/references/noise-filter.md"
         },
         {
-          "path": "skills/conquistador/commands/audit/references/report-template.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/audit/references/report-template.md"
         },
         {
-          "path": "skills/conquistador/commands/audit/references/fix-routing.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/audit/references/fix-routing.md"
         },
         {
-          "path": "skills/conquistador/commands/audit/references/polish-flow.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/audit/references/polish-flow.md"
         },
         {
-          "path": "skills/conquistador/commands/audit/references/reverify-gate.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/audit/references/reverify-gate.md"
         },
         {
-          "path": "skills/conquistador/commands/audit/references/quality-feedback-protocol.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/audit/references/quality-feedback-protocol.md"
         }
       ],
       "optionalResources": [],
@@ -578,48 +530,37 @@
       ],
       "resourceConditions": [
         {
-          "path": "skills/conquistador/commands/brand/references/narrative-tension.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/brand/references/narrative-tension.md"
         },
         {
-          "path": "skills/conquistador/commands/brand/agents/strategy-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/brand/agents/strategy-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/brand/agents/personality-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/brand/agents/personality-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/brand/agents/voice-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/brand/agents/voice-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/brand/agents/visual-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/brand/agents/visual-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/brand/agents/token-architect-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/brand/agents/token-architect-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/brand/agents/component-token-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/brand/agents/component-token-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/brand/agents/accessibility-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/brand/agents/accessibility-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/brand/agents/critic-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/brand/agents/critic-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/brand/references/format-conventions.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/brand/references/format-conventions.md"
         },
         {
-          "path": "skills/conquistador/commands/brand/references/platform-surfaces.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/brand/references/platform-surfaces.md"
         }
       ],
       "optionalResources": [],
@@ -675,28 +616,22 @@
       ],
       "resourceConditions": [
         {
-          "path": "skills/conquistador/commands/budget/agents/allocator.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/budget/agents/allocator.md"
         },
         {
-          "path": "skills/conquistador/commands/budget/agents/constraint-checker.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/budget/agents/constraint-checker.md"
         },
         {
-          "path": "skills/conquistador/commands/budget/agents/critic.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/budget/agents/critic.md"
         },
         {
-          "path": "skills/conquistador/commands/budget/references/marginal-return-model.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/budget/references/marginal-return-model.md"
         },
         {
-          "path": "skills/conquistador/commands/budget/references/next-dollar-earns-most.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/budget/references/next-dollar-earns-most.md"
         },
         {
-          "path": "skills/conquistador/commands/budget/references/format-conventions.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/budget/references/format-conventions.md"
         }
       ],
       "optionalResources": [
@@ -924,48 +859,37 @@
       ],
       "resourceConditions": [
         {
-          "path": "skills/conquistador/commands/campaign/agents/pillar-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/campaign/agents/pillar-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/campaign/agents/angle-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/campaign/agents/angle-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/campaign/agents/channel-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/campaign/agents/channel-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/campaign/agents/timeline-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/campaign/agents/timeline-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/campaign/agents/launch-sequencing-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/campaign/agents/launch-sequencing-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/campaign/agents/critic-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/campaign/agents/critic-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/campaign/references/3d-angle-framework.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/campaign/references/3d-angle-framework.md"
         },
         {
-          "path": "skills/conquistador/commands/campaign/references/channel-strategy.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/campaign/references/channel-strategy.md"
         },
         {
-          "path": "skills/conquistador/commands/campaign/references/platform-channels.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/campaign/references/platform-channels.md"
         },
         {
-          "path": "skills/conquistador/commands/campaign/references/growth-play-patterns.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/campaign/references/growth-play-patterns.md"
         },
         {
-          "path": "skills/conquistador/commands/campaign/references/pillars-before-angles.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/campaign/references/pillars-before-angles.md"
         },
         {
           "path": "skills/conquistador/commands/campaign/references/distribution-models/creator-program.md",
@@ -1072,28 +996,22 @@
       ],
       "resourceConditions": [
         {
-          "path": "skills/conquistador/commands/channels/agents/evidence-intake-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/channels/agents/evidence-intake-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/channels/agents/benchmark-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/channels/agents/benchmark-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/channels/agents/synthesis-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/channels/agents/synthesis-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/channels/agents/recommendation-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/channels/agents/recommendation-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/channels/agents/critic-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/channels/agents/critic-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/channels/references/scoring-rubrics.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/channels/references/scoring-rubrics.md"
         },
         {
           "path": "skills/conquistador/commands/channels/references/creator-channel-fit.md",
@@ -1223,64 +1141,49 @@
       ],
       "resourceConditions": [
         {
-          "path": "skills/conquistador/commands/convert/agents/conversion-tree-builder-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/convert/agents/conversion-tree-builder-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/convert/agents/conversion-external-check-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/convert/agents/conversion-external-check-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/convert/agents/conversion-hypothesis-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/convert/agents/conversion-hypothesis-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/convert/agents/conversion-data-mapper-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/convert/agents/conversion-data-mapper-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/convert/agents/conversion-verdict-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/convert/agents/conversion-verdict-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/convert/agents/conversion-critic-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/convert/agents/conversion-critic-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/convert/references/hypothesis-framework.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/convert/references/hypothesis-framework.md"
         },
         {
-          "path": "skills/conquistador/commands/convert/references/logic-tree-examples.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/convert/references/logic-tree-examples.md"
         },
         {
-          "path": "skills/conquistador/commands/convert/agents/landing-metric-ingest-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/convert/agents/landing-metric-ingest-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/convert/agents/landing-diagnosis-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/convert/agents/landing-diagnosis-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/convert/agents/landing-recommendation-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/convert/agents/landing-recommendation-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/convert/agents/landing-critic-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/convert/agents/landing-critic-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/convert/references/anti-sycophancy.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/convert/references/anti-sycophancy.md"
         },
         {
-          "path": "skills/conquistador/commands/convert/references/conversion-diagnosis-anti-patterns.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/convert/references/conversion-diagnosis-anti-patterns.md"
         },
         {
-          "path": "skills/conquistador/commands/convert/references/landing-anti-patterns.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/convert/references/landing-anti-patterns.md"
         },
         {
           "path": "skills/conquistador/commands/convert/references/app-onboarding-paywall.md",
@@ -1391,8 +1294,7 @@
           "when": "Load for a sales page or sales letter only. All other copy is a pass-through and loads no resource."
         },
         {
-          "path": "skills/conquistador/commands/copy/references/lifecycle-sequences.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/copy/references/lifecycle-sequences.md"
         }
       ],
       "optionalResources": [],
@@ -1475,104 +1377,79 @@
       ],
       "resourceConditions": [
         {
-          "path": "skills/conquistador/commands/creative/agents/brand-anchor-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/creative/agents/brand-anchor-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/creative/agents/concept-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/creative/agents/concept-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/creative/agents/copy-anchor-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/creative/agents/copy-anchor-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/creative/agents/brief-synth-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/creative/agents/brief-synth-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/creative/agents/prompt-craft-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/creative/agents/prompt-craft-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/creative/agents/figma-spec-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/creative/agents/figma-spec-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/creative/agents/critic-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/creative/agents/critic-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/creative/references/asset-types.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/creative/references/asset-types.md"
         },
         {
-          "path": "skills/conquistador/commands/creative/references/platform-modules.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/creative/references/platform-modules.md"
         },
         {
-          "path": "skills/conquistador/commands/creative/references/prompt-patterns.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/creative/references/prompt-patterns.md"
         },
         {
-          "path": "skills/conquistador/commands/creative/references/failure-modes.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/creative/references/failure-modes.md"
         },
         {
-          "path": "skills/conquistador/commands/creative/agents/prompt-author-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/creative/agents/prompt-author-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/creative/agents/asset-critic-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/creative/agents/asset-critic-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/creative/references/asset-critical-gates.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/creative/references/asset-critical-gates.md"
         },
         {
-          "path": "skills/conquistador/commands/creative/references/image-engine-dialects.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/creative/references/image-engine-dialects.md"
         },
         {
-          "path": "skills/conquistador/commands/creative/references/render-engines.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/creative/references/render-engines.md"
         },
         {
-          "path": "skills/conquistador/commands/creative/references/production-pattern.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/creative/references/production-pattern.md"
         },
         {
-          "path": "skills/conquistador/commands/creative/references/asset-anti-patterns.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/creative/references/asset-anti-patterns.md"
         },
         {
-          "path": "skills/conquistador/commands/creative/agents/ooh-concept-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/creative/agents/ooh-concept-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/creative/agents/ooh-spec-legibility-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/creative/agents/ooh-spec-legibility-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/creative/agents/ooh-critic-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/creative/agents/ooh-critic-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/creative/references/ooh-format-conventions.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/creative/references/ooh-format-conventions.md"
         },
         {
-          "path": "skills/conquistador/commands/creative/references/ooh-anti-patterns.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/creative/references/ooh-anti-patterns.md"
         },
         {
-          "path": "skills/conquistador/commands/creative/references/roughdraft-review-protocol.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/creative/references/roughdraft-review-protocol.md"
         },
         {
-          "path": "skills/conquistador/commands/creative/references/reviewable-artifact-contract.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/creative/references/reviewable-artifact-contract.md"
         }
       ],
       "optionalResources": [],
@@ -1646,52 +1523,40 @@
       ],
       "resourceConditions": [
         {
-          "path": "skills/conquistador/commands/critique/references/review-target-and-closeout.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/critique/references/review-target-and-closeout.md"
         },
         {
-          "path": "skills/conquistador/commands/critique/agents/reviewer-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/critique/agents/reviewer-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/critique/agents/security-reviewer-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/critique/agents/security-reviewer-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/critique/agents/performance-reviewer-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/critique/agents/performance-reviewer-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/critique/agents/correctness-reviewer-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/critique/agents/correctness-reviewer-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/critique/references/specialist-lenses.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/critique/references/specialist-lenses.md"
         },
         {
-          "path": "skills/conquistador/commands/critique/references/critic-consensus.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/critique/references/critic-consensus.md"
         },
         {
-          "path": "skills/conquistador/commands/critique/references/noise-filter.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/critique/references/noise-filter.md"
         },
         {
-          "path": "skills/conquistador/commands/critique/references/scope-drift.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/critique/references/scope-drift.md"
         },
         {
-          "path": "skills/conquistador/commands/critique/agents/resolver-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/critique/agents/resolver-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/critique/references/report-template.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/critique/references/report-template.md"
         },
         {
-          "path": "skills/conquistador/commands/critique/references/quality-feedback-protocol.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/critique/references/quality-feedback-protocol.md"
         }
       ],
       "optionalResources": [
@@ -1755,56 +1620,43 @@
       ],
       "resourceConditions": [
         {
-          "path": "skills/conquistador/commands/decide/references/decision-tree.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/decide/references/decision-tree.md"
         },
         {
-          "path": "skills/conquistador/commands/decide/agents/optimist-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/decide/agents/optimist-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/decide/agents/skeptic-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/decide/agents/skeptic-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/decide/agents/synthesizer-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/decide/agents/synthesizer-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/decide/agents/architect-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/decide/agents/architect-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/decide/agents/pragmatist-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/decide/agents/pragmatist-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/decide/agents/critic-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/decide/agents/critic-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/decide/references/debate-rounds.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/decide/references/debate-rounds.md"
         },
         {
-          "path": "skills/conquistador/commands/decide/references/anti-sycophancy.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/decide/references/anti-sycophancy.md"
         },
         {
-          "path": "skills/conquistador/commands/decide/references/poll-protocol.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/decide/references/poll-protocol.md"
         },
         {
-          "path": "skills/conquistador/commands/decide/references/idea-ranking-core.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/decide/references/idea-ranking-core.md"
         },
         {
-          "path": "skills/conquistador/commands/decide/agents/resolver-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/decide/agents/resolver-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/decide/references/report-template.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/decide/references/report-template.md"
         },
         {
           "path": "skills/conquistador/commands/decide/references/misjudgment-check.md",
@@ -1867,44 +1719,34 @@
       ],
       "resourceConditions": [
         {
-          "path": "skills/conquistador/commands/diagnose/agents/tree-builder-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/diagnose/agents/tree-builder-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/diagnose/agents/external-check-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/diagnose/agents/external-check-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/diagnose/agents/hypothesis-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/diagnose/agents/hypothesis-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/diagnose/agents/data-mapper-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/diagnose/agents/data-mapper-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/diagnose/agents/verdict-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/diagnose/agents/verdict-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/diagnose/agents/critic-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/diagnose/agents/critic-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/diagnose/references/diagnosis-playbook.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/diagnose/references/diagnosis-playbook.md"
         },
         {
-          "path": "skills/conquistador/commands/diagnose/references/hypothesis-framework.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/diagnose/references/hypothesis-framework.md"
         },
         {
-          "path": "skills/conquistador/commands/diagnose/references/logic-tree-examples.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/diagnose/references/logic-tree-examples.md"
         },
         {
-          "path": "skills/conquistador/commands/diagnose/references/format-conventions.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/diagnose/references/format-conventions.md"
         }
       ],
       "optionalResources": [
@@ -1960,48 +1802,37 @@
       ],
       "resourceConditions": [
         {
-          "path": "skills/conquistador/commands/docs/agents/scanner-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/docs/agents/scanner-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/docs/agents/audience-profiler-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/docs/agents/audience-profiler-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/docs/agents/concept-extractor-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/docs/agents/concept-extractor-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/docs/agents/writer-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/docs/agents/writer-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/docs/references/doc-template.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/docs/references/doc-template.md"
         },
         {
-          "path": "skills/conquistador/commands/docs/agents/staleness-checker-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/docs/agents/staleness-checker-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/docs/agents/critic-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/docs/agents/critic-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/docs/references/intake-prompts.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/docs/references/intake-prompts.md"
         },
         {
-          "path": "skills/conquistador/commands/docs/references/artifact-paths.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/docs/references/artifact-paths.md"
         },
         {
-          "path": "skills/conquistador/commands/docs/references/report-template.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/docs/references/report-template.md"
         },
         {
-          "path": "skills/conquistador/commands/docs/references/ship-log-template.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/docs/references/ship-log-template.md"
         }
       ],
       "optionalResources": [
@@ -2081,20 +1912,16 @@
       ],
       "resourceConditions": [
         {
-          "path": "skills/conquistador/commands/event/agents/segment-planner-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/event/agents/segment-planner-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/event/agents/logistics-director-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/event/agents/logistics-director-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/event/agents/critic-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/event/agents/critic-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/event/references/format-conventions.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/event/references/format-conventions.md"
         }
       ],
       "optionalResources": [
@@ -2155,12 +1982,10 @@
       ],
       "resourceConditions": [
         {
-          "path": "skills/conquistador/commands/factcheck/references/provenance.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/factcheck/references/provenance.md"
         },
         {
-          "path": "skills/conquistador/commands/factcheck/references/contradiction-protocol.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/factcheck/references/contradiction-protocol.md"
         }
       ],
       "optionalResources": [
@@ -2263,44 +2088,34 @@
       ],
       "resourceConditions": [
         {
-          "path": "skills/conquistador/commands/flow/references/platform-touchpoints.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/flow/references/platform-touchpoints.md"
         },
         {
-          "path": "skills/conquistador/commands/flow/references/intake-prompts.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/flow/references/intake-prompts.md"
         },
         {
-          "path": "skills/conquistador/commands/flow/agents/structure-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/flow/agents/structure-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/flow/agents/edge-case-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/flow/agents/edge-case-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/flow/agents/diagram-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/flow/agents/diagram-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/flow/agents/wireframe-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/flow/agents/wireframe-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/flow/agents/validation-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/flow/agents/validation-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/flow/agents/critic-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/flow/agents/critic-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/flow/references/research-checklist.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/flow/references/research-checklist.md"
         },
         {
-          "path": "skills/conquistador/commands/flow/references/report-template.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/flow/references/report-template.md"
         }
       ],
       "optionalResources": [
@@ -2365,48 +2180,37 @@
       ],
       "resourceConditions": [
         {
-          "path": "skills/conquistador/commands/funnel/agents/model-selection-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/funnel/agents/model-selection-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/funnel/agents/baseline-collector-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/funnel/agents/baseline-collector-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/funnel/agents/target-setter-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/funnel/agents/target-setter-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/funnel/agents/sanity-check-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/funnel/agents/sanity-check-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/funnel/agents/stress-test-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/funnel/agents/stress-test-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/funnel/agents/critic-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/funnel/agents/critic-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/funnel/references/funnel-models.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/funnel/references/funnel-models.md"
         },
         {
-          "path": "skills/conquistador/commands/funnel/references/benchmarks.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/funnel/references/benchmarks.md"
         },
         {
-          "path": "skills/conquistador/commands/funnel/references/unit-economics.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/funnel/references/unit-economics.md"
         },
         {
-          "path": "skills/conquistador/commands/funnel/references/stress-tests.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/funnel/references/stress-tests.md"
         },
         {
-          "path": "skills/conquistador/commands/funnel/references/format-conventions.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/funnel/references/format-conventions.md"
         }
       ],
       "optionalResources": [
@@ -2481,44 +2285,34 @@
       ],
       "resourceConditions": [
         {
-          "path": "skills/conquistador/commands/ideas/agents/platform-scout-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/ideas/agents/platform-scout-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/ideas/references/scout-protocol.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/ideas/references/scout-protocol.md"
         },
         {
-          "path": "skills/conquistador/commands/ideas/agents/audience-fit-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/ideas/agents/audience-fit-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/ideas/agents/pattern-extractor-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/ideas/agents/pattern-extractor-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/ideas/agents/audio-trend-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/ideas/agents/audio-trend-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/ideas/agents/synthesis-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/ideas/agents/synthesis-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/ideas/agents/critic-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/ideas/agents/critic-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/ideas/references/scoring-rubrics.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/ideas/references/scoring-rubrics.md"
         },
         {
-          "path": "skills/conquistador/commands/ideas/references/format-conventions.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/ideas/references/format-conventions.md"
         },
         {
-          "path": "skills/conquistador/commands/ideas/references/clipping-and-live.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/ideas/references/clipping-and-live.md"
         }
       ],
       "optionalResources": [
@@ -2606,60 +2400,46 @@
       ],
       "resourceConditions": [
         {
-          "path": "skills/conquistador/commands/measure/references/measurement-design-contract.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/measure/references/measurement-design-contract.md"
         },
         {
-          "path": "skills/conquistador/commands/measure/agents/measure-metric-ingest-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/measure/agents/measure-metric-ingest-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/measure/agents/measure-diagnosis-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/measure/agents/measure-diagnosis-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/measure/agents/pack-feedback-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/measure/agents/pack-feedback-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/measure/agents/measure-critic-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/measure/agents/measure-critic-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/measure/references/anti-sycophancy.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/measure/references/anti-sycophancy.md"
         },
         {
-          "path": "skills/conquistador/commands/measure/references/legibility-convention.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/measure/references/legibility-convention.md"
         },
         {
-          "path": "skills/conquistador/commands/measure/references/performance-data.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/measure/references/performance-data.md"
         },
         {
-          "path": "skills/conquistador/commands/measure/agents/campaign-metric-ingest-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/measure/agents/campaign-metric-ingest-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/measure/agents/campaign-diagnosis-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/measure/agents/campaign-diagnosis-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/measure/agents/campaign-recommendation-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/measure/agents/campaign-recommendation-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/measure/agents/campaign-critic-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/measure/agents/campaign-critic-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/measure/references/measure-anti-patterns.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/measure/references/measure-anti-patterns.md"
         },
         {
-          "path": "skills/conquistador/commands/measure/references/campaign-anti-patterns.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/measure/references/campaign-anti-patterns.md"
         }
       ],
       "optionalResources": [
@@ -2785,44 +2565,34 @@
           "when": "Load when the channel is email."
         },
         {
-          "path": "skills/conquistador/commands/outreach/references/modes/no-pitch-research.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/outreach/references/modes/no-pitch-research.md"
         },
         {
-          "path": "skills/conquistador/commands/outreach/agents/signal-analyst.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/outreach/agents/signal-analyst.md"
         },
         {
-          "path": "skills/conquistador/commands/outreach/agents/strategist.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/outreach/agents/strategist.md"
         },
         {
-          "path": "skills/conquistador/commands/outreach/agents/proof-selector.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/outreach/agents/proof-selector.md"
         },
         {
-          "path": "skills/conquistador/commands/outreach/agents/composer.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/outreach/agents/composer.md"
         },
         {
-          "path": "skills/conquistador/commands/outreach/agents/voice-auditor.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/outreach/agents/voice-auditor.md"
         },
         {
-          "path": "skills/conquistador/commands/outreach/agents/critic.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/outreach/agents/critic.md"
         },
         {
-          "path": "skills/conquistador/commands/outreach/agents/reply-classifier.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/outreach/agents/reply-classifier.md"
         },
         {
-          "path": "skills/conquistador/commands/outreach/agents/reply-composer.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/outreach/agents/reply-composer.md"
         },
         {
-          "path": "skills/conquistador/commands/outreach/references/proof-types.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/outreach/references/proof-types.md"
         },
         {
           "path": "skills/conquistador/commands/outreach/references/frameworks/account-program.md",
@@ -2963,108 +2733,82 @@
       ],
       "resourceConditions": [
         {
-          "path": "skills/conquistador/commands/position/references/confidence-labeling.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/position/references/confidence-labeling.md"
         },
         {
-          "path": "skills/conquistador/commands/position/agents/voc-collector-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/position/agents/voc-collector-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/position/agents/persona-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/position/agents/persona-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/position/agents/pain-analysis-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/position/agents/pain-analysis-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/position/agents/habitat-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/position/agents/habitat-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/position/agents/decision-psychology-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/position/agents/decision-psychology-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/position/agents/synthesis-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/position/agents/synthesis-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/position/agents/icp-critic-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/position/agents/icp-critic-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/position/references/voice-of-customer.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/position/references/voice-of-customer.md"
         },
         {
-          "path": "skills/conquistador/commands/position/references/customer-interviews.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/position/references/customer-interviews.md"
         },
         {
-          "path": "skills/conquistador/commands/position/references/habitat-mapping.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/position/references/habitat-mapping.md"
         },
         {
-          "path": "skills/conquistador/commands/position/references/confidence-and-bias.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/position/references/confidence-and-bias.md"
         },
         {
-          "path": "skills/conquistador/commands/position/references/icp-format-conventions.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/position/references/icp-format-conventions.md"
         },
         {
-          "path": "skills/conquistador/commands/position/references/icp-anti-patterns.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/position/references/icp-anti-patterns.md"
         },
         {
-          "path": "skills/conquistador/commands/position/agents/trends-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/position/agents/trends-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/position/agents/sizing-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/position/agents/sizing-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/position/agents/competitor-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/position/agents/competitor-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/position/agents/consumer-landscape-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/position/agents/consumer-landscape-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/position/agents/cross-analysis-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/position/agents/cross-analysis-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/position/agents/opportunity-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/position/agents/opportunity-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/position/agents/market-critic-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/position/agents/market-critic-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/position/references/competitor-analysis-framework.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/position/references/competitor-analysis-framework.md"
         },
         {
-          "path": "skills/conquistador/commands/position/references/market-sizing-guide.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/position/references/market-sizing-guide.md"
         },
         {
-          "path": "skills/conquistador/commands/position/references/gap-analysis-template.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/position/references/gap-analysis-template.md"
         },
         {
-          "path": "skills/conquistador/commands/position/references/market-format-conventions.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/position/references/market-format-conventions.md"
         },
         {
-          "path": "skills/conquistador/commands/position/references/market-anti-patterns.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/position/references/market-anti-patterns.md"
         }
       ],
       "optionalResources": [],
@@ -3147,16 +2891,13 @@
       ],
       "resourceConditions": [
         {
-          "path": "skills/conquistador/commands/pricing/references/wtp-evidence.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/pricing/references/wtp-evidence.md"
         },
         {
-          "path": "skills/conquistador/commands/pricing/references/package-fences.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/pricing/references/package-fences.md"
         },
         {
-          "path": "skills/conquistador/commands/pricing/references/unit-economics-checks.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/pricing/references/unit-economics-checks.md"
         }
       ],
       "optionalResources": [
@@ -3219,64 +2960,49 @@
       ],
       "resourceConditions": [
         {
-          "path": "skills/conquistador/commands/prioritize/agents/research-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/prioritize/agents/research-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/prioritize/agents/initiative-generator-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/prioritize/agents/initiative-generator-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/prioritize/agents/unconventional-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/prioritize/agents/unconventional-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/prioritize/agents/ranking-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/prioritize/agents/ranking-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/prioritize/agents/ice-scoring-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/prioritize/agents/ice-scoring-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/prioritize/agents/cut-line-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/prioritize/agents/cut-line-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/prioritize/agents/critic-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/prioritize/agents/critic-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/prioritize/references/hypothesis-framework.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/prioritize/references/hypothesis-framework.md"
         },
         {
-          "path": "skills/conquistador/commands/prioritize/references/idea-ranking-core.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/prioritize/references/idea-ranking-core.md"
         },
         {
-          "path": "skills/conquistador/commands/prioritize/references/initiative-types.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/prioritize/references/initiative-types.md"
         },
         {
-          "path": "skills/conquistador/commands/prioritize/references/initiative-planning.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/prioritize/references/initiative-planning.md"
         },
         {
-          "path": "skills/conquistador/commands/prioritize/references/format-conventions.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/prioritize/references/format-conventions.md"
         },
         {
-          "path": "skills/conquistador/commands/prioritize/references/churn-playbook.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/prioritize/references/churn-playbook.md"
         },
         {
-          "path": "skills/conquistador/commands/prioritize/references/churn-cancel-flow-templates.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/prioritize/references/churn-cancel-flow-templates.md"
         },
         {
-          "path": "skills/conquistador/commands/prioritize/references/churn-health-score-guide.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/prioritize/references/churn-health-score-guide.md"
         }
       ],
       "optionalResources": [],
@@ -3715,116 +3441,88 @@
       ],
       "resourceConditions": [
         {
-          "path": "skills/conquistador/commands/seo/references/retrieval-layer-seo.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/seo/references/retrieval-layer-seo.md"
         },
         {
-          "path": "skills/conquistador/commands/seo/agents/crawl-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/seo/agents/crawl-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/seo/agents/foundations-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/seo/agents/foundations-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/seo/agents/content-quality-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/seo/agents/content-quality-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/seo/agents/authority-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/seo/agents/authority-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/seo/agents/ai-structure-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/seo/agents/ai-structure-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/seo/agents/ai-presence-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/seo/agents/ai-presence-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/seo/references/platform-intelligence/bing-readiness.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/seo/references/platform-intelligence/bing-readiness.md"
         },
         {
-          "path": "skills/conquistador/commands/seo/references/geo-citation-readiness-checklist.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/seo/references/geo-citation-readiness-checklist.md"
         },
         {
-          "path": "skills/conquistador/commands/seo/agents/programmatic-template-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/seo/agents/programmatic-template-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/seo/agents/programmatic-quality-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/seo/agents/programmatic-quality-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/seo/agents/comparison-page-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/seo/agents/comparison-page-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/seo/agents/aso-keyword-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/seo/agents/aso-keyword-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/seo/agents/aso-listing-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/seo/agents/aso-listing-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/seo/agents/aso-reviews-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/seo/agents/aso-reviews-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/seo/agents/aso-competitive-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/seo/agents/aso-competitive-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/seo/agents/prioritization-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/seo/agents/prioritization-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/seo/agents/critic-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/seo/agents/critic-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/seo/references/technical-audit.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/seo/references/technical-audit.md"
         },
         {
-          "path": "skills/conquistador/commands/seo/references/technical-crawler-checklist.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/seo/references/technical-crawler-checklist.md"
         },
         {
-          "path": "skills/conquistador/commands/seo/references/ai-seo.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/seo/references/ai-seo.md"
         },
         {
-          "path": "skills/conquistador/commands/seo/references/schema-reference.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/seo/references/schema-reference.md"
         },
         {
-          "path": "skills/conquistador/commands/seo/references/aso.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/seo/references/aso.md"
         },
         {
-          "path": "skills/conquistador/commands/seo/references/evidence-classes.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/seo/references/evidence-classes.md"
         },
         {
-          "path": "skills/conquistador/commands/seo/agents/eval-metric-ingest-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/seo/agents/eval-metric-ingest-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/seo/agents/eval-diagnosis-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/seo/agents/eval-diagnosis-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/seo/agents/eval-recommendation-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/seo/agents/eval-recommendation-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/seo/agents/eval-critic-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/seo/agents/eval-critic-agent.md"
         },
         {
           "path": "skills/conquistador/commands/seo/references/local-seo.md",
@@ -3889,52 +3587,40 @@
       ],
       "resourceConditions": [
         {
-          "path": "skills/conquistador/commands/shape/references/orchestration-steps.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/shape/references/orchestration-steps.md"
         },
         {
-          "path": "skills/conquistador/commands/shape/references/context-gathering.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/shape/references/context-gathering.md"
         },
         {
-          "path": "skills/conquistador/commands/shape/references/interview-techniques.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/shape/references/interview-techniques.md"
         },
         {
-          "path": "skills/conquistador/commands/shape/references/communication-discipline.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/shape/references/communication-discipline.md"
         },
         {
-          "path": "skills/conquistador/commands/shape/references/divergence-pass.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/shape/references/divergence-pass.md"
         },
         {
-          "path": "skills/conquistador/commands/shape/references/idea-ranking-core.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/shape/references/idea-ranking-core.md"
         },
         {
-          "path": "skills/conquistador/commands/shape/agents/idea-critic-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/shape/agents/idea-critic-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/shape/references/output-formats.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/shape/references/output-formats.md"
         },
         {
-          "path": "skills/conquistador/commands/shape/references/plan-review-modes.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/shape/references/plan-review-modes.md"
         },
         {
-          "path": "skills/conquistador/commands/shape/references/question-bank.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/shape/references/question-bank.md"
         },
         {
-          "path": "skills/conquistador/commands/shape/references/configuration.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/shape/references/configuration.md"
         },
         {
-          "path": "skills/conquistador/commands/shape/references/example-contracts.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/shape/references/example-contracts.md"
         }
       ],
       "optionalResources": [],
@@ -4011,36 +3697,28 @@
       ],
       "resourceConditions": [
         {
-          "path": "skills/conquistador/commands/social/agents/launch-copywriter-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/social/agents/launch-copywriter-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/social/agents/guard-checker-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/social/agents/guard-checker-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/social/agents/copywriter-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/social/agents/copywriter-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/social/agents/format-checker-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/social/agents/format-checker-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/social/agents/critic-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/social/agents/critic-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/social/references/hook-archetypes.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/social/references/hook-archetypes.md"
         },
         {
-          "path": "skills/conquistador/commands/social/references/legibility-convention.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/social/references/legibility-convention.md"
         },
         {
-          "path": "skills/conquistador/commands/social/references/why-this-works-convention.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/social/references/why-this-works-convention.md"
         },
         {
           "path": "skills/conquistador/commands/social/references/photo-slideshows.md",
@@ -4109,52 +3787,40 @@
       ],
       "resourceConditions": [
         {
-          "path": "skills/conquistador/commands/ui/agents/intake-validator-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/ui/agents/intake-validator-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/ui/agents/screen-inventory-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/ui/agents/screen-inventory-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/ui/agents/component-system-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/ui/agents/component-system-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/ui/agents/token-application-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/ui/agents/token-application-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/ui/agents/layout-state-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/ui/agents/layout-state-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/ui/agents/handoff-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/ui/agents/handoff-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/ui/agents/critic-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/ui/agents/critic-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/ui/references/format-conventions.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/ui/references/format-conventions.md"
         },
         {
-          "path": "skills/conquistador/commands/ui/references/component-patterns.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/ui/references/component-patterns.md"
         },
         {
-          "path": "skills/conquistador/commands/ui/references/layout-conventions.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/ui/references/layout-conventions.md"
         },
         {
-          "path": "skills/conquistador/commands/ui/references/token-application-patterns.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/ui/references/token-application-patterns.md"
         },
         {
-          "path": "skills/conquistador/commands/ui/references/house-token-bindings.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/ui/references/house-token-bindings.md"
         }
       ],
       "optionalResources": [
@@ -4249,152 +3915,115 @@
       ],
       "resourceConditions": [
         {
-          "path": "skills/conquistador/commands/video/agents/hook-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/video/agents/hook-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/video/agents/format-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/video/agents/format-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/video/agents/voc-extraction-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/video/agents/voc-extraction-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/video/agents/production-mode-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/video/agents/production-mode-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/video/agents/storyboard-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/video/agents/storyboard-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/video/agents/audio-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/video/agents/audio-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/video/agents/copy-pack-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/video/agents/copy-pack-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/video/agents/platform-tailor-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/video/agents/platform-tailor-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/video/agents/critic-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/video/agents/critic-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/video/references/storyboard-grammar.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/video/references/storyboard-grammar.md"
         },
         {
-          "path": "skills/conquistador/commands/video/references/caption-cta-rules.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/video/references/caption-cta-rules.md"
         },
         {
-          "path": "skills/conquistador/commands/video/references/production-modes.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/video/references/production-modes.md"
         },
         {
-          "path": "skills/conquistador/commands/video/references/hook-archetypes.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/video/references/hook-archetypes.md"
         },
         {
-          "path": "skills/conquistador/commands/video/references/platform-intelligence/CONTRACT.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/video/references/platform-intelligence/CONTRACT.md"
         },
         {
-          "path": "skills/conquistador/commands/video/references/platform-intelligence/facebook.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/video/references/platform-intelligence/facebook.md"
         },
         {
-          "path": "skills/conquistador/commands/video/references/platform-intelligence/founder-demo.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/video/references/platform-intelligence/founder-demo.md"
         },
         {
-          "path": "skills/conquistador/commands/video/references/platform-intelligence/linkedin.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/video/references/platform-intelligence/linkedin.md"
         },
         {
-          "path": "skills/conquistador/commands/video/references/platform-intelligence/linkedin-launch.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/video/references/platform-intelligence/linkedin-launch.md"
         },
         {
-          "path": "skills/conquistador/commands/video/references/platform-intelligence/motion-background.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/video/references/platform-intelligence/motion-background.md"
         },
         {
-          "path": "skills/conquistador/commands/video/references/platform-intelligence/newsletter.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/video/references/platform-intelligence/newsletter.md"
         },
         {
-          "path": "skills/conquistador/commands/video/references/platform-intelligence/producthunt.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/video/references/platform-intelligence/producthunt.md"
         },
         {
-          "path": "skills/conquistador/commands/video/references/platform-intelligence/reddit.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/video/references/platform-intelligence/reddit.md"
         },
         {
-          "path": "skills/conquistador/commands/video/references/platform-intelligence/reels.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/video/references/platform-intelligence/reels.md"
         },
         {
-          "path": "skills/conquistador/commands/video/references/platform-intelligence/shorts.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/video/references/platform-intelligence/shorts.md"
         },
         {
-          "path": "skills/conquistador/commands/video/references/platform-intelligence/showhn.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/video/references/platform-intelligence/showhn.md"
         },
         {
-          "path": "skills/conquistador/commands/video/references/platform-intelligence/tiktok.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/video/references/platform-intelligence/tiktok.md"
         },
         {
-          "path": "skills/conquistador/commands/video/references/platform-intelligence/ugc.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/video/references/platform-intelligence/ugc.md"
         },
         {
-          "path": "skills/conquistador/commands/video/references/platform-intelligence/x.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/video/references/platform-intelligence/x.md"
         },
         {
-          "path": "skills/conquistador/commands/video/references/platform-intelligence/x-launch.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/video/references/platform-intelligence/x-launch.md"
         },
         {
-          "path": "skills/conquistador/commands/video/references/platform-intelligence/youtube.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/video/references/platform-intelligence/youtube.md"
         },
         {
-          "path": "skills/conquistador/commands/video/agents/prompt-author-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/video/agents/prompt-author-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/video/agents/produce-critic-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/video/agents/produce-critic-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/video/references/video-brief-schema.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/video/references/video-brief-schema.md"
         },
         {
-          "path": "skills/conquistador/commands/video/references/production-lanes.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/video/references/production-lanes.md"
         },
         {
-          "path": "skills/conquistador/commands/video/references/production-pattern.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/video/references/production-pattern.md"
         },
         {
-          "path": "skills/conquistador/commands/video/references/produce-quality-gate.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/video/references/produce-quality-gate.md"
         },
         {
-          "path": "skills/conquistador/commands/video/references/produce-anti-patterns.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/video/references/produce-anti-patterns.md"
         }
       ],
       "optionalResources": [],
@@ -4455,24 +4084,19 @@
       ],
       "resourceConditions": [
         {
-          "path": "skills/conquistador/commands/vietnamese/agents/diagnostic-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/vietnamese/agents/diagnostic-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/vietnamese/agents/polisher-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/vietnamese/agents/polisher-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/vietnamese/agents/critic-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/vietnamese/agents/critic-agent.md"
         },
         {
-          "path": "skills/conquistador/commands/vietnamese/references/vn-tone-corpus.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/vietnamese/references/vn-tone-corpus.md"
         },
         {
-          "path": "skills/conquistador/commands/vietnamese/references/translation-artifacts.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/vietnamese/references/translation-artifacts.md"
         }
       ],
       "optionalResources": [],
@@ -4514,12 +4138,10 @@
       ],
       "resourceConditions": [
         {
-          "path": "skills/conquistador/commands/watch/references/gemini-recipe.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/watch/references/gemini-recipe.md"
         },
         {
-          "path": "skills/conquistador/commands/watch/agents/critic-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "skills/conquistador/commands/watch/agents/critic-agent.md"
         }
       ],
       "optionalResources": [],

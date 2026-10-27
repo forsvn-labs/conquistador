@@ -16,6 +16,9 @@ const receiptPath = '.conquistador-install.json';
 const hash = value => createHash('sha256').update(value).digest('hex');
 const present = path => { try { lstatSync(path); return true; } catch { return false; } };
 
+// Largest file the doctor reads; the bundled search index has its own bound.
+export const DIAGNOSTIC_FILE_LIMIT = 262144;
+
 // Read only bounded regular files, without following links inside the selected bundle.
 function bytesAt(root, path) {
   let current = root;
@@ -25,7 +28,7 @@ function bytesAt(root, path) {
     current = join(current, part);
     const stat = lstatSync(current);
     if (stat.isSymbolicLink() || (index < parts.length - 1 ? !stat.isDirectory() : !stat.isFile())) throw Error(`Not a regular resource: ${path}`);
-    if (index === parts.length - 1 && stat.size > (path === 'tools/search-index.json' ? 8 * 1024 * 1024 : 262144)) throw Error(`Resource exceeds diagnostic limit: ${path}`);
+    if (index === parts.length - 1 && stat.size > (path === 'tools/search-index.json' ? 8 * 1024 * 1024 : DIAGNOSTIC_FILE_LIMIT)) throw Error(`Resource exceeds diagnostic limit: ${path}`);
   }
   return readFileSync(current);
 }
