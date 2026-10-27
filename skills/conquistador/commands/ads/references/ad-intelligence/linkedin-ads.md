@@ -8,8 +8,8 @@ verification: platform-facts-oct-2026
 
 # LinkedIn ads
 
-The reader is at work, scrolling between tasks. Open on a work situation they recognize, and make
-the offer worth a click from someone who is busy. Use the [craft reference](../ad-craft.md).
+The reader is at work, scrolling between tasks. Write the ads through the pass-through in the
+[entry](../../ENTRY.md); this pack holds the platform facts, the offer choice, and the account setup.
 
 ## Platform facts (checked Oct 2026)
 
@@ -21,10 +21,8 @@ the offer worth a click from someone who is busy. Use the [craft reference](../a
 - Thought Leader Ads sponsor a post from an employee's own profile. They read as a person, not a brand.
 - Matched audiences (company lists, contact lists, site visitors) need rights to the data uploaded.
 
-## Write the variations
+## Choose the offer
 
-- Lead with the work moment or the role's costly problem, not the company or the category.
-- A job title says who the reader is; the ad should say what they deal with.
 - Give-first offers (a template, a scan, an audit, a calculator) fit buyers who are not in market
   this week. A demo request fits retargeting and high-intent lists.
 

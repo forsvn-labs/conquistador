@@ -8,17 +8,14 @@ verification: platform-facts-oct-2026
 
 # Meta ads for people who already know you
 
-Retargeting ads speak to someone who has met the brand and did not act. Write the next useful thing,
-not the first pitch again. Use the [craft reference](../ad-craft.md) for the copy.
+Retargeting ads speak to someone who has met the brand and did not act. Write the ads through the
+pass-through in the [entry](../../ENTRY.md); this pack holds the audiences and the cadence.
 
-## Decide what the second contact says
+## Choose the audiences
 
-- Start from what the person did: visited the pricing page, started a trial and stopped, watched a
-  video, engaged on Instagram. Each implies a different open question.
-- The angle that usually fits is the objection the first contact left open: price, setup effort,
-  "will it work for me", or switching cost. Answer it with a fact, a demonstration, or a customer's words.
-- The opening can assume context ("Still comparing?", "You looked at the setup guide.") but must not
-  reveal sensitive browsing or personal attributes.
+- Split audiences by what the person did: visited the pricing page, started a trial and stopped,
+  watched a video, engaged on Instagram.
+- An ad may not reveal sensitive browsing or personal attributes.
 - Exclude people who already bought, unless the offer is an upsell with its own terms.
 
 ## Audiences and cadence · Starting point (Oct 2026)

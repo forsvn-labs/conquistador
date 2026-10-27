@@ -6,7 +6,7 @@ A first test compares concepts, not wording. A concept is one angle with its own
 own visual: the costly moment, the outcome, a customer's words, the main doubt answered, the
 reader's identity, the incumbent compared, or the offer. Platforms group ads that look and read
 alike, so variations that change a few words do not get a fair test. Start with three to five
-concepts from the [craft reference](ad-craft.md).
+concepts; the ads themselves are written through the pass-through in the [entry](../ENTRY.md).
 
 ## Then iterate on the winner
 

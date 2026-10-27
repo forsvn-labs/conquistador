@@ -1,7 +1,7 @@
 # Verify the selected ad format
 
 Resolve one network and placement. Draft to the dated platform facts in the
-[craft reference](ad-craft.md) and any limit in the user's brief. Before launch,
+[entry](../ENTRY.md) and any limit in the user's brief. Before launch,
 confirm them in the network's current specification for the region and placement.
 
 | Network | Component inventory to verify |

@@ -34,9 +34,7 @@ different first line or first three seconds):
 | Creator's own video | Proof | The creator's best organic clip, with permission and usage rights |
 | "I only have a balcony" | Objection | Three pots on a balcony, planned |
 
-The craft for each line is in the [craft reference](../ad-craft.md); the
-[annotated pairs](ad-sets-social.md) show the difference between distinct angles and one angle
-reworded.
+The ads for each concept are written through the pass-through in the [entry](../../ENTRY.md).
 
 ## Structure and decisions
 

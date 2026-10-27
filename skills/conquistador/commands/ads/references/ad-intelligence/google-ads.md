@@ -8,8 +8,8 @@ verification: platform-facts-oct-2026
 
 # Google search ads
 
-Search ads answer a query the person already typed. The craft is matching that query fast and then
-giving the reason to pick you. Use the [craft reference](../ad-craft.md) for openings and proof.
+Search ads answer a query the person already typed. Write the ads through the pass-through in the
+[entry](../../ENTRY.md); this pack holds the platform facts and the account setup.
 
 ## Platform facts (checked Oct 2026)
 
@@ -23,15 +23,6 @@ giving the reason to pick you. Use the [craft reference](../ad-craft.md) for ope
   them, or turn text customization off, when claims or terms need control.
 - Trademark and editorial rules apply to competitor names in ad text; bidding on a competitor term
   does not grant the right to use the name in copy.
-
-## Write the asset set
-
-- Give headlines different jobs: the query in plain words, the outcome, the proof, the offer or price,
-  the objection answered, speed or setup, and the next step. Several headlines may share a job only
-  when each says something new.
-- Put the keyword or its plain meaning in at least two headlines, and in the landing page's main heading.
-- Descriptions finish the argument: one carries the offer terms, one the proof, one the action.
-- Local services: name the place and the response time; searchers often call from the results page.
 
 ## Account setup · Starting point (Oct 2026)
 

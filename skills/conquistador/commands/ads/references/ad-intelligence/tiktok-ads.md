@@ -8,8 +8,8 @@ verification: platform-facts-oct-2026
 
 # TikTok ads
 
-A TikTok ad is a video first and copy second. The first seconds decide whether anyone reads the ad
-text. Use the [craft reference](../ad-craft.md) for angles; this pack covers the video.
+A TikTok ad is a video first and copy second. Write the ads through the pass-through in the
+[entry](../../ENTRY.md); this pack holds the platform facts and the account setup.
 
 ## Platform facts (checked Oct 2026)
 
@@ -21,18 +21,6 @@ text. Use the [craft reference](../ad-craft.md) for angles; this pack covers the
 - Smart+ campaigns automate targeting, bids, and creative combinations; they still depend on
   distinct videos to test.
 - Paid creator content needs the platform's commercial content disclosure.
-
-## Write the video
-
-For each variation, write: the opening (the first two seconds: what is seen, said, and written on
-screen), the demonstration or proof, the call to action, and the ad text.
-
-- Open on the problem in progress or the result already visible. A logo, a greeting, or "Hey guys"
-  wastes the window.
-- Show the product doing the job, on a phone screen or in hands, before the midpoint.
-- A creator speaking to camera in their own words reads as native. Script the angle and the facts,
-  not every line.
-- Each variation changes the opening and the angle, not only the caption.
 
 ## Account setup · Starting point (Oct 2026)
 
