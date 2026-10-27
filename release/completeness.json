@@ -8,8 +8,8 @@
   "outcomes": [
     {
       "name": "ads",
-      "version": "3.0.0",
-      "sha256": "14ab5ace9dbdfdf59c5314a2df18bddf25572ed274f8e85c537f642445cce126"
+      "version": "4.0.0",
+      "sha256": "c1bcf9aa58c3b02ae5656b32dd68554b0fda52a2687eea367152dc79570273ef"
     },
     {
       "name": "architect",
@@ -299,19 +299,11 @@
     },
     {
       "path": "conquistador/commands/ads/ENTRY.md",
-      "sha256": "0372ea955034977ad678c45058d8d24e16d5ccd25ff6e4e8a6cf8b0babbb7ad9"
-    },
-    {
-      "path": "conquistador/commands/ads/agents/composer.md",
-      "sha256": "2e08cf674af6fc7ee4bc0f4e61f013d24e1a34b07becedc85c54204e9c451199"
-    },
-    {
-      "path": "conquistador/commands/ads/agents/critic.md",
-      "sha256": "afb5cb50fbbca82c07d662b1137692ae332bbf2071c54ab97c852a5b45d54946"
+      "sha256": "333e596cf0e0fd470959e494713dc93d6c5ed38aed86ff65bde345025c63bbdd"
     },
     {
       "path": "conquistador/commands/ads/agents/format-checker.md",
-      "sha256": "512354c4cfbb92c1f8d3a5cd32b9994e0d7fb0eaa2d462223d666352c63d3228"
+      "sha256": "41324c4604595154a26408baec14f214d9f041b71bc0f4343888fc17bd82bd09"
     },
     {
       "path": "conquistador/commands/ads/agents/openai.yaml",
@@ -319,19 +311,7 @@
     },
     {
       "path": "conquistador/commands/ads/agents/strategist.md",
-      "sha256": "f4d6ebb5834e1104b85748d2aa2f9eeb307dfe038a86742f4d052b5aa088359c"
-    },
-    {
-      "path": "conquistador/commands/ads/agents/voice-auditor.md",
-      "sha256": "e89e75649263892a6f8f9b160a93f54297429d9bed4116e9648ba126191c280e"
-    },
-    {
-      "path": "conquistador/commands/ads/fallbacks/sequential.md",
-      "sha256": "0f6676a487b3704440b95b8067191edf2874129aa0e82d96f085791c03509b25"
-    },
-    {
-      "path": "conquistador/commands/ads/references/ad-craft.md",
-      "sha256": "1dab969d85081f5b68b6ee25829c03886108c1511db9a3dd809de9bb49218f01"
+      "sha256": "243a2b1138a9fed669763b6b94e7dc7c6478aa07d11062dd9f0ad9b894d79156"
     },
     {
       "path": "conquistador/commands/ads/references/ad-intelligence/apple-search-ads.md",
@@ -343,43 +323,31 @@
     },
     {
       "path": "conquistador/commands/ads/references/ad-intelligence/google-ads.md",
-      "sha256": "79a840ead4e044a06c7abb350afd5c2bc0246815da8c7d57fc927ec126a86553"
+      "sha256": "e166034fa1bd29351d18fda65ea996f850ff78b9e196e2a3224be1a99f9560f8"
     },
     {
       "path": "conquistador/commands/ads/references/ad-intelligence/linkedin-ads.md",
-      "sha256": "31d8924179f009560858026f8799cd08548bbcd8ac67100d9dea3841ac6c9fd9"
+      "sha256": "baeb498442c336b281832ad0ca86de1f8446581ae5ea0d9d1b47e00010ffb497"
     },
     {
       "path": "conquistador/commands/ads/references/ad-intelligence/meta-cold-traffic.md",
-      "sha256": "388e6b9163a71ba2a49a458eda0b5a206e68c5003278c435a4c41d9ae3136ccd"
+      "sha256": "6476cd574c823a5bbb0b52e8a7e6c7b31f72177428b4036cab72a9f6576a0f5a"
     },
     {
       "path": "conquistador/commands/ads/references/ad-intelligence/meta-retargeting.md",
-      "sha256": "255988e13597e0dce2e59b82abe9255c13013113728fa08e0f99716eedc09e38"
+      "sha256": "278711d0d309f787de4b202582f013b98abce560f96f749fcd65129c1feba7a5"
     },
     {
       "path": "conquistador/commands/ads/references/ad-intelligence/tiktok-ads.md",
-      "sha256": "4444078aae9f430dadf0d34e6a49077a93fbb681475079fe8b497c2a7716cbab"
-    },
-    {
-      "path": "conquistador/commands/ads/references/anti-patterns.md",
-      "sha256": "de54f753f8dd2542ecd33dbc8d2903a7996015fd5d298acd132b9df25b0cbd53"
+      "sha256": "c8cedda51112911896ff3b317c31a3ccc5a780a7dcc38e29340abd385823dfec"
     },
     {
       "path": "conquistador/commands/ads/references/earn-the-impression.md",
-      "sha256": "1c7c89eb08f58fe250eaad535028589d45133189a6ac2e80e9442980e81fdd63"
-    },
-    {
-      "path": "conquistador/commands/ads/references/examples/ad-sets-search-b2b.md",
-      "sha256": "be4b0e3a999fd58dff464f9a5cbebbab5fa37ed17109885cc7b50a435ef60b02"
-    },
-    {
-      "path": "conquistador/commands/ads/references/examples/ad-sets-social.md",
-      "sha256": "b29ec9f71ed7ce2c4c79760018bc31636e1e87a8dc1997e15676288bdcc0efe2"
+      "sha256": "ff9ea652c8808e41cd0a483755b4921f9d7578b3e3e00ddd4ed6f64771c33d5f"
     },
     {
       "path": "conquistador/commands/ads/references/examples/write-ad-walkthrough.md",
-      "sha256": "aa48c178f898d294ce43272c9d95752dcff1ebc5b8ba7e12fadec55876e9fe59"
+      "sha256": "1f4aa4654254c453a160193a3c61a0461bb651cf1f32cb3d037f109968b35e83"
     },
     {
       "path": "conquistador/commands/ads/references/format-conventions.md",
@@ -387,7 +355,7 @@
     },
     {
       "path": "conquistador/commands/ads/references/format-spec.md",
-      "sha256": "c1c9e7f7253536c76c0a44d14ac772a973ad7c08bbd6fd0e2ad2fd2a2a3760f2"
+      "sha256": "d119248a2462dab1234b0739400790ff5aabad6768138d974a1722ab91161a49"
     },
     {
       "path": "conquistador/commands/ads/references/legibility-convention.md",
@@ -399,11 +367,11 @@
     },
     {
       "path": "conquistador/commands/ads/references/platform-intelligence/facebook.md",
-      "sha256": "52da8126267ea148a18c47b75462df0e5d30cd1341a77e97b4754bfe8ed1b0ed"
+      "sha256": "95d9b17916cb5d4e733c141c0c11c414d8d08e8270587e641e094bafff464524"
     },
     {
       "path": "conquistador/commands/ads/references/platform-intelligence/reels.md",
-      "sha256": "af8072a384b3d446c36ebd99c9ead775e2b051633b512bf392df174e11dd5a37"
+      "sha256": "17d66fb9473335e6d4a65339e1405e990a1d1714e3206844340a17c3560bfffc"
     },
     {
       "path": "conquistador/commands/ads/references/policy-floor.md",
@@ -419,7 +387,7 @@
     },
     {
       "path": "conquistador/commands/ads/references/rubric.md",
-      "sha256": "ebc93305394a30be3af11802fd22b9d606487c90f7eb6e835f37e7bcdf0988b2"
+      "sha256": "b9abdf098644ead3ed0d18e109d1264127e4649162e892f9a03b543cdd39ebbe"
     },
     {
       "path": "conquistador/commands/ads/references/why-this-works-convention.md",
@@ -4391,7 +4359,7 @@
     },
     {
       "path": "conquistador/plays/paid.md",
-      "sha256": "792ce5652664a9e4bb2803cee62af58a9a1a6cf87d5739254910748beb01c1dd"
+      "sha256": "55e94bfe89c45e61a6a44923a5f50de97a74946ab1e38ae4312b7238ce8f5f18"
     },
     {
       "path": "conquistador/plays/plan.md",
@@ -4799,11 +4767,11 @@
     },
     {
       "path": "conquistador/routing-contract.json",
-      "sha256": "80efc802e16df79cf6a40ec188e8dc6c32aa25d67c9508d9c40d10af13520340"
+      "sha256": "eddaa002e60a9359042764bbb093f23813043eb0dae9a901d56636ebd439bb53"
     },
     {
       "path": "conquistador/routing-overlay.json",
-      "sha256": "c8cab4fe5240e584bd3548f2bd39e087d0e4eaeffc7bf7f793f026243f889e9c"
+      "sha256": "350dd18b4f71a0e5936e71f60c0b75377b76f4cf72cd357b4c033243fe175ef2"
     },
     {
       "path": "conquistador/rubrics/composition.md",
@@ -4815,7 +4783,7 @@
     },
     {
       "path": "conquistador/specialists/ads-agent.md",
-      "sha256": "3a40bd4deafaf9b43eb555ca159a9eeee963927503b836af2a845d49c28cd428"
+      "sha256": "95860b09cb96d33ffe2795a6e68d1ec0809d8e1ad5c9d81b57aba4b7d92c2d02"
     },
     {
       "path": "conquistador/specialists/campaign-data-agent.md",
@@ -4945,7 +4913,7 @@
     },
     {
       "path": "tools/request-text.mjs",
-      "sha256": "0ed972fc3c8567771065fa1d77873ec5797396fac28c8248ff51651c76ce75e7"
+      "sha256": "c59fd4455ec5c9fa5a5fe43df12e46af3bec09e11ad23d03f845ceadcfda68ed"
     },
     {
       "path": "tools/knowledge-index.mjs",
@@ -4953,11 +4921,11 @@
     },
     {
       "path": "tools/brief.mjs",
-      "sha256": "1e80c2d1a3cdb4a99818b9e8a8fb9199e51e1b961bd9fe320cf410dca10f5c82"
+      "sha256": "45c09c248d6c4653de41a2351a99853ec7d927efe049dd71084a995476d0eefb"
     },
     {
       "path": "tools/search-index.json",
-      "sha256": "b4eeea01d22366cdc1de53debe388cbef52647dd6dc6b411cd5ab9b30ad737fa"
+      "sha256": "4863465659d93e036e2e0b56eea2910bd9db6bc722b8a4ad30459726a6a1bf89"
     },
     {
       "path": "tools/prompt-advice.mjs",
