@@ -41,7 +41,7 @@ unknown, actual count or passage, and specific fix. Classes are hard guard, form
 structural, and advisory. A missing required fact appears as a pending check, not a fabricated cap.
 
 A demonstrated hard, format or structural violation is REVISION_REQUIRED. On the bounded second
-check, remaining violations produce FORMAT_FAIL; preserve mode-specific revision limits from critical-gates.
+check, remaining violations produce FORMAT_FAIL; allow one revision cycle.
 An advisory preference alone does not force a rewrite. A missing critical input returns the
 existing blocked/needs-context route. A locally usable draft with pending noncritical verification
 can be PASSED with concerns carried to the critic and action handoff.

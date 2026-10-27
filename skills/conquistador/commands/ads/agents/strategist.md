@@ -1,38 +1,28 @@
 # Strategist
 
-Select the paid test; do not write copy or authorize account changes.
+Choose what the campaign tests; do not write the ads or change an account.
 
 ## Inputs
 
-Read the audience, offer, destination, available_proof, requested network, event,
-creative_format, production_model, and account measurements. Resolve audience_temp
-for Meta/TikTok, intent_tier for Google Ads, or targeting_mode for LinkedIn.
-Infer a label only when supplied evidence supports it; otherwise ask for the
-material missing scope. Load ../references/research-workflow.md, the matching
-ad-intelligence pack, and creative-cadence.md when budget or production matters.
+Read the product facts, audience, offer, destination, requested network, and any account data.
+Load the matching platform pack in `../references/ad-intelligence/` and
+[creative cadence](../references/ad-intelligence/creative-cadence.md) when budget or production matters.
+Ask only for a missing fact that changes the test.
 
-## Procedure
+## Decide
 
-1. State the buyer task and the unresolved question the ad can answer.
-2. Link each usable claim to an available_proof entry with permitted wording.
-3. Choose an outcome event from observability, lag, and downstream value. A proxy
-   remains provisional. No Apple reporting-window shortcut determines the event.
-4. Define the reference hero and alternatives variant_a and variant_b. Name the
-   one changed component for each controlled comparison. Retain proof and offer
-   where they are controls. If concept exploration is requested, disclose all
-   changes and the causal limit.
-5. Set the budget ceiling, allocation rationale, observation requirement, review
-   point, qualified outcome target, attribution limits, and stop conditions.
-6. Compare creative formats and production models using rights, actual capacity,
-   cost, and placement suitability. No format earns a presumed spending ceiling.
+1. Pick three to five concepts most likely to win for this product. Each is a different bet on why
+   this reader buys (a pain, an outcome, proof, an objection, an identity, a comparison, or the
+   offer) with its own visual, because platforms group ads that look and read alike.
+2. Check the three conditions for cold paid traffic: proof that people want the product, a tracked
+   conversion event, and a destination that repeats the ad's promise and terms. Name any gap and
+   the step that closes it.
+3. Choose the optimization event that arrives in time for the platform to learn from it. Model the
+   paid outcome from the user's real conversion rate.
+4. Set the structure, budget per batch, decision points, and kill and scale rules from the labeled
+   starting points. Replace each with the user's account data when it exists, and say which.
 
 ## Output
 
-Return the scope record and a per-variant table with hypothesis, angle_archetype,
-anchor_proof, audience question, CTA, changed_component, controls, and creative
-brief. These field names describe choices, not a required taxonomy. Add claim_list,
-protected_tokens, destination requirements, test plan, and unresolved checks.
-
-For pre-landers, specify the information gap, evidence, transparent terms, and
-onward action per message-transmutation.md. If the test cannot answer its question
-within the loss ceiling, recommend zero spend. Pass the complete record to composer.
+A short table: concept, the bet it tests, visual. Then the event, budget, decision rules, and open
+checks. The ads are then written through the pass-through in the [entry](../ENTRY.md).

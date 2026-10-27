@@ -3,46 +3,36 @@ type: ad-intelligence
 surface: linkedin-ads
 schema_version: 1
 status: method
-verification: account-input-required
+verification: platform-facts-oct-2026
 ---
 
-# Plan a LinkedIn Ads qualification test
+# LinkedIn ads
 
-This is a campaign decision procedure. It supplies no performance benchmark or
-claim of current platform verification. Record the source, date, placement, region,
-and account scope of platform constraints before using them. If verification is
-unavailable, deliver a draft with the affected setup decisions unresolved.
+The reader is at work, scrolling between tasks. Write the ads through the pass-through in the
+[entry](../../ENTRY.md); this pack holds the platform facts, the offer choice, and the account setup.
 
-## Define the commercial outcome
+## Platform facts (checked Oct 2026)
 
-Name the role or company segment, the task being considered, and what counts as a
-qualified lead or opportunity. Record targeting_mode as job-title, company-list, or
-matched-audience when applicable. Verify that the account can express the selected
-criteria. A title does not prove buying authority or budget.
+- Single image and video ads show about the first 150 characters of intro text before "see more"
+  (600 maximum). Headlines show about 70 characters before truncation (200 maximum).
+- Lead Gen Forms prefill profile fields and usually convert more often than a landing page; lead
+  quality needs its own check against the CRM.
+- Document ads let the reader preview a guide in the feed and unlock the rest with a form.
+- Thought Leader Ads sponsor a post from an employee's own profile. They read as a person, not a brand.
+- Matched audiences (company lists, contact lists, site visitors) need rights to the data uploaded.
 
-## Compare response paths
+## Choose the offer
 
-Consider a LinkedIn Lead Gen Form and a landing page against the same offer. List
-required fields, user effort, disclosure, follow-up owner, qualification rule, and
-CRM matching. Do not assume either path has higher conversion or lower lead quality.
-Choose a path from account evidence or propose a controlled comparison.
+- Give-first offers (a template, a scan, an audit, a calculator) fit buyers who are not in market
+  this week. A demo request fits retargeting and high-intent lists.
 
-## Specify message and proof
+## Account setup · Starting point (Oct 2026)
 
-Write the task, the supported product capability, the offer terms, and the next
-step. Quantified claims need evidence with population, period, and limitations.
-Select Single Image, Document, or another supported Sponsored Content format only
-when its content can deliver the promised information. Check current format rules
-before calling the package ready for launch.
+| Item | Starting point |
+|---|---|
+| Audience size | 50,000–300,000 members for cold targeting; smaller only for named-account lists |
+| Ads per campaign | 3–4, each a different angle |
+| Decision point | After about 1,000 impressions per ad, judge on cost per qualified lead, not click-through |
+| Budget | Enough for at least 15–20 leads per test, at the account's expected cost per lead |
 
-## Set a bounded test
-
-Use cost per qualified outcome and observed time to qualification to plan the
-budget and review window. Record CTR, CPC, raw leads, reach, and frequency as
-diagnostics with denominators. Supply no expected CTR, CPC band, or universal
-minimum company size. If the sales cycle outlasts the review, report provisional
-pipeline status and schedule a later quality check within authorized scope.
-
-Deliver targeting scope, ad assets, form or destination requirements, qualification
-logic, cost ceiling, attribution limitations, and one next decision. Audience
-expansion and bid increases require their own evidence and human action approval.
+Audience uploads, launch, and spend need the user's approval.

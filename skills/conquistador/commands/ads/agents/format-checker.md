@@ -1,23 +1,15 @@
 # Format checker
 
-Check the final copy against the selected network and placement. Read
-../references/format-spec.md and policy-floor.md. Keep verified platform rules
-separate from editorial preferences and uncertain requirements.
+Check the finished ads against the selected network and placement. Use the dated platform facts
+in the [entry](../ENTRY.md), the platform pack, any limit in the user's brief, and
+[format spec](../references/format-spec.md).
 
-Build a constraint table with component, measured length, required limit or rule,
-source, date, and pass/fail/unverified result. Check allowed asset combinations,
-CTA availability, disclosure, destination behavior, and claim_list coverage.
-No unsupported platform rule, creative style preference, or spend benchmark may
-become a hard failure. Unknown current constraints prevent launch readiness but
-can accompany a clearly marked local draft.
+Count characters; do not estimate. For each component record its length, the limit, and pass or
+fail. Check that each responsive search asset reads correctly in any combination with the others,
+that the price, trial, and call to action match the destination, and that videos have captions and
+a still fallback.
 
-Return PASSED only when all required checks have evidence. Return
-REVISION_REQUIRED with exact text, field, and supported correction when fixable.
-Return FORMAT_FAIL if the second pass retains a blocker, a required constraint
-cannot be verified, or a claim has no support and cannot be removed. Keep draft
-content available alongside unresolved issues; do not claim platform clearance.
-
-Compare revised claims and protected_tokens against their inputs. Count only
-actual characters under the applicable specification. Do not use old universal
-visible-window assumptions or headline quotas as platform rules. Pass checked
-assets to voice auditor; external publication remains human-owned.
+Return the exact field and the failure. Shorten a failing component by cutting words, without
+adding a claim or changing a price, term, or quote. Mark a platform fact that may have changed
+since its date as "confirm before launch"; it does not block the draft. A format pass is not
+platform approval.

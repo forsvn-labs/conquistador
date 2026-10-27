@@ -36,6 +36,9 @@ export function requestClauses(prompt, { protectedPhrases = [] } = {}) {
     }
   }
 
+  // A parenthetical qualifies its clause: "Meta (Facebook and Instagram) ads" is one request.
+  for (const match of request.matchAll(/\([^()\n]*\)/g)) protectedSpans.push({ start: match.index, end: match.index + match[0].length });
+
   const clauses = [];
   let start = 0;
 
@@ -73,6 +76,69 @@ export function includesPhrase(text, phrase) {
   return (` ${text} `).includes(` ${normalizeRequest(phrase)} `);
 }
 
+// The work a clause asks for, before its subject: "write a post announcing our new integration" asks
+// for a post. A technical noun in the subject does not make a marketing artifact engineering work.
+export function requestOperation(clause) {
+  return clause.split(/\b(?:for|about|after|on|announcing|introducing|launching|celebrating|promoting)\b/i)[0];
+}
+
+// Users paste a request with supporting context: facts, notes, lists, background paragraphs. A request
+// sentence opens with an instruction ("Write a LinkedIn post", "Can you draft", "I need three ads",
+// "Fix the handler"); list items and other sentences are context. Returns the request sentences when
+// the prompt holds both, otherwise null.
+const instruction = String.raw`(?:write|draft|create|make|compose|produce|prepare|generate|give|put together|come up with|turn|rewrite|edit|revise|shorten|polish|translate|review|audit|critique|evaluate|plan|outline|map out|build|design|set up|define|pick|choose|fix|debug|refactor|implement|patch|add|update|migrate|deploy|install|configure)`;
+const requestOpener = new RegExp(String.raw`^(?:[^,.;:]{0,60},\s*)?(?:(?:task|request|ask|deliverable|assignment)\s*:\s*)?(?:(?:please|pls|now|so|and|then|also)\s+)*`
+  + String.raw`(?:(?:(?:can|could|would|will)\s+you\s+(?:please\s+)?|help\s+(?:me|us)\s+(?:to\s+)?|let'?s\s+|(?:i|we)(?:\s+would|'d)?\s+(?:need|want|like)\s+you\s+to\s+)?${instruction}(?=\s+[\w"'$])`
+  + String.raw`|(?:i|we)(?:\s+would|'d)?\s+(?:need|want|like)\s+(?:a|an|the|some|one|two|three|four|five|six|seven|eight|nine|ten|\d+)\b)`, 'i');
+const listItem = /^\s*(?:[-*•–]|\d+[.)])\s+/;
+// With `questions`, a question sentence also counts as the request ("Should we raise our price?"
+// pasted above the facts it rests on).
+export function requestFocus(prompt, { questions = false } = {}) {
+  const units = [];
+  const asks = sentence => requestOpener.test(sentence) || (questions && /\?\s*$/.test(sentence));
+
+  for (const line of unquotedRequest(prompt).replace(invocation, ' ').split(/\n+/)) {
+    if (!/[\p{L}\p{N}]/u.test(line)) continue;
+    if (listItem.test(line)) units.push({ text: line, request: false });
+    else for (const sentence of line.split(/(?<=[.!?])\s+/)) if (/[\p{L}\p{N}]/u.test(sentence)) units.push({ text: sentence.trim(), request: asks(sentence.trim()) });
+  }
+  const request = units.filter(unit => unit.request);
+
+  return request.length && request.length < units.length ? request.map(unit => unit.text).join('\n') : null;
+}
+
+// The opening block of a prompt that pastes material below its request: the lines before the first
+// blank line, list item, or header ("Facts:", "# Facts"). Its sentences are read together, so a
+// question keeps the sentence that names its subject ("A prospect wants 30% off. What should we
+// counter with?"). A label above the request ("Task:", "## Request") is skipped. Returns null when
+// nothing follows the block.
+const header = /:\s*$|^\s*#{1,6}\s/;
+const requestLabel = /^\s*(?:#{1,6}\s*)?(?:the\s+)?(?:task|request|ask|question|decision|assignment)\s*:?\s*$/i;
+export function requestLead(prompt) {
+  const lines = unquotedRequest(prompt).replace(invocation, ' ').split('\n');
+  const lead = [];
+  let index = 0;
+  for (; index < lines.length; index += 1) {
+    const line = lines[index];
+    if (!/[\p{L}\p{N}]/u.test(line)) { if (lead.length) break; continue; }
+    if (!lead.length && requestLabel.test(line)) continue;
+    if (listItem.test(line) || header.test(line)) break;
+    lead.push(line.trim());
+  }
+  const rest = lines.slice(index).some(line => /[\p{L}\p{N}]/u.test(line));
+  return lead.length && rest ? lead.join('\n') : null;
+}
+
+// A clause that opens with an instruction asks for its own deliverable ("Plan the launch").
+export const instructionClause = clause => requestOpener.test(clause.trim());
+
+// A decision request asks what to do (should we, which, is it real, design a test). A request to write
+// something names its deliverable; decision words in its subject do not make it a decision.
+export const decisionRequest = text => !/\b(?:write|draft|compose|rewrite|publish)\b/i.test(text);
+// A question that asks what to do: "Should we switch to usage-based pricing?", "Is it time to drop the
+// free tier?", "Which channel should we cut?". A plan or a test it also asks for is part of the answer.
+export const decisionQuestion = text => decisionRequest(text) && /\b(?:should|whether|is it time|worth)\b(?:[^?.!\n]|[.!](?!\s))*\?/i.test(text);
+
 // Admission runs before phrase matching or retrieval. Topic words alone are not a task.
 export function requestedBusinessClauses(prompt, options) {
   return requestClauses(prompt, options).filter(clause => {
@@ -80,7 +146,7 @@ export function requestedBusinessClauses(prompt, options) {
     // Definitions are questions, not tasks. "What does it take" and "what is the plan" are tasks.
     if (/\bwhat (?:is|are) (?:a|an)\b|\bwhat does(?: \w+){1,3} mean\b|\bmeaning of\b|\bwhat is the difference\b/.test(text)) return false;
     const productBuild = /\b(?:responsive web app|approved flow|product experience|product requirements|product spec|feature spec|in product ui)\b/.test(text);
-    const operation = text.split(/\b(?:for|about|after)\b/)[0];
+    const operation = requestOperation(text);
     // "System" and "test" are also marketing words (a content system, a test budget). They mark
     // engineering only with an engineering verb.
     const engineering = (/\b(?:engineer|engineering|debug|refactor|compile|typecheck|implement|fix|patch|design|build|write|create)\b/.test(operation)

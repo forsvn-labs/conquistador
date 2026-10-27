@@ -1,49 +1,27 @@
-# Build a paid message around a testable decision
+# Design a test that can find a winner
 
-## Start with the decision record
+## Test concepts first
 
-Record the eligible audience, offer, destination, outcome event, evidence available,
-and maximum authorized loss. Identify one uncertainty that better ad content can
-resolve. If the actual uncertainty is tracking, price, or eligibility, name it
-before proposing creative work.
+A first test compares concepts, not wording. A concept is one angle with its own opening and its
+own visual: the costly moment, the outcome, a customer's words, the main doubt answered, the
+reader's identity, the incumbent compared, or the offer. Platforms group ads that look and read
+alike, so variations that change a few words do not get a fair test. Start with three to five
+concepts; the ads themselves are written through the pass-through in the [entry](../ENTRY.md).
 
-Read research-workflow.md to build the input record. Read the selected
-ad-intelligence pack for platform-specific questions and creative-cadence.md for
-budget and production feasibility. This method assigns no universal targeting,
-creative-volume, spending, or performance rule.
+## Then iterate on the winner
 
-## Construct the reference and alternatives
+Once a concept wins on cost per qualified result, test its parts: a new opening line or first
+three seconds, a different visual format, a shorter body. Change one part at a time here, so the
+result says which part mattered.
 
-Produce hero, variant_a, and variant_b as the existing artifact slots. Each carries
-finished copy and a stated hypothesis. Hold audience, offer, proof, and destination
-constant when testing an opening or CTA. Change one consequential component per
-comparison. Do not require different proof, objections, and angles simultaneously.
+## Keep the evidence apart from the ad
 
-Use only enough supported detail to make the claim and action unambiguous. A number
-or named entity is useful when it helps the buyer assess the offer. A quota is not
-a reason to invent proof, borrow authority, or disclose private research.
+Keep a facts list with the source of each number and quote. The ad carries the claim and the
+qualifier truth needs; the source, sample, and period stay in the operator note. When a fact is
+missing, narrow the claim or ask the user; never invent one.
 
-## Review in dependency order
+## Read results honestly
 
-Strategist specifies the test. Composer writes the assets. Format checker verifies
-supplied platform constraints, claim evidence, and destination compatibility. Voice
-auditor edits for comprehension. Critic assesses the final set and its test logic.
-Use fallbacks/sequential.md when separate agents are unavailable.
-
-Format-checker returns PASSED, REVISION_REQUIRED, or FORMAT_FAIL with the exact
-field and evidence. A second failed format pass remains blocked. After a critic
-failure, run the changed draft through format and voice review again. Stop after
-two revision cycles with the best draft and unresolved issues.
-
-An optional language polish must preserve protected_tokens, offer terms, claims,
-and destination URL. Compare each changed variant with its approved predecessor;
-flag its regressions independently. A critic score or polish pass never grants
-launch authority.
-
-## Deliver an executable review packet
-
-Use format-conventions.md for the three output files and rubric.md for scoring.
-Include completed ad components, creative direction, test allocation, observation
-requirements, stop rules, attribution limits, and exact unresolved launch checks.
-Explain the product evidence behind each hypothesis in the rationale. Keep
-copy review, human acceptance, and external action approval distinct.
+Judge on cost per qualified result, then use click-through and view rates to explain why an ad
+failed. Name what else changed during the test. Planned numbers are targets until `results` reports
+observed ones. Launch, spend, and uploads need the user's approval.

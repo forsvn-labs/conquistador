@@ -26,6 +26,5 @@ Every motion brief includes a still or poster fallback, captions, and a
 reduced-motion version carrying the same proof and action. Use supplied approved
 brand examples through realized-surface-grounding.md, or record their absence.
 
-List each changed element across variants. For a controlled test retain the
-reference's other elements. For exploratory concepts, state that the result only
-compares bundles; a follow-up test must isolate the suspected cause.
+List the angle, opening, and visual of each concept. A first test compares concepts; once one
+wins, a follow-up test changes one part of it at a time to find which part mattered.

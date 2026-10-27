@@ -66,6 +66,12 @@
         "create-paid-campaign",
         "facebook ads",
         "instagram ads",
+        "facebook and instagram ad",
+        "facebook and instagram ads",
+        "instagram and facebook ad",
+        "instagram and facebook ads",
+        "instagram and tiktok ads",
+        "tiktok and instagram ads",
         "youtube ads",
         "reddit ads",
         "x ads",
@@ -87,82 +93,81 @@
         "ads performance",
         "campaign results"
       ],
-      "requiredResources": [
-        "references/rubric.md",
-        "references/anti-patterns.md",
-        "fallbacks/sequential.md"
-      ],
+      "requiredResources": [],
       "conditionalResources": [
         {
-          "path": "references/earn-the-impression.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "references/rubric.md",
+          "when": "Load when the user asks for a score or a verdict on an ad set."
         },
         {
           "path": "agents/strategist.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/composer.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/format-checker.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/voice-auditor.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/critic.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/ad-intelligence/meta-cold-traffic.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/ad-intelligence/meta-retargeting.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/ad-intelligence/google-ads.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/ad-intelligence/linkedin-ads.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/ad-intelligence/tiktok-ads.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "when": "Load for a campaign test (structure, budget, decision and kill rules). Ad drafting is a pass-through and loads no resource."
         },
         {
           "path": "references/ad-intelligence/creative-cadence.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "when": "Load for a campaign test (structure, budget, decision and kill rules). Ad drafting is a pass-through and loads no resource."
         },
         {
-          "path": "references/format-spec.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/policy-floor.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "references/earn-the-impression.md",
+          "when": "Load for a campaign test (structure, budget, decision and kill rules). Ad drafting is a pass-through and loads no resource."
         },
         {
           "path": "references/message-transmutation.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "when": "Load for a campaign test (structure, budget, decision and kill rules). Ad drafting is a pass-through and loads no resource."
+        },
+        {
+          "path": "references/ad-intelligence/meta-cold-traffic.md",
+          "when": "Load for a campaign test on this network: its account setup. Ad drafting is a pass-through and loads no resource."
+        },
+        {
+          "path": "references/ad-intelligence/meta-retargeting.md",
+          "when": "Load for a campaign test on this network: its account setup. Ad drafting is a pass-through and loads no resource."
+        },
+        {
+          "path": "references/platform-intelligence/facebook.md",
+          "when": "Load for a campaign test that runs in Facebook or Instagram feeds. Ad drafting is a pass-through and loads no resource."
+        },
+        {
+          "path": "references/platform-intelligence/reels.md",
+          "when": "Load for a campaign test that runs in Instagram or Facebook Reels or Stories. Ad drafting is a pass-through and loads no resource."
+        },
+        {
+          "path": "references/ad-intelligence/google-ads.md",
+          "when": "Load for a campaign test on this network: its account setup. Ad drafting is a pass-through and loads no resource."
+        },
+        {
+          "path": "references/ad-intelligence/linkedin-ads.md",
+          "when": "Load for a campaign test on this network: its account setup. Ad drafting is a pass-through and loads no resource."
+        },
+        {
+          "path": "references/ad-intelligence/tiktok-ads.md",
+          "when": "Load for a campaign test on this network: its account setup. Ad drafting is a pass-through and loads no resource."
         },
         {
           "path": "references/ad-intelligence/apple-search-ads.md",
           "when": "Load when the campaign runs on Apple Search Ads or the App Store search results."
+        },
+        {
+          "path": "agents/format-checker.md",
+          "when": "Load for a format or policy check before launch. Ad drafting is a pass-through and loads no resource."
+        },
+        {
+          "path": "references/format-spec.md",
+          "when": "Load for a format or policy check before launch. Ad drafting is a pass-through and loads no resource."
+        },
+        {
+          "path": "references/policy-floor.md",
+          "when": "Load for a format or policy check before launch. Ad drafting is a pass-through and loads no resource."
         }
       ],
-      "optionalResources": [],
+      "optionalResources": [
+        "references/examples/write-ad-walkthrough.md"
+      ],
       "legacy": [
         "create-paid-campaign"
       ],
       "signals": [
+        "facebook|instagram|meta|tiktok|linkedin|google|youtube|reddit & ad|ads|advert*|sponsored & write|draft|create|make|give|need|want",
         "ad|ads|advert* & variation*|creative*|set|sets|copy|headline*|text|version*|launch",
         "facebook|instagram|meta|google|linkedin|tiktok|reddit|youtube|search|display|spark & ad|ads|sponsored|paid test|paid",
         "sponsored content|sponsored post*|promoted post*|boosted post*",
@@ -544,6 +549,10 @@
         "budget*|spend*|money|dollars & split|allocat*|divide|move|shift|where|per channel|across|between|mix|reserve*|floor*|reallocat*|how much",
         "split|allocat*|divide|distribut* & between|across & month|quarter|google|meta|linkedin|tiktok|channel*|paid|ads",
         "how much & spend|invest|put & channel*|ads|paid|marketing|google|meta|linkedin"
+      ],
+      "decisions": [
+        "where should|how should|should we|should i|how do we|what & budget*|money|dollars|cash|funds|spend*|amount|sum|pot & go|split|allocat*|divide|move|shift|put|invest|more|less|between|across & !time|hours|effort",
+        "how should|where should|should we|how do we|how much & split|allocat*|divide|distribut*|reallocat* & between|across"
       ]
     },
     "build": {
@@ -855,6 +864,12 @@
         "acquisition & where|which|focus|first|pick|choose|best|top|start",
         "where|how & find|get|reach|land|meet & first|ideal & customer*|user*|client*|buyer*",
         "channel* & ideal customer*|icp|audience|buyer* & hang out|find|where|reach"
+      ],
+      "decisions": [
+        "should we|do we|whether to|is it worth|can we & keep|stop|drop|cut|cancel|renew|continue|pause|quit|double down & sponsor*|booth*|trade show*|conference*|podcast*|channel*|platform*|influencer*|events|meetup*|directories|listing*",
+        "which|what & channel*|platform* & add|try|test|start|pick|choose|focus|next|double down|invest|drop|cut|prioriti*",
+        "worth & linkedin|youtube|tiktok|instagram|facebook|pinterest|reddit|twitter|podcast*|sponsor*|seo|events|conference*|trade show*|channel*|platform*|webinar*|community|discord & !ads|ad",
+        "should we|whether to|is it time to & try|test|start|move to|switch to|expand to|double down on|go all in on|invest in & channel*|platform*|tiktok|youtube|linkedin|instagram|pinterest|reddit|podcast*|sponsorship*|influencer*|events|trade show*|conference*|community|seo|webinar* & !ads|ad"
       ]
     },
     "convert": {
@@ -1289,7 +1304,9 @@
         "debate agents"
       ],
       "aliases": [
-        "decision-panel"
+        "decision-panel",
+        "weigh both sides",
+        "argue both sides"
       ],
       "exclusions": [
         "write copy",
@@ -2357,6 +2374,12 @@
         "too cheap|too expensive|underpric*|overpric*|undercharg*|overcharg* & month|monthly|year|price*|plan|tier|product|charge",
         "annual billing|annual plan*|monthly billing|annual discount|billing & discount|offer|switch|push|default|convince",
         "free trial|trial & how long|length|days|long|should"
+      ],
+      "decisions": [
+        "should we|should i|whether to|is it time to|do we & raise|increase|lower|cut|change|drop|double & pric*",
+        "should we|should i|whether to|do we & add|offer|introduce|launch|move to|switch to & tier*|annual*|discount*|premium plan|pro plan|team plan|enterprise plan|add on*|usage based|per seat|free trial|free tier|free plan|freemium",
+        "free plan|free tier|free version|freemium & limit*|cap|caps|allowance|quota|include*|generous|too much|too little|giv* away|gate|gated|keep for paid|right & should|what|how|is|are|whether|too",
+        "discount*|off|price cut & counter*|negotiat*|push back|how should we respond|should we accept|should we agree|what should we offer & contract*|commitment|multi year|years|renew*|prospect*|customer*|client*|deal"
       ]
     },
     "prioritize": {
@@ -2450,6 +2473,10 @@
         "rank*|prioriti*|score|sort|ice|triage|force rank|drop|cut|kill & idea*|initiative*|project*|experiment*|option*|bet*|backlog|list|opportunit*|roadmap|these",
         "which & first & experiment*|idea*|bet*|project*|initiative*|test*",
         "pick|choose|what to work on & list|initiative*|backlog|these|quarter"
+      ],
+      "decisions": [
+        "rank*|prioriti*|force rank|triage & idea*|experiment*|bet*|initiative*|project*|options|backlog & !google|search|seo|serp|keyword*|chatgpt|ai answer*|channel*|platform*",
+        "which|what|pick|choose|order & idea*|experiment*|bet*|initiative*|project*|options|backlog & first|next|top & !channel*|platform*"
       ]
     },
     "results": {
@@ -2994,56 +3021,48 @@
         "outreach sequence"
       ],
       "requiredResources": [
-        "references/rubric.md",
         "references/method.md",
-        "references/anti-patterns.md",
-        "references/critical-gates.md",
-        "fallbacks/sequential.md",
-        "references/hook-archetypes.md",
         "@parent/references/writing-guide.md"
       ],
       "conditionalResources": [
         {
+          "path": "references/photo-slideshows.md",
+          "when": "Load when the post is a photo carousel or slideshow on TikTok or Instagram."
+        },
+        {
+          "path": "references/anti-patterns.md",
+          "when": "Load at the review step, after drafting, for a launch package."
+        },
+        {
+          "path": "references/rubric.md",
+          "when": "Load at the review step, after drafting, for a launch package."
+        },
+        {
           "path": "agents/launch-copywriter-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "when": "Load when the deliverable is a Product Hunt or launch listing and separate roles are available."
         },
         {
           "path": "agents/guard-checker-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "when": "Load at the review step, after drafting, for a launch package."
         },
         {
           "path": "agents/copywriter-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "when": "Load when separate roles are available; drafting still follows the entry and the channel file."
         },
         {
           "path": "agents/format-checker-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "when": "Load at the review step, after drafting, for a launch package."
         },
         {
           "path": "agents/critic-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "when": "Load at the review step, after drafting, for a launch package."
         },
         {
-          "path": "references/hook-archetypes.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/legibility-convention.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/why-this-works-convention.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/photo-slideshows.md",
-          "when": "Load when the post is a photo carousel or slideshow on TikTok or Instagram."
+          "path": "fallbacks/sequential.md",
+          "when": "Load when one agent runs the method roles in sequence."
         }
       ],
-      "optionalResources": [
-        "references/examples/social-walkthrough.md",
-        "references/examples/launch-walkthrough.md"
-      ],
+      "optionalResources": [],
       "legacy": [
         "write-social"
       ],
@@ -3449,6 +3468,10 @@
         "hypothes* & test*|experiment*|backlog",
         "growth experiment*|experiment loop|test and learn",
         "series of|run of|set of|loop of|cycle of & test*|experiment*|bet* & measured|kill|learn*|hypothes*|improve|activation|retention"
+      ],
+      "decisions": [
+        "design|plan|structure|scope|set up|propose|outline|map out|suggest & a b test*|ab test*|split test*|experiment*|test|tests|pilot* & !suite|unit|integration|e2e|end to end|regression|load|smoke|test case*|test plan*|coverage|harness|fixture*|paid test*|paid ad*|paid social|paid search|paid media|paid campaign*|ad|ads|budget*|spend*|reserve*|pric*|paywall*|free trial|trial length|discount*|channel*",
+        "test*|experiment*|a b|variant*|challenger|new version & won|win|wins|winner|beat*|result*|significan*|lift|uplift|outperform* & real|trust|significan*|ship|roll out|rollout|noise|chance|luck|valid|confiden*|call it|believe|fluke"
       ]
     },
     "gtm": {
