@@ -19,7 +19,7 @@ was loaded. A draft pack is usable as a method. It supplies no live verification
 
 1. Read the pack's §0 fit/defer and the complete answer the audience needs. Defer a format whose
    assets, permissions or owner are missing; return a useful draft with explicit dependencies.
-2. Use §1 and `references/hook-archetypes.md` to draft distinct openings around the task,
+2. Use §1 and the entry and channel file to draft distinct openings around the task,
    decision, supplied evidence or answer. Choose variants with a meaningful difference. Name
    the choice for legibility; membership carries no quality score.
 3. Deliver the promise in the body using only supplied claims and evidence. Preserve brand mode,

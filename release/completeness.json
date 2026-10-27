@@ -188,8 +188,8 @@
     },
     {
       "name": "social",
-      "version": "2.4.0",
-      "sha256": "76a93464830bcb72618ee2b9bd62b94ae4ad0e26cc267e81d86a20aade2dea1a"
+      "version": "3.0.0",
+      "sha256": "1a1f4c186a13ec6245763e2134318541e2843934313431f447949a3d3c3e2162"
     },
     {
       "name": "ui",
@@ -263,27 +263,27 @@
     },
     {
       "path": "conquistador/channels/facebook.md",
-      "sha256": "95434a04d2529c1c929bdf7cef89418ecf79b33c3f846fca53f8529bef88f2a1"
+      "sha256": "567ebdf225f9fb726b9975caf9debae3a25e43f50ddd8425b21a1b581315142d"
     },
     {
       "path": "conquistador/channels/hacker-news.md",
-      "sha256": "90303e9b4e320941b1f4f638bc321057a256837445d1aa2a9017fe420cf1327b"
+      "sha256": "11f442b2a7e0c82017b072d963544e588794f909c47757afc4e5a6609d15eeed"
     },
     {
       "path": "conquistador/channels/instagram.md",
-      "sha256": "f8ac62ab7ef4d45648eac53a84902d8e9d3af1adbd493263299a2f8b16cb0d5c"
+      "sha256": "dc8e14f604ffb63313633b2fe9d620825d36e8221e8a34ef95a6b23171f8492f"
     },
     {
       "path": "conquistador/channels/linkedin.md",
-      "sha256": "0ecae27ee61b6cdd26376b8f0de9d8f841088feb2bffd39e3a45a89fd19ae6c4"
+      "sha256": "e9cfc0e8300271e0393e5de0447a4e68875c9b2a0c256a8e6c4084081b8a4629"
     },
     {
       "path": "conquistador/channels/product-hunt.md",
-      "sha256": "1918f01c888b7d5a30b0483d3362146cd6a1f3e8170cee670172b6241e34e615"
+      "sha256": "0abcf334e7307dd1b7e3826fa4f27421b5d70abd7c62e7a791c341cb40b23a12"
     },
     {
       "path": "conquistador/channels/reddit.md",
-      "sha256": "5ea692286adde9892492bb7de4920d72967dcf2a3f33915d195de66c1b5fcb85"
+      "sha256": "be8f29306140084e744c92a5da1c2b4a9de2acee90949f1f9fd765f59ac7e71f"
     },
     {
       "path": "conquistador/channels/tiktok.md",
@@ -291,7 +291,7 @@
     },
     {
       "path": "conquistador/channels/x.md",
-      "sha256": "00b7065f63392bb768f5b78aef8e40dda8e2056d7f6c54b508026fc8bc020fb2"
+      "sha256": "43d039d6fe0131896777325b52e9627c1de4d8680aee34c4eeff2534d7f9e6f4"
     },
     {
       "path": "conquistador/channels/youtube.md",
@@ -3351,11 +3351,11 @@
     },
     {
       "path": "conquistador/commands/social/ENTRY.md",
-      "sha256": "dd6240856d907375e8fd55cb3a31c8ffc1f0e63a08569841aeed9d1bbf669243"
+      "sha256": "2cdc496c615a9acff569ef6eb68ff10f29e603bb43b027ddda9444e0ba32d19c"
     },
     {
       "path": "conquistador/commands/social/agents/copywriter-agent.md",
-      "sha256": "8f3c4bc83b6c70787d90fd031c11299ff44f788cc57fe4e591828cca826b34e0"
+      "sha256": "9924cf79c6882cb0724eed2eda5c3ead064f97e471ee5ea05a11bc0ae8a701f0"
     },
     {
       "path": "conquistador/commands/social/agents/critic-agent.md",
@@ -3363,11 +3363,11 @@
     },
     {
       "path": "conquistador/commands/social/agents/format-checker-agent.md",
-      "sha256": "ddae133b5f8c6ad4ae4411084538525c9bf74a666f0206e7bac7617e7eda5256"
+      "sha256": "f99d4d09fe68f122fb10831ffb40be160a9e739cf94161a3e231df37857e2661"
     },
     {
       "path": "conquistador/commands/social/agents/guard-checker-agent.md",
-      "sha256": "a35283b9f32d646f4a81f53993b62148660f68f146cfa896a8ef3c4f5b377e84"
+      "sha256": "969175d5a0f50d43f02b1587a66f659e3025d8b5ad4a172ac57bce5106ccf218"
     },
     {
       "path": "conquistador/commands/social/agents/launch-copywriter-agent.md",
@@ -3379,35 +3379,15 @@
     },
     {
       "path": "conquistador/commands/social/fallbacks/sequential.md",
-      "sha256": "869afb18d3e840a2bacda9c9704b526e52a3d8f69b0548036a09ff71108d28eb"
+      "sha256": "94149db426beb4c0d44341d3aae0ded92bc9de883d84061d1c4417eb24d3d45f"
     },
     {
       "path": "conquistador/commands/social/references/anti-patterns.md",
-      "sha256": "0261043eff2728689e13c8db427df311d4fc09005db229597f00837dc90ffcbb"
-    },
-    {
-      "path": "conquistador/commands/social/references/critical-gates.md",
-      "sha256": "edb09815073dbe98078f22f8e41f594918200f4247520589e2bbe87cd99095a0"
-    },
-    {
-      "path": "conquistador/commands/social/references/examples/launch-walkthrough.md",
-      "sha256": "ccb780e2a8cbfcef71f396b23c6a29062e70adf290f7eadf0504a2c1e1b989cf"
-    },
-    {
-      "path": "conquistador/commands/social/references/examples/social-walkthrough.md",
-      "sha256": "51e60c96214f3adf00baf6c0f3c39306c0cae9eae0c07cb6b8a64768e53067ff"
-    },
-    {
-      "path": "conquistador/commands/social/references/examples.md",
-      "sha256": "3c71fb414deb06a5fc599236e2a7f76fa97e4e589c46d05129af6f8604f84848"
+      "sha256": "2fd06aa631a72f7b5dbda13090ba615b4a200c3489518e1dc5d325e53f31ea3a"
     },
     {
       "path": "conquistador/commands/social/references/format-conventions.md",
       "sha256": "00e077e1854888a7544130393b248489f95973a6032f4e4b95192b72c2828388"
-    },
-    {
-      "path": "conquistador/commands/social/references/hook-archetypes.md",
-      "sha256": "2d7fe2d1e5225cf5c3a6dd2a38313cb7d8f95f904455044765ed88f63662d333"
     },
     {
       "path": "conquistador/commands/social/references/legibility-convention.md",
@@ -3415,7 +3395,7 @@
     },
     {
       "path": "conquistador/commands/social/references/method.md",
-      "sha256": "73d514d54ac601481f1357215604708f14c9b1ec480d7f5979e1ca52f9e4755f"
+      "sha256": "41644b067d56df83552fc4c8c982a1cb53f47cd7a2ec5befc8d3e882853dd088"
     },
     {
       "path": "conquistador/commands/social/references/photo-slideshows.md",
@@ -4783,11 +4763,11 @@
     },
     {
       "path": "conquistador/routing-contract.json",
-      "sha256": "9bc1a105e4af1eeafc6c485c971b33152d254bdb6373e0cbabc8e8397e5b5f58"
+      "sha256": "645e6637b7d556a5244da9a964512797a52a132a2fd06332803f453b05f4ee09"
     },
     {
       "path": "conquistador/routing-overlay.json",
-      "sha256": "b1832dbc661a9f89747dcbefa779f183849fec41836b84f84c8d0ee266a031af"
+      "sha256": "db5602e5efbb10a9177977be0c2285ff61d6fb631fffbcd095128ca380151d2e"
     },
     {
       "path": "conquistador/rubrics/composition.md",
@@ -4941,7 +4921,7 @@
     },
     {
       "path": "tools/search-index.json",
-      "sha256": "34d6fe59d7ed4f81f27a82becf88164bdd4ae1a26f88081ed1270b9d531e6075"
+      "sha256": "c56a36e71f895db71301538b8fbaa7327927d6ce47b409c24b01cdfcfd27a756"
     },
     {
       "path": "tools/prompt-advice.mjs",

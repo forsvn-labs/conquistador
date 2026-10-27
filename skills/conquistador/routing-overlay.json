@@ -2994,56 +2994,48 @@
         "outreach sequence"
       ],
       "requiredResources": [
-        "references/rubric.md",
         "references/method.md",
-        "references/anti-patterns.md",
-        "references/critical-gates.md",
-        "fallbacks/sequential.md",
-        "references/hook-archetypes.md",
         "@parent/references/writing-guide.md"
       ],
       "conditionalResources": [
         {
+          "path": "references/photo-slideshows.md",
+          "when": "Load when the post is a photo carousel or slideshow on TikTok or Instagram."
+        },
+        {
+          "path": "references/anti-patterns.md",
+          "when": "Load at the review step, after drafting, for a launch package."
+        },
+        {
+          "path": "references/rubric.md",
+          "when": "Load at the review step, after drafting, for a launch package."
+        },
+        {
           "path": "agents/launch-copywriter-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "when": "Load when the deliverable is a Product Hunt or launch listing and separate roles are available."
         },
         {
           "path": "agents/guard-checker-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "when": "Load at the review step, after drafting, for a launch package."
         },
         {
           "path": "agents/copywriter-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "when": "Load when separate roles are available; drafting still follows the entry and the channel file."
         },
         {
           "path": "agents/format-checker-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "when": "Load at the review step, after drafting, for a launch package."
         },
         {
           "path": "agents/critic-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "when": "Load at the review step, after drafting, for a launch package."
         },
         {
-          "path": "references/hook-archetypes.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/legibility-convention.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/why-this-works-convention.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/photo-slideshows.md",
-          "when": "Load when the post is a photo carousel or slideshow on TikTok or Instagram."
+          "path": "fallbacks/sequential.md",
+          "when": "Load when one agent runs the method roles in sequence."
         }
       ],
-      "optionalResources": [
-        "references/examples/social-walkthrough.md",
-        "references/examples/launch-walkthrough.md"
-      ],
+      "optionalResources": [],
       "legacy": [
         "write-social"
       ],
