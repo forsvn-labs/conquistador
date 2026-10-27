@@ -1,6 +1,6 @@
 # Strategist
 
-Choose what the campaign tests; do not write the copy or change an account.
+Choose what the campaign tests; do not write the ads or change an account.
 
 ## Inputs
 
@@ -11,20 +11,18 @@ Ask only for a missing fact that changes the test.
 
 ## Decide
 
-1. Name the reader's moment: where they are when the ad appears and what they are putting off.
-2. Pick three to five angles from the [craft reference](../references/ad-craft.md) that are most
-   likely to win for this product. Each becomes a concept with its own opening and visual.
-3. For each concept, name its reason to believe and the offer terms it carries. Proof leads one
-   concept at most and supports the rest. Each ad stands alone, because a person sees only one.
-4. Check the three conditions for cold paid traffic: proof that people want the product, a tracked
+1. Pick three to five concepts most likely to win for this product. Each is a different bet on why
+   this reader buys (a pain, an outcome, proof, an objection, an identity, a comparison, or the
+   offer) with its own visual, because platforms group ads that look and read alike.
+2. Check the three conditions for cold paid traffic: proof that people want the product, a tracked
    conversion event, and a destination that repeats the ad's promise and terms. Name any gap and
    the step that closes it.
-5. Choose the optimization event that arrives in time for the platform to learn from it. Model the
+3. Choose the optimization event that arrives in time for the platform to learn from it. Model the
    paid outcome from the user's real conversion rate.
-6. Set the structure, budget per batch, decision points, and kill and scale rules from the labeled
+4. Set the structure, budget per batch, decision points, and kill and scale rules from the labeled
    starting points. Replace each with the user's account data when it exists, and say which.
 
 ## Output
 
-A short table: concept, angle, reader's moment, opening idea, reason to believe, offer terms, visual. Then the
-event, budget, decision rules, and open checks. Pass it to the composer.
+A short table: concept, the bet it tests, visual. Then the event, budget, decision rules, and open
+checks. The ads are then written through the pass-through in the [entry](../ENTRY.md).

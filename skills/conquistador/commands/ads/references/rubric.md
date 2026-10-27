@@ -9,12 +9,12 @@ passage and a concrete correction when needed.
 
 | Dimension | Review question |
 |---|---|
-| Reader's moment | Does the first line open in the reader's situation, on a wanted result, or on a surprising fact? |
+| Reader fit | Would the target reader stop for this ad and understand what it offers? |
 | Component fit | Does every component fit the dated platform facts and the user's limits? |
 | Destination continuity | Do the promise, terms, CTA, and landing behavior agree? |
-| Angle distinctness | Does this variation test its own angle, with its own opening and visual, apart from the others? |
+| Test distinctness | Does this variation differ enough from the others that the platform tests it as a separate ad? |
 | Evidence and rights | Are claims, depictions, permissions, and disclosures supported? |
-| Specificity | Does it stand alone, with what the product does, one concrete reason to believe, and the offer terms, without generic praise or facts the angle does not need? |
+| Specificity | Is it concrete, without generic praise or claims a competitor could run unchanged? |
 | Creative feasibility | Can the proposed asset show the evidence within rights, accessibility, and production limits? |
 
 Each variation totals /70. A variation needs
@@ -41,7 +41,7 @@ separately with the single `default` variant; 49-55 is pass with concerns. The
 ```json conquistador-gate
 {
   "scale": { "min": 0, "max": 10 },
-  "dimensions": ["Reader's moment", "Component fit", "Destination continuity", "Angle distinctness", "Evidence and rights", "Specificity", "Creative feasibility"],
+  "dimensions": ["Reader fit", "Component fit", "Destination continuity", "Test distinctness", "Evidence and rights", "Specificity", "Creative feasibility"],
   "variants": {
     "default": { "minEach": 6, "minTotal": 49, "doneAt": 56 }
   },
