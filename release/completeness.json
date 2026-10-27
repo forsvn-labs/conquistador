@@ -189,7 +189,7 @@
     {
       "name": "social",
       "version": "3.0.0",
-      "sha256": "30218ea3912e4e1687575602ad7c09efcd46153b57bee42234e524b42d0c60dd"
+      "sha256": "1a1f4c186a13ec6245763e2134318541e2843934313431f447949a3d3c3e2162"
     },
     {
       "name": "ui",
@@ -267,7 +267,7 @@
     },
     {
       "path": "conquistador/channels/hacker-news.md",
-      "sha256": "ad7f00b88323fed11fc870024b90694cca8b37ab997584d21ade2beae4d7c77e"
+      "sha256": "11f442b2a7e0c82017b072d963544e588794f909c47757afc4e5a6609d15eeed"
     },
     {
       "path": "conquistador/channels/instagram.md",
@@ -275,7 +275,7 @@
     },
     {
       "path": "conquistador/channels/linkedin.md",
-      "sha256": "a6c88065e8200cb760c1bbe9d30e0fec3503cd5d1fd2c3f21719344552b305a6"
+      "sha256": "e9cfc0e8300271e0393e5de0447a4e68875c9b2a0c256a8e6c4084081b8a4629"
     },
     {
       "path": "conquistador/channels/product-hunt.md",
@@ -3379,7 +3379,7 @@
     },
     {
       "path": "conquistador/commands/social/fallbacks/sequential.md",
-      "sha256": "7a91ecf344e3240cf9cc681a074beb739dc9fa4ff8995f4df72c20e970e23e41"
+      "sha256": "94149db426beb4c0d44341d3aae0ded92bc9de883d84061d1c4417eb24d3d45f"
     },
     {
       "path": "conquistador/commands/social/references/anti-patterns.md",
@@ -4921,7 +4921,7 @@
     },
     {
       "path": "tools/search-index.json",
-      "sha256": "50a0dd00a91ddc2b1193e82cd7a5743883b351a00c81eefd5e0a74055623bc0c"
+      "sha256": "c56a36e71f895db71301538b8fbaa7327927d6ce47b409c24b01cdfcfd27a756"
     },
     {
       "path": "tools/prompt-advice.mjs",
