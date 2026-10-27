@@ -179,7 +179,7 @@ test('numbers in channel guidance are dated platform facts or labeled starting p
 
 // Named-platform tasks phrased like real requests, not like the blind-test briefs.
 const TASKS = {
-  linkedin: ['Write a LinkedIn post from the founder announcing our new integration', 'Write a LinkedIn post for the company page announcing a customer result', 'Write a LinkedIn post from the CEO announcing a job opening'],
+  linkedin: ['Write a LinkedIn post from the founder announcing our new export feature', 'Write a LinkedIn post for the company page announcing a customer result', 'Write a LinkedIn post from the CEO announcing a job opening'],
   x: ['Write an X thread about what we learned from a price increase', 'Write a launch post for X and a reply with the link'],
   reddit: ['Write a Reddit post for r/smallbusiness sharing data from our product'],
   'hacker-news': ['Write a Show HN post and the first comment for our CLI'],
