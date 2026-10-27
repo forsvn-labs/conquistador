@@ -1,4 +1,5 @@
 // Blind pairwise judging commands. See "Run a blind judging session" in evals/README.md.
+//   generate --pack <dir> --commit <sha> [--arms bare,method] [--runner <cmd>] [--cases a,b] [--force] [--trust-runner] [--repo <dir>]
 //   prepare --pack <dir> --out <dir> --reviewer <name> [--nonce <secret>] [--allow-residual]
 //   serve   --session <dir> [--verdicts <file>] [--port <n>] [--open]
 //   report  --pack <dir> --session <dir> [--verdicts <file>] [--min-decided 6] [--min-win-rate 2/3] [--sequential] [--json <file>]
@@ -8,8 +9,9 @@ import { join, resolve } from "node:path";
 
 import { buildJudgingReport, formatJudgingReport, parsePassRule, prepareJudgingSession, readVerdictsFile, requirePrivatePath } from "../src/blind-judging.ts";
 import { startJudgingServer } from "../src/blind-judging-server.ts";
+import { generateDrafts } from "../src/judge-generate.ts";
 
-const FLAGS = new Set(["allow-residual", "open", "sequential"]);
+const FLAGS = new Set(["allow-residual", "open", "sequential", "force", "trust-runner"]);
 const [command, ...rest] = process.argv.slice(2);
 const options: Record<string, string> = {};
 for (let index = 0; index < rest.length; index += 1) {
@@ -29,8 +31,23 @@ function need(name: string): string {
   return options[name] ?? fail(`--${name} is required`);
 }
 
+const list = (value: string | undefined) => value?.split(",").map((entry) => entry.trim()).filter(Boolean);
+
 try {
-  if (command === "prepare") {
+  if (command === "generate") {
+    const { written } = await generateDrafts({
+      packDir: need("pack"),
+      commit: need("commit"),
+      arms: list(options.arms),
+      cases: list(options.cases),
+      runner: options.runner,
+      repoDir: options.repo,
+      force: options.force === "true",
+      trustRunner: options["trust-runner"] === "true",
+    });
+    console.log(`Generated ${written.length} drafts. Generation records: ${join(resolve(need("pack")), ".generation")}`);
+    console.log(`Next: npm run judge:prepare -- --pack "${resolve(need("pack"))}" --out "<private session folder>" --reviewer <name>`);
+  } else if (command === "prepare") {
     const { sessionDir, session } = prepareJudgingSession({
       packDir: need("pack"),
       outDir: need("out"),
@@ -69,7 +86,7 @@ try {
       console.log(`Report JSON: ${resolve(options.json)}`);
     }
   } else {
-    fail("use prepare, serve, or report (see evals/README.md)");
+    fail("use generate, prepare, serve, or report (see evals/README.md)");
   }
 } catch (error) {
   fail(error instanceof Error ? error.message : String(error));

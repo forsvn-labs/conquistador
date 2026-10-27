@@ -62,7 +62,10 @@ export function requirePrivatePath(path: string, label: string): string {
   }
 }
 
-export function loadJudgingPack(packDir: string): JudgingPack {
+export type PackManifest = { dir: string; id: string; arms: PackArms; stripHeadings: string[]; caseIds: string[] };
+
+/** Read pack.json and the case folder names, without reading any case file. */
+export function readPackManifest(packDir: string): PackManifest {
   const dir = resolve(packDir);
   const manifest = readJson<{ schemaVersion?: string; id?: string; arms?: Partial<PackArms>; normalize?: { stripHeadings?: unknown } }>(join(dir, "pack.json"), "pack.json");
   invariant(manifest.schemaVersion === "conquistador.judging-pack/v1", "pack.json schemaVersion must be conquistador.judging-pack/v1");
@@ -73,25 +76,38 @@ export function loadJudgingPack(packDir: string): JudgingPack {
   invariant(arms.baseline.toLowerCase() !== arms.candidate.toLowerCase(), "pack arms must be distinct");
   const stripHeadings = manifest.normalize?.stripHeadings ?? [];
   invariant(Array.isArray(stripHeadings) && stripHeadings.every((entry) => typeof entry === "string"), "normalize.stripHeadings must be a list of headings");
-  const identityTokens = [arms.baseline, arms.candidate];
-  const options = { identityTokens, stripHeadings: stripHeadings as string[] };
+  const caseIds = readdirSync(dir, { withFileTypes: true }).filter((entry) => entry.isDirectory() && !entry.name.startsWith(".")).map((entry) => entry.name).sort();
+  invariant(caseIds.length > 0, `pack ${manifest.id} has no case folders`);
+  for (const id of caseIds) {
+    invariant(SLUG.test(id), `case id ${id} must be a simple name`);
+    for (const token of [arms.baseline, arms.candidate, "conquistador"]) invariant(!tokenIn(id, token), `case id ${id} contains an arm or product name; rename the folder`);
+  }
+  return { dir, id: manifest.id, arms: { baseline: arms.baseline, candidate: arms.candidate }, stripHeadings: stripHeadings as string[], caseIds };
+}
+
+/** Read a case's practice and brief. Draft files are never read here. */
+export function readCaseBrief(packDir: string, id: string): { practice: string; brief: string } {
+  const caseDir = join(resolve(packDir), id);
+  const meta = readJson<{ practice?: string }>(join(caseDir, "case.json"), `case ${id} case.json`);
+  invariant(typeof meta.practice === "string" && SLUG.test(meta.practice), `case ${id} case.json needs a practice name`);
+  invariant(existsSync(join(caseDir, "brief.md")), `case ${id} is missing brief.md`);
+  const brief = readFileSync(join(caseDir, "brief.md"), "utf8").replace(/\r\n?/g, "\n").trim();
+  invariant(brief.length > 0, `case ${id} brief.md is empty`);
+  return { practice: meta.practice, brief };
+}
+
+export function loadJudgingPack(packDir: string): JudgingPack {
+  const { dir, id: packId, arms, stripHeadings, caseIds } = readPackManifest(packDir);
+  const options = { identityTokens: [arms.baseline, arms.candidate], stripHeadings };
 
   const cases: PackCase[] = [];
-  const folders = readdirSync(dir, { withFileTypes: true }).filter((entry) => entry.isDirectory() && !entry.name.startsWith(".")).map((entry) => entry.name).sort();
-  invariant(folders.length > 0, `pack ${manifest.id} has no case folders`);
-  for (const id of folders) {
-    invariant(SLUG.test(id), `case id ${id} must be a simple name`);
-    for (const token of [...identityTokens, "conquistador"]) invariant(!tokenIn(id, token), `case id ${id} contains an arm or product name; rename the folder`);
+  for (const id of caseIds) {
     const caseDir = join(dir, id);
     const expected = new Set(["case.json", "brief.md", `${arms.baseline}.md`, `${arms.candidate}.md`]);
     for (const name of readdirSync(caseDir)) {
       if (!name.startsWith(".")) invariant(expected.has(name), `case ${id} has an unexpected file ${name}; a case holds case.json, brief.md, ${arms.baseline}.md, and ${arms.candidate}.md`);
     }
-    const meta = readJson<{ practice?: string }>(join(caseDir, "case.json"), `case ${id} case.json`);
-    invariant(typeof meta.practice === "string" && SLUG.test(meta.practice), `case ${id} case.json needs a practice name`);
-    invariant(existsSync(join(caseDir, "brief.md")), `case ${id} is missing brief.md`);
-    const brief = readFileSync(join(caseDir, "brief.md"), "utf8").replace(/\r\n?/g, "\n").trim();
-    invariant(brief.length > 0, `case ${id} brief.md is empty`);
+    const { practice, brief } = readCaseBrief(dir, id);
     const draft = (arm: string) => {
       const path = join(caseDir, `${arm}.md`);
       invariant(existsSync(path), `case ${id} is missing the ${arm} arm (${arm}.md)`);
@@ -101,9 +117,9 @@ export function loadJudgingPack(packDir: string): JudgingPack {
     };
     const drafts = { baseline: draft(arms.baseline), candidate: draft(arms.candidate) };
     invariant(drafts.baseline.text !== drafts.candidate.text, `drafts for case ${id} are identical after normalization`);
-    cases.push({ id, practice: meta.practice, brief, briefDigest: digestBytes(brief), drafts });
+    cases.push({ id, practice, brief, briefDigest: digestBytes(brief), drafts });
   }
-  return { dir, id: manifest.id, arms: { baseline: arms.baseline, candidate: arms.candidate }, stripHeadings: stripHeadings as string[], cases };
+  return { dir, id: packId, arms, stripHeadings, cases };
 }
 
 function sealPairs(pack: JudgingPack, sessionId: string, nonce: string, presentedAt: string) {
