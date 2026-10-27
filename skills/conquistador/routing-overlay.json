@@ -66,6 +66,12 @@
         "create-paid-campaign",
         "facebook ads",
         "instagram ads",
+        "facebook and instagram ad",
+        "facebook and instagram ads",
+        "instagram and facebook ad",
+        "instagram and facebook ads",
+        "instagram and tiktok ads",
+        "tiktok and instagram ads",
         "youtube ads",
         "reddit ads",
         "x ads",
@@ -88,11 +94,18 @@
         "campaign results"
       ],
       "requiredResources": [
-        "references/rubric.md",
-        "references/anti-patterns.md",
-        "fallbacks/sequential.md"
+        "references/ad-craft.md",
+        "references/anti-patterns.md"
       ],
       "conditionalResources": [
+        {
+          "path": "references/rubric.md",
+          "when": "Load when the user asks for a score or a verdict on an ad set."
+        },
+        {
+          "path": "fallbacks/sequential.md",
+          "when": "Load for a full campaign package when the host cannot run the roles as separate agents."
+        },
         {
           "path": "references/earn-the-impression.md",
           "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
@@ -124,6 +137,14 @@
         {
           "path": "references/ad-intelligence/meta-retargeting.md",
           "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+        },
+        {
+          "path": "references/platform-intelligence/facebook.md",
+          "when": "Load when the ads run in Facebook or Instagram feeds."
+        },
+        {
+          "path": "references/platform-intelligence/reels.md",
+          "when": "Load when the ads run in Instagram or Facebook Reels or Stories."
         },
         {
           "path": "references/ad-intelligence/google-ads.md",
@@ -158,11 +179,16 @@
           "when": "Load when the campaign runs on Apple Search Ads or the App Store search results."
         }
       ],
-      "optionalResources": [],
+      "optionalResources": [
+        "references/examples/ad-sets-social.md",
+        "references/examples/ad-sets-search-b2b.md",
+        "references/examples/write-ad-walkthrough.md"
+      ],
       "legacy": [
         "create-paid-campaign"
       ],
       "signals": [
+        "facebook|instagram|meta|tiktok|linkedin|google|youtube|reddit & ad|ads|advert*|sponsored & write|draft|create|make|give|need|want",
         "ad|ads|advert* & variation*|creative*|set|sets|copy|headline*|text|version*|launch",
         "facebook|instagram|meta|google|linkedin|tiktok|reddit|youtube|search|display|spark & ad|ads|sponsored|paid test|paid",
         "sponsored content|sponsored post*|promoted post*|boosted post*",

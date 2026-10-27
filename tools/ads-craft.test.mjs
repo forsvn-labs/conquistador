@@ -210,11 +210,14 @@ const adsRequests = [
   'Write a Google Search responsive ad: 8 headlines and 3 descriptions for the keyword payroll software',
   'Write three LinkedIn sponsored content ad variations for our security product',
   'Write TikTok ads for our budgeting app',
+  'Write Facebook and Instagram ads for our gym',
+  'Write Instagram and TikTok ads for our meal kit',
 ];
 
 test('ad requests reach ads first and organic post requests stay with social', () => {
   for (const task of adsRequests) assert.equal(createBrief(task, options).methods[0]?.name, 'ads', task);
-  for (const task of ['Write an Instagram post about our launch', 'Write a Facebook post announcing our new menu', 'Write a LinkedIn post about hiring']) {
+  for (const task of ['Write an Instagram post about our launch', 'Write a Facebook post announcing our new menu', 'Write a LinkedIn post about hiring',
+    'Write a Facebook and Instagram post about our launch', 'Write Facebook and Instagram captions for our launch']) {
     assert.equal(createBrief(task, options).methods[0]?.name, 'social', task);
   }
 });
