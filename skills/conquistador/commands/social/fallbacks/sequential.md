@@ -10,4 +10,5 @@ Use when one agent runs the whole method in one context. The method does not cha
 
 This is one context, not independent review. Nothing is posted, voted on, or replied to as the
 account until the user approves the exact text and the action. Polish (`editorial-polish` or
-`vietnamese`) comes last, after the check.
+`vietnamese`) comes last, after the check. Polish can change the text, so run the check again on
+the polished text (facts, consent, and limits) before delivery or approval.

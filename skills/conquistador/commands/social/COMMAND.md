@@ -35,9 +35,10 @@ Output formats and fallbacks: [sequential](fallbacks/sequential.md), [format-con
 
 1. **Draft from the craft.** Make the decisions in the entry (`ENTRY.md`), then read the channel
    file for the platform in the library's `channels/` folder: `x`, `linkedin`, `reddit`,
-   `hacker-news`, `product-hunt`, `facebook`, or `instagram`. Compare the draft with that file's
-   annotated pairs. For a TikTok or Instagram photo slideshow, also follow
-   [photo slideshows](references/photo-slideshows.md).
+   `hacker-news`, `product-hunt`, `facebook`, `instagram`, or `tiktok`. Compare the draft with that
+   file's annotated pairs. The `tiktok` file has no annotated pairs or listed limits: skip the
+   comparison, and confirm caption and length limits in the app before delivery. For a TikTok or
+   Instagram photo slideshow, also follow [photo slideshows](references/photo-slideshows.md).
 2. **Check after drafting.** Run [the check](references/method.md) on the finished draft: facts,
    first person, quote consent, limits, and a last read as the reader.
 3. **Deliver.** The post first. Add only the pieces the job needs: an alternate opening when it
