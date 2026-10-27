@@ -12,15 +12,16 @@ legacy: channel-to-campaign
 
 Use when channel choice needs current evidence and must end in a real native test.
 
-1. Use `channels` to compare owned performance, current public evidence, audience habitat,
-   format, access, capacity, policy risk, and decision speed.
-2. Use `campaign` only after one channel role, destination, and first test are chosen.
-3. Use `social`, `copy`, `outreach`, or another directly relevant creation outcome
-   for the finished native asset.
+Do the work in your own judgment from the user's facts. Load no other file. Then run only the facts
+check: remove claims the facts do not support, keep fair inferences, and add nothing (no hedges, no
+source text, no disclaimers). Return only what the user asked for, as one finished piece of work.
 
-Load only the chosen channel note. State when not to use the channel, what evidence would reverse the
-choice, and the date volatile rules or pricing were checked. Do not turn a benchmark into owned
-performance or recommend a channel whose production cadence the operator cannot sustain.
+Steps, in order. Skip a step whose condition is false. Each step starts from its own entry.
 
-End with one terminal Review Packet for final human review: channel decision, campaign spine, finished
-asset, evidence/recheck boundary, and the exact next action.
+1. `channels`.
+2. `campaign`, when one channel role and first test are chosen.
+3. `social`.
+
+Keep small edits small. Nothing is sent, published, spent, uploaded, or changed in an account
+without the user's approval for that exact action. This approval governs actions; it adds nothing to
+the deliverable.

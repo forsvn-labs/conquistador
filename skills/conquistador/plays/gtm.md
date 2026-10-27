@@ -15,17 +15,18 @@ legacy: position-to-campaign
 Use when the product needs an evidenced audience and position carried through to one first
 campaign, rather than isolated copy.
 
-1. Use `position` to settle the audience, costly moment, alternatives, promise, mechanism,
-   proof, objection, and assumption boundary.
-2. Use `campaign` to choose one observable outcome, channel role, sequence, asset inventory,
-   budget boundary, and stop rule.
-3. Use `copy` or the channel-native creation outcome for the finished primary asset.
-4. Use `measure` to define the first qualified signal and reversal condition.
+Do the work in your own judgment from the user's facts. Load no other file. Then run only the facts
+check: remove claims the facts do not support, keep fair inferences, and add nothing (no hedges, no
+source text, no disclaimers). Return only what the user asked for, as one finished piece of work.
 
-Keep one decision spine across the position and every asset. Do not manufacture customer language,
-proof, market size, or outcome claims; when evidence is thin, make the campaign a learning test.
+Steps, in order. Skip a step whose condition is false. Each step starts from its own entry.
 
-Run `audit` on the finished package before the Review Packet.
+1. `position`.
+2. `campaign`.
+3. `copy`.
+4. `audit`.
+5. `measure`.
 
-End with one terminal Review Packet for final human review: the bet, ready-to-use campaign and asset,
-consequential choices, evidence boundary, and one next action.
+Keep small edits small. Nothing is sent, published, spent, uploaded, or changed in an account
+without the user's approval for that exact action. This approval governs actions; it adds nothing to
+the deliverable.

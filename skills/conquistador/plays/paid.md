@@ -15,25 +15,19 @@ legacy: paid-campaign-loop
 
 Use when paid-media creation and actual-result evaluation must share one decision spine.
 
-Before cold paid traffic, check three things: the product already converts from organic, creator,
-or sales traffic; the conversion event fires and is tracked; and the landing page repeats the ad's
-promise and terms. If one is missing, propose the step that fixes it before any spend.
+Do the work in your own judgment from the user's facts. Load no other file. Then run only the facts
+check: remove claims the facts do not support, keep fair inferences, and add nothing (no hedges, no
+source text, no disclaimers). Return only what the user asked for, as one finished piece of work.
 
-1. Use `position` only when the segment, costly moment, offer, or proof is unresolved.
-2. Use `ads` for the finished ads (written through its pass-through), creative direction, and a
-   test of distinct concepts with labeled starting-point structure, budget, and kill rules.
-3. Use `budget` when channel floors, concentration, reserves, marginal return, or
-   reallocation rules need a decision beyond the campaign's bounded test budget.
-4. Use `creative` only when a separate visual or video production brief is needed.
-5. After delivery evidence exists, use `results` for cell-level attribution, fatigue,
-   downstream quality, and keep/revise/pause/stop guidance.
-6. Use `measure` only for broader causal or cross-channel interpretation.
+Steps, in order. Skip a step whose condition is false. Each step starts from its own entry.
 
-Confirm current network policy and formats before launch. Never invent performance or
-incrementality. Never launch, publish, spend, upload an audience or asset, or change a live account
-without the user's approval for that exact action.
+1. `position`, when segment, offer, or proof is unresolved.
+2. `ads`.
+3. `budget`, when allocation goes beyond the campaign test budget.
+4. `creative`, when a separate visual or video brief is needed.
+5. `audit`.
+6. `results`, when delivery evidence exists.
 
-Run `audit` on the finished package before the Review Packet.
-
-End with one terminal Review Packet for final human review: hypothesis, ready campaign, budget and
-authority boundary, evidence plan or actual readout, and one next action.
+Keep small edits small. Never launch, publish, spend, upload an audience or asset, or change a live
+account without the user's approval for that exact action. This approval governs actions; it adds
+nothing to the deliverable.

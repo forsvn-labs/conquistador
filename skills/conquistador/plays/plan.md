@@ -13,15 +13,17 @@ legacy: target-to-growth-plan
 
 Use when a growth or revenue target needs numeric feasibility and a focused first move.
 
-1. Use `funnel` to define units, model backward, label observed values and assumptions,
-   and expose sensitivity, capacity, and unit-economics constraints.
-2. Use `prioritize` to identify the binding constraint and force a cut line.
-3. Use `budget` to allocate only feasible minimum tests with reallocation triggers.
-4. Use `campaign` for the first initiative after the model identifies the acquisition or
-   activation requirement.
+Do the work in your own judgment from the user's facts. Load no other file. Then run only the facts
+check: remove claims the facts do not support, keep fair inferences, and add nothing (no hedges, no
+source text, no disclaimers). Return only what the user asked for, as one finished piece of work.
 
-Do not reverse-engineer optimistic rates to make the target look feasible. Include downside/base/upside
-cases, the evidence plan for unknown inputs, and a no-go condition.
+Steps, in order. Skip a step whose condition is false. Each step starts from its own entry.
 
-End with one terminal Review Packet for final human review: target math, binding constraint, chosen
-initiative, bounded allocation, assumptions, and one next action.
+1. `funnel`.
+2. `prioritize`.
+3. `budget`.
+4. `campaign`.
+
+Keep small edits small. Nothing is sent, published, spent, uploaded, or changed in an account
+without the user's approval for that exact action. This approval governs actions; it adds nothing to
+the deliverable.
