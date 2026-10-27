@@ -1,12 +1,11 @@
 # Write social posts people stop for
 
-Write the post a sharp operator in this field would publish under their own name. Make the
-decisions below, draft, then cut.
+Write the post a sharp operator would publish under their own name. Decide, draft, then cut.
 
 ## Use this method
 
-Draft from these decisions and the channel file for the platform, and compare your draft with that
-file's annotated pairs. Then run [the check](references/method.md) on the finished draft. Nothing is
+Draft from these decisions and the platform's channel file, and compare with its annotated pairs.
+Then run [the check](references/method.md) on the finished draft. Nothing is
 posted, scheduled, or sent until the user approves the exact text. Keep the requested size and
 scope. For a small edit, return the edit and only the explanation it needs.
 
@@ -17,13 +16,12 @@ scope. For a small edit, return the edit and only the explanation it needs.
   quote. Pick one voice per post.
 - **What stops this reader.** Open on the most interesting true thing for this reader: the result
   in their terms, a moment from their own work, the number that surprises, or the news itself.
-  Usually the fact is the hook. A made-up hook line or a warning about a problem reads as a
-  template.
+  Usually the fact is the hook; a made-up hook line reads as a template.
 - **One job.** A reply, a click, an application, a share. Each line serves that job or goes.
 - **Whether it earns its length.** One idea fits one post. A thread or a long post earns its
   length only with a sequence: what was at stake, what was done, what happened, what it cost, what
-  the reader can take from it. Each part stands alone and pulls to the next. If the facts fit in
-  one post, write one post.
+  the reader can take. Each part stands alone and pulls to the next. If the facts fit in one
+  post, write one.
 - **What to leave out.** Use the strongest few facts, not all of them. Never restate the audience,
   repeat a fact, or explain the product twice.
 - **How it ends.** End on the action, or on a question this reader can answer from their own work.

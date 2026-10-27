@@ -4,11 +4,8 @@ Use for posts, threads, launch posts, and replies on X.
 
 ## Decisions
 
-- The first post is the whole pitch for most readers. It must stand alone: the result, the news, or
-  the stakes, in plain words.
-- A thread earns its length with a story the reader wants the end of: the decision and what it
-  risked, what was done, what happened, what it cost, what you would repeat. Each post makes one
-  move and reads on its own if quoted.
+- Most readers see only the first post. It must stand alone: the result, the news, or the stakes.
+- In a thread, each post adds one new step and still makes sense if quoted alone.
 - A launch post says what it is, who made it, and why to try it today. The link and offer can go
   in a reply.
 - End a thread on a question peers can answer from experience, and answer the early replies.
