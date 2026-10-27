@@ -291,7 +291,7 @@
     },
     {
       "path": "conquistador/channels/tiktok.md",
-      "sha256": "51efb95cf69425d1af9353fd991c40b14938b2193d2cc98fcc855ef6e197e2fb"
+      "sha256": "de1d7bef582f942a44ab429b6ca9a1964db711819063253faf893177399d13bb"
     },
     {
       "path": "conquistador/channels/x.md",
@@ -3547,7 +3547,7 @@
     },
     {
       "path": "conquistador/commands/video/ENTRY.md",
-      "sha256": "18fae04f32ad5286bdb2f3e2a1fbaa942e92ed10ae5622c8d1a2024155597946"
+      "sha256": "9d5197eae2d2625b70d94b1747d27ec0d7afaee2319fc1a10d5709d985d66779"
     },
     {
       "path": "conquistador/commands/video/agents/audio-agent.md",
@@ -3887,7 +3887,7 @@
     },
     {
       "path": "conquistador/formats/ugc.md",
-      "sha256": "72ee3a223b87f9312d502e07b57eedc6085b8c980cf57498267c2b9eb4e0c173"
+      "sha256": "6f4118b6f3391392dc5e1e4c652fe15770fe4c61cf2fa5d6e30db88f6dc0b0cd"
     },
     {
       "path": "conquistador/integrations/README.md",
@@ -5013,7 +5013,7 @@
     },
     {
       "path": "tools/search-index.json",
-      "sha256": "073382310ae382c438da762bea95b3a3f9f4d6c6ce1e2bb0f56586d97d5c66c5"
+      "sha256": "0d8b0727d43eb6d4922300155f643425d43c0587cdfda463e04af54056e5d066"
     },
     {
       "path": "tools/prompt-advice.mjs",
