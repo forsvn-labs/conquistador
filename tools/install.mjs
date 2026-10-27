@@ -9,6 +9,7 @@ import { operatorFiles } from './operator-package.mjs';
 import { containsPath } from './install-paths.mjs';
 import { stageMethodLibrary } from './stage-method-library.mjs';
 import { methodDirectory, methodOwner, methodPath } from './method-library.mjs';
+import { isThinCommand } from './method-policy.mjs';
 import { projectSkillOwner, skillsManagerOwner } from './project-installation.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
@@ -114,8 +115,16 @@ function stage(mode, target, selection) {
     if (selection && !selection.skills.includes(name)) return;
     if (!/^[a-z][a-z0-9-]*$/.test(name) || !existsSync(join(root, 'skills', methodPath(name)))) fail(`Unknown skill: ${name}`);
     copy(`skills/${methodDirectory(name)}`, `${into}/${name}`);
-    // A standalone command is its own host skill, so its document takes the discoverable name.
-    renameSync(join(target, into, name, 'COMMAND.md'), join(target, into, name, 'SKILL.md'));
+    const directory = join(target, into, name);
+    if (isThinCommand(name)) {
+      const command = readFileSync(join(directory, 'COMMAND.md'), 'utf8');
+      const metadata = command.match(/^---\n[\s\S]*?\n---\n/)?.[0];
+      if (!metadata) fail(`Missing command metadata: ${name}`);
+      writeFileSync(join(directory, 'SKILL.md'), metadata + '\n' + readFileSync(join(directory, 'ENTRY.md'), 'utf8'));
+    } else {
+      // Kept methods retain their existing standalone document and relative links.
+      renameSync(join(directory, 'COMMAND.md'), join(directory, 'SKILL.md'));
+    }
   };
   const template = readFileSync(join(root, 'tools/entrypoint/SKILL.md'), 'utf8');
   const library = (entry, names) => stageMethodLibrary(join(root, 'skills'), join(target, entry), {
@@ -136,7 +145,7 @@ function stage(mode, target, selection) {
   copy('docs/MASTER-AGENT.md');
   copy('docs/USAGE.md');
   copy('docs/PROACTIVE.md');
-  const sharedAdviceFiles = ['prompt-advice.mjs', 'read-evidence.mjs', 'brief.mjs', 'search-index.json', 'context-files.mjs', 'context-selection.mjs', 'domain-package.mjs', 'method-library.mjs', 'plugin-contracts.mjs', 'routing-contract.mjs', 'request-text.mjs', 'module-root.mjs'].map(file => `tools/${file}`);
+  const sharedAdviceFiles = ['method-policy.mjs', 'prompt-advice.mjs', 'read-evidence.mjs', 'brief.mjs', 'search-index.json', 'context-files.mjs', 'context-selection.mjs', 'domain-package.mjs', 'method-library.mjs', 'plugin-contracts.mjs', 'routing-contract.mjs', 'request-text.mjs', 'module-root.mjs'].map(file => `tools/${file}`);
   if (['conquistador', 'plugin', 'single-agent'].includes(mode)) {
     copy('release/completeness.json');
     copy('tools/proactive.mjs');

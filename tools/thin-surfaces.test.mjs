@@ -10,13 +10,14 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
-import { mkdtempSync, readFileSync, realpathSync, rmSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, readFileSync, realpathSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { loadSkillAssets, skillMethodContext } from '../runtime/src/skill-assets.ts';
 import { loadRuntimeCorpus } from '../runtime/src/corpus.ts';
 import { loadAssignment } from '../hosts/coding-agent/contracts.mjs';
+import { runSpecialistTeam } from '../hosts/coding-agent/orchestrate.mjs';
 import { prepareAssignmentResources } from './routing-contract.mjs';
 import { createMethodAccess } from './skills-mcp.mjs';
 
@@ -44,6 +45,15 @@ test('served method context starts with the same thin entry as the brief', () =>
   const sales = skillMethodContext(loadSkillAssets('copy', skills), 24_000, { task: 'Write a sales page for our course' });
   assert.match(sales, /path="COMMAND.md"/);
   assert.match(sales, /sales-argument/);
+});
+
+test('a new practice defaults to thin and cannot restore its procedure when the entry is missing', t => {
+  const temporary = realpathSync(mkdtempSync(join(tmpdir(), 'conquistador-new-practice-')));
+  t.after(() => rmSync(temporary, { recursive: true, force: true }));
+  const directory = join(temporary, 'conquistador/commands/new-practice');
+  mkdirSync(directory, { recursive: true });
+  writeFileSync(join(directory, 'COMMAND.md'), '# Unproven method\nDetailed process.\n');
+  assert.throws(() => skillMethodContext(loadSkillAssets('new-practice', temporary)), /entry is missing/);
 });
 
 test('app corpus serves thin entries without the parent process or archived channel methods', () => {
@@ -94,6 +104,26 @@ test('standalone installs expose the entry, retain metadata and archived bytes, 
       assert.equal(readFileSync(join(target, 'skills', name, 'COMMAND.md'), 'utf8'), read(`skills/conquistador/commands/${name}/COMMAND.md`), name);
     } else assert.equal(installed, read(`skills/conquistador/commands/${name}/COMMAND.md`), name);
   }
+});
+
+// Additional failure found during integration review: coordinator assignments can restore the full
+// parent even when every requested specialist uses thin entries. Exercise the real coordinator.
+test('team integration and correction cannot restore the parent method for thin assignments', async () => {
+  const seen = [];
+  const plan = { schemaVersion: 'conquistador.specialist/v1', id: 'thin-team', goal: 'Write the launch message.',
+    assignments: [assignment({ role: 'copy', skills: ['copy'] })],
+    limits: { concurrency: 1, timeoutSeconds: 10, maxAttempts: 1, maxDispatches: 6, maxOutputBytes: 4000 } };
+  const parent = { async execute(packet) {
+    seen.push(packet.phase);
+    assert.ok(packet.context.methods.every(item => !item.path.endsWith('/COMMAND.md') && !item.path.endsWith('/SKILL.md')
+      && !item.path.endsWith('/METHOD.md') && !item.path.includes('/standards/')), packet.phase);
+    return { executionId: 'same-parent', isolated: false, result: { schemaVersion: plan.schemaVersion,
+      assignmentId: packet.assignment.id, status: packet.phase === 'review' && packet.assignment.id === 'review' ? 'revise' : 'draft',
+      artifact: 'The requested launch message.', evidence: [], gaps: [], reviewedDigest: packet.integratedDigest } };
+  } };
+  const result = await runSpecialistTeam({ plan, root, parent });
+  assert.ok(seen.includes('integrate') && seen.includes('correct'));
+  assert.equal(result.receipt.humanAccepted, false);
 });
 
 test('MCP discovery advertises entry paths and hides archived files from default thin discovery', () => {

@@ -1,6 +1,7 @@
 import { constants, openSync, closeSync, readSync, fstatSync, lstatSync, realpathSync, opendirSync, readFileSync } from 'node:fs';
 import { dirname, join, extname, posix, relative, sep } from 'node:path';
 import { createBrief, packBrief, searchKnowledge } from './brief.mjs';
+import { commandDocumentFor, isThinCommand, isThinPlay } from './method-policy.mjs';
 import { checkDocument, counted } from './check/index.mjs';
 import { channels, detectChannel, normalizeChannel } from './check/channels.mjs';
 import { extractDocument } from './check/extract.mjs';
@@ -139,9 +140,10 @@ export function createMethodAccess(root = bundledRoot) {
     const plays = [];
     for (const entry of entries(contained('conquistador/commands', true))) {
       if (!entry.isDirectory() || !methodPattern.test(entry.name)) continue;
-      contained(`conquistador/commands/${entry.name}/COMMAND.md`);
+      const path = `conquistador/commands/${entry.name}/${commandDocumentFor(entry.name)}`;
+      contained(path);
       if (result.length >= LIMITS.methods) throw new Error('Too many methods');
-      result.push({ method: entry.name, path: `conquistador/commands/${entry.name}/COMMAND.md` });
+      result.push({ method: entry.name, path });
     }
     for (const entry of entries(contained('conquistador/plays', true))) {
       const name = entry.name.replace(/\.md$/, '');
@@ -157,8 +159,14 @@ export function createMethodAccess(root = bundledRoot) {
     if (method === 'conquistador') contained('conquistador/SKILL.md');
     else try { contained(`${directory}/COMMAND.md`); } catch {
       contained(`conquistador/plays/${method}.md`);
+      if (isThinPlay(method)) return { files: [`conquistador/plays/${method}.md`] };
       directory = `conquistador/plays/${method}`;
       try { contained(directory, true); } catch { return { files: [`conquistador/plays/${method}.md`] }; }
+    }
+    if (method !== 'conquistador' && isThinCommand(method)) {
+      const entry = `${directory}/ENTRY.md`;
+      contained(entry);
+      return { files: [entry] };
     }
     const result = [];
     let visited = 0;

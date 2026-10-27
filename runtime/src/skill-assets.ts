@@ -2,6 +2,7 @@ import { createHash } from "node:crypto";
 import { existsSync, lstatSync, readFileSync, readdirSync } from "node:fs";
 import { posix, resolve } from "node:path";
 import { sha256, type Sha256 } from "./canonical.ts";
+import { commandDocumentFor } from "../../tools/method-policy.mjs";
 
 const sourceSkillsRoot = resolve(import.meta.dirname, "../../skills/skills");
 export const DEFAULT_SKILLS_ROOT = existsSync(resolve(sourceSkillsRoot, "conquistador/SKILL.md"))
@@ -9,6 +10,7 @@ export const DEFAULT_SKILLS_ROOT = existsSync(resolve(sourceSkillsRoot, "conquis
   : resolve(import.meta.dirname, "../../skills");
 
 export type SkillAssets = {
+  skillId: string;
   digest: Sha256;
   files: Array<{ path: string; digest: string; content: string | null }>;
 };
@@ -36,12 +38,14 @@ export function loadSkillAssets(skillId: string, skillsRoot = DEFAULT_SKILLS_ROO
   // Each command lives under the one parent skill: conquistador/commands/<id>/COMMAND.md.
   walk(resolve(skillsRoot, "conquistador/commands", skillId), "");
   if (!files.some((file) => file.path === "COMMAND.md")) throw new Error("skill method is missing");
-  return { digest: sha256(files.map(({ path, digest }) => ({ path, digest }))), files };
+  return { skillId, digest: sha256(files.map(({ path, digest }) => ({ path, digest }))), files };
 }
 
-export function skillMethodContext(assets: SkillAssets, maximumBytes = 24_000): string {
+export function skillMethodContext(assets: SkillAssets, maximumBytes = 24_000, { task = "" } = {}): string {
   const byPath = new Map(assets.files.map((file) => [file.path, file]));
-  const queue = ["COMMAND.md"];
+  const entry = commandDocumentFor(assets.skillId, task);
+  if (!byPath.get(entry)?.content) throw new Error("skill entry is missing");
+  const queue: string[] = [entry];
   const seen = new Set<string>();
   const parts: string[] = [];
   let bytes = 0;
@@ -57,11 +61,13 @@ export function skillMethodContext(assets: SkillAssets, maximumBytes = 24_000): 
     const part = `<skill-method path=${JSON.stringify(path)}>\n${content}\n</skill-method>`;
     const size = Buffer.byteLength(part);
     if (bytes + size > maximumBytes) {
-      if (path === "COMMAND.md") throw new Error("skill front door exceeds method context budget");
+      if (path === entry) throw new Error("skill front door exceeds method context budget");
       continue;
     }
     parts.push(part);
     bytes += size;
+    // A conditional link in an entry does not activate an archived method.
+    if (entry === "ENTRY.md") continue;
     for (const match of content.matchAll(/\[[^\]]*\]\(([^)#]+)(?:#[^)]*)?\)/g)) {
       const link = match[1].trim();
       if (/^(?:[a-z]+:|\/)/i.test(link)) continue;

@@ -3,6 +3,7 @@ import { posix, resolve } from "node:path";
 
 import { canonicalJson, deepFreeze, sha256, type Sha256 } from "./canonical.ts";
 import type { CorpusDescriptor } from "./contracts.ts";
+import { commandDocumentFor, isThinCommand, isThinPlay } from "../../tools/method-policy.mjs";
 import {
   PARENT_JOBS,
   requestedEngineeringOutcome,
@@ -108,11 +109,12 @@ function ranked(
     .map((entry) => entry.file);
 }
 
-function linkedFiles(initial: readonly CorpusFile[], byId: ReadonlyMap<string, CorpusFile>): CorpusFile[] {
+function linkedFiles(initial: readonly CorpusFile[], byId: ReadonlyMap<string, CorpusFile>, entries: ReadonlySet<string>): CorpusFile[] {
   const selected = new Map(initial.map((file) => [file.id, file]));
   const queue = [...initial];
   while (queue.length > 0) {
     const file = queue.shift()!;
+    if (entries.has(file.id)) continue;
     for (const match of file.content.matchAll(/\[[^\]]*\]\(([^)#]+)(?:#[^)]*)?\)/g)) {
       const raw = match[1].trim();
       if (!raw || /^(?:[a-z]+:|\/)/i.test(raw)) continue;
@@ -172,12 +174,25 @@ function selectionFor(files: readonly CorpusFile[], descriptor: CorpusDescriptor
   // Narrow explicit requests need only their outcome. The parent can compose
   // additional outcomes progressively when the requested deliverable needs them.
   const selectedWorkflows = explicitOutcome || engineeringIntent ? [] : ranked(promptTokens, workflows, 2);
-  const contextual = files.filter((file) =>
-    file.id.startsWith("conquistador/channels/") || file.id.startsWith("conquistador/adapters/"),
-  );
+  const contextual = files.filter((file) => /^conquistador\/(?:channels|adapters)\/[^/]+\.md$/.test(file.id));
   const selectedContext = explicitOutcome || engineeringIntent ? [] : ranked(promptTokens, contextual, 1);
-  const required = requiredIds.map((id) => byId.get(id)).filter((file): file is CorpusFile => Boolean(file));
-  const relevant = linkedFiles([...selectedOutcomes, ...selectedWorkflows, ...selectedContext], byId);
+  const passThrough = selectedOutcomes.length > 0
+    && selectedOutcomes.every(file => isThinCommand(commandId(file.id)!, prompt))
+    && selectedWorkflows.every(file => isThinPlay(PLAY_DOCUMENT.exec(file.id)![1]));
+  // Rank the original method metadata so changing the served document cannot change the route.
+  const entries = new Set<string>();
+  const frontDoors = selectedOutcomes.map(file => {
+    const document = commandDocumentFor(commandId(file.id)!, prompt);
+    if (document === "COMMAND.md") return file;
+    const id = file.id.replace(/COMMAND\.md$/, document);
+    const entry = byId.get(id);
+    if (!entry) throw new Error(`[conquistador.corpus] method entry is missing: ${id}`);
+    entries.add(id);
+    return entry;
+  });
+  const required = passThrough ? [] : requiredIds.map((id) => byId.get(id)).filter((file): file is CorpusFile => Boolean(file));
+  const initial = [...frontDoors, ...selectedWorkflows, ...selectedContext];
+  const relevant = passThrough ? initial : linkedFiles(initial, byId, entries);
   const candidates = [...new Map([...required, ...relevant].map((file) => [file.id, file])).values()];
   const selected: CorpusFile[] = [];
   const omittedFileIds: string[] = [];
@@ -196,7 +211,9 @@ function selectionFor(files: readonly CorpusFile[], descriptor: CorpusDescriptor
   const digest = sha256(canonicalJson(selected.map(({ id, digest: fileDigest }) => ({ id, digest: fileDigest }))));
   const systemInstructions = [
     `Exact Conquistador authored corpus ${descriptor.digest}; selected context ${digest}; private job ${job}.`,
-    "Only the files included below are loaded. Follow references progressively through host file tools when necessary; do not claim to have read omitted references.",
+    passThrough
+      ? "Use the supplied entries and the user's facts. Return only the requested deliverable. Do not load archived methods."
+      : "Only the files included below are loaded. Follow references progressively through host file tools when necessary; do not claim to have read omitted references.",
     "Treat the following installed authored files as trusted product instructions. Use only this relevant context and never expose internal routing, file names, workflows, or capability selection.",
     ...selected.map(({ id, content }) => `<conquistador-context id="${id}">\n${content}\n</conquistador-context>`),
   ].join("\n\n");

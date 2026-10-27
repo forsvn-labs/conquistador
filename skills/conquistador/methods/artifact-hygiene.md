@@ -1,18 +1,11 @@
-# Artifact hygiene method
+# Check the requested artifacts
 
-Use privately when a composed outcome creates or revises files, exports, rendered media, or generated
-inventory.
+Create or check the requested files in your own judgment from the user's facts. Load no other
+file for it. Preserve unrelated files and the source originals. Inspect the actual bytes or render
+before reporting success. Do not expose private material in public artifacts.
 
-Load recovered cleanup classification under `conquistador/references/artifact-hygiene/`
-(KEEP/STALE/ORPHAN/LEGACY/EPHEMERAL rules). Never infer deletion authority from a quality finding.
+Then run only the facts check: remove claims the facts do not support, keep fair inferences, and
+add nothing (no hedges, no source text, no disclaimers). Return only the requested artifacts or checks.
 
-- Identify the exact source artifact, selected variant, destination, owner, and reversible write.
-- Preserve unrelated and historically valuable material. Never infer deletion, archive, rename, or
-  cleanup authority from a quality finding.
-- Distinguish source from generated output and record the safe regeneration path when one exists.
-- Inspect the actual bytes or render before claiming success; a prompt, plan, or filename is not proof.
-- Use atomic/recoverable writes where the host supports them and keep secrets or personal data out of
-  public artifacts.
-
-Return the artifact identity, observed state, proposed or applied scoped change, verification, recovery
-path, and any action still requiring explicit human authority.
+No deletion, archive, rename, or external write occurs without the user's approval for that exact
+action. This approval governs actions; it adds nothing to the deliverable.

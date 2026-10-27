@@ -1,4 +1,5 @@
 import { methodLibrary, methodPath, playPath } from '../../tools/method-library.mjs';
+import { commandDocumentFor, isThinCommand, isThinPlay } from '../../tools/method-policy.mjs';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { existsSync, readFileSync } from 'node:fs';
@@ -199,12 +200,16 @@ export async function loadAssignment(root, task, { authorize = () => {}, resolve
   const layouts = methodLibrary(root);
   assert.equal(layouts.length, 1, 'Ambiguous or missing method library');
   const { layout: skillsRoot, internal } = layouts[0];
-  const paths = [...loadRoutingContract(root).requiredStandards];
-  if (task.role === 'parent') paths.push(`${skillsRoot}/${methodPath('conquistador', { internal })}`);
+  const preserveMethod = task.workflows.some(name => !isThinPlay(name));
+  const passThrough = (task.skills.length > 0 || task.workflows.length > 0 || Object.hasOwn(roleFiles, task.role))
+    && task.skills.every(name => isThinCommand(name, task.goal)) && task.workflows.every(isThinPlay);
+  const paths = passThrough ? [] : [...loadRoutingContract(root).requiredStandards];
+  if (task.role === 'parent' && !passThrough) paths.push(`${skillsRoot}/${methodPath('conquistador', { internal })}`);
   else if (Object.hasOwn(roleFiles, task.role)) paths.push(roleFiles[task.role].replace(/^skills/, skillsRoot));
   for (const skill of task.skills) {
     assert.ok(manifest.mayLoadSkills.includes(skill), `Undeclared skill ${skill}`);
-    paths.push(`${skillsRoot}/${methodPath(skill, { internal })}`);
+    const document = preserveMethod ? 'COMMAND.md' : commandDocumentFor(skill, task.goal);
+    paths.push(`${skillsRoot}/${methodPath(skill, { internal }).replace(/COMMAND\.md$/, document)}`);
   }
   for (const workflow of task.workflows) {
     assert.ok(manifest.mayLoadWorkflows.includes(workflow), `Undeclared workflow ${workflow}`);
@@ -213,7 +218,7 @@ export async function loadAssignment(root, task, { authorize = () => {}, resolve
   const extra = [];
   const deferred = [];
   for (const skill of task.skills) {
-    const prepared = prepareAssignmentResources(root, skill);
+    const prepared = prepareAssignmentResources(root, skill, { task: task.goal, preserveMethod });
     extra.push(...prepared.required.filter(path => !paths.includes(path)));
     deferred.push(...prepared.deferred);
   }
@@ -229,8 +234,9 @@ export async function loadAssignment(root, task, { authorize = () => {}, resolve
     }
     knowledge.push(resolved);
   }
-  return { methods: loaded.methods, knowledge, deferred, resourceRoot: resolve(root),
-    retrieval: 'Read only declared deferred paths under resourceRoot as their method requires. Follow nested contained resource links for that stage. If the host cannot read them, block that stage or split the assignment; never omit mandatory instructions.' };
+  return { methods: loaded.methods, knowledge, deferred, passThrough, resourceRoot: resolve(root),
+    retrieval: passThrough ? 'Use the supplied entries and return only the requested deliverable.'
+      : 'Read only declared deferred paths under resourceRoot as their method requires. Follow nested contained resource links for that stage. If the host cannot read them, block that stage or split the assignment; never omit mandatory instructions.' };
 }
 
 export function validateResult(value, packet) {

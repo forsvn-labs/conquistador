@@ -1,21 +1,11 @@
-# Share-card verification method
+# Check the page's share card
 
-Use privately before a page launch or when a pasted link renders incorrectly.
+Check or fix the requested share card in your own judgment from the user's facts. Load no other
+file for it. Inspect the actual page metadata and resolved image response. Verify the production
+URL, content type, dimensions, and rendered card when the host can show it. Recheck an applied fix.
 
-1. Inspect the actual page response and metadata for canonical URL, title, description, `og:*`, and
-   Twitter/X card fields; use `convert` to separate objective breakage from subjective copy
-   preference.
-2. Resolve every image to an absolute production URL. Verify reachability, content type, file size,
-   and actual dimensions; declared dimensions must match the file.
-3. Fix only the metadata/card surface when implementation is explicitly in scope, then re-fetch and
-   verify. Treat platform cache lag separately from source correctness and stop after three failed
-   cycles.
+Then run only the facts check: remove claims the facts do not support, keep fair inferences, and
+add nothing (no hedges, no source text, no disclaimers). Return only the requested correction or checks.
 
-Load recovered OG checks under `conquistador/references/share-card-verification/` (fixes,
-anti-patterns, walkthrough) instead of paraphrasing them.
-
-Use `creative` only when the card image or message needs a new production handoff.
-
-Use an inspectable host or browser tool when available; no specific CLI or runtime is required. Return
-observed defects, proposed or applied correction, objective verification, advisory items, and the
-publish boundary.
+Nothing is published or changed externally without the user's approval for that exact action.
+This approval governs actions; it adds nothing to the deliverable.

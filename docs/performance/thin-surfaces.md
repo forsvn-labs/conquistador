@@ -8,11 +8,11 @@ files remain available for an explicit read or a future blind test.
 
 | Entry point | Existing default | Required behavior |
 | --- | --- | --- |
-| CLI brief and hooks | Selected `ENTRY.md` files for thin requests | Keep the same routes, entries, and budgets. |
+| CLI brief, hooks, and chat fallback | Briefs use short entries, but chat points at the procedure | Keep the same routes and budgets. Send chat fallback to the shared default document. |
 | App corpus in `runtime/src/corpus.ts` | `COMMAND.md`, linked references, parent, and shared standards | Select by the existing route, then serve thin entries without shared process text. |
 | Served steps in `runtime/src/skill-assets.ts` | `COMMAND.md` and its local reference graph | Use the entry for thin commands. Keep the complete byte inventory for package identity. |
 | Standalone `skill:<name>` install | Rename `COMMAND.md` to the discoverable `SKILL.md` | Build the discoverable skill from canonical metadata and the short entry. Retain archived source bytes. |
-| Specialist assignments | Role, command procedures, standards, and deferred resources | Load thin role and method entries without deferred pipelines. Preserve declared tools, knowledge, and domain restrictions. |
+| Specialist assignments and team coordinators | Role, command procedures, standards, and deferred resources. Composition reloads the parent. | Load thin role and method entries without deferred method pipelines. Reuse the declared entries during composition and correction. Preserve the explicit team protocol, tools, knowledge, and domain restrictions. |
 | Resource planner | Procedure, shared standards, and optional references | Return only the entry for a thin command. |
 | MCP method and file discovery | Advertise procedures and list all supporting files | Advertise thin entries. Keep explicit archive reads available. |
 | Local, HTTP, and hosted MCP briefs | Shared briefing engine | Keep byte and route parity. The hosted Worker is not deployed by this work. |
@@ -20,6 +20,10 @@ files remain available for an explicit read or a future blind test.
 | Shared play steps | Video production, artifact hygiene, and share-card procedures | Use short entries for these untested marketing steps and retain their detailed files. |
 
 ## Scope and checks
+
+`tools/method-policy.mjs` owns the method selection policy. Untested commands are
+thin by default. A missing entry is an error and cannot restore the detailed
+procedure. Copy loads its full method only for a sales page or sales letter.
 
 The failure modes and repeatable checks are in `tools/thin-surfaces.test.mjs`.
 The existing routing corpus checks command and play selection. Installed payload
@@ -36,3 +40,15 @@ They do not add production records or process sections to the requested artifact
 These checks establish method loading and installed behavior. They do not
 establish model quality, new human preferences, native host activation, a public
 release, or a hosted deployment.
+
+Run the regression checks from the repository root with Node 24 or later:
+
+```sh
+node --test tools/thin-surfaces.test.mjs
+npm run build
+npm test
+node tools/e2e/routing-breadth.mjs
+node tools/e2e/app-integration.mjs
+```
+
+The routing and app checks write repeatable reports under `dist/e2e/`.

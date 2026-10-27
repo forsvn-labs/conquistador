@@ -5,10 +5,11 @@ import { resolve } from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
 
 import { loadCorpusDescriptor, loadRuntimeCorpus } from "../src/corpus.ts";
+import { commandDocumentFor, isThinCommand } from "../../tools/method-policy.mjs";
 
 const temporary: string[] = [];
 // The parent skill and each command document; every other file is a resource.
-const methodDocument = (fileId: string): boolean => fileId === "conquistador/SKILL.md" || fileId.endsWith("/COMMAND.md");
+const methodDocument = (fileId: string): boolean => fileId === "conquistador/SKILL.md" || /\/(?:COMMAND|ENTRY)\.md$/.test(fileId);
 
 afterEach(() => {
   for (const path of temporary.splice(0)) rmSync(path, { recursive: true, force: true });
@@ -33,7 +34,9 @@ function fixture(): string {
   writeFileSync(resolve(root, "conquistador/plays/landing-page-messaging.md"), "Landing page copy play\n");
   writeFileSync(resolve(root, "conquistador/plays/spec.md"), "Map the product flow into a UI specification.\n");
   writeFileSync(resolve(root, "conquistador/commands/copy/COMMAND.md"), "---\nname: copy\ndescription: Write landing pages and finished copy.\n---\n");
+  writeFileSync(resolve(root, "conquistador/commands/copy/ENTRY.md"), "Write the requested copy from the user's facts.\n");
   writeFileSync(resolve(root, "conquistador/commands/flow/COMMAND.md"), "---\nname: flow\ndescription: Map screens, user flow, onboarding journey, and recovery states.\n---\n");
+  writeFileSync(resolve(root, "conquistador/commands/flow/ENTRY.md"), "Map the requested user flow from the user's facts.\n");
   return root;
 }
 
@@ -46,14 +49,14 @@ describe("frozen authored corpus", () => {
     expect(after.digest).not.toBe(before.digest);
     const selection = loadRuntimeCorpus(root).resolve("Improve our landing page copy");
     expect(selection.job).toBe("create-or-improve");
-    expect(selection.fileIds).toContain("conquistador/commands/copy/COMMAND.md");
+    expect(selection.fileIds).toContain("conquistador/commands/copy/ENTRY.md");
     expect(selection.fileIds).toContain("conquistador/plays/landing-page-messaging.md");
     expect(selection.fileIds).not.toContain("conquistador/plays/unrelated.md");
     expect(selection.digest).toMatch(/^sha256:[0-9a-f]{64}$/);
     const engineering = loadRuntimeCorpus(root).resolve("Map the onboarding user flow");
     expect(engineering.job).toBe("create-or-improve");
-    expect(engineering.fileIds.filter(methodDocument)).toEqual(["conquistador/commands/flow/COMMAND.md", "conquistador/SKILL.md"]);
-    expect(engineering.fileIds).toContain("conquistador/commands/flow/COMMAND.md");
+    expect(engineering.fileIds.filter(methodDocument)).toEqual(["conquistador/commands/flow/ENTRY.md"]);
+    expect(engineering.fileIds).toContain("conquistador/commands/flow/ENTRY.md");
     expect(engineering.fileIds).not.toContain("conquistador/plays/spec.md");
   });
 });
@@ -68,7 +71,7 @@ describe("bounded progressive method context", () => {
       writeFileSync(resolve(root, `conquistador/commands/copy/reference-${index}.md`), "method detail ".repeat(2000));
     }
     writeFileSync(resolve(root, "conquistador/commands/copy/COMMAND.md"), `Write copy.\n${links.join("\n")}`);
-    const selected = loadRuntimeCorpus(root).resolve("write copy");
+    const selected = loadRuntimeCorpus(root).resolve("/conquistador copy Write a sales page");
     expect(Buffer.byteLength(selected.systemInstructions)).toBeLessThan(82_000);
     expect(selected.fileIds).toContain("conquistador/commands/copy/COMMAND.md");
     expect(selected.omittedFileIds.length).toBeGreaterThan(0);
@@ -88,8 +91,10 @@ describe("parent outcome reachability", () => {
     for (const id of outcomes) {
       expect(capabilities, id).toContain(`\`${id}\``);
       const selection = corpus.resolve(`/conquistador ${id}`);
+      const expected = [`conquistador/commands/${id}/${commandDocumentFor(id)}`,
+        ...isThinCommand(id) ? [] : ["conquistador/SKILL.md"]];
       expect(selection.fileIds.filter(methodDocument), id)
-        .toEqual([`conquistador/commands/${id}/COMMAND.md`, "conquistador/SKILL.md"]);
+        .toEqual(expected);
       expect(selection.fileIds.length, id).toBeLessThanOrEqual(24);
       expect(Buffer.byteLength(selection.systemInstructions), id).toBeLessThan(82_000);
       expect(selection.fileIds.some((file) => file.startsWith("conquistador/plays/")), id).toBe(false);
@@ -107,7 +112,7 @@ describe("parent outcome reachability", () => {
     const selection = corpus.resolve(prompt);
     expect(selection.job).toBe("create-or-improve");
     expect(selection.fileIds.filter(methodDocument))
-      .toEqual([`conquistador/commands/${id}/COMMAND.md`, "conquistador/SKILL.md"]);
+      .toEqual([`conquistador/commands/${id}/${commandDocumentFor(id)}`, ...isThinCommand(id) ? [] : ["conquistador/SKILL.md"]]);
   });
 
   it.each([

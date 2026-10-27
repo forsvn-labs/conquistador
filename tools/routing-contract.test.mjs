@@ -4,6 +4,7 @@ import { readdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { join } from 'node:path';
 import { loadAssignment } from '../hosts/coding-agent/contracts.mjs';
+import { commandDocumentFor, isThinCommand } from './method-policy.mjs';
 import {
   ASSIGNMENT_BUDGET_BYTES, buildRoutingContract, loadRoutingContract, prepareAssignmentResources,
 } from './routing-contract.mjs';
@@ -29,21 +30,22 @@ test('routing contract describes all 35 commands with required and deferred reso
 
 
 test('every method prepares a bounded assignment without recursive overflow', async () => {
-  const failingBefore = ['creative', 'brand', 'video', 'seo', 'position'];
   for (const name of routable) {
     const prepared = prepareAssignmentResources(root, name);
-    assert.ok(prepared.required.includes(`skills/conquistador/commands/${name}/COMMAND.md`));
+    const document = `skills/conquistador/commands/${name}/${commandDocumentFor(name)}`;
+    assert.ok(prepared.required.includes(document));
     const loaded = await loadAssignment(root, {
       id: 'work', role: 'outcome', goal: 'Produce a bounded draft.',
       skills: [name], workflows: [], knowledgeHandles: [], dependsOn: [],
     });
-    assert.ok(loaded.methods.some(item => item.path === `skills/conquistador/commands/${name}/COMMAND.md`));
+    assert.ok(loaded.methods.some(item => item.path === document));
     const bytes = loaded.methods.reduce((sum, item) => sum + Buffer.byteLength(item.body), 0);
     assert.ok(bytes <= ASSIGNMENT_BUDGET_BYTES, `${name} loaded ${bytes} bytes`);
     assert.ok(loaded.methods.length <= 100, `${name} loaded ${loaded.methods.length} files`);
     assert.ok(Array.isArray(loaded.deferred));
-    if (failingBefore.includes(name)) {
-      assert.ok(loaded.deferred.length > 0, `${name} must list deferred resources instead of loading the tree`);
+    if (isThinCommand(name)) {
+      assert.deepEqual(loaded.deferred, [], `${name} must not restore a deferred pipeline`);
+      assert.deepEqual(loaded.methods.map(item => item.path), [document]);
     }
   }
 });

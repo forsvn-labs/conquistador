@@ -71,6 +71,7 @@ test('contained reads refuse traversal, symlinks, hidden files, binary and overs
   mkdirSync(join(path, 'skills/conquistador/commands/test/references'), { recursive: true });
   const write = (name, body) => writeFileSync(join(path, 'skills/conquistador/commands/test', name), body);
   write('COMMAND.md', 'valid');
+  write('ENTRY.md', 'valid entry');
   write('references/utf8.md', 'Tiếng Việt');
   write('large.md', Buffer.alloc(LIMITS.file + 1, 97));
   write('boundary.md', 'é'.repeat(LIMITS.file / 2));
