@@ -5,6 +5,7 @@
 //   J7     the report command accepts the finished session.
 //   J8-J9  opened from disk, the page keeps verdicts in the browser and exports a valid verdict file.
 //   J10    on a phone-width screen, the brief and both drafts show in full.
+//   J11-J15 on every third pair a choice opens a focused, skippable reason field; other pairs record at once.
 //   node --experimental-strip-types tools/blind-judging-e2e.ts [OUT_DIR]
 // Uses the Playwright package and Chromium installed at the repository root. Writes OUT_DIR/report.json
 // and screenshots. Exit 1 when a check fails.
@@ -91,7 +92,34 @@ try {
 
   await page.keyboard.press("ArrowRight");
   await page.keyboard.press("ArrowRight");
-  await choose(page, "a");
+  const thirdPair = await onScreen(page);
+  const savedBefore = readVerdictsFile(verdictsPath).length;
+  await page.keyboard.press("a");
+  await page.locator("footer[data-asking='true']").waitFor({ timeout: 3000 });
+  const asking = await page.evaluate(() => ({
+    focused: document.activeElement?.id,
+    prompt: document.getElementById("reason-prompt")?.textContent ?? "",
+    pressed: document.getElementById("choose-A")?.getAttribute("aria-pressed"),
+    pair: document.querySelector("main")?.getAttribute("data-pair-id"),
+  }));
+  await page.screenshot({ path: join(out, "04-reason-prompt.png"), fullPage: false });
+  check("J11", "on the third pair a choice opens a focused reason field and records nothing yet",
+    asking.focused === "reason" && /why|reason/i.test(asking.prompt) && asking.pair === thirdPair && readVerdictsFile(verdictsPath).length === savedBefore && !/\b(bare|method)\b/i.test(asking.prompt), JSON.stringify(asking));
+  await page.keyboard.press("Escape");
+  const cancelled = await page.evaluate(() => ({ asking: document.querySelector("footer")?.getAttribute("data-asking"), focused: document.activeElement?.id }));
+  check("J12", "Escape closes the reason field without recording the choice",
+    cancelled.asking !== "true" && cancelled.focused !== "reason" && readVerdictsFile(verdictsPath).length === savedBefore, JSON.stringify(cancelled));
+  await page.keyboard.press("a");
+  await page.locator("footer[data-asking='true']").waitFor({ timeout: 3000 });
+  await page.keyboard.type("bat");
+  const typedIntoField = await page.locator("#reason").inputValue();
+  for (let index = 0; index < 3; index += 1) await page.keyboard.press("Backspace");
+  await page.keyboard.press("Enter");
+  await page.locator("#save-state[data-state='saved']").waitFor();
+  shownPairs[thirdPair!] = "a";
+  const skipped = readVerdictsFile(verdictsPath).find((entry) => entry.blindPairId === thirdPair);
+  check("J13", "letters typed in the reason field stay text, and Enter with empty text still records the choice",
+    typedIntoField === "bat" && skipped?.verdict === "A" && skipped.rationale === "No reason given.", JSON.stringify({ typedIntoField, skipped }));
   await page.locator("#done").waitFor();
   await page.screenshot({ path: join(out, "02-session-complete.png"), fullPage: false });
   const final = readVerdictsFile(verdictsPath);
@@ -144,6 +172,32 @@ try {
   await page.screenshot({ path: join(out, "03-narrow.png"), fullPage: true });
   check("J10", "on a phone-width screen the brief and both drafts show in full, with a compact header",
     narrow.clipped.length === 0 && narrow.header <= 120 && narrow.exportVisible && narrow.overflow <= 0, JSON.stringify(narrow));
+  await context.close();
+
+  context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+  page = await context.newPage();
+  await page.goto(server.url);
+  await page.locator("main[data-pair-id]").waitFor();
+  await page.keyboard.press("ArrowLeft");
+  await page.keyboard.press("ArrowLeft");
+  await page.keyboard.press("ArrowLeft");
+  const firstPair = await onScreen(page);
+  await page.keyboard.press("b");
+  await page.locator("#save-state[data-state='saved']").waitFor();
+  const immediate = await page.evaluate(() => ({ asking: document.querySelector("footer")?.getAttribute("data-asking"), focused: document.activeElement?.id, pair: document.querySelector("main")?.getAttribute("data-pair-id") }));
+  check("J14", "on other pairs a choice records at once and moves on, as before",
+    readVerdictsFile(verdictsPath).find((entry) => entry.blindPairId === firstPair)?.verdict === "B" && immediate.asking !== "true" && immediate.focused !== "reason", JSON.stringify(immediate));
+  await page.keyboard.press("ArrowRight");
+  await page.keyboard.press("ArrowRight");
+  const third = await onScreen(page);
+  await page.locator("#choose-tie").click();
+  await page.locator("footer[data-asking='true']").waitFor({ timeout: 3000 });
+  await page.keyboard.type("Both miss the price.");
+  await page.keyboard.press("Enter");
+  await page.locator("#save-state[data-state='saved']").waitFor();
+  const reasoned = readVerdictsFile(verdictsPath).find((entry) => entry.blindPairId === third);
+  check("J15", "a reason typed in the prompt is saved with the clicked choice",
+    reasoned?.verdict === "tie" && reasoned.rationale === "Both miss the price.", JSON.stringify(reasoned));
   await context.close();
 } catch (error) {
   check("J0", "the browser run completed", false, error instanceof Error ? error.stack : error);
