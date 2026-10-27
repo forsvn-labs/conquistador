@@ -5000,7 +5000,7 @@
     },
     {
       "path": "tools/brief.mjs",
-      "sha256": "a0b98db66fb00730dfe23869d4651a7ec5c3f2a9f5cf68adcb05156cb012563b"
+      "sha256": "a090d90552f341e8389a44a4f02d506742ba24f7c7c2e51cd11ddd8640599733"
     },
     {
       "path": "tools/check-receipt.mjs",
