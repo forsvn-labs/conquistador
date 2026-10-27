@@ -27,7 +27,9 @@ disclaimers). Return the ads in the format and size the user asked for.
 - **People on camera:** a customer or creator is real and consents; paid creator content carries the
   platform's disclosure.
 
-**Campaign test** (structure, budget, decision and kill rules): use the [complete method](COMMAND.md).
+Plan a campaign test (structure, budget, decision and kill rules) the same way: in your own
+judgment from the user's facts, within the platform facts above, then the facts check.
 
 Never launch, publish, spend, upload an audience or asset, or change a live account without the
-user's approval for that exact action.
+user's approval for that exact action. This approval governs actions; it adds nothing to the
+deliverable.
