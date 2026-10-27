@@ -295,8 +295,23 @@ export type PassRule = { minDecided: number; minWinRate: { numerator: number; de
 
 const gcd = (a: number, b: number): number => (b ? gcd(b, a % b) : a);
 
+/**
+ * Sequential rule: decide at 6 decided pairs (PASS at 6-0 or 5-1, FAIL at 2-4 or worse, otherwise add
+ * 4 pairs), then at 10 decided pairs (PASS at 8 or more). It reads counts, not judging order.
+ */
+export type SequentialRule = { kind: "sequential"; first: { decided: 6; pass: 5; fail: 2; add: 4 }; final: { decided: 10; pass: 8 } };
+export const SEQUENTIAL_RULE: SequentialRule = { kind: "sequential", first: { decided: 6, pass: 5, fail: 2, add: 4 }, final: { decided: 10, pass: 8 } };
+export type ReportRule = PassRule | SequentialRule;
+const isSequential = (rule: ReportRule): rule is SequentialRule => "kind" in rule && rule.kind === "sequential";
+
 /** Default rule: at least 6 decided pairs, and the candidate arm wins at least 2/3 of them. */
-export function parsePassRule(input: { minDecided?: string | number; minWinRate?: string | number }): PassRule {
+export function parsePassRule(input: { minDecided?: string | number; minWinRate?: string | number; sequential?: false }): PassRule;
+export function parsePassRule(input: { minDecided?: string | number; minWinRate?: string | number; sequential?: boolean }): ReportRule;
+export function parsePassRule(input: { minDecided?: string | number; minWinRate?: string | number; sequential?: boolean }): ReportRule {
+  if (input.sequential) {
+    invariant(input.minDecided === undefined && input.minWinRate === undefined, "the sequential rule has fixed thresholds; do not combine it with --min-decided or --min-win-rate");
+    return SEQUENTIAL_RULE;
+  }
   const minDecided = Number(input.minDecided ?? 6);
   invariant(Number.isInteger(minDecided) && minDecided >= 1, "minimum decided pairs must be a whole number of at least 1");
   const raw = String(input.minWinRate ?? "2/3").trim();
@@ -325,9 +340,49 @@ export type PracticeResult = {
   ties: number;
   rejectBoth: number;
   decided: number;
-  status: "pass" | "fail" | "incomplete";
+  status: "pass" | "fail" | "incomplete" | "extend";
   reason: string;
+  /** Sequential rule only: what to do next, in plain words. */
+  nextStep?: string;
+  /** Sequential rule only: pairs to add when the status is extend. */
+  addPairs?: number;
 };
+
+export type SequentialDecision = { status: "pass" | "fail" | "extend"; addPairs?: number; reason: string; nextStep: string };
+
+const cases = (count: number) => `${count} new ${count === 1 ? "case" : "cases"}`;
+const SHIP = "Record PASS for this practice in evals/practices.json with the commit and date, then ship the method change.";
+const STOP = "Do not ship this method change. Revise the method, then test it again on new held-out briefs.";
+const extend = (count: number, why: string): SequentialDecision => ({
+  status: "extend",
+  addPairs: count,
+  reason: why,
+  nextStep: `Add ${cases(count)} for this practice with new held-out briefs, generate both drafts, prepare a new session from the larger pack, and judge it. The report does not combine sessions.`,
+});
+
+/** Apply the sequential rule to the candidate's wins out of the decided pairs. */
+export function sequentialDecision(wins: number, decided: number, rule: SequentialRule = SEQUENTIAL_RULE): SequentialDecision {
+  const { first, final } = rule;
+  const score = `${wins} of ${decided} decided pairs`;
+  if (decided < first.decided) return extend(first.decided - decided, `${score}; the rule decides at ${first.decided} decided pairs`);
+  if (decided === first.decided) {
+    if (wins >= first.pass) return { status: "pass", reason: `won ${score}; ${first.pass} or more passes at ${first.decided}`, nextStep: SHIP };
+    if (wins <= first.fail) return { status: "fail", reason: `won ${score}; ${first.fail} or fewer fails at ${first.decided}`, nextStep: STOP };
+    return extend(first.add, `won ${score}; between ${first.fail + 1} and ${first.pass - 1} needs ${first.add} more pairs`);
+  }
+  if (decided < final.decided) {
+    const left = final.decided - decided;
+    if (wins >= final.pass) return { status: "pass", reason: `won ${score}; ${final.pass} wins already pass at ${final.decided}`, nextStep: SHIP };
+    if (wins + left < final.pass) return { status: "fail", reason: `won ${score}; ${final.pass} wins of ${final.decided} is out of reach`, nextStep: STOP };
+    return extend(left, `won ${score}; the rule decides at ${final.decided} decided pairs`);
+  }
+  // At 10 decided pairs the bar is 8. Above 10, hold the same share (4 in 5).
+  const passes = wins * final.decided >= final.pass * decided;
+  const bar = decided === final.decided ? `${final.pass} or more of ${final.decided}` : `at least ${final.pass}/${final.decided} of decided pairs`;
+  return passes
+    ? { status: "pass", reason: `won ${score}; the rule needs ${bar}`, nextStep: SHIP }
+    : { status: "fail", reason: `won ${score}; the rule needs ${bar}`, nextStep: STOP };
+}
 
 export type JudgingReport = {
   schemaVersion: "conquistador.judging-report/v1";
@@ -335,7 +390,7 @@ export type JudgingReport = {
   packId: string;
   reviewer: string;
   arms: PackArms;
-  rule: PassRule;
+  rule: ReportRule;
   practices: PracticeResult[];
   generatedAt: string;
 };
@@ -353,8 +408,7 @@ export function buildJudgingReport(input: { packDir: string; sessionDir: string;
     const assignment = revealBlindAssignment(pair, verdict, assignments.get(pair.id)!);
     winners.set(pair.id, verdict.verdict === "A" ? assignment.armAIdentity : verdict.verdict === "B" ? assignment.armBIdentity : verdict.verdict);
   }
-  const { minDecided, minWinRate } = input.rule;
-  const rate = `${minWinRate.numerator}/${minWinRate.denominator}`;
+  const rule = input.rule;
   const practices: PracticeResult[] = [];
   for (const practice of [...new Set(session.pairs.map((entry) => entry.practice))]) {
     const pairs = session.pairs.filter((entry) => entry.practice === practice);
@@ -375,13 +429,22 @@ export function buildJudgingReport(input: { packDir: string; sessionDir: string;
     if (result.judged < result.pairs) {
       status = "incomplete";
       reason = `${result.pairs - result.judged} of ${result.pairs} pairs not judged`;
-    } else if (decided < minDecided) {
+      if (isSequential(rule)) {
+        practices.push({ ...result, decided, status, reason, nextStep: "Judge the remaining pairs, then run the report again." });
+        continue;
+      }
+    } else if (isSequential(rule)) {
+      const decision = sequentialDecision(result.candidateWins, decided, rule);
+      practices.push({ ...result, decided, status: decision.status, reason: `${pack.arms.candidate} ${decision.reason}`, nextStep: decision.nextStep, ...(decision.addPairs ? { addPairs: decision.addPairs } : {}) });
+      continue;
+    } else if (decided < rule.minDecided) {
       status = "fail";
-      reason = `${decided} decided pairs; the rule needs at least ${minDecided}`;
+      reason = `${decided} decided pairs; the rule needs at least ${rule.minDecided}`;
     } else {
+      const { minWinRate } = rule;
       const share = `${pack.arms.candidate} won ${result.candidateWins} of ${decided} decided pairs (${Math.round((100 * result.candidateWins) / decided)}%)`;
       status = result.candidateWins * minWinRate.denominator >= minWinRate.numerator * decided ? "pass" : "fail";
-      reason = status === "pass" ? share : `${share}; the rule needs at least ${rate}`;
+      reason = status === "pass" ? share : `${share}; the rule needs at least ${minWinRate.numerator}/${minWinRate.denominator}`;
     }
     practices.push({ ...result, decided, status, reason });
   }
@@ -399,13 +462,15 @@ export function buildJudgingReport(input: { packDir: string; sessionDir: string;
 
 export function formatJudgingReport(report: JudgingReport): string {
   const { candidate, baseline } = report.arms;
-  const rate = `${report.rule.minWinRate.numerator}/${report.rule.minWinRate.denominator}`;
+  const { rule } = report;
   const width = Math.max(8, ...report.practices.map((entry) => entry.practice.length));
   const columns = [candidate, baseline, "tie", "reject", "judged"];
   const cell = (value: string | number, index: number) => String(value).padStart(Math.max(columns[index]!.length, 6));
   const lines = [
     `Blind pairwise report · session ${report.sessionId} · judge ${report.reviewer}`,
-    `Rule: at least ${report.rule.minDecided} decided pairs, and ${candidate} wins at least ${rate} of decided pairs.`,
+    isSequential(rule)
+      ? `Rule (sequential): at ${rule.first.decided} decided pairs, PASS at ${rule.first.pass} or more ${candidate} wins, FAIL at ${rule.first.fail} or fewer, otherwise add ${rule.first.add} pairs (EXTEND). At ${rule.final.decided} decided pairs, PASS at ${rule.final.pass} or more, otherwise FAIL.`
+      : `Rule: at least ${rule.minDecided} decided pairs, and ${candidate} wins at least ${rule.minWinRate.numerator}/${rule.minWinRate.denominator} of decided pairs.`,
     `Decided means ${candidate} or ${baseline} won. Ties and reject-both are neither wins nor decided.`,
     "",
     `${"practice".padEnd(width)}  ${columns.map(cell).join("  ")}  result`,
@@ -414,5 +479,7 @@ export function formatJudgingReport(report: JudgingReport): string {
     const values = [entry.candidateWins, entry.baselineWins, entry.ties, entry.rejectBoth, `${entry.judged}/${entry.pairs}`];
     lines.push(`${entry.practice.padEnd(width)}  ${values.map(cell).join("  ")}  ${entry.status.toUpperCase()} · ${entry.reason}`);
   }
+  const steps = report.practices.filter((entry) => entry.nextStep);
+  if (steps.length) lines.push("", ...steps.map((entry) => `Next: ${entry.practice} (${entry.status.toUpperCase()}). ${entry.nextStep}`));
   return `${lines.join("\n")}\n`;
 }

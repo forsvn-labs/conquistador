@@ -1,7 +1,7 @@
 // Blind pairwise judging commands. See "Run a blind judging session" in evals/README.md.
 //   prepare --pack <dir> --out <dir> --reviewer <name> [--nonce <secret>] [--allow-residual]
 //   serve   --session <dir> [--verdicts <file>] [--port <n>] [--open]
-//   report  --pack <dir> --session <dir> [--verdicts <file>] [--min-decided 6] [--min-win-rate 2/3] [--json <file>]
+//   report  --pack <dir> --session <dir> [--verdicts <file>] [--min-decided 6] [--min-win-rate 2/3] [--sequential] [--json <file>]
 import { spawn } from "node:child_process";
 import { writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
@@ -9,7 +9,7 @@ import { join, resolve } from "node:path";
 import { buildJudgingReport, formatJudgingReport, parsePassRule, prepareJudgingSession, readVerdictsFile, requirePrivatePath } from "../src/blind-judging.ts";
 import { startJudgingServer } from "../src/blind-judging-server.ts";
 
-const FLAGS = new Set(["allow-residual", "open"]);
+const FLAGS = new Set(["allow-residual", "open", "sequential"]);
 const [command, ...rest] = process.argv.slice(2);
 const options: Record<string, string> = {};
 for (let index = 0; index < rest.length; index += 1) {
@@ -61,7 +61,7 @@ try {
       packDir: need("pack"),
       sessionDir,
       verdicts: readVerdictsFile(verdictsPath),
-      rule: parsePassRule({ minDecided: options["min-decided"], minWinRate: options["min-win-rate"] }),
+      rule: parsePassRule({ minDecided: options["min-decided"], minWinRate: options["min-win-rate"], sequential: options.sequential === "true" }),
     });
     process.stdout.write(formatJudgingReport(report));
     if (options.json) {

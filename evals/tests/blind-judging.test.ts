@@ -13,6 +13,7 @@ import {
   prepareJudgingSession,
   readVerdictsFile,
   revealSessionAssignments,
+  sequentialDecision,
   upsertVerdict,
   writeVerdictsFile,
 } from "../src/blind-judging";
@@ -292,3 +293,77 @@ describe("judging report", () => {
     expect(result.practices.find((entry) => entry.practice === "copy")).toMatchObject({ candidateWins: 1, ties: 0, rejectBoth: 1, decided: 1, status: "fail" });
   });
 });
+
+describe("sequential pass rule", () => {
+  const report = (packDir: string, sessionDir: string, verdicts: HumanVerdict[]) =>
+    buildJudgingReport({ packDir, sessionDir, verdicts, rule: parsePassRule({ sequential: true }) });
+
+  it("decides at 6 decided pairs: PASS at 6-0 and 5-1, FAIL at 2-4 or worse, otherwise EXTEND by 4", () => {
+    expect(sequentialDecision(6, 6).status).toBe("pass");
+    expect(sequentialDecision(5, 6).status).toBe("pass");
+    expect(sequentialDecision(4, 6)).toMatchObject({ status: "extend", addPairs: 4 });
+    expect(sequentialDecision(3, 6)).toMatchObject({ status: "extend", addPairs: 4 });
+    expect(sequentialDecision(2, 6).status).toBe("fail");
+    expect(sequentialDecision(1, 6).status).toBe("fail");
+    expect(sequentialDecision(0, 6).status).toBe("fail");
+  });
+
+  it("decides at 10 decided pairs: PASS at 8 or more, otherwise FAIL", () => {
+    expect(sequentialDecision(10, 10).status).toBe("pass");
+    expect(sequentialDecision(8, 10).status).toBe("pass");
+    expect(sequentialDecision(7, 10).status).toBe("fail");
+    expect(sequentialDecision(5, 10).status).toBe("fail");
+  });
+
+  it("asks for more pairs below 6 decided, and between 6 and 10 unless the 10-pair result is already fixed", () => {
+    expect(sequentialDecision(5, 5)).toMatchObject({ status: "extend", addPairs: 1 });
+    expect(sequentialDecision(0, 0)).toMatchObject({ status: "extend", addPairs: 6 });
+    expect(sequentialDecision(6, 8)).toMatchObject({ status: "extend", addPairs: 2 });
+    expect(sequentialDecision(8, 9).status).toBe("pass");
+    expect(sequentialDecision(4, 7).status).toBe("fail");
+    expect(sequentialDecision(5, 7)).toMatchObject({ status: "extend", addPairs: 3 });
+  });
+
+  it("holds the 10-pair share above 10 decided pairs", () => {
+    expect(sequentialDecision(10, 12).status).toBe("pass");
+    expect(sequentialDecision(9, 12).status).toBe("fail");
+  });
+
+  it("explains every result and its next step in plain words", () => {
+    for (const [wins, decided] of [[6, 6], [4, 6], [2, 6], [8, 10], [7, 10], [3, 4]] as const) {
+      const decision = sequentialDecision(wins, decided);
+      expect(decision.reason.length).toBeGreaterThan(10);
+      expect(decision.nextStep).toMatch(/^[A-Z]/);
+    }
+    expect(sequentialDecision(4, 6).nextStep).toMatch(/4 new cases/);
+    expect(sequentialDecision(6, 6).nextStep).toMatch(/practices\.json/);
+    expect(sequentialDecision(2, 6).nextStep).toMatch(/[Dd]o not ship/);
+  });
+
+  it("reports EXTEND, PASS, and FAIL per practice, and INCOMPLETE while a pair is unjudged", () => {
+    const packDir = makePack([...practiceCases("copy", 6), ...practiceCases("ads", 6), ...practiceCases("social", 6), ...practiceCases("video", 6)]);
+    const sessionDir = prepare(packDir);
+    const winners = {
+      ...allMethod(6), "copy-5": "bare" as const, "copy-6": "bare" as const,
+      ...allMethod(6, "ads"), "ads-6": "bare" as const,
+      ...allMethod(6, "social"), "social-1": "bare" as const, "social-2": "bare" as const, "social-3": "bare" as const, "social-4": "bare" as const,
+      ...allMethod(6, "video"), "video-6": "skip" as const,
+    };
+    const result = report(packDir, sessionDir, judge(packDir, sessionDir, winners));
+    const status = Object.fromEntries(result.practices.map((entry) => [entry.practice, entry.status]));
+    expect(status).toEqual({ copy: "extend", ads: "pass", social: "fail", video: "incomplete" });
+    const text = formatJudgingReport(result);
+    expect(text).toMatch(/sequential/i);
+    expect(text).toMatch(/copy .*EXTEND/);
+    expect(text).toMatch(/ads .*PASS/);
+    expect(text).toMatch(/social .*FAIL/);
+    expect(text).toMatch(/Next: .*copy/i);
+  });
+
+  it("keeps the default rule when --sequential is absent, and refuses to mix the two rules", () => {
+    expect(parsePassRule({})).toEqual({ minDecided: 6, minWinRate: { numerator: 2, denominator: 3 } });
+    expect(() => parsePassRule({ sequential: true, minDecided: "4" })).toThrow(/sequential/);
+    expect(() => parsePassRule({ sequential: true, minWinRate: "3/4" })).toThrow(/sequential/);
+  });
+});
+
