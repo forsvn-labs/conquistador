@@ -33,6 +33,8 @@ tests check library byte parity, links, domain restrictions, and callable loader
 Outbound, social, copy sales pages and letters, engineering commands, platform
 utilities, factcheck, Vietnamese, and the spec play keep their existing methods.
 The spec play retains the detailed flow method that it needs.
+Kept plays retain only their declared method dependencies. Adding a kept play
+cannot restore an unrelated thin command's detailed procedure.
 
 Upload-only chat apps cannot remove already uploaded knowledge from a model's
 context. Their pack labels sales-page and spec-flow sections as conditional.

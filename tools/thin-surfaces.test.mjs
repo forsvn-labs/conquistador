@@ -87,6 +87,9 @@ test('specialist assignments and their resource planner load entries without def
   assert.ok(sales.methods.some(item => item.path.endsWith('/copy/COMMAND.md')));
   const spec = await loadAssignment(root, assignment({ skills: ['flow'], workflows: ['spec'] }));
   assert.ok(spec.methods.some(item => item.path.endsWith('/flow/COMMAND.md')));
+  const mixed = await loadAssignment(root, assignment({ skills: ['pricing'], workflows: ['spec'] }));
+  assert.ok(mixed.methods.some(item => item.path.endsWith('/pricing/ENTRY.md')));
+  assert.ok(!mixed.methods.some(item => item.path.endsWith('/pricing/COMMAND.md')), 'A kept play cannot restore an unrelated thin method');
   const role = await loadAssignment(root, assignment({ role: 'campaign-data', skills: ['measure'], workflows: ['launch'] }));
   assert.ok(role.methods.some(item => item.path.endsWith('/specialists/campaign-data-agent.md')));
   assert.ok(role.methods.every(item => !item.path.endsWith('/COMMAND.md') && !item.path.includes('/standards/')));

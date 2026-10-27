@@ -200,15 +200,17 @@ export async function loadAssignment(root, task, { authorize = () => {}, resolve
   const layouts = methodLibrary(root);
   assert.equal(layouts.length, 1, 'Ambiguous or missing method library');
   const { layout: skillsRoot, internal } = layouts[0];
-  const preserveMethod = task.workflows.some(name => !isThinPlay(name));
+  const contract = loadRoutingContract(root);
+  const preserved = new Set(contract.plays.filter(play => task.workflows.includes(play.name) && !isThinPlay(play.name))
+    .flatMap(play => play.dependencies));
   const passThrough = (task.skills.length > 0 || task.workflows.length > 0 || Object.hasOwn(roleFiles, task.role))
     && task.skills.every(name => isThinCommand(name, task.goal)) && task.workflows.every(isThinPlay);
-  const paths = passThrough ? [] : [...loadRoutingContract(root).requiredStandards];
+  const paths = passThrough ? [] : [...contract.requiredStandards];
   if (task.role === 'parent' && !passThrough) paths.push(`${skillsRoot}/${methodPath('conquistador', { internal })}`);
   else if (Object.hasOwn(roleFiles, task.role)) paths.push(roleFiles[task.role].replace(/^skills/, skillsRoot));
   for (const skill of task.skills) {
     assert.ok(manifest.mayLoadSkills.includes(skill), `Undeclared skill ${skill}`);
-    const document = preserveMethod ? 'COMMAND.md' : commandDocumentFor(skill, task.goal);
+    const document = preserved.has(skill) ? 'COMMAND.md' : commandDocumentFor(skill, task.goal);
     paths.push(`${skillsRoot}/${methodPath(skill, { internal }).replace(/COMMAND\.md$/, document)}`);
   }
   for (const workflow of task.workflows) {
@@ -218,7 +220,7 @@ export async function loadAssignment(root, task, { authorize = () => {}, resolve
   const extra = [];
   const deferred = [];
   for (const skill of task.skills) {
-    const prepared = prepareAssignmentResources(root, skill, { task: task.goal, preserveMethod });
+    const prepared = prepareAssignmentResources(root, skill, { task: task.goal, preserveMethod: preserved.has(skill) });
     extra.push(...prepared.required.filter(path => !paths.includes(path)));
     deferred.push(...prepared.deferred);
   }
