@@ -15,7 +15,7 @@ const out = resolve(option('--out', join(root, 'dist/e2e/routing-breadth')));
 
 export async function loadCases() {
   const corpus = JSON.parse(readFileSync(join(root, 'tools/e2e/routing-breadth.json'), 'utf8'));
-  const cases = [...corpus.cases, ...plainLanguageCases(), ...deliverableFirstCases()];
+  const cases = [...corpus.cases, ...plainLanguageCases(), ...deliverableFirstCases(), ...decisionCases()];
   // Every example the onboarding tour advertises is also a case, so the tour cannot drift (O6).
   if (existsSync(join(root, 'tools/tour.mjs'))) {
     const { AREAS } = await import('../tour.mjs');
@@ -60,6 +60,18 @@ export function deliverableFirstCases() {
   ];
 }
 
+// Decision requests (tools/e2e/routing-decisions.json): the method or play that owns the decision leads,
+// ahead of methods that only share its keywords. Pasted facts may not change the route.
+export function decisionCases() {
+  const corpus = JSON.parse(readFileSync(join(root, 'tools/e2e/routing-decisions.json'), 'utf8'));
+
+  return [
+    ...corpus.positives.map(item => ({ ...item, area: `decision:${item.mode}`, any: item.any ?? item.lead, parity: true })),
+    ...corpus.silent.map(item => ({ ...item, area: `decision:negative:${item.mode}`, silent: true, parity: true })),
+    ...corpus.unchanged.map(item => ({ ...item, area: `decision:unchanged:${item.mode}`, any: item.any ?? item.lead, parity: true })),
+  ];
+}
+
 const routeOf = brief => JSON.stringify([brief.action, brief.play?.name ?? null, brief.methods.map(method => method.name)]);
 
 export function judge(item, { playbooks = [] } = {}) {
@@ -81,6 +93,7 @@ export function judge(item, { playbooks = [] } = {}) {
     if (item.play && brief.play && !brief.play.steps.some(step => step.now)) problems.push('play has no first step (R5)');
     if (item.noPlay && play) problems.push(`expected a single command, got play ${play} (R6)`);
     for (const name of item.all ?? []) if (!methods.includes(name)) problems.push(`missing ${name} (R8)`);
+    if (item.lead && !item.lead.includes(methods[0])) problems.push(`expected ${item.lead.join(' or ')} first, got ${methods[0] ?? 'none'} (R10)`);
     if (item.request) {
       const alone = createBrief(item.request, { force: true, root, playbooks });
 
