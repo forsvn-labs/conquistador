@@ -4961,7 +4961,7 @@
   "operatorResources": [
     {
       "path": "hosts/coding-agent/contracts.mjs",
-      "sha256": "5b81586f765f116a8b0fcef60189c7ca8996d724248f70c6fb6baf9d3c3b1742"
+      "sha256": "5e062aa7234e55704206e0a4136f4744f8c8ae6dc4ece8e4ecbec08d6eca5683"
     },
     {
       "path": "hosts/coding-agent/operator.mjs",
