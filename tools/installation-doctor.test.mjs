@@ -11,6 +11,7 @@ import { operatorFiles } from './operator-package.mjs';
 import { methodIdentity } from './installation-doctor.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
+const productVersion = JSON.parse(readFileSync(join(root, 'package.json'), 'utf8')).version;
 // Commands in this checkout, including meta commands other slices add.
 const N = commandNames(join(root, 'skills')).length;
 const cli = join(root, 'runtime/bin/conquistador.js');
@@ -100,7 +101,7 @@ test('compact, plugin, and harness payloads include the manifest and distinguish
     assert.equal(report.library.available, N);
     assert.equal(report.manifest.packaged, 'matches');
     assert.equal(report.receipt.state, 'unchanged');
-    assert.equal(report.receipt.productVersion, '0.10.2');
+    assert.equal(report.receipt.productVersion, productVersion);
     assert.equal(report.bbAdapterPresent, adapter);
     assert.equal(report.operatorProfilePresent, true);
     assert.equal(report.operatorActivation, 'manual');
