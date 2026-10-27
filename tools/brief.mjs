@@ -316,6 +316,13 @@ const START_LEAD = /^\s*Use Conquistador:\s*/i;
 // Copy is a pass-through except a sales page or sales letter. In blind tests every copy rule set made
 // a strong model's copy worse; only sales page openings improved. Other copy carries no copy file.
 const SALES_PAGE = /\bsales (?:pages?|letters?)\b/;
+// Ad drafting is a pass-through too: across three blind tests every ads rule set lost or tied, each
+// creating the opposite fault of the last. A campaign test (structure, budget, decision and kill rules)
+// is decision work and keeps the ads method; drafting carries the ads entry alone.
+// A headline or a platform name inside an ad request does not add copy or social, unless the request
+// also names one of their own deliverables.
+const OWN_DELIVERABLE = { copy: /\b(?:pages?|emails?|sales letters?|newsletters?|taglines?)\b/, social: /\b(?:posts?|captions?|threads?|tweets?)\b/ };
+const AD_CAMPAIGN = /\b(?:campaigns?|budgets?|kill (?:rules?|criteria)|(?:ads?|paid) tests?|test (?:plans?|structure|design)|account (?:structure|setup)|bids?|bidding|spend|optimi[sz]ation events?|scal(?:e|ing) rules?|media plan|turn (?:ads|it|them) off)\b/;
 export const taskOf = prompt => Object.values(START_CONTEXT).reduce((rest, sentence) => rest.split(sentence).join(' '), prompt).replace(START_LEAD, '').trim();
 
 export function createBrief(input, { root = moduleRoot, playbooks, persistCache = true, force = false, automatic = false, cwd = process.cwd() } = {}) {
@@ -339,6 +346,8 @@ export function createBrief(input, { root = moduleRoot, playbooks, persistCache 
     if (lead && contract.methods[lead]) methods = [contract.methods[lead]];
   }
 
+  const adDrafting = !play && !AD_CAMPAIGN.test(normalizeRequest(prompt));
+  if (adDrafting && methods[0]?.name === 'ads') methods = methods.filter(method => !OWN_DELIVERABLE[method.name] || OWN_DELIVERABLE[method.name].test(normalizeRequest(prompt)));
   const rank = rankQuery(expand(terms(prompt)), index);
   const selectedNames = new Set(methods.map(item => item.name));
   if (!methods.length && !play && !platforms.length && !(explicit || force)) {
@@ -346,11 +355,12 @@ export function createBrief(input, { root = moduleRoot, playbooks, persistCache 
   }
   const required = new Set(methods.flatMap(item => item.requiredResources ?? []).map(path => path.slice(libraryRoot.length + 1)));
   const salesPage = SALES_PAGE.test(normalizeRequest(prompt));
-  const passThrough = !play && !salesPage && methods.length === 1 && methods[0].name === 'copy';
+  const passThrough = !play && methods.length === 1 && ((methods[0].name === 'copy' && !salesPage) || (methods[0].name === 'ads' && adDrafting));
   const ownerOf = doc => (doc.source === 'method' && selectedNames.has(doc.method)) || (doc.source === 'play' && doc.method === play?.name) ? doc.method : null;
   const scoreDoc = (doc, owned) => {
     if (doc.kind === 'process' || doc.key === 'conquistador/welcome.md') return null;
     if (!salesPage && doc.source === 'method' && doc.method === 'copy') return null;
+    if (adDrafting && doc.source === 'method' && doc.method === 'ads') return null;
     // Integration recipes join the brief only for the connect command.
     if (doc.kind === 'integration') { if (!selectedNames.has('connect')) return null; owned = 'connect'; }
     const shared = doc.source === 'shared';
