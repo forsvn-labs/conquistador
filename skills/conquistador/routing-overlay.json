@@ -101,47 +101,47 @@
         },
         {
           "path": "agents/strategist.md",
-          "when": "Load for a campaign test (structure, budget, decision and kill rules). Ad drafting is a pass-through and loads no resource."
+          "when": "Detailed method, kept unlinked until a blind test brings it back. Ad drafting and the campaign test are pass-throughs and load no resource."
         },
         {
           "path": "references/ad-intelligence/creative-cadence.md",
-          "when": "Load for a campaign test (structure, budget, decision and kill rules). Ad drafting is a pass-through and loads no resource."
+          "when": "Detailed method, kept unlinked until a blind test brings it back. Ad drafting and the campaign test are pass-throughs and load no resource."
         },
         {
           "path": "references/earn-the-impression.md",
-          "when": "Load for a campaign test (structure, budget, decision and kill rules). Ad drafting is a pass-through and loads no resource."
+          "when": "Detailed method, kept unlinked until a blind test brings it back. Ad drafting and the campaign test are pass-throughs and load no resource."
         },
         {
           "path": "references/message-transmutation.md",
-          "when": "Load for a campaign test (structure, budget, decision and kill rules). Ad drafting is a pass-through and loads no resource."
+          "when": "Detailed method, kept unlinked until a blind test brings it back. Ad drafting and the campaign test are pass-throughs and load no resource."
         },
         {
           "path": "references/ad-intelligence/meta-cold-traffic.md",
-          "when": "Load for a campaign test on this network: its account setup. Ad drafting is a pass-through and loads no resource."
+          "when": "Detailed method, kept unlinked until a blind test brings it back. Ad drafting and the campaign test are pass-throughs and load no resource."
         },
         {
           "path": "references/ad-intelligence/meta-retargeting.md",
-          "when": "Load for a campaign test on this network: its account setup. Ad drafting is a pass-through and loads no resource."
+          "when": "Detailed method, kept unlinked until a blind test brings it back. Ad drafting and the campaign test are pass-throughs and load no resource."
         },
         {
           "path": "references/platform-intelligence/facebook.md",
-          "when": "Load for a campaign test that runs in Facebook or Instagram feeds. Ad drafting is a pass-through and loads no resource."
+          "when": "Detailed method, kept unlinked until a blind test brings it back. Ad drafting and the campaign test are pass-throughs and load no resource."
         },
         {
           "path": "references/platform-intelligence/reels.md",
-          "when": "Load for a campaign test that runs in Instagram or Facebook Reels or Stories. Ad drafting is a pass-through and loads no resource."
+          "when": "Detailed method, kept unlinked until a blind test brings it back. Ad drafting and the campaign test are pass-throughs and load no resource."
         },
         {
           "path": "references/ad-intelligence/google-ads.md",
-          "when": "Load for a campaign test on this network: its account setup. Ad drafting is a pass-through and loads no resource."
+          "when": "Detailed method, kept unlinked until a blind test brings it back. Ad drafting and the campaign test are pass-throughs and load no resource."
         },
         {
           "path": "references/ad-intelligence/linkedin-ads.md",
-          "when": "Load for a campaign test on this network: its account setup. Ad drafting is a pass-through and loads no resource."
+          "when": "Detailed method, kept unlinked until a blind test brings it back. Ad drafting and the campaign test are pass-throughs and load no resource."
         },
         {
           "path": "references/ad-intelligence/tiktok-ads.md",
-          "when": "Load for a campaign test on this network: its account setup. Ad drafting is a pass-through and loads no resource."
+          "when": "Detailed method, kept unlinked until a blind test brings it back. Ad drafting and the campaign test are pass-throughs and load no resource."
         },
         {
           "path": "references/ad-intelligence/apple-search-ads.md",
@@ -309,13 +309,24 @@
         "landing page copy",
         "social posts"
       ],
-      "requiredResources": [
-        "references/research-method.md",
-        "references/rubric.md",
-        "references/anti-patterns.md",
-        "fallbacks/sequential.md"
-      ],
+      "requiredResources": [],
       "conditionalResources": [
+        {
+          "path": "references/research-method.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "references/rubric.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "references/anti-patterns.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "fallbacks/sequential.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
         {
           "path": "agents/research.md",
           "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
@@ -371,10 +382,12 @@
         "knowledge review",
         "code audit"
       ],
-      "requiredResources": [
-        "fallbacks/sequential.md"
-      ],
+      "requiredResources": [],
       "conditionalResources": [
+        {
+          "path": "fallbacks/sequential.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
         {
           "path": "references/audit-flow.md",
           "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
@@ -431,12 +444,20 @@
         "write a landing page",
         "social posts"
       ],
-      "requiredResources": [
-        "references/brand-system-method.md",
-        "references/anti-patterns.md",
-        "fallbacks/sequential.md"
-      ],
+      "requiredResources": [],
       "conditionalResources": [
+        {
+          "path": "references/brand-system-method.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "references/anti-patterns.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "fallbacks/sequential.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
         {
           "path": "references/narrative-tension.md",
           "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
@@ -508,12 +529,20 @@
         "create ads",
         "evaluate actual paid"
       ],
-      "requiredResources": [
-        "references/rubric.md",
-        "references/anti-patterns.md",
-        "fallbacks/sequential.md"
-      ],
+      "requiredResources": [],
       "conditionalResources": [
+        {
+          "path": "references/rubric.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "references/anti-patterns.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "fallbacks/sequential.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
         {
           "path": "agents/allocator.md",
           "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
@@ -707,11 +736,16 @@
         "knowledge review",
         "write social only"
       ],
-      "requiredResources": [
-        "references/anti-patterns.md",
-        "fallbacks/sequential.md"
-      ],
+      "requiredResources": [],
       "conditionalResources": [
+        {
+          "path": "references/anti-patterns.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "fallbacks/sequential.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
         {
           "path": "agents/pillar-agent.md",
           "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
@@ -819,13 +853,24 @@
         "write the posts",
         "create ads"
       ],
-      "requiredResources": [
-        "references/evidence-protocol.md",
-        "references/confidence-labeling.md",
-        "references/anti-patterns.md",
-        "fallbacks/sequential.md"
-      ],
+      "requiredResources": [],
       "conditionalResources": [
+        {
+          "path": "references/evidence-protocol.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "references/confidence-labeling.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "references/anti-patterns.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "fallbacks/sequential.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
         {
           "path": "agents/evidence-intake-agent.md",
           "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
@@ -904,14 +949,28 @@
         "seo ranking",
         "paid results"
       ],
-      "requiredResources": [
-        "references/conversion-diagnosis-method.md",
-        "references/diagnostic-evidence-method.md",
-        "references/landing-eval-method.md",
-        "references/landing-eval-rubric.md",
-        "fallbacks/sequential.md"
-      ],
+      "requiredResources": [],
       "conditionalResources": [
+        {
+          "path": "references/conversion-diagnosis-method.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "references/diagnostic-evidence-method.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "references/landing-eval-method.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "references/landing-eval-rubric.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "fallbacks/sequential.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
         {
           "path": "agents/conversion-tree-builder-agent.md",
           "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
@@ -1091,13 +1150,24 @@
         "write the copy",
         "finished ads"
       ],
-      "requiredResources": [
-        "references/visual-rubric.md",
-        "references/graphic-brief-method.md",
-        "references/anti-patterns.md",
-        "fallbacks/sequential.md"
-      ],
+      "requiredResources": [],
       "conditionalResources": [
+        {
+          "path": "references/visual-rubric.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "references/graphic-brief-method.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "references/anti-patterns.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "fallbacks/sequential.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
         {
           "path": "agents/brand-anchor-agent.md",
           "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
@@ -1228,12 +1298,20 @@
         "write the first draft",
         "create the campaign"
       ],
-      "requiredResources": [
-        "fallbacks/sequential.md",
-        "references/independent-review-method.md",
-        "references/anti-patterns.md"
-      ],
+      "requiredResources": [],
       "conditionalResources": [
+        {
+          "path": "fallbacks/sequential.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "references/independent-review-method.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "references/anti-patterns.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
         {
           "path": "references/review-target-and-closeout.md",
           "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
@@ -1312,12 +1390,20 @@
         "write copy",
         "campaign plan"
       ],
-      "requiredResources": [
-        "fallbacks/sequential.md",
-        "references/independent-positions-method.md",
-        "references/anti-patterns.md"
-      ],
+      "requiredResources": [],
       "conditionalResources": [
+        {
+          "path": "fallbacks/sequential.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "references/independent-positions-method.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "references/anti-patterns.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
         {
           "path": "references/decision-tree.md",
           "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
@@ -1403,12 +1489,20 @@
         "write a campaign",
         "create ads"
       ],
-      "requiredResources": [
-        "references/diagnostic-evidence-method.md",
-        "fallbacks/sequential.md",
-        "references/anti-patterns.md"
-      ],
+      "requiredResources": [],
       "conditionalResources": [
+        {
+          "path": "references/diagnostic-evidence-method.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "fallbacks/sequential.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "references/anti-patterns.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
         {
           "path": "agents/tree-builder-agent.md",
           "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
@@ -1561,11 +1655,16 @@
         "executor",
         "content ideas"
       ],
-      "requiredResources": [
-        "references/anti-patterns.md",
-        "fallbacks/sequential.md"
-      ],
+      "requiredResources": [],
       "conditionalResources": [
+        {
+          "path": "references/anti-patterns.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "fallbacks/sequential.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
         {
           "path": "agents/segment-planner-agent.md",
           "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
@@ -1695,13 +1794,24 @@
         "nurture flow",
         "drip flow"
       ],
-      "requiredResources": [
-        "references/flow-mapping-method.md",
-        "references/gates-and-rubric.md",
-        "references/anti-patterns.md",
-        "fallbacks/sequential.md"
-      ],
+      "requiredResources": [],
       "conditionalResources": [
+        {
+          "path": "references/flow-mapping-method.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "references/gates-and-rubric.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "references/anti-patterns.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "fallbacks/sequential.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
         {
           "path": "references/platform-touchpoints.md",
           "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
@@ -1771,12 +1881,20 @@
       "exclusions": [
         "write copy"
       ],
-      "requiredResources": [
-        "references/funnel-model-method.md",
-        "fallbacks/sequential.md",
-        "references/anti-patterns.md"
-      ],
+      "requiredResources": [],
       "conditionalResources": [
+        {
+          "path": "references/funnel-model-method.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "fallbacks/sequential.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "references/anti-patterns.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
         {
           "path": "agents/model-selection-agent.md",
           "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
@@ -1863,13 +1981,24 @@
         "executor",
         "run of show"
       ],
-      "requiredResources": [
-        "references/anti-patterns.md",
-        "references/confidence-labeling.md",
-        "references/content-ideas-method.md",
-        "fallbacks/sequential.md"
-      ],
+      "requiredResources": [],
       "conditionalResources": [
+        {
+          "path": "references/anti-patterns.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "references/confidence-labeling.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "references/content-ideas-method.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "fallbacks/sequential.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
         {
           "path": "agents/platform-scout-agent.md",
           "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
@@ -1941,13 +2070,24 @@
         "write social posts",
         "create ads"
       ],
-      "requiredResources": [
-        "references/measure-rubric.md",
-        "references/campaign-rubric.md",
-        "references/evaluation-loop-rubric.md",
-        "fallbacks/sequential.md"
-      ],
+      "requiredResources": [],
       "conditionalResources": [
+        {
+          "path": "references/measure-rubric.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "references/campaign-rubric.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "references/evaluation-loop-rubric.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "fallbacks/sequential.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
         {
           "path": "references/measurement-design-contract.md",
           "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
@@ -2188,10 +2328,12 @@
         "write the campaign",
         "submit feedback"
       ],
-      "requiredResources": [
-        "fallbacks/sequential.md"
-      ],
+      "requiredResources": [],
       "conditionalResources": [
+        {
+          "path": "fallbacks/sequential.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
         {
           "path": "references/confidence-labeling.md",
           "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
@@ -2341,12 +2483,20 @@
       "exclusions": [
         "landing page copy"
       ],
-      "requiredResources": [
-        "references/pricing-method.md",
-        "references/pricing-rubric.md",
-        "fallbacks/sequential.md"
-      ],
+      "requiredResources": [],
       "conditionalResources": [
+        {
+          "path": "references/pricing-method.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "references/pricing-rubric.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "fallbacks/sequential.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
         {
           "path": "references/wtp-evidence.md",
           "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
@@ -2397,13 +2547,24 @@
       "exclusions": [
         "write copy"
       ],
-      "requiredResources": [
-        "references/force-rank-method.md",
-        "references/ice-scoring-rubric.md",
-        "references/anti-patterns.md",
-        "fallbacks/sequential.md"
-      ],
+      "requiredResources": [],
       "conditionalResources": [
+        {
+          "path": "references/force-rank-method.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "references/ice-scoring-rubric.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "references/anti-patterns.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "fallbacks/sequential.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
         {
           "path": "agents/research-agent.md",
           "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
@@ -2769,13 +2930,24 @@
         "paid search ads",
         "landing conversion rewrite"
       ],
-      "requiredResources": [
-        "references/eval-rubric.md",
-        "references/evaluation-loop-rubric.md",
-        "fallbacks/sequential.md",
-        "references/anti-patterns.md"
-      ],
+      "requiredResources": [],
       "conditionalResources": [
+        {
+          "path": "references/eval-rubric.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "references/evaluation-loop-rubric.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "fallbacks/sequential.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "references/anti-patterns.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
         {
           "path": "references/retrieval-layer-seo.md",
           "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
@@ -2919,12 +3091,20 @@
       "exclusions": [
         "write finished copy"
       ],
-      "requiredResources": [
-        "references/initiative-shaping-method.md",
-        "references/anti-patterns.md",
-        "fallbacks/sequential.md"
-      ],
+      "requiredResources": [],
       "conditionalResources": [
+        {
+          "path": "references/initiative-shaping-method.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "references/anti-patterns.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "fallbacks/sequential.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
         {
           "path": "references/orchestration-steps.md",
           "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
@@ -3176,12 +3356,20 @@
         "analyze a supplied video",
         "evaluate published short-form"
       ],
-      "requiredResources": [
-        "references/shortform-brief-method.md",
-        "references/anti-patterns.md",
-        "fallbacks/sequential.md"
-      ],
+      "requiredResources": [],
       "conditionalResources": [
+        {
+          "path": "references/shortform-brief-method.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "references/anti-patterns.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "fallbacks/sequential.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
         {
           "path": "agents/hook-agent.md",
           "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
