@@ -19,6 +19,5 @@ Write the copy in your own judgment from the user's facts, then run only the fac
 claims the facts do not support, keep fair inferences, and add nothing (no hedges, no source text, no
 disclaimers). A sales page or sales letter uses the `copy` long-form method instead.
 
-Return the finished native copy first, then the claim boundary and facts that still need proof. Do
-not invent customer language, results, testimonials, urgency, or first-person experience. Sending and
-publishing remain human actions.
+Return the finished copy alone. Do not invent customer language, results, testimonials, urgency, or
+first-person experience. Sending and publishing remain human actions; they add nothing to the copy.
