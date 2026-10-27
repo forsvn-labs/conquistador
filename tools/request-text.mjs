@@ -36,6 +36,9 @@ export function requestClauses(prompt, { protectedPhrases = [] } = {}) {
     }
   }
 
+  // A parenthetical qualifies its clause: "Meta (Facebook and Instagram) ads" is one request.
+  for (const match of request.matchAll(/\([^()\n]*\)/g)) protectedSpans.push({ start: match.index, end: match.index + match[0].length });
+
   const clauses = [];
   let start = 0;
 
