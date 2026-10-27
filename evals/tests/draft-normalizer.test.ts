@@ -140,6 +140,37 @@ describe("draft normalizer: identity leaks through text", () => {
     expect(result.removals).toHaveLength(5);
   });
 
+  it("keeps experiment and decision vocabulary that is part of the deliverable", () => {
+    const source = [
+      "**Verdict: Not a real win. Keep A live and rerun the test.**",
+      "",
+      "- Variant: the same page plus a free 15-minute call option.",
+      "- Baseline: 4.0% of visits book. Measure attendance in the control arm.",
+      "- Split traffic evenly between the control and treatment variants.",
+      "- Status: two of the three clinics are ready to start.",
+      "- Confidence: moderate, because 9 bookings is a small sample.",
+    ].join("\n");
+    const result = normalizeDraft(source, { identityTokens: arms });
+    expect(result.removals).toEqual([]);
+    expect(result.text).toBe(source);
+  });
+
+  it("still removes arm, condition, verdict, and status labels that identify an arm or grade the draft", () => {
+    const source = [
+      "Variant: method",
+      "Condition: with method",
+      "Verdict: PASS",
+      "**Status:** REVISE pending facts",
+      "Confidence: high",
+      "This is the baseline draft.",
+      "",
+      "Raise the price to $59 for new customers.",
+    ].join("\n");
+    const result = normalizeDraft(source, { identityTokens: arms });
+    expect(result.text).toBe("Raise the price to $59 for new customers.");
+    expect(result.removals).toHaveLength(6);
+  });
+
   it("removes length markers", () => {
     const result = normalizeDraft("Body text here (212 words).\n\nWord count: 212\n\n**Length:** 1,200 characters\n\n[~150 words]", { identityTokens: arms });
     expect(result.text).toBe("Body text here.");

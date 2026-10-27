@@ -131,6 +131,8 @@ footer{display:flex;gap:10px;align-items:center;padding:12px 20px;border-top:1px
 .choice{min-width:150px;padding:10px 16px;font-weight:600}.choice kbd,.hint kbd{font:12px ui-monospace,monospace;border:1px solid var(--line);border-radius:4px;padding:0 5px;margin-left:6px;color:var(--muted)}
 .choice[aria-pressed=true]{background:var(--chosen);color:#fff;border-color:var(--chosen)}.choice[aria-pressed=true] kbd{color:#ddd;border-color:#555}
 #reason{flex:1;min-width:220px;font:inherit;padding:9px 12px;border:1px solid var(--line);border-radius:8px}
+#reason-prompt{flex-basis:100%;margin:0;font-size:14px;font-weight:600}#reason-prompt kbd{font:12px ui-monospace,monospace;border:1px solid var(--line);border-radius:4px;padding:0 5px;color:var(--muted);font-weight:400}
+footer[data-asking=true] #reason{border-color:var(--focus);box-shadow:0 0 0 1px var(--focus)}
 .hint{font-size:13px;color:var(--muted);width:100%}
 #done{background:#eef6ee;border:1px solid #b9d8b9;border-radius:10px;padding:10px 16px}
 @media (max-width:900px){
@@ -141,6 +143,7 @@ main{padding:12px}.brief{max-height:none}.drafts{grid-template-columns:1fr}artic
 footer{position:sticky;bottom:0;padding:10px 12px;display:grid;grid-template-columns:repeat(6,1fr);grid-template-areas:"a a t t b b" "p r r r r n";gap:8px}
 .choice{min-width:0;padding:10px 4px;white-space:nowrap}#choose-A{grid-area:a}#choose-tie{grid-area:t}#choose-B{grid-area:b}#prev{grid-area:p}#next{grid-area:n}
 #reason{grid-area:r;min-width:0}.choice kbd,.hint{display:none}
+#reason-prompt{grid-area:q}footer[data-asking=true]{grid-template-areas:"q q q q q q" "a a t t b b" "p r r r r n"}
 }
 `;
 
@@ -154,6 +157,11 @@ const CLIENT = String.raw`
   var current = 0;
   var $ = function (id) { return document.getElementById(id); };
   var labels = { A: "A is better", B: "B is better", tie: "Tie", "reject-both": "Both rejected" };
+  var questions = { A: "Why is A better?", B: "Why is B better?", tie: "Why a tie?" };
+  var placeholder = "Optional: one line on why (press R, then Enter)";
+  // Every third pair asks for a reason after the choice. Enter with no text still records the choice.
+  var pending = null;
+  function asksReason(index) { return (index + 1) % 3 === 0; }
 
   function belongs(v) {
     var p = v && byId[v.blindPairId];
@@ -180,6 +188,7 @@ const CLIENT = String.raw`
   }
 
   function show(index) {
+    closeAsk();
     current = Math.max(0, Math.min(data.pairs.length - 1, index));
     var p = data.pairs[current];
     var main = $("pair");
@@ -191,8 +200,38 @@ const CLIENT = String.raw`
     $("draft-a").scrollTop = 0; $("draft-b").scrollTop = 0;
     var v = verdicts[p.pairId];
     $("reason").value = v && v.rationale !== "No reason given." ? v.rationale : "";
-    ["A", "tie", "B"].forEach(function (choice) { $("choose-" + choice).setAttribute("aria-pressed", String(Boolean(v && v.verdict === choice))); });
+    $("reason").placeholder = asksReason(current) ? "This pair asks for one line on why after you choose (Enter skips)" : placeholder;
+    pressed(v && v.verdict);
     progress();
+  }
+  function pressed(choice) {
+    ["A", "tie", "B"].forEach(function (c) { $("choose-" + c).setAttribute("aria-pressed", String(c === choice)); });
+  }
+  function choose(choice) {
+    if (asksReason(current) && !$("reason").value.trim()) { ask(choice); return; }
+    closeAsk();
+    record(choice);
+  }
+  function ask(choice) {
+    pending = choice;
+    $("reason-prompt").innerHTML = "";
+    $("reason-prompt").appendChild(document.createTextNode(questions[choice] + " Type one line, or press "));
+    var enter = document.createElement("kbd"); enter.textContent = "Enter"; $("reason-prompt").appendChild(enter);
+    $("reason-prompt").appendChild(document.createTextNode(" to skip. "));
+    var esc = document.createElement("kbd"); esc.textContent = "Esc"; $("reason-prompt").appendChild(esc);
+    $("reason-prompt").appendChild(document.createTextNode(" cancels the choice."));
+    $("reason-prompt").hidden = false;
+    $("controls").setAttribute("data-asking", "true");
+    pressed(choice);
+    $("reason").focus();
+  }
+  function closeAsk() {
+    if (!pending) return;
+    pending = null;
+    $("reason-prompt").hidden = true;
+    $("controls").removeAttribute("data-asking");
+    var v = verdicts[data.pairs[current].pairId];
+    pressed(v && v.verdict);
   }
   function progress() {
     var judged = all().length, total = data.pairs.length;
@@ -247,22 +286,27 @@ const CLIENT = String.raw`
     setTimeout(function () { URL.revokeObjectURL(link.href); }, 1000);
   }
 
-  $("choose-A").onclick = function () { record("A"); };
-  $("choose-B").onclick = function () { record("B"); };
-  $("choose-tie").onclick = function () { record("tie"); };
+  $("choose-A").onclick = function () { choose("A"); };
+  $("choose-B").onclick = function () { choose("B"); };
+  $("choose-tie").onclick = function () { choose("tie"); };
   $("prev").onclick = function () { show(current - 1); };
   $("next").onclick = function () { show(current + 1); };
   $("export").onclick = exportFile;
   $("reason").addEventListener("keydown", function (event) {
-    if (event.key === "Enter" || event.key === "Escape") { event.preventDefault(); $("reason").blur(); }
+    if (event.key !== "Enter" && event.key !== "Escape") return;
+    event.preventDefault();
+    var choice = pending;
+    $("reason").blur();
+    closeAsk();
+    if (choice && event.key === "Enter") record(choice);
   });
   document.addEventListener("keydown", function (event) {
     if (event.target && (event.target.tagName === "INPUT" || event.target.tagName === "TEXTAREA")) return;
     if (event.metaKey || event.ctrlKey || event.altKey) return;
     var key = event.key.toLowerCase();
-    if (key === "a") record("A");
-    else if (key === "b") record("B");
-    else if (key === "t") record("tie");
+    if (key === "a") choose("A");
+    else if (key === "b") choose("B");
+    else if (key === "t") choose("tie");
     else if (key === "r") { event.preventDefault(); $("reason").focus(); }
     else if (event.key === "ArrowLeft") show(current - 1);
     else if (event.key === "ArrowRight") show(current + 1);
@@ -325,14 +369,15 @@ export function renderJudgingPage(session: PageSession): string {
   </div>
   <section id="done" hidden><strong>All pairs are judged.</strong> You can still go back and change a choice. When you are finished, close this tab and run the report.</section>
 </main>
-<footer>
+<footer id="controls">
+  <p id="reason-prompt" role="status" hidden></p>
   <button type="button" id="prev" title="Previous pair (←)">←</button>
   <button type="button" class="choice" id="choose-A" aria-pressed="false">A is better<kbd>A</kbd></button>
   <button type="button" class="choice" id="choose-tie" aria-pressed="false">Tie<kbd>T</kbd></button>
   <button type="button" class="choice" id="choose-B" aria-pressed="false">B is better<kbd>B</kbd></button>
   <input id="reason" type="text" maxlength="300" autocomplete="off" placeholder="Optional: one line on why (press R, then Enter)" aria-label="Optional reason">
   <button type="button" id="next" title="Next pair (→)">→</button>
-  <div class="hint">Read the brief, then both drafts. Pick the draft you would rather ship. <kbd>A</kbd> <kbd>B</kbd> <kbd>T</kbd> choose and move on · <kbd>R</kbd> write a reason before you choose · <kbd>←</kbd> <kbd>→</kbd> move between pairs.</div>
+  <div class="hint">Read the brief, then both drafts. Pick the draft you would rather ship. <kbd>A</kbd> <kbd>B</kbd> <kbd>T</kbd> choose and move on · <kbd>R</kbd> add a reason · <kbd>←</kbd> <kbd>→</kbd> move · every third pair asks why (<kbd>Enter</kbd> skips).</div>
 </footer>
 <script type="application/json" id="session-data">${json}</script>
 <script>${CLIENT}</script>

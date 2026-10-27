@@ -1,0 +1,238 @@
+{
+  "$schema": "./schemas/practices.schema.json",
+  "schemaVersion": "conquistador.practices/v1",
+  "practices": [
+    {
+      "id": "outbound",
+      "judge": "human",
+      "status": "passed",
+      "pr": 98,
+      "members": [
+        "commands/outreach",
+        "plays/outbound",
+        "channels/email-newsletter"
+      ]
+    },
+    {
+      "id": "copy",
+      "judge": "human",
+      "status": "pass-through",
+      "pr": 99,
+      "note": "Copy passes the request through to the model, except sales pages and sales letters, which keep the long-form method.",
+      "members": [
+        "commands/copy",
+        "plays/landing",
+        "specialists/copy-agent",
+        "specialists/dr-landing-agent",
+        "specialists/saas-landing-agent"
+      ]
+    },
+    {
+      "id": "ads",
+      "judge": "human",
+      "status": "pass-through",
+      "commit": "bed6730",
+      "date": "2026-10-27",
+      "pr": 104,
+      "note": "Three blind tests, 6-12 in total. Ad drafting passes the request through; the campaign test keeps its method.",
+      "members": [
+        "commands/ads",
+        "plays/paid",
+        "specialists/ads-agent"
+      ]
+    },
+    {
+      "id": "social",
+      "judge": "human",
+      "status": "passed",
+      "commit": "84ef79f",
+      "date": "2026-10-27",
+      "pr": 103,
+      "note": "Judged on the pull request; recorded at its merge commit on main.",
+      "members": [
+        "commands/social",
+        "channels/facebook",
+        "channels/hacker-news",
+        "channels/instagram",
+        "channels/linkedin",
+        "channels/product-hunt",
+        "channels/reddit",
+        "channels/x"
+      ]
+    },
+    {
+      "id": "video",
+      "judge": "human",
+      "status": "untested",
+      "members": [
+        "commands/video",
+        "commands/watch",
+        "plays/series",
+        "plays/trailer",
+        "channels/tiktok",
+        "channels/youtube",
+        "formats/founder-demo",
+        "formats/motion-background",
+        "formats/ugc"
+      ]
+    },
+    {
+      "id": "creative",
+      "judge": "human",
+      "status": "untested",
+      "members": [
+        "commands/creative",
+        "commands/brand",
+        "plays/qa",
+        "specialists/creative-assets-agent"
+      ]
+    },
+    {
+      "id": "content",
+      "judge": "human",
+      "status": "untested",
+      "members": [
+        "commands/article",
+        "commands/ideas",
+        "commands/vietnamese",
+        "plays/content"
+      ]
+    },
+    {
+      "id": "seo",
+      "judge": "human",
+      "status": "untested",
+      "members": [
+        "commands/seo",
+        "plays/answers",
+        "plays/pseo",
+        "plays/appstore"
+      ]
+    },
+    {
+      "id": "pricing",
+      "judge": "human",
+      "status": "failed",
+      "commit": "f449281",
+      "date": "2026-10-27",
+      "note": "Blind test of the method on main: 1-5 against the model with no method.",
+      "members": [
+        "commands/pricing"
+      ]
+    },
+    {
+      "id": "experiment",
+      "judge": "human",
+      "status": "failed",
+      "commit": "f449281",
+      "date": "2026-10-27",
+      "note": "Blind test of the method on main: 1-5 against the model with no method.",
+      "members": [
+        "plays/experiment",
+        "commands/convert",
+        "commands/prioritize",
+        "commands/decide"
+      ]
+    },
+    {
+      "id": "channels",
+      "judge": "human",
+      "status": "failed",
+      "commit": "f449281",
+      "date": "2026-10-27",
+      "note": "Blind test of the method on main: 3-3 against the model with no method. A tie is not an edge, so it failed.",
+      "members": [
+        "commands/channels",
+        "commands/budget",
+        "plays/expand"
+      ]
+    },
+    {
+      "id": "positioning",
+      "judge": "human",
+      "status": "untested",
+      "members": [
+        "commands/position",
+        "plays/gtm"
+      ]
+    },
+    {
+      "id": "measurement",
+      "judge": "human",
+      "status": "untested",
+      "members": [
+        "commands/measure",
+        "commands/results",
+        "commands/funnel",
+        "commands/diagnose",
+        "plays/report",
+        "plays/plan",
+        "specialists/campaign-data-agent",
+        "specialists/data-diagnosis-agent"
+      ]
+    },
+    {
+      "id": "launch",
+      "judge": "human",
+      "status": "untested",
+      "members": [
+        "plays/launch",
+        "plays/press",
+        "commands/campaign",
+        "commands/event",
+        "plays/lifecycle",
+        "plays/referral",
+        "plays/interactive"
+      ]
+    },
+    {
+      "id": "product",
+      "judge": "human",
+      "status": "untested",
+      "members": [
+        "commands/flow",
+        "commands/shape",
+        "commands/ui",
+        "plays/spec"
+      ]
+    },
+    {
+      "id": "review",
+      "judge": "human",
+      "status": "untested",
+      "members": [
+        "commands/audit",
+        "commands/check",
+        "commands/critique",
+        "commands/factcheck",
+        "commands/review"
+      ]
+    },
+    {
+      "id": "engineering",
+      "judge": "human",
+      "status": "untested",
+      "note": "Engineering and tooling commands stay as they are.",
+      "members": [
+        "commands/architect",
+        "commands/build",
+        "commands/docs",
+        "commands/connect",
+        "commands/doctor",
+        "commands/feedback",
+        "commands/init",
+        "commands/pin"
+      ]
+    }
+  ],
+  "nonMethods": [
+    {
+      "member": "specialists/roster",
+      "reason": "Index of the specialist roles; not a method."
+    },
+    {
+      "member": "specialists/deep-modes",
+      "reason": "Notes on when to load deep modes; not a method."
+    }
+  ]
+}
