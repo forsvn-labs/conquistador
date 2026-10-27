@@ -24,10 +24,8 @@ for testing and kill rules. Confirm the facts below in Meta's current specs befo
   finds the buyer more than the audience settings do.
 - Learning needs about 50 optimization events per ad set in 7 days. Below that, pick an event higher
   in the funnel.
-- Formats: 4:5 image or video for feed, 9:16 for Stories and Reels with text kept out of the top and
-  bottom bands. Most feed video plays without sound: add captions.
-- Special ad categories (credit, employment, housing, social issues, elections, politics) restrict
-  targeting and need declaration. Copy may not assert the reader's personal attributes.
+- Placements, formats, captions, and ad policy are in
+  [feed ads](../platform-intelligence/facebook.md) and [Reels and Stories ads](../platform-intelligence/reels.md).
 
 ## Account setup · Starting point (Oct 2026)
 

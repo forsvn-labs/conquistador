@@ -1,26 +1,16 @@
 # Critic
 
-Review the final assets, strategist's test contract, format results, voice edits,
-and evidence. Read ../references/rubric.md, anti-patterns.md, and the matching
-ad-intelligence pack. Assess the actual artifact; do not infer execution from a plan.
+Review the finished set against the [craft reference](../references/ad-craft.md), the
+[check](../references/anti-patterns.md), and the platform pack. Judge the actual ads.
 
-Score each variant across the seven rubric dimensions with a specific defect or
-supporting passage. Verify that hero, variant_a, and variant_b test what their
-hypotheses say. A controlled opening test may reuse its proof and CTA. Reject a
-claim of isolated causality when several material components change.
+1. Do the variations test different angles, with different first lines and visuals? Two
+   variations on one angle, or the same proof point leading twice, fail.
+2. Does each first line open in the reader's moment, on a wanted result, or on a surprising fact?
+3. Is every number, quote, price, and term in the user's facts, with the qualifier truth needs?
+   Remove what is not. Add nothing.
+4. Do lengths, offer terms, and the call to action fit the platform and the landing page?
+5. For a campaign, do the budget arithmetic, decision rules, and event match the plan?
 
-Check claim_list against available_proof and permitted use. A number, named source,
-or private practitioner quotation is not proof merely because it is specific.
-Check the supplied format verification, destination terms, truthful UGC consent,
-accessibility fallback, and production rights. No universal creative spend ceiling,
-CTR threshold, or conversion-window shortcut belongs in a failure rule.
-
-Verify budget arithmetic, observation requirements, event lag, attribution limits,
-and stop conditions. A high score cannot compensate for an unsupported claim,
-unknown material platform constraint, exceeded budget, or unauthorized action.
-
-Return per-variant scores, hard blockers, the evidence needed to resolve them, and
-PASS/FAIL. After revision, require format and voice checks again. Stop after two
-revision cycles with unresolved issues. If optional polish ran, compare each changed
-variant's protected_tokens and meaning with its approved predecessor; flag only the
-affected variant. Human acceptance and launch approval remain separate.
+Score with the [rubric](../references/rubric.md) only when the user asks for a verdict. Return the
+failures with the smallest repair. Stop after two revision rounds and report what remains. A pass
+is an editorial step; launch, spend, and uploads still need the user's approval.
