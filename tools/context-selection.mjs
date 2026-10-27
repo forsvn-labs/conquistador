@@ -1,7 +1,7 @@
 import { existsSync, lstatSync, readFileSync } from 'node:fs';
 import { join, posix, resolve } from 'node:path';
 import { assertLoadAllowed, loadRestriction } from './domain-package.mjs';
-import { decisionRequest, explicitInvocation, instructionClause, invokedCommand, requestedBusinessClauses, requestFocus, requestMode, requestOperation, unquotedRequest, normalizeRequest as normalized, includesPhrase } from './request-text.mjs';
+import { decisionRequest, explicitInvocation, instructionClause, invokedCommand, requestedBusinessClauses, requestFocus, requestLead, requestMode, requestOperation, unquotedRequest, normalizeRequest as normalized, includesPhrase } from './request-text.mjs';
 import { loadRoutingContract } from './routing-contract.mjs';
 import { packageRootOf } from './module-root.mjs';
 
@@ -90,6 +90,8 @@ function matchingMethods(query, contract, { permitGrowthInference = true, signal
   const tokens = text.split(' ');
   const inspect = /\b(?:evaluate|audit|results|performance)\b/i.test(query);
   const decisions = signals && decide && decisionRequest(text);
+  // Normalizing drops "$"; in a decision a dollar amount is money ("We have $10k a month. Where should it go?").
+  const decisionTokens = /\$\s?\d/.test(query) ? [...tokens, 'dollars'] : tokens;
   const matches = [];
   const signalled = [];
   const decided = [];
@@ -107,7 +109,7 @@ function matchingMethods(query, contract, { permitGrowthInference = true, signal
 
     if (method.exclusions.some(phrase => hasPhrase(tokens, phrase))) continue;
     const signal = signals ? signalScore(tokens, method.signals) : 0;
-    const decision = decisions ? signalScore(tokens, method.decisions) : 0;
+    const decision = decisions ? signalScore(decisionTokens, method.decisions) : 0;
     if (!hit && !signal && !decision) continue;
     if (inspect && method.kind === 'create' && hit?.kind !== 'name' && !/\b(?:write|create|draft)\b/i.test(query)) continue;
     if (decision) decided.push({ ...method, score: DECISION + decision, signal, decision, matchKind: 'decision', matchPhrase: 'decision' });
@@ -360,19 +362,35 @@ export function selectRequestContext(prompt, { root = moduleRoot, automatic = fa
   const focus = requestFocus(prompt);
   const whole = () => routeRequest(prompt, prompt, options);
   const support = routed => ({ ...routed.result, supportingQuery: requestedBusinessClauses(prompt, { protectedPhrases }).join('. ') });
-  if (!focus) {
-    // A decision question pasted above its facts decides when the question alone names the owner of
-    // the decision. A falling metric in the facts still comes first: diagnosis before prescription.
-    const question = requestFocus(prompt, { questions: true });
-    const asked = question ? routeRequest(question, prompt, options) : null;
-    if (!asked?.decided) return whole().result;
+  // A decision the request names keeps its owner: words in the pasted facts may not displace it. A
+  // falling metric in the facts still comes first: diagnosis before prescription.
+  const decide = asked => {
     const routed = whole();
     return routed.action === 'route' && routed.owners[0] === 'diagnose' ? routed.result : support(asked);
+  };
+  // The opening request block, read whole ("A prospect wants 30% off. What should we counter with?",
+  // "Rank these ideas and tell us which two to run first"), decides when it names a decision.
+  const lead = requestLead(prompt);
+  const leadDecision = () => {
+    const asked = lead ? routeRequest(lead, prompt, options) : null;
+    return asked?.action === 'route' && asked.decided ? asked : null;
+  };
+  if (!focus) {
+    // Otherwise a decision question pasted above or below its facts decides when the question alone
+    // names the owner of the decision.
+    const question = requestFocus(prompt, { questions: true });
+    const asked = leadDecision() ?? (question ? routeRequest(question, prompt, options) : null);
+    return asked?.decided ? decide(asked) : whole().result;
   }
   const focused = routeRequest(focus, prompt, options);
-  if (focused.action !== 'route') return focused.engineeringOnly ? focused.result : whole().result;
+  if (focused.action !== 'route' && focused.engineeringOnly) return focused.result;
+  if (focused.action === 'route' && focused.named) return support(focused);
+  // An instruction sentence that names no deliverable ("Give us a split by line item") yields to the
+  // decision its request block names.
+  const asked = leadDecision();
+  if (asked) return decide(asked);
+  if (focused.action !== 'route') return whole().result;
   const supported = support(focused);
-  if (focused.named) return supported;
   const routed = whole();
   return routed.action === 'route' && !focused.owners.includes(routed.owners[0]) ? routed.result : supported;
 }

@@ -546,7 +546,7 @@
         "how much & spend|invest|put & channel*|ads|paid|marketing|google|meta|linkedin"
       ],
       "decisions": [
-        "where should|how should|should we|should i|how do we & budget*|money|dollars|cash|funds|spend* & go|split|allocat*|divide|move|shift|put|invest|more|less|between|across & !time|hours|effort",
+        "where should|how should|should we|should i|how do we|what & budget*|money|dollars|cash|funds|spend*|amount|sum|pot & go|split|allocat*|divide|move|shift|put|invest|more|less|between|across & !time|hours|effort",
         "how should|where should|should we|how do we|how much & split|allocat*|divide|distribut*|reallocat* & between|across"
       ]
     },
@@ -2468,6 +2468,10 @@
         "rank*|prioriti*|score|sort|ice|triage|force rank|drop|cut|kill & idea*|initiative*|project*|experiment*|option*|bet*|backlog|list|opportunit*|roadmap|these",
         "which & first & experiment*|idea*|bet*|project*|initiative*|test*",
         "pick|choose|what to work on & list|initiative*|backlog|these|quarter"
+      ],
+      "decisions": [
+        "rank*|prioriti*|force rank|triage & idea*|experiment*|bet*|initiative*|project*|options|backlog & !google|search|seo|serp|keyword*|chatgpt|ai answer*|channel*|platform*",
+        "which|what|pick|choose|order & idea*|experiment*|bet*|initiative*|project*|options|backlog|these & first|next|top & !channel*|platform*"
       ]
     },
     "results": {

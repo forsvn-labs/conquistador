@@ -104,6 +104,25 @@ export function requestFocus(prompt, { questions = false } = {}) {
   return request.length && request.length < units.length ? request.map(unit => unit.text).join('\n') : null;
 }
 
+// The opening block of a prompt that pastes material below its request: the lines before the first
+// blank line, list item, or header ("Facts:"). Its sentences are read together, so a question keeps
+// the sentence that names its subject ("A prospect wants 30% off. What should we counter with?").
+// Returns null when nothing follows the block.
+const header = /:\s*$/;
+export function requestLead(prompt) {
+  const lines = unquotedRequest(prompt).replace(invocation, ' ').split('\n');
+  const lead = [];
+  let index = 0;
+  for (; index < lines.length; index += 1) {
+    const line = lines[index];
+    if (!/[\p{L}\p{N}]/u.test(line)) { if (lead.length) break; continue; }
+    if (listItem.test(line) || header.test(line)) break;
+    lead.push(line.trim());
+  }
+  const rest = lines.slice(index).some(line => /[\p{L}\p{N}]/u.test(line));
+  return lead.length && rest ? lead.join('\n') : null;
+}
+
 // A clause that opens with an instruction asks for its own deliverable ("Plan the launch").
 export const instructionClause = clause => requestOpener.test(clause.trim());
 
