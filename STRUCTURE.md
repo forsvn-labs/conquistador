@@ -39,6 +39,9 @@ checks source digests before reuse. `tools/update-completeness.mjs` regenerates 
 `tools/method-copies.json` names the one editable source of each byte-identical method
 file group; `tools/method-copies.mjs` syncs the copies and checks them for drift.
 Commands have short `ENTRY.md` guides and detailed `COMMAND.md` procedures.
+`tools/method-policy.mjs` owns the shared entry defaults used by briefing, app
+contexts, specialist assignments, installs, MCP discovery, and bot exports.
+Kept plays preserve their declared method dependencies.
 `tools/prompt-advice.mjs` owns shared hook advice and transcript-scoped reuse;
 `tools/read-evidence.mjs` verifies returned resource bytes. The host runs the work and checks the result. The app API reads
 bundled playbooks and caller context. Host configuration and provider
