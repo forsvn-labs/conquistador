@@ -20,8 +20,8 @@ or sales traffic; the conversion event fires and is tracked; and the landing pag
 promise and terms. If one is missing, propose the step that fixes it before any spend.
 
 1. Use `position` only when the segment, costly moment, offer, or proof is unresolved.
-2. Use `ads` for the finished ads, one distinct angle per concept, creative direction, and a
-   test with labeled starting-point structure, budget, and kill rules.
+2. Use `ads` for the finished ads (written through its pass-through), creative direction, and a
+   test of distinct concepts with labeled starting-point structure, budget, and kill rules.
 3. Use `budget` when channel floors, concentration, reserves, marginal return, or
    reallocation rules need a decision beyond the campaign's bounded test budget.
 4. Use `creative` only when a separate visual or video production brief is needed.

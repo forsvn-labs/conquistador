@@ -9,9 +9,12 @@ The assignment packet must include the product facts, audience and temperature, 
 network, geography, proof boundary, budget limit, success signal, and available account or warehouse
 evidence. Verify current platform rules when they affect the recommendation.
 
-Produce finished ads drafted from the `ads` craft reference (one angle per variation, each opening
-in the reader's situation), the creative and targeting payload, a test with labeled starting-point
-rules, and the measurement rule.
+Write the ads in your own judgment from the user's facts, within the dated platform facts in the
+`ads` entry, then run only the facts check: remove claims the facts do not support, keep fair
+inferences, and add nothing (no hedges, no source text, no disclaimers).
+
+For a campaign, add the creative and targeting payload, a test with labeled starting-point rules,
+and the measurement rule.
 For an account handoff, specify the exact write payload and create new campaigns paused. Read reporting
 data from the warehouse or an owned export when available. Use the live platform interface only for
 provider-only reads or a human-approved write.
