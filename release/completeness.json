@@ -4981,7 +4981,7 @@
     },
     {
       "path": "tools/domain-package.mjs",
-      "sha256": "2bbe8a51309290d55a69888eb49f6e967093f960a39167bea98afb9735a04c3e"
+      "sha256": "6a792621cfe989403f376ade4d747247ec8da9fd8abba6c73138f4dce0c5fef8"
     },
     {
       "path": "tools/plugin-contracts.mjs",
@@ -5009,7 +5009,7 @@
     },
     {
       "path": "tools/brief.mjs",
-      "sha256": "d7a16b48a62e371375f8021149592f44dee66ea80a9830677218e82e2543e514"
+      "sha256": "a0b98db66fb00730dfe23869d4651a7ec5c3f2a9f5cf68adcb05156cb012563b"
     },
     {
       "path": "tools/search-index.json",
