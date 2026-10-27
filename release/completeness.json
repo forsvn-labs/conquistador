@@ -4945,7 +4945,7 @@
     },
     {
       "path": "tools/request-text.mjs",
-      "sha256": "cedf89a962f2083b96fd724713fe940beed2da696142895712d913a15d467368"
+      "sha256": "0ed972fc3c8567771065fa1d77873ec5797396fac28c8248ff51651c76ce75e7"
     },
     {
       "path": "tools/knowledge-index.mjs",
@@ -4953,7 +4953,7 @@
     },
     {
       "path": "tools/brief.mjs",
-      "sha256": "b8a3cec02e4f8f98378fd7168a1f4f99eaa9889e88d862ce6336f680362b0537"
+      "sha256": "1e80c2d1a3cdb4a99818b9e8a8fb9199e51e1b961bd9fe320cf410dca10f5c82"
     },
     {
       "path": "tools/search-index.json",
@@ -4973,7 +4973,7 @@
     },
     {
       "path": "tools/context-selection.mjs",
-      "sha256": "058965707f36039e959bbc111f1114b1792024231ad645c79268e9319922d8b1"
+      "sha256": "9d7f847c9c9891a869bb7974c745f82b7bd1977cc4f62bf865454f5ffdb8830a"
     },
     {
       "path": "agents/conquistador/agent.json",

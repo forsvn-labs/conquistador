@@ -15,7 +15,7 @@ const out = resolve(option('--out', join(root, 'dist/e2e/routing-breadth')));
 
 export async function loadCases() {
   const corpus = JSON.parse(readFileSync(join(root, 'tools/e2e/routing-breadth.json'), 'utf8'));
-  const cases = [...corpus.cases, ...plainLanguageCases()];
+  const cases = [...corpus.cases, ...plainLanguageCases(), ...deliverableFirstCases()];
   // Every example the onboarding tour advertises is also a case, so the tour cannot drift (O6).
   if (existsSync(join(root, 'tools/tour.mjs'))) {
     const { AREAS } = await import('../tour.mjs');
@@ -48,6 +48,18 @@ export function plainLanguageCases() {
   ];
 }
 
+// Requests pasted with supporting context (facts, notes, background). The named deliverable decides
+// the command: the full task must route exactly like the request alone.
+export function deliverableFirstCases() {
+  const corpus = JSON.parse(readFileSync(join(root, 'tools/e2e/routing-deliverable-first.json'), 'utf8'));
+
+  return [
+    ...corpus.positives.map(item => ({ ...item, area: `context:${item.mode}`, any: item.any ?? [item.target], parity: true })),
+    ...corpus.silent.map(item => ({ ...item, area: `context:negative:${item.mode}`, silent: true, parity: true })),
+    ...corpus.unchanged.map(item => ({ ...item, area: `context:${item.mode}`, parity: true })),
+  ];
+}
+
 const routeOf = brief => JSON.stringify([brief.action, brief.play?.name ?? null, brief.methods.map(method => method.name)]);
 
 export function judge(item, { playbooks = [] } = {}) {
@@ -68,6 +80,12 @@ export function judge(item, { playbooks = [] } = {}) {
     if (item.play && play !== item.play) problems.push(`expected play ${item.play}, got ${play ?? 'none'} (R5)`);
     if (item.play && brief.play && !brief.play.steps.some(step => step.now)) problems.push('play has no first step (R5)');
     if (item.noPlay && play) problems.push(`expected a single command, got play ${play} (R6)`);
+    for (const name of item.all ?? []) if (!methods.includes(name)) problems.push(`missing ${name} (R8)`);
+    if (item.request) {
+      const alone = createBrief(item.request, { force: true, root, playbooks });
+
+      if (routeOf(alone) !== routeOf(brief)) problems.push(`context changed the route: ${routeOf(brief)} vs request alone ${routeOf(alone)} (R9)`);
+    }
   }
   if (item.parity) {
     const other = createBrief(item.task, { force: Boolean(item.silent), root, playbooks });
