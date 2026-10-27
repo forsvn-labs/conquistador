@@ -101,6 +101,9 @@ test('skill staging follows restriction without hiding undeclared siblings later
   assert.equal(shouldStageSkillPath('skills/conquistador/commands/copy/COMMAND.md', selection), false);
   assert.equal(shouldStageSkillPath('skills/conquistador/specialists/data-diagnosis-agent.md', selection), true);
   assert.equal(shouldStageSkillPath('skills/conquistador/specialists/copy-agent.md', selection), false);
+  // A thin role keeps its detailed text in <role>-agent/COMMAND.md; it stages with its role.
+  assert.equal(shouldStageSkillPath('skills/conquistador/specialists/data-diagnosis-agent/COMMAND.md', selection), true);
+  assert.equal(shouldStageSkillPath('skills/conquistador/specialists/creative-assets-agent/COMMAND.md', selection), false);
   assert.equal(shouldStageSkillPath('docs/USAGE.md', selection), true);
 });
 

@@ -248,8 +248,9 @@ export function shouldStageSkillPath(sourceKey, selection) {
   if (parts[1] === 'conquistador' && parts[2] === 'plays' && parts[3]) {
     return selection.workflows.includes(parts[3].replace(/\.md$/, ''));
   }
-  if (parts[1] === 'conquistador' && parts[2] === 'specialists' && parts[3]?.endsWith('-agent.md')) {
-    return selection.roles.includes(parts[3].slice(0, -'-agent.md'.length));
+  // A role is its <role>-agent.md entry, plus the <role>-agent/ folder that keeps a thin role's detailed text.
+  if (parts[1] === 'conquistador' && parts[2] === 'specialists' && /-agent(?:\.md)?$/.test(parts[3] ?? '')) {
+    return selection.roles.includes(parts[3].replace(/\.md$/, '').slice(0, -'-agent'.length));
   }
   return true;
 }
