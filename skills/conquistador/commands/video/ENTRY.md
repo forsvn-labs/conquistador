@@ -7,7 +7,7 @@ and add nothing (no hedges, no source text, no disclaimers). Return only what th
 ## Platform facts (checked Oct 2026; confirm in the current specs before use)
 
 - **YouTube Shorts:** vertical or square, up to 3 minutes.
-- **TikTok:** uploads up to 60 minutes; in-app recording up to 10 minutes.
+- **TikTok:** uploads up to 60 minutes; the in-app recording limit is shorter and varies by account.
 - **Instagram Reels:** up to 3 minutes.
 - **All three:** 9:16 at 1080×1920. The interface covers the top and bottom bands and the right
   edge; keep text and faces out of them. Feed video often plays muted.

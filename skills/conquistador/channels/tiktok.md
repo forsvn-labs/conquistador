@@ -13,8 +13,9 @@ A photo slideshow follows the `social` command's
 
 ## Platform facts (checked Oct 2026; confirm in the current specs before use)
 
-- **Video:** 9:16 at 1080×1920; uploads up to 60 minutes, in-app recording up to 10 minutes. The
-  right-side buttons and the bottom caption band cover the frame; keep text and faces out of them.
+- **Video:** 9:16 at 1080×1920; uploads up to 60 minutes; the in-app recording limit is shorter and
+  varies by account. The right-side buttons and the bottom caption band cover the frame; keep text
+  and faces out of them.
 - **Photo posts:** portrait images at one shared aspect ratio; the top interface band covers the top
   of the first image. The posting API can upload a private draft; sound is then chosen in the app.
 - **Music:** business accounts use the Commercial Music Library.

@@ -12,8 +12,8 @@ asked for.
 
 - **People on camera:** the speaker is real, used the product, and consents. Paid or gifted creator
   content carries the platform's disclosure.
-- **US FTC rule on reviews and testimonials (in force Oct 2024):** fake or AI-generated
-  testimonials, and testimonials that misstate the speaker's experience, are banned.
+- **US FTC rule on reviews and testimonials (in force 21 Oct 2024):** fake testimonials, including
+  AI-generated ones, and testimonials that misstate the speaker's experience are banned.
 
 Keep small edits small. Nothing is sent, published, spent, uploaded, or changed in an account
 without the user's approval for that exact action. This approval governs actions; it adds nothing to
