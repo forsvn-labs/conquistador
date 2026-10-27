@@ -88,7 +88,29 @@
       "task": "Rank these 9 test ideas and tell us which 2 to run first.\n\nIdeas:\n- Show the $19 and $29 price points side by side on the pricing page.\n- Offer a 14-day free trial instead of a free plan.\n- Shorten signup to email only.\n- Put customer logos above the fold.\n- An annual plan discount banner at checkout.\n- An onboarding checklist in the first session.\n- An exit-intent offer on the pricing page.\n- Live chat on the demo page.\n- A new homepage headline.\n\nFacts:\n- 9,000 visitors a month; 3% sign up." },
     { "mode": "rank-test-ideas-with-pricing-facts", "lead": ["prioritize", "experiment"], "none": ["pricing"],
       "request": "Which 2 of these test ideas should we run first? Rank them all.",
-      "task": "Which 2 of these test ideas should we run first? Rank them all.\n\n- Raise the pro plan price from $49 to $59 for new visitors.\n- Remove the monthly billing option.\n- Add a pricing calculator.\n- Show a discount on the second seat.\n- New onboarding emails.\n- A referral credit.\n- Testimonials on the pricing page.\n- A shorter checkout." }
+      "task": "Which 2 of these test ideas should we run first? Rank them all.\n\n- Raise the pro plan price from $49 to $59 for new visitors.\n- Remove the monthly billing option.\n- Add a pricing calculator.\n- Show a discount on the second seat.\n- New onboarding emails.\n- A referral credit.\n- Testimonials on the pricing page.\n- A shorter checkout." },
+
+    { "mode": "decision-with-plan-deliverable-and-revenue-facts", "lead": ["pricing"], "none": ["plan", "funnel", "budget"],
+      "request": "Should we move from per-seat pricing to usage-based pricing? Give us one recommendation and the migration plan for our current accounts.",
+      "task": "Should we move from per-seat pricing to usage-based pricing? Give us one recommendation and the migration plan for our current accounts.\n\n- List price: $24 per seat per month. MRR is $64,000." },
+    { "mode": "decision-with-plan-deliverable-and-revenue-facts", "lead": ["pricing"], "none": ["plan", "funnel", "budget"],
+      "request": "Should we move from per-seat pricing to usage-based pricing? Give us one recommendation and the migration plan for our current accounts.",
+      "task": "Should we move from per-seat pricing to usage-based pricing? Give us one recommendation and the migration plan for our current accounts.\n\nFacts:\n- List price: $24 per seat per month. MRR is $64,000.\n- 2,700 seats across 180 accounts.\n- Our ARR goal for next year is $1.2M." },
+    { "mode": "decision-with-plan-deliverable-and-revenue-facts", "lead": ["pricing"], "none": ["plan", "funnel", "budget"],
+      "request": "Should we raise the price of the Starter plan from $39 to $49? Recommend yes or no and give a rollout plan for existing customers.",
+      "task": "Should we raise the price of the Starter plan from $39 to $49? Recommend yes or no and give a rollout plan for existing customers.\n\nWhat we know:\n- 1,150 paying customers on the Starter plan.\n- MRR is $51,000 and ARR is about $610,000.\n- Revenue grew 6% last quarter.\n- Monthly churn is 2.1% across all plans." },
+    { "mode": "decision-with-plan-deliverable-and-revenue-facts", "lead": ["pricing"], "none": ["plan", "funnel", "budget"],
+      "request": "Should we add an annual plan at 15% off? Give us a test plan and the numbers to watch.",
+      "task": "# Task\nShould we add an annual plan at 15% off? Give us a test plan and the numbers to watch.\n\n# Facts\n- Monthly plan: $29.\n- MRR is $38,000 across 1,300 customers.\n- Revenue target for the year: $600,000 ARR." },
+    { "mode": "decision-with-plan-deliverable-and-revenue-facts", "lead": ["pricing"], "none": ["plan", "funnel", "budget"],
+      "request": "Should we add a team tier? Include a rollout plan for current customers.",
+      "task": "## Task\n\nShould we add a team tier? Include a rollout plan for current customers.\n\n## Facts\n\n- Solo plan: $15 a month.\n- MRR is $22,000.\n- 40% of accounts invite a second user.\n- Average revenue per account is $18." },
+    { "mode": "decision-with-plan-deliverable-and-revenue-facts", "lead": ["pricing"], "none": ["plan", "funnel", "budget"],
+      "request": "Should we switch to usage-based pricing? Give us the migration plan for current customers and a test plan.",
+      "task": "Task:\nShould we switch to usage-based pricing? Give us the migration plan for current customers and a test plan.\n\nFacts:\n- 640 customers pay $45 a month flat.\n- MRR is $28,800; ARR is about $345,000.\n- Usage varies 20x across accounts." },
+    { "mode": "decision-with-plan-deliverable-and-revenue-facts", "lead": ["channels"], "none": ["plan", "funnel", "budget"],
+      "request": "Should we stop sponsoring podcasts? Give a recommendation and a wind-down plan.",
+      "task": "## Task\n\nShould we stop sponsoring podcasts? Give a recommendation and a wind-down plan.\n\n## Facts\n\n- We spend $6,000 a month on four shows.\n- MRR is $140,000.\n- Podcast-attributed revenue last quarter was $9,500." }
   ],
   "silent": [
     { "mode": "engineering-test", "task": "Design the test suite for the checkout handler" },
@@ -112,6 +134,17 @@
     { "mode": "writing-about-a-decision", "lead": ["article"], "noPlay": true, "none": ["pricing"], "task": "Draft a blog post on whether startups should offer a free plan" },
     { "mode": "deliverable-with-decision-facts", "lead": ["social"], "none": ["budget", "channels"], "task": "Write a LinkedIn post about how we split our marketing budget.\n\nFacts:\n- We moved 40% of spend from Google Ads to podcasts.\n- Signups rose 18%.\n- Should we keep doing it? Our CFO thinks so." },
     { "mode": "deliverable-with-decision-facts", "lead": ["outreach"], "none": ["pricing", "budget"], "task": "Draft a cold email to the CFO of Northwind.\n\nFacts:\n- They asked for 30% off for a three-year contract.\n- We should counter with 15% off and a two-year term.\n- Their budget is split across four vendors." },
-    { "mode": "deliverable-with-decision-facts", "lead": ["campaign"], "none": ["pricing"], "task": "Plan our spring launch campaign.\n\nFacts:\n- Budget is $30,000.\n- Should we add a free tier? Undecided.\n- Instagram ads did well last year." }
+    { "mode": "deliverable-with-decision-facts", "lead": ["campaign"], "none": ["pricing"], "task": "Plan our spring launch campaign.\n\nFacts:\n- Budget is $30,000.\n- Should we add a free tier? Undecided.\n- Instagram ads did well last year." },
+    { "mode": "target-to-plan-with-revenue-facts", "play": "plan", "lead": ["plan"],
+      "request": "Our board wants 3x growth this year. Turn that into a plan.",
+      "task": "Our board wants 3x growth this year. Turn that into a plan.\n\nFacts:\n- MRR is $85,000 across 900 customers.\n- Revenue grew 3% a month last year.\n- Should we raise prices? Not decided." },
+    { "mode": "target-to-plan-with-revenue-facts", "play": "plan", "lead": ["plan"],
+      "request": "We need $2M ARR by Q4; build the plan.",
+      "task": "# Task\nWe need $2M ARR by Q4; build the plan.\n\n# Facts\n- ARR today: $1.1M.\n- Average contract: $9,000 a year.\n- Two sales reps and one marketer." },
+    { "mode": "target-to-plan-with-revenue-facts", "play": "plan", "lead": ["plan"],
+      "request": "We want to triple paying customers by next summer. Build the plan.",
+      "task": "## Task\n\nWe want to triple paying customers by next summer. Build the plan.\n\n## Facts\n\n- 420 paying customers at $59 a month.\n- MRR is $24,800." },
+    { "mode": "diagnosis-before-prescription", "lead": ["diagnose"],
+      "task": "Should we raise the price of the Starter plan from $39 to $49? Recommend yes or no and give a rollout plan for existing customers.\n\nFacts:\n- Revenue fell 12% last quarter.\n- MRR is $47,000." }
   ]
 }
