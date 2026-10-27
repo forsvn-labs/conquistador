@@ -7,4 +7,5 @@ inferences, and add nothing (no hedges, no source text, no disclaimers). Return 
 **Sales page or sales letter** (and its opening): use the long-form method in the
 [sales argument](references/sales-argument.md) and the [complete method](COMMAND.md).
 
-Keep small edits small. Sending and publishing need the user's approval.
+Keep small edits small. Nothing is sent or published without the user's approval for that exact
+action. This approval governs actions; it adds nothing to the copy.
