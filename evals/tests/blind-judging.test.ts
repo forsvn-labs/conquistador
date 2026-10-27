@@ -34,9 +34,13 @@ afterEach(() => {
 
 type CaseSpec = { id: string; practice: string; bare?: string; method?: string; extra?: Record<string, string> };
 
-function makePack(cases: CaseSpec[], arms = { baseline: "bare", candidate: "method" }): string {
+function makePack(cases: CaseSpec[], arms = { baseline: "bare", candidate: "method" }, id = "test-pack"): string {
   const dir = temp();
-  writeFileSync(join(dir, "pack.json"), JSON.stringify({ schemaVersion: "conquistador.judging-pack/v1", id: "test-pack", arms }));
+  writeFileSync(join(dir, "pack.json"), JSON.stringify({ schemaVersion: "conquistador.judging-pack/v1", id, arms }));
+  return addCases(dir, cases, arms);
+}
+
+function addCases(dir: string, cases: CaseSpec[], arms = { baseline: "bare", candidate: "method" }): string {
   for (const spec of cases) {
     mkdirSync(join(dir, spec.id));
     writeFileSync(join(dir, spec.id, "case.json"), JSON.stringify({ practice: spec.practice }));
@@ -63,9 +67,9 @@ function prepare(packDir: string, extra: Partial<Parameters<typeof prepareJudgin
 }
 
 /** Judge every pair by naming the arm identity that wins, as a judge would by reading. */
-function judge(packDir: string, sessionDir: string, winners: Record<string, "bare" | "method" | "tie" | "skip">): HumanVerdict[] {
+function judge(packDir: string, sessionDir: string, winners: Record<string, "bare" | "method" | "tie" | "skip">, earlier: string[] = []): HumanVerdict[] {
   const session = loadJudgingSession(sessionDir);
-  const assignments = revealSessionAssignments(packDir, sessionDir);
+  const assignments = revealSessionAssignments(packDir, sessionDir, earlier);
   let verdicts: HumanVerdict[] = [];
   for (const entry of session.pairs) {
     const winner = winners[entry.pair.caseId];
@@ -88,8 +92,8 @@ function judge(packDir: string, sessionDir: string, winners: Record<string, "bar
   return verdicts;
 }
 
-const allMethod = (count: number, practice = "copy") =>
-  Object.fromEntries(Array.from({ length: count }, (_, index) => [`${practice}-${index + 1}`, "method" as const]));
+const allMethod = (count: number, practice = "copy", from = 1) =>
+  Object.fromEntries(Array.from({ length: count }, (_, index) => [`${practice}-${index + from}`, "method" as const]));
 
 describe("judging pack", () => {
   it("loads the synthetic sample pack", () => {
@@ -367,3 +371,153 @@ describe("sequential pass rule", () => {
   });
 });
 
+
+describe("extending a sequential test", () => {
+  const sequential = parsePassRule({ sequential: true });
+  /** First session: 6 copy cases judged 3-3 (EXTEND), verdicts saved in the session folder. */
+  function firstLook(winsOfSix = 3) {
+    const packDir = makePack(practiceCases("copy", 6));
+    const first = prepare(packDir);
+    const winners: Record<string, "bare" | "method"> = {};
+    for (let index = 1; index <= 6; index += 1) winners[`copy-${index}`] = index <= winsOfSix ? "method" : "bare";
+    writeVerdictsFile(join(first, "verdicts.json"), judge(packDir, first, winners));
+    return { packDir, first };
+  }
+  const grow = (packDir: string, count = 4) => addCases(packDir, practiceCases("copy", 6 + count).slice(6));
+  const extendFrom = (packDir: string, earlier: string[], extra: Partial<Parameters<typeof prepareJudgingSession>[0]> = {}) =>
+    prepare(packDir, { extend: earlier, nonce: "e".repeat(48), ...extra });
+  const combined = (packDir: string, chain: Array<{ sessionDir: string; verdicts: HumanVerdict[] }>, rule = sequential) =>
+    buildJudgingReport({ packDir, sessions: chain, rule });
+
+  it("seals only the new cases into a linked session, with its own key", () => {
+    const { packDir, first } = firstLook();
+    grow(packDir);
+    const second = extendFrom(packDir, [first]);
+    const session = loadJudgingSession(second);
+    expect(session.pairs.map((entry) => entry.pair.caseId)).toEqual(["copy-10", "copy-7", "copy-8", "copy-9"]);
+    expect(session.extends).toEqual([{ sessionId: loadJudgingSession(first).sessionId, caseIds: ["copy-1", "copy-2", "copy-3", "copy-4", "copy-5", "copy-6"] }]);
+    expect(session.sessionId).not.toBe(loadJudgingSession(first).sessionId);
+    expect(JSON.parse(readFileSync(join(second, "sealed", "key.json"), "utf8")).nonce).toBe("e".repeat(48));
+    const html = readFileSync(join(second, "judge.html"), "utf8");
+    expect(html).not.toContain("Plain draft 1 for copy");
+    expect(html).toContain("Plain draft 7 for copy");
+  });
+
+  it("reports the combined 10-pair result: 3-3 then 4-0 fails at 7, 4-2 then 4-0 passes at 8", () => {
+    for (const [winsOfSix, status] of [[3, "fail"], [4, "pass"]] as const) {
+      const { packDir, first } = firstLook(winsOfSix);
+      grow(packDir);
+      const second = extendFrom(packDir, [first]);
+      const result = combined(packDir, [
+        { sessionDir: first, verdicts: readVerdictsFile(join(first, "verdicts.json")) },
+        { sessionDir: second, verdicts: judge(packDir, second, allMethod(4, "copy", 7), [first]) },
+      ]);
+      expect(result.practices[0]).toMatchObject({ practice: "copy", pairs: 10, judged: 10, candidateWins: winsOfSix + 4, decided: 10, status });
+      expect(result.sessionIds).toHaveLength(2);
+      expect(formatJudgingReport(result)).toContain(result.sessionIds![1]!);
+    }
+  });
+
+  it("refuses to extend when a draft of an earlier case changed, the pack is different, or nothing is new", () => {
+    const { packDir, first } = firstLook();
+    expect(() => extendFrom(packDir, [first])).toThrow(/no new cases/);
+    grow(packDir);
+    writeFileSync(join(packDir, "copy-2", "method.md"), "A quietly improved draft.");
+    expect(() => extendFrom(packDir, [first])).toThrow(/copy-2 changed since/);
+
+    const other = firstLook();
+    const renamed = makePack(practiceCases("copy", 10), { baseline: "bare", candidate: "method" }, "other-pack");
+    expect(() => extendFrom(renamed, [other.first])).toThrow(/pack test-pack, not other-pack/);
+    const rearmed = makePack(practiceCases("copy", 10).map(({ bare, method, ...rest }) => ({ ...rest, bare, method: undefined, extra: { "candidate.md": method! } })), { baseline: "bare", candidate: "candidate" });
+    expect(() => extendFrom(rearmed, [other.first])).toThrow(/arms changed/);
+  });
+
+  it("refuses to extend for another judge, a new practice, unjudged pairs, or a result that is already decided", () => {
+    const { packDir, first } = firstLook();
+    grow(packDir);
+    expect(() => extendFrom(packDir, [first], { reviewer: "someone-else" })).toThrow(/reviewer/);
+    addCases(packDir, practiceCases("ads", 1));
+    expect(() => extendFrom(packDir, [first])).toThrow(/practice ads is not in the earlier sessions/);
+    rmSync(join(packDir, "ads-1"), { recursive: true });
+
+    const verdicts = readVerdictsFile(join(first, "verdicts.json"));
+    writeVerdictsFile(join(first, "verdicts.json"), verdicts.slice(1));
+    expect(() => extendFrom(packDir, [first])).toThrow(/judge every pair/);
+    rmSync(join(first, "verdicts.json"));
+    expect(() => extendFrom(packDir, [first])).toThrow(/judge every pair/);
+
+    for (const [winsOfSix, decided] of [[5, /PASS/], [2, /FAIL/]] as const) {
+      const look = firstLook(winsOfSix);
+      grow(look.packDir);
+      expect(() => extendFrom(look.packDir, [look.first])).toThrow(decided);
+    }
+  });
+
+  it("refuses a second extension of the same session, so a test cannot fork", () => {
+    const { packDir, first } = firstLook();
+    grow(packDir);
+    const second = extendFrom(packDir, [first]);
+    expect(() => prepare(packDir, { extend: [first], nonce: "f".repeat(48) })).toThrow(/already extended/);
+    expect(loadJudgingSession(second).extends).toHaveLength(1);
+  });
+
+  it("refuses an extension or a grown base passed alone, sessions out of order, and the same session twice", () => {
+    const { packDir, first } = firstLook();
+    grow(packDir);
+    const second = extendFrom(packDir, [first]);
+    const firstVerdicts = readVerdictsFile(join(first, "verdicts.json"));
+    const secondVerdicts = judge(packDir, second, allMethod(4, "copy", 7), [first]);
+    expect(() => buildJudgingReport({ packDir, sessionDir: second, verdicts: secondVerdicts, rule: sequential })).toThrow(/extends .*pass every session/);
+    expect(() => buildJudgingReport({ packDir, sessionDir: first, verdicts: firstVerdicts, rule: sequential })).toThrow(/extended by .*pass that session too/);
+    const grownOnly = firstLook();
+    grow(grownOnly.packDir);
+    expect(() => buildJudgingReport({ packDir: grownOnly.packDir, sessionDir: grownOnly.first, verdicts: [], rule: sequential })).toThrow(/copy-10, copy-7, copy-8, copy-9.*not in the session|not in the session.*copy-10/);
+    expect(() => combined(packDir, [{ sessionDir: first, verdicts: firstVerdicts }])).toThrow(/extended by/);
+    expect(() => combined(packDir, [{ sessionDir: second, verdicts: secondVerdicts }, { sessionDir: first, verdicts: firstVerdicts }])).toThrow(/oldest first/);
+    expect(() => combined(packDir, [{ sessionDir: first, verdicts: firstVerdicts }, { sessionDir: first, verdicts: firstVerdicts }])).toThrow(/copy-1 is in sessions/);
+  });
+
+  it("refuses a verdict file from another session, a changed draft after extension, and mixed judges", () => {
+    const { packDir, first } = firstLook();
+    grow(packDir);
+    const second = extendFrom(packDir, [first]);
+    const firstVerdicts = readVerdictsFile(join(first, "verdicts.json"));
+    const secondVerdicts = judge(packDir, second, allMethod(4, "copy", 7), [first]);
+    expect(() => combined(packDir, [{ sessionDir: first, verdicts: secondVerdicts }, { sessionDir: second, verdicts: firstVerdicts }])).toThrow(/unknown pair/);
+
+    const sessionPath = join(second, "session.json");
+    const original = readFileSync(sessionPath, "utf8");
+    writeFileSync(sessionPath, JSON.stringify({ ...JSON.parse(original), reviewer: "someone-else" }));
+    expect(() => combined(packDir, [{ sessionDir: first, verdicts: firstVerdicts }, { sessionDir: second, verdicts: secondVerdicts }])).toThrow(/reviewer/);
+    writeFileSync(sessionPath, JSON.stringify({ ...JSON.parse(original), extends: [] }));
+    expect(() => combined(packDir, [{ sessionDir: first, verdicts: firstVerdicts }, { sessionDir: second, verdicts: secondVerdicts }])).toThrow(/links changed/);
+    writeFileSync(sessionPath, original);
+
+    writeFileSync(join(packDir, "copy-3", "bare.md"), "A quietly weakened draft.");
+    expect(() => combined(packDir, [{ sessionDir: first, verdicts: firstVerdicts }, { sessionDir: second, verdicts: secondVerdicts }])).toThrow(/copy-3 changed since/);
+  });
+
+  it("combines sessions only under the sequential rule, and refuses a re-judged earlier look that is now decided", () => {
+    const { packDir, first } = firstLook();
+    grow(packDir);
+    const second = extendFrom(packDir, [first]);
+    const chain = [
+      { sessionDir: first, verdicts: readVerdictsFile(join(first, "verdicts.json")) },
+      { sessionDir: second, verdicts: judge(packDir, second, allMethod(4, "copy", 7), [first]) },
+    ];
+    expect(() => combined(packDir, chain, parsePassRule({}))).toThrow(/sequential/);
+    const rejudged = judge(packDir, first, { ...allMethod(6), "copy-6": "bare" });
+    expect(() => combined(packDir, [{ ...chain[0]!, verdicts: rejudged }, chain[1]!])).toThrow(/already PASS after session/);
+  });
+
+  it("keeps a practice with unjudged new pairs incomplete", () => {
+    const { packDir, first } = firstLook();
+    grow(packDir);
+    const second = extendFrom(packDir, [first]);
+    const result = combined(packDir, [
+      { sessionDir: first, verdicts: readVerdictsFile(join(first, "verdicts.json")) },
+      { sessionDir: second, verdicts: judge(packDir, second, { ...allMethod(4, "copy", 7), "copy-10": "skip" }, [first]) },
+    ]);
+    expect(result.practices[0]).toMatchObject({ pairs: 10, judged: 9, status: "incomplete" });
+  });
+});

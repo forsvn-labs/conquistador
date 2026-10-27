@@ -1,8 +1,8 @@
 // Blind pairwise judging commands. See "Run a blind judging session" in evals/README.md.
 //   generate --pack <dir> --commit <sha> [--arms bare,method] [--runner <cmd>] [--cases a,b] [--force] [--trust-runner] [--repo <dir>]
-//   prepare --pack <dir> --out <dir> --reviewer <name> [--nonce <secret>] [--allow-residual]
+//   prepare --pack <dir> --out <dir> --reviewer <name> [--extend <earlier session dir> ...] [--nonce <secret>] [--allow-residual]
 //   serve   --session <dir> [--verdicts <file>] [--port <n>] [--open]
-//   report  --pack <dir> --session <dir> [--verdicts <file>] [--min-decided 6] [--min-win-rate 2/3] [--sequential] [--json <file>]
+//   report  --pack <dir> --session <dir> [--session <extension dir> ...] [--verdicts <file> ...] [--min-decided 6] [--min-win-rate 2/3] [--sequential] [--json <file>]
 import { spawn } from "node:child_process";
 import { writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
@@ -12,15 +12,27 @@ import { startJudgingServer } from "../src/blind-judging-server.ts";
 import { generateDrafts } from "../src/judge-generate.ts";
 
 const FLAGS = new Set(["allow-residual", "open", "sequential", "force", "trust-runner"]);
+/** Options an extended test repeats, one per session, oldest first. */
+const REPEATABLE = new Set(["session", "extend", "verdicts"]);
 const [command, ...rest] = process.argv.slice(2);
 const options: Record<string, string> = {};
+const repeated: Record<string, string[]> = {};
 for (let index = 0; index < rest.length; index += 1) {
   const arg = rest[index]!;
   if (!arg.startsWith("--")) fail(`unexpected argument: ${arg}`);
   const name = arg.slice(2);
   if (FLAGS.has(name)) options[name] = "true";
   else if (rest[index + 1] === undefined || rest[index + 1]!.startsWith("--")) fail(`--${name} needs a value`);
-  else options[name] = rest[++index]!;
+  else {
+    if (name in options && !REPEATABLE.has(name)) fail(`--${name} is given twice`);
+    options[name] = rest[++index]!;
+    (repeated[name] ??= []).push(options[name]!);
+  }
+}
+const all = (name: string) => repeated[name] ?? [];
+function one(name: string): string {
+  if (all(name).length > 1) fail(`--${name} takes one value for this command`);
+  return need(name);
 }
 
 function fail(message: string): never {
@@ -54,13 +66,15 @@ try {
       reviewer: need("reviewer"),
       nonce: options.nonce,
       allowResidual: options["allow-residual"] === "true",
+      extend: all("extend"),
     });
     console.log(`Prepared session ${session.sessionId} with ${session.pairs.length} pairs.`);
+    if (session.extends) console.log(`  Extends: ${session.extends.map((link) => link.sessionId).join(", ")}. Report with every --session, oldest first, ending with this one.`);
     console.log(`  Judging page:  ${join(sessionDir, "judge.html")}`);
     console.log(`  Sealed key and audit (do not open before judging): ${join(sessionDir, "sealed")}`);
     console.log(`Next: npm run judge:serve -- --session "${sessionDir}" --open`);
   } else if (command === "serve") {
-    const server = await startJudgingServer({ sessionDir: need("session"), verdictsPath: options.verdicts, port: options.port ? Number(options.port) : 0 });
+    const server = await startJudgingServer({ sessionDir: one("session"), verdictsPath: all("verdicts").length ? one("verdicts") : undefined, port: options.port ? Number(options.port) : 0 });
     console.log(`Judging page: ${server.url}`);
     console.log(`Verdicts save to: ${server.verdictsPath}`);
     console.log("Each choice is saved at once. Press Ctrl+C when you are finished.");
@@ -72,12 +86,13 @@ try {
     process.on("SIGINT", stop);
     process.on("SIGTERM", stop);
   } else if (command === "report") {
-    const sessionDir = need("session");
-    const verdictsPath = resolve(options.verdicts ?? join(sessionDir, "verdicts.json"));
+    need("session");
+    const sessionDirs = all("session");
+    const verdictPaths = all("verdicts");
+    if (verdictPaths.length && verdictPaths.length !== sessionDirs.length) fail("give one --verdicts per --session, in the same order, or none to read verdicts.json in each session folder");
     const report = buildJudgingReport({
-      packDir: need("pack"),
-      sessionDir,
-      verdicts: readVerdictsFile(verdictsPath),
+      packDir: one("pack"),
+      sessions: sessionDirs.map((sessionDir, index) => ({ sessionDir, verdicts: readVerdictsFile(resolve(verdictPaths[index] ?? join(sessionDir, "verdicts.json"))) })),
       rule: parsePassRule({ minDecided: options["min-decided"], minWinRate: options["min-win-rate"], sequential: options.sequential === "true" }),
     });
     process.stdout.write(formatJudgingReport(report));

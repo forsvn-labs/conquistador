@@ -31,6 +31,8 @@ export type PackCase = {
 export type JudgingPack = { dir: string; id: string; arms: PackArms; stripHeadings: string[]; cases: PackCase[] };
 
 export type SessionPair = { practice: string; briefDigest: Sha256; pair: BlindPair };
+/** An earlier session of the same test, and the cases it sealed. */
+export type SessionLink = { sessionId: string; caseIds: string[] };
 export type JudgingSession = {
   schemaVersion: "conquistador.judging-session/v1";
   sessionId: string;
@@ -39,8 +41,12 @@ export type JudgingSession = {
   reviewerRevision: string;
   createdAt: string;
   pairs: SessionPair[];
+  /** Extension sessions only: every earlier session of the test, oldest first. */
+  extends?: SessionLink[];
 };
-type JudgingKey = { schemaVersion: "conquistador.judging-key/v1"; sessionId: string; packId: string; nonce: string; arms: PackArms };
+type JudgingKey = { schemaVersion: "conquistador.judging-key/v1"; sessionId: string; packId: string; nonce: string; arms: PackArms; extends?: SessionLink[] };
+/** Written into a session folder when a later session extends it, so one test cannot fork into two. */
+const EXTENDED_BY = "extended-by.json";
 
 const readJson = <T>(path: string, label: string): T => {
   invariant(existsSync(path), `${label} is missing: ${path}`);
@@ -122,8 +128,8 @@ export function loadJudgingPack(packDir: string): JudgingPack {
   return { dir, id: packId, arms, stripHeadings, cases };
 }
 
-function sealPairs(pack: JudgingPack, sessionId: string, nonce: string, presentedAt: string) {
-  return pack.cases.map((entry) => {
+function sealPairs(pack: JudgingPack, cases: PackCase[], sessionId: string, nonce: string, presentedAt: string) {
+  return cases.map((entry) => {
     const sealed = createBlindPair({
       id: `${sessionId}:${entry.id}`,
       caseId: entry.id,
@@ -136,7 +142,7 @@ function sealPairs(pack: JudgingPack, sessionId: string, nonce: string, presente
   });
 }
 
-function auditMarkdown(pack: JudgingPack, sessionId: string): string {
+function auditMarkdown(pack: JudgingPack, cases: PackCase[], sessionId: string): string {
   const lines = [
     `# Normalization audit · session ${sessionId}`,
     "",
@@ -145,7 +151,7 @@ function auditMarkdown(pack: JudgingPack, sessionId: string): string {
     "",
   ];
   const block = (removal: Removal) => [`- **${removal.rule}**`, "", ...removal.excerpt.split("\n").map((line) => `    ${line}`), ""];
-  for (const entry of pack.cases) {
+  for (const entry of cases) {
     lines.push(`## ${entry.id} (${entry.practice})`, "");
     for (const [role, arm] of [["baseline", pack.arms.baseline], ["candidate", pack.arms.candidate]] as const) {
       const draft = entry.drafts[role];
@@ -166,13 +172,17 @@ export function prepareJudgingSession(input: {
   nonce?: string;
   now?: () => string;
   allowResidual?: boolean;
+  /** Earlier sessions of the same sequential test, oldest first. Only the pack's new cases are sealed. */
+  extend?: string[];
 }): { sessionDir: string; session: JudgingSession } {
   const sessionDir = requirePrivatePath(input.outDir, "session output");
   invariant(!existsSync(join(sessionDir, "session.json")), `${sessionDir} already holds a session; choose a new folder so saved verdicts are not replaced`);
   const reviewer = input.reviewer?.trim() ?? "";
   invariant(reviewer.length > 0 && !/[\n\r]/.test(reviewer), "a reviewer name is required");
   const pack = loadJudgingPack(input.packDir);
-  const residual = pack.cases.flatMap((entry) => [
+  const earlier = input.extend?.length ? checkExtension(pack, input.extend, reviewer) : undefined;
+  const cases = earlier ? earlier.cases : pack.cases;
+  const residual = cases.flatMap((entry) => [
     ...entry.drafts.baseline.residualLeaks.map((token) => `${entry.id}/${pack.arms.baseline}: ${token}`),
     ...entry.drafts.candidate.residualLeaks.map((token) => `${entry.id}/${pack.arms.candidate}: ${token}`),
   ]);
@@ -181,7 +191,7 @@ export function prepareJudgingSession(input: {
   const nonce = input.nonce ?? randomBytes(32).toString("hex");
   const createdAt = (input.now ?? (() => new Date().toISOString()))();
   const sessionId = `${pack.id}-${digestBytes(`${nonce}\0session`).slice(7, 15)}`;
-  const sealed = sealPairs(pack, sessionId, nonce, createdAt);
+  const sealed = sealPairs(pack, cases, sessionId, nonce, createdAt);
   const session: JudgingSession = {
     schemaVersion: "conquistador.judging-session/v1",
     sessionId,
@@ -190,6 +200,7 @@ export function prepareJudgingSession(input: {
     reviewerRevision: JUDGING_REVISION,
     createdAt,
     pairs: sealed.map(({ entry, pair }) => ({ practice: entry.practice, briefDigest: entry.briefDigest, pair })),
+    ...(earlier ? { extends: earlier.links } : {}),
   };
   const html = renderJudgingPage({
     sessionId,
@@ -212,15 +223,42 @@ export function prepareJudgingSession(input: {
   mkdirSync(join(sessionDir, "sealed"), { recursive: true });
   writeJson(join(sessionDir, "session.json"), session);
   writeFileSync(join(sessionDir, "judge.html"), html);
-  writeJson(join(sessionDir, "sealed", "key.json"), { schemaVersion: "conquistador.judging-key/v1", sessionId, packId: pack.id, nonce, arms: pack.arms } satisfies JudgingKey);
-  writeJson(join(sessionDir, "sealed", "audit.json"), pack.cases.map((entry) => ({
+  writeJson(join(sessionDir, "sealed", "key.json"), { schemaVersion: "conquistador.judging-key/v1", sessionId, packId: pack.id, nonce, arms: pack.arms, ...(earlier ? { extends: earlier.links } : {}) } satisfies JudgingKey);
+  writeJson(join(sessionDir, "sealed", "audit.json"), cases.map((entry) => ({
     caseId: entry.id,
     practice: entry.practice,
     [pack.arms.baseline]: { words: entry.drafts.baseline.words, residualLeaks: entry.drafts.baseline.residualLeaks, removals: entry.drafts.baseline.removals },
     [pack.arms.candidate]: { words: entry.drafts.candidate.words, residualLeaks: entry.drafts.candidate.residualLeaks, removals: entry.drafts.candidate.removals },
   })));
-  writeFileSync(join(sessionDir, "sealed", "audit.md"), auditMarkdown(pack, sessionId));
+  writeFileSync(join(sessionDir, "sealed", "audit.md"), auditMarkdown(pack, cases, sessionId));
+  if (earlier) writeJson(join(earlier.last, EXTENDED_BY), { sessionId });
   return { sessionDir, session };
+}
+
+/**
+ * An extension seals only the pack's new cases, and only while the earlier sessions leave every new
+ * case's practice at EXTEND under the sequential rule. It refuses a changed earlier draft, another
+ * pack or judge, a practice the earlier sessions did not test, and a second extension of one session.
+ */
+function checkExtension(pack: JudgingPack, earlierDirs: string[], reviewer: string): { cases: PackCase[]; links: SessionLink[]; last: string } {
+  const chain = checkChain(pack, earlierDirs, false);
+  const last = chain.at(-1)!;
+  const marker = readExtendedBy(last.dir);
+  invariant(!marker, `session ${last.session.sessionId} was already extended by ${marker}; to extend again, pass every session so far with --extend, oldest first`);
+  invariant(reviewer === chain[0]!.session.reviewer, `an extension must have the same reviewer as the earlier sessions (${chain[0]!.session.reviewer}), not ${reviewer}`);
+  const sealedCases = new Set(chain.flatMap(({ session }) => session.pairs.map(({ pair }) => pair.caseId)));
+  const cases = pack.cases.filter((entry) => !sealedCases.has(entry.id));
+  invariant(cases.length > 0, "the pack has no new cases; add the new held-out cases to the pack before you extend");
+  const winners = collectWinners(chain.map((link) => ({ ...link, verdicts: readVerdictsFile(join(link.dir, "verdicts.json")) })));
+  const pairs = chain.flatMap(({ session }) => session.pairs);
+  for (const practice of new Set(cases.map((entry) => entry.practice))) {
+    const tally = tallyPractice(pairs.filter((entry) => entry.practice === practice), winners, pack.arms);
+    invariant(tally.pairs > 0, `practice ${practice} is not in the earlier sessions; prepare a new session for it instead of an extension`);
+    invariant(tally.judged === tally.pairs, `judge every pair of practice ${practice} in the earlier sessions (verdicts.json in each session folder) before you extend; ${tally.pairs - tally.judged} of ${tally.pairs} are not judged`);
+    const decision = sequentialDecision(tally.candidateWins, tally.candidateWins + tally.baselineWins);
+    invariant(decision.status === "extend", `practice ${practice} is already ${decision.status.toUpperCase()} (${pack.arms.candidate} ${decision.reason}); an extension cannot change a decided result`);
+  }
+  return { cases, links: chain.map(linkOf), last: last.dir };
 }
 
 export function loadJudgingSession(sessionDir: string): JudgingSession {
@@ -230,21 +268,37 @@ export function loadJudgingSession(sessionDir: string): JudgingSession {
   return session;
 }
 
+type VerifiedSession = { dir: string; session: JudgingSession; assignments: Map<string, BlindAssignment> };
+
+const linkOf = ({ session }: VerifiedSession): SessionLink => ({ sessionId: session.sessionId, caseIds: session.pairs.map(({ pair }) => pair.caseId) });
+const sameLinks = (a: SessionLink[] | undefined, b: SessionLink[] | undefined) => JSON.stringify(a ?? []) === JSON.stringify(b ?? []);
+function readExtendedBy(sessionDir: string): string | undefined {
+  const path = join(sessionDir, EXTENDED_BY);
+  return existsSync(path) ? String(readJson<{ sessionId?: unknown }>(path, EXTENDED_BY).sessionId) : undefined;
+}
+
 /**
- * Re-derive every pair from the pack and the sealed nonce, and require it to match the session.
- * This detects an edited draft or brief, an edited session file, and a changed nonce.
+ * Re-derive every pair of one session from the pack and the session's own sealed nonce, and require it
+ * to match. This detects an edited draft or brief, an edited session file, and a changed nonce. The
+ * pack may hold cases of other sessions; callers decide whether that is allowed.
  */
-export function verifySession(packDir: string, sessionDir: string): { pack: JudgingPack; session: JudgingSession; assignments: Map<string, BlindAssignment> } {
-  const session = loadJudgingSession(sessionDir);
-  const key = readJson<JudgingKey>(join(resolve(sessionDir), "sealed", "key.json"), "sealed/key.json");
-  const pack = loadJudgingPack(packDir);
-  invariant(key.sessionId === session.sessionId && key.packId === session.packId && pack.id === session.packId, "pack, session, and sealed key belong to different sessions");
+function verifyAgainstPack(pack: JudgingPack, sessionDir: string): VerifiedSession {
+  const dir = resolve(sessionDir);
+  const session = loadJudgingSession(dir);
+  const key = readJson<JudgingKey>(join(dir, "sealed", "key.json"), "sealed/key.json");
+  invariant(key.sessionId === session.sessionId && key.packId === session.packId, "pack, session, and sealed key belong to different sessions");
+  invariant(pack.id === session.packId, `session ${session.sessionId} was prepared from pack ${session.packId}, not ${pack.id}`);
   invariant(key.arms?.baseline === pack.arms.baseline && key.arms?.candidate === pack.arms.candidate, "pack arms changed since the session was prepared");
-  const caseIds = new Set(pack.cases.map((entry) => entry.id));
-  for (const { pair } of session.pairs) invariant(caseIds.has(pair.caseId), `session pair ${pair.id} has no case in the pack`);
-  invariant(pack.cases.length === session.pairs.length, "the pack has cases that are not in the session");
+  invariant(sameLinks(key.extends, session.extends), `session ${session.sessionId}: the session links changed since the session was prepared`);
+  const byId = new Map(pack.cases.map((entry) => [entry.id, entry]));
+  const cases = session.pairs.map(({ pair }) => {
+    const entry = byId.get(pair.caseId);
+    invariant(entry, `session pair ${pair.id} has no case in the pack`);
+    return entry;
+  });
+  invariant(new Set(cases).size === cases.length, `session ${session.sessionId} holds a case twice`);
   const assignments = new Map<string, BlindAssignment>();
-  for (const { entry, pair, assignment } of sealPairs(pack, session.sessionId, key.nonce, session.createdAt)) {
+  for (const { entry, pair, assignment } of sealPairs(pack, cases, session.sessionId, key.nonce, session.createdAt)) {
     const stored = session.pairs.find((item) => item.pair.id === pair.id);
     invariant(stored, `session has no pair for case ${entry.id}`);
     invariant(stored.pair.assignmentDigest === pair.assignmentDigest, `blind assignment for pair ${pair.id} does not match the sealed key`);
@@ -255,11 +309,59 @@ export function verifySession(packDir: string, sessionDir: string): { pack: Judg
     invariant(stored.practice === entry.practice, `the practice for case ${entry.id} changed since the session was prepared`);
     assignments.set(pair.id, assignment);
   }
+  return { dir, session, assignments };
+}
+
+/**
+ * Verify the sessions of one test, oldest first: each against its own sealed key, no case in two
+ * sessions, one judge, and each session linked to exactly the sessions before it. When `complete`,
+ * the chain must end at the newest extension and cover every case in the pack.
+ */
+function checkChain(pack: JudgingPack, sessionDirs: string[], complete: boolean): VerifiedSession[] {
+  invariant(sessionDirs.length > 0, "at least one session is required");
+  const chain: VerifiedSession[] = [];
+  const owner = new Map<string, string>();
+  for (const sessionDir of sessionDirs) {
+    const verified = verifyAgainstPack(pack, sessionDir);
+    const { session } = verified;
+    for (const { pair } of session.pairs) {
+      const earlier = owner.get(pair.caseId);
+      invariant(!earlier, `case ${pair.caseId} is in sessions ${earlier} and ${session.sessionId}; each case is judged in one session only`);
+      owner.set(pair.caseId, session.sessionId);
+    }
+    if (chain.length) {
+      const first = chain[0]!.session;
+      invariant(session.reviewer === first.reviewer && session.reviewerRevision === first.reviewerRevision, `session ${session.sessionId} has reviewer ${session.reviewer}, not ${first.reviewer}; one test has one judge`);
+    }
+    invariant(
+      sameLinks(session.extends, chain.map(linkOf)),
+      `session ${session.sessionId} extends ${(session.extends ?? []).map((link) => link.sessionId).join(", ") || "no session"}; pass every session of the test, oldest first`,
+    );
+    chain.push(verified);
+  }
+  chain.forEach(({ dir, session }, index) => {
+    const marker = readExtendedBy(dir);
+    const next = chain[index + 1]?.session.sessionId;
+    if (next) invariant(marker === next, `session ${session.sessionId} was extended by ${marker ?? "no session"}, not ${next}`);
+    else if (complete) invariant(!marker, `session ${session.sessionId} was extended by ${marker}; pass that session too, oldest first`);
+  });
+  if (complete) {
+    const missing = pack.cases.filter((entry) => !owner.has(entry.id)).map((entry) => entry.id);
+    invariant(!missing.length, `the pack has cases that are not in the session (${missing.join(", ")}); if you extended the test, pass every session, oldest first`);
+  }
+  return chain;
+}
+
+/** Verify one session that is the whole test. An extension, or a pack that grew, needs every session. */
+export function verifySession(packDir: string, sessionDir: string): { pack: JudgingPack; session: JudgingSession; assignments: Map<string, BlindAssignment> } {
+  const pack = loadJudgingPack(packDir);
+  const { session, assignments } = checkChain(pack, [sessionDir], true)[0]!;
   return { pack, session, assignments };
 }
 
-export function revealSessionAssignments(packDir: string, sessionDir: string): Map<string, BlindAssignment> {
-  return verifySession(packDir, sessionDir).assignments;
+/** Assignments of one session; for an extension, name its earlier sessions, oldest first. */
+export function revealSessionAssignments(packDir: string, sessionDir: string, earlier: string[] = []): Map<string, BlindAssignment> {
+  return checkChain(loadJudgingPack(packDir), [...earlier, sessionDir], false).at(-1)!.assignments;
 }
 
 export function validateVerdict(session: JudgingSession, verdict: HumanVerdict): SessionPair {
@@ -373,7 +475,7 @@ const extend = (count: number, why: string): SequentialDecision => ({
   status: "extend",
   addPairs: count,
   reason: why,
-  nextStep: `Add ${cases(count)} for this practice with new held-out briefs, generate both drafts, prepare a new session from the larger pack, and judge it. The report does not combine sessions.`,
+  nextStep: `Add ${cases(count)} for this practice with new held-out briefs and generate both drafts. Run judge:prepare with --extend and every session so far, judge the new pairs, then report with every --session, oldest first.`,
 });
 
 /** Apply the sequential rule to the candidate's wins out of the decided pairs. */
@@ -403,6 +505,8 @@ export function sequentialDecision(wins: number, decided: number, rule: Sequenti
 export type JudgingReport = {
   schemaVersion: "conquistador.judging-report/v1";
   sessionId: string;
+  /** A test with extensions: every session, oldest first. */
+  sessionIds?: string[];
   packId: string;
   reviewer: string;
   arms: PackArms;
@@ -411,34 +515,75 @@ export type JudgingReport = {
   generatedAt: string;
 };
 
-export function buildJudgingReport(input: { packDir: string; sessionDir: string; verdicts: HumanVerdict[]; rule: PassRule; now?: () => string }): JudgingReport {
-  const { pack, session, assignments } = verifySession(input.packDir, input.sessionDir);
-  const seen = new Set<string>();
-  for (const verdict of input.verdicts) {
-    invariant(!seen.has(verdict.blindPairId), `pair ${verdict.blindPairId} was judged twice in the verdict file`);
-    seen.add(verdict.blindPairId);
-  }
+type Tally = { pairs: number; judged: number; candidateWins: number; baselineWins: number; ties: number; rejectBoth: number };
+
+function tallyPractice(pairs: SessionPair[], winners: Map<string, string>, arms: PackArms): Tally {
+  const outcomes = pairs.map((entry) => winners.get(entry.pair.id));
+  const count = (value: string) => outcomes.filter((outcome) => outcome === value).length;
+  return {
+    pairs: pairs.length,
+    judged: outcomes.filter(Boolean).length,
+    candidateWins: count(arms.candidate),
+    baselineWins: count(arms.baseline),
+    ties: count("tie"),
+    rejectBoth: count("reject-both"),
+  };
+}
+
+/** Map each judged pair to the winning arm, "tie", or "reject-both". Each verdict must belong to its own session. */
+function collectWinners(chain: Array<VerifiedSession & { verdicts: HumanVerdict[] }>): Map<string, string> {
   const winners = new Map<string, string>();
-  for (const verdict of input.verdicts) {
-    const { pair } = validateVerdict(session, verdict);
-    const assignment = revealBlindAssignment(pair, verdict, assignments.get(pair.id)!);
-    winners.set(pair.id, verdict.verdict === "A" ? assignment.armAIdentity : verdict.verdict === "B" ? assignment.armBIdentity : verdict.verdict);
+  for (const { session, assignments, verdicts } of chain) {
+    const seen = new Set<string>();
+    for (const verdict of verdicts) {
+      invariant(!seen.has(verdict.blindPairId), `pair ${verdict.blindPairId} was judged twice in the verdict file`);
+      seen.add(verdict.blindPairId);
+    }
+    for (const verdict of verdicts) {
+      const { pair } = validateVerdict(session, verdict);
+      const assignment = revealBlindAssignment(pair, verdict, assignments.get(pair.id)!);
+      winners.set(pair.id, verdict.verdict === "A" ? assignment.armAIdentity : verdict.verdict === "B" ? assignment.armBIdentity : verdict.verdict);
+    }
   }
+  return winners;
+}
+
+/**
+ * Report one session, or every session of an extended test (`sessions`, oldest first). Combining
+ * sessions needs the sequential rule, and refuses a test whose earlier sessions already decided a
+ * practice that a later session extends.
+ */
+export function buildJudgingReport(input: {
+  packDir: string;
+  rule: ReportRule;
+  now?: () => string;
+} & ({ sessionDir: string; verdicts: HumanVerdict[]; sessions?: undefined } | { sessions: Array<{ sessionDir: string; verdicts: HumanVerdict[] }>; sessionDir?: undefined; verdicts?: undefined })): JudgingReport {
   const rule = input.rule;
+  const sessions = input.sessions ?? [{ sessionDir: input.sessionDir!, verdicts: input.verdicts! }];
+  invariant(sessions.length > 0, "at least one session is required");
+  invariant(sessions.length === 1 || isSequential(rule), "combining the sessions of an extended test needs the sequential rule (--sequential)");
+  const pack = loadJudgingPack(input.packDir);
+  const chain = checkChain(pack, sessions.map((entry) => entry.sessionDir), true).map((link, index) => ({ ...link, verdicts: sessions[index]!.verdicts }));
+  const winners = collectWinners(chain);
+  const allPairs = chain.flatMap(({ session }) => session.pairs);
+
+  // An extension may only add pairs to a practice that the sessions before it left at EXTEND.
+  for (let index = 1; index < chain.length; index += 1) {
+    const before = chain.slice(0, index).flatMap(({ session }) => session.pairs);
+    for (const practice of new Set(chain[index]!.session.pairs.map((entry) => entry.practice))) {
+      const tally = tallyPractice(before.filter((entry) => entry.practice === practice), winners, pack.arms);
+      if (tally.judged < tally.pairs) continue; // the combined result is INCOMPLETE as well
+      const decision = sequentialDecision(tally.candidateWins, tally.candidateWins + tally.baselineWins);
+      invariant(
+        decision.status === "extend",
+        `practice ${practice} was already ${decision.status.toUpperCase()} after session ${chain[index - 1]!.session.sessionId} (${pack.arms.candidate} ${decision.reason}); session ${chain[index]!.session.sessionId} cannot change a decided result`,
+      );
+    }
+  }
+
   const practices: PracticeResult[] = [];
-  for (const practice of [...new Set(session.pairs.map((entry) => entry.practice))]) {
-    const pairs = session.pairs.filter((entry) => entry.practice === practice);
-    const outcomes = pairs.map((entry) => winners.get(entry.pair.id));
-    const count = (value: string) => outcomes.filter((outcome) => outcome === value).length;
-    const result = {
-      practice,
-      pairs: pairs.length,
-      judged: outcomes.filter(Boolean).length,
-      candidateWins: count(pack.arms.candidate),
-      baselineWins: count(pack.arms.baseline),
-      ties: count("tie"),
-      rejectBoth: count("reject-both"),
-    };
+  for (const practice of [...new Set(allPairs.map((entry) => entry.practice))]) {
+    const result = { practice, ...tallyPractice(allPairs.filter((entry) => entry.practice === practice), winners, pack.arms) };
     const decided = result.candidateWins + result.baselineWins;
     let status: PracticeResult["status"];
     let reason: string;
@@ -464,13 +609,16 @@ export function buildJudgingReport(input: { packDir: string; sessionDir: string;
     }
     practices.push({ ...result, decided, status, reason });
   }
+  const sessionIds = chain.map(({ session }) => session.sessionId);
+  const first = chain[0]!.session;
   return {
     schemaVersion: "conquistador.judging-report/v1",
-    sessionId: session.sessionId,
-    packId: session.packId,
-    reviewer: session.reviewer,
+    sessionId: sessionIds.join(" + "),
+    ...(sessionIds.length > 1 ? { sessionIds } : {}),
+    packId: first.packId,
+    reviewer: first.reviewer,
     arms: pack.arms,
-    rule: input.rule,
+    rule,
     practices,
     generatedAt: (input.now ?? (() => new Date().toISOString()))(),
   };
