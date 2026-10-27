@@ -63,7 +63,29 @@
 
     { "mode": "budget-decision-with-context", "lead": ["budget"], "none": ["results", "ads", "campaign"],
       "request": "How should we split $12k a month between Google and Meta?",
-      "task": "How should we split $12k a month between Google and Meta?\n\nFacts:\n- Google CPA is $60.\n- Meta CPA is $45.\n- Last month's campaign drove 300 trials." }
+      "task": "How should we split $12k a month between Google and Meta?\n\nFacts:\n- Google CPA is $60.\n- Meta CPA is $45.\n- Last month's campaign drove 300 trials." },
+
+    { "mode": "budget-split-with-paid-facts", "lead": ["budget", "channels"], "none": ["ads", "paid"],
+      "request": "We have a set amount for the first three months of marketing. Where should it go? Give us a split by line item.",
+      "task": "We have a set amount for the first three months of marketing. Where should it go? Give us a split by line item.\n\nWhat we know:\n- Brewbox sells a $28 monthly coffee subscription.\n- The three-month pot is $18,000.\n- Facebook ads last spring: $1,100 bought 4,200 visits and 19 subscriptions.\n- Instagram boosted posts: $500 for 9,000 views and 6 subscriptions.\n- Our email list has 3,400 people; one launch email drove 41 subscriptions.\n- Two cafe partners offered counter displays for $300 a month.\n- A food creator quoted $2,500 for one sponsored video.\n- The average subscriber stays 7 months.\n- Nobody on staff makes content." },
+    { "mode": "budget-split-with-paid-facts", "lead": ["budget", "channels"], "none": ["ads", "paid"],
+      "request": "What split of our launch marketing money should go to each channel?",
+      "task": "What split of our launch marketing money should go to each channel?\n\nNotes:\n- Total launch money: $40,000 over 3 months.\n- LinkedIn ads test: $3,000 for 210 clicks and 4 demos.\n- Paid social on Meta: $2,000 for 1,500 clicks and 0 demos.\n- Two industry newsletters sell sponsorships at $1,200 per issue.\n- A trade show booth costs $9,000.\n- Our sales cycle is 45 days.\n- The average contract is $14,000 a year.\n- Webinars got 120 signups last quarter." },
+    { "mode": "budget-split-with-paid-facts", "lead": ["budget", "channels"], "none": ["ads", "paid"],
+      "request": "Where should our monthly marketing budget go next quarter?",
+      "task": "Where should our monthly marketing budget go next quarter?\n\nContext:\n- We run a roofing company in two cities.\n- The monthly marketing budget is $9,000.\n- Bing search ads line: $2,400 a month, 52 leads, 11 jobs.\n- A home-services lead marketplace: $1,800 a month, 70 leads, 6 jobs.\n- Local radio spots: $3,000 a month; no customer mentions them.\n- Paid social on Facebook: $900 a month, 12 leads.\n- The average job is $11,500.\n- Referrals bring about 8 jobs a month at no cost." },
+    { "mode": "discount-counter-with-deal-facts", "lead": ["pricing"], "none": ["budget", "outreach"],
+      "request": "A national retailer wants 30% off for a five-year contract. What should we counter with?",
+      "task": "A national retailer wants 30% off for a five-year contract. What should we counter with?\n\n- 2,000 seats across 340 stores.\n- List is $35 per seat a month, about $840,000 ARR.\n- Their IT budget is split across four vendors.\n- A competitor quoted $26 per seat.\n- They want to move spend from on-premise tools to us.\n- Our gross margin is 81%.\n- Their CFO approves anything under $700,000.\n- Rollout would take one quarter." },
+    { "mode": "discount-counter-with-deal-facts", "lead": ["pricing"], "none": ["budget", "outreach"],
+      "request": "A hospital network is asking for 35% off in exchange for a three-year commitment. How should we respond?",
+      "task": "A hospital network is asking for 35% off in exchange for a three-year commitment. How should we respond?\n\nDeal facts:\n- 1,400 seats at a list price of $42 per seat per month.\n- About $705,000 in ARR at list.\n- A competitor quoted them $31 per seat on a one-year term.\n- Their software budget for the year is approved and split across departments.\n- Our gross margin is 78%.\n- Procurement wants an answer within two weeks.\n- Our largest current customer has 600 seats at 15% off.\n- Implementation costs us about $40,000." },
+    { "mode": "rank-test-ideas-with-pricing-facts", "lead": ["prioritize", "experiment"], "none": ["pricing"],
+      "request": "Rank these 9 test ideas and tell us which 2 to run first.",
+      "task": "Rank these 9 test ideas and tell us which 2 to run first.\n\nIdeas:\n- Show the $19 and $29 price points side by side on the pricing page.\n- Offer a 14-day free trial instead of a free plan.\n- Shorten signup to email only.\n- Put customer logos above the fold.\n- An annual plan discount banner at checkout.\n- An onboarding checklist in the first session.\n- An exit-intent offer on the pricing page.\n- Live chat on the demo page.\n- A new homepage headline.\n\nFacts:\n- 9,000 visitors a month; 3% sign up." },
+    { "mode": "rank-test-ideas-with-pricing-facts", "lead": ["prioritize", "experiment"], "none": ["pricing"],
+      "request": "Which 2 of these test ideas should we run first? Rank them all.",
+      "task": "Which 2 of these test ideas should we run first? Rank them all.\n\n- Raise the pro plan price from $49 to $59 for new visitors.\n- Remove the monthly billing option.\n- Add a pricing calculator.\n- Show a discount on the second seat.\n- New onboarding emails.\n- A referral credit.\n- Testimonials on the pricing page.\n- A shorter checkout." }
   ],
   "silent": [
     { "mode": "engineering-test", "task": "Design the test suite for the checkout handler" },
@@ -84,6 +106,9 @@
     { "mode": "decision-words-across-clauses", "lead": ["copy"], "noPlay": true, "task": "Plan the spring launch for Kilnly and test two headlines on the landing page" },
     { "mode": "writing-about-a-decision", "lead": ["social"], "noPlay": true, "none": ["experiment"], "task": "Write a LinkedIn post about how we design growth experiments" },
     { "mode": "writing-about-a-decision", "lead": ["copy"], "noPlay": true, "none": ["pricing"], "task": "Write an email telling customers we are raising prices in May" },
-    { "mode": "writing-about-a-decision", "lead": ["article"], "noPlay": true, "none": ["pricing"], "task": "Draft a blog post on whether startups should offer a free plan" }
+    { "mode": "writing-about-a-decision", "lead": ["article"], "noPlay": true, "none": ["pricing"], "task": "Draft a blog post on whether startups should offer a free plan" },
+    { "mode": "deliverable-with-decision-facts", "lead": ["social"], "none": ["budget", "channels"], "task": "Write a LinkedIn post about how we split our marketing budget.\n\nFacts:\n- We moved 40% of spend from Google Ads to podcasts.\n- Signups rose 18%.\n- Should we keep doing it? Our CFO thinks so." },
+    { "mode": "deliverable-with-decision-facts", "lead": ["outreach"], "none": ["pricing", "budget"], "task": "Draft a cold email to the CFO of Northwind.\n\nFacts:\n- They asked for 30% off for a three-year contract.\n- We should counter with 15% off and a two-year term.\n- Their budget is split across four vendors." },
+    { "mode": "deliverable-with-decision-facts", "lead": ["campaign"], "none": ["pricing"], "task": "Plan our spring launch campaign.\n\nFacts:\n- Budget is $30,000.\n- Should we add a free tier? Undecided.\n- Instagram ads did well last year." }
   ]
 }
