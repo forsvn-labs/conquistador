@@ -15,7 +15,7 @@ Use for posts from a founder, an employee, or a company page: news, customer res
 
 ## Platform facts (checked Oct 2026; confirm in the composer)
 
-- A post holds 3,000 characters; a comment holds 1,250.
+- A post holds 3,000 characters. A comment holds 1,250, but a comment in a group conversation holds 1,000.
 - The feed folds a post after about two or three lines. LinkedIn does not publish the cutoff.
 - A PDF posted as a document shows as a swipeable carousel.
 
