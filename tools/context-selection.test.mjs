@@ -172,6 +172,22 @@ test('plain-language requests reach their methods and engineering or chit-chat s
   assert.deepEqual(failures, []);
 });
 
+// Pasted context (tools/e2e/routing-deliverable-first.json): facts, notes, and background may not add or
+// replace the command the request names. Context still never grows the brief past its byte budget.
+test('the named deliverable decides the command and pasted context keeps the brief budget', async () => {
+  const { judge, deliverableFirstCases } = await import('./e2e/routing-breadth.mjs');
+  const { LIMITS, createBrief } = await import('./brief.mjs');
+  assert.deepEqual({ ...LIMITS }, { mustFiles: 5, mustBytes: 10_000, situationalFiles: 8, userFiles: 4000, userFileBytes: 262_144, userDepth: 8, packBytes: 16_000 });
+  const cases = deliverableFirstCases();
+  const failures = cases.map(item => judge(item)).filter(item => !item.pass).map(item => `${item.area}: ${item.task.split('\n')[0]} -> ${item.play ?? ''} ${item.methods.join(',')} ${item.problems.join('; ')}`);
+  assert.deepEqual(failures, []);
+  for (const item of cases.filter(entry => entry.request)) {
+    const brief = createBrief(item.task, { force: true, root, playbooks: [] });
+    assert.ok(brief.must.length <= LIMITS.mustFiles, item.task);
+    assert.ok(brief.must.reduce((sum, file) => sum + file.bytes, 0) <= LIMITS.mustBytes, item.task);
+  }
+});
+
 test('ambiguous requests pick one owner: position or campaign, channels or campaign, measure or diagnose', () => {
   const route = prompt => { const result = selectRequestContext(prompt); return [result.play?.name, ...names(result)].filter(Boolean); };
   assert.deepEqual(route('Position us against Mailchimp'), ['position']);
