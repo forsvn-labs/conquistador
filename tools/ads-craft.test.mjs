@@ -72,6 +72,10 @@ const CAMPAIGN_TASKS = [
   'Set up the account structure and budget for a TikTok ads test',
   'Plan a LinkedIn ads test for our security product: budget, test structure, and when to turn ads off',
   'Set up a Google Ads account structure and budget for our payroll software',
+  // Components listed after a colon split into clauses; "test structure" alone may not hand the ad test
+  // to the experiment play.
+  'Plan a Meta ads test for our language app: daily budget, test structure, and creative rotation',
+  'Plan our Meta ads account structure: ad sets, audiences, and test structure',
 ];
 // Retired with the ads drafting craft: the craft reference, the strong and weak sets, the drafting check,
 // the drafting roles, and the fallback that ran them.
