@@ -1,20 +1,26 @@
 # TikTok channel
 
 Use for platform-native short-form discovery, founder demos, creator-style explanation, or tested
-recuts. Verify current duration, music, disclosure, commerce, and advertising rules when material.
+recuts.
 
-- Start with the costly moment, surprising observation, or visible result; establish context quickly.
-- Demonstrate the mechanism with real footage or UI and keep spoken/on-screen claims supportable.
-- Write for sound-on personality and sound-off comprehension.
-- Recut the argument and pacing for TikTok rather than importing another platform's crop.
-- Read retention, completion, rewatches, comments, qualified actions, and downstream value separately.
+Write the TikTok work the user asked for in your own judgment from the user's facts. Load no other
+file for it. Then run only the facts check: remove claims the facts do not support, keep fair
+inferences, and add nothing (no hedges, no source text, no disclaimers). Return only what the user
+asked for.
 
-Treat a photo slideshow as its own format and follow
-[photo slideshows](../commands/social/references/photo-slideshows.md). Generate every slide in portrait,
-at one shared aspect ratio. Put the hook text on slide 1, clear of the top interface area, with
-manual line breaks so the renderer does not squeeze it. Check readability in a phone preview. When a
-person must choose the music in the app, upload a private draft, hand over the caption separately,
-and leave sound and publishing to that person. Confirm current draft and caption upload options first.
+A photo slideshow follows the `social` command's
+[photo slideshows](../commands/social/references/photo-slideshows.md) method.
 
-Deliver the hero script, shot/storyboard, caption and accessibility notes, reply bank, measurement rule,
-and explicit human-owned posting boundary.
+## Platform facts (checked Oct 2026; confirm in the current specs before use)
+
+- **Video:** 9:16 at 1080×1920; uploads up to 60 minutes, in-app recording up to 10 minutes. The
+  right-side buttons and the bottom caption band cover the frame; keep text and faces out of them.
+- **Photo posts:** portrait images at one shared aspect ratio; the top interface band covers the top
+  of the first image. The posting API can upload a private draft; sound is then chosen in the app.
+- **Music:** business accounts use the Commercial Music Library.
+- **Disclosure:** paid partnerships use the content disclosure setting; realistic AI-generated
+  content carries TikTok's AI-generated label.
+
+Keep small edits small. Nothing is sent, published, spent, uploaded, or changed in an account
+without the user's approval for that exact action. This approval governs actions; it adds nothing to
+the deliverable.

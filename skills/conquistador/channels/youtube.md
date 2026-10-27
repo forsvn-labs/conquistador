@@ -1,18 +1,22 @@
 # YouTube channel
 
-Use for Shorts or a focused product video. Verify current upload, disclosure, thumbnail, link, and
-format constraints when they materially affect the deliverable.
+Use for Shorts or a focused product video. `shorts` maps here; it is not a separate capability.
 
-- Define the viewer promise and satisfy it; title, thumbnail, opening, and content must describe the
-  same mechanism.
-- Write the title and thumbnail before the script and preview them at feed size. Drop or rework an
-  idea whose package cannot state a clear, true promise.
-- Use Shorts for one complete insight or demonstration, not a trailer that withholds all value.
-- For search-led or selling videos, use the query patterns, opening order, and teach-then-offer rule in
-  the video [YouTube pack](../commands/video/references/platform-intelligence/youtube.md).
-- Use chapters and structure for longer work only when each section advances the argument.
-- Ground demonstrations in real behavior and state sponsorship, affiliation, or representative UI.
-- Evaluate retention shape, qualified comments/actions, and downstream value rather than views alone.
+Write the YouTube work the user asked for in your own judgment from the user's facts. Load no other
+file for it. Then run only the facts check: remove claims the facts do not support, keep fair
+inferences, and add nothing (no hedges, no source text, no disclaimers). Return only what the user
+asked for.
 
-Deliver ready title/description, script or outline, shot and thumbnail direction, reply plan, and the
-human-owned upload action. `shorts` maps here; it is not a separate capability.
+## Platform facts (checked Oct 2026; confirm in the current specs before use)
+
+- **Shorts:** vertical or square, up to 3 minutes.
+- **Titles and descriptions:** titles up to 100 characters (search and feeds show far fewer);
+  descriptions up to 5,000 characters.
+- **Thumbnails:** 1280×720 (16:9), under 2 MB.
+- **Chapters:** the first timestamp is 0:00, with at least three chapters of 10 seconds or more.
+- **Disclosure:** paid promotion uses the "includes paid promotion" setting; realistic altered or
+  synthetic content uses the altered-content setting.
+
+Keep small edits small. Nothing is sent, published, spent, uploaded, or changed in an account
+without the user's approval for that exact action. This approval governs actions; it adds nothing to
+the deliverable.
