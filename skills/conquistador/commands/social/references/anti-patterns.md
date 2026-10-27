@@ -60,7 +60,7 @@ support. A claim needs evidence even when the opening sounds specific.
 
 **Detection rule:** If `platform` frontmatter contains a `+` or `,` or list value (anything other than a single value from `tiktok | reels | shorts | x | linkedin`) = TRIGGERED.
 
-**Owned by:** Orchestrator ([critical gates](critical-gates.md) + [sequential fallback](../fallbacks/sequential.md) — single-platform per invocation). Multi-platform = re-invoke per platform.
+**Owned by:** Orchestrator ([the command](../COMMAND.md), one platform per post). Multi-platform = re-invoke per platform.
 
 **Why it fails:** Each artifact needs its own audience, account constraints, preview and production checks.
 
@@ -72,7 +72,7 @@ support. A claim needs evidence even when the opening sounds specific.
 
 **Detection rule:** If brief / topic mentions Vietnam, Vietnamese, VN, or supplies Vietnamese-language source text AND `polish_chain_applied != polish-vietnamese` = TRIGGERED.
 
-**Owned by:** Sequential fallback / Cold Start ([critical gates](critical-gates.md) should default `--polish-chain polish-vietnamese` when market signal is Vietnamese). Orchestrator confirms at Cold Start / Warm Start.
+**Owned by:** Sequential fallback / Cold Start (route Vietnamese-market posts to `vietnamese` after drafting). Orchestrator confirms at Cold Start / Warm Start.
 
 **Why it fails:** Vietnamese register polish requires native-register awareness (báo chí for news/professional, semi-casual for B2B SaaS founder voice, bro for indie/casual, pop-marketing for consumer brands). Copywriter-agent generates English-pattern Vietnamese that reads as translated AI output — pronoun drift, missing particles, literal idioms, passive-voice calques. `vietnamese` is the terminal fix.
 

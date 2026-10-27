@@ -3680,59 +3680,59 @@
         "outreach sequence"
       ],
       "requiredResources": [
-        "skills/conquistador/commands/social/references/rubric.md",
         "skills/conquistador/commands/social/references/method.md",
-        "skills/conquistador/commands/social/references/anti-patterns.md",
-        "skills/conquistador/commands/social/references/critical-gates.md",
-        "skills/conquistador/commands/social/fallbacks/sequential.md",
-        "skills/conquistador/commands/social/references/hook-archetypes.md",
         "skills/conquistador/references/writing-guide.md"
       ],
       "conditionalResources": [
+        "skills/conquistador/commands/social/references/photo-slideshows.md",
+        "skills/conquistador/commands/social/references/anti-patterns.md",
+        "skills/conquistador/commands/social/references/rubric.md",
         "skills/conquistador/commands/social/agents/launch-copywriter-agent.md",
         "skills/conquistador/commands/social/agents/guard-checker-agent.md",
         "skills/conquistador/commands/social/agents/copywriter-agent.md",
         "skills/conquistador/commands/social/agents/format-checker-agent.md",
         "skills/conquistador/commands/social/agents/critic-agent.md",
-        "skills/conquistador/commands/social/references/hook-archetypes.md",
-        "skills/conquistador/commands/social/references/legibility-convention.md",
-        "skills/conquistador/commands/social/references/why-this-works-convention.md",
-        "skills/conquistador/commands/social/references/photo-slideshows.md"
+        "skills/conquistador/commands/social/fallbacks/sequential.md"
       ],
       "resourceConditions": [
         {
-          "path": "skills/conquistador/commands/social/agents/launch-copywriter-agent.md"
-        },
-        {
-          "path": "skills/conquistador/commands/social/agents/guard-checker-agent.md"
-        },
-        {
-          "path": "skills/conquistador/commands/social/agents/copywriter-agent.md"
-        },
-        {
-          "path": "skills/conquistador/commands/social/agents/format-checker-agent.md"
-        },
-        {
-          "path": "skills/conquistador/commands/social/agents/critic-agent.md"
-        },
-        {
-          "path": "skills/conquistador/commands/social/references/hook-archetypes.md"
-        },
-        {
-          "path": "skills/conquistador/commands/social/references/legibility-convention.md"
-        },
-        {
-          "path": "skills/conquistador/commands/social/references/why-this-works-convention.md"
-        },
-        {
           "path": "skills/conquistador/commands/social/references/photo-slideshows.md",
           "when": "Load when the post is a photo carousel or slideshow on TikTok or Instagram."
+        },
+        {
+          "path": "skills/conquistador/commands/social/references/anti-patterns.md",
+          "when": "Load at the review step, after drafting, for a launch package."
+        },
+        {
+          "path": "skills/conquistador/commands/social/references/rubric.md",
+          "when": "Load at the review step, after drafting, for a launch package."
+        },
+        {
+          "path": "skills/conquistador/commands/social/agents/launch-copywriter-agent.md",
+          "when": "Load when the deliverable is a Product Hunt or launch listing and separate roles are available."
+        },
+        {
+          "path": "skills/conquistador/commands/social/agents/guard-checker-agent.md",
+          "when": "Load at the review step, after drafting, for a launch package."
+        },
+        {
+          "path": "skills/conquistador/commands/social/agents/copywriter-agent.md",
+          "when": "Load when separate roles are available; drafting still follows the entry and the channel file."
+        },
+        {
+          "path": "skills/conquistador/commands/social/agents/format-checker-agent.md",
+          "when": "Load at the review step, after drafting, for a launch package."
+        },
+        {
+          "path": "skills/conquistador/commands/social/agents/critic-agent.md",
+          "when": "Load at the review step, after drafting, for a launch package."
+        },
+        {
+          "path": "skills/conquistador/commands/social/fallbacks/sequential.md",
+          "when": "Load when one agent runs the method roles in sequence."
         }
       ],
-      "optionalResources": [
-        "skills/conquistador/commands/social/references/examples/social-walkthrough.md",
-        "skills/conquistador/commands/social/references/examples/launch-walkthrough.md"
-      ],
+      "optionalResources": [],
       "plays": [
         "content",
         "expand",
