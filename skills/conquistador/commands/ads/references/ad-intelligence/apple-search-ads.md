@@ -8,11 +8,6 @@ verification: account-input-required
 
 # Plan an Apple Ads search test
 
-This is a campaign decision procedure. It supplies no performance benchmark or
-claim of current platform verification. Record the source, date, placement, region,
-and account scope of platform constraints before using them. If verification is
-unavailable, deliver a draft with the affected setup decisions unresolved.
-
 This pack covers App Store search results ads (Apple Ads, formerly Apple Search
 Ads). These ads capture people who already search the App Store; they do not create
 demand. Verify current campaign types, match types, and product page features in

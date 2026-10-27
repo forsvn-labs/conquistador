@@ -3,74 +3,70 @@ type: ad-intelligence
 surface: creative-cadence
 schema_version: 1
 status: method
-verification: account-input-required
+verification: starting-points-oct-2026
 ---
 
-# Size creative production to the test
+# Plan creative volume, structure, and kill rules
 
-This is a campaign decision procedure. It supplies no performance benchmark or
-claim of current platform verification. Record the source, date, placement, region,
-and account scope of platform constraints before using them. If verification is
-unavailable, deliver a draft with the affected setup decisions unresolved.
+These are the defaults a performance team starts from in 2026. Each is a starting point: replace it
+with the user's own account data when that exists, and say which defaults you replaced. None of
+them authorizes spend.
 
-## Calculate feasible work
+## Account structure · Starting point (Oct 2026)
 
-Collect the approved test budget, review deadline, expected event delay, usable
-baseline, production capacity, asset rights, and cost of producing each candidate.
-When a baseline is absent, propose a bounded measurement pilot and identify what it
-must establish before a comparison can be funded.
+- Two campaigns. A test campaign receives new concepts. A scale campaign, with campaign-level budget,
+  holds ads that have already won. Move a winner by its post ID so its comments and reactions carry over.
+- Broad targeting in both: the creative does the targeting. Exclude current customers when the offer
+  is for new customers only. Interest and lookalike audiences are a later test, not the default.
+- Paid comes after a format or message has already converted from organic, creator, or sales traffic.
 
-For each candidate, record the changed component, production cost, delivery budget,
-observation requirement, and reviewer. Total committed production and delivery cost
-must fit the approved ceiling. The number of candidates is the number the budget
-and review capacity can support. Do not prescribe a monthly creative quota.
+## Batch size and cadence · Starting point (Oct 2026)
 
-## Protect the comparison
+| Item | Starting point |
+|---|---|
+| Concepts per test batch | 3–5, each a different angle with its own visual |
+| Variations per concept | 2–3: a different opening line or first 3 seconds, or a different visual format |
+| New batch | Every 1–2 weeks while spending; sooner when frequency rises and cost rises with it |
+| Budget split once winners exist | About 80% scale, 20% test |
+| Test budget per concept | Enough to spend about 2–3× the target cost per result before deciding |
 
-Keep a reference creative when a comparable one exists. State allocation before
-results arrive and explain unequal allocation. If a spend cap or delivery imbalance
-prevents the intended comparison, report that limit. Do not divide spend into fixed
-test and scale percentages or repeatedly check results until a winner appears.
+## Decide · Starting point (Oct 2026)
 
-Define the primary outcome, acceptable loss, practical effect worth acting on, and
-observation requirement before delivery. Record the uncertainty method if making a
-statistical claim. A stop at the loss ceiling protects money; it does not prove
-that the creative loses. CTR alone cannot authorize a pause or scale decision.
+| Signal | Action |
+|---|---|
+| Spend reaches 2× the target cost per result with no result | Turn the ad off |
+| Cost per result above 1.5× target after 3 days | Turn it off, or recut the opening once |
+| Video: 3-second views under 20% of impressions | The opening fails: recut the first seconds |
+| Video: under 25% of 3-second viewers reach 15 seconds | The middle fails: shorten or show the product sooner |
+| Link click-through under 0.8% with a normal cost per thousand | The message or visual does not earn the click |
+| At or under target cost for 3 days | Move to scale; raise budget by 20–30% every 2–3 days |
+| Frequency above 3 in 7 days while cost rises | Fatigue: add a new concept, do not just reword |
 
-## Schedule review from evidence availability
+Judge on cost per qualified result first. Click-through and view rates explain why an ad fails; they
+do not decide a winner. When the paid outcome arrives days later (a trial converting, a lead
+qualifying), wait for it before scaling, or use the proxy only with the user's real conversion rate.
 
-Use event lag and the planned information requirement to choose a review date.
-Operational faults, incorrect claims, or an exceeded spending limit can require an
-earlier pause recommendation. Otherwise preserve the comparison until the stated
-review point. If evidence is still insufficient, propose continued observation only
-within remaining authority, or close as inconclusive.
+## Optimization event · Starting point (Oct 2026)
 
-## Choose production arrangements
+- Optimize for the deepest event that fires about 50 times per ad set per week. Below that, move one
+  step up the funnel (purchase to checkout, qualified lead to lead).
+- Subscription apps with a short free trial: optimize for trial start, then model profit from the
+  real trial-to-paid rate. The plan is healthy when cost per paying user is below first-year revenue
+  per user.
+- Check incrementality coarsely before scaling a channel: turn it off for 3–7 days, turn it back on,
+  and compare total revenue. Record what else changed in that window.
 
-Compare dedicated and repurposed-ugc assets on permission, offer accuracy, editable
-components, accessibility, production cost, and suitability for the selected
-placement. Neither format has a universal spend ceiling or scale advantage.
-For in-house, affiliate-creator, or external-freelance production, record capacity,
-review ownership, usage rights, disclosure, and payment terms. Do not infer a need
-to outsource from a target spend figure.
+## Production
 
-## Keep an input log
+- Build the ad around the product. A video that shows the product doing its job in the first
+  seconds usually holds up under more spend than a lifestyle clip where the product appears in passing.
+- Creators who make ads are paid, disclosed, and grant usage rights. Their direction comes from the
+  angle; their wording stays their own.
+- Keep an input log: each ad with its angle, the input that produced it (a review, a sales call, a
+  competitor ad from the public ad library), and its result. Read the log before the next batch. When
+  new ads start to repeat old ones, find new inputs.
+- Before calling a channel dead for an offer, test several distinct angles, including one that
+  contrasts with the incumbent. Report how many were tested.
 
-Log every produced asset with its inputs (brief, script, angle, source material) and
-its outcome. Read the log before you produce the next batch. When new variants start
-to repeat earlier ones, add new inputs, such as competitor ads from the public ad
-library, customer reviews, and recorded category conversations, and record which
-input produced each variant.
-
-Before you conclude that a channel does not work for an offer, test several distinct
-positioning angles, including one that contrasts with the incumbent. Report the
-number of angles tested in the readout.
-
-## Refresh only with a stated question
-
-Log exposure, outcome cost, placement mix, event lag, and creative changes. If
-performance deteriorates, list competing explanations before selecting a refresh.
-A refresh compares a named component against a reference under stated controls.
-Return a production queue, cost total, review schedule, stop rules, and evaluation
-handoff. No automatic pause rule, budget change, or creator engagement is authorized
-by this document.
+Return the production queue, budget per batch, decision dates, and the kill and scale rules in use.
+Spend, budget changes, and creator agreements each need the user's approval.
