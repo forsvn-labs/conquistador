@@ -1,7 +1,7 @@
 import { existsSync, lstatSync, readFileSync } from 'node:fs';
 import { join, posix, resolve } from 'node:path';
 import { assertLoadAllowed, loadRestriction } from './domain-package.mjs';
-import { explicitInvocation, invokedCommand, requestedBusinessClauses, requestFocus, requestMode, requestOperation, normalizeRequest as normalized, includesPhrase } from './request-text.mjs';
+import { decisionQuestion, decisionRequest, explicitInvocation, instructionClause, invokedCommand, requestedBusinessClauses, requestFocus, requestLead, requestMode, requestOperation, unquotedRequest, normalizeRequest as normalized, includesPhrase } from './request-text.mjs';
 import { loadRoutingContract } from './routing-contract.mjs';
 import { packageRootOf } from './module-root.mjs';
 
@@ -82,12 +82,19 @@ function parentMatch(query, contract, restriction) {
   return null;
 }
 
-function matchingMethods(query, contract, { permitGrowthInference = true, signals = true } = {}) {
+// A decision match outranks every phrase and signal score; its own score orders competing decisions.
+const DECISION = 30;
+
+function matchingMethods(query, contract, { permitGrowthInference = true, signals = true, decisions: decide = true } = {}) {
   const text = normalized(query).replace(/\bposts\b/g, 'post');
   const tokens = text.split(' ');
   const inspect = /\b(?:evaluate|audit|results|performance)\b/i.test(query);
+  const decisions = signals && decide && decisionRequest(text);
+  // Normalizing drops "$"; in a decision a dollar amount is money ("We have $10k a month. Where should it go?").
+  const decisionTokens = /\$\s?\d/.test(query) ? [...tokens, 'dollars'] : tokens;
   const matches = [];
   const signalled = [];
+  const decided = [];
   for (const method of [...Object.values(contract.methods), ...contract.unavailableMethods]) {
     if (method.explicitOnly && !feedbackOptIn.test(query)) continue;
     // A one-word command name selects only through explicit invocation (see resolveCommand).
@@ -102,16 +109,26 @@ function matchingMethods(query, contract, { permitGrowthInference = true, signal
 
     if (method.exclusions.some(phrase => hasPhrase(tokens, phrase))) continue;
     const signal = signals ? signalScore(tokens, method.signals) : 0;
-    if (!hit && !signal) continue;
+    const decision = decisions ? signalScore(decisionTokens, method.decisions) : 0;
+    if (!hit && !signal && !decision) continue;
     if (inspect && method.kind === 'create' && hit?.kind !== 'name' && !/\b(?:write|create|draft)\b/i.test(query)) continue;
+    if (decision) decided.push({ ...method, score: DECISION + decision, signal, decision, matchKind: 'decision', matchPhrase: 'decision' });
     // A phrase match also records its signal, so a play phrase must beat the method's full evidence.
     if (hit) matches.push({ ...method, score: hit.score, signal, matchKind: hit.kind, matchPhrase: hit.phrase });
-    else signalled.push({ ...method, score: signal, matchKind: 'signal', matchPhrase: 'signal' });
+    else if (signal) signalled.push({ ...method, score: signal, matchKind: 'signal', matchPhrase: 'signal' });
+  }
+  // A decision request names its owner: the strongest decision leads. Methods that only share its
+  // words (loose signals) do not join; a deliverable named by phrase stays behind it.
+  const decisive = Math.max(0, ...decided.map(item => item.decision));
+  for (const item of decided.filter(entry => entry.decision === decisive)) {
+    const existing = matches.findIndex(entry => entry.name === item.name);
+    if (existing !== -1) matches.splice(existing, 1);
+    matches.push(item);
   }
   // A signal stands in for a missing phrase. Only the strongest signal joins, and only when it
   // outscores every phrase match, so one plain-language request gets one owner.
   const strongest = Math.max(0, ...signalled.map(item => item.score));
-  if (strongest > Math.max(0, ...matches.map(item => item.score))) matches.push(...signalled.filter(item => item.score === strongest));
+  if (!decisive && strongest > Math.max(0, ...matches.map(item => item.score))) matches.push(...signalled.filter(item => item.score === strongest));
   return finishMatches(query, text, matches, contract, { permitGrowthInference, inspect });
 }
 
@@ -122,7 +139,8 @@ function finishMatches(query, text, matches, contract, { permitGrowthInference, 
   const creationRequest = /\b(?:write|draft|create|publish|post)\b/.test(text);
   const asksForDiagnosis = /\b(?:diagnos(?:e|is)|investigat(?:e|ion)|analy[sz]e|explain|why)\b/.test(text);
 
-  if (permitGrowthInference && growthMetric && adverseChange && (!creationRequest || asksForDiagnosis) && !matches.some(item => item.name === 'diagnose')) {
+  // A diagnose signal on a falling metric is the same inference; it is not a loose keyword match.
+  if (permitGrowthInference && growthMetric && adverseChange && (!creationRequest || asksForDiagnosis) && !matches.some(item => item.name === 'diagnose' && item.matchKind !== 'signal')) {
     const method = contract.methods['diagnose'] ?? contract.unavailableMethods.find(item => item.name === 'diagnose');
 
     if (method && !method.exclusions.some(phrase => includesPhrase(text, phrase))) {
@@ -157,6 +175,17 @@ function finishMatches(query, text, matches, contract, { permitGrowthInference, 
   return matches.sort((a, b) => b.score - a.score || a.name.localeCompare(b.name));
 }
 
+// The play that owns a decision ("design a test", "is the result real") when its decision signal
+// outscores every command decision. Each text is read on its own: one per clause, and the whole
+// request only when it asks a question.
+function decisionPlay(texts, selected, contract, restriction) {
+  const best = Math.max(0, ...selected.filter(item => item.matchKind === 'decision').map(item => item.decision));
+  const ranked = (contract.plays ?? []).filter(play => play.decisions?.length && allowedKind(restriction, 'workflow', play.name))
+    .map(play => ({ play, score: Math.max(0, ...texts.filter(text => decisionRequest(text)).map(text => signalScore(normalized(text).split(' '), play.decisions))) }))
+    .filter(item => item.score > best).sort((a, b) => b.score - a.score || a.play.name.localeCompare(b.play.name));
+  return ranked[0]?.play.name ?? null;
+}
+
 // A play wins over single commands when the request names the play, matches one of its intents at
 // least as specifically as the best command phrase, or selects two or more commands it chains
 // (and at least half of its unconditional commands).
@@ -169,7 +198,9 @@ export function selectPlay(query, selected, contract, restriction, invoked = nul
   const bestSignal = Math.max(0, ...selected.filter(item => item.matchKind === 'signal').map(item => item.score));
   // A play signal must also beat a command named by its old ID ("evaluate-outreach").
   const named = Math.max(0, ...selected.filter(item => item.matchKind === 'name').map(item => item.score));
-  const bestCommand = Math.max(best, bestSignal, named);
+  // A command that owns a decision holds against a play signal too.
+  const decision = Math.max(0, ...selected.filter(item => item.matchKind === 'decision').map(item => item.score));
+  const bestCommand = Math.max(best, bestSignal, named, decision);
   const ranked = (contract.plays ?? []).map(play => {
     if (!allowedKind(restriction, 'workflow', play.name)) return null;
     if (invoked === play.name) return { play, named: 1, intent: 0, hits: 0, coverage: 0 };
@@ -330,11 +361,38 @@ export function selectRequestContext(prompt, { root = moduleRoot, automatic = fa
   // the whole-prompt route.
   const focus = requestFocus(prompt);
   const whole = () => routeRequest(prompt, prompt, options);
-  if (!focus) return whole().result;
+  const support = routed => ({ ...routed.result, supportingQuery: requestedBusinessClauses(prompt, { protectedPhrases }).join('. ') });
+  // A decision the request names keeps its owner: words in the pasted facts may not displace it. A
+  // falling metric in the facts still comes first: diagnosis before prescription.
+  const decide = asked => {
+    const routed = whole();
+    return routed.action === 'route' && routed.owners[0] === 'diagnose' ? routed.result : support(asked);
+  };
+  // The opening request block, read whole ("A prospect wants 30% off. What should we counter with?",
+  // "Rank these ideas and tell us which two to run first"), decides when it names a decision. A
+  // decision question whose owner the block names by phrase holds too ("Should we move to usage-based
+  // pricing? Give us the migration plan"): revenue figures in the facts may not add a growth target.
+  const lead = requestLead(prompt);
+  const leadDecision = () => {
+    const asked = lead ? routeRequest(lead, prompt, options) : null;
+    return asked?.action === 'route' && (asked.decided || (asked.named && decisionQuestion(lead))) ? asked : null;
+  };
+  if (!focus) {
+    // Otherwise a decision question pasted above or below its facts decides when the question alone
+    // names the owner of the decision.
+    const question = requestFocus(prompt, { questions: true });
+    const asked = leadDecision() ?? (question ? routeRequest(question, prompt, options) : null);
+    return asked?.decided ? decide(asked) : whole().result;
+  }
   const focused = routeRequest(focus, prompt, options);
-  if (focused.action !== 'route') return focused.engineeringOnly ? focused.result : whole().result;
-  const supported = { ...focused.result, supportingQuery: requestedBusinessClauses(prompt, { protectedPhrases }).join('. ') };
-  if (focused.named) return supported;
+  if (focused.action !== 'route' && focused.engineeringOnly) return focused.result;
+  if (focused.action === 'route' && focused.named) return support(focused);
+  // An instruction sentence that names no deliverable ("Give us a split by line item") yields to the
+  // decision its request block names.
+  const asked = leadDecision();
+  if (asked) return decide(asked);
+  if (focused.action !== 'route') return whole().result;
+  const supported = support(focused);
   const routed = whole();
   return routed.action === 'route' && !focused.owners.includes(routed.owners[0]) ? routed.result : supported;
 }
@@ -352,10 +410,12 @@ function routeRequest(request, prompt, { packageRoot, restriction, contract, pro
   const unavailable = [];
   const selectedAll = [];
   let parentMethod = null;
+  let decidedPlay = null;
   const routed = result => ({
     action: 'route',
-    // A phrase match, an old ID, an explicit command, or a channel lock names the deliverable; a signal is loose.
+    // A phrase match, an old ID, an explicit command, a channel lock, or a decision names the deliverable; a signal is loose.
     named: selectedAll.some(item => item.matchKind !== 'signal'),
+    decided: Boolean(decidedPlay) || selectedAll.some(item => item.matchKind === 'decision'),
     owners: [result.play?.name, ...selectedAll.map(item => item.name)].filter(Boolean),
     result,
   });
@@ -376,7 +436,7 @@ function routeRequest(request, prompt, { packageRoot, restriction, contract, pro
       return;
     }
 
-    const strength = value => value.matchKind === 'name' ? 3 : value.matchKind === 'intent' && value.matchPhrase !== 'what should we do' ? 2 : value.matchKind === 'intent' ? 1 : 0;
+    const strength = value => value.matchKind === 'name' ? 3 : value.matchKind === 'decision' ? 2.5 : value.matchKind === 'intent' && value.matchPhrase !== 'what should we do' ? 2 : value.matchKind === 'intent' ? 1 : 0;
     const existing = selectedAll.findIndex(value => value.name === item.name);
 
     if (existing === -1) selectedAll.push(item);
@@ -386,6 +446,10 @@ function routeRequest(request, prompt, { packageRoot, restriction, contract, pro
   // A "for" or "about" tail is context ("a post for our launch"). "For each", "for every", and
   // "for search" still describe the deliverable ("pages for each competitor").
   const stage = clause => clause.replace(/^\s*(?:for|about)\s+/i, '').split(/\b(?:for(?! (?:each|every|all|search|seo|organic)\b)|about|announcing)\b/i)[0];
+  // Decision words from separate clauses combine only in a question ("Our test says B won. Is it
+  // real?"), and only when no clause asks for a named deliverable ("Plan the launch").
+  let namedRequest = false;
+  const asksQuestion = /\?/.test(unquotedRequest(request));
   for (const clause of clauses) {
     parentMethod ??= parentMatch(clause, contract, restriction);
 
@@ -393,7 +457,9 @@ function routeRequest(request, prompt, { packageRoot, restriction, contract, pro
     const marketing = !engineering(clause);
 
     for (const item of matchingMethods(stage(clause), contract, { permitGrowthInference: !codingAction || (businessDiagnosisRequested && !technicalStage), signals: marketing })) {
-      if (marketing || item.kind === 'build') consider(item);
+      if (!marketing && item.kind !== 'build') continue;
+      consider(item);
+      if (marketing && !['signal', 'decision'].includes(item.matchKind) && instructionClause(clause)) namedRequest = true;
     }
   }
   // The whole request is read too: a clause split ("this page, email, and ad set for problems before
@@ -403,10 +469,11 @@ function routeRequest(request, prompt, { packageRoot, restriction, contract, pro
   if (business.length > 1 || stage(business[0] ?? '') !== business[0]) {
     const empty = !selectedAll.length;
     const strongest = Math.max(0, ...selectedAll.map(item => item.score ?? 0));
-    const lead = matchingMethods(business.join('. '), contract, { permitGrowthInference: false })
-      .filter(item => contract.methods[item.name] && (empty || (item.matchKind === 'signal' && item.score > strongest)))
+    const strongestDecision = Math.max(0, ...selectedAll.filter(item => item.matchKind === 'decision').map(item => item.score));
+    const lead = matchingMethods(business.join('. '), contract, { permitGrowthInference: false, decisions: asksQuestion && (!namedRequest || empty) })
+      .filter(item => contract.methods[item.name] && (empty || (item.matchKind === 'signal' && item.score > strongest) || (item.matchKind === 'decision' && item.score > strongestDecision)))
       // A phrase found only in the context tail names the subject, not a stage, so it does not outrank a play.
-      .map(item => (item.matchKind === 'signal' ? item : { ...item, matchKind: 'context' }));
+      .map(item => (['signal', 'decision'].includes(item.matchKind) ? item : { ...item, matchKind: 'context' }));
     for (const item of lead.reverse()) {
       const existing = selectedAll.findIndex(value => value.name === item.name);
       if (existing !== -1) selectedAll.splice(existing, 1);
@@ -433,9 +500,27 @@ function routeRequest(request, prompt, { packageRoot, restriction, contract, pro
     if (broadPlanning !== -1) selectedAll.splice(broadPlanning, 1);
   }
   if (!clauses.some(clause => feedbackOptIn.test(clause))) excluded.push({ name: 'feedback', reason: 'explicit-only' });
-  // An explicit command stays a command. Otherwise a matching play brings its first step.
+  // An explicit command stays a command. Otherwise a matching play brings its first step. A play that
+  // owns the decision joins only when no other play matched: a named outcome (open a channel, run a
+  // paid test) includes its own testing.
   const requestedOutcome = business.map(stage).join('. ');
-  const play = invoked?.kind === 'command' ? null : selectPlay(productSpec ? 'product spec' : requestedOutcome, selectedAll, contract, restriction, invoked?.name);
+  const outcome = productSpec ? 'product spec' : requestedOutcome;
+  const matchedPlay = invoked?.kind === 'command' ? null : selectPlay(outcome, selectedAll, contract, restriction, invoked?.name);
+  if (!productSpec && invoked?.kind !== 'command' && !invoked) {
+    const owner = decisionPlay([...business.map(stage), ...(asksQuestion && !namedRequest ? [business.join('. ')] : [])], selectedAll, contract, restriction);
+    if (owner && (!matchedPlay || matchedPlay.name === owner)) decidedPlay = owner;
+  }
+  // A decision request: the owner of the decision leads and methods that only shared its words leave.
+  // A named command and a falling metric stay first (diagnosis before prescription).
+  if (decidedPlay || selectedAll.some(item => item.matchKind === 'decision')) {
+    const rank = item => (['name', 'inferred-growth'].includes(item.matchKind) ? 0 : item.matchKind === 'decision' ? 1 : 2);
+    const kept = selectedAll.filter(item => item.matchKind !== 'signal')
+      .map((item, position) => ({ item, position }))
+      .sort((a, b) => rank(a.item) - rank(b.item) || (rank(a.item) === 1 ? b.item.score - a.item.score : 0) || a.position - b.position)
+      .map(entry => entry.item);
+    selectedAll.splice(0, selectedAll.length, ...kept);
+  }
+  const play = matchedPlay ?? (decidedPlay ? selectPlay(outcome, selectedAll, contract, restriction, decidedPlay) : null);
   if (productSpec && play?.name === 'spec') selectedAll.length = 0;
   const first = play?.chain.find(step => step.command && !step.when) ?? play?.chain.find(step => step.command);
   if (first && contract.methods[first.command] && !selectedAll.some(item => item.name === first.command)) {

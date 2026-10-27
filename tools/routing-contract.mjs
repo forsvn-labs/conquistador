@@ -11,6 +11,12 @@ export const ROUTING_OVERLAY_SCHEMA = 'conquistador.routing-overlay/v1';
 export const KNOWLEDGE_INDEX_SCHEMA = 'conquistador.knowledge-index/v1';
 export const ASSIGNMENT_BUDGET_BYTES = 196608;
 export const ASSIGNMENT_BUDGET_FILES = 100;
+// Read limits: a routing resource (the overlay, a method file) and the generated contract.
+export const RESOURCE_READ_LIMIT = 262144;
+export const CONTRACT_READ_LIMIT = 512000;
+// Most conditional resources share this condition. The contract states it once; an entry without its
+// own `when` uses it (see expandResourceConditions).
+export const DEFAULT_RESOURCE_CONDITION = 'Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked.';
 const NAME = /^[a-z][a-z0-9-]{0,63}$/;
 const moduleRoot = packageRootOf(import.meta.url);
 const fail = message => { throw new Error(message); };
@@ -27,7 +33,7 @@ const OVERLAY_CANDIDATES = [
   'agent/skills/conquistador/library/conquistador/routing-overlay.json',
   'skills/conquistador/routing-overlay.json',
 ];
-function readContained(root, path, maximum = 262144) {
+function readContained(root, path, maximum = RESOURCE_READ_LIMIT) {
   if (typeof path !== 'string' || path.startsWith('/') || /[\\\x00-\x1f]/.test(path) || path.split('/').some(part => !part || part === '..' || part === '.')) fail('Invalid contained resource path.');
   let cursor = root;
   for (const part of path.split('/')) {
@@ -40,7 +46,7 @@ function readContained(root, path, maximum = 262144) {
   return readFileSync(absolute, 'utf8');
 }
 
-function jsonAt(root, path, maximum = 262144) {
+function jsonAt(root, path, maximum = RESOURCE_READ_LIMIT) {
   return JSON.parse(readContained(root, path, maximum));
 }
 
@@ -165,10 +171,14 @@ export function buildRoutingContract(root = moduleRoot) {
       aliases: [...(spec.aliases ?? [])],
       // Word-slot signals for plain-language requests that name no exact phrase (see context-selection.mjs).
       signals: [...(spec.signals ?? [])],
+      // Decision signals: the same word slots, read only in a decision request (should we, which, is it
+      // real, design a test). The owner of a decision leads ahead of methods that only share its words.
+      // Declared only where present: the contract stays inside the 256 KiB resource limit.
+      ...(spec.decisions?.length ? { decisions: [...spec.decisions] } : {}),
       exclusions: [...(spec.exclusions ?? [])],
       requiredResources: required,
       conditionalResources: conditional.map(item => item.path),
-      resourceConditions: conditional,
+      resourceConditions: conditional.map(item => (item.when === DEFAULT_RESOURCE_CONDITION ? { path: item.path } : item)),
       optionalResources: optional,
       plays: [],
       roles: [],
@@ -209,6 +219,7 @@ export function buildRoutingContract(root = moduleRoot) {
         path,
         intents: meta.intents,
         signals: [...(overlay.plays?.[name]?.signals ?? [])],
+        ...(overlay.plays?.[name]?.decisions?.length ? { decisions: [...overlay.plays[name].decisions] } : {}),
         legacy: meta.legacy ? [meta.legacy] : [],
         chain: steps,
         dependencies,
@@ -261,11 +272,12 @@ export function buildRoutingContract(root = moduleRoot) {
     parentPath,
     document,
     requiredStandards: ['quality', 'safety', 'context'].map(name => posix.join(parentPath, `standards/${name}.md`)),
+    defaultResourceCondition: DEFAULT_RESOURCE_CONDITION,
     channelLocks: overlay.channelLocks ?? {},
     parentMethods,
     methods,
     unavailableMethods: expected.filter(name => !methods[name]).map(name => ({ name, kind: overlay.methods[name].kind,
-      intents: overlay.methods[name].intents, aliases: overlay.methods[name].aliases ?? [], signals: overlay.methods[name].signals ?? [], exclusions: overlay.methods[name].exclusions,
+      intents: overlay.methods[name].intents, aliases: overlay.methods[name].aliases ?? [], signals: overlay.methods[name].signals ?? [], ...(overlay.methods[name].decisions?.length ? { decisions: overlay.methods[name].decisions } : {}), exclusions: overlay.methods[name].exclusions,
       explicitOnly: overlay.methods[name].explicitOnly === true || overlay.explicitOnly.includes(name) })),
     plays,
     roles,
@@ -285,15 +297,29 @@ export function validateRoutingContract(value) {
       if (!Array.isArray(method[field])) fail(`Invalid ${field} for ${name}`);
     }
     if (method.aliases !== undefined && !Array.isArray(method.aliases)) fail(`Invalid aliases for ${name}`);
-    if (method.signals !== undefined && (!Array.isArray(method.signals) || method.signals.some(item => typeof item !== 'string'))) fail(`Invalid signals for ${name}`);
+    for (const field of ['signals', 'decisions']) {
+      if (method[field] !== undefined && (!Array.isArray(method[field]) || method[field].some(item => typeof item !== 'string'))) fail(`Invalid ${field} for ${name}`);
+    }
+    if (method.resourceConditions !== undefined && (!Array.isArray(method.resourceConditions)
+      || method.resourceConditions.some(item => typeof item?.path !== 'string' || (item.when === undefined ? typeof value.defaultResourceCondition !== 'string' : typeof item.when !== 'string')))) {
+      fail(`Invalid resource condition for ${name}`);
+    }
   }
   return value;
+}
+
+// An entry without its own condition uses the contract's default, so every loaded entry has a `when`.
+export function expandResourceConditions(contract) {
+  const fallback = contract.defaultResourceCondition;
+  if (typeof fallback !== 'string') return contract;
+  const expand = method => (method.resourceConditions ? { ...method, resourceConditions: method.resourceConditions.map(item => ({ path: item.path, when: item.when ?? fallback })) } : method);
+  return { ...contract, methods: Object.fromEntries(Object.entries(contract.methods).map(([name, method]) => [name, expand(method)])) };
 }
 
 export function loadRoutingContract(root = moduleRoot) {
   const path = contractPath(root);
   if (path) {
-    let contract = validateRoutingContract(jsonAt(root, path, 512000));
+    let contract = expandResourceConditions(validateRoutingContract(jsonAt(root, path, CONTRACT_READ_LIMIT)));
     const libraries = methodLibrary(root);
     if (libraries.length !== 1) fail('Missing or ambiguous method library.');
     const [library] = libraries;
@@ -406,7 +432,7 @@ export function validateContractAgainstInstall(root, restriction) {
   const contract = loadRoutingContract(root);
   const issues = [];
   for (const path of contract.requiredStandards) if (!resourceExists(root, path)) issues.push(`Missing standard: ${path}`);
-  if (JSON.stringify(contract) !== JSON.stringify(buildRoutingContract(root))) issues.push('Routing contract differs from its installed declarations and contents.');
+  if (JSON.stringify(contract) !== JSON.stringify(expandResourceConditions(buildRoutingContract(root)))) issues.push('Routing contract differs from its installed declarations and contents.');
   for (const method of Object.values(contract.methods)) {
     if (restriction) {
       try { assertLoadAllowed(restriction, { kind: 'skill', name: method.name }); }

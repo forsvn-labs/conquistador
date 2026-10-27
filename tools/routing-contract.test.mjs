@@ -97,3 +97,59 @@ test('private knowledge resolver stays inside the explicit index scope and label
   save({ ...entry, path: '../outside.md' });
   assert.throws(() => createKnowledgeResolver(file, { productRoot: root }));
 });
+
+// Failure modes for the generated contract's size and its compact conditions:
+// S1 the contract or overlay grows past a reader's limit (doctor, MCP read, loader) and that reader refuses it;
+// S2 it creeps to the limit with no warning, so the next routing change hits the wall;
+// S3 an entry that omits its condition loads without one (in memory or from an older, expanded contract);
+// S4 a condition that differs from the default loses its own text;
+// S5 an entry omits its condition while the contract declares no default.
+test('routing contract and overlay stay 10% under the smallest limit that reads them', async () => {
+  const { readFileSync } = await import('node:fs');
+  const { LIMITS } = await import('./skills-mcp.mjs');
+  const { DIAGNOSTIC_FILE_LIMIT } = await import('./installation-doctor.mjs');
+  const { CONTRACT_READ_LIMIT, RESOURCE_READ_LIMIT } = await import('./routing-contract.mjs');
+  const files = {
+    'skills/conquistador/routing-contract.json': [LIMITS.file, DIAGNOSTIC_FILE_LIMIT, CONTRACT_READ_LIMIT],
+    'skills/conquistador/routing-overlay.json': [LIMITS.file, DIAGNOSTIC_FILE_LIMIT, RESOURCE_READ_LIMIT],
+  };
+  for (const [path, limits] of Object.entries(files)) {
+    assert.ok(limits.every(Number.isInteger), `${path} limits must be numbers`);
+    const smallest = Math.min(...limits);
+    const bytes = Buffer.byteLength(readFileSync(join(root, path)));
+    assert.ok(bytes <= smallest * 0.9, `${path} is ${bytes} bytes, within 10% of the ${smallest}-byte read limit`);
+  }
+  const built = Buffer.byteLength(`${JSON.stringify(buildRoutingContract(root), null, 2)}\n`);
+  assert.ok(built <= Math.min(LIMITS.file, DIAGNOSTIC_FILE_LIMIT, CONTRACT_READ_LIMIT) * 0.9, `built contract is ${built} bytes`);
+});
+
+test('the contract states the default resource condition once and loads it into every entry', async () => {
+  const { validateRoutingContract } = await import('./routing-contract.mjs');
+  const built = buildRoutingContract(root);
+  const fallback = built.defaultResourceCondition;
+  assert.equal(typeof fallback, 'string');
+  assert.ok(fallback.length > 20);
+  const entries = Object.values(built.methods).flatMap(method => method.resourceConditions);
+  assert.ok(entries.some(item => item.when === undefined), 'default conditions are omitted from entries');
+  assert.ok(!entries.some(item => item.when === fallback), 'no entry repeats the default condition');
+  // S4: own conditions keep their text.
+  assert.ok(entries.some(item => item.when?.startsWith('Mode video.')));
+  // S3: loaded entries always carry a condition, and the same paths as conditionalResources.
+  const loaded = loadRoutingContract(root);
+  for (const method of Object.values(loaded.methods)) {
+    assert.deepEqual(method.resourceConditions.map(item => item.path), method.conditionalResources, method.name);
+    for (const item of method.resourceConditions) assert.equal(typeof item.when, 'string', `${method.name} ${item.path}`);
+  }
+  assert.equal(loaded.methods.copy.resourceConditions.filter(item => item.when === fallback).length,
+    built.methods.copy.resourceConditions.filter(item => item.when === undefined).length);
+  const prepared = prepareAssignmentResources(root, 'copy');
+  for (const item of prepared.deferred.filter(value => value.phase === 'conditional')) assert.equal(typeof item.when, 'string');
+  // S5: an omitted condition needs a declared default.
+  const broken = structuredClone(built);
+  delete broken.defaultResourceCondition;
+  assert.throws(() => validateRoutingContract(broken), /condition/i);
+  // S3: an older contract with every condition written out still validates.
+  const expanded = structuredClone(loaded);
+  delete expanded.defaultResourceCondition;
+  assert.doesNotThrow(() => validateRoutingContract(expanded));
+});

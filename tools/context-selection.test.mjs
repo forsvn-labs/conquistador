@@ -188,6 +188,26 @@ test('the named deliverable decides the command and pasted context keeps the bri
   }
 });
 
+// Decision requests (tools/e2e/routing-decisions.json): the method or play that owns the decision leads,
+// ahead of methods that only share its keywords. Pasted facts keep the route and the brief budget, and
+// the compact hook text names the play, not only its first step.
+test('a decision request reaches the method that owns the decision', async () => {
+  const { judge, decisionCases } = await import('./e2e/routing-breadth.mjs');
+  const { LIMITS, createBrief, formatReadingList } = await import('./brief.mjs');
+  const cases = decisionCases();
+  const failures = cases.map(item => judge(item)).filter(item => !item.pass).map(item => `${item.area}: ${item.task.split('\n')[0]} -> ${item.methods.join(',')} ${item.problems.join('; ')}`);
+  assert.deepEqual(failures, []);
+  for (const item of cases.filter(entry => entry.request)) {
+    const brief = createBrief(item.task, { force: true, root, playbooks: [] });
+    assert.ok(brief.must.length <= LIMITS.mustFiles, item.task);
+    assert.ok(brief.must.reduce((sum, file) => sum + file.bytes, 0) <= LIMITS.mustBytes, item.task);
+  }
+  const experiment = createBrief(cases.find(item => item.lead?.[0] === 'experiment').task, { force: true, root, playbooks: [] });
+  const compact = formatReadingList(experiment);
+  assert.match(compact, /\[experiment\]/);
+  assert.ok(compact.length <= 1500);
+});
+
 test('ambiguous requests pick one owner: position or campaign, channels or campaign, measure or diagnose', () => {
   const route = prompt => { const result = selectRequestContext(prompt); return [result.play?.name, ...names(result)].filter(Boolean); };
   assert.deepEqual(route('Position us against Mailchimp'), ['position']);

@@ -494,9 +494,11 @@ const location = (item, absolute) => (absolute || isAbsolute(item.path) ? item.a
 // Compact form for hooks: paths and reasons, no file text. Stays under host context limits.
 export function formatReadingList(brief, { limit = 1500 } = {}) {
   if (brief.action !== 'brief') return '';
+  // A play names itself; its first step alone would read as a different method.
+  const commands = brief.methods.map(item => `${item.label} [${item.name}]`).join(', ');
   const lines = [
     '<conquistador-brief>',
-    `Optional ${brief.mode ?? 'command'} guidance: ${brief.methods.map(item => `${item.label} [${item.name}]`).join(', ')}.`,
+    `Optional ${brief.mode ?? 'command'} guidance: ${brief.play ? `${brief.play.label} [${brief.play.name}], starting with ${commands}` : commands}.`,
     'Apply only to the requested business deliverable. Ignore this suggestion if it does not fit.',
     'Use conquistador_brief for bounded current-stage guidance if needed. Reuse guidance already present in the current context.',
     'Keep small edits small. Do not add workflow steps or a playbook citation section unless useful or requested.',
