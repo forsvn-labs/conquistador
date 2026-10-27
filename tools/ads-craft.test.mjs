@@ -1,259 +1,60 @@
-// Failure modes covered before the ads craft rebuild was written:
-// 1. public text names a practitioner, course, creator, vendor source, or a fixture used for blind tests;
-// 2. an example invents a result for a real company, or does not declare its products synthetic;
-// 3. the approval boundary for launch, publish, spend, upload, or live account changes is lost;
-// 4. a strong example set has two variations on one angle, or opens two variations on a number;
-// 5. a strong example set opens two variations with the product name, or repeats an opening line;
-// 6. strong ad copy carries source, period, or method text ("(store data, Q2 2026)", "according to");
-// 7. strong ad copy or a drafting file hedges in compliance voice ("results may vary", "not a promise");
-// 8. a strong example breaks a platform limit the craft states (Meta, Google RSA, LinkedIn, TikTok);
-// 9. a strong Google example fails `conquistador check --channel google-ads` with an error;
-// 10. there are fewer than 8 or more than 12 annotated pairs, a pair lacks a weak version or a note,
-//     the pairs miss a platform, or every Meta set leads with the same angle;
-// 11. the drafting files still ban practitioner defaults or speak in readiness labels;
-// 12. a number in the craft or platform files is neither a dated platform fact nor a starting point;
-// 13. "Write three Meta ads for our app" or a Facebook and Instagram ad request reaches `social` first,
-//     or an organic post request reaches `ads`;
-// 14. an ads brief drops the craft reference without naming it, or exceeds the byte budget;
-// 15. a relative link in the owned files is broken, or the routing contract no longer builds;
-// 16. the craft tells the writer to leave facts for other variations, though a person sees only one;
-// 17. a strong Meta or TikTok variation does not stand alone: it omits the product, the offer terms
-//     the facts supply, or a reason to believe (quote, rating, or median result) the facts supply;
-// 18. an annotation still teaches that proof or a fact appears in only one variation.
-// Text copied from private sources is checked outside this repository, because those sources are private.
+// Ad drafting is a pass-through. Across three blind tests (18 pairs), ads written with any version of the
+// ads craft lost 6–12 to the same model with no craft: the old method lost 1–5, rebuilt craft round 1 tied
+// 3–3 (each variation too thin), and round 2 lost 2–4 (each variation too full). Each rule set created the
+// opposite fault; the bare model balances by judgment. The campaign test (structure, budget, kill rules) is
+// decision work, not drafting, and keeps its method.
+// Failure modes, listed and checked before the change:
+//  1. an ad drafting brief (Meta, Facebook, Instagram, Google, LinkedIn, TikTok) that inlines, lists, or
+//     stages any ads file other than ENTRY;
+//  2. an ad drafting brief that carries a drafting rule: angles, the reader's situation, a reason to believe,
+//     offer terms, proof leading once, the product name rule, strong and weak examples, or a drafting role;
+//  3. ENTRY without a dated platform fact the model may not know (Meta, Google, LinkedIn, TikTok limits,
+//     placements, safe zones, and the personal-attribute rule), or the platform facts undated;
+//  4. a drafting instruction without the facts check, or a facts check that adds text (a hedge, source text,
+//     a disclaimer, a qualifier, a footnote, a citation);
+//  5. a lost approval boundary for launch, publish, spend, upload, or a live account change;
+//  6. a Meta, Facebook, Instagram, TikTok, LinkedIn, or Google ad request that reaches another command
+//     first, or an organic post request that reaches `ads`;
+//  7. a campaign test request (structure, budget, kill rules) that loses the campaign method, or the campaign
+//     method missing its structure, batch, decision, or optimization-event starting points;
+//  8. `ads` declaring required resources, which an assignment loads for every ads task;
+//  9. a drafting instruction (ENTRY, COMMAND, the ads specialist, the paid play, the kept roles, the
+//     platform packs) that links a retired craft file or names a drafting rule;
+// 10. a retired craft file still present, a link to one, or a broken link in the method library;
+// 11. a number in a platform pack that is neither a dated platform fact nor a labeled starting point;
+// 12. public text that names a practitioner, creator, vendor source, or blind-test fixture, or a kept
+//     example that does not declare its products synthetic;
+// 13. a brief over the byte budget, or a routing contract that no longer builds.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { existsSync, mkdtempSync, readFileSync, readdirSync, rmSync, statSync, writeFileSync } from 'node:fs';
-import { tmpdir } from 'node:os';
-import { dirname, join, relative } from 'node:path';
+import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
+import { dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { spawnSync } from 'node:child_process';
 import { createBrief, packBrief } from './brief.mjs';
+import { selectRequestContext } from './context-selection.mjs';
 import { buildRoutingContract } from './routing-contract.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const library = join(root, 'skills/conquistador');
-const ads = join(library, 'commands/ads');
-const walk = dir => readdirSync(dir).flatMap(name => {
-  const path = join(dir, name);
-  return statSync(path).isDirectory() ? walk(path) : [path];
-});
-const read = path => readFileSync(path, 'utf8');
-const owned = [...walk(ads), join(library, 'plays/paid.md'), join(library, 'specialists/ads-agent.md')]
-  .filter(path => path.endsWith('.md'));
-const craft = join(ads, 'references/ad-craft.md');
-const numbered = [craft, ...['creative-cadence', 'meta-cold-traffic', 'meta-retargeting', 'google-ads', 'linkedin-ads', 'tiktok-ads']
-  .map(name => join(ads, `references/ad-intelligence/${name}.md`))];
-const pairDir = join(ads, 'references/examples');
-const pairFiles = readdirSync(pairDir).filter(name => name.startsWith('ad-sets-')).map(name => join(pairDir, name));
-
-// A pair is a `## ` section. Its strong set is one fenced `ad-<platform>` block; weak sets are fenced `text`.
-const pairs = pairFiles.flatMap(path => read(path).split(/^## /m).slice(1).map(section => ({
-  path: relative(root, path),
-  title: section.split('\n')[0].trim(),
-  section,
-  facts: (section.match(/^Facts: ([\s\S]*?)\n\n/m)?.[1] ?? '').replace(/\s+/g, ' '),
-  strong: [...section.matchAll(/```ad-(meta|google|linkedin|tiktok)\n([\s\S]*?)```/g)].map(match => ({ platform: match[1], source: match[2] })),
-})));
-const strongSets = pairs.flatMap(pair => pair.strong.map(set => ({ ...set, facts: pair.facts, pair: `${pair.path} "${pair.title}"` })));
-const field = (block, name) => {
-  const lines = block.split('\n');
-  const start = lines.findIndex(line => line.startsWith(`${name}:`));
-  if (start === -1) return null;
-  const rest = [lines[start].slice(name.length + 1).trim()];
-  for (const line of lines.slice(start + 1)) {
-    if (/^[A-Z][A-Za-z ]{1,24}:/.test(line)) break;
-    rest.push(line);
-  }
-  return rest.join('\n').trim();
-};
-const variations = set => set.source.split(/^### /m).slice(1).map(block => ({
-  angle: block.split('\n')[0].split('·').pop().trim().toLowerCase(),
-  block,
-  text: field(block, 'Primary text') ?? field(block, 'Intro text') ?? field(block, 'Ad text') ?? '',
-  headline: field(block, 'Headline'),
-  opening: field(block, 'Opening'),
-  body: field(block, 'Body'),
-}));
-const firstLine = text => text.split('\n').find(line => line.trim())?.trim() ?? '';
-const length = text => [...text].length;
-const copyOf = set => set.platform === 'google' ? set.source.replace(/^(?:Keyword|Final URL|Note):.*$/gm, '')
-  : variations(set).map(item => [item.text, item.headline, item.opening].filter(Boolean).join('\n')).join('\n');
-
-test('public ads text names no source, creator, vendor source, or blind-test fixture', () => {
-  const banned = /\b(?:Cali|Cal AI|Yadegari|Castillo|Schneider|Sean Frank|Ridge|Clem|Paid House|Chatbase|Elsaid|Sparrow|Levinger|Hormozi|Saraev|Nass|Money Button|Chad Funnel|Simplr|Segwise|Motion app|Arcads|Andromeda|Brightdesk|Dusk|Carryall|Paybird|Greenlane|Keyline|Ledgerly|Stillwater|Slotnote)\b/;
-  for (const path of owned) {
-    const hit = read(path).match(banned);
-    assert.equal(hit, null, `${relative(root, path)} names "${hit?.[0]}"`);
-  }
-});
-
-test('every example file declares its products synthetic and reports no real ad or result', () => {
-  assert.ok(pairFiles.length >= 2, 'expected annotated pair files');
-  for (const path of [...pairFiles, join(pairDir, 'write-ad-walkthrough.md')]) {
-    const head = read(path).split('\n').slice(0, 8).join(' ');
-    assert.match(head, /synthetic/i, `${relative(root, path)} must declare synthetic products in its opening lines`);
-    assert.match(read(path), /No ad was (?:run|published|bought)/i, `${relative(root, path)} must say no ad ran`);
-  }
-});
-
-test('the approval boundary covers launch, publish, spend, uploads, and live account changes', () => {
-  const boundary = /launch[\s\S]{0,40}publish[\s\S]{0,40}spend[\s\S]{0,80}upload[\s\S]{0,160}approv/i;
-  for (const path of ['commands/ads/ENTRY.md', 'commands/ads/COMMAND.md', 'commands/ads/references/ad-craft.md',
-    'commands/ads/references/anti-patterns.md', 'plays/paid.md', 'specialists/ads-agent.md']) {
-    assert.match(read(join(library, path)), boundary, path);
-  }
-});
-
-test('there are 8 to 12 annotated pairs across Meta, Google, LinkedIn, and TikTok', () => {
-  assert.ok(pairs.length >= 8 && pairs.length <= 12, `${pairs.length} pairs`);
-  for (const pair of pairs) {
-    assert.equal(pair.strong.length, 1, `${pair.path} "${pair.title}": one strong set`);
-    assert.ok([...pair.section.matchAll(/```text\n/g)].length >= 1, `${pair.path} "${pair.title}": a weak version`);
-    assert.match(pair.section, /^\*\*Why\b/m, `${pair.path} "${pair.title}": a note on why`);
-  }
-  assert.deepEqual([...new Set(strongSets.map(set => set.platform))].sort(), ['google', 'linkedin', 'meta', 'tiktok']);
-  const leads = strongSets.filter(set => set.platform === 'meta').map(set => variations(set)[0].angle);
-  assert.ok(new Set(leads).size >= 3, `Meta sets lead with ${leads}`);
-});
-
-test('strong sets give each variation its own angle and its own opening', () => {
-  for (const set of strongSets.filter(item => item.platform !== 'google')) {
-    const items = variations(set);
-    assert.ok(items.length >= 3, `${set.pair}: ${items.length} variations`);
-    assert.equal(new Set(items.map(item => item.angle)).size, items.length, `${set.pair}: angles ${items.map(item => item.angle)}`);
-    const openings = items.map(item => firstLine(item.opening ?? item.text));
-    assert.equal(new Set(openings).size, openings.length, `${set.pair}: repeated opening`);
-    const numeric = openings.filter(line => /\d/.test(line));
-    assert.ok(numeric.length <= 1, `${set.pair}: ${numeric.length} variations open on a number: ${numeric}`);
-    const product = set.source.match(/^Product: (.+)$/m)?.[1].trim();
-    assert.ok(product, `${set.pair}: name the product on a "Product:" line`);
-    assert.ok(openings.filter(line => line.startsWith(product)).length <= 1, `${set.pair}: opens with the product name more than once`);
-  }
-});
-
-test('the craft makes each variation stand alone instead of leaving facts for other variations', () => {
-  const leaveForOthers = /waits for another variation|leaves out|one angle, one proof|the one fact each angle needs|one proof and mechanism|the one concrete fact or quote its angle needs|other facts to other (?:concepts|variations)/i;
-  for (const path of ['ENTRY.md', 'COMMAND.md', 'references/ad-craft.md', 'references/anti-patterns.md', 'references/rubric.md', 'agents/composer.md', 'agents/strategist.md']) {
-    assert.doesNotMatch(read(join(ads, path)), leaveForOthers, path);
-  }
-  for (const path of ['ENTRY.md', 'references/ad-craft.md', 'agents/composer.md']) {
-    const text = read(join(ads, path));
-    assert.match(text, /stands? alone/i, `${path}: each variation stands alone`);
-    assert.match(text, /what the product does/i, `${path}: what the product does`);
-    assert.match(text, /reason to believe/i, `${path}: a reason to believe`);
-    assert.match(text, /offer terms/i, `${path}: the offer terms`);
-  }
-});
-
-test('every strong Meta and TikTok variation carries the product, the offer, and a reason to believe', () => {
-  const offer = /\$\d|\bfree\b|\btrial\b|\breturn|send (?:it|them) back/i;
-  const gaps = [];
-  for (const set of strongSets.filter(item => item.platform === 'meta' || item.platform === 'tiktok')) {
-    const { facts } = set;
-    assert.ok(facts, `${set.pair}: a "Facts:" paragraph`);
-    const product = set.source.match(/^Product: (.+)$/m)[1].trim();
-    const proof = [
-      ...[...facts.matchAll(/"([^"]{8,})"/g)].map(match => match[1].slice(0, 20)),
-      ...[...facts.matchAll(/\b\d\.\d(?= stars?\b| from\b)/g)].map(match => match[0]),
-      ...facts.split(/(?<=\.) /).filter(sentence => /median/i.test(sentence))
-        .flatMap(sentence => [...sentence.matchAll(/\b\d[\d,]* (?:minutes|hours|business days|days)\b/g)].map(match => match[0])),
-    ];
-    for (const item of variations(set)) {
-      const copy = [item.text, item.headline, item.opening, item.body].filter(Boolean).join('\n');
-      const where = `${set.pair} "${item.angle}"`;
-      if (!copy.includes(product)) gaps.push(`${where}: never names ${product}`);
-      if (offer.test(facts) && !offer.test(copy)) gaps.push(`${where}: no offer terms, though the facts supply them`);
-      if (proof.length && !proof.some(marker => copy.includes(marker))) gaps.push(`${where}: no reason to believe from ${proof.join(' | ')}`);
-    }
-  }
-  assert.deepEqual(gaps, []);
-});
-
-test('annotations do not teach that a fact appears in only one variation', () => {
-  for (const path of pairFiles) {
-    assert.doesNotMatch(read(path), /appears once|adds the one fact its video needs/i, relative(root, path));
-  }
-  assert.match(read(join(pairDir, 'ad-sets-social.md')), /sees only (?:one|this)/i, 'the social pairs explain why each variation stands alone');
-});
-
-test('strong ad copy carries no source text, no period text, and no hedges', () => {
-  const source = /\b(?:19|20)\d\d\b|\bQ[1-4]\b|according to|source:|\bper (?:our|the) (?:data|survey|study)|\((?:[^)]*\b(?:data|survey|study|report|internal)\b[^)]*)\)/i;
-  const hedge = /not a promise|results (?:may|will) vary|individual results|no guarantee|not guaranteed|may help|could help|might help|typical results|your results/i;
-  for (const set of strongSets) {
-    const text = copyOf(set);
-    assert.doesNotMatch(text, source, `${set.pair}: source or period text`);
-    assert.doesNotMatch(text, hedge, `${set.pair}: hedge`);
-  }
-});
-
-test('strong sets keep to the platform limits the craft states', () => {
-  for (const set of strongSets) {
-    for (const item of set.platform === 'google' ? [] : variations(set)) {
-      const where = `${set.pair} "${item.angle}"`;
-      if (set.platform === 'meta') {
-        assert.ok(length(firstLine(item.text)) <= 125, `${where}: first line over 125`);
-        assert.ok(item.headline && length(item.headline) <= 40, `${where}: headline missing or over 40`);
-      }
-      if (set.platform === 'linkedin') {
-        assert.ok(length(item.text) <= 150, `${where}: intro ${length(item.text)} over 150`);
-        assert.ok(item.headline && length(item.headline) <= 70, `${where}: headline missing or over 70`);
-      }
-      if (set.platform === 'tiktok') {
-        assert.ok(item.text && length(item.text) <= 100, `${where}: ad text missing or over 100`);
-        assert.ok(item.opening, `${where}: opening seconds missing`);
-      }
-    }
-  }
-});
-
-test('every strong Google set passes the RSA checker without errors and repeats no headline', t => {
-  const temp = mkdtempSync(join(tmpdir(), 'ads-craft-'));
-  t.after(() => rmSync(temp, { recursive: true, force: true }));
-  const google = strongSets.filter(set => set.platform === 'google');
-  assert.ok(google.length >= 2, `${google.length} Google sets`);
-  google.forEach((set, index) => {
-    const file = join(temp, `rsa-${index}.md`);
-    writeFileSync(file, set.source);
-    const run = spawnSync(process.execPath, [join(root, 'runtime/bin/conquistador.js'), 'check', file, '--channel', 'google-ads', '--json'], { encoding: 'utf8' });
-    const errors = JSON.parse(run.stdout || '[]').filter(item => item.severity === 'error');
-    assert.deepEqual(errors.map(item => `${item.rule}: ${item.snippet}`), [], set.pair);
-    const headlines = [...(set.source.split(/^#### Headlines$/m)[1] ?? '').split(/^#### Descriptions$/m)[0].matchAll(/^\d+\.\s+(.+)$/gm)].map(match => match[1].toLowerCase());
-    assert.ok(headlines.length >= 8, `${set.pair}: ${headlines.length} headlines`);
-    assert.equal(new Set(headlines).size, headlines.length, `${set.pair}: repeated headline`);
-  });
-});
-
-test('drafting files teach decisions, not bans on defaults or compliance voice', () => {
-  const drafting = ['ENTRY.md', 'references/ad-craft.md', 'agents/composer.md', 'agents/strategist.md'].map(path => join(ads, path));
-  for (const path of drafting) {
-    assert.doesNotMatch(read(path), /readiness|must remain uncertain|supplies no performance benchmark|not a promise|results may vary|Borrowed benchmark/i, relative(root, path));
-  }
-  assert.doesNotMatch(read(join(ads, 'references/anti-patterns.md')), /Borrowed benchmark|Unsupported authority|named practitioners/i);
-  assert.doesNotMatch(read(join(ads, 'references/ad-intelligence/creative-cadence.md')), /Do not divide spend|Do not prescribe a monthly creative quota/i);
-  for (const path of walk(join(ads, 'references/ad-intelligence'))) {
-    assert.doesNotMatch(read(path), /supplies no performance benchmark/i, relative(root, path));
-  }
-  for (const path of [join(ads, 'agents/composer.md'), join(ads, 'agents/strategist.md'), join(ads, 'references/earn-the-impression.md')]) {
-    assert.doesNotMatch(read(path), /Retain proof and offer where they are controls|Hold audience, offer, proof, and destination\s+constant|Distinct test hypotheses can share proof/i, relative(root, path));
-  }
-});
-
-test('numbers in the craft and platform files are dated platform facts or labeled starting points', () => {
-  for (const path of numbered) {
-    let section = '';
-    for (const line of read(path).split('\n')) {
-      if (/^#{2,3} /.test(line)) section = line;
-      const bare = line.replace(/^\s*\d+\.\s/, '').replace(/`[^`]*`|"[^"]*"|\[[^\]]*\]\([^)]*\)/g, '');
-      if (/\d/.test(bare) && !/^#/.test(line) && !/^---$|^\w+: /.test(line)) {
-        assert.match(`${section} ${line}`, /Starting point|Platform facts \(checked/i, `${relative(root, path)}: "${line.trim()}" has a number outside a starting-point or dated platform-facts section`);
-      }
-    }
-  }
-});
-
 const options = { root, playbooks: [], persistCache: false, cwd: null };
-const adsRequests = [
+const read = path => readFileSync(join(library, path), 'utf8');
+const pack = task => packBrief(createBrief(task, options));
+const walk = path => {
+  const absolute = join(library, path);
+  if (!existsSync(absolute)) return [];
+  if (statSync(absolute).isFile()) return [path];
+  return readdirSync(absolute).sort().flatMap(name => walk(join(path, name)));
+};
+const links = text => [...text.matchAll(/\]\(([^)\s#]+)(?:#[^)]*)?\)/g)].map(match => match[1]);
+const ADS = 'skills/conquistador/commands/ads/';
+const ENTRY = `${ADS}ENTRY.md`;
+const PACKS = ['ad-intelligence/meta-cold-traffic.md', 'ad-intelligence/meta-retargeting.md', 'ad-intelligence/google-ads.md',
+  'ad-intelligence/linkedin-ads.md', 'ad-intelligence/tiktok-ads.md', 'ad-intelligence/apple-search-ads.md',
+  'ad-intelligence/creative-cadence.md', 'platform-intelligence/facebook.md', 'platform-intelligence/reels.md']
+  .map(path => `commands/ads/references/${path}`);
+
+// Ad requests that draft ad text. Each must carry the ads entry and nothing else.
+const DRAFT_TASKS = [
   'Write three Meta ads for our app',
   'Write three Meta (Facebook and Instagram) ad variations. For each: primary text, headline (up to 40 characters), and a one-line visual direction for the image or video.',
   'Write three Facebook ads for our dental software',
@@ -261,45 +62,183 @@ const adsRequests = [
   'Write a Google Search responsive ad: 8 headlines and 3 descriptions for the keyword payroll software',
   'Write three LinkedIn sponsored content ad variations for our security product',
   'Write TikTok ads for our budgeting app',
+  'Write two TikTok ad scripts for our garment steamer',
   'Write Facebook and Instagram ads for our gym',
   'Write Instagram and TikTok ads for our meal kit',
 ];
+// Campaign test requests: structure, budget, and kill rules. These keep the campaign method.
+const CAMPAIGN_TASKS = [
+  'Plan a Meta ads test for our app with a $3,000 budget and kill rules',
+  'Set up the account structure and budget for a TikTok ads test',
+  'Plan a LinkedIn ads test for our security product: budget, test structure, and when to turn ads off',
+  'Set up a Google Ads account structure and budget for our payroll software',
+];
+// Retired with the ads drafting craft: the craft reference, the strong and weak sets, the drafting check,
+// the drafting roles, and the fallback that ran them.
+const RETIRED = ['references/ad-craft.md', 'references/anti-patterns.md', 'references/examples/ad-sets-social.md',
+  'references/examples/ad-sets-search-b2b.md', 'agents/composer.md', 'agents/voice-auditor.md', 'agents/critic.md',
+  'fallbacks/sequential.md'].map(path => `commands/ads/${path}`);
+// Every instruction that drafts ads or hands drafting on. Each must name the pass-through.
+const DRAFTING = ['commands/ads/ENTRY.md', 'commands/ads/COMMAND.md', 'specialists/ads-agent.md'];
+// Files that must not teach how ad text is written. Creative cadence is campaign material, judged separately.
+const NO_RULES = [...DRAFTING, 'plays/paid.md', 'commands/ads/agents/strategist.md', 'commands/ads/agents/format-checker.md',
+  ...PACKS.filter(path => !path.endsWith('creative-cadence.md'))];
+// Test design may name the angles a campaign tests; it may not teach how ad text is written.
+const TEST_DESIGN = new Set(['plays/paid.md', 'commands/ads/agents/strategist.md']);
+const ANGLE = /\bangles?\b/i;
+// The facts check, in the words every drafting instruction uses.
+const FACTS_CHECK = [/own\s+judgment/i, /user's\s+facts/i, /remove\s+claims\s+the\s+facts\s+do\s+not\s+support/i,
+  /keep\s+fair\s+inferences/i, /add\s+nothing/i, /no\s+hedges/i, /no\s+source\s+text/i, /no\s+disclaimers/i];
+// Text the facts check must not add to the ads.
+const ADDS = /operator\s+note|qualifier|footnote|\badd (?:a|an|the|one)\b|\binclude (?:a|an|the)\b|\bcite\b|\bsource beside\b/i;
+// Drafting rules, examples, and roles from the retired craft. The pass-through names none of them.
+const RULES = [ANGLE, /reader's (?:situation|moment|voice|world|own)/i, /reason to (?:believe|click)/i,
+  /what the product does/i, /offer terms/i, /proof (?:leads|supports)/i, /\bproduct name\b/i, /stands? alone/i,
+  /\bfirst line\b/i, /customer quotes?/i, /\*\*(?:Strong|Weak)\*\*/, /annotated|strong and weak/i,
+  /\bcomposer\b|\bvoice auditor\b|\bcritic\b/i, /craft reference|ad-craft|ad-sets-|anti-patterns/i,
+  /open(?:s|ing)? (?:in|on|with) the (?:reader|problem|work)/i, /reads as native|wastes the window/i];
+const paragraph = (text, pattern) => {
+  const at = text.search(pattern);
+  if (at < 0) return '';
+  const end = text.indexOf('\n\n', at);
+  return text.slice(at, end < 0 ? undefined : end);
+};
+// The pass-through paragraph in a drafting instruction: the one that holds "own judgment".
+const passage = path => paragraph(read(path), /[^\n]*own\s+judgment/i);
+
+test('ad drafting briefs carry the ads entry and nothing else', () => {
+  for (const task of DRAFT_TASKS) {
+    const { structured, text } = pack(task);
+    assert.equal(structured.command, 'ads', `${task} routes to ads`);
+    assert.deepEqual(structured.inlined.map(item => item.path), [ENTRY], task);
+    assert.deepEqual(structured.situational, [], `${task} lists deferred files`);
+    for (const rule of RULES) assert.doesNotMatch(text, rule, `${task} brief carries ${rule}`);
+    assert.match(text, /approval/i, `${task} keeps the approval boundary`);
+    assert.ok(Buffer.byteLength(text) <= 16_000, `${task} brief is ${Buffer.byteLength(text)} bytes`);
+  }
+});
+
+test('the ads entry carries the dated platform facts', () => {
+  const raw = read('commands/ads/ENTRY.md');
+  const entry = raw.replace(/\s+/g, ' ');
+  assert.match(entry, /Platform facts \(checked Oct 2026; confirm in the current specs before launch\)/);
+  for (const fact of [/125 characters/, /40 characters/, /\b27\b/, /5 primary texts and 5 headlines/, /4:5/, /9:16/,
+    /15 headlines of 30 characters/, /4 descriptions of 90/, /2 paths of 15/, /3 headlines and 2 descriptions/, /[Pp]inning/,
+    /150 characters/, /600/, /70 characters/, /200/, /100 characters/, /Spark Ads/, /right-side buttons/, /bottom caption band/,
+    /personal attributes/, /special ad categor/i, /disclos/i]) assert.match(entry, fact, `ENTRY: ${fact}`);
+  assert.ok(Buffer.byteLength(raw) <= 3_000, `ENTRY.md is ${Buffer.byteLength(raw)} bytes`);
+});
+
+test('every drafting instruction is a pass-through with a facts check that adds nothing', () => {
+  for (const path of DRAFTING) {
+    const text = passage(path);
+    assert.ok(text, `${path} names the pass-through`);
+    for (const rule of FACTS_CHECK) assert.match(text, rule, `${path}: ${rule}`);
+    assert.doesNotMatch(text, ADDS, `${path}: the facts check adds text`);
+    for (const target of links(text)) assert.match(target, /ads\/(?:ENTRY|COMMAND)\.md$|^(?:ENTRY|COMMAND)\.md$/, `${path} pass-through links ${target}`);
+  }
+});
+
+test('no drafting instruction, kept role, or platform pack teaches how ad text is written', () => {
+  for (const path of NO_RULES) {
+    // Campaign sections (the plan in COMMAND, labeled starting points in the packs) are test design.
+    const text = read(path).split(/^(?=## )/m).filter(section => !/^## (?:Plan the test|.*Starting point)/.test(section)).join('');
+    for (const rule of RULES) {
+      if (rule === ANGLE && TEST_DESIGN.has(path)) continue;
+      assert.doesNotMatch(text, rule, `${path} carries ${rule}`);
+    }
+  }
+});
+
+test('the approval boundary covers launch, publish, spend, uploads, and live account changes', () => {
+  const boundary = /launch[\s\S]{0,40}publish[\s\S]{0,40}spend[\s\S]{0,80}upload[\s\S]{0,160}approv/i;
+  for (const path of ['commands/ads/ENTRY.md', 'commands/ads/COMMAND.md', 'plays/paid.md', 'specialists/ads-agent.md']) {
+    assert.match(read(path), boundary, path);
+  }
+  for (const path of PACKS) assert.match(read(path), /approv/i, `${path} keeps the approval line`);
+});
 
 test('ad requests reach ads first and organic post requests stay with social', () => {
-  for (const task of adsRequests) assert.equal(createBrief(task, options).methods[0]?.name, 'ads', task);
+  for (const task of DRAFT_TASKS) assert.equal(createBrief(task, options).methods[0]?.name, 'ads', task);
+  // A parenthetical stays in its clause: "Meta (Facebook and Instagram) ad variations" is one ad request.
+  assert.deepEqual(selectRequestContext(DRAFT_TASKS[1], { root }).selected.map(item => item.name), ['ads']);
+  // An ad request that also names an organic post or a page keeps that second deliverable.
+  assert.deepEqual(createBrief('Write Meta ads and an Instagram post for our launch', options).methods.map(item => item.name), ['ads', 'social']);
   for (const task of ['Write an Instagram post about our launch', 'Write a Facebook post announcing our new menu', 'Write a LinkedIn post about hiring',
     'Write a Facebook and Instagram post about our launch', 'Write Facebook and Instagram captions for our launch']) {
     assert.equal(createBrief(task, options).methods[0]?.name, 'social', task);
   }
 });
 
-test('an ads brief carries the drafting decisions and inlines or names the craft within the byte budget', () => {
-  for (const task of adsRequests) {
-    const pack = packBrief(createBrief(task, options));
-    const inlined = pack.structured.inlined.map(item => item.path);
-    assert.ok(inlined.some(path => path.endsWith('commands/ads/ENTRY.md')), `${task}: ${inlined}`);
-    assert.ok(inlined.some(path => path.endsWith('commands/ads/references/ad-craft.md')) || /Required references not inlined[^\n]*ads\/references\/ad-craft\.md/.test(pack.text), `${task}: ${inlined}`);
-    assert.ok(Buffer.byteLength(pack.text) <= 16_000, task);
+test('a campaign test request keeps the campaign method: structure, budget, and kill rules', () => {
+  for (const task of CAMPAIGN_TASKS) {
+    const brief = createBrief(task, options);
+    assert.equal(brief.methods[0]?.name, 'ads', task);
+    const { structured } = packBrief(brief);
+    const listed = [...structured.inlined.map(item => item.path), ...structured.situational.map(item => item.path ?? item)];
+    assert.ok(listed.some(path => path.endsWith('ad-intelligence/creative-cadence.md')), `${task}: ${JSON.stringify(listed)}`);
   }
-  for (const task of adsRequests.slice(0, 5)) {
-    const inlined = packBrief(createBrief(task, options)).structured.inlined.map(item => item.path);
-    assert.ok(inlined.some(path => path.endsWith('commands/ads/references/ad-craft.md')), `${task}: ${inlined}`);
-  }
-  const entry = read(join(ads, 'ENTRY.md'));
-  assert.match(entry, /angle/i);
-  assert.match(entry, /situation/i);
-  assert.ok(Buffer.byteLength(entry) <= 3_000, `ENTRY.md is ${Buffer.byteLength(entry)} bytes`);
+  assert.match(read('commands/ads/ENTRY.md'), /campaign test[\s\S]{0,200}\(COMMAND\.md\)/i);
+  const command = read('commands/ads/COMMAND.md');
+  for (const step of [/## Plan the test/, /creative-cadence\.md/, /optimization event/i, /kill and scale rules/i, /strategist/]) assert.match(command, step, `COMMAND: ${step}`);
+  const cadence = read('commands/ads/references/ad-intelligence/creative-cadence.md');
+  for (const section of [/## Account structure · Starting point/, /## Batch size and cadence · Starting point/, /## Decide · Starting point/,
+    /## Optimization event · Starting point/, /Turn the ad off/]) assert.match(cadence, section, `creative cadence: ${section}`);
 });
 
-test('relative links in the ads files resolve', () => {
-  for (const path of owned) {
-    for (const [, target] of read(path).matchAll(/\]\(([^)#\s]+)(?:#[^)]*)?\)/g)) {
-      if (/^[a-z]+:/i.test(target)) continue;
-      assert.ok(existsSync(join(dirname(path), target)), `${relative(root, path)} links to missing ${target}`);
+test('ads declares no required resources', () => {
+  const overlay = JSON.parse(read('routing-overlay.json'));
+  assert.deepEqual(overlay.methods.ads.requiredResources, []);
+  const declared = [...overlay.methods.ads.conditionalResources.map(item => item.path), ...overlay.methods.ads.optionalResources];
+  for (const path of declared) assert.ok(existsSync(join(library, 'commands/ads', path)), `overlay declares missing ${path}`);
+});
+
+test('retired craft files are gone and nothing links to or names them', () => {
+  for (const path of RETIRED) assert.ok(!existsSync(join(library, path)), `${path} is retired`);
+  // Full paths anywhere, distinctive names anywhere, and paths relative to the ads folder inside it.
+  // The results command has its own ads mode with its own anti-patterns file; that file is not retired.
+  const local = RETIRED.map(path => path.replace(/^commands\/ads\//, ''));
+  for (const path of walk('.').filter(path => /\.(?:md|json)$/.test(path))) {
+    const text = read(path);
+    for (const target of links(text)) {
+      const absolute = resolve(dirname(join(library, path)), target);
+      if (!/^(?:https?:|mailto:)/.test(target)) assert.ok(existsSync(absolute), `${path} links missing ${target}`);
+    }
+    for (const name of [...RETIRED, 'ad-craft.md', 'ad-sets-social', 'ad-sets-search-b2b']) assert.ok(!text.includes(name), `${path} names retired ${name}`);
+    if (path.startsWith('commands/ads/')) for (const name of local) assert.ok(!text.includes(name), `${path} names retired ${name}`);
+  }
+});
+
+test('numbers in the platform packs are dated platform facts or labeled starting points', () => {
+  for (const path of PACKS.filter(path => !path.endsWith('apple-search-ads.md'))) {
+    let section = '';
+    for (const line of read(path).split('\n')) {
+      if (/^#{2,3} /.test(line)) section = line;
+      const bare = line.replace(/^\s*\d+\.\s/, '').replace(/`[^`]*`|"[^"]*"|\[[^\]]*\]\([^)]*\)/g, '');
+      if (/\d/.test(bare) && !/^#/.test(line) && !/^---$|^\w+: /.test(line)) {
+        assert.match(`${section} ${line}`, /Starting point|Platform facts \(checked/i, `${path}: "${line.trim()}" has a number outside a starting-point or dated platform-facts section`);
+      }
     }
   }
 });
 
-test('the routing contract still builds from the ads method', () => {
+test('public ads text names no source, creator, vendor source, or blind-test fixture', () => {
+  const banned = /\b(?:Cali|Cal AI|Yadegari|Castillo|Schneider|Sean Frank|Ridge|Clem|Paid House|Chatbase|Elsaid|Sparrow|Levinger|Hormozi|Saraev|Nass|Money Button|Chad Funnel|Simplr|Segwise|Motion app|Arcads|Andromeda|Brightdesk|Dusk|Carryall|Paybird|Greenlane|Keyline|Ledgerly|Stillwater|Slotnote)\b/;
+  for (const path of [...walk('commands/ads'), 'plays/paid.md', 'specialists/ads-agent.md'].filter(path => path.endsWith('.md'))) {
+    const hit = read(path).match(banned);
+    assert.equal(hit, null, `${path} names "${hit?.[0]}"`);
+  }
+  const walkthrough = read('commands/ads/references/examples/write-ad-walkthrough.md');
+  assert.match(walkthrough.split('\n').slice(0, 8).join(' '), /synthetic/i);
+  assert.match(walkthrough, /No ad was (?:run|published|bought)/i);
+});
+
+test('relative links in the ads files resolve and the routing contract builds', () => {
+  for (const path of [...walk('commands/ads'), 'plays/paid.md', 'specialists/ads-agent.md'].filter(path => path.endsWith('.md'))) {
+    for (const target of links(read(path))) {
+      if (/^[a-z]+:/i.test(target)) continue;
+      assert.ok(existsSync(join(dirname(join(library, path)), target)), `${path} links to missing ${target}`);
+    }
+  }
   assert.doesNotThrow(() => buildRoutingContract(root));
 });
