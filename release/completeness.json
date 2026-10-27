@@ -4783,11 +4783,11 @@
     },
     {
       "path": "conquistador/routing-contract.json",
-      "sha256": "10a9aeedb480d2ec7801cdc6252d1637c94c4a1dbd748c2013ace984dd2d432e"
+      "sha256": "f91ba6d57942e489efde685d70d705a775c5864e5d5a3f61f5980ea5421ddfd0"
     },
     {
       "path": "conquistador/routing-overlay.json",
-      "sha256": "a823c6861b4a5d893c4299560226020e4a85450b5d9b93a447e514f6e63398cf"
+      "sha256": "db48f31762a4896ab144d6546f1cf20a644ebb84c8ef9a65d5b6ff05163fbb2e"
     },
     {
       "path": "conquistador/rubrics/composition.md",
