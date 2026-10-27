@@ -1,39 +1,60 @@
 # Conquistador status
 
-## Release candidate 0.11.0
+Updated 2026-10-27. Release evidence: [PR #109](https://github.com/forsvn-labs/conquistador/pull/109),
+[release PR #110](https://github.com/forsvn-labs/conquistador/pull/110),
+[v0.11.0](https://github.com/forsvn-labs/conquistador/releases/tag/v0.11.0), and
+[publication run 40481863510](https://github.com/forsvn-labs/conquistador/actions/runs/40481863510).
 
-Prepared 2026-10-27 from [PR #109](https://github.com/forsvn-labs/conquistador/pull/109),
-merged at `b717e00`. This candidate includes the merged performance, routing,
-method, and evaluation changes since 0.10.2. Thin defaults now apply to the CLI,
-app prompts, installs, specialist assignments, MCP discovery, and bot exports.
-Outbound, social, sales-page copy, engineering, utilities, and kept plays retain
-their methods. Detailed files remain available for explicit reads and future tests.
+## Shipped 0.11.0
 
-Before this version change, 1,179 tests, 721 routing cases, 38 installed-app checks,
-50 executed package checks, and all executable PR checks passed. The release
-candidate still requires its own package verification and publication evidence.
-These checks establish loading and installation, not model output quality.
-The hosted Worker is a separate deployment and is not part of this release.
+Product 0.11.0 is tagged at `2dfa2a6362507e5c8a6796ecfc3c334557cb84a7`.
+The seven downloaded assets bind that source. All five archives match the release
+checksums and the tested candidate bytes. Start with `npx conquistador@latest`.
 
-The last verified public release remains 0.10.2 until publication is checked.
+Both `@forsvn/conquistador@0.11.0` and `conquistador@0.11.0` are verified as npm
+latest. Their registry tarballs match the release bytes, and the alias pins the
+exact main-package version. `npm audit signatures` verifies the installed
+registry signatures and attestations. A fresh registry install verifies the CLI,
+MCP version, an entry-only pricing brief, and startup without Conquistador home
+state. [Registry evidence](docs/release-0.11.0-verification.json) records the identities,
+digests, and checks. The CLI publication job was retried after the main version
+became readable in npm's registry.
 
-Updated 2026-10-23. Release evidence: [PR #92](https://github.com/forsvn-labs/conquistador/pull/92),
-[v0.10.2](https://github.com/forsvn-labs/conquistador/releases/tag/v0.10.2), and
-[publication run 39944022729](https://github.com/forsvn-labs/conquistador/actions/runs/39944022729).
+Thin defaults now apply to CLI briefs, app prompts, installs, specialist
+assignments and team composition, MCP discovery, and upload-only bot packs.
+Outbound, social, sales-page and sales-letter copy, engineering, utilities, and
+kept plays retain their methods. Detailed files remain available for explicit
+reads and future tests. Deliverable and decision routing, shared method files,
+and human blind-test tools are included.
 
-## In review: agent surface performance
+Release-candidate build and 1,179 tests pass, with one existing skip. All 721
+routing cases pass without command or play changes in the final loader work.
+All 38 installed-app checks and 50 executed package checks pass, including 22
+real-agent terminal checks on macOS ARM64. The optional local Node 22 CLI matrix
+was not run. CI passes product checks on Node 24/26, installed-app checks on
+Node 22.18/24/26 and Bun, and installation checks on Linux and Windows. CodeRabbit
+reported no actionable findings. The tagged source tree and archive bytes match
+the tested candidate. These checks establish loading and installation, not
+model output quality or external chat-app retrieval acceptance.
 
-The performance branch adds a portable search snapshot with source-digest checks,
+The [loader inventory and repeatable checks](docs/performance/thin-surfaces.md)
+describe the entry-point behavior and its limits. This release does not redeploy
+the hosted Worker.
+
+## Earlier performance verification (2026-10-23)
+
+The performance branch added a portable search snapshot with source-digest checks,
 per-query scoring setup, and short-entry catalog routing for all 41 commands.
 [Review and repeatable evidence](docs/performance/REVIEW.md) cover the API, CLI,
 hooks, skills/plugins, stdio, HTTP, packaging, and hosted configuration.
-Local validation: build/type checks, 980 product tests, 142 routing cases,
-38 installed-app checks, and 11 loopback HTTP workflow steps pass.
-The cleanup removes unused selection fields, redundant retries, stale comments,
+At that time, build/type checks, 980 product tests, 142 routing cases,
+38 installed-app checks, and 11 loopback HTTP workflow steps passed.
+The cleanup removed unused selection fields, redundant retries, stale comments,
 and duplicate rendered reports; raw verification JSON remains.
-This is source verification, not a new release, deployment, or live model-quality verdict.
+This was source verification before the 0.11.0 release. It did not establish a
+deployment or live model-quality verdict.
 
-## Shipped
+## Earlier release 0.10.2 (2026-10-23)
 
 Product 0.10.2 is tagged at `bd0f4c279650ca2eb14a2d32016d4d2cef80f323`.
 The seven release assets bind the tagged source; all five downloaded archives match
@@ -45,9 +66,9 @@ opt-in. Found agents appear first; the full catalog and keyboard shortcuts remai
 available. Review leads with a plain summary and puts commands behind Details.
 Home groups advanced controls under Settings and extra integrations under Connect apps.
 
-Both `@forsvn/conquistador@0.10.2` and `conquistador@0.10.2` are verified as npm
-latest. Their tarballs match the release bytes, have provenance and signatures,
-and the alias pins the exact main-package version. Fresh registry installation
+The 0.10.2 publication verified both npm packages as latest at that time. Their
+tarballs matched the release bytes, had provenance and signatures, and the
+alias pinned the exact main-package version. Fresh registry installation
 verifies the CLI, Executor-only plan, Composio preview, and standalone MCP handshake.
 [Registry evidence](docs/release-0.10.2-verification.json) records identities and digests.
 The CLI job was retried after the main package became visible in npm's registry.
@@ -60,12 +81,14 @@ Three tagged-source transcript scenarios pass. Fixture tests do not establish li
 provider acceptance. The installed-package Expect driver now verifies the direct
 Agents → Review flow; failed fixture assertions close their terminal processes.
 
-The hosted Worker remains on 0.10.1 at `https://mcp.forsvn.com/mcp`.
-This installer release does not redeploy it. Existing secrets,
+## Hosted MCP, last verified 2026-10-23
+
+The last verified hosted Worker was 0.10.1 at `https://mcp.forsvn.com/mcp`.
+The 0.11.0 package release did not redeploy it. Existing secrets,
 OAuth settings, and token storage were retained. Public health and OAuth metadata
-return 200; unauthenticated MCP requests return 401. Real authenticated Executor
-calls verify that email-system engineering gets no marketing brief, while outreach
-copy gets its 552-byte command entry within the 8,000-byte compact budget.
+returned 200; unauthenticated MCP requests returned 401. Authenticated Executor
+calls verified that email-system engineering received no marketing brief, while
+outreach copy received its 552-byte command entry within the 8,000-byte compact budget.
 [Hosted evidence](docs/hosted-0.10.1-verification.json) records the deployment and results.
 
 The 0.10.0 task-scoped behavior remains included: bounded current-stage guidance,
@@ -79,8 +102,9 @@ this release includes a runnable setup example and offline checks, without creat
 or testing a live Composio account. The example distinguishes registration, consent,
 discovery, sync, and tool execution. Local checks are not live account acceptance.
 
-The hosted check uses an existing Executor account. Fresh OAuth consent in additional
-clients, native activation in additional clients, interactive Windows and ARM,
+The hosted check used an existing Executor account. Fresh OAuth consent in additional
+clients, native activation in additional clients, interactive Windows and additional
+ARM targets,
 linked-provider lifecycle, and broader model/human task-quality acceptance remain
 unverified. Existing lint diagnostics and optional Promptfoo/node-forge findings
 remain open. They are not represented as release verification.

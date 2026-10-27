@@ -1,0 +1,84 @@
+{
+  "verifiedAt": "2026-10-27T09:47:44.044788+00:00",
+  "sourceCommit": "2dfa2a6362507e5c8a6796ecfc3c334557cb84a7",
+  "release": "https://github.com/forsvn-labs/conquistador/releases/tag/v0.11.0",
+  "publicationRun": "https://github.com/forsvn-labs/conquistador/actions/runs/40481863510",
+  "publicationRetry": {
+    "job": "publish-cli",
+    "reason": "npm accepted the main package before version 0.11.0 was readable from the registry"
+  },
+  "releaseAssets": {
+    "count": 7,
+    "verifiedArchiveChecksums": {
+      "conquistador-0.11.0.zip": "f4966d55dcf127af4e9b06b91607126ab8150d028f23ebe2f2b94a60fdfa56b2",
+      "forsvn-conquistador-0.11.0.tgz": "599e30fb3649869fd386ad6d7ba56fa24700a10af2c38a5ba2ed24d226dd19a4",
+      "conquistador-0.11.0.tgz": "2668eeb063135d41b04b9e664cad331f9ae614d7b358af4563a15e0dade2fc1e",
+      "conquistador-skill-0.11.0.zip": "6c889100fa23cdbd79198aab823cc9a79a5c85ed1b8b5cf6ad61ce0200db22bb",
+      "conquistador-plugin-0.11.0.zip": "49950593843963781e6bf92562eae46088a4b8774906ad8c4dd894dd084da028"
+    }
+  },
+  "checks": [
+    {
+      "name": "@forsvn/conquistador",
+      "version": "0.11.0",
+      "latest": "0.11.0",
+      "sha256": "599e30fb3649869fd386ad6d7ba56fa24700a10af2c38a5ba2ed24d226dd19a4",
+      "tarball": "https://registry.npmjs.org/@forsvn/conquistador/-/conquistador-0.11.0.tgz",
+      "integrity": "sha512-ba1WCNKoGQdLHJWPosUa6NseOz2bl7oFr5+d+IUMjgGXrIWGpSglpR+vDKcOdAZjXmctIgALabuyS2Il5O5TzQ==",
+      "provenance": "https://registry.npmjs.org/-/npm/v1/attestations/@forsvn%2fconquistador@0.11.0",
+      "registrySignaturesPresent": true,
+      "exactAliasPin": null
+    },
+    {
+      "name": "conquistador",
+      "version": "0.11.0",
+      "latest": "0.11.0",
+      "sha256": "2668eeb063135d41b04b9e664cad331f9ae614d7b358af4563a15e0dade2fc1e",
+      "tarball": "https://registry.npmjs.org/conquistador/-/conquistador-0.11.0.tgz",
+      "integrity": "sha512-bHSZAhsRFnYaRnyEzpKuw8bAgrfpVA7LEjMTBVjhogIyHJuXJO2GZd2JMlVt++dC3HY1ffWkIw2HVZrcM61JZQ==",
+      "provenance": "https://registry.npmjs.org/-/npm/v1/attestations/conquistador@0.11.0",
+      "registrySignaturesPresent": true,
+      "exactAliasPin": "0.11.0"
+    }
+  ],
+  "installedSmoke": {
+    "mode": "fresh npm registry installation in an isolated home and cache",
+    "checks": [
+      {
+        "name": "fresh short-alias install resolves the exact main version",
+        "passed": true
+      },
+      {
+        "name": "installed CLI reports 0.11.0",
+        "passed": true
+      },
+      {
+        "name": "published MCP handshake reports 0.11.0",
+        "passed": true
+      },
+      {
+        "name": "published pricing brief contains only its entry",
+        "passed": true
+      },
+      {
+        "name": "npm audit signatures verifies the installed packages",
+        "passed": true
+      },
+      {
+        "name": "CLI and MCP create no Conquistador home state",
+        "passed": true
+      }
+    ],
+    "signatureAuditOutput": "audited 3 packages in 3s\n\n3 packages have verified registry signatures\n\n3 packages have verified attestations\n(use --json --include-attestations to view attestation details)"
+  },
+  "candidateChecks": {
+    "sourceCommit": "380cd99302107eda6736cee9eba0dabe8176b325",
+    "sameSourceTreeAsTag": true,
+    "sameArchiveBytesAsTag": true,
+    "testsPassed": 1179,
+    "testsSkipped": 1,
+    "installedAppChecksPassed": 38,
+    "installedPackageChecksPassed": 50
+  },
+  "limits": "Package identity, installed tools, and deterministic behavior only. No new human output-quality verdict, external chat-app retrieval acceptance, or hosted deployment."
+}
