@@ -14,7 +14,8 @@ Ask only for a missing fact that changes the test.
 1. Name the reader's moment: where they are when the ad appears and what they are putting off.
 2. Pick three to five angles from the [craft reference](../references/ad-craft.md) that are most
    likely to win for this product. Each becomes a concept with its own opening and visual.
-3. For each concept, name the one fact or quote it needs. Leave the other facts to other concepts.
+3. For each concept, name its reason to believe and the offer terms it carries. Proof leads one
+   concept at most and supports the rest. Each ad stands alone, because a person sees only one.
 4. Check the three conditions for cold paid traffic: proof that people want the product, a tracked
    conversion event, and a destination that repeats the ad's promise and terms. Name any gap and
    the step that closes it.
@@ -25,5 +26,5 @@ Ask only for a missing fact that changes the test.
 
 ## Output
 
-A short table: concept, angle, reader's moment, opening idea, supporting fact, visual. Then the
+A short table: concept, angle, reader's moment, opening idea, reason to believe, offer terms, visual. Then the
 event, budget, decision rules, and open checks. Pass it to the composer.

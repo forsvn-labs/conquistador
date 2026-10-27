@@ -37,7 +37,9 @@ Output formats and fallbacks: [sequential](fallbacks/sequential.md), [format-con
 ## Draft the ads
 
 Draft from the [craft reference](references/ad-craft.md). Give each variation its own angle and its
-own first line, open in the reader's situation, and let proof lead one variation at most. Compare the
+own first line, open in the reader's situation, and let proof lead one variation at most. Each
+variation stands alone: it says what the product does, gives one reason to believe, and states the
+offer terms. Compare the
 draft with the annotated [Meta and TikTok](references/examples/ad-sets-social.md) and
 [search and LinkedIn](references/examples/ad-sets-search-b2b.md) pairs. Use the matching platform
 pack for format and account facts:
