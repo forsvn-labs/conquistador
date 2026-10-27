@@ -133,8 +133,8 @@ test('strong sets give each variation its own angle and its own opening', () => 
 });
 
 test('the craft makes each variation stand alone instead of leaving facts for other variations', () => {
-  const leaveForOthers = /waits for another variation|leaves out|one angle, one proof|the one fact each angle needs|one proof and mechanism|the one concrete fact or quote its angle needs/i;
-  for (const path of ['ENTRY.md', 'references/ad-craft.md', 'references/anti-patterns.md', 'references/rubric.md', 'agents/composer.md']) {
+  const leaveForOthers = /waits for another variation|leaves out|one angle, one proof|the one fact each angle needs|one proof and mechanism|the one concrete fact or quote its angle needs|other facts to other (?:concepts|variations)/i;
+  for (const path of ['ENTRY.md', 'COMMAND.md', 'references/ad-craft.md', 'references/anti-patterns.md', 'references/rubric.md', 'agents/composer.md', 'agents/strategist.md']) {
     assert.doesNotMatch(read(join(ads, path)), leaveForOthers, path);
   }
   for (const path of ['ENTRY.md', 'references/ad-craft.md', 'agents/composer.md']) {
