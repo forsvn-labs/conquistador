@@ -141,47 +141,47 @@
         },
         {
           "path": "skills/conquistador/commands/ads/agents/strategist.md",
-          "when": "Load for a campaign test (structure, budget, decision and kill rules). Ad drafting is a pass-through and loads no resource."
+          "when": "Detailed method, kept unlinked until a blind test brings it back. Ad drafting and the campaign test are pass-throughs and load no resource."
         },
         {
           "path": "skills/conquistador/commands/ads/references/ad-intelligence/creative-cadence.md",
-          "when": "Load for a campaign test (structure, budget, decision and kill rules). Ad drafting is a pass-through and loads no resource."
+          "when": "Detailed method, kept unlinked until a blind test brings it back. Ad drafting and the campaign test are pass-throughs and load no resource."
         },
         {
           "path": "skills/conquistador/commands/ads/references/earn-the-impression.md",
-          "when": "Load for a campaign test (structure, budget, decision and kill rules). Ad drafting is a pass-through and loads no resource."
+          "when": "Detailed method, kept unlinked until a blind test brings it back. Ad drafting and the campaign test are pass-throughs and load no resource."
         },
         {
           "path": "skills/conquistador/commands/ads/references/message-transmutation.md",
-          "when": "Load for a campaign test (structure, budget, decision and kill rules). Ad drafting is a pass-through and loads no resource."
+          "when": "Detailed method, kept unlinked until a blind test brings it back. Ad drafting and the campaign test are pass-throughs and load no resource."
         },
         {
           "path": "skills/conquistador/commands/ads/references/ad-intelligence/meta-cold-traffic.md",
-          "when": "Load for a campaign test on this network: its account setup. Ad drafting is a pass-through and loads no resource."
+          "when": "Detailed method, kept unlinked until a blind test brings it back. Ad drafting and the campaign test are pass-throughs and load no resource."
         },
         {
           "path": "skills/conquistador/commands/ads/references/ad-intelligence/meta-retargeting.md",
-          "when": "Load for a campaign test on this network: its account setup. Ad drafting is a pass-through and loads no resource."
+          "when": "Detailed method, kept unlinked until a blind test brings it back. Ad drafting and the campaign test are pass-throughs and load no resource."
         },
         {
           "path": "skills/conquistador/commands/ads/references/platform-intelligence/facebook.md",
-          "when": "Load for a campaign test that runs in Facebook or Instagram feeds. Ad drafting is a pass-through and loads no resource."
+          "when": "Detailed method, kept unlinked until a blind test brings it back. Ad drafting and the campaign test are pass-throughs and load no resource."
         },
         {
           "path": "skills/conquistador/commands/ads/references/platform-intelligence/reels.md",
-          "when": "Load for a campaign test that runs in Instagram or Facebook Reels or Stories. Ad drafting is a pass-through and loads no resource."
+          "when": "Detailed method, kept unlinked until a blind test brings it back. Ad drafting and the campaign test are pass-throughs and load no resource."
         },
         {
           "path": "skills/conquistador/commands/ads/references/ad-intelligence/google-ads.md",
-          "when": "Load for a campaign test on this network: its account setup. Ad drafting is a pass-through and loads no resource."
+          "when": "Detailed method, kept unlinked until a blind test brings it back. Ad drafting and the campaign test are pass-throughs and load no resource."
         },
         {
           "path": "skills/conquistador/commands/ads/references/ad-intelligence/linkedin-ads.md",
-          "when": "Load for a campaign test on this network: its account setup. Ad drafting is a pass-through and loads no resource."
+          "when": "Detailed method, kept unlinked until a blind test brings it back. Ad drafting and the campaign test are pass-throughs and load no resource."
         },
         {
           "path": "skills/conquistador/commands/ads/references/ad-intelligence/tiktok-ads.md",
-          "when": "Load for a campaign test on this network: its account setup. Ad drafting is a pass-through and loads no resource."
+          "when": "Detailed method, kept unlinked until a blind test brings it back. Ad drafting and the campaign test are pass-throughs and load no resource."
         },
         {
           "path": "skills/conquistador/commands/ads/references/ad-intelligence/apple-search-ads.md",
@@ -373,13 +373,12 @@
         "landing page copy",
         "social posts"
       ],
-      "requiredResources": [
+      "requiredResources": [],
+      "conditionalResources": [
         "skills/conquistador/commands/article/references/research-method.md",
         "skills/conquistador/commands/article/references/rubric.md",
         "skills/conquistador/commands/article/references/anti-patterns.md",
-        "skills/conquistador/commands/article/fallbacks/sequential.md"
-      ],
-      "conditionalResources": [
+        "skills/conquistador/commands/article/fallbacks/sequential.md",
         "skills/conquistador/commands/article/agents/research.md",
         "skills/conquistador/commands/article/agents/outline.md",
         "skills/conquistador/commands/article/agents/draft.md",
@@ -389,6 +388,22 @@
         "skills/conquistador/commands/article/references/format-conventions.md"
       ],
       "resourceConditions": [
+        {
+          "path": "skills/conquistador/commands/article/references/research-method.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "skills/conquistador/commands/article/references/rubric.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "skills/conquistador/commands/article/references/anti-patterns.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "skills/conquistador/commands/article/fallbacks/sequential.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
         {
           "path": "skills/conquistador/commands/article/agents/research.md"
         },
@@ -446,10 +461,9 @@
         "knowledge review",
         "code audit"
       ],
-      "requiredResources": [
-        "skills/conquistador/commands/audit/fallbacks/sequential.md"
-      ],
+      "requiredResources": [],
       "conditionalResources": [
+        "skills/conquistador/commands/audit/fallbacks/sequential.md",
         "skills/conquistador/commands/audit/references/audit-flow.md",
         "skills/conquistador/commands/audit/references/noise-filter.md",
         "skills/conquistador/commands/audit/references/report-template.md",
@@ -459,6 +473,10 @@
         "skills/conquistador/commands/audit/references/quality-feedback-protocol.md"
       ],
       "resourceConditions": [
+        {
+          "path": "skills/conquistador/commands/audit/fallbacks/sequential.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
         {
           "path": "skills/conquistador/commands/audit/references/audit-flow.md"
         },
@@ -530,12 +548,11 @@
         "write a landing page",
         "social posts"
       ],
-      "requiredResources": [
+      "requiredResources": [],
+      "conditionalResources": [
         "skills/conquistador/commands/brand/references/brand-system-method.md",
         "skills/conquistador/commands/brand/references/anti-patterns.md",
-        "skills/conquistador/commands/brand/fallbacks/sequential.md"
-      ],
-      "conditionalResources": [
+        "skills/conquistador/commands/brand/fallbacks/sequential.md",
         "skills/conquistador/commands/brand/references/narrative-tension.md",
         "skills/conquistador/commands/brand/agents/strategy-agent.md",
         "skills/conquistador/commands/brand/agents/personality-agent.md",
@@ -549,6 +566,18 @@
         "skills/conquistador/commands/brand/references/platform-surfaces.md"
       ],
       "resourceConditions": [
+        {
+          "path": "skills/conquistador/commands/brand/references/brand-system-method.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "skills/conquistador/commands/brand/references/anti-patterns.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "skills/conquistador/commands/brand/fallbacks/sequential.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
         {
           "path": "skills/conquistador/commands/brand/references/narrative-tension.md"
         },
@@ -621,12 +650,11 @@
         "create ads",
         "evaluate actual paid"
       ],
-      "requiredResources": [
+      "requiredResources": [],
+      "conditionalResources": [
         "skills/conquistador/commands/budget/references/rubric.md",
         "skills/conquistador/commands/budget/references/anti-patterns.md",
-        "skills/conquistador/commands/budget/fallbacks/sequential.md"
-      ],
-      "conditionalResources": [
+        "skills/conquistador/commands/budget/fallbacks/sequential.md",
         "skills/conquistador/commands/budget/agents/allocator.md",
         "skills/conquistador/commands/budget/agents/constraint-checker.md",
         "skills/conquistador/commands/budget/agents/critic.md",
@@ -635,6 +663,18 @@
         "skills/conquistador/commands/budget/references/format-conventions.md"
       ],
       "resourceConditions": [
+        {
+          "path": "skills/conquistador/commands/budget/references/rubric.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "skills/conquistador/commands/budget/references/anti-patterns.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "skills/conquistador/commands/budget/fallbacks/sequential.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
         {
           "path": "skills/conquistador/commands/budget/agents/allocator.md"
         },
@@ -850,7 +890,7 @@
         "plan our growth"
       ],
       "signals": [
-        "campaign*|promo|promos|promotion*|sale|push|blitz & plan*|map*|put together|build|run|draft|design|organi*|launch|prepare|set up",
+        "campaign*|promo|promos|promotion*|sale|push|blitz & plan*|map*|put together|build|run|draft|design|organi*|launch|prepare|set up & !ad set*|ad account*|ads account*",
         "black friday|cyber monday|back to school|holiday season|valentine*|mother s day|prime day|seasonal|summer sale|spring sale|end of year & plan*|campaign*|promo*|push|sale"
       ],
       "exclusions": [
@@ -859,11 +899,10 @@
         "knowledge review",
         "write social only"
       ],
-      "requiredResources": [
-        "skills/conquistador/commands/campaign/references/anti-patterns.md",
-        "skills/conquistador/commands/campaign/fallbacks/sequential.md"
-      ],
+      "requiredResources": [],
       "conditionalResources": [
+        "skills/conquistador/commands/campaign/references/anti-patterns.md",
+        "skills/conquistador/commands/campaign/fallbacks/sequential.md",
         "skills/conquistador/commands/campaign/agents/pillar-agent.md",
         "skills/conquistador/commands/campaign/agents/angle-agent.md",
         "skills/conquistador/commands/campaign/agents/channel-agent.md",
@@ -878,6 +917,14 @@
         "skills/conquistador/commands/campaign/references/distribution-models/creator-program.md"
       ],
       "resourceConditions": [
+        {
+          "path": "skills/conquistador/commands/campaign/references/anti-patterns.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "skills/conquistador/commands/campaign/fallbacks/sequential.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
         {
           "path": "skills/conquistador/commands/campaign/agents/pillar-agent.md"
         },
@@ -999,13 +1046,12 @@
         "write the posts",
         "create ads"
       ],
-      "requiredResources": [
+      "requiredResources": [],
+      "conditionalResources": [
         "skills/conquistador/commands/channels/references/evidence-protocol.md",
         "skills/conquistador/commands/channels/references/confidence-labeling.md",
         "skills/conquistador/commands/channels/references/anti-patterns.md",
-        "skills/conquistador/commands/channels/fallbacks/sequential.md"
-      ],
-      "conditionalResources": [
+        "skills/conquistador/commands/channels/fallbacks/sequential.md",
         "skills/conquistador/commands/channels/agents/evidence-intake-agent.md",
         "skills/conquistador/commands/channels/agents/benchmark-agent.md",
         "skills/conquistador/commands/channels/agents/synthesis-agent.md",
@@ -1015,6 +1061,22 @@
         "skills/conquistador/commands/channels/references/creator-channel-fit.md"
       ],
       "resourceConditions": [
+        {
+          "path": "skills/conquistador/commands/channels/references/evidence-protocol.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "skills/conquistador/commands/channels/references/confidence-labeling.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "skills/conquistador/commands/channels/references/anti-patterns.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "skills/conquistador/commands/channels/fallbacks/sequential.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
         {
           "path": "skills/conquistador/commands/channels/agents/evidence-intake-agent.md"
         },
@@ -1134,14 +1196,13 @@
         "seo ranking",
         "paid results"
       ],
-      "requiredResources": [
+      "requiredResources": [],
+      "conditionalResources": [
         "skills/conquistador/commands/convert/references/conversion-diagnosis-method.md",
         "skills/conquistador/commands/convert/references/diagnostic-evidence-method.md",
         "skills/conquistador/commands/convert/references/landing-eval-method.md",
         "skills/conquistador/commands/convert/references/landing-eval-rubric.md",
-        "skills/conquistador/commands/convert/fallbacks/sequential.md"
-      ],
-      "conditionalResources": [
+        "skills/conquistador/commands/convert/fallbacks/sequential.md",
         "skills/conquistador/commands/convert/agents/conversion-tree-builder-agent.md",
         "skills/conquistador/commands/convert/agents/conversion-external-check-agent.md",
         "skills/conquistador/commands/convert/agents/conversion-hypothesis-agent.md",
@@ -1160,6 +1221,26 @@
         "skills/conquistador/commands/convert/references/app-onboarding-paywall.md"
       ],
       "resourceConditions": [
+        {
+          "path": "skills/conquistador/commands/convert/references/conversion-diagnosis-method.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "skills/conquistador/commands/convert/references/diagnostic-evidence-method.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "skills/conquistador/commands/convert/references/landing-eval-method.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "skills/conquistador/commands/convert/references/landing-eval-rubric.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "skills/conquistador/commands/convert/fallbacks/sequential.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
         {
           "path": "skills/conquistador/commands/convert/agents/conversion-tree-builder-agent.md"
         },
@@ -1362,13 +1443,12 @@
         "write the copy",
         "finished ads"
       ],
-      "requiredResources": [
+      "requiredResources": [],
+      "conditionalResources": [
         "skills/conquistador/commands/creative/references/visual-rubric.md",
         "skills/conquistador/commands/creative/references/graphic-brief-method.md",
         "skills/conquistador/commands/creative/references/anti-patterns.md",
-        "skills/conquistador/commands/creative/fallbacks/sequential.md"
-      ],
-      "conditionalResources": [
+        "skills/conquistador/commands/creative/fallbacks/sequential.md",
         "skills/conquistador/commands/creative/agents/brand-anchor-agent.md",
         "skills/conquistador/commands/creative/agents/concept-agent.md",
         "skills/conquistador/commands/creative/agents/copy-anchor-agent.md",
@@ -1396,6 +1476,22 @@
         "skills/conquistador/commands/creative/references/reviewable-artifact-contract.md"
       ],
       "resourceConditions": [
+        {
+          "path": "skills/conquistador/commands/creative/references/visual-rubric.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "skills/conquistador/commands/creative/references/graphic-brief-method.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "skills/conquistador/commands/creative/references/anti-patterns.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "skills/conquistador/commands/creative/fallbacks/sequential.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
         {
           "path": "skills/conquistador/commands/creative/agents/brand-anchor-agent.md"
         },
@@ -1522,12 +1618,11 @@
         "write the first draft",
         "create the campaign"
       ],
-      "requiredResources": [
+      "requiredResources": [],
+      "conditionalResources": [
         "skills/conquistador/commands/critique/fallbacks/sequential.md",
         "skills/conquistador/commands/critique/references/independent-review-method.md",
-        "skills/conquistador/commands/critique/references/anti-patterns.md"
-      ],
-      "conditionalResources": [
+        "skills/conquistador/commands/critique/references/anti-patterns.md",
         "skills/conquistador/commands/critique/references/review-target-and-closeout.md",
         "skills/conquistador/commands/critique/agents/reviewer-agent.md",
         "skills/conquistador/commands/critique/agents/security-reviewer-agent.md",
@@ -1542,6 +1637,18 @@
         "skills/conquistador/commands/critique/references/quality-feedback-protocol.md"
       ],
       "resourceConditions": [
+        {
+          "path": "skills/conquistador/commands/critique/fallbacks/sequential.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "skills/conquistador/commands/critique/references/independent-review-method.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "skills/conquistador/commands/critique/references/anti-patterns.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
         {
           "path": "skills/conquistador/commands/critique/references/review-target-and-closeout.md"
         },
@@ -1617,12 +1724,11 @@
         "write copy",
         "campaign plan"
       ],
-      "requiredResources": [
+      "requiredResources": [],
+      "conditionalResources": [
         "skills/conquistador/commands/decide/fallbacks/sequential.md",
         "skills/conquistador/commands/decide/references/independent-positions-method.md",
-        "skills/conquistador/commands/decide/references/anti-patterns.md"
-      ],
-      "conditionalResources": [
+        "skills/conquistador/commands/decide/references/anti-patterns.md",
         "skills/conquistador/commands/decide/references/decision-tree.md",
         "skills/conquistador/commands/decide/agents/optimist-agent.md",
         "skills/conquistador/commands/decide/agents/skeptic-agent.md",
@@ -1639,6 +1745,18 @@
         "skills/conquistador/commands/decide/references/misjudgment-check.md"
       ],
       "resourceConditions": [
+        {
+          "path": "skills/conquistador/commands/decide/fallbacks/sequential.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "skills/conquistador/commands/decide/references/independent-positions-method.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "skills/conquistador/commands/decide/references/anti-patterns.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
         {
           "path": "skills/conquistador/commands/decide/references/decision-tree.md"
         },
@@ -1720,12 +1838,11 @@
         "write a campaign",
         "create ads"
       ],
-      "requiredResources": [
+      "requiredResources": [],
+      "conditionalResources": [
         "skills/conquistador/commands/diagnose/references/diagnostic-evidence-method.md",
         "skills/conquistador/commands/diagnose/fallbacks/sequential.md",
-        "skills/conquistador/commands/diagnose/references/anti-patterns.md"
-      ],
-      "conditionalResources": [
+        "skills/conquistador/commands/diagnose/references/anti-patterns.md",
         "skills/conquistador/commands/diagnose/agents/tree-builder-agent.md",
         "skills/conquistador/commands/diagnose/agents/external-check-agent.md",
         "skills/conquistador/commands/diagnose/agents/hypothesis-agent.md",
@@ -1738,6 +1855,18 @@
         "skills/conquistador/commands/diagnose/references/format-conventions.md"
       ],
       "resourceConditions": [
+        {
+          "path": "skills/conquistador/commands/diagnose/references/diagnostic-evidence-method.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "skills/conquistador/commands/diagnose/fallbacks/sequential.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "skills/conquistador/commands/diagnose/references/anti-patterns.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
         {
           "path": "skills/conquistador/commands/diagnose/agents/tree-builder-agent.md"
         },
@@ -1920,17 +2049,24 @@
         "executor",
         "content ideas"
       ],
-      "requiredResources": [
-        "skills/conquistador/commands/event/references/anti-patterns.md",
-        "skills/conquistador/commands/event/fallbacks/sequential.md"
-      ],
+      "requiredResources": [],
       "conditionalResources": [
+        "skills/conquistador/commands/event/references/anti-patterns.md",
+        "skills/conquistador/commands/event/fallbacks/sequential.md",
         "skills/conquistador/commands/event/agents/segment-planner-agent.md",
         "skills/conquistador/commands/event/agents/logistics-director-agent.md",
         "skills/conquistador/commands/event/agents/critic-agent.md",
         "skills/conquistador/commands/event/references/format-conventions.md"
       ],
       "resourceConditions": [
+        {
+          "path": "skills/conquistador/commands/event/references/anti-patterns.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "skills/conquistador/commands/event/fallbacks/sequential.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
         {
           "path": "skills/conquistador/commands/event/agents/segment-planner-agent.md"
         },
@@ -2088,13 +2224,12 @@
         "nurture flow",
         "drip flow"
       ],
-      "requiredResources": [
+      "requiredResources": [],
+      "conditionalResources": [
         "skills/conquistador/commands/flow/references/flow-mapping-method.md",
         "skills/conquistador/commands/flow/references/gates-and-rubric.md",
         "skills/conquistador/commands/flow/references/anti-patterns.md",
-        "skills/conquistador/commands/flow/fallbacks/sequential.md"
-      ],
-      "conditionalResources": [
+        "skills/conquistador/commands/flow/fallbacks/sequential.md",
         "skills/conquistador/commands/flow/references/platform-touchpoints.md",
         "skills/conquistador/commands/flow/references/intake-prompts.md",
         "skills/conquistador/commands/flow/agents/structure-agent.md",
@@ -2107,6 +2242,22 @@
         "skills/conquistador/commands/flow/references/report-template.md"
       ],
       "resourceConditions": [
+        {
+          "path": "skills/conquistador/commands/flow/references/flow-mapping-method.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "skills/conquistador/commands/flow/references/gates-and-rubric.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "skills/conquistador/commands/flow/references/anti-patterns.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "skills/conquistador/commands/flow/fallbacks/sequential.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
         {
           "path": "skills/conquistador/commands/flow/references/platform-touchpoints.md"
         },
@@ -2180,12 +2331,11 @@
       "exclusions": [
         "write copy"
       ],
-      "requiredResources": [
+      "requiredResources": [],
+      "conditionalResources": [
         "skills/conquistador/commands/funnel/references/funnel-model-method.md",
         "skills/conquistador/commands/funnel/fallbacks/sequential.md",
-        "skills/conquistador/commands/funnel/references/anti-patterns.md"
-      ],
-      "conditionalResources": [
+        "skills/conquistador/commands/funnel/references/anti-patterns.md",
         "skills/conquistador/commands/funnel/agents/model-selection-agent.md",
         "skills/conquistador/commands/funnel/agents/baseline-collector-agent.md",
         "skills/conquistador/commands/funnel/agents/target-setter-agent.md",
@@ -2199,6 +2349,18 @@
         "skills/conquistador/commands/funnel/references/format-conventions.md"
       ],
       "resourceConditions": [
+        {
+          "path": "skills/conquistador/commands/funnel/references/funnel-model-method.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "skills/conquistador/commands/funnel/fallbacks/sequential.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "skills/conquistador/commands/funnel/references/anti-patterns.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
         {
           "path": "skills/conquistador/commands/funnel/agents/model-selection-agent.md"
         },
@@ -2285,13 +2447,12 @@
         "executor",
         "run of show"
       ],
-      "requiredResources": [
+      "requiredResources": [],
+      "conditionalResources": [
         "skills/conquistador/commands/ideas/references/anti-patterns.md",
         "skills/conquistador/commands/ideas/references/confidence-labeling.md",
         "skills/conquistador/commands/ideas/references/content-ideas-method.md",
-        "skills/conquistador/commands/ideas/fallbacks/sequential.md"
-      ],
-      "conditionalResources": [
+        "skills/conquistador/commands/ideas/fallbacks/sequential.md",
         "skills/conquistador/commands/ideas/agents/platform-scout-agent.md",
         "skills/conquistador/commands/ideas/references/scout-protocol.md",
         "skills/conquistador/commands/ideas/agents/audience-fit-agent.md",
@@ -2304,6 +2465,22 @@
         "skills/conquistador/commands/ideas/references/clipping-and-live.md"
       ],
       "resourceConditions": [
+        {
+          "path": "skills/conquistador/commands/ideas/references/anti-patterns.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "skills/conquistador/commands/ideas/references/confidence-labeling.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "skills/conquistador/commands/ideas/references/content-ideas-method.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "skills/conquistador/commands/ideas/fallbacks/sequential.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
         {
           "path": "skills/conquistador/commands/ideas/agents/platform-scout-agent.md"
         },
@@ -2396,13 +2573,12 @@
         "write social posts",
         "create ads"
       ],
-      "requiredResources": [
+      "requiredResources": [],
+      "conditionalResources": [
         "skills/conquistador/commands/measure/references/measure-rubric.md",
         "skills/conquistador/commands/measure/references/campaign-rubric.md",
         "skills/conquistador/commands/measure/references/evaluation-loop-rubric.md",
-        "skills/conquistador/commands/measure/fallbacks/sequential.md"
-      ],
-      "conditionalResources": [
+        "skills/conquistador/commands/measure/fallbacks/sequential.md",
         "skills/conquistador/commands/measure/references/measurement-design-contract.md",
         "skills/conquistador/commands/measure/agents/measure-metric-ingest-agent.md",
         "skills/conquistador/commands/measure/agents/measure-diagnosis-agent.md",
@@ -2419,6 +2595,22 @@
         "skills/conquistador/commands/measure/references/campaign-anti-patterns.md"
       ],
       "resourceConditions": [
+        {
+          "path": "skills/conquistador/commands/measure/references/measure-rubric.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "skills/conquistador/commands/measure/references/campaign-rubric.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "skills/conquistador/commands/measure/references/evaluation-loop-rubric.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "skills/conquistador/commands/measure/fallbacks/sequential.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
         {
           "path": "skills/conquistador/commands/measure/references/measurement-design-contract.md"
         },
@@ -2720,10 +2912,9 @@
         "write the campaign",
         "submit feedback"
       ],
-      "requiredResources": [
-        "skills/conquistador/commands/position/fallbacks/sequential.md"
-      ],
+      "requiredResources": [],
       "conditionalResources": [
+        "skills/conquistador/commands/position/fallbacks/sequential.md",
         "skills/conquistador/commands/position/references/confidence-labeling.md",
         "skills/conquistador/commands/position/agents/voc-collector-agent.md",
         "skills/conquistador/commands/position/agents/persona-agent.md",
@@ -2752,6 +2943,10 @@
         "skills/conquistador/commands/position/references/market-anti-patterns.md"
       ],
       "resourceConditions": [
+        {
+          "path": "skills/conquistador/commands/position/fallbacks/sequential.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
         {
           "path": "skills/conquistador/commands/position/references/confidence-labeling.md"
         },
@@ -2899,17 +3094,28 @@
       "exclusions": [
         "landing page copy"
       ],
-      "requiredResources": [
+      "requiredResources": [],
+      "conditionalResources": [
         "skills/conquistador/commands/pricing/references/pricing-method.md",
         "skills/conquistador/commands/pricing/references/pricing-rubric.md",
-        "skills/conquistador/commands/pricing/fallbacks/sequential.md"
-      ],
-      "conditionalResources": [
+        "skills/conquistador/commands/pricing/fallbacks/sequential.md",
         "skills/conquistador/commands/pricing/references/wtp-evidence.md",
         "skills/conquistador/commands/pricing/references/package-fences.md",
         "skills/conquistador/commands/pricing/references/unit-economics-checks.md"
       ],
       "resourceConditions": [
+        {
+          "path": "skills/conquistador/commands/pricing/references/pricing-method.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "skills/conquistador/commands/pricing/references/pricing-rubric.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "skills/conquistador/commands/pricing/fallbacks/sequential.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
         {
           "path": "skills/conquistador/commands/pricing/references/wtp-evidence.md"
         },
@@ -2959,13 +3165,12 @@
       "exclusions": [
         "write copy"
       ],
-      "requiredResources": [
+      "requiredResources": [],
+      "conditionalResources": [
         "skills/conquistador/commands/prioritize/references/force-rank-method.md",
         "skills/conquistador/commands/prioritize/references/ice-scoring-rubric.md",
         "skills/conquistador/commands/prioritize/references/anti-patterns.md",
-        "skills/conquistador/commands/prioritize/fallbacks/sequential.md"
-      ],
-      "conditionalResources": [
+        "skills/conquistador/commands/prioritize/fallbacks/sequential.md",
         "skills/conquistador/commands/prioritize/agents/research-agent.md",
         "skills/conquistador/commands/prioritize/agents/initiative-generator-agent.md",
         "skills/conquistador/commands/prioritize/agents/unconventional-agent.md",
@@ -2983,6 +3188,22 @@
         "skills/conquistador/commands/prioritize/references/churn-health-score-guide.md"
       ],
       "resourceConditions": [
+        {
+          "path": "skills/conquistador/commands/prioritize/references/force-rank-method.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "skills/conquistador/commands/prioritize/references/ice-scoring-rubric.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "skills/conquistador/commands/prioritize/references/anti-patterns.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "skills/conquistador/commands/prioritize/fallbacks/sequential.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
         {
           "path": "skills/conquistador/commands/prioritize/agents/research-agent.md"
         },
@@ -3426,13 +3647,12 @@
         "paid search ads",
         "landing conversion rewrite"
       ],
-      "requiredResources": [
+      "requiredResources": [],
+      "conditionalResources": [
         "skills/conquistador/commands/seo/references/eval-rubric.md",
         "skills/conquistador/commands/seo/references/evaluation-loop-rubric.md",
         "skills/conquistador/commands/seo/fallbacks/sequential.md",
-        "skills/conquistador/commands/seo/references/anti-patterns.md"
-      ],
-      "conditionalResources": [
+        "skills/conquistador/commands/seo/references/anti-patterns.md",
         "skills/conquistador/commands/seo/references/retrieval-layer-seo.md",
         "skills/conquistador/commands/seo/agents/crawl-agent.md",
         "skills/conquistador/commands/seo/agents/foundations-agent.md",
@@ -3464,6 +3684,22 @@
         "skills/conquistador/commands/seo/references/local-seo.md"
       ],
       "resourceConditions": [
+        {
+          "path": "skills/conquistador/commands/seo/references/eval-rubric.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "skills/conquistador/commands/seo/references/evaluation-loop-rubric.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "skills/conquistador/commands/seo/fallbacks/sequential.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "skills/conquistador/commands/seo/references/anti-patterns.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
         {
           "path": "skills/conquistador/commands/seo/references/retrieval-layer-seo.md"
         },
@@ -3590,12 +3826,11 @@
       "exclusions": [
         "write finished copy"
       ],
-      "requiredResources": [
+      "requiredResources": [],
+      "conditionalResources": [
         "skills/conquistador/commands/shape/references/initiative-shaping-method.md",
         "skills/conquistador/commands/shape/references/anti-patterns.md",
-        "skills/conquistador/commands/shape/fallbacks/sequential.md"
-      ],
-      "conditionalResources": [
+        "skills/conquistador/commands/shape/fallbacks/sequential.md",
         "skills/conquistador/commands/shape/references/orchestration-steps.md",
         "skills/conquistador/commands/shape/references/context-gathering.md",
         "skills/conquistador/commands/shape/references/interview-techniques.md",
@@ -3610,6 +3845,18 @@
         "skills/conquistador/commands/shape/references/example-contracts.md"
       ],
       "resourceConditions": [
+        {
+          "path": "skills/conquistador/commands/shape/references/initiative-shaping-method.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "skills/conquistador/commands/shape/references/anti-patterns.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "skills/conquistador/commands/shape/fallbacks/sequential.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
         {
           "path": "skills/conquistador/commands/shape/references/orchestration-steps.md"
         },
@@ -3893,12 +4140,11 @@
         "analyze a supplied video",
         "evaluate published short-form"
       ],
-      "requiredResources": [
+      "requiredResources": [],
+      "conditionalResources": [
         "skills/conquistador/commands/video/references/shortform-brief-method.md",
         "skills/conquistador/commands/video/references/anti-patterns.md",
-        "skills/conquistador/commands/video/fallbacks/sequential.md"
-      ],
-      "conditionalResources": [
+        "skills/conquistador/commands/video/fallbacks/sequential.md",
         "skills/conquistador/commands/video/agents/hook-agent.md",
         "skills/conquistador/commands/video/agents/format-agent.md",
         "skills/conquistador/commands/video/agents/voc-extraction-agent.md",
@@ -3938,6 +4184,18 @@
         "skills/conquistador/commands/video/references/produce-anti-patterns.md"
       ],
       "resourceConditions": [
+        {
+          "path": "skills/conquistador/commands/video/references/shortform-brief-method.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "skills/conquistador/commands/video/references/anti-patterns.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
+        {
+          "path": "skills/conquistador/commands/video/fallbacks/sequential.md",
+          "when": "Detailed method, kept unlinked until a blind test brings it back. The entry is a pass-through and loads no resource."
+        },
         {
           "path": "skills/conquistador/commands/video/agents/hook-agent.md"
         },
@@ -4388,7 +4646,7 @@
         "learning cycles"
       ],
       "signals": [
-        "experiment*|test*|bet* & kill rule*|kill criteria|stop rule*|cycle*|loop|series|hypothes*|learn*|measured|see if|whether|prove",
+        "experiment*|test*|bet* & kill rule*|kill criteria|stop rule*|cycle*|loop|series|hypothes*|learn*|measured|see if|whether|prove & !ad|ads|ad set*|paid ad*|paid social|paid search",
         "hypothes* & test*|experiment*|backlog",
         "growth experiment*|experiment loop|test and learn",
         "series of|run of|set of|loop of|cycle of & test*|experiment*|bet* & measured|kill|learn*|hypothes*|improve|activation|retention"
@@ -4439,9 +4697,9 @@
         "positioning and first campaign"
       ],
       "signals": [
-        "position*|icp|audience|who|segment* & campaign*|marketing push|first push|go to market",
+        "position*|icp|audience|who|segment* & campaign*|marketing push|first push|go to market & !ad|ads|ad set*|ad account*",
         "gtm|go to market & plan|strategy|icp|enter*|launch",
-        "who|icp|ideal customer*|position*|audience|segment*|sell to & first|then & campaign*|marketing push|launch"
+        "who|icp|ideal customer*|position*|audience|segment*|sell to & first|then & campaign*|marketing push|launch & !ad|ads|ad set*|ad account*"
       ],
       "legacy": [
         "position-to-campaign"
