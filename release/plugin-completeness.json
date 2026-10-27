@@ -4960,7 +4960,7 @@
     },
     {
       "path": "tools/context-selection.mjs",
-      "sha256": "bda940b9fe2b6fed61752632eaf0c5930f90dc3bea0591ccadbe7822920bb7ed"
+      "sha256": "e9b13e7337b8706ca8ef8aaabfa2de418ee19d0011a74ad354f6dfe8c901f903"
     },
     {
       "path": "tools/domain-package.mjs",
@@ -4992,7 +4992,7 @@
     },
     {
       "path": "tools/request-text.mjs",
-      "sha256": "edd32e012a25dcfd31c37b09526d678940b7ecb13a47bdb7382333592d67006d"
+      "sha256": "86caf4aebfcbfe8d4533007cc7fa973518f4368034c88746da5fd6f0a4922949"
     },
     {
       "path": "tools/routing-contract.mjs",
