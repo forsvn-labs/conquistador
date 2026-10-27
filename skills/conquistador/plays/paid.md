@@ -15,9 +15,13 @@ legacy: paid-campaign-loop
 
 Use when paid-media creation and actual-result evaluation must share one decision spine.
 
+Before cold paid traffic, check three things: the product already converts from organic, creator,
+or sales traffic; the conversion event fires and is tracked; and the landing page repeats the ad's
+promise and terms. If one is missing, propose the step that fixes it before any spend.
+
 1. Use `position` only when the segment, costly moment, offer, or proof is unresolved.
-2. Use `ads` for one network, audience, temperature, offer, destination, finished ads,
-   creative direction, bounded budget, and test rule.
+2. Use `ads` for the finished ads, one distinct angle per concept, creative direction, and a
+   test with labeled starting-point structure, budget, and kill rules.
 3. Use `budget` when channel floors, concentration, reserves, marginal return, or
    reallocation rules need a decision beyond the campaign's bounded test budget.
 4. Use `creative` only when a separate visual or video production brief is needed.
@@ -25,8 +29,9 @@ Use when paid-media creation and actual-result evaluation must share one decisio
    downstream quality, and keep/revise/pause/stop guidance.
 6. Use `measure` only for broader causal or cross-channel interpretation.
 
-Verify current network policy, format, auction, and pricing evidence. Never invent targeting precision,
-performance, or incrementality, and never spend, upload an audience, or change a live account.
+Confirm current network policy and formats before launch. Never invent performance or
+incrementality. Never launch, publish, spend, upload an audience or asset, or change a live account
+without the user's approval for that exact action.
 
 Run `audit` on the finished package before the Review Packet.
 

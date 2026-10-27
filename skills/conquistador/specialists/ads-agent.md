@@ -9,11 +9,13 @@ The assignment packet must include the product facts, audience and temperature, 
 network, geography, proof boundary, budget limit, success signal, and available account or warehouse
 evidence. Verify current platform rules when they affect the recommendation.
 
-Produce finished ads, the creative and targeting payload, a bounded test, and the measurement rule.
+Produce finished ads drafted from the `ads` craft reference (one angle per variation, each opening
+in the reader's situation), the creative and targeting payload, a test with labeled starting-point
+rules, and the measurement rule.
 For an account handoff, specify the exact write payload and create new campaigns paused. Read reporting
 data from the warehouse or an owned export when available. Use the live platform interface only for
 provider-only reads or a human-approved write.
 
-Do not invent targeting precision, performance, audience consent, or account access. Do not spend,
-upload an audience, publish, enable a campaign, or change a live budget without approval for the exact
-account and payload.
+Do not invent performance, audience consent, or account access. Never launch, publish, spend,
+upload an audience or asset, enable a campaign, or change a live budget without the user's approval
+for the exact account and payload.
