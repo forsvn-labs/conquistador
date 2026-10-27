@@ -14,8 +14,9 @@ them authorizes spend.
 
 ## Account structure · Starting point (Oct 2026)
 
-- Two campaigns. A test campaign receives new concepts. A scale campaign, with campaign-level budget,
-  holds ads that have already won. Move a winner by its post ID so its comments and reactions carry over.
+- Two campaigns. A test campaign receives new concepts. A scale campaign, with its budget set at the
+  campaign level, holds ads that have already won. Move a winner by its post ID so its comments and
+  reactions carry over.
 - Broad targeting in both: the creative does the targeting. Exclude current customers when the offer
   is for new customers only. Interest and lookalike audiences are a later test, not the default.
 - Paid comes after a format or message has already converted from organic, creator, or sales traffic.
@@ -50,9 +51,9 @@ qualifying), wait for it before scaling, or use the proxy only with the user's r
 
 - Optimize for the deepest event that fires about 50 times per ad set per week. Below that, move one
   step up the funnel (purchase to checkout, qualified lead to lead).
-- Subscription apps with a short free trial: optimize for trial start, then model profit from the
-  real trial-to-paid rate. The plan is healthy when cost per paying user is below first-year revenue
-  per user.
+- Subscription apps with a short free trial: use trial start as the optimization event, and estimate
+  profit with the account's real trial-to-paid rate. The plan is healthy when cost per paying user is
+  below first-year revenue per user.
 - Check incrementality coarsely before scaling a channel: turn it off for 3–7 days, turn it back on,
   and compare total revenue. Record what else changed in that window.
 

@@ -17,8 +17,8 @@ result says which part mattered.
 ## Keep the evidence apart from the ad
 
 Keep a facts list with the source of each number and quote. The ad carries the claim and the
-qualifier truth needs; the source, sample, and period stay in the operator note. A missing fact
-calls for a narrower claim or a question to the user, never an invented one.
+qualifier truth needs; the source, sample, and period stay in the operator note. When a fact is
+missing, narrow the claim or ask the user; never invent one.
 
 ## Read results honestly
 
