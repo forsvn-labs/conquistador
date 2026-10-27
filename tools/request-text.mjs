@@ -73,6 +73,34 @@ export function includesPhrase(text, phrase) {
   return (` ${text} `).includes(` ${normalizeRequest(phrase)} `);
 }
 
+// The work a clause asks for, before its subject: "write a post announcing our new integration" asks
+// for a post. A technical noun in the subject does not make a marketing artifact engineering work.
+export function requestOperation(clause) {
+  return clause.split(/\b(?:for|about|after|on|announcing|introducing|launching|celebrating|promoting)\b/i)[0];
+}
+
+// Users paste a request with supporting context: facts, notes, lists, background paragraphs. A request
+// sentence opens with an instruction ("Write a LinkedIn post", "Can you draft", "I need three ads",
+// "Fix the handler"); list items and other sentences are context. Returns the request sentences when
+// the prompt holds both, otherwise null.
+const instruction = String.raw`(?:write|draft|create|make|compose|produce|prepare|generate|give|put together|come up with|turn|rewrite|edit|revise|shorten|polish|translate|review|audit|critique|evaluate|plan|outline|map out|build|design|set up|define|pick|choose|fix|debug|refactor|implement|patch|add|update|migrate|deploy|install|configure)`;
+const requestOpener = new RegExp(String.raw`^(?:[^,.;:]{0,60},\s*)?(?:(?:task|request|ask|deliverable|assignment)\s*:\s*)?(?:(?:please|pls|now|so|and|then|also)\s+)*`
+  + String.raw`(?:(?:(?:can|could|would|will)\s+you\s+(?:please\s+)?|help\s+(?:me|us)\s+(?:to\s+)?|let'?s\s+|(?:i|we)(?:\s+would|'d)?\s+(?:need|want|like)\s+you\s+to\s+)?${instruction}(?=\s+[\w"'$])`
+  + String.raw`|(?:i|we)(?:\s+would|'d)?\s+(?:need|want|like)\s+(?:a|an|the|some|one|two|three|four|five|six|seven|eight|nine|ten|\d+)\b)`, 'i');
+const listItem = /^\s*(?:[-*•–]|\d+[.)])\s+/;
+export function requestFocus(prompt) {
+  const units = [];
+
+  for (const line of unquotedRequest(prompt).replace(invocation, ' ').split(/\n+/)) {
+    if (!/[\p{L}\p{N}]/u.test(line)) continue;
+    if (listItem.test(line)) units.push({ text: line, request: false });
+    else for (const sentence of line.split(/(?<=[.!?])\s+/)) if (/[\p{L}\p{N}]/u.test(sentence)) units.push({ text: sentence.trim(), request: requestOpener.test(sentence.trim()) });
+  }
+  const request = units.filter(unit => unit.request);
+
+  return request.length && request.length < units.length ? request.map(unit => unit.text).join('\n') : null;
+}
+
 // Admission runs before phrase matching or retrieval. Topic words alone are not a task.
 export function requestedBusinessClauses(prompt, options) {
   return requestClauses(prompt, options).filter(clause => {
@@ -80,7 +108,7 @@ export function requestedBusinessClauses(prompt, options) {
     // Definitions are questions, not tasks. "What does it take" and "what is the plan" are tasks.
     if (/\bwhat (?:is|are) (?:a|an)\b|\bwhat does(?: \w+){1,3} mean\b|\bmeaning of\b|\bwhat is the difference\b/.test(text)) return false;
     const productBuild = /\b(?:responsive web app|approved flow|product experience|product requirements|product spec|feature spec|in product ui)\b/.test(text);
-    const operation = text.split(/\b(?:for|about|after)\b/)[0];
+    const operation = requestOperation(text);
     // "System" and "test" are also marketing words (a content system, a test budget). They mark
     // engineering only with an engineering verb.
     const engineering = (/\b(?:engineer|engineering|debug|refactor|compile|typecheck|implement|fix|patch|design|build|write|create)\b/.test(operation)

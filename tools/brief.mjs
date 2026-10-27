@@ -324,7 +324,8 @@ export function createBrief(input, { root = moduleRoot, playbooks, persistCache 
   const routed = selectRequestContext(input, { root: packageRoot, automatic });
   if (routed.action !== 'route') return { schema: BRIEF_SCHEMA, action: 'none', mode: 'none', reason: routed.reason, methods: [], must: [], situational: [], platforms: [], packageRoot };
   const prompt = routed.query;
-  const platforms = namedPlatforms(prompt);
+  // A platform named only in pasted context ("we launch on Product Hunt") still applies when the request names none.
+  const platforms = namedPlatforms(prompt).length || !routed.supportingQuery ? namedPlatforms(prompt) : namedPlatforms(routed.supportingQuery);
   const index = knowledgeIndex(packageRoot, { playbooks, persistCache });
   const { contract, libraryRoot } = index;
   let methods = routed.selected.map(item => contract.methods[item.name]).filter(Boolean);
