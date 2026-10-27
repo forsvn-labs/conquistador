@@ -1,7 +1,7 @@
 import { existsSync, lstatSync, readFileSync } from 'node:fs';
 import { join, posix, resolve } from 'node:path';
 import { assertLoadAllowed, loadRestriction } from './domain-package.mjs';
-import { decisionRequest, explicitInvocation, instructionClause, invokedCommand, requestedBusinessClauses, requestFocus, requestLead, requestMode, requestOperation, unquotedRequest, normalizeRequest as normalized, includesPhrase } from './request-text.mjs';
+import { decisionQuestion, decisionRequest, explicitInvocation, instructionClause, invokedCommand, requestedBusinessClauses, requestFocus, requestLead, requestMode, requestOperation, unquotedRequest, normalizeRequest as normalized, includesPhrase } from './request-text.mjs';
 import { loadRoutingContract } from './routing-contract.mjs';
 import { packageRootOf } from './module-root.mjs';
 
@@ -369,11 +369,13 @@ export function selectRequestContext(prompt, { root = moduleRoot, automatic = fa
     return routed.action === 'route' && routed.owners[0] === 'diagnose' ? routed.result : support(asked);
   };
   // The opening request block, read whole ("A prospect wants 30% off. What should we counter with?",
-  // "Rank these ideas and tell us which two to run first"), decides when it names a decision.
+  // "Rank these ideas and tell us which two to run first"), decides when it names a decision. A
+  // decision question whose owner the block names by phrase holds too ("Should we move to usage-based
+  // pricing? Give us the migration plan"): revenue figures in the facts may not add a growth target.
   const lead = requestLead(prompt);
   const leadDecision = () => {
     const asked = lead ? routeRequest(lead, prompt, options) : null;
-    return asked?.action === 'route' && asked.decided ? asked : null;
+    return asked?.action === 'route' && (asked.decided || (asked.named && decisionQuestion(lead))) ? asked : null;
   };
   if (!focus) {
     // Otherwise a decision question pasted above or below its facts decides when the question alone

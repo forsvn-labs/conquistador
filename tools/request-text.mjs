@@ -105,10 +105,12 @@ export function requestFocus(prompt, { questions = false } = {}) {
 }
 
 // The opening block of a prompt that pastes material below its request: the lines before the first
-// blank line, list item, or header ("Facts:"). Its sentences are read together, so a question keeps
-// the sentence that names its subject ("A prospect wants 30% off. What should we counter with?").
-// Returns null when nothing follows the block.
-const header = /:\s*$/;
+// blank line, list item, or header ("Facts:", "# Facts"). Its sentences are read together, so a
+// question keeps the sentence that names its subject ("A prospect wants 30% off. What should we
+// counter with?"). A label above the request ("Task:", "## Request") is skipped. Returns null when
+// nothing follows the block.
+const header = /:\s*$|^\s*#{1,6}\s/;
+const requestLabel = /^\s*(?:#{1,6}\s*)?(?:the\s+)?(?:task|request|ask|question|decision|assignment)\s*:?\s*$/i;
 export function requestLead(prompt) {
   const lines = unquotedRequest(prompt).replace(invocation, ' ').split('\n');
   const lead = [];
@@ -116,6 +118,7 @@ export function requestLead(prompt) {
   for (; index < lines.length; index += 1) {
     const line = lines[index];
     if (!/[\p{L}\p{N}]/u.test(line)) { if (lead.length) break; continue; }
+    if (!lead.length && requestLabel.test(line)) continue;
     if (listItem.test(line) || header.test(line)) break;
     lead.push(line.trim());
   }
@@ -129,6 +132,9 @@ export const instructionClause = clause => requestOpener.test(clause.trim());
 // A decision request asks what to do (should we, which, is it real, design a test). A request to write
 // something names its deliverable; decision words in its subject do not make it a decision.
 export const decisionRequest = text => !/\b(?:write|draft|compose|rewrite|publish)\b/i.test(text);
+// A question that asks what to do: "Should we switch to usage-based pricing?", "Is it time to drop the
+// free tier?", "Which channel should we cut?". A plan or a test it also asks for is part of the answer.
+export const decisionQuestion = text => decisionRequest(text) && /\b(?:should|whether|is it time|worth)\b(?:[^?.!\n]|[.!](?!\s))*\?/i.test(text);
 
 // Admission runs before phrase matching or retrieval. Topic words alone are not a task.
 export function requestedBusinessClauses(prompt, options) {
