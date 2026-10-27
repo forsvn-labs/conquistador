@@ -4783,11 +4783,11 @@
     },
     {
       "path": "conquistador/routing-contract.json",
-      "sha256": "ca0405ce65699b187e79c74371852ef471ea68b1348db8bc00b5f3c130940b28"
+      "sha256": "f9f10a643a74b8621d20ef2d2c5df488bec56c035e8f2b13538589dab4a48666"
     },
     {
       "path": "conquistador/routing-overlay.json",
-      "sha256": "eb0412360eb84f23a88ffe37e72ae24d458acce4f0f014ba28cc5fa8e9b39233"
+      "sha256": "5fdaa7f6af1dd15ea3535f67ff3594987f7191e2b53a249cb7ac5c4ac25bd9f4"
     },
     {
       "path": "conquistador/rubrics/composition.md",
@@ -4921,7 +4921,7 @@
     },
     {
       "path": "tools/routing-contract.mjs",
-      "sha256": "994b888b36dabfb15281623d9df346a321006b40df32771ac7351b6fbbb5e634"
+      "sha256": "355112bf87cb959e94b32899507b1e19070254a74ae9cada81cb5200165c789f"
     },
     {
       "path": "tools/module-root.mjs",
@@ -4957,7 +4957,7 @@
     },
     {
       "path": "tools/context-selection.mjs",
-      "sha256": "42799a7e7ed309d3c58ba5f55d507560829239d1df31de40c56adfa342cfe5a4"
+      "sha256": "a1609406c64de751f7a0813d485effde28bf375aa380e3e6a06b056f84cc42aa"
     },
     {
       "path": "agents/conquistador/agent.json",
