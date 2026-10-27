@@ -2,6 +2,7 @@ import { createHash } from "node:crypto";
 import { existsSync, lstatSync, readFileSync, readdirSync } from "node:fs";
 import { posix, resolve } from "node:path";
 import { sha256 } from "./canonical.js";
+import { commandDocumentFor } from "../../tools/method-policy.mjs";
 const sourceSkillsRoot = resolve(import.meta.dirname, "../../skills/skills");
 export const DEFAULT_SKILLS_ROOT = existsSync(resolve(sourceSkillsRoot, "conquistador/SKILL.md"))
     ? sourceSkillsRoot
@@ -38,11 +39,14 @@ export function loadSkillAssets(skillId, skillsRoot = DEFAULT_SKILLS_ROOT) {
     walk(resolve(skillsRoot, "conquistador/commands", skillId), "");
     if (!files.some((file) => file.path === "COMMAND.md"))
         throw new Error("skill method is missing");
-    return { digest: sha256(files.map(({ path, digest }) => ({ path, digest }))), files };
+    return { skillId, digest: sha256(files.map(({ path, digest }) => ({ path, digest }))), files };
 }
-export function skillMethodContext(assets, maximumBytes = 24_000) {
+export function skillMethodContext(assets, maximumBytes = 24_000, { task = "" } = {}) {
     const byPath = new Map(assets.files.map((file) => [file.path, file]));
-    const queue = ["COMMAND.md"];
+    const entry = commandDocumentFor(assets.skillId, task);
+    if (!byPath.get(entry)?.content)
+        throw new Error("skill entry is missing");
+    const queue = [entry];
     const seen = new Set();
     const parts = [];
     let bytes = 0;
@@ -60,12 +64,15 @@ export function skillMethodContext(assets, maximumBytes = 24_000) {
         const part = `<skill-method path=${JSON.stringify(path)}>\n${content}\n</skill-method>`;
         const size = Buffer.byteLength(part);
         if (bytes + size > maximumBytes) {
-            if (path === "COMMAND.md")
+            if (path === entry)
                 throw new Error("skill front door exceeds method context budget");
             continue;
         }
         parts.push(part);
         bytes += size;
+        // A conditional link in an entry does not activate an archived method.
+        if (entry === "ENTRY.md")
+            continue;
         for (const match of content.matchAll(/\[[^\]]*\]\(([^)#]+)(?:#[^)]*)?\)/g)) {
             const link = match[1].trim();
             if (/^(?:[a-z]+:|\/)/i.test(link))

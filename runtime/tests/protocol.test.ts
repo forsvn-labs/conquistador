@@ -6,6 +6,7 @@ import { describe, expect, it } from "vitest";
 import { Ajv2020 } from "ajv/dist/2020.js";
 
 import { loadCorpusDescriptor, loadRuntimeCorpus } from "../src/corpus.ts";
+import { commandDocumentFor, isThinCommand } from "../../tools/method-policy.mjs";
 import { InMemoryRuntime } from "../src/runtime.ts";
 import type { ModelProvider } from "../src/providers.ts";
 import {
@@ -82,8 +83,8 @@ describe("Conquistador-owned protocol and authored corpus", () => {
       const engineering = runtimeCorpus.resolve(prompt);
       expect(engineering.job, prompt).toBe("create-or-improve");
       expect(engineering.fileIds, prompt).not.toContain("conquistador/plays/spec.md");
-      expect(engineering.fileIds.filter((fileId) => fileId === "conquistador/SKILL.md" || fileId.endsWith("/COMMAND.md")), prompt)
-        .toEqual([`conquistador/commands/${outcome}/COMMAND.md`, "conquistador/SKILL.md"]);
+      expect(engineering.fileIds.filter((fileId) => fileId === "conquistador/SKILL.md" || /\/(?:COMMAND|ENTRY)\.md$/.test(fileId)), prompt)
+        .toEqual([`conquistador/commands/${outcome}/${commandDocumentFor(outcome)}`, ...isThinCommand(outcome) ? [] : ["conquistador/SKILL.md"]]);
     }
   });
 

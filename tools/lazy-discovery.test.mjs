@@ -100,13 +100,13 @@ test('plugin and operator packages expose one parent while retaining the complet
     for (const [task, expected] of [
       [assignment('parent'), 'conquistador/METHOD.md'],
       [assignment('copy'), 'conquistador/specialists/copy-agent.md'],
-      [assignment('outcome', { skills: ['copy'] }), 'conquistador/commands/copy/COMMAND.md'],
+      [assignment('outcome', { skills: ['copy'] }), 'conquistador/commands/copy/ENTRY.md'],
       [assignment('parent', { workflows: ['launch'] }), 'conquistador/plays/launch.md'],
     ]) {
       const loaded = await load(path, task);
       assert.ok(loaded.methods.some(method => method.path === `${library.layout}/${expected}`));
       assert.ok(loaded.methods.every(method => method.path.startsWith(`${library.layout}/`)));
-      if (task.skills.length) assert.ok(loaded.methods.length > 1, 'Selected outcome resources also load');
+      if (task.skills.length) assert.deepEqual(loaded.deferred, [], 'Thin outcomes have no deferred pipeline');
     }
     if (target.includes('plugin')) assert.match(readFileSync(join(path, 'agents/conquistador.md'), 'utf8'), /skills\/conquistador\/SKILL.md/);
     invoke(project, 'setup', 'update', '--path', path);
@@ -162,7 +162,10 @@ test('one explicitly selected specialist remains canonical and has its own owned
   invoke(project, 'setup', 'install', '--target', 'skill:copy', '--path', path);
   assert.deepEqual(skillDiscovery(path).entries.map(entry => entry.name), ['copy']);
   const files = regularFiles(join(root, 'skills/conquistador/commands/copy'));
-  for (const file of files) assert.deepEqual(readFileSync(join(path, 'skills/copy', file === 'COMMAND.md' ? 'SKILL.md' : file)), readFileSync(join(root, 'skills/conquistador/commands/copy', file)));
+  for (const file of files) assert.deepEqual(readFileSync(join(path, 'skills/copy', file)), readFileSync(join(root, 'skills/conquistador/commands/copy', file)));
+  const entry = readFileSync(join(path, 'skills/copy/SKILL.md'), 'utf8');
+  assert.match(entry, /^---\nname: copy\n/);
+  assert.ok(entry.includes(readFileSync(join(root, 'skills/conquistador/commands/copy/ENTRY.md'), 'utf8')));
   assert.equal(existsSync(join(path, 'skills/conquistador')), false);
   invoke(project, 'setup', 'update', '--path', path);
   invoke(project, 'setup', 'uninstall', '--path', path);

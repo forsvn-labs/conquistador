@@ -1,16 +1,11 @@
-# Video production method
+# Produce the requested video
 
-Use privately after a script, storyboard, or preview sequence is approved and actual production or
-render verification is in scope.
+Produce or verify the requested video in your own judgment from the user's facts. Load no other
+file for it. Use real product states and supplied footage. Check the actual exports, including
+legibility, audio, dimensions, duration, and the requested destinations.
 
-- Freeze the source brief, selected story, real UI or source footage, voice, captions, music rights,
-  privacy boundary, platform formats, safe zones, and acceptance criteria.
-- Capture truthfully; never fabricate product states, results, customer behavior, or UI.
-- Produce true recuts whose opening, pacing, framing, text, and action fit each destination—not merely
-  alternate crops.
-- Inspect the actual exports for fidelity, legibility, sound-off comprehension, audio, encoding,
-  dimensions, duration, and accessibility.
-- Keep external production, uploads, publishing, and paid amplification behind exact human approval.
+Then run only the facts check: remove claims the facts do not support, keep fair inferences, and
+add nothing (no hedges, no source text, no disclaimers). Return only the requested video or checks.
 
-Return the production record, selected exports, actual-output defects, required fixes, rights boundary,
-and final human review condition.
+Nothing is uploaded, published, or paid for without the user's approval for that exact action.
+This approval governs actions; it adds nothing to the deliverable.

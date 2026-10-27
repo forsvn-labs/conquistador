@@ -42,6 +42,7 @@ function fixture(t) {
   for (const directory of ['conquistador', 'conquistador/commands/copy']) fs.mkdirSync(join(root, 'skills', directory), { recursive: true });
   fs.writeFileSync(join(root, 'skills/conquistador/SKILL.md'), '# Synthetic parent\n');
   fs.writeFileSync(join(root, 'skills/conquistador/commands/copy/COMMAND.md'), '# Synthetic copy method\n');
+  fs.writeFileSync(join(root, 'skills/conquistador/commands/copy/ENTRY.md'), '# Synthetic copy entry\n');
   fs.writeFileSync(join(root, 'skills/conquistador/commands/copy/reference.md'), '# Synthetic reference\nRead the supplied facts.\n');
   fs.writeFileSync(join(root, 'skills/conquistador/routing-contract.json'), JSON.stringify({
     schemaVersion: 'conquistador.routing-contract/v1', parentPath: 'skills/conquistador',
@@ -102,7 +103,7 @@ test('default private export has an exact manifest and upload allowlist', t => {
   const { out, build, directory } = fixture(t);
   const result = build();
   assert.equal(result.users, 1);
-  assert.equal(result.files.length, 13);
+  assert.equal(result.files.length, 14);
   assert.match(fs.readFileSync(join(out, 'knowledge/99-your-playbooks.md'), 'utf8'), /SYNTHETIC_PRIVATE_BOT_MARKER/);
   assert.match(checkPack(out, result), /including your private playbooks/);
 
@@ -119,7 +120,7 @@ test('private then no-private replaces the complete pack and reports only includ
   build();
   const result = build({ includeUser: false });
   assert.equal(result.users, 0);
-  assert.equal(result.files.length, 12);
+  assert.equal(result.files.length, 13);
   assert.equal(fs.existsSync(join(out, 'knowledge/99-your-playbooks.md')), false);
   assert.doesNotMatch(fs.readFileSync(join(out, 'knowledge/00-index.md'), 'utf8'), /99-your-playbooks|private playbooks/);
   const readme = checkPack(out, result);
@@ -148,7 +149,7 @@ test('CLI no-private refresh excludes old files and private-count notices', t =>
   assert.match(first.stdout, /includes 1 private playbooks/);
   const second = invoke(['--no-private']);
   assert.equal(second.status, 0, second.stderr);
-  assert.match(second.stdout, /12 files listed in README.md/);
+  assert.match(second.stdout, /13 files listed in README.md/);
   assert.doesNotMatch(second.stdout, /includes .*private playbooks/);
   assert.equal(fs.existsSync(join(out, 'knowledge/99-your-playbooks.md')), false);
 });

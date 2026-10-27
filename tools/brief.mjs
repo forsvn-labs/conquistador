@@ -11,6 +11,7 @@ import { contextFiles } from './context-files.mjs';
 import { explicitInvocation, normalizeRequest } from './request-text.mjs';
 import { loadRoutingContract } from './routing-contract.mjs';
 import { methodOwner } from './method-library.mjs';
+import { isThinCommand, isThinPlay, UNCHANGED_COMMANDS } from './method-policy.mjs';
 import { packageRootOf } from './module-root.mjs';
 
 export const BRIEF_SCHEMA = 'conquistador.brief/v1';
@@ -331,12 +332,7 @@ const OWN_DELIVERABLE = { copy: /\b(?:pages?|emails?|sales letters?|newsletters?
 // brings the craft back. Kept: the winners (outreach and the outbound play, social, copy's sales page and
 // sales letter) and work that is not marketing craft (engineering, platform utilities, factcheck,
 // vietnamese, and the spec play).
-const CRAFT_METHODS = new Set(['outreach', 'social']);
-const UNCHANGED_METHODS = new Set(['architect', 'build', 'docs', 'ui', 'init', 'doctor', 'pin', 'connect', 'review', 'feedback',
-  'check', 'factcheck', 'vietnamese']);
-const KEEPS_METHOD = new Set([...CRAFT_METHODS, ...UNCHANGED_METHODS]);
-const KEEPS_PLAY = new Set(['outbound', 'spec']);
-const thinMethod = (name, salesPage) => !KEEPS_METHOD.has(name) && !(name === 'copy' && salesPage);
+const UNCHANGED_METHODS = new Set(UNCHANGED_COMMANDS);
 const AD_CAMPAIGN = /\b(?:campaigns?|budgets?|kill (?:rules?|criteria)|(?:ads?|paid) tests?|test (?:plans?|structure|design)|account (?:structure|setup)|bids?|bidding|spend|optimi[sz]ation events?|scal(?:e|ing) rules?|media plan|turn (?:ads|it|them) off)\b/;
 export const taskOf = prompt => Object.values(START_CONTEXT).reduce((rest, sentence) => rest.split(sentence).join(' '), prompt).replace(START_LEAD, '').trim();
 
@@ -374,7 +370,7 @@ export function createBrief(input, { root = moduleRoot, playbooks, persistCache 
   const required = new Set([...methods.flatMap(item => item.requiredResources ?? []),
     ...(salesPage ? (methods[0]?.resourceConditions ?? []).filter(item => /\bsales page or sales letter\b/i.test(item.when)).map(item => item.path) : [])]
     .map(path => path.slice(libraryRoot.length + 1)));
-  const passThrough = play ? !KEEPS_PLAY.has(play.name) : methods.length > 0 && thinMethod(methods[0].name, salesPage);
+  const passThrough = play ? isThinPlay(play.name) : methods.length > 0 && isThinCommand(methods[0].name, prompt);
   // A thin route inlines every selected entry. Only a utility the request also selected keeps its files
   // ("write it in Vietnamese"); a craft secondary keeps its entry, which links its method.
   const utilities = new Set(passThrough ? methods.filter(method => UNCHANGED_METHODS.has(method.name)).map(method => method.name) : []);
@@ -385,7 +381,7 @@ export function createBrief(input, { root = moduleRoot, playbooks, persistCache 
     if (adDrafting && doc.source === 'method' && doc.method === 'ads') return null;
     if (passThrough && doc.kind !== 'user' && !(doc.source === 'method' && utilities.has(doc.method))) return null;
     // A kept route reads no detailed file of a thin method it also selected; a kept play keeps its steps.
-    if (!passThrough && !play && doc.source === 'method' && doc.method !== methods[0]?.name && thinMethod(doc.method, salesPage)) return null;
+    if (!passThrough && !play && doc.source === 'method' && doc.method !== methods[0]?.name && isThinCommand(doc.method, prompt)) return null;
     // Integration recipes join the brief only for the connect command.
     if (doc.kind === 'integration') { if (!selectedNames.has('connect')) return null; owned = 'connect'; }
     const shared = doc.source === 'shared';

@@ -1,4 +1,5 @@
 import { DEFAULT_SKILLS_ROOT } from "./skill-assets.js";
+import { commandDocumentFor } from "../../tools/method-policy.mjs";
 import { randomUUID } from "node:crypto";
 import { resolve } from "node:path";
 import { createInterface } from "node:readline/promises";
@@ -57,7 +58,7 @@ export async function runChat(options, host) {
             if (field === "intent") {
                 const route = routeIntent(input.intent);
                 if (route.outcome === "skill") {
-                    print(`This outcome uses a standalone skill, not a served playbook. Open ${resolve(DEFAULT_SKILLS_ROOT, "conquistador/commands", route.targetId, "COMMAND.md")} in your agent host. From the distribution root: node tools/install.mjs install skill:${route.targetId} ABS_DEST`);
+                    print(`This outcome uses a standalone skill, not a served playbook. Open ${resolve(DEFAULT_SKILLS_ROOT, "conquistador/commands", route.targetId, commandDocumentFor(route.targetId, input.intent))} in your agent host. From the distribution root: node tools/install.mjs install skill:${route.targetId} ABS_DEST`);
                     return 2;
                 }
                 if (route.outcome === "abstain") {

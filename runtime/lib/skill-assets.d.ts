@@ -1,6 +1,7 @@
 import { type Sha256 } from "./canonical.ts";
 export declare const DEFAULT_SKILLS_ROOT: string;
 export type SkillAssets = {
+    skillId: string;
     digest: Sha256;
     files: Array<{
         path: string;
@@ -10,4 +11,6 @@ export type SkillAssets = {
 };
 /** Bind every installed byte; load only complete, local Markdown methods as context. */
 export declare function loadSkillAssets(skillId: string, skillsRoot?: string): SkillAssets;
-export declare function skillMethodContext(assets: SkillAssets, maximumBytes?: number): string;
+export declare function skillMethodContext(assets: SkillAssets, maximumBytes?: number, { task }?: {
+    task?: string | undefined;
+}): string;

@@ -3,6 +3,7 @@ import { dirname, join, posix, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { containedPath } from './plugin-contracts.mjs';
 import { commandNames, methodDocument, methodLibrary, methodPath, playPath } from './method-library.mjs';
+import { isThinCommand } from './method-policy.mjs';
 import { assertLoadAllowed, loadRestriction } from './domain-package.mjs';
 import { packageRootOf } from './module-root.mjs';
 
@@ -371,10 +372,16 @@ function resourceExists(root, path) {
   }
 }
 
-export function prepareAssignmentResources(root, methodName, { extra = [], includeConditional = false } = {}) {
+export function prepareAssignmentResources(root, methodName, { extra = [], includeConditional = false, task = '', preserveMethod = false } = {}) {
   const contract = loadRoutingContract(root);
   const method = contract.methods[methodName];
   if (!method) fail(`Unknown method: ${methodName}`);
+  if (!preserveMethod && isThinCommand(methodName, task)) {
+    const entry = method.path.replace(/COMMAND\.md$/, 'ENTRY.md');
+    if (!entry || !resourceExists(root, entry)) fail(`Required method entry missing: ${methodName}`);
+    if (extra.some(path => path !== entry)) fail('Thin assignments load only their entry. Read archived resources explicitly.');
+    return { method: methodName, required: [entry], deferred: [] };
+  }
   const required = [method.path, ...contract.requiredStandards, ...method.requiredResources];
   const deferred = [
     ...method.resourceConditions.map(item => ({ ...item, phase: 'conditional', requiredWhenApplicable: true })),

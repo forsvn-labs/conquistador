@@ -3982,8 +3982,12 @@
       "sha256": "422ca9d595be87111da4c5a10eee8536ca9c3dd4034ebd68e4eb821fe7e89070"
     },
     {
-      "path": "conquistador/methods/artifact-hygiene.md",
+      "path": "conquistador/methods/artifact-hygiene/COMMAND.md",
       "sha256": "925f4422fded433970535c2d011c31e576a4fe8324bd5385fcc0a2afbdb08513"
+    },
+    {
+      "path": "conquistador/methods/artifact-hygiene.md",
+      "sha256": "3f2bbb70134009e57e794cd94d1b6329bcce23a98bbfb29aebe723a17ae3ae4f"
     },
     {
       "path": "conquistador/methods/connect-accounts.md",
@@ -4002,16 +4006,24 @@
       "sha256": "727ac412a30fb84cc3fb86f0488f6cbf49328942d673f16c1f3fe691c3c90618"
     },
     {
-      "path": "conquistador/methods/share-card-verification.md",
+      "path": "conquistador/methods/share-card-verification/COMMAND.md",
       "sha256": "49c259ae246e51303bd5ece6284fbf720718094c6c50548fe063e1e47d7303cc"
+    },
+    {
+      "path": "conquistador/methods/share-card-verification.md",
+      "sha256": "7452999141a16947999454d4943f6f7f28b859c2d8a43abb731fceeeb84413e3"
     },
     {
       "path": "conquistador/methods/stack-setup.md",
       "sha256": "c84a427ccabd180372e4a3caca9bcc7230be018de9d052822585feae43dd02d3"
     },
     {
-      "path": "conquistador/methods/video-production.md",
+      "path": "conquistador/methods/video-production/COMMAND.md",
       "sha256": "b8af5e267dc0007082ef113d579376af54b09d8a43c6aae5f329205c87e504fb"
+    },
+    {
+      "path": "conquistador/methods/video-production.md",
+      "sha256": "46fc7966d763f60f8a560c6e5d5a4cbf007a08bea5dd775da106cccb3c780348"
     },
     {
       "path": "conquistador/operator-profile.json",
@@ -4949,7 +4961,7 @@
   "operatorResources": [
     {
       "path": "hosts/coding-agent/contracts.mjs",
-      "sha256": "c48671c8e9928cac5aff355c5d1136108af7f42b08fd11cadd94a0713953194e"
+      "sha256": "5e062aa7234e55704206e0a4136f4744f8c8ae6dc4ece8e4ecbec08d6eca5683"
     },
     {
       "path": "hosts/coding-agent/operator.mjs",
@@ -4961,7 +4973,7 @@
     },
     {
       "path": "hosts/coding-agent/orchestrate.mjs",
-      "sha256": "5d2f3d06f36cdf28ed2a93cf3ace75afa9a3631ec8aa8881245e943c043f0d36"
+      "sha256": "81bfe58dc21ae6d7f98c7525fea20f5f21ce0dc2b693515d5cc06ad4601f0644"
     },
     {
       "path": "hosts/coding-agent/bb.mjs",
@@ -4992,8 +5004,12 @@
       "sha256": "3bc7a32d1fb4d3ad66ed24ddcf525cdad560494cfbe41459e46f59281ad9af05"
     },
     {
+      "path": "tools/method-policy.mjs",
+      "sha256": "7f4ef6104d565e73248ca32428cef863a2ded8e2b155316c8c0e9ea1a5c91c2e"
+    },
+    {
       "path": "tools/routing-contract.mjs",
-      "sha256": "2b854ba0b92a1ce791a58ea4d0f7789fc3e742f309760da9958814048da3e046"
+      "sha256": "d86a7bffe9c9413da0ddf752607baf736063895e5b27c9dc3d53cd99b3061611"
     },
     {
       "path": "tools/module-root.mjs",
@@ -5009,11 +5025,11 @@
     },
     {
       "path": "tools/brief.mjs",
-      "sha256": "a090d90552f341e8389a44a4f02d506742ba24f7c7c2e51cd11ddd8640599733"
+      "sha256": "83737792a5dbe7aaead5d021e82d41df618a7bc07b618425addcd6c6984fe258"
     },
     {
       "path": "tools/search-index.json",
-      "sha256": "0d8b0727d43eb6d4922300155f643425d43c0587cdfda463e04af54056e5d066"
+      "sha256": "51c5abbf0365844b6e9c960289eda6a2c2633efe05b5a939e2046bfa496c4422"
     },
     {
       "path": "tools/prompt-advice.mjs",

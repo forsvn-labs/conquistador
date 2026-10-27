@@ -69,7 +69,7 @@ export function createServedJudgmentProvider(
       // providers. Reserve framing overhead and output capacity before dispatch.
       const methodBytes = inputCeiling - Buffer.byteLength(prompt) - Buffer.byteLength(instructions) - 516;
       if (methodBytes <= 0) throw new Error("rendered judgment input exceeds the sealed budget");
-      const system = `${instructions}\n\n${skillMethodContext(assets, Math.min(24_000, methodBytes))}`;
+      const system = `${instructions}\n\n${skillMethodContext(assets, Math.min(24_000, methodBytes), { task: prompt })}`;
       const inputUpperBound = Buffer.byteLength(system) + Buffer.byteLength(prompt) + 512;
       const maxOutputTokens = Math.min(request.budget.maxOutputTokens, totalCeiling - inputUpperBound);
       if (inputUpperBound > inputCeiling || maxOutputTokens <= 0) throw new Error("rendered judgment input exceeds the sealed budget");

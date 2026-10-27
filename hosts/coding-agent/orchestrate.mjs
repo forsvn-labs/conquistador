@@ -35,7 +35,19 @@ export async function runSpecialistTeam({ plan: input, root, host, parent, signa
   const correction = { id: 'operator:correct', role: 'parent', goal: 'Apply one targeted correction to the integrated artifact using only the review findings. Do not rewrite unrelated work or grant human acceptance.', skills: [], workflows: [], knowledgeHandles: [], dependsOn: ['review'] };
   const finalReview = { ...review, id: 'operator:final-review', dependsOn: ['operator:correct'] };
   const assets = new Map();
-  for (const task of [...plan.assignments, integration, review, correction, finalReview]) assets.set(task.id, await interruptible(
+  for (const task of plan.assignments) assets.set(task.id, await interruptible(
+    () => loadAssignment(root, task, { authorize, resolveKnowledge, requiredTools: isolated ? ['host-worker-context'] : [] }), abort));
+  if (plan.assignments.every(task => assets.get(task.id).passThrough)) {
+    // Reuse the declared entries during composition and correction. An empty parent assignment
+    // would otherwise restore the complete parent and its process instructions.
+    const skills = [...new Set(plan.assignments.flatMap(task => task.skills))];
+    const workflows = [...new Set(plan.assignments.flatMap(task => task.workflows))];
+    integration.skills = skills.length || workflows.length ? skills : ['critique'];
+    integration.workflows = workflows;
+    correction.skills = integration.skills;
+    correction.workflows = workflows;
+  }
+  for (const task of [integration, review, correction, finalReview]) assets.set(task.id, await interruptible(
     () => loadAssignment(root, task, { authorize, resolveKnowledge, requiredTools: isolated ? ['host-worker-context'] : [] }), abort));
 
   async function execute(assignment, phase, dependencies, integratedDigest = null) {
