@@ -1,6 +1,7 @@
 # Product Hunt
 
-Use for the listing (name, tagline, description, gallery), the maker comment, and launch-day replies.
+Use when you launch on Product Hunt: the listing (name, tagline, description, gallery), the maker
+comment, and replies on the day, with each piece of copy finished and ready to paste.
 
 ## Decisions
 
