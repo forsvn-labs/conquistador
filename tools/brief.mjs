@@ -331,8 +331,10 @@ const OWN_DELIVERABLE = { copy: /\b(?:pages?|emails?|sales letters?|newsletters?
 // brings the craft back. Kept: the winners (outreach and the outbound play, social, copy's sales page and
 // sales letter) and work that is not marketing craft (engineering, platform utilities, factcheck,
 // vietnamese, and the spec play).
-const KEEPS_METHOD = new Set(['outreach', 'social', 'architect', 'build', 'docs', 'ui', 'init', 'doctor', 'pin', 'connect',
-  'review', 'feedback', 'check', 'factcheck', 'vietnamese']);
+const CRAFT_METHODS = new Set(['outreach', 'social']);
+const UNCHANGED_METHODS = new Set(['architect', 'build', 'docs', 'ui', 'init', 'doctor', 'pin', 'connect', 'review', 'feedback',
+  'check', 'factcheck', 'vietnamese']);
+const KEEPS_METHOD = new Set([...CRAFT_METHODS, ...UNCHANGED_METHODS]);
 const KEEPS_PLAY = new Set(['outbound', 'spec']);
 const thinMethod = (name, salesPage) => !KEEPS_METHOD.has(name) && !(name === 'copy' && salesPage);
 const AD_CAMPAIGN = /\b(?:campaigns?|budgets?|kill (?:rules?|criteria)|(?:ads?|paid) tests?|test (?:plans?|structure|design)|account (?:structure|setup)|bids?|bidding|spend|optimi[sz]ation events?|scal(?:e|ing) rules?|media plan|turn (?:ads|it|them) off)\b/;
@@ -369,15 +371,15 @@ export function createBrief(input, { root = moduleRoot, playbooks, persistCache 
   const required = new Set(methods.flatMap(item => item.requiredResources ?? []).map(path => path.slice(libraryRoot.length + 1)));
   const salesPage = SALES_PAGE.test(normalizeRequest(prompt));
   const passThrough = play ? !KEEPS_PLAY.has(play.name) : methods.length > 0 && thinMethod(methods[0].name, salesPage);
-  // A thin route still serves a kept-craft method the request also selected ("plan it and write the posts").
-  const craft = new Set(passThrough ? methods.filter(method => !thinMethod(method.name, salesPage)).map(method => method.name) : []);
-  const craftChannels = craft.has('social') || craft.has('outreach');
+  // A thin route inlines every selected entry. Only a utility the request also selected keeps its files
+  // ("write it in Vietnamese"); a craft secondary keeps its entry, which links its method.
+  const utilities = new Set(passThrough ? methods.filter(method => UNCHANGED_METHODS.has(method.name)).map(method => method.name) : []);
   const ownerOf = doc => (doc.source === 'method' && selectedNames.has(doc.method)) || (doc.source === 'play' && doc.method === play?.name) ? doc.method : null;
   const scoreDoc = (doc, owned) => {
     if (doc.kind === 'process' || doc.key === 'conquistador/welcome.md') return null;
     if (!salesPage && doc.source === 'method' && doc.method === 'copy') return null;
     if (adDrafting && doc.source === 'method' && doc.method === 'ads') return null;
-    if (passThrough && doc.kind !== 'user' && !(doc.source === 'method' && craft.has(doc.method)) && !(doc.kind === 'channel' && craftChannels)) return null;
+    if (passThrough && doc.kind !== 'user' && !(doc.source === 'method' && utilities.has(doc.method))) return null;
     // A kept route reads no detailed file of a thin method it also selected; a kept play keeps its steps.
     if (!passThrough && !play && doc.source === 'method' && doc.method !== methods[0]?.name && thinMethod(doc.method, salesPage)) return null;
     // Integration recipes join the brief only for the connect command.

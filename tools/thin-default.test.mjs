@@ -86,10 +86,10 @@ test('every in-scope brief carries the selected entries and nothing else', async
     const { structured } = packBrief(item);
     const entries = item.methods.map(method => method.path);
     const extra = structured.inlined.map(file => file.path).filter(path => !entries.includes(path));
-    // A kept-craft or unchanged secondary method keeps its own files; everything else is an entry.
-    const kept = path => [...CRAFT_COMMANDS, ...UNCHANGED_COMMANDS].some(name => path.startsWith(`skills/conquistador/commands/${name}/`));
-    const foreign = extra.filter(path => !kept(path)
-      && !CRAFT_CHANNELS.some(name => path === `skills/conquistador/channels/${name}.md`));
+    // An unchanged utility the request also selected ("in Vietnamese") keeps its files; everything else is an
+    // entry. A kept-craft secondary keeps its entry, which links its method.
+    const kept = path => UNCHANGED_COMMANDS.some(name => path.startsWith(`skills/conquistador/commands/${name}/`));
+    const foreign = extra.filter(path => !kept(path));
     assert.deepEqual(foreign, [], `${item.task}: inlined ${JSON.stringify(extra)}`);
     const deferred = structured.situational.filter(path => !kept(path));
     assert.deepEqual(deferred, [], `${item.task}: deferred files`);
@@ -106,8 +106,11 @@ test('every in-scope brief carries the selected entries and nothing else', async
 
 test('a thin brief stays inside a small budget', async () => {
   for (const item of (await routed()).filter(isThinRoute)) {
-    const { text } = packBrief(item);
-    const limit = 3500 + 2600 * (item.methods.length - 1);
+    const { text, structured } = packBrief(item);
+    // A utility the request also selected keeps its files; they do not count against the thin entry.
+    const utility = structured.provenance.filter(file => file.status === 'included' && !file.path.endsWith('/ENTRY.md')
+      && UNCHANGED_COMMANDS.some(name => file.path.startsWith(`skills/conquistador/commands/${name}/`))).reduce((sum, file) => sum + file.bytes + 400, 0);
+    const limit = 3500 + 2600 * (item.methods.length - 1) + utility;
     assert.ok(Buffer.byteLength(text) <= limit, `${item.task}: ${Buffer.byteLength(text)} bytes`);
     assert.doesNotMatch(text, /Mark assumptions|Follow relevant method rules|Deferred files are optional/, item.task);
     assert.match(formatReadingList(item), /Entry: skills\/conquistador\/(?:commands|plays)\//, item.task);
