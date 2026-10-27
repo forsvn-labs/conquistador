@@ -140,7 +140,10 @@ test('every strong example passes conquistador check for its channel without err
     const file = join(temp, `post-${index}.md`);
     writeFileSync(file, `${body(item.text)}\n`);
     const run = spawnSync(process.execPath, [join(root, 'runtime/bin/conquistador.js'), 'check', file, '--channel', checkChannel[item.channel] ?? 'social', '--json', '--no-config'], { encoding: 'utf8' });
-    const findings = JSON.parse(run.stdout || '[]').filter(finding => finding.severity !== 'advisory');
+    assert.ifError(run.error);
+    assert.notEqual(run.status, 1, `conquistador check failed to scan: ${run.stderr}`);
+    assert.ok(run.stdout.trim(), 'conquistador check wrote no JSON');
+    const findings = JSON.parse(run.stdout).filter(finding => finding.severity !== 'advisory');
     assert.deepEqual(findings.map(finding => `${finding.rule}: ${finding.snippet}`), [], `${item.channel}: ${item.text.split('\n')[0]}`);
   });
 });
