@@ -66,6 +66,12 @@
         "create-paid-campaign",
         "facebook ads",
         "instagram ads",
+        "facebook and instagram ad",
+        "facebook and instagram ads",
+        "instagram and facebook ad",
+        "instagram and facebook ads",
+        "instagram and tiktok ads",
+        "tiktok and instagram ads",
         "youtube ads",
         "reddit ads",
         "x ads",
@@ -87,82 +93,81 @@
         "ads performance",
         "campaign results"
       ],
-      "requiredResources": [
-        "references/rubric.md",
-        "references/anti-patterns.md",
-        "fallbacks/sequential.md"
-      ],
+      "requiredResources": [],
       "conditionalResources": [
         {
-          "path": "references/earn-the-impression.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "references/rubric.md",
+          "when": "Load when the user asks for a score or a verdict on an ad set."
         },
         {
           "path": "agents/strategist.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/composer.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/format-checker.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/voice-auditor.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/critic.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/ad-intelligence/meta-cold-traffic.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/ad-intelligence/meta-retargeting.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/ad-intelligence/google-ads.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/ad-intelligence/linkedin-ads.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/ad-intelligence/tiktok-ads.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "when": "Load for a campaign test (structure, budget, decision and kill rules). Ad drafting is a pass-through and loads no resource."
         },
         {
           "path": "references/ad-intelligence/creative-cadence.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "when": "Load for a campaign test (structure, budget, decision and kill rules). Ad drafting is a pass-through and loads no resource."
         },
         {
-          "path": "references/format-spec.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/policy-floor.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "path": "references/earn-the-impression.md",
+          "when": "Load for a campaign test (structure, budget, decision and kill rules). Ad drafting is a pass-through and loads no resource."
         },
         {
           "path": "references/message-transmutation.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
+          "when": "Load for a campaign test (structure, budget, decision and kill rules). Ad drafting is a pass-through and loads no resource."
+        },
+        {
+          "path": "references/ad-intelligence/meta-cold-traffic.md",
+          "when": "Load for a campaign test on this network: its account setup. Ad drafting is a pass-through and loads no resource."
+        },
+        {
+          "path": "references/ad-intelligence/meta-retargeting.md",
+          "when": "Load for a campaign test on this network: its account setup. Ad drafting is a pass-through and loads no resource."
+        },
+        {
+          "path": "references/platform-intelligence/facebook.md",
+          "when": "Load for a campaign test that runs in Facebook or Instagram feeds. Ad drafting is a pass-through and loads no resource."
+        },
+        {
+          "path": "references/platform-intelligence/reels.md",
+          "when": "Load for a campaign test that runs in Instagram or Facebook Reels or Stories. Ad drafting is a pass-through and loads no resource."
+        },
+        {
+          "path": "references/ad-intelligence/google-ads.md",
+          "when": "Load for a campaign test on this network: its account setup. Ad drafting is a pass-through and loads no resource."
+        },
+        {
+          "path": "references/ad-intelligence/linkedin-ads.md",
+          "when": "Load for a campaign test on this network: its account setup. Ad drafting is a pass-through and loads no resource."
+        },
+        {
+          "path": "references/ad-intelligence/tiktok-ads.md",
+          "when": "Load for a campaign test on this network: its account setup. Ad drafting is a pass-through and loads no resource."
         },
         {
           "path": "references/ad-intelligence/apple-search-ads.md",
           "when": "Load when the campaign runs on Apple Search Ads or the App Store search results."
+        },
+        {
+          "path": "agents/format-checker.md",
+          "when": "Load for a format or policy check before launch. Ad drafting is a pass-through and loads no resource."
+        },
+        {
+          "path": "references/format-spec.md",
+          "when": "Load for a format or policy check before launch. Ad drafting is a pass-through and loads no resource."
+        },
+        {
+          "path": "references/policy-floor.md",
+          "when": "Load for a format or policy check before launch. Ad drafting is a pass-through and loads no resource."
         }
       ],
-      "optionalResources": [],
+      "optionalResources": [
+        "references/examples/write-ad-walkthrough.md"
+      ],
       "legacy": [
         "create-paid-campaign"
       ],
       "signals": [
+        "facebook|instagram|meta|tiktok|linkedin|google|youtube|reddit & ad|ads|advert*|sponsored & write|draft|create|make|give|need|want",
         "ad|ads|advert* & variation*|creative*|set|sets|copy|headline*|text|version*|launch",
         "facebook|instagram|meta|google|linkedin|tiktok|reddit|youtube|search|display|spark & ad|ads|sponsored|paid test|paid",
         "sponsored content|sponsored post*|promoted post*|boosted post*",

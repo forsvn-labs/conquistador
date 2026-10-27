@@ -3,67 +3,39 @@ type: ad-intelligence
 surface: meta-cold-traffic
 schema_version: 1
 status: method
-verification: account-input-required
+verification: platform-facts-oct-2026
 ---
 
-# Plan a Meta acquisition test
+# Meta ads for new customers
 
-This is a campaign decision procedure. It supplies no performance benchmark or
-claim of current platform verification. Record the source, date, placement, region,
-and account scope of platform constraints before using them. If verification is
-unavailable, deliver a draft with the affected setup decisions unresolved.
+Write the ads through the pass-through in the [entry](../../ENTRY.md). Use
+[creative cadence](creative-cadence.md) for testing and kill rules. Confirm the facts below in Meta's current specs before launch.
 
-## Define the acquisition question
+## Platform facts (checked Oct 2026)
 
-Specify who is eligible, what prior contact excludes them from this test, and the
-business event that would justify the acquisition cost. Keep Facebook and Instagram
-placement differences visible in the brief. A broad audience, interest audience, or
-lookalike is a candidate configuration, not a required winner.
+- Feeds show about the first 125 characters of primary text before "See more". Headlines show about
+  40 characters; some mobile placements cut near 27. The description is often hidden, so never put
+  needed terms only there.
+- One ad can carry up to 5 primary texts and 5 headlines. Meta combines them per viewer, so any
+  primary text can appear with any headline.
+- Meta's delivery system groups ads that look and read alike and treats them as one. Variations that
+  change only a few words do not get separate tests.
+- Advantage+ audience (broad targeting with optional suggestions) is the default. The creative
+  finds the buyer more than the audience settings do.
+- Learning needs about 50 optimization events per ad set in 7 days. Below that, pick an event higher
+  in the funnel.
+- Placements, formats, captions, and ad policy are in
+  [feed ads](../platform-intelligence/facebook.md) and [Reels and Stories ads](../platform-intelligence/reels.md).
 
-When the buyer segment is narrow, consider a test cell with broad eligibility and an
-optimization event that fires only for qualified leads, compared with a cell that
-narrows targeting. Record the qualification logic behind that event and verify the
-event is permitted for the category.
+## Account setup · Starting point (Oct 2026)
 
-Use this decision record:
+- Two campaigns: test and scale, both broad. Details and kill rules in [creative cadence](creative-cadence.md).
+- Warm viewers inside a broad campaign: one variation can address people who already know the
+  name and answer what the first ad left open, with no separate retargeting audience.
+- Subscription apps: optimize for trial start; send paid traffic to a custom product page so its
+  revenue can be read apart from organic installs.
+- B2B with a narrow buyer: broad targeting with an optimization event that fires only for qualified
+  leads, compared against a narrowed audience, is a fair first test.
 
-| Input | Required decision |
-|---|---|
-| Product use and offer terms | The exact action the ad can promise |
-| Eligible population and exclusions | Who can receive this offer and why |
-| Account evidence | Comparable delivery, cost, event lag, and downstream quality, or missing |
-| Maximum affordable loss | Total test ceiling and stop owner |
-| Attribution setup | Event source, deduplication, reporting delay, window, and blind spots |
-
-## Choose an event without inventing an attribution shortcut
-
-List candidate events such as install, trial_start, purchase, or lead. For each,
-record whether the account can observe it, when it arrives, and how it relates to
-the paid outcome. Select an event that answers the question within the authorized
-observation period. A faster event is a proxy until downstream evidence validates it.
-
-For iOS campaigns, record the actual Apple attribution configuration and Meta event
-mapping supplied for this account. Do not assume a universal reporting window or
-that trial_start must replace purchase. If purchase lag exceeds the test window,
-extend the measurement plan within authority or return an inconclusive outcome.
-Custom product pages can define destination variants when supported; their traffic
-reports do not by themselves prove incremental acquisition.
-
-## Specify the experiment
-
-Keep the offer, destination, and eligibility fixed while testing one creative
-component. Give every variant a hypothesis, evidence reference, and decision rule.
-If the operator instead requests concept exploration, identify all changed
-components and state that a winning concept will not identify the causal component.
-
-Separate a new-customer comparison from retargeting. Do not use a message addressed
-to existing users as a substitute for an eligible, consented retargeting audience.
-Choose campaign and ad-set boundaries only where they are needed for distinct
-budgets, measurement, or eligibility. No fixed campaign count is required.
-
-## Deliver and stop
-
-Return ad components, creative brief, destination checks, event mapping, allocation,
-and evaluation criteria. Use creative-cadence.md to check production and sample
-capacity. Missing tracking or an unaffordable test means no launch recommendation.
-Actual launch, audience uploads, and spend require separate human approval.
+Return the ads, the visual direction, the event, and the destination checks. Launch, spend, and
+audience uploads need the user's approval.

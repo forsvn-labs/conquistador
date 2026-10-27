@@ -1,9 +1,8 @@
 # Verify the selected ad format
 
-Resolve one network and placement before drafting. This file supplies the check
-procedure, not a timeless table of platform caps. Use current supplied specification
-or account evidence. Record source, date, region, placement, and account constraints.
-Without that evidence, produce provisional components and mark launch checks open.
+Resolve one network and placement. Draft to the dated platform facts in the
+[entry](../ENTRY.md) and any limit in the user's brief. Before launch,
+confirm them in the network's current specification for the region and placement.
 
 | Network | Component inventory to verify |
 |---|---|
@@ -27,4 +26,4 @@ as audio. For Lead Gen Forms, check the actual fields and onward behavior.
 
 Recheck after voice edits or polish. Retain the evidence and changed-component
 record with the format result. Read policy-floor.md for claims and permissions.
-Platform validation is a required input to launch readiness, not launch authority.
+Platform validation is a check before launch, not launch approval.

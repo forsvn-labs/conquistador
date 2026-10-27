@@ -7,9 +7,9 @@ when that store is unavailable.
 
 | File | Contents |
 |---|---|
-| [slug].md | Finished hero, variant_a, variant_b; creative and destination requirements; review status |
-| [slug].rationale.md | Product evidence, hypotheses, controls, allocation, observation and stop rules, attribution limits |
-| [slug].critic-score.md | Per-variant rubric, format results, revisions, unresolved issues, optional polish comparison |
+| [slug].md | Finished variations; creative and destination requirements; review status |
+| [slug].rationale.md | Facts and their sources, the angle of each concept, budget, decision and kill rules, attribution limits |
+| [slug].critic-score.md | Format results, revisions, open checks, and the rubric score when the user asked for one |
 
 Use the existing frontmatter keys:
 
@@ -26,9 +26,9 @@ production_model: in-house
 conversion_event: trial_start
 critic_total: 0/210
 critic_per_variant:
-  hero: 0/70
-  variant_a: 0/70
-  variant_b: 0/70
+  variation_1: 0/70
+  variation_2: 0/70
+  variation_3: 0/70
 ```
 
 Values above illustrate the schema, not a recommended setup or actual score.
@@ -44,7 +44,7 @@ These labels carry no assumed intent level, cost, or preferred budget.
 
 creative_format is dedicated or repurposed-ugc; production_model is in-house,
 affiliate-creator, or external-freelance. Record rights, cost, and capacity in the
-rationale. No format has a preset spending ceiling. conversion_event records the
+rationale. conversion_event records the
 actual selected event such as trial_start, purchase, lead, install, or view-content;
 include observability, lag, and downstream proxy limits.
 

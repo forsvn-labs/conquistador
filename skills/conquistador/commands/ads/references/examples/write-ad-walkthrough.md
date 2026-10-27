@@ -1,49 +1,54 @@
-# Worked paid test brief
+# Worked campaign test: a Meta launch for a subscription app
 
-This is an invented specification example, not an executed campaign or observed
-result. All values below are local scenario choices and must not become defaults.
+The product, numbers, and account below are synthetic, invented to show the order of decisions in
+a campaign request. No ad was run and no money was spent. The starting points used here come from
+[creative cadence](../ad-intelligence/creative-cadence.md); a real account replaces them with its
+own data.
 
-## Supplied task
+## The request
 
-The fictional Slotnote offer is a no-signup product tour. The operator asks for a
-Meta cold-audience test of opening copy. Available evidence is a local demonstration
-of agenda-to-action-item conversion. No customer performance statistics exist.
-The example operator permits a total test loss of 120 currency units and wants an
-estimate of qualified tour completion before funding a later comparison.
+Plotwise, an iOS garden-planning app, asks for a first Meta test. Facts supplied: 4.6 stars from
+5,200 App Store ratings; 7-day free trial, then $39.99 a year; a creator's videos about the app
+have brought steady organic installs for two months; the trial-start event fires in the app and
+reaches Meta. The founder can spend up to $3,000 on the first test and wants to know whether paid
+can bring trials at or under $12 each. Their measured trial-to-paid rate is 35%.
 
-## Strategy
+## Before writing
 
-The reference and two alternatives in ../examples.md change the opening framing.
-The offer, demonstration, CTA, eligibility, and destination remain fixed. The
-strategist records the chosen event, tracking verification, reporting lag, and a
-measurement-pilot question. Without an observed cost distribution, the brief does
-not promise that this budget can establish a winning variant.
+Checks before cold traffic: organic installs show people want it; the event is tracked; the
+destination is a custom product page that repeats the ad's promise and the trial terms. All three
+are present, so the plan goes ahead. If one were missing, the plan would fix that first.
 
-The production review records consent and rights for any actor, the current offer
-in the footage, captions, and a still or poster fallback. It compares adaptation
-cost with a new demonstration. Neither format receives a scale prediction.
+Economics: at $12 per trial and 35% conversion, a paying user costs about $34, below the $39.99
+first-year price. That makes $12 the target cost per trial.
 
-## Draft and review
+## Concepts
 
-Composer supplies hero, variant_a, and variant_b, their claim_list and
-protected_tokens, and component lengths. The format checker finds that current
-placement specifications were not supplied. It marks that check unverified and
-does not call the draft ready for launch. Voice review retains the capability and
-URL. Critic rejects an added productivity statistic because no proof supports it.
-Composer removes it, then format and voice checks run again.
+Four concepts, each a different angle with its own opening and visual, two variations each (a
+different first line or first three seconds):
 
-## Delivery
+| Concept | Angle | Opening |
+|---|---|---|
+| Last year's tomatoes | Pain | The crowded bed where nothing got sun |
+| The plan on a phone | Outcome | A finished season plan, bed by bed |
+| Creator's own video | Proof | The creator's best organic clip, with permission and usage rights |
+| "I only have a balcony" | Objection | Three pots on a balcony, planned |
 
-Return the three files from ../format-conventions.md. The rationale records the
-product demonstration, opening hypotheses, controls, total loss ceiling, unresolved
-tracking/format inputs, event lag, and observation plan. The scorecard preserves
-those blockers regardless of its quality total. Human review receives a usable
-draft with explicit pending launch checks. No publication or spending occurs.
+The ads for each concept are written through the pass-through in the [entry](../../ENTRY.md).
 
-## Evaluation handoff
+## Structure and decisions
 
-A later `results` invocation needs actual delivery and qualified
-outcome evidence with scope and denominators. The 120-unit planning ceiling cannot
-be entered as actual spend. If no results arrive, evaluation returns a measurement
-plan. If the budget ends before sufficient evidence, close as inconclusive rather
-than inventing a winner or automatically extending the budget.
+- A test campaign and a scale campaign, broad targeting, optimizing for trial start.
+- $1,500 for the first batch, about $190 per variation: room for each to pass the decision points
+  below. The other $1,500 waits for the scale campaign.
+- Turn off a variation that spends $24 with no trial. Recut the opening when 3-second views fall
+  under 20% of impressions. Move a variation to scale after three days at or under $12.
+- Check the paid outcome after the trial ends, using the real trial-to-paid rate, before raising
+  the scale budget.
+
+## Delivery and approval
+
+The founder receives the eight finished variations, the visual direction, the custom product page
+checks, the test table above, and the decision dates. Nothing launches, spends, or uploads until the
+founder approves the exact campaign, budget, and ads. Results after launch belong to `results`; the
+planned numbers above are targets, not outcomes.

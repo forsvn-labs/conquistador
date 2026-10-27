@@ -38,6 +38,7 @@ const hasPhrase = (tokens, phrase) => contains(tokens, phraseWords(phrase));
 // A signal is word slots joined by "&": every slot must appear, in any order. "|" separates
 // alternatives inside a slot, and a slot that starts with "!" vetoes the signal. Its score is the
 // length of the longest alternative matched in each slot, so specific words outrank generic ones.
+// A veto also reads `vetoTokens`: the whole request, when the signal is read on one of its clauses.
 const parsedSignals = new Map();
 function parseSignal(source) {
   if (!parsedSignals.has(source)) {
@@ -49,11 +50,12 @@ function parseSignal(source) {
   return parsedSignals.get(source);
 }
 
-export function signalScore(tokens, signals = []) {
+export function signalScore(tokens, signals = [], vetoTokens = []) {
   let best = 0;
   for (const source of signals) {
     let score = 0;
     for (const slot of parseSignal(source)) {
+      if (slot.veto && slot.alternatives.some(words => contains(vetoTokens, words))) { score = 0; break; }
       const hit = Math.max(0, ...slot.alternatives.filter(words => contains(tokens, words)).map(words => words.join(' ').replaceAll('*', '').length));
       if (slot.veto ? hit > 0 : hit === 0) { score = 0; break; }
       score += hit;
@@ -85,7 +87,7 @@ function parentMatch(query, contract, restriction) {
 // A decision match outranks every phrase and signal score; its own score orders competing decisions.
 const DECISION = 30;
 
-function matchingMethods(query, contract, { permitGrowthInference = true, signals = true, decisions: decide = true } = {}) {
+function matchingMethods(query, contract, { permitGrowthInference = true, signals = true, decisions: decide = true, requestTokens = [] } = {}) {
   const text = normalized(query).replace(/\bposts\b/g, 'post');
   const tokens = text.split(' ');
   const inspect = /\b(?:evaluate|audit|results|performance)\b/i.test(query);
@@ -109,7 +111,7 @@ function matchingMethods(query, contract, { permitGrowthInference = true, signal
 
     if (method.exclusions.some(phrase => hasPhrase(tokens, phrase))) continue;
     const signal = signals ? signalScore(tokens, method.signals) : 0;
-    const decision = decisions ? signalScore(decisionTokens, method.decisions) : 0;
+    const decision = decisions ? signalScore(decisionTokens, method.decisions, requestTokens) : 0;
     if (!hit && !signal && !decision) continue;
     if (inspect && method.kind === 'create' && hit?.kind !== 'name' && !/\b(?:write|create|draft)\b/i.test(query)) continue;
     if (decision) decided.push({ ...method, score: DECISION + decision, signal, decision, matchKind: 'decision', matchPhrase: 'decision' });
@@ -177,11 +179,12 @@ function finishMatches(query, text, matches, contract, { permitGrowthInference, 
 
 // The play that owns a decision ("design a test", "is the result real") when its decision signal
 // outscores every command decision. Each text is read on its own: one per clause, and the whole
-// request only when it asks a question.
-function decisionPlay(texts, selected, contract, restriction) {
+// request only when it asks a question. A veto reads the whole request: "test structure" in "Plan a
+// Meta ads test: budget, test structure" is still an ad test.
+function decisionPlay(texts, selected, contract, restriction, requestTokens = []) {
   const best = Math.max(0, ...selected.filter(item => item.matchKind === 'decision').map(item => item.decision));
   const ranked = (contract.plays ?? []).filter(play => play.decisions?.length && allowedKind(restriction, 'workflow', play.name))
-    .map(play => ({ play, score: Math.max(0, ...texts.filter(text => decisionRequest(text)).map(text => signalScore(normalized(text).split(' '), play.decisions))) }))
+    .map(play => ({ play, score: Math.max(0, ...texts.filter(text => decisionRequest(text)).map(text => signalScore(normalized(text).split(' '), play.decisions, requestTokens))) }))
     .filter(item => item.score > best).sort((a, b) => b.score - a.score || a.play.name.localeCompare(b.play.name));
   return ranked[0]?.play.name ?? null;
 }
@@ -446,6 +449,11 @@ function routeRequest(request, prompt, { packageRoot, restriction, contract, pro
   // A "for" or "about" tail is context ("a post for our launch"). "For each", "for every", and
   // "for search" still describe the deliverable ("pages for each competitor").
   const stage = clause => clause.replace(/^\s*(?:for|about)\s+/i, '').split(/\b(?:for(?! (?:each|every|all|search|seo|organic)\b)|about|announcing)\b/i)[0];
+  // A decision veto reads the opening request block whole, not only the clause that matched: "test
+  // structure" in "Plan a Meta ads test: budget, test structure" stays an ad test. "For" tails and
+  // pasted facts are context, so "an A/B test for our pricing page" stays a test.
+  const block = requestedBusinessClauses(requestLead(request) ?? request, { protectedPhrases }).filter(clause => !engineering(clause));
+  const requestTokens = normalized(block.map(stage).join('. ')).split(' ');
   // Decision words from separate clauses combine only in a question ("Our test says B won. Is it
   // real?"), and only when no clause asks for a named deliverable ("Plan the launch").
   let namedRequest = false;
@@ -456,7 +464,7 @@ function routeRequest(request, prompt, { packageRoot, restriction, contract, pro
     const technicalStage = technicalNoun.test(clause);
     const marketing = !engineering(clause);
 
-    for (const item of matchingMethods(stage(clause), contract, { permitGrowthInference: !codingAction || (businessDiagnosisRequested && !technicalStage), signals: marketing })) {
+    for (const item of matchingMethods(stage(clause), contract, { permitGrowthInference: !codingAction || (businessDiagnosisRequested && !technicalStage), signals: marketing, requestTokens })) {
       if (!marketing && item.kind !== 'build') continue;
       consider(item);
       if (marketing && !['signal', 'decision'].includes(item.matchKind) && instructionClause(clause)) namedRequest = true;
@@ -470,7 +478,7 @@ function routeRequest(request, prompt, { packageRoot, restriction, contract, pro
     const empty = !selectedAll.length;
     const strongest = Math.max(0, ...selectedAll.map(item => item.score ?? 0));
     const strongestDecision = Math.max(0, ...selectedAll.filter(item => item.matchKind === 'decision').map(item => item.score));
-    const lead = matchingMethods(business.join('. '), contract, { permitGrowthInference: false, decisions: asksQuestion && (!namedRequest || empty) })
+    const lead = matchingMethods(business.join('. '), contract, { permitGrowthInference: false, decisions: asksQuestion && (!namedRequest || empty), requestTokens })
       .filter(item => contract.methods[item.name] && (empty || (item.matchKind === 'signal' && item.score > strongest) || (item.matchKind === 'decision' && item.score > strongestDecision)))
       // A phrase found only in the context tail names the subject, not a stage, so it does not outrank a play.
       .map(item => (['signal', 'decision'].includes(item.matchKind) ? item : { ...item, matchKind: 'context' }));
@@ -507,7 +515,7 @@ function routeRequest(request, prompt, { packageRoot, restriction, contract, pro
   const outcome = productSpec ? 'product spec' : requestedOutcome;
   const matchedPlay = invoked?.kind === 'command' ? null : selectPlay(outcome, selectedAll, contract, restriction, invoked?.name);
   if (!productSpec && invoked?.kind !== 'command' && !invoked) {
-    const owner = decisionPlay([...business.map(stage), ...(asksQuestion && !namedRequest ? [business.join('. ')] : [])], selectedAll, contract, restriction);
+    const owner = decisionPlay([...business.map(stage), ...(asksQuestion && !namedRequest ? [business.join('. ')] : [])], selectedAll, contract, restriction, requestTokens);
     if (owner && (!matchedPlay || matchedPlay.name === owner)) decidedPlay = owner;
   }
   // A decision request: the owner of the decision leads and methods that only shared its words leave.

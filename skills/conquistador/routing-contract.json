@@ -81,6 +81,12 @@
         "create-paid-campaign",
         "facebook ads",
         "instagram ads",
+        "facebook and instagram ad",
+        "facebook and instagram ads",
+        "instagram and facebook ad",
+        "instagram and facebook ads",
+        "instagram and tiktok ads",
+        "tiktok and instagram ads",
         "youtube ads",
         "reddit ads",
         "x ads",
@@ -94,6 +100,7 @@
         "paid acquisition"
       ],
       "signals": [
+        "facebook|instagram|meta|tiktok|linkedin|google|youtube|reddit & ad|ads|advert*|sponsored & write|draft|create|make|give|need|want",
         "ad|ads|advert* & variation*|creative*|set|sets|copy|headline*|text|version*|launch",
         "facebook|instagram|meta|google|linkedin|tiktok|reddit|youtube|search|display|spark & ad|ads|sponsored|paid test|paid",
         "sponsored content|sponsored post*|promoted post*|boosted post*",
@@ -108,81 +115,94 @@
         "ads performance",
         "campaign results"
       ],
-      "requiredResources": [
-        "skills/conquistador/commands/ads/references/rubric.md",
-        "skills/conquistador/commands/ads/references/anti-patterns.md",
-        "skills/conquistador/commands/ads/fallbacks/sequential.md"
-      ],
+      "requiredResources": [],
       "conditionalResources": [
-        "skills/conquistador/commands/ads/references/earn-the-impression.md",
+        "skills/conquistador/commands/ads/references/rubric.md",
         "skills/conquistador/commands/ads/agents/strategist.md",
-        "skills/conquistador/commands/ads/agents/composer.md",
-        "skills/conquistador/commands/ads/agents/format-checker.md",
-        "skills/conquistador/commands/ads/agents/voice-auditor.md",
-        "skills/conquistador/commands/ads/agents/critic.md",
+        "skills/conquistador/commands/ads/references/ad-intelligence/creative-cadence.md",
+        "skills/conquistador/commands/ads/references/earn-the-impression.md",
+        "skills/conquistador/commands/ads/references/message-transmutation.md",
         "skills/conquistador/commands/ads/references/ad-intelligence/meta-cold-traffic.md",
         "skills/conquistador/commands/ads/references/ad-intelligence/meta-retargeting.md",
+        "skills/conquistador/commands/ads/references/platform-intelligence/facebook.md",
+        "skills/conquistador/commands/ads/references/platform-intelligence/reels.md",
         "skills/conquistador/commands/ads/references/ad-intelligence/google-ads.md",
         "skills/conquistador/commands/ads/references/ad-intelligence/linkedin-ads.md",
         "skills/conquistador/commands/ads/references/ad-intelligence/tiktok-ads.md",
-        "skills/conquistador/commands/ads/references/ad-intelligence/creative-cadence.md",
+        "skills/conquistador/commands/ads/references/ad-intelligence/apple-search-ads.md",
+        "skills/conquistador/commands/ads/agents/format-checker.md",
         "skills/conquistador/commands/ads/references/format-spec.md",
-        "skills/conquistador/commands/ads/references/policy-floor.md",
-        "skills/conquistador/commands/ads/references/message-transmutation.md",
-        "skills/conquistador/commands/ads/references/ad-intelligence/apple-search-ads.md"
+        "skills/conquistador/commands/ads/references/policy-floor.md"
       ],
       "resourceConditions": [
         {
-          "path": "skills/conquistador/commands/ads/references/earn-the-impression.md"
+          "path": "skills/conquistador/commands/ads/references/rubric.md",
+          "when": "Load when the user asks for a score or a verdict on an ad set."
         },
         {
-          "path": "skills/conquistador/commands/ads/agents/strategist.md"
+          "path": "skills/conquistador/commands/ads/agents/strategist.md",
+          "when": "Load for a campaign test (structure, budget, decision and kill rules). Ad drafting is a pass-through and loads no resource."
         },
         {
-          "path": "skills/conquistador/commands/ads/agents/composer.md"
+          "path": "skills/conquistador/commands/ads/references/ad-intelligence/creative-cadence.md",
+          "when": "Load for a campaign test (structure, budget, decision and kill rules). Ad drafting is a pass-through and loads no resource."
         },
         {
-          "path": "skills/conquistador/commands/ads/agents/format-checker.md"
+          "path": "skills/conquistador/commands/ads/references/earn-the-impression.md",
+          "when": "Load for a campaign test (structure, budget, decision and kill rules). Ad drafting is a pass-through and loads no resource."
         },
         {
-          "path": "skills/conquistador/commands/ads/agents/voice-auditor.md"
+          "path": "skills/conquistador/commands/ads/references/message-transmutation.md",
+          "when": "Load for a campaign test (structure, budget, decision and kill rules). Ad drafting is a pass-through and loads no resource."
         },
         {
-          "path": "skills/conquistador/commands/ads/agents/critic.md"
+          "path": "skills/conquistador/commands/ads/references/ad-intelligence/meta-cold-traffic.md",
+          "when": "Load for a campaign test on this network: its account setup. Ad drafting is a pass-through and loads no resource."
         },
         {
-          "path": "skills/conquistador/commands/ads/references/ad-intelligence/meta-cold-traffic.md"
+          "path": "skills/conquistador/commands/ads/references/ad-intelligence/meta-retargeting.md",
+          "when": "Load for a campaign test on this network: its account setup. Ad drafting is a pass-through and loads no resource."
         },
         {
-          "path": "skills/conquistador/commands/ads/references/ad-intelligence/meta-retargeting.md"
+          "path": "skills/conquistador/commands/ads/references/platform-intelligence/facebook.md",
+          "when": "Load for a campaign test that runs in Facebook or Instagram feeds. Ad drafting is a pass-through and loads no resource."
         },
         {
-          "path": "skills/conquistador/commands/ads/references/ad-intelligence/google-ads.md"
+          "path": "skills/conquistador/commands/ads/references/platform-intelligence/reels.md",
+          "when": "Load for a campaign test that runs in Instagram or Facebook Reels or Stories. Ad drafting is a pass-through and loads no resource."
         },
         {
-          "path": "skills/conquistador/commands/ads/references/ad-intelligence/linkedin-ads.md"
+          "path": "skills/conquistador/commands/ads/references/ad-intelligence/google-ads.md",
+          "when": "Load for a campaign test on this network: its account setup. Ad drafting is a pass-through and loads no resource."
         },
         {
-          "path": "skills/conquistador/commands/ads/references/ad-intelligence/tiktok-ads.md"
+          "path": "skills/conquistador/commands/ads/references/ad-intelligence/linkedin-ads.md",
+          "when": "Load for a campaign test on this network: its account setup. Ad drafting is a pass-through and loads no resource."
         },
         {
-          "path": "skills/conquistador/commands/ads/references/ad-intelligence/creative-cadence.md"
-        },
-        {
-          "path": "skills/conquistador/commands/ads/references/format-spec.md"
-        },
-        {
-          "path": "skills/conquistador/commands/ads/references/policy-floor.md"
-        },
-        {
-          "path": "skills/conquistador/commands/ads/references/message-transmutation.md"
+          "path": "skills/conquistador/commands/ads/references/ad-intelligence/tiktok-ads.md",
+          "when": "Load for a campaign test on this network: its account setup. Ad drafting is a pass-through and loads no resource."
         },
         {
           "path": "skills/conquistador/commands/ads/references/ad-intelligence/apple-search-ads.md",
           "when": "Load when the campaign runs on Apple Search Ads or the App Store search results."
+        },
+        {
+          "path": "skills/conquistador/commands/ads/agents/format-checker.md",
+          "when": "Load for a format or policy check before launch. Ad drafting is a pass-through and loads no resource."
+        },
+        {
+          "path": "skills/conquistador/commands/ads/references/format-spec.md",
+          "when": "Load for a format or policy check before launch. Ad drafting is a pass-through and loads no resource."
+        },
+        {
+          "path": "skills/conquistador/commands/ads/references/policy-floor.md",
+          "when": "Load for a format or policy check before launch. Ad drafting is a pass-through and loads no resource."
         }
       ],
-      "optionalResources": [],
+      "optionalResources": [
+        "skills/conquistador/commands/ads/references/examples/write-ad-walkthrough.md"
+      ],
       "plays": [
         "paid"
       ],
