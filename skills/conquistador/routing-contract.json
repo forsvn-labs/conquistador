@@ -98,6 +98,7 @@
         "sponsored content|sponsored post*|promoted post*|boosted post*",
         "retarget* & set|ad*|audience*|campaign*|put together|people"
       ],
+      "decisions": [],
       "exclusions": [
         "evaluate actual paid",
         "organic social posts",
@@ -227,6 +228,7 @@
         "architect-software-system"
       ],
       "signals": [],
+      "decisions": [],
       "exclusions": [
         "marketing architecture",
         "campaign architecture"
@@ -383,6 +385,7 @@
         "case study|newsletter issue|blog post|in depth guide|long post|long blog post|long article",
         "guide & write|draft|in depth|complete|ultimate"
       ],
+      "decisions": [],
       "exclusions": [
         "landing page copy",
         "social posts"
@@ -463,6 +466,7 @@
         "pre launch|pre ship|prelaunch & review|audit|check",
         "rank & problem*|issue*|finding* & material*|asset*|campaign|package|launch"
       ],
+      "decisions": [],
       "exclusions": [
         "knowledge review",
         "code audit"
@@ -554,6 +558,7 @@
         "tone of voice|voice chart|messaging house|naming direction|visual identity|visual style|rebrand*",
         "how & we|us|our & sound"
       ],
+      "decisions": [],
       "exclusions": [
         "write a landing page",
         "social posts"
@@ -652,6 +657,10 @@
         "split|allocat*|divide|distribut* & between|across & month|quarter|google|meta|linkedin|tiktok|channel*|paid|ads",
         "how much & spend|invest|put & channel*|ads|paid|marketing|google|meta|linkedin"
       ],
+      "decisions": [
+        "where should|how should|how much should|should we|should i|how do we & budget*|money|dollars|cash|funds|spend* & go|split|allocat*|divide|distribut*|move|shift|put|reallocat*|invest|more|less|between|across & !time|hours|effort",
+        "how should|where should|should we|how do we|how much & split|allocat*|divide|distribut*|reallocat* & between|across"
+      ],
       "exclusions": [
         "create ads",
         "evaluate actual paid"
@@ -733,6 +742,7 @@
         "build-web-app"
       ],
       "signals": [],
+      "decisions": [],
       "exclusions": [
         "marketing copy about an app",
         "landing page copy"
@@ -894,6 +904,7 @@
         "campaign*|promo|promos|promotion*|sale|push|blitz & plan*|map*|put together|build|run|draft|design|organi*|launch|prepare|set up",
         "black friday|cyber monday|back to school|holiday season|valentine*|mother s day|prime day|seasonal|summer sale|spring sale|end of year & plan*|campaign*|promo*|push|sale"
       ],
+      "decisions": [],
       "exclusions": [
         "run of show",
         "submit feedback",
@@ -1041,6 +1052,12 @@
         "where|how & find|get|reach|land|meet & first|ideal & customer*|user*|client*|buyer*",
         "channel* & ideal customer*|icp|audience|buyer* & hang out|find|where|reach"
       ],
+      "decisions": [
+        "should we|do we|whether to|is it worth|is it time to|can we & keep|stop|drop|cut|cancel|renew|continue|pause|quit|end|double down & sponsor*|booth*|trade show*|conference*|podcast*|channel*|platform*|influencer*|events|meetup*|directories|listing*",
+        "which|what & channel*|platform* & add|try|test|start|pick|choose|focus|next|double down|invest|drop|cut|prioriti*",
+        "worth it|worth our time|worth the money|worth the time|worth keeping|still worth & linkedin|youtube|tiktok|instagram|facebook|pinterest|reddit|twitter|podcast*|sponsor*|seo|events|conference*|trade show*|channel*|platform*|webinar*|community|discord & !ads|ad",
+        "should we|whether to|is it time to & try|test|start|move to|switch to|expand to|double down on|go all in on|invest in & channel*|platform*|tiktok|youtube|linkedin|instagram|pinterest|reddit|podcast*|sponsorship*|influencer*|events|trade show*|conference*|community|seo|webinar* & !ads|ad"
+      ],
       "exclusions": [
         "write the posts",
         "create ads"
@@ -1109,6 +1126,7 @@
       "legacy": [],
       "aliases": [],
       "signals": [],
+      "decisions": [],
       "exclusions": [],
       "requiredResources": [],
       "conditionalResources": [],
@@ -1129,6 +1147,7 @@
       "legacy": [],
       "aliases": [],
       "signals": [],
+      "decisions": [],
       "exclusions": [],
       "requiredResources": [],
       "conditionalResources": [],
@@ -1182,6 +1201,7 @@
         "abandon* & cart|checkout|reduce|lower|fix",
         "leave|leaving|bounce* & checkout|page|pricing page|signup & test|fix|change|what"
       ],
+      "decisions": [],
       "exclusions": [
         "seo ranking",
         "paid results"
@@ -1346,6 +1366,7 @@
         "welcome|announcement|launch|trial|onboarding|upgrade|nurture & email*",
         "product & description*"
       ],
+      "decisions": [],
       "exclusions": [
         "linkedin post",
         "linkedin announcement",
@@ -1426,6 +1447,7 @@
         "brief* & designer*|creator*|agency|illustrat*|graphic*|visual*|shoot|photo*|screenshot*|art direction|production|design|video",
         "art direction|creative direction|shot list|mood board|moodboard"
       ],
+      "decisions": [],
       "exclusions": [
         "write the copy",
         "finished ads"
@@ -1611,6 +1633,7 @@
         "push back|pushback & buyer|reader|customer|investor|board|what",
         "skeptical|critical|hostile|tough|cynical & reader|buyer|customer|investor|editor|prospect"
       ],
+      "decisions": [],
       "exclusions": [
         "write the first draft",
         "create the campaign"
@@ -1710,12 +1733,18 @@
         "decision-panel"
       ],
       "aliases": [
-        "decision-panel"
+        "decision-panel",
+        "weigh both sides",
+        "argue both sides",
+        "argue both positions",
+        "lay out both sides",
+        "debate both sides"
       ],
       "signals": [
         "decide|decision|weigh|debate|argue|make the call|agree|independent view & whether|between|or|both|each side & we|our|us|company|startup|team|business|product|market*|launch*|hire|brand|customer*|pivot|enterprise|self serve|upmarket|series|plan",
         "should we & sunset|pivot|rebrand|hire|go upmarket|move upmarket|stay|shut down|kill|open source|raise money|fundrais*"
       ],
+      "decisions": [],
       "exclusions": [
         "write copy",
         "campaign plan"
@@ -1832,6 +1861,7 @@
         "churn*|cancel*|refund*|unsubscrib* & jump*|spik*|rose|up|increas*|doubl*|surg*",
         "conversion*|signup*|revenue|lead*|trial*|activation|sales|mrr|arr & down|drop*|fell|declin*|stall*|flat & since|after|last|month|week|quarter"
       ],
+      "decisions": [],
       "exclusions": [
         "write a campaign",
         "create ads"
@@ -1924,6 +1954,7 @@
         "write-technical-docs"
       ],
       "signals": [],
+      "decisions": [],
       "exclusions": [
         "marketing copy",
         "launch email"
@@ -2010,6 +2041,7 @@
       "legacy": [],
       "aliases": [],
       "signals": [],
+      "decisions": [],
       "exclusions": [],
       "requiredResources": [],
       "conditionalResources": [],
@@ -2051,6 +2083,7 @@
         "agenda|run of show|rundown|cue sheet|segments|schedule|timing|flow & webinar*|livestream*|live stream*|summit|meetup|workshop|demo day|launch party|space|conference|event*|session*|ama",
         "script|plan|organi*|write & webinar*|livestream*|live stream*|summit|meetup|demo day|launch party|twitter space|x space|ama & hour|minute*|flow|segment*|agenda|timing|schedule"
       ],
+      "decisions": [],
       "exclusions": [
         "campaign plan",
         "connect crm",
@@ -2126,6 +2159,7 @@
         "source*|citation*|claim*|stat*|statistic*|fact*|number* & check|verify|trace|accurate|real|true|out of date|outdated|fresh*|original|conflict*|audit",
         "fact check|fact checking|factcheck"
       ],
+      "decisions": [],
       "exclusions": [
         "launch plan",
         "mark missing facts",
@@ -2180,6 +2214,7 @@
         "submit-feedback"
       ],
       "signals": [],
+      "decisions": [],
       "exclusions": [
         "launch plan",
         "draft a launch",
@@ -2222,6 +2257,7 @@
         "screen* & see|between|from|install|signup|paywall|first value",
         "recovery path*|error state*|failure state*|empty state*|edge case* & app|payment|checkout|flow|map"
       ],
+      "decisions": [],
       "exclusions": [
         "approved flow",
         "implement the app",
@@ -2330,6 +2366,7 @@
         "funnel & model|math|numbers|build|calculate",
         "realistic|feasible|achievable|possible & paying|mrr|arr|revenue|users|customers|target|conversion"
       ],
+      "decisions": [],
       "exclusions": [
         "write copy"
       ],
@@ -2443,6 +2480,7 @@
         "content calendar|editorial calendar|posting calendar|content plan|brainstorm",
         "audience & talking about|care* about|suggest"
       ],
+      "decisions": [],
       "exclusions": [
         "write the posts",
         "connect crm",
@@ -2530,6 +2568,7 @@
       "legacy": [],
       "aliases": [],
       "signals": [],
+      "decisions": [],
       "exclusions": [],
       "requiredResources": [],
       "conditionalResources": [],
@@ -2566,6 +2605,7 @@
         "how do we know|how will we know|know if|know whether|tell us if & work*|driv*|succeed*|signup*|revenue|pay* off",
         "here are|these|last quarter|last month|our & numbers|results|data|metrics & keep|change|stop|next|should|what"
       ],
+      "decisions": [],
       "exclusions": [
         "write social posts",
         "create ads"
@@ -2720,6 +2760,7 @@
         "reply|respond & prospect*|lead*|not now|objection*",
         "touch & sequence|email*|cadence"
       ],
+      "decisions": [],
       "exclusions": [
         "linkedin post",
         "linkedin announcement",
@@ -2875,6 +2916,7 @@
       "legacy": [],
       "aliases": [],
       "signals": [],
+      "decisions": [],
       "exclusions": [],
       "requiredResources": [],
       "conditionalResources": [],
@@ -2914,6 +2956,7 @@
         "audience & promise|proof|position*",
         "who & buy*|our customer|serve|sell to|ideal"
       ],
+      "decisions": [],
       "exclusions": [
         "write the campaign",
         "submit feedback"
@@ -3114,6 +3157,12 @@
         "annual billing|annual plan*|monthly billing|annual discount|billing & discount|offer|switch|push|default|convince",
         "free trial|trial & how long|length|days|long|should"
       ],
+      "decisions": [
+        "should we|should i|whether to|is it time to|do we & raise|increase|lower|cut|change|drop|double & price*|pricing",
+        "should we|should i|whether to|do we & add|offer|introduce|launch|create|move to|switch to & tier*|annual plan*|annual billing|annual discount|discount*|premium plan|pro plan|team plan|enterprise plan|add on*|addon*|usage based|per seat|seat based|free trial|free tier|free plan|freemium",
+        "free plan|free tier|free version|freemium & limit*|cap|caps|capped|allowance|quota|include|includes|generous|too much|too little|give away|giving away|gate|gated|keep for paid|right & should|what|how|is|are|whether|too",
+        "discount*|off|price cut|lower price & counter*|counteroffer|negotiat*|push back|how should we respond|should we accept|should we agree|what should we offer|what should we give & contract*|commitment|multi year|years|renew*|prospect*|customer*|client*|buyer*|deal"
+      ],
       "exclusions": [
         "landing page copy"
       ],
@@ -3173,6 +3222,7 @@
         "which & first & experiment*|idea*|bet*|project*|initiative*|test*",
         "pick|choose|what to work on & list|initiative*|backlog|these|quarter"
       ],
+      "decisions": [],
       "exclusions": [
         "write copy"
       ],
@@ -3317,6 +3367,7 @@
         "review|evaluate|analy*|look at|assess & reply rate*|open rate*|response rate*|click rate* & outbound|sequence*|campaign*|cold|email*",
         "view*|watch time|completion rate* & got|each|average|numbers|say|mean & video*|short*|reel*|tiktok*"
       ],
+      "decisions": [],
       "exclusions": [
         "write outreach",
         "create a sequence",
@@ -3589,6 +3640,7 @@
       "legacy": [],
       "aliases": [],
       "signals": [],
+      "decisions": [],
       "exclusions": [],
       "requiredResources": [],
       "conditionalResources": [],
@@ -3654,6 +3706,7 @@
         "organic traffic|on page|technical seo|seo review|search console|backlink*|meta description*",
         "optimi* & search|google|seo|for search"
       ],
+      "decisions": [],
       "exclusions": [
         "paid search ads",
         "landing conversion rewrite"
@@ -3847,6 +3900,7 @@
         "where do we even start|where do we start|where to start|where do i start|where do i even start",
         "decision & define|actual|one|real & first move|first step|define|actual"
       ],
+      "decisions": [],
       "exclusions": [
         "write finished copy"
       ],
@@ -3965,6 +4019,7 @@
         "tweet*|thread|linkedin|reddit|instagram|facebook|threads|bluesky|discord|slack|community|hacker news|show hn|product hunt & post*|thread|caption*|comment|write|draft|announce*|update|something & !ad|ads|advert*|sponsored|spark ad*",
         "maker comment|first comment|caption*"
       ],
+      "decisions": [],
       "exclusions": [
         "linkedin dm",
         "linkedin ads",
@@ -4065,6 +4120,7 @@
         "brief-product-ui"
       ],
       "signals": [],
+      "decisions": [],
       "exclusions": [
         "marketing landing",
         "brand visual identity"
@@ -4181,6 +4237,7 @@
         "script*|storyboard*|hook*|recut*|cut down|shot* & tiktok*|reel*|short*|video*|vertical|youtube|ugc|camera|demo",
         "short form|short video*|vertical video|founder to camera|talking head|ugc style"
       ],
+      "decisions": [],
       "exclusions": [
         "analyze a supplied video",
         "evaluate published short-form"
@@ -4422,6 +4479,7 @@
         "vietnamese & locali*|translat* & listing|description*|copy|post*|page*|email*|app store|store listing|play store",
         "viet lai|chinh sua"
       ],
+      "decisions": [],
       "exclusions": [],
       "requiredResources": [
         "skills/conquistador/commands/vietnamese/references/absolute-prohibitions.md",
@@ -4485,6 +4543,7 @@
         "video|recording|footage|clip*|webinar recording|screen recording & watch|summari*|timestamp*|scene|inspect|break down|shot by shot|second by second|key moments|go through|drop off|pull out|analy*|where & !script|make|create|write|storyboard|recut|plan",
         "timestamped summary|shot by shot|second by second|frame by frame"
       ],
+      "decisions": [],
       "exclusions": [
         "create short-form",
         "script a video"
@@ -4536,6 +4595,7 @@
         "how often|how many times|share of voice|how frequently & llm*|chatgpt|ai|perplexity|gemini|claude|copilot & mention*|cite*|recommend*|show up",
         "claude|gemini|chatgpt|perplexity|llm*|copilot & cite*|mention*|recommend* & our|us|brand|docs|product|site"
       ],
+      "decisions": [],
       "legacy": [
         "answer-visibility-monitor"
       ],
@@ -4579,6 +4639,7 @@
         "app store|play store|google play|store page|store listing|aso & optimi*|improve|rewrite|fix|update|keyword*|listing|install*|download*|rank*|review*|subtitle|screenshot* & !preview video|trailer|video",
         "screenshot*|subtitle|store listing|keyword* & app s store|app store|play store|store & rank*|convert*|install*|rewrite|update|description*"
       ],
+      "decisions": [],
       "legacy": [
         "optimize-app-store-listing"
       ],
@@ -4635,6 +4696,7 @@
         "content|posting|post* & engine|system|machine|flywheel|loop|repeatable|rhythm|cycle|test and learn|gets better|learns|ongoing",
         "weekly|repeat* & loop & topic*|post*|content"
       ],
+      "decisions": [],
       "legacy": [
         "content-intelligence-loop"
       ],
@@ -4684,6 +4746,7 @@
         "channel* & new|next|second|another|beyond|maxed & launch*|test*|run|pilot|campaign*|try|set up|first test & !rank*|research|compare|which",
         "pick|choose|open|find & channel* & launch*|campaign*|run|test|pilot|something"
       ],
+      "decisions": [],
       "legacy": [
         "channel-to-campaign"
       ],
@@ -4728,6 +4791,10 @@
         "hypothes* & test*|experiment*|backlog",
         "growth experiment*|experiment loop|test and learn",
         "series of|run of|set of|loop of|cycle of & test*|experiment*|bet* & measured|kill|learn*|hypothes*|improve|activation|retention"
+      ],
+      "decisions": [
+        "design|plan|structure|scope|set up|setup|propose|outline|map out|suggest & a b test*|ab test*|split test*|multivariate test*|experiment*|test|tests|pilot|pilots & !suite|unit|integration|e2e|end to end|regression|load|smoke|test case*|test plan*|coverage|harness|fixture*|paid test*|paid ad*|paid social|paid search|paid media|paid campaign*|ad|ads|ad set*|budget*|spend*|reserve*|price*|pricing|paywall*|free trial|trial length|discount*|channel*",
+        "test*|experiment*|a b|split test*|variant*|challenger|new version & won|win|wins|winner|beat|beats|result*|significan*|lift|uplift|outperform* & real|trust|significan*|ship|roll out|rollout|noise|chance|luck|valid|confiden*|call it|believe|fluke"
       ],
       "legacy": [
         "measured-initiative-loop"
@@ -4775,6 +4842,7 @@
         "gtm|go to market & plan|strategy|icp|enter*|launch",
         "who|icp|ideal customer*|position*|audience|segment*|sell to & first|then & campaign*|marketing push|launch"
       ],
+      "decisions": [],
       "legacy": [
         "position-to-campaign"
       ],
@@ -4829,6 +4897,7 @@
       "signals": [
         "calculator|quiz|quizzes|minigame|mini game|estimator|self assessment|assessment tool|spin the wheel|giveaway wheel|interactive & build|make|create|design|lead*|growth|capture"
       ],
+      "decisions": [],
       "legacy": [
         "interactive-campaign"
       ],
@@ -4884,6 +4953,7 @@
         "landing page|new page|dedicated page|page from scratch|waitlist page|lead gen page & create|build|design|make|spin up|need|new|dedicated|from scratch & !at scale|programmatic|each|every|convert*|conversion*|better|optimi*|improve*|calculator|quiz",
         "new page|landing page|dedicated page|sales page & create|build|make|need|spin up & sell|promote|launch|announce & !at scale|programmatic|each|every|convert*|conversion*|calculator|quiz"
       ],
+      "decisions": [],
       "legacy": [
         "create-landing-page"
       ],
@@ -4947,6 +5017,7 @@
         "launch*|relaunch* & plan*|day|our|feature|app|extension|product|v2|ready|week|on & !campaign*|calculator|quiz|video|preview|trailer|page|date*",
         "launch & of our|of the|of my & app|ios app|android app|extension|feature|product|v2|tool|plugin|integration"
       ],
+      "decisions": [],
       "legacy": [
         "launch-product"
       ],
@@ -5022,6 +5093,7 @@
         "bring back|reactivat*|re activate|win back & user*|customer*|subscriber*|inactive|churned|lapsed",
         "set up|build|create|automate|start & win back|winback|re engagement|onboarding|welcome|drip|nurture & email*|sequence*|flow*"
       ],
+      "decisions": [],
       "legacy": [
         "lifecycle-campaign"
       ],
@@ -5072,6 +5144,7 @@
         "outbound|cold outreach|outreach|prospecting|founder led sales & campaign|engine|end to end|start|run|track|review|results|readout|evaluate & !write|draft",
         "outbound|cold outreach|prospecting & to & owner*|cfo*|vp*|leader*|brand*|partner*|head*|founder*|manager*|director*"
       ],
+      "decisions": [],
       "legacy": [
         "outreach-sequence"
       ],
@@ -5127,6 +5200,7 @@
         "ads|ad|paid|media|paid acquisition|paid growth & run|launch|start|create & evaluat*|review|scale|keep|cut|measure|report|results|works|pilot|loop",
         "paid test|paid pilot|ad test|test budget & google|meta|facebook|linkedin|tiktok|reddit|run|launch & keep|cut|kill|scale|works|tell me"
       ],
+      "decisions": [],
       "legacy": [
         "paid-campaign-loop"
       ],
@@ -5192,6 +5266,7 @@
         "reach|hit|get to & mrr|arr|revenue|paying|customer*|user* & plan|first|what do we do",
         "goal|target|board|investor*|wants|need & mrr|arr|revenue|growth|3x|2x|double|triple & into a plan|a plan|the plan|plan"
       ],
+      "decisions": [],
       "legacy": [
         "target-to-growth-plan"
       ],
@@ -5241,6 +5316,7 @@
       "signals": [
         "press|pr|journalist*|reporter*|media coverage|earned media|analyst*|podcast*|newsletter* & coverage|campaign|pitch|get|land|booked|featured|write about|earn|briefing*"
       ],
+      "decisions": [],
       "legacy": [
         "earned-media-outreach"
       ],
@@ -5300,6 +5376,7 @@
         "page* & for each|for every|each|every & industry|city|location*|competitor*|integration*|use case*|role* & at scale|programmatic|organic|seo|search",
         "comparison pages|versus pages|vs pages|alternative pages|alternatives pages & create|build|make|generate|spin up"
       ],
+      "decisions": [],
       "legacy": [
         "build-programmatic-search"
       ],
@@ -5347,6 +5424,7 @@
       "signals": [
         "image|graphic*|share card|carousel|thumbnail|banner|rendered|visual & review|check|qa|critique|work|off|before|legib*"
       ],
+      "decisions": [],
       "legacy": [
         "creative-asset-review"
       ],
@@ -5391,6 +5469,7 @@
         "give & get & friend*|invite*|refer*",
         "give & get & program|credit|reward*|bonus|friend*|invite*"
       ],
+      "decisions": [],
       "legacy": [
         "referral-loop"
       ],
@@ -5439,6 +5518,7 @@
       "signals": [
         "post*|content|blog*|newsletter*|instagram|linkedin|youtube & did|perform*|working|results|report|open rate*|click rate*|do more|how did"
       ],
+      "decisions": [],
       "legacy": [
         "content-performance-review"
       ],
@@ -5486,6 +5566,7 @@
         "ugc & campaign|creators",
         "series|recurring & weekly|iterate|hooks|campaign|make|start|plan|run & short*|reel*|tiktok*|video*|youtube"
       ],
+      "decisions": [],
       "legacy": [
         "shortform-campaign"
       ],
@@ -5537,6 +5618,7 @@
         "screens and flows spec"
       ],
       "signals": [],
+      "decisions": [],
       "legacy": [
         "specify-product-experience"
       ],
@@ -5582,6 +5664,7 @@
       "signals": [
         "preview video|app preview|app trailer|trailer|store preview|demo video|interaction video|screenshot sequence & make|create|script|plan|storyboard|app|our"
       ],
+      "decisions": [],
       "legacy": [
         "create-app-preview"
       ],

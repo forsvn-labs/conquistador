@@ -88,18 +88,28 @@ const requestOpener = new RegExp(String.raw`^(?:[^,.;:]{0,60},\s*)?(?:(?:task|re
   + String.raw`(?:(?:(?:can|could|would|will)\s+you\s+(?:please\s+)?|help\s+(?:me|us)\s+(?:to\s+)?|let'?s\s+|(?:i|we)(?:\s+would|'d)?\s+(?:need|want|like)\s+you\s+to\s+)?${instruction}(?=\s+[\w"'$])`
   + String.raw`|(?:i|we)(?:\s+would|'d)?\s+(?:need|want|like)\s+(?:a|an|the|some|one|two|three|four|five|six|seven|eight|nine|ten|\d+)\b)`, 'i');
 const listItem = /^\s*(?:[-*•–]|\d+[.)])\s+/;
-export function requestFocus(prompt) {
+// With `questions`, a question sentence also counts as the request ("Should we raise our price?"
+// pasted above the facts it rests on).
+export function requestFocus(prompt, { questions = false } = {}) {
   const units = [];
+  const asks = sentence => requestOpener.test(sentence) || (questions && /\?\s*$/.test(sentence));
 
   for (const line of unquotedRequest(prompt).replace(invocation, ' ').split(/\n+/)) {
     if (!/[\p{L}\p{N}]/u.test(line)) continue;
     if (listItem.test(line)) units.push({ text: line, request: false });
-    else for (const sentence of line.split(/(?<=[.!?])\s+/)) if (/[\p{L}\p{N}]/u.test(sentence)) units.push({ text: sentence.trim(), request: requestOpener.test(sentence.trim()) });
+    else for (const sentence of line.split(/(?<=[.!?])\s+/)) if (/[\p{L}\p{N}]/u.test(sentence)) units.push({ text: sentence.trim(), request: asks(sentence.trim()) });
   }
   const request = units.filter(unit => unit.request);
 
   return request.length && request.length < units.length ? request.map(unit => unit.text).join('\n') : null;
 }
+
+// A clause that opens with an instruction asks for its own deliverable ("Plan the launch").
+export const instructionClause = clause => requestOpener.test(clause.trim());
+
+// A decision request asks what to do (should we, which, is it real, design a test). A request to write
+// something names its deliverable; decision words in its subject do not make it a decision.
+export const decisionRequest = text => !/\b(?:write|draft|compose|rewrite|publish)\b/i.test(text);
 
 // Admission runs before phrase matching or retrieval. Topic words alone are not a task.
 export function requestedBusinessClauses(prompt, options) {
