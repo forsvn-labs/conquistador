@@ -1,0 +1,229 @@
+{
+  "$schema": "./schemas/practices.schema.json",
+  "schemaVersion": "conquistador.practices/v1",
+  "practices": [
+    {
+      "id": "outbound",
+      "judge": "human",
+      "status": "passed",
+      "pr": 98,
+      "members": [
+        "commands/outreach",
+        "plays/outbound"
+      ]
+    },
+    {
+      "id": "copy",
+      "judge": "human",
+      "status": "pass-through",
+      "pr": 99,
+      "note": "Copy passes the request through to the model, except sales pages and sales letters, which keep the long-form method.",
+      "members": [
+        "commands/copy",
+        "plays/landing",
+        "specialists/copy-agent",
+        "specialists/dr-landing-agent",
+        "specialists/saas-landing-agent"
+      ]
+    },
+    {
+      "id": "ads",
+      "judge": "human",
+      "status": "failed",
+      "commit": "5594fa7",
+      "date": "2026-10-27",
+      "pr": 104,
+      "note": "Round 1 failed; round 2 is pending.",
+      "members": [
+        "commands/ads",
+        "plays/paid",
+        "specialists/ads-agent"
+      ]
+    },
+    {
+      "id": "social",
+      "judge": "human",
+      "status": "passed",
+      "commit": "3a573a7",
+      "date": "2026-10-27",
+      "pr": 103,
+      "note": "Judged on the pull request branch commit; the pull request is not merged yet.",
+      "members": [
+        "commands/social",
+        "channels/facebook",
+        "channels/hacker-news",
+        "channels/instagram",
+        "channels/linkedin",
+        "channels/product-hunt",
+        "channels/reddit",
+        "channels/x"
+      ]
+    },
+    {
+      "id": "video",
+      "judge": "human",
+      "status": "untested",
+      "members": [
+        "commands/video",
+        "commands/watch",
+        "plays/series",
+        "plays/trailer",
+        "channels/tiktok",
+        "channels/youtube",
+        "formats/founder-demo",
+        "formats/motion-background",
+        "formats/ugc"
+      ]
+    },
+    {
+      "id": "creative",
+      "judge": "human",
+      "status": "untested",
+      "members": [
+        "commands/creative",
+        "commands/brand",
+        "plays/qa",
+        "specialists/creative-assets-agent"
+      ]
+    },
+    {
+      "id": "content",
+      "judge": "human",
+      "status": "untested",
+      "members": [
+        "commands/article",
+        "commands/ideas",
+        "commands/vietnamese",
+        "plays/content",
+        "channels/email-newsletter"
+      ]
+    },
+    {
+      "id": "seo",
+      "judge": "pending-calibration",
+      "status": "untested",
+      "members": [
+        "commands/seo",
+        "plays/answers",
+        "plays/pseo",
+        "plays/appstore"
+      ]
+    },
+    {
+      "id": "pricing",
+      "judge": "pending-calibration",
+      "status": "untested",
+      "members": [
+        "commands/pricing"
+      ]
+    },
+    {
+      "id": "experiment",
+      "judge": "pending-calibration",
+      "status": "untested",
+      "members": [
+        "plays/experiment",
+        "commands/convert",
+        "commands/prioritize",
+        "commands/decide"
+      ]
+    },
+    {
+      "id": "channels",
+      "judge": "pending-calibration",
+      "status": "untested",
+      "members": [
+        "commands/channels",
+        "commands/budget",
+        "plays/expand"
+      ]
+    },
+    {
+      "id": "positioning",
+      "judge": "pending-calibration",
+      "status": "untested",
+      "members": [
+        "commands/position",
+        "plays/gtm"
+      ]
+    },
+    {
+      "id": "measurement",
+      "judge": "pending-calibration",
+      "status": "untested",
+      "members": [
+        "commands/measure",
+        "commands/results",
+        "commands/funnel",
+        "commands/diagnose",
+        "plays/report",
+        "plays/plan",
+        "specialists/campaign-data-agent",
+        "specialists/data-diagnosis-agent"
+      ]
+    },
+    {
+      "id": "launch",
+      "judge": "pending-calibration",
+      "status": "untested",
+      "members": [
+        "plays/launch",
+        "plays/press",
+        "commands/campaign",
+        "commands/event",
+        "plays/lifecycle",
+        "plays/referral",
+        "plays/interactive"
+      ]
+    },
+    {
+      "id": "product",
+      "judge": "pending-calibration",
+      "status": "untested",
+      "members": [
+        "commands/flow",
+        "commands/shape",
+        "commands/ui",
+        "plays/spec"
+      ]
+    },
+    {
+      "id": "review",
+      "judge": "pending-calibration",
+      "status": "untested",
+      "members": [
+        "commands/audit",
+        "commands/check",
+        "commands/critique",
+        "commands/factcheck",
+        "commands/review"
+      ]
+    },
+    {
+      "id": "engineering",
+      "judge": "pending-calibration",
+      "status": "untested",
+      "note": "Engineering and tooling commands stay as they are.",
+      "members": [
+        "commands/architect",
+        "commands/build",
+        "commands/docs",
+        "commands/connect",
+        "commands/doctor",
+        "commands/feedback",
+        "commands/init",
+        "commands/pin"
+      ]
+    }
+  ],
+  "nonMethods": [
+    {
+      "member": "specialists/roster",
+      "reason": "Index of the specialist roles; not a method."
+    },
+    {
+      "member": "specialists/deep-modes",
+      "reason": "Notes on when to load deep modes; not a method."
+    }
+  ]
+}
