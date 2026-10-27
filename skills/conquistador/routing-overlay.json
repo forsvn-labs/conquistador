@@ -546,7 +546,7 @@
         "how much & spend|invest|put & channel*|ads|paid|marketing|google|meta|linkedin"
       ],
       "decisions": [
-        "where should|how should|how much should|should we|should i|how do we & budget*|money|dollars|cash|funds|spend* & go|split|allocat*|divide|distribut*|move|shift|put|reallocat*|invest|more|less|between|across & !time|hours|effort",
+        "where should|how should|should we|should i|how do we & budget*|money|dollars|cash|funds|spend* & go|split|allocat*|divide|move|shift|put|invest|more|less|between|across & !time|hours|effort",
         "how should|where should|should we|how do we|how much & split|allocat*|divide|distribut*|reallocat* & between|across"
       ]
     },
@@ -861,9 +861,9 @@
         "channel* & ideal customer*|icp|audience|buyer* & hang out|find|where|reach"
       ],
       "decisions": [
-        "should we|do we|whether to|is it worth|is it time to|can we & keep|stop|drop|cut|cancel|renew|continue|pause|quit|end|double down & sponsor*|booth*|trade show*|conference*|podcast*|channel*|platform*|influencer*|events|meetup*|directories|listing*",
+        "should we|do we|whether to|is it worth|can we & keep|stop|drop|cut|cancel|renew|continue|pause|quit|double down & sponsor*|booth*|trade show*|conference*|podcast*|channel*|platform*|influencer*|events|meetup*|directories|listing*",
         "which|what & channel*|platform* & add|try|test|start|pick|choose|focus|next|double down|invest|drop|cut|prioriti*",
-        "worth it|worth our time|worth the money|worth the time|worth keeping|still worth & linkedin|youtube|tiktok|instagram|facebook|pinterest|reddit|twitter|podcast*|sponsor*|seo|events|conference*|trade show*|channel*|platform*|webinar*|community|discord & !ads|ad",
+        "worth & linkedin|youtube|tiktok|instagram|facebook|pinterest|reddit|twitter|podcast*|sponsor*|seo|events|conference*|trade show*|channel*|platform*|webinar*|community|discord & !ads|ad",
         "should we|whether to|is it time to & try|test|start|move to|switch to|expand to|double down on|go all in on|invest in & channel*|platform*|tiktok|youtube|linkedin|instagram|pinterest|reddit|podcast*|sponsorship*|influencer*|events|trade show*|conference*|community|seo|webinar* & !ads|ad"
       ]
     },
@@ -1301,10 +1301,7 @@
       "aliases": [
         "decision-panel",
         "weigh both sides",
-        "argue both sides",
-        "argue both positions",
-        "lay out both sides",
-        "debate both sides"
+        "argue both sides"
       ],
       "exclusions": [
         "write copy",
@@ -2374,10 +2371,10 @@
         "free trial|trial & how long|length|days|long|should"
       ],
       "decisions": [
-        "should we|should i|whether to|is it time to|do we & raise|increase|lower|cut|change|drop|double & price*|pricing",
-        "should we|should i|whether to|do we & add|offer|introduce|launch|create|move to|switch to & tier*|annual plan*|annual billing|annual discount|discount*|premium plan|pro plan|team plan|enterprise plan|add on*|addon*|usage based|per seat|seat based|free trial|free tier|free plan|freemium",
-        "free plan|free tier|free version|freemium & limit*|cap|caps|capped|allowance|quota|include|includes|generous|too much|too little|give away|giving away|gate|gated|keep for paid|right & should|what|how|is|are|whether|too",
-        "discount*|off|price cut|lower price & counter*|counteroffer|negotiat*|push back|how should we respond|should we accept|should we agree|what should we offer|what should we give & contract*|commitment|multi year|years|renew*|prospect*|customer*|client*|buyer*|deal"
+        "should we|should i|whether to|is it time to|do we & raise|increase|lower|cut|change|drop|double & pric*",
+        "should we|should i|whether to|do we & add|offer|introduce|launch|move to|switch to & tier*|annual*|discount*|premium plan|pro plan|team plan|enterprise plan|add on*|usage based|per seat|free trial|free tier|free plan|freemium",
+        "free plan|free tier|free version|freemium & limit*|cap|caps|allowance|quota|include*|generous|too much|too little|giv* away|gate|gated|keep for paid|right & should|what|how|is|are|whether|too",
+        "discount*|off|price cut & counter*|negotiat*|push back|how should we respond|should we accept|should we agree|what should we offer & contract*|commitment|multi year|years|renew*|prospect*|customer*|client*|deal"
       ]
     },
     "prioritize": {
@@ -3472,8 +3469,8 @@
         "series of|run of|set of|loop of|cycle of & test*|experiment*|bet* & measured|kill|learn*|hypothes*|improve|activation|retention"
       ],
       "decisions": [
-        "design|plan|structure|scope|set up|setup|propose|outline|map out|suggest & a b test*|ab test*|split test*|multivariate test*|experiment*|test|tests|pilot|pilots & !suite|unit|integration|e2e|end to end|regression|load|smoke|test case*|test plan*|coverage|harness|fixture*|paid test*|paid ad*|paid social|paid search|paid media|paid campaign*|ad|ads|ad set*|budget*|spend*|reserve*|price*|pricing|paywall*|free trial|trial length|discount*|channel*",
-        "test*|experiment*|a b|split test*|variant*|challenger|new version & won|win|wins|winner|beat|beats|result*|significan*|lift|uplift|outperform* & real|trust|significan*|ship|roll out|rollout|noise|chance|luck|valid|confiden*|call it|believe|fluke"
+        "design|plan|structure|scope|set up|propose|outline|map out|suggest & a b test*|ab test*|split test*|experiment*|test|tests|pilot* & !suite|unit|integration|e2e|end to end|regression|load|smoke|test case*|test plan*|coverage|harness|fixture*|paid test*|paid ad*|paid social|paid search|paid media|paid campaign*|ad|ads|budget*|spend*|reserve*|pric*|paywall*|free trial|trial length|discount*|channel*",
+        "test*|experiment*|a b|variant*|challenger|new version & won|win|wins|winner|beat*|result*|significan*|lift|uplift|outperform* & real|trust|significan*|ship|roll out|rollout|noise|chance|luck|valid|confiden*|call it|believe|fluke"
       ]
     },
     "gtm": {

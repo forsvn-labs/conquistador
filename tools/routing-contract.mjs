@@ -167,7 +167,8 @@ export function buildRoutingContract(root = moduleRoot) {
       signals: [...(spec.signals ?? [])],
       // Decision signals: the same word slots, read only in a decision request (should we, which, is it
       // real, design a test). The owner of a decision leads ahead of methods that only share its words.
-      decisions: [...(spec.decisions ?? [])],
+      // Declared only where present: the contract stays inside the 256 KiB resource limit.
+      ...(spec.decisions?.length ? { decisions: [...spec.decisions] } : {}),
       exclusions: [...(spec.exclusions ?? [])],
       requiredResources: required,
       conditionalResources: conditional.map(item => item.path),
@@ -212,7 +213,7 @@ export function buildRoutingContract(root = moduleRoot) {
         path,
         intents: meta.intents,
         signals: [...(overlay.plays?.[name]?.signals ?? [])],
-        decisions: [...(overlay.plays?.[name]?.decisions ?? [])],
+        ...(overlay.plays?.[name]?.decisions?.length ? { decisions: [...overlay.plays[name].decisions] } : {}),
         legacy: meta.legacy ? [meta.legacy] : [],
         chain: steps,
         dependencies,
@@ -269,7 +270,7 @@ export function buildRoutingContract(root = moduleRoot) {
     parentMethods,
     methods,
     unavailableMethods: expected.filter(name => !methods[name]).map(name => ({ name, kind: overlay.methods[name].kind,
-      intents: overlay.methods[name].intents, aliases: overlay.methods[name].aliases ?? [], signals: overlay.methods[name].signals ?? [], decisions: overlay.methods[name].decisions ?? [], exclusions: overlay.methods[name].exclusions,
+      intents: overlay.methods[name].intents, aliases: overlay.methods[name].aliases ?? [], signals: overlay.methods[name].signals ?? [], ...(overlay.methods[name].decisions?.length ? { decisions: overlay.methods[name].decisions } : {}), exclusions: overlay.methods[name].exclusions,
       explicitOnly: overlay.methods[name].explicitOnly === true || overlay.explicitOnly.includes(name) })),
     plays,
     roles,

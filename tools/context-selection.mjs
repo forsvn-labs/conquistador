@@ -1,7 +1,7 @@
 import { existsSync, lstatSync, readFileSync } from 'node:fs';
 import { join, posix, resolve } from 'node:path';
 import { assertLoadAllowed, loadRestriction } from './domain-package.mjs';
-import { decisionRequest, explicitInvocation, instructionClause, invokedCommand, requestedBusinessClauses, requestFocus, requestMode, requestOperation, normalizeRequest as normalized, includesPhrase } from './request-text.mjs';
+import { decisionRequest, explicitInvocation, instructionClause, invokedCommand, requestedBusinessClauses, requestFocus, requestMode, requestOperation, unquotedRequest, normalizeRequest as normalized, includesPhrase } from './request-text.mjs';
 import { loadRoutingContract } from './routing-contract.mjs';
 import { packageRootOf } from './module-root.mjs';
 
@@ -426,9 +426,10 @@ function routeRequest(request, prompt, { packageRoot, restriction, contract, pro
   // A "for" or "about" tail is context ("a post for our launch"). "For each", "for every", and
   // "for search" still describe the deliverable ("pages for each competitor").
   const stage = clause => clause.replace(/^\s*(?:for|about)\s+/i, '').split(/\b(?:for(?! (?:each|every|all|search|seo|organic)\b)|about|announcing)\b/i)[0];
-  // A clause that asks for a named deliverable ("Plan the launch") keeps decision words from other
-  // clauses from combining into a decision across the request.
+  // Decision words from separate clauses combine only in a question ("Our test says B won. Is it
+  // real?"), and only when no clause asks for a named deliverable ("Plan the launch").
   let namedRequest = false;
+  const asksQuestion = /\?/.test(unquotedRequest(request));
   for (const clause of clauses) {
     parentMethod ??= parentMatch(clause, contract, restriction);
 
@@ -449,7 +450,7 @@ function routeRequest(request, prompt, { packageRoot, restriction, contract, pro
     const empty = !selectedAll.length;
     const strongest = Math.max(0, ...selectedAll.map(item => item.score ?? 0));
     const strongestDecision = Math.max(0, ...selectedAll.filter(item => item.matchKind === 'decision').map(item => item.score));
-    const lead = matchingMethods(business.join('. '), contract, { permitGrowthInference: false, decisions: !namedRequest || empty })
+    const lead = matchingMethods(business.join('. '), contract, { permitGrowthInference: false, decisions: asksQuestion && (!namedRequest || empty) })
       .filter(item => contract.methods[item.name] && (empty || (item.matchKind === 'signal' && item.score > strongest) || (item.matchKind === 'decision' && item.score > strongestDecision)))
       // A phrase found only in the context tail names the subject, not a stage, so it does not outrank a play.
       .map(item => (['signal', 'decision'].includes(item.matchKind) ? item : { ...item, matchKind: 'context' }));
@@ -486,7 +487,7 @@ function routeRequest(request, prompt, { packageRoot, restriction, contract, pro
   const outcome = productSpec ? 'product spec' : requestedOutcome;
   const matchedPlay = invoked?.kind === 'command' ? null : selectPlay(outcome, selectedAll, contract, restriction, invoked?.name);
   if (!productSpec && invoked?.kind !== 'command' && !invoked) {
-    const owner = decisionPlay([...business.map(stage), ...(namedRequest ? [] : [business.join('. ')])], selectedAll, contract, restriction);
+    const owner = decisionPlay([...business.map(stage), ...(asksQuestion && !namedRequest ? [business.join('. ')] : [])], selectedAll, contract, restriction);
     if (owner && (!matchedPlay || matchedPlay.name === owner)) decidedPlay = owner;
   }
   // A decision request: the owner of the decision leads and methods that only shared its words leave.

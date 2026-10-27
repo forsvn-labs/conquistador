@@ -80,6 +80,8 @@
     { "mode": "decide", "lead": ["decide"], "task": "Should we move upmarket or stay self-serve? Argue both sides" },
     { "mode": "prioritize", "lead": ["prioritize"], "noPlay": true, "task": "Which of these five experiments should we run first?" },
     { "mode": "diagnosis-before-prescription", "lead": ["diagnose"], "task": "Signups fell 30% last month. Should we cut our price?" },
+    { "mode": "decision-words-across-clauses", "lead": ["diagnose"], "noPlay": true, "task": "Find out why trial signups stalled this spring. Compare against last quarter, check the onboarding funnel, and test a few explanations. Propose one next check." },
+    { "mode": "decision-words-across-clauses", "lead": ["copy"], "noPlay": true, "task": "Plan the spring launch for Kilnly and test two headlines on the landing page" },
     { "mode": "writing-about-a-decision", "lead": ["social"], "noPlay": true, "none": ["experiment"], "task": "Write a LinkedIn post about how we design growth experiments" },
     { "mode": "writing-about-a-decision", "lead": ["copy"], "noPlay": true, "none": ["pricing"], "task": "Write an email telling customers we are raising prices in May" },
     { "mode": "writing-about-a-decision", "lead": ["article"], "noPlay": true, "none": ["pricing"], "task": "Draft a blog post on whether startups should offer a free plan" }
