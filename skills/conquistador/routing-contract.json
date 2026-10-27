@@ -2934,7 +2934,7 @@
       ],
       "decisions": [
         "rank*|prioriti*|force rank|triage & idea*|experiment*|bet*|initiative*|project*|options|backlog & !google|search|seo|serp|keyword*|chatgpt|ai answer*|channel*|platform*",
-        "which|what|pick|choose|order & idea*|experiment*|bet*|initiative*|project*|options|backlog|these & first|next|top & !channel*|platform*"
+        "which|what|pick|choose|order & idea*|experiment*|bet*|initiative*|project*|options|backlog & first|next|top & !channel*|platform*"
       ],
       "exclusions": [
         "write copy"
