@@ -4832,7 +4832,7 @@
     },
     {
       "path": "skills/conquistador/routing-contract.json",
-      "sha256": "f9f10a643a74b8621d20ef2d2c5df488bec56c035e8f2b13538589dab4a48666"
+      "sha256": "a38fde5d9265c5b271c9deac2367df61474b1b4d707e460bfad70d35ade2edbe"
     },
     {
       "path": "skills/conquistador/routing-overlay.json",
@@ -4996,7 +4996,7 @@
     },
     {
       "path": "tools/routing-contract.mjs",
-      "sha256": "355112bf87cb959e94b32899507b1e19070254a74ae9cada81cb5200165c789f"
+      "sha256": "2b854ba0b92a1ce791a58ea4d0f7789fc3e742f309760da9958814048da3e046"
     },
     {
       "path": "tools/rubric-gate.mjs",
