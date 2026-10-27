@@ -368,8 +368,12 @@ export function createBrief(input, { root = moduleRoot, playbooks, persistCache 
   if (!methods.length && !play && !platforms.length && !(explicit || force)) {
     return { schema: BRIEF_SCHEMA, action: 'none', reason: routed.reason ?? 'no-relevant-capability', methods: [], must: [], situational: [], platforms: [], packageRoot };
   }
-  const required = new Set(methods.flatMap(item => item.requiredResources ?? []).map(path => path.slice(libraryRoot.length + 1)));
   const salesPage = SALES_PAGE.test(normalizeRequest(prompt));
+  // A resource whose stated condition the request meets ranks like a required file: the sales page method
+  // leads a sales page brief by rule, not by a keyword-score margin.
+  const required = new Set([...methods.flatMap(item => item.requiredResources ?? []),
+    ...(salesPage ? (methods[0]?.resourceConditions ?? []).filter(item => /\bsales page or sales letter\b/i.test(item.when)).map(item => item.path) : [])]
+    .map(path => path.slice(libraryRoot.length + 1)));
   const passThrough = play ? !KEEPS_PLAY.has(play.name) : methods.length > 0 && thinMethod(methods[0].name, salesPage);
   // A thin route inlines every selected entry. Only a utility the request also selected keeps its files
   // ("write it in Vietnamese"); a craft secondary keeps its entry, which links its method.
