@@ -4,7 +4,8 @@ Use for Show HN posts, the maker's first comment, and replies.
 
 ## Decisions
 
-- Show HN is for something people can try now. If it needs a sign-up or a waitlist, say so, or wait.
+- Show HN is for something people can try now. A sign-up is fine only when it leads straight to the
+  working product. If readers can only join a waitlist, wait until they can try it.
 - The title states what it is and does, in plain terms. No adjectives, no claims of "best" or "first".
 - The first comment, from the maker, says why you built it, how it works at the level a skeptical
   engineer wants, what it does not do yet, and where to try it. Mention price and licence plainly.
@@ -16,6 +17,9 @@ Use for Show HN posts, the maker's first comment, and replies.
 - A title holds 80 characters and starts "Show HN:" for a Show HN.
 - The guidelines forbid asking for upvotes or comments, and posting from several accounts.
 - Text with a link: the URL goes in the link field, and the explanation goes in the first comment.
+- The guidelines ask that posts and comments come from the people writing them, not from generated
+  text. Give the maker an outline and notes for the title, the first comment, and replies, and have
+  them write the final words themselves. Do not hand over text to paste.
 
 ## Annotated pairs
 
