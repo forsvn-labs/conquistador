@@ -3972,7 +3972,8 @@
         "outreach sequence"
       ],
       "requiredResources": [
-        "skills/conquistador/commands/social/references/method.md"
+        "skills/conquistador/commands/social/references/method.md",
+        "skills/conquistador/references/writing-guide.md"
       ],
       "conditionalResources": [
         "skills/conquistador/commands/social/references/photo-slideshows.md",

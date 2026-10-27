@@ -2994,7 +2994,8 @@
         "outreach sequence"
       ],
       "requiredResources": [
-        "references/method.md"
+        "references/method.md",
+        "@parent/references/writing-guide.md"
       ],
       "conditionalResources": [
         {
