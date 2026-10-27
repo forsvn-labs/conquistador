@@ -661,6 +661,9 @@ export function packBrief(brief, { limit, callerContext, hosted = false, compact
   // Budget the complete public tool result, including provenance and deferred resource paths.
   // Drop whole blocks only; never claim a partial body was inlined.
   if (limit >= 2000) {
+    // Optional deferred paths go before inlined guidance: a long path name must not push out a method file.
+    const optional = () => structured.situational.findLastIndex(path => !isRequired(path));
+    while (encodedBytes() > limit && optional() >= 0) structured.situational.splice(optional(), 1);
     while (encodedBytes() > limit && includedBlocks.length) {
       const block = includedBlocks.pop();
       const item = inlined.pop();
