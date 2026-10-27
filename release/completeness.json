@@ -4783,11 +4783,11 @@
     },
     {
       "path": "conquistador/routing-contract.json",
-      "sha256": "9bc1a105e4af1eeafc6c485c971b33152d254bdb6373e0cbabc8e8397e5b5f58"
+      "sha256": "ca0405ce65699b187e79c74371852ef471ea68b1348db8bc00b5f3c130940b28"
     },
     {
       "path": "conquistador/routing-overlay.json",
-      "sha256": "b1832dbc661a9f89747dcbefa779f183849fec41836b84f84c8d0ee266a031af"
+      "sha256": "eb0412360eb84f23a88ffe37e72ae24d458acce4f0f014ba28cc5fa8e9b39233"
     },
     {
       "path": "conquistador/rubrics/composition.md",
@@ -4921,7 +4921,7 @@
     },
     {
       "path": "tools/routing-contract.mjs",
-      "sha256": "3466323ca36409d7cf6a08eacbd502866f62f0c528a0fabe65ee260e04ad2b49"
+      "sha256": "994b888b36dabfb15281623d9df346a321006b40df32771ac7351b6fbbb5e634"
     },
     {
       "path": "tools/module-root.mjs",
@@ -4929,7 +4929,7 @@
     },
     {
       "path": "tools/request-text.mjs",
-      "sha256": "0ed972fc3c8567771065fa1d77873ec5797396fac28c8248ff51651c76ce75e7"
+      "sha256": "ab95b939c8d1d6306c5fbf6e78282ab3280080ae714800008758cd79bde3c8a6"
     },
     {
       "path": "tools/knowledge-index.mjs",
@@ -4937,7 +4937,7 @@
     },
     {
       "path": "tools/brief.mjs",
-      "sha256": "1e80c2d1a3cdb4a99818b9e8a8fb9199e51e1b961bd9fe320cf410dca10f5c82"
+      "sha256": "7bbe6576776c28a1099b1186df6990d0739c16adfe9bc4c704f6bc10ed44a95d"
     },
     {
       "path": "tools/search-index.json",
@@ -4957,7 +4957,7 @@
     },
     {
       "path": "tools/context-selection.mjs",
-      "sha256": "9d7f847c9c9891a869bb7974c745f82b7bd1977cc4f62bf865454f5ffdb8830a"
+      "sha256": "42799a7e7ed309d3c58ba5f55d507560829239d1df31de40c56adfa342cfe5a4"
     },
     {
       "path": "agents/conquistador/agent.json",
