@@ -1,31 +1,32 @@
 # Conquistador status
 
-Updated 2026-10-27. Release evidence: [PR #109](https://github.com/forsvn-labs/conquistador/pull/109),
-[release PR #110](https://github.com/forsvn-labs/conquistador/pull/110),
-[v0.11.0](https://github.com/forsvn-labs/conquistador/releases/tag/v0.11.0), and
-[publication run 40481863510](https://github.com/forsvn-labs/conquistador/actions/runs/40481863510).
+Updated 2026-10-29. Release evidence: [PR #112](https://github.com/forsvn-labs/conquistador/pull/112),
+[release PR #113](https://github.com/forsvn-labs/conquistador/pull/113),
+[v0.12.0](https://github.com/forsvn-labs/conquistador/releases/tag/v0.12.0), and
+[publication run 40916514798](https://github.com/forsvn-labs/conquistador/actions/runs/40916514798).
 
-## Release candidate 0.12.0
+## Shipped 0.12.0
 
-Prepared 2026-10-29 from [PR #112](https://github.com/forsvn-labs/conquistador/pull/112),
-merged at `942b395`. This candidate adds the distillation workflow, the growth
-playbook, broader routing, a facts-only SMS and WhatsApp channel file, corrected
-search facts, and eleven post-draft checker rules. No method craft changed.
+Product 0.12.0 is tagged at `794c5d41192755818f359d909db4b4a0e8d84728`. The tagged
+tree equals the tested candidate. The seven release assets match their checksums.
+Start with `npx conquistador@latest`.
 
-Before this version change, the product tests (one existing skip), 838 routing cases,
-44 checker fixtures, app integration, and all PR checks passed. The release candidate
-still requires its own package verification and publication evidence. These checks
-establish loading and installation, not model output quality. The hosted Worker is a
-separate deployment and is not part of this release.
+Both `@forsvn/conquistador@0.12.0` and `conquistador@0.12.0` are verified as npm latest.
+Their registry tarballs match the release bytes, and the alias pins the exact
+main-package version. `npm audit signatures` verifies the installed registry signatures
+and attestations. A fresh registry install verifies the CLI and MCP version, an
+entry-only pricing brief, an SMS brief with its facts file, a silent engineering
+request, and no Conquistador home state.
+[Registry evidence](docs/release-0.12.0-verification.json) records identities, digests,
+and checks. The CLI publication job was retried after the main version became readable
+in npm's registry.
 
-The last verified public release remains 0.11.0 until publication is checked.
-
-## Merged: distillation workflow (2026-10-29)
+### Included: distillation workflow
 
 `tools/distill.mjs` pins permissively licensed sources at exact commits, maps their units to routes,
 compares written requests with routes, and checks that public text shares no 8-word run or source
 name with a source. [docs/DISTILL.md](docs/DISTILL.md) describes the workflow. Two public skill
-libraries were distilled into private notes. This branch adds:
+libraries were distilled into private notes. The release adds:
 
 - [The growth playbook](docs/GROWTH-PLAYBOOK.md), a reference for people. Default briefs do not load it.
 - Routing for 117 new cases, including 17 engineering look-alikes that stay silent. On 455 requests
@@ -35,11 +36,11 @@ libraries were distilled into private notes. This branch adds:
 - Corrected search facts: retired FAQ and HowTo rich results, disavow scope, Apple keyword bytes.
 - Eleven post-draft checker rules. The drafting guide is unchanged, so blind-tested context is unchanged.
 
-All product tests (one existing skip), 838 routing cases, 44 checker fixtures, and app
-integration pass. No method craft changed; craft candidates wait for human blind tests. The routing
-contract is 24 bytes under its 90% safety budget. This is source verification, not a release.
+Before the version change, the product tests (one existing skip), 838 routing cases, 44 checker
+fixtures, and app integration passed. No method craft changed; craft candidates wait for human
+blind tests.
 
-## Shipped 0.11.0
+## Earlier release 0.11.0 (2026-10-27)
 
 Product 0.11.0 is tagged at `2dfa2a6362507e5c8a6796ecfc3c334557cb84a7`.
 The seven downloaded assets bind that source. All five archives match the release
@@ -150,6 +151,9 @@ remain open. They are not represented as release verification.
 2. Evaluate real tasks and corrections across methods. Keep deterministic checks,
    model judgments, human verdicts, and audience outcomes distinct.
 3. Verify marketplace listings when those distribution actions are approved.
+4. Run human blind tests on the distilled craft candidates before any of them enters a method.
+5. Give the routing contract headroom before the next routing change: it is 24 bytes under its
+   90% safety budget. Use a compact contract format or review the read limits deliberately.
 
 Gemini CLI hooks are not built. Browser and Edge app runtimes are not certified.
 Consent-bound memory and expanded method-quality evaluations remain planned work.

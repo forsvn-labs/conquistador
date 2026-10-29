@@ -1,0 +1,100 @@
+{
+  "verifiedAt": "2026-10-29T17:04:10Z",
+  "sourceCommit": "794c5d41192755818f359d909db4b4a0e8d84728",
+  "release": "https://github.com/forsvn-labs/conquistador/releases/tag/v0.12.0",
+  "publicationRun": "https://github.com/forsvn-labs/conquistador/actions/runs/40916514798",
+  "publicationRetry": {
+    "job": "publish-cli",
+    "reason": "npm accepted the main package before version 0.12.0 was readable from the registry; the job was rerun after it became readable"
+  },
+  "releaseAssets": {
+    "count": 7,
+    "verifiedArchiveChecksums": {
+      "conquistador-0.12.0.zip": "84a35b428882661f2f8d0672294a579b37c71bad7de37797316c896efb6244f4",
+      "forsvn-conquistador-0.12.0.tgz": "02d4d986ae722c55b77af6ab8c4c9aa42a011e811f4cb2c29294741e2c08129e",
+      "conquistador-0.12.0.tgz": "abb407790eb661420709772d01042edc9ed91fa592dc1a41c59b85e268d2af44",
+      "conquistador-skill-0.12.0.zip": "c5d90f0e7d9e7d6115eb358fe3acc9bb97583c46600d6ebd29186035a6c397f0",
+      "conquistador-plugin-0.12.0.zip": "1b3e2047a7a8bc010f51b21bcbecf1e2f8f4094b7eec4c8ad7701681671cfedc"
+    }
+  },
+  "checks": [
+    {
+      "name": "@forsvn/conquistador",
+      "version": "0.12.0",
+      "latest": "0.12.0",
+      "sha256": "02d4d986ae722c55b77af6ab8c4c9aa42a011e811f4cb2c29294741e2c08129e",
+      "tarball": "https://registry.npmjs.org/@forsvn/conquistador/-/conquistador-0.12.0.tgz",
+      "integrity": "sha512-JXS6piYedCXG01jUfKFldb/MhM/v9dIypU6odYi26k/S6q+NEpgX+3lG+djcnlsBqhAnDUZJAp+SeUVcC5N1KQ==",
+      "provenance": "https://registry.npmjs.org/-/npm/v1/attestations/@forsvn%2fconquistador@0.12.0",
+      "registrySignaturesPresent": true,
+      "exactAliasPin": null
+    },
+    {
+      "name": "conquistador",
+      "version": "0.12.0",
+      "latest": "0.12.0",
+      "sha256": "abb407790eb661420709772d01042edc9ed91fa592dc1a41c59b85e268d2af44",
+      "tarball": "https://registry.npmjs.org/conquistador/-/conquistador-0.12.0.tgz",
+      "integrity": "sha512-DZ5/EvGsG7ZKogXYsMYBb4MZCR6RftotaIa/KJpCscIJzmgy1/tF7ORhS6N3KzNYY4uzl700JzAXWn1sI525Qg==",
+      "provenance": "https://registry.npmjs.org/-/npm/v1/attestations/conquistador@0.12.0",
+      "registrySignaturesPresent": true,
+      "exactAliasPin": "0.12.0"
+    }
+  ],
+  "installedSmoke": {
+    "mode": "fresh npm registry installation in an isolated home",
+    "checks": [
+      {
+        "name": "fresh short-alias install resolves the exact main version",
+        "passed": true
+      },
+      {
+        "name": "installed CLI reports 0.12.0",
+        "passed": true
+      },
+      {
+        "name": "published MCP handshake reports 0.12.0",
+        "passed": true
+      },
+      {
+        "name": "published pricing brief contains only its entry",
+        "passed": true
+      },
+      {
+        "name": "published SMS compliance brief contains its entry and the SMS facts file",
+        "passed": true
+      },
+      {
+        "name": "a payment-webhook engineering request gets no brief",
+        "passed": true
+      },
+      {
+        "name": "npm audit signatures verifies the installed packages",
+        "passed": true
+      },
+      {
+        "name": "CLI and MCP create no Conquistador home state",
+        "passed": true
+      }
+    ],
+    "signatureAuditOutput": "audited 3 packages in 1s\n3 packages have verified registry signatures\n3 packages have verified attestations"
+  },
+  "candidateChecks": {
+    "sourceCommit": "81875da83004a6b3e765cbe6dfaff3bd1d0454b5",
+    "sameSourceTreeAsTag": true,
+    "productTestsPassed": 614,
+    "productTestsSkipped": 1,
+    "runtimeTestsPassed": 294,
+    "catalogTestsPassed": 167,
+    "evalTestsPassed": 150,
+    "routingCasesPassed": 838,
+    "checkerFixturesPassed": 44,
+    "appIntegration": "pass",
+    "pullRequestChecks": "12 of 12 passed on the candidate head"
+  },
+  "limits": [
+    "These checks establish packaging, publication, installation, and loading, not model output quality.",
+    "The hosted MCP Worker was not redeployed and remains on 0.10.1.",
+    "The release-asset ZIPs are verified against SHA256SUMS; only the two npm tarballs are compared with registry bytes."
+  ]
+}

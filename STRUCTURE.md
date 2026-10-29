@@ -42,6 +42,9 @@ Commands have short `ENTRY.md` guides and detailed `COMMAND.md` procedures.
 `tools/method-policy.mjs` owns the shared entry defaults used by briefing, app
 contexts, specialist assignments, installs, MCP discovery, and bot exports.
 Kept plays preserve their declared method dependencies.
+`FACTS_CHANNELS` in `tools/brief.mjs` names channel files that hold only dated facts; a thin
+route reads one when the request names its platform. `tools/distill.mjs` is a contributor tool
+for distilling licensed sources; [docs/DISTILL.md](docs/DISTILL.md) describes it.
 `tools/prompt-advice.mjs` owns shared hook advice and transcript-scoped reuse;
 `tools/read-evidence.mjs` verifies returned resource bytes. The host runs the work and checks the result. The app API reads
 bundled playbooks and caller context. Host configuration and provider
