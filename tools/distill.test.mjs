@@ -24,6 +24,7 @@
 //  C6  A missing or unfetched corpus is an error, never a silent pass.
 //  C7  A generic repository name taken from the URL (for example `seo`) is not a source name; the owner handle is.
 //  C8  Source code is not part of the prose corpus, so shared import lines are not findings.
+//  C9  With --diff <ref>, only lines added since the ref are checked; old lines and untracked files are handled.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, existsSync, readdirSync } from 'node:fs';
@@ -199,4 +200,23 @@ test('C7-C8 derives only the owner handle and checks prose only', () => {
   const named = run('check', '--registry', reg, '--out', out, '--json', owner);
   assert.equal(named.status, 1);
   assert.ok(JSON.parse(named.stdout).findings.some(item => item.kind === 'source-name' && item.text === 'someowner'));
+});
+
+test('C9 --diff checks only lines added since a Git ref', () => {
+  const { reg, out } = fetched();
+  const repo = tmp();
+  git(repo, 'init', '-q');
+  const page = join(repo, 'page.md');
+  writeFileSync(page, `Old line.\n${SOURCE_TEXT}`);
+  git(repo, 'add', '.'); git(repo, 'commit', '-qm', 'old');
+  writeFileSync(page, `Old line.\n${SOURCE_TEXT}New clean line about pricing tiers.\n`);
+  const clean = spawnSync(process.execPath, [cli, 'check', '--registry', reg, '--out', out, '--diff', 'HEAD', 'page.md'], { encoding: 'utf8', cwd: repo });
+  assert.equal(clean.status, 0, clean.stdout + clean.stderr);
+  writeFileSync(page, `Old line.\n${SOURCE_TEXT}New clean line.\n${SOURCE_TEXT}`);
+  const copied = spawnSync(process.execPath, [cli, 'check', '--registry', reg, '--out', out, '--diff', 'HEAD', '--json', 'page.md'], { encoding: 'utf8', cwd: repo });
+  assert.equal(copied.status, 1);
+  assert.deepEqual(JSON.parse(copied.stdout).findings.map(item => item.line), [4]);
+  writeFileSync(join(repo, 'new.md'), SOURCE_TEXT);
+  const untracked = spawnSync(process.execPath, [cli, 'check', '--registry', reg, '--out', out, '--diff', 'HEAD', 'new.md'], { encoding: 'utf8', cwd: repo });
+  assert.equal(untracked.status, 1, 'an untracked file is checked whole');
 });

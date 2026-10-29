@@ -106,7 +106,9 @@ node tools/distill.mjs check --registry <registry.json> --out <private folder> <
 
 The check compares prose files only (`.md`, `.mdx`, `.markdown`, `.txt`) and reports each shared
 run of 8 or more words and each source name, with its file and line. Pass `--allow <file>` with
-one stock phrase per line to accept a known common phrase. Any finding exits with code 1. Run it
+one stock phrase per line to accept a known common phrase. Pass `--diff <git ref>` to check only
+the lines added since that ref, so older text in a changed file does not add noise. An untracked
+file is checked whole. Any finding exits with code 1. Run it
 on every changed public file before you commit.
 
 ## 7. Record provenance privately

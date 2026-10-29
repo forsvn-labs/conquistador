@@ -215,7 +215,20 @@ function sourceFiles(dir) {
   return files;
 }
 
-function check({ registry: registryPath, out: outPath, allow, files }) {
+/** Line numbers added since `ref`, or null when the file is untracked (check it whole). */
+function addedLines(file, ref) {
+  const cwd = dirname(file);
+  const run = args => execFileSync('git', args, { cwd, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] });
+  try { run(['ls-files', '--error-unmatch', basename(file)]); } catch { return null; }
+  const added = new Set();
+  for (const match of run(['diff', '-U0', ref, '--', basename(file)]).matchAll(/^@@ -\S+ \+(\d+)(?:,(\d+))? @@/gm)) {
+    const start = Number(match[1]);
+    for (let line = start; line < start + Number(match[2] ?? 1); line += 1) added.add(line);
+  }
+  return added;
+}
+
+function check({ registry: registryPath, out: outPath, allow, diff, files }) {
   if (!files.length) fail('Name at least one file to check');
   const registry = readRegistry(registryPath);
   const out = requirePrivatePath(outPath, 'Corpus folder');
@@ -233,6 +246,8 @@ function check({ registry: registryPath, out: outPath, allow, files }) {
   const findings = [];
   for (const file of files.map(path => resolve(path))) {
     const lines = readFileSync(file, 'utf8').split('\n');
+    const added = diff ? addedLines(file, diff) : null;
+    const inScope = line => !added || added.has(line);
     const tokens = lines.flatMap((line, index) => words(line).map(word => ({ word, line: index + 1 })));
     let i = 0;
     while (i + RUN_WORDS <= tokens.length) {
@@ -240,10 +255,12 @@ function check({ registry: registryPath, out: outPath, allow, files }) {
       let end = i + RUN_WORDS;
       while (end < tokens.length && shingles.has(tokens.slice(end - RUN_WORDS + 1, end + 1).map(token => token.word).join(' '))) end += 1;
       const run = tokens.slice(i, end).map(token => token.word).join(' ');
-      if (!allowed.some(phrase => phrase.includes(run))) findings.push({ file, line: tokens[i].line, kind: 'shared-run', words: end - i, text: run });
+      const touched = tokens.slice(i, end).some(token => inScope(token.line));
+      if (touched && !allowed.some(phrase => phrase.includes(run))) findings.push({ file, line: tokens[i].line, kind: 'shared-run', words: end - i, text: run });
       i = end;
     }
     lines.forEach((line, index) => {
+      if (!inScope(index + 1)) return;
       for (const name of names) {
         const pattern = new RegExp(`(^|[^\\p{L}\\p{N}])${name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/[\s-]+/g, '[\\s-]+')}($|[^\\p{L}\\p{N}])`, 'iu');
         if (pattern.test(line)) findings.push({ file, line: index + 1, kind: 'source-name', text: name });
@@ -258,7 +275,7 @@ function parseArgs(argv) {
   for (let i = 0; i < argv.length; i += 1) {
     const arg = argv[i];
     if (arg === '--json') options.json = true;
-    else if (['--registry', '--out', '--notes', '--allow'].includes(arg)) {
+    else if (['--registry', '--out', '--notes', '--allow', '--diff'].includes(arg)) {
       if (!argv[i + 1]) fail(`${arg} needs a value`);
       options[arg.slice(2)] = argv[++i];
     } else if (arg.startsWith('--')) fail(`Unknown option ${arg}`);
@@ -271,7 +288,7 @@ const USAGE = `Usage:
   node tools/distill.mjs fetch     --registry <file> --out <private folder>
   node tools/distill.mjs inventory --registry <file> --out <private folder>
   node tools/distill.mjs routes    --notes <notes folder> [--json]
-  node tools/distill.mjs check     --registry <file> --out <private folder> [--allow <file>] [--json] <public files...>`;
+  node tools/distill.mjs check     --registry <file> --out <private folder> [--allow <file>] [--diff <git ref>] [--json] <public files...>`;
 
 function main([command, ...rest]) {
   const options = parseArgs(rest);
