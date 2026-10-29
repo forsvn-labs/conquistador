@@ -87,6 +87,7 @@
     "!tools/*.py",
     "!**/bun.lock",
     "!tools/dev.mjs",
+    "!tools/distill.mjs",
     "!tools/knowledge-map.mjs",
     "!tools/method-copies.json",
     "!tools/method-copies.mjs",
