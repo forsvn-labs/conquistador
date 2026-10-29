@@ -5,7 +5,22 @@ Updated 2026-10-27. Release evidence: [PR #109](https://github.com/forsvn-labs/c
 [v0.11.0](https://github.com/forsvn-labs/conquistador/releases/tag/v0.11.0), and
 [publication run 40481863510](https://github.com/forsvn-labs/conquistador/actions/runs/40481863510).
 
-## In review: distillation workflow (2026-10-29)
+## Release candidate 0.12.0
+
+Prepared 2026-10-29 from [PR #112](https://github.com/forsvn-labs/conquistador/pull/112),
+merged at `942b395`. This candidate adds the distillation workflow, the growth
+playbook, broader routing, a facts-only SMS and WhatsApp channel file, corrected
+search facts, and eleven post-draft checker rules. No method craft changed.
+
+Before this version change, the product tests (one existing skip), 838 routing cases,
+44 checker fixtures, app integration, and all PR checks passed. The release candidate
+still requires its own package verification and publication evidence. These checks
+establish loading and installation, not model output quality. The hosted Worker is a
+separate deployment and is not part of this release.
+
+The last verified public release remains 0.11.0 until publication is checked.
+
+## Merged: distillation workflow (2026-10-29)
 
 `tools/distill.mjs` pins permissively licensed sources at exact commits, maps their units to routes,
 compares written requests with routes, and checks that public text shares no 8-word run or source
