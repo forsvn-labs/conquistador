@@ -16,7 +16,12 @@ only what the user asked for.
   excluded or cited.
 - **Search snippets:** Google shows about 50–60 characters of a title and about 150–160 characters
   of a meta description. The cut is by pixel width and varies.
-- **Apple App Store:** app name 30 characters, subtitle 30, keyword field 100 (comma-separated),
+- **Rich results:** Google retired HowTo rich results in 2023 and FAQ rich results on 7 May 2026.
+  FAQPage and HowTo remain valid schema.org types, but neither earns a Google search feature.
+- **Disavow:** Google advises it only for many spammy or artificial links that caused, or are likely to
+  cause, a manual action. A third-party "toxic" score is not a reason.
+- **Apple App Store:** app name 30 characters, subtitle 30, keyword field 100 (comma-separated;
+  non-Latin scripts can reach Apple's byte limit first, so confirm the count in App Store Connect),
   promotional text 170 (not indexed).
 - **Google Play:** title 30 characters, short description 80, full description 4,000. Play has no
   keyword field; it indexes the description text.

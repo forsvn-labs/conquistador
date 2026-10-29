@@ -142,5 +142,5 @@ When an index report changes, inspect the reported state and representative URLs
 
 ### Schema at Scale
 - Generate schema dynamically from the same data source as page content
-- Use the appropriate schema type per playbook pattern (Product for comparisons, HowTo for integrations, FAQPage for glossary)
+- Use the appropriate schema type per playbook pattern (Product for comparisons, HowTo for integrations, FAQPage for glossary); HowTo and FAQPage no longer earn a Google rich result, so add them only for parsers that read them
 - Validate a sample of pages monthly (not just the template)
