@@ -15,7 +15,9 @@
       "conquistador-0.12.0.tgz": "abb407790eb661420709772d01042edc9ed91fa592dc1a41c59b85e268d2af44",
       "conquistador-skill-0.12.0.zip": "c5d90f0e7d9e7d6115eb358fe3acc9bb97583c46600d6ebd29186035a6c397f0",
       "conquistador-plugin-0.12.0.zip": "1b3e2047a7a8bc010f51b21bcbecf1e2f8f4094b7eec4c8ad7701681671cfedc"
-    }
+    },
+    "assemblyNamesSourceCommit": true,
+    "note": "SHA256SUMS covers the five archives; assembly.json was checked for the tagged commit; SHA256SUMS itself is the reference."
   },
   "checks": [
     {

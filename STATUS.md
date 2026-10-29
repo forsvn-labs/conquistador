@@ -8,8 +8,8 @@ Updated 2026-10-29. Release evidence: [PR #112](https://github.com/forsvn-labs/c
 ## Shipped 0.12.0
 
 Product 0.12.0 is tagged at `794c5d41192755818f359d909db4b4a0e8d84728`. The tagged
-tree equals the tested candidate. The seven release assets match their checksums.
-Start with `npx conquistador@latest`.
+tree equals the tested candidate. All five release archives match `SHA256SUMS`, and
+`assembly.json` names the tagged commit. Start with `npx conquistador@latest`.
 
 Both `@forsvn/conquistador@0.12.0` and `conquistador@0.12.0` are verified as npm latest.
 Their registry tarballs match the release bytes, and the alias pins the exact
@@ -44,10 +44,10 @@ blind tests.
 
 Product 0.11.0 is tagged at `2dfa2a6362507e5c8a6796ecfc3c334557cb84a7`.
 The seven downloaded assets bind that source. All five archives match the release
-checksums and the tested candidate bytes. Start with `npx conquistador@latest`.
+checksums and the tested candidate bytes. To install it, run `npx conquistador@0.11.0`.
 
-Both `@forsvn/conquistador@0.11.0` and `conquistador@0.11.0` are verified as npm
-latest. Their registry tarballs match the release bytes, and the alias pins the
+Both `@forsvn/conquistador@0.11.0` and `conquistador@0.11.0` were verified as npm
+latest at publication. Their registry tarballs match the release bytes, and the alias pins the
 exact main-package version. `npm audit signatures` verifies the installed
 registry signatures and attestations. A fresh registry install verifies the CLI,
 MCP version, an entry-only pricing brief, and startup without Conquistador home
