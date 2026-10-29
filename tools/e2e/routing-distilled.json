@@ -744,6 +744,30 @@
   {
    "area": "engineering:form",
    "task": "Render the newsletter signup form component"
+  },
+  {
+   "area": "engineering:banner",
+   "task": "Add a cookie banner component to the layout"
+  },
+  {
+   "area": "engineering:persona",
+   "task": "Add a persona object to the configuration schema"
+  },
+  {
+   "area": "engineering:guarantee",
+   "task": "Add a guarantee field to the order API response"
+  },
+  {
+   "area": "engineering:subfolder",
+   "task": "Move the test fixtures into a subfolder"
+  },
+  {
+   "area": "engineering:sms",
+   "task": "Fix the SMS webhook signature check"
+  },
+  {
+   "area": "engineering:whatsapp",
+   "task": "Debug the WhatsApp API client timeout"
   }
  ]
 }

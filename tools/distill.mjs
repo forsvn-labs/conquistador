@@ -3,7 +3,7 @@
 // check that public text written from them is in our own words. Sources, notes, and reports are
 // private: every output folder is refused inside a Git work tree. Source code is read, never run.
 import { createHash } from 'node:crypto';
-import { existsSync, mkdirSync, readFileSync, readdirSync, rmSync, statSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, readdirSync, realpathSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import { basename, dirname, join, relative, resolve } from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
@@ -29,7 +29,11 @@ const readJson = (path, label) => {
 };
 
 function requirePrivatePath(path, label) {
-  const target = resolve(path);
+  // Check the real path: a symlinked ancestor could otherwise lead into a repository unseen.
+  let probe = resolve(path);
+  const missing = [];
+  while (!existsSync(probe)) { missing.unshift(basename(probe)); probe = dirname(probe); }
+  const target = join(realpathSync(probe), ...missing);
   for (let dir = target; ; dir = dirname(dir)) {
     if (existsSync(join(dir, '.git'))) fail(`${label} is inside a Git work tree (${dir}); use a private folder outside any repository`);
     if (dirname(dir) === dir) return target;
@@ -43,6 +47,8 @@ function readRegistry(path) {
   for (const source of registry.sources) {
     if (!/^[a-z0-9-]+$/.test(source.id ?? '')) fail(`Source id must be lowercase letters, digits, or dashes: ${source.id}`);
     if (!/^[0-9a-f]{40}$/.test(source.commit ?? '')) fail(`Source ${source.id} needs a full 40-character commit`);
+    // A value that starts with "-" would reach git as an option, which can run a command.
+    if (typeof source.url !== 'string' || !source.url || source.url.startsWith('-')) fail(`Source ${source.id} needs a URL or path that does not start with "-"`);
     if (!LICENSES[source.license]) fail(`Source ${source.id}: license ${source.license} is not allowed (allowed: ${Object.keys(LICENSES).join(', ')})`);
     if (!Array.isArray(source.units) || !source.units.length) fail(`Source ${source.id} declares no unit patterns`);
   }
@@ -64,6 +70,7 @@ function fetchSources({ registry: registryPath, out: outPath }) {
   const registry = readRegistry(registryPath);
   const out = requirePrivatePath(outPath, 'Output folder');
   const sources = [];
+  const created = [];
   for (const source of registry.sources) {
     const dest = checkoutOf(out, source);
     if (existsSync(dest) && readdirSync(dest).length) fail(`Checkout folder is not empty: ${dest}; fetch into a new empty folder`);
@@ -71,7 +78,8 @@ function fetchSources({ registry: registryPath, out: outPath }) {
     const env = { ...process.env, GIT_LFS_SKIP_SMUDGE: '1', GIT_TERMINAL_PROMPT: '0' };
     const git = (...args) => execFileSync('git', ['-c', 'core.hooksPath=/dev/null', '-c', 'advice.detachedHead=false', ...args], { encoding: 'utf8', env, stdio: ['ignore', 'pipe', 'pipe'] }).trim();
     try {
-      git('clone', '--quiet', '--no-checkout', source.url, dest);
+      created.push(dest);
+      git('clone', '--quiet', '--no-checkout', '--', source.url, dest);
       try { git('-C', dest, 'cat-file', '-e', `${source.commit}^{commit}`); } catch { fail(`Source ${source.id}: commit ${source.commit} not found`); }
       git('-C', dest, 'checkout', '--quiet', source.commit);
       const licenseFile = readdirSync(dest).find(name => /^(LICENSE|LICENCE|COPYING)(\.(md|txt))?$/i.test(name));
@@ -81,7 +89,8 @@ function fetchSources({ registry: registryPath, out: outPath }) {
       const notice = readdirSync(dest).find(name => /^NOTICE(\.(md|txt))?$/i.test(name)) ?? null;
       sources.push({ id: source.id, url: source.url, commit: source.commit, license: source.license, licenseFile, licenseSha256: sha256(licenseBytes), notice });
     } catch (error) {
-      rmSync(dest, { recursive: true, force: true });
+      // Remove every checkout from this run, so a rerun into the same folder starts clean.
+      for (const path of created) rmSync(path, { recursive: true, force: true });
       throw error;
     }
   }
@@ -203,12 +212,13 @@ const words = text => text.toLowerCase().normalize('NFKC').replace(/[’']/g, ''
 function sourceFiles(dir) {
   const files = [];
   const walk = current => {
-    for (const name of readdirSync(current)) {
-      if (name === '.git' || name === 'node_modules') continue;
-      const path = join(current, name);
-      const stat = statSync(path);
-      if (stat.isDirectory()) walk(path);
-      else if (PROSE_FILE.test(name) && stat.size <= MAX_TEXT_BYTES) files.push(path);
+    // Symlinks are skipped: a dangling one would abort the run, and one that leaves the source would
+    // pull unrelated local text into the corpus.
+    for (const entry of readdirSync(current, { withFileTypes: true })) {
+      if (entry.name === '.git' || entry.name === 'node_modules' || entry.isSymbolicLink()) continue;
+      const path = join(current, entry.name);
+      if (entry.isDirectory()) walk(path);
+      else if (entry.isFile() && PROSE_FILE.test(entry.name) && statSync(path).size <= MAX_TEXT_BYTES) files.push(path);
     }
   };
   walk(dir);

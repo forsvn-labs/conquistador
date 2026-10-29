@@ -465,9 +465,11 @@ percentile of real users *(check)*.
 
 AI assistants answer from pages they can fetch and from what other sites say about you.
 
-1. **Access.** Each assistant uses separate crawlers for training, search, and user-requested
-   fetches. Decide each one deliberately in `robots.txt`. Blocking a search crawler removes you
-   from that assistant's answers.
+1. **Access.** Crawler names and controls differ by provider. Some providers publish separate
+   crawlers for training, search, and fetches that a user asks for; decide each one deliberately in
+   `robots.txt`. Blocking a provider's search crawler removes you from its search answers. Google
+   uses its normal search crawler for Search and AI Overviews; its separate AI token only controls
+   use for model training and grounding *(check)*.
 2. **Quotable pages.** Put the direct answer first. Use clear definitions, comparison tables,
    numbered steps, and specific numbers with sources. Keep one topic per page.
 3. **Consistency.** Describe the product, category, and price the same way on your site, in
@@ -677,9 +679,11 @@ advice; check them before use.
   DMARC policy), to offer one-click unsubscribe, to honor unsubscribes quickly, and to keep spam
   complaint rates low *(check)*. Send marketing email only to people who agreed to receive it
   where the law requires consent.
-- **Email at volume.** Since February 2024, the largest mailbox providers require senders of about
-  5,000 or more messages a day to authenticate with SPF, DKIM, and DMARC, to support one-click
-  unsubscribe and process it within two days, and to keep the reported spam rate below 0.3% *(check)*.
+- **Email at volume.** Thresholds and rules differ by mailbox provider. Since February 2024, Gmail
+  requires any sender above 5,000 daily messages to personal Gmail accounts to authenticate with
+  SPF, DKIM, and DMARC, to support one-click unsubscribe, and to keep the reported spam rate below
+  0.3%. Other providers set similar rules without one published volume threshold. Check each
+  provider's current requirements *(check)*.
 - **SMS and messaging.** In the US, marketing texts need prior express written consent, and words
   such as "stop" must end messages within 10 business days at most. Send between 8 a.m. and
   9 p.m. in the recipient's time zone; some states end at 8 p.m. Register 10-digit sender numbers

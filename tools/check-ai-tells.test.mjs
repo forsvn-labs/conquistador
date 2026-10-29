@@ -7,6 +7,7 @@
 // 5. A new rule is missing from the public catalog in docs-site/check.mdx.
 // 6. A claim with a source marker is still flagged as crowd proof (extends claim-vague-proof, no duplicate rule).
 // 7. Two rules report the same phrase.
+// 9. A negation list split over adjacent lines, or bait that closes an earlier post in a thread, passes.
 // 8. A post-draft rule leaks into the drafting guide, whose content passed human blind tests.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
@@ -53,6 +54,20 @@ test('ai-engagement-bait flags a social post that ends by fishing for reactions'
   const real = 'We cut our close from 9 days to 4.\n\nWhich format do your auditors ask for, CSV or PDF?';
   assert.deepEqual(hits(real, 'ai-engagement-bait', { channel: 'linkedin' }), []);
   assert.deepEqual(hits('Our plan is simple.\n\nThoughts?', 'ai-engagement-bait', { channel: 'landing' }), [], 'social only');
+});
+
+test('ai-negation-list reads a list split over adjacent lines', () => {
+  const found = hits('No setup.\nNo training.\nJust exports that balance.\n', 'ai-negation-list');
+  assert.equal(found.length, 1);
+  assert.equal(found[0].line, 1);
+  assert.deepEqual(hits('No setup fee.\nCancel any time from settings.\nExports run nightly.\n', 'ai-negation-list'), []);
+});
+
+test('ai-engagement-bait reads the end of every post in a thread', () => {
+  const thread = 'We cut our close from 9 days to 4.\n\nAgree?\n\n---\n\nHere is how the approval queue works, step by step.\n';
+  const found = hits(thread, 'ai-engagement-bait', { channel: 'x' });
+  assert.equal(found.length, 1);
+  assert.equal(found[0].line, 3);
 });
 
 test('ai-empty-comment flags a social reply with no information', () => {

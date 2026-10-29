@@ -1465,10 +1465,10 @@
       "aliases": [
         "brief-creative",
         "hero image",
-        "banner",
         "header image",
         "gallery images",
-        "og image"
+        "og image",
+        "banner image"
       ],
       "signals": [
         "brief* & designer*|creator*|agency|illustrat*|graphic*|visual*|shoot|photo*|screenshot*|art direction|production|design|video",
@@ -2972,7 +2972,7 @@
         "product market fit survey",
         "pmf survey",
         "competitor profile",
-        "persona"
+        "buyer persona"
       ],
       "signals": [
         "position* & against|versus|vs|product|us|our|company|offer|app|brand|tool|startup|market & !modal|button|element|css|div|layout|sidebar|image|logo|icon|cursor|scroll|absolute|fixed",
@@ -3154,7 +3154,7 @@
         "fixed package",
         "grandfather",
         "van westendorp",
-        "guarantee"
+        "money back guarantee"
       ],
       "signals": [
         "raise|increase|change|lower|cut|test|set|reprice & price*|pricing",
@@ -3163,7 +3163,8 @@
         "per seat|per user|usage based|per usage|seat based|flat rate & charge|pric*|bill*|or",
         "too cheap|too expensive|underpric*|overpric*|undercharg*|overcharg* & month|monthly|year|price*|plan|tier|product|charge",
         "annual billing|annual plan*|monthly billing|annual discount|billing & discount|offer|switch|push|default|convince",
-        "free trial|trial & how long|length|days|long|should"
+        "free trial|trial & how long|length|days|long|should",
+        "guarantee* & offer*|retainer*|refund*|package*|coaching|course*|agency|program*"
       ],
       "decisions": [
         "should we|should i|whether to|is it time to|do we & raise|increase|lower|cut|change|drop|double & pric*",
@@ -3740,21 +3741,20 @@
         "not indexed",
         "url structure",
         "sitemap",
-        "subfolder",
         "redirect map",
         "site migration",
         "link building",
         "backlinks",
         "disavow",
         "manual action",
-        "unnatural links",
         "seo report",
         "keyword field",
         "traffic from chatgpt",
         "gptbot",
         "comparison page",
         "orphan page",
-        "unlinked"
+        "unlinked",
+        "subdomain or a subfolder"
       ],
       "signals": [
         "rank*|ranking & google|search|blog|keyword*|app store|play store|page*",
@@ -5081,7 +5081,6 @@
         "failed payment",
         "payment failed",
         "card expiring",
-        "card is expiring",
         "cancel flow",
         "cancellation flow",
         "save offer",

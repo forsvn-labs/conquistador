@@ -239,10 +239,23 @@ export const rules = [
   // passed human blind tests, because tell lists given at drafting time flattened voice in those tests.
   documentRule({ id: 'ai-negation-list', family: 'ai-tells', postDraft: true, severity: 'warning', name: 'Negation list',
     message: 'The copy defines the product by a run of absences, such as "No X, no Y, no Z" or "No X. No Y. Just Z."', fix: 'Say what the product does. Keep one real absence beside the offer, such as "No card required".' },
-  context => context.document.lines.flatMap(line => {
-    const match = /(?:^|[.,;!?]\s+)(?:no|zero|without)\s+[^.,;!?]{1,30}[.,;]\s+(?:no|zero|without)\s+[^.,;!?]{1,30}[.,;]\s+(?:(?:no|zero|without)\s|just\s)/i.exec(line.text);
-    return match ? [{ line: line.n, snippet: clip(line.text), match: match[0].trim() }] : [];
-  })),
+  context => {
+    const list = /(?:^|[.,;!?]\s+)(?:no|zero|without)\s+[^.,;!?]{1,30}[.,;]\s+(?:no|zero|without)\s+[^.,;!?]{1,30}[.,;]\s+(?:(?:no|zero|without)\s|just\s)/i;
+    const lines = context.document.lines;
+    const found = [];
+    // Read each line, then each run of three adjacent lines, so "No X." / "No Y." / "Just Z." on
+    // separate lines counts too. Report the first line once.
+    for (let index = 0; index < lines.length; index++) {
+      const run = lines.slice(index, index + 3).filter((line, offset) => line.n === lines[index].n + offset);
+      const single = list.exec(lines[index].text);
+      const spread = single ? null : run.length === 3 ? list.exec(run.map(line => line.text).join(' ')) : null;
+      const match = single ?? spread;
+      if (!match) continue;
+      found.push({ line: lines[index].n, snippet: clip(lines[index].text), match: match[0].trim() });
+      if (spread) index += 2;
+    }
+    return found;
+  }),
   phrase({ id: 'ai-stock-transformation', family: 'ai-tells', postDraft: true, severity: 'warning', name: 'Stock transformation line',
     message: 'A prefabricated promise of change, such as "Say goodbye to X and hello to Y" or "X, reimagined".', fix: 'Name what changes, for whom, and by how much.' },
   /\bsay goodbye to [^.!?]{1,40}? and hello to\b|\b[\w-]+, (?:reimagined|redefined|reinvented)\b|\btransforms? the way (?:you|your|teams|businesses|people)\b|\ball[- ]in[- ]one (?:platform|solution|workspace)\b|\bthe future of [\w -]{1,30} (?:is here|starts (?:now|today))\b/i),
@@ -264,10 +277,12 @@ export const rules = [
   /,\s*minus the \w+|\bon steroids\b|\bwith a pulse\b|\bbut make it \w+/i),
   documentRule({ id: 'ai-engagement-bait', family: 'ai-tells', postDraft: true, severity: 'warning', name: 'Engagement-bait closer', channels: socialChannels,
     message: 'The post ends by fishing for reactions, such as "Agree?" or "Repost if this helped".', fix: 'End with a question the reader can answer from their own work, or end on the point.' },
-  context => {
-    const last = context.document.lines.at(-1);
-    return last && /^(?:agree|thoughts|am i wrong|who else|right|anyone else)\?\s*$|^(?:repost|share|save) (?:this|if)\b/i.test(last.text.trim()) ? [{ line: last.n, snippet: clip(last.text) }] : [];
-  }),
+  // Each post in a thread ends on its own line; check the last line of every post.
+  context => socialPosts(context.document).flatMap(post => {
+    const lines = post.text.split('\n');
+    const last = lines.at(-1).trim();
+    return /^(?:agree|thoughts|am i wrong|who else|right|anyone else)\?\s*$|^(?:repost|share|save) (?:this|if)\b/i.test(last) ? [{ line: post.n + lines.length - 1, snippet: clip(last) }] : [];
+  })),
   documentRule({ id: 'ai-empty-comment', family: 'ai-tells', postDraft: true, severity: 'warning', name: 'Comment with no information', channels: socialChannels,
     message: 'The whole reply is praise with no information, such as "Great post!".', fix: 'Add your own experience, a number, or a question.' },
   context => {

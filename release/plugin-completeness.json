@@ -3252,7 +3252,7 @@
     },
     {
       "path": "skills/conquistador/commands/seo/references/schema-reference.md",
-      "sha256": "98d7dc1c203a8fcd55666277f37b01559901a85e21317672664b7ad84482c23c"
+      "sha256": "4702fb35d373d17cb7d37c2cb8750357560c98d10dfe2f5b68b55f2f09642f37"
     },
     {
       "path": "skills/conquistador/commands/seo/references/technical-audit.md",
@@ -4408,7 +4408,7 @@
     },
     {
       "path": "skills/conquistador/plays/lifecycle.md",
-      "sha256": "be5db962149cd40db3a93e821c99167b064ec239559d50fbe101a6de829e73ac"
+      "sha256": "7497ae8e543d8af8eae38240d1a30ef4e58113e2f07ea5047f43c7cb6680c79c"
     },
     {
       "path": "skills/conquistador/plays/lifecycle/agents/copy.md",
@@ -4908,11 +4908,11 @@
     },
     {
       "path": "skills/conquistador/routing-contract.json",
-      "sha256": "017082232ed22ba9dccfaa923f8cf4107ca66a19e3a0b9141562dd15673071f8"
+      "sha256": "fc9321184120a864c09dc1a8a53571906eccadd71196ce07cc99721634375aeb"
     },
     {
       "path": "skills/conquistador/routing-overlay.json",
-      "sha256": "715519d3299861d542b649b1880b66f13f1e9fc2100ff46811922f550a7aaa97"
+      "sha256": "f3336ecfc6132ffd4d3d60d564dd5789cee9340db0a1a65fa71fe0e0da43804b"
     },
     {
       "path": "skills/conquistador/rubrics/composition.md",
@@ -5040,7 +5040,7 @@
     },
     {
       "path": "tools/check/rules.mjs",
-      "sha256": "a8fbb4526f5563ea2af31631d20e72b6e4af57a40b901f09e853f51b342f481b"
+      "sha256": "1a433b7d0c6d794502a6fa2c4eea5a1d02f30c3ba940d62b95df6a471d78b9b0"
     },
     {
       "path": "tools/context-files.mjs",
@@ -5096,7 +5096,7 @@
     },
     {
       "path": "tools/search-index.json",
-      "sha256": "b3344554f6200a74f19d5268d5a7ef7699e3ea839d7526c4c333faeb98036d82"
+      "sha256": "32ee59a8efaac03eb930c3211a552e1faa4a5ac5f5d3f0c02308f14d9f6e5feb"
     },
     {
       "path": "tools/skills-mcp.mjs",

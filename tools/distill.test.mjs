@@ -7,6 +7,9 @@
 //  F4  A commit that does not exist in the source is refused.
 //  F5  An existing non-empty checkout folder is refused (untrusted data needs a new empty folder).
 //  F6  A good source is checked out at the pinned commit and recorded with its license digest.
+//  F7  A source URL that starts with "-" is refused before git runs, so it cannot act as a git option.
+//  F8  When a later source fails, every checkout made in that run is removed, so a rerun can start clean.
+//  F9  An output folder reached through a symlink into a Git work tree is refused.
 // inventory
 //  I1  A unit without a description is listed as unrouted with reason no-description, not a crash.
 //  I2  A routed unit records its command or play and the practice status from evals/practices.json.
@@ -24,10 +27,11 @@
 //  C6  A missing or unfetched corpus is an error, never a silent pass.
 //  C7  A generic repository name taken from the URL (for example `seo`) is not a source name; the owner handle is.
 //  C8  Source code is not part of the prose corpus, so shared import lines are not findings.
+//  C10 A dangling symlink in a source does not abort the check, and a symlink out of the source is not read.
 //  C9  With --diff <ref>, only lines added since the ref are checked; old lines and untracked files are handled.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, existsSync, readdirSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, existsSync, readdirSync, symlinkSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, dirname } from 'node:path';
 import { execFileSync, spawnSync } from 'node:child_process';
@@ -219,4 +223,54 @@ test('C9 --diff checks only lines added since a Git ref', () => {
   writeFileSync(join(repo, 'new.md'), SOURCE_TEXT);
   const untracked = spawnSync(process.execPath, [cli, 'check', '--registry', reg, '--out', out, '--diff', 'HEAD', 'new.md'], { encoding: 'utf8', cwd: repo });
   assert.equal(untracked.status, 1, 'an untracked file is checked whole');
+});
+
+test('F7 refuses a source URL that git would read as an option', () => {
+  const source = sourceRepo();
+  const out = tmp();
+  const result = run('fetch', '--registry', registry(source, { url: `--upload-pack=touch ${join(out, 'ran')}` }), '--out', out);
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /URL/);
+  assert.equal(existsSync(join(out, 'ran')), false);
+});
+
+test('F8 removes every checkout from a failed run', () => {
+  const good = sourceRepo();
+  const bad = sourceRepo({ license: GPL });
+  const reg = registry(good);
+  const doc = JSON.parse(readFileSync(reg, 'utf8'));
+  doc.sources.push({ ...doc.sources[0], id: 'bad', url: bad.dir, commit: bad.commit });
+  writeFileSync(reg, JSON.stringify(doc));
+  const out = tmp();
+  assert.notEqual(run('fetch', '--registry', reg, '--out', out).status, 0);
+  assert.equal(existsSync(join(out, 'src', 'fx')), false);
+  assert.equal(existsSync(join(out, 'src', 'bad')), false);
+});
+
+test('F9 refuses an output folder reached through a symlink into a Git work tree', () => {
+  const source = sourceRepo();
+  const link = join(tmp(), 'into-repo');
+  symlinkSync(join(root, 'dist'), link);
+  const result = run('fetch', '--registry', registry(source), '--out', join(link, 'distill-should-not-exist'));
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /Git work tree/);
+  assert.equal(existsSync(join(root, 'dist', 'distill-should-not-exist')), false);
+});
+
+test('C10 skips symlinks in the source corpus', () => {
+  const outside = tmp();
+  writeFileSync(join(outside, 'private.md'), 'This private sentence lives outside the source and must never be read as source text.\n');
+  const source = sourceRepo();
+  symlinkSync('/nonexistent/target.md', join(source.dir, 'dangling.md'));
+  symlinkSync(join(outside, 'private.md'), join(source.dir, 'linked.md'));
+  git(source.dir, 'add', '.'); git(source.dir, 'commit', '-qm', 'links');
+  const commit = git(source.dir, 'rev-parse', 'HEAD');
+  const reg = registry({ ...source, commit });
+  const out = tmp();
+  assert.equal(run('fetch', '--registry', reg, '--out', out).status, 0);
+  const files = tmp();
+  const page = join(files, 'page.md');
+  writeFileSync(page, 'This private sentence lives outside the source and must never be read as source text.\n');
+  const result = run('check', '--registry', reg, '--out', out, page);
+  assert.equal(result.status, 0, result.stdout + result.stderr);
 });

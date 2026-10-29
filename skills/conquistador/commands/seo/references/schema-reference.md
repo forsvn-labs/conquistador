@@ -236,10 +236,10 @@ When a page needs multiple schema types (common), use `@graph`:
 
 ## Schema and AI Visibility
 
-No public study isolates the effect of schema on AI answers. Schema can help AI systems in two ways:
+No public study isolates the effect of schema on AI answers, and Google says its AI features need no special markup. Schema may still help in two ways:
 
-1. **Explicit structure:** AI models can parse the content type, author, date, and relationships without guessing
-2. **Search engine pipeline:** Google AI Overviews and Gemini directly consume structured data from the search index
+1. **Explicit structure:** a parser can read the content type, author, date, and relationships without guessing
+2. **Consistency:** markup that matches the visible text keeps the facts a search index stores consistent with the page
 
 **Priority for AI visibility:**
 1. FAQPage (direct Q&A extraction)

@@ -13,16 +13,16 @@ name with a source. [docs/DISTILL.md](docs/DISTILL.md) describes the workflow. T
 libraries were distilled into private notes. This branch adds:
 
 - [The growth playbook](docs/GROWTH-PLAYBOOK.md), a reference for people. Default briefs do not load it.
-- Routing for 111 new cases, including 11 engineering look-alikes that stay silent. On 455 requests
-  from the notes, misroutes fall from 323 to 211 and unrouted requests from 255 to 138, with none
+- Routing for 117 new cases, including 17 engineering look-alikes that stay silent. On 455 requests
+  from the notes, misroutes fall from 323 to 214 and unrouted requests from 255 to 141, with none
   newly broken.
 - A facts-only SMS and WhatsApp channel file that thin routes read when the request names it.
 - Corrected search facts: retired FAQ and HowTo rich results, disavow scope, Apple keyword bytes.
 - Eleven post-draft checker rules. The drafting guide is unchanged, so blind-tested context is unchanged.
 
-All 608 product tests (one existing skip), 832 routing cases, 44 checker fixtures, and app
+All product tests (one existing skip), 838 routing cases, 44 checker fixtures, and app
 integration pass. No method craft changed; craft candidates wait for human blind tests. The routing
-contract is 98 bytes under its 90% safety budget. This is source verification, not a release.
+contract is 24 bytes under its 90% safety budget. This is source verification, not a release.
 
 ## Shipped 0.11.0
 
