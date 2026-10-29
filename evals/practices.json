@@ -152,7 +152,8 @@
       "members": [
         "commands/channels",
         "commands/budget",
-        "plays/expand"
+        "plays/expand",
+        "channels/sms"
       ]
     },
     {

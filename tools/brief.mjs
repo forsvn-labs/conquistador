@@ -46,6 +46,14 @@ export const PLATFORMS = Object.freeze({
   newsletter: ['newsletter', 'email-newsletter'],
   substack: ['newsletter', 'email-newsletter'],
   ugc: ['ugc'],
+  // Text messaging: one channel file holds the SMS, MMS, and WhatsApp facts.
+  sms: ['sms'],
+  mms: ['sms'],
+  'text message': ['sms'],
+  'text messages': ['sms'],
+  '10dlc': ['sms'],
+  tcpa: ['sms'],
+  whatsapp: ['sms'],
   'founder demo': ['founder-demo'],
   'app store': ['app-store', 'aso'],
   'google play': ['aso'],
@@ -62,6 +70,9 @@ export const PLATFORMS = Object.freeze({
   'linkedin ads': ['linkedin-ads'],
   'tiktok ads': ['tiktok-ads'],
 });
+// Channel files that hold only dated platform and legal facts, not drafting craft. A thin route still
+// reads one when the request names its platform; craft channel files stay out of thin routes.
+export const FACTS_CHANNELS = new Set(['sms']);
 // Every stem a platform can bring. A named platform keeps its siblings out of the must-read list.
 const PLATFORM_STEMS = new Set(Object.values(PLATFORMS).flat());
 // Filler words carry no task signal ("I cannot find it, ask me", "learn the product first").
@@ -379,7 +390,8 @@ export function createBrief(input, { root = moduleRoot, playbooks, persistCache 
     if (doc.kind === 'process' || doc.key === 'conquistador/welcome.md') return null;
     if (!salesPage && doc.source === 'method' && doc.method === 'copy') return null;
     if (adDrafting && doc.source === 'method' && doc.method === 'ads') return null;
-    if (passThrough && doc.kind !== 'user' && !(doc.source === 'method' && utilities.has(doc.method))) return null;
+    const factsChannel = doc.kind === 'channel' && FACTS_CHANNELS.has(posix.basename(doc.key, '.md')) && platforms.includes(posix.basename(doc.key, '.md'));
+    if (passThrough && doc.kind !== 'user' && !(doc.source === 'method' && utilities.has(doc.method)) && !factsChannel) return null;
     // A kept route reads no detailed file of a thin method it also selected; a kept play keeps its steps.
     if (!passThrough && !play && doc.source === 'method' && doc.method !== methods[0]?.name && isThinCommand(doc.method, prompt)) return null;
     // Integration recipes join the brief only for the connect command.

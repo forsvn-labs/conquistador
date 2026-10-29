@@ -1,7 +1,7 @@
 ---
 command: lifecycle
 label: Run a lifecycle campaign
-intents: ["lifecycle campaign","onboarding sequence","onboarding flow emails","retention campaign","re engagement campaign","activation campaign","win back campaign","drip campaign"]
+intents: ["lifecycle campaign", "onboarding sequence", "onboarding flow emails", "retention campaign", "re engagement campaign", "activation campaign", "win back campaign", "drip campaign", "dunning", "failed payment", "payment failed", "card expiring", "cancel flow", "cancellation flow", "save offer", "retry schedule", "sms sequence", "whatsapp template"]
 chain:
   - { command: campaign, for: "lifecycle job, entry event, branches, suppression, exit" }
   - { command: copy, for: "the smallest finished message set" }

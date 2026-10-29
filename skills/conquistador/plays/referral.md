@@ -1,7 +1,7 @@
 ---
 command: referral
 label: Build a referral loop
-intents: ["referral program","referral loop","invite loop","refer a friend","viral loop","referral"]
+intents: ["referral program", "referral loop", "invite loop", "refer a friend", "viral loop", "referral", "affiliates", "referrers", "g2 reviews", "review program"]
 chain:
   - { command: measure, for: "retention gate before any incentive" }
   - { command: campaign, for: "loop, economics, first test" }

@@ -1,7 +1,7 @@
 ---
 command: interactive
 label: Create an interactive campaign
-intents: ["interactive campaign","quiz","calculator","minigame","interactive tool","spin the wheel","assessment tool"]
+intents: ["interactive campaign", "quiz", "calculator", "minigame", "interactive tool", "spin the wheel", "assessment tool", "lead magnet", "content upgrade", "gated content", "gate this", "website grader", "free tool"]
 chain:
   - { command: campaign, for: "a bounded slice: job, placement, signal" }
   - { command: creative, for: "mechanic, rules, states" }

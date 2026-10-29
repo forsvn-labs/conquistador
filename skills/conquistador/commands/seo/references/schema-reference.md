@@ -8,9 +8,13 @@ Schema types, implementation contexts, and validation guide.
 
 Implement in this order based on typical impact:
 
+Rich result status (checked October 2026): Google retired HowTo rich results in 2023 and FAQ rich
+results on 7 May 2026. FAQPage and HowTo are still valid schema.org types that other parsers can
+read, but neither earns a Google search feature. Do not promise a rich result from them.
+
 ### Tier 1: High Impact
 
-#### FAQPage
+#### FAQPage (no Google rich result since May 2026)
 ```json
 {
  "@context": "https://schema.org",
@@ -52,7 +56,7 @@ Implement in this order based on typical impact:
 **Use on:** Blog posts, guides, reports.
 **AI impact:** Author attribution + dates help AI models assess authority and freshness.
 
-#### HowTo
+#### HowTo (no Google rich result since 2023)
 ```json
 {
  "@context": "https://schema.org",
@@ -232,10 +236,10 @@ When a page needs multiple schema types (common), use `@graph`:
 
 ## Schema and AI Visibility
 
-Content with proper schema shows 30-40% higher AI visibility (estimated). Schema helps AI models in two ways:
+No public study isolates the effect of schema on AI answers, and Google says its AI features need no special markup. Schema may still help in two ways:
 
-1. **Explicit structure:** AI models can parse the content type, author, date, and relationships without guessing
-2. **Search engine pipeline:** Google AI Overviews and Gemini directly consume structured data from the search index
+1. **Explicit structure:** a parser can read the content type, author, date, and relationships without guessing
+2. **Consistency:** markup that matches the visible text keeps the facts a search index stores consistent with the page
 
 **Priority for AI visibility:**
 1. FAQPage (direct Q&A extraction)

@@ -1,7 +1,7 @@
 ---
 command: press
 label: Earn press and media coverage
-intents: ["press","press coverage","pr campaign","pitch journalists","podcast outreach","earned media","media pitch","pitch reporters"]
+intents: ["press", "press coverage", "pr campaign", "pitch journalists", "podcast outreach", "earned media", "media pitch", "pitch reporters", "media list", "journalist", "crisis", "data breach", "press statement", "expert quote"]
 chain:
   - { command: channels, for: "outlets and people who reach the audience" }
   - { command: position, for: "the newsworthy story" }

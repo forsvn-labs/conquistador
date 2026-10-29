@@ -45,7 +45,7 @@ Return a single markdown document with exactly these sections:
 - **Issue:** [what's wrong or what's notable]
 - **Impact:** [how it affects authority and rankings]
 - **Evidence:** [specific domains, links, or metrics]
-- **Fix:** [exact action — disavow, outreach, or content strategy]
+- **Fix:** [exact action — outreach, content strategy, or disavow only when many spammy links caused, or are likely to cause, a Google manual action]
 - **Priority:** Critical / High / Medium / Low
 
 [Repeat for each finding]

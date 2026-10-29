@@ -97,7 +97,8 @@ test('no file links to a removed style file or to any missing file', () => {
 test('the writing guide agrees with the checker', () => {
   const guide = read(guidePath);
   assert.ok(Buffer.byteLength(guide) <= 8192, `writing guide is ${Buffer.byteLength(guide)} bytes`);
-  for (const rule of rules.filter(rule => rule.family === 'ai-tells')) assert.ok(guide.includes(`\`${rule.id}\``), `guide omits ${rule.id}`);
+  // Post-draft rules check finished text only; the drafting guide does not list them.
+  for (const rule of rules.filter(rule => rule.family === 'ai-tells' && !rule.postDraft)) assert.ok(guide.includes(`\`${rule.id}\``), `guide omits ${rule.id}`);
   // Advisory rules never fail a run, so the guide must not list them as fix-every-time tells.
   const fixAlways = guide.slice(guide.indexOf('### Fix every time'), guide.indexOf('### Judge in context'));
   assert.ok(fixAlways.length > 0);

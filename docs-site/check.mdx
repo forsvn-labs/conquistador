@@ -133,6 +133,9 @@ a run.
 
 ### AI-writing tells (`ai-tells`)
 
+Rules marked "from 0.12.0" are planned for 0.12.0 and are not in a release yet. They check finished text only. The drafting guide does not list them, because
+tell lists given at drafting time made drafts worse in human blind tests.
+
 | Rule | Severity | Channels | Flags | Fix |
 | --- | --- | --- | --- | --- |
 | `ai-unlock` | warning | all | "Unlock" is a stock AI-copy verb. | Say what the reader can now do, for example "see every campaign's cost in one table". |
@@ -152,6 +155,17 @@ a run.
 | `ai-triplet` | advisory | all | Several "X, Y, and Z" lists. Reflexive groups of three read as generated. | Keep the one list that matters; cut the weakest item from the others. |
 | `ai-exclamation` | advisory | all | Many exclamation marks. They lower trust in marketing copy. | Keep at most one. |
 | `ai-emoji-bullets` | advisory | all | Lines that start with decorative emoji such as 🚀 or ✅. | Use plain bullets, or keep emoji only where the channel expects them. |
+| `ai-negation-list` (from 0.12.0) | warning | all | The product is defined by a run of absences: "No X, no Y, no Z" or "No X. No Y. Just Z." | Say what it does. One real absence beside the offer ("No card required") remains valid. |
+| `ai-stock-transformation` (from 0.12.0) | warning | all | A prefabricated promise of change: "Say goodbye to X and hello to Y", "X, reimagined", "all-in-one platform". | Name what changes, for whom, and by how much. |
+| `ai-effortless` (from 0.12.0) | warning | all | "Effortless", "in a few clicks", or "set it and forget it" with no steps or time. | Give the number of steps or the time. A sentence that has them is not flagged. |
+| `ai-hook-slop` (from 0.12.0) | warning | all | A generic opener such as "Stop scrolling" or "Here's what nobody tells you". | Open with the specific situation, number, or claim. |
+| `ai-stock-email-opener` (from 0.12.0) | warning | all | A formula email line: "I hope this email finds you well", "Just following up", "Touching base". | Open with the reason for writing. A follow-up adds something new. |
+| `ai-math-letters` (from 0.12.0) | warning | all | Mathematical bold or italic Unicode letters used as formatting. | Use plain letters. Screen readers and search read the decorated ones badly. |
+| `ai-engagement-bait` (from 0.12.0) | warning | X, LinkedIn, social | The post ends with "Agree?", "Thoughts?", or "Repost if this helped". | End with a question the reader can answer from their own work, or end on the point. |
+| `ai-empty-comment` (from 0.12.0) | warning | X, LinkedIn, social | The whole reply is praise with no information, such as "Great post!". | Add experience, a number, or a question. |
+| `ai-performed-cleverness` (from 0.12.0) | advisory | all | A pairing built to sound witty: "X, minus the noise", "X on steroids". | Keep it only when the brand is playful and the line is true. |
+| `ai-verb-bullets` (from 0.12.0) | advisory | all | Three or more lines in a row open with a product verb such as "Ensures", "Provides", "Enables". | Say what the reader gets, and vary the shape. |
+| `ai-intensifiers` (from 0.12.0) | advisory | all | Three or more intensifiers such as "truly", "genuinely", "incredibly". | Cut them and use the fact that makes the point. |
 
 ### Claim not in the context (MCP only)
 
