@@ -149,7 +149,7 @@ export const rules = [
   phrase({ id: 'claim-vague-proof', family: 'claims', severity: 'warning', name: 'Vague social proof',
     message: 'Social proof with no names or sourced count.',
     fix: 'Name customers you have permission to name, or give a sourced count with a date.' },
-  /\b(?:trusted|loved|used|chosen) by (?:thousands|millions|hundreds|countless|teams|companies|businesses|brands|leaders|customers|marketers|developers)(?: of \w+)?(?: (?:everywhere|worldwide|around the (?:world|globe)))?\b|\bjoin (?:thousands|millions|hundreds) of\b/i, cited),
+  /\b(?:trusted|loved|used|chosen) by (?:thousands|millions|hundreds|countless|teams|companies|businesses|brands|leaders|customers|marketers|developers)(?: of \w+)?(?: (?:everywhere|worldwide|around the (?:world|globe)))?\b|\bjoin (?:thousands|millions|hundreds) of\b|\btrusted by (?:industry |the world['’]?s )?(?:leaders|leading|top)\b|\b(?:teams|companies|businesses) (?:around|across) the (?:world|globe) (?:rely on|trust|use)\b/i, cited),
   phrase({ id: 'claim-placeholder', family: 'claims', severity: 'error', name: 'Unfilled placeholder',
     message: 'Unfilled placeholder text.',
     fix: 'Replace the placeholder with the real value before anyone sees this copy.' },
@@ -232,6 +232,67 @@ export const rules = [
     const hits = context.document.lines.filter(line => /^\p{Extended_Pictographic}/u.test(line.text));
 
     return hits.length >= 3 ? [{ line: hits[0].n, snippet: `${hits.length} lines start with emoji` }] : [];
+  }),
+  // More tells that editors flag in generated marketing copy (added 2026-10). Each has a fine twin in
+  // tools/check-ai-tells.test.mjs; patterns that need a reader's judgement stay out of the checker.
+  // `postDraft` rules check finished text only. They stay out of the drafting guide, whose content
+  // passed human blind tests, because tell lists given at drafting time flattened voice in those tests.
+  documentRule({ id: 'ai-negation-list', family: 'ai-tells', postDraft: true, severity: 'warning', name: 'Negation list',
+    message: 'The copy defines the product by a run of absences, such as "No X, no Y, no Z" or "No X. No Y. Just Z."', fix: 'Say what the product does. Keep one real absence beside the offer, such as "No card required".' },
+  context => context.document.lines.flatMap(line => {
+    const match = /(?:^|[.,;!?]\s+)(?:no|zero|without)\s+[^.,;!?]{1,30}[.,;]\s+(?:no|zero|without)\s+[^.,;!?]{1,30}[.,;]\s+(?:(?:no|zero|without)\s|just\s)/i.exec(line.text);
+    return match ? [{ line: line.n, snippet: clip(line.text), match: match[0].trim() }] : [];
+  })),
+  phrase({ id: 'ai-stock-transformation', family: 'ai-tells', postDraft: true, severity: 'warning', name: 'Stock transformation line',
+    message: 'A prefabricated promise of change, such as "Say goodbye to X and hello to Y" or "X, reimagined".', fix: 'Name what changes, for whom, and by how much.' },
+  /\bsay goodbye to [^.!?]{1,40}? and hello to\b|\b[\w-]+, (?:reimagined|redefined|reinvented)\b|\btransforms? the way (?:you|your|teams|businesses|people)\b|\ball[- ]in[- ]one (?:platform|solution|workspace)\b|\bthe future of [\w -]{1,30} (?:is here|starts (?:now|today))\b/i),
+  phrase({ id: 'ai-effortless', family: 'ai-tells', postDraft: true, severity: 'warning', name: 'Effort erased',
+    message: 'The copy says a task takes no effort but gives no steps or time.', fix: 'Give the number of steps or the time, for example "3 steps, about 4 minutes".' },
+  /\beffortless(?:ly)?\b|\bin (?:just )?a (?:few|couple of) clicks\b|\bset it and forget it\b|\bwith (?:zero|no) effort\b/i,
+  sentence => /\b\d+\s*(?:steps?|clicks?|minutes?|mins?|seconds?|secs?)\b/i.test(sentence)),
+  phrase({ id: 'ai-hook-slop', family: 'ai-tells', postDraft: true, severity: 'warning', name: 'Generic hook',
+    message: 'An attention opener that could front any post, such as "Stop scrolling" or "Here\'s what nobody tells you".', fix: 'Open with the specific situation, number, or claim.' },
+  /^(?:stop scrolling|(?:nobody|no one)['’]?s talking about|you['’]?re doing [^.!?]{1,30} wrong)\b|\bwhat (?:nobody|no one) tells you\b/i),
+  phrase({ id: 'ai-stock-email-opener', family: 'ai-tells', postDraft: true, severity: 'warning', name: 'Stock email opener or follow-up',
+    message: 'A formula email line such as "I hope this email finds you well" or "Just following up".', fix: 'Open with the reason for writing. A follow-up adds something new or asks one direct question.' },
+  /\bhope (?:this|the|my) (?:email|message|note) finds you\b|\bjust (?:following|circling|checking) (?:up|back|in)\b|\bper my (?:last|previous) (?:email|message)\b|\btouching base\b/i),
+  documentRule({ id: 'ai-math-letters', family: 'ai-tells', postDraft: true, severity: 'warning', name: 'Decorated Unicode letters',
+    message: 'Mathematical bold or italic letters fake formatting. Screen readers and search read them badly.', fix: 'Use plain letters; use the platform\'s own formatting if it has any.' },
+  context => context.document.lines.filter(line => /[\u{1D400}-\u{1D7FF}]/u.test(line.text)).slice(0, 1).map(line => ({ line: line.n, snippet: clip(line.text) }))),
+  phrase({ id: 'ai-performed-cleverness', family: 'ai-tells', postDraft: true, severity: 'advisory', name: 'Performed cleverness',
+    message: 'A pairing built to sound witty, such as "X, minus the noise" or "X on steroids".', fix: 'Keep it only if the brand is playful and the line states something true.' },
+  /,\s*minus the \w+|\bon steroids\b|\bwith a pulse\b|\bbut make it \w+/i),
+  documentRule({ id: 'ai-engagement-bait', family: 'ai-tells', postDraft: true, severity: 'warning', name: 'Engagement-bait closer', channels: socialChannels,
+    message: 'The post ends by fishing for reactions, such as "Agree?" or "Repost if this helped".', fix: 'End with a question the reader can answer from their own work, or end on the point.' },
+  context => {
+    const last = context.document.lines.at(-1);
+    return last && /^(?:agree|thoughts|am i wrong|who else|right|anyone else)\?\s*$|^(?:repost|share|save) (?:this|if)\b/i.test(last.text.trim()) ? [{ line: last.n, snippet: clip(last.text) }] : [];
+  }),
+  documentRule({ id: 'ai-empty-comment', family: 'ai-tells', postDraft: true, severity: 'warning', name: 'Comment with no information', channels: socialChannels,
+    message: 'The whole reply is praise with no information, such as "Great post!".', fix: 'Add your own experience, a number, or a question.' },
+  context => {
+    const text = context.document.lines.map(line => line.text).join(' ').trim();
+    return /^(?:great post|love this|so true|this is gold|well said|nailed it|\+1)[\s!.]*[\p{Extended_Pictographic}️\s]*$/iu.test(text) ? [{ line: firstLine(context), snippet: clip(text) }] : [];
+  }),
+  documentRule({ id: 'ai-verb-bullets', family: 'ai-tells', postDraft: true, severity: 'advisory', name: 'Parallel verb bullets',
+    message: 'Three or more lines in a row open with a product verb such as "Ensures", "Provides", "Enables".', fix: 'Say what the reader gets in each line, and vary the shape.' },
+  context => {
+    const verb = /^(?:ensures|provides|enables|delivers|offers|allows|empowers|streamlines|boosts|drives|simplifies|helps)\b/i;
+    const lines = context.document.lines;
+    for (let index = 0; index + 2 < lines.length; index++) {
+      const run = lines.slice(index, index + 3);
+      if (run.every((line, offset) => verb.test(line.text) && line.text.split(/\s+/).length <= 12 && line.n === run[0].n + offset)) return [{ line: run[0].n, snippet: clip(run.map(line => line.text).join(' / ')) }];
+    }
+    return [];
+  }),
+  documentRule({ id: 'ai-intensifiers', family: 'ai-tells', postDraft: true, severity: 'advisory', name: 'Intensifier cluster',
+    message: 'Several intensifiers such as "truly", "genuinely", "incredibly".', fix: 'Cut them. Use the fact that makes the point instead.' },
+  context => {
+    const pattern = /\b(?:truly|genuinely|incredibly|fundamentally|literally|remarkably)\b/gi;
+    const counts = context.document.lines.map(line => line.text.match(pattern)?.length ?? 0);
+    const hits = context.document.lines.filter((_, index) => counts[index] > 0);
+    const count = counts.reduce((total, value) => total + value, 0);
+    return count >= 3 ? [{ line: hits[0].n, snippet: `${count} intensifiers` }] : [];
   }),
 
   // Vague calls to action. Source: WCAG 2.2 failure F84 (non-specific link text).
