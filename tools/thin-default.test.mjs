@@ -20,12 +20,14 @@
 //  8. a thin brief larger than its budget;
 //  9. a broken link in a changed file;
 // 10. a practice that loses its entry, or a detailed file that is deleted instead of kept.
+// 11. (29 Oct 2026) a facts-only channel file (dated platform and legal facts, no craft) for a platform the
+//     request names is missing; it may join a thin brief, and any other channel file may not.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { createBrief, formatReadingList, packBrief } from './brief.mjs';
+import { createBrief, FACTS_CHANNELS, formatReadingList, packBrief } from './brief.mjs';
 import { loadCases } from './e2e/routing-breadth.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
@@ -72,6 +74,9 @@ const links = text => [...text.matchAll(/\]\(([^)\s]+)\)/g)].map(match => match[
 const playFile = name => `plays/${name}.md`;
 const body = text => text.replace(/^---\n[\s\S]*?\n---\n/, '');
 
+// A facts-only channel file holds dated platform and legal facts, which a pass-through keeps (failure mode 5).
+const factsChannel = path => [...FACTS_CHANNELS].some(name => path === `skills/conquistador/channels/${name}.md`);
+
 let cases;
 const routed = async () => {
   if (!cases) cases = (await loadCases()).filter(item => !item.silent).map(item => ({ ...item, ...brief(item.task) }))
@@ -89,7 +94,7 @@ test('every in-scope brief carries the selected entries and nothing else', async
     // An unchanged utility the request also selected ("in Vietnamese") keeps its files; everything else is an
     // entry. A kept-craft secondary keeps its entry, which links its method.
     const kept = path => UNCHANGED_COMMANDS.some(name => path.startsWith(`skills/conquistador/commands/${name}/`));
-    const foreign = extra.filter(path => !kept(path));
+    const foreign = extra.filter(path => !kept(path) && !factsChannel(path));
     assert.deepEqual(foreign, [], `${item.task}: inlined ${JSON.stringify(extra)}`);
     const deferred = structured.situational.filter(path => !kept(path));
     assert.deepEqual(deferred, [], `${item.task}: deferred files`);
@@ -109,7 +114,7 @@ test('a thin brief stays inside a small budget', async () => {
     const { text, structured } = packBrief(item);
     // A utility the request also selected keeps its files; they do not count against the thin entry.
     const utility = structured.provenance.filter(file => file.status === 'included' && !file.path.endsWith('/ENTRY.md')
-      && UNCHANGED_COMMANDS.some(name => file.path.startsWith(`skills/conquistador/commands/${name}/`))).reduce((sum, file) => sum + file.bytes + 400, 0);
+      && (UNCHANGED_COMMANDS.some(name => file.path.startsWith(`skills/conquistador/commands/${name}/`)) || factsChannel(file.path))).reduce((sum, file) => sum + file.bytes + 400, 0);
     const limit = 3500 + 2600 * (item.methods.length - 1) + utility;
     assert.ok(Buffer.byteLength(text) <= limit, `${item.task}: ${Buffer.byteLength(text)} bytes`);
     assert.doesNotMatch(text, /Mark assumptions|Follow relevant method rules|Deferred files are optional/, item.task);
