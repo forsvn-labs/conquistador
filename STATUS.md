@@ -5,6 +5,25 @@ Updated 2026-10-27. Release evidence: [PR #109](https://github.com/forsvn-labs/c
 [v0.11.0](https://github.com/forsvn-labs/conquistador/releases/tag/v0.11.0), and
 [publication run 40481863510](https://github.com/forsvn-labs/conquistador/actions/runs/40481863510).
 
+## In review: distillation workflow (2026-10-29)
+
+`tools/distill.mjs` pins permissively licensed sources at exact commits, maps their units to routes,
+compares written requests with routes, and checks that public text shares no 8-word run or source
+name with a source. [docs/DISTILL.md](docs/DISTILL.md) describes the workflow. Two public skill
+libraries were distilled into private notes. This branch adds:
+
+- [The growth playbook](docs/GROWTH-PLAYBOOK.md), a reference for people. Default briefs do not load it.
+- Routing for 111 new cases, including 11 engineering look-alikes that stay silent. On 455 requests
+  from the notes, misroutes fall from 323 to 211 and unrouted requests from 255 to 138, with none
+  newly broken.
+- A facts-only SMS and WhatsApp channel file that thin routes read when the request names it.
+- Corrected search facts: retired FAQ and HowTo rich results, disavow scope, Apple keyword bytes.
+- Eleven post-draft checker rules. The drafting guide is unchanged, so blind-tested context is unchanged.
+
+All 608 product tests (one existing skip), 832 routing cases, 44 checker fixtures, and app
+integration pass. No method craft changed; craft candidates wait for human blind tests. The routing
+contract is 98 bytes under its 90% safety budget. This is source verification, not a release.
+
 ## Shipped 0.11.0
 
 Product 0.11.0 is tagged at `2dfa2a6362507e5c8a6796ecfc3c334557cb84a7`.

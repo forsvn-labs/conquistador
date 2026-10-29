@@ -99,6 +99,29 @@ graph TD
 | Expansion and referral | Do customers buy more and bring others? | Expansion paths, referral loop | A measurable share of new customers comes from existing ones | `referral`, `expand` |
 | Measurement | What works, and what do we do next? | Tracking plan, reports, experiments | Each decision has a metric, and each test has a result | `measure`, `results`, `experiment`, `report` |
 
+### Find the binding stage
+
+Diagnose the funnel before you choose channels or tactics. Fix the first stage that fails:
+
+| What you see | Work on |
+|---|---|
+| No users or no pipeline yet | Acquisition: find the first customers by hand |
+| Users arrive but do not reach the first value | Activation |
+| Users activate but leave | Retention |
+| Users stay, but growth is slow | Referral, expansion, and pricing |
+| The small funnel works end to end | Scale acquisition |
+
+Once any users exist, fix leaks before you add traffic. A plan that spreads effort evenly over
+every stage usually means the diagnosis is weak.
+
+Two dependencies are hard. Tracking that you trust comes before paid spend, automation, or any
+readout, because every later decision reads those numbers. A method runs by hand and proves useful
+before it becomes a recurring, automated loop.
+
+Later stages also feed earlier ones. Sales objections and the reasons you lose deals rewrite
+positioning. Repeated pains from customer conversations rewrite the message. Each readout adds a
+line to the product facts file under "what we learned".
+
 ---
 
 ## 3. Stage guides
@@ -313,13 +336,19 @@ tied to a measured result.
    feature: the roadmap or a workaround. Always let the customer finish cancelling.
 4. For involuntary churn, set up payment recovery: warn before a card expires, retry failed
    payments on a schedule, ask the customer to update the card by email and in the product, and
-   use the payment processor's card updater.
+   use the payment processor's card updater. Retry only temporary declines. Do not retry a card
+   reported lost or stolen, and send an authentication failure to the customer. Card networks
+   limit how often a merchant may retry one transaction *(check)*.
 5. Watch health signals: falling usage, fewer active seats, support complaints, and the loss of a
    champion. Act before the renewal date.
 6. Win back former customers when something they missed has changed.
 
 **Traps.** Cancellation flows that trap people. Discounts offered to everyone. Treating all churn
 as one number.
+
+**Cancellation law.** A US appeals court vacated the federal "click-to-cancel" rule in July 2025.
+State automatic-renewal laws and other consumer protection laws still apply *(check)*. Make
+cancellation as easy as signup anyway; a hard exit produces chargebacks and bad reviews.
 
 **Exit test.** Cohort curves flatten, and you know the top three reasons customers leave.
 
@@ -401,6 +430,28 @@ estimates.
 
 Compare your click rate to your own site's curve by position, not to an industry average. Ignore
 queries with very few impressions; they are noise.
+
+**Starting thresholds.** These are working defaults for a first triage, not rules from a search
+engine. Tune them to your site.
+
+- **Bands by average position.** Positions 1–3 with a click rate well below your own curve (for
+  example below 60% of it): rewrite the title and description. Positions 4–10 below the curve:
+  quick wins. Positions 11–20: the page-two list, ranked by impressions weighted by how close the
+  page is to position 10.
+- **Expected click rate.** Build your own curve from the typical click rate of your pages at each
+  position. Use it only when you have enough data, for example at least 1,000 impressions spread
+  over several pages. Fall back to a generic curve until then.
+- **Noise floor.** Scale the minimum impressions per query with the size of the site. A small site
+  might use 10; a large one 100 or more.
+- **Decay.** Flag a page when clicks fall by 20% or more between two equal windows. Then find the
+  cause: position lost (more than one place worse), click rate lost (impressions held but clicks
+  fell), or demand lost (impressions fell).
+- **Cannibalization.** Flag a query when two or more of your pages each take a real share of its
+  impressions (for example 10% or more), and no single page holds most of it.
+- **Sudden change.** Look for a step change that lasts, not a single bad day. Compare weekly
+  medians, and check whether the date falls within a few days of a known search update.
+- **Indexing limits.** Search Console keeps 16 months of performance data *(check)*. Export it on a
+  schedule if you need longer history.
 
 ### Technical health
 
@@ -536,6 +587,11 @@ Write a tracking plan before you add tags: the events, their properties, their n
 decision each one supports. Use one naming pattern, such as object and action. Track conversions
 on the server when browsers block scripts. Test every event after each release.
 
+Count a conversion only on confirmed success, such as the thank-you state or the server response,
+not on a button click. Then verify that each conversion actually arrives in each ad platform and
+in your CRM. Never add up conversions that different platforms report: each one claims credit for
+the same customer.
+
 ### Attribution
 
 No attribution model is the truth. Platform reports overcount their own results. Combine three
@@ -547,7 +603,9 @@ direction that the views agree on.
 
 1. Write the hypothesis: the change, the expected effect, and the reason.
 2. Choose one primary metric and a few guardrail metrics that must not get worse.
-3. Calculate the sample size for the smallest effect worth detecting before you start.
+3. Calculate the sample size for the smallest effect worth detecting before you start. For
+   example, to detect a lift from 5% to 6% conversion (a 20% relative lift) with the usual 95%
+   confidence and 80% power, you need about 8,200 visitors in each variant.
 4. Run for full weeks to cover weekday and weekend behavior. Do not stop early because a result
    looks good.
 5. Record the result, including failed tests. A failed test that you recorded is still learning.
@@ -596,6 +654,18 @@ the final test: read the text aloud and ask whether a person would say it.
 
 Keep one experiment log and one product facts file. Everything else can change.
 
+### Recurring loops
+
+Automate a routine only after you ran it by hand and it proved useful. Start with the loops that
+protect revenue (failed payments, churn signals, broken tracking), then the ones that fix
+activation and conversion, then the ones that grow the top of the funnel. Each loop needs:
+
+- a schedule and a condition that triggers action;
+- a self-check that the data it reads is current;
+- a record of what it did last time;
+- a stop rule;
+- a person who approves every send, publication, and spend.
+
 ---
 
 ## 12. Trust, consent, and compliance
@@ -607,8 +677,15 @@ advice; check them before use.
   DMARC policy), to offer one-click unsubscribe, to honor unsubscribes quickly, and to keep spam
   complaint rates low *(check)*. Send marketing email only to people who agreed to receive it
   where the law requires consent.
-- **SMS and messaging.** Get explicit consent for marketing messages, identify the sender, give a
-  way to stop, and respect local quiet hours *(check)*.
+- **Email at volume.** Since February 2024, the largest mailbox providers require senders of about
+  5,000 or more messages a day to authenticate with SPF, DKIM, and DMARC, to support one-click
+  unsubscribe and process it within two days, and to keep the reported spam rate below 0.3% *(check)*.
+- **SMS and messaging.** In the US, marketing texts need prior express written consent, and words
+  such as "stop" must end messages within 10 business days at most. Send between 8 a.m. and
+  9 p.m. in the recipient's time zone; some states end at 8 p.m. Register 10-digit sender numbers
+  before you send. WhatsApp marketing templates do not reach US numbers *(check)*.
+- **Reviews.** Do not ask only happy customers for reviews. Some review sites forbid incentives;
+  others allow only small, disclosed ones *(check)*.
 - **Endorsements.** Disclose paid relationships with creators, affiliates, and reviewers clearly
   and close to the claim.
 - **Claims.** Have evidence for performance claims before you publish them. Price comparisons must
@@ -616,6 +693,14 @@ advice; check them before use.
 - **Privacy.** Ask for consent before tracking where the law requires it. Collect only the data
   you use.
 - **Dark patterns.** Do not hide the cancel path, pre-check paid add-ons, or invent countdowns.
+
+### When something goes wrong
+
+For an outage, a breach, or a public mistake: confirm the facts first, and bring in legal counsel
+when people's data or money is involved. Name one spokesperson. Publish a short holding statement
+that says what you know, what you are doing, and when the next update comes, without guessing at
+the cause. Tell the people affected first, then staff, then your status page and channels, then
+the press. Apologize without "but". Publish what you changed afterward.
 
 ---
 
