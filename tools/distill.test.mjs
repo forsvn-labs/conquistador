@@ -10,6 +10,7 @@
 //  F7  A source URL that starts with "-" is refused before git runs, so it cannot act as a git option.
 //  F8  When a later source fails, every checkout made in that run is removed, so a rerun can start clean.
 //  F9  An output folder reached through a symlink into a Git work tree is refused.
+//  F10 An output path through a broken symlink is refused, because a later mkdir would follow it.
 // inventory
 //  I1  A unit without a description is listed as unrouted with reason no-description, not a crash.
 //  I2  A routed unit records its command or play and the practice status from evals/practices.json.
@@ -250,11 +251,22 @@ test('F8 removes every checkout from a failed run', () => {
 test('F9 refuses an output folder reached through a symlink into a Git work tree', () => {
   const source = sourceRepo();
   const link = join(tmp(), 'into-repo');
-  symlinkSync(join(root, 'dist'), link);
+  // tools/ exists in every checkout; dist/ does not exist on a fresh CI clone.
+  symlinkSync(join(root, 'tools'), link);
   const result = run('fetch', '--registry', registry(source), '--out', join(link, 'distill-should-not-exist'));
   assert.notEqual(result.status, 0);
   assert.match(result.stderr, /Git work tree/);
-  assert.equal(existsSync(join(root, 'dist', 'distill-should-not-exist')), false);
+  assert.equal(existsSync(join(root, 'tools', 'distill-should-not-exist')), false);
+});
+
+test('F10 refuses an output path through a broken symlink', () => {
+  const source = sourceRepo();
+  const link = join(tmp(), 'broken');
+  symlinkSync(join(root, 'tools', 'no-such-folder'), link);
+  const result = run('fetch', '--registry', registry(source), '--out', join(link, 'out'));
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /broken link/);
+  assert.equal(existsSync(join(root, 'tools', 'no-such-folder')), false);
 });
 
 test('C10 skips symlinks in the source corpus', () => {

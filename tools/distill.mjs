@@ -3,7 +3,7 @@
 // check that public text written from them is in our own words. Sources, notes, and reports are
 // private: every output folder is refused inside a Git work tree. Source code is read, never run.
 import { createHash } from 'node:crypto';
-import { existsSync, mkdirSync, readFileSync, readdirSync, realpathSync, rmSync, statSync, writeFileSync } from 'node:fs';
+import { existsSync, lstatSync, mkdirSync, readFileSync, readdirSync, realpathSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import { basename, dirname, join, relative, resolve } from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
@@ -30,10 +30,14 @@ const readJson = (path, label) => {
 
 function requirePrivatePath(path, label) {
   // Check the real path: a symlinked ancestor could otherwise lead into a repository unseen.
+  // lstat sees a broken link that existsSync hides; a later mkdir would follow it, so refuse it.
+  const present = candidate => { try { lstatSync(candidate); return true; } catch { return false; } };
   let probe = resolve(path);
   const missing = [];
-  while (!existsSync(probe)) { missing.unshift(basename(probe)); probe = dirname(probe); }
-  const target = join(realpathSync(probe), ...missing);
+  while (!present(probe)) { missing.unshift(basename(probe)); probe = dirname(probe); }
+  let real;
+  try { real = realpathSync(probe); } catch { fail(`${label} path goes through a broken link (${probe})`); }
+  const target = join(real, ...missing);
   for (let dir = target; ; dir = dirname(dir)) {
     if (existsSync(join(dir, '.git'))) fail(`${label} is inside a Git work tree (${dir}); use a private folder outside any repository`);
     if (dirname(dir) === dir) return target;
