@@ -15,7 +15,7 @@ const out = resolve(option('--out', join(root, 'dist/e2e/routing-breadth')));
 
 export async function loadCases() {
   const corpus = JSON.parse(readFileSync(join(root, 'tools/e2e/routing-breadth.json'), 'utf8'));
-  const cases = [...corpus.cases, ...plainLanguageCases(), ...deliverableFirstCases(), ...decisionCases()];
+  const cases = [...corpus.cases, ...plainLanguageCases(), ...deliverableFirstCases(), ...decisionCases(), ...distilledCases()];
   // Every example the onboarding tour advertises is also a case, so the tour cannot drift (O6).
   if (existsSync(join(root, 'tools/tour.mjs'))) {
     const { AREAS } = await import('../tour.mjs');
@@ -57,6 +57,17 @@ export function deliverableFirstCases() {
     ...corpus.positives.map(item => ({ ...item, area: `context:${item.mode}`, any: item.any ?? [item.target], parity: true })),
     ...corpus.silent.map(item => ({ ...item, area: `context:negative:${item.mode}`, silent: true, parity: true })),
     ...corpus.unchanged.map(item => ({ ...item, area: `context:${item.mode}`, parity: true })),
+  ];
+}
+
+// Requests drawn from distilled source notes (tools/e2e/routing-distilled.json): common marketing,
+// sales, and search deliverables, plus engineering look-alikes that must stay silent.
+export function distilledCases() {
+  const corpus = JSON.parse(readFileSync(join(root, 'tools/e2e/routing-distilled.json'), 'utf8'));
+
+  return [
+    ...corpus.positives.map(item => ({ ...item, area: 'distilled', parity: true })),
+    ...corpus.negatives.map(item => ({ ...item, area: `distilled:negative:${item.area}`, silent: true, parity: true })),
   ];
 }
 

@@ -1,7 +1,7 @@
 ---
 command: pseo
 label: Build programmatic search pages
-intents: ["programmatic seo","pseo","programmatic pages","comparison pages at scale","location pages","template pages for seo"]
+intents: ["programmatic seo", "pseo", "programmatic pages", "comparison pages at scale", "location pages", "template pages for seo", "city pages", "alternative page"]
 chain:
   - { command: seo }
   - { command: copy, for: "a page template with page-specific content" }

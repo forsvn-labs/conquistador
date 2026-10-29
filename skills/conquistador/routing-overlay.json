@@ -523,7 +523,10 @@
         "marketing budget"
       ],
       "aliases": [
-        "allocate-marketing-budget"
+        "allocate-marketing-budget",
+        "conference sponsorship",
+        "sponsor this conference",
+        "conference booth"
       ],
       "exclusions": [
         "create ads",
@@ -577,7 +580,8 @@
       "signals": [
         "budget*|spend*|money|dollars & split|allocat*|divide|move|shift|where|per channel|across|between|mix|reserve*|floor*|reallocat*|how much",
         "split|allocat*|divide|distribut* & between|across & month|quarter|google|meta|linkedin|tiktok|channel*|paid|ads",
-        "how much & spend|invest|put & channel*|ads|paid|marketing|google|meta|linkedin"
+        "how much & spend|invest|put & channel*|ads|paid|marketing|google|meta|linkedin",
+        "pay|paid|rate|rates|fee|fees|budget & creator*|influencer*"
       ],
       "decisions": [
         "where should|how should|should we|should i|how do we|what & budget*|money|dollars|cash|funds|spend*|amount|sum|pot & go|split|allocat*|divide|move|shift|put|invest|more|less|between|across & !time|hours|effort",
@@ -847,7 +851,15 @@
         "earned media",
         "podcast guest",
         "podcast tour",
-        "substack"
+        "substack",
+        "directories",
+        "discord",
+        "sms",
+        "text message",
+        "whatsapp",
+        "tcpa",
+        "10dlc",
+        "sms program"
       ],
       "exclusions": [
         "write the posts",
@@ -943,7 +955,19 @@
         "increase conversion rate",
         "improve signup rate",
         "improve checkout",
-        "raise the upgrade rate"
+        "raise the upgrade rate",
+        "popup",
+        "exit intent",
+        "email capture",
+        "signup flow",
+        "multi step signup",
+        "guest checkout",
+        "request form",
+        "form fields",
+        "not converting",
+        "upgrade modal",
+        "trial expiration",
+        "isn t converting"
       ],
       "exclusions": [
         "seo ranking",
@@ -1089,7 +1113,13 @@
         "microcopy",
         "onboarding copy",
         "homepage copy",
-        "tagline"
+        "tagline",
+        "one pager",
+        "sales deck",
+        "cfp",
+        "talk proposal",
+        "proofread",
+        "sounds like ai"
       ],
       "exclusions": [
         "linkedin post",
@@ -1144,7 +1174,12 @@
         "brief a ugc creator"
       ],
       "aliases": [
-        "brief-creative"
+        "brief-creative",
+        "hero image",
+        "banner",
+        "header image",
+        "gallery images",
+        "og image"
       ],
       "exclusions": [
         "write the copy",
@@ -1876,7 +1911,15 @@
         "mrr"
       ],
       "aliases": [
-        "model-growth-funnel"
+        "model-growth-funnel",
+        "lead scoring",
+        "lead score",
+        "mql",
+        "lead routing",
+        "lifecycle stages",
+        "speed to lead",
+        "pipeline stages",
+        "sales handoff"
       ],
       "exclusions": [
         "write copy"
@@ -2064,7 +2107,19 @@
         "learn from results"
       ],
       "aliases": [
-        "measure-growth"
+        "measure-growth",
+        "tracking plan",
+        "utm",
+        "google tag manager",
+        "ga4",
+        "attribution model",
+        "attribution",
+        "media mix",
+        "holdout test",
+        "how did you hear about us",
+        "conversion tracking",
+        "server side tracking",
+        "no conversions"
       ],
       "exclusions": [
         "write social posts",
@@ -2189,7 +2244,15 @@
         "outbound sequence",
         "outbound campaign",
         "outbound email",
-        "outbound sales"
+        "outbound sales",
+        "cold call",
+        "voicemail",
+        "research this account",
+        "account research",
+        "influencer marketing",
+        "micro creators",
+        "creator deal",
+        "pay a creator"
       ],
       "exclusions": [
         "linkedin post",
@@ -2322,7 +2385,19 @@
         "define our icp"
       ],
       "aliases": [
-        "research-positioning"
+        "research-positioning",
+        "objection handling",
+        "battle card",
+        "battlecard",
+        "win loss",
+        "interview transcripts",
+        "voice of customer",
+        "quote bank",
+        "competitor dossier",
+        "product market fit survey",
+        "pmf survey",
+        "competitor profile",
+        "persona"
       ],
       "exclusions": [
         "write the campaign",
@@ -2478,7 +2553,12 @@
         "design a free trial",
         "free trial length",
         "free trial offer",
-        "reverse trial"
+        "reverse trial",
+        "productize",
+        "fixed package",
+        "grandfather",
+        "van westendorp",
+        "guarantee"
       ],
       "exclusions": [
         "landing page copy"
@@ -2542,7 +2622,11 @@
         "growth ideas"
       ],
       "aliases": [
-        "prioritize-opportunities"
+        "prioritize-opportunities",
+        "churn health score",
+        "health score",
+        "marketing ideas",
+        "growth tactics"
       ],
       "exclusions": [
         "write copy"
@@ -2924,11 +3008,49 @@
         "cited by perplexity",
         "show up in perplexity",
         "search engine optimization",
-        "search engine ranking"
+        "search engine ranking",
+        "cannibalization",
+        "striking distance",
+        "search console",
+        "json ld",
+        "schema markup",
+        "structured data",
+        "content decay",
+        "decaying content",
+        "content refresh",
+        "page 2",
+        "page two",
+        "title tag",
+        "meta description",
+        "internal links",
+        "internal linking",
+        "core update",
+        "core web vitals",
+        "hreflang",
+        "not indexed",
+        "url structure",
+        "sitemap",
+        "subfolder",
+        "redirect map",
+        "site migration",
+        "link building",
+        "backlinks",
+        "disavow",
+        "manual action",
+        "unnatural links",
+        "seo report",
+        "keyword field",
+        "traffic from chatgpt",
+        "gptbot",
+        "comparison page",
+        "orphan page",
+        "unlinked"
       ],
       "exclusions": [
         "paid search ads",
-        "landing conversion rewrite"
+        "landing conversion rewrite",
+        "fact check",
+        "verify the claims"
       ],
       "requiredResources": [],
       "conditionalResources": [
@@ -3350,7 +3472,9 @@
         "short video",
         "video script",
         "ugc video",
-        "youtube short"
+        "youtube short",
+        "beat sheet",
+        "b roll"
       ],
       "exclusions": [
         "analyze a supplied video",
@@ -3629,7 +3753,8 @@
         "chatgpt|perplexity|gemini|claude|copilot|llm*|ai assistant*|ai answer*|ai tool*|ai search|ai engine* & mention*|cite|cites|cited|citing|recommend*|says|show up|visibility|track*|audit|check|measure|test",
         "ai answer*|ai visibility|answer engine* & audit|check|track|dated|run",
         "how often|how many times|share of voice|how frequently & llm*|chatgpt|ai|perplexity|gemini|claude|copilot & mention*|cite*|recommend*|show up",
-        "claude|gemini|chatgpt|perplexity|llm*|copilot & cite*|mention*|recommend* & our|us|brand|docs|product|site"
+        "claude|gemini|chatgpt|perplexity|llm*|copilot & cite*|mention*|recommend* & our|us|brand|docs|product|site",
+        "traffic|visits|referrals|sessions & chatgpt|perplexity|claude|gemini|copilot|ai assistant*"
       ]
     },
     "appstore": {

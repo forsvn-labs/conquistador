@@ -1,0 +1,749 @@
+{
+ "schema": "conquistador.routing-distilled/v1",
+ "note": "Written on 2026-10-29 before the routing fix, from requests in the private distillation notes. A positive passes when the brief selects one of `any` (a play counts). `allowEmpty` cases name a platform and may return a platform-only brief, which must load the named channel facts. Negatives are engineering requests that share words with the new phrases and must stay silent. Quoted text and the word 'example' are context to the router by design, so these requests are written without quotes.",
+ "positives": [
+  {
+   "task": "Do we have keyword cannibalization?",
+   "any": [
+    "seo"
+   ]
+  },
+  {
+   "task": "Show me striking distance keywords.",
+   "any": [
+    "seo"
+   ]
+  },
+  {
+   "task": "Add JSON-LD schema to our product pages.",
+   "any": [
+    "seo"
+   ]
+  },
+  {
+   "task": "Validate the schema markup on this blog template.",
+   "any": [
+    "seo"
+   ]
+  },
+  {
+   "task": "Find decaying content we should refresh.",
+   "any": [
+    "seo"
+   ]
+  },
+  {
+   "task": "Build a content refresh list from Search Console.",
+   "any": [
+    "seo"
+   ]
+  },
+  {
+   "task": "Which queries could we push from page 2 to page 1?",
+   "any": [
+    "seo"
+   ]
+  },
+  {
+   "task": "Give me the 25 title tag and meta description rewrites most likely to add clicks.",
+   "any": [
+    "seo"
+   ]
+  },
+  {
+   "task": "Find internal links we should add across the site.",
+   "any": [
+    "seo"
+   ]
+  },
+  {
+   "task": "List orphan pages and pages with too few internal links.",
+   "any": [
+    "seo"
+   ]
+  },
+  {
+   "task": "Our Google traffic dropped last week. Was it the core update?",
+   "any": [
+    "seo",
+    "diagnose"
+   ]
+  },
+  {
+   "task": "Do a postmortem on the September core update for our site.",
+   "any": [
+    "seo"
+   ]
+  },
+  {
+   "task": "Is our homepage fast enough for Core Web Vitals?",
+   "any": [
+    "seo"
+   ]
+  },
+  {
+   "task": "Audit our hreflang setup; the German pages never show up in Google.",
+   "any": [
+    "seo"
+   ]
+  },
+  {
+   "task": "Why are some of our pages not indexed?",
+   "any": [
+    "seo"
+   ]
+  },
+  {
+   "task": "Plan the sitemap and URL structure for our new marketing site.",
+   "any": [
+    "seo"
+   ]
+  },
+  {
+   "task": "Should the blog live on a subdomain or a subfolder?",
+   "any": [
+    "seo"
+   ]
+  },
+  {
+   "task": "Give me the redirect map for our site migration.",
+   "any": [
+    "seo"
+   ]
+  },
+  {
+   "task": "Find unlinked brand mentions and draft the link reclaim emails.",
+   "any": [
+    "seo",
+    "outreach"
+   ]
+  },
+  {
+   "task": "We got a manual action for unnatural links. What now?",
+   "any": [
+    "seo"
+   ]
+  },
+  {
+   "task": "Should we disavow the toxic links our SEO tool found?",
+   "any": [
+    "seo"
+   ]
+  },
+  {
+   "task": "Write a Notion alternative page for us.",
+   "any": [
+    "seo",
+    "pseo"
+   ]
+  },
+  {
+   "task": "Create an Us vs HubSpot comparison page.",
+   "any": [
+    "seo",
+    "pseo"
+   ]
+  },
+  {
+   "task": "We want city pages for our cleaning service in 80 cities.",
+   "any": [
+    "pseo",
+    "seo"
+   ]
+  },
+  {
+   "task": "How much traffic do we get from ChatGPT, Perplexity, and Claude?",
+   "any": [
+    "answers",
+    "seo"
+   ]
+  },
+  {
+   "task": "Should we block GPTBot? Will that remove us from ChatGPT answers?",
+   "any": [
+    "seo",
+    "answers"
+   ]
+  },
+  {
+   "task": "Suggest a new subtitle and keyword field for our iOS app.",
+   "any": [
+    "seo",
+    "appstore"
+   ]
+  },
+  {
+   "task": "Run an SEO report for acme.com.",
+   "any": [
+    "seo",
+    "answers"
+   ]
+  },
+  {
+   "task": "Set up an email capture popup for our blog.",
+   "any": [
+    "convert"
+   ]
+  },
+  {
+   "task": "Exit-intent popup for our store: what offer and when?",
+   "any": [
+    "convert"
+   ]
+  },
+  {
+   "task": "How often should the newsletter popup show to the same person?",
+   "any": [
+    "convert"
+   ]
+  },
+  {
+   "task": "Is a multi-step signup better than one page for us?",
+   "any": [
+    "convert",
+    "flow"
+   ]
+  },
+  {
+   "task": "Guest checkout or forced account for our store?",
+   "any": [
+    "convert",
+    "flow"
+   ]
+  },
+  {
+   "task": "Our demo request form gets lots of views but few submits. What should we cut?",
+   "any": [
+    "convert"
+   ]
+  },
+  {
+   "task": "Audit this landing page and tell me why it isn't converting.",
+   "any": [
+    "convert",
+    "landing"
+   ]
+  },
+  {
+   "task": "Design the upgrade modal when a free user hits the project limit.",
+   "any": [
+    "convert",
+    "pricing"
+   ]
+  },
+  {
+   "task": "Write our trial expiration screen.",
+   "any": [
+    "convert",
+    "copy",
+    "pricing"
+   ]
+  },
+  {
+   "task": "We get 800 visitors a day. Can we even A/B test this?",
+   "any": [
+    "experiment",
+    "convert"
+   ]
+  },
+  {
+   "task": "Is a 12% lift with p=0.04 enough to ship?",
+   "any": [
+    "experiment",
+    "measure",
+    "results"
+   ]
+  },
+  {
+   "task": "What lead magnet should we create for our B2B audience?",
+   "any": [
+    "interactive",
+    "ideas",
+    "copy"
+   ]
+  },
+  {
+   "task": "Should we gate this industry report or keep it free?",
+   "any": [
+    "interactive",
+    "ideas",
+    "convert"
+   ]
+  },
+  {
+   "task": "Is a website grader worth building for lead gen?",
+   "any": [
+    "interactive"
+   ]
+  },
+  {
+   "task": "Plan a content upgrade for each of our top 10 posts.",
+   "any": [
+    "interactive",
+    "ideas"
+   ]
+  },
+  {
+   "task": "Set up dunning emails for failed payments.",
+   "any": [
+    "lifecycle",
+    "campaign",
+    "copy"
+   ]
+  },
+  {
+   "task": "Write the card expiring and payment failed emails.",
+   "any": [
+    "lifecycle",
+    "copy"
+   ]
+  },
+  {
+   "task": "Design a cancel flow with save offers.",
+   "any": [
+    "lifecycle",
+    "prioritize",
+    "convert"
+   ]
+  },
+  {
+   "task": "Too many customers cancel on price. What offer should we show in the cancel flow?",
+   "any": [
+    "lifecycle",
+    "prioritize",
+    "pricing",
+    "convert"
+   ]
+  },
+  {
+   "task": "What retry schedule should we use for failed payments?",
+   "any": [
+    "lifecycle",
+    "prioritize"
+   ]
+  },
+  {
+   "task": "Build a churn health score from our usage data.",
+   "any": [
+    "prioritize",
+    "lifecycle",
+    "measure"
+   ]
+  },
+  {
+   "task": "Build an objection handling doc for our SDR team.",
+   "any": [
+    "position",
+    "outreach",
+    "copy"
+   ]
+  },
+  {
+   "task": "Make a one-pager our champion can forward to their boss.",
+   "any": [
+    "copy",
+    "position"
+   ]
+  },
+  {
+   "task": "Write a 10-slide sales deck for economic buyers.",
+   "any": [
+    "copy",
+    "position"
+   ]
+  },
+  {
+   "task": "Run a win-loss analysis on these 40 closed deals.",
+   "any": [
+    "position",
+    "results",
+    "measure"
+   ]
+  },
+  {
+   "task": "Build a battle card against our main competitor.",
+   "any": [
+    "position"
+   ]
+  },
+  {
+   "task": "Give me a voicemail script and a cold call opener.",
+   "any": [
+    "outreach",
+    "outbound"
+   ]
+  },
+  {
+   "task": "Build a lead list of 25 Series A SaaS companies that just hired a growth marketer.",
+   "any": [
+    "outbound",
+    "outreach"
+   ]
+  },
+  {
+   "task": "Research this account before I write to their VP of Sales.",
+   "any": [
+    "outreach",
+    "outbound"
+   ]
+  },
+  {
+   "task": "Build a lead scoring model for our demo requests.",
+   "any": [
+    "funnel",
+    "measure"
+   ]
+  },
+  {
+   "task": "Define our MQL stages with entry and exit criteria and owners.",
+   "any": [
+    "funnel",
+    "measure"
+   ]
+  },
+  {
+   "task": "Our reps take a day to call inbound leads. Design lead routing and an SLA.",
+   "any": [
+    "funnel",
+    "measure"
+   ]
+  },
+  {
+   "task": "Write a tracking plan for our signup and onboarding funnel.",
+   "any": [
+    "measure"
+   ]
+  },
+  {
+   "task": "Set up a UTM naming convention for newsletters and podcasts.",
+   "any": [
+    "measure"
+   ]
+  },
+  {
+   "task": "Audit our GA4 and Google Tag Manager setup for duplicate events.",
+   "any": [
+    "measure"
+   ]
+  },
+  {
+   "task": "Which attribution model should we use for a 90-day B2B sales cycle?",
+   "any": [
+    "measure",
+    "results"
+   ]
+  },
+  {
+   "task": "Should we invest in media mix modeling or a holdout test?",
+   "any": [
+    "measure",
+    "results",
+    "decide"
+   ]
+  },
+  {
+   "task": "Put a how did you hear about us field on the signup form and explain how to read the answers.",
+   "any": [
+    "measure"
+   ]
+  },
+  {
+   "task": "Leads arrive in my inbox but the ad platform shows no conversions.",
+   "any": [
+    "measure"
+   ]
+  },
+  {
+   "task": "Synthesize these 12 customer interview transcripts into themes and quotes.",
+   "any": [
+    "position"
+   ]
+  },
+  {
+   "task": "Make a voice of customer quote bank for our copywriters.",
+   "any": [
+    "position"
+   ]
+  },
+  {
+   "task": "Profile these four competitors and update our competitor dossiers.",
+   "any": [
+    "position"
+   ]
+  },
+  {
+   "task": "Run a product-market fit survey and tell me how to read it.",
+   "any": [
+    "position",
+    "measure"
+   ]
+  },
+  {
+   "task": "Give me marketing ideas for a bootstrapped B2B SaaS with no budget.",
+   "any": [
+    "prioritize",
+    "ideas",
+    "channels",
+    "plan"
+   ]
+  },
+  {
+   "task": "What growth tactics should we try before our Series A?",
+   "any": [
+    "prioritize",
+    "plan",
+    "channels",
+    "ideas"
+   ]
+  },
+  {
+   "task": "Which funnel stage should we fix first? We get signups but nobody pays.",
+   "any": [
+    "plan",
+    "funnel",
+    "diagnose",
+    "convert"
+   ]
+  },
+  {
+   "task": "Build a media list of 30 journalists who cover developer tools.",
+   "any": [
+    "press",
+    "outreach"
+   ]
+  },
+  {
+   "task": "We had a data breach this morning. What do we say publicly?",
+   "any": [
+    "press",
+    "copy"
+   ]
+  },
+  {
+   "task": "Should we sponsor this $40k conference booth?",
+   "any": [
+    "campaign",
+    "event",
+    "decide",
+    "budget"
+   ]
+  },
+  {
+   "task": "Write a CFP talk proposal for this conference.",
+   "any": [
+    "copy",
+    "event",
+    "campaign"
+   ]
+  },
+  {
+   "task": "Find 20 micro-creators for our skincare launch and vet them.",
+   "any": [
+    "outreach",
+    "campaign",
+    "creative"
+   ]
+  },
+  {
+   "task": "What should we pay a 40k-follower TikTok creator?",
+   "any": [
+    "outreach",
+    "campaign",
+    "budget"
+   ]
+  },
+  {
+   "task": "Submit our app to the main AI tool directories.",
+   "any": [
+    "channels",
+    "launch"
+   ]
+  },
+  {
+   "task": "We want to start a Discord for our users. Where do we begin?",
+   "any": [
+    "channels"
+   ]
+  },
+  {
+   "task": "Make a blog hero image for this post.",
+   "any": [
+    "creative"
+   ]
+  },
+  {
+   "task": "I need a LinkedIn company banner and an X header image.",
+   "any": [
+    "creative"
+   ]
+  },
+  {
+   "task": "Proofread this email before I send it.",
+   "any": [
+    "check",
+    "copy",
+    "critique",
+    "review"
+   ]
+  },
+  {
+   "task": "This copy sounds like AI. Make it sound like a person wrote it.",
+   "any": [
+    "copy",
+    "check",
+    "critique"
+   ]
+  },
+  {
+   "task": "Our affiliates drive clicks but few sales. What do we fix?",
+   "any": [
+    "referral",
+    "campaign"
+   ]
+  },
+  {
+   "task": "Should we pay referrers cash or give credit?",
+   "any": [
+    "referral",
+    "pricing"
+   ]
+  },
+  {
+   "task": "How do we get more G2 reviews without breaking their rules?",
+   "any": [
+    "referral",
+    "channels"
+   ]
+  },
+  {
+   "task": "Help me productize our consulting service into a fixed package.",
+   "any": [
+    "pricing"
+   ]
+  },
+  {
+   "task": "Should we grandfather old customers after the price increase?",
+   "any": [
+    "pricing"
+   ]
+  },
+  {
+   "task": "Run a Van Westendorp survey and tell us the price range.",
+   "any": [
+    "pricing"
+   ]
+  },
+  {
+   "task": "What guarantee should our agency retainer have?",
+   "any": [
+    "pricing",
+    "copy"
+   ]
+  },
+  {
+   "task": "Write a beat sheet for our editor from this reference Reel.",
+   "any": [
+    "video",
+    "series",
+    "creative"
+   ]
+  },
+  {
+   "task": "Generate B-roll for our explainer with an AI video model.",
+   "any": [
+    "video",
+    "creative"
+   ]
+  },
+  {
+   "task": "Write an abandoned cart SMS sequence.",
+   "any": [
+    "lifecycle",
+    "copy",
+    "convert",
+    "campaign"
+   ],
+   "platforms": [
+    "sms"
+   ]
+  },
+  {
+   "task": "Is our SMS opt-in checkbox TCPA compliant?",
+   "allowEmpty": true,
+   "platforms": [
+    "sms"
+   ]
+  },
+  {
+   "task": "What are the quiet hours for marketing text messages?",
+   "allowEmpty": true,
+   "platforms": [
+    "sms"
+   ]
+  },
+  {
+   "task": "Write WhatsApp templates for order updates and win-back.",
+   "any": [
+    "lifecycle",
+    "copy",
+    "campaign"
+   ],
+   "platforms": [
+    "sms"
+   ]
+  },
+  {
+   "task": "Short code, toll-free, or 10DLC for our SMS program?",
+   "allowEmpty": true,
+   "platforms": [
+    "sms"
+   ]
+  }
+ ],
+ "negatives": [
+  {
+   "area": "engineering:popup",
+   "task": "Fix the popup z-index bug in our React modal component"
+  },
+  {
+   "area": "engineering:sitemap",
+   "task": "Debug why our sitemap.xml route returns 500 in Next.js"
+  },
+  {
+   "area": "engineering:schema",
+   "task": "Add a unit test for the JSON-LD serializer function"
+  },
+  {
+   "area": "engineering:utm",
+   "task": "Refactor the UTM parsing function in our analytics SDK"
+  },
+  {
+   "area": "engineering:payments",
+   "task": "Fix the Stripe webhook handler that misses failed payment events"
+  },
+  {
+   "area": "engineering:sms",
+   "task": "Implement the SMS sending service with Twilio in our backend"
+  },
+  {
+   "area": "engineering:lead-score",
+   "task": "Write a database migration that adds a lead_score column"
+  },
+  {
+   "area": "engineering:tracking",
+   "task": "Debug the gtag snippet that throws a TypeError in Safari"
+  },
+  {
+   "area": "engineering:internal-links",
+   "task": "Write a script that fixes broken relative links in our docs build"
+  },
+  {
+   "area": "engineering:redirect",
+   "task": "Fix the nginx redirect loop on the staging server"
+  },
+  {
+   "area": "engineering:form",
+   "task": "Render the newsletter signup form component"
+  }
+ ]
+}

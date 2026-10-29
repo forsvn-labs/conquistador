@@ -1,7 +1,7 @@
 ---
 command: plan
 label: Turn a growth target into a plan
-intents: ["growth plan","revenue target","growth target","hit our target","target to growth plan","reach mrr","reach arr"]
+intents: ["growth plan", "revenue target", "growth target", "hit our target", "target to growth plan", "reach mrr", "reach arr", "which funnel stage"]
 chain:
   - { command: funnel }
   - { command: prioritize }

@@ -1,7 +1,7 @@
 ---
 command: experiment
 label: Run a measured growth experiment
-intents: ["growth experiment","experiment loop","measured initiative","run an experiment","test and learn","learning cycles"]
+intents: ["growth experiment", "experiment loop", "measured initiative", "run an experiment", "test and learn", "learning cycles", "a b test", "statistical significance", "sample size", "enough to ship"]
 chain:
   - { command: campaign, for: "hypothesis, signal, guardrails, stop rule" }
   - { command: outreach, for: "Cycle 1 asset (or the relevant create command)" }
