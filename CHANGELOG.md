@@ -1,6 +1,6 @@
 # Conquistador changelog
 
-Verified product releases are listed below. [STATUS.md](STATUS.md) owns
+Verified product releases are listed below. [PROGRESS.md](PROGRESS.md) owns
 current acceptance gaps and planned work. [VERSIONS.md](VERSIONS.md)
 distinguishes product versions from method versions.
 

@@ -1,3 +1,12 @@
+# Progress log
+
+## Snapshot recorded 2026-10-29
+
+The following legacy snapshot is retained unchanged from commit `0b28958`.
+Its release, registry, deployment, and test claims keep their original dates.
+Commands and references to npm latest describe that snapshot, not a new check.
+Current work and gates are in [PROGRESS.md](../PROGRESS.md).
+
 # Conquistador status
 
 Updated 2026-10-29. Release evidence: [PR #112](https://github.com/forsvn-labs/conquistador/pull/112),
