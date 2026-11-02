@@ -1,0 +1,63 @@
+# Progress
+
+Updated: 2026-11-01 · Stage: live · Health: At risk
+
+The latest recorded package release is 0.12.0 (2026-10-29). Hosted MCP was last
+verified at 0.10.1 (2026-10-23). Acceptance gaps remain; migration rechecks neither.
+
+Next action: Hung reviews the draft migration PR; additional acceptance remains the next product work.
+
+## Current state
+
+| State | Item | Evidence | Date |
+| --- | --- | --- | --- |
+| Shipped | Package 0.12.0, including distillation, routing, channel facts, and checker changes | Recorded: Both `@forsvn/conquistador@0.12.0` and `conquistador@0.12.0` are verified as npm latest. [Release](https://github.com/forsvn-labs/conquistador/releases/tag/v0.12.0), [registry evidence](docs/release-0.12.0-verification.json) | 2026-10-29 |
+| Shipped | Thin guidance across package surfaces, 0.11.0 | [Release](https://github.com/forsvn-labs/conquistador/releases/tag/v0.11.0), [registry evidence](docs/release-0.11.0-verification.json) | 2026-10-27 |
+| Shipped | Four-step installer, 0.10.2 | [Release](https://github.com/forsvn-labs/conquistador/releases/tag/v0.10.2), [registry evidence](docs/release-0.10.2-verification.json) | 2026-10-23 |
+| Shipped | Hosted MCP 0.10.1, existing-account Executor routing | [Hosted evidence](docs/hosted-0.10.1-verification.json) | 2026-10-23 |
+| Built, not shipped | Project-record migration draft | Branch claude/horsemen-records-20261101; Hung reviews the draft PR | 2026-11-01 |
+| Next | Additional native-client, OAuth, ARM, and linked-provider acceptance | [Installation acceptance](docs/INSTALLATION-ACCEPTANCE.md); extend claims only after observed checks | 2026-10-29 |
+| Next | Real-task evaluations and corrections across methods | [Public-alpha checklist](docs/PUBLIC-ALPHA.md) | 2026-10-29 |
+| Next | Human blind tests for distilled craft candidates | [Distillation workflow](docs/DISTILL.md); no craft change before verdicts | 2026-10-29 |
+| Next | Routing-contract headroom before the next routing change | [Recorded snapshot](docs/progress-log.md); 24 bytes below its 90% safety budget | 2026-10-29 |
+
+## Gates
+
+- Preserve human decisions for sends, publication, spend, external writes, feedback disclosure, and reusable memory. Draft acceptance grants no disclosure or memory consent.
+- Releases, marketplace listings, and landing changes need an explicit decision. Source commits, tests, fixtures, and package identity do not prove delivery or model quality. See [the behavior contract](docs/PRODUCT-CONTRACT.md), [public-alpha checklist](docs/PUBLIC-ALPHA.md), [installation acceptance](docs/INSTALLATION-ACCEPTANCE.md), and [version policy](VERSIONS.md).
+- Additional-client OAuth consent and native activation, interactive Windows and additional ARM targets, linked-provider lifecycle, and broader model/human acceptance remain unverified. Composio has offline checks only; Browser and Edge runtimes are not certified.
+- Keep secrets, OAuth settings, and token storage under their existing owners. Package publication does not verify or redeploy hosted MCP.
+- `README.md` is byte-locked by `release/plugin-completeness.json` for 0.12.0, and published READMEs link `main/STATUS.md`. At the next release, point README at PROGRESS.md and regenerate the release manifests. Keep the `STATUS.md` pointer while any published README still links to it.
+
+## Later
+
+- Verify marketplace listings after distribution approval. Build Gemini CLI hooks, consent-bound memory, and expanded method-quality evaluations when prioritized.
+- Existing lint diagnostics and optional Promptfoo/node-forge findings remain open. See the [recorded snapshot](docs/progress-log.md).
+
+## 2026-11-01
+
+- Migrated the root records to PROGRESS. The old STATUS.md and ROADMAP.md are
+  retained in commit `0b28958`; the full dated snapshot is in [the progress log](docs/progress-log.md).
+  Release, registry, hosted, and task-quality evidence was not refreshed.
+- Updated only the approved CHANGELOG and setup-entry test references. Other
+  guides retain legacy names outside this migration scope.
+
+## 2026-10-29
+
+- Shipped 0.12.0 at `794c5d41192755818f359d909db4b4a0e8d84728`, with five archives
+  matching SHA256SUMS and both npm packages verified in the recorded evidence.
+  [PR #112](https://github.com/forsvn-labs/conquistador/pull/112),
+  [release PR #113](https://github.com/forsvn-labs/conquistador/pull/113), and
+  [publication run](https://github.com/forsvn-labs/conquistador/actions/runs/40916514798).
+- Kept distilled craft candidates out of methods pending human blind tests.
+
+## 2026-10-27
+
+- Shipped 0.11.0. Package checks established loading and installation, not model
+  quality or external chat-app acceptance. Hosted Worker was not redeployed.
+
+## 2026-10-23
+
+- Shipped 0.10.2 and verified hosted MCP 0.10.1 with an existing Executor account.
+- Verified performance source before 0.11.0, without a new deployment or live
+  model-quality verdict. Full results and limits remain in [the progress log](docs/progress-log.md).
