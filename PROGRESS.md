@@ -27,7 +27,7 @@ Next action: Hung reviews the draft migration PR; additional acceptance remains 
 - Releases, marketplace listings, and landing changes need an explicit decision. Source commits, tests, fixtures, and package identity do not prove delivery or model quality. See [the behavior contract](docs/PRODUCT-CONTRACT.md), [public-alpha checklist](docs/PUBLIC-ALPHA.md), [installation acceptance](docs/INSTALLATION-ACCEPTANCE.md), and [version policy](VERSIONS.md).
 - Additional-client OAuth consent and native activation, interactive Windows and additional ARM targets, linked-provider lifecycle, and broader model/human acceptance remain unverified. Composio has offline checks only; Browser and Edge runtimes are not certified.
 - Keep secrets, OAuth settings, and token storage under their existing owners. Package publication does not verify or redeploy hosted MCP.
-- `README.md` is byte-locked by `release/plugin-completeness.json` for 0.12.0. At the next release, point its record link at PROGRESS.md, regenerate the release manifests, and delete the `STATUS.md` pointer.
+- `README.md` is byte-locked by `release/plugin-completeness.json` for 0.12.0, and published READMEs link `main/STATUS.md`. At the next release, point README at PROGRESS.md and regenerate the release manifests. Keep the `STATUS.md` pointer while any published README still links to it.
 
 ## Later
 

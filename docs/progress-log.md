@@ -26,7 +26,7 @@ main-package version. `npm audit signatures` verifies the installed registry sig
 and attestations. A fresh registry install verifies the CLI and MCP version, an
 entry-only pricing brief, an SMS brief with its facts file, a silent engineering
 request, and no Conquistador home state.
-[Registry evidence](docs/release-0.12.0-verification.json) records identities, digests,
+[Registry evidence](../docs/release-0.12.0-verification.json) records identities, digests,
 and checks. The CLI publication job was retried after the main version became readable
 in npm's registry.
 
@@ -34,10 +34,10 @@ in npm's registry.
 
 `tools/distill.mjs` pins permissively licensed sources at exact commits, maps their units to routes,
 compares written requests with routes, and checks that public text shares no 8-word run or source
-name with a source. [docs/DISTILL.md](docs/DISTILL.md) describes the workflow. Two public skill
+name with a source. [docs/DISTILL.md](../docs/DISTILL.md) describes the workflow. Two public skill
 libraries were distilled into private notes. The release adds:
 
-- [The growth playbook](docs/GROWTH-PLAYBOOK.md), a reference for people. Default briefs do not load it.
+- [The growth playbook](../docs/GROWTH-PLAYBOOK.md), a reference for people. Default briefs do not load it.
 - Routing for 117 new cases, including 17 engineering look-alikes that stay silent. On 455 requests
   from the notes, misroutes fall from 323 to 214 and unrouted requests from 255 to 141, with none
   newly broken.
@@ -60,7 +60,7 @@ latest at publication. Their registry tarballs match the release bytes, and the 
 exact main-package version. `npm audit signatures` verifies the installed
 registry signatures and attestations. A fresh registry install verifies the CLI,
 MCP version, an entry-only pricing brief, and startup without Conquistador home
-state. [Registry evidence](docs/release-0.11.0-verification.json) records the identities,
+state. [Registry evidence](../docs/release-0.11.0-verification.json) records the identities,
 digests, and checks. The CLI publication job was retried after the main version
 became readable in npm's registry.
 
@@ -81,7 +81,7 @@ reported no actionable findings. The tagged source tree and archive bytes match
 the tested candidate. These checks establish loading and installation, not
 model output quality or external chat-app retrieval acceptance.
 
-The [loader inventory and repeatable checks](docs/performance/thin-surfaces.md)
+The [loader inventory and repeatable checks](../docs/performance/thin-surfaces.md)
 describe the entry-point behavior and its limits. This release does not redeploy
 the hosted Worker.
 
@@ -89,7 +89,7 @@ the hosted Worker.
 
 The performance branch added a portable search snapshot with source-digest checks,
 per-query scoring setup, and short-entry catalog routing for all 41 commands.
-[Review and repeatable evidence](docs/performance/REVIEW.md) cover the API, CLI,
+[Review and repeatable evidence](../docs/performance/REVIEW.md) cover the API, CLI,
 hooks, skills/plugins, stdio, HTTP, packaging, and hosted configuration.
 At that time, build/type checks, 980 product tests, 142 routing cases,
 38 installed-app checks, and 11 loopback HTTP workflow steps passed.
@@ -114,7 +114,7 @@ The 0.10.2 publication verified both npm packages as latest at that time. Their
 tarballs matched the release bytes, had provenance and signatures, and the
 alias pinned the exact main-package version. Fresh registry installation
 verifies the CLI, Executor-only plan, Composio preview, and standalone MCP handshake.
-[Registry evidence](docs/release-0.10.2-verification.json) records identities and digests.
+[Registry evidence](../docs/release-0.10.2-verification.json) records identities and digests.
 The CLI job was retried after the main package became visible in npm's registry.
 
 Release-candidate CI passed on Linux and Windows, with product checks on Node 24/26
@@ -133,11 +133,11 @@ OAuth settings, and token storage were retained. Public health and OAuth metadat
 returned 200; unauthenticated MCP requests returned 401. Authenticated Executor
 calls verified that email-system engineering received no marketing brief, while
 outreach copy received its 552-byte command entry within the 8,000-byte compact budget.
-[Hosted evidence](docs/hosted-0.10.1-verification.json) records the deployment and results.
+[Hosted evidence](../docs/hosted-0.10.1-verification.json) records the deployment and results.
 
 The 0.10.0 task-scoped behavior remains included: bounded current-stage guidance,
 advisory hooks, verified context reuse, and scoped edit checks. See the
-[behavior review](docs/BEHAVIOR-REVIEW-2026-10.md) for its evidence and limits.
+[behavior review](../docs/BEHAVIOR-REVIEW-2026-10.md) for its evidence and limits.
 
 ## Verification limits
 
@@ -166,6 +166,6 @@ remain open. They are not represented as release verification.
 
 Gemini CLI hooks are not built. Browser and Edge app runtimes are not certified.
 Consent-bound memory and expanded method-quality evaluations remain planned work.
-The [public-alpha checklist](docs/PUBLIC-ALPHA.md),
-[installation acceptance](docs/INSTALLATION-ACCEPTANCE.md), and
-[version policy](VERSIONS.md) supply technical detail.
+The [public-alpha checklist](../docs/PUBLIC-ALPHA.md),
+[installation acceptance](../docs/INSTALLATION-ACCEPTANCE.md), and
+[version policy](../VERSIONS.md) supply technical detail.

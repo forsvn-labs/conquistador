@@ -31,7 +31,7 @@ pass establish narrower facts.
 
 - Skills, CLI, MCP, and native plugins expose the same playbooks.
 - The host supplies the model, context, tools, and permissions.
-- Sends, publication, spend, feedback disclosure, and reusable memory retain
+- Sends, publication, spend, external writes, feedback disclosure, and reusable memory retain
   the applicable human decisions.
 - Credentials and private customer or workspace material stay outside public source.
 
@@ -51,5 +51,5 @@ pass establish narrower facts.
 ## Direction changes
 
 - 2026-11-01: Restructured the accepted vision without changing intent.
-- 2026-10-23: Adopted four root records in [PR #85](https://github.com/forsvn-labs/conquistador/pull/85).
+- 2026-10-23: Adopted four root records (decision recorded in [BRAIN.md](BRAIN.md#key-decisions)).
   The [product behavior contract](docs/PRODUCT-CONTRACT.md) retains detailed requirements.
