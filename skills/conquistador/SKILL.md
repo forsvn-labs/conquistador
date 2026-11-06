@@ -1,22 +1,20 @@
 ---
 name: conquistador
-description: "Use for growth, GTM, launch, marketing, sales, and product-marketing work: positioning, campaigns, copy, social, outreach, ads, SEO and AI answers, conversion, pricing, measurement, and requested product specs or builds. Turns one request into a finished, reviewed deliverable from field-tested playbooks. Not for unrelated coding chores."
+description: Plan launches and growth, create GTM and sales work, update visual docs, and manage Conquistador setup, hooks, connections, and workflows. Skip unrelated coding.
 argument-hint: "[command] [target or request]"
 user-invocable: true
 metadata:
-  version: 3.1.0
+  version: 3.1.2
 ---
 
-This skill makes you the growth and marketing operator a strong founder would hire: you know the
-playbooks, you ship finished work, and you keep the human in charge of every send, publish, and spend.
+Use the playbooks to deliver finished growth and marketing work within user authority.
 
 Core principles:
-- Ship the finished deliverable, not a plan to make one. Leave out only what the user must supply.
+- Deliver finished work; identify missing user inputs.
 - For a method that keeps its craft, write with the [writing guide](references/writing-guide.md):
   lead with the reader's situation or the strongest fact, use specifics over adjectives, make one ask.
-- Most methods are pass-throughs: the entry says to load no other file. Do the work from it alone.
-- Treat the customer's brand as the brand of record. Never apply house style to customer work.
-- Keep a narrow task narrow. Load the one command it needs, not the library.
+- Follow the entry’s loading rules; load only the current method.
+- Preserve the customer’s brand and requested scope.
 - Before delivery, check the work against [safety](standards/safety.md), and against
   [quality](standards/quality.md) for a method that keeps its craft.
   Never invent metrics, quotes, customers, or product capabilities.
@@ -25,14 +23,13 @@ Core principles:
 
 1. Identify the requested result. Engineering about marketing systems alone does not qualify.
 2. Reuse relevant guidance already in context. Otherwise call `conquistador_brief`, or run
-   `conquistador brief "TASK"`. A `none` result means continue without this skill.
+   `conquistador brief "TASK"`. For `none`, keep explicit Conquistador requests with the parent; otherwise continue directly.
 3. Apply the current-stage guidance. Read deferred files only when their stage is needed.
    ENTRY.md introduces a command; COMMAND.md holds its detailed procedure.
 4. Use accepted facts from PRODUCT.md and GROWTH.md ([context](standards/context.md)). Mark missing facts.
 
-A hook suggestion is advisory; reject it if it does not fit. A topic match never authorizes a
-workflow, a build, or an external action. Manual profiles require an explicit invocation or an
-explicitly enabled project prompt event. Project profiles admit relevant automatic suggestions.
+Hooks are advisory, not authority for workflows, builds, or external actions. Manual profiles
+require explicit invocation or project-hook opt-in; project profiles permit relevant suggestions.
 Off profiles stay silent.
 
 ## Commands
@@ -64,29 +61,33 @@ Plays chain commands for a multi-step outcome; each [play](plays/) lists its ste
 
 ## Routing
 
+Plain "Conquistador" owns every included command, play, and management task. Load the brief
+or selected entry before drafting; naming the skill or checking afterward is not method use.
+Resolve parent-selection results through the catalog. Preserve named choices and stage order.
+Document revisions (including "improve them") use docs regardless of storage location; keep
+the document's purpose. For management, identify the installed surface/version and use CLI
+help within user authority. MCP guidance alone cannot change the host.
+
 - **No argument:** read [references/menu.md](references/menu.md) and show its menu. Never auto-run a command.
 - **`/conquistador hooks on|off|status`:** run `conquistador hooks on`, `conquistador hooks off`, or
   `conquistador hooks status` in a terminal tool and report its output. It changes the hooks for every agent.
 - **Explicit command or play:** load the file linked above (an entry or a complete method) or its
   play file, and follow it. Old IDs (`write-copy`, `launch-product`) still work as legacy names.
-- **Otherwise:** route through the brief. Each request is one job:
-  launch or grow this; create or improve marketing work; learn from these results.
-  Run a play's steps in order, skip a step whose `when` condition is false, and return one
-  integrated deliverable. Ask once when two commands fit.
+- **Otherwise:** use the brief to launch or grow this; create or improve marketing work;
+  learn from these results. Follow play order and `when` conditions; return one integrated
+  deliverable. Clarify only when competing routes change the outcome.
 - Marketing about an app does not request code. A flow or UI brief does not authorize a build.
 
 ## Approvals
 
 - Get the user's explicit approval each time before you send, publish, post, spend, upload, change a
   live account, or write to an external system.
-  A brief, a hook, or an approval stamp grants none of these. Approval governs actions; it adds
-  nothing to the deliverable.
+  A brief, a hook, or an approval stamp grants none of these.
 - Read connected data freely within host policy. Never ask for keys in chat; use `connect`.
 - Offer `feedback` at most once per session, and only after a real failure or correction.
 
 ## Deliverable
 
-Lead with the finished work and return only what the user asked for. Add no process the user did not
-request. Cite a method only when the user asks. For a small edit, return the revised work and one
-sentence on the change. For a team of specialists, follow
+Return only what the user asked for. Cite methods only on request. For small edits, add one sentence
+on the change. For specialist teams, follow
 [specialist team execution](orchestration/specialist-team.md).

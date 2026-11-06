@@ -1,6 +1,6 @@
 {
   "schemaVersion": "conquistador.plugin-completeness/v1",
-  "version": "0.12.2",
+  "version": "0.12.3",
   "files": [
     {
       "path": ".agents/plugins/marketplace.json",
@@ -8,15 +8,15 @@
     },
     {
       "path": ".claude-plugin/marketplace.json",
-      "sha256": "927bbc711049ce83c79c5211787184aadf7765f57b194af055966611f6124c44"
+      "sha256": "a8ee6df7dc804e15aad6bc1c69b72d10758cdc339d3b2808255ddf1226195f3e"
     },
     {
       "path": ".claude-plugin/plugin.json",
-      "sha256": "8871c869414366760b43bbae5b3d16661df26653e54fe6739dd2254b543ef56c"
+      "sha256": "3aca34a6f57f89477a1be50f28338083699ffc7b45c7432a988e1dd123089f79"
     },
     {
       "path": ".codex-plugin/plugin.json",
-      "sha256": "3727470059211f5dcd596a1c0a6c0d11b3d4a6d681e6456b7615c53d5bd8ea02"
+      "sha256": "842bd9091b0384209bec9e657c94a483e9c5211a94ac25d2a95e8533d0df09e4"
     },
     {
       "path": ".cursor-plugin/marketplace.json",
@@ -24,7 +24,7 @@
     },
     {
       "path": ".cursor-plugin/plugin.json",
-      "sha256": "bd41bd14c5b30cddf91779caa8676e8a7d5f70913ee334885b372c2307251763"
+      "sha256": "ce14183338612d2f675d6e5002e2dc1eae910eb57b826f287e28c102e73a8382"
     },
     {
       "path": "agents/conquistador.md",
@@ -84,11 +84,11 @@
     },
     {
       "path": "package.json",
-      "sha256": "93590e4bfa93961ed9921bb7079b1e37a57eef82330c4f1fbe8cd7abc3321fcf"
+      "sha256": "4ffd6fd3a2c933c990d42e664dc67ee488b0bb1c21c9e79b3a7b36ea125dd041"
     },
     {
       "path": "plugin.json",
-      "sha256": "dc3ef3cf7c0254d0881b0b71a6af4aec15fd064b3062fa56a9c9467a1b65954d"
+      "sha256": "b09c9f238efce29318fa97643a83caebd427629379f1991696ce32e4df49dd26"
     },
     {
       "path": "README.md",
@@ -96,7 +96,7 @@
     },
     {
       "path": "SKILL.md",
-      "sha256": "0a3691287d3be947af7e15ff57c71af43f04826bd7acce70e83bd53a4f45aeb5"
+      "sha256": "d63ad691b3032f9d8b7c5774d39e85c95e60e68f14f2f6f592e3a9672d3e3c46"
     },
     {
       "path": "skills/conquistador/adapters/coding-agent.md",
@@ -1712,11 +1712,11 @@
     },
     {
       "path": "skills/conquistador/commands/docs/COMMAND.md",
-      "sha256": "c13bbc03403409b50eb4e06dda085b1afff3974a7f0d5459c935b10f227e8176"
+      "sha256": "61c09e05056baabc2d3c7d7b7ff6b8ed6a1f6e147e736076b4d7a88380da3952"
     },
     {
       "path": "skills/conquistador/commands/docs/ENTRY.md",
-      "sha256": "8e57d82b786e45a6def255508b20bc910e12060d77c6d100dfb05a7164b88637"
+      "sha256": "8d111c231813f9535099d43d962ea9ca3b509ddf2ca294a1eb17d97c763fca2b"
     },
     {
       "path": "skills/conquistador/commands/docs/fallbacks/sequential.md",
@@ -4924,7 +4924,7 @@
     },
     {
       "path": "skills/conquistador/SKILL.md",
-      "sha256": "fd7dd68bc28e0975d4d8b7dc68d7b5c19a6db9a6f1c39e455bd85749b0532bc0"
+      "sha256": "b25a9744a5b0b314daca37819b9994d9f74472f46a0858dec6841a48b16f6dca"
     },
     {
       "path": "skills/conquistador/specialists/ads-agent.md",
@@ -5016,7 +5016,7 @@
     },
     {
       "path": "tools/brief.mjs",
-      "sha256": "1920672748bc62e34d3ba7d5b7ec0a1999523e05d097336ba02f6abfe71563df"
+      "sha256": "7887ac7dad9fc22d619610c01dec5ad652e7a6c244c96ce01a97b3460739c838"
     },
     {
       "path": "tools/check-receipt.mjs",
@@ -5048,7 +5048,7 @@
     },
     {
       "path": "tools/context-selection.mjs",
-      "sha256": "5801b3b259b5a681e662a27e8158e064de0760a712a4403d991676e415ae3f9a"
+      "sha256": "9e76c65d43b0efb87c41ad3ab8e1b0aabd85b307dbaca751c31539a9ca50ed42"
     },
     {
       "path": "tools/domain-package.mjs",
@@ -5084,7 +5084,7 @@
     },
     {
       "path": "tools/request-text.mjs",
-      "sha256": "34d1d90bb9d7f287dc860841c2bc1276d5e54eab136411956224a07d16e2e8ec"
+      "sha256": "9183726f382e8d8178962607d67d96c6d45cc694bdff1694c070934a944a35bc"
     },
     {
       "path": "tools/routing-contract.mjs",
@@ -5100,7 +5100,7 @@
     },
     {
       "path": "tools/skills-mcp.mjs",
-      "sha256": "7c80875ae492f367d825bb7d19c889d64b5a176d2463da8328fec2d852a72109"
+      "sha256": "49f913c441184cded04d3cc57fa9d3aee2a2c168fc50641a156ac8a8a6b19f5f"
     }
   ]
 }

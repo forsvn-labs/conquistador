@@ -2,8 +2,8 @@
   "schemaVersion": "conquistador.install-completeness/v1",
   "parent": {
     "name": "conquistador",
-    "version": "3.1.0",
-    "sha256": "fd7dd68bc28e0975d4d8b7dc68d7b5c19a6db9a6f1c39e455bd85749b0532bc0"
+    "version": "3.1.2",
+    "sha256": "b25a9744a5b0b314daca37819b9994d9f74472f46a0858dec6841a48b16f6dca"
   },
   "outcomes": [
     {
@@ -93,8 +93,8 @@
     },
     {
       "name": "docs",
-      "version": "1.3.0",
-      "sha256": "c13bbc03403409b50eb4e06dda085b1afff3974a7f0d5459c935b10f227e8176"
+      "version": "1.3.2",
+      "sha256": "61c09e05056baabc2d3c7d7b7ff6b8ed6a1f6e147e736076b4d7a88380da3952"
     },
     {
       "name": "doctor",
@@ -1731,7 +1731,7 @@
     },
     {
       "path": "conquistador/commands/docs/ENTRY.md",
-      "sha256": "8e57d82b786e45a6def255508b20bc910e12060d77c6d100dfb05a7164b88637"
+      "sha256": "8d111c231813f9535099d43d962ea9ca3b509ddf2ca294a1eb17d97c763fca2b"
     },
     {
       "path": "conquistador/commands/docs/agents/audience-profiler-agent.md",
@@ -4989,7 +4989,7 @@
     },
     {
       "path": "hosts/coding-agent/host.json",
-      "sha256": "58e407f4259d7bdd7c368ecdf1f2b1fd9b386598c192985017d1b70f711a43f4"
+      "sha256": "03fedeece0e1388796cf348d8de8dc0a8e1a9169898949b30e699818c8002d66"
     },
     {
       "path": "hosts/coding-agent/README.md",
@@ -5021,7 +5021,7 @@
     },
     {
       "path": "tools/request-text.mjs",
-      "sha256": "34d1d90bb9d7f287dc860841c2bc1276d5e54eab136411956224a07d16e2e8ec"
+      "sha256": "9183726f382e8d8178962607d67d96c6d45cc694bdff1694c070934a944a35bc"
     },
     {
       "path": "tools/knowledge-index.mjs",
@@ -5029,7 +5029,7 @@
     },
     {
       "path": "tools/brief.mjs",
-      "sha256": "1920672748bc62e34d3ba7d5b7ec0a1999523e05d097336ba02f6abfe71563df"
+      "sha256": "7887ac7dad9fc22d619610c01dec5ad652e7a6c244c96ce01a97b3460739c838"
     },
     {
       "path": "tools/search-index.json",
@@ -5049,23 +5049,23 @@
     },
     {
       "path": "tools/context-selection.mjs",
-      "sha256": "5801b3b259b5a681e662a27e8158e064de0760a712a4403d991676e415ae3f9a"
+      "sha256": "9e76c65d43b0efb87c41ad3ab8e1b0aabd85b307dbaca751c31539a9ca50ed42"
     },
     {
       "path": "agents/conquistador/agent.json",
-      "sha256": "2dfe1819809fdbced9570cb0f4216b72310e24277c4d92287e378f6b88f09449"
+      "sha256": "b069e9315459c9338922170c9378c594025979926d344c0abfc9f7bc18262608"
     },
     {
       "path": "agents/conquistador/compatibility/v1.json",
-      "sha256": "eccd07b54b5421723035085c0d5772a0e002a2b1c369282c7e1a6f35c177e5a2"
+      "sha256": "d43a86f1adad84b4b5833e3f56d7fcc2010cd35cb7ad5709bc08e78c594dadb5"
     },
     {
       "path": "agents/agent-package.schema.json",
-      "sha256": "22a4a6e3955feeaffb31cc2d7556f937ad472de83f3927faaeb8e6bb1b059988"
+      "sha256": "3f33a9a5fbdb2d065f383ea4da751eb98e1c9a5103b6eae67f271dd2a6c0938d"
     },
     {
       "path": "agents/agent-package-v2.schema.json",
-      "sha256": "2517862ba8fd9086f563937162a6d55649af0d0ddc23510799b3c90eb947606e"
+      "sha256": "c621ebd3c8bfb10c8d0584d58a34afbaac40929df1f21263db0cb58ab47ebf9d"
     },
     {
       "path": "agents/operator-profile.schema.json",

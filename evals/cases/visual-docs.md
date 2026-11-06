@@ -12,6 +12,7 @@ this evaluation into ordinary documentation tasks. Automated loading checks are 
 | Interaction | Explain a drag-and-drop interaction in a supplied UI. | Short recording, useful poster frame, equivalent text steps, keyboard alternative if supported. |
 | Concept | Explain how approved content moves between the supplied systems. | Pele diagram grounded in actual handoffs, ownership and failure paths; text alternative. |
 | Missing access | Write a UI guide with no running app or supplied captures. | Honest draft with a specific capture list; no fabricated screenshots or ready-to-publish claim. |
+| Existing knowledge | The company documents on the brain is not good, please improve it using Conquistador. | Load the parent and docs method before drafting; inspect current documents and authoritative sources. Preserve reference purpose, improve substance and useful visuals, avoid link-only cleanup or forced tutorial sections. Record actual method reads and rendered output; checker passes alone are insufficient. |
 | Reference | Correct one API parameter description. | Focused correction; no forced screenshots, recording, or full-document rewrite. |
 
 Ask an intended reader to perform each accessible task using only the guide. Record where they

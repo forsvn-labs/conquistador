@@ -2,7 +2,7 @@
 name: docs
 description: "Write reader-first product guides, DevRel explanations, and technical references from verified sources."
 metadata:
-  version: 1.3.0
+  version: 1.3.2
 ---
 
 # Write technical documentation
@@ -53,8 +53,8 @@ internal names and jargon with visible behavior. Define an unavoidable technical
 use. Keep exact UI labels, commands, settings, and API fields intact so the guide stays usable.
 Avoid promotional claims, filler introductions, and explanations of the writing process.
 
-Explain one complete task: prerequisites, actions, expected result, and recovery from a likely
-failure. Keep implementation details in an optional reference unless they change a reader's
+For a procedural guide, explain one complete task: prerequisites, actions, expected result,
+and recovery from a likely failure. Keep implementation details in an optional reference unless they change a reader's
 choice. For example, prefer "Connect your account so you can import contacts" over
 "Initialize the OAuth integration to hydrate contact entities."
 
@@ -126,6 +126,10 @@ environment; otherwise mark verification pending and provide the exact check.
 
 ## Write for the selected mode
 
+- Company/product knowledge reference: overview, audiences, product relationships, comparisons,
+  evidence and current sources. Preserve its reference purpose; do not force setup steps or
+  silently turn revision into a positioning exercise. Use relevant annotated product captures
+  and a Pele relationship or decision map where they clarify the material.
 - README/setup: fastest correct path, prerequisites, verification, common failure, and next depth.
 - API/config: contract, auth, valid values, examples, errors, compatibility, and security.
 - Architecture/decision: context, constraints, decision, alternatives, consequences, and triggers.

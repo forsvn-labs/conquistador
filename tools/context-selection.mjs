@@ -1,7 +1,7 @@
 import { existsSync, lstatSync, readFileSync } from 'node:fs';
 import { join, posix, resolve } from 'node:path';
 import { assertLoadAllowed, loadRestriction } from './domain-package.mjs';
-import { decisionQuestion, decisionRequest, explicitInvocation, instructionClause, invokedCommand, requestedBusinessClauses, requestFocus, requestLead, requestMode, requestOperation, unquotedRequest, normalizeRequest as normalized, includesPhrase } from './request-text.mjs';
+import { decisionQuestion, decisionRequest, explicitInvocation, bareInvocation, instructionClause, invokedCommand, requestedBusinessClauses, requestFocus, requestLead, requestMode, requestOperation, unquotedRequest, normalizeRequest as normalized, includesPhrase } from './request-text.mjs';
 import { loadRoutingContract } from './routing-contract.mjs';
 import { packageRootOf } from './module-root.mjs';
 
@@ -11,6 +11,8 @@ export const MAX_CONTEXT_CHARACTERS = 7500;
 const moduleRoot = packageRootOf(import.meta.url);
 const fail = message => { throw new Error(message); };
 const feedbackOptIn = /\b(?:submit|share|send)\s+(?:product\s+)?feedback\b|\breport (?:a )?conquistador (?:bug|failure|issue)\b|\bfile a conquistador issue\b/i;
+// Match an editing action directed at documentation, not a background mention of docs.
+const docsRequest = /\b(?:edit|update|refresh|revise|improve|rewrite|write|create|maintain)\s+(?:(?:the|these|those|our|my|existing|current|product|technical|user|developer|api|internal|onboarding|installation|setup|admin|\d+|one|two|three|four|five|six)\s+){0,5}(?:docs|documentation|documents|guides?)\b/i;
 const connectionSetup = /\b(?:set\s*up|setup|install|connect|wire|configure)\b[\s\S]{0,80}\b(?:executor|hubspot|salesforce|pipedrive|crm|ads account)\b/i;
 
 const technicalNoun = /\b(?:code|functions?|handlers?|middleware|components?|modules?|files?|tests?|validation)\b/i;
@@ -107,7 +109,8 @@ function matchingMethods(query, contract, { permitGrowthInference = true, signal
     const hit = intents.flatMap(intent => hasPhrase(tokens, intent)
       ? [{ phrase: intent, kind: legacy.has(intent) ? 'name' : 'intent', score: normalized(intent).length }]
       : [])
-      .sort((a, b) => (b.kind === 'name') - (a.kind === 'name') || b.score - a.score)[0];
+      .sort((a, b) => (b.kind === 'name') - (a.kind === 'name') || b.score - a.score)[0] ?? (method.name === 'docs' && docsRequest.test(requestOperation(query).split(/\b(?:asking|requesting|telling|explaining)\b/i)[0])
+        ? { phrase: 'documentation task', kind: 'intent', score: 24 } : undefined);
 
     if (method.exclusions.some(phrase => hasPhrase(tokens, phrase))) continue;
     const signal = signals ? signalScore(tokens, method.signals) : 0;
@@ -338,6 +341,7 @@ export function explainRoute(result) {
 
 export function selectRequestContext(prompt, { root = moduleRoot, automatic = false } = {}) {
   if (typeof prompt !== 'string' || prompt.trim().length === 0 || Buffer.byteLength(prompt) > MAX_PROMPT_BYTES) return abstain('invalid-prompt');
+  if (/\b(?:do not|don't|never)\s+(?:use|run|invoke|activate)\s+[/$@]?conquistador\b/i.test(unquotedRequest(prompt))) return abstain('activation-declined');
   const packageRoot = resolve(root);
   if (/[\x00-\x1f\x7f]/.test(packageRoot)) fail('Invalid Conquistador package root.');
   const restriction = loadRestriction(packageRoot);
@@ -351,6 +355,7 @@ export function selectRequestContext(prompt, { root = moduleRoot, automatic = fa
     if (profile.activation === 'off') return abstain('activation-off');
     if (profile.activation === 'manual' && automatic && !explicitInvocation(prompt)) return abstain('activation-manual');
   }
+  if (bareInvocation(prompt)) return abstain('parent-selection-required');
   const methods = [...Object.values(contract.methods), ...contract.unavailableMethods];
 
   const protectedPhrases = [...methods, ...(contract.plays ?? [])].flatMap(method => [method.name, ...method.intents, ...(method.aliases ?? [])])
@@ -362,6 +367,11 @@ export function selectRequestContext(prompt, { root = moduleRoot, automatic = fa
   // leads with the same owner, because the context may name what the plan is for. An engineering-only
   // request stays silent whatever its context mentions. A request that names no deliverable keeps
   // the whole-prompt route.
+  // Resolve only a nearby document-quality complaint followed by an edit of it/them.
+  // Do not infer an antecedent from arbitrary background text or across other objects.
+  prompt = unquotedRequest(prompt).replace(
+    /\b((?:docs|documentation|documents|guides?)(?:\s+(?:on|in)\s+(?:the|our)\s+[a-z][a-z-]*)?\s+(?:is|are)\s+(?:not good|confusing|unclear|outdated|hard to read|poor))[,.]\s*(?:please\s+)?(update|refresh|revise|improve|rewrite)\s+(?:it|them)\b/gi,
+    '$1. $2 the documentation');
   const focus = requestFocus(prompt);
   const whole = () => routeRequest(prompt, prompt, options);
   const support = routed => ({ ...routed.result, supportingQuery: requestedBusinessClauses(prompt, { protectedPhrases }).join('. ') });
