@@ -15,6 +15,7 @@ const contract = loadRoutingContract(root);
 const prefixes = ['conquistador ', '/conquistador ', 'Use Conquistador ', '$conquistador:conquistador '];
 const cases = [...Object.keys(contract.methods), ...contract.plays.map(p => p.name)].flatMap(name => prefixes.map(prefix => ({ task: prefix + name, expected: name })));
 for (const task of ['Conquistador', 'Conquistador hooks off', 'Conquistador update', 'Conquistador status', 'Conquistador remove', 'Conquistador unpin docs', 'Conquistador unknown-operation']) cases.push({ task, expected: 'parent' });
+cases.push({ task: 'the company documents on the brain is not good, please improve it using \nConquistador', expected: 'docs' });
 const check = (item, pack) => {
   assert.equal(pack.structured.action, 'brief', item.task);
   if (item.expected === 'parent') assert.equal(pack.structured.reason, 'parent-selection-required', item.task);

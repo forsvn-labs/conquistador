@@ -10,6 +10,12 @@ method, or ask a focused question if the missing choice affects the result. It m
 turn the request into unrelated work. Natural requests still use task routing; words such as
 "to plan a launch" are not automatically interpreted as the `plan` command.
 
+Document-first revision requests such as "the company documents are confusing, please improve
+them using Conquistador" select docs. The parent loads the selected method before drafting;
+checks afterward do not establish method use. Knowledge references retain their purpose rather
+than gaining artificial tutorial steps. The local regression uses anonymized wording and does
+not contain customer source documents.
+
 For setup, status, updates, hooks, shortcuts, connections, and removal, the host consults the
 installed CLI help and uses the supported operation. The brief itself is read-only. A method
 MCP connection alone cannot change a host installation. Identify the actual installed surface

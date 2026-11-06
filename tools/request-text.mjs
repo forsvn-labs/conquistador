@@ -1,17 +1,17 @@
 // Admission and selection share invocation syntax. Quoted examples do not activate either.
-const invocation = /(?:^|[\s`])(?:please\s+)?(?:use|open|run|ask|start)\s+conquistador\b(?:\s*,|\s+to|\s+and)?\s*|\bread\s+\.?conquistador\/skill\.md(?:\s+and\s+follow\s+it)?[.,]?\s*|^\s*conquistador(?=[\s`,.:;!?]|$)|(?:^|[\s`])[/$@]conquistador(?:[/:][a-z][a-z0-9-]*)?(?=[\s`,.:;!?]|$)/gi;
+const invocation = /(?:^|[\s`])(?:please\s+)?(?:use|using|open|run|ask|start)\s+conquistador\b(?:\s*,|\s+to|\s+and)?\s*|\bread\s+\.?conquistador\/skill\.md(?:\s+and\s+follow\s+it)?[.,]?\s*|^\s*conquistador(?=[\s`,.:;!?]|$)|(?:^|[\s`])[/$@]conquistador(?:[/:][a-z][a-z0-9-]*)?(?=[\s`,.:;!?]|$)/gi;
 export function unquotedRequest(prompt) {
   return prompt.replace(/```[\s\S]*?```/g, ' ').replace(/`[^`\n]*`/g, ' ')
     .replace(/"[^"\n]*"|(?<!\w)'[^'\n]*'(?!\w)/g, ' ');
 }
 export function explicitInvocation(prompt) {
-  return unquotedRequest(prompt).split(/(?<=[.!?;])\s+|\n+|\b(?:and|but)\b/i)
+  return unquotedRequest(prompt).replace(/\busing\s+conquistador\b/gi, 'use conquistador').split(/(?<=[.!?;])\s+|\n+|\b(?:and|but)\b/i)
     .some(clause => !/\b(?:do not|don't|never|without)\b/i.test(clause) && new RegExp(invocation.source, 'i').test(clause));
 }
 
 // The command after an explicit invocation: "/conquistador launch ...", "$conquistador copy",
 // "/conquistador:write-copy", or a prompt that starts with "conquistador seo". Returns the raw word.
-const commandInvocation = /(?:^|[\s`])(?:[/$@]conquistador(?::conquistador)?|(?:please\s+)?(?:use|open|run|ask|start)\s+conquistador|^conquistador)(?:\s+|[:/])(?:(?:to\s+)?run\s+)?([a-z][a-z0-9-]*)\b/i;
+const commandInvocation = /(?:^|[\s`])(?:[/$@]conquistador(?::conquistador)?|(?:please\s+)?(?:use|using|open|run|ask|start)\s+conquistador|^conquistador)(?:\s+|[:/])(?:(?:to\s+)?run\s+)?([a-z][a-z0-9-]*)\b/i;
 export function invokedCommand(prompt) {
   if (!explicitInvocation(prompt)) return null;
   const clauses = unquotedRequest(prompt).split(/(?<=[.!?;])\s+|\n+/);

@@ -15,6 +15,12 @@ the capability menu. For a named command or workflow, preserve that selection. F
 request, use the brief to choose the method and current workflow stage. If the brief requires
 parent selection, inspect the catalog and resolve the task; never silently drop Conquistador.
 Load later workflow steps only when needed, in their declared order and conditions.
+Before drafting, obtain the brief or read the selected method entry and apply it. Naming the
+skill or running checks afterward does not establish that its method guided the work.
+When a user names documents then asks to improve "it" or "them," route the document revision
+to docs; Drive, a wiki, or a knowledge index is its location, not its writing method.
+Preserve the document's purpose. Use another method only for a requested subtask.
+
 
 For setup, status, updates, hooks, shortcuts, connections, or removal, inspect the installed
 CLI's `conquistador --help` and relevant subcommand help. Use the supported operation within

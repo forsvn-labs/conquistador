@@ -71,6 +71,12 @@ requested skill. Keep named command/play choices, workflow step order, condition
 For installation management, identify the installed surface and version first; check the CLI's
 help and execute only supported operations within user authority. MCP-only guidance cannot
 mutate the host. Reuse loaded guidance and load only the current stage.
+Before drafting, obtain the brief or read the selected method entry and apply it. Naming the
+skill or running checks afterward does not establish that its method guided the work.
+When a user names documents then asks to improve "it" or "them," route the document revision
+to docs; Drive, a wiki, or a knowledge index is its location, not its writing method.
+Preserve the document's purpose. Use another method only for a requested subtask.
+
 
 - **No argument:** read [references/menu.md](references/menu.md) and show its menu. Never auto-run a command.
 - **`/conquistador hooks on|off|status`:** run `conquistador hooks on`, `conquistador hooks off`, or

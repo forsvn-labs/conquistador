@@ -367,6 +367,11 @@ export function selectRequestContext(prompt, { root = moduleRoot, automatic = fa
   // leads with the same owner, because the context may name what the plan is for. An engineering-only
   // request stays silent whatever its context mentions. A request that names no deliverable keeps
   // the whole-prompt route.
+  // Resolve only a nearby document-quality complaint followed by an edit of it/them.
+  // Do not infer an antecedent from arbitrary background text or across other objects.
+  prompt = unquotedRequest(prompt).replace(
+    /\b((?:docs|documentation|documents|guides?)(?:\s+(?:on|in)\s+(?:the|our)\s+[a-z][a-z-]*)?\s+(?:is|are)\s+(?:not good|confusing|unclear|outdated|hard to read|poor))[,.]\s*(?:please\s+)?(update|refresh|revise|improve|rewrite)\s+(?:it|them)\b/gi,
+    '$1. $2 the documentation');
   const focus = requestFocus(prompt);
   const whole = () => routeRequest(prompt, prompt, options);
   const support = routed => ({ ...routed.result, supportingQuery: requestedBusinessClauses(prompt, { protectedPhrases }).join('. ') });
