@@ -93,8 +93,8 @@
     },
     {
       "name": "docs",
-      "version": "1.1.0",
-      "sha256": "0fbf76f309647ecb19a8c12607d4721cc453ee02d4fa62d5184c57877941d3d2"
+      "version": "1.2.0",
+      "sha256": "19d1ded4ae5de8a1a164c6d7a5c013a9ff64c22bd7e6bd4b5c7aacbf75ce70f6"
     },
     {
       "name": "doctor",
@@ -1731,7 +1731,7 @@
     },
     {
       "path": "conquistador/commands/docs/ENTRY.md",
-      "sha256": "d585dcd337f68088cedf5de6a4863555e46e86a608fbba608b10e184613a2c09"
+      "sha256": "44336e47c7c9754e156f8d9d9f9ef47de0be918bb94115866df1448428e653e2"
     },
     {
       "path": "conquistador/commands/docs/agents/audience-profiler-agent.md",
@@ -4859,11 +4859,11 @@
     },
     {
       "path": "conquistador/routing-contract.json",
-      "sha256": "fc9321184120a864c09dc1a8a53571906eccadd71196ce07cc99721634375aeb"
+      "sha256": "f39900c09dddfc574bfbab98ca4a1db1a98694367b3824b5aa091b619a600bf9"
     },
     {
       "path": "conquistador/routing-overlay.json",
-      "sha256": "f3336ecfc6132ffd4d3d60d564dd5789cee9340db0a1a65fa71fe0e0da43804b"
+      "sha256": "30e8082610f454dd66f4a97e88949d7c98aa76f4127d8e5dc3e059cdf8027e1a"
     },
     {
       "path": "conquistador/rubrics/composition.md",

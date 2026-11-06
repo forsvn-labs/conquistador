@@ -1945,7 +1945,7 @@
     "docs": {
       "name": "docs",
       "label": "Write technical documentation",
-      "description": "Write or update technical documentation from the code.",
+      "description": "Write reader-first product guides, DevRel explanations, and technical references from verified sources.",
       "path": "skills/conquistador/commands/docs/COMMAND.md",
       "kind": "build",
       "explicitOnly": false,
@@ -1966,12 +1966,13 @@
         "marketing copy",
         "launch email"
       ],
-      "requiredResources": [
+      "requiredResources": [],
+      "conditionalResources": [],
+      "resourceConditions": [],
+      "optionalResources": [
         "skills/conquistador/commands/docs/references/docs-writing-method.md",
         "skills/conquistador/commands/docs/references/anti-patterns.md",
-        "skills/conquistador/commands/docs/fallbacks/sequential.md"
-      ],
-      "conditionalResources": [
+        "skills/conquistador/commands/docs/fallbacks/sequential.md",
         "skills/conquistador/commands/docs/agents/scanner-agent.md",
         "skills/conquistador/commands/docs/agents/audience-profiler-agent.md",
         "skills/conquistador/commands/docs/agents/concept-extractor-agent.md",
@@ -1982,45 +1983,12 @@
         "skills/conquistador/commands/docs/references/intake-prompts.md",
         "skills/conquistador/commands/docs/references/artifact-paths.md",
         "skills/conquistador/commands/docs/references/report-template.md",
-        "skills/conquistador/commands/docs/references/ship-log-template.md"
-      ],
-      "resourceConditions": [
-        {
-          "path": "skills/conquistador/commands/docs/agents/scanner-agent.md"
-        },
-        {
-          "path": "skills/conquistador/commands/docs/agents/audience-profiler-agent.md"
-        },
-        {
-          "path": "skills/conquistador/commands/docs/agents/concept-extractor-agent.md"
-        },
-        {
-          "path": "skills/conquistador/commands/docs/agents/writer-agent.md"
-        },
-        {
-          "path": "skills/conquistador/commands/docs/references/doc-template.md"
-        },
-        {
-          "path": "skills/conquistador/commands/docs/agents/staleness-checker-agent.md"
-        },
-        {
-          "path": "skills/conquistador/commands/docs/agents/critic-agent.md"
-        },
-        {
-          "path": "skills/conquistador/commands/docs/references/intake-prompts.md"
-        },
-        {
-          "path": "skills/conquistador/commands/docs/references/artifact-paths.md"
-        },
-        {
-          "path": "skills/conquistador/commands/docs/references/report-template.md"
-        },
-        {
-          "path": "skills/conquistador/commands/docs/references/ship-log-template.md"
-        }
-      ],
-      "optionalResources": [
-        "skills/conquistador/commands/docs/references/examples/api-readme-walkthrough.md"
+        "skills/conquistador/commands/docs/references/ship-log-template.md",
+        "skills/conquistador/commands/docs/references/examples/api-readme-walkthrough.md",
+        "skills/conquistador/commands/docs/references/modes/sync.md",
+        "skills/conquistador/commands/docs/references/modes/audit.md",
+        "skills/conquistador/commands/docs/references/modes/release-notes.md",
+        "skills/conquistador/commands/docs/references/modes/ship-log.md"
       ],
       "plays": [],
       "roles": [],
