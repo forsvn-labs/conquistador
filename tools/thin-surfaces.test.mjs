@@ -29,7 +29,7 @@ const skills = join(root, 'skills');
 const thin = ['ads', 'article', 'audit', 'brand', 'budget', 'campaign', 'channels', 'convert', 'creative', 'critique',
   'decide', 'diagnose', 'event', 'flow', 'funnel', 'ideas', 'measure', 'position', 'pricing', 'prioritize', 'results',
   'seo', 'shape', 'video', 'watch', 'copy'];
-const kept = ['outreach', 'social', 'architect', 'build', 'docs', 'ui', 'init', 'doctor', 'pin', 'connect', 'review',
+const kept = ['outreach', 'social', 'architect', 'build', 'ui', 'init', 'doctor', 'pin', 'connect', 'review',
   'feedback', 'check', 'factcheck', 'vietnamese'];
 const read = path => readFileSync(join(root, path), 'utf8');
 const assignment = (extra = {}) => ({ id: 'work', role: 'outcome', goal: 'Produce the requested deliverable.',

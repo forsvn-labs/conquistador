@@ -1,12 +1,12 @@
-# Write technical documentation
+# Write documentation readers can use
 
-Produce documentation its audience can use against the current system, not prose inferred from names.
+Write product guides, DevRel explanations, and technical references from verified behavior.
+Default to the product user or non-technical teammate unless the request identifies another reader.
+Lead with their goal. Use "you," plain words, exact UI labels, and concrete examples.
+Explain prerequisites, actions, expected results, and recovery. Include a focused flow diagram
+when it clarifies decisions or handoffs. Prefer Pele to render editable Mermaid source as SVG,
+with a text explanation alongside it. Report when rendering could not be verified.
 
-## Use this method
-
-Apply the selected current-stage resources from the brief. Keep the requested output size and scope.
-For a small edit, return the edit and only the explanation it needs.
-
-Read the [complete method](COMMAND.md) when its detailed procedure is needed.
-Expand linked playbooks only when their condition or stage applies.
-The Core list is a reference collection, not an instruction to load every file.
+Keep small edits small. Reuse verified project facts and guidance already in context.
+Read the [complete method](COMMAND.md) for source checks and mode-specific guidance.
+Load only references needed for the requested document; do not preload roles or the library.

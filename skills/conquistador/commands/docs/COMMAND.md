@@ -1,8 +1,8 @@
 ---
 name: docs
-description: "Write or update technical documentation from the code."
+description: "Write reader-first product guides, DevRel explanations, and technical references from verified sources."
 metadata:
-  version: 1.1.0
+  version: 1.2.0
 ---
 
 # Write technical documentation
@@ -17,11 +17,11 @@ Use the brief to select current-stage resources. Read additional files only when
 Core:
 
 - [anti-patterns](references/anti-patterns.md): Docs-Writing — Anti-Patterns. Load when: critic-agent fires (Step 4 in Dispatch Protocol), or any moment…
+- [doc-template](references/doc-template.md): Documentation Template. Use this structure when generating product documentation. Adapt sections based on…
 - [docs-writing-method](references/docs-writing-method.md): Docs Writing Method. A codebase is not documented when it has a README — it's documented when a new team…
 - [intake-prompts](references/intake-prompts.md): Docs-Writing — intake Prompts. Load when: intake step fires. Choose Warm Start (audience + type inferable)…
-- [sync](references/modes/sync.md): Docs-Writing — Route C (Post-Change Sync). Load when: triggered by /write-technical-docs --sync, "update…
 
-By step: [artifact-paths](references/artifact-paths.md), [doc-template](references/doc-template.md), [audit](references/modes/audit.md), [release-notes](references/modes/release-notes.md), [ship-log](references/modes/ship-log.md), [report-template](references/report-template.md), [ship-log-template](references/ship-log-template.md).
+By step: [artifact-paths](references/artifact-paths.md), [audit](references/modes/audit.md), [release-notes](references/modes/release-notes.md), [ship-log](references/modes/ship-log.md), [sync](references/modes/sync.md), [report-template](references/report-template.md), [ship-log-template](references/ship-log-template.md).
 
 Specialist roles: [audience-profiler-agent](agents/audience-profiler-agent.md), [concept-extractor-agent](agents/concept-extractor-agent.md), [critic-agent](agents/critic-agent.md), [scanner-agent](agents/scanner-agent.md), [staleness-checker-agent](agents/staleness-checker-agent.md), [writer-agent](agents/writer-agent.md).
 
@@ -40,6 +40,45 @@ git diff before editing.
 
 Never overwrite or rename human-authored documentation merely to create a versioned artifact. Preserve
 voice, provenance, intentional exceptions, and unrelated content; state the intended diff.
+
+## Write to the reader
+
+For an unspecified audience, default to a product user or non-technical teammate. Do not infer
+technical fluency from the implementation language. A developer relations guide also starts
+with the reader's goal; add API details only when the reader needs to integrate something.
+
+Lead with what the reader can accomplish and when to use it. Address the reader as "you,"
+use active verbs and concrete examples, and preserve their approved brand voice. Replace
+internal names and jargon with visible behavior. Define an unavoidable technical term on first
+use. Keep exact UI labels, commands, settings, and API fields intact so the guide stays usable.
+Avoid promotional claims, filler introductions, and explanations of the writing process.
+
+Explain one complete task: prerequisites, actions, expected result, and recovery from a likely
+failure. Keep implementation details in an optional reference unless they change a reader's
+choice. For example, prefer "Connect your account so you can import contacts" over
+"Initialize the OAuth integration to hydrate contact entities."
+
+## Explain flows visually
+
+Include a diagram when a sequence, decision, system boundary, or handoff is easier to understand
+visually. Prefer [Pele](https://pele.run/) to render Mermaid source as SVG. Keep the editable Mermaid
+source with the diagram. Use the destination's supported format when specified. Check Pele
+compatibility for the chosen syntax before rendering. If Pele is unavailable, deliver Mermaid
+source and a numbered text flow, and report that SVG rendering remains pending.
+Label nodes with actions and familiar product names. Show who acts, what moves between steps,
+and the relevant failure or recovery branch. Keep the diagram focused on one reader question.
+Explain the same flow in adjacent text for readers who cannot view the diagram.
+
+In a full Conquistador source or npm installation, save Mermaid source as a `.mmd` file and run
+`node tools/render-diagram.mjs input.mmd output.svg` from the package root. The helper uses the
+installed, pinned Pele dependency and refuses to overwrite an output. Choose a new output path
+for revisions. Skill-only installs may lack the helper or dependency; use the host's Pele setup
+or return the source with rendering marked pending. Do not claim the renderer is bundled in
+all skill hosts.
+
+Derive arrows and labels from verified behavior. Do not invent automatic sends, permissions,
+or integrations. Check the rendered diagram when a renderer is available; otherwise state that
+rendering is unverified. A diagram does not establish that the underlying workflow was tested.
 
 ## Extract technical truth
 
@@ -68,26 +107,15 @@ Return the finished documentation or exact patch, source/evidence note, checks e
 stale claims, and acceptance criteria for the reader's job. Draft releases and changelogs, but never
 publish a release, change external docs, or mutate infrastructure without explicit approval.
 
-## Load the recovered method
+## Load only what this document needs
 
-Before delivery, load the recovered method instead of paraphrasing it:
+This method is sufficient for an ordinary guide or scoped edit. Do not load the reference
+collection, role files, or a review pipeline before delivery. Read a mode reference only for
+its requested mode: [sync](references/modes/sync.md), [audit](references/modes/audit.md),
+[release notes](references/modes/release-notes.md), or [ship log](references/modes/ship-log.md).
+Use the [doc template](references/doc-template.md) only when a longer guide needs structure.
+Historical role and method files are optional resources for explicitly requested deeper work;
+they do not require delegation or additional reads for an ordinary document.
 
-- [scanner](agents/scanner-agent.md), [audience profiler](agents/audience-profiler-agent.md), and
-  [concept extractor](agents/concept-extractor-agent.md) for Layer-1 grounding;
-- [writer](agents/writer-agent.md) with [doc template](references/doc-template.md) or the route
-  template;
-- [staleness checker](agents/staleness-checker-agent.md) and [critic](agents/critic-agent.md) before
-  ship;
-- [docs writing method](references/docs-writing-method.md), [anti-patterns](references/anti-patterns.md),
-  [intake prompts](references/intake-prompts.md), and [artifact paths](references/artifact-paths.md);
-- mode refs under [modes/](references/modes/) for audit, sync, ship-log, and release-notes;
-- [report template](references/report-template.md) and
-  [ship-log template](references/ship-log-template.md) for durable shape;
-- [API README walkthrough](references/examples/api-readme-walkthrough.md) when calibrating a first
-  README.
-
-If the host cannot run those as separate agents, use [sequential fallback](fallbacks/sequential.md).
-
-Prefer `.forsvn/artifacts/product/write-technical-docs/` for skill-owned durable artifacts. Keep
-project README, `docs/`, and `CHANGELOG.md` as the named destinations when those are the contract.
-Never invent claims from names alone. Never publish a release without explicit approval.
+Prefer the user's existing documentation destination. Use
+`.forsvn/artifacts/product/write-technical-docs/` only for otherwise unassigned durable artifacts.

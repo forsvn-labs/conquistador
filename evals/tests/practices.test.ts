@@ -25,7 +25,7 @@ describe("practice registry", () => {
 
   it("discovers the method files from the skill tree, not from the registry", () => {
     const found = discoverMethodFiles(repo);
-    const commands = readdirSync(join(repo, "skills/conquistador/commands")).filter((name) => statSync(join(repo, "skills/conquistador/commands", name)).isDirectory());
+    const commands = readdirSync(join(repo, "skills/conquistador/commands")).filter((name) => statSync(join(repo, "skills/conquistador/commands", name)).isDirectory() && existsSync(join(repo, "skills/conquistador/commands", name, "COMMAND.md")));
     expect(found.filter((entry) => entry.startsWith("commands/"))).toHaveLength(commands.length);
     expect(found).toContain("plays/outbound");
     expect(found).toContain("channels/x");

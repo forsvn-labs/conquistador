@@ -501,6 +501,11 @@ function routeRequest(request, prompt, { packageRoot, restriction, contract, pro
   }
   const invoked = resolveCommand(invokedCommand(prompt), contract);
   if (invoked?.kind === 'command') consider({ ...contract.methods[invoked.name], score: 100, matchKind: 'name', matchPhrase: invoked.name });
+  // Preserve the user's explicit method ahead of inferred matches, after access checks.
+  if (invoked?.kind === 'command') {
+    const index = selectedAll.findIndex(item => item.name === invoked.name);
+    if (index > 0) selectedAll.unshift(...selectedAll.splice(index, 1));
+  }
 
   if (selectedAll.length > 1) {
     const broadPlanning = selectedAll.findIndex(item => item.name === 'shape' && item.matchKind === 'intent' && item.matchPhrase === 'what should we do');

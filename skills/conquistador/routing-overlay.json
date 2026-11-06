@@ -1597,7 +1597,10 @@
         "technical documentation",
         "api docs",
         "readme and setup",
-        "operator docs"
+        "operator docs",
+        "product user guide",
+        "product documentation",
+        "devrel guide"
       ],
       "aliases": [
         "write-technical-docs"
@@ -1606,59 +1609,28 @@
         "marketing copy",
         "launch email"
       ],
-      "requiredResources": [
+      "requiredResources": [],
+      "conditionalResources": [],
+      "optionalResources": [
         "references/docs-writing-method.md",
         "references/anti-patterns.md",
-        "fallbacks/sequential.md"
-      ],
-      "conditionalResources": [
-        {
-          "path": "agents/scanner-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/audience-profiler-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/concept-extractor-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/writer-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/doc-template.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/staleness-checker-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "agents/critic-agent.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/intake-prompts.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/artifact-paths.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/report-template.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        },
-        {
-          "path": "references/ship-log-template.md",
-          "when": "Load before the corresponding stage or mode required by the method; if inaccessible, report the stage blocked."
-        }
-      ],
-      "optionalResources": [
-        "references/examples/api-readme-walkthrough.md"
+        "fallbacks/sequential.md",
+        "agents/scanner-agent.md",
+        "agents/audience-profiler-agent.md",
+        "agents/concept-extractor-agent.md",
+        "agents/writer-agent.md",
+        "references/doc-template.md",
+        "agents/staleness-checker-agent.md",
+        "agents/critic-agent.md",
+        "references/intake-prompts.md",
+        "references/artifact-paths.md",
+        "references/report-template.md",
+        "references/ship-log-template.md",
+        "references/examples/api-readme-walkthrough.md",
+        "references/modes/sync.md",
+        "references/modes/audit.md",
+        "references/modes/release-notes.md",
+        "references/modes/ship-log.md"
       ],
       "legacy": [
         "write-technical-docs"
