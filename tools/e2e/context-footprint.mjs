@@ -11,6 +11,9 @@ const out = resolve(process.argv[2] ?? join(root, 'dist/e2e/context-footprint'))
 const work = mkdtempSync(join(tmpdir(), 'cq-context-'));
 const bytes = value => Buffer.byteLength(typeof value === 'string' ? value : JSON.stringify(value));
 const fixtures = [
+  ['docs-update', 'update the docs', 'docs'],
+  ['docs-parent', 'Use Conquistador to update the docs', 'docs'],
+  ['docs-multiple', 'Update these five documents and the Drive guide', 'docs'],
   ['email', 'Write a launch email for a contact import feature.', 'copy'],
   ['strategy', 'Develop positioning for a contact review product for marketing teams.', 'position'],
   ['docs', '/conquistador docs Write a user guide for importing and reviewing contacts.', 'docs'],

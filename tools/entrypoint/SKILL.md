@@ -1,6 +1,6 @@
 ---
 name: conquistador
-description: Plan launches and growth, produce marketing or sales work, and handle requested product and knowledge tasks. Select relevant specialists; skip unrelated coding chores.
+description: Plan launches and growth, produce marketing or sales work, write or update documentation and visual product guides, and handle requested product tasks. Select relevant specialists; skip unrelated coding chores.
 license: MIT
 ---
 
@@ -8,6 +8,11 @@ license: MIT
 
 Use Conquistador for the business or product result the user requested. Engineering work that
 only mentions marketing, outreach, or sales does not need marketing guidance.
+
+Requests to write, update, improve, or rewrite docs are documentation work. Select the docs
+method before editing, including when the documents live in Drive or a wiki. An update checks
+content, clarity, and relevant visuals against current evidence. Do not reduce it to link or
+navigation cleanup unless that is the requested scope. Load only the selected method.
 
 For relevant work, use the `conquistador_brief` tool when available, a supplied hook brief,
 or `conquistador brief "TASK"`. Treat its selected scope and current stage as guidance.

@@ -2,8 +2,8 @@
   "schemaVersion": "conquistador.install-completeness/v1",
   "parent": {
     "name": "conquistador",
-    "version": "3.1.0",
-    "sha256": "fd7dd68bc28e0975d4d8b7dc68d7b5c19a6db9a6f1c39e455bd85749b0532bc0"
+    "version": "3.1.1",
+    "sha256": "7f7fcfe3545be019265c48f4283751c79b06e9c8c9e9c50ab6e5d417ed5f6eaf"
   },
   "outcomes": [
     {
@@ -93,8 +93,8 @@
     },
     {
       "name": "docs",
-      "version": "1.3.0",
-      "sha256": "c13bbc03403409b50eb4e06dda085b1afff3974a7f0d5459c935b10f227e8176"
+      "version": "1.3.1",
+      "sha256": "25ae52df0609831612caa7c565b8280589d24ad6c22c55664639ba75348447e4"
     },
     {
       "name": "doctor",
@@ -1731,7 +1731,7 @@
     },
     {
       "path": "conquistador/commands/docs/ENTRY.md",
-      "sha256": "8e57d82b786e45a6def255508b20bc910e12060d77c6d100dfb05a7164b88637"
+      "sha256": "23ce0aceddfcc68616fc5581db7b4d144286cf3d235f2c8a521ef154be6998d6"
     },
     {
       "path": "conquistador/commands/docs/agents/audience-profiler-agent.md",
@@ -5049,7 +5049,7 @@
     },
     {
       "path": "tools/context-selection.mjs",
-      "sha256": "5801b3b259b5a681e662a27e8158e064de0760a712a4403d991676e415ae3f9a"
+      "sha256": "7b29336687b7488f70028c71adca43aaaaaeb79c011bd9903ee59bc6e29124eb"
     },
     {
       "path": "agents/conquistador/agent.json",

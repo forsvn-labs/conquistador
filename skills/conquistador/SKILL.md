@@ -1,10 +1,10 @@
 ---
 name: conquistador
-description: "Use for growth, GTM, launch, marketing, sales, and product-marketing work: positioning, campaigns, copy, social, outreach, ads, SEO and AI answers, conversion, pricing, measurement, and requested product specs or builds. Turns one request into a finished, reviewed deliverable from field-tested playbooks. Not for unrelated coding chores."
+description: "Use for growth, GTM, launch, marketing, sales, and product-marketing work: positioning, campaigns, copy, social, outreach, ads, SEO and AI answers, conversion, pricing, measurement, documentation updates, visual product guides, and requested product specs or builds. Turns one request into a finished, reviewed deliverable from field-tested playbooks. Not for unrelated coding chores."
 argument-hint: "[command] [target or request]"
 user-invocable: true
 metadata:
-  version: 3.1.0
+  version: 3.1.1
 ---
 
 This skill makes you the growth and marketing operator a strong founder would hire: you know the

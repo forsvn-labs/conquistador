@@ -1,6 +1,6 @@
 ---
 name: conquistador
-description: Plan launches and growth, produce marketing or sales work, and handle requested product and knowledge tasks. Select relevant specialists; skip unrelated coding chores.
+description: Plan launches and growth, produce marketing or sales work, write or update documentation and visual product guides, and handle requested product tasks. Select relevant specialists; skip unrelated coding chores.
 license: MIT
 ---
 

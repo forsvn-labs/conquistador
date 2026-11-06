@@ -11,6 +11,8 @@ export const MAX_CONTEXT_CHARACTERS = 7500;
 const moduleRoot = packageRootOf(import.meta.url);
 const fail = message => { throw new Error(message); };
 const feedbackOptIn = /\b(?:submit|share|send)\s+(?:product\s+)?feedback\b|\breport (?:a )?conquistador (?:bug|failure|issue)\b|\bfile a conquistador issue\b/i;
+// Match an editing action directed at documentation, not a background mention of docs.
+const docsRequest = /\b(?:update|refresh|revise|improve|rewrite|write|create|maintain)\s+(?:(?:the|these|those|our|my|existing|current|product|technical|user|developer|api|internal|\d+|one|two|three|four|five|six)\s+){0,5}(?:docs|documentation|documents|guides?)\b/i;
 const connectionSetup = /\b(?:set\s*up|setup|install|connect|wire|configure)\b[\s\S]{0,80}\b(?:executor|hubspot|salesforce|pipedrive|crm|ads account)\b/i;
 
 const technicalNoun = /\b(?:code|functions?|handlers?|middleware|components?|modules?|files?|tests?|validation)\b/i;
@@ -107,7 +109,8 @@ function matchingMethods(query, contract, { permitGrowthInference = true, signal
     const hit = intents.flatMap(intent => hasPhrase(tokens, intent)
       ? [{ phrase: intent, kind: legacy.has(intent) ? 'name' : 'intent', score: normalized(intent).length }]
       : [])
-      .sort((a, b) => (b.kind === 'name') - (a.kind === 'name') || b.score - a.score)[0];
+      .sort((a, b) => (b.kind === 'name') - (a.kind === 'name') || b.score - a.score)[0] ?? (method.name === 'docs' && docsRequest.test(query)
+        ? { phrase: 'documentation task', kind: 'intent', score: 24 } : undefined);
 
     if (method.exclusions.some(phrase => hasPhrase(tokens, phrase))) continue;
     const signal = signals ? signalScore(tokens, method.signals) : 0;

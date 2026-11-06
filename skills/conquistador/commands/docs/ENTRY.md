@@ -19,3 +19,9 @@ with a text explanation alongside it. Report when rendering could not be verifie
 Keep small edits small. Reuse verified project facts and guidance already in context.
 Read the [complete method](COMMAND.md) for source checks and mode-specific guidance.
 Load only references needed for the requested document; do not preload roles or the library.
+
+For existing docs, read the documents and current source evidence first. Check substantive
+accuracy, reader tasks, structure, and visual gaps. Repair what is needed; preserve working
+sections. Link or warning-note cleanup alone is not a complete docs update unless requested.
+Use product sources and connected documents when there is no code repository. State missing
+evidence rather than inventing it. Reading or drafting does not authorize external publication.

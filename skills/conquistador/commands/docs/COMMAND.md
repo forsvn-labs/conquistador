@@ -2,7 +2,7 @@
 name: docs
 description: "Write reader-first product guides, DevRel explanations, and technical references from verified sources."
 metadata:
-  version: 1.3.0
+  version: 1.3.1
 ---
 
 # Write technical documentation
