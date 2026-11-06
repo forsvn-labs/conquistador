@@ -93,8 +93,8 @@
     },
     {
       "name": "docs",
-      "version": "1.2.0",
-      "sha256": "9f4299385f9495975890ce3b4e05c99e2832622d66cb5d544204f97975fbd882"
+      "version": "1.3.0",
+      "sha256": "c13bbc03403409b50eb4e06dda085b1afff3974a7f0d5459c935b10f227e8176"
     },
     {
       "name": "doctor",
@@ -1731,7 +1731,7 @@
     },
     {
       "path": "conquistador/commands/docs/ENTRY.md",
-      "sha256": "44336e47c7c9754e156f8d9d9f9ef47de0be918bb94115866df1448428e653e2"
+      "sha256": "8e57d82b786e45a6def255508b20bc910e12060d77c6d100dfb05a7164b88637"
     },
     {
       "path": "conquistador/commands/docs/agents/audience-profiler-agent.md",
@@ -1759,7 +1759,7 @@
     },
     {
       "path": "conquistador/commands/docs/agents/writer-agent.md",
-      "sha256": "6efcdc6a4e0e8ba773ddf0fe9d7c1442c35c3f1e30a1810eb6dfcaa872933691"
+      "sha256": "8ed12e0c0ad3b9d2fa53ad19873014865a8cdd52bda0e5fc319e1a78e1700826"
     },
     {
       "path": "conquistador/commands/docs/fallbacks/sequential.md",
@@ -1767,7 +1767,7 @@
     },
     {
       "path": "conquistador/commands/docs/references/anti-patterns.md",
-      "sha256": "c89b728e293584d7883bc68e9837ca18065f8b6186523624309edf0427956a6b"
+      "sha256": "de823716ef43099b80f7c813219567f594d697a4224948aac094c174ce061289"
     },
     {
       "path": "conquistador/commands/docs/references/artifact-paths.md",
@@ -1775,11 +1775,11 @@
     },
     {
       "path": "conquistador/commands/docs/references/doc-template.md",
-      "sha256": "242192c669006a2ea4644320f10a95456c895d21c3466e3de815b9ad8dc04731"
+      "sha256": "e76c1a7c34294e06110ede69e66d87b81dc4e51bb90f0ad72d1f0521ba8089a9"
     },
     {
       "path": "conquistador/commands/docs/references/docs-writing-method.md",
-      "sha256": "92774afacdfd9a65499802623359deda316f3b57d2d505d425c1c2a304843c75"
+      "sha256": "d856fd543c14fe4ab89d327fe0aa5600b54519eb2478767056dc5640ac40d8ff"
     },
     {
       "path": "conquistador/commands/docs/references/examples/api-readme-walkthrough.md",
@@ -4989,7 +4989,7 @@
     },
     {
       "path": "hosts/coding-agent/host.json",
-      "sha256": "274be1f4dd52d4e87d74616b3aa9b23e1873c21635a618005658e9a1ddf4dc84"
+      "sha256": "58e407f4259d7bdd7c368ecdf1f2b1fd9b386598c192985017d1b70f711a43f4"
     },
     {
       "path": "hosts/coding-agent/README.md",
@@ -5033,7 +5033,7 @@
     },
     {
       "path": "tools/search-index.json",
-      "sha256": "32ee59a8efaac03eb930c3211a552e1faa4a5ac5f5d3f0c02308f14d9f6e5feb"
+      "sha256": "4c925b7fc9934788c8471ab0fa5e0eb06f52c31a2fbcbfb411e3498372e2b7a9"
     },
     {
       "path": "tools/prompt-advice.mjs",
@@ -5053,19 +5053,19 @@
     },
     {
       "path": "agents/conquistador/agent.json",
-      "sha256": "63d3bbc86f3d3cb56d3c9a98879e838cc5eaa4ad565e72e2c2490eba030ee28c"
+      "sha256": "2dfe1819809fdbced9570cb0f4216b72310e24277c4d92287e378f6b88f09449"
     },
     {
       "path": "agents/conquistador/compatibility/v1.json",
-      "sha256": "4a3ada789fd5fd25dc84dfe3286e23f291bded4c494d639f2c27f7e31ce9a309"
+      "sha256": "eccd07b54b5421723035085c0d5772a0e002a2b1c369282c7e1a6f35c177e5a2"
     },
     {
       "path": "agents/agent-package.schema.json",
-      "sha256": "3bbe80277d77dbc67c8a8b817e51508a63c15da492ffacadeeaadefc1200a370"
+      "sha256": "22a4a6e3955feeaffb31cc2d7556f937ad472de83f3927faaeb8e6bb1b059988"
     },
     {
       "path": "agents/agent-package-v2.schema.json",
-      "sha256": "0bcfa64d8a0193aba573f823e7b4c1d10ad1b8bb516a74ce39446c87c92fab43"
+      "sha256": "2517862ba8fd9086f563937162a6d55649af0d0ddc23510799b3c90eb947606e"
     },
     {
       "path": "agents/operator-profile.schema.json",

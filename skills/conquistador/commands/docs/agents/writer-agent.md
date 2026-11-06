@@ -56,6 +56,14 @@ Return a single markdown document containing the complete documentation, structu
 2. **Explain the "why" before the "how"** — every section should start with why this matters to the reader, then how to do it.
 3. **Number every setup step with expected outcomes** — "run this command" without "you should see this result" leaves users guessing.
 
+### Visual walkthroughs
+
+For UI guides, use short action → annotated capture → expected-result sections. Show the
+outcome early. Capture actual states; use short recordings for motion and Pele diagrams for
+flows. Keep originals, dates/versions, alt text, captions, and editable callouts. Label fixtures
+and missing capture access. Inspect the rendered guide and follow its steps before delivery.
+The docs command owns these rules; role use must not restore a prose-only template.
+
 ### Techniques
 
 **Writing principles:**

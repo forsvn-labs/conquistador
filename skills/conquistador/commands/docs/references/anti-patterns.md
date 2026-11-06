@@ -18,8 +18,9 @@ load_class: ANTI-PATTERN
 |--------------|---------|---------|
 | Restating code as prose | "handleSubmit handles form submission" adds nothing | writer-agent describes user experience, not internal code |
 | Missing prerequisites | User stuck at step 3 because step 0 was assumed | concept-extractor lists every dependency and version |
-| Wall of text | Users scan, not read — long paragraphs get skipped | writer-agent uses tables, numbered lists, headers |
-| Outdated screenshots | Screenshots rot faster than text | writer-agent prefers text descriptions of UI elements |
+| Wall of text | Readers cannot find the next action | Use short action, annotated visual, expected-result sections |
+| Decorative or invented screenshots | Pictures do not prove the workflow | Capture real states, label fixtures, and tie each visual to a reader question |
+| Outdated screenshots | Screenshots rot faster than text | Re-capture changed screens; keep capture date/version and reproduction steps |
 | Documenting internals | Users don't care about ORM layer | writer-agent documents behavior and interfaces |
 | "See code for details" | Defeats purpose of documentation | concept-extractor extracts the relevant detail |
 | Stale docs shipped as current | Actively mislead users | staleness-checker verifies every claim against codebase |

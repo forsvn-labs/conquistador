@@ -2,7 +2,7 @@
 name: docs
 description: "Write reader-first product guides, DevRel explanations, and technical references from verified sources."
 metadata:
-  version: 1.2.0
+  version: 1.3.0
 ---
 
 # Write technical documentation
@@ -17,7 +17,7 @@ Use the brief to select current-stage resources. Read additional files only when
 Core:
 
 - [anti-patterns](references/anti-patterns.md): Docs-Writing — Anti-Patterns. Load when: critic-agent fires (Step 4 in Dispatch Protocol), or any moment…
-- [doc-template](references/doc-template.md): Documentation Template. Use this structure when generating product documentation. Adapt sections based on…
+- [doc-template](references/doc-template.md): Visual walkthrough template. Use for a product guide or tutorial. Adapt to the reader's task; omit…
 - [docs-writing-method](references/docs-writing-method.md): Docs Writing Method. A codebase is not documented when it has a README — it's documented when a new team…
 - [intake-prompts](references/intake-prompts.md): Docs-Writing — intake Prompts. Load when: intake step fires. Choose Warm Start (audience + type inferable)…
 
@@ -57,6 +57,39 @@ Explain one complete task: prerequisites, actions, expected result, and recovery
 failure. Keep implementation details in an optional reference unless they change a reader's
 choice. For example, prefer "Connect your account so you can import contacts" over
 "Initialize the OAuth integration to hydrate contact entities."
+
+## Make the guide easy to scan and follow
+
+For tutorials and product guides, show the finished result early. Build around reader questions:
+"Where do I start?", "What do I select?", "Did it work?", and "How do I recover?" Use a short
+instruction, the relevant visual, and one expected result. Put the visual beside its step,
+not in a gallery at the end. Remove prose that repeats what an annotated image already explains.
+Keep commands and essential instructions selectable; readers must not have to copy text from an image.
+
+Capture real product screens for navigation, unfamiliar controls, meaningful state changes,
+and success or recovery. Use Cap when available, or the host's supported capture tool. Record
+short interactions when sequence, motion, or timing is the point; include a poster frame and
+text steps so the guide works without playback. Never require video to understand the task.
+Do not add a screenshot quota to reference docs or small edits.
+
+Use safe sample data and capture only the task window. Retain the original capture; place
+arrows, highlights, and numbered callouts in an editable overlay. Match numbers to the nearby
+steps. Crop irrelevant chrome without hiding orientation, errors, or prerequisites. Keep labels
+readable at the document's displayed size and do not use color as the only cue. Never generate
+or redraw a UI screenshot as evidence of real product behavior. Label fixture captures, mockups,
+and conceptual diagrams. If capture is unavailable, identify the exact missing shots and keep
+the document marked as a draft; a placeholder is not a completed visual.
+
+Keep each asset's source, capture date, product version/state, and reproduction steps in an
+asset manifest or nearby source comment. Add useful alt text and a caption explaining what to
+notice. Keep media portable with the document; verify embeds and links in its destination.
+Re-capture a changed screen instead of quietly retaining stale evidence.
+
+Before delivery, inspect the rendered document at normal reading size and a narrow width.
+Check clipped labels, tiny screenshots, callout placement, contrast, playback, and asset paths.
+Walk the task from the document alone and verify its success and recovery instructions. State
+which checks were actually performed. Human task completion is the quality verdict; a format
+check or the presence of images cannot establish usefulness.
 
 ## Explain flows visually
 
