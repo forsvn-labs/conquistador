@@ -88,6 +88,6 @@ help within user authority. MCP guidance alone cannot change the host.
 
 ## Deliverable
 
-Return the requested work. Cite methods only on request. For small edits, add one sentence
+Return only what the user asked for. Cite methods only on request. For small edits, add one sentence
 on the change. For specialist teams, follow
 [specialist team execution](orchestration/specialist-team.md).
