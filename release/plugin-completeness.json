@@ -1708,15 +1708,15 @@
     },
     {
       "path": "skills/conquistador/commands/docs/agents/writer-agent.md",
-      "sha256": "6efcdc6a4e0e8ba773ddf0fe9d7c1442c35c3f1e30a1810eb6dfcaa872933691"
+      "sha256": "8ed12e0c0ad3b9d2fa53ad19873014865a8cdd52bda0e5fc319e1a78e1700826"
     },
     {
       "path": "skills/conquistador/commands/docs/COMMAND.md",
-      "sha256": "9f4299385f9495975890ce3b4e05c99e2832622d66cb5d544204f97975fbd882"
+      "sha256": "c13bbc03403409b50eb4e06dda085b1afff3974a7f0d5459c935b10f227e8176"
     },
     {
       "path": "skills/conquistador/commands/docs/ENTRY.md",
-      "sha256": "44336e47c7c9754e156f8d9d9f9ef47de0be918bb94115866df1448428e653e2"
+      "sha256": "8e57d82b786e45a6def255508b20bc910e12060d77c6d100dfb05a7164b88637"
     },
     {
       "path": "skills/conquistador/commands/docs/fallbacks/sequential.md",
@@ -1724,7 +1724,7 @@
     },
     {
       "path": "skills/conquistador/commands/docs/references/anti-patterns.md",
-      "sha256": "c89b728e293584d7883bc68e9837ca18065f8b6186523624309edf0427956a6b"
+      "sha256": "de823716ef43099b80f7c813219567f594d697a4224948aac094c174ce061289"
     },
     {
       "path": "skills/conquistador/commands/docs/references/artifact-paths.md",
@@ -1732,11 +1732,11 @@
     },
     {
       "path": "skills/conquistador/commands/docs/references/doc-template.md",
-      "sha256": "242192c669006a2ea4644320f10a95456c895d21c3466e3de815b9ad8dc04731"
+      "sha256": "e76c1a7c34294e06110ede69e66d87b81dc4e51bb90f0ad72d1f0521ba8089a9"
     },
     {
       "path": "skills/conquistador/commands/docs/references/docs-writing-method.md",
-      "sha256": "92774afacdfd9a65499802623359deda316f3b57d2d505d425c1c2a304843c75"
+      "sha256": "d856fd543c14fe4ab89d327fe0aa5600b54519eb2478767056dc5640ac40d8ff"
     },
     {
       "path": "skills/conquistador/commands/docs/references/examples/api-readme-walkthrough.md",
@@ -5096,7 +5096,7 @@
     },
     {
       "path": "tools/search-index.json",
-      "sha256": "32ee59a8efaac03eb930c3211a552e1faa4a5ac5f5d3f0c02308f14d9f6e5feb"
+      "sha256": "4c925b7fc9934788c8471ab0fa5e0eb06f52c31a2fbcbfb411e3498372e2b7a9"
     },
     {
       "path": "tools/skills-mcp.mjs",

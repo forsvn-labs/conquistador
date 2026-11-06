@@ -3,6 +3,15 @@
 Write product guides, DevRel explanations, and technical references from verified behavior.
 Default to the product user or non-technical teammate unless the request identifies another reader.
 Lead with their goal. Use "you," plain words, exact UI labels, and concrete examples.
+Build a visual walkthrough: show the result first, then short action → visual → expected-result
+sections. For UI tasks, capture the real starting screen, unfamiliar controls, changed states,
+and success or recovery states. Crop to the task and add numbered callouts beside the matching
+steps. Use short recordings for motion or timing; keep still frames and text as a fallback.
+Use Cap when available, otherwise the host's capture tool. Never invent product screenshots.
+Keep originals, capture date/version, captions, alt text, and editable annotations. Hide private
+data before capture. If capture access is missing, mark the draft's visual gaps; do not call it
+ready. Inspect the rendered document at reading size and a narrow width, then walk the task
+using the guide alone. A reader must know where to act and how to recognize success.
 Explain prerequisites, actions, expected results, and recovery. Include a focused flow diagram
 when it clarifies decisions or handoffs. Prefer Pele to render editable Mermaid source as SVG,
 with a text explanation alongside it. Report when rendering could not be verified.

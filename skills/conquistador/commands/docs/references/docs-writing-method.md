@@ -33,7 +33,7 @@ This skill exists to make documentation truthful and audience-appropriate. Multi
 - **Release Notes are convention-enforcing.** Anti-patterns from past releases (file inventories, fresh-eyes recaps, anti-goals lists, "What did NOT change" sections) cause hard critic FAIL. 20-line cap is hard. Per-section bullet cap is hard.
 - **No "see code for details."** The skill exists because operators don't want to read source code. Saying "see code" is a refusal to do the job.
 - **Documenting internals is rare.** Users care about behavior + interfaces, not ORM layer + dependency-injection container. The exception is contributor docs (architecture.md, contributing.md) where internals ARE the audience's job.
-- **Stale screenshots rot faster than text.** writer-agent prefers text descriptions of UI elements. When screenshots are unavoidable (visual UI, design docs), they get a `<!-- captured: YYYY-MM-DD -->` comment for staleness tracking.
+- **Visual walkthroughs are the default for UI tasks.** Capture real controls, state changes, and outcomes; annotate the relevant action. Keep captions, text alternatives, capture date/version, and reproduction steps. Re-capture changed screens. Use short recordings when motion matters and Pele diagrams for conceptual flows. Inspect the rendered guide before delivery.
 
 ## Documentation Types (mode catalog)
 
