@@ -17,11 +17,11 @@ Use the brief to select current-stage resources. Read additional files only when
 Core:
 
 - [anti-patterns](references/anti-patterns.md): Docs-Writing — Anti-Patterns. Load when: critic-agent fires (Step 4 in Dispatch Protocol), or any moment…
+- [doc-template](references/doc-template.md): Documentation Template. Use this structure when generating product documentation. Adapt sections based on…
 - [docs-writing-method](references/docs-writing-method.md): Docs Writing Method. A codebase is not documented when it has a README — it's documented when a new team…
 - [intake-prompts](references/intake-prompts.md): Docs-Writing — intake Prompts. Load when: intake step fires. Choose Warm Start (audience + type inferable)…
-- [sync](references/modes/sync.md): Docs-Writing — Route C (Post-Change Sync). Load when: triggered by /write-technical-docs --sync, "update…
 
-By step: [artifact-paths](references/artifact-paths.md), [doc-template](references/doc-template.md), [audit](references/modes/audit.md), [release-notes](references/modes/release-notes.md), [ship-log](references/modes/ship-log.md), [report-template](references/report-template.md), [ship-log-template](references/ship-log-template.md).
+By step: [artifact-paths](references/artifact-paths.md), [audit](references/modes/audit.md), [release-notes](references/modes/release-notes.md), [ship-log](references/modes/ship-log.md), [sync](references/modes/sync.md), [report-template](references/report-template.md), [ship-log-template](references/ship-log-template.md).
 
 Specialist roles: [audience-profiler-agent](agents/audience-profiler-agent.md), [concept-extractor-agent](agents/concept-extractor-agent.md), [critic-agent](agents/critic-agent.md), [scanner-agent](agents/scanner-agent.md), [staleness-checker-agent](agents/staleness-checker-agent.md), [writer-agent](agents/writer-agent.md).
 
@@ -68,6 +68,13 @@ source and a numbered text flow, and report that SVG rendering remains pending.
 Label nodes with actions and familiar product names. Show who acts, what moves between steps,
 and the relevant failure or recovery branch. Keep the diagram focused on one reader question.
 Explain the same flow in adjacent text for readers who cannot view the diagram.
+
+In a full Conquistador source or npm installation, save Mermaid source as a `.mmd` file and run
+`node tools/render-diagram.mjs input.mmd output.svg` from the package root. The helper uses the
+installed, pinned Pele dependency and refuses to overwrite an output. Choose a new output path
+for revisions. Skill-only installs may lack the helper or dependency; use the host's Pele setup
+or return the source with rendering marked pending. Do not claim the renderer is bundled in
+all skill hosts.
 
 Derive arrows and labels from verified behavior. Do not invent automatic sends, permissions,
 or integrations. Check the rendered diagram when a renderer is available; otherwise state that

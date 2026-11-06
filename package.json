@@ -13,7 +13,8 @@
     "node": ">=22.18"
   },
   "dependencies": {
-    "jose": "6.2.8"
+    "jose": "6.2.8",
+    "pele": "1.13.0"
   },
   "publishConfig": {
     "access": "public"

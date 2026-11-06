@@ -84,7 +84,7 @@
     },
     {
       "path": "package.json",
-      "sha256": "39542207b9dcdbe093bfcee952979ea6f91368c382424d1ad91d7282ba355166"
+      "sha256": "88f65fc58c410f38829d868c4bd8f0ae2ef3d63935008f303bc516187140f697"
     },
     {
       "path": "plugin.json",
@@ -1712,7 +1712,7 @@
     },
     {
       "path": "skills/conquistador/commands/docs/COMMAND.md",
-      "sha256": "19d1ded4ae5de8a1a164c6d7a5c013a9ff64c22bd7e6bd4b5c7aacbf75ce70f6"
+      "sha256": "9f4299385f9495975890ce3b4e05c99e2832622d66cb5d544204f97975fbd882"
     },
     {
       "path": "skills/conquistador/commands/docs/ENTRY.md",
@@ -5048,7 +5048,7 @@
     },
     {
       "path": "tools/context-selection.mjs",
-      "sha256": "99f6faa37a056deb6df0ce5b723d4c16254efac4c885e89faf03648d9c5270bd"
+      "sha256": "5801b3b259b5a681e662a27e8158e064de0760a712a4403d991676e415ae3f9a"
     },
     {
       "path": "tools/domain-package.mjs",
