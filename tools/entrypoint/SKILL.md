@@ -1,6 +1,6 @@
 ---
 name: conquistador
-description: Plan launches and growth, produce marketing or sales work, write or update documentation and visual product guides, and handle requested product tasks. Select relevant specialists; skip unrelated coding chores.
+description: Plan launches and growth, produce marketing or sales work, write or update documentation and visual product guides, and handle requested product tasks. Manage Conquistador setup, updates, hooks, and connections. Skip unrelated coding chores.
 license: MIT
 ---
 
@@ -8,6 +8,20 @@ license: MIT
 
 Use Conquistador for the business or product result the user requested. Engineering work that
 only mentions marketing, outreach, or sales does not need marketing guidance.
+
+Plain "Conquistador" is the entry for every included command, workflow, and management task.
+Accept plain, slash, "Use Conquistador", and namespaced skill invocations. With no task, show
+the capability menu. For a named command or workflow, preserve that selection. For a natural
+request, use the brief to choose the method and current workflow stage. If the brief requires
+parent selection, inspect the catalog and resolve the task; never silently drop Conquistador.
+Load later workflow steps only when needed, in their declared order and conditions.
+
+For setup, status, updates, hooks, shortcuts, connections, or removal, inspect the installed
+CLI's `conquistador --help` and relevant subcommand help. Use the supported operation within
+the requested scope. Identify the actual installed surface/version before a repair or update;
+a newer npm release does not establish that a plugin or hosted MCP is current. With MCP-only
+access, explain the missing host capability instead of claiming an installation changed.
+Respect opt-outs, domain restrictions, and existing action permissions.
 
 Requests to write, update, improve, or rewrite docs are documentation work. Select the docs
 method before editing, including when the documents live in Drive or a wiki. An update checks

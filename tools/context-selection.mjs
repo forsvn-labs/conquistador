@@ -1,7 +1,7 @@
 import { existsSync, lstatSync, readFileSync } from 'node:fs';
 import { join, posix, resolve } from 'node:path';
 import { assertLoadAllowed, loadRestriction } from './domain-package.mjs';
-import { decisionQuestion, decisionRequest, explicitInvocation, instructionClause, invokedCommand, requestedBusinessClauses, requestFocus, requestLead, requestMode, requestOperation, unquotedRequest, normalizeRequest as normalized, includesPhrase } from './request-text.mjs';
+import { decisionQuestion, decisionRequest, explicitInvocation, bareInvocation, instructionClause, invokedCommand, requestedBusinessClauses, requestFocus, requestLead, requestMode, requestOperation, unquotedRequest, normalizeRequest as normalized, includesPhrase } from './request-text.mjs';
 import { loadRoutingContract } from './routing-contract.mjs';
 import { packageRootOf } from './module-root.mjs';
 
@@ -341,6 +341,7 @@ export function explainRoute(result) {
 
 export function selectRequestContext(prompt, { root = moduleRoot, automatic = false } = {}) {
   if (typeof prompt !== 'string' || prompt.trim().length === 0 || Buffer.byteLength(prompt) > MAX_PROMPT_BYTES) return abstain('invalid-prompt');
+  if (/\b(?:do not|don't|never)\s+(?:use|run|invoke|activate)\s+[/$@]?conquistador\b/i.test(unquotedRequest(prompt))) return abstain('activation-declined');
   const packageRoot = resolve(root);
   if (/[\x00-\x1f\x7f]/.test(packageRoot)) fail('Invalid Conquistador package root.');
   const restriction = loadRestriction(packageRoot);
@@ -354,6 +355,7 @@ export function selectRequestContext(prompt, { root = moduleRoot, automatic = fa
     if (profile.activation === 'off') return abstain('activation-off');
     if (profile.activation === 'manual' && automatic && !explicitInvocation(prompt)) return abstain('activation-manual');
   }
+  if (bareInvocation(prompt)) return abstain('parent-selection-required');
   const methods = [...Object.values(contract.methods), ...contract.unavailableMethods];
 
   const protectedPhrases = [...methods, ...(contract.plays ?? [])].flatMap(method => [method.name, ...method.intents, ...(method.aliases ?? [])])

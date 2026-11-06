@@ -1,5 +1,5 @@
 // Admission and selection share invocation syntax. Quoted examples do not activate either.
-const invocation = /(?:^|[\s`])(?:please\s+)?(?:use|open|run|ask|start)\s+conquistador\b(?:\s*,|\s+to|\s+and)?\s*|\bread\s+\.?conquistador\/skill\.md(?:\s+and\s+follow\s+it)?[.,]?\s*|(?:^|[\s`])[/$@]conquistador(?:[/:][a-z][a-z0-9-]*)?(?=[\s`,.:;!?]|$)/gi;
+const invocation = /(?:^|[\s`])(?:please\s+)?(?:use|open|run|ask|start)\s+conquistador\b(?:\s*,|\s+to|\s+and)?\s*|\bread\s+\.?conquistador\/skill\.md(?:\s+and\s+follow\s+it)?[.,]?\s*|^\s*conquistador(?=[\s`,.:;!?]|$)|(?:^|[\s`])[/$@]conquistador(?:[/:][a-z][a-z0-9-]*)?(?=[\s`,.:;!?]|$)/gi;
 export function unquotedRequest(prompt) {
   return prompt.replace(/```[\s\S]*?```/g, ' ').replace(/`[^`\n]*`/g, ' ')
     .replace(/"[^"\n]*"|(?<!\w)'[^'\n]*'(?!\w)/g, ' ');
@@ -11,10 +11,20 @@ export function explicitInvocation(prompt) {
 
 // The command after an explicit invocation: "/conquistador launch ...", "$conquistador copy",
 // "/conquistador:write-copy", or a prompt that starts with "conquistador seo". Returns the raw word.
-const commandInvocation = /(?:^|[\s`])[/$@]conquistador(?:\s+|[:/])([a-z][a-z0-9-]*)\b|^\s*conquistador\s+([a-z][a-z0-9-]*)\b/i;
+const commandInvocation = /(?:^|[\s`])(?:[/$@]conquistador(?::conquistador)?|(?:please\s+)?(?:use|open|run|ask|start)\s+conquistador|^conquistador)(?:\s+|[:/])(?:(?:to\s+)?run\s+)?([a-z][a-z0-9-]*)\b/i;
 export function invokedCommand(prompt) {
-  const match = commandInvocation.exec(unquotedRequest(prompt));
-  return match ? (match[1] ?? match[2]).toLowerCase() : null;
+  if (!explicitInvocation(prompt)) return null;
+  const clauses = unquotedRequest(prompt).split(/(?<=[.!?;])\s+|\n+/);
+  for (const clause of clauses) {
+    if (/\b(?:do not|don't|never|without)\b/i.test(clause)) continue;
+    const match = commandInvocation.exec(clause.trim());
+    if (match) return match[1].toLowerCase();
+  }
+  return null;
+}
+
+export function bareInvocation(prompt) {
+  return /^(?:please\s+)?(?:(?:use|open|run|ask|start)\s+)?[/$@]?conquistador(?::conquistador)?[.!?]?$/i.test(unquotedRequest(prompt).trim());
 }
 
 export function requestClauses(prompt, { protectedPhrases = [] } = {}) {

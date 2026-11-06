@@ -351,7 +351,7 @@ export function createBrief(input, { root = moduleRoot, playbooks, persistCache 
   if (typeof input !== 'string' || !input.trim()) throw Error('Describe the task.');
   const packageRoot = realpathSync(resolve(root));
   const routed = selectRequestContext(input, { root: packageRoot, automatic });
-  if (routed.action !== 'route') return { schema: BRIEF_SCHEMA, action: 'none', mode: 'none', reason: routed.reason, methods: [], must: [], situational: [], platforms: [], packageRoot };
+  if (routed.action !== 'route') return { schema: BRIEF_SCHEMA, action: routed.reason === 'parent-selection-required' ? 'brief' : 'none', mode: routed.reason === 'parent-selection-required' ? 'assist' : 'none', reason: routed.reason, methods: [], must: [], situational: [], platforms: [], packageRoot };
   const prompt = routed.query;
   // A platform named only in pasted context ("we launch on Product Hunt") still applies when the request names none.
   const platforms = namedPlatforms(prompt).length || !routed.supportingQuery ? namedPlatforms(prompt) : namedPlatforms(routed.supportingQuery);
@@ -538,6 +538,7 @@ const location = (item, absolute) => (absolute || isAbsolute(item.path) ? item.a
 
 // Compact form for hooks: paths and reasons, no file text. Stays under host context limits.
 export function formatReadingList(brief, { limit = 1500 } = {}) {
+  if (brief.reason === 'parent-selection-required') return 'Conquistador requested: use the parent capability catalog or conquistador --help to select the supported task. Keep scope and host permissions.';
   if (brief.action !== 'brief') return '';
   // A play names itself; its first step alone would read as a different method.
   const commands = brief.methods.map(item => `${item.label} [${item.name}]`).join(', ');
@@ -593,6 +594,27 @@ export const formatBriefPack = (brief, options) => packBrief(brief, options).tex
 // The brief as text plus the same lists in structured form, so an agent can see what is inlined
 // and what it still has to read without parsing prose. `hosted` marks a caller with no repository.
 export function packBrief(brief, { limit, callerContext, hosted = false, compact = false, readBundled } = {}) {
+  if (brief.reason === 'parent-selection-required') {
+    const budgetBytes = Math.min(4000, Number.isFinite(limit) ? Math.max(0, Math.floor(limit)) : 4000);
+    const structured = { action: 'brief', mode: 'assist', reason: brief.reason, command: null, play: null,
+      inlined: [], readNow: [], readAtStep: [], situational: [], provenance: [], budgetBytes };
+    let text = `# Conquistador
+
+Use the original request to choose the next action. This is the parent entry, not an unrelated-task rejection.
+
+` +
+      `For capabilities, call conquistador_methods or read the installed capability catalog. With no task, show a short menu and ask what the user wants to accomplish. For an unclear task, inspect that catalog and ask one focused question only if the choice changes the outcome. Never invent a command or workflow.
+
+` +
+      `For Conquistador management (setup, status, doctor, update, hooks, pin/unpin, connections, or removal), use the installed CLI's conquistador --help and its relevant subcommand help. Use only supported operations within the user's requested scope. With MCP alone, explain that the host needs terminal or installation access; the method server cannot change the host.
+
+` +
+      `For a named command or workflow, request its brief, then follow the current stage and declared step order. Read later methods when needed. Preserve small edits, host restrictions, and required approvals for external writes, publication, spending, or destructive changes. A routing result is guidance, not proof that any action ran.`;
+    const encoded = () => Buffer.byteLength(JSON.stringify({ content: [{ type: 'text', text }], structuredContent: structured }));
+    if (encoded() > budgetBytes) text = 'Conquistador: use conquistador_methods for capabilities or conquistador --help for management. Preserve scope and host permissions.';
+    if (encoded() > budgetBytes) throw new Error('Context budget is too small for parent guidance.');
+    return { structured, text };
+  }
   if (brief.action !== 'brief') return { structured: { action: 'none', mode: 'none', reason: brief.reason, inlined: [], readNow: [], readAtStep: [], situational: [] }, text: 'No Conquistador method matches this task. Continue with the user request without marketing guidance.' };
   const budget = brief.mode === 'assist' ? 4000 : compact ? 8000 : 16000;
   limit = Number.isFinite(limit) ? Math.min(budget, Math.max(0, Math.floor(limit))) : budget;

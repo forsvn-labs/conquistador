@@ -1,6 +1,6 @@
 ---
 name: conquistador
-description: "Use for growth, GTM, launch, marketing, sales, and product-marketing work: positioning, campaigns, copy, social, outreach, ads, SEO and AI answers, conversion, pricing, measurement, documentation updates, visual product guides, and requested product specs or builds. Turns one request into a finished, reviewed deliverable from field-tested playbooks. Not for unrelated coding chores."
+description: "Use for growth, GTM, launch, marketing, sales, and product-marketing work: positioning, campaigns, copy, social, outreach, ads, SEO and AI answers, conversion, pricing, measurement, documentation updates, visual product guides, and requested product specs or builds. Also manage Conquistador setup, updates, hooks, and connections. Turns one request into a finished deliverable. Not for unrelated coding chores."
 argument-hint: "[command] [target or request]"
 user-invocable: true
 metadata:
@@ -63,6 +63,14 @@ Plays chain commands for a multi-step outcome; each [play](plays/) lists its ste
 [interactive](plays/interactive.md), [experiment](plays/experiment.md), [spec](plays/spec.md).
 
 ## Routing
+
+Plain "Conquistador" controls all included commands, plays, and product management tasks.
+Use the installed catalog and CLI help to resolve capabilities. A parent-selection result from
+the brief means select from that catalog or clarify the outcome; it does not mean ignore the
+requested skill. Keep named command/play choices, workflow step order, conditions, and scope.
+For installation management, identify the installed surface and version first; check the CLI's
+help and execute only supported operations within user authority. MCP-only guidance cannot
+mutate the host. Reuse loaded guidance and load only the current stage.
 
 - **No argument:** read [references/menu.md](references/menu.md) and show its menu. Never auto-run a command.
 - **`/conquistador hooks on|off|status`:** run `conquistador hooks on`, `conquistador hooks off`, or

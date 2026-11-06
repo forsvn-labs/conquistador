@@ -96,7 +96,7 @@
     },
     {
       "path": "SKILL.md",
-      "sha256": "8026087dbb36ab187338f988ca16dcf426060dcea45a5712533154792ea11a8b"
+      "sha256": "8a07ef23a7746937468840bf1d971c39bc2726fdf61e29fd467cd989fd66c4ea"
     },
     {
       "path": "skills/conquistador/adapters/coding-agent.md",
@@ -4924,7 +4924,7 @@
     },
     {
       "path": "skills/conquistador/SKILL.md",
-      "sha256": "7f7fcfe3545be019265c48f4283751c79b06e9c8c9e9c50ab6e5d417ed5f6eaf"
+      "sha256": "7dd1b149a6c452f865b5cfa1bc3365cfa6f64bf06b9475cf5ee9698d095b405d"
     },
     {
       "path": "skills/conquistador/specialists/ads-agent.md",
@@ -5016,7 +5016,7 @@
     },
     {
       "path": "tools/brief.mjs",
-      "sha256": "1920672748bc62e34d3ba7d5b7ec0a1999523e05d097336ba02f6abfe71563df"
+      "sha256": "7887ac7dad9fc22d619610c01dec5ad652e7a6c244c96ce01a97b3460739c838"
     },
     {
       "path": "tools/check-receipt.mjs",
@@ -5048,7 +5048,7 @@
     },
     {
       "path": "tools/context-selection.mjs",
-      "sha256": "7b29336687b7488f70028c71adca43aaaaaeb79c011bd9903ee59bc6e29124eb"
+      "sha256": "60da55fab12b7c58aaa3b2e05b4f713570ad90e035bc2ee1adaf2145fff64856"
     },
     {
       "path": "tools/domain-package.mjs",
@@ -5084,7 +5084,7 @@
     },
     {
       "path": "tools/request-text.mjs",
-      "sha256": "34d1d90bb9d7f287dc860841c2bc1276d5e54eab136411956224a07d16e2e8ec"
+      "sha256": "15058711c4684dfedf209e20e3c776661632aff875c77ed68fab0daeebd4464e"
     },
     {
       "path": "tools/routing-contract.mjs",
