@@ -1,6 +1,6 @@
 ---
 name: conquistador
-description: Plan launches and growth, produce marketing or sales work, write or update documentation and visual product guides, and handle requested product tasks. Manage Conquistador setup, updates, hooks, and connections. Skip unrelated coding chores.
+description: Plan launches and growth, create GTM and sales work, update visual docs, and manage Conquistador setup, hooks, connections, and workflows. Skip unrelated coding.
 license: MIT
 ---
 
