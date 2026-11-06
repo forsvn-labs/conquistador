@@ -1,6 +1,6 @@
 {
   "schemaVersion": "conquistador.plugin-completeness/v1",
-  "version": "0.12.2",
+  "version": "0.12.3",
   "files": [
     {
       "path": ".agents/plugins/marketplace.json",
@@ -8,15 +8,15 @@
     },
     {
       "path": ".claude-plugin/marketplace.json",
-      "sha256": "927bbc711049ce83c79c5211787184aadf7765f57b194af055966611f6124c44"
+      "sha256": "a8ee6df7dc804e15aad6bc1c69b72d10758cdc339d3b2808255ddf1226195f3e"
     },
     {
       "path": ".claude-plugin/plugin.json",
-      "sha256": "8871c869414366760b43bbae5b3d16661df26653e54fe6739dd2254b543ef56c"
+      "sha256": "3aca34a6f57f89477a1be50f28338083699ffc7b45c7432a988e1dd123089f79"
     },
     {
       "path": ".codex-plugin/plugin.json",
-      "sha256": "3727470059211f5dcd596a1c0a6c0d11b3d4a6d681e6456b7615c53d5bd8ea02"
+      "sha256": "842bd9091b0384209bec9e657c94a483e9c5211a94ac25d2a95e8533d0df09e4"
     },
     {
       "path": ".cursor-plugin/marketplace.json",
@@ -24,7 +24,7 @@
     },
     {
       "path": ".cursor-plugin/plugin.json",
-      "sha256": "bd41bd14c5b30cddf91779caa8676e8a7d5f70913ee334885b372c2307251763"
+      "sha256": "ce14183338612d2f675d6e5002e2dc1eae910eb57b826f287e28c102e73a8382"
     },
     {
       "path": "agents/conquistador.md",
@@ -84,11 +84,11 @@
     },
     {
       "path": "package.json",
-      "sha256": "93590e4bfa93961ed9921bb7079b1e37a57eef82330c4f1fbe8cd7abc3321fcf"
+      "sha256": "4ffd6fd3a2c933c990d42e664dc67ee488b0bb1c21c9e79b3a7b36ea125dd041"
     },
     {
       "path": "plugin.json",
-      "sha256": "dc3ef3cf7c0254d0881b0b71a6af4aec15fd064b3062fa56a9c9467a1b65954d"
+      "sha256": "b09c9f238efce29318fa97643a83caebd427629379f1991696ce32e4df49dd26"
     },
     {
       "path": "README.md",
@@ -1712,7 +1712,7 @@
     },
     {
       "path": "skills/conquistador/commands/docs/COMMAND.md",
-      "sha256": "c4238e56eacf9debd4de2b825c996b9a0051f06cfcf583c243a8552429bce7f9"
+      "sha256": "61c09e05056baabc2d3c7d7b7ff6b8ed6a1f6e147e736076b4d7a88380da3952"
     },
     {
       "path": "skills/conquistador/commands/docs/ENTRY.md",
@@ -4924,7 +4924,7 @@
     },
     {
       "path": "skills/conquistador/SKILL.md",
-      "sha256": "2203dfb37aafe0508a75766ce5021f4f89ea42c8f0be1c76196ffe3aa72ca59a"
+      "sha256": "656b39d97443cec7f44fb9a7a0c413f9ca840664ef96096333e0820641078fba"
     },
     {
       "path": "skills/conquistador/specialists/ads-agent.md",
@@ -5048,7 +5048,7 @@
     },
     {
       "path": "tools/context-selection.mjs",
-      "sha256": "42585ec979cc34776e66a1a105cc6bb59603b509d9fcffe47bc19a2a2fb9b41d"
+      "sha256": "9e76c65d43b0efb87c41ad3ab8e1b0aabd85b307dbaca751c31539a9ca50ed42"
     },
     {
       "path": "tools/domain-package.mjs",

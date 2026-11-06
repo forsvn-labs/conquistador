@@ -2,8 +2,8 @@
   "schemaVersion": "conquistador.install-completeness/v1",
   "parent": {
     "name": "conquistador",
-    "version": "3.1.1",
-    "sha256": "2203dfb37aafe0508a75766ce5021f4f89ea42c8f0be1c76196ffe3aa72ca59a"
+    "version": "3.1.2",
+    "sha256": "656b39d97443cec7f44fb9a7a0c413f9ca840664ef96096333e0820641078fba"
   },
   "outcomes": [
     {
@@ -93,8 +93,8 @@
     },
     {
       "name": "docs",
-      "version": "1.3.1",
-      "sha256": "c4238e56eacf9debd4de2b825c996b9a0051f06cfcf583c243a8552429bce7f9"
+      "version": "1.3.2",
+      "sha256": "61c09e05056baabc2d3c7d7b7ff6b8ed6a1f6e147e736076b4d7a88380da3952"
     },
     {
       "name": "doctor",
@@ -4989,7 +4989,7 @@
     },
     {
       "path": "hosts/coding-agent/host.json",
-      "sha256": "58e407f4259d7bdd7c368ecdf1f2b1fd9b386598c192985017d1b70f711a43f4"
+      "sha256": "03fedeece0e1388796cf348d8de8dc0a8e1a9169898949b30e699818c8002d66"
     },
     {
       "path": "hosts/coding-agent/README.md",
@@ -5049,23 +5049,23 @@
     },
     {
       "path": "tools/context-selection.mjs",
-      "sha256": "42585ec979cc34776e66a1a105cc6bb59603b509d9fcffe47bc19a2a2fb9b41d"
+      "sha256": "9e76c65d43b0efb87c41ad3ab8e1b0aabd85b307dbaca751c31539a9ca50ed42"
     },
     {
       "path": "agents/conquistador/agent.json",
-      "sha256": "2dfe1819809fdbced9570cb0f4216b72310e24277c4d92287e378f6b88f09449"
+      "sha256": "b069e9315459c9338922170c9378c594025979926d344c0abfc9f7bc18262608"
     },
     {
       "path": "agents/conquistador/compatibility/v1.json",
-      "sha256": "eccd07b54b5421723035085c0d5772a0e002a2b1c369282c7e1a6f35c177e5a2"
+      "sha256": "d43a86f1adad84b4b5833e3f56d7fcc2010cd35cb7ad5709bc08e78c594dadb5"
     },
     {
       "path": "agents/agent-package.schema.json",
-      "sha256": "22a4a6e3955feeaffb31cc2d7556f937ad472de83f3927faaeb8e6bb1b059988"
+      "sha256": "3f33a9a5fbdb2d065f383ea4da751eb98e1c9a5103b6eae67f271dd2a6c0938d"
     },
     {
       "path": "agents/agent-package-v2.schema.json",
-      "sha256": "2517862ba8fd9086f563937162a6d55649af0d0ddc23510799b3c90eb947606e"
+      "sha256": "c621ebd3c8bfb10c8d0584d58a34afbaac40929df1f21263db0cb58ab47ebf9d"
     },
     {
       "path": "agents/operator-profile.schema.json",
