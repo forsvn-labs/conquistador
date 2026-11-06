@@ -4859,11 +4859,11 @@
     },
     {
       "path": "conquistador/routing-contract.json",
-      "sha256": "f39900c09dddfc574bfbab98ca4a1db1a98694367b3824b5aa091b619a600bf9"
+      "sha256": "097018b29bf7971b4bbcdb1ac43d3d2e16d000084e9867771a27ee604ca2b0df"
     },
     {
       "path": "conquistador/routing-overlay.json",
-      "sha256": "30e8082610f454dd66f4a97e88949d7c98aa76f4127d8e5dc3e059cdf8027e1a"
+      "sha256": "2125a327d1b75d5de64c5a58e9e8336ed56fe42f597250eb80c792781d4c6ca9"
     },
     {
       "path": "conquistador/rubrics/composition.md",
@@ -4989,7 +4989,7 @@
     },
     {
       "path": "hosts/coding-agent/host.json",
-      "sha256": "4ad5225e3af40f6f65cb85d5240a8d906aac25e40d97dd06f3f536cfdb24eb0c"
+      "sha256": "274be1f4dd52d4e87d74616b3aa9b23e1873c21635a618005658e9a1ddf4dc84"
     },
     {
       "path": "hosts/coding-agent/README.md",
@@ -5009,7 +5009,7 @@
     },
     {
       "path": "tools/method-policy.mjs",
-      "sha256": "7f4ef6104d565e73248ca32428cef863a2ded8e2b155316c8c0e9ea1a5c91c2e"
+      "sha256": "3583e25b8be8840e44f481ce6aadd6e5f0c87ee882a8250c656564472bcd7a5b"
     },
     {
       "path": "tools/routing-contract.mjs",
@@ -5053,19 +5053,19 @@
     },
     {
       "path": "agents/conquistador/agent.json",
-      "sha256": "d5c0cf1dbf5fa770952748cd77e76c4747f9a6f64d5303345c6398f4728c2627"
+      "sha256": "63d3bbc86f3d3cb56d3c9a98879e838cc5eaa4ad565e72e2c2490eba030ee28c"
     },
     {
       "path": "agents/conquistador/compatibility/v1.json",
-      "sha256": "c717c340e69e1c07ca751141c323d7b6a87720e1f7eab3bdc2c1251cc01dd05b"
+      "sha256": "4a3ada789fd5fd25dc84dfe3286e23f291bded4c494d639f2c27f7e31ce9a309"
     },
     {
       "path": "agents/agent-package.schema.json",
-      "sha256": "e7114345ce0fa03e264037ae6e0bf6d54c7de4a00d8cd2936e0fa03bf216189b"
+      "sha256": "3bbe80277d77dbc67c8a8b817e51508a63c15da492ffacadeeaadefc1200a370"
     },
     {
       "path": "agents/agent-package-v2.schema.json",
-      "sha256": "670888cdcfe7b002267a44c16888d8ede1cb7017621939bcd58bb079778e55bc"
+      "sha256": "0bcfa64d8a0193aba573f823e7b4c1d10ad1b8bb516a74ce39446c87c92fab43"
     },
     {
       "path": "agents/operator-profile.schema.json",

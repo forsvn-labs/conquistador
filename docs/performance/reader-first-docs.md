@@ -93,3 +93,7 @@ The renderer package check is repeatable with `node tools/e2e/renderer-package.m
 the current tree, installs the tarball with Bun in a temporary directory, runs the installed
 helper, and saves package integrity plus its verdict under `dist/e2e/renderer-package/`.
 The installed-path test exposed and fixed a symlink entry-point issue.
+
+Release preparation: docs now uses its short entry across default loaders, so full briefs cannot
+rank historical pipelines back into ordinary guidance. Product user guide requests route to docs.
+Renderer output is staged before exclusive publication, and imports tolerate missing host entry paths.

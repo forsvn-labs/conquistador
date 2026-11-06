@@ -39,3 +39,9 @@ test('renderer runs through a linked installation path', () => {
     assert.match(readFileSync(output, 'utf8'), /<svg/);
   } finally { rmSync(dir, { recursive: true, force: true }); }
 });
+
+test('import works when the host entry path no longer exists', () => {
+  const code = `process.argv[1] = '/nonexistent/conquistador-host.mjs'; await import(${JSON.stringify(new URL('./render-diagram.mjs', import.meta.url).href)});`;
+  const run = spawnSync(process.execPath, ['--input-type=module', '-e', code], { encoding: 'utf8' });
+  assert.equal(run.status, 0, run.stderr);
+});

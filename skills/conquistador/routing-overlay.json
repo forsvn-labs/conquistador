@@ -1597,7 +1597,10 @@
         "technical documentation",
         "api docs",
         "readme and setup",
-        "operator docs"
+        "operator docs",
+        "product user guide",
+        "product documentation",
+        "devrel guide"
       ],
       "aliases": [
         "write-technical-docs"

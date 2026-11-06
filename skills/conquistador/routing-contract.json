@@ -1953,7 +1953,10 @@
         "technical documentation",
         "api docs",
         "readme and setup",
-        "operator docs"
+        "operator docs",
+        "product user guide",
+        "product documentation",
+        "devrel guide"
       ],
       "legacy": [
         "write-technical-docs"
