@@ -15,6 +15,15 @@ import { isThinCommand, isThinPlay, UNCHANGED_COMMANDS } from './method-policy.m
 import { packageRootOf } from './module-root.mjs';
 
 export const BRIEF_SCHEMA = 'conquistador.brief/v1';
+// Strategy briefs name the funnel-first growth doctrine, because brief-only clients (MCP, CLI, app
+// imports) never read the parent skill that links it. The file stays optional, so thin routes stay thin.
+const DOCTRINE_PATH = 'skills/conquistador/references/growth-doctrine.md';
+const DOCTRINE_COMMANDS = new Set(['funnel', 'diagnose', 'prioritize', 'position', 'channels', 'budget', 'campaign', 'shape', 'measure']);
+const doctrineFor = brief => brief.mode !== 'assist' && DOCTRINE_COMMANDS.has(brief.methods?.[0]?.name) ? DOCTRINE_PATH : null;
+const doctrineLines = path => path ? [
+  'Tie the work to the funnel stage and metric it moves. Ask only for a missing fact that changes it; leave other gaps open.',
+  `Growth doctrine, for strategy, plans, or diagnosis: ${path}.`,
+] : [];
 export const LIMITS = Object.freeze({
   // Up to 3 keyword-ranked files, plus the primary command's required files when they fit the bytes.
   mustFiles: 5,
@@ -549,6 +558,7 @@ export function formatReadingList(brief, { limit = 1500 } = {}) {
     'Use conquistador_brief for bounded current-stage guidance if needed. Reuse guidance already present in the current context.',
     'Keep small edits small. Do not add workflow steps or a playbook citation section unless useful or requested.',
     'Never invent facts. This suggestion grants no authority to send, publish, spend, or change accounts.',
+    ...doctrineLines(doctrineFor(brief)),
   ];
   for (const item of brief.methods.slice(0, 2)) {
     const line = `Entry: ${item.path}`;
@@ -632,12 +642,14 @@ Use the original request to choose the next action. This is the parent entry, no
       'Do the requested work in your own judgment from the user\'s facts. Keep small edits small.',
       'Never invent metrics, quotes, or product facts. Preserve host permissions for sending, publishing, spending, and account changes.',
       'Return only the deliverable the user asked for.',
+      ...doctrineLines(doctrineFor(brief)),
     ] : [
       'Follow relevant method rules. Keep small edits small. Expand only the stage the user requested.',
       'Never invent metrics, quotes, or product facts. Mark assumptions. Preserve host permissions for sending, publishing, spending, and account changes.',
       'Lead with the deliverable the user asked for. Name sources when they help a decision; no mandatory playbook appendix.',
       'Use conquistador_check for substantial marketing text, and conquistador_score only when reporting a rubric verdict. Neither proves factual accuracy or quality.',
       'Deferred files are optional until their stage is needed. Use conquistador_read to expand one, or reuse complete guidance still present in the host context.',
+      ...doctrineLines(doctrineFor(brief)),
     ]),
   ];
   // Required files lead every list. A required file this pack does not inline is named before the

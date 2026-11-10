@@ -1,6 +1,7 @@
 # Conquistador
 
-Marketing and growth playbooks for coding and deployed agents. Your agent
+Funnel-first marketing and growth playbooks for coding and deployed agents.
+They are built around how a stranger becomes your paying customer. Your agent
 supplies the model and runs the work.
 
 With Node 22.18 or later, start the installer:

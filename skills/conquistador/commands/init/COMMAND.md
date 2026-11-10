@@ -2,7 +2,7 @@
 name: init
 description: "Record durable product and growth truth in PRODUCT.md and GROWTH.md, so every later command starts from it"
 metadata:
-  version: 1.0.0
+  version: 1.1.0
 ---
 
 # init
@@ -50,8 +50,11 @@ tiers. Is Team the plan you most want to sell?").
 Start with the gaps that change the most decisions:
 
 1. Who buys and who uses, in what situation, and what job they do.
-2. The growth goal for the next 90 days, and the one metric that shows it.
-3. What has worked and what has not, by channel.
+2. The funnel: how a stranger becomes a paying, retained customer, the event that marks each
+   stage, and where most people stop. Use the funnel questions in the
+   [growth doctrine](../../references/growth-doctrine.md).
+3. The growth goal for the next 90 days, and the one metric that shows it.
+4. What has worked and what has not, by channel.
 
 Add a round only for a material gap: voice samples, budget, compliance, approvals, or proof.
 Write after one real answer round. If no one answers after one probe, write only what the
@@ -111,11 +114,22 @@ Growth truth. Copy the schema comment exactly.
 
 <!-- conquistador:growth-schema 1 -->
 
+## Funnel
+Motion: [product-led, sales-led, hybrid, transactional, consumer subscription, marketplace, or audience-led, plus the conversion model]
+Period: [The period and cohort every rate uses]
+
+| Stage | Event that marks it | Now | Source | Target |
+|---|---|---|---|---|
+| [Stage] | [Event] | [Rate, or Open] | [Source of the number] | [Target, or Open] |
+
+Bottleneck: [The stage that loses the most downstream value, or Open]
+- Open: [Stages with no measured rate]
+
 ## Goals and Metrics
 [The goal for the next 90 days, the one metric that shows it, its current value and source, and the target.]
 
 ## Audience and Segments
-[Segments in priority order: who, the trigger that makes them look, and where they are reachable.]
+[Segments in priority order: who, the trigger that makes them look, their awareness stage and core desire, and where they are reachable.]
 
 ## Channels
 ### What has worked

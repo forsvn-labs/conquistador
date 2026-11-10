@@ -8,7 +8,7 @@
 // 4. The shared layer grows instead of shrinking for copy, outreach, or social requests.
 // 5. The Vietnamese standard or the editorial-polish specialists lose rules they depend on.
 // 6. Damaged search-and-replace text survives in the shared layer.
-// 7. The playbook keeps the reversed awareness ladder or the fake-account channel.
+// 7. The growth doctrine keeps the reversed awareness ladder or the fake-account channel.
 // 8. Shared text gives results for real companies or names a detector product.
 // 9. The parent skill loses the job markers, hook commands, or command links that tools depend on.
 import { test } from 'node:test';
@@ -164,8 +164,8 @@ test('the shared layer has no damaged replacement text or real-company examples'
   }
 });
 
-test('the playbook has the awareness ladder in order and no fake-account channel', () => {
-  const playbook = read('references/playbook.md');
+test('the growth doctrine has the awareness ladder in order and no fake-account channel', () => {
+  const playbook = read('references/growth-doctrine.md');
   assert.doesNotMatch(playbook, /mass accounts/i);
   const order = ['Unaware', 'Problem aware', 'Solution aware', 'Product aware', 'Most aware'].map(stage => playbook.indexOf(stage));
   assert.ok(order.every(index => index >= 0), 'every stage is named');
