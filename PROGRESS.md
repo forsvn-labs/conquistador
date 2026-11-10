@@ -2,23 +2,23 @@
 
 Updated: 2026-11-10 · Stage: live · Health: At risk
 
-The latest package release is 0.12.3 (2026-11-06); [CHANGELOG.md](CHANGELOG.md) holds the
-release history. Paired-package registry evidence is recorded for 0.12.0. Hosted MCP was last
-verified at 0.10.1 (2026-10-23). Acceptance gaps remain; migration rechecks neither.
+The latest package release is 0.13.0 (2026-11-10); [CHANGELOG.md](CHANGELOG.md) holds the
+release history. Hosted MCP was last verified at 0.10.1 (2026-10-23). Acceptance gaps remain; migration rechecks neither.
 
-Next action: release 0.13.0 with the growth doctrine and verify both npm packages; Hung reviews the draft migration PR; additional acceptance remains the next product work.
+Next action: test the growth doctrine on real tasks with blind comparisons; Hung reviews the draft migration PR; additional acceptance remains the next product work.
 
 ## Current state
 
 | State | Item | Evidence | Date |
 | --- | --- | --- | --- |
+| Shipped | Package 0.13.0: the funnel-first growth doctrine. `init` asks how customers convert and records the funnel first; growth work names the stage and metric it moves | Recorded: Both `@forsvn/conquistador@0.13.0` and `conquistador@0.13.0` are verified as npm latest. [Release](https://github.com/forsvn-labs/conquistador/releases/tag/v0.13.0), [registry evidence](docs/release-0.13.0-verification.json); no model-quality evaluation yet | 2026-11-10 |
 | Shipped | Package 0.12.0, including distillation, routing, channel facts, and checker changes | Recorded: Both `@forsvn/conquistador@0.12.0` and `conquistador@0.12.0` are verified as npm latest. [Release](https://github.com/forsvn-labs/conquistador/releases/tag/v0.12.0), [registry evidence](docs/release-0.12.0-verification.json) | 2026-10-29 |
 | Shipped | Thin guidance across package surfaces, 0.11.0 | [Release](https://github.com/forsvn-labs/conquistador/releases/tag/v0.11.0), [registry evidence](docs/release-0.11.0-verification.json) | 2026-10-27 |
 | Shipped | Four-step installer, 0.10.2 | [Release](https://github.com/forsvn-labs/conquistador/releases/tag/v0.10.2), [registry evidence](docs/release-0.10.2-verification.json) | 2026-10-23 |
 | Shipped | Hosted MCP 0.10.1, existing-account Executor routing | [Hosted evidence](docs/hosted-0.10.1-verification.json) | 2026-10-23 |
-| Ready to ship (0.13.0) | Growth doctrine: growth work is tied to the customer funnel. `init` now asks how customers convert and records the funnel first in GROWTH.md | [PR #119](https://github.com/forsvn-labs/conquistador/pull/119); teaching page draft 0.1 in Drive Knowledge/doctrine; independent model review applied; Hung approved shipping 2026-11-10; no model-quality evaluation yet | 2026-11-10 |
 | Built, not shipped | Project-record migration draft | Branch claude/horsemen-records-20261101; Hung reviews the draft PR | 2026-11-01 |
 | Next | Additional native-client, OAuth, ARM, and linked-provider acceptance | [Installation acceptance](docs/INSTALLATION-ACCEPTANCE.md); extend claims only after observed checks | 2026-10-29 |
+| Next | Growth doctrine on real tasks: blind comparisons of strategy deliverables with and without it | [Doctrine](skills/conquistador/references/growth-doctrine.md); parent skill body 6,495 of 6,500 bytes and required standards 4,589 of 4,600, so deeper wiring needs room first | 2026-11-10 |
 | Next | Real-task evaluations and corrections across methods | [Public-alpha checklist](docs/PUBLIC-ALPHA.md) | 2026-10-29 |
 | Next | Human blind tests for distilled craft candidates | [Distillation workflow](docs/DISTILL.md); no craft change before verdicts | 2026-10-29 |
 | Next | Routing-contract headroom before the next routing change | [Recorded snapshot](docs/progress-log.md); 24 bytes below its 90% safety budget | 2026-10-29 |
@@ -38,6 +38,9 @@ Next action: release 0.13.0 with the growth doctrine and verify both npm package
 
 ## 2026-11-10
 
+- Shipped 0.13.0 at `682d6a9`: both npm packages are verified as latest, with matching release bytes
+  and provenance. The CLI-alias job was rerun once after npm made the main version readable.
+  Hosted MCP was not redeployed. [Release](https://github.com/forsvn-labs/conquistador/releases/tag/v0.13.0).
 - Drafted the funnel-first growth doctrine as a teaching page and as agent guidance.
   The old business playbook, which no command loaded, became `references/growth-doctrine.md`;
   GROWTH.md now leads with a Funnel section. Root tests: 637 of 638 pass, 0 fail, in [PR #119](https://github.com/forsvn-labs/conquistador/pull/119). The parent skill body

@@ -6,6 +6,7 @@ distinguishes product versions from method versions.
 
 | Date | Release | Delivered change |
 | --- | --- | --- |
+| 2026-11-10 | [0.13.0](https://github.com/forsvn-labs/conquistador/releases/tag/v0.13.0) | The funnel-first growth doctrine. `init` records a Funnel section first in GROWTH.md, growth work names the funnel stage and metric it moves, strategy briefs name the doctrine for MCP, CLI, and app clients, and VISION is rewritten as the manifesto. Both npm packages verified as latest with matching release bytes and provenance. [PR #119](https://github.com/forsvn-labs/conquistador/pull/119), `682d6a9`. |
 | 2026-11-06 | [0.12.3](https://github.com/forsvn-labs/conquistador/releases/tag/v0.12.3) | The parent skill became the entry point for every included command, workflow, and installation-management task; natural documentation revisions select docs first. npm publish recorded 2026-11-06. [PR #118](https://github.com/forsvn-labs/conquistador/pull/118), `93da6ed`. |
 | 2026-11-06 | [0.12.2](https://github.com/forsvn-labs/conquistador/releases/tag/v0.12.2) | Visual-first documentation: real screenshots, short recordings, and Pele diagrams for flows. CI was skipped at the owner's request. [PR #117](https://github.com/forsvn-labs/conquistador/pull/117), `71a6860`. |
 | 2026-11-06 | [0.12.1](https://github.com/forsvn-labs/conquistador/releases/tag/v0.12.1) | Reader-first documentation, local Mermaid rendering with Pele, and less default context. [PR #116](https://github.com/forsvn-labs/conquistador/pull/116), `8881f49`. |

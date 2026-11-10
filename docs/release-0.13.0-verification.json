@@ -1,0 +1,81 @@
+{
+  "verifiedAt": "2026-11-10T09:29:17Z",
+  "sourceCommit": "682d6a9240cbc8606f5bf9761e6404003930c1d0",
+  "release": "https://github.com/forsvn-labs/conquistador/releases/tag/v0.13.0",
+  "publicationRun": "https://github.com/forsvn-labs/conquistador/actions/runs/42790003927",
+  "publicationRetry": {
+    "job": "publish-cli",
+    "reason": "npm accepted the main package before version 0.13.0 was readable from the registry; the job was rerun (attempt 2) after it became readable"
+  },
+  "releaseAssets": {
+    "count": 7,
+    "verifiedArchiveChecksums": {
+      "conquistador-0.13.0.zip": "6c3a07e0d2693e17a0c56a908e5574d90cc7c826f262e92dd23556c523b45dd0",
+      "forsvn-conquistador-0.13.0.tgz": "a791921beeb65918b410c3ac43f8584133dd40f23a9b12de92dc2b7046877012",
+      "conquistador-0.13.0.tgz": "556cae8e837b0f2bc535b70bed14f9b54382120ee31d0fefb921ec8474aa9228",
+      "conquistador-skill-0.13.0.zip": "0b675c92de845d319c2f39b40e66583fd0cd9e4c207226abad09f723ea7539e6",
+      "conquistador-plugin-0.13.0.zip": "9b12e83045bcc8212e432a1c506fa566c8e0af123a464cb9983d117e6fea47fc"
+    },
+    "assemblyNamesSourceCommit": true,
+    "note": "Packaged from a clean clone at tag v0.13.0; shasum -c SHA256SUMS passed for the five archives."
+  },
+  "checks": [
+    {
+      "name": "@forsvn/conquistador",
+      "version": "0.13.0",
+      "latest": "0.13.0",
+      "sha256": "a791921beeb65918b410c3ac43f8584133dd40f23a9b12de92dc2b7046877012",
+      "integrity": "sha512-fA3VXfEUCU/R91UXk1AE4ascMB5m4cxt8fLwbIF7JbICAff0HhrCUubNHLxOF9wzHy1fUMsmp1735NIPnwT8EQ==",
+      "integrityMatchesReleaseAsset": true,
+      "provenancePredicate": "https://slsa.dev/provenance/v1",
+      "exactAliasPin": null
+    },
+    {
+      "name": "conquistador",
+      "version": "0.13.0",
+      "latest": "0.13.0",
+      "sha256": "556cae8e837b0f2bc535b70bed14f9b54382120ee31d0fefb921ec8474aa9228",
+      "integrity": "sha512-A3DUjp+Gl59elXVyn3th86Gdn4UPsqg3YwE0L09bc/pVkj4i5u0BD/lkzdYf68WUvKuZPeY+wLg9rg6Oi7mrhA==",
+      "integrityMatchesReleaseAsset": true,
+      "provenancePredicate": "https://slsa.dev/provenance/v1",
+      "exactAliasPin": "0.13.0"
+    }
+  ],
+  "installedSmoke": {
+    "mode": "fresh npm registry installation of conquistador@0.13.0 in an isolated home",
+    "checks": [
+      {
+        "name": "short alias resolves @forsvn/conquistador 0.13.0",
+        "passed": true
+      },
+      {
+        "name": "installed CLI reports 0.13.0",
+        "passed": true
+      },
+      {
+        "name": "installed context standard ties growth work to the funnel",
+        "passed": true
+      },
+      {
+        "name": "installed package contains references/growth-doctrine.md",
+        "passed": true
+      },
+      {
+        "name": "installed diagnose brief names the doctrine and states the funnel rule",
+        "passed": true
+      }
+    ]
+  },
+  "candidateChecks": {
+    "sourceCommit": "f010665",
+    "prChecks": "12 of 12 passed on PR #119",
+    "productTestsPassed": 638,
+    "productTestsSkipped": 1,
+    "runtimeCatalogEvals": "passed"
+  },
+  "limits": [
+    "Hosted MCP was not redeployed.",
+    "No model-quality or real-task evaluation of the doctrine was run.",
+    "npm audit signatures was not run."
+  ]
+}
