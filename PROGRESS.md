@@ -15,7 +15,7 @@ Next action: Hung reviews the growth doctrine draft (page and PR) and the draft 
 | Shipped | Thin guidance across package surfaces, 0.11.0 | [Release](https://github.com/forsvn-labs/conquistador/releases/tag/v0.11.0), [registry evidence](docs/release-0.11.0-verification.json) | 2026-10-27 |
 | Shipped | Four-step installer, 0.10.2 | [Release](https://github.com/forsvn-labs/conquistador/releases/tag/v0.10.2), [registry evidence](docs/release-0.10.2-verification.json) | 2026-10-23 |
 | Shipped | Hosted MCP 0.10.1, existing-account Executor routing | [Hosted evidence](docs/hosted-0.10.1-verification.json) | 2026-10-23 |
-| Built, not shipped | Growth doctrine: every growth task starts from the customer funnel. `init` now asks how customers convert and records the funnel first in GROWTH.md | Branch feat/growth-doctrine-spine; teaching page draft 0.1 in Drive Knowledge/doctrine; items marked proposed need Hung's verdict; no model-quality evaluation yet | 2026-11-10 |
+| Built, not shipped | Growth doctrine: every growth task starts from the customer funnel. `init` now asks how customers convert and records the funnel first in GROWTH.md | [PR #119](https://github.com/forsvn-labs/conquistador/pull/119); teaching page draft 0.1 in Drive Knowledge/doctrine; items marked proposed need Hung's verdict; no model-quality evaluation yet | 2026-11-10 |
 | Built, not shipped | Project-record migration draft | Branch claude/horsemen-records-20261101; Hung reviews the draft PR | 2026-11-01 |
 | Next | Additional native-client, OAuth, ARM, and linked-provider acceptance | [Installation acceptance](docs/INSTALLATION-ACCEPTANCE.md); extend claims only after observed checks | 2026-10-29 |
 | Next | Real-task evaluations and corrections across methods | [Public-alpha checklist](docs/PUBLIC-ALPHA.md) | 2026-10-29 |
@@ -39,7 +39,7 @@ Next action: Hung reviews the growth doctrine draft (page and PR) and the draft 
 
 - Drafted the funnel-first growth doctrine as a teaching page and as agent guidance.
   The old business playbook, which no command loaded, became `references/growth-doctrine.md`;
-  GROWTH.md now leads with a Funnel section. Root tests: see the PR. The parent skill body
+  GROWTH.md now leads with a Funnel section. Root tests: 637 of 638 pass, 0 fail, in [PR #119](https://github.com/forsvn-labs/conquistador/pull/119). The parent skill body
   is 6,498 of 6,500 bytes and the required standards 4,595 of 4,600, so deeper wiring needs room first.
 
 ## 2026-11-01
