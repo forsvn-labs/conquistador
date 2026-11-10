@@ -5,7 +5,7 @@ Updated: 2026-11-10 · Stage: live · Health: At risk
 The latest recorded package release is 0.12.0 (2026-10-29). Hosted MCP was last
 verified at 0.10.1 (2026-10-23). Acceptance gaps remain; migration rechecks neither.
 
-Next action: Hung reviews the growth doctrine draft (page and PR) and the draft migration PR; additional acceptance remains the next product work.
+Next action: release 0.13.0 with the growth doctrine and verify both npm packages; Hung reviews the draft migration PR; additional acceptance remains the next product work.
 
 ## Current state
 
@@ -15,7 +15,7 @@ Next action: Hung reviews the growth doctrine draft (page and PR) and the draft 
 | Shipped | Thin guidance across package surfaces, 0.11.0 | [Release](https://github.com/forsvn-labs/conquistador/releases/tag/v0.11.0), [registry evidence](docs/release-0.11.0-verification.json) | 2026-10-27 |
 | Shipped | Four-step installer, 0.10.2 | [Release](https://github.com/forsvn-labs/conquistador/releases/tag/v0.10.2), [registry evidence](docs/release-0.10.2-verification.json) | 2026-10-23 |
 | Shipped | Hosted MCP 0.10.1, existing-account Executor routing | [Hosted evidence](docs/hosted-0.10.1-verification.json) | 2026-10-23 |
-| Built, not shipped | Growth doctrine: every growth task starts from the customer funnel. `init` now asks how customers convert and records the funnel first in GROWTH.md | [PR #119](https://github.com/forsvn-labs/conquistador/pull/119); teaching page draft 0.1 in Drive Knowledge/doctrine; items marked proposed need Hung's verdict; no model-quality evaluation yet | 2026-11-10 |
+| Ready to ship (0.13.0) | Growth doctrine: growth work is tied to the customer funnel. `init` now asks how customers convert and records the funnel first in GROWTH.md | [PR #119](https://github.com/forsvn-labs/conquistador/pull/119); teaching page draft 0.1 in Drive Knowledge/doctrine; independent model review applied; Hung approved shipping 2026-11-10; no model-quality evaluation yet | 2026-11-10 |
 | Built, not shipped | Project-record migration draft | Branch claude/horsemen-records-20261101; Hung reviews the draft PR | 2026-11-01 |
 | Next | Additional native-client, OAuth, ARM, and linked-provider acceptance | [Installation acceptance](docs/INSTALLATION-ACCEPTANCE.md); extend claims only after observed checks | 2026-10-29 |
 | Next | Real-task evaluations and corrections across methods | [Public-alpha checklist](docs/PUBLIC-ALPHA.md) | 2026-10-29 |

@@ -9,7 +9,10 @@
 // 5. init never records the funnel: the GROWTH.md template has no Funnel section with the motion,
 //    stage table, bottleneck, and open gaps, or the interview never asks how a customer converts.
 // 6. The Funnel section changes the GROWTH.md schema marker, so existing files read as stale.
-// 7. The context standard does not tell commands that GROWTH.md holds the funnel.
+// 7. The always-read context standard does not tie growth work to the funnel, so thin routes
+//    that load no doctrine never see the rule.
+// 8. The doctrine forces false certainty: a bottleneck by rate alone, a single proven cause, a
+//    numeric forecast, or questions that never stop.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
@@ -26,8 +29,7 @@ const doctrinePath = 'references/growth-doctrine.md';
 test('the parent skill links the growth doctrine and the file exists', () => {
   assert.ok(existsSync(join(parent, doctrinePath)), doctrinePath);
   assert.ok(!existsSync(join(parent, 'references/playbook.md')), 'the old playbook is replaced, not kept beside the doctrine');
-  assert.match(read('SKILL.md'), /\]\(references\/growth-doctrine\.md\)/);
-  assert.match(read('SKILL.md'), /funnel/i);
+  assert.match(read('SKILL.md'), /strategy, plans, or diagnosis, read the \[growth doctrine\]\(references\/growth-doctrine\.md\)/);
 });
 
 test('the doctrine fits in one brief with room for the command', () => {
@@ -42,12 +44,16 @@ test('the doctrine keeps its core rules', () => {
     'funnel first': /## 1\. Funnel first[\s\S]*GROWTH\.md/,
     'name the stage': /funnel stage, the awareness stage,\s+the metric/,
     'narrowest stage': /bottleneck/i,
-    'retention before reach': /retention before you scale reach/i,
+    'retention before reach': /Check retention before large acquisition spend/,
+    'bottleneck weighs volume': /volume, the size of its gap, your confidence, and\s+the cost/,
+    'graded hypotheses': /supported, rejected, or\s+unresolved/,
+    'no forced forecast': /labeled hypothesis or `Open`/,
+    'bounded questions': /Ask only those whose answers change the task/,
     '40/40/20': /40% from the audience, 40% from the offer, and 20% from the copy/,
     'diagnosis order': /audience first, the offer second, and the copy last/,
     'big problem, small way': /big problem in a small way, not a small problem in a big way/,
     'root-cause steps': /root cause[\s\S]*hypotheses[\s\S]*data[\s\S]*analyze/i,
-    'ICE loop': /Impact, Confidence, and Ease/,
+    'ICE loop': /Impact, Confidence, and Ease[\s\S]*rank by the total/,
     'expected result before test': /baseline, expected lift/,
     'two lenses': /at\s+least two lenses/,
     'no invented numbers': /Never invent a rate, benchmark,\s+or result/,
@@ -69,13 +75,16 @@ test('init records the funnel in GROWTH.md and asks how customers convert', () =
   const template = init.slice(init.indexOf('## 5. Write GROWTH.md'), init.indexOf('## 6.'));
   assert.ok(template.includes(GROWTH_MARKER), 'schema marker unchanged');
   assert.match(template, /^## Funnel$/m);
-  for (const field of ['Motion:', '| Stage |', 'Bottleneck:', 'Open:']) assert.ok(template.includes(field), field);
+  for (const field of ['Motion:', 'Period:', '| Stage |', 'Bottleneck:', 'Open:']) assert.ok(template.includes(field), field);
   assert.ok(template.indexOf('## Funnel') < template.indexOf('## Goals and Metrics'), 'the funnel leads the growth record');
   const interview = init.slice(init.indexOf('## 3. Interview'), init.indexOf('## 4.'));
   assert.match(interview, /funnel/i);
   assert.match(interview, /growth-doctrine\.md/);
 });
 
-test('the context standard says GROWTH.md holds the funnel', () => {
-  assert.match(read('standards/context.md'), /`GROWTH\.md` \| Growth truth: funnel/);
+test('the always-read context standard ties growth work to the funnel', () => {
+  const context = read('standards/context.md');
+  assert.match(context, /`GROWTH\.md` \| Growth truth: funnel/);
+  assert.match(context, /Tie growth work to the funnel stage and metric it moves/);
+  assert.match(context, /Ask only for a missing fact or\s+`Open` entry that changes this task/);
 });

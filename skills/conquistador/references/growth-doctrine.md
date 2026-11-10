@@ -25,12 +25,13 @@ lead, qualified, meeting, proposal, close). Revenue follows: pay, expand, renew.
 | Marketplace | Needs supply and demand | supply joins, supply active, demand visits, match, transaction | Searches with no match |
 | Audience-led | Attention is the product | reach, follow, owned-list sign-up, engage, buy | Rented followers never reach an owned list |
 
-Price decides the motion. As a rule of thumb, yearly value per customer under about $1,000 sells
-self-serve; $1,000 to $15,000 sells hybrid; above that sells through people. Check it against how
-the buyers actually buy. Conversion models: free plan or freemium (pays at a limit), free trial
+Price, buying complexity, the number of people who decide, and the cost to serve shape the
+motion. A low yearly value rarely pays for a sales call; a high value with several deciders rarely
+closes self-serve. Check the guess against how the buyers actually buy. Conversion models: free plan or freemium (pays at a limit), free trial
 (pays when time ends), hard paywall (pays before full value), one-time purchase, demo and contract.
 
-Questions that find the funnel. Ask until each answer is a fact, a number, or a named gap:
+Questions that find the funnel. Ask only those whose answers change the task; record the rest
+as `Open`:
 
 1. Who pays, and who uses? Are they the same person?
 2. What does one customer pay, how often, and how (card, invoice, contract)?
@@ -45,15 +46,17 @@ Questions that find the funnel. Ask until each answer is a fact, a number, or a 
 ## 2. Name the stage
 
 For a plan, strategy, campaign, brief, or experiment, state the funnel stage, the awareness stage,
-the metric, and the expected effect. Put it where the format allows: a header, a plan table, or a
-note. Keep it out of ready-to-publish copy. Skip it for small edits.
+the metric, and the expected effect. The expected effect can be a labeled hypothesis or `Open`,
+never a made-up number. Put it where the format allows: a header, a plan table, or a note. Keep it out of ready-to-publish copy. Skip it for small edits.
 
 ## 3. Fix the narrowest stage
 
-The bottleneck is the stage whose gap to target, times downstream value, is largest. Score ideas
-against it. Fix retention before you scale reach: when most new users leave in the first weeks,
-more reach buys more churn. A quick check is the share of active users who would be very
-disappointed without the product; under 40% says work on product and activation first.
+The bottleneck is the stage where a realistic improvement adds the most downstream customers or
+revenue over the same period. Weigh the stage's volume, the size of its gap, your confidence, and
+the cost to fix it. Compare rates from the same period and cohort. Score ideas against the
+bottleneck. Check retention before large acquisition spend: when most new users leave in the
+first weeks, more reach buys more churn. When fewer than about 40% of active users would be very
+disappointed without the product, treat it as a warning and diagnose why before you scale reach.
 
 ## 4. Aim the product
 
@@ -63,15 +66,16 @@ market has money and attention already flowing to the problem, search demand, a 
 in one sentence, people who say "did you hear about this?", buyers you can reach, and optionally
 recurring revenue.
 
-Name the core desire, one of the seven deadly motivators: pride (status), greed (gain), sloth
-(ease), envy (comparison), wrath (anger at the status quo), lust (desire), gluttony (abundance).
-Business buyers have the same desires at work. Fear of loss, risk, or blame often decides a
-business purchase; pair it with one desire.
+Use the seven deadly motivators as a lens to name the core desire: pride (status), greed (gain),
+sloth (ease), envy (comparison), wrath (anger at the status quo), lust (desire), gluttony
+(abundance). Business buyers have the same desires at work. Fear of loss, risk, or blame often
+decides a business purchase. A real motive that fits no lens still counts.
 
 ## 5. Win attention
 
 Results come 40% from the audience, 40% from the offer, and 20% from the copy. Build in that order.
-When a campaign fails, check the audience first, the offer second, and the copy last.
+When a campaign fails, check the audience first, the offer second, and the copy last. When the
+evidence points elsewhere, follow the evidence.
 
 ### Awareness ladder
 
@@ -95,22 +99,25 @@ and a metric. Channel families: search and AI answers, content and earned media,
 social and creators, stores and listings, email and SMS, real-world events, partnerships, outbound,
 and in-product loops.
 
-For a large awareness campaign, use three acts. The Pledge shows the familiar problem. The Turn
+For a large awareness campaign, the three acts of a magic trick give an optional structure. The Pledge shows the familiar problem. The Turn
 shows something that breaks what the audience believed was possible. The Prestige reveals the
 product with proof and an offer, and leaves a story people retell.
 
 ## 6. Run the loop
 
-Solve a funnel problem in order: define it as a measurable gap; list every possible root cause by
-stage, segment, channel, product, and time; write falsifiable hypotheses; name the data that
-proves or disproves each; analyze; then act on the surviving cause.
+Solve a funnel problem in order: define it as a measurable gap; list the plausible root causes by
+stage, segment, channel, product, and time, most likely first; write falsifiable hypotheses; name
+the data that supports or rejects each; analyze, and mark each hypothesis supported, rejected, or
+unresolved. More than one cause can hold. Act on the supported causes, and design the next test to
+separate the unresolved ones.
 
 Grow in a loop: generate ideas, each with its stage; score Impact, Confidence, and Ease from 1 to
-10 and rank by the average; write the baseline, expected lift, sample, end date, and decision rule;
+10 and rank by the total; write the baseline, expected lift (a labeled hypothesis or `Open`),
+sample, end date, and decision rule;
 run the smallest test; keep, kill, or iterate; make winners standard work.
 
-Attribute every asset: give it a stage and a tracking tag before it ships. Judge a channel with at
-least two lenses before you cut or scale it: click tracking, a self-reported "how did you hear
+Attribute every asset: give it a stage, and a tracking tag where tracking is possible, before it
+ships. When feasible, judge a channel with at least two lenses before you cut or scale it: click tracking, a self-reported "how did you hear
 about us?", an incrementality test, or retention and revenue by source.
 
 Product-led growth sells through the engagement funnel, sales-led growth through the sales funnel,

@@ -2,7 +2,7 @@
 name: init
 description: "Record durable product and growth truth in PRODUCT.md and GROWTH.md, so every later command starts from it"
 metadata:
-  version: 1.0.0
+  version: 1.1.0
 ---
 
 # init
@@ -116,6 +116,7 @@ Growth truth. Copy the schema comment exactly.
 
 ## Funnel
 Motion: [product-led, sales-led, hybrid, transactional, consumer subscription, marketplace, or audience-led, plus the conversion model]
+Period: [The period and cohort every rate uses]
 
 | Stage | Event that marks it | Now | Source | Target |
 |---|---|---|---|---|

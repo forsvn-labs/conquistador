@@ -1,6 +1,6 @@
 {
   "schemaVersion": "conquistador.plugin-completeness/v1",
-  "version": "0.12.3",
+  "version": "0.13.0",
   "files": [
     {
       "path": ".agents/plugins/marketplace.json",
@@ -8,15 +8,15 @@
     },
     {
       "path": ".claude-plugin/marketplace.json",
-      "sha256": "a8ee6df7dc804e15aad6bc1c69b72d10758cdc339d3b2808255ddf1226195f3e"
+      "sha256": "e6b2b2c79d7b9602870dc4df5cf5039c1ab212f908de958f09ffbe6f32535b2a"
     },
     {
       "path": ".claude-plugin/plugin.json",
-      "sha256": "3aca34a6f57f89477a1be50f28338083699ffc7b45c7432a988e1dd123089f79"
+      "sha256": "ddb326599be19c40252658f8a1109e3b0627f387fc83b1d0535116a332379d91"
     },
     {
       "path": ".codex-plugin/plugin.json",
-      "sha256": "842bd9091b0384209bec9e657c94a483e9c5211a94ac25d2a95e8533d0df09e4"
+      "sha256": "e1a07f5cd0ed46c52259c0aebd44f32e6417f1cc37e8dcd5675faecdd794bf5f"
     },
     {
       "path": ".cursor-plugin/marketplace.json",
@@ -24,7 +24,7 @@
     },
     {
       "path": ".cursor-plugin/plugin.json",
-      "sha256": "ce14183338612d2f675d6e5002e2dc1eae910eb57b826f287e28c102e73a8382"
+      "sha256": "7c220f538df4e277de39e80f764ff6ebdb58eaf0b544d29d907cb36b6eb60f74"
     },
     {
       "path": "agents/conquistador.md",
@@ -84,15 +84,15 @@
     },
     {
       "path": "package.json",
-      "sha256": "4ffd6fd3a2c933c990d42e664dc67ee488b0bb1c21c9e79b3a7b36ea125dd041"
+      "sha256": "77f2852fee6249a04d589c532be067162e92300d272daf4fc971457c1e170ce5"
     },
     {
       "path": "plugin.json",
-      "sha256": "b09c9f238efce29318fa97643a83caebd427629379f1991696ce32e4df49dd26"
+      "sha256": "d252920ce93d7939f4957b00ab9c60ef2c9778c7c8b3fadbc56cb723b7bb93b0"
     },
     {
       "path": "README.md",
-      "sha256": "35c4802b1bfbbc03a0b3b553258bd79f9d475bf0a87df9596deb3ec6834079e0"
+      "sha256": "3aac6abca43975d121795707280cda222b94a2acca7742b8621959f1be6aee0a"
     },
     {
       "path": "SKILL.md",
@@ -2132,7 +2132,7 @@
     },
     {
       "path": "skills/conquistador/commands/init/COMMAND.md",
-      "sha256": "7d7712d5a359df16308b33cd93e123873e4bc9f7eb8e166303803510885c8caf"
+      "sha256": "c43404efc653081cea899555533857a810b32f69441a1ae7658026333934b09b"
     },
     {
       "path": "skills/conquistador/commands/init/ENTRY.md",
@@ -4752,7 +4752,7 @@
     },
     {
       "path": "skills/conquistador/references/growth-doctrine.md",
-      "sha256": "3dbd2751d43375932a47f2f5427cb2e4e5799fbba811b2e81bdb07366e9fbd94"
+      "sha256": "f123d24acfff1cd906f600707ca2d83376824abbd186eeeb828fa82df6a0f338"
     },
     {
       "path": "skills/conquistador/references/menu.md",
@@ -4924,7 +4924,7 @@
     },
     {
       "path": "skills/conquistador/SKILL.md",
-      "sha256": "c824d8d88de0b1083453abec04bffaf275c877a9d12b257e36a3980978c25a48"
+      "sha256": "ec3bb30e26aa4dc1a9addaa8beb272cf6cfb7f00bee3a7e8f850e1a2f76284f8"
     },
     {
       "path": "skills/conquistador/specialists/ads-agent.md",
@@ -4976,7 +4976,7 @@
     },
     {
       "path": "skills/conquistador/standards/context.md",
-      "sha256": "13ef758ecd02866dee1ec7f1fefed1351aa3bc5d5cd7beb79c115b28c40d3f48"
+      "sha256": "855c8004c58a22530a1a4a0cdee239fb77f526bbdc8ff4fdf212c60fabe8eac9"
     },
     {
       "path": "skills/conquistador/standards/engineering.md",
@@ -5096,7 +5096,7 @@
     },
     {
       "path": "tools/search-index.json",
-      "sha256": "b936a911510bb9ab86ff9ecc1281657b6eea00a76c1e6cb18a276ad1adbd09d1"
+      "sha256": "bd75ee25a4c990f93297fec2e10d42c13c39bb6c947fe25a8299748e532aa906"
     },
     {
       "path": "tools/skills-mcp.mjs",
