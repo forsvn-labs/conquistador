@@ -688,7 +688,7 @@
     },
     {
       "path": "skills/conquistador/commands/budget/ENTRY.md",
-      "sha256": "3161fac09513a9aff4275ee7028dc47ed4e369f8289df89e6a527bd9097f6326"
+      "sha256": "61e02c237e69c96e458502e35da2bbe6a70558f3b43ac2e735ca4c4f0dbbc8c0"
     },
     {
       "path": "skills/conquistador/commands/budget/fallbacks/sequential.md",
@@ -900,7 +900,7 @@
     },
     {
       "path": "skills/conquistador/commands/campaign/ENTRY.md",
-      "sha256": "4048e0de9ae34700676af5c836d35b96e92933f74153000fa7ef24621813acc9"
+      "sha256": "c6e392a3abd9a7250021011155b7bd9d955c3b4fb4c1236e51956b64eb7616ee"
     },
     {
       "path": "skills/conquistador/commands/campaign/fallbacks/sequential.md",
@@ -1056,7 +1056,7 @@
     },
     {
       "path": "skills/conquistador/commands/channels/ENTRY.md",
-      "sha256": "ac181bfbb7fb4540c60c12b977dec9cb982ab2365874b59cbdd1b8c7856989a5"
+      "sha256": "3bf022349ae3fee2753a57aefae4d93de8386a538afa7f9eff7424dab530a20a"
     },
     {
       "path": "skills/conquistador/commands/channels/fallbacks/sequential.md",
@@ -1648,7 +1648,7 @@
     },
     {
       "path": "skills/conquistador/commands/diagnose/ENTRY.md",
-      "sha256": "d25c3d5921290415c608b802c4998984f3efa004e1faa83d2704e5b745303a20"
+      "sha256": "41b65e4350a52dd3ea20d9bcbc217f8c33cae3ff536fe5c7a790c7af59fd4705"
     },
     {
       "path": "skills/conquistador/commands/diagnose/fallbacks/sequential.md",
@@ -1996,7 +1996,7 @@
     },
     {
       "path": "skills/conquistador/commands/funnel/ENTRY.md",
-      "sha256": "0fbcca9484269629957575ebb6bd058917aeb77fab72b8a55675c91892a1044f"
+      "sha256": "f6d5bae6f6e96cb54683d256504dcd684839b1445fcd18b052a9dd8638a4b2e8"
     },
     {
       "path": "skills/conquistador/commands/funnel/fallbacks/sequential.md",
@@ -2180,7 +2180,7 @@
     },
     {
       "path": "skills/conquistador/commands/measure/ENTRY.md",
-      "sha256": "3d82a1ccfbbc4471bc20cd51df057286fa13812d4c53ae58941b785ada6a7ad2"
+      "sha256": "7b7eb0b94b285f5498c602985c6c05cabcdb692ad1b4532509bbb2e9abb71c06"
     },
     {
       "path": "skills/conquistador/commands/measure/fallbacks/sequential.md",
@@ -2604,7 +2604,7 @@
     },
     {
       "path": "skills/conquistador/commands/position/ENTRY.md",
-      "sha256": "ef479c8af09a989f81d61a8864aa58ec8e5c3d9b449ddcfe5425b134e5a8995d"
+      "sha256": "1387b7dc26586f07536bbdedbb868983140cb79e18a0b8fb753574c227470e81"
     },
     {
       "path": "skills/conquistador/commands/position/fallbacks/sequential.md",
@@ -2764,7 +2764,7 @@
     },
     {
       "path": "skills/conquistador/commands/prioritize/ENTRY.md",
-      "sha256": "1e64a46652be24b3686fd99d7dddba15b7018270c763e1e66fae8f2bae102d07"
+      "sha256": "7587bf3b503e3d9897d14ce560ba9316f070f6ca0e78f30084272eeb2a076358"
     },
     {
       "path": "skills/conquistador/commands/prioritize/fallbacks/sequential.md",
@@ -3280,7 +3280,7 @@
     },
     {
       "path": "skills/conquistador/commands/shape/ENTRY.md",
-      "sha256": "fe22be608c7930961271ce4d45d6355a92aa487c2121e8f7d2326cdbf3ce4584"
+      "sha256": "40abbb7cc2437ce7696e790378b5165777233e45b996d0145488ce133bfe499e"
     },
     {
       "path": "skills/conquistador/commands/shape/fallbacks/sequential.md",
@@ -5016,7 +5016,7 @@
     },
     {
       "path": "tools/brief.mjs",
-      "sha256": "7887ac7dad9fc22d619610c01dec5ad652e7a6c244c96ce01a97b3460739c838"
+      "sha256": "fa04e89a534eaf74ecf93a5c16cedb45239646c976f8dc46399187f643d3c723"
     },
     {
       "path": "tools/check-receipt.mjs",

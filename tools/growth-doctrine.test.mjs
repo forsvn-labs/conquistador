@@ -88,3 +88,24 @@ test('the always-read context standard ties growth work to the funnel', () => {
   assert.match(context, /Tie growth work to the funnel stage and metric it moves/);
   assert.match(context, /Ask only for a missing fact or\s+`Open` entry that changes this task/);
 });
+
+// 9. Brief-only clients (MCP, CLI, app imports) never see the parent skill, so a strategy brief that
+//    does not name the doctrine leaves them without it; a thin entry that forbids every other file
+//    conflicts; inlining the doctrine would break the thin-route budget.
+const strategy = ['funnel', 'diagnose', 'prioritize', 'position', 'channels', 'budget', 'campaign', 'shape', 'measure'];
+test('strategy briefs name the doctrine and the funnel rule; their entries allow it', async () => {
+  const { createBrief, packBrief, formatReadingList } = await import('./brief.mjs');
+  for (const command of strategy) {
+    const brief = createBrief(`/conquistador ${command} for our B2B analytics product`, { cwd: root });
+    assert.equal(brief.methods[0]?.name, command, command);
+    for (const pack of [packBrief(brief), packBrief(brief, { compact: true })]) {
+      assert.ok(pack.text.includes(`skills/conquistador/${doctrinePath}`), `${command} pack names the doctrine`);
+      assert.match(pack.text, /Tie the work to the funnel stage and metric it moves/, `${command} pack states the rule`);
+      assert.doesNotMatch(pack.text, /## 1\. Funnel first/, `${command} pack stays thin`);
+    }
+    assert.ok(formatReadingList(brief).includes(doctrinePath), `${command} reading list names the doctrine`);
+    assert.match(read(`commands/${command}/ENTRY.md`), /except the growth\s+doctrine/, `${command} entry allows the doctrine`);
+  }
+  const copy = createBrief('/conquistador copy rewrite our pricing page headline', { cwd: root });
+  assert.ok(!packBrief(copy).text.includes(doctrinePath), 'creation briefs stay thin');
+});

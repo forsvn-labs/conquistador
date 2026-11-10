@@ -2,7 +2,8 @@
 
 Updated: 2026-11-10 · Stage: live · Health: At risk
 
-The latest recorded package release is 0.12.0 (2026-10-29). Hosted MCP was last
+The latest package release is 0.12.3 (2026-11-06); [CHANGELOG.md](CHANGELOG.md) holds the
+release history. Paired-package registry evidence is recorded for 0.12.0. Hosted MCP was last
 verified at 0.10.1 (2026-10-23). Acceptance gaps remain; migration rechecks neither.
 
 Next action: release 0.13.0 with the growth doctrine and verify both npm packages; Hung reviews the draft migration PR; additional acceptance remains the next product work.
