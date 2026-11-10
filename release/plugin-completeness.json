@@ -2132,7 +2132,7 @@
     },
     {
       "path": "skills/conquistador/commands/init/COMMAND.md",
-      "sha256": "4395acbe4dce9a0c84d224d3aa4804d935bcc0147528f4cd5c482434434644d2"
+      "sha256": "7d7712d5a359df16308b33cd93e123873e4bc9f7eb8e166303803510885c8caf"
     },
     {
       "path": "skills/conquistador/commands/init/ENTRY.md",
@@ -4751,12 +4751,12 @@
       "sha256": "8722831df1810570a52d7ecf65f0303862da50f409c908e0f39c96082fb940a4"
     },
     {
-      "path": "skills/conquistador/references/menu.md",
-      "sha256": "e24fe1b787fe989eb8e9105626f9e4075bf9d31038fdd12715d2bdb8694638cb"
+      "path": "skills/conquistador/references/growth-doctrine.md",
+      "sha256": "3dbd2751d43375932a47f2f5427cb2e4e5799fbba811b2e81bdb07366e9fbd94"
     },
     {
-      "path": "skills/conquistador/references/playbook.md",
-      "sha256": "8e955fead7da8c9ccaaf132e0a41607ecffc64bfe1aa103f7186e22b6190316c"
+      "path": "skills/conquistador/references/menu.md",
+      "sha256": "e24fe1b787fe989eb8e9105626f9e4075bf9d31038fdd12715d2bdb8694638cb"
     },
     {
       "path": "skills/conquistador/references/share-card-verification/references/anti-patterns.md",
@@ -4924,7 +4924,7 @@
     },
     {
       "path": "skills/conquistador/SKILL.md",
-      "sha256": "b25a9744a5b0b314daca37819b9994d9f74472f46a0858dec6841a48b16f6dca"
+      "sha256": "c824d8d88de0b1083453abec04bffaf275c877a9d12b257e36a3980978c25a48"
     },
     {
       "path": "skills/conquistador/specialists/ads-agent.md",
@@ -4976,7 +4976,7 @@
     },
     {
       "path": "skills/conquistador/standards/context.md",
-      "sha256": "c2e5f7dedac9366965b28fdd07a0da4096a3c7d06d4856e8b52c0d5c7202e708"
+      "sha256": "13ef758ecd02866dee1ec7f1fefed1351aa3bc5d5cd7beb79c115b28c40d3f48"
     },
     {
       "path": "skills/conquistador/standards/engineering.md",
@@ -5096,7 +5096,7 @@
     },
     {
       "path": "tools/search-index.json",
-      "sha256": "4c925b7fc9934788c8471ab0fa5e0eb06f52c31a2fbcbfb411e3498372e2b7a9"
+      "sha256": "b936a911510bb9ab86ff9ecc1281657b6eea00a76c1e6cb18a276ad1adbd09d1"
     },
     {
       "path": "tools/skills-mcp.mjs",

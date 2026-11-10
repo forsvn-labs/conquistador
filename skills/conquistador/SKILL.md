@@ -15,6 +15,7 @@ Core principles:
   lead with the reader's situation or the strongest fact, use specifics over adjectives, make one ask.
 - Follow the entry’s loading rules; load only the current method.
 - Preserve the customer’s brand and requested scope.
+- Tie growth work to a funnel stage and metric ([growth doctrine](references/growth-doctrine.md)).
 - Before delivery, check the work against [safety](standards/safety.md), and against
   [quality](standards/quality.md) for a method that keeps its craft.
   Never invent metrics, quotes, customers, or product capabilities.

@@ -43,7 +43,9 @@ context and change nothing. Every other route stays behind `help --all` and INST
 `/conquistador init` records durable product truth in `PRODUCT.md` (shared with Impeccable) and
 growth truth in `GROWTH.md`. Every command reads both through the brief, so the agent does not
 learn the product again on each task. Init asks only about real gaps and never overwrites a file
-that another tool wrote. A repository and connected accounts are not prerequisites for a first
+that another tool wrote. `GROWTH.md` leads with the funnel: the motion, each stage and the event
+that marks it, current rates with sources, and the bottleneck. Growth work names the funnel stage
+and metric it moves, following the parent's growth doctrine; a missing rate stays open. A repository and connected accounts are not prerequisites for a first
 draft.
 
 Relevant playbooks guide the requested result. One admission decision distinguishes unrelated work,

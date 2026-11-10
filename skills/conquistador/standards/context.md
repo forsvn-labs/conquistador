@@ -7,7 +7,7 @@ Every command starts from the project's durable context.
 | File | Holds | Written by |
 |---|---|---|
 | `PRODUCT.md` | Product truth: users, purpose, positioning, constraints, evidence on hand | `/conquistador init`, or Impeccable's `init` (same headings) |
-| `GROWTH.md` | Growth truth: goals and metrics, audience, channels, proof, voice, limits, stack | `/conquistador init` |
+| `GROWTH.md` | Growth truth: funnel, goals, audience, channels, proof, voice, limits, stack | `/conquistador init` |
 
 The files live at the project root. A child app can hold its own file; the file nearest to the
 working folder wins. The brief lists both files first; otherwise run `conquistador context --json`.
