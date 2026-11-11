@@ -17,6 +17,19 @@ Use for posts, threads, launch posts, and replies on X.
 - In July 2026 X's product lead said link posts no longer lose reach. Check your own data.
 - Use one hashtag or none.
 
+## Current plays (observed Nov 2026; review by Feb 2027)
+
+Seen in top posts of founders with verified results. Use one only when the facts support it.
+Never invent a figure.
+
+- **Receipts.** Open on one exact figure and its period. List its parts, then say what changes next.
+- **Ask with traction.** A hiring post or request opens on the number that shows momentum, then
+  the ask and the one requirement.
+- **Full method.** Give the whole method in one long post: steps in order, real settings. Do not
+  hold the last step back for a link.
+- **Bad news, live.** Say what broke, what you know and do not know, and when the next update
+  comes. Post again when it is fixed.
+
 ## Annotated pairs
 
 The people and products are synthetic. Nothing here was posted.
