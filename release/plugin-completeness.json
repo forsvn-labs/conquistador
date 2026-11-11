@@ -184,7 +184,7 @@
     },
     {
       "path": "skills/conquistador/channels/x.md",
-      "sha256": "43d039d6fe0131896777325b52e9627c1de4d8680aee34c4eeff2534d7f9e6f4"
+      "sha256": "abef26085ea53a3aefddf9d034deb555be0cfd7d056963cfabe538e2fbb993c4"
     },
     {
       "path": "skills/conquistador/channels/youtube.md",
@@ -5096,7 +5096,7 @@
     },
     {
       "path": "tools/search-index.json",
-      "sha256": "bd75ee25a4c990f93297fec2e10d42c13c39bb6c947fe25a8299748e532aa906"
+      "sha256": "bf3d91e5afa688a611136bcb80258d763a1a153687c3b79b72e36df64db8f26a"
     },
     {
       "path": "tools/skills-mcp.mjs",
