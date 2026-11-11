@@ -11,6 +11,7 @@ Next action: Hung judges the 8 sealed pairs for the X plays; test the growth doc
 
 | State | Item | Evidence | Date |
 | --- | --- | --- | --- |
+| Shipped | Freshness check for dated facts and plays, and the meta-watch workflow. Contributor tooling only; the npm package does not change, so no release | [PR #121](https://github.com/forsvn-labs/conquistador/pull/121), [workflow](docs/META-WATCH.md). The check finds 25 dated blocks and 1 overdue: the image-engine reference, verified June 2026. The weekly run fails until someone rechecks that block | 2026-11-11 |
 | Shipped | Package 0.13.0: the funnel-first growth doctrine. `init` asks how customers convert and records the funnel first; growth work names the stage and metric it moves | Recorded: Both `@forsvn/conquistador@0.13.0` and `conquistador@0.13.0` are verified as npm latest. [Release](https://github.com/forsvn-labs/conquistador/releases/tag/v0.13.0), [registry evidence](docs/release-0.13.0-verification.json); no model-quality evaluation yet | 2026-11-10 |
 | Shipped | Package 0.12.0, including distillation, routing, channel facts, and checker changes | Recorded: Both `@forsvn/conquistador@0.12.0` and `conquistador@0.12.0` are verified as npm latest. [Release](https://github.com/forsvn-labs/conquistador/releases/tag/v0.12.0), [registry evidence](docs/release-0.12.0-verification.json) | 2026-10-29 |
 | Shipped | Thin guidance across package surfaces, 0.11.0 | [Release](https://github.com/forsvn-labs/conquistador/releases/tag/v0.11.0), [registry evidence](docs/release-0.11.0-verification.json) | 2026-10-27 |
@@ -18,7 +19,6 @@ Next action: Hung judges the 8 sealed pairs for the X plays; test the growth doc
 | Shipped | Hosted MCP 0.10.1, existing-account Executor routing | [Hosted evidence](docs/hosted-0.10.1-verification.json) | 2026-10-23 |
 | Built, not shipped | Project-record migration draft | Branch claude/horsemen-records-20261101; Hung reviews the draft PR | 2026-11-01 |
 | Next | Additional native-client, OAuth, ARM, and linked-provider acceptance | [Installation acceptance](docs/INSTALLATION-ACCEPTANCE.md); extend claims only after observed checks | 2026-10-29 |
-| Built, not shipped | Freshness check for dated facts and plays, and the meta-watch workflow | Branch `feat/freshness-check`; [workflow](docs/META-WATCH.md). The check finds 25 dated blocks and 1 overdue: the image-engine reference, verified June 2026 | 2026-11-11 |
 | In progress | Meta-watch pilot on X: four candidate plays from 11 founder accounts (683 posts) wait for Hung's blind test | Branch `feat/x-plays-candidate`; 8 sealed pairs in the private knowledge folder. No play enters `main` before the verdict. Views measure reach, not customers | 2026-11-11 |
 | Next | Growth doctrine on real tasks: blind comparisons of strategy deliverables with and without it | [Doctrine](skills/conquistador/references/growth-doctrine.md); parent skill body 6,495 of 6,500 bytes and required standards 4,589 of 4,600, so deeper wiring needs room first | 2026-11-10 |
 | Next | Real-task evaluations and corrections across methods | [Public-alpha checklist](docs/PUBLIC-ALPHA.md) | 2026-10-29 |
