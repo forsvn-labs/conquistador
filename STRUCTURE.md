@@ -42,6 +42,7 @@ List tracked paths with `git ls-tree -r --name-only HEAD`.
 | `tools/prompt-advice.mjs`, `tools/read-evidence.mjs` | Shared hook advice, transcript-scoped reuse, and returned-resource byte verification |
 | `tools/launch.mjs`, `tools/installation-methods.mjs` | Reviewed installation plans and the four installation routes |
 | `tools/distill.mjs` | Contributor-only licensed-source distillation |
+| `tools/freshness.mjs` | Contributor-only review-date check for dated facts and plays |
 | `api/`, `mcp/`, `worker.mjs` | App imports reuse the MCP engine; local and hosted transports |
 | `SKILL.md`, `plugin.json`, `mcp.json`, `com.github.copilot/` | Authoring entry and host metadata; plugin overlays live in the hidden plugin folders |
 | `kit/`, `context7.json`, `package.json` | HTML review templates, documentation indexing, and package exports/scripts |
@@ -57,6 +58,7 @@ and `worker.mjs`. Commands: `npm run bootstrap`, `npm run build`, `npm test`,
 - [docs/INSTALLATION-ARCHITECTURE.md](docs/INSTALLATION-ARCHITECTURE.md) and
   [docs/INSTALLATION-ACCEPTANCE.md](docs/INSTALLATION-ACCEPTANCE.md) before setup or host changes.
 - [docs/DISTILL.md](docs/DISTILL.md) before distilling sources.
+- [docs/META-WATCH.md](docs/META-WATCH.md) before adding or updating dated facts and plays.
 
 Where new work goes:
 
