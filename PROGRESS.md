@@ -5,7 +5,7 @@ Updated: 2026-11-11 · Stage: live · Health: At risk
 The latest package release is 0.13.0 (2026-11-10); [CHANGELOG.md](CHANGELOG.md) holds the
 release history. Hosted MCP was last verified at 0.10.1 (2026-10-23). Acceptance gaps remain; migration rechecks neither.
 
-Next action: test the growth doctrine on real tasks with blind comparisons; Hung reviews the draft migration PR; additional acceptance remains the next product work.
+Next action: Hung judges the 8 sealed pairs for the X plays; test the growth doctrine on real tasks with blind comparisons; Hung reviews the draft migration PR; additional acceptance remains the next product work.
 
 ## Current state
 
@@ -19,7 +19,7 @@ Next action: test the growth doctrine on real tasks with blind comparisons; Hung
 | Built, not shipped | Project-record migration draft | Branch claude/horsemen-records-20261101; Hung reviews the draft PR | 2026-11-01 |
 | Next | Additional native-client, OAuth, ARM, and linked-provider acceptance | [Installation acceptance](docs/INSTALLATION-ACCEPTANCE.md); extend claims only after observed checks | 2026-10-29 |
 | Built, not shipped | Freshness check for dated facts and plays, and the meta-watch workflow | Branch `feat/freshness-check`; [workflow](docs/META-WATCH.md). The check finds 25 dated blocks and 1 overdue: the image-engine reference, verified June 2026 | 2026-11-11 |
-| Blocked | Meta-watch pilot on X: observe 10 operators with recent proof, then blind-test one candidate play | Three operators have payment-verified revenue. X shows 5 posts per profile without a login, so the observation needs Hung to log in to X in Chrome, or a paid data source | 2026-11-11 |
+| In progress | Meta-watch pilot on X: four candidate plays from 11 founder accounts (683 posts) wait for Hung's blind test | Branch `feat/x-plays-candidate`; 8 sealed pairs in the private knowledge folder. No play enters `main` before the verdict. Views measure reach, not customers | 2026-11-11 |
 | Next | Growth doctrine on real tasks: blind comparisons of strategy deliverables with and without it | [Doctrine](skills/conquistador/references/growth-doctrine.md); parent skill body 6,495 of 6,500 bytes and required standards 4,589 of 4,600, so deeper wiring needs room first | 2026-11-10 |
 | Next | Real-task evaluations and corrections across methods | [Public-alpha checklist](docs/PUBLIC-ALPHA.md) | 2026-10-29 |
 | Next | Human blind tests for distilled craft candidates | [Distillation workflow](docs/DISTILL.md); no craft change before verdicts | 2026-10-29 |
@@ -43,8 +43,9 @@ Next action: test the growth doctrine on real tasks with blind comparisons; Hung
 - Hung agreed to keep the methods current from operators with recent, verifiable results, in
   three layers: principles, dated plays, and dated platform facts. Built `tools/freshness.mjs`
   with 17 tests and a weekly workflow; root tests: 655 of 656 pass, 0 fail.
-- The pilot stopped at observation. Public articles on current practice were mostly vendor
-  marketing with unverified revenue, so they count as leads only. No method or doctrine text changed.
+- Public articles on current practice were mostly vendor marketing with unverified revenue, so
+  they count as leads only. The pilot read the posts of 11 founder accounts and wrote four
+  candidate plays for X. No method or doctrine text changed on `main`.
 
 ## 2026-11-10
 
