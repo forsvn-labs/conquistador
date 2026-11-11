@@ -89,6 +89,7 @@
     "!**/bun.lock",
     "!tools/dev.mjs",
     "!tools/distill.mjs",
+    "!tools/freshness.mjs",
     "!tools/knowledge-map.mjs",
     "!tools/method-copies.json",
     "!tools/method-copies.mjs",
