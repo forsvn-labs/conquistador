@@ -32,11 +32,11 @@
     },
     {
       "path": "assets/conquistador-icon.png",
-      "sha256": "e6771ff924d4a5070f6f0f754567575c640f2699613aeaac958c515938578ae6"
+      "sha256": "dffb96859354942db45b294b8c9ebaa6070e71c3f3c5a0ec2e466d7fc8e5d81b"
     },
     {
       "path": "assets/README.md",
-      "sha256": "f0df2d2bae1e887b5763016853e567e297f1590ed5aca9699196309b87c4c3f4"
+      "sha256": "23184ff01d07c9b1ca74ce6b87685c6601eda3808fbba0bbcd94177414c585bc"
     },
     {
       "path": "com.github.copilot/hooks/hooks.json",
