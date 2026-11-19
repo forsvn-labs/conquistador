@@ -266,7 +266,8 @@ export async function runLogout(args, { env = process.env, stdout = process.stdo
   }
   if (result.ok) {
     rmSync(tokenPath(env), { force: true });
-    stdout.write('Signed out. The server revoked the token and any named keys, and deleted your record.\n');
+    if (result.body.key) stdout.write(`Revoked the key "${result.body.key}". Your sign-in token and other keys still work.\n`);
+    else stdout.write('Signed out. The server revoked the token and any named keys, and deleted your record.\n');
     return 0;
   }
   if (result.status === 401) {

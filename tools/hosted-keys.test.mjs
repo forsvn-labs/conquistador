@@ -217,3 +217,56 @@ test('user records written before named keys existed keep working', async () => 
   assert.equal((await mcp(env, main)).status, 200);
   assert.deepEqual(await (await call(env, '/api/keys', { token: main })).json(), { keys: [] });
 });
+
+// A create request whose body arrives only after `release()`, to stage a race: another request
+// changes the user record while this one is still uploading its body.
+function slowCreate(env, token, name) {
+  let release;
+  const gate = new Promise(done => { release = done; });
+  const body = new ReadableStream({
+    async start(controller) {
+      await gate;
+      controller.enqueue(new TextEncoder().encode(JSON.stringify({ name })));
+      controller.close();
+    },
+  });
+  const response = worker.fetch(new Request('https://mcp.example/api/keys', { method: 'POST', headers: { 'content-type': 'application/json', authorization: `Bearer ${token}` }, body, duplex: 'half' }), env);
+  return { response, release };
+}
+const settle = () => new Promise(done => setTimeout(done, 10));
+
+test('a create request still uploading cannot bring back a record that logout deleted', async () => {
+  const { main, kv, env } = setup();
+  const slow = slowCreate(env, main, 'late');
+  await settle();
+  assert.equal((await call(env, '/api/logout', { method: 'POST', token: main })).status, 200);
+  slow.release();
+  const response = await slow.response;
+  assert.equal(response.status, 401);
+  assert.ok(!kv.data.has('user:7'), 'the user record stays deleted');
+  assert.deepEqual([...kv.data.keys()], [], 'no key record is left behind');
+});
+
+test('a create request still uploading cannot undo an account block', async () => {
+  const { main, kv, env } = setup();
+  const slow = slowCreate(env, main, 'late');
+  await settle();
+  const user = JSON.parse(kv.data.get('user:7'));
+  kv.data.set('user:7', JSON.stringify({ ...user, status: 'blocked' }));
+  slow.release();
+  assert.equal((await slow.response).status, 403);
+  assert.equal(JSON.parse(kv.data.get('user:7')).status, 'blocked');
+  assert.equal(JSON.parse(kv.data.get('user:7')).keys, undefined);
+});
+
+test('a create request still uploading cannot restore a sign-in token that a new sign-in replaced', async () => {
+  const { issueToken } = await import('./hosted-auth.mjs');
+  const { main, kv, env } = setup();
+  const slow = slowCreate(env, main, 'late');
+  await settle();
+  const issued = await issueToken(env, { githubId: 7, login: 'seven' });
+  slow.release();
+  assert.equal((await slow.response).status, 401);
+  assert.equal(JSON.parse(kv.data.get('user:7')).tokenHash, hashOf(issued.token));
+  assert.equal((await mcp(env, main)).status, 401);
+});

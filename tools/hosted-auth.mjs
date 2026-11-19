@@ -11,8 +11,11 @@
 //                         created, status: 'active' | 'blocked' }
 // A token is valid only when its user record points back at its hash (tokenHash for the sign-in
 // token, keys[name].hash for a named key), so a rotation or a revoke wins over a late "last used"
-// write, and two sign-ins at once leave one working token. Key changes rewrite the user record,
-// so two key changes at the same moment can lose one; the lost key is then refused, not trusted.
+// write, and two sign-ins at once leave one working token. Key changes reread the user record
+// just before they write, and change only its keys (freshUser), so a slow request cannot
+// recreate a deleted record, undo a block, or restore a replaced sign-in token. KV has no
+// transactions: two key changes at the same moment can still lose one, and the lost key is then
+// refused, not trusted.
 // KV is eventually consistent: another Cloudflare location can accept a replaced or revoked token
 // for up to 60 seconds.
 //
@@ -354,9 +357,12 @@ export async function handleAuthRoute(request, env, ctx) {
     const { user, key, hash } = identity;
     if (key) {
       // A named key revokes only itself.
-      const { [key]: _gone, ...keys } = user.keys;
-      await env.TOKENS.put(`user:${user.githubId}`, JSON.stringify({ ...user, keys }));
       await env.TOKENS.delete(`token:${hash}`);
+      const fresh = await freshUser(env, identity);
+      if (fresh) {
+        const { [key]: _gone, ...keys } = fresh.user.keys ?? {};
+        await env.TOKENS.put(`user:${user.githubId}`, JSON.stringify({ ...fresh.user, keys }));
+      }
       return json(200, { revoked: true, login: user.login, key });
     }
     // The sign-in token revokes everything: the user record, every named key, and itself.
@@ -369,6 +375,17 @@ export async function handleAuthRoute(request, env, ctx) {
   if (pathname === '/api/keys' || pathname.startsWith('/api/keys/')) return handleKeys(request, env, ctx, url);
 
   return json(404, { error: 'Unknown route. See /signup.' });
+}
+
+// Rereads the user record right before a key change. Returns { user } when the caller's token is
+// still the one the record names and the account is active, or { refusal } otherwise. Writers
+// spread the fresh record and change only `keys`, never status or tokenHash.
+async function freshUser(env, identity) {
+  const user = await env.TOKENS.get(`user:${identity.user.githubId}`, 'json');
+  const current = user && (identity.key ? user.keys?.[identity.key]?.hash === identity.hash : user.tokenHash === identity.hash);
+  if (!current) return { refusal: { status: 401, error: 'This token stopped being active during the request. No key was changed.' } };
+  if (user.status !== 'active') return { refusal: { status: 403, error: 'This GitHub account is blocked on this server. No key was changed.' } };
+  return { user };
 }
 
 // GET /api/keys lists the named keys, POST /api/keys { name } makes one, and
@@ -395,10 +412,13 @@ async function handleKeys(request, env, ctx, url) {
   }
 
   if (method === 'DELETE') {
-    if (!KEY_NAME.test(name) || !Object.hasOwn(keys, name)) return json(404, { error: `No key is named "${name}". List your keys with conquistador keys list.` });
-    const { [name]: gone, ...rest } = keys;
-    await env.TOKENS.put(`user:${user.githubId}`, JSON.stringify({ ...user, keys: rest }));
+    const fresh = await freshUser(env, identity);
+    if (fresh.refusal) return json(fresh.refusal.status, { error: fresh.refusal.error });
+    const current = fresh.user.keys ?? {};
+    if (!KEY_NAME.test(name) || !Object.hasOwn(current, name)) return json(404, { error: `No key is named "${name}". List your keys with conquistador keys list.` });
+    const { [name]: gone, ...rest } = current;
     await env.TOKENS.delete(`token:${gone.hash}`);
+    await env.TOKENS.put(`user:${user.githubId}`, JSON.stringify({ ...fresh.user, keys: rest }));
     return json(200, { revoked: true, name });
   }
 
@@ -408,12 +428,16 @@ async function handleKeys(request, env, ctx, url) {
   try { body = JSON.parse(text); } catch { return json(400, { error: 'Send JSON: {"name": "ci-bot"}.' }); }
   const wanted = body?.name;
   if (typeof wanted !== 'string' || !KEY_NAME.test(wanted)) return json(400, { error: 'A key name is 1 to 40 lowercase letters, digits, dashes, or underscores, and starts with a letter or digit.' });
-  if (Object.hasOwn(keys, wanted)) return json(409, { error: `A key named "${wanted}" exists. Revoke it first, or choose another name.` });
-  if (Object.keys(keys).length >= MAX_KEYS) return json(409, { error: `You have ${MAX_KEYS} keys, the most allowed. Revoke one first.` });
+  // The body upload can be slow, so check the record again after it, just before the write.
+  const fresh = await freshUser(env, identity);
+  if (fresh.refusal) return json(fresh.refusal.status, { error: fresh.refusal.error });
+  const current = fresh.user.keys ?? {};
+  if (Object.hasOwn(current, wanted)) return json(409, { error: `A key named "${wanted}" exists. Revoke it first, or choose another name.` });
+  if (Object.keys(current).length >= MAX_KEYS) return json(409, { error: `You have ${MAX_KEYS} keys, the most allowed. Revoke one first.` });
   const token = newToken();
   const hash = await hashToken(token);
   const created = new Date().toISOString();
   await env.TOKENS.put(`token:${hash}`, JSON.stringify({ githubId: user.githubId, name: wanted, created, lastUsed: null }), { expirationTtl: TOKEN_TTL });
-  await env.TOKENS.put(`user:${user.githubId}`, JSON.stringify({ ...user, keys: { ...keys, [wanted]: { hash, created } } }));
+  await env.TOKENS.put(`user:${user.githubId}`, JSON.stringify({ ...fresh.user, keys: { ...current, [wanted]: { hash, created } } }));
   return json(201, { token, name: wanted, created });
 }

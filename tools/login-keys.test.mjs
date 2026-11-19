@@ -22,7 +22,7 @@ function harness({ token = SIGN_IN, reply = () => ({ status: 200, body: {} }) } 
     return new Response(JSON.stringify(body), { status, headers: { 'content-type': 'application/json' } });
   };
   const run = args => runKeys(args, { env: { CONQUISTADOR_HOME: home, CONQUISTADOR_MCP_URL: 'https://mcp.example' }, stdout: out, stderr: err, fetch });
-  return { run, requests, out, err, cleanup: () => rmSync(home, { recursive: true, force: true }) };
+  return { home, run, requests, out, err, cleanup: () => rmSync(home, { recursive: true, force: true }) };
 }
 
 test('keys create sends the name with the saved sign-in token and prints the new key once', async t => {
@@ -98,8 +98,11 @@ test('keys reports the server error and fails', async t => {
 test('keys fails cleanly when the server cannot be reached', async t => {
   const h = harness();
   t.after(h.cleanup);
-  const code = await runKeys(['list'], { env: { CONQUISTADOR_HOME: mkdtempSync(join(tmpdir(), 'cq-keys-')), CONQUISTADOR_MCP_URL: 'https://mcp.example' }, stdout: h.out, stderr: h.err, fetch: async () => { throw new TypeError('offline'); } });
+  let called = false;
+  const code = await runKeys(['list'], { env: { CONQUISTADOR_HOME: h.home, CONQUISTADOR_MCP_URL: 'https://mcp.example' }, stdout: h.out, stderr: h.err, fetch: async () => { called = true; throw new TypeError('offline'); } });
   assert.equal(code, 1);
+  assert.equal(called, true, 'the request was attempted');
+  assert.match(h.err.text, /Could not reach/);
 });
 
 test('keys rejects a missing name, an unknown action, or an unknown option before any request', async t => {
@@ -118,4 +121,22 @@ test('keys --help prints usage and succeeds', async t => {
   t.after(h.cleanup);
   assert.equal(await h.run(['--help']), 0);
   assert.match(h.out.text, /conquistador keys create <name>/);
+});
+
+test('logout with a named key says only that key was revoked', async t => {
+  const { runLogout } = await import('./login.mjs');
+  const h = harness({ token: NAMED });
+  t.after(h.cleanup);
+  const code = await runLogout([], { env: { CONQUISTADOR_HOME: h.home, CONQUISTADOR_MCP_URL: 'https://mcp.example' }, stdout: h.out, stderr: h.err, fetch: async () => new Response(JSON.stringify({ revoked: true, login: 'seven', key: 'ci-bot' }), { status: 200 }) });
+  assert.equal(code, 0);
+  assert.match(h.out.text, /revoked the key "ci-bot"/i);
+  assert.doesNotMatch(h.out.text, /deleted your record/);
+});
+
+test('logout with the sign-in token says every key and the record are gone', async t => {
+  const { runLogout } = await import('./login.mjs');
+  const h = harness();
+  t.after(h.cleanup);
+  await runLogout([], { env: { CONQUISTADOR_HOME: h.home, CONQUISTADOR_MCP_URL: 'https://mcp.example' }, stdout: h.out, stderr: h.err, fetch: async () => new Response(JSON.stringify({ revoked: true, login: 'seven', key: null }), { status: 200 }) });
+  assert.match(h.out.text, /named keys, and deleted your record/);
 });
