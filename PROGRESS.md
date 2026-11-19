@@ -2,7 +2,7 @@
 
 Updated: 2026-11-19 · Stage: live · Health: At risk
 
-The latest package release is 0.13.0 (2026-11-10); [CHANGELOG.md](CHANGELOG.md) holds the
+The latest package release is 0.13.1 (2026-11-19); [CHANGELOG.md](CHANGELOG.md) holds the
 release history. Hosted MCP was last verified on 2026-11-19: 0.13.0 methods plus named API keys, from `main` at `887917d`. Acceptance gaps remain; migration rechecks neither.
 
 Next action: Hung judges the 8 sealed pairs for the X plays; test the growth doctrine on real tasks with blind comparisons; Hung reviews the draft migration PR; additional acceptance remains the next product work.
@@ -11,7 +11,7 @@ Next action: Hung judges the 8 sealed pairs for the X plays; test the growth doc
 
 | State | Item | Evidence | Date |
 | --- | --- | --- | --- |
-| Partly shipped | Named API keys for the hosted MCP server: one key for each agent, CI job, or app, revoked one at a time. Live on the hosted server; the `conquistador keys` CLI command ships in 0.13.1, which Hung approved on 2026-11-19 and which waits for its npm publication | Merged in [PR #125](https://github.com/forsvn-labs/conquistador/pull/125) (`887917d`) and deployed as Worker version `31d92ad2` (rollback: `e396a5e3`). [Hosted evidence](docs/hosted-0.13.0-verification.json): 13 of 13 live checks pass with a real GitHub sign-in, including make, use, and revoke of a key. Known gap: a change in the one storage round trip before a key write can be overwritten; sign-in has the same gap. A per-user Durable Object would close it | 2026-11-19 |
+| Shipped | Package 0.13.1: named API keys. `conquistador keys list`, `create <name>`, and `revoke <name>` give each agent, CI job, or app its own hosted MCP key, revoked one at a time. The hosted server serves them since the same day | Recorded: Both `@forsvn/conquistador@0.13.1` and `conquistador@0.13.1` are verified as npm latest. [Release](https://github.com/forsvn-labs/conquistador/releases/tag/v0.13.1), [registry evidence](docs/release-0.13.1-verification.json), [hosted evidence](docs/hosted-0.13.0-verification.json). Known gap: a change in the one storage round trip before a key write can be overwritten; sign-in has the same gap. A per-user Durable Object would close it | 2026-11-19 |
 | In progress | Freshness check for dated facts and plays, and the meta-watch workflow. Contributor tooling only; it is not in the npm package, so no release and no changelog entry | [PR #121](https://github.com/forsvn-labs/conquistador/pull/121), [workflow](docs/META-WATCH.md). The check finds 25 dated blocks and 1 overdue: the image-engine reference, verified June 2026. The weekly run fails until someone rechecks that block | 2026-11-11 |
 | Shipped | Package 0.13.0: the funnel-first growth doctrine. `init` asks how customers convert and records the funnel first; growth work names the stage and metric it moves | Recorded: Both `@forsvn/conquistador@0.13.0` and `conquistador@0.13.0` are verified as npm latest. [Release](https://github.com/forsvn-labs/conquistador/releases/tag/v0.13.0), [registry evidence](docs/release-0.13.0-verification.json); no model-quality evaluation yet | 2026-11-10 |
 | Shipped | Package 0.12.0, including distillation, routing, channel facts, and checker changes | Recorded: Both `@forsvn/conquistador@0.12.0` and `conquistador@0.12.0` are verified as npm latest. [Release](https://github.com/forsvn-labs/conquistador/releases/tag/v0.12.0), [registry evidence](docs/release-0.12.0-verification.json) | 2026-10-29 |
@@ -46,8 +46,10 @@ Next action: Hung judges the 8 sealed pairs for the X plays; test the growth doc
   hosted MCP, and limits for research agents. No method text changed.
 - Built named API keys so headless agents can each have their own hosted MCP key, in
   [PR #125](https://github.com/forsvn-labs/conquistador/pull/125). Hung approved merge and
-  redeploy. The hosted server now runs `887917d`; 13 of 13 live checks pass. Hung reviews the
-  remaining key-race gap; the fix is a per-user Durable Object.
+  redeploy, then said "just ship": released 0.13.1 at `c488f7a`. Both npm packages are
+  verified as latest with matching bytes and provenance; the CLI-alias job was rerun once
+  after npm made the main version readable. The hosted server runs `887917d`; 13 of 13 live
+  checks pass. The remaining key-race fix is a per-user Durable Object.
 
 ## 2026-11-11
 
