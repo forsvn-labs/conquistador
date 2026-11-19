@@ -93,7 +93,7 @@ const helpCommands = [...new Set([...help.matchAll(/^ {2}conquistador ([a-z]+(?:
 const dispatcher = new Set([...read('runtime/bin/conquistador.js').matchAll(/["']([a-z]+(?:-[a-z]+)*)["']/g)].map(match => match[1]));
 const cliPage = page('reference/cli');
 const documented = [...new Set([...cliPage.matchAll(/^#{2,3} `conquistador ([a-z]+(?:-[a-z]+)*)/gm)].map(match => match[1]))];
-const required = [...helpCommands, 'check', 'connect', 'review', 'pin', 'unpin', 'login', 'logout', 'whoami'];
+const required = [...helpCommands, 'check', 'connect', 'review', 'pin', 'unpin', 'login', 'logout', 'whoami', 'keys'];
 const undocumentedCommands = required.filter(name => !documented.includes(name));
 record('CLI reference documents every command', !undocumentedCommands.length, undocumentedCommands.length ? list(undocumentedCommands) : `${documented.length} commands`);
 const unknownCommands = documented.filter(name => !dispatcher.has(name));
@@ -164,7 +164,7 @@ record('INSTALL.md links to the docs site', read('INSTALL.md').includes(`${SITE_
 const perMinute = /name = "MCP_LIMITER"[\s\S]*?limit = (\d+)/.exec(read('wrangler.toml'))?.[1];
 const facts = {
   'install/overview': ['--surface', '--apps', '--executor-name', '--bot-out', '--json', '--plain'],
-  'install/hosted-mcp': ['conquistador login', 'conquistador whoami', 'conquistador logout', '/signup', 'cq_', `${perMinute} requests per minute`],
+  'install/hosted-mcp': ['conquistador login', 'conquistador whoami', 'conquistador logout', 'conquistador keys create', '/signup', 'cq_', `${perMinute} requests per minute`],
   'install/executor': ['addServer', '1.5.40', 'executor daemon run'],
   'install/mcp-apps': ['conquistador-backup', 'Cursor'],
 };

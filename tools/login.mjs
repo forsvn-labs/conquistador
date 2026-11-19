@@ -19,8 +19,9 @@ const HELP = `Usage:
   conquistador logout [--server URL]
 
 login signs you in with GitHub and saves a personal token for the hosted MCP server
-to ~/.conquistador/mcp-token. Signing in again replaces the token.
-whoami shows who the saved token belongs to. logout revokes it and deletes your record.
+to ~/.conquistador/mcp-token. Signing in again replaces the token; named keys stay.
+whoami shows who the saved token belongs to. logout revokes it, every named key, and your record.
+For a separate key for each agent or CI job, see conquistador keys --help.
 The server is ${DEFAULT_SERVER} unless you pass --server or set CONQUISTADOR_MCP_URL.
 `;
 
@@ -175,7 +176,7 @@ export async function runLoginCommand(args, { env = process.env, stdout = proces
   try {
     const result = await runLogin({ ui, server: options.server, env, open: !options['no-open'] && Boolean(process.stdout.isTTY) });
     if (!result) { stderr.write('Sign-in cancelled. No token was made.\n'); return 1; }
-    stdout.write(`\nSigned in as @${result.login}.\nSaved your token to ${tokenPath(env)}. Only you can read that file.\nSigning in again replaces the token. conquistador logout revokes it.\n\nAdd the server to your MCP client:\n\n${formatConfigs({ url: `${base}/mcp`, token: result.token })}\n`);
+    stdout.write(`\nSigned in as @${result.login}.\nSaved your token to ${tokenPath(env)}. Only you can read that file.\nSigning in again replaces the token. conquistador logout revokes it.\nFor a separate key for each agent or CI job: conquistador keys create <name>\n\nAdd the server to your MCP client:\n\n${formatConfigs({ url: `${base}/mcp`, token: result.token })}\n`);
     return 0;
   } catch (error) {
     stderr.write(`${error.message}\n`);
@@ -203,6 +204,52 @@ export async function runWhoami(args, { env = process.env, stdout = process.stdo
   }
 }
 
+const KEYS_HELP = `Usage:
+  conquistador keys list [--server URL] [--json]
+  conquistador keys create <name> [--server URL] [--json]
+  conquistador keys revoke <name> [--server URL]
+
+A named key gives one agent, CI job, or app its own access to the hosted MCP server, so you
+can revoke it without stopping the others. Run conquistador login first: the saved sign-in
+token manages the keys. create prints the new key once; store it in that agent's secrets.
+A name is 1 to 40 lowercase letters, digits, dashes, or underscores. You can have 10 keys.
+`;
+
+export async function runKeys(args, { env = process.env, stdout = process.stdout, stderr = process.stderr, fetch: fetchImpl = globalThis.fetch } = {}) {
+  const [action, ...rest] = args;
+  if (action === '--help' || action === '-h') { stdout.write(KEYS_HELP); return 0; }
+  if (!['list', 'create', 'revoke'].includes(action)) { stderr.write(`${action ? `Unknown action: ${action}\n` : ''}${KEYS_HELP}`); return 2; }
+  const needsName = action !== 'list';
+  const name = needsName && rest[0] && !rest[0].startsWith('-') ? rest.shift() : null;
+  if (needsName && !name) { stderr.write(`conquistador keys ${action} needs a key name.\n${KEYS_HELP}`); return 2; }
+  let options;
+  try { options = parse(rest, action === 'revoke' ? [] : ['--json']); } catch (error) { stderr.write(`${error.message}\n${KEYS_HELP}`); return 2; }
+  if (options.help) { stdout.write(KEYS_HELP); return 0; }
+  const token = readToken(env);
+  if (!token) { stderr.write('Not signed in. Run conquistador login first.\n'); return 1; }
+  const base = serverOf(env, options.server);
+  const authorization = `Bearer ${token}`;
+  const request = action === 'list' ? [`${base}/api/keys`, { headers: { authorization } }]
+    : action === 'create' ? [`${base}/api/keys`, { method: 'POST', headers: { authorization, 'content-type': 'application/json' }, body: JSON.stringify({ name }) }]
+      : [`${base}/api/keys/${encodeURIComponent(name)}`, { method: 'DELETE', headers: { authorization } }];
+  let result;
+  try { result = await call(fetchImpl, ...request); } catch (error) { stderr.write(`${error.message}\n`); return 1; }
+  if (!result.ok) { stderr.write(`${result.body.error ?? `HTTP ${result.status}`}\n`); return 1; }
+  const { body } = result;
+  if (action === 'list') {
+    if (options.json) stdout.write(`${JSON.stringify(body)}\n`);
+    else if (!body.keys?.length) stdout.write('No named keys. Make one with: conquistador keys create <name>\n');
+    else stdout.write(`${body.keys.map(key => `${key.name}  made ${key.created}  last used ${key.lastUsed ?? 'never'}`).join('\n')}\n`);
+  } else if (action === 'create') {
+    const url = `${base}/mcp`;
+    if (options.json) stdout.write(`${JSON.stringify({ token: body.token, name: body.name, created: body.created, url })}\n`);
+    else stdout.write(`Made the key "${body.name}". This is the only time it is shown:\n\n  ${body.token}\n\nGive it to that agent as "Authorization: Bearer <key>" for ${url}.\nRevoke it with: conquistador keys revoke ${body.name}\n`);
+  } else {
+    stdout.write(`Revoked the key "${body.name}". Other locations can accept it for up to 60 seconds.\n`);
+  }
+  return 0;
+}
+
 export async function runLogout(args, { env = process.env, stdout = process.stdout, stderr = process.stderr, fetch: fetchImpl = globalThis.fetch } = {}) {
   let options;
   try { options = parse(args, []); } catch (error) { stderr.write(`${error.message}\n${HELP}`); return 2; }
@@ -219,7 +266,7 @@ export async function runLogout(args, { env = process.env, stdout = process.stdo
   }
   if (result.ok) {
     rmSync(tokenPath(env), { force: true });
-    stdout.write('Signed out. The server revoked the token and deleted your record.\n');
+    stdout.write('Signed out. The server revoked the token and any named keys, and deleted your record.\n');
     return 0;
   }
   if (result.status === 401) {

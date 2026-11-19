@@ -408,20 +408,36 @@ conquistador logout    # revoke the token and delete your record
 file held another token, for example a server admin token, `login` moves it to `mcp-token.previous`.
 To use another deployment, set `CONQUISTADOR_MCP_URL` or pass `--server URL`.
 
-- Each GitHub account has one active token. When you sign in again, you get a new token and the
-  old one stops working.
+- Each GitHub account has one active sign-in token. When you sign in again, you get a new sign-in
+  token and the old one stops working. Named keys keep working.
 - Each token can send 60 requests per minute. Over the limit, the server answers 429 and says how
   many seconds to wait (`retry-after`).
 - A token that is not used for a year stops working. Sign in again to get a new one.
 - After a new sign-in or a logout, the old token can still work for up to 60 seconds in other
   Cloudflare locations.
 
+#### One key for each agent
+
+Unreleased. Give each agent, CI job, or app its own key, and revoke one without stopping the
+others. The saved sign-in token from `conquistador login` manages the keys:
+
+```sh
+conquistador keys create ci-bot     # prints the new key once
+conquistador keys list              # names, when made, when last used
+conquistador keys revoke ci-bot     # stops only this key
+```
+
+A name is 1 to 40 lowercase letters, digits, dashes, or underscores; you can have 10 named keys.
+A named key can call the MCP server and revoke itself, but cannot manage other keys. Each key has
+its own rate limit. The API is `GET /api/keys`, `POST /api/keys` with `{"name": "ci-bot"}`, and
+`DELETE /api/keys/<name>`, each with the sign-in token.
+
 ### Privacy
 
 The server stores this for each person who signs in:
 
 - the GitHub user id and login;
-- a SHA-256 hash of the token, not the token itself;
+- a SHA-256 hash of the token and of each named key, not the keys themselves, and each key's name;
 - when the token was made, when it was last used, and its status (active or blocked).
 
 The server does not store your GitHub access token, email address, or repositories. It asks GitHub
@@ -434,7 +450,7 @@ To delete your record, run `conquistador logout`, or send:
 curl -X POST https://mcp.forsvn.com/api/logout -H "Authorization: Bearer YOUR_TOKEN"
 ```
 
-Both revoke the personal API key and delete its user record. OAuth grants are separate; revoke
+With the sign-in token, both revoke it, every named key, and the user record. OAuth grants are separate; revoke
 the connection in your MCP client. If you lost the token, sign in again, then
 log out. To remove the app from your GitHub account too, open GitHub, Settings, Applications,
 Authorized OAuth Apps.

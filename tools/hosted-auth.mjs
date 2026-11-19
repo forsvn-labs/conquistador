@@ -1,12 +1,18 @@
 // Self-serve personal tokens for the hosted MCP server (Cloudflare Worker). GitHub proves who a
 // person is; the Worker issues a random cq_ token, stores only its SHA-256 hash in KV, and keeps
-// one active token per GitHub user. The shared admin token (CONQUISTADOR_MCP_TOKEN) keeps working.
+// one active sign-in token per GitHub user. The sign-in token can also make up to MAX_KEYS named
+// keys, one for each agent, CI job, or app, and revoke each one alone. A named key can call the
+// MCP endpoint and revoke itself, and nothing else. The shared admin token
+// (CONQUISTADOR_MCP_TOKEN) keeps working.
 //
 // KV (binding TOKENS):
-//   token:<sha256 hex>  { githubId, created, lastUsed }   expires after a year without use
-//   user:<github id>    { githubId, login, tokenHash, created, status: 'active' | 'blocked' }
-// A token is valid only when its user record points back at its hash, so a rotation or a revoke
-// wins over a late "last used" write, and two sign-ins at once leave one working token.
+//   token:<sha256 hex>  { githubId, name?, created, lastUsed }   expires after a year without use
+//   user:<github id>    { githubId, login, tokenHash, keys?: { <name>: { hash, created } },
+//                         created, status: 'active' | 'blocked' }
+// A token is valid only when its user record points back at its hash (tokenHash for the sign-in
+// token, keys[name].hash for a named key), so a rotation or a revoke wins over a late "last used"
+// write, and two sign-ins at once leave one working token. Key changes rewrite the user record,
+// so two key changes at the same moment can lose one; the lost key is then refused, not trusted.
 // KV is eventually consistent: another Cloudflare location can accept a replaced or revoked token
 // for up to 60 seconds.
 //
@@ -21,6 +27,8 @@ const LAST_USED_EVERY = 3_600_000;
 const MAX_HEADER = 512;
 const MAX_LOGIN_BODY = 4096;
 const RETRY_AFTER = 60;
+export const MAX_KEYS = 10;
+const KEY_NAME = /^[a-z0-9][a-z0-9_-]{0,39}$/;
 const encoder = new TextEncoder();
 
 const toHex = bytes => [...bytes].map(byte => byte.toString(16).padStart(2, '0')).join('');
@@ -94,7 +102,9 @@ export async function authenticate(env, ctx, header, origin) {
   const hash = await hashToken(token);
   const record = await env.TOKENS.get(`token:${hash}`, 'json');
   const user = record ? await env.TOKENS.get(`user:${record.githubId}`, 'json') : null;
-  if (!record || !user || user.tokenHash !== hash) {
+  const key = typeof record?.name === 'string' ? record.name : null;
+  const current = user && (key ? user.keys?.[key]?.hash === hash : user.tokenHash === hash);
+  if (!current) {
     return { refusal: refuse(401, `This token is not active. It was revoked, or a newer sign-in replaced it. Run conquistador login, or sign in again at ${origin}/signup.`, challenge(true)) };
   }
   if (user.status !== 'active') return { refusal: refuse(403, 'This GitHub account is blocked on this server.') };
@@ -106,7 +116,7 @@ export async function authenticate(env, ctx, header, origin) {
     lastUsed = new Date().toISOString();
     later(ctx, env.TOKENS.put(`token:${hash}`, JSON.stringify({ ...record, lastUsed }), { expirationTtl: TOKEN_TTL }));
   }
-  return { kind: 'personal', hash, user, created: record.created, lastUsed };
+  return { kind: 'personal', hash, user, key, created: record.created, lastUsed };
 }
 
 function rateLimited(env) {
@@ -173,15 +183,16 @@ export async function identify(gh, accessToken) {
 // The Worker needs only the user id and login, so it revokes the GitHub token at once.
 export const revokeGithubToken = (gh, accessToken) => github(`${gh.api}/applications/${encodeURIComponent(gh.id)}/token`, { method: 'DELETE', headers: appHeaders(gh), body: JSON.stringify({ access_token: accessToken }) }).catch(() => {});
 
-// Issues a new token and replaces the user's previous one. Returns null for a blocked user.
-async function issue(env, { githubId, login }) {
+// Issues a new sign-in token and replaces the user's previous one. Named keys stay. Returns null
+// for a blocked user.
+export async function issueToken(env, { githubId, login }) {
   const previous = await env.TOKENS.get(`user:${githubId}`, 'json');
   if (previous?.status === 'blocked') return null;
   const token = newToken();
   const tokenHash = await hashToken(token);
   const created = new Date().toISOString();
   await env.TOKENS.put(`token:${tokenHash}`, JSON.stringify({ githubId, created, lastUsed: null }), { expirationTtl: TOKEN_TTL });
-  await env.TOKENS.put(`user:${githubId}`, JSON.stringify({ githubId, login, tokenHash, created, status: 'active' }));
+  await env.TOKENS.put(`user:${githubId}`, JSON.stringify({ githubId, login, tokenHash, ...(previous?.keys ? { keys: previous.keys } : {}), created, status: 'active' }));
   if (previous?.tokenHash) await env.TOKENS.delete(`token:${previous.tokenHash}`);
   return { token, login, githubId, created };
 }
@@ -211,13 +222,15 @@ function page(status, title, body, headers = {}) {
 }
 
 const privacy = (env, origin) => `<h2>What the server stores</h2>
-<ul><li>Your GitHub user id and login.</li><li>A SHA-256 hash of your token. The token itself is not stored, so nobody can read it back.</li><li>When the token was made, when it was last used, and its status.</li></ul>
+<ul><li>Your GitHub user id and login.</li><li>A SHA-256 hash of your token and of each named key, with the key names. The keys themselves are not stored, so nobody can read them back.</li><li>When the token was made, when it was last used, and its status.</li></ul>
 <p>The server does not store your GitHub access token, email address, or repositories. It asks GitHub for no permissions beyond your public profile, and revokes the GitHub access token as soon as it reads your user id.</p>
 <p>Each token can send ${limitText(env)} requests per minute. A token that is not used for a year stops working.</p>
 <h2>Delete your record</h2>
 <p>Run <code>conquistador logout</code>, or send:</p>
 <pre>curl -X POST ${escapeHtml(origin)}/api/logout -H "Authorization: Bearer YOUR_TOKEN"</pre>
-<p>Both revoke the token and delete your record. Signing in again replaces your token with a new one.</p>`;
+<p>Both revoke the token and your named keys, and delete your record. Signing in again replaces your token with a new one; named keys stay.</p>
+<h2>One key for each agent</h2>
+<p>Run <code>conquistador keys create ci-bot</code> to give one agent, CI job, or app its own key. Revoke it alone with <code>conquistador keys revoke ci-bot</code>. You can have ${MAX_KEYS} named keys.</p>`;
 
 const errorPage = (status, title, message, headers = {}) => page(status, title, `<p>${escapeHtml(message)}</p><p><a href="/signup">Start again</a></p>`, headers);
 
@@ -298,7 +311,7 @@ export async function handleAuthRoute(request, env, ctx) {
       throw error;
     }
     if (!identity) return errorPage(502, 'Sign-in failed', 'GitHub did not confirm the sign-in. No token was made.', clear);
-    const issued = await issue(env, identity);
+    const issued = await issueToken(env, identity);
     if (!issued) return errorPage(403, 'Account blocked', 'This GitHub account is blocked on this server. No token was made.', clear);
     return tokenPage(env, url.origin, issued);
   }
@@ -323,7 +336,7 @@ export async function handleAuthRoute(request, env, ctx) {
     }
     if (!identity) return json(401, { error: 'GitHub did not confirm this sign-in. Run conquistador login again.' });
     later(ctx, revokeGithubToken(gh, githubToken));
-    const issued = await issue(env, identity);
+    const issued = await issueToken(env, identity);
     return issued ? json(200, issued) : json(403, { error: 'This GitHub account is blocked on this server.' });
   }
 
@@ -334,14 +347,73 @@ export async function handleAuthRoute(request, env, ctx) {
     if (identity.refusal) return fromRefusal(identity.refusal);
     if (pathname === '/api/whoami') {
       if (identity.kind === 'admin') return json(200, { kind: 'admin' });
-      const { user, created, lastUsed } = identity;
-      return json(200, { kind: 'personal', login: user.login, githubId: user.githubId, created, lastUsed, status: user.status });
+      const { user, key, created, lastUsed } = identity;
+      return json(200, { kind: 'personal', login: user.login, githubId: user.githubId, key, created, lastUsed, status: user.status });
     }
     if (identity.kind === 'admin') return json(400, { error: 'The admin token is a server secret. Change it with wrangler secret put CONQUISTADOR_MCP_TOKEN.' });
-    await env.TOKENS.delete(`user:${identity.user.githubId}`);
-    await env.TOKENS.delete(`token:${identity.hash}`);
-    return json(200, { revoked: true, login: identity.user.login });
+    const { user, key, hash } = identity;
+    if (key) {
+      // A named key revokes only itself.
+      const { [key]: _gone, ...keys } = user.keys;
+      await env.TOKENS.put(`user:${user.githubId}`, JSON.stringify({ ...user, keys }));
+      await env.TOKENS.delete(`token:${hash}`);
+      return json(200, { revoked: true, login: user.login, key });
+    }
+    // The sign-in token revokes everything: the user record, every named key, and itself.
+    await env.TOKENS.delete(`user:${user.githubId}`);
+    for (const named of Object.values(user.keys ?? {})) await env.TOKENS.delete(`token:${named.hash}`);
+    await env.TOKENS.delete(`token:${hash}`);
+    return json(200, { revoked: true, login: user.login, key: null });
   }
 
+  if (pathname === '/api/keys' || pathname.startsWith('/api/keys/')) return handleKeys(request, env, ctx, url);
+
   return json(404, { error: 'Unknown route. See /signup.' });
+}
+
+// GET /api/keys lists the named keys, POST /api/keys { name } makes one, and
+// DELETE /api/keys/<name> revokes one. Only the sign-in token manages keys.
+async function handleKeys(request, env, ctx, url) {
+  const { method } = request;
+  let name = null;
+  if (url.pathname !== '/api/keys') {
+    try { name = decodeURIComponent(url.pathname.slice('/api/keys/'.length)); } catch { name = ''; }
+  }
+  const allowed = name === null ? ['GET', 'POST'] : ['DELETE'];
+  if (!allowed.includes(method)) return json(405, { error: `Use ${allowed.join(' or ')}.` }, { allow: allowed.join(', ') });
+  const identity = await authenticate(env, ctx, request.headers.get('authorization'), url.origin);
+  if (identity.refusal) return fromRefusal(identity.refusal);
+  if (identity.kind === 'admin') return json(400, { error: 'The admin token has no named keys. Sign in with conquistador login to make keys.' });
+  if (identity.key) return json(403, { error: 'A named key cannot manage keys. Use the sign-in token from conquistador login.' });
+  const { user } = identity;
+  const keys = user.keys ?? {};
+
+  if (method === 'GET') {
+    const names = Object.keys(keys).sort();
+    const records = await Promise.all(names.map(item => env.TOKENS.get(`token:${keys[item].hash}`, 'json')));
+    return json(200, { keys: names.map((item, index) => ({ name: item, created: keys[item].created, lastUsed: records[index]?.lastUsed ?? null })) });
+  }
+
+  if (method === 'DELETE') {
+    if (!KEY_NAME.test(name) || !Object.hasOwn(keys, name)) return json(404, { error: `No key is named "${name}". List your keys with conquistador keys list.` });
+    const { [name]: gone, ...rest } = keys;
+    await env.TOKENS.put(`user:${user.githubId}`, JSON.stringify({ ...user, keys: rest }));
+    await env.TOKENS.delete(`token:${gone.hash}`);
+    return json(200, { revoked: true, name });
+  }
+
+  const text = await readBounded(request, MAX_LOGIN_BODY);
+  if (text === null) return json(413, { error: 'Request too large.' });
+  let body;
+  try { body = JSON.parse(text); } catch { return json(400, { error: 'Send JSON: {"name": "ci-bot"}.' }); }
+  const wanted = body?.name;
+  if (typeof wanted !== 'string' || !KEY_NAME.test(wanted)) return json(400, { error: 'A key name is 1 to 40 lowercase letters, digits, dashes, or underscores, and starts with a letter or digit.' });
+  if (Object.hasOwn(keys, wanted)) return json(409, { error: `A key named "${wanted}" exists. Revoke it first, or choose another name.` });
+  if (Object.keys(keys).length >= MAX_KEYS) return json(409, { error: `You have ${MAX_KEYS} keys, the most allowed. Revoke one first.` });
+  const token = newToken();
+  const hash = await hashToken(token);
+  const created = new Date().toISOString();
+  await env.TOKENS.put(`token:${hash}`, JSON.stringify({ githubId: user.githubId, name: wanted, created, lastUsed: null }), { expirationTtl: TOKEN_TTL });
+  await env.TOKENS.put(`user:${user.githubId}`, JSON.stringify({ ...user, keys: { ...keys, [wanted]: { hash, created } } }));
+  return json(201, { token, name: wanted, created });
 }

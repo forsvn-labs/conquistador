@@ -202,7 +202,17 @@ From 0.4.0. Show who the saved token belongs to, when it was made, and when it w
 conquistador logout [--server URL]
 ```
 
-From 0.4.0. Revoke the saved token and delete your record on the hosted server.
+From 0.4.0. Revoke the saved token and delete your record on the hosted server. From the next release, this also revokes your named keys.
+
+### `conquistador keys`
+
+```sh
+conquistador keys list [--server URL] [--json]
+conquistador keys create <name> [--server URL] [--json]
+conquistador keys revoke <name> [--server URL]
+```
+
+From the next release. Give each agent, CI job, or app its own key for the hosted server, and revoke one without stopping the others. The saved sign-in token from `conquistador login` manages the keys. `create` prints the new key once. See [Hosted MCP](/install/hosted-mcp).
 
 ### `conquistador bot`
 
