@@ -418,8 +418,9 @@ To use another deployment, set `CONQUISTADOR_MCP_URL` or pass `--server URL`.
 
 #### One key for each agent
 
-Unreleased. Give each agent, CI job, or app its own key, and revoke one without stopping the
-others. The saved sign-in token from `conquistador login` manages the keys:
+From 0.13.1. The hosted server supports named keys from 2026-11-19. Give each agent, CI job, or
+app its own key, and revoke one without stopping the others. The saved sign-in token from
+`conquistador login` manages the keys:
 
 ```sh
 conquistador keys create ci-bot     # prints the new key once
