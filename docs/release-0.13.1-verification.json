@@ -1,0 +1,78 @@
+{
+  "verifiedAt": "2026-11-19T06:00:58Z",
+  "sourceCommit": "c488f7a712911fe48e0ffab849fc4cd0cf5727b9",
+  "release": "https://github.com/forsvn-labs/conquistador/releases/tag/v0.13.1",
+  "publicationRun": "https://github.com/forsvn-labs/conquistador/actions/runs/44468041875",
+  "publicationRetry": {
+    "job": "publish-cli",
+    "reason": "npm accepted the main package before version 0.13.1 was readable from the registry (404 in the alias check); the job was rerun after it became readable, about 210 seconds later"
+  },
+  "releaseAssets": {
+    "count": 7,
+    "verifiedArchiveChecksums": {
+      "conquistador-0.13.1.zip": "8bb105f9f3e4ef85ed1f27ad19cce84a02db64721ba556d56439c5109ae8cf8d",
+      "forsvn-conquistador-0.13.1.tgz": "bb7e5fb450cc279ddc582639fc7f82a8d015fb7dd44c3545e6040dedc8e158f8",
+      "conquistador-0.13.1.tgz": "d0ae9a178e063a49e54b8591a9675df8d3e918b2e66686ac77942678855948cb",
+      "conquistador-skill-0.13.1.zip": "8ebf3cee2b8c945291927feb386e1542c423ca801306e4962cef6dc80b94c56c",
+      "conquistador-plugin-0.13.1.zip": "c00b6f21d590f8dd436ff442ab5e580b11036e3d6300843a7224c5822979a02b"
+    },
+    "assemblyNamesSourceCommit": true,
+    "note": "Packaged from a clean clone at tag v0.13.1 (Node v26.9.0, npm 11.19.1, darwin arm64); shasum -c SHA256SUMS passed for the five archives."
+  },
+  "checks": [
+    {
+      "name": "@forsvn/conquistador",
+      "version": "0.13.1",
+      "latest": "0.13.1",
+      "sha256": "bb7e5fb450cc279ddc582639fc7f82a8d015fb7dd44c3545e6040dedc8e158f8",
+      "integrity": "sha512-Gi9V4DjDJb1AgxOihXJUM0ZJvcYTiioNb1QkZ84jQbFUNmKA+Dweal/vRUJsMnnCpDLYDwP4ie2uLxN7Rcni4A==",
+      "integrityMatchesReleaseAsset": true,
+      "provenancePredicate": "https://slsa.dev/provenance/v1",
+      "exactAliasPin": null
+    },
+    {
+      "name": "conquistador",
+      "version": "0.13.1",
+      "latest": "0.13.1",
+      "sha256": "d0ae9a178e063a49e54b8591a9675df8d3e918b2e66686ac77942678855948cb",
+      "integrity": "sha512-lt7Mgn2jfcL5gTjLDfGwiuGmXjSY4o55tZz3+67hwCxMmOGQ+sJ1xu8GZ0uBtvIo5HjhzWMHsxhoP7LwbO0O9w==",
+      "integrityMatchesReleaseAsset": true,
+      "provenancePredicate": "https://slsa.dev/provenance/v1",
+      "exactAliasPin": "0.13.1"
+    }
+  ],
+  "installedSmoke": {
+    "mode": "fresh npm registry installation of conquistador@0.13.1 in an isolated folder",
+    "checks": [
+      {
+        "name": "short alias resolves @forsvn/conquistador 0.13.1",
+        "passed": true
+      },
+      {
+        "name": "installed CLI reports 0.13.1",
+        "passed": true
+      },
+      {
+        "name": "installed conquistador keys --help exits 0",
+        "passed": true
+      },
+      {
+        "name": "installed conquistador keys list without a token says to run conquistador login",
+        "passed": true
+      },
+      {
+        "name": "installed conquistador keys list --json with the owner's sign-in token returns the key list from mcp.forsvn.com",
+        "passed": true
+      }
+    ]
+  },
+  "candidateChecks": {
+    "ci": "13 of 13 checks passed on ecf7cbe (PR #126)",
+    "rootTests": "690 pass, 0 fail on the merge commit c488f7a"
+  },
+  "limits": [
+    "The release commit also contains PR #127, which adds favicon.png at the repository root; it is not in either npm package.",
+    "Hosted MCP evidence is separate: docs/hosted-0.13.0-verification.json.",
+    "No model-quality evaluation."
+  ]
+}
