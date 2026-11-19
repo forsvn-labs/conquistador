@@ -12,10 +12,12 @@
 // A token is valid only when its user record points back at its hash (tokenHash for the sign-in
 // token, keys[name].hash for a named key), so a rotation or a revoke wins over a late "last used"
 // write, and two sign-ins at once leave one working token. Key changes reread the user record
-// just before they write, and change only its keys (freshUser), so a slow request cannot
-// recreate a deleted record, undo a block, or restore a replaced sign-in token. KV has no
-// transactions: two key changes at the same moment can still lose one, and the lost key is then
-// refused, not trusted.
+// after the request body arrives and just before they write, and change only its keys
+// (freshUser), so a slow upload cannot recreate a deleted record, undo a block, or restore a
+// replaced sign-in token. KV has no transactions or compare-and-swap: a logout, block, sign-in,
+// or other key change that lands between that reread and the write can still be overwritten,
+// and the result lasts until the next change. Sign-in (issueToken) has the same gap. Closing it
+// needs one Durable Object per user that serializes every user-record writer.
 // KV is eventually consistent: another Cloudflare location can accept a replaced or revoked token
 // for up to 60 seconds.
 //
