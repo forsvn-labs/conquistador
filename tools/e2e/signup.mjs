@@ -402,11 +402,34 @@ async function offline() {
   const otherToken = await mcp(base, `Bearer ${current}`);
   record('a token over 60 requests a minute gets 429 with the reason and retry-after; others are not affected', refused.length > 0 && ok <= 120 && refusal.headers.get('retry-after') === '60' && /60 requests per minute/.test(refusalBody.error ?? '') && /60 seconds/.test(refusalBody.error ?? '') && refusalBody.retryAfter === 60 && otherToken.status === 200, { ok, refused: refused.length, body: refusalBody, otherToken: otherToken.status });
 
+  // 11b. Named keys: one key for each agent, revoked one at a time.
+  const json = text => { try { return JSON.parse(text); } catch { return {}; } };
+  const madeCi = await cli(['keys', 'create', 'ci-bot', '--json'], cliEnv);
+  const madeZap = await cli(['keys', 'create', 'zapier', '--json'], cliEnv);
+  const ci = json(madeCi.stdout).token ?? '';
+  const zap = json(madeZap.stdout).token ?? '';
+  const ciOpens = await mcp(base, `Bearer ${ci}`);
+  record('conquistador keys create makes named cq_ keys that open /mcp, and the saved token stays', madeCi.status === 0 && madeZap.status === 0 && TOKEN.test(ci) && TOKEN.test(zap) && ci !== current && ciOpens.status === 200 && readFileSync(tokenFile, 'utf8').trim() === current, { statuses: [madeCi.status, madeZap.status, ciOpens.status], stderr: (madeCi.stderr + madeZap.stderr).slice(-300) });
+  const keyWho = await (await fetch(`${base}/api/whoami`, { headers: { authorization: `Bearer ${ci}` } })).json();
+  record('whoami with a named key names the key and the same GitHub user', keyWho.key === 'ci-bot' && keyWho.login === 'cli-user', { body: keyWho });
+  const listed = await cli(['keys', 'list', '--json'], cliEnv);
+  const listedBody = json(listed.stdout);
+  record('conquistador keys list names both keys and shows no key or hash', listed.status === 0 && JSON.stringify(listedBody.keys?.map(key => key.name)) === '["ci-bot","zapier"]' && !listed.stdout.includes(ci) && !listed.stdout.includes(sha256(ci)), { status: listed.status, names: listedBody.keys?.map(key => key.name) });
+  store = await kvDump(worker.state);
+  const storeText = `${Object.keys(store).join('\n')}\n${Object.values(store).join('\n')}`;
+  record('KV holds only the hash of each named key', Boolean(store[`token:${sha256(ci)}`]) && Boolean(store[`token:${sha256(zap)}`]) && !storeText.includes(ci) && !storeText.includes(zap), {});
+  const keyManages = await fetch(`${base}/api/keys`, { method: 'POST', headers: { authorization: `Bearer ${ci}`, 'content-type': 'application/json' }, body: JSON.stringify({ name: 'escalate' }) });
+  record('a named key cannot make more keys', keyManages.status === 403, { status: keyManages.status });
+  const revoked = await cli(['keys', 'revoke', 'ci-bot'], cliEnv);
+  const [ciAfter, zapAfter, mainAfter] = await Promise.all([mcp(base, `Bearer ${ci}`), mcp(base, `Bearer ${zap}`), mcp(base, `Bearer ${current}`)]);
+  record('conquistador keys revoke stops only that key', revoked.status === 0 && ciAfter.status === 401 && zapAfter.status === 200 && mainAfter.status === 200, { statuses: [revoked.status, ciAfter.status, zapAfter.status, mainAfter.status] });
+
   // 12. Logout.
   const logout = await cli(['logout'], cliEnv);
   const afterLogout = await mcp(base, `Bearer ${current}`);
+  const zapAfterLogout = await mcp(base, `Bearer ${zap}`);
   store = await kvDump(worker.state);
-  record('conquistador logout revokes the token, deletes the records, and removes the file', logout.status === 0 && /Signed out/.test(logout.stdout) && !existsSync(tokenFile) && afterLogout.status === 401 && !store['user:1002'] && !store[`token:${sha256(current)}`], { status: logout.status, afterLogout: afterLogout.status });
+  record('conquistador logout revokes the token and every named key, deletes the records, and removes the file', logout.status === 0 && /Signed out/.test(logout.stdout) && !existsSync(tokenFile) && afterLogout.status === 401 && zapAfterLogout.status === 401 && !store['user:1002'] && !store[`token:${sha256(current)}`] && !store[`token:${sha256(zap)}`], { status: logout.status, afterLogout: afterLogout.status, namedKeyAfterLogout: zapAfterLogout.status });
   const whoAfter = await cli(['whoami'], cliEnv);
   record('whoami without a token file says to run conquistador login', whoAfter.status === 1 && /Not signed in\. Run conquistador login\./.test(whoAfter.stderr + whoAfter.stdout), { status: whoAfter.status });
 

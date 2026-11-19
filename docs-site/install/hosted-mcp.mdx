@@ -53,10 +53,27 @@ source checks from live GitHub and Executor acceptance.
 
 ## API key rules
 
-- Each GitHub account has one active token. When you sign in again, you get a new token, and the old one stops working.
+- Each GitHub account has one active sign-in token. When you sign in again, you get a new sign-in token, and the old one stops working. Named keys keep working.
 - Each token can send 60 requests per minute. Over the limit, the server answers 429 and says how many seconds to wait (`retry-after`).
 - A token that is not used for a year stops working. Sign in again to get a new one.
 - After a new sign-in or a logout, the old token can still work for up to 60 seconds in other Cloudflare locations.
+
+## One key for each agent
+
+From the next release. Give each agent, CI job, or app its own key, so you can revoke one without stopping the others. Sign in first with `conquistador login`; the saved sign-in token manages the keys.
+
+```sh
+conquistador keys create ci-bot     # prints the new key once
+conquistador keys list              # names, when made, when last used
+conquistador keys revoke ci-bot     # stops only this key
+```
+
+- Store the key in that agent's secrets and send it as `Authorization: Bearer <key>`.
+- A name is 1 to 40 lowercase letters, digits, dashes, or underscores. You can have 10 named keys.
+- A named key can call the MCP server and revoke itself (`POST /api/logout`). It cannot make, list, or revoke other keys.
+- Signing in again replaces only the sign-in token. `conquistador logout` revokes the sign-in token, every named key, and your record.
+- Each key has its own limit of 60 requests per minute.
+- The same API: `GET /api/keys`, `POST /api/keys` with `{"name": "ci-bot"}`, and `DELETE /api/keys/ci-bot`, each with the sign-in token.
 
 ## Configure a client
 
