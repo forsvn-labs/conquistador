@@ -1,0 +1,94 @@
+{
+  "checkedAt": "2026-11-19T05:23:38.685Z",
+  "endpoint": "https://mcp.forsvn.com/mcp",
+  "candidateCommit": "887917d",
+  "workerVersion": "31d92ad2-1f87-41bc-a031-ff9587eb9387",
+  "previousWorkerVersion": "e396a5e3-b83f-4c5d-8771-d92ed260503d",
+  "mode": "Live calls with a personal sign-in token from conquistador login (real GitHub device flow). A temporary named key was made, used, and revoked. No token or hash recorded.",
+  "passed": 13,
+  "total": 13,
+  "results": [
+    {
+      "check": "the saved sign-in token is active",
+      "passed": true,
+      "status": 200,
+      "key": null
+    },
+    {
+      "check": "initialize reports the deployed package version",
+      "passed": true,
+      "status": 200,
+      "serverVersion": "0.13.0"
+    },
+    {
+      "check": "tools/list returns the eight Conquistador tools",
+      "passed": true,
+      "tools": [
+        "conquistador_brief",
+        "conquistador_check",
+        "conquistador_files",
+        "conquistador_methods",
+        "conquistador_read",
+        "conquistador_score",
+        "conquistador_search",
+        "conquistador_verify"
+      ]
+    },
+    {
+      "check": "conquistador_brief selects guidance for a growth task",
+      "passed": true,
+      "status": 200,
+      "bytes": 1640,
+      "mentionsFunnel": true,
+      "firstLine": "# Conquistador brief"
+    },
+    {
+      "check": "conquistador_check returns findings for a weak draft",
+      "passed": true,
+      "status": 200,
+      "bytes": 1329
+    },
+    {
+      "check": "POST /api/keys makes a named key",
+      "passed": true,
+      "status": 201,
+      "name": "deploy-check-mwn3u8fg"
+    },
+    {
+      "check": "the named key opens /mcp",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "check": "whoami with the named key names the key",
+      "passed": true,
+      "key": "deploy-check-mwn3u8fg"
+    },
+    {
+      "check": "the named key cannot list keys",
+      "passed": true,
+      "status": 403
+    },
+    {
+      "check": "GET /api/keys lists the key without the key itself",
+      "passed": true,
+      "status": 200,
+      "count": 1
+    },
+    {
+      "check": "DELETE /api/keys/<name> revokes the key",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "check": "the revoked key is refused within 75 seconds",
+      "passed": true,
+      "secondsUntilRefused": 0
+    },
+    {
+      "check": "the sign-in token still works after the revoke",
+      "passed": true,
+      "status": 200
+    }
+  ]
+}

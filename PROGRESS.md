@@ -3,7 +3,7 @@
 Updated: 2026-11-19 · Stage: live · Health: At risk
 
 The latest package release is 0.13.0 (2026-11-10); [CHANGELOG.md](CHANGELOG.md) holds the
-release history. Hosted MCP was last verified at 0.10.1 (2026-10-23). Acceptance gaps remain; migration rechecks neither.
+release history. Hosted MCP was last verified on 2026-11-19: 0.13.0 methods plus named API keys, from `main` at `887917d`. Acceptance gaps remain; migration rechecks neither.
 
 Next action: Hung judges the 8 sealed pairs for the X plays; test the growth doctrine on real tasks with blind comparisons; Hung reviews the draft migration PR; additional acceptance remains the next product work.
 
@@ -11,13 +11,13 @@ Next action: Hung judges the 8 sealed pairs for the X plays; test the growth doc
 
 | State | Item | Evidence | Date |
 | --- | --- | --- | --- |
-| In progress | Named API keys for the hosted MCP server: one key for each agent, CI job, or app, revoked one at a time with `conquistador keys` | [PR #125](https://github.com/forsvn-labs/conquistador/pull/125) waits for CI, then merge and redeploy, which Hung approved. Review fixes: key changes reread the account record before writing, so a slow upload cannot undo a logout or a block. Known gap: a change in the one storage round trip before the write can still be overwritten; sign-in has the same gap. A per-user Durable Object would close it. Root tests: 690 pass, 0 fail. Real-Worker sign-up E2E 45 of 46 and OAuth E2E 27 of 27; the one failing sign-up step fails on `main` too. Not deployed: the hosted Worker still runs 0.10.1 | 2026-11-19 |
+| Partly shipped | Named API keys for the hosted MCP server: one key for each agent, CI job, or app, revoked one at a time. Live on the hosted server; the `conquistador keys` CLI command reaches npm at the next release | Merged in [PR #125](https://github.com/forsvn-labs/conquistador/pull/125) (`887917d`) and deployed as Worker version `31d92ad2` (rollback: `e396a5e3`). [Hosted evidence](docs/hosted-0.13.0-verification.json): 13 of 13 live checks pass with a real GitHub sign-in, including make, use, and revoke of a key. Known gap: a change in the one storage round trip before a key write can be overwritten; sign-in has the same gap. A per-user Durable Object would close it | 2026-11-19 |
 | In progress | Freshness check for dated facts and plays, and the meta-watch workflow. Contributor tooling only; it is not in the npm package, so no release and no changelog entry | [PR #121](https://github.com/forsvn-labs/conquistador/pull/121), [workflow](docs/META-WATCH.md). The check finds 25 dated blocks and 1 overdue: the image-engine reference, verified June 2026. The weekly run fails until someone rechecks that block | 2026-11-11 |
 | Shipped | Package 0.13.0: the funnel-first growth doctrine. `init` asks how customers convert and records the funnel first; growth work names the stage and metric it moves | Recorded: Both `@forsvn/conquistador@0.13.0` and `conquistador@0.13.0` are verified as npm latest. [Release](https://github.com/forsvn-labs/conquistador/releases/tag/v0.13.0), [registry evidence](docs/release-0.13.0-verification.json); no model-quality evaluation yet | 2026-11-10 |
 | Shipped | Package 0.12.0, including distillation, routing, channel facts, and checker changes | Recorded: Both `@forsvn/conquistador@0.12.0` and `conquistador@0.12.0` are verified as npm latest. [Release](https://github.com/forsvn-labs/conquistador/releases/tag/v0.12.0), [registry evidence](docs/release-0.12.0-verification.json) | 2026-10-29 |
 | Shipped | Thin guidance across package surfaces, 0.11.0 | [Release](https://github.com/forsvn-labs/conquistador/releases/tag/v0.11.0), [registry evidence](docs/release-0.11.0-verification.json) | 2026-10-27 |
 | Shipped | Four-step installer, 0.10.2 | [Release](https://github.com/forsvn-labs/conquistador/releases/tag/v0.10.2), [registry evidence](docs/release-0.10.2-verification.json) | 2026-10-23 |
-| Shipped | Hosted MCP 0.10.1, existing-account Executor routing | [Hosted evidence](docs/hosted-0.10.1-verification.json) | 2026-10-23 |
+| Shipped | Hosted MCP redeployed with the 0.13.0 methods; it had run 0.10.1 since 2026-10-23 | [Hosted evidence](docs/hosted-0.13.0-verification.json): version 0.13.0, eight tools, brief and check calls pass | 2026-11-19 |
 | Built, not shipped | Project-record migration draft | Branch claude/horsemen-records-20261101; Hung reviews the draft PR | 2026-11-01 |
 | Next | Additional native-client, OAuth, ARM, and linked-provider acceptance | [Installation acceptance](docs/INSTALLATION-ACCEPTANCE.md); extend claims only after observed checks | 2026-10-29 |
 | In progress | Meta-watch pilot on X: four candidate plays from 11 founder accounts (683 posts) wait for Hung's blind test | Branch `feat/x-plays-candidate`; 8 sealed pairs in the private knowledge folder. No play enters `main` before the verdict. Views measure reach, not customers | 2026-11-11 |
@@ -45,8 +45,9 @@ Next action: Hung judges the 8 sealed pairs for the X plays; test the growth doc
   features already exist here. Candidates to take: scheduled draft-only routines that call the
   hosted MCP, and limits for research agents. No method text changed.
 - Built named API keys so headless agents can each have their own hosted MCP key, in
-  [PR #125](https://github.com/forsvn-labs/conquistador/pull/125). The hosted Worker is three
-  releases behind the package; redeploying it needs Hung's decision.
+  [PR #125](https://github.com/forsvn-labs/conquistador/pull/125). Hung approved merge and
+  redeploy. The hosted server now runs `887917d`; 13 of 13 live checks pass. Hung reviews the
+  remaining key-race gap; the fix is a per-user Durable Object.
 
 ## 2026-11-11
 
