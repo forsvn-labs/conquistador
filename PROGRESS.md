@@ -1,6 +1,6 @@
 # Progress
 
-Updated: 2026-11-11 · Stage: live · Health: At risk
+Updated: 2026-11-19 · Stage: live · Health: At risk
 
 The latest package release is 0.13.0 (2026-11-10); [CHANGELOG.md](CHANGELOG.md) holds the
 release history. Hosted MCP was last verified at 0.10.1 (2026-10-23). Acceptance gaps remain; migration rechecks neither.
@@ -11,6 +11,7 @@ Next action: Hung judges the 8 sealed pairs for the X plays; test the growth doc
 
 | State | Item | Evidence | Date |
 | --- | --- | --- | --- |
+| In progress | Named API keys for the hosted MCP server: one key for each agent, CI job, or app, revoked one at a time with `conquistador keys` | [PR #125](https://github.com/forsvn-labs/conquistador/pull/125) waits for Hung's review. Root tests: 685 pass, 0 fail. Real-Worker sign-up E2E 45 of 46 and OAuth E2E 27 of 27; the one failing sign-up step fails on `main` too. Not deployed: the hosted Worker still runs 0.10.1 | 2026-11-19 |
 | Merged, not released | Freshness check for dated facts and plays, and the meta-watch workflow. Contributor tooling only; it is not in the npm package, so no release and no changelog entry | [PR #121](https://github.com/forsvn-labs/conquistador/pull/121), [workflow](docs/META-WATCH.md). The check finds 25 dated blocks and 1 overdue: the image-engine reference, verified June 2026. The weekly run fails until someone rechecks that block | 2026-11-11 |
 | Shipped | Package 0.13.0: the funnel-first growth doctrine. `init` asks how customers convert and records the funnel first; growth work names the stage and metric it moves | Recorded: Both `@forsvn/conquistador@0.13.0` and `conquistador@0.13.0` are verified as npm latest. [Release](https://github.com/forsvn-labs/conquistador/releases/tag/v0.13.0), [registry evidence](docs/release-0.13.0-verification.json); no model-quality evaluation yet | 2026-11-10 |
 | Shipped | Package 0.12.0, including distillation, routing, channel facts, and checker changes | Recorded: Both `@forsvn/conquistador@0.12.0` and `conquistador@0.12.0` are verified as npm latest. [Release](https://github.com/forsvn-labs/conquistador/releases/tag/v0.12.0), [registry evidence](docs/release-0.12.0-verification.json) | 2026-10-29 |
@@ -37,6 +38,15 @@ Next action: Hung judges the 8 sealed pairs for the X plays; test the growth doc
 
 - Verify marketplace listings after distribution approval. Build Gemini CLI hooks, consent-bound memory, and expanded method-quality evaluations when prioritized.
 - Existing lint diagnostics and optional Promptfoo/node-forge findings remain open. See the [recorded snapshot](docs/progress-log.md).
+
+## 2026-11-19
+
+- Compared Conquistador with an MIT-licensed public marketing skill library. Most of its
+  features already exist here. Candidates to take: scheduled draft-only routines that call the
+  hosted MCP, and limits for research agents. No method text changed.
+- Built named API keys so headless agents can each have their own hosted MCP key, in
+  [PR #125](https://github.com/forsvn-labs/conquistador/pull/125). The hosted Worker is three
+  releases behind the package; redeploying it needs Hung's decision.
 
 ## 2026-11-11
 
