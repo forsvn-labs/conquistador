@@ -60,7 +60,7 @@ source checks from live GitHub and Executor acceptance.
 
 ## One key for each agent
 
-The hosted server supports named keys from 2026-11-19. The `conquistador keys` command ships with the next package release; until then, use the API at the end of this section. Give each agent, CI job, or app its own key, so you can revoke one without stopping the others. Sign in first with `conquistador login`; the saved sign-in token manages the keys.
+From 0.13.1. Give each agent, CI job, or app its own key, so you can revoke one without stopping the others. Sign in first with `conquistador login`; the saved sign-in token manages the keys.
 
 ```sh
 conquistador keys create ci-bot     # prints the new key once

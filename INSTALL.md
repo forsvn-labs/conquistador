@@ -418,8 +418,7 @@ To use another deployment, set `CONQUISTADOR_MCP_URL` or pass `--server URL`.
 
 #### One key for each agent
 
-The hosted server supports named keys from 2026-11-19; the `conquistador keys` command ships
-with the next package release, and until then the API below works. Give each agent, CI job, or
+From 0.13.1. The hosted server supports named keys from 2026-11-19. Give each agent, CI job, or
 app its own key, and revoke one without stopping the others. The saved sign-in token from
 `conquistador login` manages the keys:
 
