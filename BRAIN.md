@@ -1,5 +1,11 @@
 # Brain
 
+## Private Drive resources
+
+Project key: `forsvn-labs/conquistador`. From the authorized personal tools checkout, run `python3 drive_projects.py forsvn-labs/conquistador`. If the local mount is missing or stale, add `--drive-url` and open that link through the approved personal Drive account. Read the project's `OPEN THIS.md` before searching or filing. The registry is private; do not echo folder IDs or links in public Git or logs.
+
+Drive holds original assets, approved logo exports and launch media, operating and business records, and handoffs. Git holds code, tests, deployment configuration, and runtime assets. Do not use personal wedding or customer data as marketing assets.
+
 Knowledge home: Google Drive, project key `forsvn/conquistador` · Confirmed: not yet (access verification date not recorded)
 
 Visibility: public

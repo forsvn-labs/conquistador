@@ -92,3 +92,7 @@ New knowledge follows [BRAIN.md](BRAIN.md). Each item has one editable original.
 - [docs/performance/REVIEW.md](docs/performance/REVIEW.md): API, CLI, hook, plugin, transport, packaging, and hosted checks.
 - [docs/BEHAVIOR-REVIEW-2026-10.md](docs/BEHAVIOR-REVIEW-2026-10.md): task-scoped behavior evidence.
 - `AGENTS.md` and `CLAUDE.md`: agent entrypoints.
+
+## Off-repo assets and records
+
+Use the project key in [BRAIN.md](BRAIN.md), then the Drive folder’s `OPEN THIS.md` to find brand originals, launch media, and business records. No private Drive links are stored here.
