@@ -1,15 +1,9 @@
 # Project context
 
-Before project work, read the PROGRESS snapshot and STRUCTURE's Read before
-changing section. Read the other records when the task needs them. Use the
-`horsemen` skill to update them.
+Start with [BRAIN.md](BRAIN.md) for project routes. Read [VISION.md](VISION.md) for direction, [PROGRESS.md](PROGRESS.md) for current work and evidence, and [ANATOMY.md](ANATOMY.md) for code, tech stack and checks.
 
-- [VISION.md](VISION.md): intended users, outcomes, scope, and non-goals.
-- [BRAIN.md](BRAIN.md): knowledge homes, stable key, and access rules.
-- [PROGRESS.md](PROGRESS.md): current state, gates, blockers, and next steps.
-- [STRUCTURE.md](STRUCTURE.md): code and knowledge map.
+Use the Horsemen skill to update these records. Use the supporting [DESIGN.md](DESIGN.md) for interaction and visual guidance, [README.md](README.md) for setup, and [CHANGELOG.md](CHANGELOG.md) for verified shipped changes distilled from Progress.
 
-[README.md](README.md) has setup. [CHANGELOG.md](CHANGELOG.md) has verified history.
 Keep one editable source for each fact. Store rich knowledge and originals in Drive.
 Preserve private material and existing user changes. Use scoped branches and
 reviewable pull requests. A source commit or test pass does not establish a release.

@@ -55,3 +55,10 @@ Visibility: public
 ## Open questions
 
 - When was project-specific Drive access last verified? Resolve privately with Hung.
+
+## Project records
+
+- [VISION.md](VISION.md): direction and decisions.
+- [PROGRESS.md](PROGRESS.md): current work, evidence and next steps.
+- [ANATOMY.md](ANATOMY.md): code, stack and checks.
+- [DESIGN.md](DESIGN.md): design guidance; [README.md](README.md): setup; [CHANGELOG.md](CHANGELOG.md): verified shipped changes.
