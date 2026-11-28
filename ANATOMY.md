@@ -13,6 +13,137 @@ public product. CLI, app API, plugins, and MCP consume one method library.
 | MCP | [Local entry](mcp/) and [hosted Cloudflare Worker](worker.mjs); the hosted path uses Cloudflare OAuth Provider and Wrangler. |
 | Checks and delivery | Bun lockfile and Node orchestration in [tools/dev.mjs](tools/dev.mjs); Oxlint, Playwright, and [GitHub Actions](.github/workflows/) for verification and publishing. Passing CI is not publication. |
 
+### Build and release evidence
+
+- The public Node.js CLI requires Node.js ≥22.18 from the root manifest; runtime source requires Node.js ≥24 from its own manifest and the container. The maintainer workflows and image are separate from user install requirements.
+- The paired npm packages and the hosted Cloudflare MCP have distinct release evidence. The last recorded package release is 0.13.1; the last recorded hosted methods are 0.13.0 with named keys. See [PROGRESS.md](PROGRESS.md), [installation verification](docs/INSTALLATION-ACCEPTANCE.md), and the separately gated [publish workflow](.github/workflows/publish.yml).
+- The integration catalog, evaluation harness, examples and Eve/Executor adapters below are separate source surfaces. Presence here does not imply their providers are connected. The Worker configuration is [wrangler.toml](wrangler.toml); build images are [runtime](Dockerfile) and [local MCP](mcp/Dockerfile).
+
+### Direct dependencies
+
+Declared specs are manifest constraints, not installed versions. Locked versions come from the cited checked-in lockfile, not a live deployed host. “Not verified” means no single corresponding resolution could be established from that source. Transitive dependencies remain in the lockfiles.
+
+#### Integration catalog
+
+Evidence: [catalog/package.json](catalog/package.json) and [catalog/package-lock.json](catalog/package-lock.json). Declares `node` `>=22.22.0`.
+
+| Direct dependency | Declared spec | Locked version | Role |
+| --- | --- | --- | --- |
+| `@oxlint/plugins` | `1.82.0` | `1.82.0` | Development · lint rule integration |
+| `@types/node` | `22.20.1` | `22.20.1` | Development · development type declarations |
+| `oxlint` | `1.82.0` | `1.82.0` | Development · source linting |
+| `typescript` | `7.0.2` | `7.0.2` | Development · type checking and TypeScript tooling |
+| `vitest` | `4.1.12` | `4.1.12` | Development · frontend or TypeScript test runner |
+
+#### Documentation site
+
+Evidence: [docs-site/package.json](docs-site/package.json) and [docs-site/bun.lock](docs-site/bun.lock).
+
+| Direct dependency | Declared spec | Locked version | Role |
+| --- | --- | --- | --- |
+| `mint` | `4.2.991` | `4.2.991` | Development · Mintlify docs preview, build validation and link checking |
+
+#### Evaluation harness
+
+Evidence: [evals/package.json](evals/package.json) and [evals/package-lock.json](evals/package-lock.json). Declares `node` `>=22.22.0`.
+
+| Direct dependency | Declared spec | Locked version | Role |
+| --- | --- | --- | --- |
+| `ajv` | `8.20.0` | `8.20.0` | Development · JSON Schema validation and formats |
+| `vitest` | `4.1.12` | `4.1.12` | Development · frontend or TypeScript test runner |
+
+#### Isolated Promptfoo evaluation
+
+Evidence: [evals/promptfoo-isolated/package.json](evals/promptfoo-isolated/package.json) and [evals/promptfoo-isolated/package-lock.json](evals/promptfoo-isolated/package-lock.json). Declares `node` `>=22.22.0`.
+
+| Direct dependency | Declared spec | Locked version | Role |
+| --- | --- | --- | --- |
+| `promptfoo` | `0.124.1` | `0.124.1` | Runtime · model evaluation harness |
+
+#### Composio example
+
+Evidence: [examples/composio/package.json](examples/composio/package.json) and [examples/composio/bun.lock](examples/composio/bun.lock). Declares `node` `>=22.18`.
+
+| Direct dependency | Declared spec | Locked version | Role |
+| --- | --- | --- | --- |
+| `@composio/core` | `0.27.0` | `0.27.0` | Runtime · Composio app-registration example |
+
+#### Verification gate example
+
+Evidence: [examples/verify-gate/package.json](examples/verify-gate/package.json) and [examples/verify-gate/bun.lock](examples/verify-gate/bun.lock). Declares `node` `>=24`.
+
+| Direct dependency | Declared spec | Locked version | Role |
+| --- | --- | --- | --- |
+| `@anthropic-ai/claude-agent-sdk` | `0.3.292` | `0.3.292` | Runtime · Claude Agent SDK verification-gate example |
+| `@modelcontextprotocol/sdk` | `1.32.1` | `1.32.1` | Runtime · MCP protocol types and transport |
+| `zod` | `4.1.12` | `4.1.12` | Runtime · runtime schema validation |
+
+#### Eve runtime adapter
+
+Evidence: [hosts/eve/runtime/package.json](hosts/eve/runtime/package.json) and [hosts/eve/runtime/bun.lock](hosts/eve/runtime/bun.lock). Declares `node` `>=24`.
+
+| Direct dependency | Declared spec | Locked version | Role |
+| --- | --- | --- | --- |
+| `ai` | `7.0.143` | `7.0.143` | Runtime · AI SDK provider and generation interfaces |
+| `eve` | `0.80.1` | `0.80.1` | Runtime · Eve runtime integration |
+| `just-bash` | `3.6.0` | `3.6.0` | Runtime · local Bash-compatible sandbox for the Eve adapter |
+| `@types/node` | `26.6.5` | `26.6.5` | Development · development type declarations |
+| `typescript` | `7.0.2` | `7.0.2` | Development · type checking and TypeScript tooling |
+
+#### Executor host integration
+
+Evidence: [hosts/executor/package.json](hosts/executor/package.json) and [hosts/executor/bun.lock](hosts/executor/bun.lock). Declares `node` `>=24`.
+
+| Direct dependency | Declared spec | Locked version | Role |
+| --- | --- | --- | --- |
+| `@modelcontextprotocol/sdk` | `1.32.1` | `1.32.1` | Runtime · MCP protocol types and transport |
+| `executor` | `2.0.0-beta.25` | `2.0.0-beta.25` | Development · Executor CLI for native host integration checks |
+
+#### Root package
+
+Evidence: [package.json](package.json) and [bun.lock](bun.lock). Declares `node` `>=22.18`.
+
+| Direct dependency | Declared spec | Locked version | Role |
+| --- | --- | --- | --- |
+| `jose` | `6.2.8` | `6.2.8` | Runtime · JWT/JWS signing, verification or identity checks |
+| `pele` | `1.13.0` | `1.13.0` | Runtime · diagram rendering in the local CLI tool |
+| `@cloudflare/workers-oauth-provider` | `1.2.3` | `1.2.3` | Development · OAuth authorization server for the hosted Worker |
+| `@oxlint/plugins` | `1.82.0` | `1.82.0` | Development · lint rule integration |
+| `oxlint` | `1.82.0` | `1.82.0` | Development · source linting |
+| `playwright` | `1.64.0` | `1.64.0` | Development · real browser automation and regressions |
+| `wrangler` | `4.148.0` | `4.148.0` | Development · Cloudflare Worker development, build and release CLI |
+
+#### Short npm alias
+
+Evidence: [packages/conquistador/package.json](packages/conquistador/package.json); no adjacent checked-in lockfile. Declares `node` `>=22.18`.
+
+| Direct dependency | Declared spec | Locked version | Role |
+| --- | --- | --- | --- |
+| `@forsvn/conquistador` | `0.13.1` | Not verified | Runtime · Conquistador library or published CLI payload |
+
+#### Self-hosted runtime
+
+Evidence: [runtime/package.json](runtime/package.json) and [runtime/package-lock.json](runtime/package-lock.json). Declares `node` `>=24`.
+
+| Direct dependency | Declared spec | Locked version | Role |
+| --- | --- | --- | --- |
+| `jose` | `6.2.8` | `6.2.8` | Runtime · JWT/JWS signing, verification or identity checks |
+| `@types/node` | `24.13.3` | `24.13.3` | Development · development type declarations |
+| `ajv` | `8.20.0` | `8.20.0` | Development · JSON Schema validation and formats |
+| `typescript` | `7.0.2` | `7.0.2` | Development · type checking and TypeScript tooling |
+| `vitest` | `4.1.12` | `4.1.12` | Development · frontend or TypeScript test runner |
+
+#### Terminal interface
+
+Evidence: [tools/tui/package.json](tools/tui/package.json) and [tools/tui/bun.lock](tools/tui/bun.lock).
+
+| Direct dependency | Declared spec | Locked version | Role |
+| --- | --- | --- | --- |
+| `@clack/prompts` | `1.8.1` | `1.8.1` | Runtime · interactive terminal prompts |
+| `ink` | `8.0.0` | `8.0.0` | Runtime · React terminal UI runtime |
+| `react` | `19.3.0` | `19.3.0` | Runtime · component UI runtime |
+| `esbuild` | `0.28.2` | `0.28.2` | Development · JavaScript bundling |
+
 ## At a glance
 
 ```text
