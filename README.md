@@ -25,9 +25,11 @@ to build and test the source.
 
 - [VISION.md](https://github.com/forsvn-labs/conquistador/blob/main/VISION.md): users, intended outcomes, and boundaries.
 - [BRAIN.md](https://github.com/forsvn-labs/conquistador/blob/main/BRAIN.md): external knowledge key and access.
-- [STRUCTURE.md](https://github.com/forsvn-labs/conquistador/blob/main/STRUCTURE.md): source architecture and navigation.
+- [ANATOMY.md](https://github.com/forsvn-labs/conquistador/blob/main/ANATOMY.md): source architecture and navigation.
 - [PROGRESS.md](https://github.com/forsvn-labs/conquistador/blob/main/PROGRESS.md): verified state, blockers, and next steps.
 
 [Documentation](https://conquistador.app/docs) ·
 [Releases](https://github.com/forsvn-labs/conquistador/releases) ·
 [Changelog](https://github.com/forsvn-labs/conquistador/blob/main/CHANGELOG.md) · [MIT license](LICENSE)
+
+Design guidance: [DESIGN.md](DESIGN.md).
